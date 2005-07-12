@@ -14,18 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.util;
-
-
-
 
 /**
  * @author Oliver Rossmueller <oliver@oross.net>
  * @version $Revision$
  */
-public interface LocaleChangeListener
-{
-    public void localeChanged(LocaleChangeEvent event);
+public interface LocaleChangeListener {
+	public void localeChanged(LocaleChangeEvent event);
 }

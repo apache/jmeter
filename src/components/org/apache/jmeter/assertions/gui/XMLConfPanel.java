@@ -36,19 +36,22 @@ public class XMLConfPanel extends JPanel {
 		super();
 		init();
 	}
+
 	/**
 	 * @param isDoubleBuffered
 	 */
 	public XMLConfPanel(boolean isDoubleBuffered) {
-		super( isDoubleBuffered);
+		super(isDoubleBuffered);
 		init();
 	}
+
 	private void init() {
 		add(getTolerant());
 		add(getNamespace());
 		add(getValidate());
 		add(getWhitespace());
 	}
+
 	/**
 	 * @return Returns the namespace.
 	 */
@@ -58,6 +61,7 @@ public class XMLConfPanel extends JPanel {
 		}
 		return namespace;
 	}
+
 	/**
 	 * @return Returns the tolerant.
 	 */
@@ -68,19 +72,22 @@ public class XMLConfPanel extends JPanel {
 
 				public void actionPerformed(ActionEvent e) {
 					tolerant();
-				}});
+				}
+			});
 		}
 		return tolerant;
 	}
+
 	/**
 	 * @return Returns the validate.
 	 */
 	public JCheckBox getValidate() {
-		if (validate == null) { 
+		if (validate == null) {
 			validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button"));
 		}
 		return validate;
 	}
+
 	/**
 	 * @return Returns the whitespace.
 	 */
@@ -90,44 +97,48 @@ public class XMLConfPanel extends JPanel {
 		}
 		return whitespace;
 	}
+
 	public boolean isNamespace() {
 		return getNamespace().isSelected();
 	}
+
 	public void setNamespace(boolean namespace) {
 		getNamespace().setSelected(namespace);
 	}
+
 	public boolean isTolerant() {
 		return getTolerant().isSelected();
 	}
-	
+
 	public void setTolerant(boolean tolerant) {
 		getTolerant().setSelected(tolerant);
 	}
-	
+
 	public boolean isWhitespace() {
 		return getWhitespace().isSelected();
 	}
-	
+
 	public void setWhitespace(boolean whitespace) {
 		getWhitespace().setSelected(whitespace);
 	}
-	
+
 	public boolean isValidate() {
 		return getValidate().isSelected();
 	}
-	
+
 	public void setValidate(boolean validating) {
 		getValidate().setSelected(validating);
 	}
 
 	private void tolerant() {
-			getValidate().setEnabled(!isTolerant());
-			getWhitespace().setEnabled(!isTolerant());
-			getNamespace().setEnabled(!isTolerant());
+		getValidate().setEnabled(!isTolerant());
+		getWhitespace().setEnabled(!isTolerant());
+		getNamespace().setEnabled(!isTolerant());
 	}
+
 	public static void main(String[] args) {
 		JPanel comb = new JPanel();
-		
+
 		XMLConfPanel xml = new XMLConfPanel();
 		XPathPanel xpath = new XPathPanel();
 		JFrame frame = new JFrame(xml.getClass().getName());
@@ -135,9 +146,9 @@ public class XMLConfPanel extends JPanel {
 		comb.add(xpath);
 		comb.add(xml);
 		frame.add(comb);
-		
+
 		frame.pack();
 		frame.setVisible(true);
-		
+
 	}
-}	
+}

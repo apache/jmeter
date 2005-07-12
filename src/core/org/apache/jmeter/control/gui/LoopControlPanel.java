@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -35,251 +35,217 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The user interface for a controller which specifies that its subcomponents
- * should be executed some number of times in a loop.  This component can be
- * used standalone or embedded into some other component.
- *
- * @version   $Revision$ on $Date$
+ * should be executed some number of times in a loop. This component can be used
+ * standalone or embedded into some other component.
+ * 
+ * @version $Revision$ on $Date$
  */
 
-public class LoopControlPanel
-    extends AbstractControllerGui
-    implements ActionListener
-{
-    /**
-     * A checkbox allowing the user to specify whether or not the controller
-     * should loop forever.
-     */
-    private JCheckBox infinite;
-    
-    /**
-     * A field allowing the user to specify the number of times the controller
-     * should loop. 
-     */
-    private JTextField loops;
+public class LoopControlPanel extends AbstractControllerGui implements ActionListener {
+	/**
+	 * A checkbox allowing the user to specify whether or not the controller
+	 * should loop forever.
+	 */
+	private JCheckBox infinite;
 
-   
-    /**
-     * Boolean indicating whether or not this component should display its
-     * name. If true, this is a standalone component. If false, this component
-     * is intended to be used as a subpanel for another component.
-     */
-    private boolean displayName = true;
-    
-    /** The name of the infinite checkbox component. */
-    private static final String INFINITE = "Infinite Field";
-    
-    /** The name of the loops field component. */
-    private static final String LOOPS = "Loops Field";
+	/**
+	 * A field allowing the user to specify the number of times the controller
+	 * should loop.
+	 */
+	private JTextField loops;
 
-    /**
-     * Create a new LoopControlPanel as a standalone component.
-     */
-    public LoopControlPanel()
-    {
-        this(true);
-    }
+	/**
+	 * Boolean indicating whether or not this component should display its name.
+	 * If true, this is a standalone component. If false, this component is
+	 * intended to be used as a subpanel for another component.
+	 */
+	private boolean displayName = true;
 
-    /**
-     * Create a new LoopControlPanel as either a standalone or an embedded
-     * component.
-     *
-     * @param displayName  indicates whether or not this component should
-     *                     display its name.  If true, this is a standalone
-     *                     component.  If false, this component is intended
-     *                     to be used as a subpanel for another component.
-     */
-    public LoopControlPanel(boolean displayName)
-    {
-        this.displayName = displayName;
-        init();
-        setState(1);
-    }
+	/** The name of the infinite checkbox component. */
+	private static final String INFINITE = "Infinite Field";
 
-    /**
-     * A newly created component can be initialized with the contents of
-     * a Test Element object by calling this method.  The component is
-     * responsible for querying the Test Element object for the
-     * relevant information to display in its GUI.
-     *
-     * @param element the TestElement to configure 
-     */
-    public void configure(TestElement element)
-    {
-        super.configure(element);
-        if (element instanceof LoopController)
-        {
-            setState(((LoopController) element).getLoopString());
-        }
-        else
-        {
-            setState(1);
-        }
-    }
+	/** The name of the loops field component. */
+	private static final String LOOPS = "Loops Field";
 
-    /* Implements JMeterGUIComponent.createTestElement() */
-    public TestElement createTestElement()
-    {
-        LoopController lc = new LoopController();
-        modifyTestElement(lc);
-        return lc;
-    }
+	/**
+	 * Create a new LoopControlPanel as a standalone component.
+	 */
+	public LoopControlPanel() {
+		this(true);
+	}
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-    public void modifyTestElement(TestElement lc)
-    {
-        configureTestElement(lc);
-        if (lc instanceof LoopController)
-        {
-            if (loops.getText().length() > 0)
-            {
-                ((LoopController) lc).setLoops(loops.getText());
-            }
-            else
-            {
-                ((LoopController) lc).setLoops(-1);
-            }
-        }
-    }
+	/**
+	 * Create a new LoopControlPanel as either a standalone or an embedded
+	 * component.
+	 * 
+	 * @param displayName
+	 *            indicates whether or not this component should display its
+	 *            name. If true, this is a standalone component. If false, this
+	 *            component is intended to be used as a subpanel for another
+	 *            component.
+	 */
+	public LoopControlPanel(boolean displayName) {
+		this.displayName = displayName;
+		init();
+		setState(1);
+	}
 
-    /**
-     * Invoked when an action occurs.  This implementation assumes that the
-     * target component is the infinite loops checkbox.
-     * 
-     * @param event the event that has occurred
-     */
-    public void actionPerformed(ActionEvent event)
-    {
-        if (infinite.isSelected())
-        {
-            loops.setText("");
-            loops.setEnabled(false);
-        }
-        else
-        {
-            loops.setEnabled(true);
-            new FocusRequester(loops);
-        }
-    }
+	/**
+	 * A newly created component can be initialized with the contents of a Test
+	 * Element object by calling this method. The component is responsible for
+	 * querying the Test Element object for the relevant information to display
+	 * in its GUI.
+	 * 
+	 * @param element
+	 *            the TestElement to configure
+	 */
+	public void configure(TestElement element) {
+		super.configure(element);
+		if (element instanceof LoopController) {
+			setState(((LoopController) element).getLoopString());
+		} else {
+			setState(1);
+		}
+	}
 
-    public String getLabelResource()
-    {
-        return "loop_controller_title";
-    }
+	/* Implements JMeterGUIComponent.createTestElement() */
+	public TestElement createTestElement() {
+		LoopController lc = new LoopController();
+		modifyTestElement(lc);
+		return lc;
+	}
 
-    /**
-     * Initialize the GUI components and layout for this component.
-     */
-    private void init()
-    {
-        // The Loop Controller panel can be displayed standalone or inside
-        // another panel.  For standalone, we want to display the TITLE, NAME,
-        // etc. (everything). However, if we want to display it within another
-        // panel, we just display the Loop Count fields (not the TITLE and
-        // NAME).
+	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+	public void modifyTestElement(TestElement lc) {
+		configureTestElement(lc);
+		if (lc instanceof LoopController) {
+			if (loops.getText().length() > 0) {
+				((LoopController) lc).setLoops(loops.getText());
+			} else {
+				((LoopController) lc).setLoops(-1);
+			}
+		}
+	}
 
-        // Standalone
-        if (displayName)
-        {
-            setLayout(new BorderLayout(0, 5));
-            setBorder(makeBorder());
-            add(makeTitlePanel(), BorderLayout.NORTH);
-            
-            JPanel mainPanel = new JPanel(new BorderLayout());
-            mainPanel.add(createLoopCountPanel(), BorderLayout.NORTH);
-            add(mainPanel, BorderLayout.CENTER);
-        }
-        else
-        {
-            // Embedded
-            setLayout(new BorderLayout());
-            add(createLoopCountPanel(), BorderLayout.NORTH);
-        }
-    }
+	/**
+	 * Invoked when an action occurs. This implementation assumes that the
+	 * target component is the infinite loops checkbox.
+	 * 
+	 * @param event
+	 *            the event that has occurred
+	 */
+	public void actionPerformed(ActionEvent event) {
+		if (infinite.isSelected()) {
+			loops.setText("");
+			loops.setEnabled(false);
+		} else {
+			loops.setEnabled(true);
+			new FocusRequester(loops);
+		}
+	}
 
-    /**
-     * Create a GUI panel containing the components related to the number of
-     * loops which should be executed.
-     *  
-     * @return a GUI panel containing the loop count components
-     */
-    private JPanel createLoopCountPanel()
-    {
-        JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
+	public String getLabelResource() {
+		return "loop_controller_title";
+	}
 
-        // LOOP LABEL
-        JLabel loopsLabel =
-            new JLabel(JMeterUtils.getResString("iterator_num"));
-        loopPanel.add(loopsLabel, BorderLayout.WEST);
+	/**
+	 * Initialize the GUI components and layout for this component.
+	 */
+	private void init() {
+		// The Loop Controller panel can be displayed standalone or inside
+		// another panel. For standalone, we want to display the TITLE, NAME,
+		// etc. (everything). However, if we want to display it within another
+		// panel, we just display the Loop Count fields (not the TITLE and
+		// NAME).
+
+		// Standalone
+		if (displayName) {
+			setLayout(new BorderLayout(0, 5));
+			setBorder(makeBorder());
+			add(makeTitlePanel(), BorderLayout.NORTH);
+
+			JPanel mainPanel = new JPanel(new BorderLayout());
+			mainPanel.add(createLoopCountPanel(), BorderLayout.NORTH);
+			add(mainPanel, BorderLayout.CENTER);
+		} else {
+			// Embedded
+			setLayout(new BorderLayout());
+			add(createLoopCountPanel(), BorderLayout.NORTH);
+		}
+	}
+
+	/**
+	 * Create a GUI panel containing the components related to the number of
+	 * loops which should be executed.
+	 * 
+	 * @return a GUI panel containing the loop count components
+	 */
+	private JPanel createLoopCountPanel() {
+		JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
+
+		// LOOP LABEL
+		JLabel loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num"));
+		loopPanel.add(loopsLabel, BorderLayout.WEST);
 
 		JPanel loopSubPanel = new JPanel(new BorderLayout(5, 0));
 
-        // TEXT FIELD
-        loops = new JTextField("1", 5);
-        loops.setName(LOOPS);
-        loopsLabel.setLabelFor(loops);
-        loopSubPanel.add(loops, BorderLayout.CENTER);
+		// TEXT FIELD
+		loops = new JTextField("1", 5);
+		loops.setName(LOOPS);
+		loopsLabel.setLabelFor(loops);
+		loopSubPanel.add(loops, BorderLayout.CENTER);
 
-        // FOREVER CHECKBOX
-        infinite = new JCheckBox(JMeterUtils.getResString("infinite"));
-        infinite.setActionCommand(INFINITE);
-        infinite.addActionListener(this);
-        loopSubPanel.add(infinite, BorderLayout.WEST);
-        
-        loopPanel.add(loopSubPanel,BorderLayout.CENTER);
-	
-        loopPanel.add(
-            Box.createHorizontalStrut(
-                loopsLabel.getPreferredSize().width
-                    + loops.getPreferredSize().width
-                    + infinite.getPreferredSize().width),
-            BorderLayout.NORTH);
+		// FOREVER CHECKBOX
+		infinite = new JCheckBox(JMeterUtils.getResString("infinite"));
+		infinite.setActionCommand(INFINITE);
+		infinite.addActionListener(this);
+		loopSubPanel.add(infinite, BorderLayout.WEST);
 
-        return loopPanel;
-    }
-    
-    /**
-     * Set the number of loops which should be reflected in the GUI.  The
-     * loopCount parameter should contain the String representation of an
-     * integer.  This integer will be treated as the number of loops.  If this
-     * integer is less than 0, the number of loops will be assumed to be
-     * infinity.
-     * 
-     * @param loopCount the String representation of the number of loops
-     */
-    private void setState(String loopCount)
-    {
-        if (loopCount.startsWith("-"))
-        {
-            setState(-1);
-        }
-        else
-        {
-            loops.setText(loopCount);
-            infinite.setSelected(false);
-            loops.setEnabled(true);
-        }
-    }
+		loopPanel.add(loopSubPanel, BorderLayout.CENTER);
 
-    /**
-     * Set the number of loops which should be reflected in the GUI.  If the
-     * loopCount is less than 0, the number of loops will be assumed to be
-     * infinity.
-     * 
-     * @param loopCount the number of loops
-     */
-    private void setState(int loopCount)
-    {
-        if (loopCount <= -1)
-        {
-            infinite.setSelected(true);
-            loops.setEnabled(false);
-            loops.setText("");
-        }
-        else
-        {
-            infinite.setSelected(false);
-            loops.setEnabled(true);
-            loops.setText("" + loopCount);
-        }
-    }
+		loopPanel.add(Box.createHorizontalStrut(loopsLabel.getPreferredSize().width + loops.getPreferredSize().width
+				+ infinite.getPreferredSize().width), BorderLayout.NORTH);
+
+		return loopPanel;
+	}
+
+	/**
+	 * Set the number of loops which should be reflected in the GUI. The
+	 * loopCount parameter should contain the String representation of an
+	 * integer. This integer will be treated as the number of loops. If this
+	 * integer is less than 0, the number of loops will be assumed to be
+	 * infinity.
+	 * 
+	 * @param loopCount
+	 *            the String representation of the number of loops
+	 */
+	private void setState(String loopCount) {
+		if (loopCount.startsWith("-")) {
+			setState(-1);
+		} else {
+			loops.setText(loopCount);
+			infinite.setSelected(false);
+			loops.setEnabled(true);
+		}
+	}
+
+	/**
+	 * Set the number of loops which should be reflected in the GUI. If the
+	 * loopCount is less than 0, the number of loops will be assumed to be
+	 * infinity.
+	 * 
+	 * @param loopCount
+	 *            the number of loops
+	 */
+	private void setState(int loopCount) {
+		if (loopCount <= -1) {
+			infinite.setSelected(true);
+			loops.setEnabled(false);
+			loops.setText("");
+		} else {
+			infinite.setSelected(false);
+			loops.setEnabled(true);
+			loops.setText("" + loopCount);
+		}
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control;
 
@@ -28,158 +28,130 @@ import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * This class is a Cookie encapsulator.
- *
- * @author  <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
+ * 
+ * @author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  */
-public class Cookie extends AbstractTestElement implements Serializable
-{
-    private static String VALUE = "Cookie.value";
-    private static String DOMAIN = "Cookie.domain";
-    private static String EXPIRES = "Cookie.expires";
-    private static String SECURE = "Cookie.secure";
-    private static String PATH = "Cookie.path";
+public class Cookie extends AbstractTestElement implements Serializable {
+	private static String VALUE = "Cookie.value";
 
-    /**
-     * create the coookie
-     */
-    public Cookie()
-    {
-        this.setName("");
-        this.setValue("");
-        this.setDomain("");
-        this.setPath("");
-        this.setSecure(false);
-        this.setExpires(0);
-    }
+	private static String DOMAIN = "Cookie.domain";
 
-    /**
-     * create the coookie
-     */
-    public Cookie(
-        String name,
-        String value,
-        String domain,
-        String path,
-        boolean secure,
-        long expires)
-    {
-        this.setName(name);
-        this.setValue(value);
-        this.setDomain(domain);
-        this.setPath(path);
-        this.setSecure(secure);
-        this.setExpires(expires);
-    }
+	private static String EXPIRES = "Cookie.expires";
 
-    public void addConfigElement(ConfigElement config)
-    {
-    }
+	private static String SECURE = "Cookie.secure";
 
-    public boolean expectsModification()
-    {
-        return false;
-    }
+	private static String PATH = "Cookie.path";
 
-    public String getClassLabel()
-    {
-        return "Cookie";
-    }
+	/**
+	 * create the coookie
+	 */
+	public Cookie() {
+		this.setName("");
+		this.setValue("");
+		this.setDomain("");
+		this.setPath("");
+		this.setSecure(false);
+		this.setExpires(0);
+	}
 
-    /**
-     * get the value for this object.
-     */
-    public synchronized String getValue()
-    {
-        return getPropertyAsString(VALUE);
-    }
+	/**
+	 * create the coookie
+	 */
+	public Cookie(String name, String value, String domain, String path, boolean secure, long expires) {
+		this.setName(name);
+		this.setValue(value);
+		this.setDomain(domain);
+		this.setPath(path);
+		this.setSecure(secure);
+		this.setExpires(expires);
+	}
 
-    /**
-     * set the value for this object.
-     */
-    public synchronized void setValue(String value)
-    {
-        this.setProperty(VALUE, value);
-    }
+	public void addConfigElement(ConfigElement config) {
+	}
 
-    /**
-     * get the domain for this object.
-     */
-    public synchronized String getDomain()
-    {
-        return getPropertyAsString(DOMAIN);
-    }
+	public boolean expectsModification() {
+		return false;
+	}
 
-    /**
-     * set the domain for this object.
-     */
-    public synchronized void setDomain(String domain)
-    {
-        setProperty(DOMAIN, domain);
-    }
+	public String getClassLabel() {
+		return "Cookie";
+	}
 
-    /**
-     * get the expires for this object.
-     */
-    public synchronized long getExpires()
-    {
-        return getPropertyAsLong(EXPIRES);
-    }
+	/**
+	 * get the value for this object.
+	 */
+	public synchronized String getValue() {
+		return getPropertyAsString(VALUE);
+	}
 
-    /**
-     * set the expires for this object.
-     */
-    public synchronized void setExpires(long expires)
-    {
-        setProperty(new LongProperty(EXPIRES, expires));
-    }
+	/**
+	 * set the value for this object.
+	 */
+	public synchronized void setValue(String value) {
+		this.setProperty(VALUE, value);
+	}
 
-    /**
-     * get the secure for this object.
-     */
-    public synchronized boolean getSecure()
-    {
-        return getPropertyAsBoolean(SECURE);
-    }
+	/**
+	 * get the domain for this object.
+	 */
+	public synchronized String getDomain() {
+		return getPropertyAsString(DOMAIN);
+	}
 
-    /**
-     * set the secure for this object.
-     */
-    public synchronized void setSecure(boolean secure)
-    {
-        setProperty(new BooleanProperty(SECURE, secure));
-    }
+	/**
+	 * set the domain for this object.
+	 */
+	public synchronized void setDomain(String domain) {
+		setProperty(DOMAIN, domain);
+	}
 
-    /**
-     * get the path for this object.
-     */
-    public synchronized String getPath()
-    {
-        return getPropertyAsString(PATH);
-    }
+	/**
+	 * get the expires for this object.
+	 */
+	public synchronized long getExpires() {
+		return getPropertyAsLong(EXPIRES);
+	}
 
-    /**
-     * set the path for this object.
-     */
-    public synchronized void setPath(String path)
-    {
-        setProperty(PATH, path);
-    }
+	/**
+	 * set the expires for this object.
+	 */
+	public synchronized void setExpires(long expires) {
+		setProperty(new LongProperty(EXPIRES, expires));
+	}
 
-    /**
-     * creates a string representation of this cookie
-     */
-    public String toString()
-    {
-        return getDomain()
-            + "\tTRUE\t"
-            + getPath()
-            + "\t"
-            + JOrphanUtils.booleanToSTRING(getSecure())
-            + "\t"
-            + getExpires()
-            + "\t"
-            + getName()
-            + "\t"
-            + getValue();
-    }
+	/**
+	 * get the secure for this object.
+	 */
+	public synchronized boolean getSecure() {
+		return getPropertyAsBoolean(SECURE);
+	}
+
+	/**
+	 * set the secure for this object.
+	 */
+	public synchronized void setSecure(boolean secure) {
+		setProperty(new BooleanProperty(SECURE, secure));
+	}
+
+	/**
+	 * get the path for this object.
+	 */
+	public synchronized String getPath() {
+		return getPropertyAsString(PATH);
+	}
+
+	/**
+	 * set the path for this object.
+	 */
+	public synchronized void setPath(String path) {
+		setProperty(PATH, path);
+	}
+
+	/**
+	 * creates a string representation of this cookie
+	 */
+	public String toString() {
+		return getDomain() + "\tTRUE\t" + getPath() + "\t" + JOrphanUtils.booleanToSTRING(getSecure()) + "\t"
+				+ getExpires() + "\t" + getName() + "\t" + getValue();
+	}
 }

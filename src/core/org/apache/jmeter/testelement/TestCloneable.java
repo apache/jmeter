@@ -22,11 +22,10 @@ package org.apache.jmeter.testelement;
 
 /**
  * @author mstover
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ * To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Generation - Code and Comments
  */
-public interface TestCloneable extends Cloneable
-{
-   public Object clone();
+public interface TestCloneable extends Cloneable {
+	public Object clone();
 }

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
- package org.apache.jmeter.control;
+package org.apache.jmeter.control;
 
 /**
  * TODO not used?
@@ -24,9 +24,7 @@
  * @author Michael Stover
  * @version $Revision$
  */
-public class NoEntryException extends Exception
-{
-    public NoEntryException()
-    {
-    }
+public class NoEntryException extends Exception {
+	public NoEntryException() {
+	}
 }

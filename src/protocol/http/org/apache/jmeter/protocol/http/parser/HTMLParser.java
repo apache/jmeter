@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.parser;
 
@@ -46,138 +46,125 @@ import org.apache.log.Logger;
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-public abstract class HTMLParser
-{
-    /** Used to store the Logger (used for debug and error messages). */
+public abstract class HTMLParser {
+	/** Used to store the Logger (used for debug and error messages). */
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    // Cache of parsers - parsers must be re-usable
+	// Cache of parsers - parsers must be re-usable
 	private static Hashtable parsers = new Hashtable(3);
-    
+
 	private final static String PARSER_CLASSNAME = "htmlParser.className";
-	    
-	private final static String DEFAULT_PARSER = 
-        "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser";
 
-    /**
-     * Protected constructor to prevent instantiation except
-     * from within subclasses. 
-     */
-    protected HTMLParser() {
-    }
-    
+	private final static String DEFAULT_PARSER = "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser";
 
-    public static final HTMLParser getParser(){
-        return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME,DEFAULT_PARSER));
-    }
+	/**
+	 * Protected constructor to prevent instantiation except from within
+	 * subclasses.
+	 */
+	protected HTMLParser() {
+	}
 
-	public static final synchronized HTMLParser getParser(String htmlParserClassName){
+	public static final HTMLParser getParser() {
+		return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME, DEFAULT_PARSER));
+	}
 
-        // Is there a cached parser?
-		HTMLParser pars=(HTMLParser) parsers.get(htmlParserClassName);
-		if (pars != null){
-			log.debug("Fetched "+htmlParserClassName);
+	public static final synchronized HTMLParser getParser(String htmlParserClassName) {
+
+		// Is there a cached parser?
+		HTMLParser pars = (HTMLParser) parsers.get(htmlParserClassName);
+		if (pars != null) {
+			log.debug("Fetched " + htmlParserClassName);
 			return pars;
 		}
 
-		try
-        {
-        	Object clazz = Class.forName(htmlParserClassName).newInstance();
-        	if (clazz instanceof HTMLParser){
+		try {
+			Object clazz = Class.forName(htmlParserClassName).newInstance();
+			if (clazz instanceof HTMLParser) {
 				pars = (HTMLParser) clazz;
-        	} else {
-        		throw new HTMLParseError(new ClassCastException(htmlParserClassName));
-        	}
-        }
-        catch (InstantiationException e)
-        {
-			throw new HTMLParseError(e);
-        }
-        catch (IllegalAccessException e)
-        {
-			throw new HTMLParseError(e);
-        }
-        catch (ClassNotFoundException e)
-        {
-			throw new HTMLParseError(e);
-        }
-		log.info("Created "+htmlParserClassName);
-		if (pars.isReusable()){
-			parsers.put(htmlParserClassName,pars);// cache the parser
-		}
-		
-    	return pars;
-    }
-
-    /**
-     * Get the URLs for all the resources that a browser would automatically
-     * download following the download of the HTML content, that is: images,
-     * stylesheets, javascript files, applets, etc...
-     * <p>
-     * URLs should not appear twice in the returned iterator.
-     * <p>
-     * Malformed URLs can be reported to the caller by having the Iterator
-     * return the corresponding RL String. Overall problems parsing the html
-     * should be reported by throwing an HTMLParseException. 
-     * 
-     * @param html HTML code
-     * @param baseUrl Base URL from which the HTML code was obtained
-     * @return an Iterator for the resource URLs 
-     */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl)
-        throws HTMLParseException
-        {    
-        	// The Set is used to ignore duplicated binary files.
-			// Using a LinkedHashSet to avoid unnecessary overhead in iterating
-			// the elements in the set later on. As a side-effect, this will keep
-			// them roughly in order, which should be a better model of browser
-			// behaviour.
-			
-			Collection col;
-			
-			// N.B. LinkedHashSet is Java 1.4
-			if (hasLinkedHashSet){
-				try {
-					col = (Collection) Class.forName("java.util.LinkedHashSet").newInstance();
-				} catch (Exception e) {
-					throw new Error("Should not happen:"+e.toString());
-				}
 			} else {
-				col = new java.util.HashSet(); //TODO: improve JDK1.3 solution 
+				throw new HTMLParseError(new ClassCastException(htmlParserClassName));
 			}
-        	
-			return getEmbeddedResourceURLs(html, baseUrl,new URLCollection(col));
-            
-            // An additional note on using HashSets to store URLs: I just
-            // discovered that obtaining the hashCode of a java.net.URL implies
-            // a domain-name resolution process. This means significant delays
-            // can occur, even more so if the domain name is not resolvable.
-            // Whether this can be a problem in practical situations I can't tell, but
-            // thought I'd keep a note just in case...
-            // BTW, note that using a Vector and removing duplicates via scan
-            // would not help, since URL.equals requires name resolution too.
-            // The above problem has now been addressed with the URLString and
-            // URLCollection classes.
+		} catch (InstantiationException e) {
+			throw new HTMLParseError(e);
+		} catch (IllegalAccessException e) {
+			throw new HTMLParseError(e);
+		} catch (ClassNotFoundException e) {
+			throw new HTMLParseError(e);
+		}
+		log.info("Created " + htmlParserClassName);
+		if (pars.isReusable()) {
+			parsers.put(htmlParserClassName, pars);// cache the parser
+		}
 
-        }
-        
-        // See whether we can use LinkedHashSet or not:
-        private static final boolean hasLinkedHashSet;
-        static {
-        	boolean b;
-			try
-            {
-                Class.forName("java.util.LinkedHashSet");
-                b = true;
-            }
-            catch (ClassNotFoundException e)
-            {
-            	b = false;
-            }
-            hasLinkedHashSet = b;
-        }
-        
-        
+		return pars;
+	}
+
+	/**
+	 * Get the URLs for all the resources that a browser would automatically
+	 * download following the download of the HTML content, that is: images,
+	 * stylesheets, javascript files, applets, etc...
+	 * <p>
+	 * URLs should not appear twice in the returned iterator.
+	 * <p>
+	 * Malformed URLs can be reported to the caller by having the Iterator
+	 * return the corresponding RL String. Overall problems parsing the html
+	 * should be reported by throwing an HTMLParseException.
+	 * 
+	 * @param html
+	 *            HTML code
+	 * @param baseUrl
+	 *            Base URL from which the HTML code was obtained
+	 * @return an Iterator for the resource URLs
+	 */
+	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl) throws HTMLParseException {
+		// The Set is used to ignore duplicated binary files.
+		// Using a LinkedHashSet to avoid unnecessary overhead in iterating
+		// the elements in the set later on. As a side-effect, this will keep
+		// them roughly in order, which should be a better model of browser
+		// behaviour.
+
+		Collection col;
+
+		// N.B. LinkedHashSet is Java 1.4
+		if (hasLinkedHashSet) {
+			try {
+				col = (Collection) Class.forName("java.util.LinkedHashSet").newInstance();
+			} catch (Exception e) {
+				throw new Error("Should not happen:" + e.toString());
+			}
+		} else {
+			col = new java.util.HashSet(); // TODO: improve JDK1.3 solution
+		}
+
+		return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(col));
+
+		// An additional note on using HashSets to store URLs: I just
+		// discovered that obtaining the hashCode of a java.net.URL implies
+		// a domain-name resolution process. This means significant delays
+		// can occur, even more so if the domain name is not resolvable.
+		// Whether this can be a problem in practical situations I can't tell,
+		// but
+		// thought I'd keep a note just in case...
+		// BTW, note that using a Vector and removing duplicates via scan
+		// would not help, since URL.equals requires name resolution too.
+		// The above problem has now been addressed with the URLString and
+		// URLCollection classes.
+
+	}
+
+	// See whether we can use LinkedHashSet or not:
+	private static final boolean hasLinkedHashSet;
+	static {
+		boolean b;
+		try {
+			Class.forName("java.util.LinkedHashSet");
+			b = true;
+		} catch (ClassNotFoundException e) {
+			b = false;
+		}
+		hasLinkedHashSet = b;
+	}
+
 	/**
 	 * Get the URLs for all the resources that a browser would automatically
 	 * download following the download of the HTML content, that is: images,
@@ -187,68 +174,65 @@ public abstract class HTMLParser
 	 * <p>
 	 * Malformed URLs can be reported to the caller by having the Iterator
 	 * return the corresponding RL String. Overall problems parsing the html
-	 * should be reported by throwing an HTMLParseException. 
+	 * should be reported by throwing an HTMLParseException.
 	 * 
-	 * N.B.
-	 * The Iterator returns URLs, but the Collection will contain
-	 * objects of class URLString.
+	 * N.B. The Iterator returns URLs, but the Collection will contain objects
+	 * of class URLString.
 	 * 
-	 * @param html HTML code
-	 * @param baseUrl Base URL from which the HTML code was obtained
-	 * @param coll URLCollection
-	 * @return an Iterator for the resource URLs 
+	 * @param html
+	 *            HTML code
+	 * @param baseUrl
+	 *            Base URL from which the HTML code was obtained
+	 * @param coll
+	 *            URLCollection
+	 * @return an Iterator for the resource URLs
 	 */
-	public abstract Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl,
-	                                                  URLCollection coll)
-		throws HTMLParseException;
-
+	public abstract Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection coll)
+			throws HTMLParseException;
 
 	/**
 	 * Get the URLs for all the resources that a browser would automatically
 	 * download following the download of the HTML content, that is: images,
 	 * stylesheets, javascript files, applets, etc...
 	 * 
-	 * N.B.
-	 * The Iterator returns URLs, but the Collection will contain
-	 * objects of class URLString.
+	 * N.B. The Iterator returns URLs, but the Collection will contain objects
+	 * of class URLString.
 	 * 
-	 * @param html HTML code
-	 * @param baseUrl Base URL from which the HTML code was obtained
-	 * @param coll Collection - will contain URLString objects, not URLs
-	 * @return an Iterator for the resource URLs 
+	 * @param html
+	 *            HTML code
+	 * @param baseUrl
+	 *            Base URL from which the HTML code was obtained
+	 * @param coll
+	 *            Collection - will contain URLString objects, not URLs
+	 * @return an Iterator for the resource URLs
 	 */
-	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl,
-													  Collection coll)
-		throws HTMLParseException
-		{
-			return getEmbeddedResourceURLs(html,baseUrl, new URLCollection(coll));
-		}
+	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, Collection coll) throws HTMLParseException {
+		return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(coll));
+	}
 
+	/**
+	 * Parsers should over-ride this method if the parser class is re-usable, in
+	 * which case the class will be cached for the next getParser() call.
+	 * 
+	 * @return true if the Parser is reusable
+	 */
+	protected boolean isReusable() {
+		return false;
+	}
 
-    /**
-     * Parsers should over-ride this method if the parser class is re-usable,
-     * in which case the class will be cached for the next getParser() call.
-     * 
-     * @return true if the Parser is reusable
-     */
-    protected boolean isReusable()
-    {
-    	return false;
-    }
+	// ////////////////////////// TEST CODE FOLLOWS
+	// /////////////////////////////
 
-//////////////////////////// TEST CODE FOLLOWS /////////////////////////////
-
-
-    public static class Test extends JMeterTestCase
-    {
+	public static class Test extends JMeterTestCase {
 		private String parserName;
-        private int testNumber=0;
+
+		private int testNumber = 0;
 
 		public Test() {
 			super();
 		}
 
-        public Test(String name) {
+		public Test(String name) {
 			super(name);
 		}
 
@@ -263,259 +247,214 @@ public abstract class HTMLParser
 			parserName = parser;
 		}
 
-
-		private class TestClass //Can't instantiate
+		private class TestClass // Can't instantiate
 		{
-    	    private TestClass(){};	 
+			private TestClass() {
+			};
 		}
 
-    	private static class TestData
-    	{
-    		private String fileName;
+		private static class TestData {
+			private String fileName;
+
 			private String baseURL;
+
 			private String expectedSet;
+
 			private String expectedList;
 
-			private TestData(String f, String b, String s, String l){
+			private TestData(String f, String b, String s, String l) {
 				fileName = f;
-				baseURL  = b;
+				baseURL = b;
 				expectedSet = s;
 				expectedList = l;
 			}
 
-			private TestData(String f, String b, String s){
-				this(f,b,s,null);
+			private TestData(String f, String b, String s) {
+				this(f, b, s, null);
 			}
-    	}
+		}
 
-        // List of parsers to test. Should probably be derived automatically
-        private static final String []  PARSERS = {
-			"org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
-			"org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
-			"org.apache.jmeter.protocol.http.parser.RegexpHTMLParser"
-        };
-        private static final TestData[] TESTS = new TestData[]{
-        	new TestData(
-        	             "testfiles/HTMLParserTestCase.html",
-			             "http://localhost/mydir/myfile.html",
-			             "testfiles/HTMLParserTestCase.set",
-			              "testfiles/HTMLParserTestCase.all"
-        	             ),
-			new TestData(
-			             "testfiles/HTMLParserTestCaseWithBaseHRef.html",
-						 "http://localhost/mydir/myfile.html",
-						 "testfiles/HTMLParserTestCase.set",
-						  "testfiles/HTMLParserTestCase.all"
-						 ),
-			new TestData(
-		             "testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
-					 "http://localhost/mydir/images/myfile.html",
-					 "testfiles/HTMLParserTestCase.set",
-					  "testfiles/HTMLParserTestCase.all"
-					 ),
-			new TestData(
-						 "testfiles/HTMLParserTestCase2.html",
-						 "http:", //Dummy, as the file has no entries
-						 "",
-						 ""
-						 ),
-			new TestData(
-						 "testfiles/HTMLParserTestCase3.html",
-						 "http:", //Dummy, as the file has no entries
-						 "",
-						 ""
-						 ),
-            new TestData(
-                         "testfiles/HTMLParserTestCaseWithComments.html",
-                         "http://localhost/mydir/myfile.html",
-                         "testfiles/HTMLParserTestCase.set",
-                         "testfiles/HTMLParserTestCase.all"
-                         ),
-            new TestData(
-                     "testfiles/HTMLScript.html",
-                     "http://localhost/",
-                     "testfiles/HTMLScript.set",
-                     "testfiles/HTMLScript.all"
-                     ),
-            new TestData(
-		                 "testfiles/HTMLParserTestFrames.html",
-		                 "http://localhost/",
-		                 "testfiles/HTMLParserTestFrames.all",
-		                 "testfiles/HTMLParserTestFrames.all"
-		                 ),
-        };
+		// List of parsers to test. Should probably be derived automatically
+		private static final String[] PARSERS = { "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
+				"org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
+				"org.apache.jmeter.protocol.http.parser.RegexpHTMLParser" };
 
-        public static junit.framework.Test suite(){
-        	TestSuite suite = new TestSuite();
-        	suite.addTest(new Test("testDefaultParser"));
+		private static final TestData[] TESTS = new TestData[] {
+				new TestData("testfiles/HTMLParserTestCase.html", "http://localhost/mydir/myfile.html",
+						"testfiles/HTMLParserTestCase.set", "testfiles/HTMLParserTestCase.all"),
+				new TestData("testfiles/HTMLParserTestCaseWithBaseHRef.html", "http://localhost/mydir/myfile.html",
+						"testfiles/HTMLParserTestCase.set", "testfiles/HTMLParserTestCase.all"),
+				new TestData("testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
+						"http://localhost/mydir/images/myfile.html", "testfiles/HTMLParserTestCase.set",
+						"testfiles/HTMLParserTestCase.all"),
+				new TestData("testfiles/HTMLParserTestCase2.html", "http:", // Dummy,
+																			// as
+																			// the
+																			// file
+																			// has
+																			// no
+																			// entries
+						"", ""),
+				new TestData("testfiles/HTMLParserTestCase3.html", "http:", // Dummy,
+																			// as
+																			// the
+																			// file
+																			// has
+																			// no
+																			// entries
+						"", ""),
+				new TestData("testfiles/HTMLParserTestCaseWithComments.html", "http://localhost/mydir/myfile.html",
+						"testfiles/HTMLParserTestCase.set", "testfiles/HTMLParserTestCase.all"),
+				new TestData("testfiles/HTMLScript.html", "http://localhost/", "testfiles/HTMLScript.set",
+						"testfiles/HTMLScript.all"),
+				new TestData("testfiles/HTMLParserTestFrames.html", "http://localhost/",
+						"testfiles/HTMLParserTestFrames.all", "testfiles/HTMLParserTestFrames.all"), };
+
+		public static junit.framework.Test suite() {
+			TestSuite suite = new TestSuite();
+			suite.addTest(new Test("testDefaultParser"));
 			suite.addTest(new Test("testParserDefault"));
 			suite.addTest(new Test("testParserMissing"));
 			suite.addTest(new Test("testNotParser"));
 			suite.addTest(new Test("testNotCreatable"));
-			for (int i = 0;i<PARSERS.length;i++){
-				TestSuite ps = new TestSuite(PARSERS[i]);// Identify the subtests
-				ps.addTest(new Test("testParserProperty",PARSERS[i],0));
-				for (int j=0;j<TESTS.length;j++){
+			for (int i = 0; i < PARSERS.length; i++) {
+				TestSuite ps = new TestSuite(PARSERS[i]);// Identify the
+															// subtests
+				ps.addTest(new Test("testParserProperty", PARSERS[i], 0));
+				for (int j = 0; j < TESTS.length; j++) {
 					TestSuite ts = new TestSuite(TESTS[j].fileName);
-					ts.addTest(new Test("testParserSet",PARSERS[i],j));
-					ts.addTest(new Test("testParserList",PARSERS[i],j));
+					ts.addTest(new Test("testParserSet", PARSERS[i], j));
+					ts.addTest(new Test("testParserList", PARSERS[i], j));
 					ps.addTest(ts);
 				}
 				suite.addTest(ps);
 			}
-        	return suite;
-        }
-        
-        // Test if can instantiate parser using property name
-        public void testParserProperty() throws Exception
-        {
+			return suite;
+		}
+
+		// Test if can instantiate parser using property name
+		public void testParserProperty() throws Exception {
 			Properties p = JMeterUtils.getJMeterProperties();
-			if (p == null){
-				p=JMeterUtils.getProperties("jmeter.properties");
+			if (p == null) {
+				p = JMeterUtils.getProperties("jmeter.properties");
 			}
-			p.setProperty(PARSER_CLASSNAME,parserName);
+			p.setProperty(PARSER_CLASSNAME, parserName);
 			getParser();
-        }
-        
+		}
+
 		public void testDefaultParser() throws Exception {
-			getParser(); 
+			getParser();
 		}
 
 		public void testParserDefault() throws Exception {
-			getParser(DEFAULT_PARSER); 
+			getParser(DEFAULT_PARSER);
 		}
 
 		public void testParserMissing() throws Exception {
-			try{
-			    getParser("no.such.parser");
-			}
-			catch (HTMLParseError e)
-			{
-				if (e.getCause() instanceof ClassNotFoundException)
-				{
-					 //	This is OK
-				}
-				else
-				{
+			try {
+				getParser("no.such.parser");
+			} catch (HTMLParseError e) {
+				if (e.getCause() instanceof ClassNotFoundException) {
+					// This is OK
+				} else {
 					throw e;
 				}
 			}
 		}
 
 		public void testNotParser() throws Exception {
-			try{
-                getParser("java.lang.String");
-			}
-			catch (HTMLParseError e)
-			{
-				if (e.getCause() instanceof ClassCastException) return;
+			try {
+				getParser("java.lang.String");
+			} catch (HTMLParseError e) {
+				if (e.getCause() instanceof ClassCastException)
+					return;
 				throw e;
 			}
 		}
 
 		public void testNotCreatable() throws Exception {
-			try
-			{
+			try {
 				getParser(TestClass.class.getName());
-			}
-			catch (HTMLParseError e)
-			{
-				if (e.getCause() instanceof InstantiationException) return;
+			} catch (HTMLParseError e) {
+				if (e.getCause() instanceof InstantiationException)
+					return;
 				throw e;
 			}
 		}
 
-        public void testParserSet() throws Exception
-        {
+		public void testParserSet() throws Exception {
 			HTMLParser p = getParser(parserName);
-        	filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedSet
-        	        ,null,false);
-        }
-
-		public void testParserList() throws Exception
-		{
-			HTMLParser p = getParser(parserName);
-			filetest(p,TESTS[testNumber].fileName,TESTS[testNumber].baseURL,TESTS[testNumber].expectedList
-			        ,new Vector(),true);
+			filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseURL, TESTS[testNumber].expectedSet, null,
+					false);
 		}
 
-		private static void filetest(HTMLParser p,
-		                               String file,
-		                               String url,
-		                               String resultFile,
-		                               Collection c,
-		                               boolean orderMatters) //Does the order matter?
-		throws Exception
-		{
-			String parserName=p.getClass().getName()
-				.substring("org.apache.jmeter.protocol.http.parser".length());
-			log.debug("file   "+file);
-			File f= findTestFile(file);
-			byte[] buffer= new byte[(int)f.length()];
-			int len= new FileInputStream(f).read(buffer);
+		public void testParserList() throws Exception {
+			HTMLParser p = getParser(parserName);
+			filetest(p, TESTS[testNumber].fileName, TESTS[testNumber].baseURL, TESTS[testNumber].expectedList,
+					new Vector(), true);
+		}
+
+		private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection c,
+				boolean orderMatters) // Does the order matter?
+				throws Exception {
+			String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser".length());
+			log.debug("file   " + file);
+			File f = findTestFile(file);
+			byte[] buffer = new byte[(int) f.length()];
+			int len = new FileInputStream(f).read(buffer);
 			assertEquals(len, buffer.length);
 			Iterator result;
 			if (c == null) {
-				result = p.getEmbeddedResourceURLs(buffer,new URL(url));
+				result = p.getEmbeddedResourceURLs(buffer, new URL(url));
 			} else {
-			    result = p.getEmbeddedResourceURLs(buffer,new URL(url),c);
+				result = p.getEmbeddedResourceURLs(buffer, new URL(url), c);
 			}
-			/* 
-			 * TODO:
-			 * Exact ordering is only required for some tests;
-			 * change the comparison to do a set compare where
-			 * necessary.
+			/*
+			 * TODO: Exact ordering is only required for some tests; change the
+			 * comparison to do a set compare where necessary.
 			 */
 			Iterator expected;
 			if (orderMatters) {
-			 	expected= getFile(resultFile).iterator();
+				expected = getFile(resultFile).iterator();
 			} else {
 				// Convert both to Sets
 				expected = new TreeSet(getFile(resultFile)).iterator();
-				TreeSet temp = new TreeSet(new Comparator(){
-                    public int compare(Object o1, Object o2)
-                    {
-                    	return (o1.toString().compareTo(o2.toString()));
-                    }});
-				while (result.hasNext()){
+				TreeSet temp = new TreeSet(new Comparator() {
+					public int compare(Object o1, Object o2) {
+						return (o1.toString().compareTo(o2.toString()));
+					}
+				});
+				while (result.hasNext()) {
 					temp.add(result.next());
 				}
-				result=temp.iterator();
+				result = temp.iterator();
 			}
-			
+
 			while (expected.hasNext()) {
 				Object next = expected.next();
-				assertTrue(parserName+"::Expecting another result "+next
-						,result.hasNext());
-                try
-                {
-                    assertEquals(parserName+"("+file+")",next,((URL) result.next()).toString());
-                }
-                catch (ClassCastException e)
-                {
-                	fail(parserName+"::Expected URL, but got "+e.toString());
-                }
+				assertTrue(parserName + "::Expecting another result " + next, result.hasNext());
+				try {
+					assertEquals(parserName + "(" + file + ")", next, ((URL) result.next()).toString());
+				} catch (ClassCastException e) {
+					fail(parserName + "::Expected URL, but got " + e.toString());
+				}
 			}
-			assertFalse(parserName+"::Should have reached the end of the results",result.hasNext());
+			assertFalse(parserName + "::Should have reached the end of the results", result.hasNext());
 		}
 
-        // Get expected results as a List
-		private static List getFile(String file)
-		    throws Exception
-		{
+		// Get expected results as a List
+		private static List getFile(String file) throws Exception {
 			ArrayList al = new ArrayList();
-			if (file != null && file.length() > 0){
-			  BufferedReader br = 
-			    new BufferedReader(
-			        new FileReader(findTestFile(file)));
-			  String line = br.readLine();
-			  while (line != null){
-				al.add(line);
-				line = br.readLine();
-			  }
-			  br.close();
+			if (file != null && file.length() > 0) {
+				BufferedReader br = new BufferedReader(new FileReader(findTestFile(file)));
+				String line = br.readLine();
+				while (line != null) {
+					al.add(line);
+					line = br.readLine();
+				}
+				br.close();
 			}
 			return al;
 		}
-    }
+	}
 }

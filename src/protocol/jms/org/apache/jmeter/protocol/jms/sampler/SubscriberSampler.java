@@ -36,195 +36,190 @@ import org.apache.log.Logger;
 
 /**
  * @author pete
- *
+ * 
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class SubscriberSampler
-    extends BaseJMSSampler
-    implements TestListener, MessageListener {
+public class SubscriberSampler extends BaseJMSSampler implements TestListener, MessageListener {
 
 	// private Subscriber SUBSCRIBER = null;
 	static Logger log = LoggingManager.getLoggerForClass();
+
 	private transient ReceiveSubscriber SUBSCRIBER = null;
 
 	private StringBuffer BUFFER = new StringBuffer();
+
 	private transient int counter = 0;
+
 	private transient int loop = 0;
+
 	private transient boolean RUN = true;
-	
+
 	public static String CLIENT_CHOICE = "jms.client_choice";
 
-	public SubscriberSampler(){
+	public SubscriberSampler() {
 	}
-	
-	public void testEnded(String test){
+
+	public void testEnded(String test) {
 		testEnded();
 	}
-	
-	public void testStarted(String test){
+
+	public void testStarted(String test) {
 		testStarted();
 	}
-	
-    /**
-     * testEnded is called by Jmeter's engine. the implementation
-     * will reset the count, set RUN to false and clear the 
-     * StringBuffer.
-     */
-    public synchronized void testEnded() {
+
+	/**
+	 * testEnded is called by Jmeter's engine. the implementation will reset the
+	 * count, set RUN to false and clear the StringBuffer.
+	 */
+	public synchronized void testEnded() {
 		log.info("SubscriberSampler.testEnded called");
 		this.RUN = false;
 		this.resetCount();
 		ClientPool.clearClient();
 		this.BUFFER = null;
-		if (this.SUBSCRIBER != null){
+		if (this.SUBSCRIBER != null) {
 			this.SUBSCRIBER = null;
 		}
 		try {
 			this.finalize();
-		} catch (Throwable e){
+		} catch (Throwable e) {
 			log.error(e.getMessage());
 		}
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see junit.framework.TestListener#startTest(junit.framework.Test)
-     */
-    public void testStarted() {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestListener#startTest(junit.framework.Test)
+	 */
+	public void testStarted() {
+	}
 
-	public void testIterationStart(LoopIterationEvent event){
+	public void testIterationStart(LoopIterationEvent event) {
 	}
 
 	/**
-	 * Create the OnMessageSubscriber client and set the sampler
-	 * as the message listener.
+	 * Create the OnMessageSubscriber client and set the sampler as the message
+	 * listener.
+	 * 
 	 * @return
 	 */
-    public synchronized OnMessageSubscriber initListenerClient() {
-        OnMessageSubscriber sub = (OnMessageSubscriber)ClientPool.get(this);
-        if (sub == null) {
-            sub =
-                new OnMessageSubscriber(
-                    this.getUseJNDIPropertiesAsBoolean(),
-                    this.getJNDIInitialContextFactory(),
-                    this.getProviderUrl(),
-                    this.getConnectionFactory(),
-                    this.getTopic(),
-                    this.getUseAuth(),
-                    this.getUsername(),
-                    this.getPassword());
-            sub.setMessageListener(this);
-            sub.resume();
-            ClientPool.addClient(sub);
-            ClientPool.put(this, sub);
+	public synchronized OnMessageSubscriber initListenerClient() {
+		OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
+		if (sub == null) {
+			sub = new OnMessageSubscriber(this.getUseJNDIPropertiesAsBoolean(), this.getJNDIInitialContextFactory(),
+					this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(), this.getUseAuth(), this
+							.getUsername(), this.getPassword());
+			sub.setMessageListener(this);
+			sub.resume();
+			ClientPool.addClient(sub);
+			ClientPool.put(this, sub);
 			log.info("SubscriberSampler.initListenerClient called");
 			log.info("loop count " + this.getIterations());
-        }
-        this.RUN = true;
-        return sub;
-    }
+		}
+		this.RUN = true;
+		return sub;
+	}
 
 	/**
 	 * Create the ReceiveSubscriber client for the sampler.
 	 */
-    public void initReceiveClient() {
-        this.SUBSCRIBER =
-            new ReceiveSubscriber(
-                this.getUseJNDIPropertiesAsBoolean(),
-                this.getJNDIInitialContextFactory(),
-                this.getProviderUrl(),
-                this.getConnectionFactory(),
-                this.getTopic(),
-                this.getUseAuth(),
-                this.getUsername(),
-                this.getPassword());
-        this.SUBSCRIBER.resume();
-        ClientPool.addClient(this.SUBSCRIBER);
-        log.info("SubscriberSampler.initReceiveClient called");
-    }
-	
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
-     */
-    public SampleResult sample(Entry e) {
-        return this.sample();
-    }
+	public void initReceiveClient() {
+		this.SUBSCRIBER = new ReceiveSubscriber(this.getUseJNDIPropertiesAsBoolean(), this
+				.getJNDIInitialContextFactory(), this.getProviderUrl(), this.getConnectionFactory(), this.getTopic(),
+				this.getUseAuth(), this.getUsername(), this.getPassword());
+		this.SUBSCRIBER.resume();
+		ClientPool.addClient(this.SUBSCRIBER);
+		log.info("SubscriberSampler.initReceiveClient called");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+	 */
+	public SampleResult sample(Entry e) {
+		return this.sample();
+	}
 
 	/**
-	 * sample method will check which client it should use and
-	 * call the appropriate client specific sample method.
+	 * sample method will check which client it should use and call the
+	 * appropriate client specific sample method.
+	 * 
 	 * @return
 	 */
-	public SampleResult sample(){
-		if (this.getClientChoice().equals(JMSSubscriberGui.receive_str)){
+	public SampleResult sample() {
+		if (this.getClientChoice().equals(JMSSubscriberGui.receive_str)) {
 			return sampleWithReceive();
 		} else {
 			return sampleWithListener();
 		}
 	}
-	
+
 	/**
 	 * sample will block until messages are received
+	 * 
 	 * @return
 	 */
-	public SampleResult sampleWithListener(){
+	public SampleResult sampleWithListener() {
 		SampleResult result = new SampleResult();
 		result.setSampleLabel(getName());
 		OnMessageSubscriber sub = initListenerClient();
-		
-		this.loop = this.getIterationCount();
-		
-        result.sampleStart();
-        while (this.RUN && this.count(0) < this.loop) {
-            try {
-                Thread.sleep(0,50);
-            } catch (Exception e) {
-                log.info(e.getMessage());
-            }
-        }
-		result.sampleEnd();
-        result.setResponseMessage(loop + " samples messages recieved");
-        if (this.getReadResponseAsBoolean()){
-			result.setResponseData(this.BUFFER.toString().getBytes());
-        } else {
-        	result.setBytes(this.BUFFER.toString().getBytes().length);
-        }
-        result.setSuccessful(true);
-        result.setResponseCode(loop + " message(s) recieved successfully");
-        result.setSamplerData("Not applicable");
-        result.setSampleCount(loop);
 
-		this.resetCount();
-		return result;
-	}
-	
-	/**
-	 * Sample method uses the ReceiveSubscriber client instead of
-	 * onMessage approach.
-	 * @return
-	 */
-	public SampleResult sampleWithReceive(){
-		SampleResult result = new SampleResult();
-		result.setSampleLabel(getName());
-		if (this.SUBSCRIBER == null){
-			this.initReceiveClient();
-			this.SUBSCRIBER.start();
-		}
 		this.loop = this.getIterationCount();
-		this.SUBSCRIBER.setLoop(this.loop);
-		
+
 		result.sampleStart();
-		while (this.SUBSCRIBER.count(0) < this.loop) {
+		while (this.RUN && this.count(0) < this.loop) {
 			try {
-				Thread.sleep(0,50);
+				Thread.sleep(0, 50);
 			} catch (Exception e) {
 				log.info(e.getMessage());
 			}
 		}
 		result.sampleEnd();
 		result.setResponseMessage(loop + " samples messages recieved");
-		if (this.getReadResponseAsBoolean()){
+		if (this.getReadResponseAsBoolean()) {
+			result.setResponseData(this.BUFFER.toString().getBytes());
+		} else {
+			result.setBytes(this.BUFFER.toString().getBytes().length);
+		}
+		result.setSuccessful(true);
+		result.setResponseCode(loop + " message(s) recieved successfully");
+		result.setSamplerData("Not applicable");
+		result.setSampleCount(loop);
+
+		this.resetCount();
+		return result;
+	}
+
+	/**
+	 * Sample method uses the ReceiveSubscriber client instead of onMessage
+	 * approach.
+	 * 
+	 * @return
+	 */
+	public SampleResult sampleWithReceive() {
+		SampleResult result = new SampleResult();
+		result.setSampleLabel(getName());
+		if (this.SUBSCRIBER == null) {
+			this.initReceiveClient();
+			this.SUBSCRIBER.start();
+		}
+		this.loop = this.getIterationCount();
+		this.SUBSCRIBER.setLoop(this.loop);
+
+		result.sampleStart();
+		while (this.SUBSCRIBER.count(0) < this.loop) {
+			try {
+				Thread.sleep(0, 50);
+			} catch (Exception e) {
+				log.info(e.getMessage());
+			}
+		}
+		result.sampleEnd();
+		result.setResponseMessage(loop + " samples messages recieved");
+		if (this.getReadResponseAsBoolean()) {
 			result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
 		} else {
 			result.setBytes(this.SUBSCRIBER.getMessage().getBytes().length);
@@ -240,15 +235,15 @@ public class SubscriberSampler
 	}
 
 	/**
-	 * The sampler implements MessageListener directly and sets itself
-	 * as the listener with the TopicSubscriber.
+	 * The sampler implements MessageListener directly and sets itself as the
+	 * listener with the TopicSubscriber.
 	 */
-	public synchronized void onMessage(Message message){
+	public synchronized void onMessage(Message message) {
 		try {
-			if (message instanceof TextMessage){
-				TextMessage msg = (TextMessage)message;
+			if (message instanceof TextMessage) {
+				TextMessage msg = (TextMessage) message;
 				String content = msg.getText();
-				if (content != null){
+				if (content != null) {
 					this.BUFFER.append(content);
 					count(1);
 				}
@@ -257,40 +252,42 @@ public class SubscriberSampler
 			log.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * increment the count and return the new value.
+	 * 
 	 * @param count
 	 * @return
 	 */
-	public synchronized int count(int count){
+	public synchronized int count(int count) {
 		this.counter += count;
 		return this.counter;
 	}
-	
+
 	/**
-	 * resetCount will set the counter to zero and set the
-	 * length of the StringBuffer to zero.
+	 * resetCount will set the counter to zero and set the length of the
+	 * StringBuffer to zero.
 	 */
-	public synchronized void resetCount(){
+	public synchronized void resetCount() {
 		this.counter = 0;
 		this.BUFFER.setLength(0);
 	}
-	
+
 	// ----------- get/set methods ------------------- //
 	/**
-	 * Set the client choice. There are two options: ReceiveSusbscriber
-	 * and OnMessageSubscriber.
+	 * Set the client choice. There are two options: ReceiveSusbscriber and
+	 * OnMessageSubscriber.
 	 */
-	public void setClientChoice(String choice){
-		setProperty(CLIENT_CHOICE,choice);
+	public void setClientChoice(String choice) {
+		setProperty(CLIENT_CHOICE, choice);
 	}
 
 	/**
 	 * Return the client choice.
+	 * 
 	 * @return
-	 */	
-	public String getClientChoice(){
+	 */
+	public String getClientChoice() {
 		return getPropertyAsString(CLIENT_CHOICE);
 	}
 }

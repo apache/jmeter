@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -31,71 +31,57 @@ import org.apache.log.Logger;
  * @author unascribed
  * @version $Revision$
  */
-public class RemoteTestListenerWrapper
-    extends AbstractTestElement
-    implements TestListener, Serializable, NoThreadClone
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    RemoteSampleListener listener;
+public class RemoteTestListenerWrapper extends AbstractTestElement implements TestListener, Serializable, NoThreadClone {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public RemoteTestListenerWrapper()
-    {
-    }
+	RemoteSampleListener listener;
 
-    public RemoteTestListenerWrapper(RemoteSampleListener l)
-    {
-        listener = l;
-    }
-    public void testStarted()
-    {
-        try
-        {
-            listener.testStarted();
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
+	public RemoteTestListenerWrapper() {
+	}
 
-    }
-    public void testEnded()
-    {
-        try
-        {
-            listener.testEnded();
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
-    }
-    public void testStarted(String host)
-    {
-        try
-        {
-            listener.testStarted(host);
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
-    }
-    public void testEnded(String host)
-    {
-        try
-        {
-            listener.testEnded(host);
-        }
-        catch (Exception ex)
-        {
-            log.error("", ex);
-        }
-    }
-    /* (non-Javadoc)
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event)
-    {
-    }
+	public RemoteTestListenerWrapper(RemoteSampleListener l) {
+		listener = l;
+	}
+
+	public void testStarted() {
+		try {
+			listener.testStarted();
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+
+	}
+
+	public void testEnded() {
+		try {
+			listener.testEnded();
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+	}
+
+	public void testStarted(String host) {
+		try {
+			listener.testStarted(host);
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+	}
+
+	public void testEnded(String host) {
+		try {
+			listener.testEnded(host);
+		} catch (Exception ex) {
+			log.error("", ex);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testIterationStart(LoopIterationEvent)
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+	}
 
 }

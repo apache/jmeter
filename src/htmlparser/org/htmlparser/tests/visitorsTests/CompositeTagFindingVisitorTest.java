@@ -29,23 +29,17 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.tests.ParserTestCase;
 
+public class CompositeTagFindingVisitorTest extends ParserTestCase {
 
+	public CompositeTagFindingVisitorTest(String name) {
+		super(name);
+	}
 
-public class CompositeTagFindingVisitorTest extends ParserTestCase
-{
-
-    public CompositeTagFindingVisitorTest(String name)
-    {
-        super(name);
-    }
-
-    public void testFindTagsWithinGivenTag()
-    {
-        createParser("<html></html>");
-    }
+	public void testFindTagsWithinGivenTag() {
+		createParser("<html></html>");
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.timers;
 
@@ -23,24 +23,20 @@ import java.io.Serializable;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * This class implements those methods needed by RandomTimer
- * to be instantiable and implements a random delay with
- * an average value and a uniformly distributed variation.
- *
- * @author  <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
+ * This class implements those methods needed by RandomTimer to be instantiable
+ * and implements a random delay with an average value and a uniformly
+ * distributed variation.
+ * 
+ * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @version $Revision$ $Date$
  */
-public class UniformRandomTimer extends RandomTimer implements Serializable
-{
-    public long delay()
-    {
-        return (long) Math.abs(
-            (this.random.nextDouble() * getRange()) + super.delay());
-    }
+public class UniformRandomTimer extends RandomTimer implements Serializable {
+	public long delay() {
+		return (long) Math.abs((this.random.nextDouble() * getRange()) + super.delay());
+	}
 
-    public String toString()
-    {
-        return JMeterUtils.getResString("uniform_timer_memo");
-    }
+	public String toString() {
+		return JMeterUtils.getResString("uniform_timer_memo");
+	}
 
 }

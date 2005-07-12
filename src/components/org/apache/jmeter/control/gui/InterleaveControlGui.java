@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -26,72 +26,55 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class InterleaveControlGui extends AbstractControllerGui
-{
-    private JCheckBox style;
+public class InterleaveControlGui extends AbstractControllerGui {
+	private JCheckBox style;
 
-    public InterleaveControlGui()
-    {
-        init();
-    }
+	public InterleaveControlGui() {
+		init();
+	}
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        if (((InterleaveControl) el).getStyle()
-            == InterleaveControl.IGNORE_SUB_CONTROLLERS)
-        {
-            style.setSelected(true);
-        }
-        else
-        {
-            style.setSelected(false);
-        }
-    }
+	public void configure(TestElement el) {
+		super.configure(el);
+		if (((InterleaveControl) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
+			style.setSelected(true);
+		} else {
+			style.setSelected(false);
+		}
+	}
 
-    public TestElement createTestElement()
-    {
-        InterleaveControl ic = new InterleaveControl();
-        modifyTestElement(ic);
-        return ic;
-    }
+	public TestElement createTestElement() {
+		InterleaveControl ic = new InterleaveControl();
+		modifyTestElement(ic);
+		return ic;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement ic)
-    {
-        configureTestElement(ic);
-        if (style.isSelected())
-        {
-            ((InterleaveControl) ic).setStyle(
-                InterleaveControl.IGNORE_SUB_CONTROLLERS);
-        }
-        else
-        {
-            ((InterleaveControl) ic).setStyle(
-                InterleaveControl.USE_SUB_CONTROLLERS);
-        }
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement ic) {
+		configureTestElement(ic);
+		if (style.isSelected()) {
+			((InterleaveControl) ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
+		} else {
+			((InterleaveControl) ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
+		}
+	}
 
-    public String getLabelResource()
-    {
-        return "interleave_control_title";
-    }
+	public String getLabelResource() {
+		return "interleave_control_title";
+	}
 
-    private void init()
-    {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(makeBorder());
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
 
-        add(makeTitlePanel());
+		add(makeTitlePanel());
 
-        style =
-            new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
-        add(style);
-    }
+		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+		add(style);
+	}
 }

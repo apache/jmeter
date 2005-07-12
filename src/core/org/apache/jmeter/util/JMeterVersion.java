@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on 02-Oct-2003
@@ -31,25 +31,24 @@ package org.apache.jmeter.util;
  * Utility class to define the JMeter Version string
  * 
  */
-public class JMeterVersion
-{
+public class JMeterVersion {
 
 	/*
 	 * The VERSION string is updated by the Ant build file, which looks for the
 	 * pattern: VERSION = <quote>.*<quote>
-	 *
-	 * The string is made private so the compiler can't propagate it into JMeterUtils
-	 * This ensures that JMeterUtils always gets the correct version, even if it is
-	 * not re-compiled during the build.
+	 * 
+	 * The string is made private so the compiler can't propagate it into
+	 * JMeterUtils This ensures that JMeterUtils always gets the correct
+	 * version, even if it is not re-compiled during the build.
 	 */
-	private static final String VERSION = "2.1.20050422";
+	private static final String VERSION = "2.1.20050630";
 
 	static final String COPYRIGHT = "Copyright (c) 1998-2005 The Apache Software Foundation";
-	
-    private JMeterVersion() // Not instantiable
-    {
-        super();
-    }
+
+	private JMeterVersion() // Not instantiable
+	{
+		super();
+	}
 
 	static final String getVERSION() {
 		return VERSION;

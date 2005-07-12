@@ -14,17 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
 
 import javax.swing.JComponent;
 
 /**
- * Printable is used by components that can be saved to an
- * external file. It is up to the visualizers to get the
- * right component containing the JPanel or JComponent to
- * save.
+ * Printable is used by components that can be saved to an external file. It is
+ * up to the visualizers to get the right component containing the JPanel or
+ * JComponent to save.
  */
 public interface Printable {
 	JComponent getPrintableComponent();

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on Apr 30, 2003
@@ -30,55 +30,50 @@ import org.apache.jmeter.samplers.SampleResult;
 
 /**
  * @author ano ano
- *
+ * 
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class TestSampler extends AbstractSampler
-{
+public class TestSampler extends AbstractSampler {
 
-    private long wait = 0;
-    private long samples = 0; // number of samples taken
-    
-    /* (non-Javadoc)
-     * @see 
-org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
-     */
-    public SampleResult sample(Entry e)
-    {
-        if (wait > 0) {
-            try {
-                Thread.sleep(wait);
-            } catch (InterruptedException e1) {
-                // ignore
-            }
-        }
-        samples++;
-        return null;
-    }
+	private long wait = 0;
 
-    public TestSampler(String name, long wait)
-    {
-        setName(name);
-        this.wait=wait;
-    }
+	private long samples = 0; // number of samples taken
 
-    public TestSampler(String name)
-    {
-        setName(name);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+	 */
+	public SampleResult sample(Entry e) {
+		if (wait > 0) {
+			try {
+				Thread.sleep(wait);
+			} catch (InterruptedException e1) {
+				// ignore
+			}
+		}
+		samples++;
+		return null;
+	}
 
-    public TestSampler()
-    {}
-    
-    public String toString()
-    {
-        return getName();
-    }
+	public TestSampler(String name, long wait) {
+		setName(name);
+		this.wait = wait;
+	}
 
-    public long getSamples()
-    {
-        return samples;
-    }
+	public TestSampler(String name) {
+		setName(name);
+	}
+
+	public TestSampler() {
+	}
+
+	public String toString() {
+		return getName();
+	}
+
+	public long getSamples() {
+		return samples;
+	}
 }
-

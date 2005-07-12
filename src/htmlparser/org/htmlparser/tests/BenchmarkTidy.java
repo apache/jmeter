@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests;
 
 import java.io.BufferedReader;
@@ -47,164 +46,124 @@ import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
 
 /**
- * Title:		Apache Jakarta JMeter<br>
- * Copyright:	Copyright (c) Apache<br>
- * Company:		Apache<br>
+ * Title: Apache Jakarta JMeter<br>
+ * Copyright: Copyright (c) Apache<br>
+ * Company: Apache<br>
  * License:<br>
  * <br>
  * The license is at the top!<br>
  * <br>
  * Description:<br>
  * <br>
- * This is a quick class to benchmark tidy against htmlparser.
- * It is pretty basic and uses the same process as the original
- * image parsing code in JMeter 1.9.0 and earlier.
+ * This is a quick class to benchmark tidy against htmlparser. It is pretty
+ * basic and uses the same process as the original image parsing code in JMeter
+ * 1.9.0 and earlier.
  * <p>
- * Author:	pete<br>
- * Version: 	0.1<br>
- * Created on:	Sep 30, 2003<br>
- * Last Modified:	7:41:39 AM<br>
+ * Author: pete<br>
+ * Version: 0.1<br>
+ * Created on: Sep 30, 2003<br>
+ * Last Modified: 7:41:39 AM<br>
  */
-public class BenchmarkTidy
-{
+public class BenchmarkTidy {
 
-    protected static String utfEncodingName;
+	protected static String utfEncodingName;
 
-    /**
-     * 
-     */
-    public BenchmarkTidy(String data)
-    {
-        try
-        {
-            Document doc = (Document) getDOM(data);
-            parseNodes(doc, "img", false, "src");
-        }
-        catch (SAXException e)
-        {
-            e.printStackTrace();
-        }
-    }
+	/**
+	 * 
+	 */
+	public BenchmarkTidy(String data) {
+		try {
+			Document doc = (Document) getDOM(data);
+			parseNodes(doc, "img", false, "src");
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+	}
 
-    protected void parseNodes(
-        Document html,
-        String htmlTag,
-        boolean type,
-        String srcTag)
-    {
+	protected void parseNodes(Document html, String htmlTag, boolean type, String srcTag) {
 
-        NodeList nodeList = html.getElementsByTagName(htmlTag);
-        boolean uniqueBinary;
+		NodeList nodeList = html.getElementsByTagName(htmlTag);
+		boolean uniqueBinary;
 
-        for (int i = 0; i < nodeList.getLength(); i++)
-        {
-            uniqueBinary = true;
-            Node tempNode = nodeList.item(i);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			uniqueBinary = true;
+			Node tempNode = nodeList.item(i);
 
-            // get the url of the Binary
-            NamedNodeMap nnm = tempNode.getAttributes();
-            Node namedItem = null;
+			// get the url of the Binary
+			NamedNodeMap nnm = tempNode.getAttributes();
+			Node namedItem = null;
 
-            if (type)
-            {
-                // if type is set, we need 'type=image'
-                namedItem = nnm.getNamedItem("type");
-                if (namedItem == null)
-                {
-                    break;
-                }
-                String inputType = namedItem.getNodeValue();
+			if (type) {
+				// if type is set, we need 'type=image'
+				namedItem = nnm.getNamedItem("type");
+				if (namedItem == null) {
+					break;
+				}
+				String inputType = namedItem.getNodeValue();
 
-                if (inputType != null && inputType.equalsIgnoreCase("image"))
-                {
-                    // then we need to download the binary
-                }
-                else
-                {
-                    break;
-                }
-            }
-            namedItem = nnm.getNamedItem(srcTag);
-            System.out.println("Image Tag: " + htmlTag + " src=" + namedItem);
-        }
-    }
+				if (inputType != null && inputType.equalsIgnoreCase("image")) {
+					// then we need to download the binary
+				} else {
+					break;
+				}
+			}
+			namedItem = nnm.getNamedItem(srcTag);
+			System.out.println("Image Tag: " + htmlTag + " src=" + namedItem);
+		}
+	}
 
-    protected static Tidy getParser()
-    {
-        Tidy tidy = new Tidy();
-        tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-        tidy.setQuiet(true);
-        tidy.setShowWarnings(false);
+	protected static Tidy getParser() {
+		Tidy tidy = new Tidy();
+		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+		tidy.setQuiet(true);
+		tidy.setShowWarnings(false);
 
-        return tidy;
-    }
+		return tidy;
+	}
 
-    protected static Node getDOM(String text) throws SAXException
-    {
+	protected static Node getDOM(String text) throws SAXException {
 
-        try
-        {
-            Node node =
-                getParser().parseDOM(
-                    new ByteArrayInputStream(
-                        text.getBytes(getUTFEncodingName())),
-                    null);
+		try {
+			Node node = getParser().parseDOM(new ByteArrayInputStream(text.getBytes(getUTFEncodingName())), null);
 
-            return node;
-        }
-        catch (UnsupportedEncodingException e)
-        {
+			return node;
+		} catch (UnsupportedEncodingException e) {
 
-            throw new RuntimeException("UTF-8 encoding failed - " + e);
-        }
-    }
+			throw new RuntimeException("UTF-8 encoding failed - " + e);
+		}
+	}
 
-    protected static String getUTFEncodingName()
-    {
-        if (utfEncodingName == null)
-        {
-            String versionNum = System.getProperty("java.version");
-            if (versionNum.startsWith("1.1"))
-            {
-                utfEncodingName = "UTF8";
-            }
-            else
-            {
-                utfEncodingName = "UTF-8";
-            }
-        }
-        return utfEncodingName;
-    }
+	protected static String getUTFEncodingName() {
+		if (utfEncodingName == null) {
+			String versionNum = System.getProperty("java.version");
+			if (versionNum.startsWith("1.1")) {
+				utfEncodingName = "UTF8";
+			} else {
+				utfEncodingName = "UTF-8";
+			}
+		}
+		return utfEncodingName;
+	}
 
-    public static void main(String[] args)
-    {
-        if (args != null && args.length > 0)
-        {
-            try
-            {
-                File input = new File(args[0]);
+	public static void main(String[] args) {
+		if (args != null && args.length > 0) {
+			try {
+				File input = new File(args[0]);
 
-                StringBuffer buff = new StringBuffer();
-                BufferedReader reader =
-                    new BufferedReader(new FileReader(input));
-                String line = null;
-                while ((line = reader.readLine()) != null)
-                {
-                    buff.append(line);
-                }
-                long start = System.currentTimeMillis();
-                BenchmarkTidy test = new BenchmarkTidy(buff.toString());
-                System.out.println(
-                    "Elapsed time ms: " + (System.currentTimeMillis() - start));
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            System.out.println("Please provide a filename");
-        }
-    }
+				StringBuffer buff = new StringBuffer();
+				BufferedReader reader = new BufferedReader(new FileReader(input));
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					buff.append(line);
+				}
+				long start = System.currentTimeMillis();
+				BenchmarkTidy test = new BenchmarkTidy(buff.toString());
+				System.out.println("Elapsed time ms: " + (System.currentTimeMillis() - start));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Please provide a filename");
+		}
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -38,73 +38,57 @@ import org.apache.log.Logger;
  * @author mstover
  * @version $Revision$
  */
-public abstract class AbstractAction implements Command
-{
-    private static final Logger log = LoggingManager.getLoggerForClass();
+public abstract class AbstractAction implements Command {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * @see Command#doAction(ActionEvent)
-     */
-    public void doAction(ActionEvent e)
-    {
-    }
+	/**
+	 * @see Command#doAction(ActionEvent)
+	 */
+	public void doAction(ActionEvent e) {
+	}
 
-    /**
-     * @see Command#getActionNames()
-     */
-    abstract public Set getActionNames();
+	/**
+	 * @see Command#getActionNames()
+	 */
+	abstract public Set getActionNames();
 
-    protected void convertSubTree(HashTree tree)
-    {
-        Iterator iter = new LinkedList(tree.list()).iterator();
-        while (iter.hasNext())
-        {
-            JMeterTreeNode item = (JMeterTreeNode) iter.next();
-            if (item.isEnabled())
-            {
-                if (item.getUserObject() instanceof ReplaceableController)
-                {
-                    ReplaceableController rc =
-                        (ReplaceableController) item.getTestElement();
-                    HashTree subTree = tree.getTree(item);
+	protected void convertSubTree(HashTree tree) {
+		Iterator iter = new LinkedList(tree.list()).iterator();
+		while (iter.hasNext()) {
+			JMeterTreeNode item = (JMeterTreeNode) iter.next();
+			if (item.isEnabled()) {
+				if (item.getUserObject() instanceof ReplaceableController) {
+					ReplaceableController rc = (ReplaceableController) item.getTestElement();
+					HashTree subTree = tree.getTree(item);
 
-                    if (subTree != null)
-                    {
-                        rc.replace(subTree);
-                        convertSubTree(subTree);
-                        tree.replace(item, rc.getReplacement());
-                    }
-                }
-                else
-                {
-                    convertSubTree(tree.getTree(item));
-                    TestElement testElement = item.getTestElement();
-                    tree.replace(item, testElement);
-                }
-            }
-            else
-            {
-                tree.remove(item);
-            }
+					if (subTree != null) {
+						rc.replace(subTree);
+						convertSubTree(subTree);
+						tree.replace(item, rc.getReplacement());
+					}
+				} else {
+					convertSubTree(tree.getTree(item));
+					TestElement testElement = item.getTestElement();
+					tree.replace(item, testElement);
+				}
+			} else {
+				tree.remove(item);
+			}
 
-        }
-    }
+		}
+	}
 
-    /**
-     * @param e
-     */
-    protected void popupShouldSave(ActionEvent e)
-    {
-        log.debug("popupShouldSave");
-        if(GuiPackage.getInstance().getTestPlanFile() == null)
-        {
-            if(JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-                    JMeterUtils.getResString("should_save"),JMeterUtils.getResString("warning"),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
-            {
-                ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(),e.getID(),Save.SAVE));
-            }
-        }
-    }
+	/**
+	 * @param e
+	 */
+	protected void popupShouldSave(ActionEvent e) {
+		log.debug("popupShouldSave");
+		if (GuiPackage.getInstance().getTestPlanFile() == null) {
+			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
+					.getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE));
+			}
+		}
+	}
 }

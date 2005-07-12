@@ -16,7 +16,7 @@
  */
 package org.apache.jmeter.monitor.parser;
 
-//import java.util.List;
+// import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -35,212 +35,196 @@ import org.apache.jmeter.monitor.model.Worker;
 import org.apache.jmeter.monitor.model.Workers;
 import org.apache.jmeter.monitor.model.WorkersImpl;
 
-public class MonitorHandler extends DefaultHandler
-{
-	//private boolean startDoc = false;
-	//private boolean endDoc = false;
+public class MonitorHandler extends DefaultHandler {
+	// private boolean startDoc = false;
+	// private boolean endDoc = false;
 	private Stack stacktree = new Stack();
 
-	private ObjectFactory factory = null;	
+	private ObjectFactory factory = null;
+
 	private Status status = null;
+
 	private Jvm jvm = null;
+
 	private Memory memory = null;
+
 	private Connector connector = null;
+
 	private ThreadInfo threadinfo = null;
+
 	private RequestInfo requestinfo = null;
+
 	private Worker worker = null;
+
 	private Workers workers = null;
-	//private List workerslist = null;
-	
-    /**
-     * 
-     */
-    public MonitorHandler()
-    {
-        super();
-    }
+
+	// private List workerslist = null;
 
 	/**
-	 * Set the ObjectFactory used to create new 
+	 * 
+	 */
+	public MonitorHandler() {
+		super();
+	}
+
+	/**
+	 * Set the ObjectFactory used to create new
+	 * 
 	 * @param factory
 	 */
-	public void setObjectFactory(ObjectFactory factory){
+	public void setObjectFactory(ObjectFactory factory) {
 		this.factory = factory;
 	}
-	
-	public void startDocument ()
-	throws SAXException
-	{
-		//this.startDoc = true;
+
+	public void startDocument() throws SAXException {
+		// this.startDoc = true;
 	}
-	
-	public void endDocument ()
-	throws SAXException
-	{
-		//this.startDoc = false;
-		//this.endDoc = true;
+
+	public void endDocument() throws SAXException {
+		// this.startDoc = false;
+		// this.endDoc = true;
 	}
 
 	/**
 	 * Receive notification of the start of an element.
-	 *
-	 * <p>By default, do nothing.  Application writers may override this
-	 * method in a subclass to take specific actions at the start of
-	 * each element (such as allocating a new tree node or writing
-	 * output to a file).</p>
-	 *
+	 * 
+	 * <p>
+	 * By default, do nothing. Application writers may override this method in a
+	 * subclass to take specific actions at the start of each element (such as
+	 * allocating a new tree node or writing output to a file).
+	 * </p>
+	 * 
 	 * @param uri
-	 * @param localName The element type name.
+	 * @param localName
+	 *            The element type name.
 	 * @param qName
-	 * @param attributes The specified or defaulted attributes.
-	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
-	 *            wrapping another exception.
+	 * @param attributes
+	 *            The specified or defaulted attributes.
+	 * @exception org.xml.sax.SAXException
+	 *                Any SAX exception, possibly wrapping another exception.
 	 * @see org.xml.sax.ContentHandler#startElement
 	 */
-	public void startElement (String uri, String localName,
-				  String qName, Attributes attributes)
-	throws SAXException
-	{
-		if (qName.equals(Constants.STATUS)){
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		if (qName.equals(Constants.STATUS)) {
 			status = factory.createStatus();
 			stacktree.push(status);
-		} else if (qName.equals(Constants.JVM)){
+		} else if (qName.equals(Constants.JVM)) {
 			jvm = factory.createJvm();
-			if (stacktree.peek() instanceof Status){
+			if (stacktree.peek() instanceof Status) {
 				status.setJvm(jvm);
 				stacktree.push(jvm);
 			}
-		} else if (qName.equals(Constants.MEMORY)){
+		} else if (qName.equals(Constants.MEMORY)) {
 			memory = factory.createMemory();
-			if (stacktree.peek() instanceof Jvm){
+			if (stacktree.peek() instanceof Jvm) {
 				stacktree.push(memory);
-				if (attributes != null){
-					for (int idx=0; idx < attributes.getLength(); idx++){
+				if (attributes != null) {
+					for (int idx = 0; idx < attributes.getLength(); idx++) {
 						String attr = attributes.getQName(idx);
-						if (attr.equals(Constants.MEMORY_FREE)){
-							memory.
-								setFree(parseLong(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.MEMORY_TOTAL)){
-							memory.
-								setTotal(parseLong(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.MEMORY_MAX)){
-							memory.
-								setMax(parseLong(attributes.getValue(idx)));
+						if (attr.equals(Constants.MEMORY_FREE)) {
+							memory.setFree(parseLong(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.MEMORY_TOTAL)) {
+							memory.setTotal(parseLong(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.MEMORY_MAX)) {
+							memory.setMax(parseLong(attributes.getValue(idx)));
 						}
 					}
 				}
 				jvm.setMemory(memory);
 			}
-		} else if (qName.equals(Constants.CONNECTOR)){
+		} else if (qName.equals(Constants.CONNECTOR)) {
 			connector = factory.createConnector();
-			if (stacktree.peek() instanceof Status ||
-			stacktree.peek() instanceof Connector){
-				((StatusImpl)status).addConnector(connector);
+			if (stacktree.peek() instanceof Status || stacktree.peek() instanceof Connector) {
+				((StatusImpl) status).addConnector(connector);
 				stacktree.push(connector);
-				if (attributes != null){
-					for (int idx=0; idx < attributes.getLength(); idx++){
+				if (attributes != null) {
+					for (int idx = 0; idx < attributes.getLength(); idx++) {
 						String attr = attributes.getQName(idx);
-						if (attr.equals(Constants.ATTRIBUTE_NAME)){
+						if (attr.equals(Constants.ATTRIBUTE_NAME)) {
 							connector.setName(attributes.getValue(idx));
 						}
 					}
 				}
 			}
-		} else if (qName.equals(Constants.THREADINFO)){
+		} else if (qName.equals(Constants.THREADINFO)) {
 			threadinfo = factory.createThreadInfo();
-			if (stacktree.peek() instanceof Connector){
+			if (stacktree.peek() instanceof Connector) {
 				stacktree.push(threadinfo);
 				connector.setThreadInfo(threadinfo);
-				if (attributes != null){
-					for (int idx=0; idx < attributes.getLength(); idx++){
+				if (attributes != null) {
+					for (int idx = 0; idx < attributes.getLength(); idx++) {
 						String attr = attributes.getQName(idx);
-						if (attr.equals(Constants.MAXTHREADS)){
-							threadinfo.setMaxThreads(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.MINSPARETHREADS)){
-							threadinfo.setMinSpareThreads(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.MAXSPARETHREADS)){
-							threadinfo.setMaxSpareThreads(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.CURRENTTHREADCOUNT)){
-							threadinfo.setCurrentThreadCount(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.CURRENTBUSYTHREADS)){
-							threadinfo.setCurrentThreadsBusy(
-								parseInt(attributes.getValue(idx)));
+						if (attr.equals(Constants.MAXTHREADS)) {
+							threadinfo.setMaxThreads(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.MINSPARETHREADS)) {
+							threadinfo.setMinSpareThreads(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.MAXSPARETHREADS)) {
+							threadinfo.setMaxSpareThreads(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.CURRENTTHREADCOUNT)) {
+							threadinfo.setCurrentThreadCount(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.CURRENTBUSYTHREADS)) {
+							threadinfo.setCurrentThreadsBusy(parseInt(attributes.getValue(idx)));
 						}
 					}
 				}
 			}
-		} else if (qName.equals(Constants.REQUESTINFO)){
+		} else if (qName.equals(Constants.REQUESTINFO)) {
 			requestinfo = factory.createRequestInfo();
-			if (stacktree.peek() instanceof Connector){
+			if (stacktree.peek() instanceof Connector) {
 				stacktree.push(requestinfo);
 				connector.setRequestInfo(requestinfo);
-				if (attributes != null){
-					for (int idx=0; idx < attributes.getLength(); idx++){
+				if (attributes != null) {
+					for (int idx = 0; idx < attributes.getLength(); idx++) {
 						String attr = attributes.getQName(idx);
-						if (attr.equals(Constants.MAXTIME)){
-							requestinfo.setMaxTime(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.PROCESSINGTIME)){
-							requestinfo.setProcessingTime(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.REQUESTCOUNT)){
-							requestinfo.setRequestCount(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.ERRORCOUNT)){
-							requestinfo.setErrorCount(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.BYTESRECEIVED)){
-							requestinfo.setBytesReceived(
-								parseLong(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.BYTESSENT)){
-							requestinfo.setBytesSent(
-								parseLong(attributes.getValue(idx)));
+						if (attr.equals(Constants.MAXTIME)) {
+							requestinfo.setMaxTime(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.PROCESSINGTIME)) {
+							requestinfo.setProcessingTime(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.REQUESTCOUNT)) {
+							requestinfo.setRequestCount(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.ERRORCOUNT)) {
+							requestinfo.setErrorCount(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.BYTESRECEIVED)) {
+							requestinfo.setBytesReceived(parseLong(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.BYTESSENT)) {
+							requestinfo.setBytesSent(parseLong(attributes.getValue(idx)));
 						}
 					}
 				}
 			}
-		} else if (qName.equals(Constants.WORKERS)){
+		} else if (qName.equals(Constants.WORKERS)) {
 			workers = factory.createWorkers();
-			if (stacktree.peek() instanceof Connector){
+			if (stacktree.peek() instanceof Connector) {
 				connector.setWorkers(workers);
 				stacktree.push(workers);
 			}
-		} else if (qName.equals(Constants.WORKER)){
+		} else if (qName.equals(Constants.WORKER)) {
 			worker = factory.createWorker();
-			if (stacktree.peek() instanceof Workers ||
-			stacktree.peek() instanceof Worker){
+			if (stacktree.peek() instanceof Workers || stacktree.peek() instanceof Worker) {
 				stacktree.push(worker);
-				((WorkersImpl)workers).addWorker(worker);
-				if (attributes != null){
-					for (int idx=0; idx < attributes.getLength(); idx++){
+				((WorkersImpl) workers).addWorker(worker);
+				if (attributes != null) {
+					for (int idx = 0; idx < attributes.getLength(); idx++) {
 						String attr = attributes.getQName(idx);
-						if (attr.equals(Constants.STAGE)){
+						if (attr.equals(Constants.STAGE)) {
 							worker.setStage(attributes.getValue(idx));
-						} else if (attr.equals(Constants.REQUESTPROCESSINGTIME)){
-							worker.setRequestProcessingTime(
-								parseInt(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.REQUESTBYTESSENT)){
-							worker.setRequestBytesSent(
-								parseLong(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.REQUESTBYTESRECEIVED)){
-							worker.setRequestBytesReceived(
-								parseLong(attributes.getValue(idx)));
-						} else if (attr.equals(Constants.REMOTEADDR)){
+						} else if (attr.equals(Constants.REQUESTPROCESSINGTIME)) {
+							worker.setRequestProcessingTime(parseInt(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.REQUESTBYTESSENT)) {
+							worker.setRequestBytesSent(parseLong(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.REQUESTBYTESRECEIVED)) {
+							worker.setRequestBytesReceived(parseLong(attributes.getValue(idx)));
+						} else if (attr.equals(Constants.REMOTEADDR)) {
 							worker.setRemoteAddr(attributes.getValue(idx));
-						} else if (attr.equals(Constants.VIRTUALHOST)){
+						} else if (attr.equals(Constants.VIRTUALHOST)) {
 							worker.setVirtualHost(attributes.getValue(idx));
-						} else if (attr.equals(Constants.METHOD)){
+						} else if (attr.equals(Constants.METHOD)) {
 							worker.setMethod(attributes.getValue(idx));
-						} else if (attr.equals(Constants.CURRENTURI)){
+						} else if (attr.equals(Constants.CURRENTURI)) {
 							worker.setCurrentUri(attributes.getValue(idx));
-						} else if (attr.equals(Constants.CURRENTQUERYSTRING)){
-							worker.setCurrentQueryString(
-								attributes.getValue(idx));
-						} else if (attr.equals(Constants.PROTOCOL)){
+						} else if (attr.equals(Constants.CURRENTQUERYSTRING)) {
+							worker.setCurrentQueryString(attributes.getValue(idx));
+						} else if (attr.equals(Constants.PROTOCOL)) {
 							worker.setProtocol(attributes.getValue(idx));
 						}
 					}
@@ -248,58 +232,56 @@ public class MonitorHandler extends DefaultHandler
 			}
 		}
 	}
-    
-    
+
 	/**
 	 * Receive notification of the end of an element.
-	 *
-	 * <p>By default, do nothing.  Application writers may override this
-	 * method in a subclass to take specific actions at the end of
-	 * each element (such as finalising a tree node or writing
-	 * output to a file).</p>
-	 *
+	 * 
+	 * <p>
+	 * By default, do nothing. Application writers may override this method in a
+	 * subclass to take specific actions at the end of each element (such as
+	 * finalising a tree node or writing output to a file).
+	 * </p>
+	 * 
 	 * @param uri
-	 * @param localName The element type name.
-	 * @param qName The specified or defaulted attributes.
-	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
-	 *            wrapping another exception.
+	 * @param localName
+	 *            The element type name.
+	 * @param qName
+	 *            The specified or defaulted attributes.
+	 * @exception org.xml.sax.SAXException
+	 *                Any SAX exception, possibly wrapping another exception.
 	 * @see org.xml.sax.ContentHandler#endElement
 	 */
-	public void endElement (String uri, String localName, String qName)
-	throws SAXException
-	{
-		if (qName.equals(Constants.STATUS)){
-			if (stacktree.peek() instanceof Status){
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+		if (qName.equals(Constants.STATUS)) {
+			if (stacktree.peek() instanceof Status) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.JVM)){
-			if (stacktree.peek() instanceof Jvm){
+		} else if (qName.equals(Constants.JVM)) {
+			if (stacktree.peek() instanceof Jvm) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.MEMORY)){
-			if (stacktree.peek() instanceof Memory){
+		} else if (qName.equals(Constants.MEMORY)) {
+			if (stacktree.peek() instanceof Memory) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.CONNECTOR)){
-			if (stacktree.peek() instanceof Connector ||
-			stacktree.peek() instanceof Connector){
+		} else if (qName.equals(Constants.CONNECTOR)) {
+			if (stacktree.peek() instanceof Connector || stacktree.peek() instanceof Connector) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.THREADINFO)){
-			if (stacktree.peek() instanceof ThreadInfo){
+		} else if (qName.equals(Constants.THREADINFO)) {
+			if (stacktree.peek() instanceof ThreadInfo) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.REQUESTINFO)){
-			if (stacktree.peek() instanceof RequestInfo){
+		} else if (qName.equals(Constants.REQUESTINFO)) {
+			if (stacktree.peek() instanceof RequestInfo) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.WORKERS)){
-			if (stacktree.peek() instanceof Workers){
+		} else if (qName.equals(Constants.WORKERS)) {
+			if (stacktree.peek() instanceof Workers) {
 				stacktree.pop();
 			}
-		} else if (qName.equals(Constants.WORKER)){
-			if (stacktree.peek() instanceof Worker ||
-			stacktree.peek() instanceof Worker){
+		} else if (qName.equals(Constants.WORKER)) {
+			if (stacktree.peek() instanceof Worker || stacktree.peek() instanceof Worker) {
 				stacktree.pop();
 			}
 		}
@@ -307,65 +289,69 @@ public class MonitorHandler extends DefaultHandler
 
 	/**
 	 * Receive notification of character data inside an element.
-	 *
-	 * <p>By default, do nothing.  Application writers may override this
-	 * method to take specific actions for each chunk of character data
-	 * (such as adding the data to a node or buffer, or printing it to
-	 * a file).</p>
-	 *
-	 * @param ch The characters.
-	 * @param start The start position in the character array.
-	 * @param length The number of characters to use from the
-	 *               character array.
-	 * @exception org.xml.sax.SAXException Any SAX exception, possibly
-	 *            wrapping another exception.
+	 * 
+	 * <p>
+	 * By default, do nothing. Application writers may override this method to
+	 * take specific actions for each chunk of character data (such as adding
+	 * the data to a node or buffer, or printing it to a file).
+	 * </p>
+	 * 
+	 * @param ch
+	 *            The characters.
+	 * @param start
+	 *            The start position in the character array.
+	 * @param length
+	 *            The number of characters to use from the character array.
+	 * @exception org.xml.sax.SAXException
+	 *                Any SAX exception, possibly wrapping another exception.
 	 * @see org.xml.sax.ContentHandler#characters
 	 */
-	public void characters (char ch[], int start, int length)
-	throws SAXException
-	{
+	public void characters(char ch[], int start, int length) throws SAXException {
 	}
 
 	/**
-	 * Convienance method for parsing long. If the string
-	 * was not a number, the method returns zero.
+	 * Convienance method for parsing long. If the string was not a number, the
+	 * method returns zero.
+	 * 
 	 * @param data
 	 * @return the value as a long
-	 */    
-    public long parseLong(String data){
-    	long val = 0;
-    	if (data.length() > 0){
+	 */
+	public long parseLong(String data) {
+		long val = 0;
+		if (data.length() > 0) {
 			try {
 				val = Long.parseLong(data);
-			} catch (NumberFormatException e){
+			} catch (NumberFormatException e) {
 				val = 0;
 			}
-    	}
-    	return val;
-    }
-    
-    /**
-     * Convienance method for parsing integers. 
-     * @param data
-     * @return the value as an integer
-     */
-    public int parseInt(String data){
-    	int val = 0;
-    	if (data.length() > 0){
+		}
+		return val;
+	}
+
+	/**
+	 * Convienance method for parsing integers.
+	 * 
+	 * @param data
+	 * @return the value as an integer
+	 */
+	public int parseInt(String data) {
+		int val = 0;
+		if (data.length() > 0) {
 			try {
 				val = Integer.parseInt(data);
-			} catch (NumberFormatException e){
+			} catch (NumberFormatException e) {
 				val = 0;
 			}
-    	}
-    	return val;
-    }
-    
-    /**
-     * method returns the status object.
-     * @return the status
-     */
-    public Status getContents(){
-    	return this.status;
-    }
+		}
+		return val;
+	}
+
+	/**
+	 * method returns the status object.
+	 * 
+	 * @return the status
+	 */
+	public Status getContents() {
+		return this.status;
+	}
 }

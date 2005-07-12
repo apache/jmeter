@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.reporters;
 
@@ -22,47 +22,40 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
+
+// import org.apache.jorphan.logging.LoggingManager;
+// import org.apache.log.Logger;
 
 /**
  * @author Michael Stover
  * @version $Revision$
  */
-public class MailerResultCollector
-    extends ResultCollector
-    implements Serializable
-{
-    //transient private static Logger log = LoggingManager.getLoggerForClass();
-    public static final String MAILER_MODEL =
-        "MailerResultCollector.mailer_model";
+public class MailerResultCollector extends ResultCollector implements Serializable {
+	// transient private static Logger log = LoggingManager.getLoggerForClass();
+	public static final String MAILER_MODEL = "MailerResultCollector.mailer_model";
 
+	public MailerResultCollector() {
+		super();
+		setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
+	}
 
-    public MailerResultCollector()
-    {
-        super();
-        setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
-    }
-    
-    public void clear()
-    {
-        super.clear();
-        setProperty(new TestElementProperty(MAILER_MODEL,new MailerModel()));
-    }
-    
+	public void clear() {
+		super.clear();
+		setProperty(new TestElementProperty(MAILER_MODEL, new MailerModel()));
+	}
 
-    /* (non-Javadoc)
-     * @see SampleListener#sampleOccurred(SampleEvent)
-     */
-    public void sampleOccurred(SampleEvent e)
-    {
-        // TODO Auto-generated method stub
-        super.sampleOccurred(e);
-        getMailerModel().add(e.getResult());
-    }
-    
-    public MailerModel getMailerModel()
-    {
-        return (MailerModel)getProperty(MAILER_MODEL).getObjectValue();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SampleListener#sampleOccurred(SampleEvent)
+	 */
+	public void sampleOccurred(SampleEvent e) {
+		// TODO Auto-generated method stub
+		super.sampleOccurred(e);
+		getMailerModel().add(e.getResult());
+	}
+
+	public MailerModel getMailerModel() {
+		return (MailerModel) getProperty(MAILER_MODEL).getObjectValue();
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -36,158 +36,124 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class ThroughputControllerGui extends AbstractControllerGui
-{
-    private JComboBox styleBox;
-    private int style;
-    private JTextField throughput;
-    private JCheckBox perthread;
-    private boolean isPerThread = true;
+public class ThroughputControllerGui extends AbstractControllerGui {
+	private JComboBox styleBox;
 
-    private String BYNUMBER_LABEL =
-        JMeterUtils.getResString("throughput_control_bynumber_label");
-    private String BYPERCENT_LABEL =
-        JMeterUtils.getResString("throughput_control_bypercent_label");
-    private String THROUGHPUT_LABEL =
-        JMeterUtils.getResString("throughput_control_tplabel");
-    private String THROUGHPUT = "Througput Field";
-    private String PERTHREAD_LABEL =
-        JMeterUtils.getResString("throughput_control_perthread_label");
+	private int style;
 
-    public ThroughputControllerGui()
-    {
-        init();
-    }
+	private JTextField throughput;
 
-    public TestElement createTestElement()
-    {
-        ThroughputController tc = new ThroughputController();
-        modifyTestElement(tc);
-        return tc;
-    }
+	private JCheckBox perthread;
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement tc)
-    {
-        configureTestElement(tc);
-        ((ThroughputController) tc).setStyle(style);
-        ((ThroughputController) tc).setPerThread(isPerThread);
-        if (style == ThroughputController.BYNUMBER)
-        {
-            try
-            {
-                ((ThroughputController) tc).setMaxThroughput(
-                    Integer.parseInt(throughput.getText().trim()));
-            }
-            catch (NumberFormatException e)
-            {
-                ((ThroughputController) tc).setMaxThroughput(
-                    throughput.getText());
-            }
-        }
-        else
-        {
-            try
-            {
-                ((ThroughputController) tc).setPercentThroughput(
-                    Float.parseFloat(throughput.getText().trim()));
-            }
-            catch (NumberFormatException e)
-            {
-                ((ThroughputController) tc).setPercentThroughput(
-                    throughput.getText());
-            }
-        }
-    }
+	private boolean isPerThread = true;
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        if (((ThroughputController) el).getStyle()
-            == ThroughputController.BYNUMBER)
-        {
-            styleBox.getModel().setSelectedItem(BYNUMBER_LABEL);
-            throughput.setText(
-                String.valueOf(((ThroughputController) el).getMaxThroughput()));
-        }
-        else
-        {
-            styleBox.setSelectedItem(BYPERCENT_LABEL);
-            throughput.setText(
-                String.valueOf(
-                    ((ThroughputController) el).getPercentThroughput()));
-        }
-        perthread.setSelected(((ThroughputController) el).isPerThread());
-    }
+	private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label");
 
-    public String getLabelResource()
-    {
-        return "throughput_control_title";
-    }
+	private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label");
 
-    private void init()
-    {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(makeBorder());
-        add(makeTitlePanel());
+	private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel");
 
-        DefaultComboBoxModel styleModel = new DefaultComboBoxModel();
-        styleModel.addElement(BYNUMBER_LABEL);
-        styleModel.addElement(BYPERCENT_LABEL);
-        styleBox = new JComboBox(styleModel);
-        styleBox.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                if (((String) styleBox.getSelectedItem())
-                    .equals(BYNUMBER_LABEL))
-                {
-                    style = ThroughputController.BYNUMBER;
-                }
-                else
-                {
-                    style = ThroughputController.BYPERCENT;
-                }
-            }
-        });
-        add(styleBox);
+	private String THROUGHPUT = "Througput Field";
 
-        // TYPE FIELD
-        JPanel tpPanel = new JPanel();
-        JLabel tpLabel = new JLabel(THROUGHPUT_LABEL);
-        tpPanel.add(tpLabel);
+	private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label");
 
-        // TEXT FIELD
-        throughput = new JTextField(5);
-        tpPanel.add(throughput);
-        throughput.setName(THROUGHPUT);
-        throughput.setText("1");
-        // throughput.addActionListener(this);
-        tpPanel.add(throughput);
-        add(tpPanel);
+	public ThroughputControllerGui() {
+		init();
+	}
 
-        // PERTHREAD FIELD
-        perthread = new JCheckBox(PERTHREAD_LABEL, isPerThread);
-        perthread.addItemListener(new ItemListener()
-        {
-            public void itemStateChanged(ItemEvent event)
-            {
-                if (event.getStateChange() == ItemEvent.SELECTED)
-                {
-                    isPerThread = true;
-                }
-                else
-                {
-                    isPerThread = false;
-                }
-            }
-        });
-        add(perthread);
-    }
+	public TestElement createTestElement() {
+		ThroughputController tc = new ThroughputController();
+		modifyTestElement(tc);
+		return tc;
+	}
+
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement tc) {
+		configureTestElement(tc);
+		((ThroughputController) tc).setStyle(style);
+		((ThroughputController) tc).setPerThread(isPerThread);
+		if (style == ThroughputController.BYNUMBER) {
+			try {
+				((ThroughputController) tc).setMaxThroughput(Integer.parseInt(throughput.getText().trim()));
+			} catch (NumberFormatException e) {
+				((ThroughputController) tc).setMaxThroughput(throughput.getText());
+			}
+		} else {
+			try {
+				((ThroughputController) tc).setPercentThroughput(Float.parseFloat(throughput.getText().trim()));
+			} catch (NumberFormatException e) {
+				((ThroughputController) tc).setPercentThroughput(throughput.getText());
+			}
+		}
+	}
+
+	public void configure(TestElement el) {
+		super.configure(el);
+		if (((ThroughputController) el).getStyle() == ThroughputController.BYNUMBER) {
+			styleBox.getModel().setSelectedItem(BYNUMBER_LABEL);
+			throughput.setText(String.valueOf(((ThroughputController) el).getMaxThroughput()));
+		} else {
+			styleBox.setSelectedItem(BYPERCENT_LABEL);
+			throughput.setText(String.valueOf(((ThroughputController) el).getPercentThroughput()));
+		}
+		perthread.setSelected(((ThroughputController) el).isPerThread());
+	}
+
+	public String getLabelResource() {
+		return "throughput_control_title";
+	}
+
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
+		add(makeTitlePanel());
+
+		DefaultComboBoxModel styleModel = new DefaultComboBoxModel();
+		styleModel.addElement(BYNUMBER_LABEL);
+		styleModel.addElement(BYPERCENT_LABEL);
+		styleBox = new JComboBox(styleModel);
+		styleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (((String) styleBox.getSelectedItem()).equals(BYNUMBER_LABEL)) {
+					style = ThroughputController.BYNUMBER;
+				} else {
+					style = ThroughputController.BYPERCENT;
+				}
+			}
+		});
+		add(styleBox);
+
+		// TYPE FIELD
+		JPanel tpPanel = new JPanel();
+		JLabel tpLabel = new JLabel(THROUGHPUT_LABEL);
+		tpPanel.add(tpLabel);
+
+		// TEXT FIELD
+		throughput = new JTextField(5);
+		tpPanel.add(throughput);
+		throughput.setName(THROUGHPUT);
+		throughput.setText("1");
+		// throughput.addActionListener(this);
+		tpPanel.add(throughput);
+		add(tpPanel);
+
+		// PERTHREAD FIELD
+		perthread = new JCheckBox(PERTHREAD_LABEL, isPerThread);
+		perthread.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				if (event.getStateChange() == ItemEvent.SELECTED) {
+					isPerThread = true;
+				} else {
+					isPerThread = false;
+				}
+			}
+		});
+		add(perthread);
+	}
 }

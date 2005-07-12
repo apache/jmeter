@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.sampler;
 
@@ -34,132 +34,117 @@ import org.apache.jmeter.protocol.http.control.Header;
 
 /**
  * Sampler to handle SOAP Requests.
- *
+ * 
  * @author Jordi Salvat i Alabart
  * @version $Id$
  */
-public class SoapSampler extends HTTPSampler
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    public static final String XML_DATA = "HTTPSamper.xml_data";
-    public static final String URL_DATA = "SoapSampler.URL_DATA";
+public class SoapSampler extends HTTPSampler {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-    public void setXmlData(String data)
-    {
-        setProperty(XML_DATA, data);
-    }
+	public static final String XML_DATA = "HTTPSamper.xml_data";
 
-    public String getXmlData()
-    {
-        return getPropertyAsString(XML_DATA);
-    }
+	public static final String URL_DATA = "SoapSampler.URL_DATA";
 
-    public String getURLData()
-    {
-        return getPropertyAsString(URL_DATA);
-    }
+	public void setXmlData(String data) {
+		setProperty(XML_DATA, data);
+	}
 
-    public void setURLData(String url)
-    {
-        setProperty(URL_DATA, url);
-    }
+	public String getXmlData() {
+		return getPropertyAsString(XML_DATA);
+	}
 
-    /**
-     * Set the HTTP request headers in preparation to open the connection
-     * and sending the POST data.
-     *
-     * @param connection       <code>URLConnection</code> to set headers on
-     * @exception IOException  if an I/O exception occurs
-     */
-    public void setPostHeaders(URLConnection connection) throws IOException
-    {
-        ((HttpURLConnection) connection).setRequestMethod("POST");
-        connection.setRequestProperty(
-            "Content-Length",
-            "" + getXmlData().length());
-        // my first attempt at fixing the bug failed, due to user
-        // error on my part. HeaderManager does not use the normal
-        // setProperty, and getPropertyAsString methods. Instead,
-        // it uses it's own String array and Header object.
-        if (getHeaderManager() != null){
-        		// headerManager was set, so let's set the connection
-        		// to use it.
-        		HeaderManager mngr = getHeaderManager();
-        		int headerSize = mngr.size();
-        		// we set all the header properties
-        		for (int idx=0; idx < headerSize; idx++){
-        			Header hd = mngr.getHeader(idx);
-					connection.setRequestProperty(hd.getName(),hd.getValue());
-        		}
-        } else {
-        	// otherwise we use "text/xml" as the default
+	public String getURLData() {
+		return getPropertyAsString(URL_DATA);
+	}
+
+	public void setURLData(String url) {
+		setProperty(URL_DATA, url);
+	}
+
+	/**
+	 * Set the HTTP request headers in preparation to open the connection and
+	 * sending the POST data.
+	 * 
+	 * @param connection
+	 *            <code>URLConnection</code> to set headers on
+	 * @exception IOException
+	 *                if an I/O exception occurs
+	 */
+	public void setPostHeaders(URLConnection connection) throws IOException {
+		((HttpURLConnection) connection).setRequestMethod("POST");
+		connection.setRequestProperty("Content-Length", "" + getXmlData().length());
+		// my first attempt at fixing the bug failed, due to user
+		// error on my part. HeaderManager does not use the normal
+		// setProperty, and getPropertyAsString methods. Instead,
+		// it uses it's own String array and Header object.
+		if (getHeaderManager() != null) {
+			// headerManager was set, so let's set the connection
+			// to use it.
+			HeaderManager mngr = getHeaderManager();
+			int headerSize = mngr.size();
+			// we set all the header properties
+			for (int idx = 0; idx < headerSize; idx++) {
+				Header hd = mngr.getHeader(idx);
+				connection.setRequestProperty(hd.getName(), hd.getValue());
+			}
+		} else {
+			// otherwise we use "text/xml" as the default
 			connection.setRequestProperty("Content-Type", "text/xml");
-        }
-        connection.setDoOutput(true);
-    }
+		}
+		connection.setDoOutput(true);
+	}
 
-    /**
-     * Send POST data from <code>Entry</code> to the open connection.
-     *
-     * @param connection      <code>URLConnection</code> of where POST data
-     *                        should be sent
-     * @exception IOException if an I/O exception occurs
-     */
-    public void sendPostData(URLConnection connection) throws IOException
-    {
-        PrintWriter out = new PrintWriter(connection.getOutputStream());
-        out.print(getXmlData());
-        out.close();
-    }
-    
-    /* (non-Javadoc)
-     * @see Sampler#sample(Entry)
-     */
-    public SampleResult sample(Entry e)
-    {
-        try
-        {
-            URL url = new URL(getURLData());
-            setDomain(url.getHost());
-            setPort(url.getPort());
-            setProtocol(url.getProtocol());
-            setMethod(POST);
-            if (url.getQuery() != null && url.getQuery().compareTo("") != 0)
-            {
-                setPath(url.getPath() + "?" + url.getQuery());
-            }
-            else
-            {
-                setPath(url.getPath());
-            }
-            // make sure the Post header is set
-            URLConnection conn = url.openConnection();
-            setPostHeaders(conn);
-        }
-        catch (MalformedURLException e1)
-        {
-            log.error("Bad url: " + getURLData(), e1);
-        }
-        catch (IOException e1){
+	/**
+	 * Send POST data from <code>Entry</code> to the open connection.
+	 * 
+	 * @param connection
+	 *            <code>URLConnection</code> of where POST data should be sent
+	 * @exception IOException
+	 *                if an I/O exception occurs
+	 */
+	public void sendPostData(URLConnection connection) throws IOException {
+		PrintWriter out = new PrintWriter(connection.getOutputStream());
+		out.print(getXmlData());
+		out.close();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see Sampler#sample(Entry)
+	 */
+	public SampleResult sample(Entry e) {
+		try {
+			URL url = new URL(getURLData());
+			setDomain(url.getHost());
+			setPort(url.getPort());
+			setProtocol(url.getProtocol());
+			setMethod(POST);
+			if (url.getQuery() != null && url.getQuery().compareTo("") != 0) {
+				setPath(url.getPath() + "?" + url.getQuery());
+			} else {
+				setPath(url.getPath());
+			}
+			// make sure the Post header is set
+			URLConnection conn = url.openConnection();
+			setPostHeaders(conn);
+		} catch (MalformedURLException e1) {
 			log.error("Bad url: " + getURLData(), e1);
-        }
-        return super.sample(e);
-    }
+		} catch (IOException e1) {
+			log.error("Bad url: " + getURLData(), e1);
+		}
+		return super.sample(e);
+	}
 
-    public String toString()
-    {
-        try
-        {
-            String xml = getXmlData();
-            if (xml.length() > 100)
-            {
-                xml = xml.substring(0, 100);
-            }
-            return this.getUrl().toString() + "\nXML Data: " + xml;
-        }
-        catch (MalformedURLException e)
-        {
-            return "";
-        }
-    }
+	public String toString() {
+		try {
+			String xml = getXmlData();
+			if (xml.length() > 100) {
+				xml = xml.substring(0, 100);
+			}
+			return this.getUrl().toString() + "\nXML Data: " + xml;
+		} catch (MalformedURLException e) {
+			return "";
+		}
+	}
 }

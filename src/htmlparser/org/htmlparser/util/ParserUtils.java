@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 import java.util.Enumeration;
@@ -41,128 +40,110 @@ import org.htmlparser.NodeReader;
 import org.htmlparser.scanners.TagScanner;
 import org.htmlparser.tags.Tag;
 
-public class ParserUtils
-{
-    public static boolean evaluateTag(
-        TagScanner pTagScanner,
-        String pTagString,
-        String pTagName)
-    {
-        pTagString = TagScanner.absorbLeadingBlanks(pTagString);
-        if (pTagString.toUpperCase().indexOf(pTagName) == 0)
-            return true;
-        else
-            return false;
-    }
+public class ParserUtils {
+	public static boolean evaluateTag(TagScanner pTagScanner, String pTagString, String pTagName) {
+		pTagString = TagScanner.absorbLeadingBlanks(pTagString);
+		if (pTagString.toUpperCase().indexOf(pTagName) == 0)
+			return true;
+		else
+			return false;
+	}
 
-    public static String toHTML(Tag tag)
-    {
-        StringBuffer htmlString = new StringBuffer();
+	public static String toHTML(Tag tag) {
+		StringBuffer htmlString = new StringBuffer();
 
-        Hashtable attrs = tag.getAttributes();
-        String pTagName = tag.getAttribute(Tag.TAGNAME);
-        htmlString.append("<").append(pTagName);
-        for (Enumeration e = attrs.keys(); e.hasMoreElements();)
-        {
-            String key = (String) e.nextElement();
-            String value = (String) attrs.get(key);
-            if (!key.equalsIgnoreCase(Tag.TAGNAME) && value.length() > 0)
-                htmlString.append(" ").append(key).append("=\"").append(
-                    value).append(
-                    "\"");
-        }
-        htmlString.append(">");
+		Hashtable attrs = tag.getAttributes();
+		String pTagName = tag.getAttribute(Tag.TAGNAME);
+		htmlString.append("<").append(pTagName);
+		for (Enumeration e = attrs.keys(); e.hasMoreElements();) {
+			String key = (String) e.nextElement();
+			String value = (String) attrs.get(key);
+			if (!key.equalsIgnoreCase(Tag.TAGNAME) && value.length() > 0)
+				htmlString.append(" ").append(key).append("=\"").append(value).append("\"");
+		}
+		htmlString.append(">");
 
-        return htmlString.toString();
-    }
+		return htmlString.toString();
+	}
 
-    public static String toString(Tag tag)
-    {
-        String tagName = tag.getAttribute(Tag.TAGNAME);
-        Hashtable attrs = tag.getAttributes();
+	public static String toString(Tag tag) {
+		String tagName = tag.getAttribute(Tag.TAGNAME);
+		Hashtable attrs = tag.getAttributes();
 
-        StringBuffer lString = new StringBuffer(tagName);
-        lString.append(" TAG\n");
-        lString.append("--------\n");
+		StringBuffer lString = new StringBuffer(tagName);
+		lString.append(" TAG\n");
+		lString.append("--------\n");
 
-        for (Enumeration e = attrs.keys(); e.hasMoreElements();)
-        {
-            String key = (String) e.nextElement();
-            String value = (String) attrs.get(key);
-            if (!key.equalsIgnoreCase(Tag.TAGNAME) && value.length() > 0)
-                lString.append(key).append(" : ").append(value).append("\n");
-        }
+		for (Enumeration e = attrs.keys(); e.hasMoreElements();) {
+			String key = (String) e.nextElement();
+			String value = (String) attrs.get(key);
+			if (!key.equalsIgnoreCase(Tag.TAGNAME) && value.length() > 0)
+				lString.append(key).append(" : ").append(value).append("\n");
+		}
 
-        return lString.toString();
-    }
+		return lString.toString();
+	}
 
-    public static Map adjustScanners(NodeReader reader)
-    {
-        Map tempScanners = new Hashtable();
-        tempScanners = reader.getParser().getScanners();
-        // Remove all existing scanners
-        reader.getParser().flushScanners();
-        return tempScanners;
-    }
-    public static void restoreScanners(NodeReader reader, Map tempScanners)
-    {
-        // Flush the scanners
-        reader.getParser().setScanners(tempScanners);
-    }
+	public static Map adjustScanners(NodeReader reader) {
+		Map tempScanners = new Hashtable();
+		tempScanners = reader.getParser().getScanners();
+		// Remove all existing scanners
+		reader.getParser().flushScanners();
+		return tempScanners;
+	}
 
-    public static String removeChars(String s, char occur)
-    {
-        StringBuffer newString = new StringBuffer();
-        char ch;
-        for (int i = 0; i < s.length(); i++)
-        {
-            ch = s.charAt(i);
-            if (ch != occur)
-                newString.append(ch);
-        }
-        return newString.toString();
-    }
+	public static void restoreScanners(NodeReader reader, Map tempScanners) {
+		// Flush the scanners
+		reader.getParser().setScanners(tempScanners);
+	}
 
-    public static String removeEscapeCharacters(String inputString)
-    {
-        inputString = ParserUtils.removeChars(inputString, '\r');
-        inputString = ParserUtils.removeChars(inputString, '\n');
-        inputString = ParserUtils.removeChars(inputString, '\t');
-        return inputString;
-    }
+	public static String removeChars(String s, char occur) {
+		StringBuffer newString = new StringBuffer();
+		char ch;
+		for (int i = 0; i < s.length(); i++) {
+			ch = s.charAt(i);
+			if (ch != occur)
+				newString.append(ch);
+		}
+		return newString.toString();
+	}
 
-    public static String removeLeadingBlanks(String plainText)
-    {
-        while (plainText.indexOf(' ') == 0)
-            plainText = plainText.substring(1);
-        return plainText;
-    }
+	public static String removeEscapeCharacters(String inputString) {
+		inputString = ParserUtils.removeChars(inputString, '\r');
+		inputString = ParserUtils.removeChars(inputString, '\n');
+		inputString = ParserUtils.removeChars(inputString, '\t');
+		return inputString;
+	}
 
-    public static String removeTrailingBlanks(String text)
-    {
-        char ch = ' ';
-        while (ch == ' ')
-        {
-            ch = text.charAt(text.length() - 1);
-            if (ch == ' ')
-                text = text.substring(0, text.length() - 1);
-        }
-        return text;
-    }
+	public static String removeLeadingBlanks(String plainText) {
+		while (plainText.indexOf(' ') == 0)
+			plainText = plainText.substring(1);
+		return plainText;
+	}
 
-    /**
-     * Search given node and pick up any objects of given type, return
-     * Node array.
-     * @param node
-     * @param type
-     * @return Node[]
-     */
-    public static Node[] findTypeInNode(Node node, Class type)
-    {
-        NodeList nodeList = new NodeList();
-        node.collectInto(nodeList, type);
-        Node spans[] = nodeList.toNodeArray();
-        return spans;
-    }
+	public static String removeTrailingBlanks(String text) {
+		char ch = ' ';
+		while (ch == ' ') {
+			ch = text.charAt(text.length() - 1);
+			if (ch == ' ')
+				text = text.substring(0, text.length() - 1);
+		}
+		return text;
+	}
+
+	/**
+	 * Search given node and pick up any objects of given type, return Node
+	 * array.
+	 * 
+	 * @param node
+	 * @param type
+	 * @return Node[]
+	 */
+	public static Node[] findTypeInNode(Node node, Class type) {
+		NodeList nodeList = new NodeList();
+		node.collectInto(nodeList, type);
+		Node spans[] = nodeList.toNodeArray();
+		return spans;
+	}
 
 }

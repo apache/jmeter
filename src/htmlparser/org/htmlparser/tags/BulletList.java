@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
@@ -37,22 +36,19 @@ import org.htmlparser.tags.data.TagData;
 
 /**
  * @author Somik Raha
- *
+ * 
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class BulletList extends CompositeTag
-{
+public class BulletList extends CompositeTag {
 
-    public BulletList(TagData tagData, CompositeTagData compositeTagData)
-    {
-        super(tagData, compositeTagData);
-    }
+	public BulletList(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData, compositeTagData);
+	}
 
-    public String toString()
-    {
-        // TODO Auto-generated method stub
-        return "BulletList";
-    }
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "BulletList";
+	}
 
 }

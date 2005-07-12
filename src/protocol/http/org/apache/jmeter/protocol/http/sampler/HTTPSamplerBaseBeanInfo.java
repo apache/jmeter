@@ -24,9 +24,8 @@ import org.apache.jmeter.testelement.AbstractTestElementBeanInfo;
 
 /**
  * @author mstover
- *
+ * 
  */
-public class HTTPSamplerBaseBeanInfo extends AbstractTestElementBeanInfo
-{
+public class HTTPSamplerBaseBeanInfo extends AbstractTestElementBeanInfo {
 
 }

@@ -14,21 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.URL;
 
 /**
- * Dummy HTTPSampler class for use by classes that need an HTTPSampler,
- * but that don't need an actual sampler, e.g. for Parsing testing.
+ * Dummy HTTPSampler class for use by classes that need an HTTPSampler, but that
+ * don't need an actual sampler, e.g. for Parsing testing.
  */
 public final class HTTPNullSampler extends HTTPSamplerBase {
 
-   
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#sample(java.net.URL, java.lang.String, boolean, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase#sample(java.net.URL,
+	 *      java.lang.String, boolean, int)
 	 */
 	protected HTTPSampleResult sample(URL u, String s, boolean b, int i) {
 		throw new UnsupportedOperationException("For test purposes only");

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -31,164 +31,143 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * The function represented by this class allows data to be read from CSV
- * files.  Syntax is similar to StringFromFile function.  The function allows
- * the test to line-thru the data in the CSV file - one line per each test.
- * E.g. inserting the following in the test scripts :
+ * The function represented by this class allows data to be read from CSV files.
+ * Syntax is similar to StringFromFile function. The function allows the test to
+ * line-thru the data in the CSV file - one line per each test. E.g. inserting
+ * the following in the test scripts :
  * 
- *   ${_CSVRead(c:/BOF/abcd.csv,0)}       // read (first) line of
-'c:/BOF/abcd.csv' , return the 1st column ( represented by the '0'),
- *   ${_CSVRead(c:/BOF/abcd.csv,1)}       // read (first) line of
-'c:/BOF/abcd.csv' , return the 2nd column ( represented by the '1'),
- *   ${_CSVRead(c:/BOF/abcd.csv,next())}  // Go to next line of
-'c:/BOF/abcd.csv'
- *
- * NOTE: A single instance of each different file is opened and used for all threads.
+ * ${_CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv' ,
+ * return the 1st column ( represented by the '0'),
+ * ${_CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv' ,
+ * return the 2nd column ( represented by the '1'),
+ * ${_CSVRead(c:/BOF/abcd.csv,next())} // Go to next line of 'c:/BOF/abcd.csv'
  * 
- * To open the same file twice, use the alias function:
- *  __CSVRead(abc.csv,*ONE);
- *  __CSVRead(abc.csv,*TWO);
+ * NOTE: A single instance of each different file is opened and used for all
+ * threads.
  * 
- *  __CSVRead(*ONE,1); etc
+ * To open the same file twice, use the alias function: __CSVRead(abc.csv,*ONE);
+ * __CSVRead(abc.csv,*TWO);
  * 
- *
+ * __CSVRead(*ONE,1); etc
+ * 
+ * 
  * @version $Revision$ Last Updated: $Date$
  */
-public class CSVRead extends AbstractFunction implements Serializable
-{
-    transient private static final Logger log = LoggingManager.getLoggerForClass();
+public class CSVRead extends AbstractFunction implements Serializable {
+	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String KEY = "__CSVRead"; // Function name
+	private static final String KEY = "__CSVRead"; // Function name
 
-    private static final List desc = new LinkedList();
+	private static final List desc = new LinkedList();
 
-    
-    private Object[] values; // Parameter list
-    
-    static {
-        desc.add(JMeterUtils.getResString("csvread_file_file_name"));
-        desc.add(JMeterUtils.getResString("column_number"));
-    }
+	private Object[] values; // Parameter list
 
-    public CSVRead()
-    {
-    }
+	static {
+		desc.add(JMeterUtils.getResString("csvread_file_file_name"));
+		desc.add(JMeterUtils.getResString("column_number"));
+	}
 
-    public Object clone()
-    {
-        CSVRead newReader = new CSVRead();
-        return newReader;
-    }
+	public CSVRead() {
+	}
 
-    /**
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
-    	String myValue = "";
+	public Object clone() {
+		CSVRead newReader = new CSVRead();
+		return newReader;
+	}
 
-        String fileName =
-                ((org.apache.jmeter.engine.util.CompoundVariable) values[0])
-                    .execute();
-        String columnOrNext =
-                ((org.apache.jmeter.engine.util.CompoundVariable) values[1])
-                    .execute();
+	/**
+	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+	 */
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
+		String myValue = "";
+
+		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
+		String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
 		log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
 
-        // Process __CSVRead(filename,*ALIAS)
-        if (columnOrNext.startsWith("*"))
-        {
-            FileWrapper.open(fileName,columnOrNext);
-            /*
-             * All done, so return
-             */
-            return "";
-        }  
-            
-        // if argument is 'next' - go to the next line
-        if (columnOrNext.equals("next()") || columnOrNext.equals("next"))
-        {
-        	FileWrapper.endRow(fileName);
-        
-            /*
-             * All done now ,so return the empty string - this allows the caller to
-             * append __CSVRead(file,next) to the last instance of __CSVRead(file,col)
-             * 
-             * N.B. It is important not to read any further lines at this point, otherwise
-             * the wrong line can be retrieved when using multiple threads. 
-             */
-             return "";
-        }
-
-        try
-        {
-            int columnIndex = Integer.parseInt(columnOrNext); // what column is wanted?
-            myValue = FileWrapper.getColumn(fileName,columnIndex);
-        }
-        catch (NumberFormatException e)
-        {
-            log.warn(Thread.currentThread().getName()+" - can't parse column number: " 
-                     + columnOrNext + " "+ e.toString());
-        }
-		catch (IndexOutOfBoundsException e)
-		{
-			log.warn(Thread.currentThread().getName()+" - invalid column number: " + columnOrNext
-			          + " at row " + FileWrapper.getCurrentRow(fileName) + " "
-			          + e.toString());
+		// Process __CSVRead(filename,*ALIAS)
+		if (columnOrNext.startsWith("*")) {
+			FileWrapper.open(fileName, columnOrNext);
+			/*
+			 * All done, so return
+			 */
+			return "";
 		}
 
-        log.debug("execute value: "+myValue);
-        
-        return myValue;
-    }
+		// if argument is 'next' - go to the next line
+		if (columnOrNext.equals("next()") || columnOrNext.equals("next")) {
+			FileWrapper.endRow(fileName);
 
-    /**
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+			/*
+			 * All done now ,so return the empty string - this allows the caller
+			 * to append __CSVRead(file,next) to the last instance of
+			 * __CSVRead(file,col)
+			 * 
+			 * N.B. It is important not to read any further lines at this point,
+			 * otherwise the wrong line can be retrieved when using multiple
+			 * threads.
+			 */
+			return "";
+		}
 
-    /**
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
-    
-    /**
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
-   		log.debug("setParameter - Collection.size=" + parameters.size());
+		try {
+			int columnIndex = Integer.parseInt(columnOrNext); // what column
+																// is wanted?
+			myValue = FileWrapper.getColumn(fileName, columnIndex);
+		} catch (NumberFormatException e) {
+			log.warn(Thread.currentThread().getName() + " - can't parse column number: " + columnOrNext + " "
+					+ e.toString());
+		} catch (IndexOutOfBoundsException e) {
+			log.warn(Thread.currentThread().getName() + " - invalid column number: " + columnOrNext + " at row "
+					+ FileWrapper.getCurrentRow(fileName) + " " + e.toString());
+		}
 
-        values = parameters.toArray();
+		log.debug("execute value: " + myValue);
 
-		if (log.isDebugEnabled()){
-			for (int i=0;i <parameters.size();i++){
-				log.debug("i:"+((CompoundVariable)values[i]).execute());
+		return myValue;
+	}
+
+	/**
+	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+	 */
+	public List getArgumentDesc() {
+		return desc;
+	}
+
+	/**
+	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
+	 */
+	public String getReferenceKey() {
+		return KEY;
+	}
+
+	/**
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+	 */
+	public void setParameters(Collection parameters) throws InvalidVariableException {
+		log.debug("setParameter - Collection.size=" + parameters.size());
+
+		values = parameters.toArray();
+
+		if (log.isDebugEnabled()) {
+			for (int i = 0; i < parameters.size(); i++) {
+				log.debug("i:" + ((CompoundVariable) values[i]).execute());
 			}
 		}
 
-        if (values.length != 2)
-        {
-            throw new InvalidVariableException("Wrong number of parameters; 2 != "+values.length);
-        }
-        
-        /*
-         * Need to reset the containers for repeated runs; about the only way for 
-         * functions to detect that a run is starting seems to be the setParameters()
-         * call.
-        */
-		FileWrapper.clearAll();//TODO only clear the relevant entry - if possible...
+		if (values.length != 2) {
+			throw new InvalidVariableException("Wrong number of parameters; 2 != " + values.length);
+		}
 
-    }
+		/*
+		 * Need to reset the containers for repeated runs; about the only way
+		 * for functions to detect that a run is starting seems to be the
+		 * setParameters() call.
+		 */
+		FileWrapper.clearAll();// TODO only clear the relevant entry - if
+								// possible...
+
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.exceptions;
 
@@ -22,14 +22,11 @@ package org.apache.jmeter.exceptions;
  * @author Michael Stover
  * @version $Revision$
  */
-public class IllegalUserActionException extends Exception
-{
-    public IllegalUserActionException()
-    {
-    }
+public class IllegalUserActionException extends Exception {
+	public IllegalUserActionException() {
+	}
 
-    public IllegalUserActionException(String name)
-    {
-        super(name);
-    }
+	public IllegalUserActionException(String name) {
+		super(name);
+	}
 }

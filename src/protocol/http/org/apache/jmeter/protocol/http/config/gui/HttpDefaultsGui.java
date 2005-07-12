@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.config.gui;
 
@@ -39,114 +39,99 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * @version $Revision$
  */
-public class HttpDefaultsGui extends AbstractConfigGui
-{
-    JLabeledTextField protocol;
-    JLabeledTextField domain;
-    JLabeledTextField path;
-    JLabeledTextField port;
-    HTTPArgumentsPanel argPanel;
-    private JCheckBox imageParser;
+public class HttpDefaultsGui extends AbstractConfigGui {
+	JLabeledTextField protocol;
 
-    public HttpDefaultsGui()
-    {
-        super();
-        init();
-    }
+	JLabeledTextField domain;
 
-    public String getLabelResource()
-    {
-        return "url_config_title";
-    }
+	JLabeledTextField path;
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        ConfigTestElement config = new ConfigTestElement();
-        modifyTestElement(config);
-        return config;
-    }
+	JLabeledTextField port;
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement config)
-    {
-        super.configureTestElement(config);
-        config.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
-        config.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
-        config.setProperty(HTTPSamplerBase.PATH, path.getText());
-        config.setProperty(
-            new TestElementProperty(
-                HTTPSamplerBase.ARGUMENTS,
-                argPanel.createTestElement()));
-        config.setProperty(HTTPSamplerBase.PORT, port.getText());
-        if(imageParser.isSelected())
-            config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER,true));
-        else
-        {
-            config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
-        }
-    }
+	HTTPArgumentsPanel argPanel;
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
-        domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
-        path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
-        port.setText(el.getPropertyAsString(HTTPSamplerBase.PORT));
-        argPanel.configure(
-            (TestElement) el
-                .getProperty(HTTPSamplerBase.ARGUMENTS)
-                .getObjectValue());
-        imageParser.setSelected(((AbstractTestElement)el).getPropertyAsBoolean(
-                HTTPSamplerBase.IMAGE_PARSER));
-    }
+	private JCheckBox imageParser;
 
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	public HttpDefaultsGui() {
+		super();
+		init();
+	}
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	public String getLabelResource() {
+		return "url_config_title";
+	}
 
-        Box mainPanel = Box.createVerticalBox();
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		ConfigTestElement config = new ConfigTestElement();
+		modifyTestElement(config);
+		return config;
+	}
 
-        VerticalPanel urlPanel = new VerticalPanel();
-        protocol =
-            new JLabeledTextField(
-                JMeterUtils.getResString("url_config_protocol"));
-        urlPanel.add(protocol);
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement config) {
+		super.configureTestElement(config);
+		config.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
+		config.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
+		config.setProperty(HTTPSamplerBase.PATH, path.getText());
+		config.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, argPanel.createTestElement()));
+		config.setProperty(HTTPSamplerBase.PORT, port.getText());
+		if (imageParser.isSelected())
+			config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
+		else {
+			config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+		}
+	}
 
-        domain =
-            new JLabeledTextField(
-                JMeterUtils.getResString("web_server_domain"));
-        urlPanel.add(domain);
+	public void configure(TestElement el) {
+		super.configure(el);
+		protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
+		domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
+		path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
+		port.setText(el.getPropertyAsString(HTTPSamplerBase.PORT));
+		argPanel.configure((TestElement) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue());
+		imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
+	}
 
-        path = new JLabeledTextField(JMeterUtils.getResString("path"));
-        urlPanel.add(path);
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
-        port =
-            new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
-        urlPanel.add(port);
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-        mainPanel.add(urlPanel);
+		Box mainPanel = Box.createVerticalBox();
 
-        argPanel = new HTTPArgumentsPanel();
-        mainPanel.add(argPanel);
+		VerticalPanel urlPanel = new VerticalPanel();
+		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
+		urlPanel.add(protocol);
 
-        add(mainPanel, BorderLayout.CENTER);
+		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
+		urlPanel.add(domain);
 
-        imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
-        add(imageParser,BorderLayout.SOUTH);
-    }
+		path = new JLabeledTextField(JMeterUtils.getResString("path"));
+		urlPanel.add(path);
 
-    public Dimension getPreferredSize()
-    {
-        return getMinimumSize();
-    }
+		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+		urlPanel.add(port);
+
+		mainPanel.add(urlPanel);
+
+		argPanel = new HTTPArgumentsPanel();
+		mainPanel.add(argPanel);
+
+		add(mainPanel, BorderLayout.CENTER);
+
+		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+		add(imageParser, BorderLayout.SOUTH);
+	}
+
+	public Dimension getPreferredSize() {
+		return getMinimumSize();
+	}
 }

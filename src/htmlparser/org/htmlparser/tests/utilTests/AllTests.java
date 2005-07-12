@@ -29,48 +29,46 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.utilTests;
-
 
 import junit.framework.TestSuite;
 
 /**
- * Insert the type's description here.
- * Creation date: (6/17/2001 6:07:04 PM)
+ * Insert the type's description here. Creation date: (6/17/2001 6:07:04 PM)
+ * 
  * @author: Administrator
  */
-public class AllTests extends junit.framework.TestCase
-{
-    /**
-     * AllTests constructor comment.
-     * @param name java.lang.String
-     */
-    public AllTests(String name)
-    {
-        super(name);
-    }
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(
-            new String[] { "org.htmlparser.tests.AllTests" });
-    }
-    /**
-     * Insert the method's description here.
-     * Creation date: (6/17/2001 6:07:15 PM)
-     * @return junit.framework.TestSuite
-     */
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite("Utility Tests");
+public class AllTests extends junit.framework.TestCase {
+	/**
+	 * AllTests constructor comment.
+	 * 
+	 * @param name
+	 *            java.lang.String
+	 */
+	public AllTests(String name) {
+		super(name);
+	}
 
-        suite.addTestSuite(BeanTest.class);
-        suite.addTestSuite(CharacterTranslationTest.class);
-        suite.addTestSuite(HTMLLinkProcessorTest.class);
-        suite.addTestSuite(HTMLParserUtilsTest.class);
-        suite.addTestSuite(HTMLTagParserTest.class);
-        suite.addTestSuite(NodeListTest.class);
+	public static void main(String[] args) {
+		new junit.awtui.TestRunner().start(new String[] { "org.htmlparser.tests.AllTests" });
+	}
 
-        return suite;
-    }
+	/**
+	 * Insert the method's description here. Creation date: (6/17/2001 6:07:15
+	 * PM)
+	 * 
+	 * @return junit.framework.TestSuite
+	 */
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite("Utility Tests");
+
+		suite.addTestSuite(BeanTest.class);
+		suite.addTestSuite(CharacterTranslationTest.class);
+		suite.addTestSuite(HTMLLinkProcessorTest.class);
+		suite.addTestSuite(HTMLParserUtilsTest.class);
+		suite.addTestSuite(HTMLTagParserTest.class);
+		suite.addTestSuite(NodeListTest.class);
+
+		return suite;
+	}
 }

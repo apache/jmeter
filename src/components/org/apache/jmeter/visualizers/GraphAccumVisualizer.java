@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -39,165 +38,151 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
  * This class implements a statistical analyser that plots the accumulated time
  * taken to load each set of pages. The number of plots is equivalent to the
  * number of times the set of pages is configured to load.
- *
  * 
- * Created     2001/08/11
- * @version   $Revision$ $Date$
+ * 
+ * Created 2001/08/11
+ * 
+ * @version $Revision$ $Date$
  */
-public class GraphAccumVisualizer extends AbstractVisualizer
-        implements ImageVisualizer, GraphAccumListener, Clearable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphAccumListener, Clearable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    protected transient GraphAccumModel model;
-    protected transient GraphAccum graph;
-    transient protected JPanel legendPanel;
+	protected transient GraphAccumModel model;
 
-    /**
-     * Constructor.
-     */
-    public GraphAccumVisualizer()
-    {
-        super();
-        model = new GraphAccumModel();
-        model.addGraphAccumListener(this);
-        init();
-        log.debug("Start : GraphAccumVisualizer1");
-        log.debug("End : GraphAccumVisualizer1");
-    }
+	protected transient GraphAccum graph;
 
-    public String getLabelResource()
-    {
-        return "graph_full_results_title";
-    }
+	transient protected JPanel legendPanel;
 
-    public void add(SampleResult res)
-    {
-        model.addNewSample(res);
-    }
+	/**
+	 * Constructor.
+	 */
+	public GraphAccumVisualizer() {
+		super();
+		model = new GraphAccumModel();
+		model.addGraphAccumListener(this);
+		init();
+		log.debug("Start : GraphAccumVisualizer1");
+		log.debug("End : GraphAccumVisualizer1");
+	}
 
-    /**
-     * Returns the panel where labels can be added.
-     *
-     * @return  a panel where labels can be added
-     */
-    public Object getWhiteCanvas()
-    {
-        return legendPanel;
-    }
+	public String getLabelResource() {
+		return "graph_full_results_title";
+	}
 
-    /**
-     * Gets the Image attribute of the GraphVisualizer object.
-     *
-     * @return   the Image value
-     */
-    public Image getImage()
-    {
-        log.debug("Start : getImage1");
-        Image result = graph.createImage(graph.getWidth(), graph.getHeight());
+	public void add(SampleResult res) {
+		model.addNewSample(res);
+	}
 
-        graph.paintComponent(result.getGraphics());
-        log.debug("End : getImage1");
-        return result;
-    }
+	/**
+	 * Returns the panel where labels can be added.
+	 * 
+	 * @return a panel where labels can be added
+	 */
+	public Object getWhiteCanvas() {
+		return legendPanel;
+	}
 
-    /**
-     * Updates the gui to reflect changes.
-     */
-    public void updateGui()
-    {
-        log.debug("Start : updateGui1");
-        graph.updateGui();
-        log.debug("End : updateGui1");
-    }
+	/**
+	 * Gets the Image attribute of the GraphVisualizer object.
+	 * 
+	 * @return the Image value
+	 */
+	public Image getImage() {
+		log.debug("Start : getImage1");
+		Image result = graph.createImage(graph.getWidth(), graph.getHeight());
 
-    /**
-     * Updates gui to reflect small changes.
-     *
-     * @param s  sample to be added to plot
-     */
-    public void updateGui(SampleResult s)
-    {
-        log.debug("Start : updateGui2");
-        log.debug("End : updateGui2");
-    }
+		graph.paintComponent(result.getGraphics());
+		log.debug("End : getImage1");
+		return result;
+	}
 
-    /**
-     * Clear this visualizer data.
-     */
-    public synchronized void clear()
-    {
-        model.clear();
-        graph.clear();
-        log.debug("Start : clear1");
-        repaint();
-        log.debug("End : clear1");
-    }
+	/**
+	 * Updates the gui to reflect changes.
+	 */
+	public void updateGui() {
+		log.debug("Start : updateGui1");
+		graph.updateGui();
+		log.debug("End : updateGui1");
+	}
 
-    /**
-     * Returns a description of this instance.
-     *
-     * @return   description of this instance
-     */
-    public String toString()
-    {
-        String toString = "Show the samples analysys as dot plots";
+	/**
+	 * Updates gui to reflect small changes.
+	 * 
+	 * @param s
+	 *            sample to be added to plot
+	 */
+	public void updateGui(SampleResult s) {
+		log.debug("Start : updateGui2");
+		log.debug("End : updateGui2");
+	}
 
-        log.debug("toString1 : Returning - " + toString);
-        return toString;
-    }
+	/**
+	 * Clear this visualizer data.
+	 */
+	public synchronized void clear() {
+		model.clear();
+		graph.clear();
+		log.debug("Start : clear1");
+		repaint();
+		log.debug("End : clear1");
+	}
 
-    /**
-     * Setup all the swing components.
-     */
-    private void init()
-    {
-        log.debug("Start : init1");
-        graph = new GraphAccum(model);
-        graph.setVisualizer(this);
+	/**
+	 * Returns a description of this instance.
+	 * 
+	 * @return description of this instance
+	 */
+	public String toString() {
+		String toString = "Show the samples analysys as dot plots";
 
-        this.setLayout(new BorderLayout());
+		log.debug("toString1 : Returning - " + toString);
+		return toString;
+	}
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
+	/**
+	 * Setup all the swing components.
+	 */
+	private void init() {
+		log.debug("Start : init1");
+		graph = new GraphAccum(model);
+		graph.setVisualizer(this);
 
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		this.setLayout(new BorderLayout());
 
-        // TITLE
-        JLabel panelTitleLabel =
-            new JLabel(JMeterUtils.getResString("graph_full_results_title"));
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
+		// MAIN PANEL
+		JPanel mainPanel = new JPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        curFontSize += 4;
-        panelTitleLabel.setFont(
-            new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
+		mainPanel.setBorder(margin);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.add(getNamePanel());
-        mainPanel.add(getFilePanel());
+		// TITLE
+		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title"));
+		Font curFont = panelTitleLabel.getFont();
+		int curFontSize = curFont.getSize();
 
-        JScrollPane graphScrollPanel = new
-                JScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		curFontSize += 4;
+		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+		mainPanel.add(panelTitleLabel);
 
-        graphScrollPanel.setViewportBorder(
-                BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        legendPanel = new JPanel();
+		mainPanel.add(getNamePanel());
+		mainPanel.add(getFilePanel());
 
-        JScrollPane legendScrollPanel = new JScrollPane(legendPanel);
-        JSplitPane graphSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                graphScrollPanel, legendScrollPanel);
+		JScrollPane graphScrollPanel = new JScrollPane(graph, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        this.add(mainPanel, BorderLayout.NORTH);
-        this.add(graphSplitPane, BorderLayout.CENTER);
-        log.debug("End : init1");
-    }
+		graphScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		legendPanel = new JPanel();
+
+		JScrollPane legendScrollPanel = new JScrollPane(legendPanel);
+		JSplitPane graphSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphScrollPanel, legendScrollPanel);
+
+		this.add(mainPanel, BorderLayout.NORTH);
+		this.add(graphSplitPane, BorderLayout.CENTER);
+		log.debug("End : init1");
+	}
 }

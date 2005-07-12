@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.modifiers;
 
@@ -37,177 +37,149 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class UserParameters
-    extends AbstractTestElement
-    implements Serializable, PreProcessor, LoopIterationListener
-{
+public class UserParameters extends AbstractTestElement implements Serializable, PreProcessor, LoopIterationListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static final String NAMES = "UserParameters.names";
-    public static final String THREAD_VALUES = "UserParameters.thread_values";
-    public static final String PER_ITERATION = "UserParameters.per_iteration";
-    
-    /*
-     * Although the lock appears to be an instance lock, in fact
-     * the lock is shared between all threads in a thread group, but different
-     * thread groups have different locks - see the clone() method below
-     * 
-     * The lock ensures that all the variables are processed together, which is
-     * important for functions such as __CSVRead and _StringFromFile.
-    */
-    private Integer lock = new Integer(0);
+	public static final String NAMES = "UserParameters.names";
 
-    public CollectionProperty getNames()
-    {
-        return (CollectionProperty) getProperty(NAMES);
-    }
+	public static final String THREAD_VALUES = "UserParameters.thread_values";
 
-    public CollectionProperty getThreadLists()
-    {
-        return (CollectionProperty) getProperty(THREAD_VALUES);
-    }
+	public static final String PER_ITERATION = "UserParameters.per_iteration";
 
-    /**
-     * The list of names of the variables to hold values.  This list must come
-     * in the same order as the sub lists that are given to
-     * {@link #setThreadLists(Collection)}.
-     */
-    public void setNames(Collection list)
-    {
-        setProperty(new CollectionProperty(NAMES, list));
-    }
+	/*
+	 * Although the lock appears to be an instance lock, in fact the lock is
+	 * shared between all threads in a thread group, but different thread groups
+	 * have different locks - see the clone() method below
+	 * 
+	 * The lock ensures that all the variables are processed together, which is
+	 * important for functions such as __CSVRead and _StringFromFile.
+	 */
+	private Integer lock = new Integer(0);
 
-    /**
-     * The list of names of the variables to hold values.  This list must come
-     * in the same order as the sub lists that are given to
-     * {@link #setThreadLists(CollectionProperty)}.
-     */
-    public void setNames(CollectionProperty list)
-    {
-        setProperty(list);
-    }
+	public CollectionProperty getNames() {
+		return (CollectionProperty) getProperty(NAMES);
+	}
 
-    /**
-     * The thread list is a list of lists.  Each list within the parent list is
-     * a collection of values for a simulated user.  As many different sets of 
-     * values can be supplied in this fashion to cause JMeter to set different 
-     * values to variables for different test threads.
-     */
-    public void setThreadLists(Collection threadLists)
-    {
-        setProperty(new CollectionProperty(THREAD_VALUES, threadLists));
-    }
+	public CollectionProperty getThreadLists() {
+		return (CollectionProperty) getProperty(THREAD_VALUES);
+	}
 
-    /**
-     * The thread list is a list of lists.  Each list within the parent list is
-     * a collection of values for a simulated user.  As many different sets of 
-     * values can be supplied in this fashion to cause JMeter to set different 
-     * values to variables for different test threads.
-     */
-    public void setThreadLists(CollectionProperty threadLists)
-    {
-        setProperty(threadLists);
-    }
+	/**
+	 * The list of names of the variables to hold values. This list must come in
+	 * the same order as the sub lists that are given to
+	 * {@link #setThreadLists(Collection)}.
+	 */
+	public void setNames(Collection list) {
+		setProperty(new CollectionProperty(NAMES, list));
+	}
 
-    private CollectionProperty getValues()
-    {
-        CollectionProperty threadValues =
-            (CollectionProperty) getProperty(THREAD_VALUES);
-        if (threadValues.size() > 0)
-        {
-            return (CollectionProperty) threadValues.get(
-                getThreadContext().getThreadNum()
-                    % threadValues.size());
-        }
-        else
-        {
-            return new CollectionProperty("noname", new LinkedList());
-        }
-    }
+	/**
+	 * The list of names of the variables to hold values. This list must come in
+	 * the same order as the sub lists that are given to
+	 * {@link #setThreadLists(CollectionProperty)}.
+	 */
+	public void setNames(CollectionProperty list) {
+		setProperty(list);
+	}
 
-    public boolean isPerIteration()
-    {
-        return getPropertyAsBoolean(PER_ITERATION);
-    }
+	/**
+	 * The thread list is a list of lists. Each list within the parent list is a
+	 * collection of values for a simulated user. As many different sets of
+	 * values can be supplied in this fashion to cause JMeter to set different
+	 * values to variables for different test threads.
+	 */
+	public void setThreadLists(Collection threadLists) {
+		setProperty(new CollectionProperty(THREAD_VALUES, threadLists));
+	}
 
-    public void setPerIteration(boolean perIter)
-    {
-        setProperty(new BooleanProperty(PER_ITERATION, perIter));
-    }
+	/**
+	 * The thread list is a list of lists. Each list within the parent list is a
+	 * collection of values for a simulated user. As many different sets of
+	 * values can be supplied in this fashion to cause JMeter to set different
+	 * values to variables for different test threads.
+	 */
+	public void setThreadLists(CollectionProperty threadLists) {
+		setProperty(threadLists);
+	}
 
-    public void process()
-    {
-    	if (log.isDebugEnabled())
-    	{
+	private CollectionProperty getValues() {
+		CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
+		if (threadValues.size() > 0) {
+			return (CollectionProperty) threadValues.get(getThreadContext().getThreadNum() % threadValues.size());
+		} else {
+			return new CollectionProperty("noname", new LinkedList());
+		}
+	}
+
+	public boolean isPerIteration() {
+		return getPropertyAsBoolean(PER_ITERATION);
+	}
+
+	public void setPerIteration(boolean perIter) {
+		setProperty(new BooleanProperty(PER_ITERATION, perIter));
+	}
+
+	public void process() {
+		if (log.isDebugEnabled()) {
 			log.debug(Thread.currentThread().getName() + " process " + isPerIteration());//$NON-NLS-1$
-    	}
-        if (!isPerIteration())
-        {
-            setValues();
-        }
-    }
+		}
+		if (!isPerIteration()) {
+			setValues();
+		}
+	}
 
-    private void setValues()
-    {
-        synchronized (lock)
-        {
-			if (log.isDebugEnabled())
-			{
-		        log.debug(Thread.currentThread().getName() + " Running up named: " + getName());//$NON-NLS-1$
+	private void setValues() {
+		synchronized (lock) {
+			if (log.isDebugEnabled()) {
+				log.debug(Thread.currentThread().getName() + " Running up named: " + getName());//$NON-NLS-1$
 			}
-            PropertyIterator namesIter = getNames().iterator();
-            PropertyIterator valueIter = getValues().iterator();
-            JMeterVariables jmvars = getThreadContext().getVariables();
-            while (namesIter.hasNext() && valueIter.hasNext())
-            {
-                String name = namesIter.next().getStringValue();
-                String value = valueIter.next().getStringValue();
-				if (log.isDebugEnabled())
-				{
-                    log.debug(Thread.currentThread().getName()+" saving variable: "+name+"="+value);//$NON-NLS-1$
+			PropertyIterator namesIter = getNames().iterator();
+			PropertyIterator valueIter = getValues().iterator();
+			JMeterVariables jmvars = getThreadContext().getVariables();
+			while (namesIter.hasNext() && valueIter.hasNext()) {
+				String name = namesIter.next().getStringValue();
+				String value = valueIter.next().getStringValue();
+				if (log.isDebugEnabled()) {
+					log.debug(Thread.currentThread().getName() + " saving variable: " + name + "=" + value);//$NON-NLS-1$
 				}
-                jmvars.put(name, value);
-            }
-        }
-    }
+				jmvars.put(name, value);
+			}
+		}
+	}
 
-    /**
-     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-     */
-    public void iterationStart(LoopIterationEvent event)
-    {
-		if (log.isDebugEnabled())
-        {
+	/**
+	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+	 */
+	public void iterationStart(LoopIterationEvent event) {
+		if (log.isDebugEnabled()) {
 			log.debug(Thread.currentThread().getName() + " iteration start " + isPerIteration());//$NON-NLS-1$
-        }
-        if (isPerIteration())
-        {
-            setValues();
-        }
-    }
+		}
+		if (isPerIteration()) {
+			setValues();
+		}
+	}
 
-    /* (non-Javadoc)
-     * A new instance is created for each thread group, and the
-     * clone() method is then called to create copies for each thread
-     * in a thread group.
-     * This means that the lock object is common to a thread group;
-     * separate thread groups have separate locks.
-     * If this is not intended, the lock object could be made static.
-     * 
-     * @see java.lang.Object#clone()
-     */
-    public Object clone()
-    {
-        UserParameters up = (UserParameters) super.clone();
-        up.lock = lock; // ensure that clones share the same lock object
-        return up;
-    }
+	/*
+	 * (non-Javadoc) A new instance is created for each thread group, and the
+	 * clone() method is then called to create copies for each thread in a
+	 * thread group. This means that the lock object is common to a thread
+	 * group; separate thread groups have separate locks. If this is not
+	 * intended, the lock object could be made static.
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() {
+		UserParameters up = (UserParameters) super.clone();
+		up.lock = lock; // ensure that clones share the same lock object
+		return up;
+	}
 
-    /* (non-Javadoc)
-     * @see AbstractTestElement#mergeIn(TestElement)
-     */
-    protected void mergeIn(TestElement element)
-    {
-        // super.mergeIn(element);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see AbstractTestElement#mergeIn(TestElement)
+	 */
+	protected void mergeIn(TestElement element) {
+		// super.mergeIn(element);
+	}
 }

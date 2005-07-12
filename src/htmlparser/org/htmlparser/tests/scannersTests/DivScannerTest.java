@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.scanners.DivScanner;
@@ -41,38 +40,35 @@ import org.htmlparser.tags.TableTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class DivScannerTest extends ParserTestCase
-{
+public class DivScannerTest extends ParserTestCase {
 
-    public DivScannerTest(String name)
-    {
-        super(name);
-    }
+	public DivScannerTest(String name) {
+		super(name);
+	}
 
-    public void testScan() throws ParserException
-    {
-        createParser("<table><div align=\"left\">some text</div></table>");
-        parser.registerScanners();
-        parser.addScanner(new TableScanner(parser));
-        parser.addScanner(new DivScanner());
-        parseAndAssertNodeCount(1);
-        assertType("node should be table", TableTag.class, node[0]);
-        TableTag tableTag = (TableTag) node[0];
-        Div div = (Div) tableTag.searchFor(Div.class).toNodeArray()[0];
-        assertEquals("div contents", "some text", div.toPlainTextString());
-    }
+	public void testScan() throws ParserException {
+		createParser("<table><div align=\"left\">some text</div></table>");
+		parser.registerScanners();
+		parser.addScanner(new TableScanner(parser));
+		parser.addScanner(new DivScanner());
+		parseAndAssertNodeCount(1);
+		assertType("node should be table", TableTag.class, node[0]);
+		TableTag tableTag = (TableTag) node[0];
+		Div div = (Div) tableTag.searchFor(Div.class).toNodeArray()[0];
+		assertEquals("div contents", "some text", div.toPlainTextString());
+	}
 
-    /**
-     * Test case for bug #735193 Explicit tag type recognition for CompositTags not working.
-     */
-    public void testInputInDiv() throws ParserException
-    {
-        createParser("<div><INPUT type=\"text\" name=\"X\">Hello</INPUT></div>");
-        parser.addScanner(new DivScanner());
-        parser.addScanner(new InputTagScanner());
-        parseAndAssertNodeCount(1);
-        assertType("node should be div", Div.class, node[0]);
-        Div div = (Div) node[0];
-        assertType("child not input", InputTag.class, div.getChild(0));
-    }
+	/**
+	 * Test case for bug #735193 Explicit tag type recognition for CompositTags
+	 * not working.
+	 */
+	public void testInputInDiv() throws ParserException {
+		createParser("<div><INPUT type=\"text\" name=\"X\">Hello</INPUT></div>");
+		parser.addScanner(new DivScanner());
+		parser.addScanner(new InputTagScanner());
+		parseAndAssertNodeCount(1);
+		assertType("node should be div", Div.class, node[0]);
+		Div div = (Div) node[0];
+		assertType("child not input", InputTag.class, div.getChild(0));
+	}
 }

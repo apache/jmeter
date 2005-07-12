@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
+
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.control.TransactionController;
@@ -25,45 +26,39 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * A Transaction controller component.
- *
- * @version   $Revision$ on $Date$
+ * 
+ * @version $Revision$ on $Date$
  */
-public class TransactionControllerGui extends AbstractControllerGui
-{
-    /**
-     * Create a new TransactionControllerGui instance.
-     */
-    public TransactionControllerGui()
-    {
-        init();
-    }
+public class TransactionControllerGui extends AbstractControllerGui {
+	/**
+	 * Create a new TransactionControllerGui instance.
+	 */
+	public TransactionControllerGui() {
+		init();
+	}
 
-    /* Implements JMeterGUIComponent.createTestElement() */
-    public TestElement createTestElement()
-    {
-        TransactionController lc = new TransactionController();
-        configureTestElement(lc);
-        return lc;
-    }
+	/* Implements JMeterGUIComponent.createTestElement() */
+	public TestElement createTestElement() {
+		TransactionController lc = new TransactionController();
+		configureTestElement(lc);
+		return lc;
+	}
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-    public void modifyTestElement(TestElement el)
-    {
-        configureTestElement(el);
-    }
+	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+	public void modifyTestElement(TestElement el) {
+		configureTestElement(el);
+	}
 
-    public String getLabelResource()
-    {
-        return "transaction_controller_title";
-    }
+	public String getLabelResource() {
+		return "transaction_controller_title";
+	}
 
-    /**
-     * Initialize the GUI components and layout for this component.
-     */
-    private void init()
-    {
-        setLayout(new BorderLayout());
-        setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);
-    }
+	/**
+	 * Initialize the GUI components and layout for this component.
+	 */
+	private void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
+		add(makeTitlePanel(), BorderLayout.NORTH);
+	}
 }

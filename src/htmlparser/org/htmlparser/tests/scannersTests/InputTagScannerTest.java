@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.scanners.InputTagScanner;
@@ -37,30 +36,27 @@ import org.htmlparser.tags.InputTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class InputTagScannerTest extends ParserTestCase
-{
+public class InputTagScannerTest extends ParserTestCase {
 
-    private String testHTML =
-        new String("<INPUT type=\"text\" name=\"Google\">");
-    private InputTagScanner scanner;
+	private String testHTML = new String("<INPUT type=\"text\" name=\"Google\">");
 
-    public InputTagScannerTest(String name)
-    {
-        super(name);
-    }
+	private InputTagScanner scanner;
 
-    public void testScan() throws ParserException
-    {
-        scanner = new InputTagScanner("-i");
-        createParser(testHTML, "http://www.google.com/test/index.html");
-        parser.addScanner(scanner);
-        parseAndAssertNodeCount(1);
-        assertTrue(node[0] instanceof InputTag);
+	public InputTagScannerTest(String name) {
+		super(name);
+	}
 
-        // check the input node
-        InputTag inputTag = (InputTag) node[0];
-        assertEquals("Input Scanner", scanner, inputTag.getThisScanner());
-        assertEquals("Type", "text", inputTag.getAttribute("TYPE"));
-        assertEquals("Name", "Google", inputTag.getAttribute("NAME"));
-    }
+	public void testScan() throws ParserException {
+		scanner = new InputTagScanner("-i");
+		createParser(testHTML, "http://www.google.com/test/index.html");
+		parser.addScanner(scanner);
+		parseAndAssertNodeCount(1);
+		assertTrue(node[0] instanceof InputTag);
+
+		// check the input node
+		InputTag inputTag = (InputTag) node[0];
+		assertEquals("Input Scanner", scanner, inputTag.getThisScanner());
+		assertEquals("Type", "text", inputTag.getAttribute("TYPE"));
+		assertEquals("Name", "Google", inputTag.getAttribute("NAME"));
+	}
 }

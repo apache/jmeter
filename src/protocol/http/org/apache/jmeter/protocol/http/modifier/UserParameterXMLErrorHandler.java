@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.modifier;
 
@@ -26,56 +26,28 @@ import org.xml.sax.SAXParseException;
 
 /**
  * XML Parseing errors for XML parameters file are handled here.
- *  
- * @author     Mark Walsh
- * @version    $Revision$
+ * 
+ * @author Mark Walsh
+ * @version $Revision$
  */
-public class UserParameterXMLErrorHandler implements ErrorHandler
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class UserParameterXMLErrorHandler implements ErrorHandler {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public void warning(SAXParseException exception) throws SAXException
-    {
-        log.warn(
-            "**Parsing Warning**\n"
-                + "  line:    "
-                + exception.getLineNumber()
-                + "\n"
-                + "  URI:    :"
-                + exception.getSystemId()
-                + "\n"
-                + "  Message: "
-                + exception.getMessage());
-        throw new SAXException("Warning encountered");
-    }
+	public void warning(SAXParseException exception) throws SAXException {
+		log.warn("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"
+				+ exception.getSystemId() + "\n" + "  Message: " + exception.getMessage());
+		throw new SAXException("Warning encountered");
+	}
 
-    public void error(SAXParseException exception) throws SAXException
-    {
-        log.error(
-            "**Parsing Warning**\n"
-                + "  line:    "
-                + exception.getLineNumber()
-                + "\n"
-                + "  URI:    :"
-                + exception.getSystemId()
-                + "\n"
-                + "  Message: "
-                + exception.getMessage());
-        throw new SAXException("Error encountered");
-    }
+	public void error(SAXParseException exception) throws SAXException {
+		log.error("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"
+				+ exception.getSystemId() + "\n" + "  Message: " + exception.getMessage());
+		throw new SAXException("Error encountered");
+	}
 
-    public void fatalError(SAXParseException exception) throws SAXException
-    {
-        log.error(
-            "**Parsing Warning**\n"
-                + "  line:    "
-                + exception.getLineNumber()
-                + "\n"
-                + "  URI:    :"
-                + exception.getSystemId()
-                + "\n"
-                + "  Message: "
-                + exception.getMessage());
-        throw new SAXException("Fatal Error encountered");
-    }
+	public void fatalError(SAXParseException exception) throws SAXException {
+		log.error("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"
+				+ exception.getSystemId() + "\n" + "  Message: " + exception.getMessage());
+		throw new SAXException("Fatal Error encountered");
+	}
 }

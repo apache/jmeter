@@ -29,132 +29,116 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.parserHelper;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 import org.htmlparser.StringNode;
 
-public class StringParser
-{
-    private final static int BEFORE_PARSE_BEGINS_STATE = 0;
-    private final static int PARSE_HAS_BEGUN_STATE = 1;
-    private final static int PARSE_COMPLETED_STATE = 2;
-    private final static int PARSE_IGNORE_STATE = 3;
+public class StringParser {
+	private final static int BEFORE_PARSE_BEGINS_STATE = 0;
 
-    /**
-     * Returns true if the text at <code>pos</code> in <code>line</code> should be scanned as a tag.
-     * Basically an open angle followed by a known special character or a letter.
-     * @param line The current line being parsed.
-     * @param pos The position in the line to examine.
-     * @return <code>true</code> if we think this is the start of a tag.
-     */
-    private boolean beginTag(String line, int pos)
-    {
-        char ch;
-        boolean ret;
+	private final static int PARSE_HAS_BEGUN_STATE = 1;
 
-        ret = false;
+	private final static int PARSE_COMPLETED_STATE = 2;
 
-        if (pos + 2 <= line.length())
-            if ('<' == line.charAt(pos))
-            {
-                ch = line.charAt(pos + 1);
-                // the order of these tests might be optimized for speed
-                if ('/' == ch
-                    || '%' == ch
-                    || Character.isLetter(ch)
-                    || '!' == ch)
-                    ret = true;
-            }
+	private final static int PARSE_IGNORE_STATE = 3;
 
-        return (ret);
-    }
+	/**
+	 * Returns true if the text at <code>pos</code> in <code>line</code>
+	 * should be scanned as a tag. Basically an open angle followed by a known
+	 * special character or a letter.
+	 * 
+	 * @param line
+	 *            The current line being parsed.
+	 * @param pos
+	 *            The position in the line to examine.
+	 * @return <code>true</code> if we think this is the start of a tag.
+	 */
+	private boolean beginTag(String line, int pos) {
+		char ch;
+		boolean ret;
 
-    /**
-     * Locate the StringNode within the input string, by parsing from the given position
-     * @param reader HTML reader to be provided so as to allow reading of next line
-     * @param input Input String
-     * @param position Position to start parsing from
-     * @param balance_quotes If <code>true</code> enter ignoring state on
-     * encountering quotes.
-     */
-    public Node find(
-        NodeReader reader,
-        String input,
-        int position,
-        boolean balance_quotes)
-    {
-        StringBuffer textBuffer = new StringBuffer();
-        int state = BEFORE_PARSE_BEGINS_STATE;
-        int textBegin = position;
-        int textEnd = position;
-        int inputLen = input.length();
-        char ch;
-        char ignore_ender = '\"';
-        for (int i = position;
-            (i < inputLen && state != PARSE_COMPLETED_STATE);
-            i++)
-        {
-            ch = input.charAt(i);
-            if (ch == '<' && state != PARSE_IGNORE_STATE)
-            {
-                if (beginTag(input, i))
-                {
-                    state = PARSE_COMPLETED_STATE;
-                    textEnd = i - 1;
-                }
-            }
-            if (balance_quotes && (ch == '\'' || ch == '"'))
-            {
-                if (state == PARSE_IGNORE_STATE)
-                {
-                    if (ch == ignore_ender)
-                        state = PARSE_HAS_BEGUN_STATE;
-                }
-                else
-                {
-                    ignore_ender = ch;
-                    state = PARSE_IGNORE_STATE;
-                }
-            }
-            if (state == BEFORE_PARSE_BEGINS_STATE)
-            {
-                state = PARSE_HAS_BEGUN_STATE;
-            }
-            if (state == PARSE_HAS_BEGUN_STATE || state == PARSE_IGNORE_STATE)
-            {
-                textBuffer.append(input.charAt(i));
-            }
-            // Patch by Cedric Rosa
-            if (state == BEFORE_PARSE_BEGINS_STATE && i == inputLen - 1)
-                state = PARSE_HAS_BEGUN_STATE;
-            if (state == PARSE_HAS_BEGUN_STATE && i == inputLen - 1)
-            {
-                do
-                {
-                    input = reader.getNextLine();
-                    if (input != null && input.length() == 0)
-                        textBuffer.append(Node.getLineSeparator());
-                }
-                while (input != null && input.length() == 0);
+		ret = false;
 
-                if (input == null)
-                {
-                    textEnd = i;
-                    state = PARSE_COMPLETED_STATE;
+		if (pos + 2 <= line.length())
+			if ('<' == line.charAt(pos)) {
+				ch = line.charAt(pos + 1);
+				// the order of these tests might be optimized for speed
+				if ('/' == ch || '%' == ch || Character.isLetter(ch) || '!' == ch)
+					ret = true;
+			}
 
-                }
-                else
-                {
-                    textBuffer.append(Node.getLineSeparator());
-                    inputLen = input.length();
-                    i = -1;
-                }
+		return (ret);
+	}
 
-            }
-        }
-        return new StringNode(textBuffer, textBegin, textEnd);
-    }
+	/**
+	 * Locate the StringNode within the input string, by parsing from the given
+	 * position
+	 * 
+	 * @param reader
+	 *            HTML reader to be provided so as to allow reading of next line
+	 * @param input
+	 *            Input String
+	 * @param position
+	 *            Position to start parsing from
+	 * @param balance_quotes
+	 *            If <code>true</code> enter ignoring state on encountering
+	 *            quotes.
+	 */
+	public Node find(NodeReader reader, String input, int position, boolean balance_quotes) {
+		StringBuffer textBuffer = new StringBuffer();
+		int state = BEFORE_PARSE_BEGINS_STATE;
+		int textBegin = position;
+		int textEnd = position;
+		int inputLen = input.length();
+		char ch;
+		char ignore_ender = '\"';
+		for (int i = position; (i < inputLen && state != PARSE_COMPLETED_STATE); i++) {
+			ch = input.charAt(i);
+			if (ch == '<' && state != PARSE_IGNORE_STATE) {
+				if (beginTag(input, i)) {
+					state = PARSE_COMPLETED_STATE;
+					textEnd = i - 1;
+				}
+			}
+			if (balance_quotes && (ch == '\'' || ch == '"')) {
+				if (state == PARSE_IGNORE_STATE) {
+					if (ch == ignore_ender)
+						state = PARSE_HAS_BEGUN_STATE;
+				} else {
+					ignore_ender = ch;
+					state = PARSE_IGNORE_STATE;
+				}
+			}
+			if (state == BEFORE_PARSE_BEGINS_STATE) {
+				state = PARSE_HAS_BEGUN_STATE;
+			}
+			if (state == PARSE_HAS_BEGUN_STATE || state == PARSE_IGNORE_STATE) {
+				textBuffer.append(input.charAt(i));
+			}
+			// Patch by Cedric Rosa
+			if (state == BEFORE_PARSE_BEGINS_STATE && i == inputLen - 1)
+				state = PARSE_HAS_BEGUN_STATE;
+			if (state == PARSE_HAS_BEGUN_STATE && i == inputLen - 1) {
+				do {
+					input = reader.getNextLine();
+					if (input != null && input.length() == 0)
+						textBuffer.append(Node.getLineSeparator());
+				} while (input != null && input.length() == 0);
+
+				if (input == null) {
+					textEnd = i;
+					state = PARSE_COMPLETED_STATE;
+
+				} else {
+					textBuffer.append(Node.getLineSeparator());
+					inputLen = input.length();
+					i = -1;
+				}
+
+			}
+		}
+		return new StringNode(textBuffer, textBegin, textEnd);
+	}
 }

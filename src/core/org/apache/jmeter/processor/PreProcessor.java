@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.processor;
 
 /**
  * PreProcessors are executed just prior to a sample being run.
+ * 
  * @version $Revision$
  */
-public interface PreProcessor
-{    
-    public void process();
+public interface PreProcessor {
+	public void process();
 }

@@ -14,40 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.util;
 
-
 import java.util.EventObject;
 import java.util.Locale;
-
 
 /**
  * @author Oliver Rossmueller <oliver@oross.net>
  * @version $Revision$
  */
-public class LocaleChangeEvent extends EventObject
-{
+public class LocaleChangeEvent extends EventObject {
 
-    private Locale locale;
-    
+	private Locale locale;
 
-    public LocaleChangeEvent(Object source)
-    {
-        super(source);
-    }
+	public LocaleChangeEvent(Object source) {
+		super(source);
+	}
 
+	public LocaleChangeEvent(Object source, Locale locale) {
+		super(source);
+		this.locale = locale;
+	}
 
-    public LocaleChangeEvent(Object source, Locale locale)
-    {
-        super(source);
-        this.locale = locale;
-    }
-
-
-    public Locale getLocale()
-    {
-        return locale;
-    }
+	public Locale getLocale() {
+		return locale;
+	}
 }

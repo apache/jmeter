@@ -29,39 +29,34 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.tags.EndTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class EndTagTest extends ParserTestCase
-{
+public class EndTagTest extends ParserTestCase {
 
-    public EndTagTest(String name)
-    {
-        super(name);
-    }
+	public EndTagTest(String name) {
+		super(name);
+	}
 
-    public void testToHTML() throws ParserException
-    {
-        createParser("<HTML></HTML>");
-        // Register the image scanner
-        parser.registerScanners();
-        parseAndAssertNodeCount(2);
-        // The node should be an HTMLLinkTag
-        assertTrue("Node should be a HTMLEndTag", node[1] instanceof EndTag);
-        EndTag endTag = (EndTag) node[1];
-        assertEquals("Raw String", "</HTML>", endTag.toHtml());
-    }
+	public void testToHTML() throws ParserException {
+		createParser("<HTML></HTML>");
+		// Register the image scanner
+		parser.registerScanners();
+		parseAndAssertNodeCount(2);
+		// The node should be an HTMLLinkTag
+		assertTrue("Node should be a HTMLEndTag", node[1] instanceof EndTag);
+		EndTag endTag = (EndTag) node[1];
+		assertEquals("Raw String", "</HTML>", endTag.toHtml());
+	}
 
-    public void testEndTagFind()
-    {
-        String testHtml = "<SCRIPT>document.write(d+\".com\")</SCRIPT>";
-        int pos = testHtml.indexOf("</SCRIPT>");
-        EndTag endTag = (EndTag) EndTag.find(testHtml, pos);
-        assertEquals("endtag element begin", 32, endTag.elementBegin());
-        assertEquals("endtag element end", 40, endTag.elementEnd());
-    }
+	public void testEndTagFind() {
+		String testHtml = "<SCRIPT>document.write(d+\".com\")</SCRIPT>";
+		int pos = testHtml.indexOf("</SCRIPT>");
+		EndTag endTag = (EndTag) EndTag.find(testHtml, pos);
+		assertEquals("endtag element begin", 32, endTag.elementBegin());
+		assertEquals("endtag element end", 40, endTag.elementEnd());
+	}
 }

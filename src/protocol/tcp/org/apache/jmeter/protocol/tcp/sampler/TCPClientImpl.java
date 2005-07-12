@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Basic TCP Sampler Client class
@@ -36,99 +36,102 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- *
- *
+ * 
+ * 
  */
-public class TCPClientImpl implements TCPClient
-{
+public class TCPClientImpl implements TCPClient {
 	private static Logger log = LoggingManager.getLoggerForClass();
-	private byte eolByte = (byte) JMeterUtils.getPropDefault("tcp.eolByte",0);
-	
-    public TCPClientImpl()
-    {
-        super();
-		log.info("Using eolByte="+eolByte);
-    }
 
+	private byte eolByte = (byte) JMeterUtils.getPropDefault("tcp.eolByte", 0);
 
-	/* (non-Javadoc)
+	public TCPClientImpl() {
+		super();
+		log.info("Using eolByte=" + eolByte);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#setupTest()
 	 */
-	public void setupTest()
-	{
+	public void setupTest() {
 		log.info("setuptest");
 	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
-     */
-    public void teardownTest()
-    {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#teardownTest()
+	 */
+	public void teardownTest() {
 		log.info("teardowntest");
-        
-    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream, java.lang.String)
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
+	 *      java.lang.String)
 	 */
 	public void write(OutputStream os, String s) {
-		try
-        {
-            os.write(s.getBytes());
+		try {
+			os.write(s.getBytes());
 			os.flush();
-        }
-        catch (IOException e)
-        {
-            log.debug("Write error",e);
-        }
-        log.debug("Wrote: "+s);
+		} catch (IOException e) {
+			log.debug("Write error", e);
+		}
+		log.debug("Wrote: " + s);
 		return;
 	}
 
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream)
-     */
-    public String read(InputStream is)
-    {
-		byte [] buffer = new byte[4096];
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream)
+	 */
+	public String read(InputStream is) {
+		byte[] buffer = new byte[4096];
 		ByteArrayOutputStream w = new ByteArrayOutputStream();
 		int x = 0;
 		try {
-			while ((x = is.read(buffer)) > -1)
-			{
+			while ((x = is.read(buffer)) > -1) {
 				w.write(buffer, 0, x);
-				if ((eolByte != 0) && (buffer[x-1] == eolByte)) 
+				if ((eolByte != 0) && (buffer[x - 1] == eolByte))
 					break;
 			}
-		/*
-		 * Timeout is reported as follows:
-		 * JDK1.3: InterruptedIOException
-		 * JDK1.4: SocketTimeoutException, which extends InterruptedIOException
-		 * 
-		 * So to make the code work on both, just check for InterruptedIOException
-		 *
-		 * If 1.3 support is dropped, can change to using SocketTimeoutException
-		 *  
-		 * For more accurate detection of timeouts under 1.3,
-		 * one could perhaps examine the Exception message text...
-		 * 
-		 */
+			/*
+			 * Timeout is reported as follows: JDK1.3: InterruptedIOException
+			 * JDK1.4: SocketTimeoutException, which extends
+			 * InterruptedIOException
+			 * 
+			 * So to make the code work on both, just check for
+			 * InterruptedIOException
+			 * 
+			 * If 1.3 support is dropped, can change to using
+			 * SocketTimeoutException
+			 * 
+			 * For more accurate detection of timeouts under 1.3, one could
+			 * perhaps examine the Exception message text...
+			 * 
+			 */
 		} catch (InterruptedIOException e) {
 			// drop out to handle buffer
 		} catch (IOException e) {
-			log.warn("Read error:"+e);
+			log.warn("Read error:" + e);
 			return "";
 		}
-		
+
 		// do we need to close byte array (or flush it?)
-		log.debug("Read: "+w.size()+ "\n"+w.toString());
+		log.debug("Read: " + w.size() + "\n" + w.toString());
 		return w.toString();
-    }
+	}
 
-
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream, java.io.InputStream)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
+	 *      java.io.InputStream)
 	 */
 	public void write(OutputStream os, InputStream is) {
 		// TODO Auto-generated method stub
@@ -141,8 +144,10 @@ public class TCPClientImpl implements TCPClient
 	public byte getEolByte() {
 		return eolByte;
 	}
+
 	/**
-	 * @param eolByte The eolByte to set.
+	 * @param eolByte
+	 *            The eolByte to set.
 	 */
 	public void setEolByte(byte eolByte) {
 		this.eolByte = eolByte;

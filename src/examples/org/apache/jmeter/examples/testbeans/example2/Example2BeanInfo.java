@@ -14,16 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.examples.testbeans.example2;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 public class Example2BeanInfo extends BeanInfoSupport {
-	public Example2BeanInfo()
-	{
+	public Example2BeanInfo() {
 		super(Example2.class);
-		//...
+		// ...
 	}
 }

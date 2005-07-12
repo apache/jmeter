@@ -27,8 +27,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
+// import org.apache.jorphan.logging.LoggingManager;
+// import org.apache.log.Logger;
 
 /**
  * 
@@ -36,100 +36,90 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * 
  */
 
-public class XPathAssertionGui extends AbstractAssertionGui 
-{
+public class XPathAssertionGui extends AbstractAssertionGui {
 
-	//private static transient Logger log = LoggingManager.getLoggerForClass();
-	//private static final String OPERATOR_KEY = null;
+	// private static transient Logger log = LoggingManager.getLoggerForClass();
+	// private static final String OPERATOR_KEY = null;
 
-	//private int execState;
+	// private int execState;
 	private XPathPanel xpath;
+
 	private XMLConfPanel xml;
-	
+
 	public XPathAssertionGui() {
-        init();
-    }
-
-    /**
-     * Returns the label to be shown within the JTree-Component.
-     */
-    public String getLabelResource()
-    {
-    	return "xpath_assertion_title";
-    }
-
-    /**
-     * Create test element
-     */
-    public TestElement createTestElement()
-    {
-    	XPathAssertion el = new XPathAssertion();
-        modifyTestElement(el);
-        return el;
-    }
-   
-	public String getXPathAttributesTitle()
-	{
-	    return JMeterUtils.getResString("xpath_assertion_test");
-	}	 
-	
-	public void configure(TestElement el)
-	{
-	    super.configure(el);
-	    XPathAssertion assertion = (XPathAssertion) el;
-	    xpath.setXPath(assertion.getXPathString());
-	    xpath.setNegated(assertion.isNegated());
-	    
-	    xml.setWhitespace(assertion.isWhitespace());
-	    xml.setValidate(assertion.isValidating());
-	    xml.setTolerant(assertion.isTolerant());
-	    xml.setNamespace(assertion.isNamespace());
-	    
+		init();
 	}
 
-	private void init()
-	{
-	    setLayout(
-	        new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-	    setBorder(makeBorder());
-	
-	    add(makeTitlePanel());
-	
-	    // USER_INPUT
-	    JPanel sizePanel = new JPanel(new BorderLayout());
-	    sizePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-	    sizePanel.setBorder(
-	        BorderFactory.createTitledBorder(
-	            BorderFactory.createEtchedBorder(),
-	            getXPathAttributesTitle()));
-	    xpath = new XPathPanel();
-	    sizePanel.add(xpath);
-	    
-	    xml = new XMLConfPanel();
-	    xml.setBorder(
-		        BorderFactory.createTitledBorder(
-		            BorderFactory.createEtchedBorder(),
-		            JMeterUtils.getResString("xpath_assertion_option")));
-	    add(xml);
-	   
-	    add(sizePanel);
+	/**
+	 * Returns the label to be shown within the JTree-Component.
+	 */
+	public String getLabelResource() {
+		return "xpath_assertion_title";
+	}
+
+	/**
+	 * Create test element
+	 */
+	public TestElement createTestElement() {
+		XPathAssertion el = new XPathAssertion();
+		modifyTestElement(el);
+		return el;
+	}
+
+	public String getXPathAttributesTitle() {
+		return JMeterUtils.getResString("xpath_assertion_test");
+	}
+
+	public void configure(TestElement el) {
+		super.configure(el);
+		XPathAssertion assertion = (XPathAssertion) el;
+		xpath.setXPath(assertion.getXPathString());
+		xpath.setNegated(assertion.isNegated());
+
+		xml.setWhitespace(assertion.isWhitespace());
+		xml.setValidate(assertion.isValidating());
+		xml.setTolerant(assertion.isTolerant());
+		xml.setNamespace(assertion.isNamespace());
+
+	}
+
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
+
+		add(makeTitlePanel());
+
+		// USER_INPUT
+		JPanel sizePanel = new JPanel(new BorderLayout());
+		sizePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				getXPathAttributesTitle()));
+		xpath = new XPathPanel();
+		sizePanel.add(xpath);
+
+		xml = new XMLConfPanel();
+		xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("xpath_assertion_option")));
+		add(xml);
+
+		add(sizePanel);
 	}
 
 	/**
 	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
 	 */
-	public void modifyTestElement(TestElement el)
-	{
-	    super.configureTestElement(el);
-	    if (el instanceof XPathAssertion ) {
-	    	XPathAssertion assertion = (XPathAssertion) el;
-	    	assertion.setValidating(xml.isValidate());
-	    	assertion.setWhitespace(xml.isWhitespace());
-	    	assertion.setTolerant(xml.isTolerant());
-	    	assertion.setNamespace(xml.isNamespace());
-	    	assertion.setNegated(xpath.isNegated());
-	    	assertion.setXPathString(xpath.getXPath());
-	    }
+	public void modifyTestElement(TestElement el) {
+		super.configureTestElement(el);
+		if (el instanceof XPathAssertion) {
+			XPathAssertion assertion = (XPathAssertion) el;
+			assertion.setValidating(xml.isValidate());
+			assertion.setWhitespace(xml.isWhitespace());
+			assertion.setTolerant(xml.isTolerant());
+			assertion.setNamespace(xml.isNamespace());
+			assertion.setNegated(xpath.isNegated());
+			assertion.setXPathString(xpath.getXPath());
+		}
 	}
 }

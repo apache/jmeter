@@ -30,73 +30,72 @@ import org.apache.jmeter.monitor.model.ObjectFactory;
 import org.apache.jmeter.monitor.model.Status;
 import org.apache.jmeter.samplers.SampleResult;
 
-public abstract class ParserImpl implements Parser
-{
+public abstract class ParserImpl implements Parser {
 	private SAXParserFactory PARSERFACTORY = null;
+
 	private SAXParser PARSER = null;
+
 	private MonitorHandler DOCHANDLER = null;
+
 	private ObjectFactory FACTORY = null;
-	
-    /**
-     * 
-     */
-    public ParserImpl(ObjectFactory factory)
-    {
-        super();
-        this.FACTORY = factory;
-        try {
+
+	/**
+	 * 
+	 */
+	public ParserImpl(ObjectFactory factory) {
+		super();
+		this.FACTORY = factory;
+		try {
 			PARSERFACTORY = SAXParserFactory.newInstance();
 			PARSER = PARSERFACTORY.newSAXParser();
 			DOCHANDLER = new MonitorHandler();
 			DOCHANDLER.setObjectFactory(this.FACTORY);
-        } catch (SAXException e) {
-        	// e.printStackTrace();
-        	// need to add logging later
-        } catch (ParserConfigurationException e){
+		} catch (SAXException e) {
 			// e.printStackTrace();
 			// need to add logging later
-        }
-    }
+		} catch (ParserConfigurationException e) {
+			// e.printStackTrace();
+			// need to add logging later
+		}
+	}
 
 	/**
 	 * parse byte array and return Status object
+	 * 
 	 * @param bytes
 	 * @return Status
 	 */
-    public Status parseBytes(byte[] bytes)
-    {
-    	try {
+	public Status parseBytes(byte[] bytes) {
+		try {
 			InputSource is = new InputSource();
 			is.setByteStream(new ByteArrayInputStream(bytes));
-			PARSER.parse(is,DOCHANDLER);
+			PARSER.parse(is, DOCHANDLER);
 			return DOCHANDLER.getContents();
-    	} catch (SAXException e){
+		} catch (SAXException e) {
 			e.printStackTrace();
 			// let bad input fail silently
 			return DOCHANDLER.getContents();
-    	} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 			// let bad input fail silently
 			return DOCHANDLER.getContents();
-    	}
-    }
+		}
+	}
 
 	/**
 	 * @param content
 	 * @return Status
 	 */
-    public Status parseString(String content)
-    {
-        return parseBytes(content.getBytes());
-    }
+	public Status parseString(String content) {
+		return parseBytes(content.getBytes());
+	}
 
 	/**
 	 * @param result
 	 * @return Status
 	 */
-    public Status parseSampleResult(SampleResult result)
-    {
-        return parseBytes(result.getResponseData());
-    }
+	public Status parseSampleResult(SampleResult result) {
+		return parseBytes(result.getResponseData());
+	}
 
 }

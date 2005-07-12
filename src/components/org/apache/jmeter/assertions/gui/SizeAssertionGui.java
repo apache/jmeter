@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.assertions.gui;
 
@@ -40,228 +40,173 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @version   $Revision$ Last updated: $Date$
+ * @version $Revision$ Last updated: $Date$
  */
-public class SizeAssertionGui
-    extends AbstractAssertionGui
-    implements FocusListener, ActionListener
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private JTextField size;
-    private JRadioButton equalButton,
-        notequalButton,
-        greaterthanButton,
-        lessthanButton,
-        greaterthanequalButton,
-        lessthanequalButton;
-    private int execState; //store the operator 
+	private JTextField size;
 
-    public SizeAssertionGui()
-    {
-        init();
-    }
+	private JRadioButton equalButton, notequalButton, greaterthanButton, lessthanButton, greaterthanequalButton,
+			lessthanequalButton;
 
-    public String getLabelResource()
-    {
-        return "size_assertion_title";
-    }
+	private int execState; // store the operator
 
-    public String getSizeAttributesTitle()
-    {
-        return JMeterUtils.getResString("size_assertion_size_test");
-    }
+	public SizeAssertionGui() {
+		init();
+	}
 
-    public TestElement createTestElement()
-    {
-        SizeAssertion el = new SizeAssertion();
-        modifyTestElement(el);
-        return el;
-    }
+	public String getLabelResource() {
+		return "size_assertion_title";
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement el)
-    {
-        configureTestElement(el);
-        String sizeString = size.getText();
-        long assertionSize = 0;
-        try
-        {
-            assertionSize = Long.parseLong(sizeString);
-        }
-        catch (NumberFormatException e)
-        {
-            assertionSize = Long.MAX_VALUE;
-        }
-        ((SizeAssertion) el).setAllowedSize(assertionSize);
-        ((SizeAssertion) el).setCompOper(getState());
-    }
+	public String getSizeAttributesTitle() {
+		return JMeterUtils.getResString("size_assertion_size_test");
+	}
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        SizeAssertion assertion = (SizeAssertion) el;
-        size.setText(String.valueOf(assertion.getAllowedSize()));
-        setState(assertion.getCompOper());
-    }
+	public TestElement createTestElement() {
+		SizeAssertion el = new SizeAssertion();
+		modifyTestElement(el);
+		return el;
+	}
 
-    /**
-     * Set the state of the radio Button
-     */
-    public void setState(int state)
-    {
-        if (state == SizeAssertion.EQUAL)
-        {
-            equalButton.setSelected(true);
-            execState = state;
-        }
-        else if (state == SizeAssertion.NOTEQUAL)
-        {
-            notequalButton.setSelected(true);
-            execState = state;
-        }
-        else if (state == SizeAssertion.GREATERTHAN)
-        {
-            greaterthanButton.setSelected(true);
-            execState = state;
-        }
-        else if (state == SizeAssertion.LESSTHAN)
-        {
-            lessthanButton.setSelected(true);
-            execState = state;
-        }
-        else if (state == SizeAssertion.GREATERTHANEQUAL)
-        {
-            greaterthanequalButton.setSelected(true);
-            execState = state;
-        }
-        else if (state == SizeAssertion.LESSTHANEQUAL)
-        {
-            lessthanequalButton.setSelected(true);
-            execState = state;
-        }
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement el) {
+		configureTestElement(el);
+		String sizeString = size.getText();
+		long assertionSize = 0;
+		try {
+			assertionSize = Long.parseLong(sizeString);
+		} catch (NumberFormatException e) {
+			assertionSize = Long.MAX_VALUE;
+		}
+		((SizeAssertion) el).setAllowedSize(assertionSize);
+		((SizeAssertion) el).setCompOper(getState());
+	}
 
-    /**
-     * Get the state of the radio Button
-     */
-    public int getState()
-    {
-        return execState;
-    }
-    
-    private void init()
-    {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(makeBorder());
+	public void configure(TestElement el) {
+		super.configure(el);
+		SizeAssertion assertion = (SizeAssertion) el;
+		size.setText(String.valueOf(assertion.getAllowedSize()));
+		setState(assertion.getCompOper());
+	}
 
-        add(makeTitlePanel());
+	/**
+	 * Set the state of the radio Button
+	 */
+	public void setState(int state) {
+		if (state == SizeAssertion.EQUAL) {
+			equalButton.setSelected(true);
+			execState = state;
+		} else if (state == SizeAssertion.NOTEQUAL) {
+			notequalButton.setSelected(true);
+			execState = state;
+		} else if (state == SizeAssertion.GREATERTHAN) {
+			greaterthanButton.setSelected(true);
+			execState = state;
+		} else if (state == SizeAssertion.LESSTHAN) {
+			lessthanButton.setSelected(true);
+			execState = state;
+		} else if (state == SizeAssertion.GREATERTHANEQUAL) {
+			greaterthanequalButton.setSelected(true);
+			execState = state;
+		} else if (state == SizeAssertion.LESSTHANEQUAL) {
+			lessthanequalButton.setSelected(true);
+			execState = state;
+		}
+	}
 
-        // USER_INPUT
-        JPanel sizePanel = new JPanel();
-        sizePanel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                getSizeAttributesTitle()));
+	/**
+	 * Get the state of the radio Button
+	 */
+	public int getState() {
+		return execState;
+	}
 
-        sizePanel.add(
-            new JLabel(JMeterUtils.getResString("size_assertion_label")));
-        size = new JTextField(5);
-        size.addFocusListener(this);
-        sizePanel.add(size);
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
 
-        sizePanel.add(createComparatorButtonPanel());
+		add(makeTitlePanel());
 
-        add(sizePanel);
-    }
+		// USER_INPUT
+		JPanel sizePanel = new JPanel();
+		sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				getSizeAttributesTitle()));
 
-    private Box createComparatorButtonPanel()
-    {
-        ButtonGroup group = new ButtonGroup();
+		sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label")));
+		size = new JTextField(5);
+		size.addFocusListener(this);
+		sizePanel.add(size);
 
-        equalButton = createComparatorButton("=", SizeAssertion.EQUAL, group);
-        notequalButton =
-            createComparatorButton("!=", SizeAssertion.NOTEQUAL, group);
-        greaterthanButton =
-            createComparatorButton(">", SizeAssertion.GREATERTHAN, group);
-        lessthanButton =
-            createComparatorButton("<", SizeAssertion.LESSTHAN, group);
-        greaterthanequalButton =
-            createComparatorButton(">=", SizeAssertion.GREATERTHANEQUAL, group);
-        lessthanequalButton =
-            createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group);
+		sizePanel.add(createComparatorButtonPanel());
 
-        equalButton.setSelected(true);
-        execState = Integer.parseInt(equalButton.getActionCommand());
+		add(sizePanel);
+	}
 
-        //Put the check boxes in a column in a panel
-        Box checkPanel = Box.createVerticalBox();
-        JLabel compareLabel =
-            new JLabel(
-                JMeterUtils.getResString("size_assertion_comparator_label"));
-        checkPanel.add(compareLabel);
-        checkPanel.add(equalButton);
-        checkPanel.add(notequalButton);
-        checkPanel.add(greaterthanButton);
-        checkPanel.add(lessthanButton);
-        checkPanel.add(greaterthanequalButton);
-        checkPanel.add(lessthanequalButton);
-        return checkPanel;
-    }
+	private Box createComparatorButtonPanel() {
+		ButtonGroup group = new ButtonGroup();
 
-    private JRadioButton createComparatorButton(
-        String name,
-        int value,
-        ButtonGroup group)
-    {
-        JRadioButton button = new JRadioButton(name);
-        button.setActionCommand(String.valueOf(value));
-        button.addActionListener(this);
-        group.add(button);
-        return button;
-    }
+		equalButton = createComparatorButton("=", SizeAssertion.EQUAL, group);
+		notequalButton = createComparatorButton("!=", SizeAssertion.NOTEQUAL, group);
+		greaterthanButton = createComparatorButton(">", SizeAssertion.GREATERTHAN, group);
+		lessthanButton = createComparatorButton("<", SizeAssertion.LESSTHAN, group);
+		greaterthanequalButton = createComparatorButton(">=", SizeAssertion.GREATERTHANEQUAL, group);
+		lessthanequalButton = createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group);
 
-    public void focusLost(FocusEvent e)
-    {
-        boolean isInvalid = false;
-        String sizeString = size.getText();
-        if (sizeString != null)
-        {
-            try
-            {
-                long assertionSize = Long.parseLong(sizeString);
-                if (assertionSize < 0)
-                {
-                    isInvalid = true;
-                }
-            }
-            catch (NumberFormatException ex)
-            {
-                isInvalid = true;
-            }
-            if (isInvalid)
-            {
-                log.warn("SizeAssertionGui: Not a valid number!");
-                JOptionPane.showMessageDialog(
-                    null,
-                    JMeterUtils.getResString("size_assertion_input_error"),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
+		equalButton.setSelected(true);
+		execState = Integer.parseInt(equalButton.getActionCommand());
 
-    public void focusGained(FocusEvent e)
-    {
-    }
+		// Put the check boxes in a column in a panel
+		Box checkPanel = Box.createVerticalBox();
+		JLabel compareLabel = new JLabel(JMeterUtils.getResString("size_assertion_comparator_label"));
+		checkPanel.add(compareLabel);
+		checkPanel.add(equalButton);
+		checkPanel.add(notequalButton);
+		checkPanel.add(greaterthanButton);
+		checkPanel.add(lessthanButton);
+		checkPanel.add(greaterthanequalButton);
+		checkPanel.add(lessthanequalButton);
+		return checkPanel;
+	}
 
-    public void actionPerformed(ActionEvent e)
-    {
-        int comparator = Integer.parseInt(e.getActionCommand());
-        execState = comparator;
-    }
+	private JRadioButton createComparatorButton(String name, int value, ButtonGroup group) {
+		JRadioButton button = new JRadioButton(name);
+		button.setActionCommand(String.valueOf(value));
+		button.addActionListener(this);
+		group.add(button);
+		return button;
+	}
+
+	public void focusLost(FocusEvent e) {
+		boolean isInvalid = false;
+		String sizeString = size.getText();
+		if (sizeString != null) {
+			try {
+				long assertionSize = Long.parseLong(sizeString);
+				if (assertionSize < 0) {
+					isInvalid = true;
+				}
+			} catch (NumberFormatException ex) {
+				isInvalid = true;
+			}
+			if (isInvalid) {
+				log.warn("SizeAssertionGui: Not a valid number!");
+				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("size_assertion_input_error"), "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	public void focusGained(FocusEvent e) {
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		int comparator = Integer.parseInt(e.getActionCommand());
+		execState = comparator;
+	}
 }

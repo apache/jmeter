@@ -14,17 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
+
 import org.apache.jmeter.testelement.AbstractTestElement;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public abstract class AbstractSampler
-    extends AbstractTestElement
-    implements Sampler
-{
+public abstract class AbstractSampler extends AbstractTestElement implements Sampler {
 }

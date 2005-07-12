@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on Apr 30, 2003
  */
 package org.apache.jmeter.control;
 
-public class NextIsNullException extends Exception
-{
+public class NextIsNullException extends Exception {
 }

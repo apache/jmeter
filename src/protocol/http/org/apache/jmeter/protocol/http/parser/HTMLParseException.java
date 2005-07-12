@@ -14,60 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 package org.apache.jmeter.protocol.http.parser;
 
 /**
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-public class HTMLParseException extends Exception
-{
-	private Throwable savedCause; //Support JDK1.4 getCause() on JDK1.3
-	
-    /**
-     * 
-     */
-    public HTMLParseException()
-    {
-        super();
-    }
+public class HTMLParseException extends Exception {
+	private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
 
-    /**
-     * @param message
-     */
-    public HTMLParseException(String message)
-    {
-        super(message);
-    }
+	/**
+	 * 
+	 */
+	public HTMLParseException() {
+		super();
+	}
 
-    /**
-     * @param cause
-     */
-    public HTMLParseException(Throwable cause)
-    {
-        //JDK1.4: super(cause);
-        super();
-        savedCause = cause;
-    }
+	/**
+	 * @param message
+	 */
+	public HTMLParseException(String message) {
+		super(message);
+	}
 
-    /**
-     * @param message
-     * @param cause
-     */
-    public HTMLParseException(String message, Throwable cause)
-    {
-        //JDK1.4: super(message, cause);
-        super(message);
+	/**
+	 * @param cause
+	 */
+	public HTMLParseException(Throwable cause) {
+		// JDK1.4: super(cause);
+		super();
 		savedCause = cause;
-    }
-    
-    /**
-     * Local verstion of getCause() for JDK1.3 support
-     * 
-     */
-    public Throwable getCause()
-    {
-    	return savedCause;
-    }
+	}
+
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public HTMLParseException(String message, Throwable cause) {
+		// JDK1.4: super(message, cause);
+		super(message);
+		savedCause = cause;
+	}
+
+	/**
+	 * Local verstion of getCause() for JDK1.3 support
+	 * 
+	 */
+	public Throwable getCause() {
+		return savedCause;
+	}
 }

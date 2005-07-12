@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.gui;
 
@@ -33,151 +33,133 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class ObjectTableModel extends DefaultTableModel
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    private transient ArrayList objects = new ArrayList();
-    private transient List headers = new ArrayList();
-    private transient ArrayList classes = new ArrayList();
+public class ObjectTableModel extends DefaultTableModel {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-    private transient ArrayList readFunctors = new ArrayList();
-    private transient ArrayList writeFunctors = new ArrayList();
+	private transient ArrayList objects = new ArrayList();
 
-    public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, 
-          Class[] editorClasses)
-    {
-        this.headers.addAll(Arrays.asList(headers));
-        this.classes.addAll(Arrays.asList(editorClasses));
-        this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
-        this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
-        
-    }
+	private transient List headers = new ArrayList();
 
-    public Iterator iterator()
-    {
-        return objects.iterator();
-    }
+	private transient ArrayList classes = new ArrayList();
 
-    public void clearData()
-    {
-        int size = getRowCount();
-        objects.clear();
-        super.fireTableRowsDeleted(0, size);
-    }
+	private transient ArrayList readFunctors = new ArrayList();
 
-    public void addRow(Object value)
-    {
-       log.debug("Adding row value: " + value);
-        objects.add(value);
-        super.fireTableRowsInserted(objects.size() - 1, objects.size());
-    }
-    
-    public void insertRow(Object value,int index)
-    {
-       objects.add(index,value);
-       super.fireTableRowsInserted(index, index + 1);
-    }
+	private transient ArrayList writeFunctors = new ArrayList();
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnCount()
-     */
-    public int getColumnCount()
-    {
-        return headers.size();
-    }
+	public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
+		this.headers.addAll(Arrays.asList(headers));
+		this.classes.addAll(Arrays.asList(editorClasses));
+		this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
+		this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnName(int)
-     */
-    public String getColumnName(int col)
-    {
-        return (String) headers.get(col);
-    }
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#getRowCount()
-     */
-    public int getRowCount()
-    {
-        if (objects == null)
-        {
-            return 0;
-        }
-        return objects.size();
-    }
+	public Iterator iterator() {
+		return objects.iterator();
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#getValueAt(int, int)
-     */
-    public Object getValueAt(int row, int col)
-    {
-       log.debug("Getting row value");
-        Object value = objects.get(row);
-        Functor getMethod = (Functor) readFunctors.get(col);
-        if(getMethod != null)
-        {
-           return getMethod.invoke(value);
-        }
-        return null;
-    }
+	public void clearData() {
+		int size = getRowCount();
+		objects.clear();
+		super.fireTableRowsDeleted(0, size);
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#isCellEditable(int, int)
-     */
-    public boolean isCellEditable(int arg0, int arg1)
-    {
-        return true;
-    }
+	public void addRow(Object value) {
+		log.debug("Adding row value: " + value);
+		objects.add(value);
+		super.fireTableRowsInserted(objects.size() - 1, objects.size());
+	}
 
-    /**
-     * @see javax.swing.table.DefaultTableModel#moveRow(int, int, int)
-     */
-    public void moveRow(int start, int end, int to)
-    {
-        List subList = objects.subList(start, end);
-        for (int x = end - 1; x >= start; x--)
-        {
-            objects.remove(x);
-        }
-        objects.addAll(to, subList);
-        super.fireTableChanged(new TableModelEvent(this));
-    }
+	public void insertRow(Object value, int index) {
+		objects.add(index, value);
+		super.fireTableRowsInserted(index, index + 1);
+	}
 
-    /**
-     * @see javax.swing.table.DefaultTableModel#removeRow(int)
-     */
-    public void removeRow(int row)
-    {
-        objects.remove(row);
-        super.fireTableRowsDeleted(row, row);
-    }
+	/**
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
+	public int getColumnCount() {
+		return headers.size();
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
-     */
-    public void setValueAt(Object cellValue, int row, int col)
-    {
-        if (row < objects.size())
-        {
-            Object value = objects.get(row);
-            if (col < writeFunctors.size())
-            {
-                Functor setMethod = (Functor) writeFunctors.get(col);
-                if(setMethod != null)
-                {
-                   setMethod.invoke(value, new Object[] { cellValue });
-                   super.fireTableDataChanged();
-                }
-            }
-        }
-    }
+	/**
+	 * @see javax.swing.table.TableModel#getColumnName(int)
+	 */
+	public String getColumnName(int col) {
+		return (String) headers.get(col);
+	}
 
-    /**
-     * @see javax.swing.table.TableModel#getColumnClass(int)
-     */
-    public Class getColumnClass(int arg0)
-    {
-        return (Class) classes.get(arg0);
-    }
+	/**
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
+	public int getRowCount() {
+		if (objects == null) {
+			return 0;
+		}
+		return objects.size();
+	}
+
+	/**
+	 * @see javax.swing.table.TableModel#getValueAt(int, int)
+	 */
+	public Object getValueAt(int row, int col) {
+		log.debug("Getting row value");
+		Object value = objects.get(row);
+		Functor getMethod = (Functor) readFunctors.get(col);
+		if (getMethod != null) {
+			return getMethod.invoke(value);
+		}
+		return null;
+	}
+
+	/**
+	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
+	 */
+	public boolean isCellEditable(int arg0, int arg1) {
+		return true;
+	}
+
+	/**
+	 * @see javax.swing.table.DefaultTableModel#moveRow(int, int, int)
+	 */
+	public void moveRow(int start, int end, int to) {
+		List subList = objects.subList(start, end);
+		for (int x = end - 1; x >= start; x--) {
+			objects.remove(x);
+		}
+		objects.addAll(to, subList);
+		super.fireTableChanged(new TableModelEvent(this));
+	}
+
+	/**
+	 * @see javax.swing.table.DefaultTableModel#removeRow(int)
+	 */
+	public void removeRow(int row) {
+		objects.remove(row);
+		super.fireTableRowsDeleted(row, row);
+	}
+
+	/**
+	 * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
+	 */
+	public void setValueAt(Object cellValue, int row, int col) {
+		if (row < objects.size()) {
+			Object value = objects.get(row);
+			if (col < writeFunctors.size()) {
+				Functor setMethod = (Functor) writeFunctors.get(col);
+				if (setMethod != null) {
+					setMethod.invoke(value, new Object[] { cellValue });
+					super.fireTableDataChanged();
+				}
+			}
+		}
+	}
+
+	/**
+	 * @see javax.swing.table.TableModel#getColumnClass(int)
+	 */
+	public Class getColumnClass(int arg0) {
+		return (Class) classes.get(arg0);
+	}
 
 }

@@ -25,23 +25,26 @@ import javax.jms.Message;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
- * Administration of messages. 
- * @author Martijn Blankestijn 
+ * Administration of messages.
+ * 
+ * @author Martijn Blankestijn
  * @version $Id$.
  */
 public class MessageAdmin {
 	private static final MessageAdmin SINGLETON = new MessageAdmin();
+
 	private Map table = new Hashtable();
+
 	static Logger log = LoggingManager.getLoggerForClass();
-	
+
 	private MessageAdmin() {
 	}
 
 	public static synchronized MessageAdmin getAdmin() {
 		return SINGLETON;
 	}
+
 	/**
 	 * @param request
 	 */
@@ -51,29 +54,31 @@ public class MessageAdmin {
 		}
 		table.put(id, new PlaceHolder(request));
 	}
-	
+
 	public void putReply(String id, Message reply) {
-		PlaceHolder holder = (PlaceHolder)table.get(id);
+		PlaceHolder holder = (PlaceHolder) table.get(id);
 		if (log.isDebugEnabled()) {
 			log.debug("RPL_ID [" + id + "] for holder " + holder);
 		}
-		if (holder!=null) {
+		if (holder != null) {
 			holder.setReply(reply);
-            Object obj = holder.getRequest();
+			Object obj = holder.getRequest();
 			synchronized (obj) {
 				obj.notify();
 			}
-			
+
 		}
 	}
+
 	/**
-     * Get the reply message.
-     *
-	 * @param id the id of the message
+	 * Get the reply message.
+	 * 
+	 * @param id
+	 *            the id of the message
 	 * @return the received message or <code>null</code>
 	 */
 	public Message get(String id) {
-		PlaceHolder holder = (PlaceHolder)table.remove(id);
+		PlaceHolder holder = (PlaceHolder) table.remove(id);
 		if (log.isDebugEnabled()) {
 			log.debug("GET_ID [" + id + "] for " + holder);
 		}
@@ -83,26 +88,33 @@ public class MessageAdmin {
 		return (Message) holder.getReply();
 	}
 }
+
 class PlaceHolder {
 	private Object request;
+
 	private Object reply;
+
 	PlaceHolder(Object original) {
 		this.request = original;
 	}
+
 	void setReply(Object reply) {
-		this.reply  = reply;
+		this.reply = reply;
 	}
+
 	public Object getReply() {
 		return reply;
 	}
+
 	public Object getRequest() {
 		return request;
 	}
-	
+
 	boolean hasReply() {
-		return reply !=null;
+		return reply != null;
 	}
-    public String toString() {
-        return "request=" + request + ", reply=" + reply;
-    }
+
+	public String toString() {
+		return "request=" + request + ", reply=" + reply;
+	}
 }

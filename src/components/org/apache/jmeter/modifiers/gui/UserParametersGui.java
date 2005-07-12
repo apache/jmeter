@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.modifiers.gui;
 
@@ -50,320 +50,252 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class UserParametersGui extends AbstractPreProcessorGui
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    private String THREAD_COLUMNS = JMeterUtils.getResString("user");
+public class UserParametersGui extends AbstractPreProcessorGui {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-    private JTable paramTable;
-    private PowerTableModel tableModel;
-    private int numUserColumns = 1;
-    private JButton addParameterButton,
-        addUserButton,
-        deleteRowButton,
-        deleteColumnButton;
-    private JCheckBox perIterationCheck;
+	private String THREAD_COLUMNS = JMeterUtils.getResString("user");
 
-    public UserParametersGui()
-    {
-        super();
-        init();
-    }
+	private JTable paramTable;
 
-    public String getLabelResource()
-    {
-        return "user_parameters_title";
-    }
+	private PowerTableModel tableModel;
 
-    public void configure(TestElement el)
-    {
-        initTableModel();
-        paramTable.setModel(tableModel);
-        UserParameters params = (UserParameters) el;
-        CollectionProperty names = params.getNames();
-        CollectionProperty threadValues = params.getThreadLists();
-        tableModel.setColumnData(0, (List) names.getObjectValue());
-        PropertyIterator iter = threadValues.iterator();
-        if (iter.hasNext())
-        {
-            tableModel.setColumnData(1, (List) iter.next().getObjectValue());
-        }
-        int count = 2;
-        while (iter.hasNext())
-        {
-            String colName = THREAD_COLUMNS + "_" + count;
-            tableModel.addNewColumn(colName, String.class);
-            tableModel.setColumnData(
-                count,
-                (List) iter.next().getObjectValue());
-            count++;
-        }
-        perIterationCheck.setSelected(params.isPerIteration());
-        super.configure(el);
-    }
+	private int numUserColumns = 1;
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        UserParameters params = new UserParameters();
-        modifyTestElement(params);
-        return params;
-    }
+	private JButton addParameterButton, addUserButton, deleteRowButton, deleteColumnButton;
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement params)
-    {
-       if (paramTable.isEditing())
-       {
-          paramTable.getCellEditor().stopCellEditing();
-       }
-        ((UserParameters) params).setNames(
-            new CollectionProperty(
-                UserParameters.NAMES,
-                tableModel.getColumnData(JMeterUtils.getResString("name"))));
-        CollectionProperty threadLists =
-            new CollectionProperty(
-                UserParameters.THREAD_VALUES,
-                new ArrayList());
-        log.debug("making threadlists from gui = " + threadLists);
-        for (int x = 1; x < tableModel.getColumnCount(); x++)
-        {
-            threadLists.addItem(
-                tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
-            log.debug(
-                "Adding column to threadlist: "
-                    + tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
-            log.debug("Threadlists now = " + threadLists);
-        }
-        log.debug("In the end, threadlists = " + threadLists);
-        ((UserParameters) params).setThreadLists(threadLists);
-        ((UserParameters) params).setPerIteration(
-            perIterationCheck.isSelected());
-        super.configureTestElement(params);
-    }
+	private JCheckBox perIterationCheck;
 
-    private void init()
-    {
-        setBorder(makeBorder());
-        setLayout(new BorderLayout());
-        JPanel vertPanel = new VerticalPanel();
-        vertPanel.add(makeTitlePanel());
+	public UserParametersGui() {
+		super();
+		init();
+	}
 
-        perIterationCheck =
-            new JCheckBox(JMeterUtils.getResString("update_per_iter"), true);
-        Box perIterationPanel = Box.createHorizontalBox();
-        perIterationPanel.add(perIterationCheck);
-        perIterationPanel.add(Box.createHorizontalGlue());
-        vertPanel.add(perIterationPanel);
-        add(vertPanel, BorderLayout.NORTH);
+	public String getLabelResource() {
+		return "user_parameters_title";
+	}
 
-        add(makeParameterPanel(), BorderLayout.CENTER);
-    }
+	public void configure(TestElement el) {
+		initTableModel();
+		paramTable.setModel(tableModel);
+		UserParameters params = (UserParameters) el;
+		CollectionProperty names = params.getNames();
+		CollectionProperty threadValues = params.getThreadLists();
+		tableModel.setColumnData(0, (List) names.getObjectValue());
+		PropertyIterator iter = threadValues.iterator();
+		if (iter.hasNext()) {
+			tableModel.setColumnData(1, (List) iter.next().getObjectValue());
+		}
+		int count = 2;
+		while (iter.hasNext()) {
+			String colName = THREAD_COLUMNS + "_" + count;
+			tableModel.addNewColumn(colName, String.class);
+			tableModel.setColumnData(count, (List) iter.next().getObjectValue());
+			count++;
+		}
+		perIterationCheck.setSelected(params.isPerIteration());
+		super.configure(el);
+	}
 
-    private JPanel makeParameterPanel()
-    {
-        JLabel tableLabel =
-            new JLabel(JMeterUtils.getResString("user_parameters_table"));
-        initTableModel();
-        paramTable = new JTable(tableModel);
-        //paramTable.setRowSelectionAllowed(true);
-        //paramTable.setColumnSelectionAllowed(true);
-        paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        //paramTable.setCellSelectionEnabled(true);
-        //paramTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		UserParameters params = new UserParameters();
+		modifyTestElement(params);
+		return params;
+	}
 
-        JPanel paramPanel = new JPanel(new BorderLayout());
-        paramPanel.add(tableLabel, BorderLayout.NORTH);
-        JScrollPane scroll = new JScrollPane(paramTable);
-        scroll.setPreferredSize(scroll.getMinimumSize());
-        paramPanel.add(scroll, BorderLayout.CENTER);
-        paramPanel.add(makeButtonPanel(), BorderLayout.SOUTH);
-        return paramPanel;
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement params) {
+		if (paramTable.isEditing()) {
+			paramTable.getCellEditor().stopCellEditing();
+		}
+		((UserParameters) params).setNames(new CollectionProperty(UserParameters.NAMES, tableModel
+				.getColumnData(JMeterUtils.getResString("name"))));
+		CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList());
+		log.debug("making threadlists from gui = " + threadLists);
+		for (int x = 1; x < tableModel.getColumnCount(); x++) {
+			threadLists.addItem(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+			log.debug("Adding column to threadlist: " + tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+			log.debug("Threadlists now = " + threadLists);
+		}
+		log.debug("In the end, threadlists = " + threadLists);
+		((UserParameters) params).setThreadLists(threadLists);
+		((UserParameters) params).setPerIteration(perIterationCheck.isSelected());
+		super.configureTestElement(params);
+	}
 
-    protected void initTableModel()
-    {
-        tableModel =
-            new PowerTableModel(
-                new String[] {
-                    JMeterUtils.getResString("name"),
-                    THREAD_COLUMNS + "_" + numUserColumns },
-                new Class[] { String.class, String.class });
-    }
+	private void init() {
+		setBorder(makeBorder());
+		setLayout(new BorderLayout());
+		JPanel vertPanel = new VerticalPanel();
+		vertPanel.add(makeTitlePanel());
 
-    private JPanel makeButtonPanel()
-    {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 2));
-        addParameterButton =
-            new JButton(JMeterUtils.getResString("add_parameter"));
-        addUserButton = new JButton(JMeterUtils.getResString("add_user"));
-        deleteRowButton =
-            new JButton(JMeterUtils.getResString("delete_parameter"));
-        deleteColumnButton =
-            new JButton(JMeterUtils.getResString("delete_user"));
-        buttonPanel.add(addParameterButton);
-        buttonPanel.add(deleteRowButton);
-        buttonPanel.add(addUserButton);
-        buttonPanel.add(deleteColumnButton);
-        addParameterButton.addActionListener(new AddParamAction());
-        addUserButton.addActionListener(new AddUserAction());
-        deleteRowButton.addActionListener(new DeleteRowAction());
-        deleteColumnButton.addActionListener(new DeleteColumnAction());
-        return buttonPanel;
-    }
+		perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"), true);
+		Box perIterationPanel = Box.createHorizontalBox();
+		perIterationPanel.add(perIterationCheck);
+		perIterationPanel.add(Box.createHorizontalGlue());
+		vertPanel.add(perIterationPanel);
+		add(vertPanel, BorderLayout.NORTH);
 
-    private class AddParamAction implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
-            if (paramTable.isEditing())
-            {
-                TableCellEditor cellEditor =
-                    paramTable.getCellEditor(
-                        paramTable.getEditingRow(),
-                        paramTable.getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+		add(makeParameterPanel(), BorderLayout.CENTER);
+	}
 
-            tableModel.addNewRow();
-            tableModel.fireTableDataChanged();
+	private JPanel makeParameterPanel() {
+		JLabel tableLabel = new JLabel(JMeterUtils.getResString("user_parameters_table"));
+		initTableModel();
+		paramTable = new JTable(tableModel);
+		// paramTable.setRowSelectionAllowed(true);
+		// paramTable.setColumnSelectionAllowed(true);
+		paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// paramTable.setCellSelectionEnabled(true);
+		// paramTable.setPreferredScrollableViewportSize(new Dimension(100,
+		// 70));
 
-            // Enable DELETE (which may already be enabled, but it won't hurt)
-            deleteRowButton.setEnabled(true);
+		JPanel paramPanel = new JPanel(new BorderLayout());
+		paramPanel.add(tableLabel, BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane(paramTable);
+		scroll.setPreferredSize(scroll.getMinimumSize());
+		paramPanel.add(scroll, BorderLayout.CENTER);
+		paramPanel.add(makeButtonPanel(), BorderLayout.SOUTH);
+		return paramPanel;
+	}
 
-            // Highlight (select) the appropriate row.
-            int rowToSelect = tableModel.getRowCount() - 1;
-            paramTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-        }
-    }
+	protected void initTableModel() {
+		tableModel = new PowerTableModel(new String[] { JMeterUtils.getResString("name"),
+				THREAD_COLUMNS + "_" + numUserColumns }, new Class[] { String.class, String.class });
+	}
 
-    private class AddUserAction implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
+	private JPanel makeButtonPanel() {
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(2, 2));
+		addParameterButton = new JButton(JMeterUtils.getResString("add_parameter"));
+		addUserButton = new JButton(JMeterUtils.getResString("add_user"));
+		deleteRowButton = new JButton(JMeterUtils.getResString("delete_parameter"));
+		deleteColumnButton = new JButton(JMeterUtils.getResString("delete_user"));
+		buttonPanel.add(addParameterButton);
+		buttonPanel.add(deleteRowButton);
+		buttonPanel.add(addUserButton);
+		buttonPanel.add(deleteColumnButton);
+		addParameterButton.addActionListener(new AddParamAction());
+		addUserButton.addActionListener(new AddUserAction());
+		deleteRowButton.addActionListener(new DeleteRowAction());
+		deleteColumnButton.addActionListener(new DeleteColumnAction());
+		return buttonPanel;
+	}
 
-            if (paramTable.isEditing())
-            {
-                TableCellEditor cellEditor =
-                    paramTable.getCellEditor(
-                        paramTable.getEditingRow(),
-                        paramTable.getEditingColumn());
-                cellEditor.stopCellEditing();
-            }
+	private class AddParamAction implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (paramTable.isEditing()) {
+				TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
+						.getEditingColumn());
+				cellEditor.stopCellEditing();
+			}
 
-            tableModel.addNewColumn(
-                THREAD_COLUMNS + "_" + tableModel.getColumnCount(),
-                String.class);
-            tableModel.fireTableDataChanged();
+			tableModel.addNewRow();
+			tableModel.fireTableDataChanged();
 
-            // Enable DELETE (which may already be enabled, but it won't hurt)
-            deleteColumnButton.setEnabled(true);
+			// Enable DELETE (which may already be enabled, but it won't hurt)
+			deleteRowButton.setEnabled(true);
 
-            // Highlight (select) the appropriate row.
-            int colToSelect = tableModel.getColumnCount() - 1;
-            paramTable.setColumnSelectionInterval(colToSelect, colToSelect);
-        }
-    }
+			// Highlight (select) the appropriate row.
+			int rowToSelect = tableModel.getRowCount() - 1;
+			paramTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+		}
+	}
 
-    private class DeleteRowAction implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
-            if (paramTable.isEditing())
-            {
-                TableCellEditor cellEditor =
-                    paramTable.getCellEditor(
-                        paramTable.getEditingRow(),
-                        paramTable.getEditingColumn());
-                cellEditor.cancelCellEditing();
-            }
+	private class AddUserAction implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 
-            int rowSelected = paramTable.getSelectedRow();
-            if (rowSelected >= 0)
-            {
-                tableModel.removeRow(rowSelected);
-                tableModel.fireTableDataChanged();
+			if (paramTable.isEditing()) {
+				TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
+						.getEditingColumn());
+				cellEditor.stopCellEditing();
+			}
 
-                // Disable DELETE if there are no rows in the table to delete.
-                if (tableModel.getRowCount() == 0)
-                {
-                    deleteRowButton.setEnabled(false);
-                }
+			tableModel.addNewColumn(THREAD_COLUMNS + "_" + tableModel.getColumnCount(), String.class);
+			tableModel.fireTableDataChanged();
 
-                // Table still contains one or more rows, so highlight (select)
-                // the appropriate one.
-                else
-                {
-                    int rowToSelect = rowSelected;
+			// Enable DELETE (which may already be enabled, but it won't hurt)
+			deleteColumnButton.setEnabled(true);
 
-                    if (rowSelected >= tableModel.getRowCount())
-                    {
-                        rowToSelect = rowSelected - 1;
-                    }
+			// Highlight (select) the appropriate row.
+			int colToSelect = tableModel.getColumnCount() - 1;
+			paramTable.setColumnSelectionInterval(colToSelect, colToSelect);
+		}
+	}
 
-                    paramTable.setRowSelectionInterval(
-                        rowToSelect,
-                        rowToSelect);
-                }
-            }
-        }
-    }
+	private class DeleteRowAction implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (paramTable.isEditing()) {
+				TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
+						.getEditingColumn());
+				cellEditor.cancelCellEditing();
+			}
 
-    private class DeleteColumnAction implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
-            if (paramTable.isEditing())
-            {
-                TableCellEditor cellEditor =
-                    paramTable.getCellEditor(
-                        paramTable.getEditingRow(),
-                        paramTable.getEditingColumn());
-                cellEditor.cancelCellEditing();
-            }
+			int rowSelected = paramTable.getSelectedRow();
+			if (rowSelected >= 0) {
+				tableModel.removeRow(rowSelected);
+				tableModel.fireTableDataChanged();
 
-            int colSelected = paramTable.getSelectedColumn();
-            if (colSelected == 0 || colSelected == 1)
-            {
-                JOptionPane.showMessageDialog(
-                    null,
-                    JMeterUtils.getResString("column_delete_disallowed"),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (colSelected >= 0)
-            {
-                tableModel.removeColumn(colSelected);
-                tableModel.fireTableDataChanged();
+				// Disable DELETE if there are no rows in the table to delete.
+				if (tableModel.getRowCount() == 0) {
+					deleteRowButton.setEnabled(false);
+				}
 
-                // Disable DELETE if there are no rows in the table to delete.
-                if (tableModel.getColumnCount() == 0)
-                {
-                    deleteColumnButton.setEnabled(false);
-                }
+				// Table still contains one or more rows, so highlight (select)
+				// the appropriate one.
+				else {
+					int rowToSelect = rowSelected;
 
-                // Table still contains one or more rows, so highlight (select)
-                // the appropriate one.
-                else
-                {
+					if (rowSelected >= tableModel.getRowCount()) {
+						rowToSelect = rowSelected - 1;
+					}
 
-                    if (colSelected >= tableModel.getColumnCount())
-                    {
-                        colSelected = colSelected - 1;
-                    }
+					paramTable.setRowSelectionInterval(rowToSelect, rowToSelect);
+				}
+			}
+		}
+	}
 
-                    paramTable.setColumnSelectionInterval(
-                        colSelected,
-                        colSelected);
-                }
-            }
-        }
-    }
+	private class DeleteColumnAction implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (paramTable.isEditing()) {
+				TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
+						.getEditingColumn());
+				cellEditor.cancelCellEditing();
+			}
+
+			int colSelected = paramTable.getSelectedColumn();
+			if (colSelected == 0 || colSelected == 1) {
+				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("column_delete_disallowed"), "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if (colSelected >= 0) {
+				tableModel.removeColumn(colSelected);
+				tableModel.fireTableDataChanged();
+
+				// Disable DELETE if there are no rows in the table to delete.
+				if (tableModel.getColumnCount() == 0) {
+					deleteColumnButton.setEnabled(false);
+				}
+
+				// Table still contains one or more rows, so highlight (select)
+				// the appropriate one.
+				else {
+
+					if (colSelected >= tableModel.getColumnCount()) {
+						colSelected = colSelected - 1;
+					}
+
+					paramTable.setColumnSelectionInterval(colSelected, colSelected);
+				}
+			}
+		}
+	}
 }

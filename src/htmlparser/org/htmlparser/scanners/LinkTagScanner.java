@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import java.util.Hashtable;
@@ -39,34 +38,28 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
-public class LinkTagScanner extends TagScanner
-{
-    public LinkTagScanner()
-    {
-        this("");
-    }
+public class LinkTagScanner extends TagScanner {
+	public LinkTagScanner() {
+		this("");
+	}
 
-    public LinkTagScanner(String filter)
-    {
-        super(filter);
-    }
+	public LinkTagScanner(String filter) {
+		super(filter);
+	}
 
-    public String[] getID()
-    {
-        String[] ids = new String[1];
-        ids[0] = "LINK";
-        return ids;
-    }
+	public String[] getID() {
+		String[] ids = new String[1];
+		ids[0] = "LINK";
+		return ids;
+	}
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException
-    {
-        Hashtable table = tag.getAttributes();
-        String metaTagRel = (String) table.get("REL");
-        String metaTagType = (String) table.get("TYPE");
-        String httpEquiv = (String) table.get("HREF");
+	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
+		Hashtable table = tag.getAttributes();
+		String metaTagRel = (String) table.get("REL");
+		String metaTagType = (String) table.get("TYPE");
+		String httpEquiv = (String) table.get("HREF");
 
-        return new LinkTagTag(tagData, httpEquiv, metaTagRel, metaTagType);
-    }
+		return new LinkTagTag(tagData, httpEquiv, metaTagRel, metaTagType);
+	}
 
 }

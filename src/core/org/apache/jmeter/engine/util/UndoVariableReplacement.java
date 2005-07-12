@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on May 4, 2003
@@ -31,36 +31,31 @@ import org.apache.jmeter.util.StringUtilities;
 
 /**
  * @author ano ano
- *
+ * 
  * @version $Revision$
  */
-public class UndoVariableReplacement extends AbstractTransformer
-{
-    public UndoVariableReplacement(
-        CompoundVariable masterFunction,
-        Map variables)
-        {
-            super();
-            setMasterFunction(masterFunction);
-            setVariables(variables);
-        }
+public class UndoVariableReplacement extends AbstractTransformer {
+	public UndoVariableReplacement(CompoundVariable masterFunction, Map variables) {
+		super();
+		setMasterFunction(masterFunction);
+		setVariables(variables);
+	}
 
-    /* (non-Javadoc)
-     * @see ValueTransformer#transformValue(JMeterProperty)
-     */
-    public JMeterProperty transformValue(JMeterProperty prop)
-        throws InvalidVariableException
-    {
-        Iterator iter = getVariables().keySet().iterator();
-         String input = prop.getStringValue();
-         while (iter.hasNext())
-         {
-             String key = (String) iter.next();
-             String value = (String) getVariables().get(key);
-             input = StringUtilities.substitute(input, "${" + key + "}", value);
-         }
-        StringProperty newProp = new StringProperty(prop.getName(), input);
-        return newProp;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ValueTransformer#transformValue(JMeterProperty)
+	 */
+	public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
+		Iterator iter = getVariables().keySet().iterator();
+		String input = prop.getStringValue();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String value = (String) getVariables().get(key);
+			input = StringUtilities.substitute(input, "${" + key + "}", value);
+		}
+		StringProperty newProp = new StringProperty(prop.getName(), input);
+		return newProp;
+	}
 
 }

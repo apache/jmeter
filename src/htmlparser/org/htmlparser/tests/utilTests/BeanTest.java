@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.utilTests;
 
 import java.beans.PropertyChangeEvent;
@@ -51,211 +50,164 @@ import org.htmlparser.beans.StringBean;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
-public class BeanTest extends TestCase
-{
-    public BeanTest(String name)
-    {
-        super(name);
-    }
+public class BeanTest extends TestCase {
+	public BeanTest(String name) {
+		super(name);
+	}
 
-    protected byte[] pickle(Object object) throws IOException
-    {
-        ByteArrayOutputStream bos;
-        ObjectOutputStream oos;
-        byte[] ret;
+	protected byte[] pickle(Object object) throws IOException {
+		ByteArrayOutputStream bos;
+		ObjectOutputStream oos;
+		byte[] ret;
 
-        bos = new ByteArrayOutputStream();
-        oos = new ObjectOutputStream(bos);
-        oos.writeObject(object);
-        oos.close();
-        ret = bos.toByteArray();
+		bos = new ByteArrayOutputStream();
+		oos = new ObjectOutputStream(bos);
+		oos.writeObject(object);
+		oos.close();
+		ret = bos.toByteArray();
 
-        return (ret);
-    }
+		return (ret);
+	}
 
-    protected Object unpickle(byte[] data)
-        throws IOException, ClassNotFoundException
-    {
-        ByteArrayInputStream bis;
-        ObjectInputStream ois;
-        Object ret;
+	protected Object unpickle(byte[] data) throws IOException, ClassNotFoundException {
+		ByteArrayInputStream bis;
+		ObjectInputStream ois;
+		Object ret;
 
-        bis = new ByteArrayInputStream(data);
-        ois = new ObjectInputStream(bis);
-        ret = ois.readObject();
-        ois.close();
+		bis = new ByteArrayInputStream(data);
+		ois = new ObjectInputStream(bis);
+		ret = ois.readObject();
+		ois.close();
 
-        return (ret);
-    }
+		return (ret);
+	}
 
-    public void testZeroArgConstructor()
-        throws IOException, ClassNotFoundException, ParserException
-    {
-        Parser parser;
-        byte[] data;
+	public void testZeroArgConstructor() throws IOException, ClassNotFoundException, ParserException {
+		Parser parser;
+		byte[] data;
 
-        parser = new Parser();
-        data = pickle(parser);
-        parser = (Parser) unpickle(data);
-    }
+		parser = new Parser();
+		data = pickle(parser);
+		parser = (Parser) unpickle(data);
+	}
 
-    public void testSerializable()
-        throws IOException, ClassNotFoundException, ParserException
-    {
-        Parser parser;
-        Vector vector;
-        NodeIterator enumeration;
-        byte[] data;
+	public void testSerializable() throws IOException, ClassNotFoundException, ParserException {
+		Parser parser;
+		Vector vector;
+		NodeIterator enumeration;
+		byte[] data;
 
-        parser =
-            new Parser("http://htmlparser.sourceforge.net/test/example.html");
-        enumeration = parser.elements();
-        vector = new Vector(50);
-        while (enumeration.hasMoreNodes())
-            vector.addElement(enumeration.nextNode());
+		parser = new Parser("http://htmlparser.sourceforge.net/test/example.html");
+		enumeration = parser.elements();
+		vector = new Vector(50);
+		while (enumeration.hasMoreNodes())
+			vector.addElement(enumeration.nextNode());
 
-        data = pickle(parser);
-        parser = (Parser) unpickle(data);
+		data = pickle(parser);
+		parser = (Parser) unpickle(data);
 
-        enumeration = parser.elements();
-        while (enumeration.hasMoreNodes())
-            assertEquals(
-                "Nodes before and after serialization differ",
-                ((Node) vector.remove(0)).toHtml(),
-                ((Node) enumeration.nextNode()).toHtml());
-    }
+		enumeration = parser.elements();
+		while (enumeration.hasMoreNodes())
+			assertEquals("Nodes before and after serialization differ", ((Node) vector.remove(0)).toHtml(),
+					((Node) enumeration.nextNode()).toHtml());
+	}
 
-    public void testSerializableScanners()
-        throws IOException, ClassNotFoundException, ParserException
-    {
-        Parser parser;
-        Vector vector;
-        NodeIterator enumeration;
-        byte[] data;
+	public void testSerializableScanners() throws IOException, ClassNotFoundException, ParserException {
+		Parser parser;
+		Vector vector;
+		NodeIterator enumeration;
+		byte[] data;
 
-        parser =
-            new Parser("http://htmlparser.sourceforge.net/test/example.html");
-        parser.registerScanners();
-        enumeration = parser.elements();
-        vector = new Vector(50);
-        while (enumeration.hasMoreNodes())
-            vector.addElement(enumeration.nextNode());
+		parser = new Parser("http://htmlparser.sourceforge.net/test/example.html");
+		parser.registerScanners();
+		enumeration = parser.elements();
+		vector = new Vector(50);
+		while (enumeration.hasMoreNodes())
+			vector.addElement(enumeration.nextNode());
 
-        data = pickle(parser);
-        parser = (Parser) unpickle(data);
+		data = pickle(parser);
+		parser = (Parser) unpickle(data);
 
-        enumeration = parser.elements();
-        while (enumeration.hasMoreNodes())
-            assertEquals(
-                "Nodes before and after serialization differ",
-                ((Node) vector.remove(0)).toHtml(),
-                ((Node) enumeration.nextNode()).toHtml());
-    }
+		enumeration = parser.elements();
+		while (enumeration.hasMoreNodes())
+			assertEquals("Nodes before and after serialization differ", ((Node) vector.remove(0)).toHtml(),
+					((Node) enumeration.nextNode()).toHtml());
+	}
 
-    public void testSerializableStringBean()
-        throws IOException, ClassNotFoundException, ParserException
-    {
-        StringBean sb;
-        String text;
-        byte[] data;
+	public void testSerializableStringBean() throws IOException, ClassNotFoundException, ParserException {
+		StringBean sb;
+		String text;
+		byte[] data;
 
-        sb = new StringBean();
-        sb.setURL("http://htmlparser.sourceforge.net/test/example.html");
-        text = sb.getStrings();
+		sb = new StringBean();
+		sb.setURL("http://htmlparser.sourceforge.net/test/example.html");
+		text = sb.getStrings();
 
-        data = pickle(sb);
-        sb = (StringBean) unpickle(data);
+		data = pickle(sb);
+		sb = (StringBean) unpickle(data);
 
-        assertEquals(
-            "Strings before and after serialization differ",
-            text,
-            sb.getStrings());
-    }
+		assertEquals("Strings before and after serialization differ", text, sb.getStrings());
+	}
 
-    public void testSerializableLinkBean()
-        throws IOException, ClassNotFoundException, ParserException
-    {
-        LinkBean lb;
-        URL[] links;
-        byte[] data;
-        URL[] links2;
+	public void testSerializableLinkBean() throws IOException, ClassNotFoundException, ParserException {
+		LinkBean lb;
+		URL[] links;
+		byte[] data;
+		URL[] links2;
 
-        lb = new LinkBean();
-        lb.setURL("http://htmlparser.sourceforge.net/test/example.html");
-        links = lb.getLinks();
+		lb = new LinkBean();
+		lb.setURL("http://htmlparser.sourceforge.net/test/example.html");
+		links = lb.getLinks();
 
-        data = pickle(lb);
-        lb = (LinkBean) unpickle(data);
+		data = pickle(lb);
+		lb = (LinkBean) unpickle(data);
 
-        links2 = lb.getLinks();
-        assertEquals(
-            "Number of links after serialization differs",
-            links.length,
-            links2.length);
-        for (int i = 0; i < links.length; i++)
-        {
-            assertEquals(
-                "Links before and after serialization differ",
-                links[i],
-                links2[i]);
-        }
-    }
+		links2 = lb.getLinks();
+		assertEquals("Number of links after serialization differs", links.length, links2.length);
+		for (int i = 0; i < links.length; i++) {
+			assertEquals("Links before and after serialization differ", links[i], links2[i]);
+		}
+	}
 
-    public void testStringBeanListener()
-    {
-        final StringBean sb;
-        final Boolean hit[] = new Boolean[1];
+	public void testStringBeanListener() {
+		final StringBean sb;
+		final Boolean hit[] = new Boolean[1];
 
-        sb = new StringBean();
-        hit[0] = Boolean.FALSE;
-        sb.addPropertyChangeListener(new PropertyChangeListener()
-        {
-            public void propertyChange(PropertyChangeEvent event)
-            {
-                if (event.getSource().equals(sb))
-                    if (event
-                        .getPropertyName()
-                        .equals(StringBean.PROP_STRINGS_PROPERTY))
-                        hit[0] = Boolean.TRUE;
-            }
-        });
+		sb = new StringBean();
+		hit[0] = Boolean.FALSE;
+		sb.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent event) {
+				if (event.getSource().equals(sb))
+					if (event.getPropertyName().equals(StringBean.PROP_STRINGS_PROPERTY))
+						hit[0] = Boolean.TRUE;
+			}
+		});
 
-        hit[0] = Boolean.FALSE;
-        sb.setURL("http://htmlparser.sourceforge.net/test/example.html");
-        assertTrue(
-            "Strings property change not fired for URL change",
-            hit[0].booleanValue());
+		hit[0] = Boolean.FALSE;
+		sb.setURL("http://htmlparser.sourceforge.net/test/example.html");
+		assertTrue("Strings property change not fired for URL change", hit[0].booleanValue());
 
-        hit[0] = Boolean.FALSE;
-        sb.setLinks(true);
-        assertTrue(
-            "Strings property change not fired for links change",
-            hit[0].booleanValue());
-    }
+		hit[0] = Boolean.FALSE;
+		sb.setLinks(true);
+		assertTrue("Strings property change not fired for links change", hit[0].booleanValue());
+	}
 
-    public void testLinkBeanListener()
-    {
-        final LinkBean lb;
-        final Boolean hit[] = new Boolean[1];
+	public void testLinkBeanListener() {
+		final LinkBean lb;
+		final Boolean hit[] = new Boolean[1];
 
-        lb = new LinkBean();
-        hit[0] = Boolean.FALSE;
-        lb.addPropertyChangeListener(new PropertyChangeListener()
-        {
-            public void propertyChange(PropertyChangeEvent event)
-            {
-                if (event.getSource().equals(lb))
-                    if (event
-                        .getPropertyName()
-                        .equals(LinkBean.PROP_LINKS_PROPERTY))
-                        hit[0] = Boolean.TRUE;
-            }
-        });
+		lb = new LinkBean();
+		hit[0] = Boolean.FALSE;
+		lb.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent event) {
+				if (event.getSource().equals(lb))
+					if (event.getPropertyName().equals(LinkBean.PROP_LINKS_PROPERTY))
+						hit[0] = Boolean.TRUE;
+			}
+		});
 
-        hit[0] = Boolean.FALSE;
-        lb.setURL("http://htmlparser.sourceforge.net/test/example.html");
-        assertTrue(
-            "Links property change not fired for URL change",
-            hit[0].booleanValue());
-    }
+		hit[0] = Boolean.FALSE;
+		lb.setURL("http://htmlparser.sourceforge.net/test/example.html");
+		assertTrue("Links property change not fired for URL change", hit[0].booleanValue());
+	}
 }

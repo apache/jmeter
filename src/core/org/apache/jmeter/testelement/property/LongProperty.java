@@ -14,127 +14,115 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
 
-
 /**
  * @version $Revision$
  */
-public class LongProperty extends NumberProperty
-{
-    long value;
-    long savedValue;
+public class LongProperty extends NumberProperty {
+	long value;
 
-    public LongProperty(String name, long value)
-    {
-        super(name);
-        this.value = value;
-    }
+	long savedValue;
 
-    public LongProperty()
-    {
-        super();
-    }
-    
-    /* (non-Javadoc)
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-         */
-        public void setRunningVersion(boolean runningVersion)
-        {
-            savedValue = value;
-            super.setRunningVersion(runningVersion);
-        }
+	public LongProperty(String name, long value) {
+		super(name);
+		this.value = value;
+	}
 
-        /* (non-Javadoc)
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
-         */
-        public void recoverRunningVersion(TestElement owner)
-        {
-            value = savedValue;
-        }
+	public LongProperty() {
+		super();
+	}
 
-    public void setValue(int value)
-    {
-        this.value = value;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		savedValue = value;
+		super.setRunningVersion(runningVersion);
+	}
 
-    protected void setNumberValue(Number n)
-    {
-        value = n.longValue();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		value = savedValue;
+	}
 
-    protected void setNumberValue(String n) throws NumberFormatException
-    {
-        value = Long.parseLong(n);
-    }
+	public void setValue(int value) {
+		this.value = value;
+	}
 
-    /**
-     * @see JMeterProperty#getStringValue()
-     */
-    public String getStringValue()
-    {
-        return Long.toString(value);
-    }
+	protected void setNumberValue(Number n) {
+		value = n.longValue();
+	}
 
-    /**
-     * @see JMeterProperty#getObjectValue()
-     */
-    public Object getObjectValue()
-    {
-        return new Long(value);
-    }
+	protected void setNumberValue(String n) throws NumberFormatException {
+		value = Long.parseLong(n);
+	}
 
-    /**
-     * @see java.lang.Object#clone()
-     */
-    public Object clone()
-    {
-        LongProperty prop = (LongProperty) super.clone();
-        prop.value = value;
-        return prop;
-    }
+	/**
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		return Long.toString(value);
+	}
 
-    /**
-     * @see JMeterProperty#getBooleanValue()
-     */
-    public boolean getBooleanValue()
-    {
-        return getLongValue() > 0 ? true : false;
-    }
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return new Long(value);
+	}
 
-    /**
-     * @see JMeterProperty#getDoubleValue()
-     */
-    public double getDoubleValue()
-    {
-        return value;
-    }
+	/**
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() {
+		LongProperty prop = (LongProperty) super.clone();
+		prop.value = value;
+		return prop;
+	}
 
-    /**
-     * @see JMeterProperty#getFloatValue()
-     */
-    public float getFloatValue()
-    {
-        return value;
-    }
+	/**
+	 * @see JMeterProperty#getBooleanValue()
+	 */
+	public boolean getBooleanValue() {
+		return getLongValue() > 0 ? true : false;
+	}
 
-    /**
-     * @see JMeterProperty#getIntValue()
-     */
-    public int getIntValue()
-    {
-        return (int) value;
-    }
+	/**
+	 * @see JMeterProperty#getDoubleValue()
+	 */
+	public double getDoubleValue() {
+		return value;
+	}
 
-    /**
-     * @see JMeterProperty#getLongValue()
-     */
-    public long getLongValue()
-    {
-        return value;
-    }
+	/**
+	 * @see JMeterProperty#getFloatValue()
+	 */
+	public float getFloatValue() {
+		return value;
+	}
+
+	/**
+	 * @see JMeterProperty#getIntValue()
+	 */
+	public int getIntValue() {
+		return (int) value;
+	}
+
+	/**
+	 * @see JMeterProperty#getLongValue()
+	 */
+	public long getLongValue() {
+		return value;
+	}
 }

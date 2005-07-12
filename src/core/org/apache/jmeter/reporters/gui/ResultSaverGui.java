@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.reporters.gui;
 
@@ -33,82 +33,75 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
- * Create a ResultSaver test element, which saves the sample information
- * in set of files
+ * Create a ResultSaver test element, which saves the sample information in set
+ * of files
  * 
  * @version $Revision$ Last updated: $Date$
  */
-public class ResultSaverGui extends AbstractPostProcessorGui
-{
-   
-    private JTextField filename;
-    private JCheckBox errorsOnly;
+public class ResultSaverGui extends AbstractPostProcessorGui {
 
-	public ResultSaverGui()
-    {
-        super();
-        init();
-    }
+	private JTextField filename;
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
-     */
-    public String getLabelResource()
-    {
-        return "resultsaver_title"; // $NON-NLS-1$
-    }
-    
+	private JCheckBox errorsOnly;
+
+	public ResultSaverGui() {
+		super();
+		init();
+	}
+
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
+	 */
+	public String getLabelResource() {
+		return "resultsaver_title"; // $NON-NLS-1$
+	}
+
 	/**
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
 	 */
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
-        errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
-    }
+	public void configure(TestElement el) {
+		super.configure(el);
+		filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
+		errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
+	}
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        ResultSaver ResultSaver = new ResultSaver();
-        modifyTestElement(ResultSaver);
-        return ResultSaver;
-    }
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		ResultSaver ResultSaver = new ResultSaver();
+		modifyTestElement(ResultSaver);
+		return ResultSaver;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement te)
-    {
-        super.configureTestElement(te);
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement te) {
+		super.configureTestElement(te);
 		te.setProperty(ResultSaver.FILENAME, filename.getText());
-		te.setProperty(ResultSaver.ERRORS_ONLY, 
-				JOrphanUtils.booleanToString(errorsOnly.isSelected()));
-    }
-    
-    private void init()
-    {
-        setLayout(new BorderLayout());
-        setBorder(makeBorder());
+		te.setProperty(ResultSaver.ERRORS_ONLY, JOrphanUtils.booleanToString(errorsOnly.isSelected()));
+	}
+
+	private void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
 		box.add(createFilenamePanel());
-		errorsOnly = 
-			new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
+		errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
 		box.add(errorsOnly);
-		add(box,BorderLayout.NORTH);
-        
-//        add(makeTitlePanel(),BorderLayout.NORTH);
-    }
-	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...
+		add(box, BorderLayout.NORTH);
+
+		// add(makeTitlePanel(),BorderLayout.NORTH);
+	}
+
+	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
 	{
-		JLabel label = 
-			new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
-		
+		JLabel label = new JLabel(JMeterUtils.getResString("resultsaver_prefix")); // $NON-NLS-1$
+
 		filename = new JTextField(10);
 		filename.setName(ResultSaver.FILENAME);
 		label.setLabelFor(filename);

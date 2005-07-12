@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.assertions;
 
@@ -29,105 +29,84 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * Checks if the result is a well-formed XML content.
- *
+ * 
  * @author <a href="mailto:gottfried@szing.at">Gottfried Szing</a>
  * @version $Revision$, $Date$
  */
-public class XMLAssertion
-    extends AbstractTestElement
-    implements Serializable, Assertion
-{
+public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
-	
-    // one builder for all requests
-    private static SAXBuilder  builder = null;
 
-    /**
-     * Returns the result of the Assertion. Here it checks wether the
-     * Sample took to long to be considered successful. If so an AssertionResult
-     * containing a FailureMessage will be returned. Otherwise the returned
-     * AssertionResult will reflect the success of the Sample.
-     */
-    public AssertionResult getResult(SampleResult response)
-    {
-        // no error as default
-        AssertionResult result = new AssertionResult();
-        if(response.getResponseData() == null)
-             {
-                 return result.setResultForNull();
-             }
-        result.setFailure(false);
+	// one builder for all requests
+	private static SAXBuilder builder = null;
 
-        // the result data
-        String resultData =
-            new String(getResultBody(response.getResponseData()));
+	/**
+	 * Returns the result of the Assertion. Here it checks wether the Sample
+	 * took to long to be considered successful. If so an AssertionResult
+	 * containing a FailureMessage will be returned. Otherwise the returned
+	 * AssertionResult will reflect the success of the Sample.
+	 */
+	public AssertionResult getResult(SampleResult response) {
+		// no error as default
+		AssertionResult result = new AssertionResult();
+		if (response.getResponseData() == null) {
+			return result.setResultForNull();
+		}
+		result.setFailure(false);
 
-        // create parser like (!) a singleton
-        if (builder  == null)
-        {
-            try
-            {
-                // This builds a document of whatever's in the given resource
-                builder = new SAXBuilder();
-            }
-            catch (Exception e)
-            {
-                log.error("Unable to instantiate DOM Builder", e);
+		// the result data
+		String resultData = new String(getResultBody(response.getResponseData()));
 
-                result.setFailure(true);
-                result.setFailureMessage("Unable to instantiate DOM Builder");
+		// create parser like (!) a singleton
+		if (builder == null) {
+			try {
+				// This builds a document of whatever's in the given resource
+				builder = new SAXBuilder();
+			} catch (Exception e) {
+				log.error("Unable to instantiate DOM Builder", e);
 
-                // return with an error
-                return result;
-            }
-        }
+				result.setFailure(true);
+				result.setFailureMessage("Unable to instantiate DOM Builder");
 
-        try
-        {
-            builder.build(new StringReader(resultData));
-        }
-        catch (Exception e)
-        {
-            log.debug("Cannot parse result content", e);
+				// return with an error
+				return result;
+			}
+		}
 
-            result.setFailure(true);
-            result.setFailureMessage(e.getMessage());
-        }
+		try {
+			builder.build(new StringReader(resultData));
+		} catch (Exception e) {
+			log.debug("Cannot parse result content", e);
 
-        return result;
-    }
+			result.setFailure(true);
+			result.setFailureMessage(e.getMessage());
+		}
 
-    /**
-     * Return the body of the http return.
-     */
-    private byte[] getResultBody(byte[] resultData)
-    {
-        for (int i = 0; i < (resultData.length - 1); i++)
-        {
-            if (resultData[i] == '\n' && resultData[i + 1] == '\n')
-            {
-                return getByteArraySlice(
-                    resultData,
-                    (i + 2),
-                    resultData.length - 1);
-            }
-        }
-        return resultData;
-    }
+		return result;
+	}
 
-    /**
-     * Return a slice of a byte array
-     */
-    private byte[] getByteArraySlice(byte[] array, int begin, int end)
-    {
-        byte[] slice = new byte[(end - begin + 1)];
-        int count = 0;
-        for (int i = begin; i <= end; i++)
-        {
-            slice[count] = array[i];
-            count++;
-        }
+	/**
+	 * Return the body of the http return.
+	 */
+	private byte[] getResultBody(byte[] resultData) {
+		for (int i = 0; i < (resultData.length - 1); i++) {
+			if (resultData[i] == '\n' && resultData[i + 1] == '\n') {
+				return getByteArraySlice(resultData, (i + 2), resultData.length - 1);
+			}
+		}
+		return resultData;
+	}
 
-        return slice;
-    }
+	/**
+	 * Return a slice of a byte array
+	 */
+	private byte[] getByteArraySlice(byte[] array, int begin, int end) {
+		byte[] slice = new byte[(end - begin + 1)];
+		int count = 0;
+		for (int i = begin; i <= end; i++) {
+			slice[count] = array[i];
+			count++;
+		}
+
+		return slice;
+	}
 }

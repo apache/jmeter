@@ -31,8 +31,8 @@
 // enough to assist JMeter.
 //
 // This class was contributed by Joshua Kerievsky
-
 package org.htmlparser.visitors;
+
 import org.htmlparser.Parser;
 import org.htmlparser.StringNode;
 import org.htmlparser.scanners.LinkScanner;
@@ -41,52 +41,45 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Tag;
 
-public class UrlModifyingVisitor extends NodeVisitor
-{
-    private String linkPrefix;
-    private StringBuffer modifiedResult;
-    private Parser parser;
+public class UrlModifyingVisitor extends NodeVisitor {
+	private String linkPrefix;
 
-    public UrlModifyingVisitor(Parser parser, String linkPrefix)
-    {
-        super(true, false);
-        this.parser = parser;
-        LinkScanner linkScanner = new LinkScanner();
-        parser.addScanner(linkScanner);
-        parser.addScanner(
-            linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
-        this.linkPrefix = linkPrefix;
-        modifiedResult = new StringBuffer();
-    }
+	private StringBuffer modifiedResult;
 
-    public void visitLinkTag(LinkTag linkTag)
-    {
-        linkTag.setLink(linkPrefix + linkTag.getLink());
-    }
+	private Parser parser;
 
-    public void visitImageTag(ImageTag imageTag)
-    {
-        imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
-        modifiedResult.append(imageTag.toHtml());
-    }
+	public UrlModifyingVisitor(Parser parser, String linkPrefix) {
+		super(true, false);
+		this.parser = parser;
+		LinkScanner linkScanner = new LinkScanner();
+		parser.addScanner(linkScanner);
+		parser.addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
+		this.linkPrefix = linkPrefix;
+		modifiedResult = new StringBuffer();
+	}
 
-    public void visitEndTag(EndTag endTag)
-    {
-        modifiedResult.append(endTag.toHtml());
-    }
+	public void visitLinkTag(LinkTag linkTag) {
+		linkTag.setLink(linkPrefix + linkTag.getLink());
+	}
 
-    public void visitStringNode(StringNode stringNode)
-    {
-        modifiedResult.append(stringNode.toHtml());
-    }
+	public void visitImageTag(ImageTag imageTag) {
+		imageTag.setImageURL(linkPrefix + imageTag.getImageURL());
+		modifiedResult.append(imageTag.toHtml());
+	}
 
-    public void visitTag(Tag tag)
-    {
-        modifiedResult.append(tag.toHtml());
-    }
+	public void visitEndTag(EndTag endTag) {
+		modifiedResult.append(endTag.toHtml());
+	}
 
-    public String getModifiedResult()
-    {
-        return modifiedResult.toString();
-    }
+	public void visitStringNode(StringNode stringNode) {
+		modifiedResult.append(stringNode.toHtml());
+	}
+
+	public void visitTag(Tag tag) {
+		modifiedResult.append(tag.toHtml());
+	}
+
+	public String getModifiedResult() {
+		return modifiedResult.toString();
+	}
 }

@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 import java.util.Vector;
@@ -37,84 +36,81 @@ import java.util.Vector;
 import org.htmlparser.Node;
 import org.htmlparser.NodeReader;
 
-public class IteratorImpl implements PeekingIterator
-{
-    NodeReader reader;
-    Vector preRead;
-    String resourceLocn;
-    ParserFeedback feedback;
+public class IteratorImpl implements PeekingIterator {
+	NodeReader reader;
 
-    public IteratorImpl(NodeReader rd, String resource, ParserFeedback fb)
-    {
-        reader = rd;
-        preRead = new Vector(25);
-        resourceLocn = resource;
-        feedback = fb;
-    }
+	Vector preRead;
 
-    public Node peek() throws ParserException
-    {
-        Node ret;
+	String resourceLocn;
 
-        if (null == reader)
-            ret = null;
-        else
-            try
-            {
-                ret = reader.readElement();
-                if (null != ret)
-                    preRead.addElement(ret);
-            }
-            catch (Exception e)
-            {
-                StringBuffer msgBuffer = new StringBuffer();
-                msgBuffer.append(
-                    "Unexpected Exception occurred while reading ");
-                msgBuffer.append(resourceLocn);
-                msgBuffer.append(", in nextHTMLNode");
-                reader.appendLineDetails(msgBuffer);
-                ParserException ex =
-                    new ParserException(msgBuffer.toString(), e);
-                feedback.error(msgBuffer.toString(), ex);
-                throw ex;
-            }
+	ParserFeedback feedback;
 
-        return (ret);
-    }
+	public IteratorImpl(NodeReader rd, String resource, ParserFeedback fb) {
+		reader = rd;
+		preRead = new Vector(25);
+		resourceLocn = resource;
+		feedback = fb;
+	}
 
-    /**
-     * Check if more nodes are available.
-     * @return <code>true</code> if a call to <code>nextHTMLNode()</code> will succeed.
-     */
-    public boolean hasMoreNodes() throws ParserException
-    {
-        Node node;
-        boolean ret;
+	public Node peek() throws ParserException {
+		Node ret;
 
-        if (null == reader)
-            ret = false;
-        else if (0 != preRead.size())
-            ret = true;
-        else
-            ret = !(null == peek());
+		if (null == reader)
+			ret = null;
+		else
+			try {
+				ret = reader.readElement();
+				if (null != ret)
+					preRead.addElement(ret);
+			} catch (Exception e) {
+				StringBuffer msgBuffer = new StringBuffer();
+				msgBuffer.append("Unexpected Exception occurred while reading ");
+				msgBuffer.append(resourceLocn);
+				msgBuffer.append(", in nextHTMLNode");
+				reader.appendLineDetails(msgBuffer);
+				ParserException ex = new ParserException(msgBuffer.toString(), e);
+				feedback.error(msgBuffer.toString(), ex);
+				throw ex;
+			}
 
-        return (ret);
-    }
+		return (ret);
+	}
 
-    /**
-     * Get the next node.
-     * @return The next node in the HTML stream, or null if there are no more nodes.
-     */
-    public Node nextNode() throws ParserException
-    {
-        Node ret;
+	/**
+	 * Check if more nodes are available.
+	 * 
+	 * @return <code>true</code> if a call to <code>nextHTMLNode()</code>
+	 *         will succeed.
+	 */
+	public boolean hasMoreNodes() throws ParserException {
+		Node node;
+		boolean ret;
 
-        if (hasMoreNodes())
-            ret = (Node) preRead.remove(0);
-        else
-            // should perhaps throw an exception?
-            ret = null;
+		if (null == reader)
+			ret = false;
+		else if (0 != preRead.size())
+			ret = true;
+		else
+			ret = !(null == peek());
 
-        return (ret);
-    }
+		return (ret);
+	}
+
+	/**
+	 * Get the next node.
+	 * 
+	 * @return The next node in the HTML stream, or null if there are no more
+	 *         nodes.
+	 */
+	public Node nextNode() throws ParserException {
+		Node ret;
+
+		if (hasMoreNodes())
+			ret = (Node) preRead.remove(0);
+		else
+			// should perhaps throw an exception?
+			ret = null;
+
+		return (ret);
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on May 4, 2003
@@ -40,67 +40,54 @@ import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 
 /**
- * Transforms strings into variable references
- * (in spite of the name, which suggests the opposite!)
+ * Transforms strings into variable references (in spite of the name, which
+ * suggests the opposite!)
  * 
  * @version $Revision$
  */
-public class ReplaceFunctionsWithStrings extends AbstractTransformer
-{
-    private static final Logger log = LoggingManager.getLoggerForClass();
-    
-    private boolean regexMatch;// Should we match using regexes?
-    
-    public ReplaceFunctionsWithStrings(
-        CompoundVariable masterFunction,
-        Map variables)
-    {
-        this(masterFunction,variables,false);
-    }
+public class ReplaceFunctionsWithStrings extends AbstractTransformer {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public ReplaceFunctionsWithStrings(
-            CompoundVariable masterFunction,
-            Map variables,
-            boolean regexMatch)
-        {
-            super();
-            setMasterFunction(masterFunction);
-            setVariables(variables);
-            this.regexMatch=regexMatch;
-        }
+	private boolean regexMatch;// Should we match using regexes?
 
-    /* (non-Javadoc)
-     * @see ValueTransformer#transformValue(JMeterProperty)
-     */
-    public JMeterProperty transformValue(JMeterProperty prop)
-        throws InvalidVariableException
-    {
-        PatternMatcher pm = new Perl5Matcher();
-        Pattern pattern = null;
-        PatternCompiler compiler = new Perl5Compiler();
-        Iterator iter = getVariables().keySet().iterator();
-        String input = prop.getStringValue();
-        while (iter.hasNext())
-        {
-            String key = (String) iter.next();
-            String value = (String) getVariables().get(key);
-            if (regexMatch) {
-                try {
-                    pattern = compiler.compile(value);
-                    input=Util.substitute(
-                            pm,
-                            pattern,
-                            new StringSubstitution("${"+key+"}"),
-                            input,
-                            Util.SUBSTITUTE_ALL);
-                } catch (MalformedPatternException e) {
-                    log.warn("Malformed pattern "+value);
-                }
-            } else {
-                input = StringUtilities.substitute(input, value, "${" + key + "}");                
-            }
-        }
-        StringProperty newProp =  new StringProperty(prop.getName(), input);
-        return newProp;
-    }
+	public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables) {
+		this(masterFunction, variables, false);
+	}
+
+	public ReplaceFunctionsWithStrings(CompoundVariable masterFunction, Map variables, boolean regexMatch) {
+		super();
+		setMasterFunction(masterFunction);
+		setVariables(variables);
+		this.regexMatch = regexMatch;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ValueTransformer#transformValue(JMeterProperty)
+	 */
+	public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
+		PatternMatcher pm = new Perl5Matcher();
+		Pattern pattern = null;
+		PatternCompiler compiler = new Perl5Compiler();
+		Iterator iter = getVariables().keySet().iterator();
+		String input = prop.getStringValue();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String value = (String) getVariables().get(key);
+			if (regexMatch) {
+				try {
+					pattern = compiler.compile(value);
+					input = Util.substitute(pm, pattern, new StringSubstitution("${" + key + "}"), input,
+							Util.SUBSTITUTE_ALL);
+				} catch (MalformedPatternException e) {
+					log.warn("Malformed pattern " + value);
+				}
+			} else {
+				input = StringUtilities.substitute(input, value, "${" + key + "}");
+			}
+		}
+		StringProperty newProp = new StringProperty(prop.getName(), input);
+		return newProp;
+	}
 }

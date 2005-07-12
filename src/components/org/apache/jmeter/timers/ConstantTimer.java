@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.timers;
 
@@ -28,104 +28,93 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * This class implements a constant timer with its own panel and fields for
  * value update and user interaction.
- *
+ * 
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Revision$ $Date$
  */
-public class ConstantTimer
-    extends AbstractTestElement
-    implements Timer, Serializable, LoopIterationListener
-{
+public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
 
-    public final static String DELAY = "ConstantTimer.delay";
-    private long delay = 0;
+	public final static String DELAY = "ConstantTimer.delay";
 
-    /**
-     * No-arg constructor.
-     */
-    public ConstantTimer()
-    {
-    }
+	private long delay = 0;
 
-    /**
-     * Set the delay for this timer.
-     *  
-     */
-    public void setDelay(String delay)
-    {
-        setProperty(DELAY, delay);
-    }
+	/**
+	 * No-arg constructor.
+	 */
+	public ConstantTimer() {
+	}
 
-    /**
-     * Set the range (not used for this timer).
-     * 
-     */
-    public void setRange(double range)
-    {
-    }
+	/**
+	 * Set the delay for this timer.
+	 * 
+	 */
+	public void setDelay(String delay) {
+		setProperty(DELAY, delay);
+	}
 
-    /**
-     * Get the delay value for display.
-     * 
-     * @return the delay value for display.
-     */
-    public String getDelay()
-    {
-        return getPropertyAsString(DELAY);
-    }
+	/**
+	 * Set the range (not used for this timer).
+	 * 
+	 */
+	public void setRange(double range) {
+	}
 
-    /**
-     * Retrieve the range (not used for this timer).
-     * 
-     * @return the range (always zero for this timer).
-     */
-    public double getRange()
-    {
-        return 0;
-    }
+	/**
+	 * Get the delay value for display.
+	 * 
+	 * @return the delay value for display.
+	 */
+	public String getDelay() {
+		return getPropertyAsString(DELAY);
+	}
 
-    /**
-     * Retrieve the delay to use during test execution.
-     * 
-     * @return the delay.
-     */
-    public long delay()
-    {
-        return delay;
-    }
+	/**
+	 * Retrieve the range (not used for this timer).
+	 * 
+	 * @return the range (always zero for this timer).
+	 */
+	public double getRange() {
+		return 0;
+	}
 
-    /**
-     * Provide a description of this timer class.
-     * 
-     * @return the description of this timer class.
-     */
-    public String toString()
-    {
-        return JMeterUtils.getResString("constant_timer_memo");
-    }
+	/**
+	 * Retrieve the delay to use during test execution.
+	 * 
+	 * @return the delay.
+	 */
+	public long delay() {
+		return delay;
+	}
 
-    /**
-     * Gain access to any variables that have been defined.
-     * 
-     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-     */
-    public void iterationStart(LoopIterationEvent event)
-    {
-        delay = getPropertyAsLong(DELAY);
-        
-    }
+	/**
+	 * Provide a description of this timer class.
+	 * 
+	 * @return the description of this timer class.
+	 */
+	public String toString() {
+		return JMeterUtils.getResString("constant_timer_memo");
+	}
 
-    /* This method doesn't appear to be used anymore.
-     * jeremy_a@bigfoot.com  02 May 2003
-     * 
-     * Make changes to variables available elsewhere.
-     * 
-     * @see ThreadListener#setJMeterVariables(JMeterVariables)
-    public void setJMeterVariables(JMeterVariables jmVars)
-    {
-        //vars.addJMeterVariables(jmVars);
-    }
-     */
+	/**
+	 * Gain access to any variables that have been defined.
+	 * 
+	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+	 */
+	public void iterationStart(LoopIterationEvent event) {
+		delay = getPropertyAsLong(DELAY);
+
+	}
+
+	/*
+	 * This method doesn't appear to be used anymore. jeremy_a@bigfoot.com 02
+	 * May 2003
+	 * 
+	 * Make changes to variables available elsewhere.
+	 * 
+	 * @see ThreadListener#setJMeterVariables(JMeterVariables) public void
+	 *      setJMeterVariables(JMeterVariables jmVars) {
+	 *      //vars.addJMeterVariables(jmVars); }
+	 */
 
 }

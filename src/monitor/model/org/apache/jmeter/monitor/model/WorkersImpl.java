@@ -23,25 +23,22 @@ import java.util.List;
  * 
  * @version $Revision$ on $Date$
  */
-public class WorkersImpl implements Workers
-{
+public class WorkersImpl implements Workers {
 	private List worker = null;
-	
-    /**
-     * 
-     */
-    public WorkersImpl()
-    {
-        super();
-        worker = new LinkedList();
-    }
 
-    public List getWorker()
-    {
-        return worker;
-    }
+	/**
+	 * 
+	 */
+	public WorkersImpl() {
+		super();
+		worker = new LinkedList();
+	}
 
-	public void addWorker(Worker value){
+	public List getWorker() {
+		return worker;
+	}
+
+	public void addWorker(Worker value) {
 		this.worker.add(value);
 	}
 }

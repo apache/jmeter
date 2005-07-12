@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.config.gui;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
@@ -33,135 +34,122 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * A GUI component allowing the user to enter a username and password for a
  * login.
- *
- * @version   $Revision$ on $Date$
+ * 
+ * @version $Revision$ on $Date$
  */
-public class LoginConfigGui extends AbstractConfigGui
-{
-    /** Field allowing the user to enter a username. */
-    private JTextField username = new JTextField(15);
-    
-    /** Field allowing the user to enter a password. */
-    private JPasswordField password = new JPasswordField(15);
-    
-    /**
-     * Boolean indicating whether or not this component should display its
-     * name. If true, this is a standalone component. If false, this component
-     * is intended to be used as a subpanel for another component.
-     */
-    private boolean displayName = true;
+public class LoginConfigGui extends AbstractConfigGui {
+	/** Field allowing the user to enter a username. */
+	private JTextField username = new JTextField(15);
 
-    /**
-     * Create a new LoginConfigGui as a standalone component.
-     */
-    public LoginConfigGui()
-    {
-        this(true);
-    }
+	/** Field allowing the user to enter a password. */
+	private JPasswordField password = new JPasswordField(15);
 
-    /**
-     * Create a new LoginConfigGui as either a standalone or an embedded
-     * component.
-     *
-     * @param displayName  indicates whether or not this component should
-     *                     display its name.  If true, this is a standalone
-     *                     component.  If false, this component is intended
-     *                     to be used as a subpanel for another component.
-     */
-    public LoginConfigGui(boolean displayName)
-    {
-        this.displayName = displayName;
-        init();
-    }
+	/**
+	 * Boolean indicating whether or not this component should display its name.
+	 * If true, this is a standalone component. If false, this component is
+	 * intended to be used as a subpanel for another component.
+	 */
+	private boolean displayName = true;
 
-    public String getLabelResource()
-    {
-        return "login_config_element";
-    }
+	/**
+	 * Create a new LoginConfigGui as a standalone component.
+	 */
+	public LoginConfigGui() {
+		this(true);
+	}
 
-    /**
-     * A newly created component can be initialized with the contents of
-     * a Test Element object by calling this method.  The component is
-     * responsible for querying the Test Element object for the
-     * relevant information to display in its GUI.
-     *
-     * @param element the TestElement to configure 
-     */
-    public void configure(TestElement element)
-    {
-        super.configure(element);
-        username.setText(
-            element.getPropertyAsString(ConfigTestElement.USERNAME));
-        password.setText(
-            element.getPropertyAsString(ConfigTestElement.PASSWORD));
-    }
+	/**
+	 * Create a new LoginConfigGui as either a standalone or an embedded
+	 * component.
+	 * 
+	 * @param displayName
+	 *            indicates whether or not this component should display its
+	 *            name. If true, this is a standalone component. If false, this
+	 *            component is intended to be used as a subpanel for another
+	 *            component.
+	 */
+	public LoginConfigGui(boolean displayName) {
+		this.displayName = displayName;
+		init();
+	}
 
-    /* Implements JMeterGUIComponent.createTestElement() */
-    public TestElement createTestElement()
-    {
-        ConfigTestElement element = new ConfigTestElement();
-        modifyTestElement(element);
-        return element;
-    }
+	public String getLabelResource() {
+		return "login_config_element";
+	}
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-    public void modifyTestElement(TestElement element)
-    {
-        configureTestElement(element);
-        element.setProperty(
-            new StringProperty(ConfigTestElement.USERNAME, username.getText()));
-        
-        String passwordString = new String(password.getPassword());
-        element.setProperty(
-            new StringProperty(ConfigTestElement.PASSWORD, passwordString));
-    }
+	/**
+	 * A newly created component can be initialized with the contents of a Test
+	 * Element object by calling this method. The component is responsible for
+	 * querying the Test Element object for the relevant information to display
+	 * in its GUI.
+	 * 
+	 * @param element
+	 *            the TestElement to configure
+	 */
+	public void configure(TestElement element) {
+		super.configure(element);
+		username.setText(element.getPropertyAsString(ConfigTestElement.USERNAME));
+		password.setText(element.getPropertyAsString(ConfigTestElement.PASSWORD));
+	}
 
-    /**
-     * Initialize the components and layout of this component.
-     */
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
+	/* Implements JMeterGUIComponent.createTestElement() */
+	public TestElement createTestElement() {
+		ConfigTestElement element = new ConfigTestElement();
+		modifyTestElement(element);
+		return element;
+	}
 
-        if (displayName)
-        {
-            setBorder(makeBorder());
-            add(makeTitlePanel(), BorderLayout.NORTH);
-        }
+	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+	public void modifyTestElement(TestElement element) {
+		configureTestElement(element);
+		element.setProperty(new StringProperty(ConfigTestElement.USERNAME, username.getText()));
 
-        VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.add(createUsernamePanel());
-        mainPanel.add(createPasswordPanel());
-        add(mainPanel, BorderLayout.CENTER);
-    }
+		String passwordString = new String(password.getPassword());
+		element.setProperty(new StringProperty(ConfigTestElement.PASSWORD, passwordString));
+	}
 
-    /**
-     * Create a panel containing the username field and corresponding label.
-     * 
-     * @return a GUI panel containing the username field
-     */
-    private JPanel createUsernamePanel()
-    {
-        JPanel panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("username"));
-        label.setLabelFor(username);
-        panel.add(label, BorderLayout.WEST);
-        panel.add(username, BorderLayout.CENTER);
-        return panel;
-    }
+	/**
+	 * Initialize the components and layout of this component.
+	 */
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
 
-    /**
-     * Create a panel containing the password field and corresponding label.
-     * 
-     * @return a GUI panel containing the password field
-     */
-    private JPanel createPasswordPanel()
-    {
-        JPanel panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("password"));
-        label.setLabelFor(password);
-        panel.add(label, BorderLayout.WEST);
-        panel.add(password, BorderLayout.CENTER);
-        return panel;
-    }
+		if (displayName) {
+			setBorder(makeBorder());
+			add(makeTitlePanel(), BorderLayout.NORTH);
+		}
+
+		VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.add(createUsernamePanel());
+		mainPanel.add(createPasswordPanel());
+		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Create a panel containing the username field and corresponding label.
+	 * 
+	 * @return a GUI panel containing the username field
+	 */
+	private JPanel createUsernamePanel() {
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+		JLabel label = new JLabel(JMeterUtils.getResString("username"));
+		label.setLabelFor(username);
+		panel.add(label, BorderLayout.WEST);
+		panel.add(username, BorderLayout.CENTER);
+		return panel;
+	}
+
+	/**
+	 * Create a panel containing the password field and corresponding label.
+	 * 
+	 * @return a GUI panel containing the password field
+	 */
+	private JPanel createPasswordPanel() {
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+		JLabel label = new JLabel(JMeterUtils.getResString("password"));
+		label.setLabelFor(password);
+		panel.add(label, BorderLayout.WEST);
+		panel.add(password, BorderLayout.CENTER);
+		return panel;
+	}
 }

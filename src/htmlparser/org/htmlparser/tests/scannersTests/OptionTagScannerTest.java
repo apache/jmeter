@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
@@ -38,48 +37,37 @@ import org.htmlparser.tags.OptionTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class OptionTagScannerTest extends ParserTestCase
-{
+public class OptionTagScannerTest extends ParserTestCase {
 
-    private String testHTML =
-        new String(
-            "<OPTION value=\"Google Search\">Google</OPTION>"
-                + "<OPTION value=\"AltaVista Search\">AltaVista"
-                + "<OPTION value=\"Lycos Search\"></OPTION>"
-                + "<OPTION>Yahoo!</OPTION>"
-                + "<OPTION>\nHotmail</OPTION>"
-                + "<OPTION>Mailcity\n</OPTION>"
-                + "<OPTION>\nIndiatimes\n</OPTION>"
-                + "<OPTION>\nRediff\n</OPTION>\n"
-                + "<OPTION>Cricinfo");
-    private OptionTagScanner scanner;
-    private Node[] node;
-    private int i;
+	private String testHTML = new String("<OPTION value=\"Google Search\">Google</OPTION>"
+			+ "<OPTION value=\"AltaVista Search\">AltaVista" + "<OPTION value=\"Lycos Search\"></OPTION>"
+			+ "<OPTION>Yahoo!</OPTION>" + "<OPTION>\nHotmail</OPTION>" + "<OPTION>Mailcity\n</OPTION>"
+			+ "<OPTION>\nIndiatimes\n</OPTION>" + "<OPTION>\nRediff\n</OPTION>\n" + "<OPTION>Cricinfo");
 
-    public OptionTagScannerTest(String name)
-    {
-        super(name);
-    }
+	private OptionTagScanner scanner;
 
-    public void testScan() throws ParserException
-    {
-        scanner = new OptionTagScanner("-i");
-        createParser(testHTML, "http://www.google.com/test/index.html");
-        parser.addScanner(scanner);
-        parseAndAssertNodeCount(9);
-        for (int j = 0; j < i; j++)
-        {
-            assertTrue(
-                "Node " + j + " should be Option Tag",
-                node[j] instanceof OptionTag);
-            OptionTag OptionTag = (OptionTag) node[j];
-            assertEquals("Option Scanner", scanner, OptionTag.getThisScanner());
-        }
-    }
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(
-            new String[] { OptionTagScannerTest.class.getName()});
-    }
+	private Node[] node;
+
+	private int i;
+
+	public OptionTagScannerTest(String name) {
+		super(name);
+	}
+
+	public void testScan() throws ParserException {
+		scanner = new OptionTagScanner("-i");
+		createParser(testHTML, "http://www.google.com/test/index.html");
+		parser.addScanner(scanner);
+		parseAndAssertNodeCount(9);
+		for (int j = 0; j < i; j++) {
+			assertTrue("Node " + j + " should be Option Tag", node[j] instanceof OptionTag);
+			OptionTag OptionTag = (OptionTag) node[j];
+			assertEquals("Option Scanner", scanner, OptionTag.getThisScanner());
+		}
+	}
+
+	public static void main(String[] args) {
+		new junit.awtui.TestRunner().start(new String[] { OptionTagScannerTest.class.getName() });
+	}
 
 }

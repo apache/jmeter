@@ -29,37 +29,29 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 
-public class TableRow extends CompositeTag
-{
-    private NodeList columnsList;
-    public TableRow(
-        TagData tagData,
-        CompositeTagData compositeTagData,
-        NodeList columnsList)
-    {
-        super(tagData, compositeTagData);
-        this.columnsList = columnsList;
-    }
+public class TableRow extends CompositeTag {
+	private NodeList columnsList;
 
-    public int getColumnCount()
-    {
-        return columnsList.size();
-    }
+	public TableRow(TagData tagData, CompositeTagData compositeTagData, NodeList columnsList) {
+		super(tagData, compositeTagData);
+		this.columnsList = columnsList;
+	}
 
-    public TableColumn[] getColumns()
-    {
-        TableColumn[] columns = new TableColumn[columnsList.size()];
-        for (int i = 0; i < columnsList.size(); i++)
-        {
-            columns[i] = (TableColumn) columnsList.elementAt(i);
-        }
-        return columns;
-    }
+	public int getColumnCount() {
+		return columnsList.size();
+	}
+
+	public TableColumn[] getColumns() {
+		TableColumn[] columns = new TableColumn[columnsList.size()];
+		for (int i = 0; i < columnsList.size(); i++) {
+			columns[i] = (TableColumn) columnsList.elementAt(i);
+		}
+		return columns;
+	}
 }

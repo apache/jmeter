@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.timer;
 
@@ -29,14 +29,13 @@ package org.apache.jorphan.timer;
  * thread only.
  * 
  * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
- * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @author Originally published in <a
+ *         href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  * @version $Revision$
  */
-final class JavaSystemTimer extends AbstractTimer 
-{
-    protected double getCurrentTime()
-    {
-        return System.currentTimeMillis();
-    }
+final class JavaSystemTimer extends AbstractTimer {
+	protected double getCurrentTime() {
+		return System.currentTimeMillis();
+	}
 }

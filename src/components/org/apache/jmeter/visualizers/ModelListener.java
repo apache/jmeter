@@ -14,28 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 /**
  * The Interface to be implemented by any class that wants to be notified by
  * model which makes use of this callback-Interface.
- *
- * @author     <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version    $Revision$ $Date$
+ * 
+ * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
+ * @version $Revision$ $Date$
  */
-public interface ModelListener
-{
+public interface ModelListener {
 
-    /**
-     * Informs the Visualizer that the model has changed.
-     */
-    public void updateVisualizer();
+	/**
+	 * Informs the Visualizer that the model has changed.
+	 */
+	public void updateVisualizer();
 
-    /**
-     * Informs the Visualizer that a message should be displayed.
-     */
-    public void displayMessage(String messageString, boolean isError);
+	/**
+	 * Informs the Visualizer that a message should be displayed.
+	 */
+	public void displayMessage(String messageString, boolean isError);
 }

@@ -30,99 +30,97 @@ import javax.swing.JScrollPane;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.samplers.Clearable;
+
 /**
- * The health panel is responsible for showing the health
- * of the servers. It only uses the most current information
- * to show the status.
+ * The health panel is responsible for showing the health of the servers. It
+ * only uses the most current information to show the status.
  */
-public class MonitorHealthPanel extends JPanel
-	implements MonitorListener, Clearable
-{
+public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
 	private HashMap SERVERMAP = new HashMap();
+
 	private JPanel SERVERS = null;
+
 	private MonitorAccumModel MODEL;
+
 	private JScrollPane SCROLL = null;
-	
-	//NOTUSED Font plainText = new Font("plain", Font.PLAIN, 9);
-	public static final String INFO_H =
-		JMeterUtils.getResString("monitor_equation_healthy");
-	public static final String INFO_A =
-		JMeterUtils.getResString("monitor_equation_active");
-	public static final String INFO_W =
-		JMeterUtils.getResString("monitor_equation_warning");
-	public static final String INFO_D =
-		JMeterUtils.getResString("monitor_equation_dead");
-	public static final String INFO_LOAD =
-		JMeterUtils.getResString("monitor_equation_load");
 
-    /**
-     * 
-     * @deprecated Only for use in unit testing
-     */
-    public MonitorHealthPanel()
-	{
-    	//log.warn("Only for use in unit testing");
-    }
+	// NOTUSED Font plainText = new Font("plain", Font.PLAIN, 9);
+	public static final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy");
 
-    /**
-     * 
-     */
-    public MonitorHealthPanel(MonitorAccumModel model)
-    {
-    	this.MODEL = model;
-    	this.MODEL.addListener(this);
-        init();
-    }
+	public static final String INFO_A = JMeterUtils.getResString("monitor_equation_active");
+
+	public static final String INFO_W = JMeterUtils.getResString("monitor_equation_warning");
+
+	public static final String INFO_D = JMeterUtils.getResString("monitor_equation_dead");
+
+	public static final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load");
 
 	/**
-	 * init is responsible for creating the necessary legends
-	 * and information for the health panel.
+	 * 
+	 * @deprecated Only for use in unit testing
 	 */
-	protected void init(){
+	public MonitorHealthPanel() {
+		// log.warn("Only for use in unit testing");
+	}
+
+	/**
+	 * 
+	 */
+	public MonitorHealthPanel(MonitorAccumModel model) {
+		this.MODEL = model;
+		this.MODEL.addListener(this);
+		init();
+	}
+
+	/**
+	 * init is responsible for creating the necessary legends and information
+	 * for the health panel.
+	 */
+	protected void init() {
 		this.setLayout(new BorderLayout());
 		ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif");
 		JLabel label = new JLabel(legend);
-		label.setPreferredSize(new Dimension(550,25));
-		this.add(label,BorderLayout.NORTH);
+		label.setPreferredSize(new Dimension(550, 25));
+		this.add(label, BorderLayout.NORTH);
 
 		this.SERVERS = new JPanel();
 		this.SERVERS.setLayout(new BoxLayout(SERVERS, BoxLayout.Y_AXIS));
 		this.SERVERS.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		SCROLL = new JScrollPane(this.SERVERS);
-		SCROLL.setPreferredSize(new Dimension(300,300));
-		this.add(SCROLL,BorderLayout.CENTER);
-		
+		SCROLL.setPreferredSize(new Dimension(300, 300));
+		this.add(SCROLL, BorderLayout.CENTER);
+
 		// the equations
 		String eqstring1 = " " + INFO_H + "   |   " + INFO_A;
 		String eqstring2 = " " + INFO_W + "   |   " + INFO_D;
 		String eqstring3 = " " + INFO_LOAD;
 		JLabel eqs = new JLabel();
 		eqs.setLayout(new BorderLayout());
-		eqs.setPreferredSize(new Dimension(500,60));
-		eqs.add(new JLabel(eqstring1),BorderLayout.NORTH);
-		eqs.add(new JLabel(eqstring2),BorderLayout.CENTER);
-		eqs.add(new JLabel(eqstring3),BorderLayout.SOUTH);
-		this.add(eqs,BorderLayout.SOUTH);
+		eqs.setPreferredSize(new Dimension(500, 60));
+		eqs.add(new JLabel(eqstring1), BorderLayout.NORTH);
+		eqs.add(new JLabel(eqstring2), BorderLayout.CENTER);
+		eqs.add(new JLabel(eqstring3), BorderLayout.SOUTH);
+		this.add(eqs, BorderLayout.SOUTH);
 	}
 
 	/**
 	 * 
 	 * @param model
 	 */
-	public void addSample(MonitorModel model){
-		if (SERVERMAP.containsKey(model.getURL())){
+	public void addSample(MonitorModel model) {
+		if (SERVERMAP.containsKey(model.getURL())) {
 			ServerPanel pane = null;
-			if(SERVERMAP.get(model.getURL()) != null){
-				pane = (ServerPanel)SERVERMAP.get((model.getURL()));
+			if (SERVERMAP.get(model.getURL()) != null) {
+				pane = (ServerPanel) SERVERMAP.get((model.getURL()));
 			} else {
 				pane = new ServerPanel(model);
-				SERVERMAP.put(model.getURL(),pane);
+				SERVERMAP.put(model.getURL(), pane);
 			}
 			pane.updateGui(model);
 		} else {
 			ServerPanel newpane = new ServerPanel(model);
-			SERVERMAP.put(model.getURL(),newpane);
+			SERVERMAP.put(model.getURL(), newpane);
 			this.SERVERS.add(newpane);
 			newpane.updateGui(model);
 		}
@@ -130,10 +128,10 @@ public class MonitorHealthPanel extends JPanel
 	}
 
 	/**
-	 * clear will clear the hashmap, remove all ServerPanels
-	 * from the servers pane, and update the ui.
+	 * clear will clear the hashmap, remove all ServerPanels from the servers
+	 * pane, and update the ui.
 	 */
-	public void clear(){
+	public void clear() {
 		this.SERVERMAP.clear();
 		this.SERVERS.removeAll();
 		this.SERVERS.updateUI();

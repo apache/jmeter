@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.Node;
@@ -40,36 +39,26 @@ import org.htmlparser.tags.TitleTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.NodeList;
 
-public class HtmlTest extends ParserTestCase
-{
+public class HtmlTest extends ParserTestCase {
 
-    public HtmlTest(String name)
-    {
-        super(name);
-    }
+	public HtmlTest(String name) {
+		super(name);
+	}
 
-    public void testScan() throws Exception
-    {
-        createParser(
-            "<html>"
-                + "	<head>"
-                + "		<title>Some Title</title>"
-                + "	</head>"
-                + "	<body>"
-                + "		Some data"
-                + "	</body>"
-                + "</html>");
-        parser.addScanner(new TitleScanner(""));
-        parser.addScanner(new HtmlScanner());
-        parseAndAssertNodeCount(1);
-        assertType("html tag", Html.class, node[0]);
-        Html html = (Html) node[0];
-        NodeList nodeList = new NodeList();
-        html.collectInto(nodeList, TitleTag.class);
-        assertEquals("nodelist size", 1, nodeList.size());
-        Node node = nodeList.elementAt(0);
-        assertType("expected title tag", TitleTag.class, node);
-        TitleTag titleTag = (TitleTag) node;
-        assertStringEquals("title", "Some Title", titleTag.getTitle());
-    }
+	public void testScan() throws Exception {
+		createParser("<html>" + "	<head>" + "		<title>Some Title</title>" + "	</head>" + "	<body>" + "		Some data"
+				+ "	</body>" + "</html>");
+		parser.addScanner(new TitleScanner(""));
+		parser.addScanner(new HtmlScanner());
+		parseAndAssertNodeCount(1);
+		assertType("html tag", Html.class, node[0]);
+		Html html = (Html) node[0];
+		NodeList nodeList = new NodeList();
+		html.collectInto(nodeList, TitleTag.class);
+		assertEquals("nodelist size", 1, nodeList.size());
+		Node node = nodeList.elementAt(0);
+		assertType("expected title tag", TitleTag.class, node);
+		TitleTag titleTag = (TitleTag) node;
+		assertStringEquals("title", "Some Title", titleTag.getTitle());
+	}
 }

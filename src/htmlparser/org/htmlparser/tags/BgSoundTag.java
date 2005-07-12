@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
@@ -37,28 +36,21 @@ import org.htmlparser.tags.data.TagData;
 /**
  * Identifies an bgsound tag
  */
-public class BgSoundTag extends Tag
-{
-    /**
-     * The URL where the image is stored.
-     */
-    protected String bgsoundURL;
-    public BgSoundTag(TagData tagData, String bgsoundURL)
-    {
-        super(tagData);
-        this.bgsoundURL = bgsoundURL;
-    }
+public class BgSoundTag extends Tag {
+	/**
+	 * The URL where the image is stored.
+	 */
+	protected String bgsoundURL;
 
-    /**
-     * Print the contents of the Tag
-     */
-    public String toString()
-    {
-        return "BGSOUND TAG : at "
-            + bgsoundURL
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd();
-    }
+	public BgSoundTag(TagData tagData, String bgsoundURL) {
+		super(tagData);
+		this.bgsoundURL = bgsoundURL;
+	}
+
+	/**
+	 * Print the contents of the Tag
+	 */
+	public String toString() {
+		return "BGSOUND TAG : at " + bgsoundURL + "; begins at : " + elementBegin() + "; ends at : " + elementEnd();
+	}
 }

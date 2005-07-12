@@ -29,162 +29,141 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.util;
 
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 import org.htmlparser.Node;
 
-public class NodeList implements Serializable
-{
-    private static final int INITIAL_CAPACITY = 10;
-    //private static final int CAPACITY_INCREMENT=20;
-    private Node nodeData[];
-    private int size;
-    private int capacity;
-    private int capacityIncrement;
-    private int numberOfAdjustments;
+public class NodeList implements Serializable {
+	private static final int INITIAL_CAPACITY = 10;
 
-    public NodeList()
-    {
-        size = 0;
-        capacity = INITIAL_CAPACITY;
-        nodeData = new Node[capacity];
-        capacityIncrement = capacity * 2;
-        numberOfAdjustments = 0;
-    }
+	// private static final int CAPACITY_INCREMENT=20;
+	private Node nodeData[];
 
-    public void add(Node node)
-    {
-        if (size == capacity)
-            adjustVectorCapacity();
-        nodeData[size++] = node;
-    }
+	private int size;
 
-    /**
-     * Insert the given node at the head of the list.
-     * @param node The new first element.
-     */
-    public void prepend(Node node)
-    {
-        if (size == capacity)
-            adjustVectorCapacity();
-        System.arraycopy(nodeData, 0, nodeData, 1, size);
-        size++;
-        nodeData[0] = node;
-    }
+	private int capacity;
 
-    private void adjustVectorCapacity()
-    {
-        capacity += capacityIncrement;
-        capacityIncrement *= 2;
-        Node oldData[] = nodeData;
-        nodeData = new Node[capacity];
-        System.arraycopy(oldData, 0, nodeData, 0, size);
-        numberOfAdjustments++;
-    }
+	private int capacityIncrement;
 
-    public int size()
-    {
-        return size;
-    }
+	private int numberOfAdjustments;
 
-    public Node elementAt(int i)
-    {
-        return nodeData[i];
-    }
+	public NodeList() {
+		size = 0;
+		capacity = INITIAL_CAPACITY;
+		nodeData = new Node[capacity];
+		capacityIncrement = capacity * 2;
+		numberOfAdjustments = 0;
+	}
 
-    public int getNumberOfAdjustments()
-    {
-        return numberOfAdjustments;
-    }
+	public void add(Node node) {
+		if (size == capacity)
+			adjustVectorCapacity();
+		nodeData[size++] = node;
+	}
 
-    public SimpleNodeIterator elements()
-    {
-        return new SimpleNodeIterator()
-        {
-            int count = 0;
+	/**
+	 * Insert the given node at the head of the list.
+	 * 
+	 * @param node
+	 *            The new first element.
+	 */
+	public void prepend(Node node) {
+		if (size == capacity)
+			adjustVectorCapacity();
+		System.arraycopy(nodeData, 0, nodeData, 1, size);
+		size++;
+		nodeData[0] = node;
+	}
 
-            public boolean hasMoreNodes()
-            {
-                return count < size;
-            }
+	private void adjustVectorCapacity() {
+		capacity += capacityIncrement;
+		capacityIncrement *= 2;
+		Node oldData[] = nodeData;
+		nodeData = new Node[capacity];
+		System.arraycopy(oldData, 0, nodeData, 0, size);
+		numberOfAdjustments++;
+	}
 
-            public Node nextNode()
-            {
-                synchronized (NodeList.this)
-                {
-                    if (count < size)
-                    {
-                        return nodeData[count++];
-                    }
-                }
-                throw new NoSuchElementException("Vector Enumeration");
-            }
-        };
-    }
+	public int size() {
+		return size;
+	}
 
-    public Node[] toNodeArray()
-    {
-        Node[] nodeArray = new Node[size];
-        System.arraycopy(nodeData, 0, nodeArray, 0, size);
-        return nodeArray;
-    }
+	public Node elementAt(int i) {
+		return nodeData[i];
+	}
 
-    public String asString()
-    {
-        StringBuffer buff = new StringBuffer();
-        for (int i = 0; i < size; i++)
-            buff.append(nodeData[i].toPlainTextString());
-        return buff.toString();
-    }
+	public int getNumberOfAdjustments() {
+		return numberOfAdjustments;
+	}
 
-    public String asHtml()
-    {
-        StringBuffer buff = new StringBuffer();
-        for (int i = 0; i < size; i++)
-            buff.append(nodeData[i].toHtml());
-        return buff.toString();
-    }
+	public SimpleNodeIterator elements() {
+		return new SimpleNodeIterator() {
+			int count = 0;
 
-    public void remove(int index)
-    {
-        System.arraycopy(
-            nodeData,
-            index + 1,
-            nodeData,
-            index,
-            size - index - 1);
-        size--;
-    }
+			public boolean hasMoreNodes() {
+				return count < size;
+			}
 
-    public void removeAll()
-    {
-        size = 0;
-        capacity = INITIAL_CAPACITY;
-        nodeData = new Node[capacity];
-        capacityIncrement = capacity * 2;
-        numberOfAdjustments = 0;
-    }
+			public Node nextNode() {
+				synchronized (NodeList.this) {
+					if (count < size) {
+						return nodeData[count++];
+					}
+				}
+				throw new NoSuchElementException("Vector Enumeration");
+			}
+		};
+	}
 
-    public String toString()
-    {
-        StringBuffer text = new StringBuffer();
-        for (int i = 0; i < size; i++)
-            text.append(nodeData[i].toPlainTextString());
-        return text.toString();
-    }
+	public Node[] toNodeArray() {
+		Node[] nodeArray = new Node[size];
+		System.arraycopy(nodeData, 0, nodeArray, 0, size);
+		return nodeArray;
+	}
 
-    public NodeList searchFor(Class classType)
-    {
-        NodeList foundList = new NodeList();
-        Node node;
-        for (int i = 0; i < size; i++)
-        {
-            if (nodeData[i].getClass().getName().equals(classType.getName()))
-                foundList.add(nodeData[i]);
-        }
-        return foundList;
-    }
+	public String asString() {
+		StringBuffer buff = new StringBuffer();
+		for (int i = 0; i < size; i++)
+			buff.append(nodeData[i].toPlainTextString());
+		return buff.toString();
+	}
+
+	public String asHtml() {
+		StringBuffer buff = new StringBuffer();
+		for (int i = 0; i < size; i++)
+			buff.append(nodeData[i].toHtml());
+		return buff.toString();
+	}
+
+	public void remove(int index) {
+		System.arraycopy(nodeData, index + 1, nodeData, index, size - index - 1);
+		size--;
+	}
+
+	public void removeAll() {
+		size = 0;
+		capacity = INITIAL_CAPACITY;
+		nodeData = new Node[capacity];
+		capacityIncrement = capacity * 2;
+		numberOfAdjustments = 0;
+	}
+
+	public String toString() {
+		StringBuffer text = new StringBuffer();
+		for (int i = 0; i < size; i++)
+			text.append(nodeData[i].toPlainTextString());
+		return text.toString();
+	}
+
+	public NodeList searchFor(Class classType) {
+		NodeList foundList = new NodeList();
+		Node node;
+		for (int i = 0; i < size; i++) {
+			if (nodeData[i].getClass().getName().equals(classType.getName()))
+				foundList.add(nodeData[i]);
+		}
+		return foundList;
+	}
 }

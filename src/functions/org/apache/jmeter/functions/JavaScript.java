@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -36,113 +36,102 @@ import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.WrappedException;
 
-public class JavaScript extends AbstractFunction implements Serializable
-{
+public class JavaScript extends AbstractFunction implements Serializable {
 
-    private static final List desc = new LinkedList();
-    private static final String KEY = "__javaScript";
+	private static final List desc = new LinkedList();
+
+	private static final String KEY = "__javaScript";
+
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-    static {
-        desc.add("JavaScript expression to evaluate");
-        desc.add(JMeterUtils.getResString("function_name_param"));
-    }
+	static {
+		desc.add("JavaScript expression to evaluate");
+		desc.add(JMeterUtils.getResString("function_name_param"));
+	}
 
-    private Object[] values;
+	private Object[] values;
 
-    public JavaScript()
-    {
-    }
+	public JavaScript() {
+	}
 
-    public Object clone()
-    {
-        JavaScript newJavaScript = new JavaScript();
-        return newJavaScript;
-    }
+	public Object clone() {
+		JavaScript newJavaScript = new JavaScript();
+		return newJavaScript;
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+	 */
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
 
-        JMeterVariables vars = getVariables();
+		JMeterVariables vars = getVariables();
 
-        String script = ((CompoundVariable) values[0]).execute();
-        // Allow variable to be omitted
-        String varName = values.length < 2 ? null :
-            ((CompoundVariable) values[1]).execute();
-        String resultStr = "";
+		String script = ((CompoundVariable) values[0]).execute();
+		// Allow variable to be omitted
+		String varName = values.length < 2 ? null : ((CompoundVariable) values[1]).execute();
+		String resultStr = "";
 
-        Context cx = Context.enter();
-        try
-        {
+		Context cx = Context.enter();
+		try {
 
-            Scriptable scope = cx.initStandardObjects(null);
-            Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
+			Scriptable scope = cx.initStandardObjects(null);
+			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
 
-            resultStr = Context.toString(result);
-            if (varName != null) vars.put(varName, resultStr);
+			resultStr = Context.toString(result);
+			if (varName != null)
+				vars.put(varName, resultStr);
 
-        }
-        catch (WrappedException e)
-		{
-        	log.error("Error processing Javascript",e);
-        	throw new InvalidVariableException();        	
+		} catch (WrappedException e) {
+			log.error("Error processing Javascript", e);
+			throw new InvalidVariableException();
+		} catch (EcmaError e) {
+			log.error("Error processing Javascript", e);
+			throw new InvalidVariableException();
+		} catch (JavaScriptException e) {
+			log.error("Error processing Javascript", e);
+			throw new InvalidVariableException();
+		} finally {
+			Context.exit();
 		}
-        catch (EcmaError e)
-		{
-        	log.error("Error processing Javascript",e);
-        	throw new InvalidVariableException();
+
+		return resultStr;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+	 */
+	public void setParameters(Collection parameters) throws InvalidVariableException {
+
+		values = parameters.toArray();
+
+		if (values.length < 1 || values.length > 2) {
+			throw new InvalidVariableException("Expecting 1 or 2 parameters, but found " + values.length);//$NON-NLS-1$
 		}
-        catch (JavaScriptException e)
-        {
-        	log.error("Error processing Javascript",e);
-            throw new InvalidVariableException();
-        }
-        finally
-        {
-            Context.exit();
-        }
 
-        return resultStr;
+	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
+	 */
+	public String getReferenceKey() {
+		return KEY;
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
-
-        values = parameters.toArray();
-
-        if (values.length < 1 || values.length > 2)
-        {
-            throw new InvalidVariableException(
-            		"Expecting 1 or 2 parameters, but found " + values.length);//$NON-NLS-1$
-        }
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+	 */
+	public List getArgumentDesc() {
+		return desc;
+	}
 
 }

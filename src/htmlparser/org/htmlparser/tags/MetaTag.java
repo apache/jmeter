@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
@@ -37,58 +36,46 @@ import org.htmlparser.tags.data.TagData;
 /**
  * A Meta Tag
  */
-public class MetaTag extends Tag
-{
-    private String metaTagName;
-    private String metaTagContents;
-    private String httpEquiv;
-    public MetaTag(
-        TagData tagData,
-        String httpEquiv,
-        String metaTagName,
-        String metaTagContents)
-    {
-        super(tagData);
-        this.httpEquiv = httpEquiv;
-        this.metaTagName = metaTagName;
-        this.metaTagContents = metaTagContents;
-    }
-    public String getHttpEquiv()
-    {
-        return httpEquiv;
-    }
-    public String getMetaContent()
-    {
-        return metaTagContents;
-    }
-    public String getMetaTagName()
-    {
-        return metaTagName;
-    }
-    public void setHttpEquiv(String httpEquiv)
-    {
-        this.httpEquiv = httpEquiv;
-    }
-    public void setMetaTagContents(String metaTagContents)
-    {
-        this.metaTagContents = metaTagContents;
-    }
-    public void setMetaTagName(String metaTagName)
-    {
-        this.metaTagName = metaTagName;
-    }
-    public String toString()
-    {
-        return "META TAG\n"
-            + "--------\n"
-            + "Http-Equiv : "
-            + getHttpEquiv()
-            + "\n"
-            + "Name : "
-            + metaTagName
-            + "\n"
-            + "Contents : "
-            + metaTagContents
-            + "\n";
-    }
+public class MetaTag extends Tag {
+	private String metaTagName;
+
+	private String metaTagContents;
+
+	private String httpEquiv;
+
+	public MetaTag(TagData tagData, String httpEquiv, String metaTagName, String metaTagContents) {
+		super(tagData);
+		this.httpEquiv = httpEquiv;
+		this.metaTagName = metaTagName;
+		this.metaTagContents = metaTagContents;
+	}
+
+	public String getHttpEquiv() {
+		return httpEquiv;
+	}
+
+	public String getMetaContent() {
+		return metaTagContents;
+	}
+
+	public String getMetaTagName() {
+		return metaTagName;
+	}
+
+	public void setHttpEquiv(String httpEquiv) {
+		this.httpEquiv = httpEquiv;
+	}
+
+	public void setMetaTagContents(String metaTagContents) {
+		this.metaTagContents = metaTagContents;
+	}
+
+	public void setMetaTagName(String metaTagName) {
+		this.metaTagName = metaTagName;
+	}
+
+	public String toString() {
+		return "META TAG\n" + "--------\n" + "Http-Equiv : " + getHttpEquiv() + "\n" + "Name : " + metaTagName + "\n"
+				+ "Contents : " + metaTagContents + "\n";
+	}
 }

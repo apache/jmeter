@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
@@ -37,58 +36,46 @@ import org.htmlparser.tags.data.TagData;
 /**
  * A Meta Tag
  */
-public class LinkTagTag extends Tag
-{
-    private String linkTagRel;
-    private String linkTagType;
-    private String linkTagHref;
-    public LinkTagTag(
-        TagData tagData,
-        String linkTagRel,
-        String linkTagType,
-        String linkTagHref)
-    {
-        super(tagData);
-        this.linkTagRel = linkTagRel;
-        this.linkTagType = linkTagType;
-        this.linkTagHref = linkTagHref;
-    }
-    public String getTagRel()
-    {
-        return linkTagRel;
-    }
-    public String getLinkHref()
-    {
-        return linkTagHref;
-    }
-    public String getLinkTagRel()
-    {
-        return linkTagRel;
-    }
-    public void setTagRel(String linkTagRel)
-    {
-        this.linkTagRel = linkTagRel;
-    }
-    public void setLinkTagType(String linkTagType)
-    {
-        this.linkTagType = linkTagType;
-    }
-    public void setLinkTagRel(String linkTagRel)
-    {
-        this.linkTagRel = linkTagRel;
-    }
-    public String toString()
-    {
-        return "META TAG\n"
-            + "--------\n"
-            + "Http-Equiv : "
-            + getTagRel()
-            + "\n"
-            + "Name : "
-            + linkTagRel
-            + "\n"
-            + "Contents : "
-            + linkTagType
-            + "\n";
-    }
+public class LinkTagTag extends Tag {
+	private String linkTagRel;
+
+	private String linkTagType;
+
+	private String linkTagHref;
+
+	public LinkTagTag(TagData tagData, String linkTagRel, String linkTagType, String linkTagHref) {
+		super(tagData);
+		this.linkTagRel = linkTagRel;
+		this.linkTagType = linkTagType;
+		this.linkTagHref = linkTagHref;
+	}
+
+	public String getTagRel() {
+		return linkTagRel;
+	}
+
+	public String getLinkHref() {
+		return linkTagHref;
+	}
+
+	public String getLinkTagRel() {
+		return linkTagRel;
+	}
+
+	public void setTagRel(String linkTagRel) {
+		this.linkTagRel = linkTagRel;
+	}
+
+	public void setLinkTagType(String linkTagType) {
+		this.linkTagType = linkTagType;
+	}
+
+	public void setLinkTagRel(String linkTagRel) {
+		this.linkTagRel = linkTagRel;
+	}
+
+	public String toString() {
+		return "META TAG\n" + "--------\n" + "Http-Equiv : " + getTagRel() + "\n" + "Name : " + linkTagRel + "\n"
+				+ "Contents : " + linkTagType + "\n";
+	}
 }

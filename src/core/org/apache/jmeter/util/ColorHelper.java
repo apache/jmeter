@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.util;
 
@@ -22,52 +22,44 @@ import java.awt.Color;
 
 /**
  * This class contains the static utility methods to manipulate colors.
- *
- * @author     Khor Soon Hin
- * Created    2001/08/13
- * @version    $Revision$ $Date$
+ * 
+ * @author Khor Soon Hin Created 2001/08/13
+ * @version $Revision$ $Date$
  */
-public final class ColorHelper
-{
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private ColorHelper()
-    {
-    }
+public final class ColorHelper {
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private ColorHelper() {
+	}
 
-    /**
-     * Given the <code>Color</code>, get the red, green and blue components.
-     * Increment the lowest of the components by the indicated increment value.
-     * If all the components are the same value increment in the order of
-     * red, green and blue.
-     *
-     * @param inc     value to increment the color components
-     * @return        the color after change
-     */
-    public static Color changeColorCyclicIncrement(Color col, int inc)
-    {
-        int red = col.getRed();
-        int green = col.getGreen();
-        int blue = col.getBlue();
-        int temp1 = Math.min(red, green);
-        int temp2 = Math.min(temp1, blue);
-        // now temp2 has the lowest of the three components
-        if (red == temp2)
-        {
-            red += inc;
-            red %= 256;
-        }
-        else if (green == temp2)
-        {
-            green += inc;
-            green %= 256;
-        }
-        else if (blue == temp2)
-        {
-            blue += inc;
-            blue %= 256;
-        }
-        return new Color(red, green, blue);
-    }
+	/**
+	 * Given the <code>Color</code>, get the red, green and blue components.
+	 * Increment the lowest of the components by the indicated increment value.
+	 * If all the components are the same value increment in the order of red,
+	 * green and blue.
+	 * 
+	 * @param inc
+	 *            value to increment the color components
+	 * @return the color after change
+	 */
+	public static Color changeColorCyclicIncrement(Color col, int inc) {
+		int red = col.getRed();
+		int green = col.getGreen();
+		int blue = col.getBlue();
+		int temp1 = Math.min(red, green);
+		int temp2 = Math.min(temp1, blue);
+		// now temp2 has the lowest of the three components
+		if (red == temp2) {
+			red += inc;
+			red %= 256;
+		} else if (green == temp2) {
+			green += inc;
+			green %= 256;
+		} else if (blue == temp2) {
+			blue += inc;
+			blue %= 256;
+		}
+		return new Color(red, green, blue);
+	}
 }

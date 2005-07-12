@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.threads;
 
@@ -24,69 +24,58 @@ import java.io.Serializable;
  * @author Thad Smith
  * @version $Revision$
  */
-public final class JMeterContextService implements Serializable
-{
-    static private ThreadLocal threadContext = new ThreadLocal(){
-       public Object initialValue()
-       {
-          return new JMeterContext();
-       }
-    };
-    
-    private static long testStart = 0;
-    private static int numberOfThreads = 0;
+public final class JMeterContextService implements Serializable {
+	static private ThreadLocal threadContext = new ThreadLocal() {
+		public Object initialValue() {
+			return new JMeterContext();
+		}
+	};
 
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private JMeterContextService()
-    {
-    }
+	private static long testStart = 0;
 
-    static public JMeterContext getContext()
-    {
-        return (JMeterContext) threadContext.get();
-    }
-    
-    static public void startTest()
-    {
-       if(testStart == 0)
-       {
-          numberOfThreads = 0;
-	       testStart = System.currentTimeMillis();
-	       threadContext = new ThreadLocal(){
-	          public Object initialValue()
-	          {
-	             return new JMeterContext();
-	          }
-	       };
-       }
-    }
-    
-    static synchronized void incrNumberOfThreads()
-    {
-       numberOfThreads++;
-    }
-    
-    static synchronized void decrNumberOfThreads()
-    {
-       numberOfThreads--;
-    }
-    
-    static public synchronized int getNumberOfThreads()
-    {
-       return numberOfThreads;
-    }
-    
-    static public void endTest()
-    {
-       testStart = 0;
-       numberOfThreads = 0;
-    }
-    
-    static public long getTestStartTime()
-    {
-       return testStart;
-    }
+	private static int numberOfThreads = 0;
+
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private JMeterContextService() {
+	}
+
+	static public JMeterContext getContext() {
+		return (JMeterContext) threadContext.get();
+	}
+
+	static public void startTest() {
+		if (testStart == 0) {
+			numberOfThreads = 0;
+			testStart = System.currentTimeMillis();
+			threadContext = new ThreadLocal() {
+				public Object initialValue() {
+					return new JMeterContext();
+				}
+			};
+		}
+	}
+
+	static synchronized void incrNumberOfThreads() {
+		numberOfThreads++;
+	}
+
+	static synchronized void decrNumberOfThreads() {
+		numberOfThreads--;
+	}
+
+	static public synchronized int getNumberOfThreads() {
+		return numberOfThreads;
+	}
+
+	static public void endTest() {
+		testStart = 0;
+		numberOfThreads = 0;
+	}
+
+	static public long getTestStartTime() {
+		return testStart;
+	}
 
 }

@@ -14,22 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.engine;
 
 import org.apache.jorphan.collections.HashTree;
 
 /**
- * @author     Michael Stover
- * @version    $Revision$ Last updated $Date$
+ * @author Michael Stover
+ * @version $Revision$ Last updated $Date$
  */
-public interface JMeterEngine
-{
-    void configure(HashTree testPlan);
-    void runTest() throws JMeterEngineException;
-    void stopTest();
-    void reset();
-    void setHost(String host);
-    void exit();
+public interface JMeterEngine {
+	void configure(HashTree testPlan);
+
+	void runTest() throws JMeterEngineException;
+
+	void stopTest();
+
+	void reset();
+
+	void setHost(String host);
+
+	void exit();
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -31,53 +31,40 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 
-public class RemoteSampleListenerWrapper
-    extends AbstractTestElement
-    implements SampleListener, Serializable, NoThreadClone
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    RemoteSampleListener listener;
+public class RemoteSampleListenerWrapper extends AbstractTestElement implements SampleListener, Serializable,
+		NoThreadClone {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public RemoteSampleListenerWrapper(RemoteSampleListener l)
-    {
-        listener = l;
-    }
+	RemoteSampleListener listener;
 
-    public RemoteSampleListenerWrapper()
-    {
-    }
+	public RemoteSampleListenerWrapper(RemoteSampleListener l) {
+		listener = l;
+	}
 
-    public void sampleOccurred(SampleEvent e)
-    {
-        try
-        {
-            listener.sampleOccurred(e);
-        }
-        catch (RemoteException err)
-        {
-            log.error("", err);
-        }
-    }
-    public void sampleStarted(SampleEvent e)
-    {
-        try
-        {
-            listener.sampleStarted(e);
-        }
-        catch (RemoteException err)
-        {
-            log.error("", err);
-        }
-    }
-    public void sampleStopped(SampleEvent e)
-    {
-        try
-        {
-            listener.sampleStopped(e);
-        }
-        catch (RemoteException err)
-        {
-            log.error("", err);
-        }
-    }
+	public RemoteSampleListenerWrapper() {
+	}
+
+	public void sampleOccurred(SampleEvent e) {
+		try {
+			listener.sampleOccurred(e);
+		} catch (RemoteException err) {
+			log.error("", err);
+		}
+	}
+
+	public void sampleStarted(SampleEvent e) {
+		try {
+			listener.sampleStarted(e);
+		} catch (RemoteException err) {
+			log.error("", err);
+		}
+	}
+
+	public void sampleStopped(SampleEvent e) {
+		try {
+			listener.sampleStopped(e);
+		} catch (RemoteException err) {
+			log.error("", err);
+		}
+	}
 }

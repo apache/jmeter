@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.modifier.gui;
 
@@ -32,91 +32,76 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * @version $Revision$ last updated $Date$
  */
-public class URLRewritingModifierGui extends AbstractPreProcessorGui
-{
-    JLabeledTextField argumentName;
-    JCheckBox pathExt;
-    JCheckBox pathExtNoEquals;
-    JCheckBox pathExtNoQuestionmark;
+public class URLRewritingModifierGui extends AbstractPreProcessorGui {
+	JLabeledTextField argumentName;
 
-    public String getLabelResource()
-    {
-        return "http_url_rewriting_modifier_title";
-    }
+	JCheckBox pathExt;
 
-    public URLRewritingModifierGui()
-    {
-        init();
-    }
+	JCheckBox pathExtNoEquals;
 
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	JCheckBox pathExtNoQuestionmark;
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	public String getLabelResource() {
+		return "http_url_rewriting_modifier_title";
+	}
 
-        VerticalPanel mainPanel = new VerticalPanel();
+	public URLRewritingModifierGui() {
+		init();
+	}
 
-        argumentName =
-            new JLabeledTextField(
-                JMeterUtils.getResString("session_argument_name"),
-                10);
-        mainPanel.add(argumentName);
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
-        pathExt =
-            new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));
-        mainPanel.add(pathExt);
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-        pathExtNoEquals =
-            new JCheckBox(
-                JMeterUtils.getResString("path_extension_dont_use_equals"));
-        mainPanel.add(pathExtNoEquals);
+		VerticalPanel mainPanel = new VerticalPanel();
 
-        pathExtNoQuestionmark =
-            new JCheckBox(
-                JMeterUtils.getResString("path_extension_dont_use_questionmark"));
-        mainPanel.add(pathExtNoQuestionmark);
+		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10);
+		mainPanel.add(argumentName);
 
-        add(mainPanel, BorderLayout.CENTER);
-    }
+		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));
+		mainPanel.add(pathExt);
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        URLRewritingModifier modifier = new URLRewritingModifier();
-        modifyTestElement(modifier);
-        return modifier;
-    }
+		pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals"));
+		mainPanel.add(pathExtNoEquals);
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement modifier)
-    {
-        this.configureTestElement(modifier);
-        ((URLRewritingModifier) modifier).setArgumentName(
-            argumentName.getText());
-        ((URLRewritingModifier) modifier).setPathExtension(
-            pathExt.isSelected());
-        ((URLRewritingModifier) modifier).setPathExtensionNoEquals(
-            pathExtNoEquals.isSelected());
-        ((URLRewritingModifier) modifier).setPathExtensionNoQuestionmark(
-                pathExtNoQuestionmark.isSelected());
-    }
+		pathExtNoQuestionmark = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_questionmark"));
+		mainPanel.add(pathExtNoQuestionmark);
 
-    public void configure(TestElement el)
-    {
-        argumentName.setText(((URLRewritingModifier) el).getArgumentName());
-        pathExt.setSelected(((URLRewritingModifier) el).isPathExtension());
-        pathExtNoEquals.setSelected(
-            ((URLRewritingModifier) el).isPathExtensionNoEquals());
-        pathExtNoQuestionmark.setSelected(
-                ((URLRewritingModifier) el).isPathExtensionNoQuestionmark());
+		add(mainPanel, BorderLayout.CENTER);
+	}
 
-        super.configure(el);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		URLRewritingModifier modifier = new URLRewritingModifier();
+		modifyTestElement(modifier);
+		return modifier;
+	}
+
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement modifier) {
+		this.configureTestElement(modifier);
+		((URLRewritingModifier) modifier).setArgumentName(argumentName.getText());
+		((URLRewritingModifier) modifier).setPathExtension(pathExt.isSelected());
+		((URLRewritingModifier) modifier).setPathExtensionNoEquals(pathExtNoEquals.isSelected());
+		((URLRewritingModifier) modifier).setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
+	}
+
+	public void configure(TestElement el) {
+		argumentName.setText(((URLRewritingModifier) el).getArgumentName());
+		pathExt.setSelected(((URLRewritingModifier) el).isPathExtension());
+		pathExtNoEquals.setSelected(((URLRewritingModifier) el).isPathExtensionNoEquals());
+		pathExtNoQuestionmark.setSelected(((URLRewritingModifier) el).isPathExtensionNoQuestionmark());
+
+		super.configure(el);
+	}
 }

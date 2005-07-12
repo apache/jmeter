@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.util;
 
@@ -28,139 +28,119 @@ import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public final class FileDialoger
-{
-    /**
-     * The last directory visited by the user while choosing Files.
-     */
-    private static String lastJFCDirectory = null;
-    private static JFileChooser jfc = new JFileChooser();
+public final class FileDialoger {
+	/**
+	 * The last directory visited by the user while choosing Files.
+	 */
+	private static String lastJFCDirectory = null;
 
-    /**
-     * Prevent instantiation of utility class.
-     */
-    private FileDialoger()
-    {
-    }
+	private static JFileChooser jfc = new JFileChooser();
 
-    /**
-     * Prompts the user to choose a file from their filesystems for our own
-     * devious uses. This method maintains the last directory the user visited
-     * before dismissing the dialog. This does NOT imply they actually chose a
-     * file from that directory, only that they closed the dialog there. It is
-     * the caller's responsibility to check to see if the selected file is
-     * non-null.
-     *
-     * @return   the JFileChooser that interacted with the user, after they are
-     *           finished using it (accept or otherwise).
-     */
-    public static JFileChooser promptToOpenFile(String[] exts)
-    {
-        //JFileChooser jfc = null;
+	/**
+	 * Prevent instantiation of utility class.
+	 */
+	private FileDialoger() {
+	}
 
-        if (lastJFCDirectory == null)
-        {
-            String start = JMeterUtils.getPropDefault("user.dir", "");
+	/**
+	 * Prompts the user to choose a file from their filesystems for our own
+	 * devious uses. This method maintains the last directory the user visited
+	 * before dismissing the dialog. This does NOT imply they actually chose a
+	 * file from that directory, only that they closed the dialog there. It is
+	 * the caller's responsibility to check to see if the selected file is
+	 * non-null.
+	 * 
+	 * @return the JFileChooser that interacted with the user, after they are
+	 *         finished using it (accept or otherwise).
+	 */
+	public static JFileChooser promptToOpenFile(String[] exts) {
+		// JFileChooser jfc = null;
 
-            if (!start.equals(""))
-            {
-                jfc.setCurrentDirectory(new File(start));
-            }
-        }
-        clearFileFilters();
-        jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
-        int retVal =
-            jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
-        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+		if (lastJFCDirectory == null) {
+			String start = JMeterUtils.getPropDefault("user.dir", "");
 
-        if (retVal == JFileChooser.APPROVE_OPTION)
-        {
-            return jfc;
-        }
-        else
-        {
-            return null;
-        }
-    }
+			if (!start.equals("")) {
+				jfc.setCurrentDirectory(new File(start));
+			}
+		}
+		clearFileFilters();
+		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
-    private static void clearFileFilters()
-    {
-        FileFilter[] filters = jfc.getChoosableFileFilters();
-        for (int x = 0; x < filters.length; x++)
-        {
-            jfc.removeChoosableFileFilter(filters[x]);
-        }
-    }
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+			return jfc;
+		} else {
+			return null;
+		}
+	}
 
-    public static JFileChooser promptToOpenFile()
-    {
-        return promptToOpenFile(new String[0]);
-    }
+	private static void clearFileFilters() {
+		FileFilter[] filters = jfc.getChoosableFileFilters();
+		for (int x = 0; x < filters.length; x++) {
+			jfc.removeChoosableFileFilter(filters[x]);
+		}
+	}
 
-    /**
-     * Prompts the user to choose a file from their filesystems for our own
-     * devious uses. This method maintains the last directory the user visited
-     * before dismissing the dialog. This does NOT imply they actually chose a
-     * file from that directory, only that they closed the dialog there. It is
-     * the caller's responsibility to check to see if the selected file is
-     * non-null.
-     *
-     * @return   the JFileChooser that interacted with the user, after they
-     *           are finished using it (accept or otherwise).
-     * @see             #promptToOpenFile
-     */
-	public static JFileChooser promptToSaveFile(String filename)
-	{
+	public static JFileChooser promptToOpenFile() {
+		return promptToOpenFile(new String[0]);
+	}
+
+	/**
+	 * Prompts the user to choose a file from their filesystems for our own
+	 * devious uses. This method maintains the last directory the user visited
+	 * before dismissing the dialog. This does NOT imply they actually chose a
+	 * file from that directory, only that they closed the dialog there. It is
+	 * the caller's responsibility to check to see if the selected file is
+	 * non-null.
+	 * 
+	 * @return the JFileChooser that interacted with the user, after they are
+	 *         finished using it (accept or otherwise).
+	 * @see #promptToOpenFile
+	 */
+	public static JFileChooser promptToSaveFile(String filename) {
 		return promptToSaveFile(filename, null);
 	}
-	
-    /**
-     * Get a JFileChooser with a new FileFilter.
-     * @param filename
-     * @param filters
-     * @return
-     */
-    public static JFileChooser promptToSaveFile(String filename, String[] extensions)
-    {
-        if (lastJFCDirectory == null)
-        {
-            String start = JMeterUtils.getPropDefault("user.dir", "");
-            if (!start.equals(""))
-            {
-                jfc = new JFileChooser(new File(start));
-            }
-            lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
-        }
-        String ext = ".jmx";
-        if (filename != null)
-        {
-            jfc.setSelectedFile(new File(lastJFCDirectory, filename));
-            int i = -1;
-            if ((i = filename.lastIndexOf(".")) > -1)
-            {
-                ext = filename.substring(i);
-            }
-        }
-        clearFileFilters();
-        if (extensions != null){
-			jfc.addChoosableFileFilter(new JMeterFileFilter(extensions));
-        } else {
-			jfc.addChoosableFileFilter(new JMeterFileFilter(new String[] { ext }));
-        }
 
-        int retVal =
-            jfc.showSaveDialog(GuiPackage.getInstance().getMainFrame());
-        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
-        if (retVal == JFileChooser.APPROVE_OPTION)
-        {
-            return jfc;
-        }
-        else
-        {
-            return null;
-        }
-    }
+	/**
+	 * Get a JFileChooser with a new FileFilter.
+	 * 
+	 * @param filename
+	 * @param filters
+	 * @return
+	 */
+	public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
+		if (lastJFCDirectory == null) {
+			String start = JMeterUtils.getPropDefault("user.dir", "");
+			if (!start.equals("")) {
+				jfc = new JFileChooser(new File(start));
+			}
+			lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+		}
+		String ext = ".jmx";
+		if (filename != null) {
+			jfc.setSelectedFile(new File(lastJFCDirectory, filename));
+			int i = -1;
+			if ((i = filename.lastIndexOf(".")) > -1) {
+				ext = filename.substring(i);
+			}
+		}
+		clearFileFilters();
+		if (extensions != null) {
+			jfc.addChoosableFileFilter(new JMeterFileFilter(extensions));
+		} else {
+			jfc.addChoosableFileFilter(new JMeterFileFilter(new String[] { ext }));
+		}
+
+		int retVal = jfc.showSaveDialog(GuiPackage.getInstance().getMainFrame());
+		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+		if (retVal == JFileChooser.APPROVE_OPTION) {
+			return jfc;
+		} else {
+			return null;
+		}
+	}
 }

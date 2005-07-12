@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.FrameScanner;
@@ -38,34 +37,28 @@ import org.htmlparser.tags.FrameSetTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class FrameSetTagTest extends ParserTestCase
-{
+public class FrameSetTagTest extends ParserTestCase {
 
-    public FrameSetTagTest(String name)
-    {
-        super(name);
-    }
+	public FrameSetTagTest(String name) {
+		super(name);
+	}
 
-    public void testToHTML() throws ParserException
-    {
-        createParser(
-            "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"
-                + "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"
-                + "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"
-                + "</frameset>");
+	public void testToHTML() throws ParserException {
+		createParser("<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"
+				+ "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"
+				+ "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n" + "</frameset>");
 
-        parser.addScanner(new FrameSetScanner(""));
-        parser.addScanner(new FrameScanner(""));
+		parser.addScanner(new FrameSetScanner(""));
+		parser.addScanner(new FrameScanner(""));
 
-        parseAndAssertNodeCount(1);
-        assertTrue("Node 0 should be End Tag", node[0] instanceof FrameSetTag);
-        FrameSetTag frameSetTag = (FrameSetTag) node[0];
-        assertStringEquals(
-            "HTML Contents",
-            "<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"
-                + "<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">\r\n"
-                + "<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">\r\n"
-                + "</FRAMESET>",
-            frameSetTag.toHtml());
-    }
+		parseAndAssertNodeCount(1);
+		assertTrue("Node 0 should be End Tag", node[0] instanceof FrameSetTag);
+		FrameSetTag frameSetTag = (FrameSetTag) node[0];
+		assertStringEquals(
+				"HTML Contents",
+				"<FRAMESET BORDER=\"0\" ROWS=\"115,*\" FRAMESPACING=\"0\" FRAMEBORDER=\"NO\">\r\n"
+						+ "<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">\r\n"
+						+ "<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">\r\n"
+						+ "</FRAMESET>", frameSetTag.toHtml());
+	}
 }

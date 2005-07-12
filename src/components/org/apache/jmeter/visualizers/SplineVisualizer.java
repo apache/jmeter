@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
 
@@ -42,311 +42,288 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * This class implements a statistical analyser that takes samples to process a
  * Spline interpolated curve. Currently, it tries to look mostly like the
  * GraphVisualizer.
- *
- * @version   $Revision$ on $Date$
+ * 
+ * @version $Revision$ on $Date$
  */
-public class SplineVisualizer
-    extends AbstractVisualizer
-    implements ImageVisualizer, GraphListener, Clearable
-{
+public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener, Clearable {
 
-    protected final Color BACKGROUND_COLOR = getBackground();
-    protected final Color MINIMUM_COLOR = new Color(0F, 0.5F, 0F);
-    protected final Color MAXIMUM_COLOR = new Color(0.9F, 0F, 0F);
-    protected final Color AVERAGE_COLOR = new Color(0F, 0F, 0.75F);
-    protected final Color INCOMING_COLOR = Color.black;
-    protected final int NUMBERS_TO_DISPLAY = 4;
+	protected final Color BACKGROUND_COLOR = getBackground();
 
-    protected final boolean FILL_UP_WITH_ZEROS = false;
+	protected final Color MINIMUM_COLOR = new Color(0F, 0.5F, 0F);
 
-    transient private SplineGraph graph = null;
+	protected final Color MAXIMUM_COLOR = new Color(0.9F, 0F, 0F);
 
-    private JLabel minimumLabel = null;
-    private JLabel maximumLabel = null;
-    private JLabel averageLabel = null;
-    private JLabel incomingLabel = null;
+	protected final Color AVERAGE_COLOR = new Color(0F, 0F, 0.75F);
 
-    private JLabel minimumNumberLabel = null;
-    private JLabel maximumNumberLabel = null;
-    private JLabel averageNumberLabel = null;
-    private JLabel incomingNumberLabel = null;
-    transient private SplineModel model;
+	protected final Color INCOMING_COLOR = Color.black;
 
-    public SplineVisualizer()
-    {
-        super();
-        model = new SplineModel();
-        graph = new SplineGraph();
-        this.model.setListener(this);
-        setGUI();
-    }
+	protected final int NUMBERS_TO_DISPLAY = 4;
 
-    public void add(SampleResult res)
-    {
-        model.add(res);
-    }
+	protected final boolean FILL_UP_WITH_ZEROS = false;
 
-    public String getLabelResource()
-    {
-        return "spline_visualizer_title";
-    }
+	transient private SplineGraph graph = null;
 
-    public void updateGui(Sample s)
-    {
-        updateGui();
-    }
+	private JLabel minimumLabel = null;
 
-    public void clear()
-    {
-        model.clear();
-    }
+	private JLabel maximumLabel = null;
 
-    public void setGUI()
-    {
-        Color backColor = BACKGROUND_COLOR;
+	private JLabel averageLabel = null;
 
-        this.setBackground(backColor);
+	private JLabel incomingLabel = null;
 
-        this.setLayout(new BorderLayout());
+	private JLabel minimumNumberLabel = null;
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
+	private JLabel maximumNumberLabel = null;
 
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+	private JLabel averageNumberLabel = null;
 
-        // NAME
-        mainPanel.add(makeTitlePanel());
+	private JLabel incomingNumberLabel = null;
 
-        maximumLabel =
-            new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
-        maximumLabel.setForeground(MAXIMUM_COLOR);
-        maximumLabel.setBackground(backColor);
+	transient private SplineModel model;
 
-        averageLabel =
-            new JLabel(JMeterUtils.getResString("spline_visualizer_average"));
-        averageLabel.setForeground(AVERAGE_COLOR);
-        averageLabel.setBackground(backColor);
+	public SplineVisualizer() {
+		super();
+		model = new SplineModel();
+		graph = new SplineGraph();
+		this.model.setListener(this);
+		setGUI();
+	}
 
-        incomingLabel =
-            new JLabel(JMeterUtils.getResString("spline_visualizer_incoming"));
-        incomingLabel.setForeground(INCOMING_COLOR);
-        incomingLabel.setBackground(backColor);
+	public void add(SampleResult res) {
+		model.add(res);
+	}
 
-        minimumLabel =
-            new JLabel(JMeterUtils.getResString("spline_visualizer_minimum"));
-        minimumLabel.setForeground(MINIMUM_COLOR);
-        minimumLabel.setBackground(backColor);
+	public String getLabelResource() {
+		return "spline_visualizer_title";
+	}
 
-        maximumNumberLabel = new JLabel("0 ms");
-        maximumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
-        maximumNumberLabel.setForeground(MAXIMUM_COLOR);
-        maximumNumberLabel.setBackground(backColor);
+	public void updateGui(Sample s) {
+		updateGui();
+	}
 
-        averageNumberLabel = new JLabel("0 ms");
-        averageNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
-        averageNumberLabel.setForeground(AVERAGE_COLOR);
-        averageNumberLabel.setBackground(backColor);
+	public void clear() {
+		model.clear();
+	}
 
-        incomingNumberLabel = new JLabel("0 ms");
-        incomingNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
-        incomingNumberLabel.setForeground(INCOMING_COLOR);
-        incomingNumberLabel.setBackground(backColor);
+	public void setGUI() {
+		Color backColor = BACKGROUND_COLOR;
 
-        minimumNumberLabel = new JLabel("0 ms");
-        minimumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
-        minimumNumberLabel.setForeground(MINIMUM_COLOR);
-        minimumNumberLabel.setBackground(backColor);
+		this.setBackground(backColor);
 
-        // description Panel
-        JPanel labelPanel = new JPanel();
+		this.setLayout(new BorderLayout());
 
-        labelPanel.setLayout(new GridLayout(0, 1));
-        labelPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-        labelPanel.setBackground(backColor);
-        labelPanel.add(maximumLabel);
-        labelPanel.add(averageLabel);
-        if (model.SHOW_INCOMING_SAMPLES)
-        {
-            labelPanel.add(incomingLabel);
-        }
-        labelPanel.add(minimumLabel);
-        // number Panel
-        JPanel numberPanel = new JPanel();
+		// MAIN PANEL
+		JPanel mainPanel = new JPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        numberPanel.setLayout(new GridLayout(0, 1));
-        numberPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-        numberPanel.setBackground(backColor);
-        numberPanel.add(maximumNumberLabel);
-        numberPanel.add(averageNumberLabel);
-        if (model.SHOW_INCOMING_SAMPLES)
-        {
-            numberPanel.add(incomingNumberLabel);
-        }
-        numberPanel.add(minimumNumberLabel);
-        // information display Panel
-        JPanel infoPanel = new JPanel();
+		mainPanel.setBorder(margin);
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        infoPanel.setLayout(new BorderLayout());
-        infoPanel.add(labelPanel, BorderLayout.CENTER);
-        infoPanel.add(numberPanel, BorderLayout.EAST);
+		// NAME
+		mainPanel.add(makeTitlePanel());
 
-        this.add(mainPanel, BorderLayout.NORTH);
-        this.add(infoPanel, BorderLayout.WEST);
-        this.add(graph, BorderLayout.CENTER);
-        // everyone is free to swing on its side :)
-        // add(infoPanel, BorderLayout.EAST);
-    }
+		maximumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
+		maximumLabel.setForeground(MAXIMUM_COLOR);
+		maximumLabel.setBackground(backColor);
 
-    public void updateGui()
-    {
-        repaint();
-        synchronized (this)
-        {
-            setMinimum(model.getMinimum());
-            setMaximum(model.getMaximum());
-            setAverage(model.getAverage());
-            setIncoming(model.getCurrent());
-        }
-    }
+		averageLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_average"));
+		averageLabel.setForeground(AVERAGE_COLOR);
+		averageLabel.setBackground(backColor);
 
-    public String toString()
-    {
-        return "Show the samples analysis as a Spline curve";
-    }
+		incomingLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_incoming"));
+		incomingLabel.setForeground(INCOMING_COLOR);
+		incomingLabel.setBackground(backColor);
 
-    public String formatMeasureToDisplay(long measure)
-    {
-        String numberString = String.valueOf(measure);
+		minimumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_minimum"));
+		minimumLabel.setForeground(MINIMUM_COLOR);
+		minimumLabel.setBackground(backColor);
 
-        if (FILL_UP_WITH_ZEROS)
-        {
-            for (int i = numberString.length(); i < NUMBERS_TO_DISPLAY; i++)
-            {
-                numberString = "0" + numberString;
-            }
-        }
-        return numberString;
-    }
+		maximumNumberLabel = new JLabel("0 ms");
+		maximumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+		maximumNumberLabel.setForeground(MAXIMUM_COLOR);
+		maximumNumberLabel.setBackground(backColor);
 
-    public void setMinimum(long n)
-    {
-        String text = this.formatMeasureToDisplay(n) + " ms";
+		averageNumberLabel = new JLabel("0 ms");
+		averageNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+		averageNumberLabel.setForeground(AVERAGE_COLOR);
+		averageNumberLabel.setBackground(backColor);
 
-        this.minimumNumberLabel.setText(text);
-    }
+		incomingNumberLabel = new JLabel("0 ms");
+		incomingNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+		incomingNumberLabel.setForeground(INCOMING_COLOR);
+		incomingNumberLabel.setBackground(backColor);
 
-    public void setMaximum(long n)
-    {
-        String text = this.formatMeasureToDisplay(n) + " ms";
+		minimumNumberLabel = new JLabel("0 ms");
+		minimumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+		minimumNumberLabel.setForeground(MINIMUM_COLOR);
+		minimumNumberLabel.setBackground(backColor);
 
-        this.maximumNumberLabel.setText(text);
-    }
+		// description Panel
+		JPanel labelPanel = new JPanel();
 
-    public void setAverage(long n)
-    {
-        String text = this.formatMeasureToDisplay(n) + " ms";
+		labelPanel.setLayout(new GridLayout(0, 1));
+		labelPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+		labelPanel.setBackground(backColor);
+		labelPanel.add(maximumLabel);
+		labelPanel.add(averageLabel);
+		if (model.SHOW_INCOMING_SAMPLES) {
+			labelPanel.add(incomingLabel);
+		}
+		labelPanel.add(minimumLabel);
+		// number Panel
+		JPanel numberPanel = new JPanel();
 
-        this.averageNumberLabel.setText(text);
-    }
+		numberPanel.setLayout(new GridLayout(0, 1));
+		numberPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+		numberPanel.setBackground(backColor);
+		numberPanel.add(maximumNumberLabel);
+		numberPanel.add(averageNumberLabel);
+		if (model.SHOW_INCOMING_SAMPLES) {
+			numberPanel.add(incomingNumberLabel);
+		}
+		numberPanel.add(minimumNumberLabel);
+		// information display Panel
+		JPanel infoPanel = new JPanel();
 
-    public void setIncoming(long n)
-    {
-        String text = this.formatMeasureToDisplay(n) + " ms";
+		infoPanel.setLayout(new BorderLayout());
+		infoPanel.add(labelPanel, BorderLayout.CENTER);
+		infoPanel.add(numberPanel, BorderLayout.EAST);
 
-        this.incomingNumberLabel.setText(text);
-    }
+		this.add(mainPanel, BorderLayout.NORTH);
+		this.add(infoPanel, BorderLayout.WEST);
+		this.add(graph, BorderLayout.CENTER);
+		// everyone is free to swing on its side :)
+		// add(infoPanel, BorderLayout.EAST);
+	}
 
-    public JPanel getControlPanel()
-    {
-        return this;
-    }
+	public void updateGui() {
+		repaint();
+		synchronized (this) {
+			setMinimum(model.getMinimum());
+			setMaximum(model.getMaximum());
+			setAverage(model.getAverage());
+			setIncoming(model.getCurrent());
+		}
+	}
 
-    public Image getImage()
-    {
-        Image result = graph.createImage(graph.getWidth(), graph.getHeight());
+	public String toString() {
+		return "Show the samples analysis as a Spline curve";
+	}
 
-        graph.paintComponent(result.getGraphics());
+	public String formatMeasureToDisplay(long measure) {
+		String numberString = String.valueOf(measure);
 
-        return result;
-    }
+		if (FILL_UP_WITH_ZEROS) {
+			for (int i = numberString.length(); i < NUMBERS_TO_DISPLAY; i++) {
+				numberString = "0" + numberString;
+			}
+		}
+		return numberString;
+	}
 
-    /**
-     * Component showing a Spline curve.
-     *
-     * @version   $Revision$
-     */
-    public class SplineGraph extends JComponent
-    {
-        public boolean reinterpolated = false;
-        protected final Color WAITING_COLOR = Color.darkGray;
-        protected int lastWidth = -1;
-        protected int lastHeight = -1;
-        protected int[] plot = null;
+	public void setMinimum(long n) {
+		String text = this.formatMeasureToDisplay(n) + " ms";
 
-        public SplineGraph()
-        {
-        }
+		this.minimumNumberLabel.setText(text);
+	}
 
-        /**
-         * Clear the Spline graph and get ready for the next wave.
-         */
-        public void clear()
-        {
-            lastWidth = -1;
-            lastHeight = -1;
-            plot = null;
-            this.repaint();
-        }
+	public void setMaximum(long n) {
+		String text = this.formatMeasureToDisplay(n) + " ms";
 
-        public void paintComponent(Graphics g)
-        {
-            super.paintComponent(g);
+		this.maximumNumberLabel.setText(text);
+	}
 
-            Dimension dimension = this.getSize();
-            int width = dimension.width;
-            int height = dimension.height;
+	public void setAverage(long n) {
+		String text = this.formatMeasureToDisplay(n) + " ms";
 
-            if (model.getDataCurve() == null)
-            {
-                g.setColor(this.getBackground());
-                g.fillRect(0, 0, width, height);
-                g.setColor(WAITING_COLOR);
-                g.drawString(
-                    JMeterUtils.getResString(
-                        "spline_visualizer_waitingmessage"),
-                    (width - 120) / 2,
-                    height - (height - 12) / 2);
-                return;
-            }
+		this.averageNumberLabel.setText(text);
+	}
 
-            //boolean resized = true;
+	public void setIncoming(long n) {
+		String text = this.formatMeasureToDisplay(n) + " ms";
 
-            if (width == lastWidth && height == lastHeight)
-            {
-                // dimension of the SplineGraph is the same
-                //resized = false;
-            }
-            else
-            {
-                // dimension changed
-                //resized = true;
-                lastWidth = width;
-                lastHeight = height;
-            }
+		this.incomingNumberLabel.setText(text);
+	}
 
-            this.plot = model.getDataCurve().getPlots(width, height); // rounds!
+	public JPanel getControlPanel() {
+		return this;
+	}
 
-            int n = plot.length;
-            int curY = plot[0];
+	public Image getImage() {
+		Image result = graph.createImage(graph.getWidth(), graph.getHeight());
 
-            for (int i = 1; i < n; i++)
-            {
-                g.setColor(Color.black);
-                g.drawLine(i - 1, height - curY - 1, i, height - plot[i] - 1);
-                curY = plot[i];
-            }
-        }
-    }
+		graph.paintComponent(result.getGraphics());
+
+		return result;
+	}
+
+	/**
+	 * Component showing a Spline curve.
+	 * 
+	 * @version $Revision$
+	 */
+	public class SplineGraph extends JComponent {
+		public boolean reinterpolated = false;
+
+		protected final Color WAITING_COLOR = Color.darkGray;
+
+		protected int lastWidth = -1;
+
+		protected int lastHeight = -1;
+
+		protected int[] plot = null;
+
+		public SplineGraph() {
+		}
+
+		/**
+		 * Clear the Spline graph and get ready for the next wave.
+		 */
+		public void clear() {
+			lastWidth = -1;
+			lastHeight = -1;
+			plot = null;
+			this.repaint();
+		}
+
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+
+			Dimension dimension = this.getSize();
+			int width = dimension.width;
+			int height = dimension.height;
+
+			if (model.getDataCurve() == null) {
+				g.setColor(this.getBackground());
+				g.fillRect(0, 0, width, height);
+				g.setColor(WAITING_COLOR);
+				g.drawString(JMeterUtils.getResString("spline_visualizer_waitingmessage"), (width - 120) / 2, height
+						- (height - 12) / 2);
+				return;
+			}
+
+			// boolean resized = true;
+
+			if (width == lastWidth && height == lastHeight) {
+				// dimension of the SplineGraph is the same
+				// resized = false;
+			} else {
+				// dimension changed
+				// resized = true;
+				lastWidth = width;
+				lastHeight = height;
+			}
+
+			this.plot = model.getDataCurve().getPlots(width, height); // rounds!
+
+			int n = plot.length;
+			int curY = plot[0];
+
+			for (int i = 1; i < n; i++) {
+				g.setColor(Color.black);
+				g.drawLine(i - 1, height - curY - 1, i, height - plot[i] - 1);
+				curY = plot[i];
+			}
+		}
+	}
 }

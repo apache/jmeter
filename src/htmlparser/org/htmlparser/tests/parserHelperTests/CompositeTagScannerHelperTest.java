@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.parserHelperTests;
 
 import org.htmlparser.parserHelper.CompositeTagScannerHelper;
@@ -39,33 +38,28 @@ import org.htmlparser.tests.ParserTestCase;
 
 /**
  * @author Somik Raha
- *
+ * 
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class CompositeTagScannerHelperTest extends ParserTestCase
-{
-    private CompositeTagScannerHelper helper;
-    public CompositeTagScannerHelperTest(String name)
-    {
-        super(name);
-    }
+public class CompositeTagScannerHelperTest extends ParserTestCase {
+	private CompositeTagScannerHelper helper;
 
-    protected void setUp()
-    {
-        helper =
-            new CompositeTagScannerHelper(null, null, null, null, null, false);
-    }
+	public CompositeTagScannerHelperTest(String name) {
+		super(name);
+	}
 
-    public void testIsXmlEndTagForRealXml()
-    {
-        Tag tag = new Tag(new TagData(0, 0, "something/", ""));
-        assertTrue("should be an xml end tag", helper.isXmlEndTag(tag));
-    }
+	protected void setUp() {
+		helper = new CompositeTagScannerHelper(null, null, null, null, null, false);
+	}
 
-    public void testIsXmlEndTagForFalseMatches()
-    {
-        Tag tag = new Tag(new TagData(0, 0, "a href=http://someurl.com/", ""));
-        assertFalse("should not be an xml end tag", helper.isXmlEndTag(tag));
-    }
+	public void testIsXmlEndTagForRealXml() {
+		Tag tag = new Tag(new TagData(0, 0, "something/", ""));
+		assertTrue("should be an xml end tag", helper.isXmlEndTag(tag));
+	}
+
+	public void testIsXmlEndTagForFalseMatches() {
+		Tag tag = new Tag(new TagData(0, 0, "a href=http://someurl.com/", ""));
+		assertFalse("should not be an xml end tag", helper.isXmlEndTag(tag));
+	}
 }

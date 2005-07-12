@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.jms.control.gui;
 
@@ -42,126 +42,87 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
 
 /**
- * This is the GUI for JMS Publisher
- * <br>
- * Created on:  October 13, 2003
- *
+ * This is the GUI for JMS Publisher <br>
+ * Created on: October 13, 2003
+ * 
  * @author Peter Lin
- * @version $Id$ 
+ * @version $Id$
  */
-public class JMSPublisherGui
-    extends AbstractSamplerGui
-    implements java.awt.event.ActionListener, ChangeListener
-{
-	public static final String use_file =
-	  JMeterUtils.getResString("jms_use_file");
-	public static final String use_random =
-	  JMeterUtils.getResString("jms_use_random_file"); 
-	public static final String use_text =
-	  JMeterUtils.getResString("jms_use_text"); 
-	private String[] items = {use_file,use_random,use_text};
-	
+public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
+	public static final String use_file = JMeterUtils.getResString("jms_use_file");
+
+	public static final String use_random = JMeterUtils.getResString("jms_use_random_file");
+
+	public static final String use_text = JMeterUtils.getResString("jms_use_text");
+
+	private String[] items = { use_file, use_random, use_text };
+
 	private String text_msg = JMeterUtils.getResString("jms_text_message");
+
 	private String object_msg = JMeterUtils.getResString("jms_object_message");
-	private String[] msgTypes = {text_msg,object_msg};
-	
+
+	private String[] msgTypes = { text_msg, object_msg };
+
 	private String required = JMeterUtils.getResString("jms_auth_required");
+
 	private String not_req = JMeterUtils.getResString("jms_auth_not_required");
-	private String[] auth_items = {required,not_req};
-	
-	JCheckBox useProperties =
-		new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false);
 
-	JLabeledRadio configChoice = 
-		new JLabeledRadio(JMeterUtils.getResString("jms_config"),items,use_text);
+	private String[] auth_items = { required, not_req };
 
-	JLabeledTextField jndiICF =
-		new JLabeledTextField(
-			JMeterUtils.getResString("jms_initial_context_factory"));
-    JLabeledTextField urlField =
-        new JLabeledTextField(JMeterUtils.getResString("jms_provider_url"));
+	JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false);
 
-	JLabeledTextField jndiConnFac =
-		new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory"));
+	JLabeledRadio configChoice = new JLabeledRadio(JMeterUtils.getResString("jms_config"), items, use_text);
 
-	JLabeledTextField jmsTopic =
-        new JLabeledTextField(JMeterUtils.getResString("jms_topic"));
-        
-	JLabeledRadio reqAuth =
-    	new JLabeledRadio(JMeterUtils.getResString("jms_authentication"),auth_items,not_req);
+	JLabeledTextField jndiICF = new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory"));
 
-	JLabeledTextField jmsUser =
-		new JLabeledTextField(JMeterUtils.getResString("jms_user"));
-	JLabeledTextField jmsPwd =
-		new JLabeledTextField(JMeterUtils.getResString("jms_pwd"));
+	JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url"));
 
-    JLabeledTextField iterations =
-        new JLabeledTextField(JMeterUtils.getResString("jms_itertions"));
-        
-    FilePanel messageFile =
-        new FilePanel(JMeterUtils.getResString("jms_file"), "*.*");
-	FilePanel randomFile =
-        new FilePanel(JMeterUtils.getResString("jms_random_file"), "*.*");
-	JLabeledTextArea textMessage =
-		new JLabeledTextArea(text_msg, null);
+	JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory"));
 
-	JLabeledRadio msgChoice = 
-		new JLabeledRadio(JMeterUtils.getResString("jms_message_type"),msgTypes,text_msg);
+	JLabeledTextField jmsTopic = new JLabeledTextField(JMeterUtils.getResString("jms_topic"));
 
-    /**
-     * This is the font for the note.
-     */
-    Font plainText = new Font("plain", Font.PLAIN, 10);
-    
-    private JPanel lookup = null;
-    private JPanel messagePanel = null;
-    
-    public JMSPublisherGui()
-    {
-        init();
-    }
+	JLabeledRadio reqAuth = new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req);
+
+	JLabeledTextField jmsUser = new JLabeledTextField(JMeterUtils.getResString("jms_user"));
+
+	JLabeledTextField jmsPwd = new JLabeledTextField(JMeterUtils.getResString("jms_pwd"));
+
+	JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions"));
+
+	FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), "*.*");
+
+	FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), "*.*");
+
+	JLabeledTextArea textMessage = new JLabeledTextArea(text_msg, null);
+
+	JLabeledRadio msgChoice = new JLabeledRadio(JMeterUtils.getResString("jms_message_type"), msgTypes, text_msg);
 
 	/**
-	 * the name of the property for the JMSPublisherGui is
-	 * jms_publisher.
+	 * This is the font for the note.
 	 */
-    public String getLabelResource()
-    {
-        return "jms_publisher";
-    }
+	Font plainText = new Font("plain", Font.PLAIN, 10);
 
-    /**
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
+	private JPanel lookup = null;
+
+	private JPanel messagePanel = null;
+
+	public JMSPublisherGui() {
+		init();
+	}
+
+	/**
+	 * the name of the property for the JMSPublisherGui is jms_publisher.
+	 */
+	public String getLabelResource() {
+		return "jms_publisher";
+	}
+
+	/**
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
 		PublisherSampler sampler = new PublisherSampler();
-        this.configureTestElement(sampler);
-        sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
-		sampler.setJNDIIntialContextFactory(jndiICF.getText());
-		sampler.setProviderUrl(urlField.getText());
-		sampler.setConnectionFactory(jndiConnFac.getText());
-		sampler.setTopic(jmsTopic.getText());
-		sampler.setUsername(jmsUser.getText());
-		sampler.setPassword(jmsPwd.getText());
-		sampler.setTextMessage(textMessage.getText());
-		sampler.setInputFile(messageFile.getFilename());
-		sampler.setRandomPath(randomFile.getFilename());
-		sampler.setConfigChoice(configChoice.getText());
-		sampler.setMessageChoice(msgChoice.getText());
-		sampler.setIterations(iterations.getText());
-		sampler.setUseAuth(reqAuth.getText());
-        return sampler;
-    }
-
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement s)
-    {
-    	PublisherSampler sampler = (PublisherSampler)s;
-    	this.configureTestElement(sampler);
+		this.configureTestElement(sampler);
 		sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
 		sampler.setJNDIIntialContextFactory(jndiICF.getText());
 		sampler.setProviderUrl(urlField.getText());
@@ -176,50 +137,72 @@ public class JMSPublisherGui
 		sampler.setMessageChoice(msgChoice.getText());
 		sampler.setIterations(iterations.getText());
 		sampler.setUseAuth(reqAuth.getText());
-    }
+		return sampler;
+	}
 
-    /**
-     * init() adds jndiICF to the mainPanel. The class
-     * reuses logic from SOAPSampler, since it is common.
-     */
-    private void init()
-    {
-        this.setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement s) {
+		PublisherSampler sampler = (PublisherSampler) s;
+		this.configureTestElement(sampler);
+		sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
+		sampler.setJNDIIntialContextFactory(jndiICF.getText());
+		sampler.setProviderUrl(urlField.getText());
+		sampler.setConnectionFactory(jndiConnFac.getText());
+		sampler.setTopic(jmsTopic.getText());
+		sampler.setUsername(jmsUser.getText());
+		sampler.setPassword(jmsPwd.getText());
+		sampler.setTextMessage(textMessage.getText());
+		sampler.setInputFile(messageFile.getFilename());
+		sampler.setRandomPath(randomFile.getFilename());
+		sampler.setConfigChoice(configChoice.getText());
+		sampler.setMessageChoice(msgChoice.getText());
+		sampler.setIterations(iterations.getText());
+		sampler.setUseAuth(reqAuth.getText());
+	}
 
-        // MAIN PANEL
-        JPanel mainPanel = new JPanel();
-        Border margin = new EmptyBorder(10, 10, 5, 10);
-        mainPanel.setBorder(margin);
-        mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+	/**
+	 * init() adds jndiICF to the mainPanel. The class reuses logic from
+	 * SOAPSampler, since it is common.
+	 */
+	private void init() {
+		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 
-        // TITLE
-        JLabel panelTitleLabel = new JLabel(getStaticLabel());
-        Font curFont = panelTitleLabel.getFont();
-        int curFontSize = curFont.getSize();
-        curFontSize += 4;
-        panelTitleLabel.setFont(
-            new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-        mainPanel.add(panelTitleLabel);
-        // NAME
-        mainPanel.add(getNamePanel());
+		// MAIN PANEL
+		JPanel mainPanel = new JPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
+		mainPanel.setBorder(margin);
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 
-        // Button for browsing webservice wsdl
-        lookup = new JPanel();
-        lookup.setLayout(new VerticalLayout(6,VerticalLayout.LEFT));
-        mainPanel.add(lookup);
+		// TITLE
+		JLabel panelTitleLabel = new JLabel(getStaticLabel());
+		Font curFont = panelTitleLabel.getFont();
+		int curFontSize = curFont.getSize();
+		curFontSize += 4;
+		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
+		mainPanel.add(panelTitleLabel);
+		// NAME
+		mainPanel.add(getNamePanel());
+
+		// Button for browsing webservice wsdl
+		lookup = new JPanel();
+		lookup.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
+		mainPanel.add(lookup);
 		lookup.add(useProperties);
 		useProperties.addChangeListener(this);
 		lookup.add(jndiICF);
 		lookup.add(urlField);
 		lookup.add(jndiConnFac);
-		
+
 		configChoice.addChangeListener(this);
 		msgChoice.addChangeListener(this);
 		reqAuth.addChangeListener(this);
 
 		JPanel commonParams = new JPanel();
-		commonParams.setLayout(new VerticalLayout(6,VerticalLayout.LEFT));
+		commonParams.setLayout(new VerticalLayout(6, VerticalLayout.LEFT));
 		mainPanel.add(commonParams);
 		commonParams.add(jmsTopic);
 		commonParams.add(reqAuth);
@@ -228,7 +211,7 @@ public class JMSPublisherGui
 		commonParams.add(iterations);
 
 		messagePanel = new JPanel();
-		messagePanel.setLayout(new VerticalLayout(3,VerticalLayout.LEFT));
+		messagePanel.setLayout(new VerticalLayout(3, VerticalLayout.LEFT));
 		messagePanel.add(configChoice);
 		messagePanel.add(msgChoice);
 		messagePanel.add(messageFile);
@@ -236,21 +219,19 @@ public class JMSPublisherGui
 		messagePanel.add(textMessage);
 		mainPanel.add(messagePanel);
 
-		Dimension pref = new Dimension(400,200);
+		Dimension pref = new Dimension(400, 200);
 		textMessage.setPreferredSize(pref);
-		
-		// we have to add the gui to the change listener
-        this.add(mainPanel);
-    }
 
-    /**
-     * the implementation loads the URL and the soap
-     * action for the request.
-     */
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-		PublisherSampler sampler = (PublisherSampler)el;
+		// we have to add the gui to the change listener
+		this.add(mainPanel);
+	}
+
+	/**
+	 * the implementation loads the URL and the soap action for the request.
+	 */
+	public void configure(TestElement el) {
+		super.configure(el);
+		PublisherSampler sampler = (PublisherSampler) el;
 		useProperties.setSelected(sampler.getUseJNDIPropertiesAsBoolean());
 		jndiICF.setText(sampler.getJNDIInitialContextFactory());
 		urlField.setText(sampler.getProviderUrl());
@@ -266,28 +247,28 @@ public class JMSPublisherGui
 		updateConfig(sampler.getConfigChoice());
 		iterations.setText(sampler.getIterations());
 		reqAuth.setText(sampler.getUseAuth());
-    }
+	}
 
+	/**
+	 * method from ActionListener
+	 * 
+	 * @param event
+	 *            that occurred
+	 */
+	public void actionPerformed(ActionEvent event) {
+	}
 
-    /**
-     * method from ActionListener
-     * @param event that occurred
-     */
-    public void actionPerformed(ActionEvent event)
-    {
-    }
-    
-    /**
-     * When a widget state changes, it will notify this class
-     * so we can enable/disable the correct items.
-     */
-	public void stateChanged(ChangeEvent event){
-		if (event.getSource() == this.configChoice){
+	/**
+	 * When a widget state changes, it will notify this class so we can
+	 * enable/disable the correct items.
+	 */
+	public void stateChanged(ChangeEvent event) {
+		if (event.getSource() == this.configChoice) {
 			updateConfig(this.configChoice.getText());
-		} else if (event.getSource() == this.msgChoice){
+		} else if (event.getSource() == this.msgChoice) {
 			updateMessageType(this.msgChoice.getText());
-		} else if (event.getSource() == useProperties){
-			if (useProperties.isSelected()){
+		} else if (event.getSource() == useProperties) {
+			if (useProperties.isSelected()) {
 				this.jndiICF.setEnabled(false);
 				this.urlField.setEnabled(false);
 			} else {
@@ -296,41 +277,38 @@ public class JMSPublisherGui
 			}
 		}
 	}
-	
+
 	/**
-	 * Update config contains the actual logic for enabling
-	 * or disabling text message, file or random path.
+	 * Update config contains the actual logic for enabling or disabling text
+	 * message, file or random path.
+	 * 
 	 * @param command
 	 */
-	public void updateConfig(String command){
-		if(command.equals(use_text)){
+	public void updateConfig(String command) {
+		if (command.equals(use_text)) {
 			textMessage.setEnabled(true);
 			messageFile.enableFile(false);
 			randomFile.enableFile(false);
-		} else if (command.equals(use_random)){
+		} else if (command.equals(use_random)) {
 			textMessage.setEnabled(false);
 			messageFile.enableFile(false);
 			randomFile.enableFile(true);
-		} else{
+		} else {
 			textMessage.setEnabled(false);
 			messageFile.enableFile(true);
 			randomFile.enableFile(false);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param msgType
 	 */
-	public void updateMessageType(String msgType){
-		if (msgType.equals(object_msg)){
-			if (configChoice.getText().equals(use_text)){
-				JOptionPane.showConfirmDialog(
-					this,
-					JMeterUtils.getResString("jms_error_msg"),
-					"Warning",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+	public void updateMessageType(String msgType) {
+		if (msgType.equals(object_msg)) {
+			if (configChoice.getText().equals(use_text)) {
+				JOptionPane.showConfirmDialog(this, JMeterUtils.getResString("jms_error_msg"), "Warning",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

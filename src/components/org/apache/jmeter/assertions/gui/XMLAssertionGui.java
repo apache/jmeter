@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.assertions.gui;
 
@@ -22,64 +22,55 @@ import org.apache.jmeter.assertions.XMLAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-
 /**
  * @version $Revision$, $Date$
  */
-public class XMLAssertionGui extends AbstractAssertionGui
-{
-    /**
-     * The constructor.
-     */
-    public XMLAssertionGui()
-    {
-        init();
-    }
+public class XMLAssertionGui extends AbstractAssertionGui {
+	/**
+	 * The constructor.
+	 */
+	public XMLAssertionGui() {
+		init();
+	}
 
-    /**
-     * Returns the label to be shown within the JTree-Component.
-     */
-    public String getLabelResource()
-    {
-        return "xml_assertion_title";
-    }
+	/**
+	 * Returns the label to be shown within the JTree-Component.
+	 */
+	public String getLabelResource() {
+		return "xml_assertion_title";
+	}
 
-    public TestElement createTestElement()
-    {
-        XMLAssertion el = new XMLAssertion();
-        modifyTestElement(el);
-        return el;
-    }
+	public TestElement createTestElement() {
+		XMLAssertion el = new XMLAssertion();
+		modifyTestElement(el);
+		return el;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     *
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement el)
-    {
-        configureTestElement(el);
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement el) {
+		configureTestElement(el);
+	}
 
-    /**
-     * Configures the associated test element.
-     * @param el
-     */
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-    }
+	/**
+	 * Configures the associated test element.
+	 * 
+	 * @param el
+	 */
+	public void configure(TestElement el) {
+		super.configure(el);
+	}
 
+	/**
+	 * Inits the GUI.
+	 */
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
 
-    /**
-     * Inits the GUI.
-     */
-    private void init()
-    {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(makeBorder());
-
-        add(makeTitlePanel());
-    }
+		add(makeTitlePanel());
+	}
 }

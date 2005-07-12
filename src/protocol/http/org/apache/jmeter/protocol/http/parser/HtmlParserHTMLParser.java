@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.parser;
 
@@ -54,185 +54,162 @@ import org.htmlparser.util.ParserException;
 
 /**
  * HtmlParser implementation using SourceForge's HtmlParser.
- *
+ * 
  * @version $Revision$ updated on $Date$
  */
-class HtmlParserHTMLParser extends HTMLParser
-{
-    /** Used to store the Logger (used for debug and error messages). */
-    transient private static Logger log= LoggingManager.getLoggerForClass();
+class HtmlParserHTMLParser extends HTMLParser {
+	/** Used to store the Logger (used for debug and error messages). */
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	protected HtmlParserHTMLParser(){
+	protected HtmlParserHTMLParser() {
 		super();
 	}
 
-	protected boolean isReusable()
-	{
+	protected boolean isReusable() {
 		return true;
 	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[], java.net.URL)
-     */
-    public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls)
-        throws HTMLParseException
-    {
-        Parser htmlParser= null;
-        try
-        {
-            String contents= new String(html);
-            StringReader reader= new StringReader(contents);
-            NodeReader nreader= new NodeReader(reader, contents.length());
-            htmlParser= new Parser(nreader, new DefaultParserFeedback());
-            addTagListeners(htmlParser);
-        }
-        catch (Exception e)
-        {
-            throw new HTMLParseException(e);
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.http.parser.HtmlParser#getEmbeddedResourceURLs(byte[],
+	 *      java.net.URL)
+	 */
+	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
+		Parser htmlParser = null;
+		try {
+			String contents = new String(html);
+			StringReader reader = new StringReader(contents);
+			NodeReader nreader = new NodeReader(reader, contents.length());
+			htmlParser = new Parser(nreader, new DefaultParserFeedback());
+			addTagListeners(htmlParser);
+		} catch (Exception e) {
+			throw new HTMLParseException(e);
+		}
 
-        // Now parse the DOM tree
+		// Now parse the DOM tree
 
-        // look for applets
+		// look for applets
 
-        // This will only work with an Applet .class file.
-        // Ideally, this should be upgraded to work with Objects (IE)
-        //	and archives (.jar and .zip) files as well.
+		// This will only work with an Applet .class file.
+		// Ideally, this should be upgraded to work with Objects (IE)
+		// and archives (.jar and .zip) files as well.
 
-        try
-        {
-            // we start to iterate through the elements
-            for (NodeIterator e= htmlParser.elements(); e.hasMoreNodes();)
-            {
-                Node node= e.nextNode();
-                String binUrlStr= null;
+		try {
+			// we start to iterate through the elements
+			for (NodeIterator e = htmlParser.elements(); e.hasMoreNodes();) {
+				Node node = e.nextNode();
+				String binUrlStr = null;
 
-                // first we check to see if body tag has a
-                // background set and we set the NodeIterator
-                // to the child elements inside the body
-                if (node instanceof BodyTag)
-                {
-                    BodyTag body= (BodyTag)node;
-                    binUrlStr= body.getAttribute("background");
-                    // if the body tag exists, we get the elements
-                    // within the body tag. if we don't we won't
-                    // see the body of the page. The only catch
-                    // with this is if there are images after the
-                    // closing body tag, it won't get parsed. If
-                    // someone puts it outside the body tag, it
-                    // is probably a mistake. Plus it's bad to
-                    // have important content after the closing
-                    // body tag. Peter Lin 10-9-03
-                    e= body.elements();
-                }
-                else if (node instanceof BaseHrefTag)
-                {
-                    BaseHrefTag baseHref= (BaseHrefTag)node;
-                    String baseref = baseHref.getBaseUrl().toString();
-                    try
-                    {
-                    	if(!baseref.equals(""))// Bugzilla 30713
-                    	{
-                    		baseUrl= new URL(baseUrl, baseHref.getBaseUrl()+"/");
-                    	}
-                    }
-                    catch (MalformedURLException e1)
-                    {
-                        throw new HTMLParseException(e1);
-                    }
-                }
-                else if (node instanceof ImageTag)
-                {
-                    ImageTag image= (ImageTag)node;
-                    binUrlStr= image.getImageURL();
-                }
-                else if (node instanceof AppletTag)
-                {
-                    AppletTag applet= (AppletTag)node;
-                    binUrlStr= applet.getAppletClass();
-                }
-                else if (node instanceof InputTag)
-                {
-                    InputTag input= (InputTag)node;
-                    // we check the input tag type for image
-                    String strType= input.getAttribute("type");
-                    if (strType != null && strType.equalsIgnoreCase("image"))
-                    {
-                        // then we need to download the binary
-                        binUrlStr= input.getAttribute("src");
-                    }
-				} else if (node instanceof LinkTag){
-					LinkTag link = (LinkTag)node;
-					if (link.getChild(0) instanceof ImageTag){
-						ImageTag img = (ImageTag)link.getChild(0);
+				// first we check to see if body tag has a
+				// background set and we set the NodeIterator
+				// to the child elements inside the body
+				if (node instanceof BodyTag) {
+					BodyTag body = (BodyTag) node;
+					binUrlStr = body.getAttribute("background");
+					// if the body tag exists, we get the elements
+					// within the body tag. if we don't we won't
+					// see the body of the page. The only catch
+					// with this is if there are images after the
+					// closing body tag, it won't get parsed. If
+					// someone puts it outside the body tag, it
+					// is probably a mistake. Plus it's bad to
+					// have important content after the closing
+					// body tag. Peter Lin 10-9-03
+					e = body.elements();
+				} else if (node instanceof BaseHrefTag) {
+					BaseHrefTag baseHref = (BaseHrefTag) node;
+					String baseref = baseHref.getBaseUrl().toString();
+					try {
+						if (!baseref.equals(""))// Bugzilla 30713
+						{
+							baseUrl = new URL(baseUrl, baseHref.getBaseUrl() + "/");
+						}
+					} catch (MalformedURLException e1) {
+						throw new HTMLParseException(e1);
+					}
+				} else if (node instanceof ImageTag) {
+					ImageTag image = (ImageTag) node;
+					binUrlStr = image.getImageURL();
+				} else if (node instanceof AppletTag) {
+					AppletTag applet = (AppletTag) node;
+					binUrlStr = applet.getAppletClass();
+				} else if (node instanceof InputTag) {
+					InputTag input = (InputTag) node;
+					// we check the input tag type for image
+					String strType = input.getAttribute("type");
+					if (strType != null && strType.equalsIgnoreCase("image")) {
+						// then we need to download the binary
+						binUrlStr = input.getAttribute("src");
+					}
+				} else if (node instanceof LinkTag) {
+					LinkTag link = (LinkTag) node;
+					if (link.getChild(0) instanceof ImageTag) {
+						ImageTag img = (ImageTag) link.getChild(0);
 						binUrlStr = img.getImageURL();
 					}
-				} else if (node instanceof ScriptTag){
-					ScriptTag script = (ScriptTag)node;
+				} else if (node instanceof ScriptTag) {
+					ScriptTag script = (ScriptTag) node;
 					binUrlStr = script.getAttribute("src");
-				} else if (node instanceof FrameTag){
-					FrameTag tag = (FrameTag)node;
+				} else if (node instanceof FrameTag) {
+					FrameTag tag = (FrameTag) node;
 					binUrlStr = tag.getAttribute("src");
-				} else if (node instanceof LinkTagTag){
-					LinkTagTag script = (LinkTagTag)node;
-					if (script.getAttribute("rel").equalsIgnoreCase("stylesheet")){
+				} else if (node instanceof LinkTagTag) {
+					LinkTagTag script = (LinkTagTag) node;
+					if (script.getAttribute("rel").equalsIgnoreCase("stylesheet")) {
 						binUrlStr = script.getAttribute("href");
 					}
-				} else if (node instanceof FrameTag){
-					FrameTag script = (FrameTag)node;
+				} else if (node instanceof FrameTag) {
+					FrameTag script = (FrameTag) node;
 					binUrlStr = script.getAttribute("src");
-				} else if (node instanceof BgSoundTag){
-					BgSoundTag script = (BgSoundTag)node;
+				} else if (node instanceof BgSoundTag) {
+					BgSoundTag script = (BgSoundTag) node;
 					binUrlStr = script.getAttribute("src");
 				}
-				
-                if (binUrlStr == null)
-                {
-                    continue;
-                }
 
-                urls.addURL(binUrlStr,baseUrl);
-            }
-            log.debug("End   : parseNodes");
-        }
-        catch (ParserException e)
-        {
-            throw new HTMLParseException(e);
-        }
+				if (binUrlStr == null) {
+					continue;
+				}
 
-        return urls.iterator();
-    }
+				urls.addURL(binUrlStr, baseUrl);
+			}
+			log.debug("End   : parseNodes");
+		} catch (ParserException e) {
+			throw new HTMLParseException(e);
+		}
 
-    /**
-     * Returns a node representing a whole xml given an xml document.
-     *
-     * @param text	an xml document
-     * @return	a node representing a whole xml
-     *
-     * @throws SAXException indicates an error parsing the xml document
-     */
-    private static void addTagListeners(Parser parser)
-    {
-        log.debug("Start : addTagListeners");
-        // add body tag scanner
-        parser.addScanner(new BodyScanner());
-        // add BaseHRefTag scanner
-        parser.addScanner(new BaseHrefScanner());
-        // add ImageTag and BaseHrefTag scanners
-        LinkScanner linkScanner= new LinkScanner(LinkTag.LINK_TAG_FILTER);
-        // parser.addScanner(linkScanner);
-        parser.addScanner(
-            linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
-        parser.addScanner(
-            linkScanner.createBaseHREFScanner("-b"));
-                            // Taken from org.htmlparser.Parser
-        // add input tag scanner
-        parser.addScanner(new InputTagScanner());
-        // add applet tag scanner
-        parser.addScanner(new AppletScanner());
-        parser.addScanner(new ScriptScanner());
-        parser.addScanner(new LinkTagScanner());
-        parser.addScanner(new FrameScanner());
-        parser.addScanner(new BgSoundScanner());
-    }
+		return urls.iterator();
+	}
+
+	/**
+	 * Returns a node representing a whole xml given an xml document.
+	 * 
+	 * @param text
+	 *            an xml document
+	 * @return a node representing a whole xml
+	 * 
+	 * @throws SAXException
+	 *             indicates an error parsing the xml document
+	 */
+	private static void addTagListeners(Parser parser) {
+		log.debug("Start : addTagListeners");
+		// add body tag scanner
+		parser.addScanner(new BodyScanner());
+		// add BaseHRefTag scanner
+		parser.addScanner(new BaseHrefScanner());
+		// add ImageTag and BaseHrefTag scanners
+		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
+		// parser.addScanner(linkScanner);
+		parser.addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
+		parser.addScanner(linkScanner.createBaseHREFScanner("-b"));
+		// Taken from org.htmlparser.Parser
+		// add input tag scanner
+		parser.addScanner(new InputTagScanner());
+		// add applet tag scanner
+		parser.addScanner(new AppletScanner());
+		parser.addScanner(new ScriptScanner());
+		parser.addScanner(new LinkTagScanner());
+		parser.addScanner(new FrameScanner());
+		parser.addScanner(new BgSoundScanner());
+	}
 }

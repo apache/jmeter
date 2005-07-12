@@ -20,8 +20,7 @@ package org.apache.jmeter.monitor.model;
 /**
  * @version $Revision$ on $Date$
  */
-public interface ThreadInfo
-{
+public interface ThreadInfo {
 	int getMaxSpareThreads();
 
 	void setMaxSpareThreads(int value);

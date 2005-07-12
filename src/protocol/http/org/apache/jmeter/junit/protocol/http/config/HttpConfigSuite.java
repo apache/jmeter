@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.junit.protocol.http.config;
 
@@ -24,18 +24,15 @@ import junit.framework.TestSuite;
  * @author Michael Stover
  * @version $Revision$
  */
-public final class HttpConfigSuite
-{
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private HttpConfigSuite()
-    {
-    }
-    
-    public static TestSuite suite()
-    {
-       TestSuite test = new TestSuite(UrlConfigTest.class);
-       return test;
-    }
+public final class HttpConfigSuite {
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private HttpConfigSuite() {
+	}
+
+	public static TestSuite suite() {
+		TestSuite test = new TestSuite(UrlConfigTest.class);
+		return test;
+	}
 }

@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import junit.framework.TestSuite;
@@ -39,92 +38,71 @@ import org.htmlparser.tags.BodyTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class BodyScannerTest extends ParserTestCase
-{
+public class BodyScannerTest extends ParserTestCase {
 
-    public BodyScannerTest(String name)
-    {
-        super(name);
-    }
+	public BodyScannerTest(String name) {
+		super(name);
+	}
 
-    public void testSimpleBody() throws ParserException
-    {
-        createParser("<html><head><title>Test 1</title></head><body>This is a body tag</body></html>");
-        parser.registerScanners();
-        BodyScanner bodyScanner = new BodyScanner("-b");
-        parser.addScanner(bodyScanner);
-        parseAndAssertNodeCount(6);
-        assertTrue(node[4] instanceof BodyTag);
-        // check the body node
-        BodyTag bodyTag = (BodyTag) node[4];
-        assertEquals("Body", "This is a body tag", bodyTag.getBody());
-        assertEquals(
-            "Body",
-            "<BODY>This is a body tag</BODY>",
-            bodyTag.toHtml());
-        assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
-    }
+	public void testSimpleBody() throws ParserException {
+		createParser("<html><head><title>Test 1</title></head><body>This is a body tag</body></html>");
+		parser.registerScanners();
+		BodyScanner bodyScanner = new BodyScanner("-b");
+		parser.addScanner(bodyScanner);
+		parseAndAssertNodeCount(6);
+		assertTrue(node[4] instanceof BodyTag);
+		// check the body node
+		BodyTag bodyTag = (BodyTag) node[4];
+		assertEquals("Body", "This is a body tag", bodyTag.getBody());
+		assertEquals("Body", "<BODY>This is a body tag</BODY>", bodyTag.toHtml());
+		assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
+	}
 
-    public void testBodywithJsp() throws ParserException
-    {
-        createParser("<html><head><title>Test 1</title></head><body><%=BodyValue%></body></html>");
-        parser.registerScanners();
-        BodyScanner bodyScanner = new BodyScanner("-b");
-        parser.addScanner(bodyScanner);
-        parseAndAssertNodeCount(6);
-        assertTrue(node[4] instanceof BodyTag);
-        // check the body node
-        BodyTag bodyTag = (BodyTag) node[4];
-        assertStringEquals(
-            "Body",
-            "<BODY><%=BodyValue%></BODY>",
-            bodyTag.toHtml());
-        assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
-    }
+	public void testBodywithJsp() throws ParserException {
+		createParser("<html><head><title>Test 1</title></head><body><%=BodyValue%></body></html>");
+		parser.registerScanners();
+		BodyScanner bodyScanner = new BodyScanner("-b");
+		parser.addScanner(bodyScanner);
+		parseAndAssertNodeCount(6);
+		assertTrue(node[4] instanceof BodyTag);
+		// check the body node
+		BodyTag bodyTag = (BodyTag) node[4];
+		assertStringEquals("Body", "<BODY><%=BodyValue%></BODY>", bodyTag.toHtml());
+		assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
+	}
 
-    public void testBodyMixed() throws ParserException
-    {
-        createParser("<html><head><title>Test 1</title></head><body>before jsp<%=BodyValue%>after jsp</body></html>");
-        parser.registerScanners();
-        BodyScanner bodyScanner = new BodyScanner("-b");
-        parser.addScanner(bodyScanner);
-        parseAndAssertNodeCount(6);
-        assertTrue(node[4] instanceof BodyTag);
-        // check the body node
-        BodyTag bodyTag = (BodyTag) node[4];
-        assertEquals(
-            "Body",
-            "<BODY>before jsp<%=BodyValue%>after jsp</BODY>",
-            bodyTag.toHtml());
-        assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
-    }
+	public void testBodyMixed() throws ParserException {
+		createParser("<html><head><title>Test 1</title></head><body>before jsp<%=BodyValue%>after jsp</body></html>");
+		parser.registerScanners();
+		BodyScanner bodyScanner = new BodyScanner("-b");
+		parser.addScanner(bodyScanner);
+		parseAndAssertNodeCount(6);
+		assertTrue(node[4] instanceof BodyTag);
+		// check the body node
+		BodyTag bodyTag = (BodyTag) node[4];
+		assertEquals("Body", "<BODY>before jsp<%=BodyValue%>after jsp</BODY>", bodyTag.toHtml());
+		assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
+	}
 
-    public void testBodyEnding() throws ParserException
-    {
-        createParser("<html><body>before jsp<%=BodyValue%>after jsp</html>");
-        parser.registerScanners();
-        BodyScanner bodyScanner = new BodyScanner("-b");
-        parser.addScanner(bodyScanner);
-        parseAndAssertNodeCount(3);
-        assertTrue(node[1] instanceof BodyTag);
-        // check the body node
-        BodyTag bodyTag = (BodyTag) node[1];
-        assertEquals(
-            "Body",
-            "<BODY>before jsp<%=BodyValue%>after jsp</BODY>",
-            bodyTag.toHtml());
-        assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
-    }
+	public void testBodyEnding() throws ParserException {
+		createParser("<html><body>before jsp<%=BodyValue%>after jsp</html>");
+		parser.registerScanners();
+		BodyScanner bodyScanner = new BodyScanner("-b");
+		parser.addScanner(bodyScanner);
+		parseAndAssertNodeCount(3);
+		assertTrue(node[1] instanceof BodyTag);
+		// check the body node
+		BodyTag bodyTag = (BodyTag) node[1];
+		assertEquals("Body", "<BODY>before jsp<%=BodyValue%>after jsp</BODY>", bodyTag.toHtml());
+		assertEquals("Body Scanner", bodyScanner, bodyTag.getThisScanner());
+	}
 
-    public static TestSuite suite()
-    {
-        return new TestSuite(BodyScannerTest.class);
-    }
+	public static TestSuite suite() {
+		return new TestSuite(BodyScannerTest.class);
+	}
 
-    public static void main(String[] args)
-    {
-        new junit.awtui.TestRunner().start(
-            new String[] { BodyScannerTest.class.getName()});
-    }
+	public static void main(String[] args) {
+		new junit.awtui.TestRunner().start(new String[] { BodyScannerTest.class.getName() });
+	}
 
 }

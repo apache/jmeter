@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control;
 
@@ -25,72 +25,68 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 
 /**
  * This class is an Authorization encapsulator.
- *
+ * 
  * @author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
  * @version $Revision$
  */
-public class Authorization extends AbstractTestElement implements Serializable
-{
-    private static String URL = "Authorization.url";
-    private static String USERNAME = "Authorization.username";
-    private static String PASSWORD = "Authorization.password";
-    /**
-     * create the authorization
-     */
-    Authorization(String url, String user, String pass)
-    {
-        setURL(url);
-        setUser(user);
-        setPass(pass);
-    }
+public class Authorization extends AbstractTestElement implements Serializable {
+	private static String URL = "Authorization.url";
 
-    public boolean expectsModification()
-    {
-        return false;
-    }
+	private static String USERNAME = "Authorization.username";
 
-    public Authorization()
-    {
-        setURL("");
-        setUser("");
-        setPass("");
-    }
+	private static String PASSWORD = "Authorization.password";
 
-    public String getClassLabel()
-    {
-        return "Authorization";
-    }
+	/**
+	 * create the authorization
+	 */
+	Authorization(String url, String user, String pass) {
+		setURL(url);
+		setUser(user);
+		setPass(pass);
+	}
 
-    public void addConfigElement(ConfigElement config)
-    {
-    }
+	public boolean expectsModification() {
+		return false;
+	}
 
-    public synchronized String getURL()
-    {
-        return getPropertyAsString(URL);
-    }
-    public synchronized void setURL(String url)
-    {
-        setProperty(URL, url);
-    }
-    public synchronized String getUser()
-    {
-        return getPropertyAsString(USERNAME);
-    }
-    public synchronized void setUser(String user)
-    {
-        setProperty(USERNAME, user);
-    }
-    public synchronized String getPass()
-    {
-        return getPropertyAsString(PASSWORD);
-    }
-    public synchronized void setPass(String pass)
-    {
-        setProperty(PASSWORD, pass);
-    }
-    public String toString()
-    {
-        return getURL() + "\t" + getUser() + "\t" + getPass();
-    }
+	public Authorization() {
+		setURL("");
+		setUser("");
+		setPass("");
+	}
+
+	public String getClassLabel() {
+		return "Authorization";
+	}
+
+	public void addConfigElement(ConfigElement config) {
+	}
+
+	public synchronized String getURL() {
+		return getPropertyAsString(URL);
+	}
+
+	public synchronized void setURL(String url) {
+		setProperty(URL, url);
+	}
+
+	public synchronized String getUser() {
+		return getPropertyAsString(USERNAME);
+	}
+
+	public synchronized void setUser(String user) {
+		setProperty(USERNAME, user);
+	}
+
+	public synchronized String getPass() {
+		return getPropertyAsString(PASSWORD);
+	}
+
+	public synchronized void setPass(String pass) {
+		setProperty(PASSWORD, pass);
+	}
+
+	public String toString() {
+		return getURL() + "\t" + getUser() + "\t" + getPass();
+	}
 }

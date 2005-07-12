@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.gui;
 
@@ -31,108 +31,78 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
-public class HTTPArgumentsPanel extends ArgumentsPanel
-{
-	/* NOTUSED
-    private static final String ENCODED_VALUE =
-        JMeterUtils.getResString("encoded_value");
-        */
-    private static final String ENCODE_OR_NOT =
-        JMeterUtils.getResString("encode?");
-    private static final String INCLUDE_EQUALS =
-        JMeterUtils.getResString("include_equals");
+public class HTTPArgumentsPanel extends ArgumentsPanel {
+	/*
+	 * NOTUSED private static final String ENCODED_VALUE =
+	 * JMeterUtils.getResString("encoded_value");
+	 */
+	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?");
 
-    protected void initializeTableModel()
-    {
-        tableModel =
-            new ObjectTableModel(
-                new String[] {
-                    ArgumentsPanel.COLUMN_NAMES_0,
-                    ArgumentsPanel.COLUMN_NAMES_1,
-                    ENCODE_OR_NOT,
-                    INCLUDE_EQUALS },
-                new Functor[] { new Functor("getName"), 
-                      new Functor("getValue"), 
-                      new Functor("isAlwaysEncoded"), 
-                      new Functor("isUseEquals") },
-                new Functor[] { new Functor("setName"), 
-                      new Functor("setValue"), 
-                      new Functor("setAlwaysEncoded"), 
-                      new Functor("setUseEquals") },
-                new Class[] {
-                    String.class,
-                    String.class,
-                    Boolean.class,
-                    Boolean.class });
-    }
+	private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals");
 
-    protected void sizeColumns(JTable table)
-    {
-        int resizeMode = table.getAutoResizeMode();
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        fixSize(table.getColumn(INCLUDE_EQUALS));
-        fixSize(table.getColumn(ENCODE_OR_NOT));
-        table.setAutoResizeMode(resizeMode);
-    }
+	protected void initializeTableModel() {
+		tableModel = new ObjectTableModel(new String[] { ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1,
+				ENCODE_OR_NOT, INCLUDE_EQUALS }, new Functor[] { new Functor("getName"), new Functor("getValue"),
+				new Functor("isAlwaysEncoded"), new Functor("isUseEquals") }, new Functor[] { new Functor("setName"),
+				new Functor("setValue"), new Functor("setAlwaysEncoded"), new Functor("setUseEquals") }, new Class[] {
+				String.class, String.class, Boolean.class, Boolean.class });
+	}
 
-    protected Object makeNewArgument()
-    {
-        HTTPArgument arg = new HTTPArgument("", "");
-        arg.setAlwaysEncoded(false);
-        arg.setUseEquals(true);
-        return arg;
-    }
+	protected void sizeColumns(JTable table) {
+		int resizeMode = table.getAutoResizeMode();
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		fixSize(table.getColumn(INCLUDE_EQUALS));
+		fixSize(table.getColumn(ENCODE_OR_NOT));
+		table.setAutoResizeMode(resizeMode);
+	}
 
-    private void fixSize(TableColumn column)
-    {
-        column.sizeWidthToFit();
-        //column.setMinWidth(column.getWidth());
-        column.setMaxWidth((int) (column.getWidth() * 1.5));
-        column.setWidth(column.getMaxWidth());
-        column.setResizable(false);
-    }
+	protected Object makeNewArgument() {
+		HTTPArgument arg = new HTTPArgument("", "");
+		arg.setAlwaysEncoded(false);
+		arg.setUseEquals(true);
+		return arg;
+	}
 
-    public HTTPArgumentsPanel()
-    {
-        super(JMeterUtils.getResString("paramtable"));
-    }
+	private void fixSize(TableColumn column) {
+		column.sizeWidthToFit();
+		// column.setMinWidth(column.getWidth());
+		column.setMaxWidth((int) (column.getWidth() * 1.5));
+		column.setWidth(column.getMaxWidth());
+		column.setResizable(false);
+	}
 
-    public TestElement createTestElement()
-    {
-       stopTableEditing();
-        Iterator modelData = tableModel.iterator();
-        Arguments args = new Arguments();
-        while (modelData.hasNext())
-        {
-            HTTPArgument arg = (HTTPArgument) modelData.next();
-            args.addArgument(arg);
-        }
-        this.configureTestElement(args);
-        return (TestElement) args.clone();
-    }
+	public HTTPArgumentsPanel() {
+		super(JMeterUtils.getResString("paramtable"));
+	}
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        if (el instanceof Arguments)
-        {
-            tableModel.clearData();
-            HTTPArgument.convertArgumentsToHTTP((Arguments) el);
-            PropertyIterator iter = ((Arguments) el).getArguments().iterator();
-            while (iter.hasNext())
-            {
-                HTTPArgument arg = (HTTPArgument) iter.next().getObjectValue();
-                tableModel.addRow(arg);
-            }
-        }
-        checkDeleteStatus();
-    }
+	public TestElement createTestElement() {
+		stopTableEditing();
+		Iterator modelData = tableModel.iterator();
+		Arguments args = new Arguments();
+		while (modelData.hasNext()) {
+			HTTPArgument arg = (HTTPArgument) modelData.next();
+			args.addArgument(arg);
+		}
+		this.configureTestElement(args);
+		return (TestElement) args.clone();
+	}
 
-    protected boolean isMetaDataNormal(HTTPArgument arg)
-    {
-        return arg.getMetaData() == null
-            || arg.getMetaData().equals("=")
-            || (arg.getValue() != null &&
-                arg.getValue().length() > 0);
-    }
+	public void configure(TestElement el) {
+		super.configure(el);
+		if (el instanceof Arguments) {
+			tableModel.clearData();
+			HTTPArgument.convertArgumentsToHTTP((Arguments) el);
+			PropertyIterator iter = ((Arguments) el).getArguments().iterator();
+			while (iter.hasNext()) {
+				HTTPArgument arg = (HTTPArgument) iter.next().getObjectValue();
+				tableModel.addRow(arg);
+			}
+		}
+		checkDeleteStatus();
+	}
+
+	protected boolean isMetaDataNormal(HTTPArgument arg) {
+		return arg.getMetaData() == null || arg.getMetaData().equals("=")
+				|| (arg.getValue() != null && arg.getValue().length() > 0);
+	}
 }

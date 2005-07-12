@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /**
  * MD5HexAssertion class creates an MD5 checksum from the response <br/>
@@ -41,107 +41,94 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class MD5HexAssertion
-    extends AbstractTestElement
-    implements Serializable, Assertion {
+public class MD5HexAssertion extends AbstractTestElement implements Serializable, Assertion {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
-	
-    /** Key for storing assertion-informations in the jmx-file. */
-    private static final String MD5HEX_KEY = "MD5HexAssertion.size";
 
-    /* 
-     * @param response
-     * @return
-     */
-    public AssertionResult getResult(SampleResult response) {
+	/** Key for storing assertion-informations in the jmx-file. */
+	private static final String MD5HEX_KEY = "MD5HexAssertion.size";
 
-        AssertionResult result = new AssertionResult();
-        result.setFailure(false);
-        byte[] resultData = response.getResponseData();
+	/*
+	 * @param response @return
+	 */
+	public AssertionResult getResult(SampleResult response) {
 
-        if (resultData == null) {
-            result.setError(false);
-            result.setFailure(true);
-            result.setFailureMessage("Response was null");
-            return result;
-        }
+		AssertionResult result = new AssertionResult();
+		result.setFailure(false);
+		byte[] resultData = response.getResponseData();
 
-        //no point in checking if we don't have anything to compare against
-        if (getAllowedMD5Hex().equals("")) {
-            result.setError(false);
-            result.setFailure(true);
-            result.setFailureMessage("MD5Hex to test against is empty");
-            return result;
-        }
-        
-		String md5Result=baMD5Hex(resultData);
+		if (resultData == null) {
+			result.setError(false);
+			result.setFailure(true);
+			result.setFailureMessage("Response was null");
+			return result;
+		}
 
-        //String md5Result = DigestUtils.md5Hex(resultData);
+		// no point in checking if we don't have anything to compare against
+		if (getAllowedMD5Hex().equals("")) {
+			result.setError(false);
+			result.setFailure(true);
+			result.setFailureMessage("MD5Hex to test against is empty");
+			return result;
+		}
 
-        if (!md5Result.equalsIgnoreCase(getAllowedMD5Hex())) {
-            result.setFailure(true);
+		String md5Result = baMD5Hex(resultData);
 
-            Object[] arguments = { md5Result, getAllowedMD5Hex()};
-            String message =
-                MessageFormat.format(
-                    JMeterUtils.getResString("md5hex_assertion_failure"),
-                    arguments);
-            result.setFailureMessage(message);
+		// String md5Result = DigestUtils.md5Hex(resultData);
 
-        }
+		if (!md5Result.equalsIgnoreCase(getAllowedMD5Hex())) {
+			result.setFailure(true);
 
-        return result;
-    }
+			Object[] arguments = { md5Result, getAllowedMD5Hex() };
+			String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments);
+			result.setFailureMessage(message);
 
-    public void setAllowedMD5Hex(String hex) {
-        setProperty(new StringProperty(MD5HexAssertion.MD5HEX_KEY, hex));
-    }
+		}
 
-    public String getAllowedMD5Hex() {
-        return getPropertyAsString(MD5HexAssertion.MD5HEX_KEY);
-    }
-    
-    private static String baToHex(byte ba [])
-    {
-    	StringBuffer sb = new StringBuffer(32);
-		for (int i = 0; i<ba.length; i++ )
-			{
-				int j = ba[i]&0xff;
-				if (j < 16) sb.append("0");
-				sb.append(Integer.toHexString(j));
-			}
-	   	return sb.toString();
-    }
-    
-    private static String baMD5Hex(byte ba[])
-    {
-		byte [] md5Result={};
-		
-		try
-		{
+		return result;
+	}
+
+	public void setAllowedMD5Hex(String hex) {
+		setProperty(new StringProperty(MD5HexAssertion.MD5HEX_KEY, hex));
+	}
+
+	public String getAllowedMD5Hex() {
+		return getPropertyAsString(MD5HexAssertion.MD5HEX_KEY);
+	}
+
+	private static String baToHex(byte ba[]) {
+		StringBuffer sb = new StringBuffer(32);
+		for (int i = 0; i < ba.length; i++) {
+			int j = ba[i] & 0xff;
+			if (j < 16)
+				sb.append("0");
+			sb.append(Integer.toHexString(j));
+		}
+		return sb.toString();
+	}
+
+	private static String baMD5Hex(byte ba[]) {
+		byte[] md5Result = {};
+
+		try {
 			MessageDigest md;
 			md = MessageDigest.getInstance("MD5");
 			md5Result = md.digest(ba);
+		} catch (NoSuchAlgorithmException e) {
+			log.error("", e);
 		}
-		catch (NoSuchAlgorithmException e)
-		{
-			log.error("",e);
+		return baToHex(md5Result);
+	}
+
+	public static class Test extends TestCase {
+		public void testHex() throws Exception {
+			assertEquals("00010203", baToHex(new byte[] { 0, 1, 2, 3 }));
+			assertEquals("03020100", baToHex(new byte[] { 3, 2, 1, 0 }));
+			assertEquals("0f807fff", baToHex(new byte[] { 0xF, -128, 127, -1 }));
 		}
-    	return baToHex(md5Result);
-    }
-    
-    public static class Test extends TestCase
-    {
-    	public void testHex() throws Exception
-    	{
-			assertEquals("00010203",baToHex(new byte[]{0,1,2,3}));
-			assertEquals("03020100",baToHex(new byte[]{3,2,1,0}));
-			assertEquals("0f807fff",baToHex(new byte[]{0xF,-128,127,-1}));
-    	}
-    	public void testMD5() throws Exception
-    	{
-    		assertEquals("D41D8CD98F00B204E9800998ECF8427E",baMD5Hex(new byte[]{}).toUpperCase());
-    	}
-    }
+
+		public void testMD5() throws Exception {
+			assertEquals("D41D8CD98F00B204E9800998ECF8427E", baMD5Hex(new byte[] {}).toUpperCase());
+		}
+	}
 }

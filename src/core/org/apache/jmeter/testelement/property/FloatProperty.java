@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.testelement.property;
 
@@ -23,116 +23,105 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * @version $Revision$
  */
-public class FloatProperty extends NumberProperty
-{
-    float value;
-    float savedValue;
-    
-    public FloatProperty(String name,float value)
-    {
-        super(name);
-        this.value = value;
-    }
-    
-    public FloatProperty()
-    {
-    }
-    
-    /* (non-Javadoc)
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-         */
-        public void setRunningVersion(boolean runningVersion)
-        {
-            savedValue = value;
-            super.setRunningVersion(runningVersion);
-        }
+public class FloatProperty extends NumberProperty {
+	float value;
 
-        /* (non-Javadoc)
-         * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
-         */
-        public void recoverRunningVersion(TestElement owner)
-        {
-            value = savedValue;
-        }
-    
-    public void setValue(float value)
-    {
-        this.value = value;
-    }
-    
-    protected void setNumberValue(Number n)
-    {
-        value = n.floatValue();
-    }
-    
-    protected void setNumberValue(String n) throws NumberFormatException
-    {
-        value = Float.parseFloat(n);
-    }
+	float savedValue;
 
-    /**
-     * @see JMeterProperty#getStringValue()
-     */
-    public String getStringValue()
-    {
-        return Float.toString(value);
-    }
+	public FloatProperty(String name, float value) {
+		super(name);
+		this.value = value;
+	}
 
-    /**
-     * @see JMeterProperty#getObjectValue()
-     */
-    public Object getObjectValue()
-    {
-        return new Float(value);
-    }
+	public FloatProperty() {
+	}
 
-    /**
-     * @see Object#clone()
-     */
-    public Object clone() 
-    {
-        FloatProperty prop = (FloatProperty)super.clone();
-        prop.value = value;
-        return prop;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		savedValue = value;
+		super.setRunningVersion(runningVersion);
+	}
 
-    /**
-     * @see JMeterProperty#getBooleanValue()
-     */
-    public boolean getBooleanValue()
-    {
-        return value > 0 ? true : false;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		value = savedValue;
+	}
 
-    /**
-     * @see JMeterProperty#getDoubleValue()
-     */
-    public double getDoubleValue()
-    {
-        return value;
-    }
+	public void setValue(float value) {
+		this.value = value;
+	}
 
-    /**
-     * @see JMeterProperty#getFloatValue()
-     */
-    public float getFloatValue()
-    {
-        return value;
-    }
+	protected void setNumberValue(Number n) {
+		value = n.floatValue();
+	}
 
-    /**
-     * @see JMeterProperty#getIntValue()
-     */
-    public int getIntValue()
-    {
-        return (int)value;
-    }
+	protected void setNumberValue(String n) throws NumberFormatException {
+		value = Float.parseFloat(n);
+	}
 
-    /**
-     * @see JMeterProperty#getLongValue()
-     */
-    public long getLongValue()
-    {
-        return (long)value;
-    }
+	/**
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		return Float.toString(value);
+	}
+
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return new Float(value);
+	}
+
+	/**
+	 * @see Object#clone()
+	 */
+	public Object clone() {
+		FloatProperty prop = (FloatProperty) super.clone();
+		prop.value = value;
+		return prop;
+	}
+
+	/**
+	 * @see JMeterProperty#getBooleanValue()
+	 */
+	public boolean getBooleanValue() {
+		return value > 0 ? true : false;
+	}
+
+	/**
+	 * @see JMeterProperty#getDoubleValue()
+	 */
+	public double getDoubleValue() {
+		return value;
+	}
+
+	/**
+	 * @see JMeterProperty#getFloatValue()
+	 */
+	public float getFloatValue() {
+		return value;
+	}
+
+	/**
+	 * @see JMeterProperty#getIntValue()
+	 */
+	public int getIntValue() {
+		return (int) value;
+	}
+
+	/**
+	 * @see JMeterProperty#getLongValue()
+	 */
+	public long getLongValue() {
+		return (long) value;
+	}
 }

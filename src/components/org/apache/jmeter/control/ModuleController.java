@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control;
 
@@ -36,200 +36,170 @@ import org.apache.log.Logger;
 
 /**
  * The goal of ModuleController is to add modularity to JMeter. The general idea
- * is that web applications consist of small units of functionality (i.e.
- * Logon, Create Account, Logoff...) which consist of requests that implement
- * the functionality. These small units of functionality can be stored in
+ * is that web applications consist of small units of functionality (i.e. Logon,
+ * Create Account, Logoff...) which consist of requests that implement the
+ * functionality. These small units of functionality can be stored in
  * SimpleControllers as modules that can be linked together quickly to form
  * tests. ModuleController facilitates this by acting as a pointer to any
  * controller that sits under the WorkBench. The controller and it's subelements
  * will be substituted in place of the ModuleController at runtime. Config
  * elements can be attached to the ModuleController to alter the functionality
  * (which user logs in, which account is created, etc.) of the module.
- *
- * @author    Thad Smith
- * @version   $Revision$
+ * 
+ * @author Thad Smith
+ * @version $Revision$
  */
-public class ModuleController
-    extends GenericController
-    implements ReplaceableController
-{
-    private static final Logger log = LoggingManager.getLoggerForClass();
-    private static final String NODE_PATH = "ModuleController.node_path";
-    private JMeterTreeNode selectedNode = null;
+public class ModuleController extends GenericController implements ReplaceableController {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * No-arg constructor
-     * 
-     * @see java.lang.Object#Object()
-     */
-    public ModuleController()
-    {
-        super();
-    }
+	private static final String NODE_PATH = "ModuleController.node_path";
 
-    public Object clone()
-    {
-        ModuleController clone = (ModuleController) super.clone();
-        if (selectedNode == null)
-        {
-            this.restoreSelected();
-        }
-        clone.selectedNode = selectedNode;
-        return clone;
-    }
+	private JMeterTreeNode selectedNode = null;
 
-    /**
-     * Get the controller which this object is "pointing" to.
-     * 
-     * @return  the controller which this node points to
-     * @see org.apache.jmeter.testelement.TestElement
-     * @see org.apache.jmeter.control.ReplaceableController#getReplacement()
-     */
-    public TestElement getReplacement()
-    {
-        if (selectedNode != null)
-        {
-            return selectedNode.getTestElement();
-        }
-        else
-        {
-            return this;
-        }
-    }
+	/**
+	 * No-arg constructor
+	 * 
+	 * @see java.lang.Object#Object()
+	 */
+	public ModuleController() {
+		super();
+	}
 
-    /**
-     * Sets the (@link JMeterTreeNode) which represents the controller which
-     * this object is pointing to. Used for building the test case upon
-     * execution.
-     * 
-     * @param   tn JMeterTreeNode
-     * @see org.apache.jmeter.gui.tree.JMeterTreeNode
-     */
-    public void setSelectedNode(JMeterTreeNode tn)
-    {
-        selectedNode = tn;
-        setNodePath();
-    }
+	public Object clone() {
+		ModuleController clone = (ModuleController) super.clone();
+		if (selectedNode == null) {
+			this.restoreSelected();
+		}
+		clone.selectedNode = selectedNode;
+		return clone;
+	}
 
-    /**
-     * Gets the (@link JMeterTreeNode) for the Controller
-     * 
-     * @return JMeterTreeNode
-     */
-    public JMeterTreeNode getSelectedNode()
-    {      
-        if(selectedNode == null) restoreSelected();
-        return selectedNode;
-    }
+	/**
+	 * Get the controller which this object is "pointing" to.
+	 * 
+	 * @return the controller which this node points to
+	 * @see org.apache.jmeter.testelement.TestElement
+	 * @see org.apache.jmeter.control.ReplaceableController#getReplacement()
+	 */
+	public TestElement getReplacement() {
+		if (selectedNode != null) {
+			return selectedNode.getTestElement();
+		} else {
+			return this;
+		}
+	}
 
-    private void setNodePath()
-    {
-        List nodePath = new ArrayList();
-        if (selectedNode != null)
-        {
-            TreeNode[] path = selectedNode.getPath();
-            for (int i = 0; i < path.length; i++)
-            {
-                nodePath.add(((JMeterTreeNode) path[i]).getName());
-            }
-            //nodePath.add(selectedNode.getName());
-        }
-        setProperty(new CollectionProperty(NODE_PATH, nodePath));
-    }
+	/**
+	 * Sets the (@link JMeterTreeNode) which represents the controller which
+	 * this object is pointing to. Used for building the test case upon
+	 * execution.
+	 * 
+	 * @param tn
+	 *            JMeterTreeNode
+	 * @see org.apache.jmeter.gui.tree.JMeterTreeNode
+	 */
+	public void setSelectedNode(JMeterTreeNode tn) {
+		selectedNode = tn;
+		setNodePath();
+	}
 
-    public List getNodePath()
-    {
-        JMeterProperty prop = getProperty(NODE_PATH);
-        if (!(prop instanceof NullProperty))
-        {
-            return (List) ((CollectionProperty) prop).getObjectValue();
-        }
-        else
-        {
-            return null;
-        }
-    }
+	/**
+	 * Gets the (@link JMeterTreeNode) for the Controller
+	 * 
+	 * @return JMeterTreeNode
+	 */
+	public JMeterTreeNode getSelectedNode() {
+		if (selectedNode == null)
+			restoreSelected();
+		return selectedNode;
+	}
 
-    private void restoreSelected()
-    {
-        if (selectedNode == null)
-        {
-            List nodePath = getNodePath();
-            if (nodePath != null && nodePath.size() > 0)
-            {
-                GuiPackage gp = GuiPackage.getInstance();
-                if (gp != null)
-                {
-                    JMeterTreeNode root =
-                        (JMeterTreeNode) gp.getTreeModel().getRoot();
-                    traverse(root, nodePath,1);
-                }
-            }
-        }
-    }
+	private void setNodePath() {
+		List nodePath = new ArrayList();
+		if (selectedNode != null) {
+			TreeNode[] path = selectedNode.getPath();
+			for (int i = 0; i < path.length; i++) {
+				nodePath.add(((JMeterTreeNode) path[i]).getName());
+			}
+			// nodePath.add(selectedNode.getName());
+		}
+		setProperty(new CollectionProperty(NODE_PATH, nodePath));
+	}
 
-    private void traverse(JMeterTreeNode node, List nodePath,int level)
-    {
-        if (node != null && nodePath.size() > level)
-        {
-            for (int i = 0; i < node.getChildCount(); i++)
-            {
-                JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
-                if (cur.getName().equals(nodePath.get(level).toString()))
-                {
-                    if(nodePath.size() == (level + 1)) selectedNode = cur;
-                    traverse(cur, nodePath,level + 1);
-                }
-            }
-        }
-    }
+	public List getNodePath() {
+		JMeterProperty prop = getProperty(NODE_PATH);
+		if (!(prop instanceof NullProperty)) {
+			return (List) ((CollectionProperty) prop).getObjectValue();
+		} else {
+			return null;
+		}
+	}
 
-    /**
-     * Copies the controller's subelements into the execution tree
-     * 
-     * @param tree - The current tree under which the nodes will be added
-     */
-    public void replace(HashTree tree)
-    {
-        if (!selectedNode.isEnabled())
-        {
-            selectedNode = cloneTreeNode(selectedNode);
-            selectedNode.setEnabled(true);
-        }
-        createSubTree(tree, selectedNode);
-    }
+	private void restoreSelected() {
+		if (selectedNode == null) {
+			List nodePath = getNodePath();
+			if (nodePath != null && nodePath.size() > 0) {
+				GuiPackage gp = GuiPackage.getInstance();
+				if (gp != null) {
+					JMeterTreeNode root = (JMeterTreeNode) gp.getTreeModel().getRoot();
+					traverse(root, nodePath, 1);
+				}
+			}
+		}
+	}
 
-    private void createSubTree(HashTree tree, JMeterTreeNode node)
-    {
-        Enumeration e = node.children();
-        while (e.hasMoreElements())
-        {
-            JMeterTreeNode subNode = (JMeterTreeNode) e.nextElement();
-            tree.add(subNode);
-            createSubTree(tree.getTree(subNode), subNode);
-        }
-    }
+	private void traverse(JMeterTreeNode node, List nodePath, int level) {
+		if (node != null && nodePath.size() > level) {
+			for (int i = 0; i < node.getChildCount(); i++) {
+				JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
+				if (cur.getName().equals(nodePath.get(level).toString())) {
+					if (nodePath.size() == (level + 1))
+						selectedNode = cur;
+					traverse(cur, nodePath, level + 1);
+				}
+			}
+		}
+	}
 
-    private static JMeterTreeNode cloneTreeNode(JMeterTreeNode node)
-    {
-        JMeterTreeNode treeNode = (JMeterTreeNode) node.clone();
-        treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
-        cloneChildren(treeNode, node);
-        return treeNode;
-    }
+	/**
+	 * Copies the controller's subelements into the execution tree
+	 * 
+	 * @param tree -
+	 *            The current tree under which the nodes will be added
+	 */
+	public void replace(HashTree tree) {
+		if (!selectedNode.isEnabled()) {
+			selectedNode = cloneTreeNode(selectedNode);
+			selectedNode.setEnabled(true);
+		}
+		createSubTree(tree, selectedNode);
+	}
 
-    private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from)
-    {
-        Enumeration enumr = from.children();
-        while (enumr.hasMoreElements())
-        {
-            JMeterTreeNode child = (JMeterTreeNode) enumr.nextElement();
-            JMeterTreeNode childClone = (JMeterTreeNode) child.clone();
-            childClone.setUserObject(
-                ((TestElement) child.getUserObject()).clone());
-            to.add(childClone);
-            cloneChildren((JMeterTreeNode) to.getLastChild(), child);
-        }
-    }
+	private void createSubTree(HashTree tree, JMeterTreeNode node) {
+		Enumeration e = node.children();
+		while (e.hasMoreElements()) {
+			JMeterTreeNode subNode = (JMeterTreeNode) e.nextElement();
+			tree.add(subNode);
+			createSubTree(tree.getTree(subNode), subNode);
+		}
+	}
+
+	private static JMeterTreeNode cloneTreeNode(JMeterTreeNode node) {
+		JMeterTreeNode treeNode = (JMeterTreeNode) node.clone();
+		treeNode.setUserObject(((TestElement) node.getUserObject()).clone());
+		cloneChildren(treeNode, node);
+		return treeNode;
+	}
+
+	private static void cloneChildren(JMeterTreeNode to, JMeterTreeNode from) {
+		Enumeration enumr = from.children();
+		while (enumr.hasMoreElements()) {
+			JMeterTreeNode child = (JMeterTreeNode) enumr.nextElement();
+			JMeterTreeNode childClone = (JMeterTreeNode) child.clone();
+			childClone.setUserObject(((TestElement) child.getUserObject()).clone());
+			to.add(childClone);
+			cloneChildren((JMeterTreeNode) to.getLastChild(), child);
+		}
+	}
 
 }

@@ -14,41 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 
 /**
- * Packages information regarding the target of a sample event,
- * such as the result from that event and the thread group it
- * ran in.
+ * Packages information regarding the target of a sample event, such as the
+ * result from that event and the thread group it ran in.
  * 
  * @version $Revision$
  */
-public class SampleEvent implements Serializable
-{
-    SampleResult result;
-    String threadGroup;
+public class SampleEvent implements Serializable {
+	SampleResult result;
 
-    public SampleEvent()
-    {
-    }
+	String threadGroup;
 
-    public SampleEvent(SampleResult result, String threadGroup)
-    {
-        this.result = result;
-        this.threadGroup = threadGroup;
-    }
+	public SampleEvent() {
+	}
 
-    public SampleResult getResult()
-    {
-        return result;
-    }
+	public SampleEvent(SampleResult result, String threadGroup) {
+		this.result = result;
+		this.threadGroup = threadGroup;
+	}
 
-    public String getThreadGroup()
-    {
-        return threadGroup;
-    }
+	public SampleResult getResult() {
+		return result;
+	}
+
+	public String getThreadGroup() {
+		return threadGroup;
+	}
 }

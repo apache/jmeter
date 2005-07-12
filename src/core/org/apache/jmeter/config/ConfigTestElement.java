@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.config;
 
@@ -24,39 +24,38 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class ConfigTestElement
-    extends AbstractTestElement
-    implements Serializable,ConfigElement
-{
-    public final static String USERNAME = "ConfigTestElement.username";
-    public final static String PASSWORD = "ConfigTestElement.password";
+public class ConfigTestElement extends AbstractTestElement implements Serializable, ConfigElement {
+	public final static String USERNAME = "ConfigTestElement.username";
 
-    public ConfigTestElement()
-    {
-    }
+	public final static String PASSWORD = "ConfigTestElement.password";
 
-    public void addTestElement(TestElement parm1)
-    {
-        if (parm1 instanceof ConfigTestElement)
-        {
-            mergeIn(parm1);
-        }
-    }
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
-     */
-    public void addConfigElement(ConfigElement config)
-    {
-        mergeIn((TestElement)config);
-    }
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.config.ConfigElement#expectsModification()
-     */
-    public boolean expectsModification()
-    {
-        return false;
-    }
+	public ConfigTestElement() {
+	}
+
+	public void addTestElement(TestElement parm1) {
+		if (parm1 instanceof ConfigTestElement) {
+			mergeIn(parm1);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
+	 */
+	public void addConfigElement(ConfigElement config) {
+		mergeIn((TestElement) config);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.config.ConfigElement#expectsModification()
+	 */
+	public boolean expectsModification() {
+		return false;
+	}
 }

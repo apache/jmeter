@@ -20,8 +20,7 @@ package org.apache.jmeter.monitor.model;
 /**
  * @version $Revision$ on $Date$
  */
-public interface Worker
-{
+public interface Worker {
 	int getRequestProcessingTime();
 
 	void setRequestProcessingTime(int value);

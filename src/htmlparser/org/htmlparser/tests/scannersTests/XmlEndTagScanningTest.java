@@ -29,32 +29,25 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.scannersTests;
 
 import org.htmlparser.tags.Div;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class XmlEndTagScanningTest extends ParserTestCase
-{
+public class XmlEndTagScanningTest extends ParserTestCase {
 
-    public XmlEndTagScanningTest(String name)
-    {
-        super(name);
-    }
+	public XmlEndTagScanningTest(String name) {
+		super(name);
+	}
 
-    public void testSingleTagParsing() throws ParserException
-    {
-        createParser("<div style=\"page-break-before: always; \" />");
-        parser.registerScanners();
-        parseAndAssertNodeCount(1);
-        assertType("div tag", Div.class, node[0]);
-        Div div = (Div) node[0];
-        assertStringEquals(
-            "style",
-            "page-break-before: always; ",
-            div.getAttribute("style"));
-    }
+	public void testSingleTagParsing() throws ParserException {
+		createParser("<div style=\"page-break-before: always; \" />");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertType("div tag", Div.class, node[0]);
+		Div div = (Div) node[0];
+		assertStringEquals("style", "page-break-before: always; ", div.getAttribute("style"));
+	}
 
 }

@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.ScriptTag;
@@ -40,52 +39,33 @@ import org.htmlparser.tags.data.TagData;
 /**
  * The HTMLScriptScanner identifies javascript code
  */
-public class ScriptScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "SCRIPT" };
-    private static final String ENDERS[] = { "BODY", "HTML" };
-    public ScriptScanner()
-    {
-        this("");
-    }
+public class ScriptScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "SCRIPT" };
 
-    public ScriptScanner(String filter)
-    {
-        this(filter, MATCH_NAME, ENDERS);
-    }
+	private static final String ENDERS[] = { "BODY", "HTML" };
 
-    public ScriptScanner(
-        String filter,
-        String[] nameOfTagToMatch,
-        String[] enders)
-    {
-        this(filter, nameOfTagToMatch, enders, new String[0], true, true);
-    }
+	public ScriptScanner() {
+		this("");
+	}
 
-    public ScriptScanner(
-        String filter,
-        String[] nameOfTagToMatch,
-        String[] enders,
-        String[] endtagenders,
-        boolean allowSelfChildren,
-        boolean balance_quotes)
-    {
-        super(
-            filter,
-            nameOfTagToMatch,
-            enders,
-            new String[0],
-            allowSelfChildren,
-            balance_quotes);
-    }
+	public ScriptScanner(String filter) {
+		this(filter, MATCH_NAME, ENDERS);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public ScriptScanner(String filter, String[] nameOfTagToMatch, String[] enders) {
+		this(filter, nameOfTagToMatch, enders, new String[0], true, true);
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new ScriptTag(tagData, compositeTagData);
-    }
+	public ScriptScanner(String filter, String[] nameOfTagToMatch, String[] enders, String[] endtagenders,
+			boolean allowSelfChildren, boolean balance_quotes) {
+		super(filter, nameOfTagToMatch, enders, new String[0], allowSelfChildren, balance_quotes);
+	}
+
+	public String[] getID() {
+		return MATCH_NAME;
+	}
+
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new ScriptTag(tagData, compositeTagData);
+	}
 }

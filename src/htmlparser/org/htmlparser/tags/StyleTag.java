@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
@@ -38,39 +37,43 @@ import org.htmlparser.tags.data.TagData;
 /**
  * A HTMLStyleTag represents a &lt;style&gt; tag
  */
-public class StyleTag extends CompositeTag
-{
-    /**
-     * The HTMLStyleTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param nodeBegin beginning position of the tag
-     * @param nodeEnd ending position of the tag
-     * @param styleCode The style code b/w the tags
-     * @param tagLine The current line being parsed, where the tag was found	 
-     */
-    public StyleTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        super(tagData, compositeTagData);
-    }
-    /**
-     * Get the javascript code in this tag
-     * @return java.lang.String
-     */
-    public java.lang.String getStyleCode()
-    {
-        return getChildrenHTML();
-    }
-    /**
-     * Print the contents of the javascript node
-     */
-    public String toString()
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Style Node : \n");
-        sb.append("\n");
-        sb.append("Code\n");
-        sb.append("****\n");
-        sb.append(tagContents + "\n");
-        return sb.toString();
-    }
+public class StyleTag extends CompositeTag {
+	/**
+	 * The HTMLStyleTag is constructed by providing the beginning posn, ending
+	 * posn and the tag contents.
+	 * 
+	 * @param nodeBegin
+	 *            beginning position of the tag
+	 * @param nodeEnd
+	 *            ending position of the tag
+	 * @param styleCode
+	 *            The style code b/w the tags
+	 * @param tagLine
+	 *            The current line being parsed, where the tag was found
+	 */
+	public StyleTag(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData, compositeTagData);
+	}
+
+	/**
+	 * Get the javascript code in this tag
+	 * 
+	 * @return java.lang.String
+	 */
+	public java.lang.String getStyleCode() {
+		return getChildrenHTML();
+	}
+
+	/**
+	 * Print the contents of the javascript node
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Style Node : \n");
+		sb.append("\n");
+		sb.append("Code\n");
+		sb.append("****\n");
+		sb.append(tagContents + "\n");
+		return sb.toString();
+	}
 }

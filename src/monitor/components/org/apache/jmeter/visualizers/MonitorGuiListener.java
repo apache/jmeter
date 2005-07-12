@@ -16,8 +16,8 @@
  */
 package org.apache.jmeter.visualizers;
 
-public interface MonitorGuiListener
-{
+public interface MonitorGuiListener {
 	void updateGui(MonitorModel event);
+
 	void updateGui();
 }

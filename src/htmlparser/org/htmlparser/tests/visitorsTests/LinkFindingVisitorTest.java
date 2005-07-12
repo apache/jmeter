@@ -29,30 +29,25 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.visitorsTests;
 
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.LinkFindingVisitor;
 
-public class LinkFindingVisitorTest extends ParserTestCase
-{
-    private String html =
-        "<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, <A href=\"http://www.industriallogic.com\">Industrial Logic</a></BODY></HTML>";
+public class LinkFindingVisitorTest extends ParserTestCase {
+	private String html = "<HTML><HEAD><TITLE>This is the Title</TITLE></HEAD><BODY>Hello World, <A href=\"http://www.industriallogic.com\">Industrial Logic</a></BODY></HTML>";
 
-    public LinkFindingVisitorTest(String name)
-    {
-        super(name);
-    }
+	public LinkFindingVisitorTest(String name) {
+		super(name);
+	}
 
-    public void testLinkFoundCorrectly() throws Exception
-    {
-        createParser(html);
-        parser.registerScanners();
-        LinkFindingVisitor visitor = new LinkFindingVisitor("Industrial Logic");
-        parser.visitAllNodesWith(visitor);
-        assertTrue("Found Industrial Logic Link", visitor.linkTextFound());
-        assertEquals("Link Count", 1, visitor.getCount());
-    }
+	public void testLinkFoundCorrectly() throws Exception {
+		createParser(html);
+		parser.registerScanners();
+		LinkFindingVisitor visitor = new LinkFindingVisitor("Industrial Logic");
+		parser.visitAllNodesWith(visitor);
+		assertTrue("Found Industrial Logic Link", visitor.linkTextFound());
+		assertEquals("Link Count", 1, visitor.getCount());
+	}
 
 }

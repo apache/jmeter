@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 
 /**
  * @author pete
- *
+ * 
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
@@ -44,76 +44,79 @@ public class Publisher {
 	static Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
+
 	private TopicSession SESSION = null;
+
 	private Topic TOPIC = null;
+
 	private TopicPublisher PUBLISHER = null;
+
 	private byte[] RESULT = null;
+
 	private Object OBJ_RESULT = null;
 
-    /**
-     * 
-     */
-    public Publisher(boolean useProps, String jndi, String url, String connfactory,
-	String topic, String useAuth, String user, String pwd){
-        super();
-        Context ctx = initJNDI(useProps,jndi,url,useAuth,user,pwd);
-        if (ctx != null){
-			initConnection(ctx,connfactory,topic);
-        } else {
-        	log.equals("Could not initialize JNDI Initial Context Factory");
-        }
-    }
-
-	public Context initJNDI(boolean useProps, String jndi, 
-	  String url, String useAuth, String user, String pwd){
-	  	if (useProps){
-	  		try {
-				return new InitialContext();
-	  		} catch (NamingException e){
-	  			log.error(e.getMessage());
-	  			return null;
-	  		}
-	  	} else {
-			return InitialContextFactory.lookupContext(jndi,url,useAuth,user,pwd);
-	  	}
+	/**
+	 * 
+	 */
+	public Publisher(boolean useProps, String jndi, String url, String connfactory, String topic, String useAuth,
+			String user, String pwd) {
+		super();
+		Context ctx = initJNDI(useProps, jndi, url, useAuth, user, pwd);
+		if (ctx != null) {
+			initConnection(ctx, connfactory, topic);
+		} else {
+			log.equals("Could not initialize JNDI Initial Context Factory");
+		}
 	}
-    
-	public void initConnection(Context ctx, String connfactory, String topic){
+
+	public Context initJNDI(boolean useProps, String jndi, String url, String useAuth, String user, String pwd) {
+		if (useProps) {
+			try {
+				return new InitialContext();
+			} catch (NamingException e) {
+				log.error(e.getMessage());
+				return null;
+			}
+		} else {
+			return InitialContextFactory.lookupContext(jndi, url, useAuth, user, pwd);
+		}
+	}
+
+	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
-			TopicConnectionFactory connfac =
-				ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
+			TopicConnectionFactory connfac = ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
-			this.TOPIC = InitialContextFactory.lookupTopic(ctx,topic);
-			this.SESSION = this.CONN.createTopicSession(false,TopicSession.AUTO_ACKNOWLEDGE);
+			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
+			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
 			this.PUBLISHER = this.SESSION.createPublisher(this.TOPIC);
 			log.info("created the topic connection successfully");
-		} catch (JMSException e){
+		} catch (JMSException e) {
 			log.error("Connection error: " + e.getMessage());
 		}
 	}
 
-	public void publish(String text){
+	public void publish(String text) {
 		try {
 			TextMessage msg = this.SESSION.createTextMessage(text);
 			this.PUBLISHER.publish(msg);
-		} catch (JMSException e){
+		} catch (JMSException e) {
 			log.error(e.getMessage());
 		}
 	}
-	
-	public void publish(Serializable contents){
+
+	public void publish(Serializable contents) {
 		try {
 			ObjectMessage msg = this.SESSION.createObjectMessage(contents);
 			this.PUBLISHER.publish(msg);
-		} catch (JMSException e){
+		} catch (JMSException e) {
 			log.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Clise will close the session
 	 */
-	public void close(){
+	public void close() {
 		try {
 			log.info("Publisher closed");
 			this.PUBLISHER.close();
@@ -123,9 +126,9 @@ public class Publisher {
 			this.SESSION = null;
 			this.CONN = null;
 			this.finalize();
-		} catch (JMSException e){
+		} catch (JMSException e) {
 			log.error(e.getMessage());
-		} catch (Throwable e){
+		} catch (Throwable e) {
 			log.error(e.getMessage());
 		}
 	}

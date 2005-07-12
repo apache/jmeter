@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.testelement.property;
 
@@ -24,82 +24,75 @@ import org.apache.jorphan.util.JOrphanUtils;
 /**
  * @version $Revision$
  */
-public class BooleanProperty extends AbstractProperty
-{
-    boolean value; //TODO: should these be private?
-    transient boolean savedValue;
-    
-    public BooleanProperty(String name,boolean v)
-    {
-        super(name);
-        value = v;
-    }
-    
-    public BooleanProperty()
-    {
-        super();
-    }
-    
-    public void setObjectValue(Object v)
-    {
-        if(v instanceof Boolean)
-        {
-            value = ((Boolean)v).booleanValue();
-        }
-        else
-        {
-            value = Boolean.valueOf(v.toString()).booleanValue();
-        }
-    }
+public class BooleanProperty extends AbstractProperty {
+	boolean value; // TODO: should these be private?
 
-    /**
-     * @see JMeterProperty#getStringValue()
-     */
-    public String getStringValue()
-    {
-        return JOrphanUtils.booleanToString(value);
-    }
+	transient boolean savedValue;
 
-    /**
-     * @see JMeterProperty#getObjectValue()
-     */
-    public Object getObjectValue()
-    {
-        return JOrphanUtils.valueOf(value);
-    }
+	public BooleanProperty(String name, boolean v) {
+		super(name);
+		value = v;
+	}
 
-    /**
-     * @see Object#clone()
-     */
-    public Object clone()
-    {
-        BooleanProperty prop = (BooleanProperty)super.clone();
-        prop.value = value;
-        return prop;
-    }
+	public BooleanProperty() {
+		super();
+	}
 
-    /**
-     * @see JMeterProperty#getBooleanValue()
-     */
-    public boolean getBooleanValue()
-    {
-        return value;
-    }
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
-     */
-    public void setRunningVersion(boolean runningVersion)
-    {
-        savedValue = value;
-        super.setRunningVersion(runningVersion);
-    }
+	public void setObjectValue(Object v) {
+		if (v instanceof Boolean) {
+			value = ((Boolean) v).booleanValue();
+		} else {
+			value = Boolean.valueOf(v.toString()).booleanValue();
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
-     */
-    public void recoverRunningVersion(TestElement owner)
-    {
-        value = savedValue;
-    }
+	/**
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		return JOrphanUtils.booleanToString(value);
+	}
+
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return JOrphanUtils.valueOf(value);
+	}
+
+	/**
+	 * @see Object#clone()
+	 */
+	public Object clone() {
+		BooleanProperty prop = (BooleanProperty) super.clone();
+		prop.value = value;
+		return prop;
+	}
+
+	/**
+	 * @see JMeterProperty#getBooleanValue()
+	 */
+	public boolean getBooleanValue() {
+		return value;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		savedValue = value;
+		super.setRunningVersion(runningVersion);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		value = savedValue;
+	}
 
 }
