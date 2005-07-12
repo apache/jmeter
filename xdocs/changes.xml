@@ -30,10 +30,12 @@
 <h3>Version 2.1</h3>
 <h4>New functionality:</h4>
 <ul>
+<li>New Test Script file format - smaller, more compact, more readable</li>
+<li>New Sample Result file format - smaller, more compact</li>
 <li>XSchema Assertion</li>
 <li>XML Tree display</li>
-<li>New JMX and Results format. Previous formats still available.</li>
 <li>CSV DataSet Config item</li>
+<li>New JDBC Connection Pool Config Element</li>
 <li>Synchronisation Timer</li>
 <li>setProperty function</li>
 <li>Save response data on error</li>
