@@ -220,23 +220,23 @@ public class SaveService {
 
 	private static void checkVersions() {
 		versionsOK = true;
-		checkVersion(BooleanPropertyConverter.class, "1.4");
-		checkVersion(HashTreeConverter.class, "1.2");
-		checkVersion(IntegerPropertyConverter.class, "1.3");
-		checkVersion(LongPropertyConverter.class, "1.3");
-		checkVersion(MultiPropertyConverter.class, "1.3");
-		checkVersion(SampleResultConverter.class, "1.8");
+		checkVersion(BooleanPropertyConverter.class, "1.5");
+		checkVersion(HashTreeConverter.class, "1.3");
+		checkVersion(IntegerPropertyConverter.class, "1.4");
+		checkVersion(LongPropertyConverter.class, "1.4");
+		checkVersion(MultiPropertyConverter.class, "1.4");
+		checkVersion(SampleResultConverter.class, "1.9");
 		/*
 		 * Should check this, but tricky to do, because not built until later.
 		 * 
 		 * checkVersion(HTTPResultConverter.class, "1.6");
 		 * 
 		 */
-		checkVersion(StringPropertyConverter.class, "1.6");
-		checkVersion(TestElementConverter.class, "1.3");
-		checkVersion(TestElementPropertyConverter.class, "1.6");
-		checkVersion(ScriptWrapperConverter.class, "1.5");
-		checkVersion(TestResultWrapperConverter.class, "1.4");
+		checkVersion(StringPropertyConverter.class, "1.7");
+		checkVersion(TestElementConverter.class, "1.4");
+		checkVersion(TestElementPropertyConverter.class, "1.7");
+		checkVersion(ScriptWrapperConverter.class, "1.6");
+		checkVersion(TestResultWrapperConverter.class, "1.5");
 		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Property file - expected " + PROPVERSION + ", found " + propertiesVersion);
 		}
