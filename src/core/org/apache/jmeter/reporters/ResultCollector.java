@@ -63,461 +63,444 @@ import org.xml.sax.SAXException;
 
 /**
  */
-public class ResultCollector extends AbstractListenerElement implements
-        SampleListener, Clearable, Serializable, TestListener, Remoteable,
-        NoThreadClone {
-    static final long serialVersionUID = 2;
+public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
+		TestListener, Remoteable, NoThreadClone {
+	static final long serialVersionUID = 2;
 
-    private static final String TESTRESULTS_START = "<testResults>";
-    private static final String TESTRESULTS_START_V1_1 = "<testResults version=\""
-        +SaveService.version
-        +"\">";
+	private static final String TESTRESULTS_START = "<testResults>";
 
-    private static final String TESTRESULTS_END = "</testResults>";
+	private static final String TESTRESULTS_START_V1_1 = "<testResults version=\"" + SaveService.version + "\">";
 
-    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	private static final String TESTRESULTS_END = "</testResults>";
 
-    private static final int MIN_XML_FILE_LEN = XML_HEADER.length()
-            + TESTRESULTS_START.length() + TESTRESULTS_END.length();
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
+			+ TESTRESULTS_END.length();
 
-    public final static String FILENAME = "filename";
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public final static String SAVE_CONFIG = "saveConfig";
+	public final static String FILENAME = "filename";
 
-    public static final String ERROR_LOGGING = "ResultCollector.error_logging";
+	public final static String SAVE_CONFIG = "saveConfig";
 
-    // protected List results = Collections.synchronizedList(new ArrayList());
-    // private int current;
-    transient private DefaultConfigurationSerializer serializer;
+	public static final String ERROR_LOGGING = "ResultCollector.error_logging";
 
-    // private boolean inLoading = false;
-    transient private volatile PrintWriter out;
+	// protected List results = Collections.synchronizedList(new ArrayList());
+	// private int current;
+	transient private DefaultConfigurationSerializer serializer;
 
-    private boolean inTest = false;
+	// private boolean inLoading = false;
+	transient private volatile PrintWriter out;
 
-    private static Map files = new HashMap();
+	private boolean inTest = false;
 
-    private Set hosts = new HashSet();
+	private static Map files = new HashMap();
 
-    protected boolean isStats = false;
+	private Set hosts = new HashSet();
 
-    /**
-     * No-arg constructor.
-     */
-    public ResultCollector() {
-        // current = -1;
-        // serializer = new DefaultConfigurationSerializer();
-        setErrorLogging(false);
-        setProperty(new ObjectProperty(SAVE_CONFIG,
-                new SampleSaveConfiguration()));
-    }
+	protected boolean isStats = false;
 
-    private void setFilenameProperty(String f) {
-        setProperty(FILENAME, f);
-    }
+	/**
+	 * No-arg constructor.
+	 */
+	public ResultCollector() {
+		// current = -1;
+		// serializer = new DefaultConfigurationSerializer();
+		setErrorLogging(false);
+		setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
+	}
 
-    public String getFilename() {
-        return getPropertyAsString(FILENAME);
-    }
+	private void setFilenameProperty(String f) {
+		setProperty(FILENAME, f);
+	}
 
-    public boolean isErrorLogging() {
-        return getPropertyAsBoolean(ERROR_LOGGING);
-    }
+	public String getFilename() {
+		return getPropertyAsString(FILENAME);
+	}
 
-    public void setErrorLogging(boolean errorLogging) {
-        setProperty(new BooleanProperty(ERROR_LOGGING, errorLogging));
-    }
+	public boolean isErrorLogging() {
+		return getPropertyAsBoolean(ERROR_LOGGING);
+	}
 
-    /**
-     * Sets the filename attribute of the ResultCollector object.
-     * 
-     * @param f
-     *            the new filename value
-     */
-    public void setFilename(String f) {
-        if (inTest) {
-            return;
-        }
-        setFilenameProperty(f);
-    }
+	public void setErrorLogging(boolean errorLogging) {
+		setProperty(new BooleanProperty(ERROR_LOGGING, errorLogging));
+	}
 
-    public void testEnded(String host) {
-        hosts.remove(host);
-        if (hosts.size() == 0) {
-            finalizeFileOutput();
-            inTest = false;
-        }
-    }
+	/**
+	 * Sets the filename attribute of the ResultCollector object.
+	 * 
+	 * @param f
+	 *            the new filename value
+	 */
+	public void setFilename(String f) {
+		if (inTest) {
+			return;
+		}
+		setFilenameProperty(f);
+	}
 
-    public void testStarted(String host) {
-        hosts.add(host);
-        try {
-            initializeFileOutput();
-            if (getVisualizer() != null) {
-                this.isStats = getVisualizer().isStats();
-            }
-        } catch (Exception e) {
-            log.error("", e);
-        }
-        inTest = true;
-    }
+	public void testEnded(String host) {
+		hosts.remove(host);
+		if (hosts.size() == 0) {
+			finalizeFileOutput();
+			inTest = false;
+		}
+	}
 
-    public void testEnded() {
-        testEnded("local");
-    }
+	public void testStarted(String host) {
+		hosts.add(host);
+		try {
+			initializeFileOutput();
+			if (getVisualizer() != null) {
+				this.isStats = getVisualizer().isStats();
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+		inTest = true;
+	}
 
-    public void testStarted() {
-        testStarted("local");
-    }
+	public void testEnded() {
+		testEnded("local");
+	}
 
-    public void loadExistingFile() throws IOException {
-        // inLoading = true;
-        boolean parsedOK = false;
-        if (new File(getFilename()).exists()) {
-            clearVisualizer();
-            BufferedReader dataReader = null;
-            try {
-                readSamples(SaveService
-                        .loadTestResults(new BufferedInputStream(
-                                new FileInputStream(getFilename()))));
-                parsedOK = true;
-            } catch (Exception e) {
-                log.warn("File load failure, trying old data format.");
-                try {
-                    Configuration savedSamples = getConfiguration(getFilename());
-                    Configuration[] samples = savedSamples.getChildren();
-                    for (int i = 0; i < samples.length; i++) {
-                        SampleResult result = OldSaveService
-                                .getSampleResult(samples[i]);
-                        sendToVisualizer(result);
-                    }
-                } catch (Exception e1) {
-                    log.warn("Error parsing XML results " + e);
-                    log.info("Assuming CSV format instead");
-                    dataReader = new BufferedReader(new FileReader(
-                            getFilename()));
-                    String line;
-                    while ((line = dataReader.readLine()) != null) {
-                        sendToVisualizer(OldSaveService
-                                .makeResultFromDelimitedString(line));
-                    }
-                    parsedOK = true;
-                }
-            } finally {
-                if (dataReader != null)
-                    dataReader.close();
-                if (!parsedOK) {
-                    SampleResult sr = new SampleResult();
-                    sr
-                            .setSampleLabel("Error loading results file - see log file");
-                    sendToVisualizer(sr);
-                }
-            }
-        }
-        // inLoading = false;
-    }
+	public void testStarted() {
+		testStarted("local");
+	}
 
-    private static void writeFileStart(PrintWriter writer,
-            SampleSaveConfiguration saveConfig) {
-        if (saveConfig.saveAsXml()) {
-            writer.println(XML_HEADER);
-            writer.println(TESTRESULTS_START_V1_1);
-        } else if (saveConfig.saveFieldNames()) {
-            writer.println(OldSaveService.printableFieldNamesToString());
-        }
-    }
+	public void loadExistingFile() throws IOException {
+		// inLoading = true;
+		boolean parsedOK = false;
+		if (new File(getFilename()).exists()) {
+			clearVisualizer();
+			BufferedReader dataReader = null;
+			try {
+				readSamples(SaveService.loadTestResults(new BufferedInputStream(new FileInputStream(getFilename()))));
+				parsedOK = true;
+			} catch (Exception e) {
+				log.warn("File load failure, trying old data format.");
+				try {
+					Configuration savedSamples = getConfiguration(getFilename());
+					Configuration[] samples = savedSamples.getChildren();
+					for (int i = 0; i < samples.length; i++) {
+						SampleResult result = OldSaveService.getSampleResult(samples[i]);
+						sendToVisualizer(result);
+					}
+				} catch (Exception e1) {
+					log.warn("Error parsing XML results " + e);
+					log.info("Assuming CSV format instead");
+					dataReader = new BufferedReader(new FileReader(getFilename()));
+					String line;
+					while ((line = dataReader.readLine()) != null) {
+						sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
+					}
+					parsedOK = true;
+				}
+			} finally {
+				if (dataReader != null)
+					dataReader.close();
+				if (!parsedOK) {
+					SampleResult sr = new SampleResult();
+					sr.setSampleLabel("Error loading results file - see log file");
+					sendToVisualizer(sr);
+				}
+			}
+		}
+		// inLoading = false;
+	}
 
-    private static void writeFileEnd(PrintWriter pw,
-            SampleSaveConfiguration saveConfig) {
-        if (saveConfig.saveAsXml()) {
-            pw.print("\n");
-            pw.print(TESTRESULTS_END);
-            pw.print("\n");// Added in version 1.1
-        }
-    }
+	private static void writeFileStart(PrintWriter writer, SampleSaveConfiguration saveConfig) {
+		if (saveConfig.saveAsXml()) {
+			writer.println(XML_HEADER);
+			writer.println(TESTRESULTS_START_V1_1);
+		} else if (saveConfig.saveFieldNames()) {
+			writer.println(OldSaveService.printableFieldNamesToString());
+		}
+	}
 
-    private static synchronized PrintWriter getFileWriter(String filename,
-            SampleSaveConfiguration saveConfig) throws IOException {
-        if (filename == null || filename.length() == 0) {
-            return null;
-        }
-        PrintWriter writer = (PrintWriter) files.get(filename);
-        boolean trimmed = true;
+	private static void writeFileEnd(PrintWriter pw, SampleSaveConfiguration saveConfig) {
+		if (saveConfig.saveAsXml()) {
+			pw.print("\n");
+			pw.print(TESTRESULTS_END);
+			pw.print("\n");// Added in version 1.1
+		}
+	}
 
-        if (writer == null) {
-            if (saveConfig.saveAsXml()) {
-                trimmed = trimLastLine(filename);
-            } else {
-            	trimmed = new File(filename).exists();
-            }
-            // Find the name of the directory containing the file
-            // and create it - if there is one
-            File pdir = new File(filename).getParentFile();
-            if (pdir != null)
-                pdir.mkdirs();
-            writer = new PrintWriter(new OutputStreamWriter(
-                    new BufferedOutputStream(new FileOutputStream(filename,
-                            trimmed)), "UTF-8"), true);
-            files.put(filename, writer);
-        }
-        if (!trimmed) {
-            writeFileStart(writer, saveConfig);
-        }
-        return writer;
-    }
+	private static synchronized PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
+			throws IOException {
+		if (filename == null || filename.length() == 0) {
+			return null;
+		}
+		PrintWriter writer = (PrintWriter) files.get(filename);
+		boolean trimmed = true;
 
-    // returns false if the file did not contain the terminator
-    private static boolean trimLastLine(String filename) {
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(filename, "rw");
-            long len = raf.length();
-            if (len < MIN_XML_FILE_LEN) {
-                return false;
-            }
-            raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not work on all OSes?
-            String line;
-            long pos = raf.getFilePointer();
-            int end = 0;
-            while ((line = raf.readLine()) != null)// reads to end of line OR file
-            {
-                end = line.indexOf(TESTRESULTS_END);
-                if (end >= 0) // found the string
-                {
-                    break;
-                }
-                pos = raf.getFilePointer();
-            }
-            if (line == null) {
-                log.warn("Unexpected EOF trying to find XML end marker in "
-                        + filename);
-                raf.close();
-                return false;
-            }
-            raf.setLength(pos + end);// Truncate the file
-            raf.close();
-            raf=null;
-        } catch (FileNotFoundException e) {
-            return false;
-        } catch (IOException e) {
-            log.warn("Error trying to find XML terminator " + e.toString());
-            return false;
-        }
-        finally {
-            try {
-                if (raf != null)
-                    raf.close();
-            } catch (IOException e1) {
-            	log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
-            }        	
-        }
-        return true;
-    }
+		if (writer == null) {
+			if (saveConfig.saveAsXml()) {
+				trimmed = trimLastLine(filename);
+			} else {
+				trimmed = new File(filename).exists();
+			}
+			// Find the name of the directory containing the file
+			// and create it - if there is one
+			File pdir = new File(filename).getParentFile();
+			if (pdir != null)
+				pdir.mkdirs();
+			writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
+					trimmed)), "UTF-8"), true);
+			files.put(filename, writer);
+		}
+		if (!trimmed) {
+			writeFileStart(writer, saveConfig);
+		}
+		return writer;
+	}
 
-    /**
-     * Gets the serializedSampleResult attribute of the ResultCollector object.
-     * 
-     * @param result
-     *            description of the Parameter
-     * @return the serializedSampleResult value
-     */
-    // NOTUSED
-    // private String getSerializedSampleResult(SampleResult result)
-    // throws SAXException, IOException, ConfigurationException
-    // {
-    // ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-    //
-    // serializer.serialize(tempOut, OldSaveService.getConfiguration(result,
-    // getFunctionalMode()));
-    // String serVer = tempOut.toString();
-    //
-    // return serVer.substring(serVer.indexOf(System
-    // .getProperty("line.separator")));
-    // }
-    private void readSamples(TestResultWrapper testResults) throws Exception {
-        Collection samples = testResults.getSampleResults();
-        Iterator iter = samples.iterator();
-        while (iter.hasNext()) {
-            SampleResult result = (SampleResult) iter.next();
-            sendToVisualizer(result);
-        }
-    }
+	// returns false if the file did not contain the terminator
+	private static boolean trimLastLine(String filename) {
+		RandomAccessFile raf = null;
+		try {
+			raf = new RandomAccessFile(filename, "rw");
+			long len = raf.length();
+			if (len < MIN_XML_FILE_LEN) {
+				return false;
+			}
+			raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not
+															// work on all OSes?
+			String line;
+			long pos = raf.getFilePointer();
+			int end = 0;
+			while ((line = raf.readLine()) != null)// reads to end of line OR
+													// file
+			{
+				end = line.indexOf(TESTRESULTS_END);
+				if (end >= 0) // found the string
+				{
+					break;
+				}
+				pos = raf.getFilePointer();
+			}
+			if (line == null) {
+				log.warn("Unexpected EOF trying to find XML end marker in " + filename);
+				raf.close();
+				return false;
+			}
+			raf.setLength(pos + end);// Truncate the file
+			raf.close();
+			raf = null;
+		} catch (FileNotFoundException e) {
+			return false;
+		} catch (IOException e) {
+			log.warn("Error trying to find XML terminator " + e.toString());
+			return false;
+		} finally {
+			try {
+				if (raf != null)
+					raf.close();
+			} catch (IOException e1) {
+				log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
+			}
+		}
+		return true;
+	}
 
-    /**
-     * Gets the configuration attribute of the ResultCollector object.
-     * 
-     * @return the configuration value
-     */
-    private Configuration getConfiguration(String filename)
-            throws SAXException, IOException, ConfigurationException {
-        DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+	/**
+	 * Gets the serializedSampleResult attribute of the ResultCollector object.
+	 * 
+	 * @param result
+	 *            description of the Parameter
+	 * @return the serializedSampleResult value
+	 */
+	// NOTUSED
+	// private String getSerializedSampleResult(SampleResult result)
+	// throws SAXException, IOException, ConfigurationException
+	// {
+	// ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+	//
+	// serializer.serialize(tempOut, OldSaveService.getConfiguration(result,
+	// getFunctionalMode()));
+	// String serVer = tempOut.toString();
+	//
+	// return serVer.substring(serVer.indexOf(System
+	// .getProperty("line.separator")));
+	// }
+	private void readSamples(TestResultWrapper testResults) throws Exception {
+		Collection samples = testResults.getSampleResults();
+		Iterator iter = samples.iterator();
+		while (iter.hasNext()) {
+			SampleResult result = (SampleResult) iter.next();
+			sendToVisualizer(result);
+		}
+	}
 
-        return builder.buildFromFile(filename);
-    }
+	/**
+	 * Gets the configuration attribute of the ResultCollector object.
+	 * 
+	 * @return the configuration value
+	 */
+	private Configuration getConfiguration(String filename) throws SAXException, IOException, ConfigurationException {
+		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 
-    public void clearVisualizer() {
-        // current = -1;
-        if (getVisualizer() != null && getVisualizer() instanceof Clearable) {
-            ((Clearable) getVisualizer()).clear();
-        }
-        finalizeFileOutput();
-    }
+		return builder.buildFromFile(filename);
+	}
 
-    // public void setListener(Object l)
-    // {
-    // }
+	public void clearVisualizer() {
+		// current = -1;
+		if (getVisualizer() != null && getVisualizer() instanceof Clearable) {
+			((Clearable) getVisualizer()).clear();
+		}
+		finalizeFileOutput();
+	}
 
-    public void sampleStarted(SampleEvent e) {
-    }
+	// public void setListener(Object l)
+	// {
+	// }
 
-    public void sampleStopped(SampleEvent e) {
-    }
+	public void sampleStarted(SampleEvent e) {
+	}
 
-    /**
-     * When a test result is received, display it and save it.
-     * 
-     * @param e
-     *            the sample event that was received
-     */
-    public void sampleOccurred(SampleEvent e) {
-        SampleResult result = e.getResult();
+	public void sampleStopped(SampleEvent e) {
+	}
 
-        if (!isErrorLogging() || !result.isSuccessful()) {
-            sendToVisualizer(result);
+	/**
+	 * When a test result is received, display it and save it.
+	 * 
+	 * @param e
+	 *            the sample event that was received
+	 */
+	public void sampleOccurred(SampleEvent e) {
+		SampleResult result = e.getResult();
 
-            SampleSaveConfiguration config = getSaveConfig();
-            result.setSaveConfig(config);
+		if (!isErrorLogging() || !result.isSuccessful()) {
+			sendToVisualizer(result);
 
-            try {
-                if (!config.saveAsXml()) {
-                    if (out != null) {
-                        String savee = OldSaveService
-                                .resultToDelimitedString(result);
-                        out.println(savee);
-                    }
-                }
-                // Save results as XML
-                else {
-                    recordResult(result);
-                }
-            } catch (Exception err) {
-                log.error("", err); // should throw exception back to caller
-            }
-        }
-    }
+			SampleSaveConfiguration config = getSaveConfig();
+			result.setSaveConfig(config);
 
-    protected void sendToVisualizer(SampleResult r) {
-        if (getVisualizer() != null) {
-            getVisualizer().add(r);
-        }
-    }
+			try {
+				if (!config.saveAsXml()) {
+					if (out != null) {
+						String savee = OldSaveService.resultToDelimitedString(result);
+						out.println(savee);
+					}
+				}
+				// Save results as XML
+				else {
+					recordResult(result);
+				}
+			} catch (Exception err) {
+				log.error("", err); // should throw exception back to caller
+			}
+		}
+	}
 
-    private void recordResult(SampleResult result) throws Exception {
-        if (out != null) {
-            if (!isResultMarked(result) && !this.isStats) {
-                if (SaveService.isSaveTestLogFormat20())
-                {
-                    if (serializer == null)
-                        serializer = new DefaultConfigurationSerializer();
-                    out.write(getSerializedSampleResult(result));
-                } else {
-                    SaveService.saveSampleResult(result, out);
-                }
-            }
-        }
-    }
+	protected void sendToVisualizer(SampleResult r) {
+		if (getVisualizer() != null) {
+			getVisualizer().add(r);
+		}
+	}
 
-    private String getSerializedSampleResult(SampleResult result)
-            throws SAXException, IOException, ConfigurationException {
-        ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+	private void recordResult(SampleResult result) throws Exception {
+		if (out != null) {
+			if (!isResultMarked(result) && !this.isStats) {
+				if (SaveService.isSaveTestLogFormat20()) {
+					if (serializer == null)
+						serializer = new DefaultConfigurationSerializer();
+					out.write(getSerializedSampleResult(result));
+				} else {
+					SaveService.saveSampleResult(result, out);
+				}
+			}
+		}
+	}
 
-        serializer.serialize(tempOut, OldSaveService.getConfiguration(result,
-                getSaveConfig()));
-        String serVer = tempOut.toString();
-        int index = serVer.indexOf(System.getProperty("line.separator"));
-        if (index > -1) {
-            return serVer.substring(index);
-        } else {
-            return serVer;
-        }
-    }
+	private String getSerializedSampleResult(SampleResult result) throws SAXException, IOException,
+			ConfigurationException {
+		ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
 
-    /**
-     * recordStats is used to save statistics generated by visualizers
-     * 
-     * @param e
-     * @throws Exception
-     */
-    public void recordStats(TestElement e) throws Exception {
-        if (out == null) {
-            initializeFileOutput();
-        }
-        if (out != null) {
-            SaveService.saveTestElement(e, out);
-        }
-    }
+		serializer.serialize(tempOut, OldSaveService.getConfiguration(result, getSaveConfig()));
+		String serVer = tempOut.toString();
+		int index = serVer.indexOf(System.getProperty("line.separator"));
+		if (index > -1) {
+			return serVer.substring(index);
+		} else {
+			return serVer;
+		}
+	}
 
-    private synchronized boolean isResultMarked(SampleResult res) {
-        String filename = getFilename();
-        boolean marked = res.isMarked(filename);
+	/**
+	 * recordStats is used to save statistics generated by visualizers
+	 * 
+	 * @param e
+	 * @throws Exception
+	 */
+	public void recordStats(TestElement e) throws Exception {
+		if (out == null) {
+			initializeFileOutput();
+		}
+		if (out != null) {
+			SaveService.saveTestElement(e, out);
+		}
+	}
 
-        if (!marked) {
-            res.setMarked(filename);
-        }
-        return marked;
-    }
+	private synchronized boolean isResultMarked(SampleResult res) {
+		String filename = getFilename();
+		boolean marked = res.isMarked(filename);
 
-    private void initializeFileOutput() throws IOException {
+		if (!marked) {
+			res.setMarked(filename);
+		}
+		return marked;
+	}
 
-        String filename = getFilename();
-        if (out == null && filename != null) {
-            if (out == null) {
-                try {
-                    out = getFileWriter(filename, getSaveConfig());
-                } catch (FileNotFoundException e) {
-                    out = null;
-                }
-            }
-        }
-    }
+	private void initializeFileOutput() throws IOException {
 
-    private synchronized void finalizeFileOutput() {
-        if (out != null) {
-            writeFileEnd(out, getSaveConfig());
-            out.close();
-            files.remove(getFilename());
-            out = null;
-        }
-    }
+		String filename = getFilename();
+		if (out == null && filename != null) {
+			if (out == null) {
+				try {
+					out = getFileWriter(filename, getSaveConfig());
+				} catch (FileNotFoundException e) {
+					out = null;
+				}
+			}
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-    }
+	private synchronized void finalizeFileOutput() {
+		if (out != null) {
+			writeFileEnd(out, getSaveConfig());
+			out.close();
+			files.remove(getFilename());
+			out = null;
+		}
+	}
 
-    /**
-     * @return Returns the saveConfig.
-     */
-    public SampleSaveConfiguration getSaveConfig() {
-        try {
-            return (SampleSaveConfiguration) getProperty(SAVE_CONFIG)
-                    .getObjectValue();
-        } catch (ClassCastException e) {
-            setSaveConfig(new SampleSaveConfiguration());
-            return getSaveConfig();
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testIterationStart(LoopIterationEvent)
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+	}
 
-    /**
-     * @param saveConfig
-     *            The saveConfig to set.
-     */
-    public void setSaveConfig(SampleSaveConfiguration saveConfig) {
-        getProperty(SAVE_CONFIG).setObjectValue(saveConfig);
-    }
+	/**
+	 * @return Returns the saveConfig.
+	 */
+	public SampleSaveConfiguration getSaveConfig() {
+		try {
+			return (SampleSaveConfiguration) getProperty(SAVE_CONFIG).getObjectValue();
+		} catch (ClassCastException e) {
+			setSaveConfig(new SampleSaveConfiguration());
+			return getSaveConfig();
+		}
+	}
+
+	/**
+	 * @param saveConfig
+	 *            The saveConfig to set.
+	 */
+	public void setSaveConfig(SampleSaveConfiguration saveConfig) {
+		getProperty(SAVE_CONFIG).setObjectValue(saveConfig);
+	}
 }

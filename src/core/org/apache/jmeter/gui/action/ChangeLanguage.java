@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
@@ -30,40 +31,38 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class ChangeLanguage implements Command
-{
-    private static final Set commands = new HashSet();
-    public final static String CHANGE_LANGUAGE = "change_language";
-    private Logger log = LoggingManager.getLoggerForClass();
+public class ChangeLanguage implements Command {
+	private static final Set commands = new HashSet();
 
-    static
-    {
-        commands.add(CHANGE_LANGUAGE);
-    }
-    
-    /**
-     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-     */
-    public void doAction(ActionEvent e)
-    {
-        String locale = ((Component) e.getSource()).getName();
-        Locale loc;
+	public final static String CHANGE_LANGUAGE = "change_language";
 
-        int sep = locale.indexOf('_');
-        if (sep>0) {
-            loc = new Locale(locale.substring(0,sep),locale.substring(sep+1));
-        } else {
-            loc = new Locale(locale, "");
-        }
-        log.debug("Changing locale to " + loc.toString());
-        JMeterUtils.setLocale(loc);
-    }
-    
-    /**
-     * @see org.apache.jmeter.gui.action.Command#getActionNames()
-     */
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	private Logger log = LoggingManager.getLoggerForClass();
+
+	static {
+		commands.add(CHANGE_LANGUAGE);
+	}
+
+	/**
+	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+	 */
+	public void doAction(ActionEvent e) {
+		String locale = ((Component) e.getSource()).getName();
+		Locale loc;
+
+		int sep = locale.indexOf('_');
+		if (sep > 0) {
+			loc = new Locale(locale.substring(0, sep), locale.substring(sep + 1));
+		} else {
+			loc = new Locale(locale, "");
+		}
+		log.debug("Changing locale to " + loc.toString());
+		JMeterUtils.setLocale(loc);
+	}
+
+	/**
+	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
+	 */
+	public Set getActionNames() {
+		return commands;
+	}
 }

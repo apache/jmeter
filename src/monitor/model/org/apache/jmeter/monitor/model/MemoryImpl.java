@@ -20,48 +20,42 @@ package org.apache.jmeter.monitor.model;
  * 
  * @version $Revision$ on $Date$
  */
-public class MemoryImpl implements Memory
-{
+public class MemoryImpl implements Memory {
 	private long max = 0;
+
 	private long free = 0;
+
 	private long total = 0;
-	
-    /**
-     * 
-     */
-    public MemoryImpl()
-    {
-        super();
-    }
 
-    public long getMax()
-    {
-        return this.max;
-    }
+	/**
+	 * 
+	 */
+	public MemoryImpl() {
+		super();
+	}
 
-    public void setMax(long value)
-    {
+	public long getMax() {
+		return this.max;
+	}
+
+	public void setMax(long value) {
 		this.max = value;
-    }
+	}
 
-    public long getFree()
-    {
-        return this.free;
-    }
+	public long getFree() {
+		return this.free;
+	}
 
-    public void setFree(long value)
-    {
+	public void setFree(long value) {
 		this.free = value;
-    }
+	}
 
-    public long getTotal()
-    {
-        return this.total;
-    }
+	public long getTotal() {
+		return this.total;
+	}
 
-    public void setTotal(long value)
-    {
+	public void setTotal(long value) {
 		this.total = value;
-    }
+	}
 
 }

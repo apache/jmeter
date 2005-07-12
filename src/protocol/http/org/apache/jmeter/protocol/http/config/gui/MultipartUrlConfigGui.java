@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.config.gui;
-
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -38,196 +37,174 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-
 /**
- * @author    Michael Stover
- * @version   $Revision$
+ * @author Michael Stover
+ * @version $Revision$
  */
-public class MultipartUrlConfigGui
-    extends UrlConfigGui
-    implements ActionListener
-{
+public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListener {
 
-    private JTextField filenameField;
-    private JTextField paramNameField;
-    private JTextField mimetypeField;
+	private JTextField filenameField;
 
-    private static String FILENAME = "filename";
-    private static String BROWSE = "browse";
-    private static String PARAMNAME = "paramname";
-    private static String MIMETYPE = "mimetype";
+	private JTextField paramNameField;
 
-    public MultipartUrlConfigGui()
-    {
-        super();
-    }
+	private JTextField mimetypeField;
 
-    public TestElement createTestElement()
-    {
-        TestElement ce = super.createTestElement();
+	private static String FILENAME = "filename";
 
-        configureTestElement(ce);
-        ce.setProperty(HTTPSamplerBase.MIMETYPE, mimetypeField.getText());
-        ce.setProperty(HTTPSamplerBase.FILE_NAME, filenameField.getText());
-        ce.setProperty(HTTPSamplerBase.FILE_FIELD, paramNameField.getText());
-        return ce;
-    }
+	private static String BROWSE = "browse";
 
-// does not appear to be used
-//    public void configureSampler(HTTPSamplerBase sampler)
-//    {
-//        sampler.setMimetype(mimetypeField.getText());
-//        sampler.setFileField(paramNameField.getText());
-//        sampler.setFilename(filenameField.getText());
-//        super.configureSampler(sampler);
-//    }
+	private static String PARAMNAME = "paramname";
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        mimetypeField.setText(el.getPropertyAsString(HTTPSamplerBase.MIMETYPE));
-        filenameField.setText(el.getPropertyAsString(HTTPSamplerBase.FILE_NAME));
-        paramNameField.setText(el.getPropertyAsString(HTTPSamplerBase.FILE_FIELD));
-    }
+	private static String MIMETYPE = "mimetype";
 
-    public String getLabelResource()
-    {
-        return "url_multipart_config_title";
-    }
+	public MultipartUrlConfigGui() {
+		super();
+	}
 
-    public void updateGui()
-    {}
+	public TestElement createTestElement() {
+		TestElement ce = super.createTestElement();
 
-    public void actionPerformed(ActionEvent e)
-    {
-        String name = e.getActionCommand();
+		configureTestElement(ce);
+		ce.setProperty(HTTPSamplerBase.MIMETYPE, mimetypeField.getText());
+		ce.setProperty(HTTPSamplerBase.FILE_NAME, filenameField.getText());
+		ce.setProperty(HTTPSamplerBase.FILE_FIELD, paramNameField.getText());
+		return ce;
+	}
 
-        if (name.equals(BROWSE))
-        {
-            JFileChooser chooser = FileDialoger.promptToOpenFile();
+	// does not appear to be used
+	// public void configureSampler(HTTPSamplerBase sampler)
+	// {
+	// sampler.setMimetype(mimetypeField.getText());
+	// sampler.setFileField(paramNameField.getText());
+	// sampler.setFilename(filenameField.getText());
+	// super.configureSampler(sampler);
+	// }
 
-            if (chooser == null)
-            {
-                return;
-            }
-            File file = chooser.getSelectedFile();
+	public void configure(TestElement el) {
+		super.configure(el);
+		mimetypeField.setText(el.getPropertyAsString(HTTPSamplerBase.MIMETYPE));
+		filenameField.setText(el.getPropertyAsString(HTTPSamplerBase.FILE_NAME));
+		paramNameField.setText(el.getPropertyAsString(HTTPSamplerBase.FILE_FIELD));
+	}
 
-            if (file != null)
-            {
-                filenameField.setText(file.getPath());
-            }
-        }
-    }
+	public String getLabelResource() {
+		return "url_multipart_config_title";
+	}
 
-    protected void init()
-    {
-        this.setLayout(new BorderLayout());
+	public void updateGui() {
+	}
 
-        // WEB SERVER PANEL
-        VerticalPanel webServerPanel = new VerticalPanel();
-        webServerPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("web_server")));
-        webServerPanel.add(getDomainPanel());
-        webServerPanel.add(getPortPanel());
+	public void actionPerformed(ActionEvent e) {
+		String name = e.getActionCommand();
 
-        JPanel northPanel = new JPanel();
-        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-        northPanel.add(getProtocolAndMethodPanel());
-        northPanel.add(getPathPanel());
+		if (name.equals(BROWSE)) {
+			JFileChooser chooser = FileDialoger.promptToOpenFile();
 
-        // WEB REQUEST PANEL
-        JPanel webRequestPanel = new JPanel();
-        webRequestPanel.setLayout(new BorderLayout());
-        webRequestPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("web_request")));
-        
-        webRequestPanel.add(northPanel,BorderLayout.NORTH);
-        webRequestPanel.add(getParameterPanel(),BorderLayout.CENTER);
-        webRequestPanel.add(getFilePanel(),BorderLayout.SOUTH );
-        
-        this.add(webServerPanel, BorderLayout.NORTH);
-        this.add(webRequestPanel, BorderLayout.CENTER);
-    }
+			if (chooser == null) {
+				return;
+			}
+			File file = chooser.getSelectedFile();
 
-    protected JPanel getFilePanel()
-    {
-        JPanel filePanel = new VerticalPanel();
-        filePanel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("send_file")));
+			if (file != null) {
+				filenameField.setText(file.getPath());
+			}
+		}
+	}
 
-        filePanel.add(createFilenamePanel());
-        filePanel.add(createFileParamNamePanel());
-        filePanel.add(createFileMimeTypePanel());
+	protected void init() {
+		this.setLayout(new BorderLayout());
 
-        return filePanel;
-    }
+		// WEB SERVER PANEL
+		VerticalPanel webServerPanel = new VerticalPanel();
+		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("web_server")));
+		webServerPanel.add(getDomainPanel());
+		webServerPanel.add(getPortPanel());
 
-    private JPanel createFileMimeTypePanel()
-    {
-        mimetypeField = new JTextField(15);
-        mimetypeField.setName(MIMETYPE);
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+		northPanel.add(getProtocolAndMethodPanel());
+		northPanel.add(getPathPanel());
 
-        JLabel mimetypeLabel =
-            new JLabel(JMeterUtils.getResString("send_file_mime_label"));
-        mimetypeLabel.setLabelFor(mimetypeField);
-        JPanel mimePanel = new JPanel(new BorderLayout(5, 0));
-        mimePanel.add(mimetypeLabel, BorderLayout.WEST);
-        mimePanel.add(mimetypeField, BorderLayout.CENTER);
-        return mimePanel;
-    }
+		// WEB REQUEST PANEL
+		JPanel webRequestPanel = new JPanel();
+		webRequestPanel.setLayout(new BorderLayout());
+		webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("web_request")));
 
-    private JPanel createFileParamNamePanel()
-    {
-        paramNameField = new JTextField(15);
-        paramNameField.setName(PARAMNAME);
+		webRequestPanel.add(northPanel, BorderLayout.NORTH);
+		webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
+		webRequestPanel.add(getFilePanel(), BorderLayout.SOUTH);
 
-        JLabel paramNameLabel =
-            new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
-        paramNameLabel.setLabelFor(paramNameField);
+		this.add(webServerPanel, BorderLayout.NORTH);
+		this.add(webRequestPanel, BorderLayout.CENTER);
+	}
 
-        JPanel paramNamePanel = new JPanel(new BorderLayout(5, 0));        
-        paramNamePanel.add(paramNameLabel, BorderLayout.WEST);
-        paramNamePanel.add(paramNameField, BorderLayout.CENTER);
-        return paramNamePanel;
-    }
+	protected JPanel getFilePanel() {
+		JPanel filePanel = new VerticalPanel();
+		filePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("send_file")));
 
-    private JPanel createFilenamePanel()
-    {
-        filenameField = new JTextField(15);
-        filenameField.setName(FILENAME);
+		filePanel.add(createFilenamePanel());
+		filePanel.add(createFileParamNamePanel());
+		filePanel.add(createFileMimeTypePanel());
 
-        JLabel filenameLabel =
-            new JLabel(JMeterUtils.getResString("send_file_filename_label"));
-        filenameLabel.setLabelFor(filenameField);
+		return filePanel;
+	}
 
-        JButton browseFileButton =
-            new JButton(JMeterUtils.getResString("send_file_browse"));
-        browseFileButton.setActionCommand(BROWSE);
-        browseFileButton.addActionListener(this);
-        
+	private JPanel createFileMimeTypePanel() {
+		mimetypeField = new JTextField(15);
+		mimetypeField.setName(MIMETYPE);
 
-        JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));        
-        filenamePanel.add(filenameLabel, BorderLayout.WEST);
-        filenamePanel.add(filenameField, BorderLayout.CENTER);
-        filenamePanel.add(browseFileButton, BorderLayout.EAST);
-        return filenamePanel;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.config.gui.UrlConfigGui#clear()
-     */
-    public void clear()
-    {
-        // TODO Auto-generated method stub
-        super.clear();
-        filenameField.setText("");
-        mimetypeField.setText("");
-        paramNameField.setText("");
-    }
+		JLabel mimetypeLabel = new JLabel(JMeterUtils.getResString("send_file_mime_label"));
+		mimetypeLabel.setLabelFor(mimetypeField);
+		JPanel mimePanel = new JPanel(new BorderLayout(5, 0));
+		mimePanel.add(mimetypeLabel, BorderLayout.WEST);
+		mimePanel.add(mimetypeField, BorderLayout.CENTER);
+		return mimePanel;
+	}
+
+	private JPanel createFileParamNamePanel() {
+		paramNameField = new JTextField(15);
+		paramNameField.setName(PARAMNAME);
+
+		JLabel paramNameLabel = new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
+		paramNameLabel.setLabelFor(paramNameField);
+
+		JPanel paramNamePanel = new JPanel(new BorderLayout(5, 0));
+		paramNamePanel.add(paramNameLabel, BorderLayout.WEST);
+		paramNamePanel.add(paramNameField, BorderLayout.CENTER);
+		return paramNamePanel;
+	}
+
+	private JPanel createFilenamePanel() {
+		filenameField = new JTextField(15);
+		filenameField.setName(FILENAME);
+
+		JLabel filenameLabel = new JLabel(JMeterUtils.getResString("send_file_filename_label"));
+		filenameLabel.setLabelFor(filenameField);
+
+		JButton browseFileButton = new JButton(JMeterUtils.getResString("send_file_browse"));
+		browseFileButton.setActionCommand(BROWSE);
+		browseFileButton.addActionListener(this);
+
+		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
+		filenamePanel.add(filenameLabel, BorderLayout.WEST);
+		filenamePanel.add(filenameField, BorderLayout.CENTER);
+		filenamePanel.add(browseFileButton, BorderLayout.EAST);
+		return filenamePanel;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.protocol.http.config.gui.UrlConfigGui#clear()
+	 */
+	public void clear() {
+		// TODO Auto-generated method stub
+		super.clear();
+		filenameField.setText("");
+		mimetypeField.setText("");
+		paramNameField.setText("");
+	}
 }

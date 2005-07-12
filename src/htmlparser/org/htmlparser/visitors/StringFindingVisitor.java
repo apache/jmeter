@@ -31,60 +31,50 @@
 // enough to assist JMeter.
 //
 // contributed by Joshua Kerievsky
-
 package org.htmlparser.visitors;
 
 import org.htmlparser.StringNode;
 
-public class StringFindingVisitor extends NodeVisitor
-{
-    private boolean stringFound = false;
-    private String stringToFind;
-    private int foundCount;
-    private boolean multipleSearchesWithinStrings;
+public class StringFindingVisitor extends NodeVisitor {
+	private boolean stringFound = false;
 
-    public StringFindingVisitor(String stringToFind)
-    {
-        this.stringToFind = stringToFind.toUpperCase();
-        foundCount = 0;
-        multipleSearchesWithinStrings = false;
-    }
+	private String stringToFind;
 
-    public void doMultipleSearchesWithinStrings()
-    {
-        multipleSearchesWithinStrings = true;
-    }
+	private int foundCount;
 
-    public void visitStringNode(StringNode stringNode)
-    {
-        String stringToBeSearched = stringNode.getText().toUpperCase();
-        if (!multipleSearchesWithinStrings
-            && stringToBeSearched.indexOf(stringToFind) != -1)
-        {
-            stringFound = true;
-            foundCount++;
-        }
-        else if (multipleSearchesWithinStrings)
-        {
-            int index = -1;
-            do
-            {
-                index = stringToBeSearched.indexOf(stringToFind, index + 1);
-                if (index != -1)
-                    foundCount++;
-            }
-            while (index != -1);
-        }
-    }
+	private boolean multipleSearchesWithinStrings;
 
-    public boolean stringWasFound()
-    {
-        return stringFound;
-    }
+	public StringFindingVisitor(String stringToFind) {
+		this.stringToFind = stringToFind.toUpperCase();
+		foundCount = 0;
+		multipleSearchesWithinStrings = false;
+	}
 
-    public int stringFoundCount()
-    {
-        return foundCount;
-    }
+	public void doMultipleSearchesWithinStrings() {
+		multipleSearchesWithinStrings = true;
+	}
+
+	public void visitStringNode(StringNode stringNode) {
+		String stringToBeSearched = stringNode.getText().toUpperCase();
+		if (!multipleSearchesWithinStrings && stringToBeSearched.indexOf(stringToFind) != -1) {
+			stringFound = true;
+			foundCount++;
+		} else if (multipleSearchesWithinStrings) {
+			int index = -1;
+			do {
+				index = stringToBeSearched.indexOf(stringToFind, index + 1);
+				if (index != -1)
+					foundCount++;
+			} while (index != -1);
+		}
+	}
+
+	public boolean stringWasFound() {
+		return stringFound;
+	}
+
+	public int stringFoundCount() {
+		return foundCount;
+	}
 
 }

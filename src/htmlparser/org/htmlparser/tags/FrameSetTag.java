@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
@@ -40,68 +39,67 @@ import org.htmlparser.util.SimpleNodeIterator;
 /**
  * Identifies an frame tag
  */
-public class FrameSetTag extends CompositeTag
-{
-    /**
-     * The URL where the image is stored.
-     */
-    protected String frameURL;
-    protected String frameName;
-    protected NodeList frames;
-    public FrameSetTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        super(tagData, compositeTagData);
-        this.frames = compositeTagData.getChildren();
-    }
+public class FrameSetTag extends CompositeTag {
+	/**
+	 * The URL where the image is stored.
+	 */
+	protected String frameURL;
 
-    /**
-     * Returns the location of the frame
-     */
-    public String getFrameLocation()
-    {
-        return frameURL;
-    }
+	protected String frameName;
 
-    public String getFrameName()
-    {
-        return frameName;
-    }
+	protected NodeList frames;
 
-    /**
-     * Print the contents of the HTMLImageNode
-     */
-    public String toString()
-    {
-        return "FRAME TAG : Image at "
-            + frameURL
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd();
-    }
+	public FrameSetTag(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData, compositeTagData);
+		this.frames = compositeTagData.getChildren();
+	}
 
-    /**
-     * Returns the frames.
-     * @return Vector
-     */
-    public NodeList getFrames()
-    {
-        return frames;
-    }
+	/**
+	 * Returns the location of the frame
+	 */
+	public String getFrameLocation() {
+		return frameURL;
+	}
+
+	public String getFrameName() {
+		return frameName;
+	}
+
+	/**
+	 * Print the contents of the HTMLImageNode
+	 */
+	public String toString() {
+		return "FRAME TAG : Image at " + frameURL + "; begins at : " + elementBegin() + "; ends at : " + elementEnd();
+	}
+
+	/**
+	 * Returns the frames.
+	 * 
+	 * @return Vector
+	 */
+	public NodeList getFrames() {
+		return frames;
+	}
 
 	public FrameTag getFrame(String frameName) {
 		boolean found = false;
-		FrameTag frameTag=null;
-		for (SimpleNodeIterator e=frames.elements();e.hasMoreNodes() && !found;) {
-			frameTag = (FrameTag)e.nextNode();
-			if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase())) found = true;
+		FrameTag frameTag = null;
+		for (SimpleNodeIterator e = frames.elements(); e.hasMoreNodes() && !found;) {
+			frameTag = (FrameTag) e.nextNode();
+			if (frameTag.getFrameName().toUpperCase().equals(frameName.toUpperCase()))
+				found = true;
 		}
 		if (found)
-		return frameTag; else return null;
+			return frameTag;
+		else
+			return null;
 	}
+
 	/**
 	 * Sets the frames.
-	 * @param frames The frames to set
+	 * 
+	 * @param frames
+	 *            The frames to set
 	 */
 	public void setFrames(NodeList frames) {
 		this.frames = frames;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui;
 
@@ -26,6 +26,5 @@ package org.apache.jmeter.gui;
  * @author unknown
  * @version $Revision$
  */
-public interface UnsharedComponent
-{
+public interface UnsharedComponent {
 }

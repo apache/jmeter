@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control.gui;
 
@@ -33,76 +33,68 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * @version $Revision$ on $Date$
  */
-public class SoapSamplerGui extends AbstractSamplerGui
-{
-    private JLabeledTextField urlField;
-    private JLabeledTextArea soapXml;
+public class SoapSamplerGui extends AbstractSamplerGui {
+	private JLabeledTextField urlField;
 
-    public SoapSamplerGui()
-    {
-        init();
-    }
+	private JLabeledTextArea soapXml;
 
-    public String getLabelResource()
-    {
-        return "soap_sampler_title";
-    }
+	public SoapSamplerGui() {
+		init();
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        SoapSampler sampler = new SoapSampler();
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public String getLabelResource() {
+		return "soap_sampler_title";
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement s)
-    {
-        this.configureTestElement(s);
-        if (s instanceof SoapSampler)
-        {
-            SoapSampler sampler = (SoapSampler) s;
-            sampler.setURLData(urlField.getText());
-            sampler.setXmlData(soapXml.getText());
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		SoapSampler sampler = new SoapSampler();
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    private void init()
-    {
-        setLayout(new BorderLayout());
-        setBorder(makeBorder());
-        
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement s) {
+		this.configureTestElement(s);
+		if (s instanceof SoapSampler) {
+			SoapSampler sampler = (SoapSampler) s;
+			sampler.setURLData(urlField.getText());
+			sampler.setXmlData(soapXml.getText());
+		}
+	}
 
-        urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10);
-        soapXml =
-            new JLabeledTextArea(
-                JMeterUtils.getResString("soap_data_title"),
-                null);
+	private void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(urlField, BorderLayout.NORTH);
-        mainPanel.add(soapXml, BorderLayout.CENTER);
-        
-        add(mainPanel, BorderLayout.CENTER);
-    }
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        SoapSampler sampler = (SoapSampler) el;
-        urlField.setText(sampler.getURLData());
-        soapXml.setText(sampler.getXmlData());
-    }
-    
-    public Dimension getPreferredSize()
-    {
-        return getMinimumSize();
-    }
+		urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10);
+		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
+
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(urlField, BorderLayout.NORTH);
+		mainPanel.add(soapXml, BorderLayout.CENTER);
+
+		add(mainPanel, BorderLayout.CENTER);
+	}
+
+	public void configure(TestElement el) {
+		super.configure(el);
+		SoapSampler sampler = (SoapSampler) el;
+		urlField.setText(sampler.getURLData());
+		soapXml.setText(sampler.getXmlData());
+	}
+
+	public Dimension getPreferredSize() {
+		return getMinimumSize();
+	}
 }

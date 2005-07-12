@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -28,70 +28,56 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author  Brendan Burns
- * @author  <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @author Brendan Burns
+ * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
  * @version $Revision$ updated on $Date$
  */
-public class ExitCommand implements Command
-{
+public class ExitCommand implements Command {
 
-    public static final String EXIT = "exit";
-    private static Set commands = new HashSet();
-    static {
-        commands.add(EXIT);
-    }
+	public static final String EXIT = "exit";
 
-    /**
-     *  Constructor for the ExitCommand object
-     */
-    public ExitCommand()
-    {}
+	private static Set commands = new HashSet();
+	static {
+		commands.add(EXIT);
+	}
 
-    /**
-     *  Gets the ActionNames attribute of the ExitCommand object
-     *
-     *@return    The ActionNames value
-     */
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	/**
+	 * Constructor for the ExitCommand object
+	 */
+	public ExitCommand() {
+	}
 
-    /**
-     *  Description of the Method
-     *
-     *@param  e  Description of Parameter
-     */
-    public void doAction(ActionEvent e)
-    {
-        ActionRouter.getInstance().doActionNow(
-            new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
-        if (GuiPackage.getInstance().isDirty())
-        {
-            int chosenOption =
-                JOptionPane.showConfirmDialog(
-                    GuiPackage.getInstance().getMainFrame(),
-                    JMeterUtils.getResString("cancel_exit_to_save"),
-                    JMeterUtils.getResString("Save?"),
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if (chosenOption == JOptionPane.NO_OPTION)
-            {
-                System.exit(0);
-            }
-            else if (chosenOption == JOptionPane.YES_OPTION)
-            {
-                ActionRouter.getInstance().doActionNow(
-                    new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL_AS));
-                if (!GuiPackage.getInstance().isDirty())
-                {
-                    System.exit(0);
-                }
-            }
-        }
-        else
-        {
-            System.exit(0);
-        }
-    }
+	/**
+	 * Gets the ActionNames attribute of the ExitCommand object
+	 * 
+	 * @return The ActionNames value
+	 */
+	public Set getActionNames() {
+		return commands;
+	}
+
+	/**
+	 * Description of the Method
+	 * 
+	 * @param e
+	 *            Description of Parameter
+	 */
+	public void doAction(ActionEvent e) {
+		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+		if (GuiPackage.getInstance().isDirty()) {
+			int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
+					.getResString("cancel_exit_to_save"), JMeterUtils.getResString("Save?"),
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (chosenOption == JOptionPane.NO_OPTION) {
+				System.exit(0);
+			} else if (chosenOption == JOptionPane.YES_OPTION) {
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL_AS));
+				if (!GuiPackage.getInstance().isDirty()) {
+					System.exit(0);
+				}
+			}
+		} else {
+			System.exit(0);
+		}
+	}
 }

@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.Tag;
@@ -40,33 +39,24 @@ import org.htmlparser.tags.data.TagData;
 /**
  * Scans title tags.
  */
-public class TitleScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "TITLE" };
+public class TitleScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "TITLE" };
 
-    public TitleScanner(String filter)
-    {
-        super(filter, MATCH_NAME);
-    }
+	public TitleScanner(String filter) {
+		super(filter, MATCH_NAME);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public String[] getID() {
+		return MATCH_NAME;
+	}
 
-    public boolean evaluate(
-        String tagNameBeingChecked,
-        TagScanner previousOpenScanner)
-    {
-        absorbLeadingBlanks(tagNameBeingChecked);
-        return (
-            tagNameBeingChecked.toUpperCase().startsWith(MATCH_NAME[0])
-                && null == previousOpenScanner);
-    }
+	public boolean evaluate(String tagNameBeingChecked, TagScanner previousOpenScanner) {
+		absorbLeadingBlanks(tagNameBeingChecked);
+		return (tagNameBeingChecked.toUpperCase().startsWith(MATCH_NAME[0]) && null == previousOpenScanner);
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new TitleTag(tagData, compositeTagData);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new TitleTag(tagData, compositeTagData);
+	}
 
 }

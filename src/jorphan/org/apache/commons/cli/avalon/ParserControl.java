@@ -15,22 +15,23 @@
  * limitations under the License.
  */
 package org.apache.commons.cli.avalon;
-//Renamed from org.apache.avalon.excalibur.cli
+
+// Renamed from org.apache.avalon.excalibur.cli
 
 /**
  * ParserControl is used to control particular behaviour of the parser.
- *
+ * 
  * @version $Revision$ $Date$
  * @see AbstractParserControl
  */
-public interface ParserControl
-{
-    /**
-     * Called by the parser to determine whether it should stop
-     * after last option parsed.
-     *
-     * @param lastOptionCode the code of last option parsed
-     * @return return true to halt, false to continue parsing
-     */
-    boolean isFinished( int lastOptionCode );
+public interface ParserControl {
+	/**
+	 * Called by the parser to determine whether it should stop after last
+	 * option parsed.
+	 * 
+	 * @param lastOptionCode
+	 *            the code of last option parsed
+	 * @return return true to halt, false to continue parsing
+	 */
+	boolean isFinished(int lastOptionCode);
 }

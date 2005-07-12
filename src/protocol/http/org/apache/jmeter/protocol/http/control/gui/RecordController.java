@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control.gui;
 
@@ -25,17 +25,14 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * @version $Revision$
  */
-public class RecordController extends LogicControllerGui
-{
-    public String getLabelResource()
-    {
-        return "record_controller_title";
-    }
+public class RecordController extends LogicControllerGui {
+	public String getLabelResource() {
+		return "record_controller_title";
+	}
 
-    public TestElement createTestElement()
-    {
-        RecordingController con = new RecordingController();
-        this.configureTestElement(con);
-        return con;
-    }
+	public TestElement createTestElement() {
+		RecordingController con = new RecordingController();
+		this.configureTestElement(con);
+		return con;
+	}
 }

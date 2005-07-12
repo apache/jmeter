@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.java.control.gui;
 
@@ -23,7 +23,7 @@ import java.awt.BorderLayout;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane; 
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -33,93 +33,88 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- *  
- * @version   $Revision$ $Date$
+ * 
+ * @version $Revision$ $Date$
  */
-public class BSFSamplerGui extends AbstractSamplerGui
-{
+public class BSFSamplerGui extends AbstractSamplerGui {
 	private JTextArea scriptField;
-	private JTextField langField;// Language TODO should this be a drop-down list?
+
+	private JTextField langField;// Language TODO should this be a drop-down
+									// list?
+
 	private JTextField filename;// script file name (if present)
-	private JTextField parameters;// parameters to pass to script file (or script)
 
-    public BSFSamplerGui()
-    {
-        init();
-    }
+	private JTextField parameters;// parameters to pass to script file (or
+									// script)
 
-    public void configure(TestElement element)
-    {
+	public BSFSamplerGui() {
+		init();
+	}
+
+	public void configure(TestElement element) {
 		super.configure(element);
-    	scriptField.setText(element.getPropertyAsString(BSFSampler.SCRIPT));
+		scriptField.setText(element.getPropertyAsString(BSFSampler.SCRIPT));
 		langField.setText(element.getPropertyAsString(BSFSampler.LANGUAGE));
-    }
+	}
 
-    public TestElement createTestElement()
-    {
-        BSFSampler sampler = new BSFSampler();
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public TestElement createTestElement() {
+		BSFSampler sampler = new BSFSampler();
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement te)
-    {
-        te.clear();
-        this.configureTestElement(te);
-		te.setProperty(BSFSampler.FILENAME,filename.getText());
-		te.setProperty(BSFSampler.LANGUAGE,langField.getText());
-		te.setProperty(BSFSampler.PARAMETERS,parameters.getText());
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement te) {
+		te.clear();
+		this.configureTestElement(te);
+		te.setProperty(BSFSampler.FILENAME, filename.getText());
+		te.setProperty(BSFSampler.LANGUAGE, langField.getText());
+		te.setProperty(BSFSampler.PARAMETERS, parameters.getText());
 		te.setProperty(BSFSampler.SCRIPT, scriptField.getText());
-    }
+	}
 
-    public String getLabelResource()
-    {
-        return "bsf_sampler_title";
-    }
+	public String getLabelResource() {
+		return "bsf_sampler_title";
+	}
 
-    private void init()
-    { 
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
 		box.add(createLanguagePanel());
 		box.add(createFilenamePanel());
 		box.add(createParameterPanel());
-		add(box,BorderLayout.NORTH);
+		add(box, BorderLayout.NORTH);
 
 		JPanel panel = createScriptPanel();
 		add(panel, BorderLayout.CENTER);
 		// Don't let the input field shrink too much
-		add(
-			Box.createVerticalStrut(panel.getPreferredSize().height),
-			BorderLayout.WEST);
-    }
+		add(Box.createVerticalStrut(panel.getPreferredSize().height), BorderLayout.WEST);
+	}
 
-	private JPanel createParameterPanel()
-	{
+	private JPanel createParameterPanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_parameters"));
 
 		parameters = new JTextField(10);
 		parameters.setName(BSFSampler.PARAMETERS);
 		label.setLabelFor(parameters);
 
-		JPanel parameterPanel = new JPanel(new BorderLayout(5,0));
-		parameterPanel.add(label,BorderLayout.WEST);
+		JPanel parameterPanel = new JPanel(new BorderLayout(5, 0));
+		parameterPanel.add(label, BorderLayout.WEST);
 		parameterPanel.add(parameters, BorderLayout.CENTER);
 		return parameterPanel;
 	}
 
-
-	private JPanel createFilenamePanel()//TODO ought to be a FileChooser ...
+	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
 	{
 		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_file"));
-		
+
 		filename = new JTextField(10);
 		filename.setName(BSFSampler.FILENAME);
 		label.setLabelFor(filename);
@@ -130,24 +125,20 @@ public class BSFSamplerGui extends AbstractSamplerGui
 		return filenamePanel;
 	}
 
-	private JPanel createLanguagePanel()
-	{
+	private JPanel createLanguagePanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_language"));
 
 		langField = new JTextField(10);
 		langField.setName(BSFSampler.LANGUAGE);
 		label.setLabelFor(langField);
 
-		JPanel langPanel = new JPanel(new BorderLayout(5,0));
-		langPanel.add(label,BorderLayout.WEST);
+		JPanel langPanel = new JPanel(new BorderLayout(5, 0));
+		langPanel.add(label, BorderLayout.WEST);
 		langPanel.add(langField, BorderLayout.CENTER);
 		return langPanel;
 	}
 
-
-
-	private JPanel createScriptPanel()
-	{
+	private JPanel createScriptPanel() {
 		scriptField = new JTextArea();
 		scriptField.setRows(4);
 		scriptField.setLineWrap(true);

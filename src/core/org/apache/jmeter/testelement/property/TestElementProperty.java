@@ -14,160 +14,146 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
- package org.apache.jmeter.testelement.property;
+package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
 
 /**
  * @version $Revision$
  */
-public class TestElementProperty extends MultiProperty
-{
-    TestElement value;
-    transient TestElement savedValue = null;
+public class TestElementProperty extends MultiProperty {
+	TestElement value;
 
-    public TestElementProperty(String name, TestElement value)
-    {
-        super(name);
-        this.value = value;
-    }
+	transient TestElement savedValue = null;
 
-    public TestElementProperty()
-    {
-        super();
-    }
+	public TestElementProperty(String name, TestElement value) {
+		super(name);
+		this.value = value;
+	}
 
-    /**
-     * Determines if two test elements are equal.
-     * 
-     * @return true if the value is not null and equals the other Objects value;
-     * false otherwise (even if both values are null)
-     */
-    public boolean equals(Object o)
-    {
-        if (o instanceof TestElementProperty)
-        {
-        	if (this == o) return true;
-            if (value != null)
-            {
-                return value.equals(((JMeterProperty) o).getObjectValue());
-            }
-        }
-        return false;
-    }
-    public int hashCode()
-	{
-    	return value == null ? 0 : value.hashCode();
-    }
+	public TestElementProperty() {
+		super();
+	}
 
-    /* (non-Javadoc)
-     * #getStringValue()
-     */
-    public String getStringValue()
-    {
-        return value.toString();
-    }
+	/**
+	 * Determines if two test elements are equal.
+	 * 
+	 * @return true if the value is not null and equals the other Objects value;
+	 *         false otherwise (even if both values are null)
+	 */
+	public boolean equals(Object o) {
+		if (o instanceof TestElementProperty) {
+			if (this == o)
+				return true;
+			if (value != null) {
+				return value.equals(((JMeterProperty) o).getObjectValue());
+			}
+		}
+		return false;
+	}
 
-    public void setObjectValue(Object v)
-    {
-        if (v instanceof TestElement)
-        {
-            value = (TestElement) v;
-        }
-    }
+	public int hashCode() {
+		return value == null ? 0 : value.hashCode();
+	}
 
-    /* (non-Javadoc)
-     * #getObjectValue()
-     */
-    public Object getObjectValue()
-    {
-        return value;
-    }
+	/*
+	 * (non-Javadoc) #getStringValue()
+	 */
+	public String getStringValue() {
+		return value.toString();
+	}
 
-    public TestElement getElement()
-    {
-        return value;
-    }
+	public void setObjectValue(Object v) {
+		if (v instanceof TestElement) {
+			value = (TestElement) v;
+		}
+	}
 
-    public void setElement(TestElement el)
-    {
-        value = el;
-    }
+	/*
+	 * (non-Javadoc) #getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return value;
+	}
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#clone()
-     */
-    public Object clone()
-    {
-        TestElementProperty prop = (TestElementProperty) super.clone();
-        prop.value = (TestElement) value.clone();
-        return prop;
-    }
+	public TestElement getElement() {
+		return value;
+	}
 
-    /* (non-Javadoc)
-     * #mergeIn(JMeterProperty)
-     */
-    public void mergeIn(JMeterProperty prop)
-    {
-        if (isEqualType(prop))
-        {
-            value.addTestElement((TestElement) prop.getObjectValue());
-        }
-    }
+	public void setElement(TestElement el) {
+		value = el;
+	}
 
-    /* (non-Javadoc)
-     * #recoverRunningVersion(TestElement)
-     */
-    public void recoverRunningVersion(TestElement owner)
-    {
-        if (savedValue != null)
-        {
-            value = savedValue;
-        }
-        value.recoverRunningVersion();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() {
+		TestElementProperty prop = (TestElementProperty) super.clone();
+		prop.value = (TestElement) value.clone();
+		return prop;
+	}
 
-    /* (non-Javadoc)
-     * #setRunningVersion(boolean)
-     */
-    public void setRunningVersion(boolean runningVersion)
-    {
-        super.setRunningVersion(runningVersion);
-        value.setRunningVersion(runningVersion);
-        if(runningVersion)
-        {
-            savedValue = value;
-        }
-        else
-        {
-            savedValue = null;
-        }
-    }
+	/*
+	 * (non-Javadoc) #mergeIn(JMeterProperty)
+	 */
+	public void mergeIn(JMeterProperty prop) {
+		if (isEqualType(prop)) {
+			value.addTestElement((TestElement) prop.getObjectValue());
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see MultiProperty#addProperty(JMeterProperty)
-     */
-    public void addProperty(JMeterProperty prop)
-    {
-        value.setProperty(prop);
-    }
+	/*
+	 * (non-Javadoc) #recoverRunningVersion(TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		if (savedValue != null) {
+			value = savedValue;
+		}
+		value.recoverRunningVersion();
+	}
 
-    /* (non-Javadoc)
-     * @see MultiProperty#clear()
-     */
-    public void clear()
-    {
-        value.clear();
+	/*
+	 * (non-Javadoc) #setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		super.setRunningVersion(runningVersion);
+		value.setRunningVersion(runningVersion);
+		if (runningVersion) {
+			savedValue = value;
+		} else {
+			savedValue = null;
+		}
+	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see MultiProperty#addProperty(JMeterProperty)
+	 */
+	public void addProperty(JMeterProperty prop) {
+		value.setProperty(prop);
+	}
 
-    /* (non-Javadoc)
-     * @see MultiProperty#iterator()
-     */
-    public PropertyIterator iterator()
-    {
-        return value.propertyIterator();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see MultiProperty#clear()
+	 */
+	public void clear() {
+		value.clear();
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see MultiProperty#iterator()
+	 */
+	public PropertyIterator iterator() {
+		return value.propertyIterator();
+	}
 }

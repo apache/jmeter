@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.ftp.control.gui;
 
@@ -32,68 +32,60 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * 
- * @version   $Revision$ last updated $Date$
+ * @version $Revision$ last updated $Date$
  */
-public class FtpTestSamplerGui extends AbstractSamplerGui
-{
-    private LoginConfigGui loginPanel;
-    private FtpConfigGui ftpDefaultPanel;
+public class FtpTestSamplerGui extends AbstractSamplerGui {
+	private LoginConfigGui loginPanel;
 
-    public FtpTestSamplerGui()
-    {
-        init();
-    }
+	private FtpConfigGui ftpDefaultPanel;
 
-    public void configure(TestElement element)
-    {
-        super.configure(element);
-        loginPanel.configure(element);
-        ftpDefaultPanel.configure(element);
-    }
+	public FtpTestSamplerGui() {
+		init();
+	}
 
-    public TestElement createTestElement()
-    {
-        FTPSampler sampler = new FTPSampler();
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public void configure(TestElement element) {
+		super.configure(element);
+		loginPanel.configure(element);
+		ftpDefaultPanel.configure(element);
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement sampler)
-    {
-        sampler.clear();
-        ((FTPSampler) sampler).addTestElement(
-            ftpDefaultPanel.createTestElement());
-        ((FTPSampler) sampler).addTestElement(loginPanel.createTestElement());
-        this.configureTestElement(sampler);
-    }
+	public TestElement createTestElement() {
+		FTPSampler sampler = new FTPSampler();
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    public String getLabelResource()
-    {
-        return "ftp_testing_title";
-    }
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement sampler) {
+		sampler.clear();
+		((FTPSampler) sampler).addTestElement(ftpDefaultPanel.createTestElement());
+		((FTPSampler) sampler).addTestElement(loginPanel.createTestElement());
+		this.configureTestElement(sampler);
+	}
 
-    private void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	public String getLabelResource() {
+		return "ftp_testing_title";
+	}
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	private void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
-        VerticalPanel mainPanel = new VerticalPanel();
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-        ftpDefaultPanel = new FtpConfigGui(false);
-        mainPanel.add(ftpDefaultPanel);
+		VerticalPanel mainPanel = new VerticalPanel();
 
-        loginPanel = new LoginConfigGui(false);
-        loginPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                JMeterUtils.getResString("login_config")));
-        mainPanel.add(loginPanel);
+		ftpDefaultPanel = new FtpConfigGui(false);
+		mainPanel.add(ftpDefaultPanel);
 
-        add(mainPanel, BorderLayout.CENTER);
-    }
+		loginPanel = new LoginConfigGui(false);
+		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+		mainPanel.add(loginPanel);
+
+		add(mainPanel, BorderLayout.CENTER);
+	}
 }

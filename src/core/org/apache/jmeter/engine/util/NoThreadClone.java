@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 /*
  * Created on Apr 23, 2003
@@ -22,12 +22,11 @@
 package org.apache.jmeter.engine.util;
 
 /**
- * Implement this method-less interface to indicate your test element should
- * not be cloned for each thread in a test run. Otherwise, the default behavior
- * is to clone every test element for each thread.
+ * Implement this method-less interface to indicate your test element should not
+ * be cloned for each thread in a test run. Otherwise, the default behavior is
+ * to clone every test element for each thread.
  * 
  * @version $Revision$
  */
-public interface NoThreadClone
-{
+public interface NoThreadClone {
 }

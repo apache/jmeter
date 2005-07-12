@@ -13,44 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.sampler;
 
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Factory to return the appropriate HTTPSampler for use with classes
- * that need an HTTPSampler
+ * Factory to return the appropriate HTTPSampler for use with classes that need
+ * an HTTPSampler
  * 
  */
 public class HTTPSamplerFactory {
-	
+
 	private static final String HTTP_SAMPLER = "HTTPSampler"; //$NON-NLS-1$
+
 	private static final String HTTP_SAMPLER_APACHE = "HTTPSampler2"; //$NON-NLS-1$
-	private static final String DEFAULT_CLASSNAME =
-		JMeterUtils.getPropDefault("jmeter.httpsampler",HTTP_SAMPLER); //$NON-NLS-1$
-	
-	private HTTPSamplerFactory()
-	{
-		//Not intended to be instantiated
+
+	private static final String DEFAULT_CLASSNAME = JMeterUtils.getPropDefault("jmeter.httpsampler", HTTP_SAMPLER); //$NON-NLS-1$
+
+	private HTTPSamplerFactory() {
+		// Not intended to be instantiated
 	}
-	
-	public static HTTPSamplerBase newInstance()
-	{
+
+	public static HTTPSamplerBase newInstance() {
 		return newInstance(DEFAULT_CLASSNAME);
 	}
 
-	public static HTTPSamplerBase newInstance(String classname)
-	{
-		if (classname.equals(HTTP_SAMPLER))
-		{
+	public static HTTPSamplerBase newInstance(String classname) {
+		if (classname.equals(HTTP_SAMPLER)) {
 			return new HTTPSampler();
 		}
-		if (classname.equals(HTTP_SAMPLER_APACHE))
-		{
+		if (classname.equals(HTTP_SAMPLER_APACHE)) {
 			return new HTTPSampler2();
 		}
-		throw new UnsupportedOperationException("Cannot create class: "+classname);
+		throw new UnsupportedOperationException("Cannot create class: " + classname);
 	}
 }

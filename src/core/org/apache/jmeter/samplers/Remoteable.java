@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -22,6 +22,5 @@ package org.apache.jmeter.samplers;
  * @author mstover
  * @version $Revision$
  */
-public interface Remoteable
-{
+public interface Remoteable {
 }

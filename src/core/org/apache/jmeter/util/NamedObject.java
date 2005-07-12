@@ -14,16 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
- package org.apache.jmeter.util;
+package org.apache.jmeter.util;
 
 /**
  * @author Michael Stover
  * @version $Revision$
  */
 
-public interface NamedObject
-{
-    public String getName();
+public interface NamedObject {
+	public String getName();
 }

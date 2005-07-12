@@ -30,7 +30,6 @@
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
 
-
 package org.htmlparser.scanners;
 
 /////////////////////////
@@ -41,37 +40,31 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
-public class JspScanner extends TagScanner
-{
-    private String language;
-    private String type;
+public class JspScanner extends TagScanner {
+	private String language;
 
-    public JspScanner()
-    {
-        super();
-    }
+	private String type;
 
-    public JspScanner(String filter)
-    {
-        super(filter);
-    }
+	public JspScanner() {
+		super();
+	}
 
-    public String[] getID()
-    {
-        String[] ids = new String[3];
-        ids[0] = "%";
-        ids[1] = "%=";
-        ids[2] = "%@";
-        return ids;
-    }
+	public JspScanner(String filter) {
+		super(filter);
+	}
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException
-    {
-        String tagContents = tagData.getTagContents();
-        tagData.setTagContents(
-            tagContents.substring(1, tagContents.length() - 1));
-        return new JspTag(tagData);
-    }
+	public String[] getID() {
+		String[] ids = new String[3];
+		ids[0] = "%";
+		ids[1] = "%=";
+		ids[2] = "%@";
+		return ids;
+	}
+
+	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
+		String tagContents = tagData.getTagContents();
+		tagData.setTagContents(tagContents.substring(1, tagContents.length() - 1));
+		return new JspTag(tagData);
+	}
 
 }

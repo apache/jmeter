@@ -25,139 +25,130 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MonitorModel implements Clearable, Serializable, Cloneable
-{
+public class MonitorModel implements Clearable, Serializable, Cloneable {
 
-	//private String name;
+	// private String name;
 	private List listeners;
-	private MonitorStats current =
-		new MonitorStats(0,0,0,0,0,"","","",System.currentTimeMillis());
-	
-    /**
-     * 
-     */
-    public MonitorModel()
-    {
-        super();
-        listeners = new LinkedList();
-    }
 
-	public MonitorModel(MonitorStats stat){
+	private MonitorStats current = new MonitorStats(0, 0, 0, 0, 0, "", "", "", System.currentTimeMillis());
+
+	/**
+	 * 
+	 */
+	public MonitorModel() {
+		super();
+		listeners = new LinkedList();
+	}
+
+	public MonitorModel(MonitorStats stat) {
 		this.current = stat;
 	}
-	public void setName(String name){
-		//this.name = name;
+
+	public void setName(String name) {
+		// this.name = name;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return this.getURL();
 	}
-	
-	public int getHealth(){
+
+	public int getHealth() {
 		return this.current.getHealth();
 	}
-	
-	public int getLoad(){
+
+	public int getLoad() {
 		return this.current.getLoad();
 	}
 
-	public int getCpuload(){
-		return this.current.getCpuLoad();	
+	public int getCpuload() {
+		return this.current.getCpuLoad();
 	}
-	
-	public int getMemload(){
+
+	public int getMemload() {
 		return this.current.getMemLoad();
 	}
-	
-	public int getThreadload(){
+
+	public int getThreadload() {
 		return this.current.getThreadLoad();
 	}
-	
-	public String getHost(){
+
+	public String getHost() {
 		return this.current.getHost();
 	}
-	
-	public String getPort(){
+
+	public String getPort() {
 		return this.current.getPort();
 	}
-	
-	public String getProtocol(){
+
+	public String getProtocol() {
 		return this.current.getProtocol();
 	}
-	
-	public long getTimestamp(){
+
+	public long getTimestamp() {
 		return this.current.getTimeStamp();
 	}
-	
-	public String getURL(){
+
+	public String getURL() {
 		return this.current.getURL();
 	}
-	
+
 	/**
-	 * Method will return a formatted date using
-	 * SimpleDateFormat.
-	 * @return String 
+	 * Method will return a formatted date using SimpleDateFormat.
+	 * 
+	 * @return String
 	 */
-	public String getTimestampString(){
+	public String getTimestampString() {
 		Date date = new Date(this.current.getTimeStamp());
 		SimpleDateFormat ft = new SimpleDateFormat();
 		return ft.format(date);
 	}
-	
+
 	/**
-	 * Method is used by DefaultMutableTreeNode to get
-	 * the label for the node.
+	 * Method is used by DefaultMutableTreeNode to get the label for the node.
 	 */
-	public String toString(){
+	public String toString() {
 		return getURL();
 	}
 
 	/**
 	 * clear will create a new MonitorStats object.
-	 */	
-    public void clear()
-    {
-		current = 
-			new MonitorStats(0,0,0,0,0,"","","",System.currentTimeMillis());
-    }
+	 */
+	public void clear() {
+		current = new MonitorStats(0, 0, 0, 0, 0, "", "", "", System.currentTimeMillis());
+	}
 
 	/**
 	 * notify the listeners with the MonitorModel object.
+	 * 
 	 * @param model
 	 */
-	public void notifyListeners(MonitorModel model)
-	{
-		for (int idx=0; idx < listeners.size(); idx++){
-			MonitorListener ml = (MonitorListener)listeners.get(idx);
+	public void notifyListeners(MonitorModel model) {
+		for (int idx = 0; idx < listeners.size(); idx++) {
+			MonitorListener ml = (MonitorListener) listeners.get(idx);
 			ml.addSample(model);
 		}
 	}
-	
-	public void addListener(MonitorListener listener){
+
+	public void addListener(MonitorListener listener) {
 		listeners.add(listener);
 	}
-	
+
 	/**
-	 * a clone method is provided for convienance. In some
-	 * cases, it may be desirable to clone the object.
+	 * a clone method is provided for convienance. In some cases, it may be
+	 * desirable to clone the object.
 	 */
-	public Object clone(){
+	public Object clone() {
 		return new MonitorModel(cloneMonitorStats());
 	}
-	
+
 	/**
 	 * a clone method to clone the stats
+	 * 
 	 * @return
 	 */
-	public MonitorStats cloneMonitorStats(){
-		return new MonitorStats(current.getHealth(),
-			current.getLoad(),
-			current.getCpuLoad(),
-			current.getMemLoad(),
-			current.getThreadLoad(),
-			current.getHost(),
-			current.getPort(),
-			current.getProtocol(),
-			current.getTimeStamp());
+	public MonitorStats cloneMonitorStats() {
+		return new MonitorStats(current.getHealth(), current.getLoad(), current.getCpuLoad(), current.getMemLoad(),
+				current.getThreadLoad(), current.getHost(), current.getPort(), current.getProtocol(), current
+						.getTimeStamp());
 	}
 }

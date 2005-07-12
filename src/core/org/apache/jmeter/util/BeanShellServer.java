@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.util;
 
@@ -27,11 +27,11 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Implements a BeanShell server to allow access to JMeter variables and methods.
+ * Implements a BeanShell server to allow access to JMeter variables and
+ * methods.
  * 
- * To enable, define the JMeter property:
- * beanshell.server.port (see JMeter.java)
- * beanshell.server.file (optional, startup file)
+ * To enable, define the JMeter property: beanshell.server.port (see
+ * JMeter.java) beanshell.server.file (optional, startup file)
  * 
  * @version $Revision$ Last updated: $Date$
  */
@@ -39,104 +39,90 @@ public class BeanShellServer implements Runnable {
 
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private final int serverport;
-    private final String serverfile;
-    
+	private final int serverport;
+
+	private final String serverfile;
+
 	/**
 	 * 
 	 */
-	public BeanShellServer(int port,String file) {
+	public BeanShellServer(int port, String file) {
 		super();
-		serverfile=file;// can be the empty string
-		serverport=port;
+		serverfile = file;// can be the empty string
+		serverport = port;
 	}
 
-    private BeanShellServer(){// do not use!
-    	super();
-    	serverport=0;
-    	serverfile="";
-    }
-    // For use by the server script
-	private static String getprop(String s){
-		return JMeterUtils.getPropDefault(s,s);
+	private BeanShellServer() {// do not use!
+		super();
+		serverport = 0;
+		serverfile = "";
 	}
 
-	private static void setprop(String s, String v){
+	// For use by the server script
+	private static String getprop(String s) {
+		return JMeterUtils.getPropDefault(s, s);
+	}
+
+	private static void setprop(String s, String v) {
 		JMeterUtils.getJMeterProperties().setProperty(s, v);
 	}
 
-	public void run(){
+	public void run() {
 
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-		try
-		{
+		try {
 			Class Interpreter = loader.loadClass("bsh.Interpreter");
 			Object instance = Interpreter.newInstance();
 			Class string = String.class;
 			Class object = Object.class;
-			
-			Method eval =
-				Interpreter.getMethod(
-					"eval",
-					new Class[] {string});
-			Method setObj = Interpreter.getMethod(
-					"set",
-					new Class[] {string,object});
-			Method setInt = Interpreter.getMethod(
-					"set",
-					new Class[] {string,int.class});
-			Method source =
-				Interpreter.getMethod(
-					"source",
-					new Class[] {string});
-			
-			setObj.invoke(instance, new Object[] { "t",this });
-			setInt.invoke(instance, new Object[] { "portnum",new Integer(serverport) });
 
-			if (serverfile.length() > 0 ){
+			Method eval = Interpreter.getMethod("eval", new Class[] { string });
+			Method setObj = Interpreter.getMethod("set", new Class[] { string, object });
+			Method setInt = Interpreter.getMethod("set", new Class[] { string, int.class });
+			Method source = Interpreter.getMethod("source", new Class[] { string });
+
+			setObj.invoke(instance, new Object[] { "t", this });
+			setInt.invoke(instance, new Object[] { "portnum", new Integer(serverport) });
+
+			if (serverfile.length() > 0) {
 				try {
-					source.invoke(instance, new Object[]{serverfile});
+					source.invoke(instance, new Object[] { serverfile });
 				} catch (InvocationTargetException e1) {
-					log.warn("Could not source "+serverfile);
-					//JDK1.4: Throwable t= e1.getCause();
-					//JDK1.4: if (t != null) log.warn(t.toString());
+					log.warn("Could not source " + serverfile);
+					// JDK1.4: Throwable t= e1.getCause();
+					// JDK1.4: if (t != null) log.warn(t.toString());
 				}
 			}
-			eval.invoke(instance, new Object[]{"setAccessibility(true);"});
-			eval.invoke(instance, new Object[]{"server(portnum);"});
+			eval.invoke(instance, new Object[] { "setAccessibility(true);" });
+			eval.invoke(instance, new Object[] { "server(portnum);" });
 
-		}
-		catch(ClassNotFoundException e ){
+		} catch (ClassNotFoundException e) {
 			log.error("Beanshell Interpreter not found");
-		}
-		catch (Exception e)
-		{
-			log.error("Problem starting BeanShell server ",e);
+		} catch (Exception e) {
+			log.error("Problem starting BeanShell server ", e);
 		}
 	}
-	public static class Test extends TestCase
-	{
-		//private static Logger log = LoggingManager.getLoggerForClass();
 
-		public Test()
-		{
+	public static class Test extends TestCase {
+		// private static Logger log = LoggingManager.getLoggerForClass();
+
+		public Test() {
 			super();
 		}
 
-        public void testServer() throws Exception
-        {
-        	BeanShellServer bshs = new BeanShellServer(9876,"");
-        	assertNotNull(bshs);
-        	// Not sure we can test anything else here
-        }
-        
-		public void testProps() throws Exception
-		{
-			if (JMeterUtils.getJMeterProperties() != null){//Can't test standalone
-			assertNotNull("Property user.dir should not be null",getprop("user.dir"));
-			setprop("beanshelltest","xyz");
-			assertEquals("xyz",getprop("beanshelltest"));
+		public void testServer() throws Exception {
+			BeanShellServer bshs = new BeanShellServer(9876, "");
+			assertNotNull(bshs);
+			// Not sure we can test anything else here
+		}
+
+		public void testProps() throws Exception {
+			if (JMeterUtils.getJMeterProperties() != null) {// Can't test
+															// standalone
+				assertNotNull("Property user.dir should not be null", getprop("user.dir"));
+				setprop("beanshelltest", "xyz");
+				assertEquals("xyz", getprop("beanshelltest"));
 			}
 		}
 	}

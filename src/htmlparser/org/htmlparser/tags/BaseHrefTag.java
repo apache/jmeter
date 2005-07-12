@@ -29,38 +29,34 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
 
 /**
  * @author Somik Raha
- *
+ * 
  * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
+ * Window>Preferences>Java>Templates. To enable and disable the creation of type
+ * comments go to Window>Preferences>Java>Code Generation.
  */
-public class BaseHrefTag extends Tag
-{
-    private String baseUrl;
+public class BaseHrefTag extends Tag {
+	private String baseUrl;
 
-    public BaseHrefTag(TagData tagData, String baseUrl)
-    {
-        super(tagData);
-        this.baseUrl = baseUrl;
-    }
-    public String getBaseUrl()
-    {
-        return baseUrl;
-    }
-    public void setBaseUrl(String baseUrl)
-    {
-        this.baseUrl = baseUrl;
-    }
-    public String toString()
-    {
-        return "BASE TAG\n" + "--------\n" + "Name : " + baseUrl;
-    }
+	public BaseHrefTag(TagData tagData, String baseUrl) {
+		super(tagData);
+		this.baseUrl = baseUrl;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public String toString() {
+		return "BASE TAG\n" + "--------\n" + "Name : " + baseUrl;
+	}
 }

@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.save;
 
 import org.apache.jorphan.collections.HashTree;
 
-
 /**
  * @author mstover
- *
+ * 
  */
-class ScriptWrapper
-{
+class ScriptWrapper {
 	// Used by ScriptWrapperConverter
-   String version = "";
-   HashTree testPlan;
+	String version = "";
+
+	HashTree testPlan;
 }

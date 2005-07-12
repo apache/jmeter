@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.Tag;
@@ -37,27 +36,22 @@ import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
-public class TextareaTagScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "TEXTAREA" };
+public class TextareaTagScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "TEXTAREA" };
 
-    public TextareaTagScanner()
-    {
-        super(MATCH_NAME);
-    }
+	public TextareaTagScanner() {
+		super(MATCH_NAME);
+	}
 
-    public TextareaTagScanner(String filter)
-    {
-        super(filter, MATCH_NAME);
-    }
+	public TextareaTagScanner(String filter) {
+		super(filter, MATCH_NAME);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public String[] getID() {
+		return MATCH_NAME;
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new TextareaTag(tagData, compositeTagData);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new TextareaTag(tagData, compositeTagData);
+	}
 }

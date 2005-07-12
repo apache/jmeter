@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.utilTests;
 
 import org.htmlparser.parserHelper.TagParser;
@@ -45,24 +44,27 @@ public class HTMLTagParserTest extends ParserTestCase {
 		super(name);
 	}
 
-    public void testCorrectTag() {
-    	Tag tag = new Tag(new TagData(0,20,"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"","<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
+	public void testCorrectTag() {
+		Tag tag = new Tag(new TagData(0, 20,
+				"font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",
+				"<font face=\"Arial,\"helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\">"));
 		tagParser.correctTag(tag);
-		assertStringEquals("Corrected Tag","font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"",tag.getText());
-    }	
+		assertStringEquals("Corrected Tag",
+				"font face=\"Arial,helvetica,\" sans-serif=\"sans-serif\" size=\"2\" color=\"#FFFFFF\"", tag.getText());
+	}
 
 	public void testInsertInvertedCommasCorrectly() {
-		StringBuffer test = new StringBuffer("a b=c d e = f"); 
+		StringBuffer test = new StringBuffer("a b=c d e = f");
 		StringBuffer result = tagParser.insertInvertedCommasCorrectly(test);
-		assertStringEquals("Expected Correction","a b=\"c d\" e=\"f\"",result.toString());
+		assertStringEquals("Expected Correction", "a b=\"c d\" e=\"f\"", result.toString());
 	}
 
 	public void testPruneSpaces() {
 		String test = "  fdfdf dfdf   ";
-		assertEquals("Expected Pruned string","fdfdf dfdf",TagParser.pruneSpaces(test));
-	}   
+		assertEquals("Expected Pruned string", "fdfdf dfdf", TagParser.pruneSpaces(test));
+	}
 
 	protected void setUp() {
-		tagParser = new TagParser(new DefaultParserFeedback());	
-	} 
+		tagParser = new TagParser(new DefaultParserFeedback());
+	}
 }

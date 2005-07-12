@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,13 +27,10 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class GlobalMouseListener extends MouseAdapter
-{
-    transient private static Logger log =
-        LoggingManager.getLoggerForClass();
+public class GlobalMouseListener extends MouseAdapter {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public void mousePressed(MouseEvent e)
-    {
-        log.debug("global mouse event");
-    }
+	public void mousePressed(MouseEvent e) {
+		log.debug("global mouse event");
+	}
 }

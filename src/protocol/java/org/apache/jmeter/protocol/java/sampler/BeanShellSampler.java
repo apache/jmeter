@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.java.sampler;
 
@@ -35,154 +35,146 @@ import org.apache.log.Logger;
 
 /**
  * A sampler which understands BeanShell
- *
- * @version    $Revision$ Updated on: $Date$
+ * 
+ * @version $Revision$ Updated on: $Date$
  */
-public class BeanShellSampler extends AbstractSampler 
-{
+public class BeanShellSampler extends AbstractSampler {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static final String FILENAME   = "BeanShellSampler.filename"; //$NON-NLS-1$
-	public static final String SCRIPT     = "BeanShellSampler.query"; //$NON-NLS-1$
+	public static final String FILENAME = "BeanShellSampler.filename"; //$NON-NLS-1$
+
+	public static final String SCRIPT = "BeanShellSampler.query"; //$NON-NLS-1$
+
 	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
+
 	public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
 
-    transient private BeanShellInterpreter bshInterpreter;
-	
-	public BeanShellSampler()
-	{
+	transient private BeanShellInterpreter bshInterpreter;
+
+	public BeanShellSampler() {
 		try {
 			bshInterpreter = new BeanShellInterpreter();
 			String init = JMeterUtils.getProperty(INIT_FILE);
 			try {
-				bshInterpreter.init(init,log);
+				bshInterpreter.init(init, log);
 			} catch (IOException e) {
-				log.warn("Could not initialise interpreter",e);
+				log.warn("Could not initialise interpreter", e);
 			} catch (JMeterException e) {
-				log.warn("Could not initialise interpreter",e);
+				log.warn("Could not initialise interpreter", e);
 			}
 		} catch (ClassNotFoundException e) {
-			log.error("Could not establish BeanShellInterpreter: "+e);
+			log.error("Could not establish BeanShellInterpreter: " + e);
 		}
 	}
 
-    /**
-     * Returns a formatted string label describing this sampler
-     *
-     * @return a formatted string label describing this sampler
-     */
+	/**
+	 * Returns a formatted string label describing this sampler
+	 * 
+	 * @return a formatted string label describing this sampler
+	 */
 
-    public String getLabel()
-    {
-        return getName();
-    }
+	public String getLabel() {
+		return getName();
+	}
 
-	public String getScript()
-	{
+	public String getScript() {
 		return this.getPropertyAsString(SCRIPT);
 	}
-    
-	public String getFilename()
-	{
+
+	public String getFilename() {
 		return getPropertyAsString(FILENAME);
 	}
 
-	public String getParameters()
-	{
+	public String getParameters() {
 		return getPropertyAsString(PARAMETERS);
 	}
 
-    public SampleResult sample(Entry e)// Entry tends to be ignored ...
-    {
-    	//log.info(getLabel()+" "+getFilename());
-        SampleResult res = new SampleResult();
-        boolean isSuccessful = false;
-        res.setSampleLabel(getLabel());
-        res.sampleStart();
-		if (bshInterpreter == null){
+	public SampleResult sample(Entry e)// Entry tends to be ignored ...
+	{
+		// log.info(getLabel()+" "+getFilename());
+		SampleResult res = new SampleResult();
+		boolean isSuccessful = false;
+		res.setSampleLabel(getLabel());
+		res.sampleStart();
+		if (bshInterpreter == null) {
 			res.sampleEnd();
 			res.setResponseCode("503");//$NON-NLS-1$
 			res.setResponseMessage("BeanShell Interpreter not found");
 			res.setSuccessful(false);
 			return res;
 		}
-        try
-        {
-        	String request=getScript();
-        	String fileName=getFilename();
-        	if (fileName.length() == 0) {
-				res.setSamplerData(request);	
-        	} else {
+		try {
+			String request = getScript();
+			String fileName = getFilename();
+			if (fileName.length() == 0) {
+				res.setSamplerData(request);
+			} else {
 				res.setSamplerData(fileName);
-        	}
+			}
 
-			bshInterpreter.set("Label",getLabel());  //$NON-NLS-1$
-			bshInterpreter.set("FileName",getFilename()); //$NON-NLS-1$
-			bshInterpreter.set("SampleResult",res); //$NON-NLS-1$
-			bshInterpreter.set("Parameters",getParameters());// as a single line//$NON-NLS-1$
-			bshInterpreter.set("bsh.args",JOrphanUtils.split(getParameters()," "));
+			bshInterpreter.set("Label", getLabel()); //$NON-NLS-1$
+			bshInterpreter.set("FileName", getFilename()); //$NON-NLS-1$
+			bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
+			bshInterpreter.set("Parameters", getParameters());// as a single
+																// line//$NON-NLS-1$
+			bshInterpreter.set("bsh.args", JOrphanUtils.split(getParameters(), " "));
 
-            // Set default values
-			bshInterpreter.set("ResponseCode","200"); //$NON-NLS-1$
-			bshInterpreter.set("ResponseMessage","OK");//$NON-NLS-1$
-			bshInterpreter.set("IsSuccess",true);//$NON-NLS-1$
-			
+			// Set default values
+			bshInterpreter.set("ResponseCode", "200"); //$NON-NLS-1$
+			bshInterpreter.set("ResponseMessage", "OK");//$NON-NLS-1$
+			bshInterpreter.set("IsSuccess", true);//$NON-NLS-1$
+
 			// Add variables for access to context and variables
-	    	JMeterContext jmctx = JMeterContextService.getContext();
-	        JMeterVariables vars = jmctx.getVariables();
-			bshInterpreter.set("ctx",jmctx);//$NON-NLS-1$
-			bshInterpreter.set("vars",vars);//$NON-NLS-1$
+			JMeterContext jmctx = JMeterContextService.getContext();
+			JMeterVariables vars = jmctx.getVariables();
+			bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
+			bshInterpreter.set("vars", vars);//$NON-NLS-1$
 
 			Object bshOut;
-			
-			if (fileName.length() == 0){
+
+			if (fileName.length() == 0) {
 				bshOut = bshInterpreter.eval(request);
 			} else {
 				bshOut = bshInterpreter.source(fileName);
 			}
-			
+
 			String out;
 			if (bshOut == null) {// Script did not return anything...
-				out="";
-			} else { 
+				out = "";
+			} else {
 				out = bshOut.toString();
 			}
-	        res.setResponseData(out.getBytes());
-	        res.setDataType(SampleResult.TEXT);
-	        res.setResponseCode(bshInterpreter.get("ResponseCode").toString());//$NON-NLS-1$
-	        res.setResponseMessage(bshInterpreter.get("ResponseMessage").toString());//$NON-NLS-1$
-	        isSuccessful = Boolean.valueOf(bshInterpreter.get("IsSuccess") //$NON-NLS-1$
-	            .toString()).booleanValue();
-        }
-/*
- * To avoid class loading problems when bsh,jar is missing,
- * we don't try to catch this error separately
- * 		catch (bsh.EvalError ex)
-		{
-			log.debug("",ex);
-			res.setResponseCode("500");//$NON-NLS-1$
-			res.setResponseMessage(ex.toString());
-		} 
- */
-        // but we do trap this error to make tests work better
-        catch(NoClassDefFoundError ex){
-			log.error("BeanShell Jar missing? "+ex.toString());
+			res.setResponseData(out.getBytes());
+			res.setDataType(SampleResult.TEXT);
+			res.setResponseCode(bshInterpreter.get("ResponseCode").toString());//$NON-NLS-1$
+			res.setResponseMessage(bshInterpreter.get("ResponseMessage").toString());//$NON-NLS-1$
+			isSuccessful = Boolean.valueOf(bshInterpreter.get("IsSuccess") //$NON-NLS-1$
+					.toString()).booleanValue();
+		}
+		/*
+		 * To avoid class loading problems when bsh,jar is missing, we don't try
+		 * to catch this error separately catch (bsh.EvalError ex) {
+		 * log.debug("",ex); res.setResponseCode("500");//$NON-NLS-1$
+		 * res.setResponseMessage(ex.toString()); }
+		 */
+		// but we do trap this error to make tests work better
+		catch (NoClassDefFoundError ex) {
+			log.error("BeanShell Jar missing? " + ex.toString());
 			res.setResponseCode("501");//$NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 			res.setStopThread(true); // No point continuing
-        }
-		catch (Exception ex) // Mainly for bsh.EvalError
+		} catch (Exception ex) // Mainly for bsh.EvalError
 		{
 			log.warn(ex.toString());
 			res.setResponseCode("500");//$NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 		}
 
-        res.sampleEnd();
+		res.sampleEnd();
 
-        // Set if we were successful or not
-        res.setSuccessful(isSuccessful);
+		// Set if we were successful or not
+		res.setSuccessful(isSuccessful);
 
-        return res;
-    }
+		return res;
+	}
 }

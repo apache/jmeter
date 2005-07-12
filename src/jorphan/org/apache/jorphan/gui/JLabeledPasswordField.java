@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.gui;
 
@@ -24,27 +24,23 @@ import javax.swing.JTextField;
 /**
  * @version $Revision$
  */
-public class JLabeledPasswordField extends JLabeledTextField
-{
+public class JLabeledPasswordField extends JLabeledTextField {
 
-    public JLabeledPasswordField()
-    {
-        super();
-    }
+	public JLabeledPasswordField() {
+		super();
+	}
 
-    /**
-     * Constructs a new component with the label displaying the
-     * passed text.
-     *
-     * @param pLabel The text to in the label.
-     */
-    public JLabeledPasswordField(String pLabel)
-    {
-        super(pLabel);
-    }
+	/**
+	 * Constructs a new component with the label displaying the passed text.
+	 * 
+	 * @param pLabel
+	 *            The text to in the label.
+	 */
+	public JLabeledPasswordField(String pLabel) {
+		super(pLabel);
+	}
 
-    protected JTextField createTextField(int size)
-    {
-        return new JPasswordField(size);
-    }
+	protected JTextField createTextField(int size) {
+		return new JPasswordField(size);
+	}
 }

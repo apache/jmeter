@@ -26,100 +26,86 @@ import org.apache.jmeter.threads.JMeterContextService;
 /**
  * @version $Revision$
  */
-public class FunctionProperty extends AbstractProperty
-{
-   CompoundVariable function;
-   int testIteration = -1;
-   String cacheValue;
+public class FunctionProperty extends AbstractProperty {
+	CompoundVariable function;
 
-   public FunctionProperty(String name, CompoundVariable func)
-   {
-      super(name);
-      function = func;
-   }
+	int testIteration = -1;
 
-   public FunctionProperty()
-   {
-      super();
-   }
+	String cacheValue;
 
-   public void setObjectValue(Object v)
-   {
-      if (v instanceof CompoundVariable && !isRunningVersion())
-      {
-         function = (CompoundVariable) v;
-      }
-      else
-      {
-         cacheValue = v.toString();
-      }
-   }
+	public FunctionProperty(String name, CompoundVariable func) {
+		super(name);
+		function = func;
+	}
 
-   public boolean equals(Object o)
-   {
-      if (o instanceof FunctionProperty)
-      {
-         if (function != null) { return function.equals(((JMeterProperty) o)
-               .getObjectValue()); }
-      }
-      return false;
-   }
+	public FunctionProperty() {
+		super();
+	}
 
-   /**
-    * Executes the function (and caches the value for the duration of the test
-    * iteration) if the property is a running version. Otherwise, the raw
-    * string representation of the function is provided.
-    * 
-    * @see JMeterProperty#getStringValue()
-    */
-   public String getStringValue()
-   {
-      JMeterContext ctx = JMeterContextService.getContext();//Expensive, so do
-                                                            // once
-      if (!isRunningVersion() || !ctx.isSamplingStarted())
-      {
-         log.debug("Not running version, return raw function string");
-         return function.getRawParameters();
-      }
-      else
-      {
-         log.debug("Running version, executing function");
-         int iter = ctx.getVariables().getIteration();
-         if (iter < testIteration)
-         {
-            testIteration = -1;
-         }
-         if (iter > testIteration || cacheValue == null)
-         {
-            testIteration = iter;
-            cacheValue = function.execute();
-         }
-         return cacheValue;
-      }
-   }
+	public void setObjectValue(Object v) {
+		if (v instanceof CompoundVariable && !isRunningVersion()) {
+			function = (CompoundVariable) v;
+		} else {
+			cacheValue = v.toString();
+		}
+	}
 
-   /**
-    * @see JMeterProperty#getObjectValue()
-    */
-   public Object getObjectValue()
-   {
-      return function;
-   }
+	public boolean equals(Object o) {
+		if (o instanceof FunctionProperty) {
+			if (function != null) {
+				return function.equals(((JMeterProperty) o).getObjectValue());
+			}
+		}
+		return false;
+	}
 
-   public Object clone()
-   {
-      FunctionProperty prop = (FunctionProperty) super.clone();
-      prop.cacheValue = cacheValue;
-      prop.testIteration = testIteration;
-      prop.function = function;
-      return prop;
-   }
+	/**
+	 * Executes the function (and caches the value for the duration of the test
+	 * iteration) if the property is a running version. Otherwise, the raw
+	 * string representation of the function is provided.
+	 * 
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		JMeterContext ctx = JMeterContextService.getContext();// Expensive, so
+																// do
+		// once
+		if (!isRunningVersion() || !ctx.isSamplingStarted()) {
+			log.debug("Not running version, return raw function string");
+			return function.getRawParameters();
+		} else {
+			log.debug("Running version, executing function");
+			int iter = ctx.getVariables().getIteration();
+			if (iter < testIteration) {
+				testIteration = -1;
+			}
+			if (iter > testIteration || cacheValue == null) {
+				testIteration = iter;
+				cacheValue = function.execute();
+			}
+			return cacheValue;
+		}
+	}
 
-   /**
-    * @see JMeterProperty#recoverRunningVersion(TestElement)
-    */
-   public void recoverRunningVersion(TestElement owner)
-   {
-      cacheValue = null;
-   }
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return function;
+	}
+
+	public Object clone() {
+		FunctionProperty prop = (FunctionProperty) super.clone();
+		prop.cacheValue = cacheValue;
+		prop.testIteration = testIteration;
+		prop.function = function;
+		return prop;
+	}
+
+	/**
+	 * @see JMeterProperty#recoverRunningVersion(TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		cacheValue = null;
+	}
 }

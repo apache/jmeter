@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.junit;
 
@@ -28,52 +28,52 @@ import org.apache.log.Logger;
 
 /**
  * @author ano ano
- *
+ * 
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public abstract class JMeterTestCase extends TestCase
-{
+public abstract class JMeterTestCase extends TestCase {
 	// Used by findTestFile
-	private static final String filePrefix; 
-	public JMeterTestCase(){
+	private static final String filePrefix;
+
+	public JMeterTestCase() {
 		super();
 	}
-    
-    public JMeterTestCase(String name)
-    {
-        super(name);
-    }
-    
-    /*
-     * If not running under AllTests.java, make sure that the properties
-     * (and log file) are set up correctly.
-     * 
-     * N.B. In order for this to work correctly, the JUnit test must be started
-     * in the bin directory, and all the JMeter jars (plus any others needed at
-     * run-time) need to be on the classpath.
-     * 
-     */
-    static {
-    	if (JMeterUtils.getJMeterProperties() == null){
-    		String file="jmetertest.properties";
+
+	public JMeterTestCase(String name) {
+		super(name);
+	}
+
+	/*
+	 * If not running under AllTests.java, make sure that the properties (and
+	 * log file) are set up correctly.
+	 * 
+	 * N.B. In order for this to work correctly, the JUnit test must be started
+	 * in the bin directory, and all the JMeter jars (plus any others needed at
+	 * run-time) need to be on the classpath.
+	 * 
+	 */
+	static {
+		if (JMeterUtils.getJMeterProperties() == null) {
+			String file = "jmetertest.properties";
 			File f = new File(file);
-			if (!f.canRead()){
-				System.out.println("Can't find "+file+" - trying bin directory");
-				file="bin/"+file;// JMeterUtils assumes Unix-style separators
+			if (!f.canRead()) {
+				System.out.println("Can't find " + file + " - trying bin directory");
+				file = "bin/" + file;// JMeterUtils assumes Unix-style
+										// separators
 				// Also need to set working directory so test files can be found
-				System.setProperty("user.dir",System.getProperty("user.dir")+File.separatorChar+"bin");
-				System.out.println("Setting user.dir="+System.getProperty("user.dir"));
-				filePrefix="bin/";
+				System.setProperty("user.dir", System.getProperty("user.dir") + File.separatorChar + "bin");
+				System.out.println("Setting user.dir=" + System.getProperty("user.dir"));
+				filePrefix = "bin/";
 			} else {
-				filePrefix="";
+				filePrefix = "";
 			}
-    		JMeterUtils jmu = new JMeterUtils();
-            try {
-    		    jmu.initializeProperties(file);
-            } catch (MissingResourceException e){
-            	System.out.println("** Can't find resources - continuing anyway **");
-            }
+			JMeterUtils jmu = new JMeterUtils();
+			try {
+				jmu.initializeProperties(file);
+			} catch (MissingResourceException e) {
+				System.out.println("** Can't find resources - continuing anyway **");
+			}
 			logprop("java.version");
 			logprop("java.vendor");
 			logprop("java.home");
@@ -84,33 +84,29 @@ public abstract class JMeterTestCase extends TestCase
 			logprop("os.version");
 			logprop("os.arch");
 			logprop("java.class.path");
-//			String cp = System.getProperty("java.class.path");
-//			String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
-//			System.out.println("java.class.path=");
-//			for (int i=0;i<cpe.length;i++){
-//				System.out.println(cpe[i]);
-//			}
-    	} else {
-    		filePrefix="";
-    	}
-    }
-    
-	private static void logprop(String prop)
-	{
-		System.out.println(prop+"="+System.getProperty(prop));
+			// String cp = System.getProperty("java.class.path");
+			// String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
+			// System.out.println("java.class.path=");
+			// for (int i=0;i<cpe.length;i++){
+			// System.out.println(cpe[i]);
+			// }
+		} else {
+			filePrefix = "";
+		}
+	}
+
+	private static void logprop(String prop) {
+		System.out.println(prop + "=" + System.getProperty(prop));
 	}
 
 	// Helper method to find a file
-	protected static File findTestFile(String file)
-	{
-		File f= new File(file);
-		if (filePrefix.length() > 0 && !f.isAbsolute())
-		{
-			f= new File(filePrefix+file);// Add the offset
+	protected static File findTestFile(String file) {
+		File f = new File(file);
+		if (filePrefix.length() > 0 && !f.isAbsolute()) {
+			f = new File(filePrefix + file);// Add the offset
 		}
 		return f;
 	}
 
-    protected static final Logger testLog = LoggingManager.getLoggerForClass();
+	protected static final Logger testLog = LoggingManager.getLoggerForClass();
 }
-

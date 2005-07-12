@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.scanners.FrameScanner;
@@ -37,37 +36,29 @@ import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class FrameTagTest extends ParserTestCase
-{
+public class FrameTagTest extends ParserTestCase {
 
-    public FrameTagTest(String name)
-    {
-        super(name);
-    }
+	public FrameTagTest(String name) {
+		super(name);
+	}
 
-    public void testToHTML() throws ParserException
-    {
-        createParser(
-            "<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"
-                + "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"
-                + "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n"
-                + "</frameset>");
-        parser.addScanner(new FrameScanner(""));
+	public void testToHTML() throws ParserException {
+		createParser("<frameset rows=\"115,*\" frameborder=\"NO\" border=\"0\" framespacing=\"0\">\n"
+				+ "<frame name=\"topFrame\" noresize src=\"demo_bc_top.html\" scrolling=\"NO\" frameborder=\"NO\">\n"
+				+ "<frame name=\"mainFrame\" src=\"http://www.kizna.com/web_e/\" scrolling=\"AUTO\">\n" + "</frameset>");
+		parser.addScanner(new FrameScanner(""));
 
-        parseAndAssertNodeCount(4);
-        assertTrue("Node 1 should be Frame Tag", node[1] instanceof FrameTag);
-        assertTrue("Node 2 should be Frame Tag", node[2] instanceof FrameTag);
+		parseAndAssertNodeCount(4);
+		assertTrue("Node 1 should be Frame Tag", node[1] instanceof FrameTag);
+		assertTrue("Node 2 should be Frame Tag", node[2] instanceof FrameTag);
 
-        FrameTag frameTag1 = (FrameTag) node[1];
-        FrameTag frameTag2 = (FrameTag) node[2];
+		FrameTag frameTag1 = (FrameTag) node[1];
+		FrameTag frameTag2 = (FrameTag) node[2];
 
-        assertStringEquals(
-            "Frame 1 toHTML()",
-            "<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">",
-            frameTag1.toHtml());
-        assertStringEquals(
-            "Frame 2 toHTML()",
-            "<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">",
-            frameTag2.toHtml());
-    }
+		assertStringEquals("Frame 1 toHTML()",
+				"<FRAME SCROLLING=\"NO\" FRAMEBORDER=\"NO\" SRC=\"demo_bc_top.html\" NAME=\"topFrame\" NORESIZE=\"\">",
+				frameTag1.toHtml());
+		assertStringEquals("Frame 2 toHTML()",
+				"<FRAME SCROLLING=\"AUTO\" SRC=\"http://www.kizna.com/web_e/\" NAME=\"mainFrame\">", frameTag2.toHtml());
+	}
 }

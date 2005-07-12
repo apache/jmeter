@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -30,71 +30,55 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * This command clears the existing test plan, allowing the creation of a New
  * test plan.
- *
- * @author     <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a>
- * Created      June 6, 2002
- * @version    $Revision$ Last updated: $Date$
+ * 
+ * @author <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a> Created
+ *         June 6, 2002
+ * @version $Revision$ Last updated: $Date$
  */
-public class Close implements Command
-{
+public class Close implements Command {
 
-    private static Set commands = new HashSet();
-    static {
-        commands.add("close");
-    }
+	private static Set commands = new HashSet();
+	static {
+		commands.add("close");
+	}
 
-    /**
-     *  Constructor for the Close object.
-     */
-    public Close()
-    {
-    }
+	/**
+	 * Constructor for the Close object.
+	 */
+	public Close() {
+	}
 
-    /**
-     * Gets the ActionNames attribute of the Close object.
-     *
-     *@return    the ActionNames value
-     */
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	/**
+	 * Gets the ActionNames attribute of the Close object.
+	 * 
+	 * @return the ActionNames value
+	 */
+	public Set getActionNames() {
+		return commands;
+	}
 
-    /**
-     * This method performs the actual command processing.
-     *
-     *@param  e  the generic UI action event
-     */
-    public void doAction(ActionEvent e)
-    {
-		ActionRouter.getInstance().doActionNow(
-            new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        if (guiPackage.isDirty())
-        {
-            if (JOptionPane
-                .showConfirmDialog(
-                    GuiPackage.getInstance().getMainFrame(),
-                    JMeterUtils.getResString("cancel_new_to_save"),
-                    JMeterUtils.getResString("Save?"),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE)
-                == JOptionPane.YES_OPTION)
-            {
-                ActionRouter.getInstance().doActionNow(
-                    new ActionEvent(
-                        e.getSource(),
-                        e.getID(),
-                        Save.SAVE));
-            }
-        }
-        guiPackage.getTreeModel().clearTestPlan();
-        guiPackage.getTreeListener().getJTree().setSelectionRow(1);
+	/**
+	 * This method performs the actual command processing.
+	 * 
+	 * @param e
+	 *            the generic UI action event
+	 */
+	public void doAction(ActionEvent e) {
+		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+		GuiPackage guiPackage = GuiPackage.getInstance();
+		if (guiPackage.isDirty()) {
+			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
+					.getResString("cancel_new_to_save"), JMeterUtils.getResString("Save?"), JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE));
+			}
+		}
+		guiPackage.getTreeModel().clearTestPlan();
+		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
-        // Clear the name of the test plan file
-        GuiPackage.getInstance().setTestPlanFile(null);
+		// Clear the name of the test plan file
+		GuiPackage.getInstance().setTestPlanFile(null);
 
-        ActionRouter.getInstance().actionPerformed(
-            new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));
-    }
+		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));
+	}
 }

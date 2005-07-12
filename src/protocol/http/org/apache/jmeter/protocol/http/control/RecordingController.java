@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control;
 
@@ -22,8 +22,8 @@ import org.apache.jmeter.control.GenericController;
 
 /**
  * @author Administrator
- *
+ * 
  * @version $Revision$
  */
-public class RecordingController extends GenericController
-{}
+public class RecordingController extends GenericController {
+}

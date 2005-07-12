@@ -14,95 +14,86 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
- package org.apache.jmeter.testelement.property;
+package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
 
 /**
  * @version $Revision$
  */
-public class StringProperty extends AbstractProperty
-{
-    String value;
-    transient String savedValue;
+public class StringProperty extends AbstractProperty {
+	String value;
 
-    public StringProperty(String name, String value)
-    {
-        super(name);
-        this.value = value;
-    }
+	transient String savedValue;
 
-    public StringProperty()
-    {
-        super();
-    }
+	public StringProperty(String name, String value) {
+		super(name);
+		this.value = value;
+	}
 
-    /**
-     * @see JMeterProperty#setRunningVersion(boolean)
-     */
-    public void setRunningVersion(boolean runningVersion)
-    {
-        super.setRunningVersion(runningVersion);
-        if(runningVersion)
-        {
-            savedValue = value;
-        }
-        else
-        {
-            savedValue = null;
-        }
-    }
+	public StringProperty() {
+		super();
+	}
 
-    public void setObjectValue(Object v)
-    {
-        value = v.toString();
-    }
+	/**
+	 * @see JMeterProperty#setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		super.setRunningVersion(runningVersion);
+		if (runningVersion) {
+			savedValue = value;
+		} else {
+			savedValue = null;
+		}
+	}
 
-    /**
-     * @see JMeterProperty#getStringValue()
-     */
-    public String getStringValue()
-    {
-        return value;
-    }
+	public void setObjectValue(Object v) {
+		value = v.toString();
+	}
 
-    /**
-     * @see JMeterProperty#getObjectValue()
-     */
-    public Object getObjectValue()
-    {
-        return value;
-    }
+	/**
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		return value;
+	}
 
-    /**
-     * @see Object#clone()
-     */
-    public Object clone()
-    {
-        StringProperty prop = (StringProperty) super.clone();
-        prop.value = value;
-        return prop;
-    }
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return value;
+	}
 
-    /**
-     * Sets the value.
-     * @param value The value to set
-     */
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
+	/**
+	 * @see Object#clone()
+	 */
+	public Object clone() {
+		StringProperty prop = (StringProperty) super.clone();
+		prop.value = value;
+		return prop;
+	}
 
-    /* (non-Javadoc)
-     * @see JMeterProperty#recoverRunningVersion(TestElement)
-     */
-    public void recoverRunningVersion(TestElement owner)
-    {
-        if (savedValue != null)
-        {
-            value = savedValue;
-        }
-    }
+	/**
+	 * Sets the value.
+	 * 
+	 * @param value
+	 *            The value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see JMeterProperty#recoverRunningVersion(TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		if (savedValue != null) {
+			value = savedValue;
+		}
+	}
 }

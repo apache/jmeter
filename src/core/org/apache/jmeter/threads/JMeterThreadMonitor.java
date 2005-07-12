@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.threads;
 
 /**
  * @version $Revision$
  */
-public interface JMeterThreadMonitor 
-{
-    public void threadFinished(JMeterThread thread);
+public interface JMeterThreadMonitor {
+	public void threadFinished(JMeterThread thread);
 }

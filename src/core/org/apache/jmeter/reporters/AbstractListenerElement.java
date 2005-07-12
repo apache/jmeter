@@ -14,42 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.reporters;
 
-
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.visualizers.Visualizer;
-
 
 /**
  * @author Michael Stover
  * @version $Revision$
  */
 
-public abstract class AbstractListenerElement extends AbstractTestElement
-{
-    transient private Visualizer listener;
+public abstract class AbstractListenerElement extends AbstractTestElement {
+	transient private Visualizer listener;
 
-    public AbstractListenerElement()
-    {}
+	public AbstractListenerElement() {
+	}
 
-    protected Visualizer getVisualizer()
-    {
-        return listener;
-    }
+	protected Visualizer getVisualizer() {
+		return listener;
+	}
 
-    public void setListener(Visualizer vis)
-    {
-        listener = vis;
-    }
+	public void setListener(Visualizer vis) {
+		listener = vis;
+	}
 
-    public Object clone()
-    {
-        AbstractListenerElement clone = (AbstractListenerElement) super.clone();
+	public Object clone() {
+		AbstractListenerElement clone = (AbstractListenerElement) super.clone();
 
-        clone.setListener(getVisualizer());
-        return clone;
-    }
+		clone.setListener(getVisualizer());
+		return clone;
+	}
 }

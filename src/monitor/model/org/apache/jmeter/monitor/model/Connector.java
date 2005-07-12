@@ -16,8 +16,7 @@
  */
 package org.apache.jmeter.monitor.model;
 
-public interface Connector
-{
+public interface Connector {
 	ThreadInfo getThreadInfo();
 
 	void setThreadInfo(ThreadInfo value);

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.plugin;
 
@@ -30,53 +30,48 @@ import org.apache.log.Logger;
  * @author Oliver Rossmueller
  * @version $Revision$
  */
-public final class PluginManager
-{
-    private static final PluginManager instance = new PluginManager();
+public final class PluginManager {
+	private static final PluginManager instance = new PluginManager();
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
-    private PluginManager()
-    {
-    }
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * Installs a plugin.
-     * @param plugin the plugin to install
-     * @param useGui indication of whether or not the gui will be used
-     */
-    public static void install(JMeterPlugin plugin, boolean useGui)
-    {
-        if (useGui)
-        {
-            instance.installPlugin(plugin);
-        }
-    }
+	private PluginManager() {
+	}
 
-    private void installPlugin(JMeterPlugin plugin)
-    {
-        String[][] icons = plugin.getIconMappings();
-        ClassLoader classloader = plugin.getClass().getClassLoader();
+	/**
+	 * Installs a plugin.
+	 * 
+	 * @param plugin
+	 *            the plugin to install
+	 * @param useGui
+	 *            indication of whether or not the gui will be used
+	 */
+	public static void install(JMeterPlugin plugin, boolean useGui) {
+		if (useGui) {
+			instance.installPlugin(plugin);
+		}
+	}
 
-        for (int i = 0; i < icons.length; i++)
-        {
-            URL resource = classloader.getResource(icons[i][1].trim());
+	private void installPlugin(JMeterPlugin plugin) {
+		String[][] icons = plugin.getIconMappings();
+		ClassLoader classloader = plugin.getClass().getClassLoader();
 
-            if (resource == null)
-            {
-                log.warn("Can't find icon for "+icons[i][0]+" - "+icons[i][1]);
-            }
-            else
-            {
-                GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
-                if (icons[i].length > 2 && icons[i][2] != null){
-                    URL resource2 = classloader.getResource(icons[i][2].trim());
-                    if (resource2 == null) {
-                        log.info("Can't find disabled icon for "+icons[i][0]+" - "+icons[i][2]);
-                    } else {
-                        GUIFactory.registerDisabledIcon(icons[i][0], new ImageIcon(resource2));
-                    }
-                }
-            }
-        }
-    }
+		for (int i = 0; i < icons.length; i++) {
+			URL resource = classloader.getResource(icons[i][1].trim());
+
+			if (resource == null) {
+				log.warn("Can't find icon for " + icons[i][0] + " - " + icons[i][1]);
+			} else {
+				GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
+				if (icons[i].length > 2 && icons[i][2] != null) {
+					URL resource2 = classloader.getResource(icons[i][2].trim());
+					if (resource2 == null) {
+						log.info("Can't find disabled icon for " + icons[i][0] + " - " + icons[i][2]);
+					} else {
+						GUIFactory.registerDisabledIcon(icons[i][0], new ImageIcon(resource2));
+					}
+				}
+			}
+		}
+	}
 }

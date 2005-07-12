@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.util;
 
@@ -23,32 +23,28 @@ package org.apache.jorphan.util;
  * 
  * @version $Revision$ $Date$
  */
-public class JMeterError extends Error
-{
-	private Throwable savedCause; //Support JDK1.4 getCause() on JDK1.3
+public class JMeterError extends Error {
+	private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
 
-    /**
-     * 
-     */
-    public JMeterError()
-    {
-        super();
-    }
+	/**
+	 * 
+	 */
+	public JMeterError() {
+		super();
+	}
 
-    /**
-     * @param s
-     */
-    public JMeterError(String s)
-    {
-        super(s);
-    }
+	/**
+	 * @param s
+	 */
+	public JMeterError(String s) {
+		super(s);
+	}
 
 	/**
 	 * @param cause
 	 */
-	public JMeterError(Throwable cause)
-	{
-		//JDK1.4: super(cause);
+	public JMeterError(Throwable cause) {
+		// JDK1.4: super(cause);
 		savedCause = cause;
 	}
 
@@ -56,19 +52,17 @@ public class JMeterError extends Error
 	 * @param message
 	 * @param cause
 	 */
-	public JMeterError(String message, Throwable cause)
-	{
-		//JDK1.4: super(message, cause);
+	public JMeterError(String message, Throwable cause) {
+		// JDK1.4: super(message, cause);
 		super(message);
 		savedCause = cause;
 	}
-    
+
 	/**
 	 * Local version of getCause() for JDK1.3 support
 	 * 
 	 */
-	public Throwable getCause()
-	{
+	public Throwable getCause() {
 		return savedCause;
 	}
 

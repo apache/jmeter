@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control;
 
@@ -36,83 +36,78 @@ import org.apache.log.Logger;
  * 
  * @version $Revision$
  */
-public class TransactionController
-    extends GenericController
-    implements Controller, Serializable
-{
-    protected static final Logger log = LoggingManager.getLoggerForClass();
+public class TransactionController extends GenericController implements Controller, Serializable {
+	protected static final Logger log = LoggingManager.getLoggerForClass();
 
-    transient private String threadName;
+	transient private String threadName;
+
 	transient private ListenerNotifier lnf;
+
 	transient private JMeterContext threadContext;
+
 	transient private JMeterVariables threadVars;
+
 	transient private SampleResult res;
-	
-    /**
-     * Creates a Transaction Controller
-     */
-    public TransactionController()
-    {
-    	threadName = Thread.currentThread().getName();
+
+	/**
+	 * Creates a Transaction Controller
+	 */
+	public TransactionController() {
+		threadName = Thread.currentThread().getName();
 		lnf = new ListenerNotifier();
-    }
+	}
 
-    private void log_debug(String s)
-    {
-	    String n = this.getName();
-	    log.debug(threadName + " " + n + " "+ s);
-    }
-    
-    private int calls;
-    /**
-     * @see org.apache.jmeter.control.Controller#next()
-     */
-    public Sampler next()
-    {
+	private void log_debug(String s) {
+		String n = this.getName();
+		log.debug(threadName + " " + n + " " + s);
+	}
+
+	private int calls;
+
+	/**
+	 * @see org.apache.jmeter.control.Controller#next()
+	 */
+	public Sampler next() {
 		Sampler returnValue = null;
-    	if (isFirst()) // must be the start of the subtree
-    	{
-    		log_debug("+++++++++++++++++++++++++++++");
-    		calls = 0;
-    		res = new SampleResult();
-    		res.sampleStart();
-    	}
-    	
-    	calls++;
-    	
-    	returnValue = super.next();
+		if (isFirst()) // must be the start of the subtree
+		{
+			log_debug("+++++++++++++++++++++++++++++");
+			calls = 0;
+			res = new SampleResult();
+			res.sampleStart();
+		}
 
-        if (returnValue == null) // Must be the end of the controller
-        {
-			log_debug("-----------------------------"+calls);
-        	if (res == null){
-        		log_debug("already called");
-        	} else {
+		calls++;
+
+		returnValue = super.next();
+
+		if (returnValue == null) // Must be the end of the controller
+		{
+			log_debug("-----------------------------" + calls);
+			if (res == null) {
+				log_debug("already called");
+			} else {
 				res.sampleEnd();
 				res.setSuccessful(true);
 				res.setSampleLabel(getName());
 				res.setResponseCode("200");
-				res.setResponseMessage("Called: "+calls);
+				res.setResponseMessage("Called: " + calls);
 				res.setThreadName(threadName);
-        	
-				//TODO could these be done earlier (or just once?)
+
+				// TODO could these be done earlier (or just once?)
 				threadContext = getThreadContext();
 				threadVars = threadContext.getVariables();
-				
-				SamplePackage pack = (SamplePackage)
-				              threadVars.getObject(JMeterThread.PACKAGE_OBJECT);
-				if (pack == null)
-				{
-					log.warn("Could not fetch SamplePackage");
-				}
-				else 
-				{
-					lnf.notifyListeners(new SampleEvent(res,getName()),pack.getSampleListeners());
-				}
-				res=null;
-        	}
-        }
 
-        return returnValue;
-    }
+				SamplePackage pack = (SamplePackage) threadVars.getObject(JMeterThread.PACKAGE_OBJECT);
+				if (pack == null) {
+					log.warn("Could not fetch SamplePackage");
+				} else {
+					lnf.notifyListeners(new SampleEvent(res, getName()), pack.getSampleListeners());
+				}
+				res = null;
+			}
+		}
+
+		return returnValue;
+	}
 }

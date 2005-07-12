@@ -29,31 +29,27 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.visitorsTests;
 
 import junit.framework.TestSuite;
 
-public class AllTests extends junit.framework.TestCase
-{
-    public AllTests(String name)
-    {
-        super(name);
-    }
+public class AllTests extends junit.framework.TestCase {
+	public AllTests(String name) {
+		super(name);
+	}
 
-    public static TestSuite suite()
-    {
-        TestSuite suite = new TestSuite("Visitor Tests");
+	public static TestSuite suite() {
+		TestSuite suite = new TestSuite("Visitor Tests");
 
-        suite.addTestSuite(CompositeTagFindingVisitorTest.class);
-        suite.addTestSuite(HtmlPageTest.class);
-        suite.addTestSuite(LinkFindingVisitorTest.class);
-        suite.addTestSuite(NodeVisitorTest.class);
-        suite.addTestSuite(StringFindingVisitorTest.class);
-        suite.addTestSuite(TagFindingVisitorTest.class);
-        suite.addTestSuite(TextExtractingVisitorTest.class);
-        suite.addTestSuite(UrlModifyingVisitorTest.class);
+		suite.addTestSuite(CompositeTagFindingVisitorTest.class);
+		suite.addTestSuite(HtmlPageTest.class);
+		suite.addTestSuite(LinkFindingVisitorTest.class);
+		suite.addTestSuite(NodeVisitorTest.class);
+		suite.addTestSuite(StringFindingVisitorTest.class);
+		suite.addTestSuite(TagFindingVisitorTest.class);
+		suite.addTestSuite(TextExtractingVisitorTest.class);
+		suite.addTestSuite(UrlModifyingVisitorTest.class);
 
-        return suite;
-    }
+		return suite;
+	}
 }

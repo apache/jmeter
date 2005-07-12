@@ -33,57 +33,47 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * @version $Revision$
  */
-public class AddParent implements Command
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class AddParent implements Command {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static Set commands = new HashSet();
-    static
-    {
-        commands.add("Add Parent");
-    }
+	private static Set commands = new HashSet();
+	static {
+		commands.add("Add Parent");
+	}
 
-    public AddParent()
-    {}
+	public AddParent() {
+	}
 
-    public void doAction(ActionEvent e)
-    {
-        String name = ((Component)e.getSource()).getName();
-        try
-        {
-            TestElement controller = GuiPackage.getInstance().createTestElement(name);
-            addParentToTree(controller);
-        }
-        catch(Exception err)
-        {
-            log.error("", err);
-        }
+	public void doAction(ActionEvent e) {
+		String name = ((Component) e.getSource()).getName();
+		try {
+			TestElement controller = GuiPackage.getInstance().createTestElement(name);
+			addParentToTree(controller);
+		} catch (Exception err) {
+			log.error("", err);
+		}
 
-    }
+	}
 
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	public Set getActionNames() {
+		return commands;
+	}
 
-    protected void addParentToTree(TestElement newParent)
-    {
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());
-        JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
-        JMeterTreeNode parentNode = (JMeterTreeNode)currentNode.getParent();
-        int index = parentNode.getIndex(currentNode);
-        guiPackage.getTreeModel().insertNodeInto(newNode, parentNode, index);
-        JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
-        for(int i = 0; i < nodes.length; i++)
-        {
-            moveNode(guiPackage, nodes[i], newNode);
-        }
-    }
+	protected void addParentToTree(TestElement newParent) {
+		GuiPackage guiPackage = GuiPackage.getInstance();
+		JMeterTreeNode newNode = new JMeterTreeNode(newParent, guiPackage.getTreeModel());
+		JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
+		JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
+		int index = parentNode.getIndex(currentNode);
+		guiPackage.getTreeModel().insertNodeInto(newNode, parentNode, index);
+		JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
+		for (int i = 0; i < nodes.length; i++) {
+			moveNode(guiPackage, nodes[i], newNode);
+		}
+	}
 
-    private void moveNode(GuiPackage guiPackage, JMeterTreeNode node, JMeterTreeNode newParentNode)
-    {
-        guiPackage.getTreeModel().removeNodeFromParent(node);
-        guiPackage.getTreeModel().insertNodeInto(node, newParentNode, newParentNode.getChildCount());
-    }
+	private void moveNode(GuiPackage guiPackage, JMeterTreeNode node, JMeterTreeNode newParentNode) {
+		guiPackage.getTreeModel().removeNodeFromParent(node);
+		guiPackage.getTreeModel().insertNodeInto(node, newParentNode, newParentNode.getChildCount());
+	}
 }

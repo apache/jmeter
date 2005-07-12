@@ -29,8 +29,8 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
+
 /////////////////////////
 // HTML Parser Imports //
 /////////////////////////
@@ -43,35 +43,30 @@ import org.htmlparser.util.ParserException;
  * The HTMLDoctypeScanner identifies Doctype tags
  */
 
-public class DoctypeScanner extends TagScanner
-{
-    private java.lang.String language;
-    private java.lang.String type;
+public class DoctypeScanner extends TagScanner {
+	private java.lang.String language;
 
-    public DoctypeScanner()
-    {
-        super();
-    }
+	private java.lang.String type;
 
-    public DoctypeScanner(String filter)
-    {
-        super(filter);
-    }
+	public DoctypeScanner() {
+		super();
+	}
 
-    public String[] getID()
-    {
-        String[] ids = new String[1];
-        ids[0] = "!DOCTYPE";
-        return ids;
-    }
+	public DoctypeScanner(String filter) {
+		super(filter);
+	}
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException
-    {
-        String tagContents = tag.getText();
-        tagContents = tagContents.substring(9, tagContents.length());
-        tagData.setTagContents(tagContents);
-        return new DoctypeTag(tagData);
-    }
+	public String[] getID() {
+		String[] ids = new String[1];
+		ids[0] = "!DOCTYPE";
+		return ids;
+	}
+
+	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
+		String tagContents = tag.getText();
+		tagContents = tagContents.substring(9, tagContents.length());
+		tagData.setTagContents(tagContents);
+		return new DoctypeTag(tagData);
+	}
 
 }

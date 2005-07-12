@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -43,252 +43,215 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * ModuleController Gui.
- *
- * @version   $Revision$ on $Date$
+ * 
+ * @version $Revision$ on $Date$
  */
-public class ModuleControllerGui
-    extends AbstractControllerGui /*implements UnsharedComponent*/
+public class ModuleControllerGui extends AbstractControllerGui /*
+																 * implements
+																 * UnsharedComponent
+																 */
 {
 
-    private JMeterTreeNode selected = null;
+	private JMeterTreeNode selected = null;
 
-    private JComboBox nodes;
-    private DefaultComboBoxModel nodesModel;
-    private JLabel warningLabel;
+	private JComboBox nodes;
 
-    public static final String CONTROLLER = "Module To Run";
-    //TODO should be a resource, and probably ought to be resolved at run-time (to allow language change)
+	private DefaultComboBoxModel nodesModel;
 
-    /**
-     * Initializes the gui panel for the ModuleController instance.
-     */
-    public ModuleControllerGui()
-    {
-        init();
-    }
+	private JLabel warningLabel;
 
-    public String getLabelResource()
-    {
-        return "module_controller_title";
-    }
+	public static final String CONTROLLER = "Module To Run";
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
-     */
-    public void configure(TestElement el)
-    {
-        super.configure(el);
-        ModuleController controller = (ModuleController) el;
-        this.selected = controller.getSelectedNode();
-        if(selected == null && controller.getNodePath() != null) warningLabel.setText(JMeterUtils.getResString("module_controller_warning") +
-                renderPath(controller.getNodePath()));
-        else warningLabel.setText("");
-        reinitialize();
-    }
-    
-    private String renderPath(Collection path)
-    {
-        Iterator iter = path.iterator();
-        StringBuffer buf = new StringBuffer();
-        boolean first = true;
-        while(iter.hasNext())
-        {
-            if(first)
-            {
-                first = false;
-                iter.next();
-                continue;
-            }
-            buf.append(iter.next());
-            if(iter.hasNext()) buf.append(" > ");
-        }
-        return buf.toString();
-    }
+	// TODO should be a resource, and probably ought to be resolved at run-time
+	// (to allow language change)
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
-     */
-    public TestElement createTestElement()
-    {
-        ModuleController mc = new ModuleController();
-        configureTestElement(mc);
-        if (selected != null)
-        {
-            mc.setSelectedNode(selected);
-        }
-        return mc;
-    }
+	/**
+	 * Initializes the gui panel for the ModuleController instance.
+	 */
+	public ModuleControllerGui() {
+		init();
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement element)
-    {
-        configureTestElement(element);
-        TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();
-        if (tnw != null && tnw.getTreeNode() != null)
-        {
-            selected = tnw.getTreeNode();
-            if (selected != null)
-            {
-                ((ModuleController) element).setSelectedNode(selected);
-            }
-        }
-    }
+	public String getLabelResource() {
+		return "module_controller_title";
+	}
 
-    public JPopupMenu createPopupMenu()
-    {
-        JPopupMenu menu = new JPopupMenu();
-        JMenu addMenu =
-            MenuFactory.makeMenus(
-                new String[] {
-                    MenuFactory.CONFIG_ELEMENTS,
-                    MenuFactory.ASSERTIONS,
-                    MenuFactory.TIMERS,
-                    MenuFactory.LISTENERS,
-                    },
-                JMeterUtils.getResString("Add"),
-                "Add");
-        menu.add(addMenu);
-        MenuFactory.addEditMenu(menu, true);
-        MenuFactory.addFileMenu(menu);
-        return menu;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(TestElement)
+	 */
+	public void configure(TestElement el) {
+		super.configure(el);
+		ModuleController controller = (ModuleController) el;
+		this.selected = controller.getSelectedNode();
+		if (selected == null && controller.getNodePath() != null)
+			warningLabel.setText(JMeterUtils.getResString("module_controller_warning")
+					+ renderPath(controller.getNodePath()));
+		else
+			warningLabel.setText("");
+		reinitialize();
+	}
 
-    private void init()
-    {
-        setLayout(
-            new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
-        setBorder(makeBorder());
-        add(makeTitlePanel());
+	private String renderPath(Collection path) {
+		Iterator iter = path.iterator();
+		StringBuffer buf = new StringBuffer();
+		boolean first = true;
+		while (iter.hasNext()) {
+			if (first) {
+				first = false;
+				iter.next();
+				continue;
+			}
+			buf.append(iter.next());
+			if (iter.hasNext())
+				buf.append(" > ");
+		}
+		return buf.toString();
+	}
 
-        // DROP-DOWN MENU
-        JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,5));
-        modulesPanel.add(new JLabel(CONTROLLER));
-        nodesModel = new DefaultComboBoxModel();
-        nodes = new JComboBox(nodesModel);
-        reinitialize();
-        modulesPanel.add(nodes);
-        warningLabel = new JLabel("");
-        modulesPanel.add(warningLabel);
-        add(modulesPanel);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
+	 */
+	public TestElement createTestElement() {
+		ModuleController mc = new ModuleController();
+		configureTestElement(mc);
+		if (selected != null) {
+			mc.setSelectedNode(selected);
+		}
+		return mc;
+	}
 
-    private void reinitialize()
-    {
-        TreeNodeWrapper current;
-        nodesModel.removeAllElements();
-        GuiPackage gp = GuiPackage.getInstance();
-        JMeterTreeNode root;
-        if (gp != null)
-        {
-            root =
-                (JMeterTreeNode) GuiPackage
-                    .getInstance()
-                    .getTreeModel()
-                    .getRoot();
-            buildNodesModel(root, "", 0);
-        }
-        if (selected != null)
-        {
-            for (int i = 0; i < nodesModel.getSize(); i++)
-            {
-                current = (TreeNodeWrapper) nodesModel.getElementAt(i);
-                if ((current.getTreeNode() == null && selected == null) || 
-                        (current.getTreeNode() != null && current.getTreeNode().equals(selected)))
-                {
-                    nodesModel.setSelectedItem(current);
-                    break;
-                }
-            }
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement element) {
+		configureTestElement(element);
+		TreeNodeWrapper tnw = (TreeNodeWrapper) nodesModel.getSelectedItem();
+		if (tnw != null && tnw.getTreeNode() != null) {
+			selected = tnw.getTreeNode();
+			if (selected != null) {
+				((ModuleController) element).setSelectedNode(selected);
+			}
+		}
+	}
 
-    private void buildNodesModel(
-        JMeterTreeNode node,
-        String parent_name,
-        int level)
-    {
-        if(level == 0 && (parent_name == null || parent_name.length() == 0))
-        {
-            nodesModel.addElement(new TreeNodeWrapper(null,""));
-        }
-        String seperator = " > ";
-        if (node != null)
-        {
-            for (int i = 0; i < node.getChildCount(); i++)
-            {
-                StringBuffer name = new StringBuffer();
-                JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
-                TestElement te = cur.getTestElement();
-                if (te instanceof ThreadGroup)
-                {
-                    name.append(parent_name);
-                    name.append(cur.getName());
-                    name.append(seperator);
-                    buildNodesModel(cur, name.toString(), level);
-                }
-                else if (
-                    te instanceof Controller
-                        && !(te instanceof ModuleController))
-                {
-                    name.append(spaces(level));
-                    name.append(parent_name);
-                    name.append(cur.getName());
-                    TreeNodeWrapper tnw =
-                        new TreeNodeWrapper(cur, name.toString());
-                    nodesModel.addElement(tnw);
-                    name = new StringBuffer();
-                    name.append(cur.getName());
-                    name.append(seperator);
-                    buildNodesModel(cur, name.toString(), level + 1);
-                }
-                else if (te instanceof TestPlan || te instanceof WorkBench)
-                {
-                    name.append(cur.getName());
-                    name.append(seperator);
-                    buildNodesModel(cur, name.toString(), 0);
-                }
-            }
-        }
-    }
+	public JPopupMenu createPopupMenu() {
+		JPopupMenu menu = new JPopupMenu();
+		JMenu addMenu = MenuFactory.makeMenus(new String[] { MenuFactory.CONFIG_ELEMENTS, MenuFactory.ASSERTIONS,
+				MenuFactory.TIMERS, MenuFactory.LISTENERS, }, JMeterUtils.getResString("Add"), "Add");
+		menu.add(addMenu);
+		MenuFactory.addEditMenu(menu, true);
+		MenuFactory.addFileMenu(menu);
+		return menu;
+	}
 
-    private String spaces(int level)
-    {
-        int multi = 4;
-        StringBuffer spaces = new StringBuffer(level * multi);
-        for (int i = 0; i < level * multi; i++)
-        {
-            spaces.append(" ");
-        }
-        return spaces.toString();
-    }
+	private void init() {
+		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setBorder(makeBorder());
+		add(makeTitlePanel());
+
+		// DROP-DOWN MENU
+		JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+		modulesPanel.add(new JLabel(CONTROLLER));
+		nodesModel = new DefaultComboBoxModel();
+		nodes = new JComboBox(nodesModel);
+		reinitialize();
+		modulesPanel.add(nodes);
+		warningLabel = new JLabel("");
+		modulesPanel.add(warningLabel);
+		add(modulesPanel);
+	}
+
+	private void reinitialize() {
+		TreeNodeWrapper current;
+		nodesModel.removeAllElements();
+		GuiPackage gp = GuiPackage.getInstance();
+		JMeterTreeNode root;
+		if (gp != null) {
+			root = (JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot();
+			buildNodesModel(root, "", 0);
+		}
+		if (selected != null) {
+			for (int i = 0; i < nodesModel.getSize(); i++) {
+				current = (TreeNodeWrapper) nodesModel.getElementAt(i);
+				if ((current.getTreeNode() == null && selected == null)
+						|| (current.getTreeNode() != null && current.getTreeNode().equals(selected))) {
+					nodesModel.setSelectedItem(current);
+					break;
+				}
+			}
+		}
+	}
+
+	private void buildNodesModel(JMeterTreeNode node, String parent_name, int level) {
+		if (level == 0 && (parent_name == null || parent_name.length() == 0)) {
+			nodesModel.addElement(new TreeNodeWrapper(null, ""));
+		}
+		String seperator = " > ";
+		if (node != null) {
+			for (int i = 0; i < node.getChildCount(); i++) {
+				StringBuffer name = new StringBuffer();
+				JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
+				TestElement te = cur.getTestElement();
+				if (te instanceof ThreadGroup) {
+					name.append(parent_name);
+					name.append(cur.getName());
+					name.append(seperator);
+					buildNodesModel(cur, name.toString(), level);
+				} else if (te instanceof Controller && !(te instanceof ModuleController)) {
+					name.append(spaces(level));
+					name.append(parent_name);
+					name.append(cur.getName());
+					TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
+					nodesModel.addElement(tnw);
+					name = new StringBuffer();
+					name.append(cur.getName());
+					name.append(seperator);
+					buildNodesModel(cur, name.toString(), level + 1);
+				} else if (te instanceof TestPlan || te instanceof WorkBench) {
+					name.append(cur.getName());
+					name.append(seperator);
+					buildNodesModel(cur, name.toString(), 0);
+				}
+			}
+		}
+	}
+
+	private String spaces(int level) {
+		int multi = 4;
+		StringBuffer spaces = new StringBuffer(level * multi);
+		for (int i = 0; i < level * multi; i++) {
+			spaces.append(" ");
+		}
+		return spaces.toString();
+	}
 }
 
-class TreeNodeWrapper
-{
+class TreeNodeWrapper {
 
-    private JMeterTreeNode tn;
-    private String label;
+	private JMeterTreeNode tn;
 
-    private TreeNodeWrapper()
-    {
-    };
+	private String label;
 
-    public TreeNodeWrapper(JMeterTreeNode tn, String label)
-    {
-        this.tn = tn;
-        this.label = label;
-    }
+	private TreeNodeWrapper() {
+	};
 
-    public JMeterTreeNode getTreeNode()
-    {
-        return tn;
-    }
+	public TreeNodeWrapper(JMeterTreeNode tn, String label) {
+		this.tn = tn;
+		this.label = label;
+	}
 
-    public String toString()
-    {
-        return label;
-    }
+	public JMeterTreeNode getTreeNode() {
+		return tn;
+	}
+
+	public String toString() {
+		return label;
+	}
 
 }

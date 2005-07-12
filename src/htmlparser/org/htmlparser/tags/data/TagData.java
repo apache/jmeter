@@ -29,125 +29,93 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags.data;
 
-public class TagData
-{
-    private int tagBegin;
-    private int tagEnd;
-    private int startLine;
-    private int endLine;
-    private String tagContents;
-    private String tagLine;
-    private String urlBeingParsed;
-    private boolean isXmlEndTag;
+public class TagData {
+	private int tagBegin;
 
-    public TagData(
-        int tagBegin,
-        int tagEnd,
-        String tagContents,
-        String tagLine)
-    {
-        this(tagBegin, tagEnd, 0, 0, tagContents, tagLine, "", false);
-    }
+	private int tagEnd;
 
-    public TagData(
-        int tagBegin,
-        int tagEnd,
-        String tagContents,
-        String tagLine,
-        String urlBeingParsed)
-    {
-        this(
-            tagBegin,
-            tagEnd,
-            0,
-            0,
-            tagContents,
-            tagLine,
-            urlBeingParsed,
-            false);
-    }
+	private int startLine;
 
-    public TagData(
-        int tagBegin,
-        int tagEnd,
-        int startLine,
-        int endLine,
-        String tagContents,
-        String tagLine,
-        String urlBeingParsed,
-        boolean isXmlEndTag)
-    {
-        this.tagBegin = tagBegin;
-        this.tagEnd = tagEnd;
-        this.startLine = startLine;
-        this.endLine = endLine;
-        this.tagContents = tagContents;
-        this.tagLine = tagLine;
-        this.urlBeingParsed = urlBeingParsed;
-        this.isXmlEndTag = isXmlEndTag;
-    }
+	private int endLine;
 
-    public int getTagBegin()
-    {
-        return tagBegin;
-    }
+	private String tagContents;
 
-    public String getTagContents()
-    {
-        return tagContents;
-    }
+	private String tagLine;
 
-    public int getTagEnd()
-    {
-        return tagEnd;
-    }
+	private String urlBeingParsed;
 
-    public String getTagLine()
-    {
-        return tagLine;
-    }
+	private boolean isXmlEndTag;
 
-    public void setTagContents(String tagContents)
-    {
-        this.tagContents = tagContents;
-    }
+	public TagData(int tagBegin, int tagEnd, String tagContents, String tagLine) {
+		this(tagBegin, tagEnd, 0, 0, tagContents, tagLine, "", false);
+	}
 
-    public String getUrlBeingParsed()
-    {
-        return urlBeingParsed;
-    }
+	public TagData(int tagBegin, int tagEnd, String tagContents, String tagLine, String urlBeingParsed) {
+		this(tagBegin, tagEnd, 0, 0, tagContents, tagLine, urlBeingParsed, false);
+	}
 
-    public void setUrlBeingParsed(String baseUrl)
-    {
-        this.urlBeingParsed = baseUrl;
-    }
+	public TagData(int tagBegin, int tagEnd, int startLine, int endLine, String tagContents, String tagLine,
+			String urlBeingParsed, boolean isXmlEndTag) {
+		this.tagBegin = tagBegin;
+		this.tagEnd = tagEnd;
+		this.startLine = startLine;
+		this.endLine = endLine;
+		this.tagContents = tagContents;
+		this.tagLine = tagLine;
+		this.urlBeingParsed = urlBeingParsed;
+		this.isXmlEndTag = isXmlEndTag;
+	}
 
-    public boolean isEmptyXmlTag()
-    {
-        return isXmlEndTag;
-    }
+	public int getTagBegin() {
+		return tagBegin;
+	}
 
-    /**
-     * Returns the line number where the tag starts in the HTML. At the moment this
-     * will only be valid for tags created with the
-     * <code>CompositeTagScanner</code> or a subclass of it.
-     */
-    public int getStartLine()
-    {
-        return startLine;
-    }
+	public String getTagContents() {
+		return tagContents;
+	}
 
-    /**
-     * Returns the line number where the tag ends in the HTML. At the moment this
-     * will only be valid for tags created with the
-     * <code>CompositeTagScanner</code> or a subclass of it.
-     */
-    public int getEndLine()
-    {
-        return endLine;
-    }
+	public int getTagEnd() {
+		return tagEnd;
+	}
+
+	public String getTagLine() {
+		return tagLine;
+	}
+
+	public void setTagContents(String tagContents) {
+		this.tagContents = tagContents;
+	}
+
+	public String getUrlBeingParsed() {
+		return urlBeingParsed;
+	}
+
+	public void setUrlBeingParsed(String baseUrl) {
+		this.urlBeingParsed = baseUrl;
+	}
+
+	public boolean isEmptyXmlTag() {
+		return isXmlEndTag;
+	}
+
+	/**
+	 * Returns the line number where the tag starts in the HTML. At the moment
+	 * this will only be valid for tags created with the
+	 * <code>CompositeTagScanner</code> or a subclass of it.
+	 */
+	public int getStartLine() {
+		return startLine;
+	}
+
+	/**
+	 * Returns the line number where the tag ends in the HTML. At the moment
+	 * this will only be valid for tags created with the
+	 * <code>CompositeTagScanner</code> or a subclass of it.
+	 */
+	public int getEndLine() {
+		return endLine;
+	}
 
 }

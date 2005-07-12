@@ -14,7 +14,7 @@
  * limitations under the License.
  * 
  */
- 
+
 package org.apache.jmeter.protocol.jms.client;
 
 import javax.naming.Context;
@@ -34,35 +34,37 @@ import org.apache.log.Logger;
 
 /**
  * @author pete
- *
- * ConnectionFactory is responsible for creating new connections.
- * Eventually, the connection factory should read an external
- * configuration file and create a pool of connections. The current
- * implementation just does the basics. Once the tires get kicked
- * a bit, we can add connection pooling support.
+ * 
+ * ConnectionFactory is responsible for creating new connections. Eventually,
+ * the connection factory should read an external configuration file and create
+ * a pool of connections. The current implementation just does the basics. Once
+ * the tires get kicked a bit, we can add connection pooling support.
  */
 public class ConnectionFactory implements TestListener {
 
 	private static TopicConnectionFactory factory = null;
-	private static QueueConnectionFactory qfactory = null;
-	static Logger log = LoggingManager.getLoggerForClass();
-	
-    /**
-     * 
-     */
-    protected ConnectionFactory() {
-        super();
-    }
 
-	public void testStarted(String test){
+	private static QueueConnectionFactory qfactory = null;
+
+	static Logger log = LoggingManager.getLoggerForClass();
+
+	/**
+	 * 
+	 */
+	protected ConnectionFactory() {
+		super();
 	}
-	
-	public void testEnded(String test){
+
+	public void testStarted(String test) {
+	}
+
+	public void testEnded(String test) {
 		testEnded();
 	}
 
 	/**
 	 * endTest cleans up the client
+	 * 
 	 * @see junit.framework.TestListener#endTest(junit.framework.Test)
 	 */
 	public void testEnded() {
@@ -70,15 +72,15 @@ public class ConnectionFactory implements TestListener {
 	}
 
 	/**
-	 * startTest sets up the client and gets it ready for the
-	 * test. Since async messaging is different than request/
-	 * response applications, the connection is created at the
-	 * beginning of the test and closed at the end of the test.
+	 * startTest sets up the client and gets it ready for the test. Since async
+	 * messaging is different than request/ response applications, the
+	 * connection is created at the beginning of the test and closed at the end
+	 * of the test.
 	 */
 	public void testStarted() {
 	}
 
-	public void testIterationStart(LoopIterationEvent event){
+	public void testIterationStart(LoopIterationEvent event) {
 	}
 
 	/**
@@ -87,16 +89,15 @@ public class ConnectionFactory implements TestListener {
 	 * @param fac
 	 * @return
 	 */
-	public static synchronized TopicConnectionFactory getTopicConnectionFactory(
-	Context ctx, String fac){
-		while (factory == null){
+	public static synchronized TopicConnectionFactory getTopicConnectionFactory(Context ctx, String fac) {
+		while (factory == null) {
 			try {
 				Object objfac = ctx.lookup(fac);
-				if (objfac instanceof TopicConnectionFactory){
-					factory = (TopicConnectionFactory)objfac;
+				if (objfac instanceof TopicConnectionFactory) {
+					factory = (TopicConnectionFactory) objfac;
 				}
-			} catch (NamingException e){
-				log.error(e.getRootCause().toString());//JDK1.4 getCause()
+			} catch (NamingException e) {
+				log.error(e.getRootCause().toString());// JDK1.4 getCause()
 			}
 		}
 		return factory;
@@ -108,47 +109,46 @@ public class ConnectionFactory implements TestListener {
 	 * @param fac
 	 * @return
 	 */
-	public static synchronized QueueConnectionFactory getQueueConnectionFactory(
-	Context ctx, String fac){
-		while (qfactory == null){
+	public static synchronized QueueConnectionFactory getQueueConnectionFactory(Context ctx, String fac) {
+		while (qfactory == null) {
 			try {
 				Object objfac = ctx.lookup(fac);
-				if (objfac instanceof QueueConnectionFactory){
-					qfactory = (QueueConnectionFactory)objfac;
+				if (objfac instanceof QueueConnectionFactory) {
+					qfactory = (QueueConnectionFactory) objfac;
 				}
-			} catch (NamingException e){
+			} catch (NamingException e) {
 				log.error(e.getMessage());
 			}
 		}
 		return qfactory;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
-	public static synchronized TopicConnection getTopicConnection(){
-		if (factory != null){
+	public static synchronized TopicConnection getTopicConnection() {
+		if (factory != null) {
 			try {
 				return factory.createTopicConnection();
-			} catch (JMSException e){
+			} catch (JMSException e) {
 				log.error(e.getMessage());
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * @param ctx
 	 * @param queueConn
 	 * @return
 	 */
-	public static QueueConnection getQueueConnection(Context ctx, String queueConn){
-		if (factory != null){
+	public static QueueConnection getQueueConnection(Context ctx, String queueConn) {
+		if (factory != null) {
 			try {
 				return qfactory.createQueueConnection();
-			} catch (JMSException e){
+			} catch (JMSException e) {
 				log.error(e.getMessage());
 			}
 		}

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.assertions;
 
@@ -43,305 +43,330 @@ import org.w3c.tidy.Tidy;
  */
 public class HTMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-  //constants
-  public static final String DEFAULT_DOCTYPE = "omit";
-  public static final String DOCTYPE_KEY = "html_assertion_doctype";
-  public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly";
-  public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold";
-  public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold";
-  public static final String FORMAT_KEY = "html_assertion_format";
-  public static final String FILENAME_KEY = "html_assertion_filename";
+	// constants
+	public static final String DEFAULT_DOCTYPE = "omit";
 
-  //class attributes
-  transient private static Logger log = LoggingManager.getLoggerForClass();
+	public static final String DOCTYPE_KEY = "html_assertion_doctype";
 
-  /**
-   * 
-   */
-  public HTMLAssertion() {
-    log.debug("HTMLAssertion(): called");
-  }
+	public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly";
 
-  /**
-   * Returns the result of the Assertion. If so an AssertionResult
-   * containing a FailureMessage will be returned. Otherwise the returned
-   * AssertionResult will reflect the success of the Sample.
-   */
-  public AssertionResult getResult(SampleResult inResponse) {
-    log.debug("HTMLAssertions.getResult() called");
+	public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold";
 
-    // no error as default
-    AssertionResult result = new AssertionResult();
+	public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold";
 
-    if (inResponse.getResponseData() == null) {
-      return result.setResultForNull();
-    }
+	public static final String FORMAT_KEY = "html_assertion_format";
 
-    result.setFailure(false);
+	public static final String FILENAME_KEY = "html_assertion_filename";
 
-    // create parser
-    Tidy tidy = null;
-    try {
-      log.debug("HTMLAssertions.getResult(): Setup tidy ...");
-      log.debug("doctype: " + getDoctype());
-      log.debug("errors only: " + isErrorsOnly());
-      log.debug("error threshold: " + getErrorThreshold());
-      log.debug("warning threshold: " + getWarningThreshold());
-      log.debug("html mode: " + isHTML());
-      log.debug("xhtml mode: " + isXHTML());
-      log.debug("xml mode: " + isXML());
-      tidy = new Tidy();
-      tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-      tidy.setQuiet(false);
-      tidy.setShowWarnings(true);
-      tidy.setOnlyErrors(isErrorsOnly());
-      tidy.setDocType(getDoctype());
-      if (isXHTML()) {
-        tidy.setXHTML(true);
-      } else if (isXML()) {
-        tidy.setXmlTags(true);
-      }
-      log.debug("err file: " + getFilename());
-      tidy.setErrfile(getFilename());
+	// class attributes
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-      if (log.isDebugEnabled()) {
-        log.debug("getParser : tidy parser created - " + tidy);
-      }
-      log.debug("HTMLAssertions.getResult(): Tidy instance created!");
+	/**
+	 * 
+	 */
+	public HTMLAssertion() {
+		log.debug("HTMLAssertion(): called");
+	}
 
-    } catch (Exception e) {
-      log.error("Unable to instantiate tidy parser", e);
-      result.setFailure(true);
-      result.setFailureMessage("Unable to instantiate tidy parser");
-      // return with an error
-      return result;
-    }
+	/**
+	 * Returns the result of the Assertion. If so an AssertionResult containing
+	 * a FailureMessage will be returned. Otherwise the returned AssertionResult
+	 * will reflect the success of the Sample.
+	 */
+	public AssertionResult getResult(SampleResult inResponse) {
+		log.debug("HTMLAssertions.getResult() called");
 
-    /* Run tidy.
-     */
-    try {
-      log.debug("HTMLAssertions.getResult(): start parsing with tidy ...");
+		// no error as default
+		AssertionResult result = new AssertionResult();
 
-      StringWriter errbuf = new StringWriter();
-      tidy.setErrout(new PrintWriter(errbuf));
-      //Node node = tidy.parseDOM(new ByteArrayInputStream(response.getResponseData()), null);
-      ByteArrayOutputStream os = new ByteArrayOutputStream();
-      log.debug("Start : parse");
-      Node node = tidy.parse(new ByteArrayInputStream(inResponse.getResponseData()), os);
-      if (log.isDebugEnabled()) {
-        log.debug("node : " + node);
-      }
-      log.debug("End   : parse");
-      log.debug("HTMLAssertions.getResult(): parsing with tidy done!");
-      log.debug("Output: " + os.toString());
+		if (inResponse.getResponseData() == null) {
+			return result.setResultForNull();
+		}
 
-      //write output to file
-      writeOutput(errbuf.toString());
+		result.setFailure(false);
 
-      //evaluate result
-      if ((tidy.getParseErrors() > getErrorThreshold()) || (!isErrorsOnly() && (tidy.getParseWarnings() > getWarningThreshold()))) {
-        log.debug("HTMLAssertions.getResult(): errors/warnings detected:");
-        log.debug(errbuf.toString());
-        result.setFailure(true);
-        result.setFailureMessage(MessageFormat.format("Tidy Parser errors:   " + tidy.getParseErrors() + " (allowed " + getErrorThreshold() + ") " + "Tidy Parser warnings: " + tidy.getParseWarnings() + " (allowed " + getWarningThreshold() + ")", new Object[0]));
-        //return with an error
+		// create parser
+		Tidy tidy = null;
+		try {
+			log.debug("HTMLAssertions.getResult(): Setup tidy ...");
+			log.debug("doctype: " + getDoctype());
+			log.debug("errors only: " + isErrorsOnly());
+			log.debug("error threshold: " + getErrorThreshold());
+			log.debug("warning threshold: " + getWarningThreshold());
+			log.debug("html mode: " + isHTML());
+			log.debug("xhtml mode: " + isXHTML());
+			log.debug("xml mode: " + isXML());
+			tidy = new Tidy();
+			tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+			tidy.setQuiet(false);
+			tidy.setShowWarnings(true);
+			tidy.setOnlyErrors(isErrorsOnly());
+			tidy.setDocType(getDoctype());
+			if (isXHTML()) {
+				tidy.setXHTML(true);
+			} else if (isXML()) {
+				tidy.setXmlTags(true);
+			}
+			log.debug("err file: " + getFilename());
+			tidy.setErrfile(getFilename());
 
-      } else if ((tidy.getParseErrors() > 0) || (tidy.getParseWarnings() > 0)) {
-        //return with no error
-        log.debug("HTMLAssertions.getResult(): there were errors/warnings but threshold to high");
-        result.setFailure(false);
-      } else {
-        //return with no error
-        log.debug("HTMLAssertions.getResult(): no errors/warnings detected:");
-        result.setFailure(false);
-      }
+			if (log.isDebugEnabled()) {
+				log.debug("getParser : tidy parser created - " + tidy);
+			}
+			log.debug("HTMLAssertions.getResult(): Tidy instance created!");
 
-    } catch (Exception e) {
-      //return with an error
-      log.warn("Cannot parse result content", e);
-      result.setFailure(true);
-      result.setFailureMessage(e.getMessage());
-    }
-    return result;
-  }
+		} catch (Exception e) {
+			log.error("Unable to instantiate tidy parser", e);
+			result.setFailure(true);
+			result.setFailureMessage("Unable to instantiate tidy parser");
+			// return with an error
+			return result;
+		}
 
-  /**
-   * Writes the output of tidy to file.
-   * @param inOutput
-   */
-  private void writeOutput(String inOutput) {
-    String lFilename = getFilename();
+		/*
+		 * Run tidy.
+		 */
+		try {
+			log.debug("HTMLAssertions.getResult(): start parsing with tidy ...");
 
-    //check if filename defined
-    if ((lFilename != null) && (!"".equals(lFilename.trim()))) {
-      FileWriter lOutputWriter = null;
-      try {
+			StringWriter errbuf = new StringWriter();
+			tidy.setErrout(new PrintWriter(errbuf));
+			// Node node = tidy.parseDOM(new
+			// ByteArrayInputStream(response.getResponseData()), null);
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			log.debug("Start : parse");
+			Node node = tidy.parse(new ByteArrayInputStream(inResponse.getResponseData()), os);
+			if (log.isDebugEnabled()) {
+				log.debug("node : " + node);
+			}
+			log.debug("End   : parse");
+			log.debug("HTMLAssertions.getResult(): parsing with tidy done!");
+			log.debug("Output: " + os.toString());
 
-      	//open file
-        lOutputWriter = new FileWriter(lFilename, false);
+			// write output to file
+			writeOutput(errbuf.toString());
 
-        //write to file
-        lOutputWriter.write(inOutput);
-        
-        //flush
-        lOutputWriter.flush();
-        
-        log.debug("writeOutput() -> output successfully written to file " + lFilename);
-        
-      } catch (IOException ex) {
-        log.warn("writeOutput() -> could not write output to file " + lFilename, ex);
-      } finally {
-        //close file
-        if (lOutputWriter != null) {
-          try {
-            lOutputWriter.close();
-          } catch (Exception e) {
-          }
-        }
-      }
-    }
-  }
+			// evaluate result
+			if ((tidy.getParseErrors() > getErrorThreshold())
+					|| (!isErrorsOnly() && (tidy.getParseWarnings() > getWarningThreshold()))) {
+				log.debug("HTMLAssertions.getResult(): errors/warnings detected:");
+				log.debug(errbuf.toString());
+				result.setFailure(true);
+				result.setFailureMessage(MessageFormat.format("Tidy Parser errors:   " + tidy.getParseErrors()
+						+ " (allowed " + getErrorThreshold() + ") " + "Tidy Parser warnings: "
+						+ tidy.getParseWarnings() + " (allowed " + getWarningThreshold() + ")", new Object[0]));
+				// return with an error
 
-  /**
-   * Gets the doctype
-   * @return the documemt type
-   */
-  public String getDoctype() {
-    return getPropertyAsString(DOCTYPE_KEY);
-  }
+			} else if ((tidy.getParseErrors() > 0) || (tidy.getParseWarnings() > 0)) {
+				// return with no error
+				log.debug("HTMLAssertions.getResult(): there were errors/warnings but threshold to high");
+				result.setFailure(false);
+			} else {
+				// return with no error
+				log.debug("HTMLAssertions.getResult(): no errors/warnings detected:");
+				result.setFailure(false);
+			}
 
-  /**
-   * Check if errors will be reported only
-   * @return boolean - report errors only?
-   */
-  public boolean isErrorsOnly() {
-    return getPropertyAsBoolean(ERRORS_ONLY_KEY);
-  }
+		} catch (Exception e) {
+			// return with an error
+			log.warn("Cannot parse result content", e);
+			result.setFailure(true);
+			result.setFailureMessage(e.getMessage());
+		}
+		return result;
+	}
 
-  /**
-   * Gets the threshold setting for errors
-   * @return long error threshold
-   */
-  public long getErrorThreshold() {
-    return getPropertyAsLong(ERROR_THRESHOLD_KEY);
-  }
+	/**
+	 * Writes the output of tidy to file.
+	 * 
+	 * @param inOutput
+	 */
+	private void writeOutput(String inOutput) {
+		String lFilename = getFilename();
 
-  /**
-   * Gets the threshold setting for warnings
-   * @return long warning threshold
-   */
-  public long getWarningThreshold() {
-    return getPropertyAsLong(WARNING_THRESHOLD_KEY);
-  }
+		// check if filename defined
+		if ((lFilename != null) && (!"".equals(lFilename.trim()))) {
+			FileWriter lOutputWriter = null;
+			try {
 
-  /**
-   * Sets the doctype setting
-   * @param inDoctype
-   */
-  public void setDoctype(String inDoctype) {
-    if ((inDoctype == null) || (inDoctype.trim().equals(""))) {
-      setProperty(new StringProperty(DOCTYPE_KEY, DEFAULT_DOCTYPE));
-    } else {
-      setProperty(new StringProperty(DOCTYPE_KEY, inDoctype));
-    }
-  }
+				// open file
+				lOutputWriter = new FileWriter(lFilename, false);
 
-  /**
-   * Sets if errors shoud be tracked only
-   * @param inErrorsOnly
-   */
-  public void setErrorsOnly(boolean inErrorsOnly) {
-    setProperty(new BooleanProperty(ERRORS_ONLY_KEY, inErrorsOnly));
-  }
+				// write to file
+				lOutputWriter.write(inOutput);
 
-  /**
-   * Sets the threshold on error level
-   * @param inErrorThreshold
-   */
-  public void setErrorThreshold(long inErrorThreshold) {
-    if (inErrorThreshold < 0L) {
-      throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
-    }
-    if (inErrorThreshold == Long.MAX_VALUE) {
-      setProperty(new LongProperty(ERROR_THRESHOLD_KEY, 0));
-    } else {
-      setProperty(new LongProperty(ERROR_THRESHOLD_KEY, inErrorThreshold));
-    }
-  }
+				// flush
+				lOutputWriter.flush();
 
-  /**
-   * Sets the threshold on warning level
-   * @param inWarningThreshold
-   */
-  public void setWarningThreshold(long inWarningThreshold) {
-    if (inWarningThreshold < 0L) {
-      throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
-    }
-    if (inWarningThreshold == Long.MAX_VALUE) {
-      setProperty(new LongProperty(WARNING_THRESHOLD_KEY, 0));
-    } else {
-      setProperty(new LongProperty(WARNING_THRESHOLD_KEY, inWarningThreshold));
-    }
-  }
+				log.debug("writeOutput() -> output successfully written to file " + lFilename);
 
-  /**
-   * Enables html validation mode
-   */
-  public void setHTML() {
-    setProperty(new LongProperty(FORMAT_KEY, 0));
-  }
+			} catch (IOException ex) {
+				log.warn("writeOutput() -> could not write output to file " + lFilename, ex);
+			} finally {
+				// close file
+				if (lOutputWriter != null) {
+					try {
+						lOutputWriter.close();
+					} catch (Exception e) {
+					}
+				}
+			}
+		}
+	}
 
-  /**
-   * Check if html validation mode is set
-   * @return boolean
-   */
-  public boolean isHTML() {
-    return getPropertyAsLong(FORMAT_KEY) == 0;
-  }
+	/**
+	 * Gets the doctype
+	 * 
+	 * @return the documemt type
+	 */
+	public String getDoctype() {
+		return getPropertyAsString(DOCTYPE_KEY);
+	}
 
-  /**
-   * Enables xhtml validation mode
-   */
-  public void setXHTML() {
-    setProperty(new LongProperty(FORMAT_KEY, 1));
-  }
+	/**
+	 * Check if errors will be reported only
+	 * 
+	 * @return boolean - report errors only?
+	 */
+	public boolean isErrorsOnly() {
+		return getPropertyAsBoolean(ERRORS_ONLY_KEY);
+	}
 
-  /**
-   * Check if xhtml validation mode is set
-   * @return boolean
-   */
-  public boolean isXHTML() {
-    return getPropertyAsLong(FORMAT_KEY) == 1;
-  }
+	/**
+	 * Gets the threshold setting for errors
+	 * 
+	 * @return long error threshold
+	 */
+	public long getErrorThreshold() {
+		return getPropertyAsLong(ERROR_THRESHOLD_KEY);
+	}
 
-  /**
-   * Enables xml validation mode
-   */
-  public void setXML() {
-    setProperty(new LongProperty(FORMAT_KEY, 2));
-  }
+	/**
+	 * Gets the threshold setting for warnings
+	 * 
+	 * @return long warning threshold
+	 */
+	public long getWarningThreshold() {
+		return getPropertyAsLong(WARNING_THRESHOLD_KEY);
+	}
 
-  /**
-   * Check if xml validation mode is set
-   * @return boolean
-   */
-  public boolean isXML() {
-    return getPropertyAsLong(FORMAT_KEY) == 2;
-  }
+	/**
+	 * Sets the doctype setting
+	 * 
+	 * @param inDoctype
+	 */
+	public void setDoctype(String inDoctype) {
+		if ((inDoctype == null) || (inDoctype.trim().equals(""))) {
+			setProperty(new StringProperty(DOCTYPE_KEY, DEFAULT_DOCTYPE));
+		} else {
+			setProperty(new StringProperty(DOCTYPE_KEY, inDoctype));
+		}
+	}
 
-  /**
-   * Sets the name of the file where tidy writes the output to
-   * @return name of file
-   */
-  public String getFilename() {
-    return getPropertyAsString(FILENAME_KEY);
-  }
+	/**
+	 * Sets if errors shoud be tracked only
+	 * 
+	 * @param inErrorsOnly
+	 */
+	public void setErrorsOnly(boolean inErrorsOnly) {
+		setProperty(new BooleanProperty(ERRORS_ONLY_KEY, inErrorsOnly));
+	}
 
-  /**
-   * Sets the name of the tidy output file
-   * @param inName
-   */
-  public void setFilename(String inName) {
-    setProperty(FILENAME_KEY, inName);
-  }
+	/**
+	 * Sets the threshold on error level
+	 * 
+	 * @param inErrorThreshold
+	 */
+	public void setErrorThreshold(long inErrorThreshold) {
+		if (inErrorThreshold < 0L) {
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+		}
+		if (inErrorThreshold == Long.MAX_VALUE) {
+			setProperty(new LongProperty(ERROR_THRESHOLD_KEY, 0));
+		} else {
+			setProperty(new LongProperty(ERROR_THRESHOLD_KEY, inErrorThreshold));
+		}
+	}
+
+	/**
+	 * Sets the threshold on warning level
+	 * 
+	 * @param inWarningThreshold
+	 */
+	public void setWarningThreshold(long inWarningThreshold) {
+		if (inWarningThreshold < 0L) {
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+		}
+		if (inWarningThreshold == Long.MAX_VALUE) {
+			setProperty(new LongProperty(WARNING_THRESHOLD_KEY, 0));
+		} else {
+			setProperty(new LongProperty(WARNING_THRESHOLD_KEY, inWarningThreshold));
+		}
+	}
+
+	/**
+	 * Enables html validation mode
+	 */
+	public void setHTML() {
+		setProperty(new LongProperty(FORMAT_KEY, 0));
+	}
+
+	/**
+	 * Check if html validation mode is set
+	 * 
+	 * @return boolean
+	 */
+	public boolean isHTML() {
+		return getPropertyAsLong(FORMAT_KEY) == 0;
+	}
+
+	/**
+	 * Enables xhtml validation mode
+	 */
+	public void setXHTML() {
+		setProperty(new LongProperty(FORMAT_KEY, 1));
+	}
+
+	/**
+	 * Check if xhtml validation mode is set
+	 * 
+	 * @return boolean
+	 */
+	public boolean isXHTML() {
+		return getPropertyAsLong(FORMAT_KEY) == 1;
+	}
+
+	/**
+	 * Enables xml validation mode
+	 */
+	public void setXML() {
+		setProperty(new LongProperty(FORMAT_KEY, 2));
+	}
+
+	/**
+	 * Check if xml validation mode is set
+	 * 
+	 * @return boolean
+	 */
+	public boolean isXML() {
+		return getPropertyAsLong(FORMAT_KEY) == 2;
+	}
+
+	/**
+	 * Sets the name of the file where tidy writes the output to
+	 * 
+	 * @return name of file
+	 */
+	public String getFilename() {
+		return getPropertyAsString(FILENAME_KEY);
+	}
+
+	/**
+	 * Sets the name of the tidy output file
+	 * 
+	 * @param inName
+	 */
+	public void setFilename(String inName) {
+		setProperty(FILENAME_KEY, inName);
+	}
 }

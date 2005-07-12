@@ -29,8 +29,8 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
+
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.CompositeTagData;
@@ -40,33 +40,30 @@ import org.htmlparser.util.ParserException;
 /**
  * Scanner for Applet tags
  */
-public class AppletScanner extends CompositeTagScanner
-{
-    private static String[] MATCH_STRING = { "APPLET" };
-    private java.lang.String className;
-    private java.lang.String archive;
-    private java.lang.String codebase;
+public class AppletScanner extends CompositeTagScanner {
+	private static String[] MATCH_STRING = { "APPLET" };
 
-    public AppletScanner()
-    {
-        super(MATCH_STRING);
-    }
+	private java.lang.String className;
 
-    public AppletScanner(String filter)
-    {
-        super(filter, MATCH_STRING);
-    }
+	private java.lang.String archive;
 
-    public String[] getID()
-    {
-        return MATCH_STRING;
-    }
+	private java.lang.String codebase;
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-        throws ParserException
-    {
+	public AppletScanner() {
+		super(MATCH_STRING);
+	}
 
-        return new AppletTag(tagData, compositeTagData);
-    }
+	public AppletScanner(String filter) {
+		super(filter, MATCH_STRING);
+	}
+
+	public String[] getID() {
+		return MATCH_STRING;
+	}
+
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) throws ParserException {
+
+		return new AppletTag(tagData, compositeTagData);
+	}
 
 }

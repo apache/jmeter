@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -30,55 +30,46 @@ import org.apache.log.Logger;
 /**
  * @version $Revision$
  */
-public class EnableComponent implements Command
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
+public class EnableComponent implements Command {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-    public static final String ENABLE = "enable";
-    public static final String DISABLE = "disable";
+	public static final String ENABLE = "enable";
 
-    private static Set commands = new HashSet();
-    static
-    {
-        commands.add(ENABLE);
-        commands.add(DISABLE);
-    }
+	public static final String DISABLE = "disable";
 
-    /**
-     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
-     */
-    public void doAction(ActionEvent e)
-    {
-    	JMeterTreeNode[] nodes =
-    		GuiPackage.getInstance().getTreeListener().getSelectedNodes();
-    	
-        if (e.getActionCommand().equals(ENABLE))
-        {
-            log.debug("enabling currently selected gui objects");
-            enableComponents(nodes,true);
-        }
-        else if (e.getActionCommand().equals(DISABLE))
-        {
-            log.debug("disabling currently selected gui objects");
-            enableComponents(nodes,false);
-        }
-    }
+	private static Set commands = new HashSet();
+	static {
+		commands.add(ENABLE);
+		commands.add(DISABLE);
+	}
 
-    private void enableComponents(JMeterTreeNode[] nodes, boolean enable)
-    {
-    	GuiPackage pack = GuiPackage.getInstance();
-    	for(int i=0;i<nodes.length;i++)
-    	{
-    		nodes[i].setEnabled(enable);
-    		pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
-    	}
-    }
+	/**
+	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+	 */
+	public void doAction(ActionEvent e) {
+		JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
 
-    /**
-     * @see org.apache.jmeter.gui.action.Command#getActionNames()
-     */
-    public Set getActionNames()
-    {
-        return commands;
-    }
+		if (e.getActionCommand().equals(ENABLE)) {
+			log.debug("enabling currently selected gui objects");
+			enableComponents(nodes, true);
+		} else if (e.getActionCommand().equals(DISABLE)) {
+			log.debug("disabling currently selected gui objects");
+			enableComponents(nodes, false);
+		}
+	}
+
+	private void enableComponents(JMeterTreeNode[] nodes, boolean enable) {
+		GuiPackage pack = GuiPackage.getInstance();
+		for (int i = 0; i < nodes.length; i++) {
+			nodes[i].setEnabled(enable);
+			pack.getGui(nodes[i].getTestElement()).setEnabled(enable);
+		}
+	}
+
+	/**
+	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
+	 */
+	public Set getActionNames() {
+		return commands;
+	}
 }

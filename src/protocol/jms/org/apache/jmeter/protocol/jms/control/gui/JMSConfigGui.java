@@ -37,37 +37,37 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * Configuration screen for Java Messaging Point-to-Point requests.
- * <br>
- * Created on:  October 28, 2004
- *
+ * Configuration screen for Java Messaging Point-to-Point requests. <br>
+ * Created on: October 28, 2004
+ * 
  * @author Martijn Blankestijn
- * @version $Id$ 
+ * @version $Id$
  */
 public class JMSConfigGui extends AbstractSamplerGui {
 
-	private JLabeledTextField queueuConnectionFactory =
-		new JLabeledTextField(JMeterUtils.getResString("jms_queue_connection_factory"));
-	private JLabeledTextField sendQueue =
-		new JLabeledTextField(JMeterUtils.getResString("jms_send_queue"));
-	private JLabeledTextField receiveQueue =
-		new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue"));
-	private JLabeledTextField timeout =
-		new JLabeledTextField(JMeterUtils.getResString("jms_timeout"));
-	private JLabeledTextArea soapXml =
-		new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content"), null);
-	private JLabeledTextField initialContextFactory =
-		new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory"));
-	private JLabeledTextField providerUrl =
-		new JLabeledTextField(JMeterUtils.getResString("jms_provider_url"));
+	private JLabeledTextField queueuConnectionFactory = new JLabeledTextField(JMeterUtils
+			.getResString("jms_queue_connection_factory"));
 
-	private String[] labels =
-		new String[] {
-			JMeterUtils.getResString("jms_request"),
-			JMeterUtils.getResString("jms_requestreply")};
-	private JLabeledChoice oneWay =
-		new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels);
+	private JLabeledTextField sendQueue = new JLabeledTextField(JMeterUtils.getResString("jms_send_queue"));
+
+	private JLabeledTextField receiveQueue = new JLabeledTextField(JMeterUtils.getResString("jms_receive_queue"));
+
+	private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout"));
+
+	private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content"), null);
+
+	private JLabeledTextField initialContextFactory = new JLabeledTextField(JMeterUtils
+			.getResString("jms_initial_context_factory"));
+
+	private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url"));
+
+	private String[] labels = new String[] { JMeterUtils.getResString("jms_request"),
+			JMeterUtils.getResString("jms_requestreply") };
+
+	private JLabeledChoice oneWay = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels);
+
 	private ArgumentsPanel jmsPropertiesPanel;
+
 	private ArgumentsPanel jndiPropertiesPanel;
 
 	public JMSConfigGui() {
@@ -81,8 +81,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		queueuConnectionFactory.setText("");
 		sendQueue.setText("");
 		receiveQueue.setText("");
-		((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(
-			JMeterUtils.getResString("jms_request"));
+		((JComboBox) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request"));
 		timeout.setText("");
 		soapXml.setText("");
 		initialContextFactory.setText("");
@@ -91,52 +90,17 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		jndiPropertiesPanel.clear();
 	}
 
-    public TestElement createTestElement()
-    {
-        //org.activemq.jndi.ActiveMQInitialContextFactory
-        //ConfigTestElement element = new ConfigTestElement();
-        JMSSampler sampler = new JMSSampler();
-        this.configureTestElement(sampler);
-        transfer(sampler);
-        return sampler;
-    }
+	public TestElement createTestElement() {
+		// org.activemq.jndi.ActiveMQInitialContextFactory
+		// ConfigTestElement element = new ConfigTestElement();
+		JMSSampler sampler = new JMSSampler();
+		this.configureTestElement(sampler);
+		transfer(sampler);
+		return sampler;
+	}
 
-    private void transfer(JMSSampler element) {
-        element.setProperty(
-            JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
-            queueuConnectionFactory.getText());
-        element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
-        element.setProperty(JMSSampler.RECEIVE_QUEUE, receiveQueue.getText());
-
-        boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request"));
-        element.setProperty(new BooleanProperty(JMSSampler.IS_ONE_WAY, isOneway));
-
-        element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
-        element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
-
-        element.setProperty(
-            JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
-            initialContextFactory.getText());
-        element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL, providerUrl.getText());
-        Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
-        element.setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
-
-        Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
-        element.setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-
-    }
-    /**
-     *
-     * @param element
-     */
-	public void modifyTestElement(TestElement element) {
-        JMSSampler sampler = (JMSSampler) element;
-        this.configureTestElement(sampler);
-        transfer(sampler);
-
-/*		element.setProperty(
-			JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
-			queueuConnectionFactory.getText());
+	private void transfer(JMSSampler element) {
+		element.setProperty(JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI, queueuConnectionFactory.getText());
 		element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
 		element.setProperty(JMSSampler.RECEIVE_QUEUE, receiveQueue.getText());
 
@@ -146,30 +110,65 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
 		element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
 
-		element.setProperty(
-			JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
-			initialContextFactory.getText());
+		element.setProperty(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY, initialContextFactory.getText());
 		element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL, providerUrl.getText());
 		Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
 		element.setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
 
 		Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
 		element.setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-*/	}
+
+	}
+
+	/**
+	 * 
+	 * @param element
+	 */
+	public void modifyTestElement(TestElement element) {
+		JMSSampler sampler = (JMSSampler) element;
+		this.configureTestElement(sampler);
+		transfer(sampler);
+
+		/*
+		 * element.setProperty( JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI,
+		 * queueuConnectionFactory.getText());
+		 * element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
+		 * element.setProperty(JMSSampler.RECEIVE_QUEUE,
+		 * receiveQueue.getText());
+		 * 
+		 * boolean isOneway =
+		 * oneWay.getText().equals(JMeterUtils.getResString("jms_request"));
+		 * element.setProperty(new BooleanProperty(JMSSampler.IS_ONE_WAY,
+		 * isOneway));
+		 * 
+		 * element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
+		 * element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
+		 * 
+		 * element.setProperty( JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY,
+		 * initialContextFactory.getText());
+		 * element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL,
+		 * providerUrl.getText()); Arguments jndiArgs = (Arguments)
+		 * jndiPropertiesPanel.createTestElement(); element.setProperty(new
+		 * TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
+		 * 
+		 * Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
+		 * element.setProperty(new
+		 * TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+		 */}
 
 	/**
 	 * @param el
 	 */
 	public void configure(TestElement el) {
 		super.configure(el);
-        JMSSampler sampler = (JMSSampler)el;
+		JMSSampler sampler = (JMSSampler) el;
 		queueuConnectionFactory.setText(sampler.getQueueConnectionFactory());
 		sendQueue.setText(sampler.getSendQueue());
 		receiveQueue.setText(sampler.getReceiveQueue());
 
 		JComboBox box = (JComboBox) oneWay.getComponentList().get(1);
 		String selected = null;
-        if (sampler.isOneway()) {
+		if (sampler.isOneway()) {
 			selected = JMeterUtils.getResString("jms_request");
 		} else {
 			selected = JMeterUtils.getResString("jms_requestreply");
@@ -182,28 +181,28 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		providerUrl.setText(sampler.getContextProvider());
 
 		jmsPropertiesPanel.configure(sampler.getJMSProperties());
-//			(TestElement) el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
+		// (TestElement)
+		// el.getProperty(JMSSampler.JMS_PROPERTIES).getObjectValue());
 
 		jndiPropertiesPanel.configure(sampler.getJNDIProperties());
-			//(TestElement) el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
+		// (TestElement)
+		// el.getProperty(JMSSampler.JNDI_PROPERTIES).getObjectValue());
 	}
 
 	/**
 	 * Initializes the configuration screen.
-	 *
+	 * 
 	 */
 	private void init() {
 		setLayout(new BorderLayout());
-        setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);
+		setBorder(makeBorder());
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-        Box mainPanel = Box.createVerticalBox();
+		Box mainPanel = Box.createVerticalBox();
 
 		JPanel jmsQueueingPanel = new JPanel(new BorderLayout());
-		jmsQueueingPanel.setBorder(
-			BorderFactory.createTitledBorder(
-				BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("jms_queueing")));
+		jmsQueueingPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("jms_queueing")));
 
 		JPanel qcfPanel = new JPanel(new BorderLayout(5, 0));
 		qcfPanel.add(queueuConnectionFactory, BorderLayout.CENTER);
@@ -220,10 +219,8 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		JPanel jndiPanel = createJNDIPanel();
 
 		JPanel messagePanel = new JPanel(new BorderLayout());
-		messagePanel.setBorder(
-			BorderFactory.createTitledBorder(
-				BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("jms_message_title")));
+		messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("jms_message_title")));
 
 		JPanel messageNorthPanel = new JPanel(new BorderLayout());
 		JPanel onewayPanel = new JPanel(new BorderLayout());
@@ -247,19 +244,18 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		mainPanel.add(messagePanel, BorderLayout.CENTER);
 		mainPanel.add(jndiPanel, BorderLayout.SOUTH);
 
-        add(mainPanel, BorderLayout.CENTER);
+		add(mainPanel, BorderLayout.CENTER);
 	}
 
 	/**
 	 * Creates the panel for the JNDI configuration.
+	 * 
 	 * @return the JNDI Panel
 	 */
 	private JPanel createJNDIPanel() {
 		JPanel jndiPanel = new JPanel(new BorderLayout());
-		jndiPanel.setBorder(
-			BorderFactory.createTitledBorder(
-				BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("jms_jndi_props")));
+		jndiPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("jms_jndi_props")));
 
 		JPanel contextPanel = new JPanel(new BorderLayout(10, 0));
 		contextPanel.add(initialContextFactory);

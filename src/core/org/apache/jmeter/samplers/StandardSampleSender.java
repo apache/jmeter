@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
 package org.apache.jmeter.samplers;
+
 import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 
@@ -23,57 +24,44 @@ import java.rmi.RemoteException;
 import java.io.Serializable;
 
 /**
- * Default behaviour for remote testing.  
+ * Default behaviour for remote testing.
  */
 
-public class StandardSampleSender implements SampleSender, Serializable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    RemoteSampleListener listener;
+public class StandardSampleSender implements SampleSender, Serializable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    StandardSampleSender(RemoteSampleListener listener)
-    {
-        log.info("Using Standard Remote Sampler for this test run");
-        this.listener = listener;
-    }
+	RemoteSampleListener listener;
 
-    public void testEnded()
-    {
-        log.info("Test ended()");
-        try
-        {
-            listener.testEnded();
-        }
-        catch (Throwable ex)
-        {
-            log.warn("testEnded()", ex);
-        }
+	StandardSampleSender(RemoteSampleListener listener) {
+		log.info("Using Standard Remote Sampler for this test run");
+		this.listener = listener;
+	}
 
-    }
+	public void testEnded() {
+		log.info("Test ended()");
+		try {
+			listener.testEnded();
+		} catch (Throwable ex) {
+			log.warn("testEnded()", ex);
+		}
 
-    public void testEnded(String host)
-    {
-        log.info("Test Ended on " + host); // should this be debug?
-        try
-        {
-            listener.testEnded(host);
-        }
-        catch (Throwable ex)
-        {
-            log.error("testEnded(host)", ex);
-        }
-    }
+	}
 
-    public void SampleOccurred(SampleEvent e)
-    {
-        log.debug("Sample occurred");
-        try
-        {
-            listener.sampleOccurred(e);
-        }
-        catch (RemoteException err)
-        {
-            log.error("sampleOccurred", err);
-        }
-    }
+	public void testEnded(String host) {
+		log.info("Test Ended on " + host); // should this be debug?
+		try {
+			listener.testEnded(host);
+		} catch (Throwable ex) {
+			log.error("testEnded(host)", ex);
+		}
+	}
+
+	public void SampleOccurred(SampleEvent e) {
+		log.debug("Sample occurred");
+		try {
+			listener.sampleOccurred(e);
+		} catch (RemoteException err) {
+			log.error("sampleOccurred", err);
+		}
+	}
 }

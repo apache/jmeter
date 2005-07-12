@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -29,109 +29,97 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Provides a Random function which returns a random integer between
- * a min (first argument) and a max (seceond argument).
- *
+ * Provides a Random function which returns a random integer between a min
+ * (first argument) and a max (seceond argument).
+ * 
  * @author <a href="mailto:sjkwadzo@praize.com">Jonathan Kwadzo</a>
  */
-public class Random extends AbstractFunction implements Serializable
-{
+public class Random extends AbstractFunction implements Serializable {
 
-    private static final List desc = new LinkedList();
-    private static final String KEY = "__Random";
+	private static final List desc = new LinkedList();
 
-    static {
-        desc.add(JMeterUtils.getResString("minimum_param"));
-        desc.add(JMeterUtils.getResString("maximum_param"));
-        desc.add(JMeterUtils.getResString("function_name_param"));
-    }
+	private static final String KEY = "__Random";
 
-    private transient CompoundVariable varName, minimum, maximum;
+	static {
+		desc.add(JMeterUtils.getResString("minimum_param"));
+		desc.add(JMeterUtils.getResString("maximum_param"));
+		desc.add(JMeterUtils.getResString("function_name_param"));
+	}
 
-    /**
-     * No-arg constructor.
-     */
-    public Random()
-    {
-    }
+	private transient CompoundVariable varName, minimum, maximum;
 
-    /**
-     * Clone this Add object.
-     *
-     * @return A new Add object.
-     */
-    public Object clone()
-    {
-        Random newRandom = new Random();
-        return newRandom;
-    }
+	/**
+	 * No-arg constructor.
+	 */
+	public Random() {
+	}
 
-    /**
-     * Execute the function.
-     *
-     * @see Function#execute(SampleResult, Sampler)
-     */
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
+	/**
+	 * Clone this Add object.
+	 * 
+	 * @return A new Add object.
+	 */
+	public Object clone() {
+		Random newRandom = new Random();
+		return newRandom;
+	}
 
-        JMeterVariables vars = getVariables();
+	/**
+	 * Execute the function.
+	 * 
+	 * @see Function#execute(SampleResult, Sampler)
+	 */
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
 
-        int min = Integer.parseInt(minimum.execute().trim());
-        int max = Integer.parseInt(maximum.execute().trim());
+		JMeterVariables vars = getVariables();
 
-        int rand = (int) Math.round(min + Math.random() * (max - min));
+		int min = Integer.parseInt(minimum.execute().trim());
+		int max = Integer.parseInt(maximum.execute().trim());
 
-        String randString = Integer.toString(rand);
-        vars.put(varName.execute(), randString);
+		int rand = (int) Math.round(min + Math.random() * (max - min));
 
-        return randString;
+		String randString = Integer.toString(rand);
+		vars.put(varName.execute(), randString);
 
-    }
+		return randString;
 
-    /**
-     * Set the parameters for the function.
-     *
-     * @see Function#setParameters(Collection)
-     */
-    public synchronized void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
-        Object[] values = parameters.toArray();
+	}
 
-        if (values.length < 3)
-        {
-            throw new InvalidVariableException();
-        }
-        else
-        {
-            varName = (CompoundVariable) values[2];
-            minimum = (CompoundVariable) values[0];
-            maximum = (CompoundVariable) values[1];
-        }
+	/**
+	 * Set the parameters for the function.
+	 * 
+	 * @see Function#setParameters(Collection)
+	 */
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+		Object[] values = parameters.toArray();
 
-    }
+		if (values.length < 3) {
+			throw new InvalidVariableException();
+		} else {
+			varName = (CompoundVariable) values[2];
+			minimum = (CompoundVariable) values[0];
+			maximum = (CompoundVariable) values[1];
+		}
 
-    /**
-     * Get the invocation key for this function.
-     *
-     * @see Function#getReferenceKey()
-     */
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+	}
 
-    /**
-     * Get the description of this function.
-     *
-     * @see Function#getArgumentDesc()
-     */
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	/**
+	 * Get the invocation key for this function.
+	 * 
+	 * @see Function#getReferenceKey()
+	 */
+	public String getReferenceKey() {
+		return KEY;
+	}
+
+	/**
+	 * Get the description of this function.
+	 * 
+	 * @see Function#getArgumentDesc()
+	 */
+	public List getArgumentDesc() {
+		return desc;
+	}
 
 }

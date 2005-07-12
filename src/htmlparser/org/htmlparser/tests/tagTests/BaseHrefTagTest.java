@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.tagTests;
 
 import org.htmlparser.tags.BaseHrefTag;
@@ -37,37 +36,24 @@ import org.htmlparser.tags.data.TagData;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.util.ParserException;
 
-public class BaseHrefTagTest extends ParserTestCase
-{
+public class BaseHrefTagTest extends ParserTestCase {
 
-    public BaseHrefTagTest(String name)
-    {
-        super(name);
-    }
+	public BaseHrefTagTest(String name) {
+		super(name);
+	}
 
-    public void testConstruction()
-    {
-        BaseHrefTag baseRefTag =
-            new BaseHrefTag(new TagData(0, 0, "", ""), "http://www.abc.com");
-        assertEquals(
-            "Expected Base URL",
-            "http://www.abc.com",
-            baseRefTag.getBaseUrl());
-    }
+	public void testConstruction() {
+		BaseHrefTag baseRefTag = new BaseHrefTag(new TagData(0, 0, "", ""), "http://www.abc.com");
+		assertEquals("Expected Base URL", "http://www.abc.com", baseRefTag.getBaseUrl());
+	}
 
-    public void testNotHREFBaseTag() throws ParserException
-    {
-        createParser("<base target=\"_top\">");
-        parser.registerScanners();
-        parseAndAssertNodeCount(1);
-        assertTrue(
-            "Should be a base tag but was " + node[0].getClass().getName(),
-            node[0] instanceof BaseHrefTag);
-        BaseHrefTag baseTag = (BaseHrefTag) node[0];
-        assertStringEquals(
-            "Base Tag HTML",
-            "<BASE TARGET=\"_top\">",
-            baseTag.toHtml());
-    }
+	public void testNotHREFBaseTag() throws ParserException {
+		createParser("<base target=\"_top\">");
+		parser.registerScanners();
+		parseAndAssertNodeCount(1);
+		assertTrue("Should be a base tag but was " + node[0].getClass().getName(), node[0] instanceof BaseHrefTag);
+		BaseHrefTag baseTag = (BaseHrefTag) node[0];
+		assertStringEquals("Base Tag HTML", "<BASE TARGET=\"_top\">", baseTag.toHtml());
+	}
 
 }

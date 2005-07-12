@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.control.gui;
 
@@ -37,143 +37,124 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class HttpTestSampleGui extends AbstractSamplerGui
-{
-    private UrlConfigGui urlConfigGui;
-    private JCheckBox getImages;
-    private JCheckBox isMon;
+public class HttpTestSampleGui extends AbstractSamplerGui {
+	private UrlConfigGui urlConfigGui;
 
-    public HttpTestSampleGui()
-    {
-        init();
-    }
+	private JCheckBox getImages;
 
-    public void configure(TestElement element)
-    {
-        super.configure(element);
-        urlConfigGui.configure(element);
-        getImages.setSelected(((HTTPSamplerBase) element).isImageParser());
-        isMon.setSelected(((HTTPSamplerBase) element).isMonitor());
-    }
+	private JCheckBox isMon;
 
-    public TestElement createTestElement()
-    {
-        HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler");
-        modifyTestElement(sampler);
-        return sampler;
-    }
+	public HttpTestSampleGui() {
+		init();
+	}
 
-    /**
-     * Modifies a given TestElement to mirror the data in the gui components.
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
-     */
-    public void modifyTestElement(TestElement sampler)
-    {
-        TestElement el = urlConfigGui.createTestElement();
-        sampler.clear();
-        sampler.addTestElement(el);
-        if (getImages.isSelected())
-        {
-            ((HTTPSamplerBase)sampler).setImageParser(true);
-        }
-        else
-        {
-            sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
-        }
-        if (isMon.isSelected()){
-			((HTTPSamplerBase)sampler).setMonitor("true");
-        } else {
-			((HTTPSamplerBase)sampler).setMonitor("false");
-        }
-        this.configureTestElement(sampler);
-    }
+	public void configure(TestElement element) {
+		super.configure(element);
+		urlConfigGui.configure(element);
+		getImages.setSelected(((HTTPSamplerBase) element).isImageParser());
+		isMon.setSelected(((HTTPSamplerBase) element).isMonitor());
+	}
 
-    public String getLabelResource()
-    {
-        return "web_testing_title";
-    }
+	public TestElement createTestElement() {
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler");
+		modifyTestElement(sampler);
+		return sampler;
+	}
 
-    protected void init()
-    {
-        setLayout(new BorderLayout(0, 5));
-        setBorder(makeBorder());
+	/**
+	 * Modifies a given TestElement to mirror the data in the gui components.
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
+	 */
+	public void modifyTestElement(TestElement sampler) {
+		TestElement el = urlConfigGui.createTestElement();
+		sampler.clear();
+		sampler.addTestElement(el);
+		if (getImages.isSelected()) {
+			((HTTPSamplerBase) sampler).setImageParser(true);
+		} else {
+			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+		}
+		if (isMon.isSelected()) {
+			((HTTPSamplerBase) sampler).setMonitor("true");
+		} else {
+			((HTTPSamplerBase) sampler).setMonitor("false");
+		}
+		this.configureTestElement(sampler);
+	}
 
-        add(makeTitlePanel(), BorderLayout.NORTH);
+	public String getLabelResource() {
+		return "web_testing_title";
+	}
 
-        // URL CONFIG
-        urlConfigGui = new MultipartUrlConfigGui();
-        add(urlConfigGui, BorderLayout.CENTER);
+	protected void init() {
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
 
-        // OPTIONAL TASKS
-        add(createOptionalTasksPanel(), BorderLayout.SOUTH);
-    }
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
-    private JPanel createOptionalTasksPanel()
-    {
-        // OPTIONAL TASKS
-        HorizontalPanel optionalTasksPanel = new HorizontalPanel();
-        optionalTasksPanel.setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("optional_tasks")));
+		// URL CONFIG
+		urlConfigGui = new MultipartUrlConfigGui();
+		add(urlConfigGui, BorderLayout.CENTER);
 
-        // RETRIEVE IMAGES
-        JPanel retrieveImagesPanel = new JPanel();
-        getImages =
-            new JCheckBox(
-                JMeterUtils.getResString("web_testing_retrieve_images"));
-        retrieveImagesPanel.add(getImages);
-        JPanel isMonitorPanel = new JPanel();
-        isMon = new JCheckBox(
-            JMeterUtils.getResString("monitor_is_title"));
-        isMonitorPanel.add(isMon);
-        optionalTasksPanel.add(retrieveImagesPanel);
+		// OPTIONAL TASKS
+		add(createOptionalTasksPanel(), BorderLayout.SOUTH);
+	}
+
+	private JPanel createOptionalTasksPanel() {
+		// OPTIONAL TASKS
+		HorizontalPanel optionalTasksPanel = new HorizontalPanel();
+		optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+				.getResString("optional_tasks")));
+
+		// RETRIEVE IMAGES
+		JPanel retrieveImagesPanel = new JPanel();
+		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+		retrieveImagesPanel.add(getImages);
+		JPanel isMonitorPanel = new JPanel();
+		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title"));
+		isMonitorPanel.add(isMon);
+		optionalTasksPanel.add(retrieveImagesPanel);
 		optionalTasksPanel.add(isMonitorPanel);
-        return optionalTasksPanel;
-    }
-        
-    public Dimension getPreferredSize()
-    {
-        return getMinimumSize();
-    }
+		return optionalTasksPanel;
+	}
 
-    public static class Test extends TestCase
-    {
-        HttpTestSampleGui gui;
-        
-        public Test(String name)
-        {
-            super(name);
-        }
-        
-        public void setUp()
-        {
-            gui = new HttpTestSampleGui();
-        }
-        
-        public void testCloneSampler() throws Exception
-        {
-            HTTPSamplerBase sampler = (HTTPSamplerBase)gui.createTestElement();
-            sampler.addArgument("param","value");
-            HTTPSamplerBase clonedSampler = (HTTPSamplerBase)sampler.clone();
-            clonedSampler.setRunningVersion(true);
-            sampler.getArguments().getArgument(0).setValue("new value");
-            assertEquals(
-                "Sampler didn't clone correctly",
-                "new value",
-                sampler.getArguments().getArgument(0).getValue());
-        }
-    }
+	public Dimension getPreferredSize() {
+		return getMinimumSize();
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
-     */
-    public void clear()
-    {
-        super.clear();
-        getImages.setSelected(false);
-        urlConfigGui.clear();
-    }
+	public static class Test extends TestCase {
+		HttpTestSampleGui gui;
+
+		public Test(String name) {
+			super(name);
+		}
+
+		public void setUp() {
+			gui = new HttpTestSampleGui();
+		}
+
+		public void testCloneSampler() throws Exception {
+			HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
+			sampler.addArgument("param", "value");
+			HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
+			clonedSampler.setRunningVersion(true);
+			sampler.getArguments().getArgument(0).setValue("new value");
+			assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
+					.getValue());
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 */
+	public void clear() {
+		super.clear();
+		getImages.setSelected(false);
+		urlConfigGui.clear();
+	}
 }

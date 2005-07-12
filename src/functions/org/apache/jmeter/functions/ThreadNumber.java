@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -29,43 +29,44 @@ import org.apache.jmeter.samplers.Sampler;
 /**
  * @version $Revision$
  */
-public class ThreadNumber implements Function, Serializable
-{
+public class ThreadNumber implements Function, Serializable {
 
-    private static final String KEY = "__threadNum";
+	private static final String KEY = "__threadNum";
+
 	private static final List desc = new LinkedList();
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
-    public String execute(SampleResult previousResult, Sampler currentSampler)
-        throws InvalidVariableException
-    {
-        return Thread.currentThread().getName().substring(
-            Thread.currentThread().getName().lastIndexOf("-") + 1);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+	 */
+	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
+		return Thread.currentThread().getName().substring(Thread.currentThread().getName().lastIndexOf("-") + 1);
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-     */
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
+	 */
+	public void setParameters(Collection parameters) throws InvalidVariableException {
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#getReferenceKey()
-     */
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#getReferenceKey()
+	 */
+	public String getReferenceKey() {
+		return KEY;
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.functions.Function#getArgumentDesc()
-     */
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.functions.Function#getArgumentDesc()
+	 */
+	public List getArgumentDesc() {
+		return desc;
+	}
 }

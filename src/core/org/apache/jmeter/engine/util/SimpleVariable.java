@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.engine.util;
 
@@ -25,56 +25,47 @@ import org.apache.jmeter.threads.JMeterVariables;
 /**
  * @version $Revision$
  */
-public class SimpleVariable
-{
+public class SimpleVariable {
 
-    private String name;
+	private String name;
 
-    public SimpleVariable(String name)
-    {
-        this.name = name;
-    }
+	public SimpleVariable(String name) {
+		this.name = name;
+	}
 
-    public SimpleVariable()
-    {
-        this.name = "";
-    }
+	public SimpleVariable() {
+		this.name = "";
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
-     */
-    public String toString()
-    {
-        String ret = null;
-        JMeterVariables vars = getVariables();
+	/**
+	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+	 */
+	public String toString() {
+		String ret = null;
+		JMeterVariables vars = getVariables();
 
-        if (vars != null)
-        {
-            ret = vars.get(name);
-        }
+		if (vars != null) {
+			ret = vars.get(name);
+		}
 
-        if (ret == null)
-        {
-            return "${" + name + "}";
-        }
+		if (ret == null) {
+			return "${" + name + "}";
+		}
 
-        return ret;
-    }
+		return ret;
+	}
 
-    private JMeterVariables getVariables()
-    {
-        JMeterContext context = JMeterContextService.getContext();
-        return context.getVariables();
-    }
+	private JMeterVariables getVariables() {
+		JMeterContext context = JMeterContextService.getContext();
+		return context.getVariables();
+	}
 
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -32,96 +32,83 @@ import org.apache.log.Logger;
 /**
  * Function to log a message
  * 
- * Parameters:
- *  - string
- *  - log level (optional; defaults to INFO; or DEBUG if unrecognised)
- *  - throwable message (optional)
- *
- * Returns:
- * - Empty String (so can be used where return value would be a nuisance)
+ * Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
+ * unrecognised) - throwable message (optional)
+ * 
+ * Returns: - Empty String (so can be used where return value would be a
+ * nuisance)
  * 
  * @version $Revision$ Updated: $Date$
  */
-public class LogFunction2 extends AbstractFunction implements Serializable
-{
+public class LogFunction2 extends AbstractFunction implements Serializable {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List desc = new LinkedList();
-    private static final String KEY = "__logn";
+	private static final List desc = new LinkedList();
 
-    // Number of parameters expected - used to reject invalid calls
-    private static final int MIN_PARAMETER_COUNT = 1;
-    private static final int MAX_PARAMETER_COUNT = 3;
-    static {
-        desc.add("String to be logged");
-        desc.add("Log level (default INFO)");
+	private static final String KEY = "__logn";
+
+	// Number of parameters expected - used to reject invalid calls
+	private static final int MIN_PARAMETER_COUNT = 1;
+
+	private static final int MAX_PARAMETER_COUNT = 3;
+	static {
+		desc.add("String to be logged");
+		desc.add("Log level (default INFO)");
 		desc.add("Throwable text (optional)");
-    }
-    private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
+	}
 
-    private Object[] values;
+	private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
 
-    public LogFunction2()
-    {
-    }
+	private Object[] values;
 
-    public Object clone()
-    {
-        return new LogFunction2();
-    }
+	public LogFunction2() {
+	}
 
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
-        String stringToLog = ((CompoundVariable) values[0]).execute();
-        
+	public Object clone() {
+		return new LogFunction2();
+	}
+
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
+		String stringToLog = ((CompoundVariable) values[0]).execute();
+
 		String priorityString;
-        if (values.length > 1){ // We have a default
-        	priorityString= ((CompoundVariable) values[1]).execute();
-        	if (priorityString.length()==0) priorityString= DEFAULT_PRIORITY;
-        } else {
-        	priorityString = DEFAULT_PRIORITY;
-        }
-        
-        Throwable t=null;
-		if (values.length > 2){ // Throwable wanted
+		if (values.length > 1) { // We have a default
+			priorityString = ((CompoundVariable) values[1]).execute();
+			if (priorityString.length() == 0)
+				priorityString = DEFAULT_PRIORITY;
+		} else {
+			priorityString = DEFAULT_PRIORITY;
+		}
+
+		Throwable t = null;
+		if (values.length > 2) { // Throwable wanted
 			t = new Throwable(((CompoundVariable) values[2]).execute());
 		}
 
-		LogFunction.logDetails(log,stringToLog,priorityString,t);
-        
-        return "";
+		LogFunction.logDetails(log, stringToLog, priorityString, t);
 
-    }
+		return "";
 
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
+	}
 
-        values = parameters.toArray();
+	public void setParameters(Collection parameters) throws InvalidVariableException {
 
-        if ((values.length < MIN_PARAMETER_COUNT)
-            || (values.length > MAX_PARAMETER_COUNT))
-        {
-            throw new InvalidVariableException(
-                "Parameter Count not between "
-                    + MIN_PARAMETER_COUNT
-                    + " & "
-                    + MAX_PARAMETER_COUNT);
-        }
+		values = parameters.toArray();
 
-    }
+		if ((values.length < MIN_PARAMETER_COUNT) || (values.length > MAX_PARAMETER_COUNT)) {
+			throw new InvalidVariableException("Parameter Count not between " + MIN_PARAMETER_COUNT + " & "
+					+ MAX_PARAMETER_COUNT);
+		}
 
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+	}
 
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	public String getReferenceKey() {
+		return KEY;
+	}
+
+	public List getArgumentDesc() {
+		return desc;
+	}
 
 }

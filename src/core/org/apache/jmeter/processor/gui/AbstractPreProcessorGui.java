@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.processor.gui;
 
@@ -30,17 +30,14 @@ import org.apache.jmeter.gui.util.MenuFactory;
  * 
  * @version $Revision$ $Date$
  */
-public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
-{
+public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent {
 
-    public JPopupMenu createPopupMenu()
-   {
-      return MenuFactory.getDefaultExtractorMenu();
-   }
+	public JPopupMenu createPopupMenu() {
+		return MenuFactory.getDefaultExtractorMenu();
+	}
 
-   public Collection getMenuCategories()
-   {
-      return Arrays.asList(new String[]{MenuFactory.PRE_PROCESSORS});
-   }
+	public Collection getMenuCategories() {
+		return Arrays.asList(new String[] { MenuFactory.PRE_PROCESSORS });
+	}
 
 }

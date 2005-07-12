@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.testelement.property;
 
@@ -22,11 +22,10 @@ package org.apache.jmeter.testelement.property;
  * @author Administrator
  * @version $Revision$ on $Date$
  */
-public interface PropertyIterator
-{
-    public boolean hasNext();
-    
-    public JMeterProperty next();
-    
-    public void remove();
+public interface PropertyIterator {
+	public boolean hasNext();
+
+	public JMeterProperty next();
+
+	public void remove();
 }

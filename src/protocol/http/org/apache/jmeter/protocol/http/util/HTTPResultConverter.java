@@ -37,126 +37,102 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @author mstover
  * 
  */
-public class HTTPResultConverter extends SampleResultConverter
-{
+public class HTTPResultConverter extends SampleResultConverter {
 
-    /**
-     * Returns the converter version; used to check for possible
-     * incompatibilities
-     */
-    public static String getVersion()
-    {
-       return "$Revision$";
-    }
+	/**
+	 * Returns the converter version; used to check for possible
+	 * incompatibilities
+	 */
+	public static String getVersion() {
+		return "$Revision$";
+	}
 
-   /**
-    * @param arg0
-    * @param arg1
-    */
-   public HTTPResultConverter(ClassMapper arg0, String arg1)
-   {
-      super(arg0, arg1);
-   }
+	/**
+	 * @param arg0
+	 * @param arg1
+	 */
+	public HTTPResultConverter(ClassMapper arg0, String arg1) {
+		super(arg0, arg1);
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
-    */
-   public boolean canConvert(Class arg0)
-   {
-      return HTTPSampleResult.class.equals(arg0);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.thoughtworks.xstream.converters.Converter#canConvert(java.lang.Class)
+	 */
+	public boolean canConvert(Class arg0) {
+		return HTTPSampleResult.class.equals(arg0);
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
-    *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-    *      com.thoughtworks.xstream.converters.MarshallingContext)
-    */
-   public void marshal(Object obj, HierarchicalStreamWriter writer,
-         MarshallingContext context)
-   {
-      HTTPSampleResult res = (HTTPSampleResult) obj;
-      SampleSaveConfiguration save = res.getSaveConfig();
-      setAttributes(writer, context, res, save);
-      saveAssertions(writer, context, res, save);
-      saveSubResults(writer, context, res, save);
-      saveResponseHeaders(writer, context, res, save);
-      saveRequestHeaders(writer, context, res, save);
-      saveResponseData(writer, context, res, save);
-      saveSamplerData(writer, context, res, save);
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
+	 *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+	 *      com.thoughtworks.xstream.converters.MarshallingContext)
+	 */
+	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
+		HTTPSampleResult res = (HTTPSampleResult) obj;
+		SampleSaveConfiguration save = res.getSaveConfig();
+		setAttributes(writer, context, res, save);
+		saveAssertions(writer, context, res, save);
+		saveSubResults(writer, context, res, save);
+		saveResponseHeaders(writer, context, res, save);
+		saveRequestHeaders(writer, context, res, save);
+		saveResponseData(writer, context, res, save);
+		saveSamplerData(writer, context, res, save);
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see org.apache.jmeter.save.converters.SampleResultConverter#saveSamplerData(com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-    *      org.apache.jmeter.samplers.SampleResult,
-    *      org.apache.jmeter.samplers.SampleSaveConfiguration)
-    */
-   protected void saveSamplerData(HierarchicalStreamWriter writer,
-         MarshallingContext context, HTTPSampleResult res,
-         SampleSaveConfiguration save)
-   {
-      if (save.saveSamplerData(res))
-      {
-         writeString(writer, "cookies", res.getCookies());
-         writeString(writer, "method", res.getHTTPMethod());
-         writeString(writer, "queryString", res.getQueryString());
-         writeString(writer, "redirectLocation", res.getRedirectLocation());
-         writeItem(res.getURL(), context, writer);
-      }
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.save.converters.SampleResultConverter#saveSamplerData(com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+	 *      org.apache.jmeter.samplers.SampleResult,
+	 *      org.apache.jmeter.samplers.SampleSaveConfiguration)
+	 */
+	protected void saveSamplerData(HierarchicalStreamWriter writer, MarshallingContext context, HTTPSampleResult res,
+			SampleSaveConfiguration save) {
+		if (save.saveSamplerData(res)) {
+			writeString(writer, "cookies", res.getCookies());
+			writeString(writer, "method", res.getHTTPMethod());
+			writeString(writer, "queryString", res.getQueryString());
+			writeString(writer, "redirectLocation", res.getRedirectLocation());
+			writeItem(res.getURL(), context, writer);
+		}
+	}
 
-   /*
-    * (non-Javadoc)
-    * 
-    * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-    *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-    */
-   public Object unmarshal(HierarchicalStreamReader reader,
-         UnmarshallingContext context)
-   {
-      HTTPSampleResult res = (HTTPSampleResult) createCollection(context
-            .getRequiredType());
-      retrieveAttributes(reader, context, res);
-      while (reader.hasMoreChildren())
-      {
-         reader.moveDown();
-         Object subItem = readItem(reader, context, res);
-         if (!retrieveItem(reader, context, res, subItem))
-         {
-            retrieveHTTPItem(reader, context, res, subItem);
-         }
-         reader.moveUp();
-      }
-      return res;
-   }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
+	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
+	 */
+	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+		HTTPSampleResult res = (HTTPSampleResult) createCollection(context.getRequiredType());
+		retrieveAttributes(reader, context, res);
+		while (reader.hasMoreChildren()) {
+			reader.moveDown();
+			Object subItem = readItem(reader, context, res);
+			if (!retrieveItem(reader, context, res, subItem)) {
+				retrieveHTTPItem(reader, context, res, subItem);
+			}
+			reader.moveUp();
+		}
+		return res;
+	}
 
-   protected void retrieveHTTPItem(HierarchicalStreamReader reader,
-         UnmarshallingContext context, HTTPSampleResult res, Object subItem)
-   {
-      if (subItem instanceof URL)
-      {
-         res.setURL((URL) subItem);
-      }
-      else if (reader.getNodeName().equals("cookies"))
-      {
-         res.setCookies((String) subItem);
-      }
-      else if (reader.getNodeName().equals("method"))
-      {
-         res.setHTTPMethod((String) subItem);
-      }
-      else if (reader.getNodeName().equals("queryString"))
-      {
-         res.setQueryString((String) subItem);
-      }
-      else if (reader.getNodeName().equals("redirectLocation"))
-      {
-         res.setRedirectLocation((String) subItem);
-      }
-   }
+	protected void retrieveHTTPItem(HierarchicalStreamReader reader, UnmarshallingContext context,
+			HTTPSampleResult res, Object subItem) {
+		if (subItem instanceof URL) {
+			res.setURL((URL) subItem);
+		} else if (reader.getNodeName().equals("cookies")) {
+			res.setCookies((String) subItem);
+		} else if (reader.getNodeName().equals("method")) {
+			res.setHTTPMethod((String) subItem);
+		} else if (reader.getNodeName().equals("queryString")) {
+			res.setQueryString((String) subItem);
+		} else if (reader.getNodeName().equals("redirectLocation")) {
+			res.setRedirectLocation((String) subItem);
+		}
+	}
 }

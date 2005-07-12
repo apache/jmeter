@@ -20,29 +20,27 @@ package org.apache.jmeter.monitor.model;
  * 
  * @version $Revision$ on $Date$
  */
-public class JvmImpl implements Jvm
-{
+public class JvmImpl implements Jvm {
 	private Memory memory = null;
-	
-    /**
-     * 
-     */
-    public JvmImpl()
-    {
-        super();
-    }
 
-    public Memory getMemory()
-    {
-        return this.memory;
-    }
+	/**
+	 * 
+	 */
+	public JvmImpl() {
+		super();
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.monitor.model.Jvm#setMemory(org.apache.jmeter.monitor.model.Memory)
-     */
-    public void setMemory(Memory mem)
-    {
+	public Memory getMemory() {
+		return this.memory;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.monitor.model.Jvm#setMemory(org.apache.jmeter.monitor.model.Memory)
+	 */
+	public void setMemory(Memory mem) {
 		this.memory = mem;
-    }
+	}
 
 }

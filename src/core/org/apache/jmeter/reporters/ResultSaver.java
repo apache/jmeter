@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.reporters;
 
@@ -32,64 +32,60 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Save Result responseData to a set of files
- * TODO - perhaps save other items such as headers?
+ * Save Result responseData to a set of files TODO - perhaps save other items
+ * such as headers?
  * 
  * This is mainly intended for validation tests
  * 
  */
-public class ResultSaver
-    extends AbstractTestElement
-    implements Serializable,
-    SampleListener,
-    Clearable
-{
+public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener, Clearable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
-    
-    // File name sequence number 
-    private static long sequenceNumber = 0;    
-    
+
+	// File name sequence number
+	private static long sequenceNumber = 0;
+
 	public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
+
 	public static final String ERRORS_ONLY = "FileSaver.errorsonly"; // $NON-NLS-1$
 
-    private static synchronized long nextNumber(){
-    	return ++sequenceNumber;
-    }
-    /*
-     * Constructor is initially called once for each occurrence in the test plan
-     * For GUI, several more instances are created
-     * Then clear is called at start of test
-     * Called several times during test startup
-     * The name will not necessarily have been set at this point.
-     */
-	public ResultSaver(){
-		super();
-		//log.debug(Thread.currentThread().getName());
-		//System.out.println(">> "+me+"        "+this.getName()+" "+Thread.currentThread().getName());		
+	private static synchronized long nextNumber() {
+		return ++sequenceNumber;
 	}
 
-    /*
-     * Constructor for use during startup
-     * (intended for non-GUI use)
-     * @param name of summariser
-     */
-    public ResultSaver(String name){
-    	this();
-    	setName(name);
-    }
-    
-    /*
-     * This is called once for each occurrence in the test plan, before the start of the test.
-     * The super.clear() method clears the name (and all other properties),
-     * so it is called last.
-     */
-	public void clear()
-	{
-		//System.out.println("-- "+me+this.getName()+" "+Thread.currentThread().getName());
-		super.clear();
-		sequenceNumber=0; //TODO is this the right thing to do?
+	/*
+	 * Constructor is initially called once for each occurrence in the test plan
+	 * For GUI, several more instances are created Then clear is called at start
+	 * of test Called several times during test startup The name will not
+	 * necessarily have been set at this point.
+	 */
+	public ResultSaver() {
+		super();
+		// log.debug(Thread.currentThread().getName());
+		// System.out.println(">> "+me+" "+this.getName()+"
+		// "+Thread.currentThread().getName());
 	}
-	
+
+	/*
+	 * Constructor for use during startup (intended for non-GUI use) @param name
+	 * of summariser
+	 */
+	public ResultSaver(String name) {
+		this();
+		setName(name);
+	}
+
+	/*
+	 * This is called once for each occurrence in the test plan, before the
+	 * start of the test. The super.clear() method clears the name (and all
+	 * other properties), so it is called last.
+	 */
+	public void clear() {
+		// System.out.println("-- "+me+this.getName()+"
+		// "+Thread.currentThread().getName());
+		super.clear();
+		sequenceNumber = 0; // TODO is this the right thing to do?
+	}
+
 	/**
 	 * Saves the sample result (and any sub results) in files
 	 * 
@@ -98,84 +94,87 @@ public class ResultSaver
 	public void sampleOccurred(SampleEvent e) {
 		SampleResult s = e.getResult();
 		saveSample(s);
-		SampleResult []sr = s.getSubResults();
-		for (int i = 0; i < sr.length; i++){
+		SampleResult[] sr = s.getSubResults();
+		for (int i = 0; i < sr.length; i++) {
 			saveSample(sr[i]);
 		}
-    }
+	}
 
 	/**
-	 * @param s SampleResult to save
+	 * @param s
+	 *            SampleResult to save
 	 */
 	private void saveSample(SampleResult s) {
 		// Should we save successful samples?
-		if (s.isSuccessful() && getErrorsOnly()) return;
-		
+		if (s.isSuccessful() && getErrorsOnly())
+			return;
+
 		nextNumber();
-		String fileName=makeFileName(s.getContentType());
-		log.debug("Saving "+s.getSampleLabel()+" in "+fileName);
-		//System.out.println(fileName);
+		String fileName = makeFileName(s.getContentType());
+		log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
+		// System.out.println(fileName);
 		File out = new File(fileName);
-		FileOutputStream pw=null;
+		FileOutputStream pw = null;
 		try {
 			pw = new FileOutputStream(out);
 			pw.write(s.getResponseData());
 		} catch (FileNotFoundException e1) {
-			log.error("Error creating sample file for "+s.getSampleLabel(),e1);
+			log.error("Error creating sample file for " + s.getSampleLabel(), e1);
 		} catch (IOException e1) {
-			log.error("Error saving sample "+s.getSampleLabel(),e1);
-		}
-		finally
-		{
+			log.error("Error saving sample " + s.getSampleLabel(), e1);
+		} finally {
 			try {
-				if (pw != null) pw.close();
-			} catch (IOException e) {}
+				if (pw != null)
+					pw.close();
+			} catch (IOException e) {
+			}
 		}
 	}
+
 	/**
-	 * @return fileName composed of fixed prefix, a number,
-	 * and a suffix derived from the contentType
-	 * e.g. Content-Type: text/html;charset=ISO-8859-1
+	 * @return fileName composed of fixed prefix, a number, and a suffix derived
+	 *         from the contentType e.g. Content-Type:
+	 *         text/html;charset=ISO-8859-1
 	 */
 	private String makeFileName(String contentType) {
-		String suffix="unknown";
-		if (contentType!=null){
+		String suffix = "unknown";
+		if (contentType != null) {
 			int i = contentType.indexOf("/");
-			if (i != -1){
+			if (i != -1) {
 				int j = contentType.indexOf(";");
-				if (j != -1)
-				{
-					suffix=contentType.substring(i+1,j);					
-				} 
-				else
-				{
-					suffix=contentType.substring(i+1);
+				if (j != -1) {
+					suffix = contentType.substring(i + 1, j);
+				} else {
+					suffix = contentType.substring(i + 1);
 				}
 			}
 		}
-		return getFilename()+sequenceNumber+"."+suffix;
+		return getFilename() + sequenceNumber + "." + suffix;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleStarted(org.apache.jmeter.samplers.SampleEvent)
 	 */
-	public void sampleStarted(SampleEvent e) 
-	{
+	public void sampleStarted(SampleEvent e) {
 		// not used
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleStopped(org.apache.jmeter.samplers.SampleEvent)
 	 */
-	public void sampleStopped(SampleEvent e)
-	{
+	public void sampleStopped(SampleEvent e) {
 		// not used
 	}
-	private String getFilename()
-	{
+
+	private String getFilename() {
 		return getPropertyAsString(FILENAME);
 	}
-	private boolean getErrorsOnly()
-	{
+
+	private boolean getErrorsOnly() {
 		return getPropertyAsBoolean(ERRORS_ONLY);
 	}
 }

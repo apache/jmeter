@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.Parser;
@@ -40,34 +39,30 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.NodeList;
 
-public class TableScanner extends CompositeTagScanner
-{
-    private final static String MATCH_STRING[] = { "TABLE" };
-    private final static String ENDERS[] = { "BODY", "HTML" };
-    private final static String ENDTAG_ENDERS[] = { "BODY", "HTML" };
+public class TableScanner extends CompositeTagScanner {
+	private final static String MATCH_STRING[] = { "TABLE" };
 
-    public TableScanner(Parser parser)
-    {
-        this(parser, "");
-    }
+	private final static String ENDERS[] = { "BODY", "HTML" };
 
-    public TableScanner(Parser parser, String filter)
-    {
-        super(filter, MATCH_STRING, ENDERS, ENDTAG_ENDERS, true);
-        parser.addScanner(new TableRowScanner(parser));
+	private final static String ENDTAG_ENDERS[] = { "BODY", "HTML" };
 
-    }
+	public TableScanner(Parser parser) {
+		this(parser, "");
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        NodeList rows =
-            compositeTagData.getChildren().searchFor(TableRow.class);
-        return new TableTag(tagData, compositeTagData, rows);
-    }
+	public TableScanner(Parser parser, String filter) {
+		super(filter, MATCH_STRING, ENDERS, ENDTAG_ENDERS, true);
+		parser.addScanner(new TableRowScanner(parser));
 
-    public String[] getID()
-    {
-        return MATCH_STRING;
-    }
+	}
+
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		NodeList rows = compositeTagData.getChildren().searchFor(TableRow.class);
+		return new TableTag(tagData, compositeTagData, rows);
+	}
+
+	public String[] getID() {
+		return MATCH_STRING;
+	}
 
 }

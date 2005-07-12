@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
+
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,57 +33,45 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author     unattributed
- * @version    $Revision$ Last updated: $Date$
+ * @author unattributed
+ * @version $Revision$ Last updated: $Date$
  */
-public class AddToTree implements Command
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    private Map allJMeterComponentCommands;
+public class AddToTree implements Command {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public AddToTree()
-    {
-        allJMeterComponentCommands = new HashMap();
-        allJMeterComponentCommands.put("Add", "Add");
-    }
+	private Map allJMeterComponentCommands;
 
-    /**
-     * Gets the Set of actions this Command class responds to.
-     *
-     * @return    the ActionNames value
-     */
-    public Set getActionNames()
-    {
-        return allJMeterComponentCommands.keySet();
-    }
+	public AddToTree() {
+		allJMeterComponentCommands = new HashMap();
+		allJMeterComponentCommands.put("Add", "Add");
+	}
 
-    /**
-     * Adds the specified class to the current node of the tree.
-     */
-    public void doAction(ActionEvent e)
-    {
-        try
-        {
-            TestElement node =
-                GuiPackage.getInstance().createTestElement(
-                    ((JComponent) e.getSource()).getName());
-            addObjectToTree(node);
-        }
-        catch (Exception err)
-        {
-            log.error("", err);
-        }
-    }
+	/**
+	 * Gets the Set of actions this Command class responds to.
+	 * 
+	 * @return the ActionNames value
+	 */
+	public Set getActionNames() {
+		return allJMeterComponentCommands.keySet();
+	}
 
-    protected void addObjectToTree(TestElement el)
-    {
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode node = new JMeterTreeNode(el, guiPackage.getTreeModel());
-        guiPackage.getTreeModel().insertNodeInto(
-            node,
-            guiPackage.getTreeListener().getCurrentNode(),
-            guiPackage.getTreeListener().getCurrentNode().getChildCount());
-        guiPackage.getMainFrame().getTree().setSelectionPath(
-            new TreePath(node.getPath()));
-    }
+	/**
+	 * Adds the specified class to the current node of the tree.
+	 */
+	public void doAction(ActionEvent e) {
+		try {
+			TestElement node = GuiPackage.getInstance().createTestElement(((JComponent) e.getSource()).getName());
+			addObjectToTree(node);
+		} catch (Exception err) {
+			log.error("", err);
+		}
+	}
+
+	protected void addObjectToTree(TestElement el) {
+		GuiPackage guiPackage = GuiPackage.getInstance();
+		JMeterTreeNode node = new JMeterTreeNode(el, guiPackage.getTreeModel());
+		guiPackage.getTreeModel().insertNodeInto(node, guiPackage.getTreeListener().getCurrentNode(),
+				guiPackage.getTreeListener().getCurrentNode().getChildCount());
+		guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
+	}
 }

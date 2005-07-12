@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.InputTag;
@@ -37,29 +36,23 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserException;
 
-public class InputTagScanner extends TagScanner
-{
-    public InputTagScanner()
-    {
-        super();
-    }
+public class InputTagScanner extends TagScanner {
+	public InputTagScanner() {
+		super();
+	}
 
-    public InputTagScanner(String filter)
-    {
-        super(filter);
-    }
+	public InputTagScanner(String filter) {
+		super(filter);
+	}
 
-    public String[] getID()
-    {
-        String[] ids = new String[1];
-        ids[0] = "INPUT";
-        return ids;
-    }
+	public String[] getID() {
+		String[] ids = new String[1];
+		ids[0] = "INPUT";
+		return ids;
+	}
 
-    protected Tag createTag(TagData tagData, Tag tag, String url)
-        throws ParserException
-    {
-        return new InputTag(tagData);
-    }
+	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
+		return new InputTag(tagData);
+	}
 
 }

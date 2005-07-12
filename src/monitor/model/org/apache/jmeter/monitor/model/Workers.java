@@ -20,8 +20,7 @@ package org.apache.jmeter.monitor.model;
 /**
  * @version $Revision$ on $Date$
  */
-public interface Workers
-{
+public interface Workers {
 	java.util.List getWorker();
 
 }

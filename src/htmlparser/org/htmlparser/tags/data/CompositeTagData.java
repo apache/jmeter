@@ -29,51 +29,45 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags.data;
 
 import org.htmlparser.tags.Tag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class CompositeTagData
-{
-    private Tag startTag;
-    private Tag endTag;
-    private NodeList children;
+public class CompositeTagData {
+	private Tag startTag;
 
-    public CompositeTagData(Tag startTag, Tag endTag, NodeList children)
-    {
-        this.startTag = startTag;
-        this.endTag = endTag;
-        this.children = new NodeList();
-        if (children != null)
-            for (SimpleNodeIterator i = children.elements(); i.hasMoreNodes();)
-            {
-                this.children.add(i.nextNode());
-            }
-    }
+	private Tag endTag;
 
-    public NodeList getChildren()
-    {
-        return children;
-    }
+	private NodeList children;
 
-    public Tag getEndTag()
-    {
-        return endTag;
-    }
+	public CompositeTagData(Tag startTag, Tag endTag, NodeList children) {
+		this.startTag = startTag;
+		this.endTag = endTag;
+		this.children = new NodeList();
+		if (children != null)
+			for (SimpleNodeIterator i = children.elements(); i.hasMoreNodes();) {
+				this.children.add(i.nextNode());
+			}
+	}
 
-    public Tag getStartTag()
-    {
-        return startTag;
-    }
+	public NodeList getChildren() {
+		return children;
+	}
 
-    public String toString()
-    {
-        StringBuffer childrenString = new StringBuffer();
-        for (int i = 0; i < children.size(); i++)
-            childrenString.append(children.elementAt(i).toPlainTextString());
-        return childrenString.toString();
-    }
+	public Tag getEndTag() {
+		return endTag;
+	}
+
+	public Tag getStartTag() {
+		return startTag;
+	}
+
+	public String toString() {
+		StringBuffer childrenString = new StringBuffer();
+		for (int i = 0; i < children.size(); i++)
+			childrenString.append(children.elementAt(i).toPlainTextString());
+		return childrenString.toString();
+	}
 }

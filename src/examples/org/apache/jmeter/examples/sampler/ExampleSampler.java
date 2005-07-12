@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.examples.sampler;
 
@@ -27,105 +27,100 @@ import org.apache.log.Logger;
 /**
  * Example Sampler (non-Bean version)
  * 
- * JMeter creates an instance of a sampler class for every
- * occurrence of the element in every thread.
- * [some additional copies may be created before the test run starts]
- *
- * Thus each sampler is guaranteed to be called by a single thread -
- * there is no need to synchronize access to instance variables.
+ * JMeter creates an instance of a sampler class for every occurrence of the
+ * element in every thread. [some additional copies may be created before the
+ * test run starts]
+ * 
+ * Thus each sampler is guaranteed to be called by a single thread - there is no
+ * need to synchronize access to instance variables.
  * 
  * However, access to class fields must be synchronized.
- *  
+ * 
  * @version $Revision$ $Date$
  */
-public class ExampleSampler extends AbstractSampler
-{
+public class ExampleSampler extends AbstractSampler {
 
 	protected static Logger log = LoggingManager.getLoggerForClass();
 
-    // The name of the property used to hold our data
-	public final static String DATA = "ExampleSampler.data";   //$NON-NLS-1$
-	
-	private transient static int classCount=0; // keep track of classes created
+	// The name of the property used to hold our data
+	public final static String DATA = "ExampleSampler.data"; //$NON-NLS-1$
+
+	private transient static int classCount = 0; // keep track of classes
+													// created
+
 	// (for instructional purposes only!)
-	
-	public ExampleSampler()
-	{
+
+	public ExampleSampler() {
 		classCount++;
 		trace("ExampleSampler()");
 	}
 
-    /* (non-Javadoc)
-     * Performs the sample, and returns the result
-     * 
-     * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
-     */
-    public SampleResult sample(Entry e)
-    {
-    	trace("sample()");
+	/*
+	 * (non-Javadoc) Performs the sample, and returns the result
+	 * 
+	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
+	 */
+	public SampleResult sample(Entry e) {
+		trace("sample()");
 		SampleResult res = new SampleResult();
 		boolean isOK = false; // Did sample succeed?
-		String data=getData(); // Sampler data
-		String response=null;
-		
+		String data = getData(); // Sampler data
+		String response = null;
+
 		res.setSampleLabel(getTitle());
 		/*
 		 * Perform the sampling
 		 */
-		res.sampleStart(); //Start timing
+		res.sampleStart(); // Start timing
 		try {
-			
+
 			// Do something here ...
-			
-			response=Thread.currentThread().getName();
-			
+
+			response = Thread.currentThread().getName();
+
 			/*
 			 * Set up the sample result details
 			 */
 			res.setSamplerData(data);
 			res.setResponseData(response.getBytes());
 			res.setDataType(SampleResult.TEXT);
-			
+
 			res.setResponseCode("200");
 			res.setResponseMessage("OK");
 			isOK = true;
-		}
-		catch (Exception ex){
-			log.debug("",ex);
+		} catch (Exception ex) {
+			log.debug("", ex);
 			res.setResponseCode("500");
 			res.setResponseMessage(ex.toString());
 		}
-		res.sampleEnd(); //End timimg
-		
+		res.sampleEnd(); // End timimg
+
 		res.setSuccessful(isOK);
 
-        return res;
-    }
+		return res;
+	}
 
-    /**
-     * @return a string for the sampleResult Title
-     */
-    private String getTitle()
-    {
-        return this.getName();
-    }
-    
-    /**
-     * @return the data for the sample
-     */
-    public String getData()
-    {
-    	return getPropertyAsString(DATA);
-    }
-    
-    /*
-     * Helper method
-     */
-	private void trace(String s)
-	{
+	/**
+	 * @return a string for the sampleResult Title
+	 */
+	private String getTitle() {
+		return this.getName();
+	}
+
+	/**
+	 * @return the data for the sample
+	 */
+	public String getData() {
+		return getPropertyAsString(DATA);
+	}
+
+	/*
+	 * Helper method
+	 */
+	private void trace(String s) {
 		String tl = getTitle();
 		String tn = Thread.currentThread().getName();
 		String th = this.toString();
-		log.debug(tn+" ("+classCount+") "+tl+" "+s+" "+th);
+		log.debug(tn + " (" + classCount + ") " + tl + " " + s + " " + th);
 	}
 }

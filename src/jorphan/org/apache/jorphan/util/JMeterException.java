@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.util;
 
@@ -23,33 +23,30 @@ package org.apache.jorphan.util;
  * 
  * @version $Revision$ $Date$
  */
-public class JMeterException extends Exception
-{
-	private Throwable savedCause; //Support JDK1.4 getCause() on JDK1.3
+public class JMeterException extends Exception {
+	private Throwable savedCause; // Support JDK1.4 getCause() on JDK1.3
 
-    /**
-     * 
-     */
-    public JMeterException()
-    {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * 
+	 */
+	public JMeterException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * @param s
-     */
-    public JMeterException(String s)
-    {
-        super(s);
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * @param s
+	 */
+	public JMeterException(String s) {
+		super(s);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * @param cause
 	 */
-	public JMeterException(Throwable cause)
-	{
-		//JDK1.4: super(cause);
+	public JMeterException(Throwable cause) {
+		// JDK1.4: super(cause);
 		savedCause = cause;
 	}
 
@@ -57,21 +54,18 @@ public class JMeterException extends Exception
 	 * @param message
 	 * @param cause
 	 */
-	public JMeterException(String message, Throwable cause)
-	{
-		//JDK1.4: super(message, cause);
+	public JMeterException(String message, Throwable cause) {
+		// JDK1.4: super(message, cause);
 		super(message);
 		savedCause = cause;
 	}
-    
+
 	/**
 	 * Local version of getCause() for JDK1.3 support
 	 * 
 	 */
-	public Throwable getCause()
-	{
+	public Throwable getCause() {
 		return savedCause;
 	}
-
 
 }

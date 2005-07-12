@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -31,86 +31,70 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Function to set a JMeter property
  * 
- * Parameters:
- *  - property name
- *  - value
- *
+ * Parameters: - property name - value
+ * 
  * Usage:
  * 
- *   Set the property value in the appropriate GUI by using the string:
- *   ${__setProperty(propname,propvalue)}
- *  
- * Returns:
- *    nothing
- *    
+ * Set the property value in the appropriate GUI by using the string:
+ * ${__setProperty(propname,propvalue)}
+ * 
+ * Returns: nothing
+ * 
  * @version $Revision$ Updated: $Date$
  */
-public class SetProperty extends AbstractFunction implements Serializable
-{
+public class SetProperty extends AbstractFunction implements Serializable {
 
-    private static final List desc = new LinkedList();
-    private static final String KEY = "__setProperty";
+	private static final List desc = new LinkedList();
 
-    // Number of parameters expected - used to reject invalid calls
-    private static final int MIN_PARAMETER_COUNT = 2;
-    private static final int MAX_PARAMETER_COUNT = 2;
-    static {
-        desc.add(JMeterUtils.getResString("property_name_param"));
-        desc.add(JMeterUtils.getResString("property_value_param"));
-    }
+	private static final String KEY = "__setProperty";
 
-    private Object[] values;
+	// Number of parameters expected - used to reject invalid calls
+	private static final int MIN_PARAMETER_COUNT = 2;
 
-    public SetProperty()
-    {
-    }
+	private static final int MAX_PARAMETER_COUNT = 2;
+	static {
+		desc.add(JMeterUtils.getResString("property_name_param"));
+		desc.add(JMeterUtils.getResString("property_value_param"));
+	}
 
-    public Object clone()
-    {
-        return new SetProperty();
-    }
+	private Object[] values;
 
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
-        String propertyName = ((CompoundVariable) values[0]).execute();
-        
-        String propertyValue = ((CompoundVariable) values[1]).execute();
-        
-        JMeterUtils.setProperty(propertyName, propertyValue);
-        
-        return propertyValue;
+	public SetProperty() {
+	}
 
-    }
+	public Object clone() {
+		return new SetProperty();
+	}
 
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
+		String propertyName = ((CompoundVariable) values[0]).execute();
 
-        values = parameters.toArray();
+		String propertyValue = ((CompoundVariable) values[1]).execute();
 
-        if ((values.length < MIN_PARAMETER_COUNT)
-            || (values.length > MAX_PARAMETER_COUNT))
-        {
-            throw new InvalidVariableException(
-                "Parameter Count not between "
-                    + MIN_PARAMETER_COUNT
-                    + " & "
-                    + MAX_PARAMETER_COUNT);
-        }
+		JMeterUtils.setProperty(propertyName, propertyValue);
 
-    }
+		return propertyValue;
 
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+	}
 
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	public void setParameters(Collection parameters) throws InvalidVariableException {
+
+		values = parameters.toArray();
+
+		if ((values.length < MIN_PARAMETER_COUNT) || (values.length > MAX_PARAMETER_COUNT)) {
+			throw new InvalidVariableException("Parameter Count not between " + MIN_PARAMETER_COUNT + " & "
+					+ MAX_PARAMETER_COUNT);
+		}
+
+	}
+
+	public String getReferenceKey() {
+		return KEY;
+	}
+
+	public List getArgumentDesc() {
+		return desc;
+	}
 
 }

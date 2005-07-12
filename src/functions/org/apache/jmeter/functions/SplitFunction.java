@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -34,94 +34,78 @@ import org.apache.log.Logger;
 /**
  * Function to log a message
  * 
- * Parameters:
- *  - string
- *  - log level (optional; defaults to INFO; or DEBUG if unrecognised)
- *  - throwable message (optional)
- *
- * Returns:
- *  - the input string
+ * Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
+ * unrecognised) - throwable message (optional)
+ * 
+ * Returns: - the input string
  * 
  * @version $Revision$ Updated: $Date$
  */
-public class SplitFunction extends AbstractFunction implements Serializable
-{
+public class SplitFunction extends AbstractFunction implements Serializable {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static final List desc = new LinkedList();
-    private static final String KEY = "__split";
+	private static final List desc = new LinkedList();
 
-    // Number of parameters expected - used to reject invalid calls
-    private static final int MIN_PARAMETER_COUNT = 2;
-    private static final int MAX_PARAMETER_COUNT = 3;
-    static {
-        desc.add("String to split");
-        desc.add("Variable name");
+	private static final String KEY = "__split";
+
+	// Number of parameters expected - used to reject invalid calls
+	private static final int MIN_PARAMETER_COUNT = 2;
+
+	private static final int MAX_PARAMETER_COUNT = 3;
+	static {
+		desc.add("String to split");
+		desc.add("Variable name");
 		desc.add("Split character (omit for ',')");
-    }
+	}
 
-    private Object[] values;
+	private Object[] values;
 
-    public SplitFunction()
-    {
-    }
+	public SplitFunction() {
+	}
 
-    public Object clone()
-    {
-        return new SplitFunction();
-    }
+	public Object clone() {
+		return new SplitFunction();
+	}
 
-    public synchronized String execute(
-        SampleResult previousResult,
-        Sampler currentSampler)
-        throws InvalidVariableException
-    {
-    	JMeterVariables vars = getVariables();
-    	
-        String stringToSplit  = ((CompoundVariable) values[0]).execute();
-        String varNamePrefix  = ((CompoundVariable) values[1]).execute();
-        String splitString = ",";
-        
-		if (values.length > 2){ // Split string provided
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
+		JMeterVariables vars = getVariables();
+
+		String stringToSplit = ((CompoundVariable) values[0]).execute();
+		String varNamePrefix = ((CompoundVariable) values[1]).execute();
+		String splitString = ",";
+
+		if (values.length > 2) { // Split string provided
 			splitString = ((CompoundVariable) values[2]).execute();
 		}
-		String parts[] = JMeterUtils.split(stringToSplit,splitString,"?");
-		
+		String parts[] = JMeterUtils.split(stringToSplit, splitString, "?");
+
 		vars.put(varNamePrefix, stringToSplit);
-		vars.put(varNamePrefix+"_n", ""+parts.length);
-		for (int i = 1; i <= parts.length ;i++){
-			vars.put(varNamePrefix+"_"+i,parts[i-1]);
+		vars.put(varNamePrefix + "_n", "" + parts.length);
+		for (int i = 1; i <= parts.length; i++) {
+			vars.put(varNamePrefix + "_" + i, parts[i - 1]);
 		}
-        return stringToSplit;
+		return stringToSplit;
 
-    }
-    
-    public void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
+	}
 
-        values = parameters.toArray();
+	public void setParameters(Collection parameters) throws InvalidVariableException {
 
-        if ((values.length < MIN_PARAMETER_COUNT)
-            || (values.length > MAX_PARAMETER_COUNT))
-        {
-            throw new InvalidVariableException(
-                "Parameter Count not between "
-                    + MIN_PARAMETER_COUNT
-                    + " & "
-                    + MAX_PARAMETER_COUNT);
-        }
+		values = parameters.toArray();
 
-    }
+		if ((values.length < MIN_PARAMETER_COUNT) || (values.length > MAX_PARAMETER_COUNT)) {
+			throw new InvalidVariableException("Parameter Count not between " + MIN_PARAMETER_COUNT + " & "
+					+ MAX_PARAMETER_COUNT);
+		}
 
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+	}
 
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+	public String getReferenceKey() {
+		return KEY;
+	}
+
+	public List getArgumentDesc() {
+		return desc;
+	}
 
 }

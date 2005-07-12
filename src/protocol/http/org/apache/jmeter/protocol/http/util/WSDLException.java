@@ -14,36 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.util;
 
 /**
- * Created on:  Jun 3, 2003<br>
- * @author  Peter Lin
+ * Created on: Jun 3, 2003<br>
+ * 
+ * @author Peter Lin
  * @version $Revision$
  */
-public class WSDLException extends Exception
-{
+public class WSDLException extends Exception {
 
-    public WSDLException()
-    {
-        super();
-    }
+	public WSDLException() {
+		super();
+	}
 
-    /**
-     * @param message
-     */
-    public WSDLException(String message)
-    {
-        super(message);
-    }
+	/**
+	 * @param message
+	 */
+	public WSDLException(String message) {
+		super(message);
+	}
 
-    /**
-     * @param exception
-     */
-    public WSDLException(Exception exception)
-    {
-        super(exception.getMessage());
-    }
+	/**
+	 * @param exception
+	 */
+	public WSDLException(Exception exception) {
+		super(exception.getMessage());
+	}
 }

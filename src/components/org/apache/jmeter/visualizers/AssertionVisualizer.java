@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
 
@@ -33,104 +33,86 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
-
 /**
  * 
- * @version   $Revision$ on $Date$
+ * @version $Revision$ on $Date$
  */
-public class AssertionVisualizer extends AbstractVisualizer implements Clearable
-{
+public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
 
-    private JTextArea textArea;
+	private JTextArea textArea;
 
-    public AssertionVisualizer()
-    {
-        init();
-        setName(getStaticLabel());
-    }
+	public AssertionVisualizer() {
+		init();
+		setName(getStaticLabel());
+	}
 
-    public String getLabelResource()
-    {
-        return "assertion_visualizer_title";
-    }
+	public String getLabelResource() {
+		return "assertion_visualizer_title";
+	}
 
-    public void add(SampleResult sample)
-    {
-    	StringBuffer sb = new StringBuffer(100);
-    	String sd= sample.getSamplerData();
-        if(null != sd)
-        {
-            sb.append(sd);
-        }
-        else
-        {
-            sb.append(sample.getSampleLabel());
-        }
-        sb.append(getAssertionResult(sample));
-        sb.append("\n");
-        synchronized(textArea){
-        	textArea.append(sb.toString());
-        }
-    }
+	public void add(SampleResult sample) {
+		StringBuffer sb = new StringBuffer(100);
+		String sd = sample.getSamplerData();
+		if (null != sd) {
+			sb.append(sd);
+		} else {
+			sb.append(sample.getSampleLabel());
+		}
+		sb.append(getAssertionResult(sample));
+		sb.append("\n");
+		synchronized (textArea) {
+			textArea.append(sb.toString());
+		}
+	}
 
-    public void clear()
-    {
-        textArea.setText("");
-    }
+	public void clear() {
+		textArea.setText("");
+	}
 
-    private String getAssertionResult(SampleResult res)
-    {
-        if (res != null)
-        {
-            StringBuffer display = new StringBuffer();
-            AssertionResult assertionResults[] = res.getAssertionResults();
-            for (int i = 0; i < assertionResults.length; i++)
-            {
-                AssertionResult item = assertionResults[i];
+	private String getAssertionResult(SampleResult res) {
+		if (res != null) {
+			StringBuffer display = new StringBuffer();
+			AssertionResult assertionResults[] = res.getAssertionResults();
+			for (int i = 0; i < assertionResults.length; i++) {
+				AssertionResult item = assertionResults[i];
 
-                if (item.isFailure() || item.isError())
-                {
-                    display.append("\n\t\t");
-                    display.append(item.getFailureMessage());
-                }
-            }
-            return display.toString();
-        }
-        return "";
-    }
+				if (item.isFailure() || item.isError()) {
+					display.append("\n\t\t");
+					display.append(item.getFailureMessage());
+				}
+			}
+			return display.toString();
+		}
+		return "";
+	}
 
-    private void init()
-    {
-        this.setLayout(new BorderLayout());
+	private void init() {
+		this.setLayout(new BorderLayout());
 
-        // MAIN PANEL
-        Border margin = new EmptyBorder(10, 10, 5, 10);
+		// MAIN PANEL
+		Border margin = new EmptyBorder(10, 10, 5, 10);
 
-        this.setBorder(margin);
+		this.setBorder(margin);
 
+		// NAME
+		this.add(makeTitlePanel(), BorderLayout.NORTH);
 
-        // NAME
-        this.add(makeTitlePanel(),BorderLayout.NORTH);
+		// TEXTAREA LABEL
+		JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
+		Box mainPanel = Box.createVerticalBox();
+		mainPanel.add(textAreaLabel);
 
-        // TEXTAREA LABEL
-        JLabel textAreaLabel =
-            new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
-        Box mainPanel = Box.createVerticalBox();
-        mainPanel.add(textAreaLabel);
+		// TEXTAREA
+		textArea = new JTextArea();
+		textArea.setEditable(false);
+		textArea.setLineWrap(false);
+		JScrollPane areaScrollPane = new JScrollPane(textArea);
 
-        // TEXTAREA
-        textArea = new JTextArea();
-        textArea.setEditable(false);
-        textArea.setLineWrap(false);
-        JScrollPane areaScrollPane = new JScrollPane(textArea);
+		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        areaScrollPane.setVerticalScrollBarPolicy(
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        areaScrollPane.setHorizontalScrollBarPolicy(
-            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        mainPanel.add(areaScrollPane);
-        mainPanel.add(Box.createVerticalGlue());
-        this.add(mainPanel, BorderLayout.CENTER);
-    }
+		mainPanel.add(areaScrollPane);
+		mainPanel.add(Box.createVerticalGlue());
+		this.add(mainPanel, BorderLayout.CENTER);
+	}
 }

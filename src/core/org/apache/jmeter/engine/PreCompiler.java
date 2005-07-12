@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.engine;
 
@@ -33,64 +33,59 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author  Michael Stover
- * @author  <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
+ * @author Michael Stover
+ * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
-public class PreCompiler implements HashTreeTraverser
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    private ValueReplacer replacer;
+public class PreCompiler implements HashTreeTraverser {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public PreCompiler()
-    {
-        replacer = new ValueReplacer();
-    }
+	private ValueReplacer replacer;
 
-    /* (non-Javadoc)
-     * @see HashTreeTraverser#addNode(Object, HashTree)
-     */
-    public void addNode(Object node, HashTree subTree)
-    {
-        if (node instanceof TestPlan)
-        {
-            Map args= ((TestPlan)node).getUserDefinedVariables();
-            replacer.setUserDefinedVariables(args);
-            JMeterVariables vars= new JMeterVariables();
-            vars.putAll(args);
-            JMeterContextService.getContext().setVariables(vars);
-        }
-        else if (node instanceof TestElement)
-        {
-            try
-            {
-                replacer.replaceValues((TestElement) node);
-            }
-            catch (InvalidVariableException e)
-            {
-                log.error("invalid variables", e);
-            }
-        }
+	public PreCompiler() {
+		replacer = new ValueReplacer();
+	}
 
-        if (node instanceof Arguments)
-        {
-            Map args= ((Arguments)node).getArgumentsAsMap();
-            replacer.addVariables(args);
-            JMeterContextService.getContext().getVariables().putAll(args);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see HashTreeTraverser#addNode(Object, HashTree)
+	 */
+	public void addNode(Object node, HashTree subTree) {
+		if (node instanceof TestPlan) {
+			Map args = ((TestPlan) node).getUserDefinedVariables();
+			replacer.setUserDefinedVariables(args);
+			JMeterVariables vars = new JMeterVariables();
+			vars.putAll(args);
+			JMeterContextService.getContext().setVariables(vars);
+		} else if (node instanceof TestElement) {
+			try {
+				replacer.replaceValues((TestElement) node);
+			} catch (InvalidVariableException e) {
+				log.error("invalid variables", e);
+			}
+		}
 
-    /* (non-Javadoc)
-     * @see HashTreeTraverser#subtractNode()
-     */
-    public void subtractNode()
-    {
-    }
+		if (node instanceof Arguments) {
+			Map args = ((Arguments) node).getArgumentsAsMap();
+			replacer.addVariables(args);
+			JMeterContextService.getContext().getVariables().putAll(args);
+		}
+	}
 
-    /* (non-Javadoc)
-     * @see HashTreeTraverser#processPath()
-     */
-    public void processPath()
-    {
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see HashTreeTraverser#subtractNode()
+	 */
+	public void subtractNode() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see HashTreeTraverser#processPath()
+	 */
+	public void processPath() {
+	}
 }

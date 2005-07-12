@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
 
 import org.htmlparser.tags.BodyTag;
@@ -40,31 +39,27 @@ import org.htmlparser.tags.data.TagData;
 /**
  * Scans body tags.
  */
-public class BodyScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "BODY" };
-    private static final String ENDERS[] = {
-    };
-    private static final String END_TAG_ENDERS[] = { "HTML" };
+public class BodyScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "BODY" };
 
-    public BodyScanner()
-    {
-        this("");
-    }
+	private static final String ENDERS[] = {};
 
-    public BodyScanner(String filter)
-    {
-        super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
-    }
+	private static final String END_TAG_ENDERS[] = { "HTML" };
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public BodyScanner() {
+		this("");
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new BodyTag(tagData, compositeTagData);
-    }
+	public BodyScanner(String filter) {
+		super(filter, MATCH_NAME, ENDERS, END_TAG_ENDERS, false);
+	}
+
+	public String[] getID() {
+		return MATCH_NAME;
+	}
+
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new BodyTag(tagData, compositeTagData);
+	}
 
 }

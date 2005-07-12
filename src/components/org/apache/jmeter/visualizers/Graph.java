@@ -39,247 +39,214 @@ import org.apache.log.Logger;
  * @author Michael Stover Created March 21, 2002
  * @version $Revision$ Last updated: $Date$
  */
-public class Graph extends JComponent implements Scrollable, Clearable
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    private boolean wantData = true;
-    private boolean wantAverage = true;
-    private boolean wantDeviation = true;
-    private boolean wantThroughput = true;
-    private boolean wantMedian = true;
+public class Graph extends JComponent implements Scrollable, Clearable {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-   private SamplingStatCalculator model;
-   private static int width = 2000;
-   private long graphMax = 1;
-   private double throughputMax = 1;
+	private boolean wantData = true;
 
-   /**
-    * Constructor for the Graph object.
-    */
-   public Graph()
-   {
-      this.setPreferredSize(new Dimension(width, 100));
-   }
+	private boolean wantAverage = true;
 
-   /**
-    * Constructor for the Graph object.
-    */
-   public Graph(SamplingStatCalculator model)
-   {
-      this();
-      setModel(model);
-   }
+	private boolean wantDeviation = true;
 
-   /**
-    * Sets the Model attribute of the Graph object.
-    */
-   private void setModel(Object model)
-   {
-      this.model = (SamplingStatCalculator) model;
-      repaint();
-   }
+	private boolean wantThroughput = true;
 
-   /**
-    * Gets the PreferredScrollableViewportSize attribute of the Graph object.
-    * 
-    * @return the PreferredScrollableViewportSize value
-    */
-   public Dimension getPreferredScrollableViewportSize()
-   {
-      return this.getPreferredSize();
-      // return new Dimension(width, 400);
-   }
+	private boolean wantMedian = true;
 
-   /**
-    * Gets the ScrollableUnitIncrement attribute of the Graph object.
-    * 
-    * @return the ScrollableUnitIncrement value
-    */
-   public int getScrollableUnitIncrement(Rectangle visibleRect,
-         int orientation, int direction)
-   {
-      return 5;
-   }
+	private SamplingStatCalculator model;
 
-   /**
-    * Gets the ScrollableBlockIncrement attribute of the Graph object.
-    * 
-    * @return the ScrollableBlockIncrement value
-    */
-   public int getScrollableBlockIncrement(Rectangle visibleRect,
-         int orientation, int direction)
-   {
-      return (int) (visibleRect.width * .9);
-   }
+	private static int width = 2000;
 
-   /**
-    * Gets the ScrollableTracksViewportWidth attribute of the Graph object.
-    * 
-    * @return the ScrollableTracksViewportWidth value
-    */
-   public boolean getScrollableTracksViewportWidth()
-   {
-      return false;
-   }
+	private long graphMax = 1;
 
-   /**
-    * Gets the ScrollableTracksViewportHeight attribute of the Graph object.
-    * 
-    * @return the ScrollableTracksViewportHeight value
-    */
-   public boolean getScrollableTracksViewportHeight()
-   {
-      return true;
-   }
+	private double throughputMax = 1;
 
-   /**
-    * Clears this graph.
-    */
-   public void clear()
-   {
-      graphMax = 1;
-      throughputMax = 1;
-   }
+	/**
+	 * Constructor for the Graph object.
+	 */
+	public Graph() {
+		this.setPreferredSize(new Dimension(width, 100));
+	}
 
-    public void enableData(boolean value)
-    {
-        this.wantData = value;
-    }
+	/**
+	 * Constructor for the Graph object.
+	 */
+	public Graph(SamplingStatCalculator model) {
+		this();
+		setModel(model);
+	}
 
-    public void enableAverage(boolean value)
-    {
-        this.wantAverage = value;
-    }
+	/**
+	 * Sets the Model attribute of the Graph object.
+	 */
+	private void setModel(Object model) {
+		this.model = (SamplingStatCalculator) model;
+		repaint();
+	}
 
-    public void enableMedian(boolean value)
-    {
-        this.wantMedian = value;
-    }
+	/**
+	 * Gets the PreferredScrollableViewportSize attribute of the Graph object.
+	 * 
+	 * @return the PreferredScrollableViewportSize value
+	 */
+	public Dimension getPreferredScrollableViewportSize() {
+		return this.getPreferredSize();
+		// return new Dimension(width, 400);
+	}
 
-    public void enableDeviation(boolean value)
-    {
-        this.wantDeviation = value;
-    }
+	/**
+	 * Gets the ScrollableUnitIncrement attribute of the Graph object.
+	 * 
+	 * @return the ScrollableUnitIncrement value
+	 */
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 5;
+	}
 
-    public void enableThroughput(boolean value)
-    {
-        this.wantThroughput = value;
-    }
+	/**
+	 * Gets the ScrollableBlockIncrement attribute of the Graph object.
+	 * 
+	 * @return the ScrollableBlockIncrement value
+	 */
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return (int) (visibleRect.width * .9);
+	}
 
-   public void updateGui(final Sample oneSample)
-   {
-      long h = model.getPercentPoint((float) 0.90).longValue();
-      boolean repaint = false;
-      if ((oneSample.count % 20 == 0 || oneSample.count < 20) && 
-      		h > (graphMax * 1.2) || graphMax > (h * 1.2))
-      {
-         graphMax = h;
-         repaint = true;
-      }
-      if(model.getMaxThroughput() > throughputMax)
-      {
-         throughputMax = model.getMaxThroughput() * 1.3;
-         repaint = true;
-      }
-      if(repaint)
-      {
-         repaint();
-         return;
-      }
-      final int xPos = model.getCount();
+	/**
+	 * Gets the ScrollableTracksViewportWidth attribute of the Graph object.
+	 * 
+	 * @return the ScrollableTracksViewportWidth value
+	 */
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
 
-      SwingUtilities.invokeLater(new Runnable()
-      {
-         public void run()
-         {
-            Graphics g = getGraphics();
+	/**
+	 * Gets the ScrollableTracksViewportHeight attribute of the Graph object.
+	 * 
+	 * @return the ScrollableTracksViewportHeight value
+	 */
+	public boolean getScrollableTracksViewportHeight() {
+		return true;
+	}
 
-            if (g != null)
-            {
-               drawSample(xPos, oneSample, g);
-            }
-         }
-      });
-   }
+	/**
+	 * Clears this graph.
+	 */
+	public void clear() {
+		graphMax = 1;
+		throughputMax = 1;
+	}
 
-   public void paintComponent(Graphics g)
-   {
-      super.paintComponent(g);
+	public void enableData(boolean value) {
+		this.wantData = value;
+	}
 
-      synchronized (model.getSamples())
-      {
-         Iterator e = model.getSamples().iterator();
+	public void enableAverage(boolean value) {
+		this.wantAverage = value;
+	}
 
-         for (int i = 0; e.hasNext(); i++)
-         {
-            Sample s = (Sample) e.next();
+	public void enableMedian(boolean value) {
+		this.wantMedian = value;
+	}
 
-            drawSample(i, s, g);
-         }
-      }
-   }
+	public void enableDeviation(boolean value) {
+		this.wantDeviation = value;
+	}
 
-   private void drawSample(int x, Sample oneSample, Graphics g)
-   {
-      //int width = getWidth();
-      int height = getHeight();
-      log.debug("Drawing a sample at " + x);
-      if (wantData)
-      {
-         int data = (int) (oneSample.data * height / graphMax);
+	public void enableThroughput(boolean value) {
+		this.wantThroughput = value;
+	}
 
-         if (oneSample.success)
-         {
-            g.setColor(Color.black);
-         }
-         else
-         {
-            g.setColor(JMeterColor.YELLOW);
-         }
-         g.drawLine(x % width, height - data, x % width, height - data - 1);
-         log.debug("Drawing coords = " + (x % width) + "," + (height - data));
-      }
+	public void updateGui(final Sample oneSample) {
+		long h = model.getPercentPoint((float) 0.90).longValue();
+		boolean repaint = false;
+		if ((oneSample.count % 20 == 0 || oneSample.count < 20) && h > (graphMax * 1.2) || graphMax > (h * 1.2)) {
+			graphMax = h;
+			repaint = true;
+		}
+		if (model.getMaxThroughput() > throughputMax) {
+			throughputMax = model.getMaxThroughput() * 1.3;
+			repaint = true;
+		}
+		if (repaint) {
+			repaint();
+			return;
+		}
+		final int xPos = model.getCount();
 
-      if (wantAverage)
-      {
-         int average = (int) (oneSample.average * height / graphMax);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Graphics g = getGraphics();
 
-         g.setColor(Color.blue);
-         g.drawLine(x % width, height - average, x % width,
-               (height - average - 1));
-      }
+				if (g != null) {
+					drawSample(xPos, oneSample, g);
+				}
+			}
+		});
+	}
 
-      if (wantMedian)
-      {
-         int median = (int) (oneSample.median * height / graphMax);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-         g.setColor(JMeterColor.purple);
-         g.drawLine(x % width, height - median, x % width,
-               (height - median - 1));
-      }
+		synchronized (model.getSamples()) {
+			Iterator e = model.getSamples().iterator();
 
-      if (wantDeviation)
-      {
-         int deviation = (int) (oneSample.deviation * height / graphMax);
+			for (int i = 0; e.hasNext(); i++) {
+				Sample s = (Sample) e.next();
 
-         g.setColor(Color.red);
-         g.drawLine(x % width, height - deviation, x % width, (height
-               - deviation - 1));
-      }
-      if (wantThroughput)
-      {
-         int throughput = (int) (oneSample.throughput * height / throughputMax);
+				drawSample(i, s, g);
+			}
+		}
+	}
 
-         g.setColor(JMeterColor.dark_green);
-         g.drawLine(x % width, height - throughput, x % width, (height
-               - throughput - 1));
-      }
-   }
-   /**
-    * @return Returns the graphMax.
-    */
-   public long getGraphMax()
-   {
-      return graphMax;
-   }
+	private void drawSample(int x, Sample oneSample, Graphics g) {
+		// int width = getWidth();
+		int height = getHeight();
+		log.debug("Drawing a sample at " + x);
+		if (wantData) {
+			int data = (int) (oneSample.data * height / graphMax);
+
+			if (oneSample.success) {
+				g.setColor(Color.black);
+			} else {
+				g.setColor(JMeterColor.YELLOW);
+			}
+			g.drawLine(x % width, height - data, x % width, height - data - 1);
+			log.debug("Drawing coords = " + (x % width) + "," + (height - data));
+		}
+
+		if (wantAverage) {
+			int average = (int) (oneSample.average * height / graphMax);
+
+			g.setColor(Color.blue);
+			g.drawLine(x % width, height - average, x % width, (height - average - 1));
+		}
+
+		if (wantMedian) {
+			int median = (int) (oneSample.median * height / graphMax);
+
+			g.setColor(JMeterColor.purple);
+			g.drawLine(x % width, height - median, x % width, (height - median - 1));
+		}
+
+		if (wantDeviation) {
+			int deviation = (int) (oneSample.deviation * height / graphMax);
+
+			g.setColor(Color.red);
+			g.drawLine(x % width, height - deviation, x % width, (height - deviation - 1));
+		}
+		if (wantThroughput) {
+			int throughput = (int) (oneSample.throughput * height / throughputMax);
+
+			g.setColor(JMeterColor.dark_green);
+			g.drawLine(x % width, height - throughput, x % width, (height - throughput - 1));
+		}
+	}
+
+	/**
+	 * @return Returns the graphMax.
+	 */
+	public long getGraphMax() {
+		return graphMax;
+	}
 }

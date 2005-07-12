@@ -29,38 +29,29 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.*;
 import org.htmlparser.util.*;
 
-public class TableTag extends CompositeTag
-{
-    private NodeList rows;
+public class TableTag extends CompositeTag {
+	private NodeList rows;
 
-    public TableTag(
-        TagData tagData,
-        CompositeTagData compositeTagData,
-        NodeList rows)
-    {
-        super(tagData, compositeTagData);
-        this.rows = rows;
-    }
+	public TableTag(TagData tagData, CompositeTagData compositeTagData, NodeList rows) {
+		super(tagData, compositeTagData);
+		this.rows = rows;
+	}
 
-    public int getRowCount()
-    {
-        return rows.size();
-    }
+	public int getRowCount() {
+		return rows.size();
+	}
 
-    public TableRow getRow(int i)
-    {
-        return (TableRow) rows.elementAt(i);
-    }
+	public TableRow getRow(int i) {
+		return (TableRow) rows.elementAt(i);
+	}
 
-    public String toString()
-    {
-        return "TableTag\n" + "********\n" + toHtml();
-    }
+	public String toString() {
+		return "TableTag\n" + "********\n" + toHtml();
+	}
 
 }

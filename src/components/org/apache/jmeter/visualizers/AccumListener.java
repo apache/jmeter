@@ -14,17 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.visualizers;
-
 
 /**
  * @author Administrator
  * @version $Revision$ on $Date$
  */
-public interface AccumListener
-{
+public interface AccumListener {
 
-    public void updateGui(RunningSample s);
+	public void updateGui(RunningSample s);
 }

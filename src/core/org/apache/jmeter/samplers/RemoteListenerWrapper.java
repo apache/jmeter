@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.samplers;
 
@@ -31,109 +31,93 @@ import org.apache.log.Logger;
 /**
  * @author unascribed
  * 
- * Lars-Erik Helander provided the idea (and original implementation)
- * for the caching functionality (sampleStore).
+ * Lars-Erik Helander provided the idea (and original implementation) for the
+ * caching functionality (sampleStore).
  * 
  * @version $Revision$ Updated on: $Date$
  */
-public class RemoteListenerWrapper
-    extends AbstractTestElement
-    implements SampleListener, TestListener, Serializable, NoThreadClone
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    private RemoteSampleListener listener = null;
-    
-    SampleSender mode;
+public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestListener, Serializable,
+		NoThreadClone {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    public RemoteListenerWrapper(RemoteSampleListener l)
-    {
-        listener = l;
-        // Get appropriate class governed by the behaviour set in the Jmeter property mode.
-        this.mode = SampleSenderFactory.getInstance(listener);
-    }
+	private RemoteSampleListener listener = null;
 
-    public RemoteListenerWrapper() //TODO: not used - make private?
-    {
-    }
+	SampleSender mode;
 
-    public void testStarted()
-    {
-    	log.info("Test Started()");
-        try
-        {
-           listener.testStarted();
-        }
-        catch (Throwable ex)
-        {
-            log.warn("testStarted()", ex);
-        }
+	public RemoteListenerWrapper(RemoteSampleListener l) {
+		listener = l;
+		// Get appropriate class governed by the behaviour set in the Jmeter
+		// property mode.
+		this.mode = SampleSenderFactory.getInstance(listener);
+	}
 
-    }
-    public void testEnded()
-    {
-        mode.testEnded();
-    }
+	public RemoteListenerWrapper() // TODO: not used - make private?
+	{
+	}
 
-    public void testStarted(String host)
-    {
-		log.info("Test Started on "+host); // should this be debug?
-        try
-        {
-            listener.testStarted(host);
-        }
-        catch (Throwable ex)
-        {
-            log.error("testStarted(host)", ex);
-        }
-    }
+	public void testStarted() {
+		log.info("Test Started()");
+		try {
+			listener.testStarted();
+		} catch (Throwable ex) {
+			log.warn("testStarted()", ex);
+		}
 
-    public void testEnded(String host)
-    {
-        mode.testEnded(host);
-    }
+	}
 
-    public void sampleOccurred(SampleEvent e)
-    {
-        mode.SampleOccurred(e);
-    }
+	public void testEnded() {
+		mode.testEnded();
+	}
 
-//	Note that sampleStarted() and sampleStopped() is not made to appear
-//	in synch with sampleOccured() when replaying held samples.
-//	For now this is not critical since sampleStarted() and sampleStopped()
-//	is not used, but it may become an issue in the future. Then these
-//	events must also be stored so that replay of all events may occur and
-//	in the right order. Each stored event must then be tagged with something
-//	that lets you distinguish between occured, started and ended.
+	public void testStarted(String host) {
+		log.info("Test Started on " + host); // should this be debug?
+		try {
+			listener.testStarted(host);
+		} catch (Throwable ex) {
+			log.error("testStarted(host)", ex);
+		}
+	}
 
-    public void sampleStarted(SampleEvent e)
-    {
+	public void testEnded(String host) {
+		mode.testEnded(host);
+	}
+
+	public void sampleOccurred(SampleEvent e) {
+		mode.SampleOccurred(e);
+	}
+
+	// Note that sampleStarted() and sampleStopped() is not made to appear
+	// in synch with sampleOccured() when replaying held samples.
+	// For now this is not critical since sampleStarted() and sampleStopped()
+	// is not used, but it may become an issue in the future. Then these
+	// events must also be stored so that replay of all events may occur and
+	// in the right order. Each stored event must then be tagged with something
+	// that lets you distinguish between occured, started and ended.
+
+	public void sampleStarted(SampleEvent e) {
 		log.debug("Sample started");
-        try
-        {
-            listener.sampleStarted(e);
-        }
-        catch (RemoteException err)
-        {
-            log.error("sampleStarted", err);
-        }
-    }
-    public void sampleStopped(SampleEvent e)
-    {
+		try {
+			listener.sampleStarted(e);
+		} catch (RemoteException err) {
+			log.error("sampleStarted", err);
+		}
+	}
+
+	public void sampleStopped(SampleEvent e) {
 		log.debug("Sample stopped");
-        try
-        {
-            listener.sampleStopped(e);
-        }
-        catch (RemoteException err)
-        {
-            log.error("sampleStopped", err);
-        }
-    }
-    /* (non-Javadoc)
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event)
-    {
-    }
+		try {
+			listener.sampleStopped(e);
+		} catch (RemoteException err) {
+			log.error("sampleStopped", err);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testIterationStart(LoopIterationEvent)
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+	}
 
 }

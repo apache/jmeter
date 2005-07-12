@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control.gui;
 
@@ -32,11 +32,9 @@ import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class WhileControllerGui extends AbstractControllerGui
-	implements ActionListener
-{
+public class WhileControllerGui extends AbstractControllerGui implements ActionListener {
 
-	  private static final String CONDITION_LABEL = "while_controller_label";
+	private static final String CONDITION_LABEL = "while_controller_label";
 
 	/**
 	 * A field allowing the user to specify the condition (not yet used).
@@ -49,17 +47,18 @@ public class WhileControllerGui extends AbstractControllerGui
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
 	 */
-	public WhileControllerGui()   {
+	public WhileControllerGui() {
 		init();
 	}
 
 	/**
-	 * A newly created component can be initialized with the contents of
-	 * a Test Element object by calling this method.  The component is
-	 * responsible for querying the Test Element object for the
-	 * relevant information to display in its GUI.
-	 *
-	 * @param element the TestElement to configure
+	 * A newly created component can be initialized with the contents of a Test
+	 * Element object by calling this method. The component is responsible for
+	 * querying the Test Element object for the relevant information to display
+	 * in its GUI.
+	 * 
+	 * @param element
+	 *            the TestElement to configure
 	 */
 	public void configure(TestElement element) {
 		super.configure(element);
@@ -70,7 +69,7 @@ public class WhileControllerGui extends AbstractControllerGui
 	}
 
 	/**
-	 *  Implements JMeterGUIComponent.createTestElement()
+	 * Implements JMeterGUIComponent.createTestElement()
 	 */
 	public TestElement createTestElement() {
 		WhileController controller = new WhileController();
@@ -83,8 +82,7 @@ public class WhileControllerGui extends AbstractControllerGui
 	 */
 	public void modifyTestElement(TestElement controller) {
 		configureTestElement(controller);
-		if (controller instanceof WhileController)
-		{
+		if (controller instanceof WhileController) {
 			if (theCondition.getText().length() > 0) {
 				((WhileController) controller).setCondition(theCondition.getText());
 			} else {
@@ -94,10 +92,11 @@ public class WhileControllerGui extends AbstractControllerGui
 	}
 
 	/**
-	 * Invoked when an action occurs.  This implementation assumes that the
+	 * Invoked when an action occurs. This implementation assumes that the
 	 * target component is the infinite loops checkbox.
-	 *
-	 * @param event the event that has occurred
+	 * 
+	 * @param event
+	 *            the event that has occurred
 	 */
 	public void actionPerformed(ActionEvent event) {
 		new FocusRequester(theCondition);
@@ -110,8 +109,7 @@ public class WhileControllerGui extends AbstractControllerGui
 	/**
 	 * Initialize the GUI components and layout for this component.
 	 */
-	private void init()
-	{
+	private void init() {
 		setLayout(new BorderLayout(0, 5));
 		setBorder(makeBorder());
 		add(makeTitlePanel(), BorderLayout.NORTH);
@@ -122,31 +120,28 @@ public class WhileControllerGui extends AbstractControllerGui
 
 	}
 
-
 	/**
-	 * Create a GUI panel containing the condition.
-	 * TODO make use of the field
+	 * Create a GUI panel containing the condition. TODO make use of the field
+	 * 
 	 * @return a GUI panel containing the condition components
 	 */
-	private JPanel createConditionPanel()  {
+	private JPanel createConditionPanel() {
 		JPanel conditionPanel = new JPanel(new BorderLayout(5, 0));
 
 		// Condition LABEL
-		JLabel conditionLabel =
-		new JLabel(JMeterUtils.getResString( CONDITION_LABEL ));
+		JLabel conditionLabel = new JLabel(JMeterUtils.getResString(CONDITION_LABEL));
 		conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
 		// TEXT FIELD
-		theCondition = new JTextField(""); // This means exit if last sample failed
+		theCondition = new JTextField(""); // This means exit if last sample
+											// failed
 		theCondition.setName(CONDITION);
 		conditionLabel.setLabelFor(theCondition);
 		conditionPanel.add(theCondition, BorderLayout.CENTER);
 		theCondition.addActionListener(this);
 
-		conditionPanel.add(
-			Box.createHorizontalStrut( conditionLabel.getPreferredSize().width
-			+ theCondition.getPreferredSize().width)
-			, BorderLayout.NORTH);
+		conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
+				+ theCondition.getPreferredSize().width), BorderLayout.NORTH);
 
 		return conditionPanel;
 	}

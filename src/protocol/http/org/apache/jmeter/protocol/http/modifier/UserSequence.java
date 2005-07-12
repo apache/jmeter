@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.modifier;
 
@@ -28,76 +28,67 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * This module controls the Sequence in which user details are returned.  This
+ * This module controls the Sequence in which user details are returned. This
  * module uses round robin allocation of users.
  * 
- * @author     Mark Walsh
- * @version    $Revision$
+ * @author Mark Walsh
+ * @version $Revision$
  */
-public class UserSequence implements Serializable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+public class UserSequence implements Serializable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    //-------------------------------------------
-    // Constants and Data Members
-    //-------------------------------------------
-    private List allUsers;
-    private Iterator indexOfUsers;
+	// -------------------------------------------
+	// Constants and Data Members
+	// -------------------------------------------
+	private List allUsers;
 
-    //-------------------------------------------
-    // Constructors
-    //-------------------------------------------
+	private Iterator indexOfUsers;
 
-    public UserSequence()
-    {
-    }
+	// -------------------------------------------
+	// Constructors
+	// -------------------------------------------
 
-    /**
-     * Load all user and parameter data into the sequence module.
-     * <P>
-     * ie a Set of Mapped "parameter names and parameter values" for each user
-     * to be loaded into the sequencer.
-     */
-    public UserSequence(List allUsers)
-    {
-        this.allUsers = allUsers;
+	public UserSequence() {
+	}
 
-        // initalise pointer to first user
-        indexOfUsers = allUsers.iterator();
-    }
+	/**
+	 * Load all user and parameter data into the sequence module.
+	 * <P>
+	 * ie a Set of Mapped "parameter names and parameter values" for each user
+	 * to be loaded into the sequencer.
+	 */
+	public UserSequence(List allUsers) {
+		this.allUsers = allUsers;
 
-    //-------------------------------------------
-    // Methods
-    //-------------------------------------------
-    
-    /**
-     * Returns the parameter data for the next user in the sequence
-     * @return a Map object of parameter names and matching parameter
-     *         values for the next user
-     */
-    public synchronized Map getNextUserMods()
-    {
-        // Use round robin allocation of user details
-        if (!indexOfUsers.hasNext())
-        {
-            indexOfUsers = allUsers.iterator();
-        }
+		// initalise pointer to first user
+		indexOfUsers = allUsers.iterator();
+	}
 
-        Map user;
-        if (indexOfUsers.hasNext())
-        {
-            user = (Map) indexOfUsers.next();
-            log.debug(
-                "UserSequence.getNextuserMods(): current parameters will be "
-                    + "changed to: "
-                    + user);
-        }
-        else
-        {
-            // no entries in all users, therefore create an empty Map object
-            user = new HashMap();
-        }
+	// -------------------------------------------
+	// Methods
+	// -------------------------------------------
 
-        return user;
-    }
+	/**
+	 * Returns the parameter data for the next user in the sequence
+	 * 
+	 * @return a Map object of parameter names and matching parameter values for
+	 *         the next user
+	 */
+	public synchronized Map getNextUserMods() {
+		// Use round robin allocation of user details
+		if (!indexOfUsers.hasNext()) {
+			indexOfUsers = allUsers.iterator();
+		}
+
+		Map user;
+		if (indexOfUsers.hasNext()) {
+			user = (Map) indexOfUsers.next();
+			log.debug("UserSequence.getNextuserMods(): current parameters will be " + "changed to: " + user);
+		} else {
+			// no entries in all users, therefore create an empty Map object
+			user = new HashMap();
+		}
+
+		return user;
+	}
 }

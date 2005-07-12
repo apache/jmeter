@@ -18,15 +18,13 @@ package org.apache.jmeter.visualizers;
 
 import javax.swing.JTabbedPane;
 
-public class MonitorTabPane extends JTabbedPane
-{
+public class MonitorTabPane extends JTabbedPane {
 
-    /**
-     * 
-     */
-    public MonitorTabPane()
-    {
-        super(TOP);
-    }
+	/**
+	 * 
+	 */
+	public MonitorTabPane() {
+		super(TOP);
+	}
 
 }

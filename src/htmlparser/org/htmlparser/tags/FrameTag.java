@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
@@ -37,40 +36,35 @@ import org.htmlparser.tags.data.TagData;
 /**
  * Identifies an frame tag
  */
-public class FrameTag extends Tag
-{
-    /**
-     * The URL where the image is stored.
-     */
-    protected String frameURL;
-    protected String frameName;
-    public FrameTag(TagData tagData, String frameURL, String frameName)
-    {
-        super(tagData);
-        this.frameURL = frameURL;
-        this.frameName = frameName;
-    }
-    /**
-     * Returns the location of the image
-     */
-    public String getFrameLocation()
-    {
-        return frameURL;
-    }
-    public String getFrameName()
-    {
-        return frameName;
-    }
-    /**
-     * Print the contents of the HTMLFrameTag
-     */
-    public String toString()
-    {
-        return "FRAME TAG : Image at "
-            + frameURL
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd();
-    }
+public class FrameTag extends Tag {
+	/**
+	 * The URL where the image is stored.
+	 */
+	protected String frameURL;
+
+	protected String frameName;
+
+	public FrameTag(TagData tagData, String frameURL, String frameName) {
+		super(tagData);
+		this.frameURL = frameURL;
+		this.frameName = frameName;
+	}
+
+	/**
+	 * Returns the location of the image
+	 */
+	public String getFrameLocation() {
+		return frameURL;
+	}
+
+	public String getFrameName() {
+		return frameName;
+	}
+
+	/**
+	 * Print the contents of the HTMLFrameTag
+	 */
+	public String toString() {
+		return "FRAME TAG : Image at " + frameURL + "; begins at : " + elementBegin() + "; ends at : " + elementEnd();
+	}
 }

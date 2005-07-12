@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.threads;
 
@@ -36,250 +36,237 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * @version $Revision$
  */
-public class SamplePackage
-{
-    private static Logger log = LoggingManager.getLoggerForClass();
-    List sampleListeners = new LinkedList();
-    List timers = new LinkedList();
-    List assertions = new LinkedList();
-    List postProcessors = new LinkedList();
-    List preProcessors = new LinkedList();
-    List responseModifiers;
-    List configs;
-    List modifiers;
-    List controllers;
-    Sampler sampler;
+public class SamplePackage {
+	private static Logger log = LoggingManager.getLoggerForClass();
 
-    public SamplePackage()
-    {
-    }
-    
-    public SamplePackage(
-        List configs,
-        List modifiers,
-        List responseModifiers,
-        List listeners,
-        List timers,
-        List assertions,
-        List extractors,
-        List pres,
-        List controllers)
-    {
-        log.debug("configs is null: " + (configs == null));
-        this.configs = configs;
-        this.modifiers = modifiers;
-        this.responseModifiers = responseModifiers;
-        this.sampleListeners = listeners;
-        this.timers = timers;
-        this.assertions = assertions;
-        this.postProcessors = extractors;
-        this.preProcessors = pres;
-        this.controllers = controllers;
-    }
-    
-    public void setRunningVersion(boolean running)
-    {
-        setRunningVersion(configs, running);
-        setRunningVersion(modifiers, running);
-        setRunningVersion(sampleListeners, running);
-        setRunningVersion(assertions, running);
-        setRunningVersion(timers, running);
-        setRunningVersion(responseModifiers, running);
-        setRunningVersion(postProcessors, running);
-        setRunningVersion(preProcessors, running);
-        setRunningVersion(controllers,running);
-        sampler.setRunningVersion(running);
-    }
-        
-    private void setRunningVersion(List list,boolean running)
-    {
-        Iterator iter = list.iterator();
-        while (iter.hasNext())
-        {
-            ((TestElement) iter.next()).setRunningVersion(running);
-        }
-    }
-    
-    private void recoverRunningVersion(List list)
-    {
-        Iterator iter = list.iterator();
-        while (iter.hasNext())
-        {
-            ((TestElement) iter.next()).recoverRunningVersion();
-        }
-    }
-    
-    public void recoverRunningVersion()
-    {
-        recoverRunningVersion(configs);
-        recoverRunningVersion(modifiers);
-        recoverRunningVersion(sampleListeners);
-        recoverRunningVersion(assertions);
-        recoverRunningVersion(timers);
-        recoverRunningVersion(responseModifiers);
-        recoverRunningVersion(postProcessors);
-        recoverRunningVersion(preProcessors);
-        recoverRunningVersion(controllers);
-        sampler.recoverRunningVersion();
-    }
+	List sampleListeners = new LinkedList();
 
-    public List getSampleListeners()
-    {
-        return sampleListeners;
-    }
+	List timers = new LinkedList();
 
-    public void addSampleListener(SampleListener listener)
-    {
-        sampleListeners.add(listener);
-    }
+	List assertions = new LinkedList();
 
-    public List getTimers()
-    {
-        return timers;
-    }
-    
-    public void addPostProcessor(PostProcessor ex)
-    {
-        postProcessors.add(ex);
-    }
-    
-    public void addPreProcessor(PreProcessor pre)
-    {
-        preProcessors.add(pre);
-    }
+	List postProcessors = new LinkedList();
 
-    public void addTimer(Timer timer)
-    {
-        timers.add(timer);
-    }
+	List preProcessors = new LinkedList();
 
-    public void addAssertion(Assertion asser)
-    {
-        assertions.add(asser);
-    }
+	List responseModifiers;
 
-    public List getAssertions()
-    {
-        return assertions;
-    }
-    
-    public List getPostProcessors()
-    {
-        return postProcessors;
-    }
+	List configs;
 
-    public Sampler getSampler()
-    {
-        return sampler;
-    }
+	List modifiers;
 
-    public void setSampler(Sampler s)
-    {
-        sampler = s;
-    }
+	List controllers;
 
-    /**
-     * Returns the preProcessors.
-     */
-    public List getPreProcessors()
-    {
-        return preProcessors;
-    }
+	Sampler sampler;
 
-    /**
-     * Sets the preProcessors.
-     * @param preProcessors the preProcessors to set
-     */
-    public void setPreProcessors(List preProcessors)
-    {
-        this.preProcessors = preProcessors;
-    }
+	public SamplePackage() {
+	}
 
-    /**
-     * Returns the configs.
-     * @return List
-     */
-    public List getConfigs()
-    {
-        return configs;
-    }
+	public SamplePackage(List configs, List modifiers, List responseModifiers, List listeners, List timers,
+			List assertions, List extractors, List pres, List controllers) {
+		log.debug("configs is null: " + (configs == null));
+		this.configs = configs;
+		this.modifiers = modifiers;
+		this.responseModifiers = responseModifiers;
+		this.sampleListeners = listeners;
+		this.timers = timers;
+		this.assertions = assertions;
+		this.postProcessors = extractors;
+		this.preProcessors = pres;
+		this.controllers = controllers;
+	}
 
-    /**
-     * Returns the modifiers.
-     */
-    public List getModifiers()
-    {
-        return modifiers;
-    }
+	public void setRunningVersion(boolean running) {
+		setRunningVersion(configs, running);
+		setRunningVersion(modifiers, running);
+		setRunningVersion(sampleListeners, running);
+		setRunningVersion(assertions, running);
+		setRunningVersion(timers, running);
+		setRunningVersion(responseModifiers, running);
+		setRunningVersion(postProcessors, running);
+		setRunningVersion(preProcessors, running);
+		setRunningVersion(controllers, running);
+		sampler.setRunningVersion(running);
+	}
 
-    /**
-     * Returns the responseModifiers.
-     */
-    public List getResponseModifiers()
-    {
-        return responseModifiers;
-    }
+	private void setRunningVersion(List list, boolean running) {
+		Iterator iter = list.iterator();
+		while (iter.hasNext()) {
+			((TestElement) iter.next()).setRunningVersion(running);
+		}
+	}
 
-    /**
-     * Sets the assertions.
-     * @param assertions the assertions to set
-     */
-    public void setAssertions(List assertions)
-    {
-        this.assertions = assertions;
-    }
+	private void recoverRunningVersion(List list) {
+		Iterator iter = list.iterator();
+		while (iter.hasNext()) {
+			((TestElement) iter.next()).recoverRunningVersion();
+		}
+	}
 
-    /**
-     * Sets the configs.
-     * @param configs the configs to set
-     */
-    public void setConfigs(List configs)
-    {
-        this.configs = configs;
-    }
+	public void recoverRunningVersion() {
+		recoverRunningVersion(configs);
+		recoverRunningVersion(modifiers);
+		recoverRunningVersion(sampleListeners);
+		recoverRunningVersion(assertions);
+		recoverRunningVersion(timers);
+		recoverRunningVersion(responseModifiers);
+		recoverRunningVersion(postProcessors);
+		recoverRunningVersion(preProcessors);
+		recoverRunningVersion(controllers);
+		sampler.recoverRunningVersion();
+	}
 
-    /**
-     * Sets the modifiers.
-     * @param modifiers the modifiers to set
-     */
-    public void setModifiers(List modifiers)
-    {
-        this.modifiers = modifiers;
-    }
+	public List getSampleListeners() {
+		return sampleListeners;
+	}
 
-    /**
-     * Sets the postProcessors.
-     * @param postProcessors the postProcessors to set
-     */
-    public void setPostProcessors(List postProcessors)
-    {
-        this.postProcessors = postProcessors;
-    }
+	public void addSampleListener(SampleListener listener) {
+		sampleListeners.add(listener);
+	}
 
-    /**
-     * Sets the responseModifiers.
-     * @param responseModifiers the responseModifiers to set
-     */
-    public void setResponseModifiers(List responseModifiers)
-    {
-        this.responseModifiers = responseModifiers;
-    }
+	public List getTimers() {
+		return timers;
+	}
 
-    /**
-     * Sets the sampleListeners.
-     * @param sampleListeners the sampleListeners to set
-     */
-    public void setSampleListeners(List sampleListeners)
-    {
-        this.sampleListeners = sampleListeners;
-    }
+	public void addPostProcessor(PostProcessor ex) {
+		postProcessors.add(ex);
+	}
 
-    /**
-     * Sets the timers.
-     * @param timers the timers to set
-     */
-    public void setTimers(List timers)
-    {
-        this.timers = timers;
-    }
+	public void addPreProcessor(PreProcessor pre) {
+		preProcessors.add(pre);
+	}
+
+	public void addTimer(Timer timer) {
+		timers.add(timer);
+	}
+
+	public void addAssertion(Assertion asser) {
+		assertions.add(asser);
+	}
+
+	public List getAssertions() {
+		return assertions;
+	}
+
+	public List getPostProcessors() {
+		return postProcessors;
+	}
+
+	public Sampler getSampler() {
+		return sampler;
+	}
+
+	public void setSampler(Sampler s) {
+		sampler = s;
+	}
+
+	/**
+	 * Returns the preProcessors.
+	 */
+	public List getPreProcessors() {
+		return preProcessors;
+	}
+
+	/**
+	 * Sets the preProcessors.
+	 * 
+	 * @param preProcessors
+	 *            the preProcessors to set
+	 */
+	public void setPreProcessors(List preProcessors) {
+		this.preProcessors = preProcessors;
+	}
+
+	/**
+	 * Returns the configs.
+	 * 
+	 * @return List
+	 */
+	public List getConfigs() {
+		return configs;
+	}
+
+	/**
+	 * Returns the modifiers.
+	 */
+	public List getModifiers() {
+		return modifiers;
+	}
+
+	/**
+	 * Returns the responseModifiers.
+	 */
+	public List getResponseModifiers() {
+		return responseModifiers;
+	}
+
+	/**
+	 * Sets the assertions.
+	 * 
+	 * @param assertions
+	 *            the assertions to set
+	 */
+	public void setAssertions(List assertions) {
+		this.assertions = assertions;
+	}
+
+	/**
+	 * Sets the configs.
+	 * 
+	 * @param configs
+	 *            the configs to set
+	 */
+	public void setConfigs(List configs) {
+		this.configs = configs;
+	}
+
+	/**
+	 * Sets the modifiers.
+	 * 
+	 * @param modifiers
+	 *            the modifiers to set
+	 */
+	public void setModifiers(List modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	/**
+	 * Sets the postProcessors.
+	 * 
+	 * @param postProcessors
+	 *            the postProcessors to set
+	 */
+	public void setPostProcessors(List postProcessors) {
+		this.postProcessors = postProcessors;
+	}
+
+	/**
+	 * Sets the responseModifiers.
+	 * 
+	 * @param responseModifiers
+	 *            the responseModifiers to set
+	 */
+	public void setResponseModifiers(List responseModifiers) {
+		this.responseModifiers = responseModifiers;
+	}
+
+	/**
+	 * Sets the sampleListeners.
+	 * 
+	 * @param sampleListeners
+	 *            the sampleListeners to set
+	 */
+	public void setSampleListeners(List sampleListeners) {
+		this.sampleListeners = sampleListeners;
+	}
+
+	/**
+	 * Sets the timers.
+	 * 
+	 * @param timers
+	 *            the timers to set
+	 */
+	public void setTimers(List timers) {
+		this.timers = timers;
+	}
 }

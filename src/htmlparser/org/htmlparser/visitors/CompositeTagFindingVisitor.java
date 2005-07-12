@@ -31,16 +31,12 @@
 // enough to assist JMeter.
 //
 // contributed by Joshua Kerievsky
-
 package org.htmlparser.visitors;
 
+public class CompositeTagFindingVisitor extends NodeVisitor {
 
-public class CompositeTagFindingVisitor extends NodeVisitor
-{
+	public CompositeTagFindingVisitor(String compositeTag) {
 
-    public CompositeTagFindingVisitor(String compositeTag)
-    {
-
-    }
+	}
 
 }

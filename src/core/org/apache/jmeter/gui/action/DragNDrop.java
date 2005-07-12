@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.action;
 
@@ -35,87 +35,70 @@ import org.apache.jmeter.testelement.WorkBench;
  * @author mstover
  * @version $Revision$
  */
-public class DragNDrop extends AbstractAction
-{
-    public final static String ADD = "drag_n_drop.add";//$NON-NLS-1$
-    public final static String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
-    public final static String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
+public class DragNDrop extends AbstractAction {
+	public final static String ADD = "drag_n_drop.add";//$NON-NLS-1$
 
-    private static Set commands = new HashSet();
-    static {
-        commands.add(ADD);
-        commands.add(INSERT_BEFORE);
-        commands.add(INSERT_AFTER);
-    }
-    /**
-     * @see Command#doAction(ActionEvent)
-     */
-    public void doAction(ActionEvent e)
-    {
-        String action = e.getActionCommand();
-        GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeNode[] draggedNodes = guiPackage.getTreeListener().getDraggedNodes();
-        JMeterTreeListener treeListener = guiPackage.getTreeListener();
-        JMeterTreeNode currentNode = treeListener.getCurrentNode();
-        JMeterTreeNode parentNode =
-            (JMeterTreeNode) currentNode.getParent();
-        TestElement te = currentNode.getTestElement(); 
-        if (te instanceof TestPlan || te instanceof WorkBench)
-        {
-        	parentNode=null; // So elements can only be added as children
-        }
-        //System.out.println(action+" "+te.getClass().getName());
-        
-        if (ADD.equals(action) && canAddTo(currentNode))
-        {
-        	removeNodesFromParents(draggedNodes);
-            for (int i = 0; i < draggedNodes.length; i++)
-            {
-                GuiPackage.getInstance().getTreeModel().insertNodeInto(
-                    draggedNodes[i],
-                    currentNode,
-                    currentNode.getChildCount());
-            }
-        }
-        else if (INSERT_BEFORE.equals(action) && canAddTo(parentNode))
-        {
-        	removeNodesFromParents(draggedNodes);
-            for (int i = 0; i < draggedNodes.length; i++)
-            {
-                int index = parentNode.getIndex(currentNode);
-                GuiPackage.getInstance().getTreeModel().insertNodeInto(
-                    draggedNodes[i],
-                    parentNode,
-                    index);
-            }
-        }
-        else if (INSERT_AFTER.equals(action) && canAddTo(parentNode))
-        {
-        	removeNodesFromParents(draggedNodes);
-            for (int i = 0; i < draggedNodes.length; i++)
-            {
-                int index = parentNode.getIndex(currentNode) + 1;
-                GuiPackage.getInstance().getTreeModel().insertNodeInto(
-                    draggedNodes[i],
-                    parentNode,
-                    index);
-            }
-        }
-        GuiPackage.getInstance().getMainFrame().repaint();
-    }
-    
-    /**
-     * Determine whether or not dragged nodes can be added to this parent.
-     * Also used by Paste
-     * TODO tighten rules
-     * TODO move to MenuFactory?
+	public final static String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
+
+	public final static String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
+
+	private static Set commands = new HashSet();
+	static {
+		commands.add(ADD);
+		commands.add(INSERT_BEFORE);
+		commands.add(INSERT_AFTER);
+	}
+
+	/**
+	 * @see Command#doAction(ActionEvent)
+	 */
+	public void doAction(ActionEvent e) {
+		String action = e.getActionCommand();
+		GuiPackage guiPackage = GuiPackage.getInstance();
+		JMeterTreeNode[] draggedNodes = guiPackage.getTreeListener().getDraggedNodes();
+		JMeterTreeListener treeListener = guiPackage.getTreeListener();
+		JMeterTreeNode currentNode = treeListener.getCurrentNode();
+		JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
+		TestElement te = currentNode.getTestElement();
+		if (te instanceof TestPlan || te instanceof WorkBench) {
+			parentNode = null; // So elements can only be added as children
+		}
+		// System.out.println(action+" "+te.getClass().getName());
+
+		if (ADD.equals(action) && canAddTo(currentNode)) {
+			removeNodesFromParents(draggedNodes);
+			for (int i = 0; i < draggedNodes.length; i++) {
+				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
+						currentNode.getChildCount());
+			}
+		} else if (INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
+			removeNodesFromParents(draggedNodes);
+			for (int i = 0; i < draggedNodes.length; i++) {
+				int index = parentNode.getIndex(currentNode);
+				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+			}
+		} else if (INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
+			removeNodesFromParents(draggedNodes);
+			for (int i = 0; i < draggedNodes.length; i++) {
+				int index = parentNode.getIndex(currentNode) + 1;
+				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
+			}
+		}
+		GuiPackage.getInstance().getMainFrame().repaint();
+	}
+
+	/**
+	 * Determine whether or not dragged nodes can be added to this parent. Also
+	 * used by Paste TODO tighten rules TODO move to MenuFactory?
+	 * 
 	 * @param parentNode
 	 * @return whether it is OK to add the dragged nodes to this parent
 	 */
 	static boolean canAddTo(JMeterTreeNode parentNode) {
-		if (null==parentNode) return false;
+		if (null == parentNode)
+			return false;
 		TestElement te = parentNode.getTestElement();
-		//System.out.println("Add to: "+te.getClass().getName());
+		// System.out.println("Add to: "+te.getClass().getName());
 		if (te instanceof Controller)
 			return true;
 		if (te instanceof Sampler)
@@ -127,19 +110,16 @@ public class DragNDrop extends AbstractAction
 		return false;
 	}
 
-	protected void removeNodesFromParents(JMeterTreeNode[] nodes)
-    {
-        for (int i = 0; i < nodes.length; i++)
-        {
-            GuiPackage.getInstance().getTreeModel().removeNodeFromParent(nodes[i]);
-        }        
-    }
+	protected void removeNodesFromParents(JMeterTreeNode[] nodes) {
+		for (int i = 0; i < nodes.length; i++) {
+			GuiPackage.getInstance().getTreeModel().removeNodeFromParent(nodes[i]);
+		}
+	}
 
-    /**
-     * @see Command#getActionNames()
-     */
-    public Set getActionNames()
-    {
-        return commands;
-    }
+	/**
+	 * @see Command#getActionNames()
+	 */
+	public Set getActionNames() {
+		return commands;
+	}
 }

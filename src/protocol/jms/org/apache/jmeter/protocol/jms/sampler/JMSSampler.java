@@ -47,26 +47,34 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Sampler for JMS Communication.
- * <br>
- * Created on:  October 28, 2004
- *
+ * Sampler for JMS Communication. <br>
+ * Created on: October 28, 2004
+ * 
  * @author Martijn Blankestijn
  * @version $Id$
  */
 public class JMSSampler extends AbstractSampler {
 
 	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory";
+
 	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl";
+
 	public static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties";
 
 	private static final int DEFAULT_TIMEOUT = 2000;
+
 	public final static String TIMEOUT = "JMSSampler.timeout";
+
 	public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget";
+
 	public static final String JMS_PROPERTIES = "arguments";
+
 	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
+
 	public static final String XML_DATA = "HTTPSamper.xml_data";
+
 	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
+
 	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory";
 
 	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
@@ -75,25 +83,32 @@ public class JMSSampler extends AbstractSampler {
 	// Member variables
 	//
 	/** Factory for the connections to the queueing system. */
-	//NOTUSED private QueueConnectionFactory factory;
+	// NOTUSED private QueueConnectionFactory factory;
 	/** Queue for receiving messages (if applicable). */
 	private Queue receiveQueue;
+
 	/** The session with the queueing system. */
 	private QueueSession session;
+
 	/** Connection to the queueing system. */
 	private QueueConnection connection;
+
 	/** Queue for sending messages. */
 	private Queue sendQueue;
+
 	/** Is the communication oneway? */
-	//NOTUSED private boolean oneway;
+	// NOTUSED private boolean oneway;
 	/** The executor for (pseudo) synchronous communication. */
 	private QueueExecutor executor;
+
 	/** Producer of the messages. */
 	private QueueSender producer;
 
 	private Receiver receiverThread = null;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
 	 */
 	public SampleResult sample(Entry entry) {
@@ -118,9 +133,9 @@ public class JMSSampler extends AbstractSampler {
 				Message replyMsg = executor.sendAndReceive(msg);
 				if (replyMsg == null) {
 					res.setSuccessful(false);
-                    if (LOGGER.isDebugEnabled()) {
-					    LOGGER.debug("No reply message received");
-                    }
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("No reply message received");
+					}
 				} else {
 					if (replyMsg instanceof TextMessage) {
 						res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
@@ -140,9 +155,9 @@ public class JMSSampler extends AbstractSampler {
 	}
 
 	private TextMessage createMessage() throws JMSException {
-        if (session==null) {
-            throw new IllegalStateException("Session may not be null while creating message");
-        }
+		if (session == null) {
+			throw new IllegalStateException("Session may not be null while creating message");
+		}
 		TextMessage msg = session.createTextMessage();
 		msg.setText(getContent());
 		addJMSProperties(msg);
@@ -162,13 +177,13 @@ public class JMSSampler extends AbstractSampler {
 		}
 	}
 
-    public Arguments getJMSProperties() {
-        return getArguments(JMSSampler.JMS_PROPERTIES);
-    }
+	public Arguments getJMSProperties() {
+		return getArguments(JMSSampler.JMS_PROPERTIES);
+	}
 
-    public Arguments getJNDIProperties() {
-        return getArguments(JMSSampler.JNDI_PROPERTIES);
-    }
+	public Arguments getJNDIProperties() {
+		return getArguments(JMSSampler.JNDI_PROPERTIES);
+	}
 
 	public String getQueueConnectionFactory() {
 		return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
@@ -209,6 +224,7 @@ public class JMSSampler extends AbstractSampler {
 	public String getInitialContextFactory() {
 		return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
 	}
+
 	public String getContextProvider() {
 		return getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL);
 	}
@@ -231,10 +247,12 @@ public class JMSSampler extends AbstractSampler {
 	}
 
 	public void testIterationStart(LoopIterationEvent event) {
-		//		LOGGER.debug("testIterationStart");
+		// LOGGER.debug("testIterationStart");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.jmeter.testelement.TestElement#threadStarted()
 	 */
 	public void threadStarted() {
@@ -244,14 +262,13 @@ public class JMSSampler extends AbstractSampler {
 		Context context = null;
 		try {
 			context = getInitialContext();
-            Object obj  = context.lookup(getQueueConnectionFactory());
-            if (! (obj instanceof QueueConnectionFactory)) {
-                String msg = "QueueConnectionFactory expected, but got " + obj.getClass().getName();
-                LOGGER.fatalError(msg);
-                throw new IllegalStateException(msg);
-            }
-			QueueConnectionFactory factory =
-				(QueueConnectionFactory) obj;
+			Object obj = context.lookup(getQueueConnectionFactory());
+			if (!(obj instanceof QueueConnectionFactory)) {
+				String msg = "QueueConnectionFactory expected, but got " + obj.getClass().getName();
+				LOGGER.fatalError(msg);
+				throw new IllegalStateException(msg);
+			}
+			QueueConnectionFactory factory = (QueueConnectionFactory) obj;
 			Queue queue = (Queue) context.lookup(getSendQueue());
 
 			sendQueue = queue;
@@ -285,9 +302,9 @@ public class JMSSampler extends AbstractSampler {
 
 			connection.start();
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Connection started");
-            }
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Connection started");
+			}
 		} catch (JMSException e) {
 			LOGGER.warn(e.getLocalizedMessage(), e);
 		} catch (NamingException e) {
@@ -320,14 +337,13 @@ public class JMSSampler extends AbstractSampler {
 		if (LOGGER.isDebugEnabled()) {
 			if (map.isEmpty()) {
 				LOGGER.debug("Empty JNDI properties");
-			}
-			else {
+			} else {
 				LOGGER.debug("Number of JNDI properties: " + map.size());
 			}
 		}
 		Iterator it = map.keySet().iterator();
-		while(it.hasNext()) {
-			String key = (String)it.next();
+		while (it.hasNext()) {
+			String key = (String) it.next();
 			table.put(key, map.get(key));
 		}
 
@@ -351,14 +367,8 @@ public class JMSSampler extends AbstractSampler {
 	private void logThreadStart() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Thread started " + new Date());
-			LOGGER.debug(
-				"JMSSampler: ["
-					+ Thread.currentThread().getName()
-					+ "], hashCode=["
-					+ hashCode()
-					+ "]");
-			LOGGER.debug(
-				"QCF: [" + getQueueConnectionFactory() + "], sendQueue=[" + getSendQueue() + "]");
+			LOGGER.debug("JMSSampler: [" + Thread.currentThread().getName() + "], hashCode=[" + hashCode() + "]");
+			LOGGER.debug("QCF: [" + getQueueConnectionFactory() + "], sendQueue=[" + getSendQueue() + "]");
 			LOGGER.debug("Timeout             = " + getTimeout() + "]");
 			LOGGER.debug("Use temporary queue =" + useTemporyQueue() + "]");
 			LOGGER.debug("Reply queue         =" + getReceiveQueue() + "]");
@@ -375,7 +385,9 @@ public class JMSSampler extends AbstractSampler {
 		return getPropertyAsInt(TIMEOUT);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.jmeter.testelement.TestElement#threadFinished()
 	 */
 	public void threadFinished() {
@@ -395,7 +407,8 @@ public class JMSSampler extends AbstractSampler {
 			} catch (JMSException e) {
 				LOGGER.info(e.getLocalizedMessage());
 			}
-		if(receiverThread != null) receiverThread.deactivate();
+		if (receiverThread != null)
+			receiverThread.deactivate();
 	}
 
 	private boolean useTemporyQueue() {

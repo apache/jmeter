@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.visitors;
 
 import org.htmlparser.Node;
@@ -43,102 +42,87 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.NodeList;
 
-public class HtmlPage extends NodeVisitor
-{
-    private String title;
-    private NodeList nodesInBody;
-    private NodeList tables;
-    private boolean bodyTagBegin;
+public class HtmlPage extends NodeVisitor {
+	private String title;
 
-    public HtmlPage(Parser parser)
-    {
-        super(false);
-        parser.registerScanners();
-        parser.addScanner(new TableScanner(parser));
-        nodesInBody = new NodeList();
-        tables = new NodeList();
-        bodyTagBegin = false;
-    }
+	private NodeList nodesInBody;
 
-    public String getTitle()
-    {
-        return title;
-    }
+	private NodeList tables;
 
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
+	private boolean bodyTagBegin;
 
-    public void visitTag(Tag tag)
-    {
-        addTagToBodyIfApplicable(tag);
+	public HtmlPage(Parser parser) {
+		super(false);
+		parser.registerScanners();
+		parser.addScanner(new TableScanner(parser));
+		nodesInBody = new NodeList();
+		tables = new NodeList();
+		bodyTagBegin = false;
+	}
 
-        if (isTable(tag))
-        {
-            tables.add(tag);
-        }
-        else
-        {
-            if (isBodyTag(tag))
-                bodyTagBegin = true;
-        }
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    private boolean isTitle(Tag tag)
-    {
-        return tag instanceof TitleTag;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    private boolean isTable(Tag tag)
-    {
-        return tag instanceof TableTag;
-    }
+	public void visitTag(Tag tag) {
+		addTagToBodyIfApplicable(tag);
 
-    private void addTagToBodyIfApplicable(Node node)
-    {
-        if (bodyTagBegin)
-            nodesInBody.add(node);
-    }
+		if (isTable(tag)) {
+			tables.add(tag);
+		} else {
+			if (isBodyTag(tag))
+				bodyTagBegin = true;
+		}
+	}
 
-    public void visitEndTag(EndTag endTag)
-    {
-        if (isBodyTag(endTag))
-            bodyTagBegin = false;
-        addTagToBodyIfApplicable(endTag);
-    }
+	private boolean isTitle(Tag tag) {
+		return tag instanceof TitleTag;
+	}
 
-    public void visitRemarkNode(RemarkNode remarkNode)
-    {
-        addTagToBodyIfApplicable(remarkNode);
-    }
+	private boolean isTable(Tag tag) {
+		return tag instanceof TableTag;
+	}
 
-    public void visitStringNode(StringNode stringNode)
-    {
-        addTagToBodyIfApplicable(stringNode);
-    }
+	private void addTagToBodyIfApplicable(Node node) {
+		if (bodyTagBegin)
+			nodesInBody.add(node);
+	}
 
-    private boolean isBodyTag(Tag tag)
-    {
-        return tag.getTagName().equals("BODY");
-    }
+	public void visitEndTag(EndTag endTag) {
+		if (isBodyTag(endTag))
+			bodyTagBegin = false;
+		addTagToBodyIfApplicable(endTag);
+	}
 
-    public NodeList getBody()
-    {
-        return nodesInBody;
-    }
+	public void visitRemarkNode(RemarkNode remarkNode) {
+		addTagToBodyIfApplicable(remarkNode);
+	}
 
-    public TableTag[] getTables()
-    {
-        TableTag[] tableArr = new TableTag[tables.size()];
-        for (int i = 0; i < tables.size(); i++)
-            tableArr[i] = (TableTag) tables.elementAt(i);
-        return tableArr;
-    }
+	public void visitStringNode(StringNode stringNode) {
+		addTagToBodyIfApplicable(stringNode);
+	}
 
-    public void visitTitleTag(TitleTag titleTag)
-    {
-        title = titleTag.getTitle();
-    }
+	private boolean isBodyTag(Tag tag) {
+		return tag.getTagName().equals("BODY");
+	}
+
+	public NodeList getBody() {
+		return nodesInBody;
+	}
+
+	public TableTag[] getTables() {
+		TableTag[] tableArr = new TableTag[tables.size()];
+		for (int i = 0; i < tables.size(); i++)
+			tableArr[i] = (TableTag) tables.elementAt(i);
+		return tableArr;
+	}
+
+	public void visitTitleTag(TitleTag titleTag) {
+		title = titleTag.getTitle();
+	}
 
 }

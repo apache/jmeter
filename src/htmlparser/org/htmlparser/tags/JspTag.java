@@ -29,43 +29,38 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
 
 /**
- * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this class.
+ * The JSP/ASP tags like &lt;%&#46;&#46;&#46;%&gt; can be identified by this
+ * class.
  */
-public class JspTag extends Tag
-{
-    /**
-     * The HTMLJspTag is constructed by providing the beginning posn, ending posn
-     * and the tag contents.
-     * @param nodeBegin beginning position of the tag
-     * @param nodeEnd ending position of the tag
-     * @param tagContents contents of the remark tag
-     */
-    public JspTag(TagData tagData)
-    {
-        super(tagData);
-    }
+public class JspTag extends Tag {
+	/**
+	 * The HTMLJspTag is constructed by providing the beginning posn, ending
+	 * posn and the tag contents.
+	 * 
+	 * @param nodeBegin
+	 *            beginning position of the tag
+	 * @param nodeEnd
+	 *            ending position of the tag
+	 * @param tagContents
+	 *            contents of the remark tag
+	 */
+	public JspTag(TagData tagData) {
+		super(tagData);
+	}
 
-    public String toHtml()
-    {
-        return "<%" + tagContents + "%>";
-    }
+	public String toHtml() {
+		return "<%" + tagContents + "%>";
+	}
 
-    /**
-     * Print the contents of the remark tag.
-     */
-    public String toString()
-    {
-        return "JSP/ASP Tag : "
-            + tagContents
-            + "; begins at : "
-            + elementBegin()
-            + "; ends at : "
-            + elementEnd();
-    }
+	/**
+	 * Print the contents of the remark tag.
+	 */
+	public String toString() {
+		return "JSP/ASP Tag : " + tagContents + "; begins at : " + elementBegin() + "; ends at : " + elementEnd();
+	}
 }

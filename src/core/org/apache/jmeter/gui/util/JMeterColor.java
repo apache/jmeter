@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.gui.util;
 
@@ -24,22 +24,20 @@ import java.awt.Color;
  * @author mstover
  * @version $Revision$
  */
-public class JMeterColor extends Color
-{
-    public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
-    public final static Color YELLOW = new JMeterColor(1F, 1F, 0);
-    public final static Color LAVENDER =
-        new JMeterColor(206F / 255F, 207F / 255F, 1F);
-    public final static Color purple =
-        new JMeterColor(150 / 255F, 0, 150 / 255F);
+public class JMeterColor extends Color {
+	public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
 
-    public JMeterColor(float r, float g, float b)
-    {
-        super(r, g, b);
-    }
+	public final static Color YELLOW = new JMeterColor(1F, 1F, 0);
 
-    public JMeterColor()
-    {
-        super(0, 0, 0);
-    }
+	public final static Color LAVENDER = new JMeterColor(206F / 255F, 207F / 255F, 1F);
+
+	public final static Color purple = new JMeterColor(150 / 255F, 0, 150 / 255F);
+
+	public JMeterColor(float r, float g, float b) {
+		super(r, g, b);
+	}
+
+	public JMeterColor() {
+		super(0, 0, 0);
+	}
 }

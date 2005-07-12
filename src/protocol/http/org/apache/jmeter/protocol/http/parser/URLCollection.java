@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.http.parser;
 
@@ -29,110 +29,99 @@ import java.util.Iterator;
  * Before a URL is added to the collection, it is wrapped in a URLString class.
  * The iterator unwraps the URL before return.
  * 
- * N.B.
- * Designed for use by HTMLParser, so is not a full implementation 
- * - e.g. does not support remove()
+ * N.B. Designed for use by HTMLParser, so is not a full implementation - e.g.
+ * does not support remove()
  * 
  * @version $Revision$ $Date$
  */
-public class URLCollection
-{
+public class URLCollection {
 	Collection coll;
 
-    // Inaccessible default constructor
-    private URLCollection(){}
-    
-    /**
-     * Creates a new URLCollection from an existing Collection
-     * 
-     */
-    public URLCollection(Collection c)
-    {
-        coll = c;
-    }
+	// Inaccessible default constructor
+	private URLCollection() {
+	}
 
-    /**
-     * Adds the URL to the Collection, first wrapping
-     * it in the URLString class
-     * 
-     * @param u URL to add
-     * @return boolean condition returned by the add() method of the underlying collection
-     */
-    public boolean add(URL u)
-    {
-    	return coll.add(new URLString(u));
-    }
-    
-	/*
-	 * Adds the string to the Collection, first wrapping
-	 * it in the URLString class
+	/**
+	 * Creates a new URLCollection from an existing Collection
 	 * 
-	 * @param s string to add
-	 * @return boolean condition returned by the add() method of the underlying collection
 	 */
-	private boolean add(String s)
-	{
+	public URLCollection(Collection c) {
+		coll = c;
+	}
+
+	/**
+	 * Adds the URL to the Collection, first wrapping it in the URLString class
+	 * 
+	 * @param u
+	 *            URL to add
+	 * @return boolean condition returned by the add() method of the underlying
+	 *         collection
+	 */
+	public boolean add(URL u) {
+		return coll.add(new URLString(u));
+	}
+
+	/*
+	 * Adds the string to the Collection, first wrapping it in the URLString
+	 * class
+	 * 
+	 * @param s string to add @return boolean condition returned by the add()
+	 * method of the underlying collection
+	 */
+	private boolean add(String s) {
 		return coll.add(new URLString(s));
 	}
-    
-    /**
-     * Convenience method for adding URLs to the collection
-     * If the url parameter is null or empty, nothing is done
-     * 
-     * @param url String, may be null or empty
-     * @param baseUrl
-     * @return boolean condition returned by the add() method of the underlying collection
-     */
-    public boolean addURL(String url, URL baseUrl)
-	{
-		if (url == null || url.length() == 0) return false;
-		boolean b=false;
-		try
-		{
-			b=this.add(new URL(baseUrl, url));
-		}
-		catch(MalformedURLException mfue)
-		{
-			//TODO log a warning message?
-			b=this.add(url);// Add the string if cannot create the URL
+
+	/**
+	 * Convenience method for adding URLs to the collection If the url parameter
+	 * is null or empty, nothing is done
+	 * 
+	 * @param url
+	 *            String, may be null or empty
+	 * @param baseUrl
+	 * @return boolean condition returned by the add() method of the underlying
+	 *         collection
+	 */
+	public boolean addURL(String url, URL baseUrl) {
+		if (url == null || url.length() == 0)
+			return false;
+		boolean b = false;
+		try {
+			b = this.add(new URL(baseUrl, url));
+		} catch (MalformedURLException mfue) {
+			// TODO log a warning message?
+			b = this.add(url);// Add the string if cannot create the URL
 		}
 		return b;
 	}
-    
-    
-	public Iterator iterator()
-	{
+
+	public Iterator iterator() {
 		return new UrlIterator(coll.iterator());
 	}
 
-    /*
-     * Private iterator used to unwrap the URL from the URLString class
-     * 
-     */
-	private static class UrlIterator implements Iterator
-	{
+	/*
+	 * Private iterator used to unwrap the URL from the URLString class
+	 * 
+	 */
+	private static class UrlIterator implements Iterator {
 		Iterator iter;
-		
-		UrlIterator(Iterator i)
-		{
-			iter=i;
+
+		UrlIterator(Iterator i) {
+			iter = i;
 		}
-	
-		public boolean hasNext()
-		{
+
+		public boolean hasNext() {
 			return iter.hasNext();
 		}
-	
+
 		/*
-		 * Unwraps the URLString class to return the URL 
+		 * Unwraps the URLString class to return the URL
 		 */
-		public Object next()
-		{
+		public Object next() {
 			return ((URLString) iter.next()).getURL();
 		}
-	
-		public void remove()
-		{
+
+		public void remove() {
 			throw new UnsupportedOperationException();
 		}
 	}

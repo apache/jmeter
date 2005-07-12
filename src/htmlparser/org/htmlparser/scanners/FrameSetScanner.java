@@ -29,9 +29,7 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.scanners;
-
 
 //////////////////
 // Java Imports //
@@ -42,33 +40,28 @@ import org.htmlparser.tags.data.CompositeTagData;
 import org.htmlparser.tags.data.TagData;
 
 /**
- * Scans for the Frame Tag. This is a subclass of TagScanner, and is called using a
- * variant of the template method. If the evaluate() method returns true, that means the
- * given string contains an image tag. Extraction is done by the scan method thereafter
- * by the user of this class.
+ * Scans for the Frame Tag. This is a subclass of TagScanner, and is called
+ * using a variant of the template method. If the evaluate() method returns
+ * true, that means the given string contains an image tag. Extraction is done
+ * by the scan method thereafter by the user of this class.
  */
-public class FrameSetScanner extends CompositeTagScanner
-{
-    private static final String MATCH_NAME[] = { "FRAMESET" };
+public class FrameSetScanner extends CompositeTagScanner {
+	private static final String MATCH_NAME[] = { "FRAMESET" };
 
-    public FrameSetScanner()
-    {
-        super(MATCH_NAME);
-    }
+	public FrameSetScanner() {
+		super(MATCH_NAME);
+	}
 
-    public FrameSetScanner(String filter)
-    {
-        super(filter, MATCH_NAME);
-    }
+	public FrameSetScanner(String filter) {
+		super(filter, MATCH_NAME);
+	}
 
-    public String[] getID()
-    {
-        return MATCH_NAME;
-    }
+	public String[] getID() {
+		return MATCH_NAME;
+	}
 
-    public Tag createTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        return new FrameSetTag(tagData, compositeTagData);
-    }
+	public Tag createTag(TagData tagData, CompositeTagData compositeTagData) {
+		return new FrameSetTag(tagData, compositeTagData);
+	}
 
 }

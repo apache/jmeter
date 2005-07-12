@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.protocol.ldap.config.gui;
 
@@ -46,480 +46,400 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
-
 /**
- * A GUI panel allowing the user to enter name-value argument pairs.  These
+ * A GUI panel allowing the user to enter name-value argument pairs. These
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  * 
- *author    Dolf Smits(Dolf.Smits@Siemens.com)
- *created    Aug 09 2003 11:00 AM
- *company    Siemens Netherlands N.V..
+ * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
+ * company Siemens Netherlands N.V..
  * 
  * Based on the work of:
  * 
- * author    Michael Stover
-  */
+ * author Michael Stover
+ */
 
-public class LDAPArgumentsPanel
-    extends AbstractConfigGui
-    implements  ActionListener
-{
-    /** Logging. */
-    private static transient Logger log =LoggingManager.getLoggerForClass();
-        
-    /** The title label for this component. */    
-    private JLabel tableLabel;
+public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListener {
+	/** Logging. */
+	private static transient Logger log = LoggingManager.getLoggerForClass();
 
-    /** The table containing the list of arguments. */
-    private transient JTable table;
-    
-    /** The model for the arguments table. */
-    protected transient ObjectTableModel tableModel;
+	/** The title label for this component. */
+	private JLabel tableLabel;
 
-    /** A button for adding new arguments to the table. */
-    private JButton add;
-    
-    /** A button for removing arguments from the table. */
-    private JButton delete;
+	/** The table containing the list of arguments. */
+	private transient JTable table;
 
-    /** Command for adding a row to the table. */ 
-    private static final String ADD = "add";
-    
-    /** Command for removing a row from the table. */
-    private static final String DELETE = "delete";
+	/** The model for the arguments table. */
+	protected transient ObjectTableModel tableModel;
 
-    public static final String[] COLUMN_NAMES =
-        {
-            JMeterUtils.getResString("attribute"),
-            JMeterUtils.getResString("value"),
-            JMeterUtils.getResString("opcode"),
-            JMeterUtils.getResString("metadata")
-        };
+	/** A button for adding new arguments to the table. */
+	private JButton add;
 
-    /**
-     * Create a new LDAPArgumentsPanel, using the default title. 
-     */
-    public LDAPArgumentsPanel()
-    {
-        this(JMeterUtils.getResString("paramtable"));
-    }
+	/** A button for removing arguments from the table. */
+	private JButton delete;
 
-    /**
-     * Create a new LDAPArgumentsPanel, using the specified title.
-     * 
-     * @param label the title of the component
-     */
-    public LDAPArgumentsPanel(String label)
-    {
-        tableLabel = new JLabel(label);
-        init();
-    }
+	/** Command for adding a row to the table. */
+	private static final String ADD = "add";
 
-    /**
-     * This is the list of menu categories this gui component will be available
-     * under. The LDAPArgumentsPanel is not intended to be used as a standalone
-     * component, so this inplementation returns null.
-     *
-     * @return   a Collection of Strings, where each element is one of the
-     *           constants defined in MenuFactory
-     */
-    public Collection getMenuCategories()
-    {
-        return null;
-    }
+	/** Command for removing a row from the table. */
+	private static final String DELETE = "delete";
 
-    public String getStaticLabel()
-    {
-        return ""; // This is not an independently displayable item
-    }
-    
-    public String getLabelResource()
-    {
-        return "unused";//TODO use constant
-    }
+	public static final String[] COLUMN_NAMES = { JMeterUtils.getResString("attribute"),
+			JMeterUtils.getResString("value"), JMeterUtils.getResString("opcode"), JMeterUtils.getResString("metadata") };
 
-    /* Implements JMeterGUIComponent.createTestElement() */
-    public TestElement createTestElement()
-    {
-        LDAPArguments args = new LDAPArguments();
-        modifyTestElement(args);
-        // TODO: Why do we clone the return value? This is the only reference
-        // to it (right?) so we shouldn't need a separate copy.
-        return (TestElement) args.clone();
-    }
+	/**
+	 * Create a new LDAPArgumentsPanel, using the default title.
+	 */
+	public LDAPArgumentsPanel() {
+		this(JMeterUtils.getResString("paramtable"));
+	}
 
-    /* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
-    public void modifyTestElement(TestElement args)
-    {
-        stopTableEditing();
-        Iterator modelData = tableModel.iterator();
-        LDAPArguments arguments = null;
-        if (args instanceof LDAPArguments)
-        {
-            arguments = (LDAPArguments) args;
-            arguments.clear();
-            while (modelData.hasNext())
-            {
-                LDAPArgument arg = (LDAPArgument) modelData.next();
-                arg.setMetaData("=");
-                arguments.addArgument(arg);
-            }
-        }
-        this.configureTestElement(args);
-    }
+	/**
+	 * Create a new LDAPArgumentsPanel, using the specified title.
+	 * 
+	 * @param label
+	 *            the title of the component
+	 */
+	public LDAPArgumentsPanel(String label) {
+		tableLabel = new JLabel(label);
+		init();
+	}
 
-    /**
-     * A newly created component can be initialized with the contents of
-     * a Test Element object by calling this method.  The component is
-     * responsible for querying the Test Element object for the
-     * relevant information to display in its GUI.
-     *
-     * @param el the TestElement to configure 
-     */
-     public void configure(TestElement el)
-    {
-        super.configure(el);
-        if (el instanceof LDAPArguments)
-        {
-            tableModel.clearData();
-            PropertyIterator iter = ((LDAPArguments) el).iterator();
-            while (iter.hasNext())
-            {
-                LDAPArgument arg = (LDAPArgument) iter.next().getObjectValue();
-                tableModel.addRow(arg);
-            }
-        }
-        checkDeleteStatus();
-    }
+	/**
+	 * This is the list of menu categories this gui component will be available
+	 * under. The LDAPArgumentsPanel is not intended to be used as a standalone
+	 * component, so this inplementation returns null.
+	 * 
+	 * @return a Collection of Strings, where each element is one of the
+	 *         constants defined in MenuFactory
+	 */
+	public Collection getMenuCategories() {
+		return null;
+	}
 
-    /**
-     * Get the table used to enter arguments.
-     * 
-     * @return the table used to enter arguments
-     */
-    protected JTable getTable()
-    {
-        return table;
-    }
+	public String getStaticLabel() {
+		return ""; // This is not an independently displayable item
+	}
 
-    /**
-     * Get the title label for this component.
-     * 
-     * @return the title label displayed with the table
-     */
-    protected JLabel getTableLabel()
-    {
-        return tableLabel;
-    }
+	public String getLabelResource() {
+		return "unused";// TODO use constant
+	}
 
-    /**
-     * Get the button used to delete rows from the table.
-     * 
-     * @return the button used to delete rows from the table
-     */
-    protected JButton getDeleteButton()
-    {
-        return delete;
-    }
+	/* Implements JMeterGUIComponent.createTestElement() */
+	public TestElement createTestElement() {
+		LDAPArguments args = new LDAPArguments();
+		modifyTestElement(args);
+		// TODO: Why do we clone the return value? This is the only reference
+		// to it (right?) so we shouldn't need a separate copy.
+		return (TestElement) args.clone();
+	}
 
-    /**
-     * Get the button used to add rows to the table.
-     * 
-     * @return the button used to add rows to the table
-     */
-    protected JButton getAddButton()
-    {
-        return add;
-    }
+	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+	public void modifyTestElement(TestElement args) {
+		stopTableEditing();
+		Iterator modelData = tableModel.iterator();
+		LDAPArguments arguments = null;
+		if (args instanceof LDAPArguments) {
+			arguments = (LDAPArguments) args;
+			arguments.clear();
+			while (modelData.hasNext()) {
+				LDAPArgument arg = (LDAPArgument) modelData.next();
+				arg.setMetaData("=");
+				arguments.addArgument(arg);
+			}
+		}
+		this.configureTestElement(args);
+	}
 
-    /**
-     * Enable or disable the delete button depending on whether or not there
-     * is a row to be deleted.
-     */
-    protected void checkDeleteStatus()
-    {
-        // Disable DELETE if there are no rows in the table to delete.
-        if (tableModel.getRowCount() == 0)
-        {
-            delete.setEnabled(false);
-        }
-        else
-        {
-            delete.setEnabled(true);
-        }
-    }
+	/**
+	 * A newly created component can be initialized with the contents of a Test
+	 * Element object by calling this method. The component is responsible for
+	 * querying the Test Element object for the relevant information to display
+	 * in its GUI.
+	 * 
+	 * @param el
+	 *            the TestElement to configure
+	 */
+	public void configure(TestElement el) {
+		super.configure(el);
+		if (el instanceof LDAPArguments) {
+			tableModel.clearData();
+			PropertyIterator iter = ((LDAPArguments) el).iterator();
+			while (iter.hasNext()) {
+				LDAPArgument arg = (LDAPArgument) iter.next().getObjectValue();
+				tableModel.addRow(arg);
+			}
+		}
+		checkDeleteStatus();
+	}
 
-    /**
-     * Clear all rows from the table.
-     * T.Elanjchezhiyan(chezhiyan@siptech.co.in)
-     */
-    public void clear()
-    {
-        tableModel.clearData();
-    }
+	/**
+	 * Get the table used to enter arguments.
+	 * 
+	 * @return the table used to enter arguments
+	 */
+	protected JTable getTable() {
+		return table;
+	}
 
-    /**
-     * Invoked when an action occurs.  This implementation supports the add
-     * and delete buttons.
-     * 
-     * @param e the event that has occurred
-     */
-    public void actionPerformed(ActionEvent e)
-    {
-        String action = e.getActionCommand();
-        if (action.equals(DELETE))
-        {
-            deleteArgument();
-        }
-        else if (action.equals(ADD))
-        {
-            addArgument();
-        }
-    }
+	/**
+	 * Get the title label for this component.
+	 * 
+	 * @return the title label displayed with the table
+	 */
+	protected JLabel getTableLabel() {
+		return tableLabel;
+	}
 
-    /**
-     * Remove the currently selected argument from the table.
-     */
-    protected void deleteArgument()
-    {
-        // If a table cell is being edited, we must cancel the editing before
-        // deleting the row
-        if (table.isEditing())
-        {
-            TableCellEditor cellEditor = table.getCellEditor(
-                    table.getEditingRow(),
-                    table.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
+	/**
+	 * Get the button used to delete rows from the table.
+	 * 
+	 * @return the button used to delete rows from the table
+	 */
+	protected JButton getDeleteButton() {
+		return delete;
+	}
 
-        int rowSelected = table.getSelectedRow();
-        if (rowSelected >= 0)
-        {
-            tableModel.removeRow(rowSelected);
-            tableModel.fireTableDataChanged();
+	/**
+	 * Get the button used to add rows to the table.
+	 * 
+	 * @return the button used to add rows to the table
+	 */
+	protected JButton getAddButton() {
+		return add;
+	}
 
-            // Disable DELETE if there are no rows in the table to delete.
-            if (tableModel.getRowCount() == 0)
-            {
-                delete.setEnabled(false);
-            }
+	/**
+	 * Enable or disable the delete button depending on whether or not there is
+	 * a row to be deleted.
+	 */
+	protected void checkDeleteStatus() {
+		// Disable DELETE if there are no rows in the table to delete.
+		if (tableModel.getRowCount() == 0) {
+			delete.setEnabled(false);
+		} else {
+			delete.setEnabled(true);
+		}
+	}
 
-            // Table still contains one or more rows, so highlight (select)
-            // the appropriate one.
-            else
-            {
-                int rowToSelect = rowSelected;
+	/**
+	 * Clear all rows from the table. T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 */
+	public void clear() {
+		tableModel.clearData();
+	}
 
-                if (rowSelected >= tableModel.getRowCount())
-                {
-                    rowToSelect = rowSelected - 1;
-                }
+	/**
+	 * Invoked when an action occurs. This implementation supports the add and
+	 * delete buttons.
+	 * 
+	 * @param e
+	 *            the event that has occurred
+	 */
+	public void actionPerformed(ActionEvent e) {
+		String action = e.getActionCommand();
+		if (action.equals(DELETE)) {
+			deleteArgument();
+		} else if (action.equals(ADD)) {
+			addArgument();
+		}
+	}
 
-                table.setRowSelectionInterval(rowToSelect, rowToSelect);
-            }
-        }
-    }
+	/**
+	 * Remove the currently selected argument from the table.
+	 */
+	protected void deleteArgument() {
+		// If a table cell is being edited, we must cancel the editing before
+		// deleting the row
+		if (table.isEditing()) {
+			TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+			cellEditor.cancelCellEditing();
+		}
 
-    /**
-     * Add a new argument row to the table.
-     */
-    protected void addArgument()
-    {
-        // If a table cell is being edited, we should accept the current value
-        // and stop the editing before adding a new row.
-        stopTableEditing();
+		int rowSelected = table.getSelectedRow();
+		if (rowSelected >= 0) {
+			tableModel.removeRow(rowSelected);
+			tableModel.fireTableDataChanged();
 
-        tableModel.addRow(makeNewLDAPArgument());
+			// Disable DELETE if there are no rows in the table to delete.
+			if (tableModel.getRowCount() == 0) {
+				delete.setEnabled(false);
+			}
 
-        // Enable DELETE (which may already be enabled, but it won't hurt)
-        delete.setEnabled(true);
+			// Table still contains one or more rows, so highlight (select)
+			// the appropriate one.
+			else {
+				int rowToSelect = rowSelected;
 
-        // Highlight (select) the appropriate row.
-        int rowToSelect = tableModel.getRowCount() - 1;
-        table.setRowSelectionInterval(rowToSelect, rowToSelect);
-    }
+				if (rowSelected >= tableModel.getRowCount()) {
+					rowToSelect = rowSelected - 1;
+				}
 
-    /**
-     * Create a new LDAPArgument object.
-     * @return a new LDAPArgument object
-     */
-    protected Object makeNewLDAPArgument()
-    {
-        return new LDAPArgument("", "","");
-    }
+				table.setRowSelectionInterval(rowToSelect, rowToSelect);
+			}
+		}
+	}
 
-    /**
-     * Stop any editing that is currently being done on the table.  This will
-     * save any changes that have already been made.
-     */
-    private void stopTableEditing()
-    {
-        if (table.isEditing())
-        {
-            TableCellEditor cellEditor =
-                table.getCellEditor(
-                    table.getEditingRow(),
-                    table.getEditingColumn());
-            cellEditor.stopCellEditing();
-        }
-    }
+	/**
+	 * Add a new argument row to the table.
+	 */
+	protected void addArgument() {
+		// If a table cell is being edited, we should accept the current value
+		// and stop the editing before adding a new row.
+		stopTableEditing();
 
-    /**
-     * Initialize the table model used for the arguments table.
-     */
-    protected void initializeTableModel()
-    {
-        tableModel =
-            new ObjectTableModel(
-                new String[] {
-                    COLUMN_NAMES[0],
-                    COLUMN_NAMES[1],
-                    COLUMN_NAMES[2] },
-                new Functor[] { new Functor("getName"), 
-                      new Functor("getValue"), 
-                      new Functor("getOpcode")}, 
-                new Functor[] { new Functor("setName"), 
-                      new Functor("setValue"), 
-                      new Functor("setOpcode")}, 
-                new Class[] { String.class, String.class, String.class });
-    }
-    
-/*    protected void initializeTableModel()
-    {
-        tableModel =
-            new ObjectTableModel(
-                new String[] {
-                    ArgumentsPanel.COLUMN_NAMES_0,
-                    ArgumentsPanel.COLUMN_NAMES_1,
-                    ENCODE_OR_NOT,
-                    INCLUDE_EQUALS },
-                new Functor[] { new Functor("getName"), 
-                      new Functor("getValue"), 
-                      new Functor("isAlwaysEncoded"), 
-                      new Functor("isUseEquals") },
-                new Functor[] { new Functor("setName"), 
-                      new Functor("setValue"), 
-                      new Functor("setAlwaysEncoded"), 
-                      new Functor("setUseEquals") },
-                new Class[] {
-                    String.class,
-                    String.class,
-                    Boolean.class,
-                    Boolean.class });
-    }
-*/
-    /**
-     * Resize the table columns to appropriate widths.
-     * @param table the table to resize columns for
-     */
-    protected void sizeColumns(JTable table)
-    {
-    }
+		tableModel.addRow(makeNewLDAPArgument());
 
-    /**
-     * Create the main GUI panel which contains the argument table.
-     * 
-     * @return the main GUI panel
-     */
-    private Component makeMainPanel()
-    {
-        initializeTableModel();
-        table = new JTable(tableModel);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        return makeScrollPane(table);
-    }
+		// Enable DELETE (which may already be enabled, but it won't hurt)
+		delete.setEnabled(true);
 
-    /**
-     * Create a panel containing the title label for the table.
-     * 
-     * @return a panel containing the title label
-     */
-    protected Component makeLabelPanel()
-    {
-        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        labelPanel.add(tableLabel);
-        return labelPanel;
-    }
+		// Highlight (select) the appropriate row.
+		int rowToSelect = tableModel.getRowCount() - 1;
+		table.setRowSelectionInterval(rowToSelect, rowToSelect);
+	}
 
-    /**
-     * Create a panel containing the add and delete buttons.
-     * 
-     * @return a GUI panel containing the buttons
-     */
-    private JPanel makeButtonPanel()
-    {
-        add = new JButton(JMeterUtils.getResString("add"));
-        add.setActionCommand(ADD);
-        add.setEnabled(true);
-        
-        delete = new JButton(JMeterUtils.getResString("delete"));
-        delete.setActionCommand(DELETE);
-        
-        checkDeleteStatus();
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        add.addActionListener(this);
-        delete.addActionListener(this);
-        buttonPanel.add(add);
-        buttonPanel.add(delete);
-        return buttonPanel;
-    }
+	/**
+	 * Create a new LDAPArgument object.
+	 * 
+	 * @return a new LDAPArgument object
+	 */
+	protected Object makeNewLDAPArgument() {
+		return new LDAPArgument("", "", "");
+	}
 
-    /**
-     * Initialize the components and layout of this component.
-     */
-    private void init()
-    {
-        setLayout(new BorderLayout());
+	/**
+	 * Stop any editing that is currently being done on the table. This will
+	 * save any changes that have already been made.
+	 */
+	private void stopTableEditing() {
+		if (table.isEditing()) {
+			TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+			cellEditor.stopCellEditing();
+		}
+	}
 
-        add(makeLabelPanel(), BorderLayout.NORTH);
-        add(makeMainPanel(), BorderLayout.CENTER);
-        // Force a minimum table height of 70 pixels
-        add(Box.createVerticalStrut(70), BorderLayout.WEST);
-        add(makeButtonPanel(), BorderLayout.SOUTH);
+	/**
+	 * Initialize the table model used for the arguments table.
+	 */
+	protected void initializeTableModel() {
+		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES[0], COLUMN_NAMES[1], COLUMN_NAMES[2] },
+				new Functor[] { new Functor("getName"), new Functor("getValue"), new Functor("getOpcode") },
+				new Functor[] { new Functor("setName"), new Functor("setValue"), new Functor("setOpcode") },
+				new Class[] { String.class, String.class, String.class });
+	}
 
-        table.revalidate();
-        sizeColumns(table);
-    }
+	/*
+	 * protected void initializeTableModel() { tableModel = new
+	 * ObjectTableModel( new String[] { ArgumentsPanel.COLUMN_NAMES_0,
+	 * ArgumentsPanel.COLUMN_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS }, new
+	 * Functor[] { new Functor("getName"), new Functor("getValue"), new
+	 * Functor("isAlwaysEncoded"), new Functor("isUseEquals") }, new Functor[] {
+	 * new Functor("setName"), new Functor("setValue"), new
+	 * Functor("setAlwaysEncoded"), new Functor("setUseEquals") }, new Class[] {
+	 * String.class, String.class, Boolean.class, Boolean.class }); }
+	 */
+	/**
+	 * Resize the table columns to appropriate widths.
+	 * 
+	 * @param table
+	 *            the table to resize columns for
+	 */
+	protected void sizeColumns(JTable table) {
+	}
 
+	/**
+	 * Create the main GUI panel which contains the argument table.
+	 * 
+	 * @return the main GUI panel
+	 */
+	private Component makeMainPanel() {
+		initializeTableModel();
+		table = new JTable(tableModel);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		return makeScrollPane(table);
+	}
 
-    /**
-     * Tests for the LDAPArgumentsPanel component.
-     */
-    public static class Test extends TestCase
-    {
-        /**
-         * Create a new test.
-         * @param name the name of the test
-         */
-        public Test(String name)
-        {
-            super(name);
-        }
+	/**
+	 * Create a panel containing the title label for the table.
+	 * 
+	 * @return a panel containing the title label
+	 */
+	protected Component makeLabelPanel() {
+		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		labelPanel.add(tableLabel);
+		return labelPanel;
+	}
 
-        /**
-         * Test that adding an argument to the table results in an appropriate
-         * TestElement being created.
-         * 
-         * @throws Exception if an exception occurred during the test
-         */
-        public void testLDAPArgumentCreation() throws Exception
-        {
-            LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
-            gui.tableModel.addRow(new LDAPArgument());
-            gui.tableModel.setValueAt("howdy", 0, 0);
-            gui.tableModel.addRow(new LDAPArgument());
-            gui.tableModel.setValueAt("doody", 0, 1);
+	/**
+	 * Create a panel containing the add and delete buttons.
+	 * 
+	 * @return a GUI panel containing the buttons
+	 */
+	private JPanel makeButtonPanel() {
+		add = new JButton(JMeterUtils.getResString("add"));
+		add.setActionCommand(ADD);
+		add.setEnabled(true);
 
-            assertEquals(
-                "=",
-                ((LDAPArgument) ((LDAPArguments) gui.createTestElement())
-                    .getArguments()
-                    .get(0)
-                    .getObjectValue())
-                    .getMetaData());
-        }
-    }
+		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete.setActionCommand(DELETE);
+
+		checkDeleteStatus();
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		add.addActionListener(this);
+		delete.addActionListener(this);
+		buttonPanel.add(add);
+		buttonPanel.add(delete);
+		return buttonPanel;
+	}
+
+	/**
+	 * Initialize the components and layout of this component.
+	 */
+	private void init() {
+		setLayout(new BorderLayout());
+
+		add(makeLabelPanel(), BorderLayout.NORTH);
+		add(makeMainPanel(), BorderLayout.CENTER);
+		// Force a minimum table height of 70 pixels
+		add(Box.createVerticalStrut(70), BorderLayout.WEST);
+		add(makeButtonPanel(), BorderLayout.SOUTH);
+
+		table.revalidate();
+		sizeColumns(table);
+	}
+
+	/**
+	 * Tests for the LDAPArgumentsPanel component.
+	 */
+	public static class Test extends TestCase {
+		/**
+		 * Create a new test.
+		 * 
+		 * @param name
+		 *            the name of the test
+		 */
+		public Test(String name) {
+			super(name);
+		}
+
+		/**
+		 * Test that adding an argument to the table results in an appropriate
+		 * TestElement being created.
+		 * 
+		 * @throws Exception
+		 *             if an exception occurred during the test
+		 */
+		public void testLDAPArgumentCreation() throws Exception {
+			LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
+			gui.tableModel.addRow(new LDAPArgument());
+			gui.tableModel.setValueAt("howdy", 0, 0);
+			gui.tableModel.addRow(new LDAPArgument());
+			gui.tableModel.setValueAt("doody", 0, 1);
+
+			assertEquals("=", ((LDAPArgument) ((LDAPArguments) gui.createTestElement()).getArguments().get(0)
+					.getObjectValue()).getMetaData());
+		}
+	}
 }

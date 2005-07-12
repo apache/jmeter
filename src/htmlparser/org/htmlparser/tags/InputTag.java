@@ -29,21 +29,17 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.TagData;
 import org.htmlparser.util.ParserUtils;
 
-public class InputTag extends Tag
-{
-    public InputTag(TagData tagData)
-    {
-        super(tagData);
-    }
+public class InputTag extends Tag {
+	public InputTag(TagData tagData) {
+		super(tagData);
+	}
 
-    public String toString()
-    {
-        return (ParserUtils.toString(this));
-    }
+	public String toString() {
+		return (ParserUtils.toString(this));
+	}
 }

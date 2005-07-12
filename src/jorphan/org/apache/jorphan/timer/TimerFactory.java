@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jorphan.timer;
 
@@ -23,33 +23,30 @@ package org.apache.jorphan.timer;
  * {@link ITimer} implementations.
  * 
  * @author <a href="mailto:vroubtsov@illinoisalumni.org">Vlad Roubtsov</a>
- * @author Originally published in <a href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
+ * @author Originally published in <a
+ *         href="http://www.javaworld.com/javaworld/javaqa/2003-01/01-qa-0110-timing.html">JavaWorld</a>
  * @version $Revision$
  */
-public final class TimerFactory
-{
-    /**
-     * Creates a new instance of {@link ITimer} which is returned in 'ready'
-     * state. If the JNI-based/high-resolution implementation is not available
-     * this will return an instance of <code>JavaSystemTimer</code>, so this
-     * method is guaranteed not to fail.
-     * 
-     * @return ITimer a new timer instance in 'ready' state [never null] 
-     */
-    public static ITimer newTimer ()
-    {
-        try
-        {
-            return new HRTimer ();
-        }
-        catch (Throwable t)
-        {
-            return new JavaSystemTimer ();
-        }
-    }
+public final class TimerFactory {
+	/**
+	 * Creates a new instance of {@link ITimer} which is returned in 'ready'
+	 * state. If the JNI-based/high-resolution implementation is not available
+	 * this will return an instance of <code>JavaSystemTimer</code>, so this
+	 * method is guaranteed not to fail.
+	 * 
+	 * @return ITimer a new timer instance in 'ready' state [never null]
+	 */
+	public static ITimer newTimer() {
+		try {
+			return new HRTimer();
+		} catch (Throwable t) {
+			return new JavaSystemTimer();
+		}
+	}
 
-    /**
-     * Private default constructor to prevent instantiation.
-     */    
-    private TimerFactory () {}   
+	/**
+	 * Private default constructor to prevent instantiation.
+	 */
+	private TimerFactory() {
+	}
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.control;
 
@@ -35,608 +35,475 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
- * This class represents a controller that can controll the 
- * number of times that it is executed, either by the total number
- * of times the user wants the controller executed (BYNUMBER)
- * or by the percentage of time it is called (BYPERCENT)
- *
+ * This class represents a controller that can controll the number of times that
+ * it is executed, either by the total number of times the user wants the
+ * controller executed (BYNUMBER) or by the percentage of time it is called
+ * (BYPERCENT)
+ * 
  * @author Thad Smith
  * @version $Revision$
  */
-public class ThroughputController
-    extends GenericController
-    implements Serializable, LoopIterationListener, TestListener
-{
+public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
+		TestListener {
 
-    public static final int BYNUMBER = 0;
-    public static final int BYPERCENT = 1;
+	public static final int BYNUMBER = 0;
 
-    private static final String STYLE = "ThroughputController.style";
-    private static final String PERTHREAD = "ThroughputController.perThread";
-    private static final String MAXTHROUGHPUT =
-        "ThroughputController.maxThroughput";
-    private static final String PERCENTTHROUGHPUT =
-        "ThroughputController.percentThroughput";
+	public static final int BYPERCENT = 1;
 
-    private int globalNumExecutions;
-    private int globalIteration;
-    private transient Object counterLock;
+	private static final String STYLE = "ThroughputController.style";
 
-    /**
-     * Number of iterations on which we've chosen to deliver samplers.
-     */
-    private int numExecutions = 0;
-    
-    /**
-     * Index of the current iteration. 0-based.
-     */
-    private int iteration = -1;
-    
-    /**
-     * Whether to deliver samplers on this iteration.
-     */
-    private boolean runThisTime;
+	private static final String PERTHREAD = "ThroughputController.perThread";
 
-    public ThroughputController()
-    {
-        globalNumExecutions = 0;
-        globalIteration = -1;
-        counterLock = new Object();
-        setStyle(BYNUMBER);
-        setPerThread(true);
-        setMaxThroughput(1);
-        setPercentThroughput(100);
-        runThisTime = false;
-    }
+	private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";
 
-    public void setStyle(int style)
-    {
-        setProperty(new IntegerProperty(STYLE, style));
-    }
+	private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";
 
-    public int getStyle()
-    {
-        return getPropertyAsInt(STYLE);
-    }
+	private int globalNumExecutions;
 
-    public void setPerThread(boolean perThread)
-    {
-        setProperty(new BooleanProperty(PERTHREAD, perThread));
-    }
+	private int globalIteration;
 
-    public boolean isPerThread()
-    {
-        return getPropertyAsBoolean(PERTHREAD);
-    }
+	private transient Object counterLock;
 
-    public void setMaxThroughput(int maxThroughput)
-    {
-        setProperty(new IntegerProperty(MAXTHROUGHPUT, maxThroughput));
-    }
+	/**
+	 * Number of iterations on which we've chosen to deliver samplers.
+	 */
+	private int numExecutions = 0;
 
-    public void setMaxThroughput(String maxThroughput)
-    {
-        setProperty(new StringProperty(MAXTHROUGHPUT, maxThroughput));
-    }
+	/**
+	 * Index of the current iteration. 0-based.
+	 */
+	private int iteration = -1;
 
-    public String getMaxThroughput()
-    {
-        return getPropertyAsString(MAXTHROUGHPUT);
-    }
+	/**
+	 * Whether to deliver samplers on this iteration.
+	 */
+	private boolean runThisTime;
 
-    protected int getMaxThroughputAsInt()
-    {
-        JMeterProperty prop = getProperty(MAXTHROUGHPUT);
-        int retVal = 1;
-        if (prop instanceof IntegerProperty)
-        {
-            retVal = (((IntegerProperty) prop).getIntValue());
-        }
-        else
-        {
-            try
-            {
-                retVal = Integer.parseInt(prop.getStringValue());
-            }
-            catch (NumberFormatException e)
-            {
-            }
-        }
-        return retVal;
-    }
+	public ThroughputController() {
+		globalNumExecutions = 0;
+		globalIteration = -1;
+		counterLock = new Object();
+		setStyle(BYNUMBER);
+		setPerThread(true);
+		setMaxThroughput(1);
+		setPercentThroughput(100);
+		runThisTime = false;
+	}
 
-    public void setPercentThroughput(float percentThroughput)
-    {
-        setProperty(new FloatProperty(PERCENTTHROUGHPUT, percentThroughput));
-    }
+	public void setStyle(int style) {
+		setProperty(new IntegerProperty(STYLE, style));
+	}
 
-    public void setPercentThroughput(String percentThroughput)
-    {
-        setProperty(new StringProperty(PERCENTTHROUGHPUT, percentThroughput));
-    }
+	public int getStyle() {
+		return getPropertyAsInt(STYLE);
+	}
 
-    public String getPercentThroughput()
-    {
-        return getPropertyAsString(PERCENTTHROUGHPUT);
-    }
+	public void setPerThread(boolean perThread) {
+		setProperty(new BooleanProperty(PERTHREAD, perThread));
+	}
 
-    protected float getPercentThroughputAsFloat()
-    {
-        JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
-        float retVal = 100;
-        if (prop instanceof FloatProperty)
-        {
-            retVal = (((FloatProperty) prop).getFloatValue());
-        }
-        else
-        {
-            try
-            {
-                retVal = Float.parseFloat(prop.getStringValue());
-            }
-            catch (NumberFormatException e)
-            {
-            }
-        }
-        return retVal;
-    }
+	public boolean isPerThread() {
+		return getPropertyAsBoolean(PERTHREAD);
+	}
 
-    protected void setExecutions(int executions)
-    {
-        if (!isPerThread())
-        {
-            globalNumExecutions=executions;
-        }
-        this.numExecutions = executions;
-    }
+	public void setMaxThroughput(int maxThroughput) {
+		setProperty(new IntegerProperty(MAXTHROUGHPUT, maxThroughput));
+	}
 
-    protected int getExecutions()
-    {
-        if (!isPerThread())
-        {
-            return globalNumExecutions;
-        }
-        else
-        {
-            return numExecutions;
-        }
-    }
+	public void setMaxThroughput(String maxThroughput) {
+		setProperty(new StringProperty(MAXTHROUGHPUT, maxThroughput));
+	}
 
-    private void increaseExecutions()
-    {
-        setExecutions(getExecutions() + 1);
-    }
+	public String getMaxThroughput() {
+		return getPropertyAsString(MAXTHROUGHPUT);
+	}
 
-    protected void setIteration(int iteration)
-    {
-        if (!isPerThread())
-        {
-            globalIteration=iteration;
-        }
-        this.iteration = iteration;
-    }
+	protected int getMaxThroughputAsInt() {
+		JMeterProperty prop = getProperty(MAXTHROUGHPUT);
+		int retVal = 1;
+		if (prop instanceof IntegerProperty) {
+			retVal = (((IntegerProperty) prop).getIntValue());
+		} else {
+			try {
+				retVal = Integer.parseInt(prop.getStringValue());
+			} catch (NumberFormatException e) {
+			}
+		}
+		return retVal;
+	}
 
-    protected int getIteration()
-    {
-        if (!isPerThread())
-        {
-            return globalIteration;
-        }
-        else
-        {
-            return iteration;
-        }
-    }
+	public void setPercentThroughput(float percentThroughput) {
+		setProperty(new FloatProperty(PERCENTTHROUGHPUT, percentThroughput));
+	}
 
-    private void increaseIteration()
-    {
-        setIteration(getIteration() + 1);
-    }
+	public void setPercentThroughput(String percentThroughput) {
+		setProperty(new StringProperty(PERCENTTHROUGHPUT, percentThroughput));
+	}
 
-    /**
-     * @see org.apache.jmeter.control.Controller#next()
-     */
-    public Sampler next()
-    {
-        if (runThisTime)
-        {
-            return super.next();
-        }
-        return null;
-    }
+	public String getPercentThroughput() {
+		return getPropertyAsString(PERCENTTHROUGHPUT);
+	}
 
-    /**
-     * Decide whether to return any samplers on this iteration.
-     */
-    private boolean decide()
-    {
-        int executions, iterations;
+	protected float getPercentThroughputAsFloat() {
+		JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
+		float retVal = 100;
+		if (prop instanceof FloatProperty) {
+			retVal = (((FloatProperty) prop).getFloatValue());
+		} else {
+			try {
+				retVal = Float.parseFloat(prop.getStringValue());
+			} catch (NumberFormatException e) {
+			}
+		}
+		return retVal;
+	}
 
-        executions = getExecutions();
-        iterations = getIteration();
-        if (getStyle() == BYNUMBER)
-        {
-            return executions < getMaxThroughputAsInt();
-        }
-        else
-        {
-            return (100.0*executions+50.0) / (iterations+1)
-                    < getPercentThroughputAsFloat();
-        }
-    }
+	protected void setExecutions(int executions) {
+		if (!isPerThread()) {
+			globalNumExecutions = executions;
+		}
+		this.numExecutions = executions;
+	}
 
-    /**
-     * @see org.apache.jmeter.control.Controller#isDone()
-     */
-    public boolean isDone()
-    {
-        if (subControllersAndSamplers.size() == 0)
-        {
-            return true;
-        }
-        else if (
-            getStyle() == BYNUMBER
-                && getExecutions() >= getMaxThroughputAsInt()
-                && current >= getSubControllers().size())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+	protected int getExecutions() {
+		if (!isPerThread()) {
+			return globalNumExecutions;
+		} else {
+			return numExecutions;
+		}
+	}
 
-    public Object clone()
-    {
-        ThroughputController clone = (ThroughputController) super.clone();
-        clone.numExecutions = numExecutions;
-        clone.iteration = iteration;
-        clone.globalNumExecutions = globalNumExecutions;
-        clone.globalIteration = globalIteration;
-        clone.counterLock = counterLock;
-        clone.runThisTime = false;
-        return clone;
-    }
+	private void increaseExecutions() {
+		setExecutions(getExecutions() + 1);
+	}
 
-    private void readObject(java.io.ObjectInputStream in)
-        throws IOException, ClassNotFoundException
-    {
-        in.defaultReadObject();
-        counterLock = new Object();
-    }
+	protected void setIteration(int iteration) {
+		if (!isPerThread()) {
+			globalIteration = iteration;
+		}
+		this.iteration = iteration;
+	}
 
-    /* (non-Javadoc)
-     * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-     */
-    public void iterationStart(LoopIterationEvent iterEvent)
-    {
-        if (!isPerThread())
-        {
-            synchronized (counterLock)
-            {
-                increaseIteration();
-                runThisTime= decide();
-                if (runThisTime) increaseExecutions();
-            }
-        }
-        else
-        {
-            increaseIteration();
-            runThisTime= decide();
-            if (runThisTime) increaseExecutions();
-        }
-    }
+	protected int getIteration() {
+		if (!isPerThread()) {
+			return globalIteration;
+		} else {
+			return iteration;
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testStarted()
-     */
-    public void testStarted()
-    {
-        setExecutions(0);
-        setIteration(-1);
-    }
+	private void increaseIteration() {
+		setIteration(getIteration() + 1);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.apache.jmeter.testelement.TestListener#testEnded()
-     */
-    public void testEnded()
-    {
-    }
+	/**
+	 * @see org.apache.jmeter.control.Controller#next()
+	 */
+	public Sampler next() {
+		if (runThisTime) {
+			return super.next();
+		}
+		return null;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see TestListener#testStarted(String)
-     */
-    public void testStarted(String host)
-    {
-    }
+	/**
+	 * Decide whether to return any samplers on this iteration.
+	 */
+	private boolean decide() {
+		int executions, iterations;
 
-    /*
-     * (non-Javadoc)
-     * @see TestListener#testEnded(String)
-     */
-    public void testEnded(String host)
-    {
-    }
+		executions = getExecutions();
+		iterations = getIteration();
+		if (getStyle() == BYNUMBER) {
+			return executions < getMaxThroughputAsInt();
+		} else {
+			return (100.0 * executions + 50.0) / (iterations + 1) < getPercentThroughputAsFloat();
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see TestListener#testIterationStart(LoopIterationEvent)
-     */
-    public void testIterationStart(LoopIterationEvent event)
-    {
-    }
+	/**
+	 * @see org.apache.jmeter.control.Controller#isDone()
+	 */
+	public boolean isDone() {
+		if (subControllersAndSamplers.size() == 0) {
+			return true;
+		} else if (getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
+				&& current >= getSubControllers().size()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    /////////////////////////// Start of Test Code ///////////////////////////
+	public Object clone() {
+		ThroughputController clone = (ThroughputController) super.clone();
+		clone.numExecutions = numExecutions;
+		clone.iteration = iteration;
+		clone.globalNumExecutions = globalNumExecutions;
+		clone.globalIteration = globalIteration;
+		clone.counterLock = counterLock;
+		clone.runThisTime = false;
+		return clone;
+	}
 
-    public static class Test extends JMeterTestCase
-    {
-        public Test(String name)
-        {
-            super(name);
-        }
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		counterLock = new Object();
+	}
 
-        public void testByNumber() throws Exception
-        {
-            ThroughputController sub_1 = new ThroughputController();
-            sub_1.setStyle(BYNUMBER);
-            sub_1.setMaxThroughput(2);
-            sub_1.addTestElement(new TestSampler("one"));
-            sub_1.addTestElement(new TestSampler("two"));
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
+	 */
+	public void iterationStart(LoopIterationEvent iterEvent) {
+		if (!isPerThread()) {
+			synchronized (counterLock) {
+				increaseIteration();
+				runThisTime = decide();
+				if (runThisTime)
+					increaseExecutions();
+			}
+		} else {
+			increaseIteration();
+			runThisTime = decide();
+			if (runThisTime)
+				increaseExecutions();
+		}
+	}
 
-            LoopController loop = new LoopController();
-            loop.setLoops(5);
-            loop.addTestElement(new TestSampler("zero"));
-            loop.addTestElement(sub_1);
-            loop.addIterationListener(sub_1);
-            loop.addTestElement(new TestSampler("three"));
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
+	 */
+	public void testStarted() {
+		setExecutions(0);
+		setIteration(-1);
+	}
 
-            LoopController test = new LoopController();
-            test.setLoops(2);
-            test.addTestElement(loop);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
+	 */
+	public void testEnded() {
+	}
 
-            String[] order =
-                new String[] {
-                    "zero",
-                    "one",
-                    "two",
-                    "three",
-                    "zero",
-                    "one",
-                    "two",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                };
-            sub_1.testStarted();
-            test.setRunningVersion(true);
-            sub_1.setRunningVersion(true);
-            loop.setRunningVersion(true);
-            test.initialize();
-            for (int counter= 0; counter < order.length; counter++)
-            {
-                TestElement sampler = test.next();
-                assertNotNull(sampler);
-                assertEquals("Counter: "+counter
-                        +", executions: "+sub_1.getExecutions()
-                        +", iteration: "+sub_1.getIteration(),
-                    order[counter],
-                    sampler.getPropertyAsString(TestElement.NAME)
-                    );
-            }
-            assertNull(test.next());
-            sub_1.testEnded();
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testStarted(String)
+	 */
+	public void testStarted(String host) {
+	}
 
-        public void testByNumberZero() throws Exception
-        {
-            ThroughputController sub_1 = new ThroughputController();
-            sub_1.setStyle(BYNUMBER);
-            sub_1.setMaxThroughput(0);
-            sub_1.addTestElement(new TestSampler("one"));
-            sub_1.addTestElement(new TestSampler("two"));
-        
-            LoopController controller = new LoopController();
-            controller.setLoops(5);
-            controller.addTestElement(new TestSampler("zero"));
-            controller.addTestElement(sub_1);
-            controller.addIterationListener(sub_1);
-            controller.addTestElement(new TestSampler("three"));
-        
-            String[] order =
-                new String[] {
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                    "zero",
-                    "three",
-                };
-            int counter= 0;
-            controller.setRunningVersion(true);
-            sub_1.setRunningVersion(true);
-            sub_1.testStarted();
-            controller.initialize();
-            for (int i=0; i<3; i++)
-            {
-                TestElement sampler = null;
-                while ((sampler = controller.next()) != null)
-                {
-                    assertEquals("Counter: "+counter+", i: "+i,
-                        order[counter],
-                        sampler.getPropertyAsString(TestElement.NAME)
-                        );
-                    counter++;
-                }
-                assertEquals(counter, order.length);
-                counter= 0;
-            }
-            sub_1.testEnded();
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testEnded(String)
+	 */
+	public void testEnded(String host) {
+	}
 
-        public void testByPercent33() throws Exception
-        {
-            ThroughputController sub_1 = new ThroughputController();
-            sub_1.setStyle(BYPERCENT);
-            sub_1.setPercentThroughput(33.33f);
-            sub_1.addTestElement(new TestSampler("one"));
-            sub_1.addTestElement(new TestSampler("two"));
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see TestListener#testIterationStart(LoopIterationEvent)
+	 */
+	public void testIterationStart(LoopIterationEvent event) {
+	}
 
-            LoopController controller = new LoopController();
-            controller.setLoops(6);
-            controller.addTestElement(new TestSampler("zero"));
-            controller.addTestElement(sub_1);
-            controller.addIterationListener(sub_1);
-            controller.addTestElement(new TestSampler("three"));
-            // Expected results established using the DDA
-            // algorithm (see http://www.siggraph.org/education/materials/HyperGraph/scanline/outprims/drawline.htm):
-            String[] order =
-                new String[] {
-                    "zero", // 0/1 vs. 1/1 -> 0 is closer to 33.33
-                    "three",
-                    "zero",  // 0/2 vs. 1/2 -> 50.0 is closer to 33.33
-                    "one",
-                    "two",
-                    "three",
-                    "zero", // 1/3 vs. 2/3 -> 33.33 is closer to 33.33
-                    "three",
-                    "zero", // 1/4 vs. 2/4 -> 25.0 is closer to 33.33
-                    "three",
-                    "zero", // 1/5 vs. 2/5 -> 40.0 is closer to 33.33
-                    "one",
-                    "two",
-                    "three",
-                    "zero", // 2/6 vs. 3/6 -> 33.33 is closer to 33.33
-                    "three",
-                    // etc...
-                };
-            int counter= 0;
-            controller.setRunningVersion(true);
-            sub_1.setRunningVersion(true);
-            sub_1.testStarted();
-            controller.initialize();
-            for (int i=0; i<3; i++)
-            {
-                TestElement sampler = null;
-                while ((sampler = controller.next()) != null)
-                {
-                    assertEquals("Counter: "+counter+", i: "+i,
-                        order[counter],
-                        sampler.getPropertyAsString(TestElement.NAME)
-                        );
-                    counter++;
-                }
-                assertEquals(counter, order.length);
-                counter= 0;
-            }
-            sub_1.testEnded();
-        }
+	// ///////////////////////// Start of Test Code ///////////////////////////
 
-        public void testByPercentZero() throws Exception
-        {
-            ThroughputController sub_1 = new ThroughputController();
-            sub_1.setStyle(BYPERCENT);
-            sub_1.setPercentThroughput(0.0f);
-            sub_1.addTestElement(new TestSampler("one"));
-            sub_1.addTestElement(new TestSampler("two"));
-        
-            LoopController controller = new LoopController();
-            controller.setLoops(150);
-            controller.addTestElement(new TestSampler("zero"));
-            controller.addTestElement(sub_1);
-            controller.addIterationListener(sub_1);
-            controller.addTestElement(new TestSampler("three"));
-        
-            String[] order =
-                new String[] {
-                    "zero",
-                    "three",
-                };
-            int counter= 0;
-            controller.setRunningVersion(true);
-            sub_1.setRunningVersion(true);
-            sub_1.testStarted();
-            controller.initialize();
-            for (int i=0; i<3; i++)
-            {
-                TestElement sampler = null;
-                while ((sampler = controller.next()) != null)
-                {
-                    assertEquals("Counter: "+counter+", i: "+i,
-                        order[counter%order.length],
-                        sampler.getPropertyAsString(TestElement.NAME)
-                        );
-                    counter++;
-                }
-                assertEquals(counter, 150*order.length);
-                counter= 0;
-            }
-            sub_1.testEnded();
-        }
+	public static class Test extends JMeterTestCase {
+		public Test(String name) {
+			super(name);
+		}
 
-        public void testByPercent100() throws Exception
-        {
-            ThroughputController sub_1 = new ThroughputController();
-            sub_1.setStyle(BYPERCENT);
-            sub_1.setPercentThroughput(100.0f);
-            sub_1.addTestElement(new TestSampler("one"));
-            sub_1.addTestElement(new TestSampler("two"));
-        
-            LoopController controller = new LoopController();
-            controller.setLoops(150);
-            controller.addTestElement(new TestSampler("zero"));
-            controller.addTestElement(sub_1);
-            controller.addIterationListener(sub_1);
-            controller.addTestElement(new TestSampler("three"));
-        
-            String[] order =
-                new String[] {
-                    "zero",
-                    "one",
-                    "two",
-                    "three",
-                };
-            int counter= 0;
-            controller.setRunningVersion(true);
-            sub_1.setRunningVersion(true);
-            sub_1.testStarted();
-            controller.initialize();
-            for (int i=0; i<3; i++)
-            {
-                TestElement sampler = null;
-                while ((sampler = controller.next()) != null)
-                {
-                    assertEquals("Counter: "+counter+", i: "+i,
-                        order[counter%order.length],
-                        sampler.getPropertyAsString(TestElement.NAME)
-                        );
-                    counter++;
-                }
-                assertEquals(counter, 150*order.length);
-                counter= 0;
-            }
-            sub_1.testEnded();
-        }
-    }
+		public void testByNumber() throws Exception {
+			ThroughputController sub_1 = new ThroughputController();
+			sub_1.setStyle(BYNUMBER);
+			sub_1.setMaxThroughput(2);
+			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.addTestElement(new TestSampler("two"));
+
+			LoopController loop = new LoopController();
+			loop.setLoops(5);
+			loop.addTestElement(new TestSampler("zero"));
+			loop.addTestElement(sub_1);
+			loop.addIterationListener(sub_1);
+			loop.addTestElement(new TestSampler("three"));
+
+			LoopController test = new LoopController();
+			test.setLoops(2);
+			test.addTestElement(loop);
+
+			String[] order = new String[] { "zero", "one", "two", "three", "zero", "one", "two", "three", "zero",
+					"three", "zero", "three", "zero", "three", "zero", "three", "zero", "three", "zero", "three",
+					"zero", "three", "zero", "three", };
+			sub_1.testStarted();
+			test.setRunningVersion(true);
+			sub_1.setRunningVersion(true);
+			loop.setRunningVersion(true);
+			test.initialize();
+			for (int counter = 0; counter < order.length; counter++) {
+				TestElement sampler = test.next();
+				assertNotNull(sampler);
+				assertEquals("Counter: " + counter + ", executions: " + sub_1.getExecutions() + ", iteration: "
+						+ sub_1.getIteration(), order[counter], sampler.getPropertyAsString(TestElement.NAME));
+			}
+			assertNull(test.next());
+			sub_1.testEnded();
+		}
+
+		public void testByNumberZero() throws Exception {
+			ThroughputController sub_1 = new ThroughputController();
+			sub_1.setStyle(BYNUMBER);
+			sub_1.setMaxThroughput(0);
+			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.addTestElement(new TestSampler("two"));
+
+			LoopController controller = new LoopController();
+			controller.setLoops(5);
+			controller.addTestElement(new TestSampler("zero"));
+			controller.addTestElement(sub_1);
+			controller.addIterationListener(sub_1);
+			controller.addTestElement(new TestSampler("three"));
+
+			String[] order = new String[] { "zero", "three", "zero", "three", "zero", "three", "zero", "three", "zero",
+					"three", };
+			int counter = 0;
+			controller.setRunningVersion(true);
+			sub_1.setRunningVersion(true);
+			sub_1.testStarted();
+			controller.initialize();
+			for (int i = 0; i < 3; i++) {
+				TestElement sampler = null;
+				while ((sampler = controller.next()) != null) {
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter], sampler
+							.getPropertyAsString(TestElement.NAME));
+					counter++;
+				}
+				assertEquals(counter, order.length);
+				counter = 0;
+			}
+			sub_1.testEnded();
+		}
+
+		public void testByPercent33() throws Exception {
+			ThroughputController sub_1 = new ThroughputController();
+			sub_1.setStyle(BYPERCENT);
+			sub_1.setPercentThroughput(33.33f);
+			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.addTestElement(new TestSampler("two"));
+
+			LoopController controller = new LoopController();
+			controller.setLoops(6);
+			controller.addTestElement(new TestSampler("zero"));
+			controller.addTestElement(sub_1);
+			controller.addIterationListener(sub_1);
+			controller.addTestElement(new TestSampler("three"));
+			// Expected results established using the DDA
+			// algorithm (see
+			// http://www.siggraph.org/education/materials/HyperGraph/scanline/outprims/drawline.htm):
+			String[] order = new String[] { "zero", // 0/1 vs. 1/1 -> 0 is
+													// closer to 33.33
+					"three", "zero", // 0/2 vs. 1/2 -> 50.0 is closer to
+										// 33.33
+					"one", "two", "three", "zero", // 1/3 vs. 2/3 -> 33.33 is
+													// closer to 33.33
+					"three", "zero", // 1/4 vs. 2/4 -> 25.0 is closer to
+										// 33.33
+					"three", "zero", // 1/5 vs. 2/5 -> 40.0 is closer to
+										// 33.33
+					"one", "two", "three", "zero", // 2/6 vs. 3/6 -> 33.33 is
+													// closer to 33.33
+					"three",
+			// etc...
+			};
+			int counter = 0;
+			controller.setRunningVersion(true);
+			sub_1.setRunningVersion(true);
+			sub_1.testStarted();
+			controller.initialize();
+			for (int i = 0; i < 3; i++) {
+				TestElement sampler = null;
+				while ((sampler = controller.next()) != null) {
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter], sampler
+							.getPropertyAsString(TestElement.NAME));
+					counter++;
+				}
+				assertEquals(counter, order.length);
+				counter = 0;
+			}
+			sub_1.testEnded();
+		}
+
+		public void testByPercentZero() throws Exception {
+			ThroughputController sub_1 = new ThroughputController();
+			sub_1.setStyle(BYPERCENT);
+			sub_1.setPercentThroughput(0.0f);
+			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.addTestElement(new TestSampler("two"));
+
+			LoopController controller = new LoopController();
+			controller.setLoops(150);
+			controller.addTestElement(new TestSampler("zero"));
+			controller.addTestElement(sub_1);
+			controller.addIterationListener(sub_1);
+			controller.addTestElement(new TestSampler("three"));
+
+			String[] order = new String[] { "zero", "three", };
+			int counter = 0;
+			controller.setRunningVersion(true);
+			sub_1.setRunningVersion(true);
+			sub_1.testStarted();
+			controller.initialize();
+			for (int i = 0; i < 3; i++) {
+				TestElement sampler = null;
+				while ((sampler = controller.next()) != null) {
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter % order.length], sampler
+							.getPropertyAsString(TestElement.NAME));
+					counter++;
+				}
+				assertEquals(counter, 150 * order.length);
+				counter = 0;
+			}
+			sub_1.testEnded();
+		}
+
+		public void testByPercent100() throws Exception {
+			ThroughputController sub_1 = new ThroughputController();
+			sub_1.setStyle(BYPERCENT);
+			sub_1.setPercentThroughput(100.0f);
+			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.addTestElement(new TestSampler("two"));
+
+			LoopController controller = new LoopController();
+			controller.setLoops(150);
+			controller.addTestElement(new TestSampler("zero"));
+			controller.addTestElement(sub_1);
+			controller.addIterationListener(sub_1);
+			controller.addTestElement(new TestSampler("three"));
+
+			String[] order = new String[] { "zero", "one", "two", "three", };
+			int counter = 0;
+			controller.setRunningVersion(true);
+			sub_1.setRunningVersion(true);
+			sub_1.testStarted();
+			controller.initialize();
+			for (int i = 0; i < 3; i++) {
+				TestElement sampler = null;
+				while ((sampler = controller.next()) != null) {
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter % order.length], sampler
+							.getPropertyAsString(TestElement.NAME));
+					counter++;
+				}
+				assertEquals(counter, 150 * order.length);
+				counter = 0;
+			}
+			sub_1.testEnded();
+		}
+	}
 }

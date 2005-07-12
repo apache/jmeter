@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tags;
 
 import org.htmlparser.tags.data.CompositeTagData;
@@ -39,27 +38,22 @@ import org.htmlparser.visitors.NodeVisitor;
 /**
  * A Title Tag
  */
-public class TitleTag extends CompositeTag
-{
+public class TitleTag extends CompositeTag {
 
-    public TitleTag(TagData tagData, CompositeTagData compositeTagData)
-    {
-        super(tagData, compositeTagData);
-    }
+	public TitleTag(TagData tagData, CompositeTagData compositeTagData) {
+		super(tagData, compositeTagData);
+	}
 
-    public String getTitle()
-    {
-        return toPlainTextString();
-    }
+	public String getTitle() {
+		return toPlainTextString();
+	}
 
-    public String toString()
-    {
-        return "TITLE: " + getTitle();
-    }
+	public String toString() {
+		return "TITLE: " + getTitle();
+	}
 
-    public void accept(NodeVisitor visitor)
-    {
-        visitor.visitTitleTag(this);
-    }
+	public void accept(NodeVisitor visitor) {
+		visitor.visitTitleTag(this);
+	}
 
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
-*/
+ */
 
 package org.apache.jmeter.functions;
 
@@ -44,420 +44,336 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
-public class RegexFunction extends AbstractFunction implements Serializable
-{
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-    public static final String ALL = "ALL";
-    public static final String RAND = "RAND";
-    public static final String KEY = "__regexFunction";
+public class RegexFunction extends AbstractFunction implements Serializable {
+	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private Object[] values;//Parameters are stored here
-    
-    private static Random rand = new Random();
-    private static final List desc = new LinkedList();
+	public static final String ALL = "ALL";
 
-    private static PatternCacheLRU patternCache =
-        new PatternCacheLRU(1000, new Perl5Compiler());
-    private Pattern templatePattern;// initialised to the regex \$(\d+)\$
+	public static final String RAND = "RAND";
 
-    private static ThreadLocal localMatcher = new ThreadLocal()
-    {
-        protected Object initialValue()
-        {
-            return new Perl5Matcher();
-        }
-    };
+	public static final String KEY = "__regexFunction";
 
-    // Number of parameters expected - used to reject invalid calls
-    private static final int MIN_PARAMETER_COUNT = 2;
-    private static final int MAX_PARAMETER_COUNT = 6;
-    static {
-        desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex
-        desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template
-        desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match
-        desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text
-        desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text
-        desc.add(JMeterUtils.getResString("function_name_param"));
-    }
+	private Object[] values;// Parameters are stored here
 
-    public RegexFunction()
-    {
-        templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
-    }
+	private static Random rand = new Random();
 
-    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-        throws InvalidVariableException
-    {
-    	String valueIndex="", defaultValue="", between="";
-    	String name="";
-    	Pattern searchPattern;
-    	Object [] tmplt;
-        try
-        {
-            searchPattern =
-                patternCache.getPattern(((CompoundVariable) values[0]).execute(), Perl5Compiler.READ_ONLY_MASK);
-            tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
+	private static final List desc = new LinkedList();
 
-            if (values.length > 2)
-            {
-                valueIndex = ((CompoundVariable) values[2]).execute();
-            }
-            if (valueIndex.equals(""))
-            {
-                valueIndex = "1";
-            }
+	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
-            if (values.length > 3)
-            {
-                between = ((CompoundVariable) values[3]).execute();
-            }
+	private Pattern templatePattern;// initialised to the regex \$(\d+)\$
 
-            if (values.length > 4)
-            {
-                String dv = ((CompoundVariable) values[4]).execute();
-                if (!dv.equals(""))
-                {
-                    defaultValue = dv;
-                }
-            }
+	private static ThreadLocal localMatcher = new ThreadLocal() {
+		protected Object initialValue() {
+			return new Perl5Matcher();
+		}
+	};
 
-            if (values.length > 5)
-            {
-                name = ((CompoundVariable) values[values.length - 1]).execute();
-            }
-        }
-        catch (Exception e)
-        {
-            throw new InvalidVariableException(e.toString());
-        }
+	// Number of parameters expected - used to reject invalid calls
+	private static final int MIN_PARAMETER_COUNT = 2;
 
-        JMeterVariables vars = getVariables();//Relatively expensive operation, so do it once
-        vars.put(name, defaultValue);
-        if (previousResult == null || previousResult.getResponseData() == null)
-        {
-            return defaultValue;
-        }
+	private static final int MAX_PARAMETER_COUNT = 6;
+	static {
+		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex
+		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template
+		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match
+		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text
+		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text
+		desc.add(JMeterUtils.getResString("function_name_param"));
+	}
 
-        List collectAllMatches = new ArrayList();
-        try
-        {
-            PatternMatcher matcher = (PatternMatcher) localMatcher.get();
-            String responseText = new String(previousResult.getResponseData());
-            PatternMatcherInput input = new PatternMatcherInput(responseText);
-            while (matcher.contains(input, searchPattern))
-            {
-                MatchResult match = matcher.getMatch();
-                collectAllMatches.add(match);
-            }
-        }
-        catch (NumberFormatException e)
-        {
-            log.error("", e);
-            return defaultValue;
-        }
-        catch (Exception e)
-        {
-            return defaultValue;
-        }
-        finally
-		{
-			vars.put(name+"_matchNr", ""+collectAllMatches.size());
-        }
+	public RegexFunction() {
+		templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
+	}
 
-        if (collectAllMatches.size() == 0)
-        {
-            return defaultValue;
-        }
+	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+			throws InvalidVariableException {
+		String valueIndex = "", defaultValue = "", between = "";
+		String name = "";
+		Pattern searchPattern;
+		Object[] tmplt;
+		try {
+			searchPattern = patternCache.getPattern(((CompoundVariable) values[0]).execute(),
+					Perl5Compiler.READ_ONLY_MASK);
+			tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
 
-        if (valueIndex.equals(ALL))
-        {
-            StringBuffer value = new StringBuffer();
-            Iterator it = collectAllMatches.iterator();
-            boolean first = true;
-            while (it.hasNext())
-            {
-                if (!first)
-                {
-                    value.append(between);
-                }
-                else
-                {
-                    first = false;
-                }
-                value.append(generateResult((MatchResult) it.next(),name, tmplt, vars));
-            }
-            return value.toString();
-        }
-        else if (valueIndex.equals(RAND))
-        {
-            MatchResult result =
-                (MatchResult) collectAllMatches.get(
-                    rand.nextInt(collectAllMatches.size()));
-            return generateResult(result,name, tmplt, vars);
-        }
-        else
-        {
-            try
-            {
-                int index = Integer.parseInt(valueIndex) - 1;
-                MatchResult result = (MatchResult) collectAllMatches.get(index);
-                return generateResult(result,name, tmplt, vars);
-            }
-            catch (NumberFormatException e)
-            {
-                float ratio = Float.parseFloat(valueIndex);
-                MatchResult result =
-                    (MatchResult) collectAllMatches.get(
-                        (int) (collectAllMatches.size() * ratio + .5) - 1);
-                return generateResult(result,name, tmplt, vars);
-            }
-            catch (IndexOutOfBoundsException e)
-            {
-                return defaultValue;
-            }
-        }
+			if (values.length > 2) {
+				valueIndex = ((CompoundVariable) values[2]).execute();
+			}
+			if (valueIndex.equals("")) {
+				valueIndex = "1";
+			}
 
-    }
+			if (values.length > 3) {
+				between = ((CompoundVariable) values[3]).execute();
+			}
 
-    private void saveGroups(MatchResult result, String namep, JMeterVariables vars)
-    {
-        if (result != null)
-        {
-            for (int x = 0; x < result.groups(); x++)
-            {
-                vars.put(namep + "_g" + x, result.group(x));
-            }
-        }
-    }
+			if (values.length > 4) {
+				String dv = ((CompoundVariable) values[4]).execute();
+				if (!dv.equals("")) {
+					defaultValue = dv;
+				}
+			}
 
-    public List getArgumentDesc()
-    {
-        return desc;
-    }
+			if (values.length > 5) {
+				name = ((CompoundVariable) values[values.length - 1]).execute();
+			}
+		} catch (Exception e) {
+			throw new InvalidVariableException(e.toString());
+		}
 
-    private String generateResult(MatchResult match, String namep, Object[] template
-    		,JMeterVariables vars)
-    {
-        saveGroups(match, namep, vars);
-        StringBuffer result = new StringBuffer();
-        for (int a = 0; a < template.length; a++)
-        {
-            if (template[a] instanceof String)
-            {
-                result.append(template[a]);
-            }
-            else
-            {
-                result.append(match.group(((Integer) template[a]).intValue()));
-            }
-        }
-        vars.put(namep, result.toString());
-        return result.toString();
-    }
+		JMeterVariables vars = getVariables();// Relatively expensive
+												// operation, so do it once
+		vars.put(name, defaultValue);
+		if (previousResult == null || previousResult.getResponseData() == null) {
+			return defaultValue;
+		}
 
-    public String getReferenceKey()
-    {
-        return KEY;
-    }
+		List collectAllMatches = new ArrayList();
+		try {
+			PatternMatcher matcher = (PatternMatcher) localMatcher.get();
+			String responseText = new String(previousResult.getResponseData());
+			PatternMatcherInput input = new PatternMatcherInput(responseText);
+			while (matcher.contains(input, searchPattern)) {
+				MatchResult match = matcher.getMatch();
+				collectAllMatches.add(match);
+			}
+		} catch (NumberFormatException e) {
+			log.error("", e);
+			return defaultValue;
+		} catch (Exception e) {
+			return defaultValue;
+		} finally {
+			vars.put(name + "_matchNr", "" + collectAllMatches.size());
+		}
 
-    public synchronized void setParameters(Collection parameters)
-        throws InvalidVariableException
-    {
-        values = parameters.toArray();
+		if (collectAllMatches.size() == 0) {
+			return defaultValue;
+		}
 
-        if ((values.length < MIN_PARAMETER_COUNT)
-                || (values.length > MAX_PARAMETER_COUNT))
-            {
-                throw new InvalidVariableException(
-                    "Parameter Count " //$NON-NLS-1$
-                	+ values.length 
-					+ " not between " //$NON-NLS-1$
-                    + MIN_PARAMETER_COUNT
-                    + " & " //$NON-NLS-1$
-                    + MAX_PARAMETER_COUNT);
-            }
-    }
+		if (valueIndex.equals(ALL)) {
+			StringBuffer value = new StringBuffer();
+			Iterator it = collectAllMatches.iterator();
+			boolean first = true;
+			while (it.hasNext()) {
+				if (!first) {
+					value.append(between);
+				} else {
+					first = false;
+				}
+				value.append(generateResult((MatchResult) it.next(), name, tmplt, vars));
+			}
+			return value.toString();
+		} else if (valueIndex.equals(RAND)) {
+			MatchResult result = (MatchResult) collectAllMatches.get(rand.nextInt(collectAllMatches.size()));
+			return generateResult(result, name, tmplt, vars);
+		} else {
+			try {
+				int index = Integer.parseInt(valueIndex) - 1;
+				MatchResult result = (MatchResult) collectAllMatches.get(index);
+				return generateResult(result, name, tmplt, vars);
+			} catch (NumberFormatException e) {
+				float ratio = Float.parseFloat(valueIndex);
+				MatchResult result = (MatchResult) collectAllMatches
+						.get((int) (collectAllMatches.size() * ratio + .5) - 1);
+				return generateResult(result, name, tmplt, vars);
+			} catch (IndexOutOfBoundsException e) {
+				return defaultValue;
+			}
+		}
 
-    private Object[] generateTemplate(String rawTemplate)
-    {
-        List pieces = new ArrayList();
-        List combined = new LinkedList();
-        PatternMatcher matcher = new Perl5Matcher();
-        Util.split(pieces, new Perl5Matcher(), templatePattern, rawTemplate);
-        PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
-        Iterator iter = pieces.iterator();
-        boolean startsWith = isFirstElementGroup(rawTemplate);
-        while (iter.hasNext())
-        {
-            boolean matchExists = matcher.contains(input, templatePattern);
-            if (startsWith)
-            {
-                if (matchExists)
-                {
-                    combined.add(new Integer(matcher.getMatch().group(1)));
-                }
-                combined.add(iter.next());
-            }
-            else
-            {
-                combined.add(iter.next());
-                if (matchExists)
-                {
-                    combined.add(new Integer(matcher.getMatch().group(1)));
-                }
-            }
-        }
-        if (matcher.contains(input, templatePattern))
-        {
-            combined.add(new Integer(matcher.getMatch().group(1)));
-        }
-        return combined.toArray();
-    }
+	}
 
-    private boolean isFirstElementGroup(String rawData)
-    {
-        Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK);
-        return new Perl5Matcher().contains(rawData, pattern);
-    }
+	private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
+		if (result != null) {
+			for (int x = 0; x < result.groups(); x++) {
+				vars.put(namep + "_g" + x, result.group(x));
+			}
+		}
+	}
 
-/**/
-    public static class Test extends JMeterTestCase
-    {
-        RegexFunction variable;
-        SampleResult result;
-        Collection params;
-        private JMeterVariables vars;
-        private JMeterContext jmctx = null;
+	public List getArgumentDesc() {
+		return desc;
+	}
 
-        public Test(String name)
-        {
-            super(name);
-        }
+	private String generateResult(MatchResult match, String namep, Object[] template, JMeterVariables vars) {
+		saveGroups(match, namep, vars);
+		StringBuffer result = new StringBuffer();
+		for (int a = 0; a < template.length; a++) {
+			if (template[a] instanceof String) {
+				result.append(template[a]);
+			} else {
+				result.append(match.group(((Integer) template[a]).intValue()));
+			}
+		}
+		vars.put(namep, result.toString());
+		return result.toString();
+	}
 
-        public void setUp()
-        {
-            variable = new RegexFunction();
-            result = new SampleResult();
-        	jmctx = JMeterContextService.getContext();
-           String data =
-                "<company-xmlext-query-ret><row>"
-                    + "<value field=\"RetCode\">"
-                    + "LIS_OK</value><value"
-                    + " field=\"RetCodeExtension\"></value>"
-                    + "<value field=\"alias\"></value><value"
-                    + " field=\"positioncount\"></value>"
-                    + "<value field=\"invalidpincount\">0</value><value"
-                    + " field=\"pinposition1\">1</value><value"
-                    + " field=\"pinpositionvalue1\"></value><value"
-                    + " field=\"pinposition2\">5</value><value"
-                    + " field=\"pinpositionvalue2\"></value><value"
-                    + " field=\"pinposition3\">6</value><value"
-                    + " field=\"pinpositionvalue3\"></value>"
-                    + "</row></company-xmlext-query-ret>";
-            result.setResponseData(data.getBytes());
-            vars = new JMeterVariables();
-            jmctx.setVariables(vars);
-            jmctx.setPreviousResult(result);
-        }
+	public String getReferenceKey() {
+		return KEY;
+	}
 
-        public void testVariableExtraction() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$2$"));
-            params.add(new CompoundVariable("2"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("5", match);
-        }
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+		values = parameters.toArray();
 
-        public void testVariableExtraction2() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$1$"));
-            params.add(new CompoundVariable("3"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("pinposition3", match);
-        }
+		if ((values.length < MIN_PARAMETER_COUNT) || (values.length > MAX_PARAMETER_COUNT)) {
+			throw new InvalidVariableException("Parameter Count " //$NON-NLS-1$
+					+ values.length + " not between " //$NON-NLS-1$
+					+ MIN_PARAMETER_COUNT + " & " //$NON-NLS-1$
+					+ MAX_PARAMETER_COUNT);
+		}
+	}
 
-        public void testVariableExtraction5() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$1$"));
-            params.add(new CompoundVariable("ALL"));
-            params.add(new CompoundVariable("_"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("pinposition1_pinposition2_pinposition3", match);
-        }
+	private Object[] generateTemplate(String rawTemplate) {
+		List pieces = new ArrayList();
+		List combined = new LinkedList();
+		PatternMatcher matcher = new Perl5Matcher();
+		Util.split(pieces, new Perl5Matcher(), templatePattern, rawTemplate);
+		PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
+		Iterator iter = pieces.iterator();
+		boolean startsWith = isFirstElementGroup(rawTemplate);
+		while (iter.hasNext()) {
+			boolean matchExists = matcher.contains(input, templatePattern);
+			if (startsWith) {
+				if (matchExists) {
+					combined.add(new Integer(matcher.getMatch().group(1)));
+				}
+				combined.add(iter.next());
+			} else {
+				combined.add(iter.next());
+				if (matchExists) {
+					combined.add(new Integer(matcher.getMatch().group(1)));
+				}
+			}
+		}
+		if (matcher.contains(input, templatePattern)) {
+			combined.add(new Integer(matcher.getMatch().group(1)));
+		}
+		return combined.toArray();
+	}
 
-        public void testVariableExtraction6() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$2$"));
-            params.add(new CompoundVariable("4"));
-            params.add(new CompoundVariable(""));
-            params.add(new CompoundVariable("default"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("default", match);
-        }
+	private boolean isFirstElementGroup(String rawData) {
+		Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK);
+		return new Perl5Matcher().contains(rawData, pattern);
+	}
 
-        public void testComma() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$1$"));
-            params.add(new CompoundVariable("3"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("pinposition3", match);
-        }
+	/**/
+	public static class Test extends JMeterTestCase {
+		RegexFunction variable;
 
-        public void testVariableExtraction3() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("_$1$"));
-            params.add(new CompoundVariable("2"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("_pinposition2", match);
-        }
+		SampleResult result;
 
-        public void testVariableExtraction4() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$2$, "));
-            params.add(new CompoundVariable(".333"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("1, ", match);
-        }
+		Collection params;
 
-        public void testDefaultValue() throws Exception
-        {
-            params = new LinkedList();
-            params.add(new CompoundVariable(
-                    "<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
-            params.add(new CompoundVariable("$2$, "));
-            params.add(new CompoundVariable(".333"));
-            params.add(new CompoundVariable(""));
-            params.add(new CompoundVariable("No Value Found"));
-            variable.setParameters(params);
-            String match = variable.execute(result, null);
-            assertEquals("No Value Found", match);
-        }
-    }
+		private JMeterVariables vars;
+
+		private JMeterContext jmctx = null;
+
+		public Test(String name) {
+			super(name);
+		}
+
+		public void setUp() {
+			variable = new RegexFunction();
+			result = new SampleResult();
+			jmctx = JMeterContextService.getContext();
+			String data = "<company-xmlext-query-ret><row>" + "<value field=\"RetCode\">" + "LIS_OK</value><value"
+					+ " field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value><value"
+					+ " field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value><value"
+					+ " field=\"pinposition1\">1</value><value" + " field=\"pinpositionvalue1\"></value><value"
+					+ " field=\"pinposition2\">5</value><value" + " field=\"pinpositionvalue2\"></value><value"
+					+ " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
+					+ "</row></company-xmlext-query-ret>";
+			result.setResponseData(data.getBytes());
+			vars = new JMeterVariables();
+			jmctx.setVariables(vars);
+			jmctx.setPreviousResult(result);
+		}
+
+		public void testVariableExtraction() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$2$"));
+			params.add(new CompoundVariable("2"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("5", match);
+		}
+
+		public void testVariableExtraction2() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$1$"));
+			params.add(new CompoundVariable("3"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("pinposition3", match);
+		}
+
+		public void testVariableExtraction5() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$1$"));
+			params.add(new CompoundVariable("ALL"));
+			params.add(new CompoundVariable("_"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("pinposition1_pinposition2_pinposition3", match);
+		}
+
+		public void testVariableExtraction6() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$2$"));
+			params.add(new CompoundVariable("4"));
+			params.add(new CompoundVariable(""));
+			params.add(new CompoundVariable("default"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("default", match);
+		}
+
+		public void testComma() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$1$"));
+			params.add(new CompoundVariable("3"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("pinposition3", match);
+		}
+
+		public void testVariableExtraction3() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("_$1$"));
+			params.add(new CompoundVariable("2"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("_pinposition2", match);
+		}
+
+		public void testVariableExtraction4() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$2$, "));
+			params.add(new CompoundVariable(".333"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("1, ", match);
+		}
+
+		public void testDefaultValue() throws Exception {
+			params = new LinkedList();
+			params.add(new CompoundVariable("<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
+			params.add(new CompoundVariable("$2$, "));
+			params.add(new CompoundVariable(".333"));
+			params.add(new CompoundVariable(""));
+			params.add(new CompoundVariable("No Value Found"));
+			variable.setParameters(params);
+			String match = variable.execute(result, null);
+			assertEquals("No Value Found", match);
+		}
+	}
 }

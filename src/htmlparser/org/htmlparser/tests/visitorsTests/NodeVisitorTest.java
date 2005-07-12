@@ -29,7 +29,6 @@
 // design so that it is able to tackle the difficult task of parsing
 // dirty HTML. Derrick Oswald is the current lead developer and was kind
 // enough to assist JMeter.
-
 package org.htmlparser.tests.visitorsTests;
 
 import java.util.HashMap;
@@ -40,48 +39,37 @@ import org.htmlparser.tags.Tag;
 import org.htmlparser.tests.ParserTestCase;
 import org.htmlparser.visitors.NodeVisitor;
 
-public class NodeVisitorTest extends ParserTestCase
-{
+public class NodeVisitorTest extends ParserTestCase {
 
-    public NodeVisitorTest(String name)
-    {
-        super(name);
-    }
+	public NodeVisitorTest(String name) {
+		super(name);
+	}
 
-    public void testVisitTag() throws Exception
-    {
-        ParameterVisitor visitor = new ParameterVisitor();
-        createParser(
-            "<input>"
-                + "<param name='key1'>value1</param>"
-                + "<param name='key2'>value2</param>"
-                + "</input>");
-        parser.visitAllNodesWith(visitor);
-        assertEquals("value of key1", "value1", visitor.getValue("key1"));
-        assertEquals("value of key2", "value2", visitor.getValue("key2"));
-    }
+	public void testVisitTag() throws Exception {
+		ParameterVisitor visitor = new ParameterVisitor();
+		createParser("<input>" + "<param name='key1'>value1</param>" + "<param name='key2'>value2</param>" + "</input>");
+		parser.visitAllNodesWith(visitor);
+		assertEquals("value of key1", "value1", visitor.getValue("key1"));
+		assertEquals("value of key2", "value2", visitor.getValue("key2"));
+	}
 
-    class ParameterVisitor extends NodeVisitor
-    {
-        Map paramsMap = new HashMap();
-        String lastKeyVisited;
+	class ParameterVisitor extends NodeVisitor {
+		Map paramsMap = new HashMap();
 
-        public String getValue(String key)
-        {
-            return (String) paramsMap.get(key);
-        }
+		String lastKeyVisited;
 
-        public void visitStringNode(StringNode stringNode)
-        {
-            paramsMap.put(lastKeyVisited, stringNode.getText());
-        }
+		public String getValue(String key) {
+			return (String) paramsMap.get(key);
+		}
 
-        public void visitTag(Tag tag)
-        {
-            if (tag.getTagName().equals("PARAM"))
-            {
-                lastKeyVisited = tag.getAttribute("NAME");
-            }
-        }
-    }
+		public void visitStringNode(StringNode stringNode) {
+			paramsMap.put(lastKeyVisited, stringNode.getText());
+		}
+
+		public void visitTag(Tag tag) {
+			if (tag.getTagName().equals("PARAM")) {
+				lastKeyVisited = tag.getAttribute("NAME");
+			}
+		}
+	}
 }
