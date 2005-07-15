@@ -44,12 +44,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String QUERY = "query";
+	public static final String SELECT = "Select Statement";
 
 	public String query = "";
 
 	public String dataSource = "";
 
-	public boolean queryOnly = true;
+	public String queryType = SELECT;
 
 	/**
 	 * Creates a JDBCSampler.
@@ -80,7 +81,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			stmt = conn.createStatement();
 
 			// Based on query return value, get results
-			if (isQueryOnly()) {
+			if (SELECT.equals(getQueryType())) {
 				ResultSet rs = null;
 				try {
 					rs = stmt.executeQuery(getQuery());
@@ -195,17 +196,16 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	}
 
 	/**
-	 * @return Returns the queryOnly.
+	 * @return Returns the queryType.
 	 */
-	public boolean isQueryOnly() {
-		return queryOnly;
+	public String getQueryType() {
+		return queryType;
 	}
 
 	/**
-	 * @param queryOnly
-	 *            The queryOnly to set.
+	 * @param queryType The queryType to set.
 	 */
-	public void setQueryOnly(boolean queryOnly) {
-		this.queryOnly = queryOnly;
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
 	}
 }
