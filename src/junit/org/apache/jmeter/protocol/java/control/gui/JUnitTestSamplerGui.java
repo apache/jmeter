@@ -163,6 +163,9 @@ implements ChangeListener, ActionListener
         
         VerticalPanel panel = new VerticalPanel();
         panel.add(label);
+        filterpkg.addChangeListener(this);
+        panel.add(filterpkg);
+
         if (classnameCombo != null){
             panel.add(classnameCombo);
         }
@@ -170,8 +173,6 @@ implements ChangeListener, ActionListener
         if (methodName != null){
             panel.add(methodName);
         }
-        filterpkg.addChangeListener(this);
-        panel.add(filterpkg);
         panel.add(successMsg);
         panel.add(successCode);
         panel.add(failureMsg);
