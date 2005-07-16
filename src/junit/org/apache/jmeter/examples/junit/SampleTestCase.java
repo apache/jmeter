@@ -77,7 +77,7 @@ public class SampleTestCase extends TestCase {
     }
     
     public void testDouble(){
-        long time = nextInt();
+        long time = 250;
         try {
             Thread.sleep(time);
         } catch (InterruptedException e){
