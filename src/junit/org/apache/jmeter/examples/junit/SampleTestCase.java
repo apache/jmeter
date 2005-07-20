@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2005 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public class SampleTestCase extends TestCase {
 	}
 
     public void testInt(){
-        assertEquals(nextInt(),nextInt());
+        assertTrue(nextInt()!=nextInt());
     }
     
     public void testShort(){
@@ -59,9 +59,9 @@ public class SampleTestCase extends TestCase {
     }
     
     public void testLong(){
-        long time = nextLong();
+        long time = Math.abs(nextLong());
         try {
-            Thread.sleep(time);
+            Thread.sleep(time > 1000 ? 1000 : time);
         } catch (InterruptedException e){
             fail(e.getMessage());
         }
@@ -86,11 +86,11 @@ public class SampleTestCase extends TestCase {
     }
     
     public void setUp(){
-        System.out.println("setUp");
+        //System.out.println("setUp");
     }
     
     public void tearDown(){
-        System.out.println("tearDown");
+        //System.out.println("tearDown");
     }
     
     public int nextInt(){
