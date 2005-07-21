@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,7 +201,6 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
             // create a text test runner
             TestCase tc = (TestCase)ins;
             initMethodObjects(tc);
-            sresult.sampleStart();
             log.info("got instance and TestResult");
             try {
                 if (SETUP_METHOD != null){
@@ -209,7 +208,9 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
                     log.info("called setUp");
                 }
                 Method m = getMethod(tc,getMethod());
+                sresult.sampleStart();
                 m.invoke(tc,null);
+                sresult.sampleEnd();
                 log.info("invoked " + getMethod());
                 if (TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(tc,new Class[0]);
@@ -220,7 +221,6 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
             } catch (IllegalAccessException e) {
                 log.warn(e.getMessage());
             }
-            sresult.sampleEnd();
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
                 StringBuffer buf = new StringBuffer();
