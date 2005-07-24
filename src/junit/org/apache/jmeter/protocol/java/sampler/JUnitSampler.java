@@ -53,6 +53,7 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
     public static final String SUCCESS = "junitsampler.success";
     public static final String SUCCESSCODE = "junitsampler.success.code";
     public static final String FILTER = "junitsampler.pkg.filter";
+    public static final String DOSETUP = "junitsampler.exec.setup";
     
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
@@ -74,7 +75,7 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
      * @param tc
      */
     public void initMethodObjects(TestCase tc){
-        if (!this.checkStartUpTearDown){
+        if (!this.checkStartUpTearDown && !getDoNotSetUpTearDown() ){
             if (SETUP_METHOD == null){
                 SETUP_METHOD = getMethod(tc,SETUP);
             }
@@ -138,10 +139,19 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
         setProperty(SUCCESS,success);
     }
     
+    /**
+     * get the success code defined by the user
+     * @return
+     */
     public String getSuccessCode(){
         return getPropertyAsString(SUCCESSCODE);
     }
-    
+
+    /**
+     * set the succes code. the success code should
+     * be unique.
+     * @param code
+     */
     public void setSuccessCode(String code){
         setProperty(SUCCESSCODE,code);
     }
@@ -178,12 +188,28 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
         setProperty(FAILURECODE,code);
     }
 
+    /**
+     * return the comma separated string for the filter
+     * @return
+     */
     public String getFilterString(){
         return getPropertyAsString(FILTER);
     }
     
+    /**
+     * set the filter string in comman separated format
+     * @param text
+     */
     public void setFilterString(String text){
         setProperty(FILTER,text);
+    }
+    
+    public boolean getDoNotSetUpTearDown(){
+        return getPropertyAsBoolean(DOSETUP);
+    }
+    
+    public void setDoNotSetUpTearDown(boolean setup){
+        setProperty(DOSETUP,String.valueOf(setup));
     }
     
     /* (non-Javadoc)
@@ -191,7 +217,8 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
 	 */
 	public SampleResult sample(Entry entry) {
 		SampleResult sresult = new SampleResult();
-        sresult.setSampleLabel(getClassname() + "." + getMethod());
+        sresult.setSampleLabel(JUnitSampler.class.getName());
+        sresult.setSamplerData(getClassname() + "." + getMethod());
         Object ins = getClassInstance();
         if (ins != null){
             // create a new TestResult
@@ -203,7 +230,7 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
             initMethodObjects(tc);
             log.info("got instance and TestResult");
             try {
-                if (SETUP_METHOD != null){
+                if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
                     SETUP_METHOD.invoke(tc,new Class[0]);
                     log.info("called setUp");
                 }
@@ -212,7 +239,7 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
                 m.invoke(tc,null);
                 sresult.sampleEnd();
                 log.info("invoked " + getMethod());
-                if (TDOWN_METHOD != null){
+                if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(tc,new Class[0]);
                     log.info("called tearDown");
                 }

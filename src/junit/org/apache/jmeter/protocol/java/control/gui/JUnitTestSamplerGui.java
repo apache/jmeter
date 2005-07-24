@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -84,6 +85,7 @@ implements ChangeListener, ActionListener
         new JLabeledTextField(
             JMeterUtils.getResString("junit_pkg_filter"));
 
+    JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown"));
     
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
@@ -177,6 +179,7 @@ implements ChangeListener, ActionListener
         panel.add(successCode);
         panel.add(failureMsg);
         panel.add(failureCode);
+        panel.add(doSetup);
         return panel;
     }
 
@@ -207,6 +210,7 @@ implements ChangeListener, ActionListener
         sampler.setSuccessCode(successCode.getText());
         sampler.setFailure(failureMsg.getText());
         sampler.setFailureCode(failureCode.getText());
+        sampler.setDoNotSetUpTearDown(doSetup.isSelected());
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
@@ -222,6 +226,7 @@ implements ChangeListener, ActionListener
         successMsg.setText(sampler.getSuccess());
         failureCode.setText(sampler.getFailureCode());
         failureMsg.setText(sampler.getFailure());
+        doSetup.setSelected(sampler.getDoNotSetUpTearDown());
     }
     
     public void instantiateClass(){
