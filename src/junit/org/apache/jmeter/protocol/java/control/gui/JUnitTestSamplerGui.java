@@ -164,9 +164,9 @@ implements ChangeListener, ActionListener
         methodLabel.setLabelFor(methodName);
         
         VerticalPanel panel = new VerticalPanel();
+        panel.add(filterpkg);
         panel.add(label);
         filterpkg.addChangeListener(this);
-        panel.add(filterpkg);
 
         if (classnameCombo != null){
             panel.add(classnameCombo);
