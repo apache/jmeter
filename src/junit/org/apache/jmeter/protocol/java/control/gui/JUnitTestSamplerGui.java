@@ -222,10 +222,26 @@ implements ChangeListener, ActionListener
         instantiateClass();
         methodName.setSelectedItem(sampler.getMethod());
         filterpkg.setText(sampler.getFilterString());
-        successCode.setText(sampler.getSuccessCode());
-        successMsg.setText(sampler.getSuccess());
-        failureCode.setText(sampler.getFailureCode());
-        failureMsg.setText(sampler.getFailure());
+        if (sampler.getSuccessCode().length() > 0) {
+            successCode.setText(sampler.getSuccessCode());
+        } else {
+            successCode.setText(JMeterUtils.getResString("junit_success_default_code"));
+        }
+        if (sampler.getSuccess().length() > 0) {
+            successMsg.setText(sampler.getSuccess());
+        } else {
+            successMsg.setText(JMeterUtils.getResString("junit_success_default_msg"));
+        }
+        if (sampler.getFailureCode().length() > 0) {
+            failureCode.setText(sampler.getFailureCode());
+        } else {
+            failureCode.setText(JMeterUtils.getResString("junit_failure_default_code"));
+        }
+        if (sampler.getFailure().length() > 0) {
+            failureMsg.setText(sampler.getFailure());
+        } else {
+            failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg"));
+        }
         doSetup.setSelected(sampler.getDoNotSetUpTearDown());
     }
     
