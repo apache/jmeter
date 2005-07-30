@@ -23,11 +23,9 @@ import java.util.Enumeration;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -39,7 +37,7 @@ import org.apache.log.Logger;
  * oneTimeSetUp yet. Still need to think about that more thoroughly
  * and decide how it should be called.
  */
-public class JUnitSampler extends AbstractSampler implements TestListener {
+public class JUnitSampler extends AbstractSampler {
 
     /**
      * Property key representing the classname of the JavaSamplerClient to
@@ -56,13 +54,9 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
     
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
-    public static final String ONETIMESETUP = "oneTimeSetUp";
-    public static final String ONETIMETEARDOWN = "oneTimeTearDown";
     /// the Method objects for setUp and tearDown methods
     protected Method SETUP_METHOD = null;
     protected Method TDOWN_METHOD = null;
-    protected Method ONETIME_SETUP_METHOD = null;
-    protected Method ONETIME_TDOWN_METHOD = null;
     protected boolean checkStartUpTearDown = false;
     
     protected TestCase TEST_INSTANCE = null;
@@ -80,30 +74,23 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
      * @param tc
      */
     public void initMethodObjects(TestCase tc){
-        if (!this.checkStartUpTearDown){
-            if (ONETIME_SETUP_METHOD == null){
-                ONETIME_SETUP_METHOD = getMethod(tc,ONETIMESETUP);
-            }
-            if (ONETIME_TDOWN_METHOD == null){
-                ONETIME_TDOWN_METHOD = getMethod(tc,ONETIMETEARDOWN);
-            }
-            if (!getDoNotSetUpTearDown()) {
-                if (SETUP_METHOD == null){
-                    SETUP_METHOD = getMethod(tc,SETUP);
-                }
-                if (TDOWN_METHOD == null){
-                    TDOWN_METHOD = getMethod(tc,TEARDOWN);
-                }
-            }
-            this.checkStartUpTearDown = true;
-        }
+        if (!this.checkStartUpTearDown && !getDoNotSetUpTearDown()) {
+			if (SETUP_METHOD == null) {
+				SETUP_METHOD = getMethod(tc, SETUP);
+			}
+			if (TDOWN_METHOD == null) {
+				TDOWN_METHOD = getMethod(tc, TEARDOWN);
+			}
+			this.checkStartUpTearDown = true;
+		}
     }
     
     /**
-     * Sets the Classname attribute of the JavaConfig object
-     *
-     * @param  classname  the new Classname value
-     */
+	 * Sets the Classname attribute of the JavaConfig object
+	 * 
+	 * @param classname
+	 *            the new Classname value
+	 */
     public void setClassname(String classname)
     {
         setProperty(CLASSNAME, classname);
@@ -232,7 +219,12 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
 		SampleResult sresult = new SampleResult();
         sresult.setSampleLabel(JUnitSampler.class.getName());
         sresult.setSamplerData(getClassname() + "." + getMethod());
-        this.testStarted("");
+        // check to see if the test class is null. if it is, we create
+        // a new instance. this should only happen at the start of a
+        // test run
+        if (this.TEST_INSTANCE == null) {
+            this.TEST_INSTANCE = (TestCase)getClassInstance();
+        }
         if (this.TEST_INSTANCE != null){
             initMethodObjects(this.TEST_INSTANCE);
             // create a new TestResult
@@ -324,76 +316,5 @@ public class JUnitSampler extends AbstractSampler implements TestListener {
             }
         }
         return null;
-    }
-    
-    public void testStarted(){
-    }
-
-    /**
-     * method will call oneTimeTearDown to clean things up. It is only called
-     * at the end of the test.
-     */
-    public void testEnded() {
-        if (this.TEST_INSTANCE == null) {
-            this.TEST_INSTANCE = (TestCase)getClassInstance();
-            initMethodObjects(this.TEST_INSTANCE);
-            if (ONETIME_TDOWN_METHOD != null && this.TEST_INSTANCE != null) {
-                try {
-                    ONETIME_TDOWN_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
-                    log.info("oneTimeTearDown invoked");
-                } catch (IllegalAccessException ex){
-                    log.warn(ex.getMessage());
-                } catch (InvocationTargetException ex){
-                    log.warn(ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    log.warn(ex.getMessage());
-                }
-            } else {
-                if (this.TEST_INSTANCE == null) {
-                    log.info("testEnded - oneTimeTearDown and test class were null");
-                } else {
-                    log.info("testEnded - oneTimeTearDown was null");
-                }
-            }
-        }
-    }
-
-    /**
-     * method will call oneTimeSetUp to setup the unit test
-     */
-    public void testStarted(String host) {
-        if (this.TEST_INSTANCE == null) {
-            this.TEST_INSTANCE = (TestCase)getClassInstance();
-            initMethodObjects(this.TEST_INSTANCE);
-            if (ONETIME_SETUP_METHOD != null && this.TEST_INSTANCE != null) {
-                try {
-                    ONETIME_SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
-                    log.info("oneTimeSetUp invoked");
-                } catch (IllegalAccessException ex){
-                    log.warn(ex.getMessage());
-                } catch (InvocationTargetException ex){
-                    log.warn(ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    log.warn(ex.getMessage());
-                }
-            } else {
-                if (this.TEST_INSTANCE == null) {
-                    log.info("testStarted - oneTimeSetUp and test class were null");
-                } else {
-                    log.info("testStarted - oneTimeSetUp was null");
-                }
-            }
-        }
-    }
-
-    public void testEnded(String host) {
-        
-    }
-
-    /**
-     * Method is not implemented, but required by TestListener
-     */
-    public void testIterationStart(LoopIterationEvent event) {
-        
     }
 }
