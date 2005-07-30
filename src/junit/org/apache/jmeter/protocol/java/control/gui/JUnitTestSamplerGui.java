@@ -59,6 +59,8 @@ implements ChangeListener, ActionListener
     private static final String CLASSNAMECOMBO = "classnamecombo";
     private static final String METHODCOMBO = "methodcombo";
     private static final String PREFIX = "test";
+    public static final String ONETIMESETUP = "oneTimeSetUp";
+    public static final String ONETIMETEARDOWN = "oneTimeTearDown";
     protected String[] SPATHS = null;
 
     JLabel methodLabel =
@@ -325,7 +327,9 @@ implements ChangeListener, ActionListener
     {
         Method[] meths = obj.getClass().getMethods();
         for (int idx=0; idx < meths.length; idx++){
-            if (meths[idx].getName().startsWith(PREFIX)) {
+            if (meths[idx].getName().startsWith(PREFIX) ||
+                    meths[idx].getName().equals(ONETIMESETUP) ||
+                    meths[idx].getName().equals(ONETIMETEARDOWN)) {
                 list.add(meths[idx]);
             }
         }
