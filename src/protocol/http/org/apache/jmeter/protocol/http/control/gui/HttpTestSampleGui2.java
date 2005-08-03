@@ -38,6 +38,6 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
 	}
 
 	public String getStaticLabel() {
-		return super.getStaticLabel() + " HTTPCLient (ALPHA)";
+		return super.getStaticLabel() + " HTTPCLient";
 	}
 }
