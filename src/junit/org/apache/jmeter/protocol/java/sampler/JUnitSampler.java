@@ -16,6 +16,7 @@
  */
 package org.apache.jmeter.protocol.java.sampler;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
@@ -223,7 +224,7 @@ public class JUnitSampler extends AbstractSampler {
         // a new instance. this should only happen at the start of a
         // test run
         if (this.TEST_INSTANCE == null) {
-            this.TEST_INSTANCE = (TestCase)getClassInstance();
+            this.TEST_INSTANCE = (TestCase)getClassInstance(this.getClassname());
         }
         if (this.TEST_INSTANCE != null){
             initMethodObjects(this.TEST_INSTANCE);
@@ -279,24 +280,59 @@ public class JUnitSampler extends AbstractSampler {
      * warning level.
      * @return
      */
-    public Object getClassInstance(){
-        if (getClassname() != null){
-            try {
-                Class clazz = Class.forName(getClassname());
-                return clazz.getDeclaredConstructor(new Class[0]).newInstance(null);
-            } catch (ClassNotFoundException ex){
-                log.warn(ex.getMessage());
-            } catch (IllegalAccessException ex){
-                log.warn(ex.getMessage());
-            } catch (NoSuchMethodException ex){
-                log.warn(ex.getMessage());
-            } catch (InvocationTargetException ex){
-                log.warn(ex.getMessage());
-            } catch (InstantiationException ex){
-                log.warn(ex.getMessage());
+    public static Object getClassInstance(String className){
+        Object testclass = null;
+        if (className != null){
+            Constructor con = null;
+            Class clazz = null;
+            Class theclazz = null;
+            try
+            {
+                theclazz = Class.forName(
+                            className.trim(),
+                            true,
+                            Thread.currentThread().getContextClassLoader()
+                        );
+            } catch (ClassNotFoundException e) {
+                log.warn(e.getMessage());
+            }
+            if (theclazz != null) {
+                try {
+                    con = theclazz.getDeclaredConstructor(new Class[0]);
+                    if (con != null){
+                        testclass = (TestCase)theclazz.newInstance();
+                    }
+                } catch (NoSuchMethodException e) {
+                    log.info(e.getMessage());
+                } catch (InstantiationException e) {
+                    log.info(e.getMessage());
+                } catch (IllegalAccessException e) {
+                    log.info(e.getMessage());
+                }
+                // only if we weren't able to create an instance of the class
+                // with a null constructor do we try to create one with the
+                // string constructor.
+                if (testclass == null ){
+                    try {
+                        Constructor con2 = theclazz.getDeclaredConstructor(
+                                new Class[] {String.class});
+                        if (con2 != null){
+                            Object[] pm = {className};
+                            testclass = (TestCase)con2.newInstance(pm);
+                        }
+                    } catch (NoSuchMethodException e) {
+                        log.info(e.getMessage());
+                    } catch (InvocationTargetException e) {
+                        log.warn(e.getMessage());
+                    } catch (IllegalAccessException e) {
+                        log.info(e.getMessage());
+                    } catch (InstantiationException e) {
+                        log.info(e.getMessage());
+                    }
+                }
             }
         }
-        return null;
+        return testclass;
     }
     
     /**
