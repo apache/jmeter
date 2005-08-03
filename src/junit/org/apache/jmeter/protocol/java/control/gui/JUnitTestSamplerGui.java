@@ -20,8 +20,6 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -251,56 +249,9 @@ implements ChangeListener, ActionListener
         String className =
             ((String) classnameCombo.getSelectedItem());
         if (className != null) {
-            TESTCLASS = null;
-            Class theclazz = null;
-            try
-            {
-                theclazz = Class.forName(
-                            className.trim(),
-                            true,
-                            Thread.currentThread().getContextClassLoader()
-                        );
-            } catch (ClassNotFoundException e) {
-                log.warn(e.getMessage());
-            }
-            if (theclazz != null) {
-                try {
-                    Constructor con = theclazz.getDeclaredConstructor(new Class[0]);
-                    if (con != null){
-                        TESTCLASS = (TestCase)theclazz.newInstance();
-                    }
-                } catch (NoSuchMethodException e) {
-                    log.info("The class " + className + " does not have " +
-                    "an empty constructor");
-                    clearMethodCombo();
-                } catch (InstantiationException e) {
-                    log.info(e.getMessage());
-                } catch (IllegalAccessException e) {
-                    log.info(e.getMessage());
-                }
-                // only if we weren't able to create an instance of the class
-                // with a null constructor do we try to create one with the
-                // string constructor.
-                if (TESTCLASS == null ){
-                    try {
-                        Constructor con2 = theclazz.getDeclaredConstructor(
-                                new Class[] {String.class});
-                        if (con2 != null){
-                            Object[] pm = {className};
-                            TESTCLASS = (TestCase)con2.newInstance(pm);
-                        }
-                    } catch (NoSuchMethodException e) {
-                        log.info("The class " + className + " does not have " +
-                        "a string constructor");
-                        clearMethodCombo();
-                    } catch (InvocationTargetException e) {
-                        log.warn(e.getMessage());
-                    } catch (IllegalAccessException e) {
-                        log.info(e.getMessage());
-                    } catch (InstantiationException e) {
-                        log.info(e.getMessage());
-                    }
-                }
+            TESTCLASS = (TestCase)JUnitSampler.getClassInstance(className);
+            if (TESTCLASS == null) {
+                clearMethodCombo();
             }
             configureMethodCombo();
         }
