@@ -46,6 +46,8 @@ public class JUnitSampler extends AbstractSampler {
      */
     public static final String CLASSNAME = "junitSampler.classname";
     public static final String METHOD = "junitsampler.method";
+    public static final String ERROR = "junitsampler.error";
+    public static final String ERRORCODE = "junitsampler.error.code";
     public static final String FAILURE = "junitsampler.failure";
     public static final String FAILURECODE = "junitsampler.failure.code";
     public static final String SUCCESS = "junitsampler.success";
@@ -190,6 +192,43 @@ public class JUnitSampler extends AbstractSampler {
     }
 
     /**
+     * return the descriptive error for the test
+     * @return
+     */
+    public String getError(){
+        return getPropertyAsString(ERROR);
+    }
+    
+    /**
+     * provide a descriptive error for the test method. For
+     * a description of the difference between failure and
+     * error, please refer to the following url
+     * http://junit.sourceforge.net/doc/faq/faq.htm#tests_9
+     * @param error
+     */
+    public void setError(String error){
+        setProperty(ERROR,error);
+    }
+    
+    /**
+     * return the error code for the test method. it should
+     * be an unique error code.
+     * @return
+     */
+    public String getErrorCode(){
+        return getPropertyAsString(ERRORCODE);
+    }
+    
+    /**
+     * provide an unique error code for when the test
+     * does not pass the assert test.
+     * @param code
+     */
+    public void setErrorCode(String code){
+        setProperty(ERRORCODE,code);
+    }
+    
+    /**
      * return the comma separated string for the filter
      * @return
      */
@@ -233,7 +272,6 @@ public class JUnitSampler extends AbstractSampler {
             try {
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
                     SETUP_METHOD.invoke(TEST_INSTANCE,new Class[0]);
-                    log.info("called setUp");
                 }
                 Method m = getMethod(TEST_INSTANCE,getMethod());
                 sresult.sampleStart();
@@ -242,12 +280,18 @@ public class JUnitSampler extends AbstractSampler {
                 // log.info("invoked " + getMethod());
                 if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(TEST_INSTANCE,new Class[0]);
-                    log.info("called tearDown");
                 }
             } catch (InvocationTargetException e) {
                 log.warn(e.getMessage());
+                sresult.setResponseCode(getErrorCode());
+                sresult.setResponseMessage(getError());
             } catch (IllegalAccessException e) {
                 log.warn(e.getMessage());
+                sresult.setResponseCode(getErrorCode());
+                sresult.setResponseMessage(getError());
+            } catch (Exception e) {
+                sresult.setResponseCode(getErrorCode());
+                sresult.setResponseMessage(getError());
             }
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
