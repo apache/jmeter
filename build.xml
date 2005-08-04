@@ -1343,7 +1343,7 @@ some of its classes - at present JMeter can only run from jar files.
    test.headless = ${test.headless}
    user.dir = ${user.dir}
    basedir = ${basedir}
-   test dir = ${build.dir}/test
+   test dir = ${build.test}
    testsaveservice.saveout = ${testsaveservice.saveout}
    </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
@@ -1354,7 +1354,7 @@ some of its classes - at present JMeter can only run from jar files.
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
-      <arg value="${build.dir}/test,../lib/ext"/>
+      <arg value="${build.test},../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
