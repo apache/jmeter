@@ -294,22 +294,23 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 					}
 				}
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			log.debug("", ex);
 			res.setResponseCode("500");
 			res.setResponseMessage(ex.toString());
-		}
-
-		// Calculate response time
-		res.sampleEnd();
-
-		// Set if we were successful or not
-		res.setSuccessful(isSuccessful);
+            closeSocket();
+		} finally {
+    		// Calculate response time
+    		res.sampleEnd();
+    
+    		// Set if we were successful or not
+    		res.setSuccessful(isSuccessful);
+        }
 
 		return res;
 	}
 
-	/**
+    /**
 	 * @param rc
 	 *            response code
 	 * @return whether this represents success or not
@@ -328,8 +329,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
         log.debug("Thread Started");
     }
 
-    public void threadFinished() {
-        log.debug("Thread Finished");
+    private void closeSocket() {
         Map cp = (Map) tp.get();
         Socket con = (Socket) cp.remove(TCPKEY);
         if (con != null) {
@@ -340,6 +340,10 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
                 log.warn("Error closing socket "+e);
             }
         }
+    }
 
+    public void threadFinished() {
+        log.debug("Thread Finished");
+        closeSocket();
     }
 }
