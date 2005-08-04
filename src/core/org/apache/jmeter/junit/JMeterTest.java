@@ -173,11 +173,14 @@ public class JMeterTest extends JMeterTestCase {
 			List components = ((Element) sections.get(i)).getChildren("component");
 			for (int j = 0; j < components.size(); j++) {
 				Element comp = (Element) components.get(j);
-				guiTitles.put(comp.getAttributeValue("name"), Boolean.FALSE);
+                String nm=comp.getAttributeValue("name");
+                if (!nm.equals("SSL Manager")){// Not a true GUI component
+				    guiTitles.put(nm.replace(' ','_'), Boolean.FALSE);
+                }
 			}
 		}
 		// Add titles that don't need to be documented
-		guiTitles.put("Root", Boolean.FALSE);
+		//guiTitles.put("Root", Boolean.FALSE);
 		guiTitles.put("Example Sampler", Boolean.FALSE);
 	}
 
@@ -235,10 +238,6 @@ public class JMeterTest extends JMeterTestCase {
 		while (i.hasNext()) {
 			Object key = i.next();
 			if (!m.get(key).equals(Boolean.TRUE)) {
-				if (key.equals("SSL Manager"))// Not a true GUI component
-				{
-					continue;
-				}
 				if (unseen == 0)// first time
 				{
 					System.out.println("\nNames remaining in " + t + " Map:");
@@ -332,13 +331,13 @@ public class JMeterTest extends JMeterTestCase {
 	 */
 	public void runGUITitle() throws Exception {
 		if (guiTitles.size() > 0) {
-			String title = guiItem.getStaticLabel();
+			String title = guiItem.getDocAnchor();
 			boolean ct = guiTitles.containsKey(title);
 			if (ct)
 				guiTitles.put(title, Boolean.TRUE);// So we can detect extra
 													// entries
 			if (// Is this a work in progress or an internal GUI component?
-			(title.length() > 0) // Will be "" for internal components
+			(title != null && title.length() > 0) // Will be "" for internal components
 					&& (title.toUpperCase().indexOf("(ALPHA") == -1) && (title.toUpperCase().indexOf("(BETA") == -1)
 					&& (!title.equals("Example1")) // Skip the example samplers
 													// ...
