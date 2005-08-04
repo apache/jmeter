@@ -73,6 +73,10 @@ implements ChangeListener, ActionListener
         new JLabeledTextField(
             JMeterUtils.getResString("junit_failure_msg"));
     
+    JLabeledTextField errorMsg =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_error_msg"));
+
     JLabeledTextField successCode =
         new JLabeledTextField(
             JMeterUtils.getResString("junit_success_code"));
@@ -80,6 +84,10 @@ implements ChangeListener, ActionListener
     JLabeledTextField failureCode =
         new JLabeledTextField(
             JMeterUtils.getResString("junit_failure_code"));
+
+    JLabeledTextField errorCode =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_error_code"));
 
     JLabeledTextField filterpkg =
         new JLabeledTextField(
@@ -179,6 +187,8 @@ implements ChangeListener, ActionListener
         panel.add(successCode);
         panel.add(failureMsg);
         panel.add(failureCode);
+        panel.add(errorMsg);
+        panel.add(errorCode);
         panel.add(doSetup);
         return panel;
     }
@@ -241,6 +251,16 @@ implements ChangeListener, ActionListener
             failureMsg.setText(sampler.getFailure());
         } else {
             failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg"));
+        }
+        if (sampler.getError().length() > 0) {
+            errorMsg.setText(sampler.getError());
+        } else {
+            errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg"));
+        }
+        if (sampler.getErrorCode().length() > 0) {
+            errorCode.setText(sampler.getErrorCode());
+        } else {
+            errorCode.setText(JMeterUtils.getResString("junit_error_default_code"));
         }
         doSetup.setSelected(sampler.getDoNotSetUpTearDown());
     }
