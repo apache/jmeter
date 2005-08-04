@@ -54,6 +54,6 @@ public class DynamicClassLoader extends URLClassLoader {
 	}
 
     public void addURL(URL url) {
-        this.addURL(url);
+        super.addURL(url);
     }
 }
