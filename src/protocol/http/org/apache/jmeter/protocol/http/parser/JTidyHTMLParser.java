@@ -111,7 +111,7 @@ class JTidyHTMLParser extends HTMLParser {
 				break;
 			}
 
-			if (name.equalsIgnoreCase("img")) {
+			if (name.equalsIgnoreCase("img") || name.equalsIgnoreCase("embed")) {
 				urls.addURL(getValue(attrs, "src"), baseUrl);
 				break;
 			}
