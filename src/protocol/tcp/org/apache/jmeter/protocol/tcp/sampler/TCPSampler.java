@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,15 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -46,7 +42,7 @@ import org.apache.log.Logger;
  * A sampler which understands Tcp requests.
  * 
  */
-public class TCPSampler extends AbstractSampler implements TestListener {
+public class TCPSampler extends AbstractSampler implements ThreadListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public final static String SERVER = "TCPSampler.server"; //$NON-NLS-1$
@@ -66,9 +62,6 @@ public class TCPSampler extends AbstractSampler implements TestListener {
 	private final static String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
 
 	private final static String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
-
-	private static Set allSockets = new HashSet();// Keep track of connections
-													// to allow close
 
 	// If set, this is the regex that is used to extract the status from the
 	// response
@@ -142,7 +135,6 @@ public class TCPSampler extends AbstractSampler implements TestListener {
 			log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
 			log.debug("Created new connection " + con); //$NON-NLS-1$
 			cp.put(TCPKEY, con);
-			allSockets.add(con);// Save so can be closed
 		} catch (UnknownHostException e) {
 			log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
 			cp.put(ERRKEY, e.toString());
@@ -332,69 +324,22 @@ public class TCPSampler extends AbstractSampler implements TestListener {
 		return true;
 	}
 
-	private void disconnectAll() {
-		synchronized (allSockets) {
-			Iterator i = allSockets.iterator();
-			while (i.hasNext()) {
-				Socket socket = (Socket) i.next();
-				try {
-					socket.close();
-				} catch (IOException e) {
-					log.warn("Error closing socket ", e);
-				} finally {
-					i.remove();
-				}
-			}
-		}
-	}
+    public void threadStarted() {
+        log.debug("Thread Started");
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
-	 */
-	public void testStarted() // Only called once per class?
-	{
-		log.debug(this + " test started");
-	}
+    public void threadFinished() {
+        log.debug("Thread Finished");
+        Map cp = (Map) tp.get();
+        Socket con = (Socket) cp.remove(TCPKEY);
+        if (con != null) {
+            log.debug(this + " Closing connection " + con); //$NON-NLS-1$
+            try {
+                con.close();
+            } catch (IOException e) {
+                log.warn("Error closing socket "+e);
+            }
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
-	 */
-	public void testEnded() // Only called once per class?
-	{
-		log.debug(this + " test ended");
-		disconnectAll();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
-	 */
-	public void testStarted(String host) {
-		log.debug(this + " test started on " + host);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
-	 */
-	public void testEnded(String host) {
-		log.debug(this + " test ended on " + host);
-		disconnectAll();
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-	 */
-	public void testIterationStart(LoopIterationEvent event) {
-		log.debug(this + " test iteration start on " + event.getIteration());
-	}
+    }
 }
