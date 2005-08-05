@@ -59,6 +59,7 @@ implements ChangeListener, ActionListener
     private static final String PREFIX = "test";
     public static final String ONETIMESETUP = "oneTimeSetUp";
     public static final String ONETIMETEARDOWN = "oneTimeTearDown";
+    public static final String SUITE = "suite";
     protected String[] SPATHS = null;
 
     JLabel methodLabel =
@@ -300,7 +301,8 @@ implements ChangeListener, ActionListener
         for (int idx=0; idx < meths.length; idx++){
             if (meths[idx].getName().startsWith(PREFIX) ||
                     meths[idx].getName().equals(ONETIMESETUP) ||
-                    meths[idx].getName().equals(ONETIMETEARDOWN)) {
+                    meths[idx].getName().equals(ONETIMETEARDOWN) ||
+                    meths[idx].getName().equals(SUITE)) {
                 list.add(meths[idx]);
             }
         }
