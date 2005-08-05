@@ -170,7 +170,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		WebServiceSampler sampler = (WebServiceSampler) s;
 		this.configureTestElement(sampler);
 		sampler.setDomain(domain.getText());
-		sampler.setPort(80);
+		sampler.setProperty(HTTPSamplerBase.PORT,port.getText());
 		sampler.setPath(path.getText());
 		sampler.setWsdlURL(wsdlField.getText());
 		sampler.setMethod(HTTPSamplerBase.POST);
@@ -280,12 +280,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		WebServiceSampler sampler = (WebServiceSampler) el;
 		wsdlField.setText(sampler.getWsdlURL());
 		domain.setText(sampler.getDomain());
-		String portstring = sampler.getPropertyAsString(HTTPSamplerBase.PORT);
-		if (portstring.equals("" + HTTPSamplerBase.UNSPECIFIED_PORT)) {
-			port.setText("");
-		} else {
-			port.setText(portstring);
-		}
+        port.setText(sampler.getPropertyAsString(HTTPSamplerBase.PORT));
 		path.setText(sampler.getPath());
 		soapAction.setText(sampler.getSoapAction());
 		soapXml.setText(sampler.getXmlData());
