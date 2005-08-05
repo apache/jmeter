@@ -1057,8 +1057,8 @@ some of its classes - at present JMeter can only run from jar files.
 
   <!-- Used by project jakarta-jmeter-test -->
   <target name="gump-test" 
-      depends="_gump_properties,_test"
-      description="Test JMeter">
+      depends="_gump_properties,compile-tests,_test"
+      description="Test JMeter in Gump">
     <!-- Show the log file -->
     <concat>
       <filelist dir="bin" files="jmeter-test.log" />
