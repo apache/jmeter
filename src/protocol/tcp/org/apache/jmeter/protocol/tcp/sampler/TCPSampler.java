@@ -59,10 +59,6 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 	public final static String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
-	private final static String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
-
-	private final static String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
-
 	// If set, this is the regex that is used to extract the status from the
 	// response
 	// NOT implemented yet private final static String STATUS_REGEX =
@@ -98,7 +94,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 		}
 	}
 
-	/** the cache of TCP Connections */
+	/*
+     * The cache of TCP Connections - key is "hostname:port".
+     * The hostname is used as-is - no case conversion is done.
+     * This allows for more than one connection to a single host if required. 
+     */
 	private static ThreadLocal tp = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
@@ -106,6 +106,13 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	};
 
 	private transient TCPClient protocolHandler;
+    
+    private transient String hashKey=null; // key for cache
+    
+    // Must save host details in case need to re-establish connection
+    private transient String hostName=null;
+    private transient int portNumber=-1;
+    private transient Exception except=null; // Used to pass back error from getSocket()
 
 	public TCPSampler() {
 		log.debug("Created " + this);
@@ -113,14 +120,16 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 		log.debug("Using Protocol Handler: " + protocolHandler.getClass().getName());
 	}
 
-	private String getError() {
-		Map cp = (Map) tp.get();
-		return (String) cp.get(ERRKEY);
-	}
-
 	private Socket getSocket() {
+        // Is this the first call? If so, set up the socket details
+        if (hashKey == null){
+            hostName = getServer();
+            portNumber = getPort();
+            hashKey=hostName + ":" + portNumber;
+            log.debug("Initialising socket "+hashKey);
+        }
 		Map cp = (Map) tp.get();
-		Socket con = (Socket) cp.get(TCPKEY);
+		Socket con = (Socket) cp.get(hashKey);
 		if (con != null) {
 			log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
 			return con;
@@ -128,19 +137,19 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 		// Not in cache, so create new one and cache it
 		try {
-			con = new Socket(getServer(), getPort());
+			con = new Socket(hostName, portNumber);
 			con.setSoTimeout(getTimeout());
 			con.setTcpNoDelay(getNoDelay());
 
 			log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
 			log.debug("Created new connection " + con); //$NON-NLS-1$
-			cp.put(TCPKEY, con);
+			cp.put(hashKey, con);
 		} catch (UnknownHostException e) {
 			log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
-			cp.put(ERRKEY, e.toString());
+            except=e;
 		} catch (IOException e) {
 			log.warn("Could not create socket for " + getLabel(), e); //$NON-NLS-1$
-			cp.put(ERRKEY, e.toString());
+            except=e;
 		}
 		return con;
 	}
@@ -260,7 +269,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 			Socket sock = getSocket();
 			if (sock == null) {
 				res.setResponseCode("500");
-				res.setResponseMessage(getError());
+				res.setResponseMessage(except.toString());
 			} else {
 				InputStream is = sock.getInputStream();
 				OutputStream os = sock.getOutputStream();
@@ -295,7 +304,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 				}
 			}
 		} catch (IOException ex) {
-			log.debug("", ex);
+			log.debug(getName(), ex);
 			res.setResponseCode("500");
 			res.setResponseMessage(ex.toString());
             closeSocket();
@@ -326,24 +335,25 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	}
 
     public void threadStarted() {
-        log.debug("Thread Started");
+        log.debug(getName() + " Thread Started");
     }
 
     private void closeSocket() {
         Map cp = (Map) tp.get();
-        Socket con = (Socket) cp.remove(TCPKEY);
+        if (hashKey==null) return;
+        Socket con = (Socket) cp.remove(hashKey);
         if (con != null) {
-            log.debug(this + " Closing connection " + con); //$NON-NLS-1$
+            log.debug(getName()+" Closing socket for " + hashKey); //$NON-NLS-1$
             try {
                 con.close();
             } catch (IOException e) {
-                log.warn("Error closing socket "+e);
+                log.warn(getName()+" Error closing socket for "+hashKey+" "+e);  //$NON-NLS-1$
             }
         }
     }
 
     public void threadFinished() {
-        log.debug("Thread Finished");
+        log.debug(getName()+" Thread Finished");
         closeSocket();
     }
 }
