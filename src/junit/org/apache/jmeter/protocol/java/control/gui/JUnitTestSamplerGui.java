@@ -62,6 +62,10 @@ implements ChangeListener, ActionListener
     public static final String SUITE = "suite";
     protected String[] SPATHS = null;
 
+    JLabeledTextField constructorLabel =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_constructor_string"));
+
     JLabel methodLabel =
         new JLabel(
             JMeterUtils.getResString("junit_test_method"));
@@ -180,6 +184,7 @@ implements ChangeListener, ActionListener
         if (classnameCombo != null){
             panel.add(classnameCombo);
         }
+        panel.add(constructorLabel);
         panel.add(methodLabel);
         if (methodName != null){
             panel.add(methodName);
@@ -212,6 +217,7 @@ implements ChangeListener, ActionListener
                 classnameCombo.getSelectedItem() instanceof String) {
             sampler.setClassname((String)classnameCombo.getSelectedItem());
         }
+        sampler.setConstructorString(constructorLabel.getText());
         if (methodName.getSelectedItem() != null) {
             Object mobj = methodName.getSelectedItem();
             sampler.setMethod((String)mobj);
@@ -233,6 +239,7 @@ implements ChangeListener, ActionListener
         instantiateClass();
         methodName.setSelectedItem(sampler.getMethod());
         filterpkg.setText(sampler.getFilterString());
+        constructorLabel.setText(sampler.getConstructorString());
         if (sampler.getSuccessCode().length() > 0) {
             successCode.setText(sampler.getSuccessCode());
         } else {
@@ -270,7 +277,7 @@ implements ChangeListener, ActionListener
         String className =
             ((String) classnameCombo.getSelectedItem());
         if (className != null) {
-            TESTCLASS = (TestCase)JUnitSampler.getClassInstance(className);
+            TESTCLASS = (TestCase)JUnitSampler.getClassInstance(className,"");
             if (TESTCLASS == null) {
                 clearMethodCombo();
             }
