@@ -34,9 +34,9 @@ import org.apache.log.Logger;
  * @author pete
  *
  * This is a basic implementation that runs a single test method of
- * a JUnit test case. The current implementation doesn't support
- * oneTimeSetUp yet. Still need to think about that more thoroughly
- * and decide how it should be called.
+ * a JUnit test case. The current implementation will use the string
+ * constructor first. If the test class does not declare a string
+ * constructor, the sampler will try empty constructor.
  */
 public class JUnitSampler extends AbstractSampler {
 
@@ -45,6 +45,7 @@ public class JUnitSampler extends AbstractSampler {
      * user.
      */
     public static final String CLASSNAME = "junitSampler.classname";
+    public static final String CONSTRUCTORSTRING = "junitsampler.constructorstring";
     public static final String METHOD = "junitsampler.method";
     public static final String ERROR = "junitsampler.error";
     public static final String ERRORCODE = "junitsampler.error.code";
@@ -107,6 +108,25 @@ public class JUnitSampler extends AbstractSampler {
     public String getClassname()
     {
         return getPropertyAsString(CLASSNAME);
+    }
+    
+    /**
+     * Set the string label used to create an instance of the
+     * test with the string constructor.
+     * @param constr
+     */
+    public void setConstructorString(String constr)
+    {
+        setProperty(CONSTRUCTORSTRING,constr);
+    }
+    
+    /**
+     * get the string passed to the string constructor
+     * @return
+     */
+    public String getConstructorString()
+    {
+        return getPropertyAsString(CONSTRUCTORSTRING);
     }
     
     /**
@@ -257,13 +277,19 @@ public class JUnitSampler extends AbstractSampler {
 	 */
 	public SampleResult sample(Entry entry) {
 		SampleResult sresult = new SampleResult();
-        sresult.setSampleLabel(JUnitSampler.class.getName());
+        String rlabel = null;
+        if (getConstructorString().length() > 0) {
+            rlabel = getConstructorString();
+        } else {
+            rlabel = JUnitSampler.class.getName();
+        }
+        sresult.setSampleLabel(rlabel);
         sresult.setSamplerData(getClassname() + "." + getMethod());
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
         // test run
         if (this.TEST_INSTANCE == null) {
-            this.TEST_INSTANCE = (TestCase)getClassInstance(this.getClassname());
+            this.TEST_INSTANCE = (TestCase)getClassInstance(getClassname(),rlabel);
         }
         if (this.TEST_INSTANCE != null){
             initMethodObjects(this.TEST_INSTANCE);
@@ -282,11 +308,11 @@ public class JUnitSampler extends AbstractSampler {
                     TDOWN_METHOD.invoke(TEST_INSTANCE,new Class[0]);
                 }
             } catch (InvocationTargetException e) {
-                log.warn(e.getMessage());
+                // log.warn(e.getMessage());
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
             } catch (IllegalAccessException e) {
-                log.warn(e.getMessage());
+                // log.warn(e.getMessage());
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
             } catch (Exception e) {
@@ -324,12 +350,12 @@ public class JUnitSampler extends AbstractSampler {
      * warning level.
      * @return
      */
-    public static Object getClassInstance(String className){
+    public static Object getClassInstance(String className, String label){
         Object testclass = null;
         if (className != null){
             Constructor con = null;
-            Class clazz = null;
             Class theclazz = null;
+            Object[] params = null;
             try
             {
                 theclazz = Class.forName(
@@ -338,41 +364,39 @@ public class JUnitSampler extends AbstractSampler {
                             Thread.currentThread().getContextClassLoader()
                         );
             } catch (ClassNotFoundException e) {
-                log.warn(e.getMessage());
+                log.warn("ClassNotFoundException:: " + e.getMessage());
             }
             if (theclazz != null) {
+                // first we see if the class declares a string
+                // constructor. if it is doesn't we look for
+                // empty constructor.
                 try {
-                    con = theclazz.getDeclaredConstructor(new Class[0]);
-                    if (con != null){
-                        testclass = (TestCase)theclazz.newInstance();
-                    }
+                    con = theclazz.getDeclaredConstructor(
+                            new Class[] {String.class});
+                    params = new Object[]{label};
                 } catch (NoSuchMethodException e) {
-                    log.info(e.getMessage());
+                    log.info("String constructor:: " + e.getMessage());
+                }
+                if (con == null ){
+                    try {
+                        con = theclazz.getDeclaredConstructor(new Class[0]);
+                        if (con != null){
+                            params = new Object[]{};
+                        }
+                    } catch (NoSuchMethodException e) {
+                        log.info("Empty constructor:: " + e.getMessage());
+                    }
+                }
+                try {
+                    if (con != null){
+                        testclass = (TestCase)con.newInstance(params);
+                    }
+                } catch (InvocationTargetException e) {
+                    log.warn(e.getMessage());
                 } catch (InstantiationException e) {
                     log.info(e.getMessage());
                 } catch (IllegalAccessException e) {
                     log.info(e.getMessage());
-                }
-                // only if we weren't able to create an instance of the class
-                // with a null constructor do we try to create one with the
-                // string constructor.
-                if (testclass == null ){
-                    try {
-                        Constructor con2 = theclazz.getDeclaredConstructor(
-                                new Class[] {String.class});
-                        if (con2 != null){
-                            Object[] pm = {className};
-                            testclass = (TestCase)con2.newInstance(pm);
-                        }
-                    } catch (NoSuchMethodException e) {
-                        log.info(e.getMessage());
-                    } catch (InvocationTargetException e) {
-                        log.warn(e.getMessage());
-                    } catch (IllegalAccessException e) {
-                        log.info(e.getMessage());
-                    } catch (InstantiationException e) {
-                        log.info(e.getMessage());
-                    }
                 }
             }
         }
