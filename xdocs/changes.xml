@@ -55,6 +55,7 @@
 <li>How-to for JMS samplers</li>
 <li>Bug 35525 - Added Spanish localisation</li>
 <li>Bug 30379 - allow server.rmi.port to be overridden</li>
+<li>CSVRead - allow "next" to be appended to column number</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>

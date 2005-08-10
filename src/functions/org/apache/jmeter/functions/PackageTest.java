@@ -71,6 +71,19 @@ public class PackageTest extends JMeterTestCase {
 		return cr;
 	}
 
+	// Create the CSVRead function and set its parameters.
+	private static CSVRead setParams(String p1, String p2, String p3, String p4) throws Exception {
+		CSVRead cr = new CSVRead();
+		Collection parms = new LinkedList();
+		parms.add(new CompoundVariable(p1));
+		parms.add(new CompoundVariable(p2));
+		parms.add(new CompoundVariable(p3));
+		if (p4 != null)
+			parms.add(new CompoundVariable(p4));
+		cr.setParameters(parms);
+		return cr;
+	}
+
 	// Create the StringFromFile function and set its parameters.
 	private static StringFromFile SFFParams(String p1, String p2, String p3, String p4) throws Exception {
 		StringFromFile sff = new StringFromFile();
@@ -379,7 +392,7 @@ public class PackageTest extends JMeterTestCase {
 	}
 
 	// Function objects to be tested
-	private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
+	private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6, cr7;
 
 	// Helper class used to implement co-routine between two threads
 	private static class Baton {
@@ -488,22 +501,29 @@ public class PackageTest extends JMeterTestCase {
 		assertEquals("", cr6.execute(null, null));
 		assertEquals("a2", cr5.execute(null, null));
 
+		assertEquals("b2", cr7.execute(null, null));
+		assertEquals("b3", cr7.execute(null, null));
 	}
 
 	public void CSVParams() throws Exception {
 		try {
 			setParams(null, null);
-			fail("Should have failed");
-		} catch (InvalidVariableException e) {
-		}
-		try {
-			setParams(null, "");
-			fail("Should have failed");
+			fail("Should have failed with 0 params");
 		} catch (InvalidVariableException e) {
 		}
 		try {
 			setParams("", null);
-			fail("Should have failed");
+			fail("Should have failed with 1 param");
+		} catch (InvalidVariableException e) {
+		}
+		try {
+			setParams("", "","",null);
+			fail("Should have failed with 3 params");
+		} catch (InvalidVariableException e) {
+		}
+		try {
+			setParams("", "","","");
+			fail("Should have failed with 4 params");
 		} catch (InvalidVariableException e) {
 		}
 	}
@@ -515,6 +535,7 @@ public class PackageTest extends JMeterTestCase {
 		cr4 = setParams("testfiles/test.csv", "next");
 		cr5 = setParams("", "0");
 		cr6 = setParams("", "next");
+		cr7 = setParams("testfiles/test.csv", "1next");
 	}
 
 	public void CSValias() throws Exception {
