@@ -112,6 +112,13 @@ public class CSVRead extends AbstractFunction implements Serializable {
 			return "";
 		}
 
+		boolean getNext = false;// Should we get the next line after this column?
+		int idxNext;
+		if ((idxNext=columnOrNext.indexOf("next"))!=-1) {
+			getNext=true;
+			columnOrNext=columnOrNext.substring(0,idxNext);
+		}
+
 		try {
 			int columnIndex = Integer.parseInt(columnOrNext); // what column
 																// is wanted?
@@ -126,6 +133,9 @@ public class CSVRead extends AbstractFunction implements Serializable {
 
 		log.debug("execute value: " + myValue);
 
+		if (getNext) {
+			FileWrapper.endRow(fileName);
+		}
 		return myValue;
 	}
 

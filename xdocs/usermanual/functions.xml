@@ -335,19 +335,22 @@ Examples:<br/>
 	</p>
 	<p>
 	Each thread has its own internal pointer to its current row in the file array.
-	When a thread first refers to the file it will be allocated the next free row in
+	When a thread first refers to the file (or uses next) it will be allocated the next unread row in
 	the array, so each thread will access a different row from all other threads.
-	[Unless there are more threads than there are rows in the array.]
+	When the end of the file is reached, it starts from the beginning again.
 	</p>
 </description>
 
 <properties>
         <property name="File Name" required="Yes">The file (or *ALIAS) to read from</property>
         <property name="Column number" required="Yes">
-        	The column number in the file.
-        	0 = first column, 1 = second etc.
-        	"next" - go to next line of file.
-        	*ALIAS - open a file and assign it to the alias
+        	The column number in the file:
+        	<ul>
+        	<li>0 = first column, 1 = second etc.</li>
+        	<li>next or next() - go to next unread line of file.</li>
+        	<li>3next - extract 4th column, and go to next unread line of file.</li>
+        	<li>*ALIAS - open a file and assign it to the alias</li>
+        	</ul>
         	</property>
 </properties>
 </component>
