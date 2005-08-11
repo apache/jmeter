@@ -48,6 +48,7 @@ import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.LinkTagTag;
 import org.htmlparser.tags.ScriptTag;
+import org.htmlparser.tags.Tag;
 import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
@@ -165,7 +166,13 @@ class HtmlParserHTMLParser extends HTMLParser {
 				} else if (node instanceof BgSoundTag) {
 					BgSoundTag script = (BgSoundTag) node;
 					binUrlStr = script.getAttribute("src");
-				}
+                } else if (node instanceof Tag) {
+                    Tag tag = (Tag) node;
+                    String tagname=tag.getTagName();
+                    if (tagname.equalsIgnoreCase("EMBED")){
+                        binUrlStr = tag.getAttribute("src");  
+                    }
+                }
 
 				if (binUrlStr == null) {
 					continue;
