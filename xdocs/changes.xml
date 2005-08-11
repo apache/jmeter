@@ -82,6 +82,8 @@
 <li>Fixed webservice sampler so it works with user defined variables</li>
 <li>Fixed screen borders for LDAP config GUI elements</li>
 <li>Bug 31184 - make sure encoding is specified in JDBC sampler</li>
+<li>TCP sampler - only share sockets with same host:port details; correct the manual</li>
+<li>Extract src attribute for embed tags in JTidy and Html Parsers</li>
 </ul>	
 	
 <h3>Version 2.0.3</h3>
