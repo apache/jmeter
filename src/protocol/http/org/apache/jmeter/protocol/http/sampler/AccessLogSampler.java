@@ -295,6 +295,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean {
 					if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {
 						initFilter();
 						s.filter = (Filter) ((TestCloneable) filter).clone();
+                        instantiateParser();
 					}
 				} catch (Exception e) {
 					log.warn("Could not clone cloneable filter", e);
