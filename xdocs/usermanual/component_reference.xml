@@ -80,6 +80,9 @@ JMeter assumes the FTP server is listening on the default port.</property>
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
+        <p>There are two versions of the sampler
+         - one uses the default Java HTTP implementation, the other uses Commons HttpClient</p>
+         
         <p>If the request requires a login authorization, you will also have to add an
         <complink name="HTTP Authorization Manager"/>
         Configuration Element. And, if the request uses cookies, then you will also need an
@@ -614,8 +617,15 @@ TBC
 		<p>
 		The TCP Sampler opens a TCP/IP connection to the specified server.
 		It then sends the text, and waits for a response.
-		Once established, the same connection is re-used by the Sampler that created it.
-		Connections are not shared between Samplers, even in the same thread.
+		<br></br>
+		Connections are shared between Samplers in the same thread, provided that the exact
+		same host name string and port are used.
+		To force a different socket to be used, change the hostname by changing the case
+		of one of the letters, e.g. www.apache.org and wWw.apache.org will use different
+		sockets.
+		<br></br>
+		If an error is detected, the socket is closed. 
+		Another socket will be reopened on the next sample.
 		<br></br>
 		The following properties can be used to control its operation:
 		</p>
