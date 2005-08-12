@@ -37,7 +37,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -57,8 +56,6 @@ import org.apache.jmeter.gui.action.GlobalMouseListener;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jmeter.samplers.Remoteable;
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -70,19 +67,7 @@ import org.apache.jorphan.gui.ComponentUtil;
  * @author Michael Stover
  * @version $Revision$
  */
-public class MainFrame extends JFrame implements TestListener, Remoteable {
-
-	/** The menu bar. */
-	private JMeterMenuBar menuBar;
-
-	/** The main panel where components display their GUIs. */
-	private JScrollPane mainPanel;
-
-	/** The panel where the test tree is shown. */
-	private JScrollPane treePanel;
-
-	/** The test tree. */
-	private JTree tree;
+public class ReportMainFrame extends MainFrame {
 
 	/** An image which is displayed when a test is running. */
 	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
@@ -92,12 +77,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
 	/** The button used to display the running/stopped image. */
 	private JButton runningIndicator;
-
-	/** The x coordinate of the last location where a component was dragged. */
-	private int previousDragXLocation = 0;
-
-	/** The y coordinate of the last location where a component was dragged. */
-	private int previousDragYLocation = 0;
 
 	/** The set of currently running hosts. */
 	private Set hosts = new HashSet();
@@ -115,28 +94,16 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @param treeListener
 	 *            the listener for the test tree
 	 */
-	public MainFrame(ActionListener actionHandler, TreeModel treeModel, JMeterTreeListener treeListener) {
-		// TODO: actionHandler isn't used -- remove it from the parameter list
-		// this.actionHandler = actionHandler;
-
-		// TODO: Make the running indicator its own class instead of a JButton
-		runningIndicator = new JButton(stoppedIcon);
-		runningIndicator.setMargin(new Insets(0, 0, 0, 0));
-		runningIndicator.setBorder(BorderFactory.createEmptyBorder());
-
-		tree = makeTree(treeModel, treeListener);
-
-		GuiPackage.getInstance().setMainFrame(this);
-		init();
-
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+	public ReportMainFrame(ActionListener actionHandler, TreeModel treeModel,
+            JMeterTreeListener treeListener) {
+        super(actionHandler,treeModel,treeListener);
 	}
 
 	/**
 	 * Default constructor for the JMeter frame. This constructor will not
 	 * properly initialize the tree, so don't use it.
 	 */
-	public MainFrame() {
+	public ReportMainFrame() {
 		// TODO: Can we remove this constructor? JMeter won't behave properly
 		// if it used.
 	}
@@ -152,7 +119,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setFileLoadEnabled(boolean enabled) {
-		menuBar.setFileLoadEnabled(enabled);
+        super.setFileLoadEnabled(enabled);
 	}
 
 	/**
@@ -162,7 +129,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setFileSaveEnabled(boolean enabled) {
-		menuBar.setFileSaveEnabled(enabled);
+		super.setFileSaveEnabled(enabled);
 	}
 
 	/**
@@ -172,7 +139,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            the new Edit menu
 	 */
 	public void setEditMenu(JPopupMenu menu) {
-		menuBar.setEditMenu(menu);
+		super.setEditMenu(menu);
 	}
 
 	/**
@@ -182,7 +149,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditEnabled(boolean enabled) {
-		menuBar.setEditEnabled(enabled);
+		super.setEditEnabled(enabled);
 	}
 
 	/**
@@ -192,7 +159,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            the new Edit|Add menu
 	 */
 	public void setEditAddMenu(JMenu menu) {
-		menuBar.setEditAddMenu(menu);
+		super.setEditAddMenu(menu);
 	}
 
 	/**
@@ -202,7 +169,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditAddEnabled(boolean enabled) {
-		menuBar.setEditAddEnabled(enabled);
+		super.setEditAddEnabled(enabled);
 	}
 
 	/**
@@ -212,59 +179,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditRemoveEnabled(boolean enabled) {
-		menuBar.setEditRemoveEnabled(enabled);
-	}
-
-	/**
-	 * Close the currently selected menu.
-	 */
-	public void closeMenu() {
-		if (menuBar.isSelected()) {
-			MenuElement[] menuElement = menuBar.getSubElements();
-			if (menuElement != null) {
-				for (int i = 0; i < menuElement.length; i++) {
-					JMenu menu = (JMenu) menuElement[i];
-					if (menu.isSelected()) {
-						menu.setPopupMenuVisible(false);
-						menu.setSelected(false);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Show a dialog indicating that JMeter threads are stopping on a particular
-	 * host.
-	 * 
-	 * @param host
-	 *            the host where JMeter threads are stopping
-	 */
-	public void showStoppingMessage(String host) {
-		stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true);
-		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host);
-		stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		stoppingMessage.getContentPane().add(stopLabel);
-		stoppingMessage.pack();
-		ComponentUtil.centerComponentInComponent(this, stoppingMessage);
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				if (stoppingMessage != null) {
-					stoppingMessage.show();
-				}
-			}
-		});
-	}
-
-	/***************************************************************************
-	 * !ToDo (Method description)
-	 * 
-	 * @param comp
-	 *            !ToDo (Parameter description)
-	 **************************************************************************/
-	public void setMainPanel(JComponent comp) {
-		mainPanel.setViewportView(comp);
+		super.setEditRemoveEnabled(enabled);
 	}
 
 	/***************************************************************************
@@ -273,63 +188,50 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @return !ToDo (Return description)
 	 **************************************************************************/
 	public JTree getTree() {
-		return tree;
+		return super.getTree();
 	}
 
 	// TestListener implementation
 
 	/**
-	 * Called when a test is started on the local system. This implementation
-	 * sets the running indicator and ensures that the menubar is enabled and in
-	 * the running state.
+	 * Not sure if this should be in the ReportMainFrame, since the
+     * report component doesn't really test, it generates reports. for
+     * now, I will use it to trigger reporting. Later we can refactor
+     * MainFrame and create an abstract base class.
 	 */
 	public void testStarted() {
-		testStarted("local");
-		menuBar.setEnabled(true);
+        
+        // super.testStarted();
 	}
 
 	/**
-	 * Called when a test is started on a specific host. This implementation
-	 * sets the running indicator and ensures that the menubar is in the running
-	 * state.
-	 * 
-	 * @param host
-	 *            the host where the test is starting
+     * Not sure if this should be in the ReportMainFrame, since the
+     * report component doesn't really test, it generates reports. for
+     * now, I will use it to trigger reporting. Later we can refactor
+     * MainFrame and create an abstract base class.
 	 */
 	public void testStarted(String host) {
-		hosts.add(host);
-		runningIndicator.setIcon(runningIcon);
-		menuBar.setRunning(true, host);
+        // super.testStarted(host);
 	}
 
 	/**
-	 * Called when a test is ended on the local system. This implementation
-	 * disables the menubar, stops the running indicator, and closes the
-	 * stopping message dialog.
+     * Not sure if this should be in the ReportMainFrame, since the
+     * report component doesn't really test, it generates reports. for
+     * now, I will use it to trigger reporting. Later we can refactor
+     * MainFrame and create an abstract base class.
 	 */
 	public void testEnded() {
-		testEnded("local");
-		menuBar.setEnabled(false);
+        // super.testEnded();
 	}
 
 	/**
-	 * Called when a test is ended on the remote system. This implementation
-	 * stops the running indicator and closes the stopping message dialog.
-	 * 
-	 * @param host
-	 *            the host where the test is ending
+     * Not sure if this should be in the ReportMainFrame, since the
+     * report component doesn't really test, it generates reports. for
+     * now, I will use it to trigger reporting. Later we can refactor
+     * MainFrame and create an abstract base class.
 	 */
 	public void testEnded(String host) {
-		hosts.remove(host);
-		if (hosts.size() == 0) {
-			runningIndicator.setIcon(stoppedIcon);
-			JMeterContextService.endTest();
-		}
-		menuBar.setRunning(false, host);
-		if (stoppingMessage != null) {
-			stoppingMessage.dispose();
-			stoppingMessage = null;
-		}
+        // super.testEnded(host);
 	}
 
 	/* Implements TestListener#testIterationStart(LoopIterationEvent) */
@@ -340,6 +242,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * Create the GUI components and layout.
 	 */
 	protected void init() {
+        super.init();
+        /**
 		menuBar = new JMeterMenuBar();
 		setJMenuBar(menuBar);
 
@@ -363,7 +267,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
 		addMouseListener(new GlobalMouseListener());
-	}
+	    */
+    }
 
 	/**
 	 * Create the JMeter tool bar pane containing the running indicator.
@@ -371,11 +276,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @return a panel containing the running indicator
 	 */
 	protected Component createToolBar() {
-		Box toolPanel = new Box(BoxLayout.X_AXIS);
-		toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
-		toolPanel.add(Box.createGlue());
-		toolPanel.add(runningIndicator);
-		return toolPanel;
+        return super.createToolBar();
 	}
 
 	/**
@@ -385,9 +286,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @return a scroll pane containing the test tree GUI
 	 */
 	protected JScrollPane createTreePanel() {
-		JScrollPane treeP = new JScrollPane(tree);
-		treeP.setMinimumSize(new Dimension(100, 0));
-		return treeP;
+		return super.createTreePanel();
 	}
 
 	/**
@@ -396,7 +295,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @return the main scroll pane
 	 */
 	protected JScrollPane createMainPanel() {
-		return new JScrollPane();
+		return super.createMainPanel();
 	}
 
 	/**
@@ -424,51 +323,4 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		return treevar;
 	}
 
-	/**
-	 * Create the tree cell renderer used to draw the nodes in the test tree.
-	 * 
-	 * @return a renderer to draw the test tree nodes
-	 */
-	protected TreeCellRenderer getCellRenderer() {
-		DefaultTreeCellRenderer rend = new JMeterCellRenderer();
-		rend.setFont(new Font("Dialog", Font.PLAIN, 11));
-		return rend;
-	}
-
-	/**
-	 * Repaint pieces of the GUI as needed while dragging. This method should
-	 * only be called from the Swing event thread.
-	 * 
-	 * @param dragIcon
-	 *            the component being dragged
-	 * @param x
-	 *            the current mouse x coordinate
-	 * @param y
-	 *            the current mouse y coordinate
-	 */
-	public void drawDraggedComponent(Component dragIcon, int x, int y) {
-		Dimension size = dragIcon.getPreferredSize();
-		treePanel.paintImmediately(previousDragXLocation, previousDragYLocation, size.width, size.height);
-		this.getLayeredPane().setLayer(dragIcon, 400);
-		SwingUtilities.paintComponent(treePanel.getGraphics(), dragIcon, treePanel, x, y, size.width, size.height);
-		previousDragXLocation = x;
-		previousDragYLocation = y;
-	}
-
-	/**
-	 * A window adapter used to detect when the main JMeter frame is being
-	 * closed.
-	 */
-	protected class WindowHappenings extends WindowAdapter {
-		/**
-		 * Called when the main JMeter frame is being closed. Sends a
-		 * notification so that JMeter can react appropriately.
-		 * 
-		 * @param event
-		 *            the WindowEvent to handle
-		 */
-		public void windowClosing(WindowEvent event) {
-			ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), "exit"));
-		}
-	}
 }
