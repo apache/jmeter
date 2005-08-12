@@ -184,6 +184,7 @@ implements ChangeListener, ActionListener
         if (classnameCombo != null){
             panel.add(classnameCombo);
         }
+        constructorLabel.setText("");
         panel.add(constructorLabel);
         panel.add(methodLabel);
         if (methodName != null){
@@ -277,7 +278,8 @@ implements ChangeListener, ActionListener
         String className =
             ((String) classnameCombo.getSelectedItem());
         if (className != null) {
-            TESTCLASS = (TestCase)JUnitSampler.getClassInstance(className,"");
+            TESTCLASS = (TestCase)JUnitSampler.getClassInstance(className,
+                    constructorLabel.getText());
             if (TESTCLASS == null) {
                 clearMethodCombo();
             }
