@@ -132,4 +132,10 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 	public String getVarName() {
 		return getPropertyAsString(VAR_NAME);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void iterationEnd(LoopIterationEvent iterEvent) {
+	}
 }

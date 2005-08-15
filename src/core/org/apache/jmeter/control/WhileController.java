@@ -111,13 +111,13 @@ public class WhileController extends GenericController implements Serializable {
 	 * distinguish this from previous failure *inside* loop
 	 * 
 	 */
-	public Sampler next() {
+	public Sampler doNext() {
 		if (current != 0) { // in the middle of the loop
-			return super.next();
+			return super.doNext();
 		}
 		// Must be start of loop
 		if (!endOfLoop(false)) {
-			return super.next(); // OK to continue
+			return super.doNext(); // OK to continue
 		} else {
 			reInitialize(); // Don't even start the loop
 			return null;

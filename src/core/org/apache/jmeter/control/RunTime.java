@@ -77,7 +77,7 @@ public class RunTime extends GenericController implements Serializable {
 		return System.currentTimeMillis() - startTime >= 1000 * getRuntime();
 	}
 
-	public Sampler next() {
+	public Sampler doNext() {
 		if (startTime == 0)
 			startTime = System.currentTimeMillis();
 		if (endOfLoop()) {
@@ -85,7 +85,7 @@ public class RunTime extends GenericController implements Serializable {
 			resetLoopCount();
 			return null;
 		}
-		return super.next();
+		return super.doNext();
 	}
 
 	/*
@@ -99,7 +99,7 @@ public class RunTime extends GenericController implements Serializable {
 			resetLoopCount();
 			return null;
 		} else {
-			return next();
+			return doNext();
 		}
 	}
 

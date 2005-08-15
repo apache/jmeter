@@ -20,4 +20,5 @@ package org.apache.jmeter.engine.event;
 
 public interface LoopIterationListener {
 	public void iterationStart(LoopIterationEvent iterEvent);
+	public void iterationEnd(LoopIterationEvent iterEvent);
 }
