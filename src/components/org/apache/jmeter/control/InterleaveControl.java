@@ -79,12 +79,12 @@ public class InterleaveControl extends GenericController implements Serializable
 	 * 
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
-	public Sampler next() {
+	public Sampler doNext() {
 		if (isSkipNext()) {
 			reInitialize();
 			return null;
 		}
-		return super.next();
+		return super.doNext();
 	}
 
 	/*
@@ -96,7 +96,7 @@ public class InterleaveControl extends GenericController implements Serializable
 		Sampler sampler = controller.next();
 		if (sampler == null) {
 			currentReturnedNull(controller);
-			return next();
+			return doNext();
 		} else {
 			currentReturnedAtLeastOne = true;
 			if (getStyle() == IGNORE_SUB_CONTROLLERS) {
@@ -128,7 +128,7 @@ public class InterleaveControl extends GenericController implements Serializable
 	 */
 	protected Sampler nextIsNull() {
 		resetCurrent();
-		return next();
+		return doNext();
 	}
 
 	/*

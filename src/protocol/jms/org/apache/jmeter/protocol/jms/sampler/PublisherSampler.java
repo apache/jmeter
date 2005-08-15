@@ -148,7 +148,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 			}
 			result.sampleEnd();
 			String content = this.BUFFER.toString();
-			result.setBytes(content.getBytes().length);
+			result.setContentLength(content.getBytes().length);
 			result.setResponseCode("message published successfully");
 			result.setResponseMessage(loop + " messages published");
 			result.setSuccessful(true);

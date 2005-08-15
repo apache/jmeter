@@ -159,6 +159,12 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void iterationEnd(LoopIterationEvent iterEvent) {
+	}
+
 	/*
 	 * (non-Javadoc) A new instance is created for each thread group, and the
 	 * clone() method is then called to create copies for each thread in a

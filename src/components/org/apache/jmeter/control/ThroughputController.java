@@ -199,9 +199,9 @@ public class ThroughputController extends GenericController implements Serializa
 	/**
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
-	public Sampler next() {
+	public Sampler doNext() {
 		if (runThisTime) {
-			return super.next();
+			return super.doNext();
 		}
 		return null;
 	}
@@ -270,6 +270,13 @@ public class ThroughputController extends GenericController implements Serializa
 			if (runThisTime)
 				increaseExecutions();
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void iterationEnd(LoopIterationEvent iterEvent) {
+		
 	}
 
 	/*

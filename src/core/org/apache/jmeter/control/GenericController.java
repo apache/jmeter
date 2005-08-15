@@ -82,9 +82,16 @@ public class GenericController extends AbstractTestElement implements Controller
 	/**
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
-	public Sampler next() {
+	public final Sampler next() {
 		fireIterEvents();
 		log.debug("Calling next on: " + this.getClass().getName());
+		Sampler returnValue = doNext();
+		fireIterEvents(returnValue);
+		return returnValue;
+	}
+	
+	protected Sampler doNext()
+	{
 		if (isDone())
 			return null;
 		Sampler returnValue = null;
@@ -218,6 +225,14 @@ public class GenericController extends AbstractTestElement implements Controller
 			first = false;
 		}
 	}
+	
+	protected void fireIterEvents(Object sampler)
+	{
+		if(sampler == null)
+		{
+			fireIterationEnd();
+		}
+	}
 
 	protected void fireIterationStart() {
 		Iterator iter = iterationListeners.iterator();
@@ -225,6 +240,17 @@ public class GenericController extends AbstractTestElement implements Controller
 		while (iter.hasNext()) {
 			LoopIterationListener item = (LoopIterationListener) iter.next();
 			item.iterationStart(event);
+		}
+	}
+	
+	protected void fireIterationEnd()
+	{
+		Iterator iter = iterationListeners.iterator();
+		LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
+		while(iter.hasNext())
+		{
+			LoopIterationListener item = (LoopIterationListener)iter.next();
+			item.iterationEnd(event);
 		}
 	}
 

@@ -117,7 +117,7 @@ public class LoopController extends GenericController implements Serializable {
 			}
 			return null;
 		} else {
-			return next();
+			return doNext();
 		}
 	}
 

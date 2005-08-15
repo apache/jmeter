@@ -498,6 +498,9 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		public void iterationStart(LoopIterationEvent iterEvent) {
 			notifyTestListeners();
 		}
+		
+		public void iterationEnd(LoopIterationEvent iterEvent)
+		{}
 	}
 
 	/**

@@ -70,6 +70,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			log.error("Failed to read file: " + getFilename());
 		}
 	}
+	
+	public void iterationEnd(LoopIterationEvent iterEvent)
+	{}
 
 	/**
 	 * @return Returns the filename.

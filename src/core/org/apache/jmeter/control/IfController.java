@@ -142,10 +142,10 @@ public class IfController extends GenericController implements Serializable {
 	 *      time this is run. The first time is special cause it is called prior
 	 *      the iteration even starts !
 	 */
-	public Sampler next() {
+	public Sampler doNext() {
 		boolean result = evaluateCondition(getCondition());
 		if (result)
-			return super.next();
+			return super.doNext();
 		else
 			try {
 				return nextIsNull();
