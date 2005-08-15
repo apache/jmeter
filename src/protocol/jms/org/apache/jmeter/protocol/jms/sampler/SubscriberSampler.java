@@ -182,7 +182,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 		if (this.getReadResponseAsBoolean()) {
 			result.setResponseData(this.BUFFER.toString().getBytes());
 		} else {
-			result.setBytes(this.BUFFER.toString().getBytes().length);
+			result.setContentLength(this.BUFFER.toString().getBytes().length);
 		}
 		result.setSuccessful(true);
 		result.setResponseCode(loop + " message(s) recieved successfully");
@@ -222,7 +222,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 		if (this.getReadResponseAsBoolean()) {
 			result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
 		} else {
-			result.setBytes(this.SUBSCRIBER.getMessage().getBytes().length);
+			result.setContentLength(this.SUBSCRIBER.getMessage().getBytes().length);
 		}
 		result.setSuccessful(true);
 		result.setResponseCode(loop + " message(s) recieved successfully");

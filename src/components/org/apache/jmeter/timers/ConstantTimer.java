@@ -106,6 +106,12 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void iterationEnd(LoopIterationEvent iterEvent) {
+	}
+
 	/*
 	 * This method doesn't appear to be used anymore. jeremy_a@bigfoot.com 02
 	 * May 2003

@@ -42,6 +42,13 @@ public class AssertionResult implements Serializable {
 	 */
 	public AssertionResult() {
 	}
+	
+	public AssertionResult(boolean failure,boolean error,String message)
+	{
+		setFailure(failure);
+		setError(error);
+		setFailureMessage(message);
+	}
 
 	/**
 	 * Check if the assertion failed. If it failed, the failure message may give

@@ -67,7 +67,7 @@ public class TransactionController extends GenericController implements Controll
 	/**
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
-	public Sampler next() {
+	public Sampler doNext() {
 		Sampler returnValue = null;
 		if (isFirst()) // must be the start of the subtree
 		{
@@ -79,7 +79,7 @@ public class TransactionController extends GenericController implements Controll
 
 		calls++;
 
-		returnValue = super.next();
+		returnValue = super.doNext();
 
 		if (returnValue == null) // Must be the end of the controller
 		{

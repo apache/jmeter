@@ -116,12 +116,12 @@ public class ForeachController extends GenericController implements Serializable
 	}
 
 	// Prevent entry if nothing to do
-	public Sampler next() {
+	public Sampler doNext() {
 		if (emptyList()) {
 			reInitialize();
 			return null;
 		}
-		return super.next();
+		return super.doNext();
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class ForeachController extends GenericController implements Serializable
 			resetLoopCount();
 			return null;
 		} else {
-			return next();
+			return doNext();
 		}
 	}
 

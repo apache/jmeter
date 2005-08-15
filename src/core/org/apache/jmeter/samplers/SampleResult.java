@@ -142,7 +142,7 @@ public class SampleResult implements Serializable {
 
 	private int sampleCount = 1;
 
-	private int bytes = 0;
+	private int contentLength = 0;
 
 	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult
 	// instead?
@@ -380,6 +380,7 @@ public class SampleResult implements Serializable {
 	 */
 	public void setResponseData(byte[] response) {
 		responseData = response;
+		setContentLength(response.length);
 	}
 
 	/**
@@ -680,8 +681,8 @@ public class SampleResult implements Serializable {
 	 * 
 	 * @param length
 	 */
-	public void setBytes(int length) {
-		bytes = length;
+	public void setContentLength(int length) {
+		contentLength = length;
 	}
 
 	/**
@@ -689,8 +690,8 @@ public class SampleResult implements Serializable {
 	 * 
 	 * @return
 	 */
-	public int getBytes() {
-		return bytes;
+	public int getContentLength() {
+		return contentLength;
 	}
 
 	// //////////////////////////// Start of Test Code

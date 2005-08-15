@@ -48,6 +48,13 @@ public class OnceOnlyController extends GenericController implements Serializabl
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
+	public void iterationEnd(LoopIterationEvent iterEvent) {
+		
+	}
+
 	protected Sampler nextIsNull() throws NextIsNullException {
 		return null;
 	}
