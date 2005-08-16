@@ -34,12 +34,12 @@ import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
-import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.CheckDirty;
 import org.apache.jmeter.gui.action.Load;
-import org.apache.jmeter.gui.tree.JMeterTreeListener;
-import org.apache.jmeter.gui.tree.JMeterTreeModel;
+import org.apache.jmeter.gui.tree.ReportTreeListener;
+import org.apache.jmeter.gui.tree.ReportTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -136,14 +136,6 @@ public class JMeterReport implements JMeterPlugin {
                     "run JMeter in nongui mode"),
             new CLOptionDescriptor("server", CLOptionDescriptor.ARGUMENT_DISALLOWED, SERVER_OPT,
                     "run the JMeter server"),
-            new CLOptionDescriptor("proxyHost", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_HOST,
-                    "Set a proxy server for JMeter to use"),
-            new CLOptionDescriptor("proxyPort", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_PORT,
-                    "Set proxy server port for JMeter to use"),
-            new CLOptionDescriptor("username", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_USERNAME,
-                    "Set username for proxy server that JMeter is to use"),
-            new CLOptionDescriptor("password", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_PASSWORD,
-                    "Set password for proxy server that JMeter is to use"),
             new CLOptionDescriptor("jmeterproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_PROPERTY, "Define additional JMeter properties"),
             new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
@@ -221,11 +213,11 @@ public class JMeterReport implements JMeterPlugin {
     
     public void startGui(CLOption testFile) {
         PluginManager.install(this, true);
-        JMeterTreeModel treeModel = new JMeterTreeModel();
-        JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
+        ReportTreeModel treeModel = new ReportTreeModel();
+        ReportTreeListener treeLis = new ReportTreeListener(treeModel);
         treeLis.setActionHandler(ActionRouter.getInstance());
         // NOTUSED: GuiPackage guiPack =
-        GuiPackage.getInstance(treeLis, treeModel);
+        ReportGuiPackage.getInstance(treeLis, treeModel);
         org.apache.jmeter.gui.ReportMainFrame main = new org.apache.jmeter.gui.ReportMainFrame(ActionRouter.getInstance(),
                 treeModel, treeLis);
         main.setTitle("Apache JMeter Report");
@@ -240,7 +232,7 @@ public class JMeterReport implements JMeterPlugin {
                 FileInputStream reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
 
-                GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+                ReportGuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
 
                 new Load().insertLoadedTree(1, tree);
             } catch (Exception e) {

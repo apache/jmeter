@@ -44,9 +44,7 @@ import org.apache.log.Logger;
 public class ReportPlan extends AbstractTestElement implements Serializable, TestListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String THREAD_GROUPS = "ReportPlan.thread_groups";
-
-	public final static String FUNCTIONAL_MODE = "ReportPlan.functional_mode";
+	public final static String REPORT_PAGE = "ReportPlan.report_page";
 
 	public final static String USER_DEFINED_VARIABLES = "ReportPlan.user_defined_variables";
 
@@ -56,7 +54,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
 	public final static String BASEDIR = "basedir";
 
-	private transient List threadGroups = new LinkedList();
+	private transient List reportPages = new LinkedList();
 
 	private transient List configs = new LinkedList();
 
@@ -72,7 +70,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 		// returned in org.apache.jmeter.threads.ThreadGroup.getClassLabel()
 		// method. If it's not you will not be able to add a Thread Group
 		// element to a Test Plan.
-		itemsCanAdd.add(JMeterUtils.getResString("threadgroup"));
+		itemsCanAdd.add(JMeterUtils.getResString("reportpage"));
 	}
 
 	public ReportPlan() {
@@ -85,16 +83,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 		setName(name);
 		// setFunctionalMode(false);
 		// setSerialized(false);
-		setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
-	}
-
-	/**
-	 * Fetches the functional mode property
-	 * 
-	 * @return functional mode
-	 */
-	public boolean isFunctionalMode() {
-		return getPropertyAsBoolean(FUNCTIONAL_MODE);
+		setProperty(new CollectionProperty(REPORT_PAGE, reportPages));
 	}
 
 	public void setUserDefinedVariables(Arguments vars) {
@@ -121,11 +110,6 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 			setUserDefinedVariables(args);
 		}
 		return args;
-	}
-
-	public void setFunctionalMode(boolean funcMode) {
-		setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
-		functionalMode = funcMode;
 	}
 
 	/**
@@ -169,13 +153,13 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 	public void addTestElement(TestElement tg) {
 		super.addTestElement(tg);
 		if (tg instanceof ThreadGroup && !isRunningVersion()) {
-			addThreadGroup((ThreadGroup) tg);
+			addReportPage((ThreadGroup) tg);
 		}
 	}
 
 	public void addJMeterComponent(TestElement child) {
 		if (child instanceof ThreadGroup) {
-			addThreadGroup((ThreadGroup) child);
+			addReportPage((ThreadGroup) child);
 		}
 	}
 
@@ -184,8 +168,8 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 	 * 
 	 * @return the ThreadGroups value
 	 */
-	public Collection getThreadGroups() {
-		return threadGroups;
+	public Collection getReportPages() {
+		return reportPages;
 	}
 
 	/**
@@ -204,8 +188,8 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 	 * @param group
 	 *            the feature to be added to the ThreadGroup attribute
 	 */
-	public void addThreadGroup(ThreadGroup group) {
-		threadGroups.add(group);
+	public void addReportPage(ThreadGroup group) {
+		reportPages.add(group);
 	}
 
 	/*

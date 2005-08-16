@@ -81,8 +81,6 @@ public class ReportTreeModel extends DefaultTreeModel {
 				current = (ReportTreeNode) ((ReportTreeNode) getRoot()).getChildAt(0);
 				((TestElement) current.getUserObject()).addTestElement(item);
 				((ReportPlan) current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
-				((ReportPlan) current.getUserObject()).setFunctionalMode(item
-						.getPropertyAsBoolean(ReportPlan.FUNCTIONAL_MODE));
 				((ReportPlan) current.getUserObject()).setSerialized(item
 						.getPropertyAsBoolean(ReportPlan.SERIALIZE_THREADGROUPS));
 				addSubTree(subTree.getTree(item), current);
