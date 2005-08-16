@@ -82,7 +82,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	private JScrollPane treePanel;
 
 	/** The test tree. */
-	private JTree tree;
+	protected JTree tree;
 
 	/** An image which is displayed when a test is running. */
 	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
