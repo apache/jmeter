@@ -106,7 +106,7 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	}
 
 	public String getLabelResource() {
-		return "test_plan";
+		return "report_plan";
 	}
 
 	/**
