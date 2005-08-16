@@ -139,9 +139,9 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 					}
 				} else {
 					if (replyMsg instanceof TextMessage) {
-						res.setResponseData(((TextMessage) replyMsg).getText().getContentLength());
+						res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
 					} else {
-						res.setResponseData(replyMsg.toString().getContentLength());
+						res.setResponseData(replyMsg.toString().getBytes());
 					}
 					res.setSuccessful(true);
 				}
