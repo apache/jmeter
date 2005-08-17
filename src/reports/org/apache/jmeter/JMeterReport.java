@@ -35,17 +35,17 @@ import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.CheckDirty;
-import org.apache.jmeter.gui.action.Load;
-import org.apache.jmeter.gui.tree.ReportTreeListener;
-import org.apache.jmeter.gui.tree.ReportTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
+import org.apache.jmeter.report.gui.action.LoadReport;
+import org.apache.jmeter.report.gui.action.ReportActionRouter;
+import org.apache.jmeter.report.gui.action.ReportCheckDirty;
+import org.apache.jmeter.report.gui.tree.ReportTreeListener;
+import org.apache.jmeter.report.gui.tree.ReportTreeModel;
 import org.apache.jmeter.report.writers.gui.AbstractReportWriterGui;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
@@ -215,16 +215,17 @@ public class JMeterReport implements JMeterPlugin {
         PluginManager.install(this, true);
         ReportTreeModel treeModel = new ReportTreeModel();
         ReportTreeListener treeLis = new ReportTreeListener(treeModel);
-        treeLis.setActionHandler(ActionRouter.getInstance());
+        treeLis.setActionHandler(ReportActionRouter.getInstance());
         // NOTUSED: GuiPackage guiPack =
         ReportGuiPackage.getInstance(treeLis, treeModel);
-        org.apache.jmeter.gui.ReportMainFrame main = new org.apache.jmeter.gui.ReportMainFrame(ActionRouter.getInstance(),
+        org.apache.jmeter.gui.ReportMainFrame main = 
+            new org.apache.jmeter.gui.ReportMainFrame(ReportActionRouter.getInstance(),
                 treeModel, treeLis);
         main.setTitle("Apache JMeter Report");
         main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());
         ComponentUtil.centerComponentInWindow(main, 80);
         main.show();
-        ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, CheckDirty.ADD_ALL));
+        ReportActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ReportCheckDirty.ADD_ALL));
         if (testFile != null) {
             try {
                 File f = new File(testFile.getArgument());
@@ -234,7 +235,7 @@ public class JMeterReport implements JMeterPlugin {
 
                 ReportGuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
 
-                new Load().insertLoadedTree(1, tree);
+                new LoadReport().insertLoadedTree(1, tree);
             } catch (Exception e) {
                 log.error("Failure loading test file", e);
                 JMeterUtils.reportErrorToUser(e.toString());

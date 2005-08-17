@@ -51,11 +51,11 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.GlobalMouseListener;
-import org.apache.jmeter.gui.tree.JMeterCellRenderer;
-import org.apache.jmeter.gui.tree.ReportTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jmeter.report.gui.action.ReportActionRouter;
+import org.apache.jmeter.report.gui.tree.ReportCellRenderer;
+import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -243,7 +243,6 @@ public class ReportMainFrame extends MainFrame {
 	 */
 	protected void init() {
         super.init();
-        /**
 		menuBar = new JMeterMenuBar();
 		setJMenuBar(menuBar);
 
@@ -267,7 +266,6 @@ public class ReportMainFrame extends MainFrame {
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
 		addMouseListener(new GlobalMouseListener());
-	    */
     }
 
 	/**
@@ -277,25 +275,6 @@ public class ReportMainFrame extends MainFrame {
 	 */
 	protected Component createToolBar() {
         return super.createToolBar();
-	}
-
-	/**
-	 * Create the panel where the GUI representation of the test tree is
-	 * displayed. The tree should already be created before calling this method.
-	 * 
-	 * @return a scroll pane containing the test tree GUI
-	 */
-	protected JScrollPane createTreePanel() {
-		return super.createTreePanel();
-	}
-
-	/**
-	 * Create the main panel where components can display their GUIs.
-	 * 
-	 * @return the main scroll pane
-	 */
-	protected JScrollPane createMainPanel() {
-		return super.createMainPanel();
 	}
 
 	/**
@@ -322,5 +301,16 @@ public class ReportMainFrame extends MainFrame {
 
 		return treevar;
 	}
+
+    /**
+     * Create the tree cell renderer used to draw the nodes in the test tree.
+     * 
+     * @return a renderer to draw the test tree nodes
+     */
+    protected TreeCellRenderer getCellRenderer() {
+        DefaultTreeCellRenderer rend = new ReportCellRenderer();
+        rend.setFont(new Font("Dialog", Font.PLAIN, 11));
+        return rend;
+    }
 
 }
