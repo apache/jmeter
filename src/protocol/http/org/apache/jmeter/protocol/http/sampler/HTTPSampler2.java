@@ -536,11 +536,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	}
 
 	public void threadStarted() {
-		log.info("Thread Started");
+		log.debug("Thread Started");
 	}
 
 	public void threadFinished() {
-		log.info("Thread Finished");
+		log.debug("Thread Finished");
 		if (httpConn != null)
 			httpConn.close();
 	}
