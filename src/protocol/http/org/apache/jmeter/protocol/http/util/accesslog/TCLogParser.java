@@ -244,7 +244,7 @@ public class TCLogParser implements LogParser {
 		el.setProperty(HTTPSamplerBase.METHOD, RMETHOD);
 		if (FILTER != null) {
 			log.debug("filter is not null");
-			if (!FILTER.isFiltered(line)) {
+			if (!FILTER.isFiltered(line,el)) {
 				log.debug("line was not filtered");
 				// increment the current count
 				count++;
