@@ -38,6 +38,11 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
 	}
 
 	public String getStaticLabel() {
-		return super.getStaticLabel() + " HTTPCLient";
+		return super.getStaticLabel() + " HTTPClient";
 	}
+
+    public String getDocAnchor() {
+        return super.getStaticLabel().replace(' ', '_');
+    }
+
 }
