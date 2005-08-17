@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import javax.swing.tree.TreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
@@ -177,8 +177,8 @@ public interface JMeterGUIComponent {
 	 * @param node
 	 *            the tree node corresponding to this component
 	 */
-	void setNode(JMeterTreeNode node);
-
+	void setNode(TreeNode node);
+    
 	/**
 	 * Clear the gui and return it to initial default values. This is necessary
 	 * because most gui classes are instantiated just once and re-used for

@@ -42,7 +42,7 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * @version $Revision$
  */
-public class JMeterTreeNode extends DefaultMutableTreeNode {
+public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	private JMeterTreeModel treeModel;
