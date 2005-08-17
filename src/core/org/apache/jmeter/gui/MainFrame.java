@@ -73,13 +73,13 @@ import org.apache.jorphan.gui.ComponentUtil;
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
 	/** The menu bar. */
-	private JMeterMenuBar menuBar;
+	protected JMeterMenuBar menuBar;
 
 	/** The main panel where components display their GUIs. */
-	private JScrollPane mainPanel;
+	protected JScrollPane mainPanel;
 
 	/** The panel where the test tree is shown. */
-	private JScrollPane treePanel;
+	protected JScrollPane treePanel;
 
 	/** The test tree. */
 	protected JTree tree;
