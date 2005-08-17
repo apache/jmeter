@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +15,7 @@
  * 
  */
 
-package org.apache.jmeter.gui.tree;
+package org.apache.jmeter.report.gui.tree;
 
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -31,6 +30,7 @@ import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.WorkBench;
@@ -41,7 +41,7 @@ import org.apache.jorphan.collections.ListedHashTree;
 
 /**
  * 
- * author Michael Stover
+ * author Peter Lin
  * 
  * @version $Revision$
  */
@@ -73,16 +73,20 @@ public class ReportTreeModel extends DefaultTreeModel {
 	 * Adds the sub tree at the given node. Returns a boolean indicating whether
 	 * the added sub tree was a full test plan.
 	 */
-	public HashTree addSubTree(HashTree subTree, ReportTreeNode current) throws IllegalUserActionException {
+	public HashTree addSubTree(HashTree subTree, ReportTreeNode current)
+			throws IllegalUserActionException {
 		Iterator iter = subTree.list().iterator();
 		while (iter.hasNext()) {
 			TestElement item = (TestElement) iter.next();
 			if (item instanceof ReportPlan) {
-				current = (ReportTreeNode) ((ReportTreeNode) getRoot()).getChildAt(0);
+				current = (ReportTreeNode) ((ReportTreeNode) getRoot())
+						.getChildAt(0);
 				((TestElement) current.getUserObject()).addTestElement(item);
-				((ReportPlan) current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
-				((ReportPlan) current.getUserObject()).setSerialized(item
-						.getPropertyAsBoolean(ReportPlan.SERIALIZE_THREADGROUPS));
+				((ReportPlan) current.getUserObject()).setName(item
+						.getPropertyAsString(TestElement.NAME));
+				((ReportPlan) current.getUserObject())
+						.setSerialized(item
+								.getPropertyAsBoolean(ReportPlan.SERIALIZE_THREADGROUPS));
 				addSubTree(subTree.getTree(item), current);
 			} else {
 				addSubTree(subTree.getTree(item), addComponent(item, current));
@@ -91,18 +95,21 @@ public class ReportTreeModel extends DefaultTreeModel {
 		return getCurrentSubTree(current);
 	}
 
-	public ReportTreeNode addComponent(TestElement component, ReportTreeNode node) throws IllegalUserActionException {
+	public ReportTreeNode addComponent(TestElement component,
+			ReportTreeNode node) throws IllegalUserActionException {
 		if (node.getUserObject() instanceof AbstractConfigGui) {
-			throw new IllegalUserActionException("This node cannot hold sub-elements");
+			throw new IllegalUserActionException(
+					"This node cannot hold sub-elements");
 		}
-		component.setProperty(TestElement.GUI_CLASS, NameUpdater.getCurrentName(component
-				.getPropertyAsString(TestElement.GUI_CLASS)));
+		component.setProperty(TestElement.GUI_CLASS, NameUpdater
+				.getCurrentName(component
+						.getPropertyAsString(TestElement.GUI_CLASS)));
 		GuiPackage.getInstance().updateCurrentNode();
 		JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
 		guicomp.configure(component);
 		guicomp.modifyTestElement(component);
 		GuiPackage.getInstance().getCurrentGui(); // put the gui object back
-													// to the way it was.
+		// to the way it was.
 		ReportTreeNode newNode = new ReportTreeNode(component, this);
 
 		// This check the state of the TestElement and if returns false it
@@ -122,8 +129,9 @@ public class ReportTreeModel extends DefaultTreeModel {
 		return newNode;
 	}
 
-	public void removeNodeFromParent(JMeterTreeNode node) {
-		if (!(node.getUserObject() instanceof ReportPlan) && !(node.getUserObject() instanceof WorkBench)) {
+	public void removeNodeFromParent(ReportTreeNode node) {
+		if (!(node.getUserObject() instanceof ReportPlan)
+				&& !(node.getUserObject() instanceof WorkBench)) {
 			super.removeNodeFromParent(node);
 		}
 	}
@@ -139,7 +147,8 @@ public class ReportTreeModel extends DefaultTreeModel {
 		}
 	}
 
-	private ReportTreeNode traverseAndFind(TestElement userObject, ReportTreeNode node) {
+	private ReportTreeNode traverseAndFind(TestElement userObject,
+			ReportTreeNode node) {
 		if (userObject == node.getUserObject()) {
 			return node;
 		}
@@ -164,7 +173,8 @@ public class ReportTreeModel extends DefaultTreeModel {
 	}
 
 	public HashTree getTestPlan() {
-		return getCurrentSubTree((ReportTreeNode) ((ReportTreeNode) this.getRoot()).getChildAt(0));
+		return getCurrentSubTree((ReportTreeNode) ((ReportTreeNode) this
+				.getRoot()).getChildAt(0));
 	}
 
 	public void clearTestPlan() {
@@ -175,11 +185,13 @@ public class ReportTreeModel extends DefaultTreeModel {
 	private void initTree() {
 		TestElement tp = new TestPlanGui().createTestElement();
 		TestElement wb = new ReportGui().createTestElement();
-		this.insertNodeInto(new ReportTreeNode(tp, this), (ReportTreeNode) getRoot(), 0);
+		this.insertNodeInto(new ReportTreeNode(tp, this),
+				(ReportTreeNode) getRoot(), 0);
 		try {
 			super.removeNodeFromParent((ReportTreeNode) getChild(getRoot(), 1));
 		} catch (RuntimeException e) {
 		}
-		this.insertNodeInto(new ReportTreeNode(wb, this), (ReportTreeNode) getRoot(), 1);
+		this.insertNodeInto(new ReportTreeNode(wb, this),
+				(ReportTreeNode) getRoot(), 1);
 	}
 }

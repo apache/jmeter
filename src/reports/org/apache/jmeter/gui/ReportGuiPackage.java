@@ -29,9 +29,9 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.tree.ReportTreeListener;
-import org.apache.jmeter.gui.tree.ReportTreeModel;
-import org.apache.jmeter.gui.tree.ReportTreeNode;
+import org.apache.jmeter.report.gui.tree.ReportTreeListener;
+import org.apache.jmeter.report.gui.tree.ReportTreeModel;
+import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -100,7 +100,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	private ReportTreeListener treeListener;
 
 	/** The main JMeter frame. */
-	private MainFrame mainFrame;
+	private ReportMainFrame mainFrame;
 
 	/**
 	 * Private constructor to permit instantiation only from within this class.
@@ -116,6 +116,9 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 * @return the GuiPackage instance
 	 */
 	public static ReportGuiPackage getInstance() {
+        if (guiPack == null){
+            log.error("ReportGuiPackage is null");
+        }
 		return guiPack;
 	}
 
@@ -495,7 +498,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 * @param newMainFrame
 	 *            the new JMeter main frame
 	 */
-	public void setMainFrame(MainFrame newMainFrame) {
+	public void setMainFrame(ReportMainFrame newMainFrame) {
 		mainFrame = newMainFrame;
 	}
 

@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +15,7 @@
  * 
  */
 
-package org.apache.jmeter.gui.tree;
+package org.apache.jmeter.report.gui.tree;
 
 import java.awt.Image;
 import java.beans.BeanInfo;
@@ -30,6 +29,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.tree.NamedTreeNode;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -39,10 +39,11 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
+ * @author Peter Lin
  * @version $Revision$
  */
-public class ReportTreeNode extends DefaultMutableTreeNode {
+public class ReportTreeNode extends DefaultMutableTreeNode implements
+		NamedTreeNode {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	private ReportTreeModel treeModel;
@@ -61,11 +62,13 @@ public class ReportTreeNode extends DefaultMutableTreeNode {
 	}
 
 	public boolean isEnabled() {
-		return ((AbstractTestElement) getTestElement()).getPropertyAsBoolean(TestElement.ENABLED);
+		return ((AbstractTestElement) getTestElement())
+				.getPropertyAsBoolean(TestElement.ENABLED);
 	}
 
 	public void setEnabled(boolean enabled) {
-		getTestElement().setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+		getTestElement().setProperty(
+				new BooleanProperty(TestElement.ENABLED, enabled));
 		treeModel.nodeChanged(this);
 	}
 
@@ -77,17 +80,22 @@ public class ReportTreeNode extends DefaultMutableTreeNode {
 		try {
 			if (getTestElement() instanceof TestBean) {
 				try {
-					Image img = Introspector.getBeanInfo(getTestElement().getClass())
-							.getIcon(BeanInfo.ICON_COLOR_16x16);
+					Image img = Introspector.getBeanInfo(
+							getTestElement().getClass()).getIcon(
+							BeanInfo.ICON_COLOR_16x16);
 					// If icon has not been defined, then use GUI_CLASS property
 					if (img == null) {//
-						Object clazz = Introspector.getBeanInfo(getTestElement().getClass()).getBeanDescriptor()
-								.getValue(TestElement.GUI_CLASS);
+						Object clazz = Introspector.getBeanInfo(
+								getTestElement().getClass())
+								.getBeanDescriptor().getValue(
+										TestElement.GUI_CLASS);
 						if (clazz == null) {
-							log.error("Can't obtain GUI class for " + getTestElement().getClass().getName());
+							log.error("Can't obtain GUI class for "
+									+ getTestElement().getClass().getName());
 							return null;
 						}
-						return GUIFactory.getIcon(Class.forName((String) clazz), enabled);
+						return GUIFactory.getIcon(
+								Class.forName((String) clazz), enabled);
 					}
 					return new ImageIcon(img);
 				} catch (IntrospectionException e1) {
@@ -95,8 +103,8 @@ public class ReportTreeNode extends DefaultMutableTreeNode {
 					throw new org.apache.jorphan.util.JMeterError(e1);
 				}
 			} else {
-				return GUIFactory.getIcon(Class.forName(getTestElement().getPropertyAsString(TestElement.GUI_CLASS)),
-						enabled);
+				return GUIFactory.getIcon(Class.forName(getTestElement()
+						.getPropertyAsString(TestElement.GUI_CLASS)), enabled);
 			}
 		} catch (ClassNotFoundException e) {
 			log.warn("Can't get icon for class " + getTestElement(), e);
@@ -106,7 +114,8 @@ public class ReportTreeNode extends DefaultMutableTreeNode {
 
 	public Collection getMenuCategories() {
 		try {
-			return GuiPackage.getInstance().getGui(getTestElement()).getMenuCategories();
+			return GuiPackage.getInstance().getGui(getTestElement())
+					.getMenuCategories();
 		} catch (Exception e) {
 			log.error("Can't get popup menu for gui", e);
 			return null;
@@ -115,7 +124,8 @@ public class ReportTreeNode extends DefaultMutableTreeNode {
 
 	public JPopupMenu createPopupMenu() {
 		try {
-			return GuiPackage.getInstance().getGui(getTestElement()).createPopupMenu();
+			return GuiPackage.getInstance().getGui(getTestElement())
+					.createPopupMenu();
 		} catch (Exception e) {
 			log.error("Can't get popup menu for gui", e);
 			return null;
@@ -127,19 +137,23 @@ public class ReportTreeNode extends DefaultMutableTreeNode {
 	}
 
 	public String getStaticLabel() {
-		return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getStaticLabel();
+		return GuiPackage.getInstance().getGui((TestElement) getUserObject())
+				.getStaticLabel();
 	}
 
 	public String getDocAnchor() {
-		return GuiPackage.getInstance().getGui((TestElement) getUserObject()).getDocAnchor();
+		return GuiPackage.getInstance().getGui((TestElement) getUserObject())
+				.getDocAnchor();
 	}
 
 	public void setName(String name) {
-		((TestElement) getUserObject()).setProperty(new StringProperty(TestElement.NAME, name));
+		((TestElement) getUserObject()).setProperty(new StringProperty(
+				TestElement.NAME, name));
 	}
 
 	public String getName() {
-		return ((TestElement) getUserObject()).getPropertyAsString(TestElement.NAME);
+		return ((TestElement) getUserObject())
+				.getPropertyAsString(TestElement.NAME);
 	}
 
 	public void nameChanged() {
