@@ -266,20 +266,23 @@ public final class ActionRouter implements ActionListener {
 			iterClasses = listClasses.iterator();
 			while (iterClasses.hasNext()) {
 				String strClassName = (String) iterClasses.next();
-				commandClass = Class.forName(strClassName);
-				if (!Modifier.isAbstract(commandClass.getModifiers())) {
-					command = (Command) commandClass.newInstance();
-					Iterator iter = command.getActionNames().iterator();
-					while (iter.hasNext()) {
-						String commandName = (String) iter.next();
-						Set commandObjects = (Set) commands.get(commandName);
-						if (commandObjects == null) {
-							commandObjects = new HashSet();
-							commands.put(commandName, commandObjects);
-						}
-						commandObjects.add(command);
-					}
-				}
+                if (strClassName.startsWith("org.apache.jmeter.gui")) {
+                    log.info("classname:: " + strClassName);
+                    commandClass = Class.forName(strClassName);
+                    if (!Modifier.isAbstract(commandClass.getModifiers())) {
+                        command = (Command) commandClass.newInstance();
+                        Iterator iter = command.getActionNames().iterator();
+                        while (iter.hasNext()) {
+                            String commandName = (String) iter.next();
+                            Set commandObjects = (Set) commands.get(commandName);
+                            if (commandObjects == null) {
+                                commandObjects = new HashSet();
+                                commands.put(commandName, commandObjects);
+                            }
+                            commandObjects.add(command);
+                        }
+                    }
+                }
 			}
 		} catch (Exception e) {
 			if ("java.awt.HeadlessException".equals(e.getClass().getName())) // JDK1.4:
