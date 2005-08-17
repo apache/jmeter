@@ -267,7 +267,6 @@ public final class ActionRouter implements ActionListener {
 			while (iterClasses.hasNext()) {
 				String strClassName = (String) iterClasses.next();
                 if (strClassName.startsWith("org.apache.jmeter.gui")) {
-                    log.info("classname:: " + strClassName);
                     commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         command = (Command) commandClass.newInstance();
