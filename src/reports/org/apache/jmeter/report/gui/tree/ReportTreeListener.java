@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +15,7 @@
  * 
  */
 
-package org.apache.jmeter.gui.tree;
+package org.apache.jmeter.report.gui.tree;
 
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -40,13 +39,13 @@ import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
-import org.apache.jmeter.gui.action.DragNDrop;
+import org.apache.jmeter.report.gui.action.ReportDragNDrop;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover Created March 11, 2001
+ * @author Peter Lin
  * @version $Revision$ Last updated: $Date$
  */
 public class ReportTreeListener implements TreeSelectionListener, MouseListener, KeyListener, MouseMotionListener {
@@ -175,15 +174,15 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
 			JPopupMenu dragNdrop = new JPopupMenu();
 			JMenuItem item = new JMenuItem(JMeterUtils.getResString("Insert Before"));
 			item.addActionListener(actionHandler);
-			item.setActionCommand(DragNDrop.INSERT_BEFORE);
+			item.setActionCommand(ReportDragNDrop.INSERT_BEFORE);
 			dragNdrop.add(item);
 			item = new JMenuItem(JMeterUtils.getResString("Insert After"));
 			item.addActionListener(actionHandler);
-			item.setActionCommand(DragNDrop.INSERT_AFTER);
+			item.setActionCommand(ReportDragNDrop.INSERT_AFTER);
 			dragNdrop.add(item);
 			item = new JMenuItem(JMeterUtils.getResString("Add as Child"));
 			item.addActionListener(actionHandler);
-			item.setActionCommand(DragNDrop.ADD);
+			item.setActionCommand(ReportDragNDrop.ADD);
 			dragNdrop.add(item);
 			dragNdrop.addSeparator();
 			item = new JMenuItem(JMeterUtils.getResString("Cancel"));
