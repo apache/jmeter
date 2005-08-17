@@ -62,7 +62,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			String delim = getDelimiter();
 			if (delim.equals("\\t"))
 				delim = "\t";// Make it easier to enter a Tab
-			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim);
+			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim,false);
 			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
 				this.getThreadContext().getVariables().put(vars[a], lineValues[a]);
 			}

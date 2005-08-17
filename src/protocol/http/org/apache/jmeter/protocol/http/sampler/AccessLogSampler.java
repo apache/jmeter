@@ -25,6 +25,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestCloneable;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
@@ -65,7 +66,7 @@ import org.apache.log.Logger;
  * @author Peter Lin
  * @version $Revision$ last updated $Date$
  */
-public class AccessLogSampler extends HTTPSampler implements TestBean {
+public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
@@ -295,8 +296,16 @@ public class AccessLogSampler extends HTTPSampler implements TestBean {
 					if (TestCloneable.class.isAssignableFrom(Class.forName(filterClassName))) {
 						initFilter();
 						s.filter = (Filter) ((TestCloneable) filter).clone();
-                        instantiateParser();
 					}
+                    if(TestCloneable.class.isAssignableFrom(Class.forName(parserClassName)))
+                    {
+                        instantiateParser();
+                        s.PARSER = (LogParser)((TestCloneable)PARSER).clone();
+                        if(filter != null)
+                        {
+                            s.PARSER.setFilter(s.filter);
+                        }
+                    }
 				} catch (Exception e) {
 					log.warn("Could not clone cloneable filter", e);
 				}
@@ -314,6 +323,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean {
 		if (PARSER != null) {
 			PARSER.close();
 		}
+        filter = null;
 		started = false;
 		super.testEnded();
 	}
@@ -326,5 +336,23 @@ public class AccessLogSampler extends HTTPSampler implements TestBean {
 	public void testStarted() {
 		started = true;
 		super.testStarted();
+	}
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.AbstractTestElement#threadFinished()
+     */
+    public void threadFinished() {
+        if(PARSER instanceof ThreadListener)
+            ((ThreadListener)PARSER).threadFinished();
+        if(filter instanceof ThreadListener)
+            ((ThreadListener)filter).threadFinished();
+    }
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
+	 */
+	public void threadStarted() {
+		// TODO Auto-generated method stub
+		
 	}
 }

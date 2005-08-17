@@ -204,6 +204,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	}
 
 	protected void notifyTestListenersOfEnd() {
+        log.info("Notifying test listeners of end of test");
 		Iterator iter = testListeners.getSearchResults().iterator();
 		while (iter.hasNext()) {
 			TestListener tl = (TestListener) iter.next();
@@ -231,12 +232,16 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	}
 
 	public synchronized void threadFinished(JMeterThread thread) {
-		allThreads.remove(thread);
-		log.info("Ending thread " + thread.getThreadNum());
-		if (!serialized && allThreads.size() == 0 && !schcdule_run) {
-			log.info("Stopping test");
-			stopTest();
-		}
+		try {
+            allThreads.remove(thread);
+            log.info("Ending thread " + thread.getThreadNum());
+            if (!serialized && allThreads.size() == 0 && !schcdule_run) {
+            	log.info("Stopping test");
+            	stopTest();
+            }
+        } catch (Throwable e) {
+            log.fatalError("Call to threadFinished should never throw an exception - this can deadlock JMeter",e);
+        }
 	}
 
 	public synchronized void stopTest() {
