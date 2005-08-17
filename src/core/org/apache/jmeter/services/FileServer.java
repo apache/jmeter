@@ -72,7 +72,6 @@ public class FileServer {
 	}
 
 	public void setBasedir(String basedir) throws IOException {
-		log.info("Setting basedir to: " + basedir);
 		if (filesOpen()) {
 			throw new IOException("Files are still open, cannot change base directory");
 		}
@@ -90,7 +89,6 @@ public class FileServer {
 	}
 
 	public synchronized void reserveFile(String filename) {
-		log.info("filename = " + filename + " base = " + base);
 		if (!files.containsKey(filename)) {
 			Object[] file = new Object[] { new File(base, filename), null };
 			files.put(filename, file);
@@ -151,7 +149,7 @@ public class FileServer {
 	 */
 	public synchronized void closeFile(String name) throws IOException {
 		Object[] file = (Object[]) files.get(name);
-		if (file[1] != null) {
+		if (file != null && file.length == 2 && file[1] != null) {
 			((Reader) file[1]).close();
 			file[1] = null;
 		}
@@ -171,6 +169,8 @@ public class FileServer {
 
 	/**
 	 * Method will get a random file in a base directory
+     * TODO hey, not sure this method belongs here.  FileServer is for threadsafe
+     * File access relative to current test's base directory.  
 	 * 
 	 * @param basedir
 	 * @return

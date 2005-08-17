@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -207,7 +208,7 @@ public class LogFilter implements Filter, Serializable {
 	 * @param path
 	 * @return boolean
 	 */
-	public boolean isFiltered(String path) {
+	public boolean isFiltered(String path,TestElement el) {
 		// we do a quick check to see if any
 		// filters are set. If not we just
 		// return false to be efficient.
@@ -474,7 +475,7 @@ public class LogFilter implements Filter, Serializable {
 
 		public void testReplaceExtension() {
 			testf.setReplaceExtension("html", "jsp");
-			testf.isFiltered(TESTSTR);// set the required variables
+			testf.isFiltered(TESTSTR,null);// set the required variables
 			assertEquals(TESTSTROUT, testf.filter(TESTSTR));
 		}
 
@@ -485,7 +486,7 @@ public class LogFilter implements Filter, Serializable {
 				String theFile = td.file;
 				boolean expect = td.exclfile;
 
-				testf.isFiltered(theFile);
+				testf.isFiltered(theFile,null);
 				String line = testf.filter(theFile);
 				if (line != null) {
 					assertTrue("Expect to accept " + theFile, expect);
@@ -502,7 +503,7 @@ public class LogFilter implements Filter, Serializable {
 				String theFile = td.file;
 				boolean expect = td.inclfile;
 
-				testf.isFiltered(theFile);
+				testf.isFiltered(theFile,null);
 				String line = testf.filter(theFile);
 				if (line != null) {
 					assertTrue("Expect to accept " + theFile, expect);
@@ -520,7 +521,7 @@ public class LogFilter implements Filter, Serializable {
 				String theFile = td.file;
 				boolean expect = td.exclpatt;
 
-				assertEquals(!expect, testf.isFiltered(theFile));
+				assertEquals(!expect, testf.isFiltered(theFile,null));
 				String line = testf.filter(theFile);
 				if (line != null) {
 					assertTrue("Expect to accept " + theFile, expect);
@@ -537,7 +538,7 @@ public class LogFilter implements Filter, Serializable {
 				String theFile = td.file;
 				boolean expect = td.inclpatt;
 
-				assertEquals(!expect, testf.isFiltered(theFile));
+				assertEquals(!expect, testf.isFiltered(theFile,null));
 				String line = testf.filter(theFile);
 				if (line != null) {
 					assertTrue("Expect to accept " + theFile, expect);

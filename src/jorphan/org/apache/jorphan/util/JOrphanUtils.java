@@ -61,15 +61,18 @@ public final class JOrphanUtils {
 	 *            Character to split the string on
 	 * @return Array of all the tokens.
 	 */
-	public static String[] split(String splittee, String splitChar) {
+	public static String[] split(String splittee, String splitChar,boolean truncate) {
 		if (splittee == null || splitChar == null) {
 			return new String[0];
 		}
 		int spot;
-		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
-			splittee = splittee.substring(0, spot + splitChar.length())
-					+ splittee.substring(spot + 2 * splitChar.length(), splittee.length());
-		}
+        if(truncate) {
+    		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
+    			splittee = splittee.substring(0, spot + splitChar.length())
+    					+ splittee.substring(spot + 2 * splitChar.length(), splittee.length());
+    		}
+            if(splittee.startsWith(splitChar)) splittee = splittee.substring(splitChar.length());
+        }
 		Vector returns = new Vector();
 		int start = 0;
 		int length = splittee.length();
@@ -78,6 +81,10 @@ public final class JOrphanUtils {
 			if (spot > 0) {
 				returns.addElement(splittee.substring(start, spot));
 			}
+            else
+            {
+                returns.addElement("");
+            }
 			start = spot + splitChar.length();
 		}
 		if (start < length) {
@@ -87,6 +94,11 @@ public final class JOrphanUtils {
 		returns.copyInto(values);
 		return values;
 	}
+    
+    public static String[] split(String splittee,String splitChar)
+    {
+        return split(splittee,splitChar,true);
+    }
 
 	private static final String SPACES = "                                 ";
 
@@ -279,57 +291,5 @@ public final class JOrphanUtils {
 		}
 
 		return slice;
-	}
-
-	public static class Test extends TestCase {
-		public void testReplace1() {
-			assertEquals("xyzdef", replaceFirst("abcdef", "abc", "xyz"));
-		}
-
-		public void testReplace2() {
-			assertEquals("axyzdef", replaceFirst("abcdef", "bc", "xyz"));
-		}
-
-		public void testReplace3() {
-			assertEquals("abcxyz", replaceFirst("abcdef", "def", "xyz"));
-		}
-
-		public void testReplace4() {
-			assertEquals("abcdef", replaceFirst("abcdef", "bce", "xyz"));
-		}
-
-		public void testReplace5() {
-			assertEquals("abcdef", replaceFirst("abcdef", "alt=\"\" ", ""));
-		}
-
-		public void testReplace6() {
-			assertEquals("abcdef", replaceFirst("abcdef", "alt=\"\" ", ""));
-		}
-
-		public void testReplace7() {
-			assertEquals("alt=\"\"", replaceFirst("alt=\"\"", "alt=\"\" ", ""));
-		}
-
-		public void testReplace8() {
-			assertEquals("img src=xyz ", replaceFirst("img src=xyz alt=\"\" ", "alt=\"\" ", ""));
-		}
-
-		public void testSplit1() {
-			String in = "a,bc,,"; // Test ignore trailing split characters
-			String out[] = split(in, ",");
-			assertEquals(2, out.length);
-			assertEquals("a", out[0]);
-			assertEquals("bc", out[1]);
-		}
-
-		public void testSplit2() {
-			String in = ",,a,bc"; // Test leading split characters
-			String out[] = split(in, ",");
-			assertEquals("Should detect the leading split chars; ", 2, out.length - 2);
-			assertEquals("", out[0]);
-			assertEquals("", out[1]);
-			assertEquals("a", out[2]);
-			assertEquals("bc", out[3]);
-		}
 	}
 }

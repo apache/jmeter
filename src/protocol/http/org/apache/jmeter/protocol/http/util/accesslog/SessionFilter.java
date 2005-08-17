@@ -21,11 +21,17 @@
 package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.jmeter.protocol.http.control.CookieManager;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.testelement.TestCloneable;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -37,37 +43,26 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * @author mstover
  * 
  */
-public class SessionFilter implements Filter, Serializable, TestCloneable {
+public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
+    private static final long serialVersionUID = 1;
 	static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
-	 * This object is static across multiple threads in a test, via clone()
+	 * These objects are static across multiple threads in a test, via clone()
 	 * method.
 	 */
-	protected List excludedIps;
+	protected Map cookieManagers;
+    protected Set managersInUse;
+    
+    protected CookieManager lastUsed;
 
-	String ipAddress;
-
-	/*
+    /*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.jmeter.protocol.http.util.accesslog.LogFilter#excPattern(java.lang.String)
 	 */
 	protected boolean hasExcPattern(String text) {
-		synchronized (excludedIps) {
-			boolean exclude = false;
-			for (Iterator x = excludedIps.iterator(); x.hasNext();) {
-				if (text.indexOf((String) x.next()) > -1) {
-					exclude = true;
-					break;
-				}
-			}
-			if (!exclude) {
-				ipAddress = getIpAddress(text);
-				excludedIps.add(ipAddress);
-			}
-			return exclude;
-		}
+        return false;
 	}
 
 	protected String getIpAddress(String logLine) {
@@ -84,12 +79,21 @@ public class SessionFilter implements Filter, Serializable, TestCloneable {
 	 * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#reset()
 	 */
 	public void reset() {
-		ipAddress = null;
+		cookieManagers.clear();
 	}
 
 	public Object clone() {
+        if(cookieManagers == null)
+        {
+            cookieManagers = Collections.synchronizedMap(new HashMap());
+        }
+        if(managersInUse == null)
+        {
+            managersInUse = Collections.synchronizedSet(new HashSet());
+        }
 		SessionFilter f = new SessionFilter();
-		f.excludedIps = excludedIps;
+        f.cookieManagers = cookieManagers;
+        f.managersInUse = managersInUse;
 		return f;
 	}
 
@@ -97,7 +101,6 @@ public class SessionFilter implements Filter, Serializable, TestCloneable {
 	 * 
 	 */
 	public SessionFilter() {
-		excludedIps = new LinkedList();
 	}
 
 	/*
@@ -146,13 +149,55 @@ public class SessionFilter implements Filter, Serializable, TestCloneable {
 	 * 
 	 * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(java.lang.String)
 	 */
-	public boolean isFiltered(String path) {
-		if (ipAddress != null) {
-			log.debug("looking for ip address: " + ipAddress + " in line: " + path);
-			return !(path.indexOf(ipAddress) > -1);
-		} else
-			return hasExcPattern(path);
+	public boolean isFiltered(String path,TestElement sampler) {
+		String ipAddr = getIpAddress(path);
+        CookieManager cm = getCookieManager(ipAddr);
+        ((HTTPSampler)sampler).setCookieManager(cm);   
+        return false;
 	}
+    
+    protected CookieManager getCookieManager(String ipAddr)
+    {
+        CookieManager cm = null;
+        // First have to release the cookie we were using so other
+        // threads stuck in wait can move on
+        synchronized(managersInUse)
+        {
+            if(lastUsed != null)
+            {
+                managersInUse.remove(lastUsed);
+                managersInUse.notify(); 
+            }
+        }
+        // let notified threads move on and get lock on managersInUse
+        if(lastUsed != null)
+        {
+            Thread.yield();
+        }
+        // here is the core routine to find appropriate cookie manager and
+        // check it's not being used.  If used, wait until whoever's using it gives
+        // it up
+        synchronized(managersInUse)
+        {
+            cm = (CookieManager)cookieManagers.get(ipAddr);
+            if(cm == null)
+            {
+                cm = new CookieManager();
+                cookieManagers.put(ipAddr,cm);
+            } 
+            while(managersInUse.contains(cm))
+            {
+                try {
+                    managersInUse.wait();
+                } catch (InterruptedException e) {
+                    log.info("SessionFilter wait interrupted");
+                }
+            }
+            managersInUse.add(cm);
+            lastUsed = cm;
+        }
+        return cm;
+    }
 
 	/*
 	 * (non-Javadoc)
@@ -162,4 +207,23 @@ public class SessionFilter implements Filter, Serializable, TestCloneable {
 	 */
 	public void setReplaceExtension(String oldextension, String newextension) {
 	}
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.ThreadListener#threadFinished()
+     */
+    public void threadFinished() {
+        synchronized(managersInUse)
+        {
+            managersInUse.remove(lastUsed);
+            managersInUse.notify(); 
+        }        
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
+     */
+    public void threadStarted() {
+        // TODO Auto-generated method stub
+        
+    }
 }
