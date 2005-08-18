@@ -74,6 +74,7 @@ public class FunctionProperty extends AbstractProperty {
 			log.debug("Not running version, return raw function string");
 			return function.getRawParameters();
 		} else {
+            if(!ctx.isSamplingStarted()) return function.execute();
 			log.debug("Running version, executing function");
 			int iter = ctx.getVariables() != null ? ctx.getVariables().getIteration() : -1;
 			if (iter < testIteration) {
