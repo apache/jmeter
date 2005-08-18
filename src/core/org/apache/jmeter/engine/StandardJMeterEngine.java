@@ -301,7 +301,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		if (((TestPlan) plan[0]).isSerialized()) {
 			serialized = true;
 		}
-		JMeterContextService.startTest();
+        JMeterContextService.startTest();
 		compileTree();
 		/**
 		 * Notification of test listeners needs to happen after function
@@ -359,9 +359,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				log.info("Continue on error");
 			}
 
+            ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+            threadGroupTree.add(group, testLevelElements);
 			for (int i = 0; running && i < threads.length; i++) {
-				ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
-				threadGroupTree.add(group, testLevelElements);
 				threads[i] = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
 				threads[i].setThreadNum(i);
 				threads[i].setThreadGroup(group);
