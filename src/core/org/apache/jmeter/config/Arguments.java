@@ -27,6 +27,8 @@ import java.util.Map;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 // Mark Walsh, 2002-08-03 add method:
 // addArgument(String name, Object value, Object metadata)
@@ -41,6 +43,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * @version $Revision$
  */
 public class Arguments extends ConfigTestElement implements Serializable {
+    private static Logger log = LoggingManager.getLoggerForClass();
 	/** The name of the property used to store the arguments. */
 	public static final String ARGUMENTS = "Arguments.arguments";
 

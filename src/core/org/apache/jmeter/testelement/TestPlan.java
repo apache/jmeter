@@ -88,6 +88,11 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		// setSerialized(false);
 		setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
 	}
+    
+    public void prepareForPreCompile()
+    {
+        getVariables().setRunningVersion(true);
+    }
 
 	/**
 	 * Fetches the functional mode property
