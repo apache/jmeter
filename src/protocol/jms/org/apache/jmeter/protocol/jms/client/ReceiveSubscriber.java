@@ -23,6 +23,7 @@ import javax.naming.NamingException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
+import javax.jms.ObjectMessage;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
@@ -40,6 +41,9 @@ import org.apache.log.Logger;
  */
 public class ReceiveSubscriber implements Runnable {
 
+    public static final int TEXT = 0;
+    public static final int OBJECT = 1;
+    
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
@@ -52,7 +56,7 @@ public class ReceiveSubscriber implements Runnable {
 
 	private byte[] RESULT = null;
 
-	private Object OBJ_RESULT = null;// TODO never read
+	private Object OBJ_RESULT = null;
 
 	// private long time = System.currentTimeMillis();
 	private int counter;
@@ -65,6 +69,8 @@ public class ReceiveSubscriber implements Runnable {
 										// is picked up
 
 	private Thread CLIENTTHREAD = null;
+    
+    private int MSG_TYPE = TEXT;
 
 	/**
 	 * 
@@ -174,6 +180,22 @@ public class ReceiveSubscriber implements Runnable {
 		return this.RESULT;
 	}
 
+    /**
+     * current implementation supports Text and Object messages
+     * @return
+     */
+    public int getMessageType() {
+        return this.MSG_TYPE;
+    }
+    
+    /**
+     * Return the raw object in the message
+     * @return
+     */
+    public Object getObjectMessage() {
+        return this.OBJ_RESULT;
+    }
+    
 	/**
 	 * close() will stop the connection first. Then it closes the subscriber,
 	 * session and connection and sets them to null.
@@ -260,12 +282,16 @@ public class ReceiveSubscriber implements Runnable {
 			}
 			try {
 				Message message = this.SUBSCRIBER.receive();
-				if (message != null && message instanceof TextMessage) {
-					TextMessage msg = (TextMessage) message;
-					if (msg.getText().trim().length() > 0) {
-						this.buffer.append(msg.getText());
-						count(1);
-					}
+				if (message != null) {
+                    if (message instanceof TextMessage) {
+                        TextMessage msg = (TextMessage) message;
+                        if (msg.getText().trim().length() > 0) {
+                            this.buffer.append(msg.getText());
+                        }
+                    } else if (message instanceof ObjectMessage) {
+                        this.OBJ_RESULT = ((ObjectMessage)message).getObject();
+                    }
+                    count(1);
 				}
 			} catch (JMSException e) {
 				log.info("Communication error: " + e.getMessage());
