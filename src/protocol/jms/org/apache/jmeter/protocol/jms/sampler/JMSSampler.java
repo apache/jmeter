@@ -31,6 +31,7 @@ import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
+import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -140,6 +141,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 				} else {
 					if (replyMsg instanceof TextMessage) {
 						res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
+                        res.setContentLength(((TextMessage) replyMsg).getText().getBytes().length);
 					} else {
 						res.setResponseData(replyMsg.toString().getBytes());
 					}

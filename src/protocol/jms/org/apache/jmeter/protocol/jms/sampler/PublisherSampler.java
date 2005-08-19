@@ -152,7 +152,12 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 			result.setResponseCode("message published successfully");
 			result.setResponseMessage(loop + " messages published");
 			result.setSuccessful(true);
+            // we have to set the ReponseData so that it gets counted in
+            // the aggregate listener. Since JMS performance is about
+            // the throughput of both pub/sub, it's important to measure
+            // both. Peter Lin
 			result.setResponseData(content.getBytes());
+            result.setSamplerData(content);
 			result.setSampleCount(loop);
 			this.BUFFER.setLength(0);
 		}
