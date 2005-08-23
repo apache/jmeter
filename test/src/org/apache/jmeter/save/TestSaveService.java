@@ -67,11 +67,21 @@ public class TestSaveService extends JMeterTestCase {
 			// fail, because the order of the properties within each
 			// test element may change. Comparing the lengths should be
 			// enough to detect most problem cases...
-			if (len != out.size()) {
+            int outsz=out.size();
+            // Allow for input in CRLF and output in LF only
+            int lines=0;
+            byte ba[]=out.toByteArray();
+            for(int j=0;j<ba.length;j++) {
+                if (ba[j] == '\n'){
+                    lines++;
+                }
+            }
+			if (len != outsz && len != outsz+lines) {
 				failed = true;
 				System.out.println();
 				System.out.println("Loading file testfiles/" + FILES[i] + " and "
-						+ "saving it back changes its size from " + len + " to " + out.size() + ".");
+						+ "saving it back changes its size from " + len + " to " + outsz + ".");
+                System.out.println("Diff "+(len-outsz)+" lines "+lines);
 				if (saveOut) {
 					String outfile = "testfiles/" + FILES[i] + ".out";
 					System.out.println("Write " + outfile);

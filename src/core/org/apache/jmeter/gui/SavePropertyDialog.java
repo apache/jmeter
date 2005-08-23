@@ -92,7 +92,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 			JPanel checkPanel = new JPanel(new GridLayout(x, 3));
 			for (int i = 0; i < methods.length; i++) {
 				String name = methods[i].getName();
-				if (name.startsWith("save")) {
+				if (name.startsWith("save") && methods[i].getParameterTypes().length == 0) {
 					try {
 						name = name.substring(4);
 						JCheckBox check = new JCheckBox(JMeterUtils.getResString("save " + name), ((Boolean) methods[i]
