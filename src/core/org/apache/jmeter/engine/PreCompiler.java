@@ -52,21 +52,25 @@ public class PreCompiler implements HashTreeTraverser {
 	 * @see HashTreeTraverser#addNode(Object, HashTree)
 	 */
 	public void addNode(Object node, HashTree subTree) {
+        if(node instanceof TestElement)
+        {
+            try {
+                replacer.replaceValues((TestElement) node);
+            } catch (InvalidVariableException e) {
+                log.error("invalid variables", e);
+            }
+        }
 		if (node instanceof TestPlan) {
-			Map args = ((TestPlan) node).getUserDefinedVariables();
+            ((TestPlan)node).prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
+            Map args = ((TestPlan) node).getUserDefinedVariables();
 			replacer.setUserDefinedVariables(args);
 			JMeterVariables vars = new JMeterVariables();
 			vars.putAll(args);
 			JMeterContextService.getContext().setVariables(vars);
-		} else if (node instanceof TestElement) {
-			try {
-				replacer.replaceValues((TestElement) node);
-			} catch (InvalidVariableException e) {
-				log.error("invalid variables", e);
-			}
-		}
+		} 
 
 		if (node instanceof Arguments) {
+            ((Arguments)node).setRunningVersion(true);
 			Map args = ((Arguments) node).getArgumentsAsMap();
 			replacer.addVariables(args);
 			JMeterContextService.getContext().getVariables().putAll(args);

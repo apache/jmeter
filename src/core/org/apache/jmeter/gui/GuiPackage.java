@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
@@ -306,6 +307,11 @@ public final class GuiPackage implements LocaleChangeListener {
 			return node;
 		} catch (NoClassDefFoundError e) {
 			log.error("Problem retrieving gui for " + objClass, e);
+            String msg="Cannot find class: "+e.getMessage();
+            JOptionPane.showMessageDialog(null,
+                    msg,
+                    "Missing jar? See log file." , 
+                    JOptionPane.ERROR_MESSAGE);
 			throw new RuntimeException(e.toString()); // Probably a missing
 														// jar
 		} catch (ClassNotFoundException e) {
