@@ -57,6 +57,7 @@
 <li>Bug 30379 - allow server.rmi.port to be overridden</li>
 <li>CSVRead - allow "next" to be appended to column number</li>
 <li>enhanced the monitor listener to save the calculated stats</li>
+<li>Functions and variables now work at top level of test plan</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>

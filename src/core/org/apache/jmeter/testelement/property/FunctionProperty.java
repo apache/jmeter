@@ -70,12 +70,13 @@ public class FunctionProperty extends AbstractProperty {
 		JMeterContext ctx = JMeterContextService.getContext();// Expensive, so
 																// do
 		// once
-		if (!isRunningVersion() || !ctx.isSamplingStarted()) {
+		if (!isRunningVersion() /*|| !ctx.isSamplingStarted()*/) {
 			log.debug("Not running version, return raw function string");
 			return function.getRawParameters();
 		} else {
+            if(!ctx.isSamplingStarted()) return function.execute();
 			log.debug("Running version, executing function");
-			int iter = ctx.getVariables().getIteration();
+			int iter = ctx.getVariables() != null ? ctx.getVariables().getIteration() : -1;
 			if (iter < testIteration) {
 				testIteration = -1;
 			}
