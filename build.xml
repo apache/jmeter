@@ -975,7 +975,7 @@ some of its classes - at present JMeter can only run from jar files.
 	-->
 	<target name="distribution" 
 		depends="assume-libs-present,clean,install,test,_distribution"
-		description="Build JMeter for end-user distribution (includes site)"/>
+		description="Build JMeter for end-user distribution (excludes site)"/>
 
 	<!-- Internal target -->
 	<target name="_distribution">
