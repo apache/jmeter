@@ -1323,7 +1323,9 @@ some of its classes - at present JMeter can only run from jar files.
    	allow this to be specified, it seems...
    	Temporary fix until migrated to SVN
    	-->
+   	<!-- No longer needed as Test code now allows for either
    	<fixcrlf srcdir="bin/testfiles" eol="lf" includes="*.jmx"/>
+   	-->
    <!-- 
    The property java.awt.headless is not automatically passed on,
    because the tests are run in a separate JVM from the build.
