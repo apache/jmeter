@@ -94,12 +94,9 @@ public class IncludeController extends GenericController implements ReplaceableC
      * The way ReplaceableController works is clone is called first,
      * followed by replace(HashTree) and finally getReplacement().
      */
-    public void replace(HashTree tree) {
+    public HashTree getReplacementSubTree() {
         log.info("----- replace(HashTree) ------");
-        ListedHashTree col = (ListedHashTree)this.SUBTREE.get(this.SUB); 
-        JMeterTreeNode newnode = new JMeterTreeNode(this.SUB,
-                GuiPackage.getInstance().getTreeModel());
-        tree.add(newnode,new HashTree(col));
+        return SUBTREE;
     }
 
     public TestElement getReplacement() {
