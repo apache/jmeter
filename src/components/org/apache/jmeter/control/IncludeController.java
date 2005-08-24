@@ -22,13 +22,10 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -56,20 +53,19 @@ public class IncludeController extends GenericController implements ReplaceableC
 	}
 
 	public Object clone() {
-        log.info("----- clone() ------");
         this.loadIncludedElements();
 		IncludeController clone = (IncludeController) super.clone();
         clone.setIncludePath(this.getIncludePath());
-        if (this.SUBTREE.keySet().size() == 1) {
-            Iterator itr = this.SUBTREE.keySet().iterator();
-            while (itr.hasNext()) {
-                this.SUB = (TestElement)itr.next();
+        if (this.SUBTREE != null) {
+            if (this.SUBTREE.keySet().size() == 1) {
+                Iterator itr = this.SUBTREE.keySet().iterator();
+                while (itr.hasNext()) {
+                    this.SUB = (TestElement)itr.next();
+                }
             }
-            System.out.println("key=" + this.SUB.getClass().getName() +
-                    " -- value=" + this.SUBTREE.get(this.SUB).getClass().getName());
+            clone.SUBTREE = (HashTree)this.SUBTREE.clone();
+            clone.SUB = (TestElement)this.SUB.clone();
         }
-        clone.SUBTREE = (HashTree)this.SUBTREE.clone();
-        clone.SUB = (TestElement)this.SUB.clone();
 		return clone;
 	}
 
@@ -95,13 +91,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      * followed by replace(HashTree) and finally getReplacement().
      */
     public HashTree getReplacementSubTree() {
-        log.info("----- replace(HashTree) ------");
         return SUBTREE;
-    }
-
-    public TestElement getReplacement() {
-        log.info("----- getReplacement() ------");
-        return this.SUB;
     }
 
     /**
