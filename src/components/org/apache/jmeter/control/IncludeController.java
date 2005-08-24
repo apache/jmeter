@@ -20,14 +20,15 @@ package org.apache.jmeter.control;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.collections.SearchByClass;
+import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -42,9 +43,8 @@ public class IncludeController extends GenericController implements ReplaceableC
 
     public static final String INCLUDE_PATH = "IncludeController.includepath";
 
-    private Controller INCLUDED_ELEMENTS = null;
-    
     private HashTree SUBTREE = null;
+    private TestElement SUB = null;
 
 	/**
 	 * No-arg constructor
@@ -56,7 +56,20 @@ public class IncludeController extends GenericController implements ReplaceableC
 	}
 
 	public Object clone() {
+        log.info("----- clone() ------");
+        this.loadIncludedElements();
 		IncludeController clone = (IncludeController) super.clone();
+        clone.setIncludePath(this.getIncludePath());
+        if (this.SUBTREE.keySet().size() == 1) {
+            Iterator itr = this.SUBTREE.keySet().iterator();
+            while (itr.hasNext()) {
+                this.SUB = (TestElement)itr.next();
+            }
+            System.out.println("key=" + this.SUB.getClass().getName() +
+                    " -- value=" + this.SUBTREE.get(this.SUB).getClass().getName());
+        }
+        clone.SUBTREE = (HashTree)this.SUBTREE.clone();
+        clone.SUB = (TestElement)this.SUB.clone();
 		return clone;
 	}
 
@@ -77,40 +90,23 @@ public class IncludeController extends GenericController implements ReplaceableC
         return this.getPropertyAsString(INCLUDE_PATH);
     }
     
+    /**
+     * The way ReplaceableController works is clone is called first,
+     * followed by replace(HashTree) and finally getReplacement().
+     */
+    public void replace(HashTree tree) {
+        log.info("----- replace(HashTree) ------");
+        ListedHashTree col = (ListedHashTree)this.SUBTREE.get(this.SUB); 
+        JMeterTreeNode newnode = new JMeterTreeNode(this.SUB,
+                GuiPackage.getInstance().getTreeModel());
+        tree.add(newnode,new HashTree(col));
+    }
+
     public TestElement getReplacement() {
-        this.loadIncludedElements();
-        return this;
+        log.info("----- getReplacement() ------");
+        return this.SUB;
     }
 
-	/**
-	 * Copies the controller's subelements into the execution tree
-	 * 
-	 * @param tree -
-	 *            The current tree under which the nodes will be added
-	 */
-	public void replace(HashTree tree) {
-        /**
-         * 
-        HashTree thistree = findTree(tree);
-        if (thistree != null) {
-            thistree.add(loadIncludedElements());
-            log.info("replace - added the include tree");
-        }
-         */
-        try {
-            GuiPackage.getInstance().addSubTree(loadIncludedElements());
-        } catch (IllegalUserActionException e) {
-            log.warn(e.getMessage());
-        }
-	}
-
-    public HashTree findTree(HashTree tree) {
-        log.info("search the tree ---- " + tree.size() + " --- " + tree.hashCode());
-        SearchByClass search = new SearchByClass(IncludeController.class);
-        tree.traverse(search);
-        return search.getSubTree(this);
-    }
-    
     /**
      * load the included elements using SaveService
      * @param node
