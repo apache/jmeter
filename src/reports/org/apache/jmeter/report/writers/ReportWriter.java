@@ -28,4 +28,6 @@ import org.apache.jmeter.testelement.TestElement;
  */
 public interface ReportWriter {
     ReportSummary writeReport(TestElement element);
+    String getTargetDirectory();
+    void setTargetDirectory(String directory);
 }

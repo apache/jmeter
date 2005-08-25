@@ -14,8 +14,7 @@
  * limitations under the License.
  * 
  */
-
-package org.apache.jmeter.report.writers.gui;
+package org.apache.jmeter.report.gui;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,42 +27,42 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.visualizers.Printable;
 
 /**
- * This is the base class for JMeter GUI components which manage timers.
- * 
  * @author Peter Lin
- * @version $Revision$
+ *
+ * This is the abstract base for report gui's
  */
-public abstract class AbstractReportWriterGui extends AbstractJMeterGuiComponent 
+public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent 
     implements Printable
 {
-	/**
-	 * When a user right-clicks on the component in the test tree, or selects
-	 * the edit menu when the component is selected, the component will be asked
-	 * to return a JPopupMenu that provides all the options available to the
-	 * user from this component.
-	 * <p>
-	 * This implementation returns menu items appropriate for most timer
-	 * components.
-	 * 
-	 * @return a JPopupMenu appropriate for the component.
-	 */
-	public JPopupMenu createPopupMenu() {
-		return MenuFactory.getDefaultTimerMenu();
-	}
 
 	/**
-	 * This is the list of menu categories this gui component will be available
-	 * under. This implementation returns
-	 * {@link org.apache.jmeter.gui.util.MenuFactory#TIMERS}, which is
-	 * appropriate for most timer components.
 	 * 
-	 * @return a Collection of Strings, where each element is one of the
-	 *         constants defined in MenuFactory
+	 */
+	public AbstractReportPageGui() {
+		super();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
+	 */
+	public String getLabelResource() {
+		return AbstractReportPageGui.class.getName();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
+	 */
+	public JPopupMenu createPopupMenu() {
+        return MenuFactory.getDefaultSamplerMenu();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
 	 */
 	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.TIMERS });
+        return Arrays.asList(new String[] { MenuFactory.SAMPLERS });
 	}
-    
+
     /**
      * Subclasses need to over this method, if they wish to return something
      * other than the Visualizer itself.

@@ -47,7 +47,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Peter Lin
  * @version $Revision$
  */
-public class LoadReport implements Command {
+public class ReportLoad implements Command {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	XStream loadService = new XStream();
@@ -58,7 +58,7 @@ public class LoadReport implements Command {
 		commands.add("merge");
 	}
 
-	public LoadReport() {
+	public ReportLoad() {
 		super();
 	}
 
