@@ -49,6 +49,7 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.Converter;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
@@ -103,6 +104,11 @@ public final class OldSaveService implements SaveServiceConstants {
 			}
 
 			result = new SampleResult(timeStamp, elapsed);
+
+			if (_saveConfig.saveContentLength()) {
+				text = splitter.nextToken();
+				result.setContentLength(Converter.getInt(text));
+			}
 
 			if (_saveConfig.saveLabel()) {
 				text = splitter.nextToken();
@@ -162,6 +168,12 @@ public final class OldSaveService implements SaveServiceConstants {
 
 		if (_saveConfig.saveTime()) {
 			text.append(SaveServiceConstants.TIME);
+			text.append(delim);
+		}
+		
+		if(_saveConfig.saveContentLength())
+		{
+			text.append(SaveServiceConstants.CONTENT_LENGTH);
 			text.append(delim);
 		}
 
@@ -419,6 +431,11 @@ public final class OldSaveService implements SaveServiceConstants {
 
 		if (saveConfig.saveTime()) {
 			text.append(sample.getTime());
+			text.append(delimiter);
+		}
+
+		if (saveConfig.saveContentLength()) {
+			text.append(sample.getContentLength());
 			text.append(delimiter);
 		}
 

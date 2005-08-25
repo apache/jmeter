@@ -26,8 +26,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -57,7 +59,7 @@ public class FileServer {
 
 	File base;
 
-	Map files = new HashMap();
+	Map files = Collections.synchronizedMap(new HashMap());
 
 	private static FileServer server = new FileServer();
 
@@ -90,7 +92,12 @@ public class FileServer {
 
 	public synchronized void reserveFile(String filename) {
 		if (!files.containsKey(filename)) {
-			Object[] file = new Object[] { new File(base, filename), null };
+			Object[] file = new Object[2];
+			file[0] = new File(base,filename);
+			if(!((File)file[0]).exists() && !((File)file[0]).getParentFile().exists())
+			{
+				file[0] = new File(filename);
+			}
 			files.put(filename, file);
 		}
 	}
@@ -102,36 +109,53 @@ public class FileServer {
 	 * @return
 	 * @throws IOException
 	 */
-	public synchronized String readLine(String filename) throws IOException {
-		Object[] file = (Object[]) files.get(filename);
-		if (file != null) {
-			if (file[1] == null) {
-				BufferedReader r = new BufferedReader(new FileReader((File) file[0]));
-				file[1] = r;
+	public String readLine(String filename) throws IOException {
+		Object[] file = getFileObjects(filename);
+		synchronized(file)
+		{
+			if (file != null) {
+				if (file[1] == null) {
+					BufferedReader r = new BufferedReader(new FileReader((File) file[0]));
+					file[1] = r;
+				}
+				BufferedReader reader = (BufferedReader) file[1];
+				String line = reader.readLine();
+				if (line == null) {
+					reader.close();
+					reader = new BufferedReader(new FileReader((File) file[0]));
+					file[1] = reader;
+					line = reader.readLine();
+				}
+				return line;
 			}
-			BufferedReader reader = (BufferedReader) file[1];
-			String line = reader.readLine();
-			if (line == null) {
-				reader.close();
-				reader = new BufferedReader(new FileReader((File) file[0]));
-				file[1] = reader;
-				line = reader.readLine();
-			}
-			return line;
 		}
 		throw new IOException("File never reserved");
 	}
-
-	public synchronized void write(String filename, String value) throws IOException {
+	
+	protected Object[] getFileObjects(String filename)
+	{
 		Object[] file = (Object[]) files.get(filename);
-		if (file != null) {
-			if (file[1] == null) {
-				file[1] = new BufferedWriter(new FileWriter((File) file[0]));
-			} else if (!(file[1] instanceof Writer)) {
-				throw new IOException("File " + filename + " already in use");
+		if(file == null)
+		{
+			reserveFile(filename);
+			file = (Object[]) files.get(filename);
+		}
+		return file;		
+	}
+
+	public void write(String filename, String value) throws IOException {
+		Object[] file = getFileObjects(filename);
+		synchronized(file)
+		{
+			if (file != null) {
+				if (file[1] == null) {
+					file[1] = new PrintWriter((File) file[0],"utf-8");
+				} else if (!(file[1] instanceof Writer)) {
+					throw new IOException("File " + filename + " already in use for reading");
+				}
+				PrintWriter writer = (PrintWriter) file[1];
+				writer.write(value);
 			}
-			BufferedWriter writer = (BufferedWriter) file[1];
-			writer.write(value);
 		}
 	}
 
@@ -147,11 +171,14 @@ public class FileServer {
 	 * @param name
 	 * @throws IOException
 	 */
-	public synchronized void closeFile(String name) throws IOException {
+	public void closeFile(String name) throws IOException {
 		Object[] file = (Object[]) files.get(name);
-		if (file != null && file.length == 2 && file[1] != null) {
-			((Reader) file[1]).close();
-			file[1] = null;
+		synchronized(file)
+		{
+			if (file != null && file.length == 2 && file[1] != null) {
+				((Reader) file[1]).close();
+				file[1] = null;
+			}
 		}
 	}
 

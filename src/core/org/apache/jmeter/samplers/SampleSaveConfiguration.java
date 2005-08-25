@@ -131,6 +131,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	 * be saved.
 	 **************************************************************************/
 	public static final String SAVE_SUCCESSFUL_PROP = "jmeter.save.saveservice.successful";
+	
+	public static final String SAVE_CONTENT_LENGTH = "jmeter.save.saveservice.content_length";
 
 	/***************************************************************************
 	 * The name of the property indicating whether the thread name should be
@@ -190,7 +192,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 			code = _code, message = _message, threadName = _threadName, dataType = _dataType, encoding = _encoding,
 			assertions = _assertions, subresults = _subresults, responseData = _responseData,
 			samplerData = _samplerData, xml = _xml, fieldNames = _fieldNames, responseHeaders = _responseHeaders,
-			requestHeaders = _requestHeaders, responseDataOnError = _responseDataOnError;
+			requestHeaders = _requestHeaders, responseDataOnError = _responseDataOnError, contentLength = _contentLength;
 
 	private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
@@ -206,7 +208,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	// Defaults from properties:
 	private static final boolean _time, _timestamp, _success, _label, _code, _message, _threadName, _xml,
 			_responseData, _dataType, _encoding, _assertions, _latency, _subresults, _samplerData, _fieldNames,
-			_responseHeaders, _requestHeaders;
+			_responseHeaders, _requestHeaders, _contentLength;
 
 	private static final boolean _responseDataOnError;
 
@@ -270,6 +272,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		_success = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
 
 		_threadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
+		
+		_contentLength = TRUE.equalsIgnoreCase(props.getProperty(SAVE_CONTENT_LENGTH,TRUE));
 
 		_time = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
@@ -638,5 +642,17 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	public String getDelimiter() {
 		return delimiter;
+	}
+
+	/**
+	 * @param contentLength The contentLength to set.
+	 */
+	public void setContentLength(boolean contentLength) {
+		this.contentLength = contentLength;
+	}
+	
+	public boolean saveContentLength()
+	{
+		return contentLength;
 	}
 }

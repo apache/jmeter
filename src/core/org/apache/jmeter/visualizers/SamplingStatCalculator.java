@@ -211,11 +211,7 @@ public class SamplingStatCalculator implements Serializable {
 			long byteslength = 0;
 			// in case the sampler doesn't return the contents
 			// we see if the bytes was set
-			if (res.getResponseData() == null || res.getResponseData().length == 0) {
-				byteslength = res.getContentLength();
-			} else {
-				byteslength = res.getResponseData().length;
-			}
+			byteslength = res.getContentLength();
 			// if there was more than 1 loop in the sample, we
 			// handle it appropriately
 			if (res.getSampleCount() > 1) {

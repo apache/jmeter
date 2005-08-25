@@ -196,6 +196,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute("dt", ConversionHelp.encode(res.getDataType()));
 		if (save.saveEncoding())
 			writer.addAttribute("de", ConversionHelp.encode(res.getDataEncoding()));
+		if(save.saveContentLength())
+		{
+			writer.addAttribute("len", Integer.toString(res.getContentLength()));
+		}
 	}
 
 	/**
@@ -273,6 +277,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		res.setTime(Converter.getLong(reader.getAttribute("t")));
 		res.setTimeStamp(Converter.getLong(reader.getAttribute("ts")));
 		res.setLatency(Converter.getLong(reader.getAttribute("lt")));
+		res.setContentLength(Converter.getInt(reader.getAttribute("len")));
 	}
 
 	/**
