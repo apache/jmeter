@@ -43,6 +43,8 @@ public interface SaveServiceConstants {
 	public static final String BINARY = "binary";
 
 	public static final String DATA_TYPE = "dataType";
+	
+	public static final String CONTENT_LENGTH = "contentLength";
 
 	public static final String ERROR = "error";
 
