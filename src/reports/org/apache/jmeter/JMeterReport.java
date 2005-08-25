@@ -41,7 +41,8 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
-import org.apache.jmeter.report.gui.action.LoadReport;
+import org.apache.jmeter.report.gui.AbstractReportPageGui;
+import org.apache.jmeter.report.gui.action.ReportLoad;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.action.ReportCheckDirty;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
@@ -94,14 +95,6 @@ public class JMeterReport implements JMeterPlugin {
     private static final int VERSION_OPT = 'v';
 
     private static final int SERVER_OPT = 's';
-
-    private static final int PROXY_HOST = 'H';
-
-    private static final int PROXY_PORT = 'P';
-
-    private static final int PROXY_USERNAME = 'u';
-
-    private static final int PROXY_PASSWORD = 'a';
 
     private static final int JMETER_PROPERTY = 'J';
 
@@ -168,6 +161,7 @@ public class JMeterReport implements JMeterPlugin {
             { WorkBenchGui.class.getName(), "org/apache/jmeter/images/clipboard.gif" },
             { AbstractSamplerGui.class.getName(), "org/apache/jmeter/images/pipet.png" },
             { AbstractReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
+            { AbstractReportPageGui.class.getName(), "org/apache/jmeter/images/new/book.png" },
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }
     };
     
@@ -225,6 +219,9 @@ public class JMeterReport implements JMeterPlugin {
         main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());
         ComponentUtil.centerComponentInWindow(main, 80);
         main.show();
+        /**
+         * 
+         * for now I'm commenting it out to test
         ReportActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ReportCheckDirty.ADD_ALL));
         if (testFile != null) {
             try {
@@ -241,7 +238,7 @@ public class JMeterReport implements JMeterPlugin {
                 JMeterUtils.reportErrorToUser(e.toString());
             }
         }
-        
+         */
     }
 
     /**
