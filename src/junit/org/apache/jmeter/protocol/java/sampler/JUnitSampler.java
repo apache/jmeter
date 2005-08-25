@@ -311,13 +311,19 @@ public class JUnitSampler extends AbstractSampler {
                 // log.warn(e.getMessage());
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
+                sresult.setResponseData(e.getMessage().getBytes());
+                sresult.setSuccessful(false);
             } catch (IllegalAccessException e) {
                 // log.warn(e.getMessage());
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
+                sresult.setResponseData(e.getMessage().getBytes());
+                sresult.setSuccessful(false);
             } catch (Exception e) {
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
+                sresult.setResponseData(e.getMessage().getBytes());
+                sresult.setSuccessful(false);
             }
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
