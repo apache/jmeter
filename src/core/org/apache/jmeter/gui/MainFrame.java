@@ -73,16 +73,16 @@ import org.apache.jorphan.gui.ComponentUtil;
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
 	/** The menu bar. */
-	protected JMeterMenuBar menuBar;
+	private JMeterMenuBar menuBar;
 
 	/** The main panel where components display their GUIs. */
-	protected JScrollPane mainPanel;
+	private JScrollPane mainPanel;
 
 	/** The panel where the test tree is shown. */
-	protected JScrollPane treePanel;
+	private JScrollPane treePanel;
 
 	/** The test tree. */
-	protected JTree tree;
+	private JTree tree;
 
 	/** An image which is displayed when a test is running. */
 	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
