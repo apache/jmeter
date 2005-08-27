@@ -37,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -52,11 +53,12 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.action.GlobalMouseListener;
-import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jmeter.gui.util.ReportMenuBar;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.tree.ReportCellRenderer;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
-import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 
@@ -67,15 +69,33 @@ import org.apache.jorphan.gui.ComponentUtil;
  * @author Michael Stover
  * @version $Revision$
  */
-public class ReportMainFrame extends MainFrame {
+public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
 
-	/** An image which is displayed when a test is running. */
+    /** The menu bar. */
+    protected ReportMenuBar menuBar;
+
+    /** The main panel where components display their GUIs. */
+    protected JScrollPane mainPanel;
+
+    /** The panel where the test tree is shown. */
+    protected JScrollPane treePanel;
+
+    /** The test tree. */
+    protected JTree tree;
+
+    /** An image which is displayed when a test is running. */
 	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
 
 	/** An image which is displayed when a test is not currently running. */
 	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");
 
-	/** The button used to display the running/stopped image. */
+    /** The x coordinate of the last location where a component was dragged. */
+    private int previousDragXLocation = 0;
+
+    /** The y coordinate of the last location where a component was dragged. */
+    private int previousDragYLocation = 0;
+
+    /** The button used to display the running/stopped image. */
 	private JButton runningIndicator;
 
 	/** The set of currently running hosts. */
@@ -84,7 +104,7 @@ public class ReportMainFrame extends MainFrame {
 	/** A message dialog shown while JMeter threads are stopping. */
 	private JDialog stoppingMessage;
 
-	/**
+    /**
 	 * Create a new JMeter frame.
 	 * 
 	 * @param actionHandler
@@ -96,16 +116,16 @@ public class ReportMainFrame extends MainFrame {
 	 */
 	public ReportMainFrame(ActionListener actionHandler, TreeModel treeModel,
             ReportTreeListener treeListener) {
-        super.tree = this.makeTree(treeModel,treeListener);
-	}
+        runningIndicator = new JButton(stoppedIcon);
+        runningIndicator.setMargin(new Insets(0, 0, 0, 0));
+        runningIndicator.setBorder(BorderFactory.createEmptyBorder());
 
-	/**
-	 * Default constructor for the JMeter frame. This constructor will not
-	 * properly initialize the tree, so don't use it.
-	 */
-	public ReportMainFrame() {
-		// TODO: Can we remove this constructor? JMeter won't behave properly
-		// if it used.
+        this.tree = this.makeTree(treeModel,treeListener);
+
+        ReportGuiPackage.getInstance().setMainFrame(this);
+        init();
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 
 	// MenuBar related methods
@@ -119,7 +139,7 @@ public class ReportMainFrame extends MainFrame {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setFileLoadEnabled(boolean enabled) {
-        super.setFileLoadEnabled(enabled);
+        menuBar.setFileLoadEnabled(enabled);
 	}
 
 	/**
@@ -129,7 +149,7 @@ public class ReportMainFrame extends MainFrame {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setFileSaveEnabled(boolean enabled) {
-		super.setFileSaveEnabled(enabled);
+        menuBar.setFileSaveEnabled(enabled);
 	}
 
 	/**
@@ -139,7 +159,7 @@ public class ReportMainFrame extends MainFrame {
 	 *            the new Edit menu
 	 */
 	public void setEditMenu(JPopupMenu menu) {
-		super.setEditMenu(menu);
+        menuBar.setEditMenu(menu);
 	}
 
 	/**
@@ -149,7 +169,7 @@ public class ReportMainFrame extends MainFrame {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditEnabled(boolean enabled) {
-		super.setEditEnabled(enabled);
+		menuBar.setEditEnabled(enabled);
 	}
 
 	/**
@@ -159,7 +179,7 @@ public class ReportMainFrame extends MainFrame {
 	 *            the new Edit|Add menu
 	 */
 	public void setEditAddMenu(JMenu menu) {
-		super.setEditAddMenu(menu);
+		menuBar.setEditAddMenu(menu);
 	}
 
 	/**
@@ -169,7 +189,7 @@ public class ReportMainFrame extends MainFrame {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditAddEnabled(boolean enabled) {
-		super.setEditAddEnabled(enabled);
+		menuBar.setEditAddEnabled(enabled);
 	}
 
 	/**
@@ -179,8 +199,53 @@ public class ReportMainFrame extends MainFrame {
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditRemoveEnabled(boolean enabled) {
-		super.setEditRemoveEnabled(enabled);
+		menuBar.setEditRemoveEnabled(enabled);
 	}
+
+    /**
+     * Close the currently selected menu.
+     */
+    public void closeMenu() {
+        if (menuBar.isSelected()) {
+            MenuElement[] menuElement = menuBar.getSubElements();
+            if (menuElement != null) {
+                for (int i = 0; i < menuElement.length; i++) {
+                    JMenu menu = (JMenu) menuElement[i];
+                    if (menu.isSelected()) {
+                        menu.setPopupMenuVisible(false);
+                        menu.setSelected(false);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Show a dialog indicating that JMeter threads are stopping on a particular
+     * host.
+     * 
+     * @param host
+     *            the host where JMeter threads are stopping
+     */
+    public void showStoppingMessage(String host) {
+        stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true);
+        JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host);
+        stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        stoppingMessage.getContentPane().add(stopLabel);
+        stoppingMessage.pack();
+        ComponentUtil.centerComponentInComponent(this, stoppingMessage);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (stoppingMessage != null) {
+                    stoppingMessage.show();
+                }
+            }
+        });
+    }
+
+    public void setMainPanel(JComponent comp) {
+        mainPanel.setViewportView(comp);
+    }
 
 	/***************************************************************************
 	 * !ToDoo (Method description)
@@ -188,7 +253,7 @@ public class ReportMainFrame extends MainFrame {
 	 * @return !ToDo (Return description)
 	 **************************************************************************/
 	public JTree getTree() {
-		return super.getTree();
+		return this.tree;
 	}
 
 	// TestListener implementation
@@ -242,8 +307,7 @@ public class ReportMainFrame extends MainFrame {
 	 * Create the GUI components and layout.
 	 */
 	protected void init() {
-        super.init();
-		menuBar = new JMeterMenuBar();
+		menuBar = new ReportMenuBar();
 		setJMenuBar(menuBar);
 
 		JPanel all = new JPanel(new BorderLayout());
@@ -268,16 +332,41 @@ public class ReportMainFrame extends MainFrame {
 		addMouseListener(new GlobalMouseListener());
     }
 
-	/**
-	 * Create the JMeter tool bar pane containing the running indicator.
-	 * 
-	 * @return a panel containing the running indicator
-	 */
-	protected Component createToolBar() {
-        return super.createToolBar();
-	}
+    /**
+     * Create the JMeter tool bar pane containing the running indicator.
+     * 
+     * @return a panel containing the running indicator
+     */
+    protected Component createToolBar() {
+        Box toolPanel = new Box(BoxLayout.X_AXIS);
+        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(Box.createGlue());
+        toolPanel.add(runningIndicator);
+        return toolPanel;
+    }
 
-	/**
+    /**
+     * Create the panel where the GUI representation of the test tree is
+     * displayed. The tree should already be created before calling this method.
+     * 
+     * @return a scroll pane containing the test tree GUI
+     */
+    protected JScrollPane createTreePanel() {
+        JScrollPane treeP = new JScrollPane(tree);
+        treeP.setMinimumSize(new Dimension(100, 0));
+        return treeP;
+    }
+
+    /**
+     * Create the main panel where components can display their GUIs.
+     * 
+     * @return the main scroll pane
+     */
+    protected JScrollPane createMainPanel() {
+        return new JScrollPane();
+    }
+
+    /**
 	 * Create and initialize the GUI representation of the test tree.
 	 * 
 	 * @param treeModel
@@ -313,4 +402,29 @@ public class ReportMainFrame extends MainFrame {
         return rend;
     }
 
+    public void drawDraggedComponent(Component dragIcon, int x, int y) {
+        Dimension size = dragIcon.getPreferredSize();
+        treePanel.paintImmediately(previousDragXLocation, previousDragYLocation, size.width, size.height);
+        this.getLayeredPane().setLayer(dragIcon, 400);
+        SwingUtilities.paintComponent(treePanel.getGraphics(), dragIcon, treePanel, x, y, size.width, size.height);
+        previousDragXLocation = x;
+        previousDragYLocation = y;
+    }
+    
+    /**
+     * A window adapter used to detect when the main JMeter frame is being
+     * closed.
+     */
+    protected class WindowHappenings extends WindowAdapter {
+        /**
+         * Called when the main JMeter frame is being closed. Sends a
+         * notification so that JMeter can react appropriately.
+         * 
+         * @param event
+         *            the WindowEvent to handle
+         */
+        public void windowClosing(WindowEvent event) {
+            ReportActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), "exit"));
+        }
+    }
 }

@@ -25,7 +25,6 @@ import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
@@ -33,7 +32,6 @@ import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
-import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
@@ -130,8 +128,7 @@ public class ReportTreeModel extends DefaultTreeModel {
 	}
 
 	public void removeNodeFromParent(ReportTreeNode node) {
-		if (!(node.getUserObject() instanceof ReportPlan)
-				&& !(node.getUserObject() instanceof WorkBench)) {
+		if (!(node.getUserObject() instanceof ReportPlan)) {
 			super.removeNodeFromParent(node);
 		}
 	}
@@ -183,15 +180,8 @@ public class ReportTreeModel extends DefaultTreeModel {
 	}
 
 	private void initTree() {
-		TestElement tp = new TestPlanGui().createTestElement();
 		TestElement wb = new ReportGui().createTestElement();
-		this.insertNodeInto(new ReportTreeNode(tp, this),
-				(ReportTreeNode) getRoot(), 0);
-		try {
-			super.removeNodeFromParent((ReportTreeNode) getChild(getRoot(), 1));
-		} catch (RuntimeException e) {
-		}
 		this.insertNodeInto(new ReportTreeNode(wb, this),
-				(ReportTreeNode) getRoot(), 1);
+				(ReportTreeNode) getRoot(), 0);
 	}
 }

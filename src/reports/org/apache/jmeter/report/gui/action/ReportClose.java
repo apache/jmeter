@@ -24,7 +24,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.gui.action.CheckDirty;
 import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.action.Save;
@@ -66,7 +66,7 @@ public class ReportClose implements Command {
 	 *            the generic UI action event
 	 */
 	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().doActionNow(
+		ReportActionRouter.getInstance().doActionNow(
 				new ActionEvent(e.getSource(), e.getID(),
 						ReportCheckDirty.CHECK_DIRTY));
 		ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
