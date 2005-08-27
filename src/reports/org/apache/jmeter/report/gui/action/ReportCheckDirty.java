@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.gui.action.AbstractAction;
+import org.apache.jmeter.report.gui.action.AbstractAction;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.report.gui.action.ReportExitCommand;

@@ -25,7 +25,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
-import org.apache.jmeter.gui.action.AbstractAction;
+import org.apache.jmeter.report.gui.action.AbstractAction;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jorphan.logging.LoggingManager;

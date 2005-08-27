@@ -28,7 +28,7 @@ import javax.swing.JFileChooser;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.visualizers.Printable;
@@ -77,13 +77,13 @@ public class ReportSaveGraphics implements Command {
 			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
 		}
 		if (e.getActionCommand().equals(SAVE_GRAPHICS)) {
-			component = GuiPackage.getInstance().getCurrentGui();
+			component = ReportGuiPackage.getInstance().getCurrentGui();
 			// get the JComponent from the visualizer
 			if (component instanceof Printable) {
 				comp = ((Printable) component).getPrintableComponent();
 
 				String filename;
-				JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+				JFileChooser chooser = FileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
 						.getCurrentNode().getName(), extensions);
 				if (chooser == null) {
 					return;

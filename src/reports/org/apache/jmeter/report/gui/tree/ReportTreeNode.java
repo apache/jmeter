@@ -28,7 +28,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.jmeter.gui.GUIFactory;
-import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.tree.NamedTreeNode;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -114,7 +114,7 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
 
 	public Collection getMenuCategories() {
 		try {
-			return GuiPackage.getInstance().getGui(getTestElement())
+			return ReportGuiPackage.getInstance().getGui(getTestElement())
 					.getMenuCategories();
 		} catch (Exception e) {
 			log.error("Can't get popup menu for gui", e);
@@ -124,7 +124,7 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
 
 	public JPopupMenu createPopupMenu() {
 		try {
-			return GuiPackage.getInstance().getGui(getTestElement())
+			return ReportGuiPackage.getInstance().getGui(getTestElement())
 					.createPopupMenu();
 		} catch (Exception e) {
 			log.error("Can't get popup menu for gui", e);
@@ -137,12 +137,12 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
 	}
 
 	public String getStaticLabel() {
-		return GuiPackage.getInstance().getGui((TestElement) getUserObject())
+		return ReportGuiPackage.getInstance().getGui((TestElement) getUserObject())
 				.getStaticLabel();
 	}
 
 	public String getDocAnchor() {
-		return GuiPackage.getInstance().getGui((TestElement) getUserObject())
+		return ReportGuiPackage.getInstance().getGui((TestElement) getUserObject())
 				.getDocAnchor();
 	}
 
