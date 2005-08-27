@@ -22,6 +22,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -32,15 +34,16 @@ import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.ReportGui;
-import org.apache.jmeter.control.gui.TestPlanGui;
-import org.apache.jmeter.control.gui.WorkBenchGui;
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
-import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
+import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jmeter.threads.gui.ThreadGroupGui;
-import org.apache.jmeter.timers.gui.AbstractTimerGui;
+import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.report.gui.AbstractReportPageGui;
 import org.apache.jmeter.report.gui.action.ReportLoad;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
@@ -48,6 +51,8 @@ import org.apache.jmeter.report.gui.action.ReportCheckDirty;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeModel;
 import org.apache.jmeter.report.writers.gui.AbstractReportWriterGui;
+import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
@@ -141,6 +146,8 @@ public class JMeterReport implements JMeterPlugin {
             new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
                     "the jmeter home directory to use"), };
     
+    transient boolean testEnded = false;
+
     /**
 	 * 
 	 */
@@ -152,14 +159,9 @@ public class JMeterReport implements JMeterPlugin {
      * The default icons for the report GUI.
      */
     private static final String[][] DEFAULT_ICONS = {
-            { TestPlanGui.class.getName(), "org/apache/jmeter/images/beaker.gif" },
-            { AbstractTimerGui.class.getName(), "org/apache/jmeter/images/timer.gif" },
-            { ThreadGroupGui.class.getName(), "org/apache/jmeter/images/thread.gif" },
             { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },
             { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },
             { AbstractControllerGui.class.getName(), "org/apache/jmeter/images/knob.gif" },
-            { WorkBenchGui.class.getName(), "org/apache/jmeter/images/clipboard.gif" },
-            { AbstractSamplerGui.class.getName(), "org/apache/jmeter/images/pipet.png" },
             { AbstractReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
             { AbstractReportPageGui.class.getName(), "org/apache/jmeter/images/new/book.png" },
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }
@@ -219,9 +221,7 @@ public class JMeterReport implements JMeterPlugin {
         main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());
         ComponentUtil.centerComponentInWindow(main, 80);
         main.show();
-        /**
-         * 
-         * for now I'm commenting it out to test
+
         ReportActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ReportCheckDirty.ADD_ALL));
         if (testFile != null) {
             try {
@@ -232,15 +232,82 @@ public class JMeterReport implements JMeterPlugin {
 
                 ReportGuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
 
-                new LoadReport().insertLoadedTree(1, tree);
+                new ReportLoad().insertLoadedTree(1, tree);
             } catch (Exception e) {
                 log.error("Failure loading test file", e);
                 JMeterUtils.reportErrorToUser(e.toString());
             }
         }
-         */
     }
 
+	private void run(String testFile, String logFile, boolean remoteStart) {
+		FileInputStream reader = null;
+		try {
+			File f = new File(testFile);
+			if (!f.exists() || !f.isFile()) {
+				System.out.println("Could not open " + testFile);
+				return;
+			}
+			FileServer.getFileServer().setBasedir(f.getAbsolutePath());
+
+			reader = new FileInputStream(f);
+			log.info("Loading file: " + f);
+
+			HashTree tree = SaveService.loadTree(reader);
+
+			// Remove the disabled items
+			// For GUI runs this is done in Start.java
+			convertSubTree(tree);
+
+			if (logFile != null) {
+				ResultCollector logger = new ResultCollector();
+				logger.setFilename(logFile);
+				tree.add(tree.getArray()[0], logger);
+			}
+			String summariserName = JMeterUtils.getPropDefault(
+					"summariser.name", "");//$NON-NLS-1$
+			if (summariserName.length() > 0) {
+				log.info("Creating summariser <" + summariserName + ">");
+				System.out.println("Creating summariser <" + summariserName + ">");
+				Summariser summer = new Summariser(summariserName);
+				tree.add(tree.getArray()[0], summer);
+			}
+			tree.add(tree.getArray()[0], new ListenToTest(parent));
+			System.out.println("Created the tree successfully");
+            /**
+			JMeterEngine engine = null;
+			if (!remoteStart) {
+				engine = new StandardJMeterEngine();
+				engine.configure(tree);
+				System.out.println("Starting the test");
+				engine.runTest();
+			} else {
+				String remote_hosts_string = JMeterUtils.getPropDefault(
+						"remote_hosts", "127.0.0.1");
+				java.util.StringTokenizer st = new java.util.StringTokenizer(
+						remote_hosts_string, ",");
+				List engines = new LinkedList();
+				while (st.hasMoreElements()) {
+					String el = (String) st.nextElement();
+					System.out.println("Configuring remote engine for " + el);
+					// engines.add(doRemoteInit(el.trim(), tree));
+				}
+				System.out.println("Starting remote engines");
+				Iterator iter = engines.iterator();
+				while (iter.hasNext()) {
+					engine = (JMeterEngine) iter.next();
+					engine.runTest();
+				}
+				System.out.println("Remote engines have been started");
+			}
+            **/
+		} catch (Exception e) {
+			System.out.println("Error in NonGUIDriver " + e.toString());
+			log.error("", e);
+		}
+	}
+
+    
     /**
      * 
      * @param args
@@ -344,4 +411,110 @@ public class JMeterReport implements JMeterPlugin {
 
     }
     
+    /**
+     * Code copied from AbstractAction.java and modified to suit TestElements
+     * 
+     * @param tree
+     */
+    private void convertSubTree(HashTree tree) {// TODO check build dependencies
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext()) {
+            TestElement item = (TestElement) iter.next();
+            if (item.isEnabled()) {
+                // This is done for GUI runs in JMeterTreeModel.addSubTree()
+                if (item instanceof ReportPlan) {
+                    ReportPlan tp = (ReportPlan) item;
+                    tp.setSerialized(tp.isSerialized());
+                }
+                // TODO handle ReplaceableControllers
+                // if (item instanceof ReplaceableController)
+                // {
+                // System.out.println("Replaceable "+item.getClass().getName());
+                // HashTree subTree = tree.getTree(item);
+                //
+                // if (subTree != null)
+                // {
+                // ReplaceableController rc =
+                // (ReplaceableController) item;//.createTestElement();
+                // rc.replace(subTree);
+                // convertSubTree(subTree);
+                // tree.replace(item, rc.getReplacement());
+                // }
+                // }
+                // else
+                {
+                    // System.out.println("NonReplaceable
+                    // "+item.getClass().getName());
+                    convertSubTree(tree.getTree(item));
+                    // TestElement testElement = item.createTestElement();
+                    // tree.replace(item, testElement);
+                }
+            } else {
+                // System.out.println("Disabled "+item.getClass().getName());
+                tree.remove(item);
+            }
+        }
+    }
+    
+    /**
+     * Listen to test and exit program after test completes, after a 5 second
+     * delay to give listeners a chance to close out their files.
+     */
+    private class ListenToTest implements TestListener, Runnable, Remoteable {
+        int started = 0;
+
+        private JMeterReport _parent;
+
+        private ListenToTest(JMeterReport parent) {
+            _parent = parent;
+        }
+
+        public synchronized void testEnded(String host) {
+            started--;
+            log.info("Remote host " + host + " finished");
+            if (started == 0) {
+                testEnded();
+            }
+        }
+
+        public void testEnded() {
+            Thread stopSoon = new Thread(this);
+            stopSoon.start();
+        }
+
+        public synchronized void testStarted(String host) {
+            started++;
+            log.info("Started remote host: " + host);
+        }
+
+        public void testStarted() {
+            log.info(JMeterUtils.getResString("running_test"));
+        }
+
+        /**
+         * This is a hack to allow listeners a chance to close their files. Must
+         * implement a queue for sample responses tied to the engine, and the
+         * engine won't deliver testEnded signal till all sample responses have
+         * been delivered. Should also improve performance of remote JMeter
+         * testing.
+         */
+        public void run() {
+            System.out.println("Tidying up ...");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // ignored
+            }
+            System.out.println("... end of run");
+            _parent.testEnded = true;
+        }
+
+        /**
+         * @see TestListener#testIterationStart(LoopIterationEvent)
+         */
+        public void testIterationStart(LoopIterationEvent event) {
+            // ignored
+        }
+    }
+
 }

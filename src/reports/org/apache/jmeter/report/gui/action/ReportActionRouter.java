@@ -268,7 +268,7 @@ public final class ReportActionRouter implements ActionListener {
 			while (iterClasses.hasNext()) {
 				String strClassName = (String) iterClasses.next();
                 if (strClassName.startsWith("org.apache.jmeter.report.gui.action")) {
-                    log.info("classname:: " + strClassName);
+                    // log.info("classname:: " + strClassName);
                     commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         command = (Command) commandClass.newInstance();

@@ -27,16 +27,16 @@ import java.util.Map;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
+import org.apache.jmeter.report.engine.ValueReplacer;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeModel;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
+import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
@@ -488,7 +488,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 * @return a ValueReplacer configured for the test tree
 	 */
 	public ValueReplacer getReplacer() {
-		return new ValueReplacer((TestPlan) ((ReportTreeNode) getTreeModel().getTestPlan().getArray()[0])
+		return new ValueReplacer((ReportPlan) ((ReportTreeNode) getTreeModel().getTestPlan().getArray()[0])
 				.getTestElement());
 	}
 
@@ -499,7 +499,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 *            the new JMeter main frame
 	 */
 	public void setMainFrame(ReportMainFrame newMainFrame) {
-		mainFrame = newMainFrame;
+		this.mainFrame = newMainFrame;
 	}
 
 	/**
@@ -507,8 +507,8 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 * 
 	 * @return the main JMeter frame
 	 */
-	public MainFrame getMainFrame() {
-		return mainFrame;
+	public ReportMainFrame getMainFrame() {
+		return this.mainFrame;
 	}
 
 	/**
@@ -589,7 +589,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 		// EditCommand action -- we can't just trigger the action because that
 		// would populate the current node with the contents of the new GUI --
 		// which is empty.]
-		MainFrame mf = getMainFrame(); // Fetch once
+		ReportMainFrame mf = getMainFrame(); // Fetch once
 		if (mf == null) // Probably caused by unit testing on headless system
 		{
 			log.warn("Mainframe is null");

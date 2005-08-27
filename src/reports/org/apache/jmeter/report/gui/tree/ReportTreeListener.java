@@ -35,10 +35,9 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.apache.jmeter.control.gui.TestPlanGui;
-import org.apache.jmeter.control.gui.WorkBenchGui;
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.MainFrame;
+import org.apache.jmeter.control.gui.ReportGui;
+import org.apache.jmeter.gui.ReportGuiPackage;
+import org.apache.jmeter.gui.ReportMainFrame;
 import org.apache.jmeter.report.gui.action.ReportDragNDrop;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -189,7 +188,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
 			dragNdrop.add(item);
 			displayPopUp(e, dragNdrop);
 		} else {
-			GuiPackage.getInstance().getMainFrame().repaint();
+			ReportGuiPackage.getInstance().getMainFrame().repaint();
 		}
 		dragging = false;
 	}
@@ -218,7 +217,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
 
 	private void changeSelectionIfDragging(MouseEvent e) {
 		if (dragging) {
-			GuiPackage.getInstance().getMainFrame().drawDraggedComponent(dragIcon, e.getX(), e.getY());
+			ReportGuiPackage.getInstance().getMainFrame().drawDraggedComponent(dragIcon, e.getX(), e.getY());
 			if (tree.getPathForLocation(e.getX(), e.getY()) != null) {
 				currentPath = tree.getPathForLocation(e.getX(), e.getY());
 				if (!contains(draggedNodes, getCurrentNode())) {
@@ -239,7 +238,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
 
 	public void mousePressed(MouseEvent e) {
 		// Get the Main Frame.
-		MainFrame mainFrame = GuiPackage.getInstance().getMainFrame();
+		ReportMainFrame mainFrame = ReportGuiPackage.getInstance().getMainFrame();
 		// Close any Main Menu that is open
 		mainFrame.closeMenu();
 		int selRow = tree.getRowForLocation(e.getX(), e.getY());
@@ -266,8 +265,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
 		if (!dragging) {
 			dragging = true;
 			draggedNodes = getSelectedNodes();
-			if (draggedNodes[0].getUserObject() instanceof TestPlanGui
-					|| draggedNodes[0].getUserObject() instanceof WorkBenchGui) {
+			if (draggedNodes[0].getUserObject() instanceof ReportGui) {
 				dragging = false;
 			}
 
@@ -304,7 +302,7 @@ public class ReportTreeListener implements TreeSelectionListener, MouseListener,
 
 	private void displayPopUp(MouseEvent e) {
 		JPopupMenu pop = getCurrentNode().createPopupMenu();
-		GuiPackage.getInstance().displayPopUp(e, pop);
+		ReportGuiPackage.getInstance().displayPopUp(e, pop);
 	}
 
 	private void displayPopUp(MouseEvent e, JPopupMenu popup) {

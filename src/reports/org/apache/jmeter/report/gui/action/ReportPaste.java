@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.gui.action.AbstractAction;
+import org.apache.jmeter.report.gui.action.AbstractAction;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 
