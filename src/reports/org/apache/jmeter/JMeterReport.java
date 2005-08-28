@@ -32,7 +32,6 @@ import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.ReportGuiPackage;
@@ -161,7 +160,6 @@ public class JMeterReport implements JMeterPlugin {
     private static final String[][] DEFAULT_ICONS = {
             { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },
             { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },
-            { AbstractControllerGui.class.getName(), "org/apache/jmeter/images/knob.gif" },
             { AbstractReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
             { AbstractReportPageGui.class.getName(), "org/apache/jmeter/images/new/book.png" },
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }

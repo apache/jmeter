@@ -31,7 +31,7 @@ import javax.swing.JTextArea;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
-import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -77,12 +77,12 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(MenuFactory.makeMenuItem(new ThreadGroupGui().getStaticLabel(), ThreadGroupGui.class.getName(),
+		addMenu.add(ReportMenuFactory.makeMenuItem(new ThreadGroupGui().getStaticLabel(), ThreadGroupGui.class.getName(),
 				"Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, "Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
+		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.LISTENERS, "Add"));
+		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
 		pop.add(addMenu);
-		MenuFactory.addFileMenu(pop);
+		ReportMenuFactory.addFileMenu(pop);
 		return pop;
 	}
 
