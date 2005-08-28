@@ -23,7 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
-import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.visualizers.Printable;
 
 /**
@@ -53,14 +53,14 @@ public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
 	 */
 	public JPopupMenu createPopupMenu() {
-        return MenuFactory.getDefaultSamplerMenu();
+        return ReportMenuFactory.getDefaultSamplerMenu();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
 	 */
 	public Collection getMenuCategories() {
-        return Arrays.asList(new String[] { MenuFactory.SAMPLERS });
+        return Arrays.asList(new String[] { ReportMenuFactory.SAMPLERS });
 	}
 
     /**

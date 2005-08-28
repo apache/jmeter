@@ -139,7 +139,8 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setFileLoadEnabled(boolean enabled) {
-        menuBar.setFileLoadEnabled(enabled);
+        // menuBar.setFileLoadEnabled(enabled);
+        menuBar.setFileLoadEnabled(true);
 	}
 
 	/**
@@ -149,7 +150,8 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setFileSaveEnabled(boolean enabled) {
-        menuBar.setFileSaveEnabled(enabled);
+        // menuBar.setFileSaveEnabled(enabled);
+        menuBar.setFileSaveEnabled(true);
 	}
 
 	/**
@@ -169,7 +171,8 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	 *            true if the menu item should be enabled, false otherwise
 	 */
 	public void setEditEnabled(boolean enabled) {
-		menuBar.setEditEnabled(enabled);
+		// menuBar.setEditEnabled(enabled);
+        menuBar.setEditEnabled(true);
 	}
 
 	/**

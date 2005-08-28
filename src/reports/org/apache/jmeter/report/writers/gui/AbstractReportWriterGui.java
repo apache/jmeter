@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
-import org.apache.jmeter.gui.util.MenuFactory;
+import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.visualizers.Printable;
 
 /**
@@ -48,7 +48,7 @@ public abstract class AbstractReportWriterGui extends AbstractJMeterGuiComponent
 	 * @return a JPopupMenu appropriate for the component.
 	 */
 	public JPopupMenu createPopupMenu() {
-		return MenuFactory.getDefaultTimerMenu();
+		return ReportMenuFactory.getDefaultTimerMenu();
 	}
 
 	/**
@@ -61,7 +61,7 @@ public abstract class AbstractReportWriterGui extends AbstractJMeterGuiComponent
 	 *         constants defined in MenuFactory
 	 */
 	public Collection getMenuCategories() {
-		return Arrays.asList(new String[] { MenuFactory.TIMERS });
+		return Arrays.asList(new String[] { ReportMenuFactory.TIMERS });
 	}
     
     /**

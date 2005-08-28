@@ -75,14 +75,10 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
 	public ReportPlan() {
 		// this("Test Plan");
-		// setFunctionalMode(false);
-		// setSerialized(false);
 	}
 
 	public ReportPlan(String name) {
 		setName(name);
-		// setFunctionalMode(false);
-		// setSerialized(false);
 		setProperty(new CollectionProperty(REPORT_PAGE, reportPages));
 	}
 
@@ -145,7 +141,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 			} else {
 				plan = new ReportPlan(name);
 			}
-			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.TestPlanGui"));
+			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.ReportGui"));
 		}
 		return plan;
 	}
