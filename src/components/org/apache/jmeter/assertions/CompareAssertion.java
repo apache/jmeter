@@ -2,6 +2,7 @@ package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	private boolean compareContent = true;
 
 	private long compareTime = -1;
+	
+	Collection stringsToSkip;
 
 	public CompareAssertion() {
 		super();
@@ -173,6 +176,20 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	 */
 	public void setCompareTime(long compareTime) {
 		this.compareTime = compareTime;
+	}
+
+	/**
+	 * @return Returns the stringsToSkip.
+	 */
+	public Collection getStringsToSkip() {
+		return stringsToSkip;
+	}
+
+	/**
+	 * @param stringsToSkip The stringsToSkip to set.
+	 */
+	public void setStringsToSkip(Collection stringsToSkip) {
+		this.stringsToSkip = stringsToSkip;
 	}
 
 }

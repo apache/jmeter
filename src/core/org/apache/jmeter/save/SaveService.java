@@ -225,7 +225,7 @@ public class SaveService {
 		checkVersion(IntegerPropertyConverter.class, "1.4");
 		checkVersion(LongPropertyConverter.class, "1.4");
 		checkVersion(MultiPropertyConverter.class, "1.4");
-		checkVersion(SampleResultConverter.class, "1.9");
+		checkVersion(SampleResultConverter.class, "1.10");
 		/*
 		 * Should check this, but tricky to do, because not built until later.
 		 * 
