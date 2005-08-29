@@ -36,6 +36,11 @@ import org.apache.jmeter.visualizers.Printable;
 public abstract class AbstractReportWriterGui extends AbstractJMeterGuiComponent 
     implements Printable
 {
+    public String getLabelResource() {
+        // Replace this with property string later
+        return "report_writer";
+    }
+
 	/**
 	 * When a user right-clicks on the component in the test tree, or selects
 	 * the edit menu when the component is selected, the component will be asked
@@ -48,7 +53,7 @@ public abstract class AbstractReportWriterGui extends AbstractJMeterGuiComponent
 	 * @return a JPopupMenu appropriate for the component.
 	 */
 	public JPopupMenu createPopupMenu() {
-		return ReportMenuFactory.getDefaultTimerMenu();
+		return ReportMenuFactory.getDefaultControllerMenu();
 	}
 
 	/**

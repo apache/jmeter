@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +44,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
+ * This is a version of the MenuBar for the reporting tool. I started
+ * with the existing jmeter menubar.
+ * @author Peter Lin
  * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
  * @version $Revision$ updated on $Date$
  */
 public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
