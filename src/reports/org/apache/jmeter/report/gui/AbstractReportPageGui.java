@@ -1,3 +1,4 @@
+//$Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -20,10 +21,14 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
+import org.apache.jmeter.threads.gui.ThreadGroupGui;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 
 /**
@@ -46,14 +51,21 @@ public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
 	 */
 	public String getLabelResource() {
-		return AbstractReportPageGui.class.getName();
+		return "report_page";
 	}
 
 	/* (non-Javadoc)
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
 	 */
 	public JPopupMenu createPopupMenu() {
-        return ReportMenuFactory.getDefaultSamplerMenu();
+        JPopupMenu pop = new JPopupMenu();
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
+        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
+        pop.add(addMenu);
+        MenuFactory.addFileMenu(pop);
+        return pop;
 	}
 
 	/* (non-Javadoc)

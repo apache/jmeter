@@ -1,3 +1,4 @@
+//$Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -66,11 +67,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 	private static boolean functionalMode = false;
 
 	static {
-		// WARNING! This String value must be identical to the String value
-		// returned in org.apache.jmeter.threads.ThreadGroup.getClassLabel()
-		// method. If it's not you will not be able to add a Thread Group
-		// element to a Test Plan.
-		itemsCanAdd.add(JMeterUtils.getResString("reportpage"));
+		itemsCanAdd.add(JMeterUtils.getResString("report_page"));
 	}
 
 	public ReportPlan() {

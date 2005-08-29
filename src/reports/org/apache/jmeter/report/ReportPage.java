@@ -1,3 +1,4 @@
+//$Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -14,7 +15,6 @@
  * limitations under the License.
  * 
  */
-
 package org.apache.jmeter.report;
 
 import java.io.Serializable;
