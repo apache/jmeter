@@ -12,13 +12,18 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.oro.text.regex.StringSubstitution;
+import org.apache.oro.text.regex.Substitution;
+import org.apache.oro.text.regex.Util;
 
 public class CompareAssertion extends AbstractTestElement implements Assertion, TestBean, Serializable,
 		LoopIterationListener {
 	static Logger log = LoggingManager.getLoggerForClass();
 	transient List responses;
+	private static final Substitution emptySub = new StringSubstitution("");
 
 	transient boolean iterationDone = false;
 
@@ -26,7 +31,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
 	private long compareTime = -1;
 	
-	Collection stringsToSkip;
+	Collection<String> stringsToSkip;
 
 	public CompareAssertion() {
 		super();
@@ -102,6 +107,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 					result.setFailureMessage("Unsupported Encoding Exception: " +sResult.getDataEncoding());
 					return;
 				}
+				currentContent = filterString(currentContent);
 				if (prevContent != null)
 				{
 					success = prevContent.equals(currentContent);
@@ -119,7 +125,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 					message.append(sResult.toString());
 					message.append("\n\n");
 					message.append(currentContent);
-					message.append("/n/n");
+					message.append("\n\n");
 					message.append("==============================\n\n");
 					result.setFailureMessage(message.toString());
 					break;
@@ -129,6 +135,23 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 			}
 		}
 	} 
+	
+	private String filterString(String content)
+	{
+		if(stringsToSkip == null || stringsToSkip.size() == 0)
+		{
+			return content;
+		}
+		else
+		{
+			for(String regex : stringsToSkip)
+			{
+				log.info("replacing regex: " + regex);
+				content = Util.substitute(JMeterUtils.getMatcher(),JMeterUtils.getPatternCache().getPattern(regex),emptySub,content,Util.SUBSTITUTE_ALL);
+			}
+		}
+		return content;
+	}
 	
 	/*
 		 * (non-Javadoc)
@@ -189,7 +212,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	 * @param stringsToSkip The stringsToSkip to set.
 	 */
 	public void setStringsToSkip(Collection stringsToSkip) {
-		this.stringsToSkip = stringsToSkip;
+		this.stringsToSkip = (Collection<String>)stringsToSkip;
 	}
 
 }
