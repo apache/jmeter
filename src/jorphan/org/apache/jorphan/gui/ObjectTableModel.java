@@ -69,6 +69,15 @@ public class ObjectTableModel extends DefaultTableModel {
 		objects.add(value);
 		super.fireTableRowsInserted(objects.size() - 1, objects.size());
 	}
+	
+	public void setRows(Iterable rows)
+	{
+		clearData();
+		for(Object val : rows)
+		{
+			addRow(val);
+		}
+	}
 
 	public void insertRow(Object value, int index) {
 		objects.add(index, value);
@@ -105,8 +114,10 @@ public class ObjectTableModel extends DefaultTableModel {
 	public Object getValueAt(int row, int col) {
 		log.debug("Getting row value");
 		Object value = objects.get(row);
+		if(headers.size() == 1 && col >= readFunctors.size())
+			return value;
 		Functor getMethod = (Functor) readFunctors.get(col);
-		if (getMethod != null) {
+		if (getMethod != null && value != null) {
 			return getMethod.invoke(value);
 		}
 		return null;
@@ -152,6 +163,10 @@ public class ObjectTableModel extends DefaultTableModel {
 					super.fireTableDataChanged();
 				}
 			}
+			else if(headers.size() == 1)
+			{
+				objects.set(row,cellValue);
+			}
 		}
 	}
 
@@ -160,6 +175,11 @@ public class ObjectTableModel extends DefaultTableModel {
 	 */
 	public Class getColumnClass(int arg0) {
 		return (Class) classes.get(arg0);
+	}
+	
+	public List getObjectList()
+	{
+		return objects;
 	}
 
 }

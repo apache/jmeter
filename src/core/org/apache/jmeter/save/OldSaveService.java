@@ -74,6 +74,11 @@ public final class OldSaveService implements SaveServiceConstants {
 	 */
 	private OldSaveService() {
 	}
+	
+	public static SampleResult makeResultFromDelimitedString(String delim)
+	{
+		return makeResultFromDelimitedString(delim,_saveConfig);
+	}
 
 	/**
 	 * Make a SampleResult given a delimited string.
@@ -81,65 +86,65 @@ public final class OldSaveService implements SaveServiceConstants {
 	 * @param delim
 	 * @return SampleResult
 	 */
-	public static SampleResult makeResultFromDelimitedString(String delim) {
+	public static SampleResult makeResultFromDelimitedString(String delim,SampleSaveConfiguration saveConfig) {
 		SampleResult result = null;
 		long timeStamp = 0;
 		long elapsed = 0;
-		StringTokenizer splitter = new StringTokenizer(delim, _saveConfig.getDelimiter());
+		StringTokenizer splitter = new StringTokenizer(delim, saveConfig.getDelimiter());
 		String text = null;
 
 		try {
-			if (_saveConfig.printMilliseconds()) {
+			if (saveConfig.printMilliseconds()) {
 				text = splitter.nextToken();
 				timeStamp = Long.parseLong(text);
-			} else if (_saveConfig.formatter() != null) {
+			} else if (saveConfig.formatter() != null) {
 				text = splitter.nextToken();
-				Date stamp = _saveConfig.formatter().parse(text);
+				Date stamp = saveConfig.formatter().parse(text);
 				timeStamp = stamp.getTime();
 			}
 
-			if (_saveConfig.saveTime()) {
+			if (saveConfig.saveTime()) {
 				text = splitter.nextToken();
 				elapsed = Long.parseLong(text);
 			}
 
 			result = new SampleResult(timeStamp, elapsed);
 
-			if (_saveConfig.saveContentLength()) {
+			if (saveConfig.saveContentLength()) {
 				text = splitter.nextToken();
 				result.setContentLength(Converter.getInt(text));
 			}
 
-			if (_saveConfig.saveLabel()) {
+			if (saveConfig.saveLabel()) {
 				text = splitter.nextToken();
 				result.setSampleLabel(text);
 			}
-			if (_saveConfig.saveCode()) {
+			if (saveConfig.saveCode()) {
 				text = splitter.nextToken();
 				result.setResponseCode(text);
 			}
 
-			if (_saveConfig.saveMessage()) {
+			if (saveConfig.saveMessage()) {
 				text = splitter.nextToken();
 				result.setResponseMessage(text);
 			}
 
-			if (_saveConfig.saveThreadName()) {
+			if (saveConfig.saveThreadName()) {
 				text = splitter.nextToken();
 				result.setThreadName(text);
 			}
 
-			if (_saveConfig.saveDataType()) {
+			if (saveConfig.saveDataType()) {
 				text = splitter.nextToken();
 				result.setDataType(text);
 			}
 
-			if (_saveConfig.saveSuccess()) {
+			if (saveConfig.saveSuccess()) {
 				text = splitter.nextToken();
 				result.setSuccessful(Boolean.valueOf(text).booleanValue());
 			}
 
-			if (_saveConfig.saveAssertionResultsFailureMessage()) {
+			if (saveConfig.saveAssertionResultsFailureMessage()) {
 				text = splitter.nextToken();
 			}
 		} catch (NumberFormatException e) {

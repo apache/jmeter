@@ -46,6 +46,8 @@ public class SampleSenderFactory {
 		} else if(type.equalsIgnoreCase("Full")) {
 			StandardSampleSender s = new StandardSampleSender(listener);
 			return s;
+		}  else if(type.equalsIgnoreCase("Stripped Batch")) {
+			return new DataStrippingSampleSender(new BatchSampleSender(listener));
 		} else {
 			return new DataStrippingSampleSender(listener);
 		}

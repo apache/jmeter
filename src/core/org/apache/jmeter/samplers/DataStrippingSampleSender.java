@@ -19,26 +19,39 @@ public class DataStrippingSampleSender implements SampleSender,Serializable {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 	
 	RemoteSampleListener listener;
+	SampleSender decoratedSender;
 
 	public DataStrippingSampleSender(RemoteSampleListener listener) {
 		this.listener = listener;
 	}
+	
+	public DataStrippingSampleSender(SampleSender decorate)
+	{
+		decoratedSender = decorate;
+	}
 
 	public void testEnded() {
-
+		if(decoratedSender != null) decoratedSender.testEnded();
 	}
 
 	public void testEnded(String host) {
-
+		if(decoratedSender != null) decoratedSender.testEnded(host);
 	}
 
 	public void SampleOccurred(SampleEvent e) {
 		//Strip the response data before wiring, but only for a successful request.
 		if(e.getResult().isSuccessful()) e.getResult().setResponseData(new byte[0]);
-		try {
-			listener.sampleOccurred(e);
-		} catch (RemoteException e1) {
-			log.error("Error sending sample result over network ",e1);
+		if(decoratedSender == null)
+		{
+			try {
+				listener.sampleOccurred(e);
+			} catch (RemoteException e1) {
+				log.error("Error sending sample result over network ",e1);
+			}
+		}
+		else
+		{
+			decoratedSender.SampleOccurred(e);
 		}
 	}
 
