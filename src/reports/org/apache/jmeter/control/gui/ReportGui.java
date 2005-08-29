@@ -1,5 +1,6 @@
+//$Header:
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@ import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.report.gui.DefaultReportPageGui;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
@@ -63,23 +65,14 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	}
 
 	/**
-	 * When a user right-clicks on the component in the test tree, or selects
-	 * the edit menu when the component is selected, the component will be asked
-	 * to return a JPopupMenu that provides all the options available to the
-	 * user from this component.
-	 * <p>
-	 * The TestPlan will return a popup menu allowing you to add ThreadGroups,
-	 * Listeners, Configuration Elements, Assertions, PreProcessors,
-	 * PostProcessors, and Timers.
-	 * 
+	 * Need to update this to make the context popupmenu correct
 	 * @return a JPopupMenu appropriate for the component.
 	 */
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new ThreadGroupGui().getStaticLabel(), ThreadGroupGui.class.getName(),
+		addMenu.add(ReportMenuFactory.makeMenuItem(new DefaultReportPageGui().getStaticLabel(), ThreadGroupGui.class.getName(),
 				"Add"));
-		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.LISTENERS, "Add"));
 		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
 		pop.add(addMenu);
 		ReportMenuFactory.addFileMenu(pop);
@@ -175,10 +168,6 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 		VerticalPanel southPanel = new VerticalPanel();
 		serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
 		southPanel.add(serializedMode);
-		JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation"));
-		explain.setEditable(false);
-		explain.setBackground(this.getBackground());
-		southPanel.add(explain);
 
 		add(southPanel, BorderLayout.SOUTH);
 	}

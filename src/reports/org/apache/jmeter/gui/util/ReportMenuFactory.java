@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import javax.swing.MenuElement;
 
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -257,7 +257,7 @@ public final class ReportMenuFactory {
 	public static JMenuItem makeMenuItem(String label, String name, String actionCommand) {
 		JMenuItem newMenuChoice = new JMenuItem(label);
 		newMenuChoice.setName(name);
-		newMenuChoice.addActionListener(ActionRouter.getInstance());
+		newMenuChoice.addActionListener(ReportActionRouter.getInstance());
 		if (actionCommand != null) {
 			newMenuChoice.setActionCommand(actionCommand);
 		}
