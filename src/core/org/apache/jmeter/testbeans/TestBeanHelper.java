@@ -120,7 +120,7 @@ public class TestBeanHelper {
 				JMeterProperty propVal = iter.next();
 				try
 				{
-					values.add(Converter.convert(propVal.getObjectValue(), Class.forName(type)));
+					values.add(Converter.convert(propVal.getStringValue(), Class.forName(type)));
 				}
 				catch(Exception e)
 				{
