@@ -22,9 +22,15 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.LinkedList;
 
+import org.apache.jmeter.testbeans.gui.TableEditor;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.MultiProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
 import org.apache.log.Logger;
@@ -67,7 +73,8 @@ public class TestBeanHelper {
 				// Obtain a value of the appropriate type for this property.
 				JMeterProperty jprop = el.getProperty(desc[x].getName());
 				Class type = desc[x].getPropertyType();
-				Object value = Converter.convert(jprop.getStringValue(), type);
+				Object value = null;
+				value = unwrapProperty(desc[x], jprop, type);
 
 				if (log.isDebugEnabled())
 					log.debug("Setting " + jprop.getName() + "=" + value);
@@ -83,6 +90,46 @@ public class TestBeanHelper {
 		} catch (IntrospectionException e) {
 			log.error("Couldn't set properties for " + el.getClass().getName(), e);
 		}
+	}
+
+	/**
+	 * @param desc
+	 * @param x
+	 * @param jprop
+	 * @param type
+	 * @return
+	 */
+	private static Object unwrapProperty(PropertyDescriptor desc, JMeterProperty jprop, Class type) {
+		Object value;
+		if(jprop instanceof MultiProperty)
+		{
+			value = unwrapCollection((MultiProperty)jprop,(String)desc.getValue(TableEditor.CLASSNAME));
+		}
+		else value = Converter.convert(jprop.getStringValue(), type);
+		return value;
+	}
+	
+	private static Object unwrapCollection(MultiProperty prop,String type)
+	{
+		if(prop instanceof CollectionProperty)
+		{
+			Collection values = new LinkedList();
+			PropertyIterator iter = prop.iterator();
+			while(iter.hasNext())
+			{
+				JMeterProperty propVal = iter.next();
+				try
+				{
+					values.add(Converter.convert(propVal.getObjectValue(), Class.forName(type)));
+				}
+				catch(Exception e)
+				{
+					log.error("Couldn't convert object: " + propVal.getObjectValue() + " to " + type);
+				}
+			}
+			return values;
+		}
+		return null;
 	}
 
 	/**

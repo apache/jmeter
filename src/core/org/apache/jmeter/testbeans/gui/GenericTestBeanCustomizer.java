@@ -111,6 +111,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	public static final String NOT_OTHER = "notOther";
 
 	public static final String DEFAULT = "default";
+	
+	public static final String MULTILINE = "multiline";
 
 	public static final String RESOURCE_BUNDLE = "resourceBundle";
 
@@ -213,13 +215,17 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 				editors[i] = null;
 				continue;
 			}
-
+			String[] tags = mergeTags(propertyEditor,descriptors[i]);
 			if (!propertyEditor.supportsCustomEditor()) {
-				propertyEditor = createWrapperEditor(propertyEditor, descriptors[i]);
+				propertyEditor = createWrapperEditor(propertyEditor, descriptors[i],tags);
 
 				if (log.isDebugEnabled()) {
 					log.debug("Editor for property " + name + " is wrapped in " + propertyEditor);
 				}
+			}
+			if(propertyEditor instanceof TestBeanPropertyEditor)
+			{
+				((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptors[i]);
 			}
 			if (propertyEditor.getCustomEditor() instanceof JScrollPane) {
 				scrollerCount++;
@@ -251,22 +257,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 * @param descriptor
 	 * @return
 	 */
-	private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
-		String[] editorTags = typeEditor.getTags();
-		String[] additionalTags = (String[]) descriptor.getValue(TAGS);
-		String[] tags = null;
-		if (editorTags == null)
-			tags = additionalTags;
-		else if (additionalTags == null)
-			tags = editorTags;
-		else {
-			tags = new String[editorTags.length + additionalTags.length];
-			int j = 0;
-			for (int i = 0; i < editorTags.length; i++)
-				tags[j++] = editorTags[i];
-			for (int i = 0; i < additionalTags.length; i++)
-				tags[j++] = additionalTags[i];
-		}
+	private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor,String[] tags) {
 
 		boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
 		boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
@@ -290,6 +281,30 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 				descriptor.getValue(DEFAULT));
 
 		return wrapper;
+	}
+
+	/**
+	 * @param typeEditor
+	 * @param descriptor
+	 * @return
+	 */
+	protected String[] mergeTags(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
+		String[] editorTags = typeEditor.getTags();
+		String[] additionalTags = (String[]) descriptor.getValue(TAGS);
+		String[] tags = null;
+		if (editorTags == null)
+			tags = additionalTags;
+		else if (additionalTags == null)
+			tags = editorTags;
+		else {
+			tags = new String[editorTags.length + additionalTags.length];
+			int j = 0;
+			for (int i = 0; i < editorTags.length; i++)
+				tags[j++] = editorTags[i];
+			for (int i = 0; i < additionalTags.length; i++)
+				tags[j++] = additionalTags[i];
+		}
+		return tags;
 	}
 
 	/**
@@ -425,7 +440,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 			Component customEditor = editors[i].getCustomEditor();
 
 			boolean multiLineEditor = false;
-			if (customEditor.getPreferredSize().height > 50 || customEditor instanceof JScrollPane) {
+			if (descriptors[i].getValue(MULTILINE) != null ||
+					customEditor.getPreferredSize().height > 50 || 
+					customEditor instanceof JScrollPane) {
 				// TODO: the above works in the current situation, but it's
 				// just a hack. How to get each editor to report whether it
 				// wants to grow bigger? Whether the property label should

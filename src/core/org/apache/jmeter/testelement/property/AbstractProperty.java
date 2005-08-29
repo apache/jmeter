@@ -38,6 +38,7 @@
 
 package org.apache.jmeter.testelement.property;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -324,7 +325,8 @@ public abstract class AbstractProperty implements JMeterProperty {
 				try {
 					newColl = (Collection) coll.getClass().newInstance();
 				} catch (Exception e) {
-					log.error("Bad collection", e);
+					newColl = new ArrayList();
+					log.warn("Bad collection", e);
 				}
 			}
 			newColl.add(convertObject(item));

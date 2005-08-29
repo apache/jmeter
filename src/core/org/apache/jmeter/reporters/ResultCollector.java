@@ -193,7 +193,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 					dataReader = new BufferedReader(new FileReader(getFilename()));
 					String line;
 					while ((line = dataReader.readLine()) != null) {
-						sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
+						sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line,getSaveConfig()));
 					}
 					parsedOK = true;
 				}
