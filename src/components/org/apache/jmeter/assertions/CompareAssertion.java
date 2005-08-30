@@ -25,7 +25,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
 	transient List responses;
 
-	private static final Substitution emptySub = new StringSubstitution("");
+	private StringSubstitution emptySub = new StringSubstitution("");
 
 	transient boolean iterationDone = false;
 
@@ -33,7 +33,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
 	private long compareTime = -1;
 
-	Collection<String> stringsToSkip;
+	Collection<SubstitutionElement> stringsToSkip;
 
 	public CompareAssertion() {
 		super();
@@ -122,9 +122,10 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 		if (stringsToSkip == null || stringsToSkip.size() == 0) {
 			return content;
 		} else {
-			for (String regex : stringsToSkip) {
+			for (SubstitutionElement regex : stringsToSkip) {
 				log.info("replacing regex: " + regex);
-				content = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex),
+				emptySub.setSubstitution(regex.getSubstitute());
+				content = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
 						emptySub, content, Util.SUBSTITUTE_ALL);
 			}
 		}
@@ -193,7 +194,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	 *            The stringsToSkip to set.
 	 */
 	public void setStringsToSkip(Collection stringsToSkip) {
-		this.stringsToSkip = (Collection<String>) stringsToSkip;
+		this.stringsToSkip = (Collection<SubstitutionElement>) stringsToSkip;
 	}
 
 }
