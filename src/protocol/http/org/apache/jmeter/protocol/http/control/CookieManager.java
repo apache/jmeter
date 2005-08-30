@@ -278,7 +278,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 						+ cookie.getPath() + " expires=" + cookie.getExpires());
 			}
 			if (host.endsWith(cookie.getDomain()) && url.getFile().startsWith(cookie.getPath())
-					&& ((cookie.getExpires() == 0) // treat as never expiring
+					&& ((cookie.getExpires() == 0 && // treat as never expiring
+					(cookie.getPort() == 0 || cookie.getPort() == url.getPort())) 
 													// (bug 27713)
 					|| (System.currentTimeMillis() / 1000) <= cookie.getExpires())) {
 				if (header.length() > 0) {
@@ -333,6 +334,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 																			// means
 																			// session
 																			// cookie
+		newCookie.setPort(url.getPort());
 		// check the rest of the headers
 		while (st.hasMoreTokens()) {
 			nvp = st.nextToken();

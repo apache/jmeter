@@ -22,7 +22,9 @@ import org.apache.oro.text.regex.Util;
 public class CompareAssertion extends AbstractTestElement implements Assertion, TestBean, Serializable,
 		LoopIterationListener {
 	static Logger log = LoggingManager.getLoggerForClass();
+
 	transient List responses;
+
 	private static final Substitution emptySub = new StringSubstitution("");
 
 	transient boolean iterationDone = false;
@@ -30,7 +32,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	private boolean compareContent = true;
 
 	private long compareTime = -1;
-	
+
 	Collection<String> stringsToSkip;
 
 	public CompareAssertion() {
@@ -41,18 +43,16 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 		log.info("get assertion result for sample");
 		responses.add(response);
 		if (responses.size() > 1) {
-			AssertionResult result = new AssertionResult(false,false,null);
+			CompareAssertionResult result = new CompareAssertionResult(false, false, null);
 			compareContent(result);
 			compareTime(result);
 			return result;
 		} else
 			return new AssertionResult(false, false, null);
 	}
-	
-	protected void compareTime(AssertionResult result)
-	{
-		if(compareTime > -1)
-		{
+
+	protected void compareTime(CompareAssertionResult result) {
+		if (compareTime > -1) {
 			Iterator iter = responses.iterator();
 			long prevTime = -1;
 			SampleResult prevResult = null;
@@ -60,29 +60,19 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 			while (iter.hasNext()) {
 				SampleResult sResult = (SampleResult) iter.next();
 				long currentTime = sResult.getTime();
-				if (prevTime != -1)
-				{
+				if (prevTime != -1) {
 					success = Math.abs(prevTime - currentTime) < compareTime;
 					prevResult = sResult;
 				}
 				if (!success) {
 					result.setFailure(true);
-					StringBuffer message = new StringBuffer("##################\n");
-					message.append("From Request: ");
-					message.append(prevResult.toString());
-					message.append("\n\n");
-					message.append("Response Time = ");
-					message.append(prevTime);
-					message.append("\n\n");
-					message.append("Not Close Enough To: \n\n");
-					message.append("From Request: ");
-					message.append(sResult.toString());
-					message.append("\n\n");
-					message.append("Response Time = ");
-					message.append(currentTime);
-					message.append("/n/n");
-					message.append("==============================\n\n");
-					result.setFailureMessage(message.toString());
+					StringBuffer buf = new StringBuffer(prevResult.getSamplerData().trim()).append("\n").append(
+							prevResult.getRequestHeaders()).append("\n\n").append("Response Time: ").append(prevTime);
+					result.addToBaseResult(buf.toString());
+					buf = new StringBuffer(sResult.getSamplerData().trim()).append("\n").append(
+							sResult.getRequestHeaders()).append("\n\n").append("Response Time: ").append(currentTime);
+					result.addToSecondaryResult(buf.toString());
+					result.setFailureMessage("Responses differ in response time");
 					break;
 				}
 				prevResult = sResult;
@@ -91,7 +81,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 		}
 	}
 
-	protected void compareContent(AssertionResult result) {
+	protected void compareContent(CompareAssertionResult result) {
 		if (compareContent) {
 			Iterator iter = responses.iterator();
 			String prevContent = null;
@@ -104,60 +94,48 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 					currentContent = new String(sResult.getResponseData(), sResult.getDataEncoding());
 				} catch (UnsupportedEncodingException e) {
 					result.setError(true);
-					result.setFailureMessage("Unsupported Encoding Exception: " +sResult.getDataEncoding());
+					result.setFailureMessage("Unsupported Encoding Exception: " + sResult.getDataEncoding());
 					return;
 				}
 				currentContent = filterString(currentContent);
-				if (prevContent != null)
-				{
+				if (prevContent != null) {
 					success = prevContent.equals(currentContent);
 				}
 				if (!success) {
 					result.setFailure(true);
-					StringBuffer message = new StringBuffer("##################\n");
-					message.append("From Request: ");
-					message.append(prevResult.toString());
-					message.append("\n\n");
-					message.append(prevContent);
-					message.append("\n\n");
-					message.append("Not Equal To: \n\n");
-					message.append("From Request: ");
-					message.append(sResult.toString());
-					message.append("\n\n");
-					message.append(currentContent);
-					message.append("\n\n");
-					message.append("==============================\n\n");
-					result.setFailureMessage(message.toString());
+					StringBuffer buf = new StringBuffer(prevResult.getSamplerData().trim()).append("\n").append(
+							prevResult.getRequestHeaders()).append("\n\n").append(prevContent);
+					result.addToBaseResult(buf.toString());
+					buf = new StringBuffer(sResult.getSamplerData().trim()).append("\n").append(
+							sResult.getRequestHeaders()).append("\n\n").append(currentContent);
+					result.addToSecondaryResult(buf.toString());
+					result.setFailureMessage("Responses differ in content");
 					break;
 				}
 				prevResult = sResult;
 				prevContent = currentContent;
 			}
 		}
-	} 
-	
-	private String filterString(String content)
-	{
-		if(stringsToSkip == null || stringsToSkip.size() == 0)
-		{
+	}
+
+	private String filterString(String content) {
+		if (stringsToSkip == null || stringsToSkip.size() == 0) {
 			return content;
-		}
-		else
-		{
-			for(String regex : stringsToSkip)
-			{
+		} else {
+			for (String regex : stringsToSkip) {
 				log.info("replacing regex: " + regex);
-				content = Util.substitute(JMeterUtils.getMatcher(),JMeterUtils.getPatternCache().getPattern(regex),emptySub,content,Util.SUBSTITUTE_ALL);
+				content = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex),
+						emptySub, content, Util.SUBSTITUTE_ALL);
 			}
 		}
 		return content;
 	}
-	
+
 	/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-		 */
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
+	 */
 	public void iterationStart(LoopIterationEvent iterEvent) {
 		log.info("iteration started for compare Assertion");
 		responses = new LinkedList();
@@ -181,7 +159,8 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	}
 
 	/**
-	 * @param compareContent The compareContent to set.
+	 * @param compareContent
+	 *            The compareContent to set.
 	 */
 	public void setCompareContent(boolean compareContent) {
 		this.compareContent = compareContent;
@@ -195,7 +174,8 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	}
 
 	/**
-	 * @param compareTime The compareTime to set.
+	 * @param compareTime
+	 *            The compareTime to set.
 	 */
 	public void setCompareTime(long compareTime) {
 		this.compareTime = compareTime;
@@ -209,10 +189,11 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 	}
 
 	/**
-	 * @param stringsToSkip The stringsToSkip to set.
+	 * @param stringsToSkip
+	 *            The stringsToSkip to set.
 	 */
 	public void setStringsToSkip(Collection stringsToSkip) {
-		this.stringsToSkip = (Collection<String>)stringsToSkip;
+		this.stringsToSkip = (Collection<String>) stringsToSkip;
 	}
 
 }
