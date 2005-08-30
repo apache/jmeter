@@ -31,6 +31,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
 import org.apache.log.Logger;
@@ -55,7 +56,6 @@ public class TestBeanHelper {
 	 * property value map.
 	 * <p>
 	 * 
-	 * @deprecated to limit it's usage in expectation of moving it elsewhere.
 	 */
 	public static void prepare(TestElement el) {
 		if (!(el instanceof TestBean)) {
@@ -101,7 +101,16 @@ public class TestBeanHelper {
 	 */
 	private static Object unwrapProperty(PropertyDescriptor desc, JMeterProperty jprop, Class type) {
 		Object value;
-		if(jprop instanceof MultiProperty)
+		if(jprop instanceof TestElementProperty)
+		{
+			TestElement te = ((TestElementProperty)jprop).getElement();
+			if(te instanceof TestBean)
+			{
+				prepare(te);
+			}
+			value = te;
+		}
+		else if(jprop instanceof MultiProperty)
 		{
 			value = unwrapCollection((MultiProperty)jprop,(String)desc.getValue(TableEditor.CLASSNAME));
 		}
@@ -117,14 +126,13 @@ public class TestBeanHelper {
 			PropertyIterator iter = prop.iterator();
 			while(iter.hasNext())
 			{
-				JMeterProperty propVal = iter.next();
 				try
 				{
-					values.add(Converter.convert(propVal.getStringValue(), Class.forName(type)));
+					values.add(unwrapProperty(null,iter.next(),Class.forName(type)));
 				}
 				catch(Exception e)
 				{
-					log.error("Couldn't convert object: " + propVal.getObjectValue() + " to " + type);
+					log.error("Couldn't convert object: " + prop.getObjectValue() + " to " + type,e);
 				}
 			}
 			return values;
@@ -153,22 +161,5 @@ public class TestBeanHelper {
 			log.error("This should never happen.", e);
 			throw new Error(e.toString()); // Programming error: bail out.
 		}
-	}
-
-	/**
-	 * Utility method to obtain the value of a property in the given type.
-	 * <p>
-	 * I plan to get rid of this sooner than later, so please don't use it much.
-	 * 
-	 * @param property
-	 *            Property to get the value of.
-	 * @param type
-	 *            Type of the result.
-	 * @return an object of the given type if it is one of the known supported
-	 *         types, or the value returned by property.getObjectValue
-	 * @deprecated
-	 */
-	private static Object unwrapProperty(JMeterProperty property, Class type) {
-		return Converter.convert(property.getObjectValue(), type);
 	}
 }
