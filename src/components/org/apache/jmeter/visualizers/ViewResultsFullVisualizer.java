@@ -585,7 +585,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 		treeModel = new DefaultTreeModel(root);
 		jTree = new JTree(treeModel);
-		jTree.setCellRenderer(new ResultsNodeRenderer());
+		jTree.setCellRenderer(new TreeNodeRenderer());
 		jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		jTree.addTreeSelectionListener(this);
 		jTree.setRootVisible(false);
@@ -642,18 +642,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 		return resultsPane;
 	}
-
-	private class ResultsNodeRenderer extends DefaultTreeCellRenderer {
-		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
-				boolean leaf, int row, boolean focus) {
-			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
-			if (!((SampleResult) ((DefaultMutableTreeNode) value).getUserObject()).isSuccessful()) {
-				this.setForeground(Color.red);
-			}
-			return this;
-		}
-	}
-
 	private static class LocalHTMLEditorKit extends HTMLEditorKit {
 
 		private static final ViewFactory defaultFactory = new LocalHTMLFactory();
