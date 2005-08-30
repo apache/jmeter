@@ -68,7 +68,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	private TreeNode node;
 
 	/** A GUI panel containing the name of this component. */
-	private NamePanel namePanel;
+	protected NamePanel namePanel;
 
 	/**
 	 * When constructing a new component, this takes care of basic tasks like
