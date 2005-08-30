@@ -9,6 +9,9 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditorSupport;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.CellEditor;
 import javax.swing.JButton;
@@ -20,6 +23,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.logging.LoggingManager;
@@ -99,10 +103,27 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
 	public void setValue(Object value) {
 		if(value != null)
 		{
-			model.setRows((Iterable)value);
+			model.setRows(convertCollection((Collection)value));
 		}
 		else model.clearData();
 		this.firePropertyChange();
+	}
+	
+	private Collection convertCollection(Collection values)
+	{
+		List l = new LinkedList();
+		for(Object obj : values)
+		{
+			if(obj instanceof TestElementProperty)
+			{
+				l.add(((TestElementProperty)obj).getElement());
+			}
+			else
+			{
+				l.add(obj);
+			}
+		}
+		return l;
 	}
 
 	/* (non-Javadoc)

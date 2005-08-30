@@ -1,7 +1,7 @@
 package org.apache.jmeter.assertions;
 
 import java.beans.PropertyDescriptor;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TableEditor;
@@ -22,10 +22,11 @@ public class CompareAssertionBeanInfo extends BeanInfoSupport {
 		p.setValue(NOT_EXPRESSION, Boolean.FALSE);	
 		p = property("stringsToSkip");
 		p.setPropertyEditorClass(TableEditor.class);
-		p.setValue(TableEditor.CLASSNAME,"java.lang.String");
-		p.setValue(TableEditor.HEADERS,new String[]{"Regex String"});
+		p.setValue(TableEditor.CLASSNAME,"org.apache.jmeter.assertions.SubstitutionElement");
+		p.setValue(TableEditor.HEADERS,new String[]{"Regex String","Substitution"});
+		p.setValue(TableEditor.OBJECT_PROPERTIES,new String[]{"regex","substitute"});
 		p.setValue(NOT_UNDEFINED,Boolean.TRUE);
-		p.setValue(DEFAULT,Arrays.asList(new String[]{"One","Two"}));
+		p.setValue(DEFAULT,new ArrayList());
 		p.setValue(MULTILINE,Boolean.TRUE);
 		
 	}
