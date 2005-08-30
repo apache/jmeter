@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jorphan.util.JOrphanUtils;
 
@@ -41,6 +42,8 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	private static String SECURE = "Cookie.secure";
 
 	private static String PATH = "Cookie.path";
+	
+	private static String PORT = "Cookie.port";
 
 	/**
 	 * create the coookie
@@ -145,6 +148,16 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	 */
 	public synchronized void setPath(String path) {
 		setProperty(PATH, path);
+	}
+	
+	public void setPort(int port)
+	{
+		setProperty(new IntegerProperty(PORT,port));
+	}
+	
+	public int getPort()
+	{
+		return getProperty(PORT).getIntValue();
 	}
 
 	/**
