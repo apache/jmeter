@@ -17,7 +17,15 @@
 
 package org.apache.jmeter;
 
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,6 +36,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
@@ -51,8 +65,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
-// import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
-// import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
@@ -237,8 +249,11 @@ public class JMeter implements JMeterPlugin {
 				startServer(JMeterUtils.getPropDefault("server_port", 0));
 				startBSH();
 			} else if (parser.getArgumentById(NONGUI_OPT) == null) {
+				Splash splash = new Splash();
+				splash.showSplash();
 				startGui(parser.getArgumentById(TESTFILE_OPT));
 				startBSH();
+				splash.removeSplash();
 			} else {
 				startNonGui(parser.getArgumentById(TESTFILE_OPT), parser.getArgumentById(LOGFILE_OPT), parser
 						.getArgumentById(REMOTE_OPT));

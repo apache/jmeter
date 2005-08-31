@@ -135,6 +135,7 @@ public final class NewDriver {
 	 *            the command line arguments
 	 */
 	public static void main(String[] args) {
+		
 		Thread.currentThread().setContextClassLoader(loader);
 		if (System.getProperty("log4j.configuration") == null) {
 			File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");

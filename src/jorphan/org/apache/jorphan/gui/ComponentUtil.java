@@ -55,6 +55,20 @@ public final class ComponentUtil {
 		component.setSize((int) (dimension.getWidth() * percent), (int) (dimension.getHeight() * percent));
 		centerComponentInWindow(component);
 	}
+	
+	/**
+	 * Use this static method if you want to center and set its size to a fixed Dimension.
+	 * 
+	 * @param component
+	 *            the component you want to center and set size on
+	 * @param percentOfScreen
+	 *            the percent of the current screensize you want the component
+	 *            to be
+	 */
+	public static void centerComponentInWindow(Component component, int width,int height) {
+		component.setSize(width, height);
+		centerComponentInWindow(component);
+	}
 
 	/**
 	 * Use this static method if you want to center a component in Window.
