@@ -19,6 +19,7 @@
 package org.apache.jmeter.util;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,7 +42,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-// import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
