@@ -49,8 +49,6 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
 	public final static String USER_DEFINED_VARIABLES = "ReportPlan.user_defined_variables";
 
-	public final static String SERIALIZE_THREADGROUPS = "ReportPlan.serialize_threadgroups";
-
 	public final static String COMMENTS = "ReportPlan.comments";
 
 	public final static String BASEDIR = "basedir";
@@ -71,7 +69,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 	}
 
 	public ReportPlan() {
-		// this("Test Plan");
+		this(JMeterUtils.getResString("report_plan"));
 	}
 
 	public ReportPlan(String name) {
@@ -114,24 +112,11 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 		return functionalMode;
 	}
 
-	public void setSerialized(boolean serializeTGs) {
-		setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
-	}
-
-	/**
-	 * Fetch the serialize threadgroups property
-	 * 
-	 * @return serialized setting
-	 */
-	public boolean isSerialized() {
-		return getPropertyAsBoolean(SERIALIZE_THREADGROUPS);
-	}
-
 	public void addParameter(String name, String value) {
 		getVariables().addArgument(name, value);
 	}
 
-	public static ReportPlan createTestPlan(String name) {
+	public static ReportPlan createReportPlan(String name) {
 		if (plan == null) {
 			if (name == null) {
 				plan = new ReportPlan();

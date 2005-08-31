@@ -17,34 +17,47 @@
  */
 package org.apache.jmeter.report.gui;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Font;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
-import org.apache.jmeter.threads.gui.ThreadGroupGui;
+import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author Peter Lin
  *
  * This is the abstract base for report gui's
  */
-public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent 
+public abstract class AbstractReportGui extends AbstractJMeterGuiComponent 
     implements Printable
 {
+    /** Logging */
+    private static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * 
 	 */
-	public AbstractReportPageGui() {
-		super();
+	public AbstractReportGui() {
+        this.namePanel = new NamePanel();
+        this.namePanel.setBackground(Color.white);
+        setName(getStaticLabel());
 	}
 
 	/* (non-Javadoc)
@@ -54,7 +67,14 @@ public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent
 		return "report_page";
 	}
 
-	/* (non-Javadoc)
+    /**
+    public void configureTestElement(TestElement element) {
+        log.info("calling super.configureTestElement");
+        super.configureTestElement(element);
+    }
+    **/
+    
+    /* (non-Javadoc)
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()
 	 */
 	public JPopupMenu createPopupMenu() {
@@ -64,7 +84,7 @@ public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent
         addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
         addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
         pop.add(addMenu);
-        MenuFactory.addFileMenu(pop);
+        ReportMenuFactory.addFileMenu(pop);
         return pop;
 	}
 
@@ -75,6 +95,30 @@ public abstract class AbstractReportPageGui extends AbstractJMeterGuiComponent
         return Arrays.asList(new String[] { ReportMenuFactory.SAMPLERS });
 	}
 
+    /**
+     * This implementaion differs a bit from the normal jmeter gui. it uses
+     * a white background instead of the default grey.
+     * @return a panel containing the component title and name panel
+     */
+    protected Container makeTitlePanel() {
+        VerticalPanel titlePanel = new VerticalPanel();
+        titlePanel.setBackground(Color.white);
+        titlePanel.add(createTitleLabel());
+        titlePanel.add(getNamePanel());
+        return titlePanel;
+    }
+
+    /**
+     * This implementaion differs a bit from the normal jmeter gui. it uses
+     * a white background instead of the default grey.
+     */
+    protected Component createTitleLabel() {
+        JLabel titleLabel = new JLabel(getStaticLabel());
+        Font curFont = titleLabel.getFont();
+        titleLabel.setFont(curFont.deriveFont((float) curFont.getSize() + 4));
+        titleLabel.setBackground(Color.white);
+        return titleLabel;
+    }
     /**
      * Subclasses need to over this method, if they wish to return something
      * other than the Visualizer itself.
