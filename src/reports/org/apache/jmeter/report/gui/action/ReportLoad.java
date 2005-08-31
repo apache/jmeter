@@ -31,7 +31,7 @@ import javax.swing.tree.TreePath;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.action.Command;
-import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.ReportFileDialoger;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
@@ -74,8 +74,8 @@ public class ReportLoad implements Command {
 					new ActionEvent(e.getSource(), e.getID(), "close"));
 		}
 
-		JFileChooser chooser = FileDialoger
-				.promptToOpenFile(new String[] { ".jmx" });
+		JFileChooser chooser = ReportFileDialoger
+				.promptToOpenFile(new String[] { ".jmr" });
 		if (chooser == null) {
 			return;
 		}

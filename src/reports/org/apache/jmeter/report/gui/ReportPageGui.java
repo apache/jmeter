@@ -27,6 +27,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPage;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
@@ -50,6 +51,8 @@ public class ReportPageGui extends AbstractReportGui {
     private JLabeledTextField footerURL = 
         new JLabeledTextField(JMeterUtils.getResString("report_page_footer"));
 
+    private JLabeledTextArea introduction = 
+        new JLabeledTextArea(JMeterUtils.getResString("report_page_intro"), null);
     /**
 	 * 
 	 */
@@ -76,11 +79,13 @@ public class ReportPageGui extends AbstractReportGui {
         cssURL.setBackground(Color.white);
         headerURL.setBackground(Color.white);
         footerURL.setBackground(Color.white);
+        introduction.setBackground(Color.white);
         options.add(pageTitle);
         options.add(makeIndex);
         options.add(cssURL);
         options.add(headerURL);
         options.add(footerURL);
+        options.add(introduction);
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
     }
@@ -99,6 +104,23 @@ public class ReportPageGui extends AbstractReportGui {
 	 */
 	public void modifyTestElement(TestElement element) {
         super.configureTestElement(element);
+        ReportPage page = (ReportPage)element;
+        page.setCSS(cssURL.getText());
+        page.setFooterURL(footerURL.getText());
+        page.setHeaderURL(headerURL.getText());
+        page.setIndex(String.valueOf(makeIndex.isSelected()));
+        page.setIntroduction(introduction.getText());
+        page.setTitle(pageTitle.getText());
 	}
 
+    public void configure(TestElement element) {
+        super.configure(element);
+        ReportPage page = (ReportPage)element;
+        cssURL.setText(page.getCSS());
+        footerURL.setText(page.getFooterURL());
+        headerURL.setText(page.getHeaderURL());
+        makeIndex.setSelected(page.getIndex());
+        introduction.setText(page.getIntroduction());
+        pageTitle.setText(page.getTitle());
+    }
 }

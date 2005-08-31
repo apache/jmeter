@@ -29,7 +29,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.ReportFileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.logging.LoggingManager;
@@ -83,7 +83,7 @@ public class ReportSaveGraphics implements Command {
 				comp = ((Printable) component).getPrintableComponent();
 
 				String filename;
-				JFileChooser chooser = FileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
+				JFileChooser chooser = ReportFileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
 						.getCurrentNode().getName(), extensions);
 				if (chooser == null) {
 					return;
