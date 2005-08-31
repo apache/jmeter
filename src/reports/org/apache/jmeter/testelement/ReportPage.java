@@ -1,4 +1,4 @@
-//$Header$
+//$Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -17,19 +17,51 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.io.Serializable;
+import org.apache.jmeter.report.gui.AbstractReportGui;
+import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 /**
+ * ReportPage
+ * 
  * @author Peter Lin
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @version $Id$
  */
-public class ReportPage extends AbstractTestElement {
+public class ReportPage extends AbstractTestElement implements Serializable {
+    private final static Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * 
-	 */
-	public ReportPage() {
-		super();
-	}
+    public static final String REPORT_PAGE_TITLE = "ReportPage.title";
+    public static final String REPORT_PAGE_INDEX = "ReportPage.index";
+    
+    /**
+     * No-arg constructor.
+     */
+    public ReportPage() {
+        // setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
+    }
 
+    public static ReportPage createReportPage(String name) {
+        ReportPage page = new ReportPage();
+        page.setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
+        return page;
+    }
+
+    public String getTitle() {
+        return getPropertyAsString(REPORT_PAGE_TITLE);
+    }
+    
+    public void setTitle(String title) {
+        setProperty(REPORT_PAGE_TITLE,title);
+    }
+    
+    public boolean getIndex() {
+        return getPropertyAsBoolean(REPORT_PAGE_INDEX);
+    }
+    
+    public void setIndex(String makeIndex) {
+        setProperty(REPORT_PAGE_INDEX,makeIndex);
+    }
 }

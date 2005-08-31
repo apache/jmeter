@@ -82,9 +82,6 @@ public class ReportTreeModel extends DefaultTreeModel {
 				((TestElement) current.getUserObject()).addTestElement(item);
 				((ReportPlan) current.getUserObject()).setName(item
 						.getPropertyAsString(TestElement.NAME));
-				((ReportPlan) current.getUserObject())
-						.setSerialized(item
-								.getPropertyAsBoolean(ReportPlan.SERIALIZE_THREADGROUPS));
 				addSubTree(subTree.getTree(item), current);
 			} else {
 				addSubTree(subTree.getTree(item), addComponent(item, current));
