@@ -134,6 +134,7 @@
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
       <sourcePath path="${src.jms}" />
+      <sourcePath path="${src.report}" />
 
 	<!--
       Uncomment the following 2 lines to include htmlparser in the analysis
@@ -186,6 +187,7 @@
   <property name="src.monitor.components" value="src/monitor/components"/>
   <property name="src.monitor.model" value="src/monitor/model"/>
   <property name="src.jms" value="src/protocol/jms"/>
+  <property name="src.report" value="src/reports"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -211,6 +213,7 @@
     <pathelement location="${src.monitor.components}"/>
     <pathelement location="${src.monitor.model}"/>
     <pathelement location="${src.jms}"/>
+    <pathelement location="${src.report}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -232,6 +235,7 @@
   <property name="build.monitor.components" location="build/monitor/components"/>
   <property name="build.monitor.model" location="build/monitor/model"/>
   <property name="build.jms" location="build/protocol/jms"/>
+  <property name="build.report" location="build/reports"/>
   <property name="build.test" location="build/test"/>
   
   <!-- Path prefix to allow Anakia to find stylesheets if running under Eclipse -->
@@ -639,6 +643,19 @@
     </javac>
   </target>
 
+  <target name="compile-report" depends="compile-jorphan,compile-core,compile-components" 
+    description="Compile report components.">
+    <mkdir dir="${build.report}"/>
+    <javac srcdir="${src.report}" destdir="${build.report}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
   <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
     <mkdir dir="${build.tcp}"/>
     <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
@@ -747,7 +764,7 @@
     </javac>
   </target>
 
-  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor,compile-junit"
+  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor,compile-junit,compile-report"
   description="Compile everything."/>
 
   <target name="package" depends="compile, package-only"
@@ -833,6 +850,12 @@ some of its classes - at present JMeter can only run from jar files.
     <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar">
       <fileset dir="${build.junit}" includes="**/*.class" />
       <fileset dir="${src.junit}" includes="**/*.properties" />
+    </jar>
+
+    <!-- report -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar">
+      <fileset dir="${build.report}" includes="**/*.class" />
+      <fileset dir="${src.report}" includes="**/*.properties" />
     </jar>
 
     <!-- ldap -->
