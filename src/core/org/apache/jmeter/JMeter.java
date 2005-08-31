@@ -267,7 +267,7 @@ public class JMeter implements JMeterPlugin {
 			e.printStackTrace();
 			System.out.println("An error occurred: " + e.getMessage());
 			System.exit(-1);
-		}
+		} 
 	}
 
 	/**
