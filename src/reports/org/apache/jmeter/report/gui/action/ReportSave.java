@@ -32,7 +32,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.gui.action.Command;
-import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.ReportFileDialoger;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
@@ -91,9 +91,9 @@ public class ReportSave implements Command {
 
 		String updateFile = ReportGuiPackage.getInstance().getTestPlanFile();
 		if (!SAVE.equals(e.getActionCommand()) || updateFile == null) {
-			JFileChooser chooser = FileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
+			JFileChooser chooser = ReportFileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
 					.getCurrentNode().getName()
-					+ ".jmx");
+					+ ".jmr");
 			if (chooser == null) {
 				return;
 			}
@@ -116,9 +116,11 @@ public class ReportSave implements Command {
 			if (SaveService.isSaveTestPlanFormat20()) {
 				ostream = new FileOutputStream(updateFile);
 				OldSaveService.saveSubTree(subTree, ostream);
+                log.info("saveSubTree");
 			} else {
 				writer = new FileWriter(updateFile);
 				SaveService.saveTree(subTree, writer);
+                log.info("saveTree");
 			}
 		} catch (Throwable ex) {
 			ReportGuiPackage.getInstance().setTestPlanFile(null);
