@@ -35,6 +35,10 @@ public class ReportPage extends AbstractTestElement implements Serializable {
 
     public static final String REPORT_PAGE_TITLE = "ReportPage.title";
     public static final String REPORT_PAGE_INDEX = "ReportPage.index";
+    public static final String REPORT_PAGE_CSS = "ReportPage.css";
+    public static final String REPORT_PAGE_HEADER = "ReportPage.header";
+    public static final String REPORT_PAGE_FOOTER = "ReportPage.footer";
+    public static final String REPORT_PAGE_INTRO = "ReportPage.intro";
     
     /**
      * No-arg constructor.
@@ -63,5 +67,37 @@ public class ReportPage extends AbstractTestElement implements Serializable {
     
     public void setIndex(String makeIndex) {
         setProperty(REPORT_PAGE_INDEX,makeIndex);
+    }
+    
+    public String getCSS() {
+        return getPropertyAsString(REPORT_PAGE_CSS);
+    }
+    
+    public void setCSS(String css) {
+        setProperty(REPORT_PAGE_CSS,css);
+    }
+    
+    public String getHeaderURL() {
+        return getPropertyAsString(REPORT_PAGE_HEADER);
+    }
+    
+    public void setHeaderURL(String url) {
+        setProperty(REPORT_PAGE_HEADER,url);
+    }
+    
+    public String getFooterURL() {
+        return getPropertyAsString(REPORT_PAGE_FOOTER);
+    }
+    
+    public void setFooterURL(String url) {
+        setProperty(REPORT_PAGE_FOOTER,url);
+    }
+    
+    public String getIntroduction() {
+        return getPropertyAsString(REPORT_PAGE_INTRO);
+    }
+    
+    public void setIntroduction(String intro) {
+        setProperty(REPORT_PAGE_INTRO,intro);
     }
 }
