@@ -73,8 +73,8 @@ class Splash {
 			g.drawImage(icon,0,0,icon.getWidth(null),icon.getHeight(null),null);
 			g.setColor(Color.BLACK);
 			g.setFont(font);
-			g.drawChars(versionNotice.toCharArray(),0,versionNotice.length(),10,115);
-			g.drawChars(copyRight.toCharArray(),0,copyRight.length(),10,120 + (int)versionRect.getHeight());
+			g.drawChars(versionNotice.toCharArray(),0,versionNotice.length(),10,icon.getHeight(null) + 10);
+			g.drawChars(copyRight.toCharArray(),0,copyRight.length(),10,icon.getHeight(null) + 20 + (int)versionRect.getHeight());
 		}
 		
 		public SplashCanvas(Font f)
