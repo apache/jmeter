@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.control.gui;
 
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.util.Collection;
@@ -27,18 +28,15 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
-import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
-import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.report.gui.DefaultReportPageGui;
-import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.report.gui.AbstractReportGui;
+import org.apache.jmeter.report.gui.ReportPageGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
-import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -47,7 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @version $Revision$ Last Updated: $Date$
  */
-public class ReportGui extends AbstractJMeterGuiComponent {
+public class ReportGui extends AbstractReportGui {
 
 	private JCheckBox serializedMode;
 
@@ -55,7 +53,7 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	private ArgumentsPanel argsPanel;
 
 	/** A panel to contain comments on the test plan. */
-	private JTextArea commentPanel;
+	private JTextField commentPanel;
 
 	/**
 	 * Create a new TestPlanGui.
@@ -71,7 +69,7 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new DefaultReportPageGui().getStaticLabel(), ThreadGroupGui.class.getName(),
+		addMenu.add(ReportMenuFactory.makeMenuItem(new ReportPageGui().getStaticLabel(), ReportPageGui.class.getName(),
 				"Add"));
 		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
 		pop.add(addMenu);
@@ -91,7 +89,6 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 		super.configureTestElement(plan);
 		if (plan instanceof ReportPlan) {
 			ReportPlan tp = (ReportPlan) plan;
-			tp.setSerialized(serializedMode.isSelected());
 			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
 			tp.setProperty(ReportPlan.COMMENTS, commentPanel.getText());
 		}
@@ -125,8 +122,6 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	public void configure(TestElement el) {
 		super.configure(el);
 
-		serializedMode.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(ReportPlan.SERIALIZE_THREADGROUPS));
-
 		if (el.getProperty(ReportPlan.USER_DEFINED_VARIABLES) != null) {
 			argsPanel.configure((Arguments) el.getProperty(ReportPlan.USER_DEFINED_VARIABLES).getObjectValue());
 		}
@@ -139,15 +134,18 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	 * @return a panel for user-defined variables
 	 */
 	private JPanel createVariablePanel() {
-		argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables"));
-
+		argsPanel = 
+            new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables"),
+                    Color.white);
 		return argsPanel;
 	}
 
 	private Container createCommentPanel() {
 		Container panel = makeTitlePanel();
-		commentPanel = new JTextArea();
+		commentPanel = new JTextField();
+        commentPanel.setBackground(Color.white);
 		JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
+        label.setBackground(Color.white);
 		label.setLabelFor(commentPanel);
 		panel.add(label);
 		panel.add(commentPanel);
@@ -160,15 +158,8 @@ public class ReportGui extends AbstractJMeterGuiComponent {
 	private void init() {
 		setLayout(new BorderLayout(10, 10));
 		setBorder(makeBorder());
-
+        setBackground(Color.white);
 		add(createCommentPanel(), BorderLayout.NORTH);
-
 		add(createVariablePanel(), BorderLayout.CENTER);
-
-		VerticalPanel southPanel = new VerticalPanel();
-		serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
-		southPanel.add(serializedMode);
-
-		add(southPanel, BorderLayout.SOUTH);
 	}
 }

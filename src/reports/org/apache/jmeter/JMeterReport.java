@@ -44,7 +44,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.ReportPlan;
-import org.apache.jmeter.report.gui.AbstractReportPageGui;
+import org.apache.jmeter.report.gui.ReportPageGui;
 import org.apache.jmeter.report.gui.action.ReportLoad;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.action.ReportCheckDirty;
@@ -162,7 +162,7 @@ public class JMeterReport implements JMeterPlugin {
             { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },
             { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },
             { AbstractReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
-            { AbstractReportPageGui.class.getName(), "org/apache/jmeter/images/new/book.png" },
+            { ReportPageGui.class.getName(), "org/apache/jmeter/images/new/scroll.png" },
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }
     };
     
@@ -211,7 +211,6 @@ public class JMeterReport implements JMeterPlugin {
         ReportTreeModel treeModel = new ReportTreeModel();
         ReportTreeListener treeLis = new ReportTreeListener(treeModel);
         treeLis.setActionHandler(ReportActionRouter.getInstance());
-        // NOTUSED: GuiPackage guiPack =
         ReportGuiPackage.getInstance(treeLis, treeModel);
         org.apache.jmeter.gui.ReportMainFrame main = 
             new org.apache.jmeter.gui.ReportMainFrame(ReportActionRouter.getInstance(),
@@ -423,7 +422,6 @@ public class JMeterReport implements JMeterPlugin {
                 // This is done for GUI runs in JMeterTreeModel.addSubTree()
                 if (item instanceof ReportPlan) {
                     ReportPlan tp = (ReportPlan) item;
-                    tp.setSerialized(tp.isSerialized());
                 }
                 // TODO handle ReplaceableControllers
                 // if (item instanceof ReplaceableController)
