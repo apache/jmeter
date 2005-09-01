@@ -322,6 +322,7 @@
                 <fieldNames>true</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
+                <contentLength>false</contentLength>
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
