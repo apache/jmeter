@@ -22,6 +22,7 @@ import org.apache.avalon.framework.logger.LogKitLogger;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jorphan.logging.LoggingManager;
@@ -89,6 +90,8 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 	public void testStarted() {
 		if (!started[0]) {
 			try {
+                this.setRunningVersion(true);
+                TestBeanHelper.prepare(this);
 				initPool();
 			} catch (Exception e) {
 				log.error("Unable to start database connection pool.", e);
