@@ -38,6 +38,7 @@ import org.apache.commons.collections.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
@@ -48,6 +49,7 @@ import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
+import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
@@ -134,7 +136,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	}
 
 	// Dummy for JUnit test
-	public TestBeanGUI() {
+	TestBeanGUI() {
 		log.warn("Only for use in testing");
 	}
 
@@ -267,7 +269,28 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 		{
 			return MenuFactory.getDefaultTimerMenu();
 		}
-		return MenuFactory.getDefaultControllerMenu();
+        else if(Sampler.class.isAssignableFrom(testBeanClass))
+        {
+            return MenuFactory.getDefaultSamplerMenu();
+        }
+        else if(ConfigTestElement.class.isAssignableFrom(testBeanClass))
+        {
+            return MenuFactory.getDefaultConfigElementMenu();
+        }
+        else if(Assertion.class.isAssignableFrom(testBeanClass))
+        {
+            return MenuFactory.getDefaultAssertionMenu();
+        }
+        else if(PostProcessor.class.isAssignableFrom(testBeanClass) || 
+                PreProcessor.class.isAssignableFrom(testBeanClass))
+        {
+            return MenuFactory.getDefaultExtractorMenu();
+        }
+        else if(AbstractListenerElement.class.isAssignableFrom(testBeanClass))
+        {
+            return MenuFactory.getDefaultVisualizerMenu();
+        }
+        else return MenuFactory.getDefaultControllerMenu();
 	}
 
 	/*
