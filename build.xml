@@ -895,7 +895,7 @@ some of its classes - at present JMeter can only run from jar files.
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
-    <fixcrlf srcdir="." eol="lf" includes="**/jmeter,**/jmeter-server"/>
+    <fixcrlf srcdir="." eol="lf" includes="**/jmeter,**/jmeter-server,**/jmeter-report"/>
   </target>
 
   <target name="all" depends="clean,install" 
