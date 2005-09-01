@@ -81,7 +81,7 @@ public final class MenuFactory {
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
 	private static final String[] MENU_ADD_CONTROLLER = new String[] { MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-			MenuFactory.CONFIG_ELEMENTS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
+			MenuFactory.ASSERTIONS, MenuFactory.CONFIG_ELEMENTS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
 			MenuFactory.POST_PROCESSORS };
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { MenuFactory.CONTROLLERS };
