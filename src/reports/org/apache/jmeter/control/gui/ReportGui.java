@@ -88,9 +88,9 @@ public class ReportGui extends AbstractReportGui {
 	public void modifyTestElement(TestElement plan) {
 		super.configureTestElement(plan);
 		if (plan instanceof ReportPlan) {
-			ReportPlan tp = (ReportPlan) plan;
-			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
-			tp.setProperty(ReportPlan.COMMENTS, commentPanel.getText());
+			ReportPlan rp = (ReportPlan) plan;
+			rp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
+			rp.setProperty(ReportPlan.COMMENTS, commentPanel.getText());
 		}
 	}
 
