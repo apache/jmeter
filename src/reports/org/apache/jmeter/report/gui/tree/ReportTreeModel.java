@@ -27,7 +27,7 @@ import javax.swing.tree.DefaultTreeModel;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.control.gui.ReportGui;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
@@ -84,7 +84,9 @@ public class ReportTreeModel extends DefaultTreeModel {
 						.getPropertyAsString(TestElement.NAME));
 				addSubTree(subTree.getTree(item), current);
 			} else {
-				addSubTree(subTree.getTree(item), addComponent(item, current));
+				if (subTree.getTree(item) != null) {
+					addSubTree(subTree.getTree(item), addComponent(item, current));
+				}
 			}
 		}
 		return getCurrentSubTree(current);
@@ -99,11 +101,11 @@ public class ReportTreeModel extends DefaultTreeModel {
 		component.setProperty(TestElement.GUI_CLASS, NameUpdater
 				.getCurrentName(component
 						.getPropertyAsString(TestElement.GUI_CLASS)));
-		GuiPackage.getInstance().updateCurrentNode();
-		JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
+		ReportGuiPackage.getInstance().updateCurrentNode();
+		JMeterGUIComponent guicomp = ReportGuiPackage.getInstance().getGui(component);
 		guicomp.configure(component);
 		guicomp.modifyTestElement(component);
-		GuiPackage.getInstance().getCurrentGui(); // put the gui object back
+		ReportGuiPackage.getInstance().getCurrentGui(); // put the gui object back
 		// to the way it was.
 		ReportTreeNode newNode = new ReportTreeNode(component, this);
 
@@ -177,8 +179,8 @@ public class ReportTreeModel extends DefaultTreeModel {
 	}
 
 	private void initTree() {
-		TestElement wb = new ReportGui().createTestElement();
-		this.insertNodeInto(new ReportTreeNode(wb, this),
+		TestElement rp = new ReportGui().createTestElement();
+		this.insertNodeInto(new ReportTreeNode(rp, this),
 				(ReportTreeNode) getRoot(), 0);
 	}
 }
