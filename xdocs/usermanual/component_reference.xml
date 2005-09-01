@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- 
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2319,7 +2319,9 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
-with the start, continuing on like that until the test is ended.  </p></description>
+with the start, continuing on like that until the test is ended.  </p>
+<p>The counter uses an int to store the value, so the range is from -2^^31 to 2^^31-1, i.e. -2147483648 to 2147483647.</p>
+</description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
