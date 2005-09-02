@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
+import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
@@ -58,9 +59,11 @@ public class JUnitSampler extends AbstractSampler {
     
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
+    public static final String RUNTEST = "run";
     /// the Method objects for setUp and tearDown methods
     protected Method SETUP_METHOD = null;
     protected Method TDOWN_METHOD = null;
+    protected Method RUN_METHOD = null;
     protected boolean checkStartUpTearDown = false;
     
     protected TestCase TEST_INSTANCE = null;
@@ -295,15 +298,24 @@ public class JUnitSampler extends AbstractSampler {
             initMethodObjects(this.TEST_INSTANCE);
             // create a new TestResult
             TestResult tr = new TestResult();
+            this.TEST_INSTANCE.setName(getMethod());
             try {
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
-                    SETUP_METHOD.invoke(TEST_INSTANCE,new Class[0]);
+                    SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
                 }
-                Method m = getMethod(TEST_INSTANCE,getMethod());
+                if (RUN_METHOD == null) {
+                    RUN_METHOD = getRunTestMethod(this.TEST_INSTANCE);
+                }
+                Method m = getMethod(this.TEST_INSTANCE,getMethod());
                 sresult.sampleStart();
-                m.invoke(TEST_INSTANCE,null);
+                // use runTest method to run the test instead of the method directly
+                if (RUN_METHOD != null) {
+                    Object[] p = {tr};
+                    RUN_METHOD.invoke(this.TEST_INSTANCE,p);
+                } else {
+                    m.invoke(this.TEST_INSTANCE,new Class[0]);
+                }
                 sresult.sampleEnd();
-                // log.info("invoked " + getMethod());
                 if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(TEST_INSTANCE,new Class[0]);
                 }
@@ -315,6 +327,11 @@ public class JUnitSampler extends AbstractSampler {
                 sresult.setSuccessful(false);
             } catch (IllegalAccessException e) {
                 // log.warn(e.getMessage());
+                sresult.setResponseCode(getErrorCode());
+                sresult.setResponseMessage(getError());
+                sresult.setResponseData(e.getMessage().getBytes());
+                sresult.setSuccessful(false);
+            } catch (ComparisonFailure e) {
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
                 sresult.setResponseData(e.getMessage().getBytes());
@@ -389,7 +406,11 @@ public class JUnitSampler extends AbstractSampler {
                 try {
                     con = theclazz.getDeclaredConstructor(
                             new Class[] {String.class});
-                    params = new Object[]{label};
+                    if (con.isAccessible()) {
+                        params = new Object[]{label};
+                    } else {
+                        con = null;
+                    }
                 } catch (NoSuchMethodException e) {
                     log.info("String constructor:: " + e.getMessage());
                 }
@@ -431,6 +452,20 @@ public class JUnitSampler extends AbstractSampler {
                     " method name is " + method);
             try {
                 return clazz.getClass().getMethod(method,new Class[0]);
+            } catch (NoSuchMethodException e) {
+                log.warn(e.getMessage());
+            }
+        }
+        return null;
+    }
+    
+    public Method getRunTestMethod(Object clazz){
+        if (clazz != null){
+            log.info("class " + clazz.getClass().getName() +
+                    " method name is " + RUNTEST);
+            try {
+                Class[] param = {TestResult.class};
+                return clazz.getClass().getMethod(RUNTEST,param);
             } catch (NoSuchMethodException e) {
                 log.warn(e.getMessage());
             }
