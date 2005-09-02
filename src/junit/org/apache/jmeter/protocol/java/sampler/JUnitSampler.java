@@ -308,7 +308,10 @@ public class JUnitSampler extends AbstractSampler {
                 }
                 Method m = getMethod(this.TEST_INSTANCE,getMethod());
                 sresult.sampleStart();
-                // use runTest method to run the test instead of the method directly
+                // use run method to run the test instead of the method directly
+                // we invoke TestCase.run(TestResult). If it happens to be null,
+                // we invoke the method directly, though that shouldn't happen
+                // unless the junit class breaks convention
                 if (RUN_METHOD != null) {
                     Object[] p = {tr};
                     RUN_METHOD.invoke(this.TEST_INSTANCE,p);
@@ -406,6 +409,9 @@ public class JUnitSampler extends AbstractSampler {
                 try {
                     con = theclazz.getDeclaredConstructor(
                             new Class[] {String.class});
+                    // we have to check and make sure the constructor is
+                    // accessible. if we didn't it would throw an exception
+                    // and cause a NPE.
                     if (con.isAccessible()) {
                         params = new Object[]{label};
                     } else {
@@ -448,8 +454,8 @@ public class JUnitSampler extends AbstractSampler {
      */
     public Method getMethod(Object clazz, String method){
         if (clazz != null && method != null){
-            log.info("class " + clazz.getClass().getName() +
-                    " method name is " + method);
+            // log.info("class " + clazz.getClass().getName() +
+            //        " method name is " + method);
             try {
                 return clazz.getClass().getMethod(method,new Class[0]);
             } catch (NoSuchMethodException e) {
@@ -461,8 +467,8 @@ public class JUnitSampler extends AbstractSampler {
     
     public Method getRunTestMethod(Object clazz){
         if (clazz != null){
-            log.info("class " + clazz.getClass().getName() +
-                    " method name is " + RUNTEST);
+            // log.info("class " + clazz.getClass().getName() +
+            //        " method name is " + RUNTEST);
             try {
                 Class[] param = {TestResult.class};
                 return clazz.getClass().getMethod(RUNTEST,param);
