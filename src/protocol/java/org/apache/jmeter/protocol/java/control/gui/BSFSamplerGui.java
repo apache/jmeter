@@ -55,6 +55,8 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 		super.configure(element);
 		scriptField.setText(element.getPropertyAsString(BSFSampler.SCRIPT));
 		langField.setText(element.getPropertyAsString(BSFSampler.LANGUAGE));
+        filename.setText(element.getPropertyAsString(BSFSampler.FILENAME));
+        parameters.setText(element.getPropertyAsString(BSFSampler.PARAMETERS));
 	}
 
 	public TestElement createTestElement() {
