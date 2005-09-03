@@ -472,7 +472,7 @@ XML.</p>
 
 </component>
 
-<component name="Access Log Sampler" index="&sect-num;.1.8" screenshot="">
+<component name="Access Log Sampler" index="&sect-num;.1.8" screenshot="accesslogsampler.png">
 <center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
@@ -525,7 +525,7 @@ StandardGenerator and TCLogParser.
 
 </component>
 
-<component name="BeanShell Sampler" index="&sect-num;.1.9" screenshot="">
+<component name="BeanShell Sampler" index="&sect-num;.1.9" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
@@ -592,7 +592,7 @@ return "Data from sample with Label "+Label;
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.10" screenshot="">
+<component name="BSF Sampler" index="&sect-num;.1.10" screenshot="bsfsampler.png">
 <note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
@@ -611,7 +611,7 @@ return "Data from sample with Label "+Label;
 TBC
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.11" screenshot="">
+<component name="TCP Sampler" index="&sect-num;.1.11" screenshot="tcpsampler.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -671,7 +671,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.12" screenshot="">
+<component name="JMS Publisher" index="&sect-num;.1.12" screenshot="jmspublisher.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -680,6 +680,7 @@ TBC
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -696,7 +697,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.13" screenshot="">
+<component name="JMS Subscriber" index="&sect-num;.1.13" screenshot="jmssubscriber.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -705,6 +706,7 @@ TBC
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -729,6 +731,7 @@ TBC
         It is different from pub/sub messages and is generally used for handling transactions.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1015,7 +1018,7 @@ setting is reset when a parent Loop Controller restarts.
 </properties>
 
 </component>
-<component name="If Controller" index="&sect-num;.2.9" screenshot="">
+<component name="If Controller" index="&sect-num;.2.9" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
 	</description>
@@ -1032,7 +1035,7 @@ setting is reset when a parent Loop Controller restarts.
 	</p>
 </component>
 
-<component name="Random Order Controller" index="&sect-num;.2.10" screenshot="">
+<component name="Random Order Controller" index="&sect-num;.2.10" screenshot="randomordercontroller.png">
 	<description>
 		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
 		 element at most once, but the order of execution of the nodes will be random.</p>
@@ -1114,7 +1117,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </example>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.12" screenshot="">
+<component name="Transaction Controller" index="&sect-num;.2.12" screenshot="transactioncontroller.png">
 	<description>
 		<p>The Transaction Controller times how long it takes for all its children to run.
 			It then adds a "sample" entry to the test output with the total elapsed time.
@@ -1126,7 +1129,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </properties>
 </component>
 
-<component name="Runtime Controller" index="&sect-num;.2.12" screenshot="">
+<component name="Runtime Controller" index="&sect-num;.2.12" screenshot="runtimecontroller.png">
 	<description>
 		<p>The Runtime Controller controls how long its children are allowed to run.
 		</p>
@@ -1136,7 +1139,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
 </properties>
 </component>
-<component name="While Controller" index="15.2.13" screenshot="">
+<component name="While Controller" index="15.2.13" screenshot="whilecontroller.png">
 	<description>
 <p>
 The While Controller runs its children until the condition is "false".
@@ -1168,7 +1171,7 @@ For example:
 </properties>
 </component>
 
-<component name="Switch Controller" index="&sect-num;.2.14" screenshot="">
+<component name="Switch Controller" index="&sect-num;.2.14" screenshot="switchcontroller.png">
 	<description>
 <p>
 The Switch Controller acts like the <complink name="Interleave Controller"/> 
@@ -1304,7 +1307,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.3.2" name="Graph Full Results" screenshot="">
+<component index="&sect-num;.3.2" name="Graph Full Results" screenshot="graphfullresults.png">
 <description>No Description</description>
 </component>
 
@@ -1380,7 +1383,7 @@ this visualizer uses a lot of memory. The last column shows the number of bytes 
 response from the server.</description>
 </component>
 
-<component index="&sect-num;.3.9" name="Simple Data Writer" screenshot="">
+<component index="&sect-num;.3.9" name="Simple Data Writer" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.</description>
@@ -1808,7 +1811,7 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="">
+<component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="tcpsamplerconfig.png">
 	<note>ALPHA CODE</note>
 <description>
 	The TCP Sampler Config provides default data for the TCP Sampler
@@ -1823,7 +1826,7 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="">
+<component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="csvdatasetconfig.png">
 <description>
 	CSV DataSet Config is used to read lines from a file, and split them into variables.
 	<p>
@@ -2411,7 +2414,7 @@ Generates a summary of the test run so far to the log file and/or
 standard output. Both running and differential totals are shown.
 Output is generated every n seconds (default 3 minutes) on the appropriate
 time boundary, so that multiple test runs on the same time will be
- synchronised.
+ synchronised.The interval is defined by the property "summariser.interval" - see jmeter.properties.
 
 This is mainly intended for batch (non-GUI) runs.
 	</description>
