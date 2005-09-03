@@ -54,6 +54,24 @@ public final class NameUpdater {
 		}
 		return className;
 	}
+    /**
+     * Looks up test element / gui class combination; if that
+     * does not exist in the map, then defaults to getCurrentName.
+     * 
+     * @param testClassName - test element class name
+     * @param guiClassName - associated gui class name
+     * @return new test class name
+     */
+
+    public static String getCurrentTestName(String testClassName, String guiClassName) {
+        String key = testClassName + "|" + guiClassName;
+        if (nameMap.containsKey(key)) {
+            String newName = nameMap.getProperty(key);
+            log.info("Upgrading " + key + " to " + newName);
+            return newName;
+        }
+        return getCurrentName(testClassName);
+    }
 
 	public static String getCurrentName(String propertyName, String className) {
 		String key = className + "/" + propertyName;
