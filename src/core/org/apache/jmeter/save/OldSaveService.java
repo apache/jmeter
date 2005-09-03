@@ -574,13 +574,26 @@ public final class OldSaveService implements SaveServiceConstants {
 		TestElement element = null;
 
 		String testClass = config.getAttribute("class");
-		element = (TestElement) Class.forName(NameUpdater.getCurrentName(testClass)).newInstance();
+		
+        String gui_class="";
 		Configuration[] children = config.getChildren();
+        for (int i = 0; i < children.length; i++) {
+            if (children[i].getName().equals("property")) {
+                if (children[i].getAttribute("name").equals(TestElement.GUI_CLASS)){
+                    gui_class=children[i].getValue();
+                }
+            }  
+        }
+        
+        String newClass = NameUpdater.getCurrentTestName(testClass,gui_class);
 
-		for (int i = 0; i < children.length; i++) {
+        element = (TestElement) Class.forName(newClass).newInstance();
+
+        for (int i = 0; i < children.length; i++) {
 			if (children[i].getName().equals("property")) {
 				try {
-					element.setProperty(createProperty(children[i], testClass));
+                    JMeterProperty prop = createProperty(children[i], newClass);
+					if (prop!=null) element.setProperty(prop);
 				} catch (Exception ex) {
 					log.error("Problem loading property", ex);
 					element.setProperty(children[i].getAttribute("name"), "");
@@ -589,11 +602,11 @@ public final class OldSaveService implements SaveServiceConstants {
 				element.setProperty(new TestElementProperty(children[i].getAttribute("name", ""),
 						createTestElement(children[i])));
 			} else if (children[i].getName().equals("collection")) {
-				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""), createCollection(
-						children[i], testClass)));
+				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""),
+                        createCollection(children[i], newClass)));
 			} else if (children[i].getName().equals("map")) {
-				element.setProperty(new MapProperty(children[i].getAttribute("name", ""), createMap(children[i],
-						testClass)));
+				element.setProperty(new MapProperty(children[i].getAttribute("name", ""),
+                        createMap(children[i],newClass)));
 			}
 		}
 		return element;
@@ -606,14 +619,16 @@ public final class OldSaveService implements SaveServiceConstants {
 
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].getName().equals("property")) {
-				coll.add(createProperty(items[i], testClass));
+                JMeterProperty prop = createProperty(items[i], testClass);
+				if (prop!=null) coll.add(prop);
 			} else if (items[i].getName().equals("testelement")) {
 				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i])));
 			} else if (items[i].getName().equals("collection")) {
 				coll.add(new CollectionProperty(items[i].getAttribute("name", ""),
 						createCollection(items[i], testClass)));
 			} else if (items[i].getName().equals("string")) {
-				coll.add(createProperty(items[i], testClass));
+                JMeterProperty prop = createProperty(items[i], testClass);
+				if (prop!=null) coll.add(prop);
 			} else if (items[i].getName().equals("map")) {
 				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass)));
 			}
@@ -625,17 +640,25 @@ public final class OldSaveService implements SaveServiceConstants {
 			ClassNotFoundException, InstantiationException {
 		String value = config.getValue("");
 		String name = config.getAttribute("name", value);
+        String oname = name;
 		String type = config.getAttribute("propType", StringProperty.class.getName());
 
 		// Do upgrade translation:
 		name = NameUpdater.getCurrentName(name, testClass);
-		if (TestElement.GUI_CLASS.equals(name) || TestElement.TEST_CLASS.equals(name)) {
+		if (TestElement.GUI_CLASS.equals(name)) {
 			value = NameUpdater.getCurrentName(value);
+        } else if (TestElement.TEST_CLASS.equals(name)) {
+            value=testClass; // must always agree
 		} else {
 			value = NameUpdater.getCurrentName(value, name, testClass);
 		}
 
-		// Create the property:
+        // Delete any properties whose name converts to the empty string
+        if (oname.length() != 0 && name.length()==0) {
+            return null;
+        }
+
+        // Create the property:
 		JMeterProperty prop = (JMeterProperty) Class.forName(type).newInstance();
 		prop.setName(name);
 		prop.setObjectValue(value);
@@ -651,7 +674,7 @@ public final class OldSaveService implements SaveServiceConstants {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].getName().equals("property")) {
 				JMeterProperty prop = createProperty(items[i], testClass);
-				map.put(prop.getName(), prop);
+				if (prop!=null) map.put(prop.getName(), prop);
 			} else if (items[i].getName().equals("testelement")) {
 				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""),
 						createTestElement(items[i])));
