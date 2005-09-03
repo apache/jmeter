@@ -1,7 +1,7 @@
 <?xml version="1.0"?> 
 <!--
    $Header$
-   Copyright 2001-2004 The Apache Software Foundation
+   Copyright 2001-2005 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -26,6 +26,18 @@
 (least recent)</b></p>  
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
+
+<h3>Version 2.1.1</h3>
+<h4>New functionality:</h4>
+<ul>
+</ul>
+<h4>Bug fixes:</h4>
+<ul>
+<li>AccessLog Sampler and JDBC test elements populated correctly from 2.0 test plans</li>
+<li>BSF Sampler now populates filename and parameters from saved test plan</li>
+</ul>	
+	
+
 
 <h3>Version 2.1</h3>
 <h4>New functionality:</h4>
