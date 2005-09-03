@@ -297,11 +297,13 @@ Examples:<br/>
         			- a random number between 0 and the variable maxRandom</li>
         		<li>${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1))
         			- a random number between the variables minRandom and maxRandom</li>
+        		<li>"${VAR}"=="abcd"</li>
         	</ul>
         	</property>
-        <property name="Name of function" required="Yes">A reference name for reusing the value
+        <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
 </component>
 
 <component index="19.5.8" name="__Random">
@@ -450,6 +452,11 @@ the second would return 1 and the last would return www.dummy.org
 	The BeanShell function evaluates the script passed to it, and returns the result.
 </p>
 <p>
+<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+<br/>
+For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
 Note that a different Interpreter is used for each independent occurence of the function
 in a test script, but the same Interpreter is used for subsequent invocations.
 This means that variables persist across calls to the function.
@@ -491,6 +498,7 @@ ${__BeanShell(123*456)} - returns 56088
 ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 </pre>
 </p>
+<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
 </component>
 
 <component index="19.5.14" name="__split">
