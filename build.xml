@@ -415,9 +415,6 @@
         <available classname="javax.activation.DataHandler" classpathref="classpath"/>
       </and>
     </condition>
-    <available classname="iaik.protocol.https.Handler" property="isasilk.present">
-      <classpath refid="classpath"/>
-    </available>
     <available classname="bsh.Interpreter" property="beanshell.present">
       <classpath refid="classpath"/>
     </available>
@@ -434,10 +431,6 @@
     -->
   <target name="ssl-message" depends="check-libs" unless="jsse.present">
     <echo message="Classes for SSL not found in classpath"/>
-  </target>
-
-  <target name="iaik-message" depends="check-libs" unless="isasilk.present">
-    <echo message="Classes for IAIK iSaSiLk not found in classpath"/>
   </target>
 
   <target name="mail-message" depends="check-libs" unless="javamail.complete">
@@ -457,7 +450,7 @@
   </target>
 
   <target name="report-missing-libs" 
-      depends="ssl-message,iaik-message,mail-message,beanshell-message,bsf-message,jms-message"
+      depends="ssl-message,mail-message,beanshell-message,bsf-message,jms-message"
   />
 
   <!--
@@ -477,7 +470,6 @@
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
-      <exclude name="org/apache/jmeter/util/keystore/PKCS12KeyStore.java" unless="isasilk.present"/>
       <exclude name="org/apache/jmeter/util/keystore/DefaultKeyStore.java" unless="jsse.present"/>
       <classpath>
         <path refid="classpath"/>
