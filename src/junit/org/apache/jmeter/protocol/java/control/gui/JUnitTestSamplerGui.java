@@ -20,8 +20,8 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JCheckBox;
@@ -44,8 +44,8 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 /**
- * The <code>JavaTestSamplerGui</code> class provides the user interface
- * for the {@link JavaSampler}.
+ * The <code>JUnitTestSamplerGui</code> class provides the user interface
+ * for the {@link JUnitTestSampler}.
  * 
  * @version $Revision$ on $Date$
  */
@@ -60,7 +60,9 @@ implements ChangeListener, ActionListener
     public static final String ONETIMESETUP = "oneTimeSetUp";
     public static final String ONETIMETEARDOWN = "oneTimeTearDown";
     public static final String SUITE = "suite";
-    protected String[] SPATHS = null;
+    private static final String[] SPATHS = new String[] {
+            JMeterUtils.getJMeterHome() + "/lib/junit/",
+    };
 
     JLabeledTextField constructorLabel =
         new JLabeledTextField(
@@ -111,7 +113,7 @@ implements ChangeListener, ActionListener
     private static transient Logger log = LoggingManager.getLoggerForClass();
 
     /**
-     * Constructor for JavaTestSamplerGui
+     * Constructor for JUnitTestSamplerGui
      */
     public JUnitTestSamplerGui()
     {
@@ -141,9 +143,6 @@ implements ChangeListener, ActionListener
     private JPanel createClassPanel()
     {
         METHODLIST = new java.util.ArrayList();
-        SPATHS = new String[2];
-        SPATHS[0] = JMeterUtils.getSearchPaths()[0];
-        SPATHS[1] = JMeterUtils.getJMeterHome() + "/lib/junit/";
 
         try
         {
@@ -153,9 +152,12 @@ implements ChangeListener, ActionListener
                     SPATHS,
                     new Class[] { TestCase.class });
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            log.debug("Exception getting interfaces.", e);
+            log.error("Exception getting interfaces.", e);
+        } 
+        catch (ClassNotFoundException e) {
+            log.error("Exception getting interfaces.", e);
         }
 
         JLabel label =
@@ -335,7 +337,6 @@ implements ChangeListener, ActionListener
     public Class[] filterClasses(Class[] clz) {
         if (clz != null && clz.length > 0){
             Class[] nclz = null;
-            ArrayList matches = new ArrayList();
             return nclz;
         } else {
             return clz;
