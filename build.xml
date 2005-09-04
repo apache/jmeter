@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-   Copyright 1999-2004 The Apache Software Foundation
+   Copyright 1999-2005 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@
     To build all and package up the files for distribution
       ant distribution [ -Djmeter.version=vvvv ]
 
-  	To create tar and tgz of the web-site documentation (docs and api)
+    To create tar and tgz of the web-site documentation (docs and api)
       ant site [ -Djmeter.version=vvvv ]
       
       
@@ -124,6 +124,7 @@
       <sourcePath path="${src.http}" />
       <sourcePath path="${src.ftp}" />
       <sourcePath path="${src.java}" />
+      <sourcePath path="${src.junit}" />
       <sourcePath path="${src.jdbc}" />
       <sourcePath path="${src.ldap}" />
       <sourcePath path="${src.mail}" />
@@ -173,6 +174,7 @@
   <property name="src.test" value="test/src"/>
   <property name="src.jdbc" value="src/protocol/jdbc"/>
   <property name="src.java" value="src/protocol/java"/>
+  <property name="src.junit" value="src/junit"/>
   <property name="src.components" value="src/components"/>
   <property name="src.functions" value="src/functions"/>
   <property name="src.jorphan" value="src/jorphan"/>
@@ -199,6 +201,7 @@
     <pathelement location="${src.ftp}"/>
     <pathelement location="${src.jdbc}"/>
     <pathelement location="${src.java}"/>
+    <pathelement location="${src.junit}"/>
     <pathelement location="${src.jorphan}"/>
     <pathelement location="${src.ldap}"/>
     <pathelement location="${src.htmlparser}"/>
@@ -217,6 +220,7 @@
   <property name="build.ftp" value="build/protocol/ftp"/>
   <property name="build.jdbc" value="build/protocol/jdbc"/>
   <property name="build.java" value="build/protocol/java"/>
+  <property name="build.junit" value="build/junit"/>
   <property name="build.components" value="build/components"/>
   <property name="build.functions" value="build/functions"/>
   <property name="build.jorphan" value="build/jorphan"/>
@@ -623,6 +627,18 @@
     </javac>
   </target>
 
+  <target name="compile-junit" depends="compile-jorphan,compile-core" description="Compile components specific to JUnit sampling.">
+    <mkdir dir="${build.junit}"/>
+    <javac srcdir="${src.junit}" destdir="${build.junit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+        <path refid="classpath"/>
+        <pathelement location="${build.jorphan}"/>
+        <pathelement location="${build.core}"/>
+      </classpath>
+    </javac>
+  </target>
+
   <target name="compile-tcp" depends="compile-jorphan,compile-core" description="Compile components specific to TCP sampling.">
     <mkdir dir="${build.tcp}"/>
     <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
@@ -635,7 +651,7 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp,compile-jms" description="Compile all protocol-specific components."/>
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
@@ -731,7 +747,8 @@
     </javac>
   </target>
 
-  <target name="compile" depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor"
+  <target name="compile" 
+  depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor,compile-junit,compile-jms"
   description="Compile everything."/>
 
   <target name="package" depends="compile, package-only"
@@ -813,6 +830,12 @@ some of its classes - at present JMeter can only run from jar files.
       <fileset dir="${src.java}" includes="**/*.properties" />
     </jar>
     
+    <!-- junit -->
+    <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar">
+      <fileset dir="${build.junit}" includes="**/*.class" />
+      <fileset dir="${src.junit}" includes="**/*.properties" />
+    </jar>
+
     <!-- ldap -->
     <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar">
       <fileset dir="${build.ldap}" includes="**/*.class" />
@@ -952,8 +975,8 @@ some of its classes - at present JMeter can only run from jar files.
 	Creates archives for updating web-site
 	-->
 	<target name="distribution" 
-		depends="assume-libs-present,clean,install,docs-all,test,_distribution,site"
-		description="Build JMeter for end-user distribution (includes site)"/>
+		depends="assume-libs-present,clean,install,docs-all,test,_distribution"
+		description="Build JMeter for end-user distribution (excludes site)"/>
 
 	<!-- Internal target -->
 	<target name="_distribution">
@@ -1035,8 +1058,8 @@ some of its classes - at present JMeter can only run from jar files.
 
   <!-- Used by project jakarta-jmeter-test -->
   <target name="gump-test" 
-      depends="_gump_properties,_test"
-      description="Test JMeter">
+      depends="_gump_properties,compile-tests,_test"
+      description="Test JMeter in Gump">
     <!-- Show the log file -->
     <concat>
       <filelist dir="bin" files="jmeter-test.log" />
@@ -1150,8 +1173,13 @@ some of its classes - at present JMeter can only run from jar files.
    <!-- When creating the tars for the web-site, no version prefix directory is added -->
    <target name="pack-site"  depends="init-version">
      <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
-     <antcall target="_pack_site_api"/>
-     <antcall target="_pack_site_doc"/>
+     <!-- Note: define pack.name here so it overrides any existing value -->
+     <antcall target="_pack_site_api">
+        <param name="pack.name" value="${dist.name}_api"/>
+     </antcall>
+     <antcall target="_pack_site_doc">
+        <param name="pack.name" value="${dist.name}_doc"/>
+     </antcall>
    </target>
  
    <target name="_pack_site_doc">
@@ -1321,7 +1349,7 @@ some of its classes - at present JMeter can only run from jar files.
    test.headless = ${test.headless}
    user.dir = ${user.dir}
    basedir = ${basedir}
-   test dir = ${build.dir}/test
+   test dir = ${build.test}
    testsaveservice.saveout = ${testsaveservice.saveout}
    </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
@@ -1332,7 +1360,7 @@ some of its classes - at present JMeter can only run from jar files.
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
-      <arg value="${build.dir}/test,../lib/ext"/>
+      <arg value="${build.test},../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
