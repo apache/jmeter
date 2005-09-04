@@ -786,6 +786,65 @@ TBC
 </properties>
 </component>
 
+<component name="JUnit Sampler" index="&sect-num;.1.16" screenshot="junit_sampler.png">
+<description>
+The current implementation supports standard Junit convention and extensions. It also
+includes extensions like oneTimeSetUp and oneTimeTea Down. The sampler works like the
+JavaSampler with some differences.
+1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
+2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
+3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
+4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
+5. Each time the test method is called, Jmeter will pass the result to the listeners.
+6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
+7. The sampler reports unexpected exceptions as errors.
+There are some important differences between standard JUnit test runners and JMeter's
+implementation. Rather than make a new instance of the class for each test, JMeter
+creates 1 instance per sampler and reuses it.&lt;br>
+The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:&lt;br>
+&lt;br>
+Empty Constructor:&lt;br>
+public class myTestCase {&lt;br>
+  public myTestCase() {}&lt;br>
+}&lt;br>
+&lt;br>
+String Constructor:&lt;br>
+public class myTestCase {&lt;br>
+  public myTestCase(String text) {&lt;br>
+    super(text);&lt;br>
+  }&lt;br>
+}&lt;br>
+By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.&lt;br>
+General Guidelines&lt;br>
+&lt;br>
+Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.&lt;br>
+&lt;br>
+1. Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.&lt;br>
+2. Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a descrete operation, it makes it easier to combine test methods to create new test plans.&lt;br>
+3. Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.&lt;br>
+4. If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.&lt;br>
+5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Package filter" required="">Comma separated list of packages to show. Example, org.apache.jmeter,junit.framework.</property>
+  <property name="Class name" required="">Fully qualified name of the JUnit test class.</property>
+  <property name="Constructor string" required="">String pass to the string constructor. If a string is set, the sampler will use the
+   string constructor instead of the empty constructor.</property>
+  <property name="Test method" required="">The method to test.</property>
+  <property name="Success message" required="">A descriptive message indicating what success means.</property>
+  <property name="Success code" required="">An unique code indicating the test was successful.</property>
+  <property name="Failure message" required="">A descriptive message indicating what failure means.</property>
+  <property name="Failure code" required="">An unique code indicating the test failed.</property>
+  <property name="Error message" required="">A description for errors.</property>
+  <property name="Error code" required="">Some code for errors. Does not need to be unique.</property>
+  <property name="Do not call setUp and tearDown" required="">Set the sampler not to call setUp and tearDown.
+   By default, setUp and tearDown should be called. Not calling those methods could affect the test and make it inaccurate.
+    This option should only be used with calling oneTimeSetUp and oneTimeTearDown. If the selected method is oneTimeSetUp or oneTimeTearDown,
+     this option should be checked.</property>
+</properties>
+</component>
+
 </section>
 
 <section name="&sect-num;.2 Logic Controllers" anchor="logic_controllers">
