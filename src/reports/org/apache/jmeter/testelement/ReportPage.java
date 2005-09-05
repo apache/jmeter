@@ -49,7 +49,7 @@ public class ReportPage extends AbstractTestElement implements Serializable {
 
     public static ReportPage createReportPage(String name) {
         ReportPage page = new ReportPage();
-        page.setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
+        // page.setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
         return page;
     }
 

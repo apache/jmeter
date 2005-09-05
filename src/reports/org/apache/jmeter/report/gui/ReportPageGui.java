@@ -1,4 +1,4 @@
-//$Header:
+// $Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -21,8 +21,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JCheckBox;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
+import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPage;
@@ -31,10 +34,8 @@ import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * @author pete
+ * @author Peter Lin
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ReportPageGui extends AbstractReportGui {
     
@@ -89,6 +90,19 @@ public class ReportPageGui extends AbstractReportGui {
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
     }
+    
+	public JPopupMenu createPopupMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
+		addMenu.add(ReportMenuFactory.makeMenuItem(new TableGui().getStaticLabel(),
+				TableGui.class.getName(),
+				"Add"));
+        // addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.TABLES, "Add"));
+        pop.add(addMenu);
+        ReportMenuFactory.addFileMenu(pop);
+        ReportMenuFactory.addEditMenu(pop,true);
+        return pop;
+	}
 
     /* (non-Javadoc)
      * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()

@@ -88,7 +88,7 @@ public abstract class AbstractAction implements Command {
 	 */
 	protected void popupShouldSave(ActionEvent e) {
 		log.debug("popupShouldSave");
-		if (ReportGuiPackage.getInstance().getTestPlanFile() == null) {
+		if (ReportGuiPackage.getInstance().getReportPlanFile() == null) {
 			if (JOptionPane.showConfirmDialog(ReportGuiPackage.getInstance().getMainFrame(), JMeterUtils
 					.getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {

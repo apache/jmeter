@@ -1,4 +1,4 @@
-//$Header:
+// $Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -17,10 +17,72 @@
  */
 package org.apache.jmeter.testelement;
 
-public class AbstractChart extends AbstractTestElement {
+import javax.swing.JComponent;
 
-	public AbstractChart() {
+/**
+ * The general idea of the chart graphs information for a table.
+ * A chart can only be generated from a specific table, though more
+ * than one chart can be generated from a single table.
+ * @author Peter Lin
+ *
+ */
+public abstract class AbstractChart extends AbstractTestElement implements Chart {
+
+    public static final String REPORT_CHART_X_AXIS = "ReportTable.chart.x.axis";
+    public static final String REPORT_CHART_Y_AXIS = "ReportTable.chart.y.axis";
+    public static final String REPORT_CHART_X_LABEL = "ReportTable.chart.x.label";
+    public static final String REPORT_CHART_Y_LABEL = "ReportTable.chart.y.label";
+    public static final String REPORT_CHART_TITLE = "ReportTable.chart.title";
+
+    protected AbstractTable parent = null;
+    
+    public AbstractChart() {
 		super();
 	}
+    
+    public String getXAxis() {
+    	return getPropertyAsString(REPORT_CHART_X_AXIS);
+    }
+    
+    public void setXAxis(String field) {
+    	setProperty(REPORT_CHART_X_AXIS,field);
+    }
+    
+    public String getYAxis() {
+    	return getPropertyAsString(REPORT_CHART_Y_AXIS);
+    }
+    
+    public void setYAxis(String scale) {
+    	setProperty(REPORT_CHART_Y_AXIS,scale);
+    }
 
+    public String getXLabel() {
+    	return getPropertyAsString(REPORT_CHART_X_LABEL);
+    }
+    
+    public void setXLabel(String label) {
+    	setProperty(REPORT_CHART_X_LABEL,label);
+    }
+    
+    public String getYLabel() {
+    	return getPropertyAsString(REPORT_CHART_Y_LABEL);
+    }
+    
+    public void setYLabel(String label) {
+    	setProperty(REPORT_CHART_Y_LABEL,label);
+    }
+    
+    public String getTitle() {
+    	return getPropertyAsString(REPORT_CHART_TITLE);
+    }
+    
+    public void setTitle(String title) {
+    	setProperty(REPORT_CHART_TITLE,title);
+    }
+    
+    public void setParentTable(AbstractTable table) {
+    	this.parent = table;
+    }
+
+	public abstract JComponent renderChart(TestElement element);
 }

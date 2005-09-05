@@ -488,7 +488,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 * @return a ValueReplacer configured for the test tree
 	 */
 	public ValueReplacer getReplacer() {
-		return new ValueReplacer((ReportPlan) ((ReportTreeNode) getTreeModel().getTestPlan().getArray()[0])
+		return new ValueReplacer((ReportPlan) ((ReportTreeNode) getTreeModel().getReportPlan().getArray()[0])
 				.getTestElement());
 	}
 
@@ -599,7 +599,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 		}
 	}
 
-	private String testPlanFile;
+	private String reportPlanFile;
 
 	/**
 	 * Sets the filepath of the current test plan. It's shown in the main frame
@@ -607,17 +607,18 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 * 
 	 * @param f
 	 */
-	public void setTestPlanFile(String f) {
-		testPlanFile = f;
-		ReportGuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
+	public void setReportPlanFile(String f) {
+		reportPlanFile = f;
+		ReportGuiPackage.getInstance().getMainFrame().setTitle(
+				JMeterUtils.getExtendedFrameTitle(reportPlanFile));
 		try {
-			FileServer.getFileServer().setBasedir(testPlanFile);
+			FileServer.getFileServer().setBasedir(reportPlanFile);
 		} catch (IOException e1) {
 			log.error("Failure setting file server's base dir", e1);
 		}
 	}
 
-	public String getTestPlanFile() {
-		return testPlanFile;
+	public String getReportPlanFile() {
+		return reportPlanFile;
 	}
 }

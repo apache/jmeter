@@ -166,7 +166,7 @@ public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
 			}
 			editMenu.setEnabled(true);
 		} else {
-			editMenu.setEnabled(false);
+			// editMenu.setEnabled(false);
 		}
 	}
 

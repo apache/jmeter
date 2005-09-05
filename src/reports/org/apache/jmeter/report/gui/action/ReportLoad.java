@@ -1,3 +1,4 @@
+// $Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -121,7 +122,7 @@ public class ReportLoad implements Command {
 		}
 		// don't change name if merging
 		if (!merging && isTestPlan && f != null) {
-			ReportGuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+			ReportGuiPackage.getInstance().setReportPlanFile(f.getAbsolutePath());
 		}
 	}
 

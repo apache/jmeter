@@ -1,4 +1,4 @@
-//$Header:
+// $Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -109,4 +109,11 @@ public abstract class AbstractTable extends AbstractTestElement {
     public void setErrorRate(String set) {
     	setProperty(REPORT_TABLE_ERROR_RATE,set);
     }
+    
+	public void addTestElement(TestElement el) {
+		super.addTestElement(el);
+		if (el instanceof AbstractChart) {
+			((AbstractChart)el).setParentTable(this);
+		}
+	}
 }
