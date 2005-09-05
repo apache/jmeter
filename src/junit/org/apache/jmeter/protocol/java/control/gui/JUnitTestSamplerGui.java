@@ -27,6 +27,7 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -289,6 +290,12 @@ implements ChangeListener, ActionListener
         }
     }
 
+    public void showErrorDialog() {
+        JOptionPane.showConfirmDialog(this, 
+                JMeterUtils.getResString("junit_constructor_error"), "Warning",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+    }
+    
     public void configureMethodCombo(){
         if (TESTCLASS != null) {
             clearMethodCombo();
