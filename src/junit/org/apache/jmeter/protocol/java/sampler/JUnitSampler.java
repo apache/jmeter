@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.java.sampler;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 
 import junit.framework.ComparisonFailure;
@@ -392,6 +393,7 @@ public class JUnitSampler extends AbstractSampler {
             Constructor con = null;
             Constructor strCon = null;
             Class theclazz = null;
+            Object[] strParams = null;
             Object[] params = null;
             try
             {
@@ -416,7 +418,11 @@ public class JUnitSampler extends AbstractSampler {
                     if (label == null || label.length() == 0) {
                         label = className;
                     }
-                    params = new Object[]{label};
+                    if (strCon.getModifiers() == Modifier.PUBLIC) {
+                        strParams = new Object[]{label};
+                    } else {
+                        strCon = null;
+                    }
                 } catch (NoSuchMethodException e) {
                     log.info("String constructor:: " + e.getMessage());
                 }
@@ -435,7 +441,7 @@ public class JUnitSampler extends AbstractSampler {
                     // if the string constructor is null, we use the empty
                     // constructor to get a new instance
                     if (strCon != null) {
-                        testclass = (TestCase)strCon.newInstance(params);
+                        testclass = (TestCase)strCon.newInstance(strParams);
                     } else if (con != null){
                         testclass = (TestCase)con.newInstance(params);
                     }
