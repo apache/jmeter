@@ -159,7 +159,7 @@ test, the box should be checked. When "Read Soap Responses" is unchecked,
 no result will be displayed in view result tree or view results in table.</p>
 
 <p>An important note on the sampler. It will automatically use the proxy host
-and port passed to JMeter from command line, if thoe fields in the sampler are
+and port passed to JMeter from command line, if those fields in the sampler are
 left blank. If a sampler has values in the proxy host and port text field, it
 will use the ones provided by the user. If no host or port are provided and
 JMeter wasn't started with command line options, the sampler will fail
