@@ -60,19 +60,19 @@ public final class ReportMenuFactory {
 
 	public final static String CONTROLLERS = "menu_logic_controller";
 
-	public final static String SAMPLERS = "menu_generative_controller";
-
 	public final static String CONFIG_ELEMENTS = "menu_config_element";
 
 	public final static String POST_PROCESSORS = "menu_post_processors";
 
 	public final static String PRE_PROCESSORS = "menu_pre_processors";
 
-	public final static String ASSERTIONS = "menu_assertions";
-
 	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements";
 
 	public final static String LISTENERS = "menu_listener";
+	
+	public final static String REPORT_PAGE = "menu_report_page";
+	
+	public final static String TABLES = "menu_tables";
 
 	private static Map menuMap = new HashMap();
 
@@ -80,20 +80,22 @@ public final class ReportMenuFactory {
 
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
-	private static final String[] MENU_ADD_CONTROLLER = new String[] { ReportMenuFactory.CONTROLLERS, ReportMenuFactory.SAMPLERS,
-			ReportMenuFactory.CONFIG_ELEMENTS, ReportMenuFactory.TIMERS, ReportMenuFactory.LISTENERS, ReportMenuFactory.PRE_PROCESSORS,
-			ReportMenuFactory.POST_PROCESSORS };
+	private static final String[] MENU_ADD_CONTROLLER = new String[] { ReportMenuFactory.CONTROLLERS,
+			ReportMenuFactory.CONFIG_ELEMENTS, ReportMenuFactory.TIMERS, ReportMenuFactory.LISTENERS,
+			ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS };
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
-	private static final String[] MENU_ADD_SAMPLER = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
-			ReportMenuFactory.ASSERTIONS, ReportMenuFactory.TIMERS, ReportMenuFactory.LISTENERS, ReportMenuFactory.PRE_PROCESSORS,
-			ReportMenuFactory.POST_PROCESSORS };
+	private static final String[] MENU_ADD_REPORT_PAGE = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
+			ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS,
+			ReportMenuFactory.TABLES };
+	
+	private static final String[] MENU_ADD_TABLES = new String[] { ReportMenuFactory.TABLES };
 
 	private static final String[] MENU_PARENT_SAMPLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
-	private static List timers, controllers, samplers, configElements, assertions, listeners, nonTestElements,
-			postProcessors, preProcessors;
+	private static List controllers, configElements, listeners, nonTestElements,
+			postProcessors, preProcessors, reportPage, tables;
 
 	// private static JMenu timerMenu;
 	// private static JMenu controllerMenu;
@@ -188,17 +190,6 @@ public final class ReportMenuFactory {
 		return pop;
 	}
 
-	public static JPopupMenu getDefaultSamplerMenu() {
-		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
-		pop.add(makeMenus(MENU_PARENT_SAMPLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
-		MenuFactory.addEditMenu(pop, true);
-		MenuFactory.addFileMenu(pop);
-		return pop;
-	}
-
 	public static JPopupMenu getDefaultConfigElementMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		MenuFactory.addEditMenu(pop, true);
@@ -275,24 +266,22 @@ public final class ReportMenuFactory {
 		try {
 			List guiClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] {
 					JMeterGUIComponent.class, TestBean.class });
-			timers = new LinkedList();
 			controllers = new LinkedList();
-			samplers = new LinkedList();
 			configElements = new LinkedList();
-			assertions = new LinkedList();
 			listeners = new LinkedList();
 			postProcessors = new LinkedList();
 			preProcessors = new LinkedList();
+			tables = new LinkedList();
+			reportPage = new LinkedList();
 			nonTestElements = new LinkedList();
-			menuMap.put(TIMERS, timers);
-			menuMap.put(ASSERTIONS, assertions);
 			menuMap.put(CONFIG_ELEMENTS, configElements);
 			menuMap.put(CONTROLLERS, controllers);
 			menuMap.put(LISTENERS, listeners);
 			menuMap.put(NON_TEST_ELEMENTS, nonTestElements);
-			menuMap.put(SAMPLERS, samplers);
 			menuMap.put(POST_PROCESSORS, postProcessors);
 			menuMap.put(PRE_PROCESSORS, preProcessors);
+			menuMap.put(REPORT_PAGE, reportPage);
+			menuMap.put(TABLES, tables);
 			Collections.sort(guiClasses);
 			Iterator iter = guiClasses.iterator();
 			while (iter.hasNext()) {
@@ -334,9 +323,6 @@ public final class ReportMenuFactory {
 					log.debug(name + " participates in no menus.");
 					continue;
 				}
-				if (categories.contains(TIMERS)) {
-					timers.add(new MenuInfo(item.getStaticLabel(), name));
-				}
 
 				if (categories.contains(POST_PROCESSORS)) {
 					postProcessors.add(new MenuInfo(item.getStaticLabel(), name));
@@ -350,10 +336,6 @@ public final class ReportMenuFactory {
 					controllers.add(new MenuInfo(item.getStaticLabel(), name));
 				}
 
-				if (categories.contains(SAMPLERS)) {
-					samplers.add(new MenuInfo(item.getStaticLabel(), name));
-				}
-
 				if (categories.contains(NON_TEST_ELEMENTS)) {
 					nonTestElements.add(new MenuInfo(item.getStaticLabel(), name));
 				}
@@ -365,10 +347,14 @@ public final class ReportMenuFactory {
 				if (categories.contains(CONFIG_ELEMENTS)) {
 					configElements.add(new MenuInfo(item.getStaticLabel(), name));
 				}
-				if (categories.contains(ASSERTIONS)) {
-					assertions.add(new MenuInfo(item.getStaticLabel(), name));
+
+				if (categories.contains(TABLES)) {
+					tables.add(new MenuInfo(item.getStaticLabel(), name));
 				}
 
+				if (categories.contains(REPORT_PAGE)) {
+					reportPage.add(new MenuInfo(item.getStaticLabel(), name));
+				}
 			}
 		} catch (Exception e) {
 			log.error("", e);
@@ -402,15 +388,12 @@ public final class ReportMenuFactory {
 		public void testMenu() throws Exception {
 			check("menumap", menuMap.size());
 
-			check("assertions", assertions.size());
 			check("configElements", configElements.size());
 			check("controllers", controllers.size());
 			check("listeners", listeners.size());
 			check("nonTestElements", nonTestElements.size());
 			check("postProcessors", postProcessors.size());
 			check("preProcessors", preProcessors.size());
-			check("samplers", samplers.size());
-			check("timers", timers.size());
 
 			check("elementstoskip", elementsToSkip.size());
 

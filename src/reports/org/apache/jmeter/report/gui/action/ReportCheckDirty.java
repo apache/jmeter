@@ -97,7 +97,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
 			addTree.traverse(this);
 		} else if (action.equals(ADD_ALL)) {
 			previousGuiItems.clear();
-			ReportGuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
+			ReportGuiPackage.getInstance().getTreeModel().getReportPlan().traverse(this);
 		} else if (action.equals(REMOVE)) {
 			ReportGuiPackage guiPackage = ReportGuiPackage.getInstance();
 			ReportTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
@@ -109,7 +109,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
 		}
 		checkMode = true;
 		dirty = false;
-		HashTree wholeTree = ReportGuiPackage.getInstance().getTreeModel().getTestPlan();
+		HashTree wholeTree = ReportGuiPackage.getInstance().getTreeModel().getReportPlan();
 		wholeTree.traverse(this);
 		ReportGuiPackage.getInstance().setDirty(dirty);
 		checkMode = false;

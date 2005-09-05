@@ -31,7 +31,6 @@ import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.NamePanel;
-import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
@@ -80,9 +79,9 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
 	public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
-        addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
+        addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
+        addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.PRE_PROCESSORS, "Add"));
+        addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.POST_PROCESSORS, "Add"));
         pop.add(addMenu);
         ReportMenuFactory.addFileMenu(pop);
         return pop;
@@ -92,7 +91,7 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getMenuCategories()
 	 */
 	public Collection getMenuCategories() {
-        return Arrays.asList(new String[] { ReportMenuFactory.SAMPLERS });
+        return Arrays.asList(new String[] { ReportMenuFactory.TABLES });
 	}
 
     /**
