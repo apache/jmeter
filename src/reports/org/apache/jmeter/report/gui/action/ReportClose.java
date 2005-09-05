@@ -84,7 +84,7 @@ public class ReportClose implements Command {
 		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
 		// Clear the name of the test plan file
-		ReportGuiPackage.getInstance().setTestPlanFile(null);
+		ReportGuiPackage.getInstance().setReportPlanFile(null);
 
 		ReportActionRouter.getInstance().actionPerformed(
 				new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));

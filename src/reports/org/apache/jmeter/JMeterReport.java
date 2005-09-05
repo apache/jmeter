@@ -228,7 +228,7 @@ public class JMeterReport implements JMeterPlugin {
                 FileInputStream reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
 
-                ReportGuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+                ReportGuiPackage.getInstance().setReportPlanFile(f.getAbsolutePath());
 
                 new ReportLoad().insertLoadedTree(1, tree);
             } catch (Exception e) {

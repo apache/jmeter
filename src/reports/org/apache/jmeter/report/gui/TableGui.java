@@ -17,8 +17,16 @@
  */
 package org.apache.jmeter.report.gui;
 
-import javax.swing.JCheckBox;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
+import javax.swing.JCheckBox;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import org.apache.jmeter.gui.util.ReportMenuFactory;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.Table;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -36,15 +44,74 @@ public class TableGui extends AbstractReportGui {
     private JCheckBox fiftypercentCheck = 
     	new JCheckBox(JMeterUtils.getResString("monitor_label_left_middle"));
     private JCheckBox nintypercentCheck = 
-    	new JCheckBox(JMeterUtils.getResString("aggregate_report_90%_line"));
-    private JCheckBox errorRateCheck = new JCheckBox(JMeterUtils.getResString("aggregate_report_error"));
+    	new JCheckBox(JMeterUtils.getResString("aggregate_report_90"));
+    private JCheckBox errorRateCheck = 
+    	new JCheckBox(JMeterUtils.getResString("aggregate_report_error"));
 
     public TableGui() {
 		super();
+		init();
+	}
+    
+	public String getLabelResource() {
+		return "report_table";
+	}
+
+	/**
+     * Initialize the components and layout of this component.
+     */
+    protected void init() {
+        setLayout(new BorderLayout(10, 10));
+        setBorder(makeBorder());
+        setBackground(Color.white);
+
+        JPanel pane = new JPanel();
+        pane.setLayout(new BorderLayout(10,10));
+        pane.setBackground(Color.white);
+        pane.add(this.getNamePanel(),BorderLayout.NORTH);
+        
+        VerticalPanel options = new VerticalPanel(Color.white);
+        meanCheck.setBackground(Color.white);
+        medianCheck.setBackground(Color.white);
+        maxCheck.setBackground(Color.white);
+        minCheck.setBackground(Color.white);
+        responseRateCheck.setBackground(Color.white);
+        transferRateCheck.setBackground(Color.white);
+        fiftypercentCheck.setBackground(Color.white);
+        nintypercentCheck.setBackground(Color.white);
+        errorRateCheck.setBackground(Color.white);
+        options.add(meanCheck);
+        options.add(medianCheck);
+        options.add(maxCheck);
+        options.add(minCheck);
+        options.add(responseRateCheck);
+        options.add(transferRateCheck);
+        options.add(fiftypercentCheck);
+        options.add(nintypercentCheck);
+        options.add(errorRateCheck);
+        add(pane,BorderLayout.NORTH);
+        add(options,BorderLayout.CENTER);
+    }
+    
+	public JPopupMenu createPopupMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
+		addMenu.add(ReportMenuFactory.makeMenuItem(new BarChartGui().getStaticLabel(),
+				BarChartGui.class.getName(),
+				"Add"));
+		addMenu.add(ReportMenuFactory.makeMenuItem(new LineGraphGui().getStaticLabel(),
+				LineGraphGui.class.getName(),
+				"Add"));
+        pop.add(addMenu);
+        ReportMenuFactory.addFileMenu(pop);
+        ReportMenuFactory.addEditMenu(pop,true);
+        return pop;
 	}
 
 	public TestElement createTestElement() {
-		return new Table() ;
+		Table element = new Table();
+        modifyTestElement(element);
+		return element;
 	}
 
 	public void modifyTestElement(TestElement element) {
@@ -57,6 +124,21 @@ public class TableGui extends AbstractReportGui {
 		tb.setMean(String.valueOf(meanCheck.isSelected()));
 		tb.setMedian(String.valueOf(medianCheck.isSelected()));
 		tb.setMin(String.valueOf(minCheck.isSelected()));
+		tb.setResponseRate(String.valueOf(responseRateCheck.isSelected()));
+		tb.setTransferRate(String.valueOf(transferRateCheck.isSelected()));
 	}
-
+	
+    public void configure(TestElement element) {
+        super.configure(element);
+        Table tb = (Table)element;
+        meanCheck.setSelected(tb.getMean());
+        medianCheck.setSelected(tb.getMedian());
+        maxCheck.setSelected(tb.getMax());
+        minCheck.setSelected(tb.getMin());
+        fiftypercentCheck.setSelected(tb.get50Percent());
+        nintypercentCheck.setSelected(tb.get90Percent());
+        errorRateCheck.setSelected(tb.getErrorRate());
+        responseRateCheck.setSelected(tb.getResponseRate());
+        transferRateCheck.setSelected(tb.getTransferRate());
+    }
 }

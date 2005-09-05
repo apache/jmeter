@@ -86,10 +86,10 @@ public class ReportSave implements Command {
 		if (e.getActionCommand().equals(SAVE_AS)) {
 			subTree = ReportGuiPackage.getInstance().getCurrentSubTree();
 		} else {
-			subTree = ReportGuiPackage.getInstance().getTreeModel().getTestPlan();
+			subTree = ReportGuiPackage.getInstance().getTreeModel().getReportPlan();
 		}
 
-		String updateFile = ReportGuiPackage.getInstance().getTestPlanFile();
+		String updateFile = ReportGuiPackage.getInstance().getReportPlanFile();
 		if (!SAVE.equals(e.getActionCommand()) || updateFile == null) {
 			JFileChooser chooser = ReportFileDialoger.promptToSaveFile(ReportGuiPackage.getInstance().getTreeListener()
 					.getCurrentNode().getName()
@@ -99,7 +99,7 @@ public class ReportSave implements Command {
 			}
 			updateFile = chooser.getSelectedFile().getAbsolutePath();
 			if (!e.getActionCommand().equals(SAVE_AS)) {
-				ReportGuiPackage.getInstance().setTestPlanFile(updateFile);
+				ReportGuiPackage.getInstance().setReportPlanFile(updateFile);
 			}
 		}
 		// TODO: doesn't putting this here mark the tree as
@@ -123,7 +123,7 @@ public class ReportSave implements Command {
                 log.info("saveTree");
 			}
 		} catch (Throwable ex) {
-			ReportGuiPackage.getInstance().setTestPlanFile(null);
+			ReportGuiPackage.getInstance().setReportPlanFile(null);
 			log.error("", ex);
 			throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
 		} finally {

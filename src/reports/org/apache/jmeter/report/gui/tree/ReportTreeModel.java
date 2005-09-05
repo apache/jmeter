@@ -168,7 +168,7 @@ public class ReportTreeModel extends DefaultTreeModel {
 		return hashTree;
 	}
 
-	public HashTree getTestPlan() {
+	public HashTree getReportPlan() {
 		return getCurrentSubTree((ReportTreeNode) ((ReportTreeNode) this
 				.getRoot()).getChildAt(0));
 	}

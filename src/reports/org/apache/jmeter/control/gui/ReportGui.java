@@ -69,11 +69,13 @@ public class ReportGui extends AbstractReportGui {
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new ReportPageGui().getStaticLabel(), ReportPageGui.class.getName(),
+		addMenu.add(ReportMenuFactory.makeMenuItem(new ReportPageGui().getStaticLabel(),
+				ReportPageGui.class.getName(),
 				"Add"));
 		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
 		pop.add(addMenu);
 		ReportMenuFactory.addFileMenu(pop);
+		ReportMenuFactory.addEditMenu(pop,true);
 		return pop;
 	}
 
@@ -155,7 +157,7 @@ public class ReportGui extends AbstractReportGui {
 	/**
 	 * Initialize the components and layout of this component.
 	 */
-	private void init() {
+	protected void init() {
 		setLayout(new BorderLayout(10, 10));
 		setBorder(makeBorder());
         setBackground(Color.white);
