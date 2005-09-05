@@ -390,6 +390,7 @@ public class JUnitSampler extends AbstractSampler {
         Object testclass = null;
         if (className != null){
             Constructor con = null;
+            Constructor strCon = null;
             Class theclazz = null;
             Object[] params = null;
             try
@@ -407,16 +408,15 @@ public class JUnitSampler extends AbstractSampler {
                 // constructor. if it is doesn't we look for
                 // empty constructor.
                 try {
-                    con = theclazz.getDeclaredConstructor(
+                    strCon = theclazz.getDeclaredConstructor(
                             new Class[] {String.class});
                     // we have to check and make sure the constructor is
                     // accessible. if we didn't it would throw an exception
                     // and cause a NPE.
-                    if (con.isAccessible()) {
-                        params = new Object[]{label};
-                    } else {
-                        con = null;
+                    if (label == null || label.length() == 0) {
+                        label = className;
                     }
+                    params = new Object[]{label};
                 } catch (NoSuchMethodException e) {
                     log.info("String constructor:: " + e.getMessage());
                 }
@@ -431,7 +431,12 @@ public class JUnitSampler extends AbstractSampler {
                     }
                 }
                 try {
-                    if (con != null){
+                    // if the string constructor is not null, we use it.
+                    // if the string constructor is null, we use the empty
+                    // constructor to get a new instance
+                    if (strCon != null) {
+                        testclass = (TestCase)strCon.newInstance(params);
+                    } else if (con != null){
                         testclass = (TestCase)con.newInstance(params);
                     }
                 } catch (InvocationTargetException e) {
