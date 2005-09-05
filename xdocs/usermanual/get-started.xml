@@ -26,9 +26,20 @@
 <section name="2. Getting Started" anchor="get_started">
 <p>The easiest way to begin using JMeter is to first
 <a href="http://jakarta.apache.org/builds/jakarta-jmeter/release/">download the latest production release</a> and install it.
-The release contains all of the files you need to build and run Web, FTP, JDBC, and JNDI tests.  If you want to perform JDBC testing,
+The release contains all of the files you need to build and run Web, FTP, JDBC, and JNDI tests.</p>
+<p>If you want to perform JDBC testing,
 then you will, of course, need the appropriate JDBC driver from your vendor.  JMeter does not come with
 any JDBC drivers.</p>
+<p>
+Other software that you may want to download:
+<ul>
+<li><a href="http://www.beanshell.org/">BeanShell</a></li>
+<li><a href="http://java.sun.com/products/javabeans/glasgow/jaf.html">Java Activation Framework</a> - needed for JavaMail</li>
+<li><a href="http://java.sun.com/products/javamail/index.jsp">Java Mail</a> - needed for mail visualiser and SOAP tests</li>
+<li><a href="http://java.sun.com/products/jms/docs.html">JMS</a> - for JMS samplers</li>
+<li><a href="http://java.sun.com/downloads/">General Java download page</a></li>
+</ul>
+</p>
 <p>Next, start JMeter and go through the <a href="build-test-plan.html">Building a Test Plan</a> section
 of the User Guide to familiarize yourself with JMeter basics (for example, adding and removing elements).</p>
 <p>Finally, go through the appropriate section on how to build a specific type of Test Plan.
