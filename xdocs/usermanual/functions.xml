@@ -246,21 +246,22 @@ A reference name - refName - for reusing the value created by this function. Sto
 	<p>
 <code>
 # - insert the number, with no leading zeros or spaces<br/>
-000 - insert the number packed out to 3 digits with leading zeros if necessary<br/>
+000 - insert the number packed out to 3 digits with leading zeros if necessary
 <p/>
 Examples:<br/>
- pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
- pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
- pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999<br/>
- N.B: pin.dat# -> pin1.0dat, ... pin9.0dat ... pin999.0dat<br/>
+ pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
+ pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
+ pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999
 </code><p/>
 	If more digits are required than there are formatting characters, the number will be
 	expanded as necessary.<br/>
-	To prevent a formatting character from being interpreted,
-	enclose it in single quotes. Note that the decimal point is a formatting character,
-	and must be enclosed in single quotes (though it works as expected for #. and 000.)
-	N.B. the decimal point varies between locales, but in the UK and US, at least, it is
-	the same character as is used to separate parts of file names.<br/>
+	<b>To prevent a formatting character from being interpreted,
+	enclose it in single quotes. Note that "." is a formatting character,
+	and must be enclosed in single quotes</b>
+	(though #. and 000. work as expected in locales where the decimal point is also ".")
+	<br/>
+	In other locales (e.g. fr), the decimal point is "," - which means that "#."
+	becomes "nnn,".<br/>
 	See the documentation for DecimalFormat for full details.<br/>
 	If the path name does not contain any special formatting characters,
 	the current sequence number will be appended to the name, otherwise
@@ -269,10 +270,12 @@ Examples:<br/>
 	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
 	In this case the filename is not formatted.
 	<code>
-	
-	${_StringFromFile(PIN#.DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT
-	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice
+	<br/>
+	${_StringFromFile(PIN#'.'DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT<br/>
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice<br/>
 	</code>
+	Note that the "." in PIN.DAT above should <u>not</u> be quoted.
+	In this case the start number is omitted, so the file name is used exactly as is.
 	</p>
 </component>
 
