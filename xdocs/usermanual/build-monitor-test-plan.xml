@@ -146,7 +146,7 @@ reach the maximum memory.</p>
 the right is dead/healthy. If the memory line spikes up and down rapidly, it could
 indicate memory thrashing. In those situations, it is a good idea to profile the
 application with Borland OptimizeIt or JProbe. What you want to see is a regular
-pattern for load, memory and threads. Any irratic behavior usually indicates poor
+pattern for load, memory and threads. Any erratic behavior usually indicates poor
 performance or a bug of some sort.</p>
 
 </section>
