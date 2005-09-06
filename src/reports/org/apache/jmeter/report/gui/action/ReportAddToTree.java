@@ -74,6 +74,7 @@ public class ReportAddToTree implements Command {
 		guiPackage.getTreeModel().insertNodeInto(node,
 				guiPackage.getTreeListener().getCurrentNode(),
 				guiPackage.getTreeListener().getCurrentNode().getChildCount());
+		((TestElement)guiPackage.getTreeListener().getCurrentNode().getUserObject()).addTestElement(el);
 		guiPackage.getMainFrame().getTree().setSelectionPath(
 				new TreePath(node.getPath()));
 	}
