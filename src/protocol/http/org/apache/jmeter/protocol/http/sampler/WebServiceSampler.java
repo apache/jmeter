@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -33,6 +34,7 @@ import javax.mail.MessagingException;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
@@ -371,7 +373,8 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			if (DOMPool.getDocument(next) != null) {
 				return DOMPool.getDocument(next).getDocumentElement();
 			} else {
-				return openDocument(next).getDocumentElement();
+                Document doc = openDocument(next);
+				return doc == null ? null : doc.getDocumentElement();
 			}
 		} else {
 			Document doc = openDocument(null);
@@ -400,21 +403,29 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		if (getXmlFile().length() > 0 || getXmlPathLoc().length() > 0) {
 			try {
 				doc = XDB.parse(new FileInputStream(retrieveRuntimeXmlData()));
-			} catch (Exception e) {
-				// there should be a file, if not fail silently
-				log.debug(e.getMessage());
-			}
+			} catch (SAXException e) {
+				log.warn("Error processing file data: "+e.getMessage());
+			} catch (FileNotFoundException e) {
+                log.warn(e.getMessage());
+            } catch (IOException e) {
+                log.warn(e.getMessage());
+            }
 		} else {
 			FILE_CONTENTS = getXmlData();
 			if (FILE_CONTENTS != null && FILE_CONTENTS.length() > 0) {
 				try {
 					doc = XDB.parse(new InputSource(new StringReader(FILE_CONTENTS)));
-				} catch (Exception ex) {
-					log.debug(ex.getMessage());
-				}
-			}
+				} catch (SAXException ex) {
+					log.warn("Error processing data: "+ex.getMessage());
+				} catch (IOException ex) {
+                    log.warn(ex.getMessage()); // shouldn't really happen
+                }
+			} else {
+			    log.warn("No post data provided!");
+            }
 		}
-		if (this.getPropertyAsBoolean(MEMORY_CACHE)) {
+        // don't cache null documents ...
+		if (doc != null && this.getPropertyAsBoolean(MEMORY_CACHE)) {
 			DOMPool.putDocument(key, doc);
 		}
 		return doc;
