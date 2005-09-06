@@ -17,6 +17,9 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JComponent;
 
 /**
@@ -84,5 +87,20 @@ public abstract class AbstractChart extends AbstractTestElement implements Chart
     	this.parent = table;
     }
 
+    /**
+     * Method returns the items that are checked
+     * @return
+     */
+    public List getCheckedItems() {
+    	ArrayList checked = new ArrayList();
+    	for (int idx=0; idx < AbstractTable.items.length; idx++) {
+    		if (this.parent.getPropertyAsString(
+    				AbstractTable.items[idx]).equals(String.valueOf(true))) {
+    			checked.add(AbstractTable.items[idx]);
+    		}
+    	}
+    	return checked;
+    }
+    
 	public abstract JComponent renderChart(TestElement element);
 }

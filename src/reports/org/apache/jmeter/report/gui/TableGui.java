@@ -24,14 +24,17 @@ import javax.swing.JCheckBox;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.Table;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class TableGui extends AbstractReportGui {
+public class TableGui extends AbstractReportGui implements ChangeListener {
 
     private JCheckBox meanCheck = new JCheckBox(JMeterUtils.getResString("average"));
     private JCheckBox medianCheck = new JCheckBox(JMeterUtils.getResString("graph_results_median"));
@@ -70,6 +73,7 @@ public class TableGui extends AbstractReportGui {
         pane.setBackground(Color.white);
         pane.add(this.getNamePanel(),BorderLayout.NORTH);
         
+        meanCheck.addChangeListener(this);
         VerticalPanel options = new VerticalPanel(Color.white);
         meanCheck.setBackground(Color.white);
         medianCheck.setBackground(Color.white);
@@ -89,6 +93,7 @@ public class TableGui extends AbstractReportGui {
         options.add(fiftypercentCheck);
         options.add(nintypercentCheck);
         options.add(errorRateCheck);
+        
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
     }
@@ -140,5 +145,9 @@ public class TableGui extends AbstractReportGui {
         errorRateCheck.setSelected(tb.getErrorRate());
         responseRateCheck.setSelected(tb.getResponseRate());
         transferRateCheck.setSelected(tb.getTransferRate());
+    }
+    
+    public void stateChanged(ChangeEvent e) {
+    	modifyTestElement(ReportGuiPackage.getInstance().getCurrentElement());
     }
 }

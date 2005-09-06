@@ -17,6 +17,8 @@
  */
 package org.apache.jmeter.testelement;
 
+import org.apache.jmeter.report.gui.AbstractReportGui;
+
 /**
  * AbstractTable is the base Element for different kinds of report tables.
  * @author pete
@@ -33,6 +35,18 @@ public abstract class AbstractTable extends AbstractTestElement {
     public static final String REPORT_TABLE_50_PERCENT = "ReportTable.50.percent";
     public static final String REPORT_TABLE_90_PERCENT = "ReportTable.90.percent";
     public static final String REPORT_TABLE_ERROR_RATE = "ReportTable.error.rate";
+    public static final String[] items = {
+    	REPORT_TABLE_MEAN, REPORT_TABLE_MEDIAN, REPORT_TABLE_MAX, REPORT_TABLE_MIN,
+    	REPORT_TABLE_RESPONSE_RATE, REPORT_TABLE_TRANSFER_RATE, REPORT_TABLE_50_PERCENT,
+    	REPORT_TABLE_90_PERCENT, REPORT_TABLE_ERROR_RATE };
+
+    public static final String REPORT_TABLE_FILE = "ReportTable.file";
+    public static final String REPORT_TABLE_DATE = "ReportTable.test.date";
+    public static final String REPORT_TABLE_URL = "ReportTable.url";
+    
+    public static final String[] xitems = { REPORT_TABLE_FILE, REPORT_TABLE_DATE,
+    	REPORT_TABLE_URL };
+    
 
     public AbstractTable() {
 		super();
@@ -95,11 +109,11 @@ public abstract class AbstractTable extends AbstractTestElement {
     }
     
     public boolean get90Percent() {
-    	return getPropertyAsBoolean(REPORT_TABLE_50_PERCENT);
+    	return getPropertyAsBoolean(REPORT_TABLE_90_PERCENT);
     }
     
     public void set90Percent(String set) {
-    	setProperty(REPORT_TABLE_50_PERCENT,set);
+    	setProperty(REPORT_TABLE_90_PERCENT,set);
     }
     
     public boolean getErrorRate() {

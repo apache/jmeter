@@ -21,7 +21,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
+import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.LineGraph;
 import org.apache.jmeter.testelement.TestElement;
@@ -49,6 +51,13 @@ public class LineGraphGui extends AbstractReportGui {
 	
 	public String getLabelResource() {
 		return "report_line_graph";
+	}
+	
+	public JPopupMenu createPopupMenu() {
+        JPopupMenu pop = new JPopupMenu();
+        ReportMenuFactory.addFileMenu(pop);
+        ReportMenuFactory.addEditMenu(pop,true);
+        return pop;
 	}
 
 	protected void init() {
