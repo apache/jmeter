@@ -127,6 +127,10 @@ implements ChangeListener, ActionListener
         return "junit_request";
     }
 
+    public String getDocAnchor() {
+        return "JUnit_Sampler";
+    }
+
     /**
      * Initialize the GUI components and layout.
      */
