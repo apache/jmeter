@@ -1,4 +1,4 @@
-//$Header:
+// $Header:
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -17,48 +17,75 @@
  */
 package org.apache.jmeter.report.writers;
 
+import java.io.File;
+import java.util.Date;
+
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author pete
+ * @author Peter Lin
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * The abstract report writer provides the common implementation for subclasses
+ * to reuse.
  */
-public abstract class AbstractReportWriter implements ReportWriter {
+public abstract class AbstractReportWriter extends AbstractTestElement implements ReportWriter {
 
+	public static final String TARGET_DIRECTORY = "ReportWriter.target.directory";
+	
 	/**
 	 * 
 	 */
 	public AbstractReportWriter() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-    /* (non-Javadoc)
-	 * @see org.apache.jmeter.report.writers.ReportWriter#writeReport(org.apache.jmeter.testelement.TestElement)
+    /**
+     * Subclasses need to implement this method and provide the necessary
+     * logic to produce a ReportSummary object and write the report
 	 */
-	public ReportSummary writeReport(TestElement element) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract ReportSummary writeReport(TestElement element);
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.report.writers.ReportWriter#getTargetDirectory()
+	/**
+	 * The method simply returns the target directory and doesn't
+	 * validate it. the abstract class expects some other class will
+	 * validate the target directory.
 	 */
 	public String getTargetDirectory() {
-		// TODO Auto-generated method stub
-		return null;
+		return getPropertyAsString(TARGET_DIRECTORY);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.report.writers.ReportWriter#setTargetDirectory(java.lang.String)
+	/**
+	 * Set the target directory where the report should be saved 
 	 */
 	public void setTargetDirectory(String directory) {
-		// TODO Auto-generated method stub
-
+		setProperty(TARGET_DIRECTORY,directory);
 	}
 
-	public static void main(String[] args) {
+	public void makeDirectory() {
+		File output = new File(getTargetDirectory());
+		if (!output.exists() || !output.isDirectory()) {
+			output.mkdir();
+		}
+	}
+	
+	public void archiveDirectory() {
+		File output = new File(getTargetDirectory());
+		if (output.exists() && output.isDirectory()) {
+			// if the directory already exists and is a directory,
+			// we just renamed to "archive.date"
+			output.renameTo(new File("archive." + getDayString()));
+		}
+	}
+	
+	public String getDayString() {
+		Date today = new Date();
+		String year = String.valueOf(today.getYear());
+		String month = String.valueOf(today.getMonth() + 1);
+		String day = String.valueOf(today.getDate());
+		if (month.length() == 1) {
+			month = "0" + month;
+		}
+		return year + month + day;
 	}
 }

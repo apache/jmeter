@@ -50,7 +50,7 @@ import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.action.ReportCheckDirty;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeModel;
-import org.apache.jmeter.report.writers.gui.AbstractReportWriterGui;
+import org.apache.jmeter.report.writers.gui.HTMLReportWriterGui;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.util.JMeterUtils;
@@ -161,7 +161,7 @@ public class JMeterReport implements JMeterPlugin {
     private static final String[][] DEFAULT_ICONS = {
             { AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },
             { AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },
-            { AbstractReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
+            { HTMLReportWriterGui.class.getName(), "org/apache/jmeter/images/new/pencil.png" },
             { ReportPageGui.class.getName(), "org/apache/jmeter/images/new/scroll.png" },
             { ReportGui.class.getName(), "org/apache/jmeter/images/new/book.png" }
     };
