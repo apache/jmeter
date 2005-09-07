@@ -130,12 +130,6 @@ public class IncludeControllerGui extends AbstractControllerGui
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
-		// DROP-DOWN MENU
-		JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-		modulesPanel.add(new JLabel(CONTROLLER));
-		warningLabel = new JLabel("");
-		modulesPanel.add(warningLabel);
-		add(modulesPanel);
         add(includePanel);
 	}
 
