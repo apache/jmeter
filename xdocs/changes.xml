@@ -35,6 +35,8 @@
 <ul>
 <li>AccessLog Sampler and JDBC test elements populated correctly from 2.0 test plans</li>
 <li>BSF Sampler now populates filename and parameters from saved test plan</li>
+<li>Bug 36500 - handle missing data more gracefully in WebServiceSampler</li>
+<li>Bug 35546 - add merge to right-click menu</li>
 </ul>	
 	
 
