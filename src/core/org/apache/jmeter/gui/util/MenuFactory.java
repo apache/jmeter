@@ -146,7 +146,8 @@ public final class MenuFactory {
 	public static void addFileMenu(JPopupMenu menu) {
 		addSeparator(menu);
 		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
-		menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
+        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"), "Merge", "merge"));
+        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
 		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics",
 				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
 		menu.add(savePicture);
