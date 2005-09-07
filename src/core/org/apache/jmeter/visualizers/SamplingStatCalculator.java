@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
@@ -47,9 +47,9 @@ public class SamplingStatCalculator implements Serializable {
 
 	private static DecimalFormat kbFormatter = new DecimalFormat("#0.00");
 
-	private StatCalculator calculator = new StatCalculator();
+	private final StatCalculator calculator = new StatCalculator();
 
-	private ArrayList storedValues = new ArrayList();
+	private final List storedValues = new Vector();
 
 	private double maxThroughput;
 
@@ -89,9 +89,12 @@ public class SamplingStatCalculator implements Serializable {
 
 	public void addSamples(SamplingStatCalculator ssc) {
 		calculator.addAll(ssc.calculator);
-		storedValues.addAll(ssc.storedValues);
-		Collections.sort(storedValues);
-		if (firstTime > ssc.firstTime) {
+        synchronized( storedValues )
+        {
+            storedValues.addAll(ssc.storedValues);
+            Collections.sort(storedValues);
+        }
+        if (firstTime > ssc.firstTime) {
 			firstTime = ssc.firstTime;
 		}
 	}
@@ -105,10 +108,13 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	public Sample getCurrentSample() {
-		if (storedValues.size() == 0) {
-			return new Sample();
-		}
-		return (Sample) storedValues.get(storedValues.size() - 1);
+        synchronized( storedValues )
+        {
+            if (storedValues.size() == 0) {
+                return new Sample();
+            }
+            return (Sample) storedValues.get(storedValues.size() - 1);
+        }
 	}
 
 	/**
@@ -206,8 +212,10 @@ public class SamplingStatCalculator implements Serializable {
 	 * 
 	 */
 	public Sample addSample(SampleResult res) {
-		Sample s = null;
-		synchronized (calculator) {
+        long rtime, cmean, cstdv, cmedian, cpercent, eCount, endTime;
+        double throughput;
+        boolean rbool;
+        synchronized (calculator) {
 			long byteslength = 0;
 			// in case the sampler doesn't return the contents
 			// we see if the bytes was set
@@ -230,26 +238,32 @@ public class SamplingStatCalculator implements Serializable {
 				calculator.addBytes(byteslength);
 			}
 			setStartTime(res);
-			long eCount = getCurrentSample().errorCount;
+			eCount = getCurrentSample().errorCount;
 			if (!res.isSuccessful()) {
 				eCount++;
 			}
-			long endTime = getEndTime(res);
+			endTime = getEndTime(res);
 			long howLongRunning = endTime - firstTime;
-			double throughput = 0;
-			if (howLongRunning <= 0) {
-				throughput = Double.MAX_VALUE;
-			}
 			throughput = ((double) calculator.getCount() / (double) howLongRunning) * 1000.0;
 			if (throughput > maxThroughput) {
 				maxThroughput = throughput;
 			}
-			s = new Sample(null, res.getTime(), (long) calculator.getMean(), (long) calculator.getStandardDeviation(),
-					calculator.getMedian().longValue(), calculator.getPercentPoint(0.500).longValue(), throughput,
-					eCount, res.isSuccessful(), storedValues.size() + 1, endTime);
-			storedValues.add(s);
-		}
-		return s;
+
+            rtime = res.getTime();
+            cmean = (long)calculator.getMean();
+            cstdv = (long)calculator.getStandardDeviation();
+            cmedian = calculator.getMedian().longValue();
+            cpercent = calculator.getPercentPoint( 0.500 ).longValue();
+            rbool = res.isSuccessful();
+        }
+
+        synchronized( storedValues ){
+            int count = storedValues.size() + 1;
+            Sample s =
+                new Sample( null, rtime, cmean, cstdv, cmedian, cpercent, throughput, eCount, rbool, count, endTime );
+            storedValues.add( s );
+            return s;
+        }
 	}
 
 	public List getSamples() {
@@ -257,10 +271,12 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	public Sample getSample(int index) {
-		if (index < storedValues.size()) {
-			return (Sample) storedValues.get(index);
-		}
+        synchronized( storedValues ){
+            if (index < storedValues.size()) {
+                return (Sample) storedValues.get(index);
+            }
 		return null;
+        }
 	}
 
 	private long getEndTime(SampleResult res) {
