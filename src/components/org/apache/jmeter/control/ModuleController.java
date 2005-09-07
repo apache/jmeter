@@ -31,6 +31,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -72,21 +73,6 @@ public class ModuleController extends GenericController implements ReplaceableCo
 		}
 		clone.selectedNode = selectedNode;
 		return clone;
-	}
-
-	/**
-	 * Get the controller which this object is "pointing" to.
-	 * 
-	 * @return the controller which this node points to
-	 * @see org.apache.jmeter.testelement.TestElement
-	 * @see org.apache.jmeter.control.ReplaceableController#getReplacement()
-	 */
-	public TestElement getReplacement() {
-		if (selectedNode != null) {
-			return selectedNode.getTestElement();
-		} else {
-			return this;
-		}
 	}
 
 	/**
@@ -167,12 +153,15 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * @param tree -
 	 *            The current tree under which the nodes will be added
 	 */
-	public void replace(HashTree tree) {
+	public HashTree getReplacementSubTree() {
 		if (!selectedNode.isEnabled()) {
 			selectedNode = cloneTreeNode(selectedNode);
 			selectedNode.setEnabled(true);
 		}
+		HashTree tree = new ListedHashTree();
+		tree.add(selectedNode);
 		createSubTree(tree, selectedNode);
+		return tree;
 	}
 
 	private void createSubTree(HashTree tree, JMeterTreeNode node) {
