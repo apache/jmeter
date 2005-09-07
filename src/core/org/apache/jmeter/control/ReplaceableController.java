@@ -31,14 +31,6 @@ import org.apache.jorphan.collections.HashTree;
  * @version $Revision$
  */
 public interface ReplaceableController {
-	/**
-	 * Returns the TestElement that should replace the current
-	 * ReplaceableCoroller.
-	 * 
-	 * @return TestElement
-	 * @see org.apache.jmeter.testelement.TestElement
-	 */
-	public TestElement getReplacement();
 
 	/**
 	 * Used to replace the test execution tree (usually by adding the
@@ -50,5 +42,5 @@ public interface ReplaceableController {
 	 * @see org.apache.jorphan.collections.HashTree
 	 * @see org.apache.jmeter.gui.action.AbstractAction#convertSubTree
 	 */
-	public void replace(HashTree tree);
+	public HashTree getReplacementSubTree();
 }

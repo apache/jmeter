@@ -55,16 +55,20 @@ public abstract class AbstractAction implements Command {
 	protected void convertSubTree(HashTree tree) {
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext()) {
-			JMeterTreeNode item = (JMeterTreeNode) iter.next();
+			Object o = iter.next();
+			if(o instanceof TestElement)
+				continue; //hey, no need to convert
+			JMeterTreeNode item = (JMeterTreeNode) o;
 			if (item.isEnabled()) {
 				if (item.getUserObject() instanceof ReplaceableController) {
 					ReplaceableController rc = (ReplaceableController) item.getTestElement();
 					HashTree subTree = tree.getTree(item);
 
 					if (subTree != null) {
-						rc.replace(subTree);
-						convertSubTree(subTree);
-						tree.replace(item, rc.getReplacement());
+						HashTree replacementTree = rc.getReplacementSubTree();
+						convertSubTree(replacementTree);
+						tree.replace(item,rc);
+						tree.set(rc,replacementTree);
 					}
 				} else {
 					convertSubTree(tree.getTree(item));
