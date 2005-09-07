@@ -35,6 +35,7 @@ import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.report.gui.AbstractReportGui;
 import org.apache.jmeter.report.gui.ReportPageGui;
+import org.apache.jmeter.report.writers.gui.HTMLReportWriterGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.util.JMeterUtils;
@@ -71,6 +72,9 @@ public class ReportGui extends AbstractReportGui {
 		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
 		addMenu.add(ReportMenuFactory.makeMenuItem(new ReportPageGui().getStaticLabel(),
 				ReportPageGui.class.getName(),
+				"Add"));
+		addMenu.add(ReportMenuFactory.makeMenuItem(new HTMLReportWriterGui().getStaticLabel(),
+				HTMLReportWriterGui.class.getName(),
 				"Add"));
 		addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.CONFIG_ELEMENTS, "Add"));
 		pop.add(addMenu);

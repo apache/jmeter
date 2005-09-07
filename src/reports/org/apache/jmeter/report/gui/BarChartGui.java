@@ -76,8 +76,17 @@ public class BarChartGui extends AbstractReportGui {
         VerticalPanel options = new VerticalPanel(Color.white);
         xAxisLabel.setBackground(Color.white);
         yAxisLabel.setBackground(Color.white);
+
+        JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
+		HorizontalPanel xpanel = new HorizontalPanel(Color.white);
+		xLabel.setBorder(new EmptyBorder(5,2,5,2));
+        xItems = new JLabeledChoice();
+        xItems.setBackground(Color.white);
+        xItems.setValues(AbstractTable.xitems);
+        xpanel.add(xLabel);
+        xpanel.add(xItems);
+        options.add(xpanel);
         options.add(xAxisLabel);
-        options.add(yAxisLabel);
         
 		JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
 		HorizontalPanel ypanel = new HorizontalPanel(Color.white);
@@ -87,16 +96,7 @@ public class BarChartGui extends AbstractReportGui {
         ypanel.add(yLabel);
         ypanel.add(checkItems);
         options.add(ypanel);
-        
-		JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
-		HorizontalPanel xpanel = new HorizontalPanel(Color.white);
-		xLabel.setBorder(new EmptyBorder(5,2,5,2));
-        xItems = new JLabeledChoice();
-        xItems.setBackground(Color.white);
-        xItems.setValues(AbstractTable.xitems);
-        xpanel.add(xLabel);
-        xpanel.add(xItems);
-        options.add(xpanel);
+        options.add(yAxisLabel);
         
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
@@ -111,8 +111,8 @@ public class BarChartGui extends AbstractReportGui {
 	public void modifyTestElement(TestElement element) {
 		this.configureTestElement(element);
 		BarChart bc = (BarChart)element;
-		// bc.setXAxis(xAxis.getText());
-		// bc.setYAxis(yAxis.getText());
+		bc.setXAxis(xItems.getText());
+		bc.setYAxis(checkItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
 	}
@@ -120,13 +120,14 @@ public class BarChartGui extends AbstractReportGui {
     public void configure(TestElement element) {
         super.configure(element);
         BarChart bc = (BarChart)element;
-        // xAxis.setText(bc.getXAxis());
-        // yAxis.setText(bc.getYAxis());
+        xItems.setText(bc.getXAxis());
+        checkItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
-        if (bc.getCheckedItems().size() > 0) {
+        if (bc.getCheckedItems() != null && bc.getCheckedItems().size() > 0) {
         	String[] its = new String[bc.getCheckedItems().size()];
         	checkItems.setValues((String[])bc.getCheckedItems().toArray(its));
         }
     }
+    
 }

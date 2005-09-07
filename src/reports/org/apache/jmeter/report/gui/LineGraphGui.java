@@ -20,29 +20,31 @@ package org.apache.jmeter.report.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.testelement.AbstractTable;
 import org.apache.jmeter.testelement.LineGraph;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 public class LineGraphGui extends AbstractReportGui {
 
-    private JLabeledTextField xAxis = 
-        new JLabeledTextField(JMeterUtils.getResString("report_chart_x_axis"));
-    
-    private JLabeledTextField yAxis = 
-        new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis"));
-    
     private JLabeledTextField xAxisLabel = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_x_axis_label"));
     
     private JLabeledTextField yAxisLabel = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
+    
+	private JLabeledChoice checkItems = null;
+	private JLabeledChoice xItems = null;
 
     public LineGraphGui() {
 		super();
@@ -71,13 +73,28 @@ public class LineGraphGui extends AbstractReportGui {
         pane.add(this.getNamePanel(),BorderLayout.NORTH);
         
         VerticalPanel options = new VerticalPanel(Color.white);
-        xAxis.setBackground(Color.white);
-        yAxis.setBackground(Color.white);
         xAxisLabel.setBackground(Color.white);
         yAxisLabel.setBackground(Color.white);
-        options.add(xAxis);
-        options.add(yAxis);
+
+        JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
+		HorizontalPanel xpanel = new HorizontalPanel(Color.white);
+		xLabel.setBorder(new EmptyBorder(5,2,5,2));
+        xItems = new JLabeledChoice();
+        xItems.setBackground(Color.white);
+        xItems.setValues(AbstractTable.xitems);
+        xpanel.add(xLabel);
+        xpanel.add(xItems);
+        options.add(xpanel);
         options.add(xAxisLabel);
+        
+		JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
+		HorizontalPanel ypanel = new HorizontalPanel(Color.white);
+		yLabel.setBorder(new EmptyBorder(5,2,5,2));
+        checkItems = new JLabeledChoice();
+        checkItems.setBackground(Color.white);
+        ypanel.add(yLabel);
+        ypanel.add(checkItems);
+        options.add(ypanel);
         options.add(yAxisLabel);
         
         add(pane,BorderLayout.NORTH);
@@ -93,8 +110,8 @@ public class LineGraphGui extends AbstractReportGui {
 	public void modifyTestElement(TestElement element) {
 		this.configureTestElement(element);
 		LineGraph bc = (LineGraph)element;
-		bc.setXAxis(xAxis.getText());
-		bc.setYAxis(yAxis.getText());
+		bc.setXAxis(xItems.getText());
+		bc.setYAxis(checkItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
 	}
@@ -102,9 +119,13 @@ public class LineGraphGui extends AbstractReportGui {
     public void configure(TestElement element) {
         super.configure(element);
         LineGraph bc = (LineGraph)element;
-        xAxis.setText(bc.getXAxis());
-        yAxis.setText(bc.getYAxis());
+        xItems.setText(bc.getXAxis());
+        checkItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
+        if (bc.getCheckedItems() != null && bc.getCheckedItems().size() > 0) {
+        	String[] its = new String[bc.getCheckedItems().size()];
+        	checkItems.setValues((String[])bc.getCheckedItems().toArray(its));
+        }
     }
 }
