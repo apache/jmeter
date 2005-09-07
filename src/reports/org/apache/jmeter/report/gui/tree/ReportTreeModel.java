@@ -30,6 +30,8 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
+import org.apache.jmeter.testelement.AbstractChart;
+import org.apache.jmeter.testelement.AbstractTable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.property.NullProperty;
@@ -106,6 +108,9 @@ public class ReportTreeModel extends DefaultTreeModel {
 		guicomp.configure(component);
 		guicomp.modifyTestElement(component);
 		ReportGuiPackage.getInstance().getCurrentGui(); // put the gui object back
+		if (component instanceof AbstractChart) {
+			((AbstractChart)component).setParentTable((AbstractTable)node.getUserObject());
+		}
 		// to the way it was.
 		ReportTreeNode newNode = new ReportTreeNode(component, this);
 

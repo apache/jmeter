@@ -93,11 +93,13 @@ public abstract class AbstractChart extends AbstractTestElement implements Chart
      */
     public List getCheckedItems() {
     	ArrayList checked = new ArrayList();
-    	for (int idx=0; idx < AbstractTable.items.length; idx++) {
-    		if (this.parent.getPropertyAsString(
-    				AbstractTable.items[idx]).equals(String.valueOf(true))) {
-    			checked.add(AbstractTable.items[idx]);
-    		}
+    	if ( this.parent != null) {
+        	for (int idx=0; idx < AbstractTable.items.length; idx++) {
+        		if (this.parent.getPropertyAsString(
+        				AbstractTable.items[idx]).equals(String.valueOf(true))) {
+        			checked.add(AbstractTable.items[idx]);
+        		}
+        	}
     	}
     	return checked;
     }
