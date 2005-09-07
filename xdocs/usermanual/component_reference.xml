@@ -1246,6 +1246,19 @@ which therefore acts as the default.</p>
 </properties>
 </component>
 
+<component name="Include Controller" index="&sect-num;.2.15" screenshot="includecontroller.png">
+	<description>
+<p>
+The include controller is designed to use an external jmx file. To use it, add
+samples to a simple controller, then save the simple controller as a jmx file.
+The file can then be used in a test plan.
+</p>
+</description>
+<properties>
+	<property name="Filename" required="Yes">The file to include.</property>
+</properties>
+</component>
+
 </section>
 
 <section name="&sect-num;.3 Listeners" anchor="listeners">
