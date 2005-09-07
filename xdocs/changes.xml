@@ -30,6 +30,8 @@
 <h3>Version 2.1.1</h3>
 <h4>New functionality:</h4>
 <ul>
+<li>New Include Controller allows a test plan to reference an external jmx file</li>
+<li>New JUnitSampler added for using JUnit Test classes</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
