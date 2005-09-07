@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
@@ -188,8 +189,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		synchronized (model.getSamples()) {
-			Iterator e = model.getSamples().iterator();
+        List samples = model.getSamples();
+        synchronized (samples ) {
+			Iterator e = samples.iterator();
 
 			for (int i = 0; e.hasNext(); i++) {
 				Sample s = (Sample) e.next();
