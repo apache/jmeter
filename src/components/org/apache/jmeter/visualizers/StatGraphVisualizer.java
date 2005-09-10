@@ -22,9 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +90,8 @@ ActionListener {
     
     protected JScrollPane graphScroll = null;
     
+    protected JSplitPane spane = null;
+    
     protected JLabeledChoice columns = 
         new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);
     
@@ -116,6 +115,10 @@ ActionListener {
     protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");
     
     protected boolean saveGraphToFile = false;
+    
+    protected int defaultWidth = 400;
+    
+    protected int defaultHeight = 400;
 
 	public StatGraphVisualizer() {
 		super();
@@ -189,16 +192,15 @@ ActionListener {
         
         graph = new VerticalPanel();
         graph.setBorder(margin2);
-        graph.setPreferredSize(new Dimension(400,500));
-        graphScroll = new JScrollPane(graph);
-        graphScroll.setAutoscrolls(true);
 
 
         JLabel graphLabel = new JLabel(JMeterUtils.getResString("aggregate_graph"));
         graphPanel = new AxisGraph();
+        graphPanel.setPreferredSize(new Dimension(defaultWidth,defaultHeight));
 
         // horizontal panel for the buttons
         HorizontalPanel buttonpanel = new HorizontalPanel();
+        buttonpanel.add(columns);
         buttonpanel.add(displayButton);
         buttonpanel.add(saveGraph);
         
@@ -206,19 +208,19 @@ ActionListener {
         graph.add(graphTitle);
         graph.add(graphWidth);
         graph.add(graphHeight);
-        graph.add(columns);
         graph.add(buttonpanel);
         graph.add(graphPanel);
 
         displayButton.addActionListener(this);
         saveGraph.addActionListener(this);
+        graphScroll = new JScrollPane(graph);
+        graphScroll.setAutoscrolls(true);
 
-        JSplitPane spane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        spane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         spane.setLeftComponent(myScrollPane);
         spane.setRightComponent(graphScroll);
         spane.setResizeWeight(.2);
         spane.setContinuousLayout(true);
-        spane.setOneTouchExpandable(true);
 
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(spane,BorderLayout.CENTER);
@@ -235,6 +237,7 @@ ActionListener {
         }
         int width = Integer.parseInt(wstr);
         int height = Integer.parseInt(hstr);
+        graphPanel.setPreferredSize(new Dimension(width,height));
 
         graphPanel.setData(this.getData());
         graphPanel.setHeight(height);
@@ -244,7 +247,8 @@ ActionListener {
         graphPanel.setXAxisTitle(columns.getText());
         graphPanel.setYAxisLabels(this.yAxisLabel);
         graphPanel.setYAxisTitle(this.yAxisTitle);
-        this.repaint();
+        
+        spane.repaint();
     }
     
     public double[][] getData() {
