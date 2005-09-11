@@ -1484,7 +1484,7 @@ the performance history of each machine for the last hour.</p>
 </description>
 </component>
 
-<component index="&sect-num;.3.11" name="Distribution Graph (alpha)" screenshot="distribution_graph.png">
+<component index="&sect-num;.3.11" name="Distribution Graph" screenshot="distribution_graph.png">
 <description>
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
@@ -1502,6 +1502,12 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
+<component index="&sect-num;.3.12" name="Aggregate graph" screenshot="aggregate_graph.png">
+<description>The aggregate graph is similar to the aggregate report. The primary
+difference is the aggregate graph provides an easy way to generate bar graphs and save
+the graph as a PNG file. By default, the aggregate graph will generate a bar chart
+450 x 250 pixels.</description>
+</component>
 
 </section>
 
