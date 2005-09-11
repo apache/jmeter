@@ -118,7 +118,7 @@ ActionListener {
     
     protected int defaultWidth = 400;
     
-    protected int defaultHeight = 400;
+    protected int defaultHeight = 300;
 
 	public StatGraphVisualizer() {
 		super();
@@ -187,7 +187,7 @@ ActionListener {
 		mainPanel.add(makeTitlePanel());
 
 		myJTable = new JTable(model);
-		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
 		myScrollPane = new JScrollPane(myJTable);
         
         graph = new VerticalPanel();
@@ -237,7 +237,6 @@ ActionListener {
         }
         int width = Integer.parseInt(wstr);
         int height = Integer.parseInt(hstr);
-        graphPanel.setPreferredSize(new Dimension(width,height));
 
         graphPanel.setData(this.getData());
         graphPanel.setHeight(height);
@@ -247,7 +246,9 @@ ActionListener {
         graphPanel.setXAxisTitle(columns.getText());
         graphPanel.setYAxisLabels(this.yAxisLabel);
         graphPanel.setYAxisTitle(this.yAxisTitle);
-        
+
+        graphPanel.setPreferredSize(new Dimension(width,height));
+        graph.resize(new Dimension(graph.getWidth(), height + 120));
         spane.repaint();
     }
     
