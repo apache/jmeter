@@ -32,6 +32,7 @@
 <ul>
 <li>New Include Controller allows a test plan to reference an external jmx file</li>
 <li>New JUnitSampler added for using JUnit Test classes</li>
+<li>New Aggregate Graph listener is capable of graphing aggregate statistics</li>
 </ul>
 <h4>Bug fixes:</h4>
 <ul>
