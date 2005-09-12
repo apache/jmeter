@@ -1502,7 +1502,7 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
-<component index="&sect-num;.3.12" name="Aggregate graph" screenshot="aggregate_graph.png">
+<component index="&sect-num;.3.12" name="Aggregate Graph" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file. By default, the aggregate graph will generate a bar chart
