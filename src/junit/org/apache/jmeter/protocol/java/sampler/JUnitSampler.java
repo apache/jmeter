@@ -288,7 +288,7 @@ public class JUnitSampler extends AbstractSampler {
             rlabel = JUnitSampler.class.getName();
         }
         sresult.setSampleLabel(rlabel);
-        sresult.setSamplerData(getClassname() + "." + getMethod());
+        sresult.setSamplerData(getClassname() + "." + getMethod());   
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
         // test run
@@ -371,6 +371,7 @@ public class JUnitSampler extends AbstractSampler {
                 sresult.setSuccessful(true);
                 sresult.setResponseMessage(getSuccess());
                 sresult.setResponseCode(getSuccessCode());
+                sresult.setResponseData("Not Applicable".getBytes());
             }
         } else {
             // we should log a warning, but allow the test to keep running
@@ -378,6 +379,10 @@ public class JUnitSampler extends AbstractSampler {
             // this should be externalized to the properties
             sresult.setResponseMessage("failed to create an instance of the class");
         }
+        sresult.setBytes(0);
+        sresult.setContentType("text");
+        sresult.setDataType("Not Applicable");
+        sresult.setRequestHeaders("Not Applicable");
 		return sresult;
 	}
 
