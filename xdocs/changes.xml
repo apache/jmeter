@@ -40,6 +40,7 @@
 <li>BSF Sampler now populates filename and parameters from saved test plan</li>
 <li>Bug 36500 - handle missing data more gracefully in WebServiceSampler</li>
 <li>Bug 35546 - add merge to right-click menu</li>
+<li>Bug 36642 - Summariser stopped working in 2.1</li>
 </ul>	
 	
 
