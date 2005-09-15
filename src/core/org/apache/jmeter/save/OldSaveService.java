@@ -146,56 +146,65 @@ public final class OldSaveService implements SaveServiceConstants {
 		return result;
 	}
 
+    /**
+     * Generates the field names for the output file
+     * 
+     * @return the field names as a string
+     */
+    public static String printableFieldNamesToString() {
+        return printableFieldNamesToString(_saveConfig);
+    }
+    
 	/**
 	 * Generates the field names for the output file
 	 * 
 	 * @return the field names as a string
 	 */
-	public static String printableFieldNamesToString() {
+	public static String printableFieldNamesToString(SampleSaveConfiguration saveConfig) {
 		StringBuffer text = new StringBuffer();
-		String delim = _saveConfig.getDelimiter();
+		String delim = saveConfig.getDelimiter();
 
-		if (_saveConfig.printMilliseconds() || (_saveConfig.formatter() != null)) {
+		if (saveConfig.saveTimestamp() || (saveConfig.formatter() != null)) {
 			text.append(SaveServiceConstants.TIME_STAMP);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveTime()) {
+		if (saveConfig.saveTime()) {
 			text.append(SaveServiceConstants.TIME);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveLabel()) {
+		if (saveConfig.saveLabel()) {
 			text.append(SaveServiceConstants.LABEL);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveCode()) {
+		if (saveConfig.saveCode()) {
 			text.append(SaveServiceConstants.RESPONSE_CODE);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveMessage()) {
+		if (saveConfig.saveMessage()) {
 			text.append(SaveServiceConstants.RESPONSE_MESSAGE);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveThreadName()) {
+		if (saveConfig.saveThreadName()) {
 			text.append(SaveServiceConstants.THREAD_NAME);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveDataType()) {
+		if (saveConfig.saveDataType()) {
 			text.append(SaveServiceConstants.DATA_TYPE);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveSuccess()) {
+		if (saveConfig.saveSuccess()) {
 			text.append(SaveServiceConstants.SUCCESSFUL);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveAssertionResultsFailureMessage()) {
+		if (saveConfig.saveAssertionResultsFailureMessage()) {
 			text.append(SaveServiceConstants.FAILURE_MESSAGE);
 			text.append(delim);
 		}
