@@ -1484,7 +1484,7 @@ the performance history of each machine for the last hour.</p>
 </description>
 </component>
 
-<component index="&sect-num;.3.11" name="Distribution Graph" screenshot="distribution_graph.png">
+<component index="&sect-num;.3.11" name="Distribution Graph (alpha)" screenshot="distribution_graph.png">
 <description>
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
