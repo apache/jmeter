@@ -215,7 +215,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			writer.println(XML_HEADER);
 			writer.println(TESTRESULTS_START_V1_1);
 		} else if (saveConfig.saveFieldNames()) {
-			writer.println(OldSaveService.printableFieldNamesToString());
+			writer.println(OldSaveService.printableFieldNamesToString(saveConfig));
 		}
 	}
 
