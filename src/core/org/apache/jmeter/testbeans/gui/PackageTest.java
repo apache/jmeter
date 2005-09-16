@@ -55,15 +55,15 @@ public class PackageTest extends JMeterTestCase {
 
 	// ResourceBundle i18nEdit=
 	// ResourceBundle.getBundle("org.apache.jmeter.resources.i18nedit");
-	private static final Locale defaultLocale = new Locale("en"); // i18nEdit.getString("locale.default");
+	private static final Locale defaultLocale = new Locale("en",""); // i18nEdit.getString("locale.default");
 
 	// TODO: find a clean way to get these from i18nedit.properties
 
 	private static final Locale[] locales = new Locale[] {
 	// new Locale("de"), // No resources yet
-			new Locale("ja"),
-			// new Locale("no"), // No resources yet
-			// new Locale("fr"), // No resources yet
+			new Locale("ja",""),
+			// new Locale("no",""), // No resources yet
+			// new Locale("fr",""), // No resources yet
 			// new Locale("zh","CN"), //No resources yet
 			new Locale("zh", "TW") };
 
