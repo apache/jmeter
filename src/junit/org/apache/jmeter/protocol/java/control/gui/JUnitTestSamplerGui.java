@@ -42,6 +42,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -374,7 +375,7 @@ implements ChangeListener, ActionListener
      */
     public void stateChanged(ChangeEvent event) {
         if ( event.getSource() == filterpkg) {
-            FILTER.setPackges(filterpkg.getText().split(","));
+            FILTER.setPackges(JOrphanUtils.split(filterpkg.getText(),","));
             classnameCombo.removeAllItems();
             // change the classname drop down
             Object[] clist = FILTER.filterArray(CLASSLIST);
