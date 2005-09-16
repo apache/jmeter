@@ -373,10 +373,11 @@ public class Converter {
 			return replacement.toString();
 		}
 	}
-
-	public static String insertSpaceBreaks(String v, String insertion) {
-		return v.trim().replaceAll("\\s+", insertion);
-	}
+// Does not appear to be used.
+// Remove as replaceAll() requires 1.4
+//	public static String insertSpaceBreaks(String v, String insertion) {
+//		return v.trim().replaceAll("\\s+", insertion);
+//	}
 
 	/**
 	 * Converts object to a String, defaults to empty string if object is null.
