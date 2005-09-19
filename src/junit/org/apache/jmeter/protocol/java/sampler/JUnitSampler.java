@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 
 import junit.framework.ComparisonFailure;
+import junit.framework.Protectable;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 
@@ -64,7 +65,6 @@ public class JUnitSampler extends AbstractSampler {
     /// the Method objects for setUp and tearDown methods
     protected Method SETUP_METHOD = null;
     protected Method TDOWN_METHOD = null;
-    protected Method RUN_METHOD = null;
     protected boolean checkStartUpTearDown = false;
     
     protected TestCase TEST_INSTANCE = null;
@@ -301,25 +301,28 @@ public class JUnitSampler extends AbstractSampler {
             TestResult tr = new TestResult();
             this.TEST_INSTANCE.setName(getMethod());
             try {
+                
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
                     SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
                 }
-                if (RUN_METHOD == null) {
-                    RUN_METHOD = getRunTestMethod(this.TEST_INSTANCE);
-                }
-                Method m = getMethod(this.TEST_INSTANCE,getMethod());
+                final Method m = getMethod(this.TEST_INSTANCE,getMethod());
+                final TestCase theClazz = this.TEST_INSTANCE;
+                tr.startTest(this.TEST_INSTANCE);
                 sresult.sampleStart();
-                // use run method to run the test instead of the method directly
-                // we invoke TestCase.run(TestResult). If it happens to be null,
-                // we invoke the method directly, though that shouldn't happen
-                // unless the junit class breaks convention
-                if (RUN_METHOD != null) {
-                    Object[] p = {tr};
-                    RUN_METHOD.invoke(this.TEST_INSTANCE,p);
-                } else {
-                    m.invoke(this.TEST_INSTANCE,new Class[0]);
-                }
+                // Do not use TestCase.run(TestResult) method, since it will
+                // call setUp and tearDown. Doing that will result in calling
+                // the setUp and tearDown method twice and the elapsed time
+                // will include setup and teardown.
+                Protectable p = new Protectable() {
+                    public void protect() throws Throwable {
+                        m.invoke(theClazz,new Class[0]);
+                    }
+                };
+                tr.runProtected(theClazz, p);
+                // m.invoke(this.TEST_INSTANCE,new Class[0]);
+                tr.endTest(this.TEST_INSTANCE);
                 sresult.sampleEnd();
+                
                 if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(TEST_INSTANCE,new Class[0]);
                 }
@@ -362,7 +365,12 @@ public class JUnitSampler extends AbstractSampler {
                 buf.append(getFailure());
                 Enumeration en = tr.errors();
                 while (en.hasMoreElements()){
-                    buf.append((String)en.nextElement());
+                    Object item = en.nextElement();
+                    if (item instanceof String) {
+                        buf.append((String)en.nextElement());
+                    } else if (item instanceof Throwable) {
+                        buf.append( ((Throwable)item).getMessage() );
+                    }
                 }
                 sresult.setResponseMessage(buf.toString());
                 sresult.setResponseCode(getFailureCode());
