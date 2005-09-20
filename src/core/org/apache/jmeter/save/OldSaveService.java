@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.save;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -235,6 +237,29 @@ public final class OldSaveService implements SaveServiceConstants {
 			throw new IOException("Problem using Avalon Configuration tools");
 		}
 	}
+    
+    /**
+     * Method will save aggregate statistics as CSV. For now I put it here.
+     * Not sure if it should go in the newer SaveService instead of here.
+     * if we ever decide to get rid of this class, we'll need to move this
+     * method to the new save service.
+     * @param data
+     * @param writer
+     * @throws IOException
+     */
+    public static void saveCSVStats(Vector data, FileWriter writer) throws IOException {
+        for (int idx=0; idx < data.size(); idx++) {
+            Vector row = (Vector)data.elementAt(idx);
+            for (int idy=0; idy < row.size(); idy++) {
+                if (idy > 0) {
+                    writer.write(",");
+                }
+                Object item = row.elementAt(idy);
+                writer.write( String.valueOf(item) );
+            }
+            writer.write(System.getProperty("line.separator"));
+        }
+    }
 
 	public static SampleResult getSampleResult(Configuration config) {
 		SampleResult result = new SampleResult(config.getAttributeAsLong(TIME_STAMP, 0L), config.getAttributeAsLong(
