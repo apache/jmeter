@@ -22,13 +22,19 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,17 +45,21 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
+import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.log.Logger;
 
 /**
  * Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
@@ -61,6 +71,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable,
 ActionListener {
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 	private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
 			JMeterUtils.getResString("aggregate_report_count"), JMeterUtils.getResString("average"),
 			JMeterUtils.getResString("aggregate_report_median"), JMeterUtils.getResString("aggregate_report_90%_line"),
@@ -102,6 +113,9 @@ ActionListener {
     
     protected JButton saveGraph = 
         new JButton(JMeterUtils.getResString("aggregate_graph_save"));
+    
+    protected JButton saveTable = 
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));
     
     JLabeledTextField graphTitle = 
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));
@@ -203,6 +217,7 @@ ActionListener {
         buttonpanel.add(columns);
         buttonpanel.add(displayButton);
         buttonpanel.add(saveGraph);
+        buttonpanel.add(saveTable);
         
         graph.add(graphLabel);
         graph.add(graphTitle);
@@ -213,6 +228,7 @@ ActionListener {
 
         displayButton.addActionListener(this);
         saveGraph.addActionListener(this);
+        saveTable.addActionListener(this);
         graphScroll = new JScrollPane(graph);
         graphScroll.setAutoscrolls(true);
 
@@ -279,6 +295,28 @@ ActionListener {
         }
     }
     
+    /**
+     * We use this method to get the data, since we are using
+     * ObjectTableModel, so the calling getDataVector doesn't 
+     * work as expected.
+     * @return
+     */
+    public Vector getAllTableData() {
+        Vector data = new Vector();
+        if (model.getRowCount() > 0) {
+            for (int rw=0; rw < model.getRowCount(); rw++) {
+                int cols = model.getColumnCount();
+                Vector column = new Vector();
+                data.add(column);
+                for (int idx=0; idx < cols; idx++) {
+                    Object val = model.getValueAt(rw,idx);
+                    column.add(val);
+                }
+            }
+        }
+        return data;
+    }
+    
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == displayButton) {
             makeGraph();
@@ -290,6 +328,21 @@ ActionListener {
                                 new ActionEvent(this,1,SaveGraphics.SAVE_GRAPHICS));
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        } else if (event.getSource() == saveTable) {
+            JFileChooser chooser = FileDialoger.promptToSaveFile(
+                    "statistics.csv");
+            File output = chooser.getSelectedFile();
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(output);
+                Vector data = this.getAllTableData();
+                OldSaveService.saveCSVStats(data,writer);
+                writer.close();
+            } catch (FileNotFoundException e) {
+                log.warn(e.getMessage());
+            } catch (IOException e) {
+                log.warn(e.getMessage());
             }
         }
     }
