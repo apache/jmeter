@@ -100,7 +100,6 @@ public final class NewDriver {
 
 		System.setProperty("java.class.path", System.getProperty("java.class.path") + classpath.toString());
 		loader = new DynamicClassLoader((URL[]) jars.toArray(new URL[0]));
-
 	}
 
 	/**
