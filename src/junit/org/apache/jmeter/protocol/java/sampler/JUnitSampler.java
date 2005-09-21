@@ -320,7 +320,6 @@ public class JUnitSampler extends AbstractSampler {
                     }
                 };
                 tr.runProtected(theClazz, p);
-                // m.invoke(this.TEST_INSTANCE,new Class[0]);
                 tr.endTest(this.TEST_INSTANCE);
                 sresult.sampleEnd();
                 
@@ -413,11 +412,8 @@ public class JUnitSampler extends AbstractSampler {
             Object[] params = null;
             try
             {
-                theclazz = Class.forName(
-                            className.trim(),
-                            true,
-                            Thread.currentThread().getContextClassLoader()
-                        );
+                theclazz = 
+                    Thread.currentThread().getContextClassLoader().loadClass(className.trim());
             } catch (ClassNotFoundException e) {
                 log.warn("ClassNotFoundException:: " + e.getMessage());
             }
