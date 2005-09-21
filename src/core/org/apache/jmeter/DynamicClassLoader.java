@@ -31,16 +31,16 @@ public class DynamicClassLoader extends URLClassLoader {
 	/**
 	 * @param arg0
 	 */
-	public DynamicClassLoader(URL[] arg0) {
-		super(arg0);
+	public DynamicClassLoader(URL[] urls) {
+		super(urls);
 	}
 
 	/**
 	 * @param arg0
 	 * @param arg1
 	 */
-	public DynamicClassLoader(URL[] arg0, ClassLoader arg1) {
-		super(arg0, arg1);
+	public DynamicClassLoader(URL[] urls, ClassLoader parent) {
+		super(urls, parent);
 	}
 
 	/**
@@ -48,9 +48,9 @@ public class DynamicClassLoader extends URLClassLoader {
 	 * @param arg1
 	 * @param arg2
 	 */
-	public DynamicClassLoader(URL[] arg0, ClassLoader arg1,
-			URLStreamHandlerFactory arg2) {
-		super(arg0, arg1, arg2);
+	public DynamicClassLoader(URL[] urls, ClassLoader parent,
+			URLStreamHandlerFactory factory) {
+		super(urls, parent, factory);
 	}
 
     public void addURL(URL url) {
