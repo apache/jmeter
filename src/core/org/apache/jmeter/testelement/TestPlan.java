@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -36,6 +37,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -53,6 +55,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 
 	public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups";
 
+    public final static String CLASSPATHS = "TestPlan.user_define_classpath";
+    
 	public final static String COMMENTS = "TestPlan.comments";
 
 	public final static String BASEDIR = "basedir";
@@ -146,6 +150,45 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	public void setSerialized(boolean serializeTGs) {
 		setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
 	}
+    
+    /**
+     * Set the classpath for the test plan
+     * @param text
+     */
+    public void setTestPlanClasspath(String text) {
+        setProperty(CLASSPATHS,text);
+    }
+    
+    public void setTestPlanClasspath(String[] text) {
+        for (int idx=0; idx < text.length; idx++) {
+            NewDriver.addURL(text[idx]);
+        }
+        String cat = "";
+        if (text.length > 1) {
+            for (int idx=0; idx < text.length; idx++) {
+                if (idx > 0) {
+                    cat += "," + text[idx];
+                } else {
+                    cat += text[idx];
+                }
+            }
+        } else if (text != null && text.length == 1){
+            cat = text[0];
+        }
+        this.setTestPlanClasspath(cat);
+    }
+    
+    public String[] getTestPlanClasspathArray() {
+        return JOrphanUtils.split(this.getTestPlanClasspath(),",");
+    }
+    
+    /**
+     * Returns a string in CSV format
+     * @return
+     */
+    public String getTestPlanClasspath() {
+        return getPropertyAsString(CLASSPATHS);
+    }
 
 	/**
 	 * Fetch the serialize threadgroups property
@@ -258,6 +301,10 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 				log.error("Failed to set file server base dir with " + getBasedir(), e);
 			}
 		}
+        String propClasspath = JMeterUtils.getPropDefault("user.classpath","");
+        if (propClasspath.length() > 0) {
+            NewDriver.addURL(propClasspath);
+        }
 	}
 
 	/*
@@ -268,4 +315,5 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	public void testStarted(String host) {
 		testStarted();
 	}
+    
 }
