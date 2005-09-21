@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import junit.framework.ComparisonFailure;
 import junit.framework.Protectable;
 import junit.framework.TestCase;
+import junit.framework.TestFailure;
 import junit.framework.TestResult;
 
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -362,17 +363,19 @@ public class JUnitSampler extends AbstractSampler {
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
                 StringBuffer buf = new StringBuffer();
-                buf.append(getFailure());
+                buf.append(getFailure() + System.getProperty("line.separator"));
                 Enumeration en = tr.errors();
                 while (en.hasMoreElements()){
                     Object item = en.nextElement();
-                    if (item instanceof String) {
-                        buf.append((String)en.nextElement());
+                    if (item instanceof TestFailure) {
+                        buf.append( "Trace -- " + ((TestFailure)item).trace() );
+                        buf.append( "Failure -- " + ((TestFailure)item).toString() );
                     } else if (item instanceof Throwable) {
                         buf.append( ((Throwable)item).getMessage() );
                     }
                 }
                 sresult.setResponseMessage(buf.toString());
+                sresult.setRequestHeaders(buf.toString());
                 sresult.setResponseCode(getFailureCode());
             } else {
                 // this means there's no failures
