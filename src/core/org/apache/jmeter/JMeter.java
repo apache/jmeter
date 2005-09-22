@@ -23,12 +23,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Authenticator;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
@@ -230,6 +233,8 @@ public class JMeter implements JMeterPlugin {
 			log.info("java.version=" + System.getProperty("java.version"));
 			log.info("Locale=" + Locale.getDefault().getDisplayName());
 			log.info(JMeterUtils.getJMeterCopyright());
+            
+            updateClassLoader();
 			if (parser.getArgumentById(VERSION_OPT) != null) {
 				System.out.println(JMeterUtils.getJMeterCopyright());
 				System.out.println("Version " + JMeterUtils.getJMeterVersion());
@@ -257,7 +262,31 @@ public class JMeter implements JMeterPlugin {
 		}
 	}
 
-	/**
+    // Update classloader if necessary
+	private void updateClassLoader() {
+        String userpath= JMeterUtils.getPropDefault("user.classpath","");
+        if (userpath.length()> 0){
+            log.info("user.classpath="+userpath);
+            StringTokenizer tok = new StringTokenizer(userpath, File.pathSeparator);
+            while(tok.hasMoreTokens()) {
+                String path=tok.nextToken();
+                File f=new File(path);
+                if (!f.canRead() && !f.isDirectory()) {
+                    log.warn("Can't read "+path);   
+                } else {
+                    URL url;
+                    try {
+                        url = new URL("file","",path);
+                        NewDriver.addURL(url);
+                    } catch (MalformedURLException e) {
+                        log.warn("Can't create URL for "+path+" "+e);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
 	 * 
 	 */
 	private void startBSH() {
