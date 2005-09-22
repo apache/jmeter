@@ -301,10 +301,6 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 				log.error("Failed to set file server base dir with " + getBasedir(), e);
 			}
 		}
-        String propClasspath = JMeterUtils.getPropDefault("user.classpath","");
-        if (propClasspath.length() > 0) {
-            NewDriver.addURL(propClasspath);
-        }
 	}
 
 	/*
