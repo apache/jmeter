@@ -2508,7 +2508,9 @@ This is mainly intended for batch (non-GUI) runs.
 		<br></br>
 </description>
 <component index="&sect-num;.9.1" name="Test Plan" screenshot="testplan.png">
-<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
+<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
+<p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
+<p>In jmeter.properties, edit "user.classpath" to include additional libraries. Note that paths with spaces may cause problems for Java.</p></description>
 </component>
 
 <component index="&sect-num;.9.2" name="Thread Group" screenshot="threadgroup.png">
