@@ -24,36 +24,42 @@ import java.net.URLStreamHandlerFactory;
  * @author pete
  *
  * This is a basic URL classloader for loading new resources
- * dynamically
+ * dynamically.
+ * 
+ * It allows public access to the addURL() method.
+ * 
+ * It also adds a convenience method to update the current thread classloader
+ *
  */
 public class DynamicClassLoader extends URLClassLoader {
 
-	/**
-	 * @param arg0
-	 */
 	public DynamicClassLoader(URL[] urls) {
 		super(urls);
 	}
 
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
 	public DynamicClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
 	}
 
-	/**
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 */
 	public DynamicClassLoader(URL[] urls, ClassLoader parent,
 			URLStreamHandlerFactory factory) {
 		super(urls, parent, factory);
 	}
 
+    // Make the addURL method visible
     public void addURL(URL url) {
         super.addURL(url);
+    }
+
+    /**
+     * 
+     * @param urls - list of URLs to add to the thread's classloader
+     */
+    public static void updateLoader(URL [] urls) {
+        DynamicClassLoader loader 
+            = (DynamicClassLoader) Thread.currentThread().getContextClassLoader();
+        for(int i=0;i<urls.length;i++) {
+            loader.addURL(urls[i]);
+        }
     }
 }
