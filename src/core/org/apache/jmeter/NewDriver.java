@@ -117,6 +117,10 @@ public final class NewDriver {
         }
     }
     
+    public static void addURL(URL url) {
+        loader.addURL(url);
+    }
+    
 	/**
 	 * Get the directory where JMeter is installed. This is the absolute path
 	 * name.
