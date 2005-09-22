@@ -529,7 +529,7 @@
     </javac>
   </target>
   
-  <target name="compile-tests" depends="compile" description="Compile components specific to HTTP sampling.">
+  <target name="compile-tests" description="Compile test components only">
     <mkdir dir="${build.test}"/>
     <javac srcdir="${src.test}" destdir="${build.test}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <classpath>
@@ -1298,7 +1298,7 @@ some of its classes - at present JMeter can only run from jar files.
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" 
   	description="Generate documentation. (site, printable, api)"/>
 
-  <target name="test" depends="install,compile-tests,_test" description="Run tests"/>
+  <target name="test" depends="compile-tests,_test" description="Run tests"/>
   
   <target name="test-both" depends="test-headless,test-headed"/>
 
