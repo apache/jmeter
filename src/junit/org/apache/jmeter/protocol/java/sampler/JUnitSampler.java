@@ -367,8 +367,10 @@ public class JUnitSampler extends AbstractSampler {
                 while (en.hasMoreElements()){
                     Object item = en.nextElement();
                     if (item instanceof TestFailure) {
-                        buf.append( "Trace -- " + ((TestFailure)item).trace() );
-                        buf.append( "Failure -- " + ((TestFailure)item).toString() );
+                        buf.append( "Trace -- ");
+                        buf.append( ((TestFailure)item).trace() );
+                        buf.append( "Failure -- ");
+                        buf.append( ((TestFailure)item).toString() );
                     } else if (item instanceof Throwable) {
                         buf.append( ((Throwable)item).getMessage() );
                     }
