@@ -116,7 +116,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 			tp.setSerialized(serializedMode.isSelected());
 			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
 			tp.setProperty(TestPlan.COMMENTS, commentPanel.getText());
-            tp.setTestPlanClasspath(browseJar.getFiles());
+            tp.setTestPlanClasspathArray(browseJar.getFiles());
 		}
 	}
 
