@@ -160,9 +160,6 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     }
     
     public void setTestPlanClasspath(String[] text) {
-        for (int idx=0; idx < text.length; idx++) {
-            NewDriver.addURL(text[idx]);
-        }
         String cat = "";
         if (text.length > 1) {
             for (int idx=0; idx < text.length; idx++) {
@@ -301,6 +298,12 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 				log.error("Failed to set file server base dir with " + getBasedir(), e);
 			}
 		}
+        // we set the classpath
+        String[] paths = this.getTestPlanClasspathArray();
+        for (int idx=0; idx < paths.length; idx++) {
+            NewDriver.addURL(paths[idx]);
+            log.info("add " + paths[idx] + " to classpath");
+        }
 	}
 
 	/*
