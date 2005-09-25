@@ -1892,7 +1892,9 @@ The variables in User Defined Variables components will take precedence over tho
 <component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="tcpsamplerconfig.png">
 	<note>ALPHA CODE</note>
 <description>
+        <p>
 	The TCP Sampler Config provides default data for the TCP Sampler
+	</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1906,9 +1908,12 @@ The variables in User Defined Variables components will take precedence over tho
 
 <component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="csvdatasetconfig.png">
 <description>
+        <p>
 	CSV DataSet Config is used to read lines from a file, and split them into variables.
+	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	</p>
 	<p>
-	As a special case, the string "\\t" (without quotes) is treated as a Tab.
+	As a special case, the string "\t" (without quotes) is treated as a Tab.
 	</p>
 </description>
 <properties>
