@@ -779,10 +779,15 @@ TBC
 </component>
 
 <component name="Test Action" index="&sect-num;.1.15" screenshot="test_action.png">
-<description>TBA
+<description>
+The Test Action sampler is a sampler that is intended for use in a conditional controller.
+Rather than generate a sample, the test element pauses or stops the selected target.
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Target" required="Yes">Current Thread / All Threads</property>
+  <property name="Action" required="Yes">Pause / Stop</property>
+  <property name="Duration" required="Yes">How long to pause for (milliseconds)</property>
 </properties>
 </component>
 
