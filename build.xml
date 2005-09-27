@@ -1278,6 +1278,9 @@ some of its classes - at present JMeter can only run from jar files.
     <copy todir="${dest.docs}/demos">
       <fileset dir="${src.demos}"/>
     </copy>
+  	<copy todir="${dest.docs}/usermanual">
+  	  <fileset file="${src.docs}/usermanual/*.pdf"/>
+    </copy>
   </target>
 
   <target name="docs-printable" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
