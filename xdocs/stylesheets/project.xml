@@ -47,9 +47,10 @@
 	 	<item name="Developer Notes"     href="http://wiki.apache.org/jakarta-jmeter/JMeterDevelopment"/>
 	 </menu>
 	 <menu name="Tutorials">
-		<item name="Distributed Testing"		 href="./docs/usermanual/jmeter_distributed_testing_step_by_step.pdf"/>
-		<item name="Recording Tests"		 href="./docs/usermanual/jmeter_proxy_step_by_step.pdf"/>
-		<item name="JUnit Sampler"		 href="./docs/usermanual/junitsampler_tutorial.pdf"/>
+		<item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.pdf"/>
+		<item name="Recording Tests"	 href="/usermanual/jmeter_proxy_step_by_step.pdf"/>
+		<item name="JUnit Sampler"		 href="/usermanual/junitsampler_tutorial.pdf"/>
+		<item name="Access Log Sampler"	 href="/usermanual/jmeter_accesslog_sampler_step_by_step.pdf"/>
 	 </menu>
 	 <menu name="Community">
 		<item name="Get Involved"        href="/site/getinvolved.html"/>
