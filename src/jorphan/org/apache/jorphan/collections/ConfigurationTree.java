@@ -31,6 +31,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.jorphan.util.JOrphanUtils;
+
 /**
  * @author mike
  * 
@@ -258,7 +260,8 @@ public class ConfigurationTree implements Serializable, Cloneable {
 
 	protected String[] getPath(String key) {
 		if (key != null) {
-			String[] keys = key.split("/");
+            //JDK 1.4 String[] keys = key.split("/");
+			String[] keys = JOrphanUtils.split(key,"/");
 			return keys;
 		}
 		return new String[0];
@@ -447,7 +450,8 @@ public class ConfigurationTree implements Serializable, Cloneable {
 	 * @return
 	 */
 	public String remove(String key) {
-		String[] keys = key.split("/");
+		//JDK 1.4 String[] keys = key.split("/");
+        String[] keys = JOrphanUtils.split(key,"/");
 		String prop = null;
 		HashTree tree = propTree;
 		for (int i = 0; i < keys.length && tree != null; i++) {

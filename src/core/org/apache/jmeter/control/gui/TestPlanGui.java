@@ -32,6 +32,7 @@ import javax.swing.JTextArea;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.util.FileListPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -62,7 +63,9 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 	/** A panel to contain comments on the test plan. */
 	private JTextArea commentPanel;
 
-	/**
+    FileListPanel browseJar = null;
+
+    /**
 	 * Create a new TestPlanGui.
 	 */
 	public TestPlanGui() {
@@ -113,6 +116,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 			tp.setSerialized(serializedMode.isSelected());
 			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
 			tp.setProperty(TestPlan.COMMENTS, commentPanel.getText());
+            tp.setTestPlanClasspathArray(browseJar.getFiles());
 		}
 	}
 
@@ -151,6 +155,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 			argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue());
 		}
 		commentPanel.setText(el.getPropertyAsString(TestPlan.COMMENTS));
+        browseJar.setFiles( ((TestPlan)el).getTestPlanClasspathArray() );
 	}
 
 	/**
@@ -173,6 +178,11 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		panel.add(commentPanel);
 		return panel;
 	}
+    
+    protected Container createClassPathPanel() {
+        browseJar = new FileListPanel(JMeterUtils.getResString("test_plan_classpath_browse"), ".jar");
+        return browseJar;
+    }
 
 	/**
 	 * Initialize the components and layout of this component.
@@ -194,6 +204,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		explain.setEditable(false);
 		explain.setBackground(this.getBackground());
 		southPanel.add(explain);
+        southPanel.add(createClassPathPanel());
 
 		add(southPanel, BorderLayout.SOUTH);
 	}

@@ -204,6 +204,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	}
 
 	protected void notifyTestListenersOfEnd() {
+        log.info("Notifying test listeners of end of test");
 		Iterator iter = testListeners.getSearchResults().iterator();
 		while (iter.hasNext()) {
 			TestListener tl = (TestListener) iter.next();
@@ -231,12 +232,16 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	}
 
 	public synchronized void threadFinished(JMeterThread thread) {
-		allThreads.remove(thread);
-		log.info("Ending thread " + thread.getThreadNum());
-		if (!serialized && allThreads.size() == 0 && !schcdule_run) {
-			log.info("Stopping test");
-			stopTest();
-		}
+		try {
+            allThreads.remove(thread);
+            log.info("Ending thread " + thread.getThreadNum());
+            if (!serialized && allThreads.size() == 0 && !schcdule_run) {
+            	log.info("Stopping test");
+            	stopTest();
+            }
+        } catch (Throwable e) {
+            log.fatalError("Call to threadFinished should never throw an exception - this can deadlock JMeter",e);
+        }
 	}
 
 	public synchronized void stopTest() {
@@ -296,7 +301,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		if (((TestPlan) plan[0]).isSerialized()) {
 			serialized = true;
 		}
-		JMeterContextService.startTest();
+        JMeterContextService.startTest();
 		compileTree();
 		/**
 		 * Notification of test listeners needs to happen after function
@@ -354,9 +359,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				log.info("Continue on error");
 			}
 
+            ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+            threadGroupTree.add(group, testLevelElements);
 			for (int i = 0; running && i < threads.length; i++) {
-				ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
-				threadGroupTree.add(group, testLevelElements);
 				threads[i] = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
 				threads[i].setThreadNum(i);
 				threads[i].setThreadGroup(group);

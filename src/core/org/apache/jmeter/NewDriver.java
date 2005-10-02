@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -35,7 +34,7 @@ import java.util.StringTokenizer;
  */
 public final class NewDriver {
 	/** The class loader to use for loading JMeter classes. */
-	private static URLClassLoader loader;
+	private static DynamicClassLoader loader;
 
 	/** The directory JMeter is installed in. */
 	private static String jmDir;
@@ -65,7 +64,8 @@ public final class NewDriver {
 
 		StringBuffer classpath = new StringBuffer();
 		File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),
-				new File(jmDir + File.separator + "lib" + File.separator + "ext") };
+				new File(jmDir + File.separator + "lib" + File.separator + "ext"),
+                new File(jmDir + File.separator + "lib" + File.separator + "junit")};
 		for (int a = 0; a < libDirs.length; a++) {
 			File[] libJars = libDirs[a].listFiles(new FilenameFilter() {
 				public boolean accept(File dir, String name) {
@@ -99,8 +99,7 @@ public final class NewDriver {
 		}
 
 		System.setProperty("java.class.path", System.getProperty("java.class.path") + classpath.toString());
-		loader = new URLClassLoader((URL[]) jars.toArray(new URL[0]));
-
+		loader = new DynamicClassLoader((URL[]) jars.toArray(new URL[0]));
 	}
 
 	/**
@@ -109,6 +108,19 @@ public final class NewDriver {
 	private NewDriver() {
 	}
 
+    public static void addURL(String url) {
+        File furl = new File(url);
+        try {
+            loader.addURL(furl.toURL());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void addURL(URL url) {
+        loader.addURL(url);
+    }
+    
 	/**
 	 * Get the directory where JMeter is installed. This is the absolute path
 	 * name.

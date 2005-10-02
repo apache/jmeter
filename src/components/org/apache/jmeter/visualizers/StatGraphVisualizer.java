@@ -1,0 +1,360 @@
+// $Header$
+/*
+ * Copyright 2002-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *  
+ */
+
+package org.apache.jmeter.visualizers;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
+import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.SaveGraphics;
+import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.OldSaveService;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.JLabeledChoice;
+import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.Functor;
+import org.apache.log.Logger;
+
+/**
+ * Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
+ * who've done the other visualizers ahead of me (Stefano Mazzocchi), who I
+ * borrowed code from to start me off (and much code may still exist). Thank
+ * you!
+ * 
+ * @version $Revision$ on $Date$
+ */
+public class StatGraphVisualizer extends AbstractVisualizer implements Clearable,
+ActionListener {
+    transient private static Logger log = LoggingManager.getLoggerForClass();
+	private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
+			JMeterUtils.getResString("aggregate_report_count"), JMeterUtils.getResString("average"),
+			JMeterUtils.getResString("aggregate_report_median"), JMeterUtils.getResString("aggregate_report_90%_line"),
+			JMeterUtils.getResString("aggregate_report_min"), JMeterUtils.getResString("aggregate_report_max"),
+			JMeterUtils.getResString("aggregate_report_error%"), JMeterUtils.getResString("aggregate_report_rate"),
+			JMeterUtils.getResString("aggregate_report_bandwidth") };
+    
+    private final String[] GRAPH_COLUMNS = {JMeterUtils.getResString("average"),
+            JMeterUtils.getResString("aggregate_report_median"),
+            JMeterUtils.getResString("aggregate_report_90%_line"),
+            JMeterUtils.getResString("aggregate_report_min"),
+            JMeterUtils.getResString("aggregate_report_max")};
+
+	private final String TOTAL_ROW_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
+
+	protected JTable myJTable;
+
+	protected JScrollPane myScrollPane;
+
+	transient private ObjectTableModel model;
+
+	Map tableRows = Collections.synchronizedMap(new HashMap());
+    
+    protected AxisGraph graphPanel = null;
+    
+    protected VerticalPanel graph = null;
+    
+    protected JScrollPane graphScroll = null;
+    
+    protected JSplitPane spane = null;
+    
+    protected JLabeledChoice columns = 
+        new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);
+    
+    protected double[][] data = null;
+    
+    protected JButton displayButton = 
+        new JButton(JMeterUtils.getResString("aggregate_graph_display"));
+    
+    protected JButton saveGraph = 
+        new JButton(JMeterUtils.getResString("aggregate_graph_save"));
+    
+    protected JButton saveTable = 
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));
+    
+    JLabeledTextField graphTitle = 
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));
+    JLabeledTextField graphWidth = 
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));
+    JLabeledTextField graphHeight = 
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));
+    
+    protected String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");
+    
+    protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");
+    
+    protected boolean saveGraphToFile = false;
+    
+    protected int defaultWidth = 400;
+    
+    protected int defaultHeight = 300;
+
+	public StatGraphVisualizer() {
+		super();
+		model = new ObjectTableModel(COLUMNS, new Functor[] { new Functor("getLabel"), new Functor("getCount"),
+				new Functor("getMeanAsNumber"), new Functor("getMedian"),
+				new Functor("getPercentPoint", new Object[] { new Float(.900) }), new Functor("getMin"),
+				new Functor("getMax"), new Functor("getErrorPercentageString"), new Functor("getRateString"),
+				new Functor("getPageSizeString") }, new Functor[] { null, null, null, null, null, null, null, null,
+				null, null }, new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
+				Long.class, String.class, String.class, String.class });
+		clear();
+		init();
+	}
+
+	public String getLabelResource() {
+		return "aggregate_graph_title";
+	}
+
+	public void add(SampleResult res) {
+		SamplingStatCalculator row = null;
+		synchronized (tableRows) {
+			row = (SamplingStatCalculator) tableRows.get(res.getSampleLabel());
+			if (row == null) {
+				row = new SamplingStatCalculator(res.getSampleLabel());
+				tableRows.put(row.getLabel(), row);
+				model.insertRow(row, model.getRowCount() - 1);
+			}
+		}
+		row.addSample(res);
+		((SamplingStatCalculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
+		model.fireTableDataChanged();
+	}
+
+	/**
+	 * Clears this visualizer and its model, and forces a repaint of the table.
+	 */
+	public void clear() {
+		model.clearData();
+		tableRows.clear();
+		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
+		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
+	}
+
+	// overrides AbstractVisualizer
+	// forces GUI update after sample file has been read
+	public TestElement createTestElement() {
+		TestElement t = super.createTestElement();
+
+		// sleepTill = 0;
+		return t;
+	}
+
+	/**
+	 * Main visualizer setup.
+	 */
+	private void init() {
+		this.setLayout(new BorderLayout());
+
+		// MAIN PANEL
+		JPanel mainPanel = new JPanel();
+		Border margin = new EmptyBorder(10, 10, 5, 10);
+        Border margin2 = new EmptyBorder(10, 10, 5, 10);
+        
+		mainPanel.setBorder(margin);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		mainPanel.add(makeTitlePanel());
+
+		myJTable = new JTable(model);
+		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
+		myScrollPane = new JScrollPane(myJTable);
+        
+        graph = new VerticalPanel();
+        graph.setBorder(margin2);
+
+
+        JLabel graphLabel = new JLabel(JMeterUtils.getResString("aggregate_graph"));
+        graphPanel = new AxisGraph();
+        graphPanel.setPreferredSize(new Dimension(defaultWidth,defaultHeight));
+
+        // horizontal panel for the buttons
+        HorizontalPanel buttonpanel = new HorizontalPanel();
+        buttonpanel.add(columns);
+        buttonpanel.add(displayButton);
+        buttonpanel.add(saveGraph);
+        buttonpanel.add(saveTable);
+        
+        graph.add(graphLabel);
+        graph.add(graphTitle);
+        graph.add(graphWidth);
+        graph.add(graphHeight);
+        graph.add(buttonpanel);
+        graph.add(graphPanel);
+
+        displayButton.addActionListener(this);
+        saveGraph.addActionListener(this);
+        saveTable.addActionListener(this);
+        graphScroll = new JScrollPane(graph);
+        graphScroll.setAutoscrolls(true);
+
+        spane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        spane.setLeftComponent(myScrollPane);
+        spane.setRightComponent(graphScroll);
+        spane.setResizeWeight(.2);
+        spane.setContinuousLayout(true);
+
+        this.add(mainPanel, BorderLayout.NORTH);
+        this.add(spane,BorderLayout.CENTER);
+	}
+    
+    public void makeGraph() {
+        String wstr = graphWidth.getText();
+        String hstr = graphHeight.getText();
+        if (wstr.length() == 0) {
+            wstr = "450";
+        }
+        if (hstr.length() == 0) {
+            hstr = "250";
+        }
+        int width = Integer.parseInt(wstr);
+        int height = Integer.parseInt(hstr);
+
+        graphPanel.setData(this.getData());
+        graphPanel.setHeight(height);
+        graphPanel.setWidth(width);
+        graphPanel.setTitle(graphTitle.getText());
+        graphPanel.setXAxisLabels(getAxisLabels());
+        graphPanel.setXAxisTitle(columns.getText());
+        graphPanel.setYAxisLabels(this.yAxisLabel);
+        graphPanel.setYAxisTitle(this.yAxisTitle);
+
+        graphPanel.setPreferredSize(new Dimension(width,height));
+        graph.resize(new Dimension(graph.getWidth(), height + 120));
+        spane.repaint();
+    }
+    
+    public double[][] getData() {
+        if (model.getRowCount() > 1) {
+            int count = model.getRowCount() -1;
+            int col = model.findColumn(columns.getText());
+            double[][] data = new double[1][count];
+            for (int idx=0; idx < count; idx++) {
+                data[0][idx] = ((Number)model.getValueAt(idx,col)).doubleValue();
+            }
+            return data;
+        } else {
+            return new double[][]{ { 250, 45, 36, 66, 145, 80, 55  } };
+        }
+    }
+    
+    public String[] getAxisLabels() {
+        if (model.getRowCount() > 1) {
+            int count = model.getRowCount() -1;
+            String[] labels = new String[count];
+            for (int idx=0; idx < count; idx++) {
+                labels[idx] = (String)model.getValueAt(idx,0);
+            }
+            return labels;
+        } else {
+            return new String[]{ "/", "/samples", "/jsp-samples", "/manager", "/manager/status", "/hello", "/world" };
+        }
+    }
+    
+    /**
+     * We use this method to get the data, since we are using
+     * ObjectTableModel, so the calling getDataVector doesn't 
+     * work as expected.
+     * @return
+     */
+    public Vector getAllTableData() {
+        Vector data = new Vector();
+        if (model.getRowCount() > 0) {
+            for (int rw=0; rw < model.getRowCount(); rw++) {
+                int cols = model.getColumnCount();
+                Vector column = new Vector();
+                data.add(column);
+                for (int idx=0; idx < cols; idx++) {
+                    Object val = model.getValueAt(rw,idx);
+                    column.add(val);
+                }
+            }
+        }
+        return data;
+    }
+    
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource() == displayButton) {
+            makeGraph();
+        } else if (event.getSource() == saveGraph) {
+            saveGraphToFile = true;
+            try {
+                ActionRouter.getInstance().getAction(
+                        SaveGraphics.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
+                                new ActionEvent(this,1,SaveGraphics.SAVE_GRAPHICS));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (event.getSource() == saveTable) {
+            JFileChooser chooser = FileDialoger.promptToSaveFile(
+                    "statistics.csv");
+            File output = chooser.getSelectedFile();
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(output);
+                Vector data = this.getAllTableData();
+                OldSaveService.saveCSVStats(data,writer);
+                writer.close();
+            } catch (FileNotFoundException e) {
+                log.warn(e.getMessage());
+            } catch (IOException e) {
+                log.warn(e.getMessage());
+            }
+        }
+    }
+    
+    public JComponent getPrintableComponent() {
+        if (saveGraphToFile == true) {
+            saveGraphToFile = false;
+            graphPanel.setBounds(graphPanel.getLocation().x,graphPanel.getLocation().y,
+                    graphPanel.width,graphPanel.height);
+            return graphPanel;
+        } else {
+            return this;
+        }
+    }
+}

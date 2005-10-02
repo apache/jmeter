@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
+import org.apache.jmeter.testelement.TestElement;
+
 /**
  * Description:<br>
  * <br>
@@ -82,7 +84,7 @@ public interface Filter {
 	 * @param path
 	 * @return boolean
 	 */
-	public boolean isFiltered(String path);
+	public boolean isFiltered(String path,TestElement sampler);
 
 	/**
 	 * In case the user wants to replace the file extension, log parsers should

@@ -29,7 +29,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.SamplingStatCalculator;
+import org.apache.jmeter.visualizers.RunningSample;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -124,9 +124,9 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		private long last = 0;// set to -1 by TestEnded to prevent double
 								// reporting
 
-		private SamplingStatCalculator delta = new SamplingStatCalculator("DELTA");
+		private RunningSample delta = new RunningSample("DELTA",0);
 
-		private SamplingStatCalculator total = new SamplingStatCalculator("TOTAL");
+		private RunningSample total = new RunningSample("TOTAL",0);
 
 		private void clear() {
 			delta.clear();
@@ -138,14 +138,15 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		 * Add the delta values to the total values and clear the delta
 		 */
 		private synchronized void moveDelta() {
-			total.addSamples(delta);
+			total.addSample(delta);
 			delta.clear();
 		}
 	}
 
 	/**
-	 * Cached copy of Totals for this instance These do not need to be
-	 * synchronised, as they are not shared between threads
+	 * Cached copy of Totals for this instance.
+     * These do not need to be synchronised,
+     * as they are not shared between threads
 	 */
 	transient private Totals myTotals = null;
 
@@ -182,8 +183,8 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 
 		long now = System.currentTimeMillis() / 1000;// in seconds
 
-		SamplingStatCalculator myDelta = null;
-		SamplingStatCalculator myTotal = null;
+		RunningSample myDelta = null;
+		RunningSample myTotal = null;
 		boolean reportNow = false;
 
 		/*
@@ -194,14 +195,14 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		synchronized (myTotals) {
 			if ((now > myTotals.last + INTERVAL_WINDOW) && (now % INTERVAL <= INTERVAL_WINDOW)) {
 				reportNow = true;
-				myDelta = new SamplingStatCalculator(myTotals.delta);// copy
+				myDelta = new RunningSample(myTotals.delta);// copy
 																		// the
 																		// data
 																		// to
 																		// minimise
 																		// ...
 				myTotals.moveDelta();
-				myTotal = new SamplingStatCalculator(myTotals.total);// ...
+				myTotal = new RunningSample(myTotals.total);// ...
 																		// the
 																		// synch
 																		// time
@@ -216,8 +217,8 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 			if (TOOUT)
 				System.out.println(str);
 
-			if (myTotal.getCount() != myDelta.getCount()) {// Only if we have
-															// updated them
+			// Only if we have updated them
+			if (myTotal.getNumSamples() != myDelta.getNumSamples()) {
 				str = format(myTotal, "=");
 				if (TOLOG)
 					log.info(str);
@@ -248,14 +249,14 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 * @param string
 	 * @return
 	 */
-	private String format(SamplingStatCalculator s, String type) {
+	private String format(RunningSample s, String type) {
 		StringBuffer tmp = new StringBuffer(20); // for intermediate use
 		StringBuffer sb = new StringBuffer(100); // output line buffer
 		sb.append(myName);
 		sb.append(" ");
 		sb.append(type);
 		sb.append(" ");
-		sb.append(longToSb(tmp, s.getCount(), 5));
+		sb.append(longToSb(tmp, s.getNumSamples(), 5));
 		sb.append(" in ");
 		long elapsed = s.getElapsed();
 		sb.append(doubleToSb(tmp, elapsed / 1000.0, 5, 1));
@@ -266,11 +267,11 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 			sb.append("******");// Rate is effectively infinite
 		}
 		sb.append("/s Avg: ");
-		sb.append(longToSb(tmp, (long) s.getMean(), 5));
+		sb.append(longToSb(tmp, s.getAverage(), 5));
 		sb.append(" Min: ");
-		sb.append(longToSb(tmp, s.getMin().longValue(), 5));
+		sb.append(longToSb(tmp, s.getMin(), 5));
 		sb.append(" Max: ");
-		sb.append(longToSb(tmp, s.getMax().longValue(), 5));
+		sb.append(longToSb(tmp, s.getMax(), 5));
 		sb.append(" Err: ");
 		sb.append(longToSb(tmp, s.getErrorCount(), 5));
 		sb.append(" (");
@@ -339,7 +340,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 			Totals t = (Totals) accumulators.get(myName);
 			if (t.last != -1) {
 				String str;
-				if (t.total.getCount() != 0) {// Only print delta if different
+				if (t.total.getNumSamples() != 0) {// Only print delta if different
 												// from total
 					str = format(t.delta, "+");
 					if (TOLOG)

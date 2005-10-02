@@ -213,6 +213,12 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 	For example when testing a banking application, 100s or 1000s of different account numbers might be required.
 	</p>
 	<p>
+	See also the 
+	<a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config test element</a> 
+	which may be easier to use. However, that does not currently support multiple input files.
+	</p>
+
+	<p>
 	Each time it is called it reads the next line from the file.
 	When the end of the file is reached, it will start reading again from the beginning,
 	unless the maximum loop count has been reached.
@@ -246,21 +252,22 @@ A reference name - refName - for reusing the value created by this function. Sto
 	<p>
 <code>
 # - insert the number, with no leading zeros or spaces<br/>
-000 - insert the number packed out to 3 digits with leading zeros if necessary<br/>
+000 - insert the number packed out to 3 digits with leading zeros if necessary
 <p/>
 Examples:<br/>
- pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
- pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
- pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999<br/>
- N.B: pin.dat# -> pin1.0dat, ... pin9.0dat ... pin999.0dat<br/>
+ pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
+ pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
+ pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999
 </code><p/>
 	If more digits are required than there are formatting characters, the number will be
 	expanded as necessary.<br/>
-	To prevent a formatting character from being interpreted,
-	enclose it in single quotes. Note that the decimal point is a formatting character,
-	and must be enclosed in single quotes (though it works as expected for #. and 000.)
-	N.B. the decimal point varies between locales, but in the UK and US, at least, it is
-	the same character as is used to separate parts of file names.<br/>
+	<b>To prevent a formatting character from being interpreted,
+	enclose it in single quotes. Note that "." is a formatting character,
+	and must be enclosed in single quotes</b>
+	(though #. and 000. work as expected in locales where the decimal point is also ".")
+	<br/>
+	In other locales (e.g. fr), the decimal point is "," - which means that "#."
+	becomes "nnn,".<br/>
 	See the documentation for DecimalFormat for full details.<br/>
 	If the path name does not contain any special formatting characters,
 	the current sequence number will be appended to the name, otherwise
@@ -269,10 +276,12 @@ Examples:<br/>
 	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
 	In this case the filename is not formatted.
 	<code>
-	
-	${_StringFromFile(PIN#.DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT
-	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice
+	<br/>
+	${_StringFromFile(PIN#'.'DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT<br/>
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice<br/>
 	</code>
+	Note that the "." in PIN.DAT above should <u>not</u> be quoted.
+	In this case the start number is omitted, so the file name is used exactly as is.
 	</p>
 </component>
 
@@ -297,11 +306,13 @@ Examples:<br/>
         			- a random number between 0 and the variable maxRandom</li>
         		<li>${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1))
         			- a random number between the variables minRandom and maxRandom</li>
+        		<li>"${VAR}"=="abcd"</li>
         	</ul>
         	</property>
-        <property name="Name of function" required="Yes">A reference name for reusing the value
+        <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
 </component>
 
 <component index="19.5.8" name="__Random">
@@ -320,6 +331,9 @@ Examples:<br/>
 	<p>NOTE: versions up to 1.9.1 only supported a single file. 
 		JMeter versions since 1.9.1 support multiple file names.
 	</p>
+	<p><b>In most cases, the newer 
+	<a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
+	 is easier to use.</b></p>
 	<p>
 	When a filename is first encountered, the file is opened and read into an internal
 	array. If a blank line is detected, this is treated as end of file - this allows
@@ -450,6 +464,11 @@ the second would return 1 and the last would return www.dummy.org
 	The BeanShell function evaluates the script passed to it, and returns the result.
 </p>
 <p>
+<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+<br/>
+For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
 Note that a different Interpreter is used for each independent occurence of the function
 in a test script, but the same Interpreter is used for subsequent invocations.
 This means that variables persist across calls to the function.
@@ -491,6 +510,7 @@ ${__BeanShell(123*456)} - returns 56088
 ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 </pre>
 </p>
+<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
 </component>
 
 <component index="19.5.14" name="__split">

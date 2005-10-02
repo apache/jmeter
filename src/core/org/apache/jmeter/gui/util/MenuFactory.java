@@ -81,7 +81,7 @@ public final class MenuFactory {
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
 	private static final String[] MENU_ADD_CONTROLLER = new String[] { MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-			MenuFactory.CONFIG_ELEMENTS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
+			MenuFactory.ASSERTIONS, MenuFactory.CONFIG_ELEMENTS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
 			MenuFactory.POST_PROCESSORS };
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { MenuFactory.CONTROLLERS };
@@ -146,7 +146,8 @@ public final class MenuFactory {
 	public static void addFileMenu(JPopupMenu menu) {
 		addSeparator(menu);
 		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
-		menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
+        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"), "Merge", "merge"));
+        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
 		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics",
 				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
 		menu.add(savePicture);

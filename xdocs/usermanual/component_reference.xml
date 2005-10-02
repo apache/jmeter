@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- 
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,9 @@ JMeter assumes the FTP server is listening on the default port.</property>
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
+        <p>There are two versions of the sampler
+         - one uses the default Java HTTP implementation, the other uses Commons HttpClient</p>
+         
         <p>If the request requires a login authorization, you will also have to add an
         <complink name="HTTP Authorization Manager"/>
         Configuration Element. And, if the request uses cookies, then you will also need an
@@ -469,7 +472,7 @@ XML.</p>
 
 </component>
 
-<component name="Access Log Sampler" index="&sect-num;.1.8" screenshot="">
+<component name="Access Log Sampler" index="&sect-num;.1.8" screenshot="accesslogsampler.png">
 <center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
@@ -522,7 +525,7 @@ StandardGenerator and TCLogParser.
 
 </component>
 
-<component name="BeanShell Sampler" index="&sect-num;.1.9" screenshot="">
+<component name="BeanShell Sampler" index="&sect-num;.1.9" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
@@ -589,7 +592,7 @@ return "Data from sample with Label "+Label;
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.10" screenshot="">
+<component name="BSF Sampler" index="&sect-num;.1.10" screenshot="bsfsampler.png">
 <note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
@@ -608,14 +611,21 @@ return "Data from sample with Label "+Label;
 TBC
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.11" screenshot="">
+<component name="TCP Sampler" index="&sect-num;.1.11" screenshot="tcpsampler.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
 		The TCP Sampler opens a TCP/IP connection to the specified server.
 		It then sends the text, and waits for a response.
-		Once established, the same connection is re-used by the Sampler that created it.
-		Connections are not shared between Samplers, even in the same thread.
+		<br></br>
+		Connections are shared between Samplers in the same thread, provided that the exact
+		same host name string and port are used.
+		To force a different socket to be used, change the hostname by changing the case
+		of one of the letters, e.g. www.apache.org and wWw.apache.org will use different
+		sockets.
+		<br></br>
+		If an error is detected, the socket is closed. 
+		Another socket will be reopened on the next sample.
 		<br></br>
 		The following properties can be used to control its operation:
 		</p>
@@ -661,7 +671,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.12" screenshot="">
+<component name="JMS Publisher" index="&sect-num;.1.12" screenshot="jmspublisher.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -670,6 +680,7 @@ TBC
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -686,7 +697,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.13" screenshot="">
+<component name="JMS Subscriber" index="&sect-num;.1.13" screenshot="jmssubscriber.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -695,6 +706,7 @@ TBC
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -719,6 +731,7 @@ TBC
         It is different from pub/sub messages and is generally used for handling transactions.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -766,10 +779,74 @@ TBC
 </component>
 
 <component name="Test Action" index="&sect-num;.1.15" screenshot="test_action.png">
-<description>TBA
+<description>
+The Test Action sampler is a sampler that is intended for use in a conditional controller.
+Rather than generate a sample, the test element pauses or stops the selected target.
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Target" required="Yes">Current Thread / All Threads</property>
+  <property name="Action" required="Yes">Pause / Stop</property>
+  <property name="Duration" required="Yes">How long to pause for (milliseconds)</property>
+</properties>
+</component>
+
+<component name="JUnit Sampler" index="&sect-num;.1.16" screenshot="junit_sampler.png">
+<description>
+The current implementation supports standard Junit convention and extensions. It also
+includes extensions like oneTimeSetUp and oneTimeTea Down. The sampler works like the
+JavaSampler with some differences.
+1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
+2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
+3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
+4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
+5. Each time the test method is called, Jmeter will pass the result to the listeners.
+6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
+7. The sampler reports unexpected exceptions as errors.
+There are some important differences between standard JUnit test runners and JMeter's
+implementation. Rather than make a new instance of the class for each test, JMeter
+creates 1 instance per sampler and reuses it.&lt;br>
+The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:&lt;br>
+&lt;br>
+Empty Constructor:&lt;br>
+public class myTestCase {&lt;br>
+  public myTestCase() {}&lt;br>
+}&lt;br>
+&lt;br>
+String Constructor:&lt;br>
+public class myTestCase {&lt;br>
+  public myTestCase(String text) {&lt;br>
+    super(text);&lt;br>
+  }&lt;br>
+}&lt;br>
+By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.&lt;br>
+General Guidelines&lt;br>
+&lt;br>
+Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.&lt;br>
+&lt;br>
+1. Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.&lt;br>
+2. Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a descrete operation, it makes it easier to combine test methods to create new test plans.&lt;br>
+3. Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.&lt;br>
+4. If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.&lt;br>
+5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Package filter" required="">Comma separated list of packages to show. Example, org.apache.jmeter,junit.framework.</property>
+  <property name="Class name" required="">Fully qualified name of the JUnit test class.</property>
+  <property name="Constructor string" required="">String pass to the string constructor. If a string is set, the sampler will use the
+   string constructor instead of the empty constructor.</property>
+  <property name="Test method" required="">The method to test.</property>
+  <property name="Success message" required="">A descriptive message indicating what success means.</property>
+  <property name="Success code" required="">An unique code indicating the test was successful.</property>
+  <property name="Failure message" required="">A descriptive message indicating what failure means.</property>
+  <property name="Failure code" required="">An unique code indicating the test failed.</property>
+  <property name="Error message" required="">A description for errors.</property>
+  <property name="Error code" required="">Some code for errors. Does not need to be unique.</property>
+  <property name="Do not call setUp and tearDown" required="">Set the sampler not to call setUp and tearDown.
+   By default, setUp and tearDown should be called. Not calling those methods could affect the test and make it inaccurate.
+    This option should only be used with calling oneTimeSetUp and oneTimeTearDown. If the selected method is oneTimeSetUp or oneTimeTearDown,
+     this option should be checked.</property>
 </properties>
 </component>
 
@@ -1005,7 +1082,7 @@ setting is reset when a parent Loop Controller restarts.
 </properties>
 
 </component>
-<component name="If Controller" index="&sect-num;.2.9" screenshot="">
+<component name="If Controller" index="&sect-num;.2.9" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
 	</description>
@@ -1022,7 +1099,7 @@ setting is reset when a parent Loop Controller restarts.
 	</p>
 </component>
 
-<component name="Random Order Controller" index="&sect-num;.2.10" screenshot="">
+<component name="Random Order Controller" index="&sect-num;.2.10" screenshot="randomordercontroller.png">
 	<description>
 		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
 		 element at most once, but the order of execution of the nodes will be random.</p>
@@ -1104,7 +1181,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </example>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.12" screenshot="">
+<component name="Transaction Controller" index="&sect-num;.2.12" screenshot="transactioncontroller.png">
 	<description>
 		<p>The Transaction Controller times how long it takes for all its children to run.
 			It then adds a "sample" entry to the test output with the total elapsed time.
@@ -1116,7 +1193,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </properties>
 </component>
 
-<component name="Runtime Controller" index="&sect-num;.2.12" screenshot="">
+<component name="Runtime Controller" index="&sect-num;.2.12" screenshot="runtimecontroller.png">
 	<description>
 		<p>The Runtime Controller controls how long its children are allowed to run.
 		</p>
@@ -1126,7 +1203,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
 </properties>
 </component>
-<component name="While Controller" index="15.2.13" screenshot="">
+<component name="While Controller" index="15.2.13" screenshot="whilecontroller.png">
 	<description>
 <p>
 The While Controller runs its children until the condition is "false".
@@ -1158,7 +1235,7 @@ For example:
 </properties>
 </component>
 
-<component name="Switch Controller" index="&sect-num;.2.14" screenshot="">
+<component name="Switch Controller" index="&sect-num;.2.14" screenshot="switchcontroller.png">
 	<description>
 <p>
 The Switch Controller acts like the <complink name="Interleave Controller"/> 
@@ -1171,6 +1248,19 @@ which therefore acts as the default.</p>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
 	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
+</properties>
+</component>
+
+<component name="Include Controller" index="&sect-num;.2.15" screenshot="includecontroller.png">
+	<description>
+<p>
+The include controller is designed to use an external jmx file. To use it, add
+samples to a simple controller, then save the simple controller as a jmx file.
+The file can then be used in a test plan.
+</p>
+</description>
+<properties>
+	<property name="Filename" required="Yes">The file to include.</property>
 </properties>
 </component>
 
@@ -1294,7 +1384,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.3.2" name="Graph Full Results" screenshot="">
+<component index="&sect-num;.3.2" name="Graph Full Results" screenshot="graphfullresults.png">
 <description>No Description</description>
 </component>
 
@@ -1370,7 +1460,7 @@ this visualizer uses a lot of memory. The last column shows the number of bytes 
 response from the server.</description>
 </component>
 
-<component index="&sect-num;.3.9" name="Simple Data Writer" screenshot="">
+<component index="&sect-num;.3.9" name="Simple Data Writer" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.</description>
@@ -1417,6 +1507,12 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
+<component index="&sect-num;.3.12" name="Aggregate Graph" screenshot="aggregate_graph.png">
+<description>The aggregate graph is similar to the aggregate report. The primary
+difference is the aggregate graph provides an easy way to generate bar graphs and save
+the graph as a PNG file. By default, the aggregate graph will generate a bar chart
+450 x 250 pixels.</description>
+</component>
 
 </section>
 
@@ -1798,10 +1894,12 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="">
+<component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="tcpsamplerconfig.png">
 	<note>ALPHA CODE</note>
 <description>
+        <p>
 	The TCP Sampler Config provides default data for the TCP Sampler
+	</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1813,11 +1911,14 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="">
+<component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="csvdatasetconfig.png">
 <description>
+        <p>
 	CSV DataSet Config is used to read lines from a file, and split them into variables.
+	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	</p>
 	<p>
-	As a special case, the string "\\t" (without quotes) is treated as a Tab.
+	As a special case, the string "\t" (without quotes) is treated as a Tab.
 	</p>
 </description>
 <properties>
@@ -1854,7 +1955,12 @@ The variables in User Defined Variables components will take precedence over tho
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
-	The pattern strings are Perl5-style regular expressions. You can also choose whether the strings will be expected
+	The pattern strings are Perl5-style regular expressions. 
+	</p>
+	<p>
+	A summary of the pattern matching characters can be found at <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html</a>
+	</p>
+	<p>You can also choose whether the strings will be expected
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
 <p>Note that the pattern string should not include the enclosing delimiters, 
@@ -2309,7 +2415,9 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
-with the start, continuing on like that until the test is ended.  </p></description>
+with the start, continuing on like that until the test is ended.  </p>
+<p>The counter uses an int to store the value, so the range is from -2^^31 to 2^^31-1, i.e. -2147483648 to 2147483647.</p>
+</description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
@@ -2399,7 +2507,7 @@ Generates a summary of the test run so far to the log file and/or
 standard output. Both running and differential totals are shown.
 Output is generated every n seconds (default 3 minutes) on the appropriate
 time boundary, so that multiple test runs on the same time will be
- synchronised.
+ synchronised.The interval is defined by the property "summariser.interval" - see jmeter.properties.
 
 This is mainly intended for batch (non-GUI) runs.
 	</description>
@@ -2415,7 +2523,9 @@ This is mainly intended for batch (non-GUI) runs.
 		<br></br>
 </description>
 <component index="&sect-num;.9.1" name="Test Plan" screenshot="testplan.png">
-<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
+<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
+<p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
+<p>In jmeter.properties, edit "user.classpath" to include additional libraries. Note that paths with spaces may cause problems for Java.</p></description>
 </component>
 
 <component index="&sect-num;.9.2" name="Thread Group" screenshot="threadgroup.png">
