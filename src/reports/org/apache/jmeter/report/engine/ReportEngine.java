@@ -1,4 +1,4 @@
-// $Header:
+//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -15,18 +15,24 @@
  * limitations under the License.
  * 
  */
-package org.apache.jmeter.testelement;
+package org.apache.jmeter.report.engine;
 
-import javax.swing.JComponent;
+import org.apache.jmeter.engine.JMeterEngineException;
+import org.apache.jorphan.collections.HashTree;
 
-public class LineGraph extends AbstractChart {
+/**
+ * @author peter lin
+ *
+ * ReportEngine is the base interface for report engines
+ */
+public interface ReportEngine {
+    void configure(HashTree testPlan);
 
-	public LineGraph() {
-		super();
-	}
+    void runReport() throws JMeterEngineException;
 
-	public JComponent renderChart(TestElement element) {
-		return null;
-	}
+    void stopReport();
 
+    void reset();
+
+    void exit();
 }
