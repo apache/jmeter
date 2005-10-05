@@ -27,8 +27,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.tree.TreeNode;
 
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.tree.NamedTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -48,7 +49,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	private JLabel nameLabel;
 
 	/** The node which this component is providing the name for. */
-	private JMeterTreeNode node;
+	private TreeNode node;
 
 	/**
 	 * Create a new NamePanel with the default name.
@@ -118,7 +119,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	 * 
 	 * @return the tree node corresponding to this component
 	 */
-	protected JMeterTreeNode getNode() {
+	protected TreeNode getNode() {
 		return node;
 	}
 
@@ -128,7 +129,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	 * @param node
 	 *            the tree node corresponding to this component
 	 */
-	public void setNode(JMeterTreeNode node) {
+	public void setNode(TreeNode node) {
 		this.node = node;
 	}
 
@@ -184,7 +185,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	 */
 	private void updateName(String newValue) {
 		if (getNode() != null) {
-			getNode().nameChanged();
+            ((NamedTreeNode)getNode()).nameChanged();
 		}
 	}
 
