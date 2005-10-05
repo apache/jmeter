@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.config.gui;
 
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -69,6 +70,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	/** A button for removing arguments from the table. */
 	private JButton delete;
 
+    /**
+     * Added background support for reporting tool
+     */
+    private Color background;
+    
 	/**
 	 * Boolean indicating whether this component is a standalong component or it
 	 * is intended to be used as a subpanel for another component.
@@ -110,6 +116,19 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 		init();
 	}
 
+    /**
+     * Create a new ArgumentsPanel with a border and color background
+     * @param label
+     * @param borderHeight
+     * @param borderWidth
+     */
+    public ArgumentsPanel(String label, Color bkg) {
+        tableLabel = new JLabel(label);
+        this.background = bkg;
+        standalone = false;
+        init();
+    }
+    
 	/**
 	 * This is the list of menu categories this gui component will be available
 	 * under.
@@ -348,6 +367,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 		initializeTableModel();
 		table = new JTable(tableModel);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if (this.background != null) {
+            table.setBackground(this.background);
+        }
 		return makeScrollPane(table);
 	}
 
@@ -359,6 +381,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	protected Component makeLabelPanel() {
 		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		labelPanel.add(tableLabel);
+        if (this.background != null) {
+            labelPanel.setBackground(this.background);
+        }
 		return labelPanel;
 	}
 
@@ -379,6 +404,9 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        if (this.background != null) {
+            buttonPanel.setBackground(this.background);
+        }
 		add.addActionListener(this);
 		delete.addActionListener(this);
 		buttonPanel.add(add);
