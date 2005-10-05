@@ -24,6 +24,7 @@
  */
 package org.apache.jmeter.gui.util;
 
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Component;
 
@@ -46,6 +47,12 @@ public class VerticalPanel extends JPanel {
 		this(5, LEFT_ALIGNMENT);
 	}
 
+    public VerticalPanel(Color bkg) {
+        this();
+        subPanel.setBackground(bkg);
+        this.setBackground(bkg);
+    }
+    
 	public VerticalPanel(int vgap, float horizontalAlign) {
 		super(new BorderLayout());
 		add(subPanel, BorderLayout.NORTH);
