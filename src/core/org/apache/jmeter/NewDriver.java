@@ -144,14 +144,26 @@ public final class NewDriver {
 			System.setProperty("log4j.configuration", "file:" + conf);
 		}
 
-		try {
-			Class JMeter = loader.loadClass("org.apache.jmeter.JMeter");
-			Object instance = JMeter.newInstance();
-			Method startup = JMeter.getMethod("start", new Class[] { (new String[0]).getClass() });
-			startup.invoke(instance, new Object[] { args });
+        if (args != null && args.length > 0 && args[0].equals("report")) {
+            try {
+                Class JMeterReport = loader.loadClass("org.apache.jmeter.JMeterReport");
+                Object instance = JMeterReport.newInstance();
+                Method startup = JMeterReport.getMethod("start", new Class[] { (new String[0]).getClass() });
+                startup.invoke(instance, new Object[] { args });
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Class JMeter = loader.loadClass("org.apache.jmeter.JMeter");
+                Object instance = JMeter.newInstance();
+                Method startup = JMeter.getMethod("start", new Class[] { (new String[0]).getClass() });
+                startup.invoke(instance, new Object[] { args });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 }
