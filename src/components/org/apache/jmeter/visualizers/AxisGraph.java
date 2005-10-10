@@ -1,8 +1,18 @@
 /*
- * Created on Sep 9, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Copyright 2005 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *  
  */
 package org.apache.jmeter.visualizers;
 
@@ -12,14 +22,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Paint;
-import java.awt.event.ActionEvent;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.SaveGraphics;
-import org.apache.jmeter.util.JMeterUtils;
 import org.jCharts.axisChart.AxisChart;
 import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.DataSeries;
@@ -30,10 +35,9 @@ import org.jCharts.properties.LegendProperties;
 import org.jCharts.types.ChartType;
 
 /**
- * @author pete
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Axis graph is used by StatGraphVisualizer, which generates bar graphs
+ * from the statistical data.
  */
 public class AxisGraph extends JPanel {
 
