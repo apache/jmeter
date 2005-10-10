@@ -1,4 +1,4 @@
-//$Header:
+//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
