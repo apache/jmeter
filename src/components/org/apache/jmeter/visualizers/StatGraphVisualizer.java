@@ -264,7 +264,7 @@ ActionListener {
         graphPanel.setYAxisTitle(this.yAxisTitle);
 
         graphPanel.setPreferredSize(new Dimension(width,height));
-        graph.resize(new Dimension(graph.getWidth(), height + 120));
+        graph.setSize(new Dimension(graph.getWidth(), height + 120));
         spane.repaint();
     }
     
