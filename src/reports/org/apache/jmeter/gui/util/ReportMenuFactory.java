@@ -49,8 +49,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @author Peter Lin
  * @version $Revision$ updated on $Date$
  */
 public final class ReportMenuFactory {

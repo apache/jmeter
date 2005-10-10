@@ -1,4 +1,4 @@
-//$Header:
+//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -33,7 +33,6 @@ import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.logging.LoggingManager;

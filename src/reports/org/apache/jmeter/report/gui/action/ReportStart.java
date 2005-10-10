@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ package org.apache.jmeter.report.gui.action;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.report.gui.action.AbstractAction;
