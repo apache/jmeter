@@ -1,6 +1,6 @@
 // $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,10 +63,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 
 /**
- * The main JMeter frame, containing the menu bar, test tree, and an area for
- * JMeter component GUIs.
+ * ReportMainFrame is based on MainFrame. it uses the same basic structure,
+ * but with changes for the report gui.
  * 
- * @author Michael Stover
+ * @author Peter Lin
  * @version $Revision$
  */
 public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
