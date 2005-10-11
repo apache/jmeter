@@ -15,7 +15,7 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
-set JAVA_HOME=c:/jdk1.5.0
+rem set JAVA_HOME=c:/jdk1.5.0
 
 if not "%OS%"=="Windows_NT" goto win9xStart
 :winNTStart
