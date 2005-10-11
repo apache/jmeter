@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry output="build/jorphan" kind="src" path="src/jorphan"/>
 	<classpathentry output="build/junit" kind="src" path="src/junit"/>
+	<classpathentry output="build/reports" kind="src" path="src/reports"/>
 	<classpathentry output="build/test" kind="src" path="test/src"/>
 	<classpathentry output="build/protocol/jms" kind="src" path="src/protocol/jms"/>
 	<classpathentry output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
