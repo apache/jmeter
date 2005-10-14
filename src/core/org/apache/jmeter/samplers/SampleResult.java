@@ -121,7 +121,7 @@ public class SampleResult implements Serializable {
 
 	private List subResults;
 
-	private String dataType;
+	private String dataType=""; // Don't return null if not set
 
 	private boolean success;
 
@@ -129,6 +129,7 @@ public class SampleResult implements Serializable {
 
 	private String dataEncoding;// (is this really the character set?) e.g.
 								// ISO-8895-1, UTF-8
+	// If null, then DEFAULT_ENCODING is returned by getDataEncoding()
 
 	private long time = 0;
 
