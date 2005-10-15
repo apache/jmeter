@@ -27,8 +27,6 @@ import java.util.Vector;
 import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
 
-import junit.framework.TestCase;
-
 /**
  * This class contains frequently-used static utility methods.
  * 
