@@ -17,7 +17,6 @@
  */
 package org.apache.jmeter.testelement;
 
-import org.apache.jmeter.report.gui.AbstractReportGui;
 
 /**
  * AbstractTable is the base Element for different kinds of report tables.

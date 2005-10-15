@@ -18,13 +18,11 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.awt.FlowLayout;
 import java.util.Collection;
 import java.util.Iterator;
 
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.IncludeController;

@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.ThreadListener;
 
 public class SharedTCLogParser extends TCLogParser implements TestCloneable {
 
