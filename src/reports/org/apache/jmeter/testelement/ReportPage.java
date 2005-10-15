@@ -18,9 +18,7 @@
 package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
-import org.apache.jmeter.report.gui.AbstractReportGui;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 

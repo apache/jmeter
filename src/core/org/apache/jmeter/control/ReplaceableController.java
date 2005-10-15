@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.control;
 
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 
 /**
