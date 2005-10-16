@@ -420,10 +420,21 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 		serializer.serialize(tempOut, OldSaveService.getConfiguration(result, getSaveConfig()));
 		String serVer = tempOut.toString();
-		int index = serVer.indexOf(System.getProperty("line.separator"));
-		if (index > -1) {
+        String lineSep=System.getProperty("line.separator");
+        /*
+         * Remove the <?xml ... ?> prefix.
+         * When using the x-jars (xakan etc) or Java 1.4, the serialised output has a 
+         * newline after the prefix. However, when using Java 1.5 without the x-jars, the output
+         * has no newline at all.
+         */
+		int index = serVer.indexOf(lineSep); // Is there a new-line?
+		if (index > -1) {// Yes, assume it follows the prefix
 			return serVer.substring(index);
-		} else {
+		} else { // no new-line; check for prefix and repace with new-line
+            if (serVer.startsWith("<?xml")){
+                index=serVer.indexOf("?>");// must exist
+                return lineSep + serVer.substring(index+2);// +2 for ?>
+            }
 			return serVer;
 		}
 	}
