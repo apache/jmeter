@@ -578,8 +578,9 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
 <component index="19.5.16" name="__setProperty">
 <description>
 	<p>The setProperty function sets the value of a JMeter property. 
-		The return value from the function is the empty string,
+		The default return value from the function is the empty string,
 		so the function call can be used anywhere functions are valid.</p>
+        <p>The original value can be returned by setting the optional 3rd parameter to "true".</p>
 	<p>Properties are global to JMeter,
 		so can be used to communicate between threads and thread groups</p>
 	</description>
@@ -587,6 +588,7 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
 <properties>
         <property name="Property Name" required="Yes">The property name to be set.</property>
         <property name="Property Value" required="Yes">The value for the property.</property>
+        <property name="Property Value" required="No">Should the original value be returned?</property>
 </properties>
 </component>
 
