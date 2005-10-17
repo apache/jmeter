@@ -27,6 +27,21 @@
 
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 
+<h3>Version 2.1.2</h3>
+<h4>New functionality:</h4>
+<ul>
+<li>Report function</li>
+</ul>
+
+<h4>Bug fixes:</h4>
+<ul>
+<li>Fix NPE when no module selected in Module Controller</li>
+<li>Fix NPE in XStream when no ResponseData present</li>
+<li>Remove ?xml prefix when running with Java 1.5 and no x-jars</li>
+<li>Bug 37117 - setProperty() function should return ""; added optional return of original setting</li>
+</ul>	
+	
+
 <h3>Version 2.1.1</h3>
 <h4>New functionality:</h4>
 <ul>
