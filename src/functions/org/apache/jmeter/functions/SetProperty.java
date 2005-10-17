@@ -51,10 +51,11 @@ public class SetProperty extends AbstractFunction implements Serializable {
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
 
-	private static final int MAX_PARAMETER_COUNT = 2;
+	private static final int MAX_PARAMETER_COUNT = 3;
 	static {
 		desc.add(JMeterUtils.getResString("property_name_param"));
 		desc.add(JMeterUtils.getResString("property_value_param"));
+		desc.add(JMeterUtils.getResString("property_returnvalue_param"));
 	}
 
 	private Object[] values;
@@ -71,11 +72,18 @@ public class SetProperty extends AbstractFunction implements Serializable {
 		String propertyName = ((CompoundVariable) values[0]).execute();
 
 		String propertyValue = ((CompoundVariable) values[1]).execute();
+		
+		boolean returnValue = false;// should we return original value?
+		if (values.length > 2) {
+			returnValue = ((CompoundVariable) values[2]).execute().equalsIgnoreCase("true");
+		}
 
-		JMeterUtils.setProperty(propertyName, propertyValue);
-
-		return propertyValue;
-
+		if (returnValue) { // Only obtain and cast the return if needed 
+			return (String) JMeterUtils.setProperty(propertyName, propertyValue);
+		} else {
+			JMeterUtils.setProperty(propertyName, propertyValue);
+			return "";
+		}
 	}
 
 	public void setParameters(Collection parameters) throws InvalidVariableException {
