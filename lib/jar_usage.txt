@@ -47,7 +47,7 @@ logkit-1.2
 - logging
 - Anakia
 
-soap
+soap (appears to be version 2.3.1)
 - WebServiceSampler ONLY
 
 Tidy
