@@ -18,7 +18,7 @@
 package org.apache.jmeter.report.writers;
 
 import java.io.File;
-import java.util.Date;
+import java.util.Calendar;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -69,6 +69,9 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
 		}
 	}
 	
+    /**
+     * if the target output directory already exists, archive it
+     */
 	public void archiveDirectory() {
 		File output = new File(getTargetDirectory());
 		if (output.exists() && output.isDirectory()) {
@@ -78,14 +81,15 @@ public abstract class AbstractReportWriter extends AbstractTestElement implement
 		}
 	}
 	
+    /**
+     * return the day in YYYYMMDD format
+     * @return
+     */
 	public String getDayString() {
-		Date today = new Date();
-		String year = String.valueOf(today.getYear());
-		String month = String.valueOf(today.getMonth() + 1);
-		String day = String.valueOf(today.getDate());
-		if (month.length() == 1) {
-			month = "0" + month;
-		}
+		Calendar today = Calendar.getInstance();
+        String year = String.valueOf(today.get(Calendar.YEAR));
+        String month = String.valueOf(today.get(Calendar.MONTH));
+        String day = String.valueOf(today.get(Calendar.DATE));
 		return year + month + day;
 	}
 }
