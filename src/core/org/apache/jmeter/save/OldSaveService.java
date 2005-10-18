@@ -443,12 +443,14 @@ public final class OldSaveService implements SaveServiceConstants {
 		SampleSaveConfiguration saveConfig = sample.getSaveConfig();
 
 		if (saveConfig.saveTimestamp()) {
-			text.append(sample.getTimeStamp());
-			text.append(delimiter);
-		} else if (saveConfig.formatter() != null) {
-			String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
-			text.append(stamp);
-			text.append(delimiter);
+			if (saveConfig.printMilliseconds()){
+				text.append(sample.getTimeStamp());
+				text.append(delimiter);
+			} else if (saveConfig.formatter() != null) {
+				String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
+				text.append(stamp);
+				text.append(delimiter);
+			}
 		}
 
 		if (saveConfig.saveTime()) {
