@@ -186,12 +186,16 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 * Add a cookie.
 	 */
 	public void add(Cookie c) {
-		if (log.isDebugEnabled())
-			log.debug("Add cookie " + c.toString());
 		String cv = c.getValue();
 		if (DELETE_NULL_COOKIES && (null == cv || "".equals(cv))) {
+            if (log.isDebugEnabled()) {
+                log.debug("Removing cookie with null value " + c.toString());
+            }
 			removeCookieNamed(c.getName());
 		} else {
+            if (log.isDebugEnabled()) {
+                log.debug("Add cookie " + c.toString());
+            }
 			JMeterContext context = getThreadContext();
 			getCookies().addItem(c);
 			if (context.isSamplingStarted()) {
@@ -256,18 +260,19 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 */
 	public String getCookieHeaderForURL(URL url) {
 		boolean debugEnabled = log.isDebugEnabled();
-		if (debugEnabled)
+		if (debugEnabled) {
 			log.debug("Get cookie for URL= " + url);
+        }
 		if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
 				&& !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
 			return null;
 
 		StringBuffer header = new StringBuffer();
 		String host = "." + url.getHost();
-		if (debugEnabled)
+		if (debugEnabled) {
 			log.debug("URL Host=" + host);
-		if (debugEnabled)
 			log.debug("Time now (secs)" + (System.currentTimeMillis() / 1000));
+        }
 		for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();) {
 			Cookie cookie = (Cookie) iter.next().getObjectValue();
 			// Add a leading dot to the host name so that host X matches
@@ -284,15 +289,17 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 				if (header.length() > 0) {
 					header.append("; ");
 				}
-				if (debugEnabled)
+				if (debugEnabled) {
 					log.debug("matched cookie, value = " + cookie.getValue());
+                }
 				header.append(cookie.getName()).append("=").append(cookie.getValue());
 			}
 		}
 
 		if (header.length() != 0) {
-			if (debugEnabled)
+			if (debugEnabled){
 				log.debug(header.toString());
+            }
 			return header.toString();
 		} else {
 			return null;
@@ -309,7 +316,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 *            URL used in the request for the above-mentioned response.
 	 */
 	public void addCookieFromHeader(String cookieHeader, URL url) {
-		if (log.isDebugEnabled()) {
+        boolean debugEnabled = log.isDebugEnabled(); 
+		if (debugEnabled) {
 			log.debug("addCookieFromHeader(" + cookieHeader + "," + url.toExternalForm() + ")");
 		}
 		StringTokenizer st = new StringTokenizer(cookieHeader, ";");
@@ -393,7 +401,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 				continue;
 			if (cookie.getPath().equals(newCookie.getPath()) && cookie.getDomain().equals(newCookie.getDomain())
 					&& cookie.getName().equals(newCookie.getName())) {
-				if (log.isDebugEnabled()) {
+				if (debugEnabled) {
 					log
 							.debug("New Cookie = " + newCookie.toString() + " removing matching Cookie "
 									+ cookie.toString());
@@ -410,8 +418,12 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		long exp = newCookie.getExpires();
 		// Store session cookies as well as unexpired ones
 		if (exp == 0 || exp >= System.currentTimeMillis() / 1000) {
-			add(newCookie);
-		}
+			add(newCookie); // Has its own debug log
+		} else {
+            if (debugEnabled){
+                log.debug("Dropping expired Cookie: "+newCookie.toString());
+            }      
+        }
 	}
 
 	public void removeCookieNamed(String name) {
