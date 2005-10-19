@@ -201,7 +201,11 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	private boolean printMilliseconds = _printMilliseconds;
 
 	/** A formatter for the time stamp. */
-	private SimpleDateFormat formatter = _formatter;
+	private transient SimpleDateFormat formatter = _formatter;
+    /* Make transient as we don't want to save the SimpleDataFormat class
+     * Also, there's currently no way to change the value via the GUI, so changing it
+     * later means editting the JMX, or recreating the Listener.
+     */
 
 	// Defaults from properties:
 	private static final boolean _time, _timestamp, _success, _label, _code, _message, _threadName, _xml,
