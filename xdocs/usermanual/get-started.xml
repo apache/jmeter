@@ -56,12 +56,13 @@ over your Test Plans.</p>
 <p>JMeter requires your computing environment meets some minimum requirements.</p>
 
 <subsection name="2.1.1 Java Version" anchor="java_versions">
-<p>JMeter version 1.8 requires a fully compliant JDK1.4 or higher.</p>
-<p>JMeter 1.8.1 and 1.9 requires a fully compliant JDK1.3 or higher.  This may seem odd, but we are making a strong effort
-currently to be compatible with the 1.3 JDK's, though it is expected JMeter performs best with 1.4 or better. Because JMeter uses only
-standard Java APIs (java.*), please do not file bug reports if your JRE fails to run
+<p>JMeter requires a fully compliant JVM 1.3 or higher.  
+We are making a strong effort currently to be compatible with the 1.3 JVM's, though it is expected JMeter performs best with 1.4 or better. 
+</p>
+<p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
-<note>JDK1.4.1Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.</note>
+<note>Java 1.4.1 Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.
+Also, Java 1.3 does not include SSL (HTTPS) support - you'll need to download JSSE.</note>
 </subsection>
 
 <subsection name="2.1.2 Operating Systems" anchor="os">
@@ -77,7 +78,7 @@ that has a compliant Java implementation.</p>
 
 
 <subsection name="2.2.1 Java Compiler" anchor="opt_compiler">
-<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK1.3 (1.4 for JMeter 1.8) or higher compiler.</p>
+<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 1.3 or higher.</p>
 </subsection>
 
 <subsection name="2.2.2 SAX XML Parser" anchor="opt_sax">
@@ -132,7 +133,11 @@ and the JAVA_HOME environment variable set, JMeter should be installed successfu
 </section>
 
 <section name="2.4 Running JMeter" anchor="running">
-<p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file.</p>
+<br/>
+<p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file. 
+JMeter must be started from the JMeter bin directory (where those files are found).
+The jmeter.bat file attempts to change to the appropriate directory if it can.
+</p>
 
 <subsection name="2.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in its /lib and /lib/ext directories.  
@@ -140,7 +145,7 @@ If you want to add other JAR files to JMeter's classpath, then
 you must copy them to JMeter's "lib" directory.  If you have developed new JMeter specific components,
 then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
 automatically find JMeter components in any jars found here.</p>
-<p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext</p>
+<p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property user.classpath in jmeter.properties</p>
 <p>Note that setting the CLASSPATH environment variable will have no effect.
 This is because JMeter is started with "java -jar", 
 and the java command silently ignores the CLASSPATH variable, and the -classpath/-cp options when -jar is used. 
@@ -159,7 +164,7 @@ from a command line with the following parameters:</p>
 <p>Alternatively, you can use --proxyHost, --proxyPort, --username, and --password</p>
 </subsection>
 
-<subsection name="2.4.3 Non-GUI Mode" anchor="non_gui">
+<subsection name="2.4.3 Non-GUI Mode (Command Line mode)" anchor="non_gui">
 <p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
 the following command options</p>
 <p>-n This specifies JMeter is to run in non-gui mode</p>
@@ -225,6 +230,47 @@ jmeter -LDEBUG</pre>
 </pre>
 <p>The log file can be helpful in determining the cause of an error,
 	as JMeter does not interrupt a test to display an error dialogue.</p>
+</subsection>
+<subsection name="2.4.7 Full list of command-line options" anchor="options">
+<p>Invoking JMeter as "jmeter -?" will print a list of all the command-line options. 
+These are shown below.</p>
+<pre>
+        -h, --help
+                print usage information and exit
+        -v, --version
+                print the version information and exit
+        -p, --propfile {argument}
+                the jmeter property file to use
+        -q, --addprop {argument}
+                additional property file(s)
+        -t, --testfile {argument}
+                the jmeter test(.jmx) file to run
+        -l, --logfile {argument}
+                the file to log samples to
+        -n, --nongui
+                run JMeter in nongui mode
+        -s, --server
+                run the JMeter server
+        -H, --proxyHost {argument}
+                Set a proxy server for JMeter to use
+        -P, --proxyPort {argument}
+                Set proxy server port for JMeter to use
+        -u, --username {argument}
+                Set username for proxy server that JMeter is to use
+        -a, --password {argument}
+                Set password for proxy server that JMeter is to use
+        -J, --jmeterproperty {argument}={value}
+                Define additional JMeter properties
+        -D, --systemproperty {argument}={value}
+                Define additional JMeter properties
+        -L, --loglevel {argument}={value}
+                Define loglevel: [category=]level 
+                e.g. jorphan=INFO or jmeter.util=DEBUG
+        -r, --runremote
+                Start remote servers from non-gui mode
+        -d, --homedir {argument}
+                the jmeter home directory to use
+</pre>
 </subsection>
 </section>
 
