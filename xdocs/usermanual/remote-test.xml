@@ -18,7 +18,7 @@
 <document prev="listeners.html" next="best-practices.html" date="$Date$">
 
 <properties>
-  <title>User's Manual: Remote Testing</title>
+  <title>User's Manual: Remote (Distributed) Testing</title>
 </properties>
 
 <body>
@@ -65,8 +65,7 @@ add the value of your running JMeter server's IP address.  Multiple such servers
 use the script "bin/jmeter".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
 normal JMeter start and stop menu items.</p>
-<p><img src="../images/screenshots/remote/run-menu00.gif" width="232" height="156"></img>
-<br>Figure 1 - Run Menu</br></p>
+<figure image="remote/run-menu00.gif" width="232" height="156">Figure 1 - Run Menu</figure>
 <subsection name="15.1 Doing it Manually" anchor="detail_instructions">
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).  Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
 <p><b>Step 1a: Start the RMI Registry</b></p>
