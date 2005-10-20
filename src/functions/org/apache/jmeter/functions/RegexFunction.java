@@ -18,6 +18,7 @@
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -132,16 +133,18 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		List collectAllMatches = new ArrayList();
 		try {
 			PatternMatcher matcher = (PatternMatcher) localMatcher.get();
-			String responseText = new String(previousResult.getResponseData());
+			String responseText = new String(previousResult.getResponseData(),
+                    previousResult.getDataEncoding()); // Bug 37140
 			PatternMatcherInput input = new PatternMatcherInput(responseText);
 			while (matcher.contains(input, searchPattern)) {
 				MatchResult match = matcher.getMatch();
 				collectAllMatches.add(match);
 			}
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {//TODO: can this occur?
 			log.error("", e);
 			return defaultValue;
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException e) {
+            log.error("Can't convert ResponseData", e);
 			return defaultValue;
 		} finally {
 			vars.put(name + "_matchNr", "" + collectAllMatches.size());
