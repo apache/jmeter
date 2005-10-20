@@ -729,6 +729,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		totalRes.setResponseMessage(lastRes.getResponseMessage());
 		totalRes.setDataType(lastRes.getDataType());
 		totalRes.setResponseHeaders(lastRes.getResponseHeaders());
+        totalRes.setContentType(lastRes.getContentType());
+        totalRes.setDataEncoding(lastRes.getDataEncoding());
 		return totalRes;
 	}
 
