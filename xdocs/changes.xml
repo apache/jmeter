@@ -39,6 +39,9 @@
 <li>Fix NPE in XStream when no ResponseData present</li>
 <li>Remove ?xml prefix when running with Java 1.5 and no x-jars</li>
 <li>Bug 37117 - setProperty() function should return ""; added optional return of original setting</li>
+<li>Fix CSV output time format</li>
+<li>Bug 37140 - handle encoding better in RegexFunction</li>
+
 </ul>	
 	
 
