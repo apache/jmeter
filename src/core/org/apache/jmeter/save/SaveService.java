@@ -65,8 +65,11 @@ public class SaveService {
 	public static final String version = "1.1";
 
 	static String propertiesVersion = "";// read from properties file
+    private static final String PROPVERSION = "1.7";
 
-	private static final String PROPVERSION = "325411";
+    // Internal information only
+    private static String fileVersion = ""; // read from properties file
+	private static final String FILEVERSION = "325411";
 
 	// Helper method to simplify alias creation from properties
 	private static void makeAlias(String alias, String clazz) {
@@ -96,9 +99,12 @@ public class SaveService {
 				} else {
 					// process special keys
 					if (key.equalsIgnoreCase("_version")) {
-						val = extractVersion(val);
 						log.info("Using SaveService properties file " + val);
 						propertiesVersion = val;
+                    } else if (key.equalsIgnoreCase("_file_version")) {
+                            val = extractVersion(val);
+                            log.info("Using SaveService properties file " + val);
+                            fileVersion = val;
 					} else {
 						key = key.substring(1);
 						try {
@@ -238,8 +244,11 @@ public class SaveService {
 		checkVersion(ScriptWrapperConverter.class, "325542");
 		checkVersion(TestResultWrapperConverter.class, "325542");
 		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
-			log.warn("Property file - expected " + PROPVERSION + ", found " + propertiesVersion);
+			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
 		}
+        if (!FILEVERSION.equalsIgnoreCase(fileVersion)) {
+            log.warn("Bad _file_version - expected " + FILEVERSION + ", found " + fileVersion +".");
+        }
 		if (versionsOK) {
 			log.info("All converter versions present and correct");
 		}
@@ -288,11 +297,15 @@ public class SaveService {
 			super(name);
 		}
 
+        public void testPropfile() throws Exception {
+            assertEquals("Property Version mismatch", PROPVERSION, propertiesVersion);            
+            assertEquals("Property File Version mismatch", FILEVERSION, fileVersion);
+        }
+        
 		public void testVersions() throws Exception {
 			initProps();
 			checkVersions();
 			assertTrue("Unexpected version found", versionsOK);
-			assertEquals("Property Version mismatch", PROPVERSION, propertiesVersion);
 		}
 	}
 }
