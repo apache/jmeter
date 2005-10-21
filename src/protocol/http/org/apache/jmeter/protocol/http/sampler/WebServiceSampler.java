@@ -89,19 +89,19 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	/**
 	 * size of File[] array
 	 */
-	private int FILE_COUNT = -1;
+	private int fileCount = -1;
 
 	/**
 	 * List of files that have .xml extension
 	 */
-	private File[] FILE_LIST = null;
+	private File[] fileList = null;
 
 	/**
 	 * Random class for generating random numbers.
 	 */
-	private Random RANDOM = new Random();
+	private final Random RANDOM = new Random();
 
-	private String FILE_CONTENTS = null;
+	private String fileContents = null;
 
 	/**
 	 * Set the path where XML messages are stored for random selection.
@@ -154,7 +154,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		if (file.length() > 0) {
 			if (this.getReadResponse()) {
 				TextFile tfile = new TextFile(file);
-				FILE_CONTENTS = tfile.getText();
+				fileContents = tfile.getText();
 			}
 			return new File(file);
 		} else {
@@ -174,9 +174,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		if (this.getXmlPathLoc() != null) {
 			File src = new File(this.getXmlPathLoc());
 			if (src.isDirectory() && src.list() != null) {
-				FILE_LIST = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }));
-				this.FILE_COUNT = FILE_LIST.length;
-				File one = FILE_LIST[RANDOM.nextInt(FILE_COUNT)];
+				fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }));
+				this.fileCount = fileList.length;
+				File one = fileList[RANDOM.nextInt(fileCount)];
 				// return the absolutePath of the file
 				return one.getAbsolutePath();
 			} else {
@@ -411,10 +411,10 @@ public class WebServiceSampler extends HTTPSamplerBase {
                 log.warn(e.getMessage());
             }
 		} else {
-			FILE_CONTENTS = getXmlData();
-			if (FILE_CONTENTS != null && FILE_CONTENTS.length() > 0) {
+			fileContents = getXmlData();
+			if (fileContents != null && fileContents.length() > 0) {
 				try {
-					doc = XDB.parse(new InputSource(new StringReader(FILE_CONTENTS)));
+					doc = XDB.parse(new InputSource(new StringReader(fileContents)));
 				} catch (SAXException ex) {
 					log.warn("Error processing data: "+ex.getMessage());
 				} catch (IOException ex) {
@@ -448,17 +448,17 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * the server goes into the ether.
 	 */
 	public SampleResult sample() {
-		SampleResult RESULT = new SampleResult();
+		SampleResult result = new SampleResult();
 		try {
-			RESULT.setURL(this.getUrl());
-			RESULT.setSampleLabel(getName());
+			result.setURL(this.getUrl());
+			result.setSampleLabel(getName());
 			org.w3c.dom.Element rdoc = createDocument();
 			if (rdoc == null)
 				throw new SOAPException("Could not create document", null);
 			Envelope msgEnv = Envelope.unmarshall(rdoc);
 			// create a new message
 			Message msg = new Message();
-			RESULT.sampleStart();
+			result.sampleStart();
 			SOAPHTTPConnection spconn = null;
 			// if a blank HeaderManager exists, try to
 			// get the SOAPHTTPConnection. After the first
@@ -515,7 +515,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			}
 
 			SOAPTransport st = msg.getSOAPTransport();
-			RESULT.setDataType(SampleResult.TEXT);
+			result.setDataType(SampleResult.TEXT);
 			BufferedReader br = null;
 			// check to see if SOAPTransport is not nul and receive is
 			// also not null. hopefully this will improve the error
@@ -528,25 +528,25 @@ public class WebServiceSampler extends HTTPSamplerBase {
 					while ((line = br.readLine()) != null) {
 						buf.append(line);
 					}
-					RESULT.sampleEnd();
+					result.sampleEnd();
 					// set the response
-					RESULT.setResponseData(buf.toString().getBytes());
+					result.setResponseData(buf.toString().getBytes());
 				} else {
 					// by not reading the response
 					// for real, it improves the
 					// performance on slow clients
 					br.read();
-					RESULT.sampleEnd();
-					RESULT.setResponseData(JMeterUtils.getResString("read_response_message").getBytes());
+					result.sampleEnd();
+					result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes());
 				}
-				RESULT.setSuccessful(true);
-				RESULT.setResponseCode("200");
-				RESULT.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
+				result.setSuccessful(true);
+				result.setResponseCode("200");
+				result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
 			} else {
-				RESULT.setSuccessful(false);
-				RESULT.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
-				RESULT.setResponseCode("000");
-				RESULT.setResponseHeaders("error");
+				result.setSuccessful(false);
+				result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
+				result.setResponseCode("000");
+				result.setResponseHeaders("error");
 			}
 			// 1-22-04 updated the sampler so that when read
 			// response is set, it also sets SamplerData with
@@ -554,9 +554,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// sent. if read response is not checked, it will
 			// not set sampler data with the request message.
 			// peter lin.
-			RESULT.setSamplerData(getUrl().getProtocol() + "://" + getUrl().getHost() + "/" + getUrl().getFile() + "\n"
-					+ FILE_CONTENTS);
-			RESULT.setDataEncoding(st.getResponseSOAPContext().getContentType());
+			result.setSamplerData(getUrl().getProtocol() + "://" + getUrl().getHost() + "/" + getUrl().getFile() + "\n"
+					+ fileContents);
+			result.setDataEncoding(st.getResponseSOAPContext().getContentType());
 			// setting this is just a formality, since
 			// soap will return a descriptive error
 			// message, soap errors within the response
@@ -571,7 +571,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// response code
 		} catch (SOAPException exception) {
 			log.warn(exception.getMessage());
-			RESULT.setSuccessful(false);
+			result.setSuccessful(false);
 		} catch (MalformedURLException exception) {
 			// keep this debug, since a bad URL, means the
 			// soap driver can't get to it anyways
@@ -586,7 +586,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// anyways
 			log.warn(exception.getMessage());
 		}
-		return RESULT;
+		return result;
 	}
 
 	/**
