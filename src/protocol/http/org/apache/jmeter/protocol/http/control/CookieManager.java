@@ -331,10 +331,16 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		String domain = "." + url.getHost(); // this is the default
 		// the leading dot breaks the standard, but helps in
 		// reproducing actual browser behaviour.
-		// The default is the path of the reques URL
+		// The default is the path of the request URL (upto and including the last slash)
 		String path = url.getPath();
-		if (path.length() == 0)
+		if (path.length() == 0) {
 			path = "/"; // default if no path specified
+		} else {
+			int lastSlash = path.lastIndexOf("/");
+			if (lastSlash > -1) {
+				path=path.substring(0,lastSlash+1);
+			}
+		}
 
 		Cookie newCookie = new Cookie(name, value, domain, path, false, 0); // No
 																			// expiry
