@@ -69,7 +69,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file
-	private static final String FILEVERSION = "325411";
+	private static final String FILEVERSION = "327020";
 
 	// Helper method to simplify alias creation from properties
 	private static void makeAlias(String alias, String clazz) {
