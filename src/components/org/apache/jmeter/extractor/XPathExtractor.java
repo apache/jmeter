@@ -40,8 +40,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import sun.rmi.runtime.GetThreadPoolAction;
-
 /**
  * Extracts text from (X)HTML response using XPath query language
  * Example XPath queries:
