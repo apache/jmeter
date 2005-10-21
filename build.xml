@@ -524,7 +524,7 @@
     </javac>
   </target>
 
-  <target name="compile-http" depends="compile-jorphan,compile-core,compile-htmlparser" description="Compile components specific to HTTP sampling.">
+  <target name="compile-http" depends="compile-jorphan,compile-core,compile-components,compile-htmlparser" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
     <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
