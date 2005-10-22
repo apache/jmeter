@@ -67,20 +67,18 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public static final String COOKIES = "CookieManager.cookies";
 
 	// SimpleDateFormat isn't thread-safe
-	// TestElements are cloned for each thread, so
-	// we use an instance variable.
+	// TestElements are cloned for each thread, so we use an instance variable.
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US);
 
 	// See bug 33796
-	private static final boolean DELETE_NULL_COOKIES = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies",
-			true);// $NON-NLS-1$
+	private static final boolean DELETE_NULL_COOKIES 
+        = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
 
 	public CookieManager() {
 		// The cookie specification requires that the timezone be GMT.
-		// See
-		// http://developer.netscape.com/docs/manuals/communicator/jsguide4/cookies.htm
-		// See http://www.cookiecentral.com/faq/
-		// See http://wp.netscape.com/newsref/std/cookie_spec.html
+		// See:
+		// http://wp.netscape.com/newsref/std/cookie_spec.html (Netscape)
+        // http://www.w3.org/Protocols/rfc2109/rfc2109.txt
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
@@ -91,7 +89,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		return (CollectionProperty) getProperty(COOKIES);
 	}
 
-	public int getCookieCount() {
+	public int getCookieCount() {// Used by GUI
 		return getCookies().size();
 	}
 
@@ -115,7 +113,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	}
 
 	/**
-	 * Save the cookie data to a file.
+	 * Save the static cookie data to a file.
+     * Cookies are only taken from the GUI - runtime cookies are not included. 
 	 */
 	public void save(String authFile) throws IOException {
 		File file = new File(authFile);
@@ -187,19 +186,23 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 */
 	public void add(Cookie c) {
 		String cv = c.getValue();
+        String cn = c.getName();
 		if (DELETE_NULL_COOKIES && (null == cv || "".equals(cv))) {
             if (log.isDebugEnabled()) {
                 log.debug("Removing cookie with null value " + c.toString());
             }
-			removeCookieNamed(c.getName());
+			removeCookieNamed(cn);
 		} else {
             if (log.isDebugEnabled()) {
                 log.debug("Add cookie " + c.toString());
             }
-			JMeterContext context = getThreadContext();
 			getCookies().addItem(c);
+            // Store cookie as a thread variable. 
+            // TODO - should we add a prefix to these variables?
+            // TODO - should storing cookie values be optional?
+            JMeterContext context = getThreadContext();
 			if (context.isSamplingStarted()) {
-				context.getVariables().put(c.getName(), c.getValue());
+				context.getVariables().put(cn, cv);
 			}
 		}
 	}
@@ -228,22 +231,16 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	/**
 	 * Remove a cookie.
 	 */
-	public void remove(int index) {
+	public void remove(int index) {// TODO not used by GUI
 		getCookies().remove(index);
-	}
-
-	/**
-	 * Return the number of cookies.
-	 */
-	public int size() {
-		return getCookies().size();
 	}
 
 	/**
 	 * Return the cookie at index i.
 	 */
-	public Cookie get(int i) {
-		return (Cookie) getCookies().get(i);
+	public Cookie get(int i) {// Only used by GUI
+        //JMeterProperty ck=getCookies().get(i);
+		return (Cookie) getCookies().get(i).getObjectValue();
 	}
 
 	public String convertLongToDateFormatStr(long dateLong) {
@@ -337,16 +334,16 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			path = "/"; // default if no path specified
 		} else {
 			int lastSlash = path.lastIndexOf("/");
-			if (lastSlash > -1) {
-				path=path.substring(0,lastSlash+1);
+			if (lastSlash > 0) {// Must be after initial character
+                // Upto, but not including, trailing slash for Set-Cookie:
+                // (Set-Cookie2: would need the trailing slash as well
+				path=path.substring(0,lastSlash);
 			}
 		}
 
-		Cookie newCookie = new Cookie(name, value, domain, path, false, 0); // No
-																			// expiry
-																			// means
-																			// session
-																			// cookie
+		Cookie newCookie = new Cookie(name, value, domain, path, false
+                                    , 0); // No expiry means session cookie
+
 		// check the rest of the headers
 		while (st.hasMoreTokens()) {
 			nvp = st.nextToken();
@@ -400,22 +397,24 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			}
 		}
 
-		Vector removeIndices = new Vector();
+        // Scan for any matching cookies
+        Vector removeIndices = new Vector();
 		for (int i = getCookies().size() - 1; i >= 0; i--) {
 			Cookie cookie = (Cookie) getCookies().get(i).getObjectValue();
 			if (cookie == null)
 				continue;
-			if (cookie.getPath().equals(newCookie.getPath()) && cookie.getDomain().equals(newCookie.getDomain())
+			if (cookie.getPath().equals(newCookie.getPath()) 
+                    && cookie.getDomain().equals(newCookie.getDomain())
 					&& cookie.getName().equals(newCookie.getName())) {
 				if (debugEnabled) {
-					log
-							.debug("New Cookie = " + newCookie.toString() + " removing matching Cookie "
-									+ cookie.toString());
+					log.debug("New Cookie = " + newCookie.toString()
+                              + " removing matching Cookie " + cookie.toString());
 				}
 				removeIndices.addElement(new Integer(i));
 			}
 		}
 
+        // Now remove the matching cookies
 		for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
 			index = ((Integer) e.nextElement()).intValue();
 			remove(index);
