@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,8 +177,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 				if (tmp != null) {
 					CookieManager manager = new CookieManager();
 					manager.addFile(tmp.getAbsolutePath());
-					Cookie cookie = manager.get(0);
-					addCookieToTable(cookie);
+                    for (int i = 0; i < manager.getCookieCount() ; i++){
+                        addCookieToTable(manager.get(i));
+                    }
 					tableModel.fireTableDataChanged();
 
 					if (tableModel.getRowCount() > 0) {
