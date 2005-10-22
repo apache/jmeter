@@ -129,7 +129,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	 * Return the record at index i
 	 */
 	public Authorization get(int i) {
-		return (Authorization) getAuthObjects().get(i);
+		return (Authorization) getAuthObjects().get(i).getObjectValue();
 	}
 
 	public String getAuthHeaderForURL(URL url) {
@@ -216,7 +216,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
 		writer.println("# JMeter generated Authorization file");
 		for (int i = 0; i < getAuthObjects().size(); i++) {
-			Authorization auth = (Authorization) getAuthObjects().get(i);
+			Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();
 			writer.println(auth.toString());
 		}
 		writer.flush();
@@ -268,7 +268,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	/**
 	 * Return the number of records.
 	 */
-	public int size() {
+	public int getAuthCount() {
 		return getAuthObjects().size();
 	}
 
