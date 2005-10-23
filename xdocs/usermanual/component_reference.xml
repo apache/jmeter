@@ -1585,7 +1585,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component index="&sect-num;.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
+<component index="&sect-num;.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
@@ -1596,20 +1596,25 @@ the response contains a cookie, the Cookie Manager automatically stores that coo
 use it for all future requests to that particular web site.  Each JMeter thread has its own
 "cookie storage area".  So, if you are testing a web site that uses a cookie for storing
 session information, each JMeter thread will have its own session.</p>
-
+<p>Received Cookies are stored as JMeter thread variables. 
+Thus the value of a cookie with the name TEST can be referred to as ${TEST}</p>
 <p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
 the cookie will be shared by all JMeter threads.</p>
-<p>Note that an Expiration time of 0 is treated as never expiring.</p>
+<p>Note that such Cookies are created with an Expiration time far in the future</p>
 </description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Clear Cookies each Iteration" required="Yes">If selected, all cookies are cleared each time the thread group script is executed. 
+  This includes all the Cookies stored in the manager, so they will never be sent.</property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.</property>
   <property name="Add Button" required="N/A">Add an entry to the cookie table.</property>
   <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
   <property name="Load Button" required="N/A">Load a previously saved cookie table and add the entries to the existing
 cookie table entries.</property>
-  <property name="Save As Button" required="N/A">Save the current cookie table to a file.</property>
+  <property name="Save As Button" required="N/A">
+  Save the current cookie table to a file (does not save any cookies extracted from HTTP Responses).
+  </property>
 </properties>
 
 </component>
