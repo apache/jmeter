@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -64,6 +63,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -126,18 +126,18 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
 	static {
 		List paths = new LinkedList();
-		paths.add("org.apache.jmeter.testbeans.gui");
+		paths.add("org.apache.jmeter.testbeans.gui");// $NON-NLS-1$
 		paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
-		String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);
+		String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);// $NON-NLS-1$
 		if (s != null) {
-			paths.addAll(Arrays.asList(JMeterUtils.split(s, ",", "")));
+			paths.addAll(Arrays.asList(JOrphanUtils.split(s, ",", "")));// $NON-NLS-1$ // $NON-NLS-2$
 		}
 		PropertyEditorManager.setEditorSearchPath((String[]) paths.toArray(new String[0]));
 	}
 
 	// Dummy for JUnit test
 	TestBeanGUI() {
-		log.warn("Only for use in testing");
+		log.warn("Only for use in testing");// $NON-NLS-1$
 	}
 
 	public TestBeanGUI(Class testBeanClass) {
@@ -191,7 +191,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 */
 	public String getStaticLabel() {
 		if (beanInfo == null)
-			return "null";
+			return "null";// $NON-NLS-1$
 		return beanInfo.getBeanDescriptor().getDisplayName();
 	}
 
@@ -262,10 +262,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 */
 	public JPopupMenu createPopupMenu() {
 		// TODO: this menu is too wide (allows, e.g. to add controllers, no
-		// matter the
-		// type of the element). Change to match the actual bean's capabilities.
-		if (Timer.class.isAssignableFrom(testBeanClass))// HACK: Fix one such
-														// problem
+		// matter what the type of the element).
+        // Change to match the actual bean's capabilities.
+		if (Timer.class.isAssignableFrom(testBeanClass))// HACK: Fix one such problem
 		{
 			return MenuFactory.getDefaultTimerMenu();
 		}
