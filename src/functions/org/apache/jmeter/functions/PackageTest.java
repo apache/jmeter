@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -282,7 +281,7 @@ public class PackageTest extends JMeterTestCase {
 		split = SplitParams(src, "VAR4", "|");
 		assertEquals(src, split.execute());
 		assertEquals(src, vars.get("VAR4"));
-		assertEquals("3", vars.get("VAR4_n"));
+		assertEquals("4", vars.get("VAR4_n"));
 		assertEquals("a", vars.get("VAR4_1"));
 		assertEquals("b", vars.get("VAR4_2"));
 		assertEquals("?", vars.get("VAR4_3"));
@@ -296,7 +295,20 @@ public class PackageTest extends JMeterTestCase {
 		assertEquals("a", vars.get("VAR_1"));
 		assertEquals("?", vars.get("VAR_2"));
 		assertEquals("c", vars.get("VAR_3"));
-	}
+        assertNull(vars.get("VAR3_4"));
+
+        src = "a,,c,";
+        vars.put("VAR", src);
+        split = SplitParams("${VAR}", "VAR5", null);
+        assertEquals(src, split.execute());
+        assertEquals("4", vars.get("VAR5_n"));
+        assertEquals("a", vars.get("VAR5_1"));
+        assertEquals("?", vars.get("VAR5_2"));
+        assertEquals("c", vars.get("VAR5_3"));
+        assertEquals("?", vars.get("VAR5_4"));
+        assertNull(vars.get("VAR5_5"));
+
+}
 
 	public void SFFTest1() throws Exception {
 		StringFromFile sff1 = SFFParams("testfiles/SFFTest#.txt", "", "1", "3");
