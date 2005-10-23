@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
  *
@@ -50,25 +49,27 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
  * This class provides an interface to the netscape cookies file to pass cookies
  * along with a request.
  * 
- * @author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
+ * author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  * @version $Revision$ $Date$
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String CLEAR = "CookieManager.clearEachIteration";
+	public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
 
-	public static final String COOKIES = "CookieManager.cookies";
+	public static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
 
 	// SimpleDateFormat isn't thread-safe
 	// TestElements are cloned for each thread, so we use an instance variable.
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US);
+	private SimpleDateFormat dateFormat 
+    = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US);// $NON-NLS-1$
 
 	// See bug 33796
 	private static final boolean DELETE_NULL_COOKIES 
@@ -79,7 +80,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		// See:
 		// http://wp.netscape.com/newsref/std/cookie_spec.html (Netscape)
         // http://www.w3.org/Protocols/rfc2109/rfc2109.txt
-		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));// $NON-NLS-1$
 
 		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
 		setProperty(new BooleanProperty(CLEAR, false));
@@ -119,9 +120,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void save(String authFile) throws IOException {
 		File file = new File(authFile);
 		if (!file.isAbsolute())
-			file = new File(System.getProperty("user.dir") + File.separator + authFile);
+			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
+                    + File.separator + authFile);
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
-		writer.println("# JMeter generated Cookie file");
+		writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
 		PropertyIterator cookies = getCookies().iterator();
 		long now = System.currentTimeMillis() / 1000;
 		while (cookies.hasNext()) {
@@ -141,7 +143,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void addFile(String cookieFile) throws IOException {
 		File file = new File(cookieFile);
 		if (!file.isAbsolute())
-			file = new File(System.getProperty("user.dir") + File.separator + cookieFile);
+			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
+                    + File.separator + cookieFile);
 		BufferedReader reader = null;
 		if (file.canRead()) {
 			reader = new BufferedReader(new FileReader(file));
@@ -154,7 +157,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			try {
 				if (line.startsWith("#") || line.trim().length() == 0)
 					continue;
-				String[] st = split(line, "\t", " ");
+				String[] st = JOrphanUtils.split(line, "\t", " ");
 				int domain = 0;
 				int path = 2;
 				if (st[path].equals(" "))
@@ -207,15 +210,6 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		}
 	}
 
-	// NOT USED - did it make sense to create an empty cookie, anyway?
-	// /**
-	// * Add an empty cookie.
-	// */
-	// public void add()
-	// {
-	// getCookies().addItem(new Cookie());
-	// }
-
 	/**
 	 * Remove all the cookies.
 	 */
@@ -239,7 +233,6 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 * Return the cookie at index i.
 	 */
 	public Cookie get(int i) {// Only used by GUI
-        //JMeterProperty ck=getCookies().get(i);
 		return (Cookie) getCookies().get(i).getObjectValue();
 	}
 
@@ -260,8 +253,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		if (debugEnabled) {
 			log.debug("Get cookie for URL= " + url);
         }
-		if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
-				&& !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
+		if (!url.getProtocol().toUpperCase().trim().equals("HTTP")// $NON-NLS-1$
+				&& !url.getProtocol().toUpperCase().trim().equals("HTTPS"))// $NON-NLS-1$
 			return null;
 
 		StringBuffer header = new StringBuffer();
@@ -276,8 +269,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			// domain .X. This is a breach of the standard, but it's how
 			// browsers behave:
 			if (debugEnabled) {
-				log.debug("Cookie name=" + cookie.getName() + " domain=" + cookie.getDomain() + " path="
-						+ cookie.getPath() + " expires=" + cookie.getExpires());
+				log.debug("Cookie name=" + cookie.getName() 
+                        + " domain=" + cookie.getDomain() 
+                        + " path=" + cookie.getPath() 
+                        + " expires=" + cookie.getExpires());
 			}
 			if (host.endsWith(cookie.getDomain()) && url.getFile().startsWith(cookie.getPath())
 					&& ((cookie.getExpires() == 0) // treat as never expiring
@@ -317,12 +312,12 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		if (debugEnabled) {
 			log.debug("addCookieFromHeader(" + cookieHeader + "," + url.toExternalForm() + ")");
 		}
-		StringTokenizer st = new StringTokenizer(cookieHeader, ";");
+		StringTokenizer st = new StringTokenizer(cookieHeader, ";");// $NON-NLS-1$
 		String nvp;
 
 		// first n=v is name=value
 		nvp = st.nextToken();
-		int index = nvp.indexOf("=");
+		int index = nvp.indexOf("=");// $NON-NLS-1$
 		String name = nvp.substring(0, index);
 		String value = nvp.substring(index + 1);
 		String domain = "." + url.getHost(); // this is the default
@@ -331,9 +326,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		// The default is the path of the request URL (upto and including the last slash)
 		String path = url.getPath();
 		if (path.length() == 0) {
-			path = "/"; // default if no path specified
+			path = "/"; // $NON-NLS-1$ default if no path specified
 		} else {
-			int lastSlash = path.lastIndexOf("/");
+			int lastSlash = path.lastIndexOf("/");// $NON-NLS-1$
 			if (lastSlash > 0) {// Must be after initial character
                 // Upto, but not including, trailing slash for Set-Cookie:
                 // (Set-Cookie2: would need the trailing slash as well
@@ -348,12 +343,12 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		while (st.hasMoreTokens()) {
 			nvp = st.nextToken();
 			nvp = nvp.trim();
-			index = nvp.indexOf("=");
+			index = nvp.indexOf("=");// $NON-NLS-1$
 			if (index == -1) {
 				index = nvp.length();
 			}
 			String key = nvp.substring(0, index);
-			if (key.equalsIgnoreCase("expires")) {
+			if (key.equalsIgnoreCase("expires")) {// $NON-NLS-1$
 				try {
 					String expires = nvp.substring(index + 1);
 					Date date = dateFormat.parse(expires);
@@ -377,7 +372,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 					// above:
 					log.error("Couln't parse Cookie expiration time: likely JDK bug.", e);
 				}
-			} else if (key.equalsIgnoreCase("domain")) {
+			} else if (key.equalsIgnoreCase("domain")) {// $NON-NLS-1$
 				// trim() is a workaround for bug in Oracle8iAS wherere
 				// cookies would have leading spaces in the domain portion
 				domain = nvp.substring(index + 1).trim();
@@ -385,14 +380,14 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 				// The standard dictates domains must have a leading dot,
 				// but the new standard (Cookie2) tells us to add it if it's not
 				// there:
-				if (!domain.startsWith(".")) {
-					domain = "." + domain;
+				if (!domain.startsWith(".")) {// $NON-NLS-1$
+					domain = "." + domain;// $NON-NLS-1$
 				}
 
 				newCookie.setDomain(domain);
-			} else if (key.equalsIgnoreCase("path")) {
+			} else if (key.equalsIgnoreCase("path")) {// $NON-NLS-1$
 				newCookie.setPath(nvp.substring(index + 1).trim());
-			} else if (key.equalsIgnoreCase("secure")) {
+			} else if (key.equalsIgnoreCase("secure")) {// $NON-NLS-1$
 				newCookie.setSecure(true);
 			}
 		}
@@ -443,41 +438,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		}
 	}
 
-	/**
-	 * Takes a String and a tokenizer character, and returns a new array of
-	 * strings of the string split by the tokenizer character.
-	 * 
-	 * @param splittee
-	 *            string to be split
-	 * @param splitChar
-	 *            character to split the string on
-	 * @param def
-	 *            default value to place between two split chars that have
-	 *            nothing between them
-	 * @return array of all the tokens.
-	 */
-	public String[] split(String splittee, String splitChar, String def) {
-		if (splittee == null || splitChar == null)
-			return new String[0];
-		StringTokenizer tokens;
-		String temp;
-		int spot;
-		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
-			splittee = splittee.substring(0, spot + splitChar.length()) + def
-					+ splittee.substring(spot + 1 * splitChar.length(), splittee.length());
-		Vector returns = new Vector();
-		tokens = new StringTokenizer(splittee, splitChar);
-		while (tokens.hasMoreTokens()) {
-			temp = tokens.nextToken();
-			returns.addElement(temp);
-		}
-		String[] values = new String[returns.size()];
-		returns.copyInto(values);
-		return values;
-	}
-
 	public String getClassLabel() {
-		return JMeterUtils.getResString("cookie_manager_title");
+		return JMeterUtils.getResString("cookie_manager_title");// $NON-NLS-1$
 	}
 
 	public void testStarted() {
@@ -496,6 +458,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		if (getClearEachIteration())
 			clear();
 	}
+    
+    ///////////////////////////////////////////// TEST CASES ////////////////////////////////////
 
 	public static class Test extends TestCase {
 		CookieManager man = null;
