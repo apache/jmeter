@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +26,8 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -46,7 +45,7 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__split";
+	private static final String KEY = "__split";// $NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
@@ -78,12 +77,18 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 		if (values.length > 2) { // Split string provided
 			splitString = ((CompoundVariable) values[2]).execute();
 		}
-		String parts[] = JMeterUtils.split(stringToSplit, splitString, "?");
+        if (log.isDebugEnabled()){
+            log.debug("Split "+stringToSplit+ " using "+ splitString+ " into "+varNamePrefix);
+        }
+		String parts[] = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$
 
 		vars.put(varNamePrefix, stringToSplit);
-		vars.put(varNamePrefix + "_n", "" + parts.length);
+		vars.put(varNamePrefix + "_n", "" + parts.length);// $NON-NLS-1$ // $NON-NLS-2$
 		for (int i = 1; i <= parts.length; i++) {
-			vars.put(varNamePrefix + "_" + i, parts[i - 1]);
+            if (log.isDebugEnabled()){
+                log.debug(parts[i-1]);
+            }
+			vars.put(varNamePrefix + "_" + i, parts[i - 1]);// $NON-NLS-1$
 		}
 		return stringToSplit;
 
