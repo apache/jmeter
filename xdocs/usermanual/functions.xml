@@ -520,16 +520,19 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
     and returns the original string. If any delimiters are adjacent, "?" is returned as the value.
     The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
     The count of variables is returned in ${VAR_n}. 
+    From JMeter 2.1.2 onwards, a trailing delimiter is treated as a missing variable, and "?" is returned.
 	</p>
 	<p/>
 	Example:
 	<code>
 	<br/>
-	Define VAR="a,,c" in the test plan.
+	Define VAR="a,,c," in the test plan.
 	<br/>
 	${__split(${VAR},VAR)}
 	<br/>
-	This will return the contents of VAR, i.e. "a,,c" and set the following variables:
+	This will return the contents of VAR, i.e. "a,,c," and set the following variables:
+	<br/>
+        VAR_n=4 (3 in JMeter 2.1.1 and earlier)
 	<br/>
         VAR_1=a
 	<br/>
@@ -537,7 +540,7 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 	<br/>
         VAR_3=c
 	<br/>
-        VAR_n=3
+        VAR_4=? (null in JMeter 2.1.1 and earlier)
 	</code>
 </description>
 
