@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +21,9 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log.Logger;
@@ -47,7 +49,8 @@ public final class JOrphanUtils {
 	 * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
 	 * here to enable us to support earlier JDKs.
 	 * 
-	 * Note that unlike JDK1.4 spilt(), it ignores leading split Characters.
+	 * Note that unlike JDK1.4 split(), it ignores leading split Characters,
+     * and the splitChar parameter is not a Regular expression
 	 * 
 	 * <P>
 	 * This piece of code used to be part of JMeterUtils, but was moved here
@@ -57,7 +60,13 @@ public final class JOrphanUtils {
 	 *            String to be split
 	 * @param splitChar
 	 *            Character to split the string on
+     * @param truncate
+     *            Should adjacent and leading splitChars be removed?
+     *            
 	 * @return Array of all the tokens.
+     * 
+     * @see #split(String, String, String)
+     * 
 	 */
 	public static String[] split(String splittee, String splitChar,boolean truncate) {
 		if (splittee == null || splitChar == null) {
@@ -98,7 +107,55 @@ public final class JOrphanUtils {
         return split(splittee,splitChar,true);
     }
 
-	private static final String SPACES = "                                 ";
+    /**
+     * Takes a String and a tokenizer character string, and returns a new array of
+     * strings of the string split by the tokenizer character(s).
+     * 
+     * Trailing delimiters are significant (unless the default = null)
+     *  
+     * @param splittee
+     *            String to be split.
+     * @param delims
+     *            Delimiter character(s) to split the string on
+     * @param def
+     *            Default value to place between two split chars that have
+     *            nothing between them. If null, then ignore omitted elements.
+     *
+     * @return Array of all the tokens.
+     * 
+     * @throws NullPointerException if splittee or delims are null
+     * 
+     * @see #split(String, String, boolean)
+     * @see #split(String, String)
+     * 
+     * This is a rewritten version of JMeterUtils.split()
+     */
+    public static String[] split(String splittee, String delims, String def) {
+        StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
+        boolean lastWasDelim=false;
+        List strList=new ArrayList();
+        while (tokens.hasMoreTokens()) {
+            String tok=tokens.nextToken();
+            if (   tok.length()==1 // we have a single character; could be a token 
+                && delims.indexOf(tok)!=-1) // it is a token
+            {
+                if (lastWasDelim) {// we saw a delimiter last time
+                    strList.add(def);// so add the default
+                }
+                lastWasDelim=true;
+            } else {
+                lastWasDelim=false;
+                strList.add(tok);
+            }
+        }
+        if (lastWasDelim) {
+            strList.add(def);
+        }
+        return (String[])strList.toArray(new String[0]);
+    }
+    
+    
+    private static final String SPACES = "                                 ";
 
 	private static final int SPACES_LEN = SPACES.length();
 
