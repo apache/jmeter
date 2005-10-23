@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -466,18 +465,6 @@ public class JMeterUtils implements UnitTestManager {
 	}
 
 	/**
-	 * Create an instance of an org.xml.sax.Parser
-	 * 
-	 * @deprecated use the plain version instead. We are using JAXP!
-	 * @param properties
-	 *            The properties file containing the parser's class name
-	 * @return The XMLParser value
-	 */
-	public static XMLReader getXMLParser(Properties properties) {
-		return getXMLParser();
-	}
-
-	/**
 	 * Create an instance of an org.xml.sax.Parser based on the default props.
 	 * 
 	 * @return The XMLParser value
@@ -765,6 +752,7 @@ public class JMeterUtils implements UnitTestManager {
 	 *            Description of Parameter
 	 * @return Description of the Returned Value
 	 */
+    //TODO move to JOrphanUtils ?
 	public static Vector tokenize(String string, String separator) {
 		Vector v = new Vector();
 		StringTokenizer s = new StringTokenizer(string, separator);
@@ -830,16 +818,22 @@ public class JMeterUtils implements UnitTestManager {
 	 *            Default value to place between two split chars that have
 	 *            nothing between them
 	 * @return Array of all the tokens.
+     * @deprecated 
+     * Use rewritten version in JOrphanUtils (handles leading tokenisers better)
+     * 
 	 */
 	public static String[] split(String splittee, String splitChar, String def) {
 		if (splittee == null || splitChar == null) {
 			return new String[0];
 		}
 		int spot;
-		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
-			splittee = splittee.substring(0, spot + splitChar.length()) + def
-					+ splittee.substring(spot + 1 * splitChar.length(), splittee.length());
-		}
+        // Replace ## with #def# (where #=splitChar)
+        if (def.length() > 0 ) {// Prevent infinite loop
+    		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
+    			splittee = splittee.substring(0, spot + splitChar.length()) + def
+    					+ splittee.substring(spot + 1 * splitChar.length(), splittee.length());
+    		}
+        }
 		Vector returns = new Vector();
 		int start = 0;
 		int length = splittee.length();
@@ -893,6 +887,7 @@ public class JMeterUtils implements UnitTestManager {
 	 *            String to compare to array values.
 	 * @return Index of value in array, or -1 if not in array.
 	 */
+    //TODO - move to JOrphanUtils?
 	public static int findInArray(String[] array, String value) {
 		int count = -1;
 		int index = -1;
@@ -918,6 +913,7 @@ public class JMeterUtils implements UnitTestManager {
 	 *            Object to unsplit the strings with.
 	 * @return Array of all the tokens.
 	 */
+    //TODO - move to JOrphanUtils?
 	public static String unsplit(Object[] splittee, Object splitChar) {
 		StringBuffer retVal = new StringBuffer("");
 		int count = -1;
@@ -947,6 +943,7 @@ public class JMeterUtils implements UnitTestManager {
 	 *            Default value to replace null values in array.
 	 * @return Array of all the tokens.
 	 */
+    //TODO - move to JOrphanUtils?
 	public static String unsplit(Object[] splittee, Object splitChar, String def) {
 		StringBuffer retVal = new StringBuffer("");
 		int count = -1;
