@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,19 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.Enumeration;
 
 import org.apache.commons.httpclient.ConnectMethod;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
@@ -40,6 +47,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.control.Cookie;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -57,17 +65,18 @@ import org.apache.log.Logger;
 public class HTTPSampler2 extends HTTPSamplerBase {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
+    /*
+     * Connection is re-used within the thread if possible
+     */
+	transient private static ThreadLocal httpClients = null;
+
 	static {
 		// Set the default to Avalon Logkit, if not already defined:
-		if (System.getProperty("org.apache.commons.logging.Log") == null) {
-			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.LogKitLogger");
+		if (System.getProperty("org.apache.commons.logging.Log") == null) { // $NON-NLS-1$
+			System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
+                    , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
 		}
 	}
-
-	/*
-	 * Connection is re-used if possible
-	 */
-	private transient HttpConnection httpConn = null;
 
 	/*
 	 * These variables are recreated every time Find a better way of passing
@@ -77,10 +86,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 	private transient HttpState httpState = null;
 
-	private static boolean basicAuth = JMeterUtils.getPropDefault("httpsampler2.basicauth", false);
+	private static boolean basicAuth 
+        = JMeterUtils.getPropDefault("httpsampler2.basicauth", false); // $NON-NLS-1$
 
 	static {
-		log.info("httpsampler2.basicauth=" + basicAuth);
+		log.info("httpsampler2.basicauth=" + basicAuth); // $NON-NLS-1$
 	}
 
 	/**
@@ -136,10 +146,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 				post.setRequestContentLength(EntityEnclosingMethod.CONTENT_LENGTH_CHUNKED);
 			}
 			// TODO - is this correct?
-			post.setRequestHeader("Content-Disposition", "form-data; name=\"" + encode(sampler.getFileField())
-					+ "\"; filename=\"" + encode(filename) + "\"");
+			post.setRequestHeader("Content-Disposition" // $NON-NLS-1$
+                    , "form-data; name=\"" // $NON-NLS-1$ // $NON-NLS-1$
+                    + encode(sampler.getFileField())
+					+ "\"; filename=\""  // $NON-NLS-1$
+                    + encode(filename) + "\""); // $NON-NLS-1$
 			// Specify content type and encoding
-			post.setRequestHeader("Content-Type", sampler.getMimetype());
+			post.setRequestHeader("Content-Type", sampler.getMimetype()); // $NON-NLS-1$
 			post.setRequestBody(new FileInputStream(input));
 		}
 	}
@@ -148,8 +161,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		StringBuffer newValue = new StringBuffer();
 		char[] chars = value.toCharArray();
 		for (int i = 0; i < chars.length; i++) {
-			if (chars[i] == '\\') {
-				newValue.append("\\\\");
+			if (chars[i] == '\\') { // $NON-NLS-1$
+				newValue.append("\\\\"); // $NON-NLS-1$
 			} else {
 				newValue.append(chars[i]);
 			}
@@ -181,8 +194,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		org.apache.commons.httpclient.URI uri = new org.apache.commons.httpclient.URI(urlStr);
 
 		String schema = uri.getScheme();
-		if ((schema == null) || (schema.equals(""))) {
-			schema = "http";
+		if ((schema == null) || (schema.equals(""))) { // $NON-NLS-1$
+			schema = "http"; // $NON-NLS-1$
 		}
 		Protocol protocol = Protocol.getProtocol(schema);
 
@@ -190,14 +203,23 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		int port = uri.getPort();
 
 		HostConfiguration hc = new HostConfiguration();
-		hc.setHost(host, port, protocol);
-		if (httpConn != null && hc.hostEquals(httpConn)) {
-			// Same details, no need to reset
-		} else {
-			httpConn = new HttpConnection(hc);
-			// TODO check these
-			httpConn.setProxyHost(System.getProperty("http.proxyHost"));
-			httpConn.setProxyPort(Integer.parseInt(System.getProperty("http.proxyPort", "80")));
+		hc.setHost(host, port, protocol); // All needed to ensure re-usablility
+
+		HttpConnection httpConn = null;
+		Map map = (Map)httpClients.get();
+		synchronized ( map ) // TODO: does this need to be synchronized?
+		{
+			httpConn = (HttpConnection)map.get(hc);
+			
+			if ( httpConn == null )
+			{
+				httpConn = new HttpConnection(hc);
+				// TODO check these
+				httpConn.setProxyHost(System.getProperty("http.proxyHost")); // $NON-NLS-1$
+				httpConn.setProxyPort(Integer.parseInt(System.getProperty("http.proxyPort", "80"))); // $NON-NLS-1$
+				
+				map.put(hc, httpConn);
+			}
 		}
 
 		if (method.equals(POST)) {
@@ -208,10 +230,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			new DefaultMethodRetryHandler();
 		}
 
-		httpMethod.setHttp11(!JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0"));
+		httpMethod.setHttp11(!JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0")); // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
 
 		// Set the timeout (if non-zero)
-		httpConn.setSoTimeout(JMeterUtils.getPropDefault("httpclient.timeout", 0));
+		httpConn.setSoTimeout(JMeterUtils.getPropDefault("httpclient.timeout", 0)); // $NON-NLS-1$
 
 		httpState = new HttpState();
 		if (httpConn.isProxied() && httpConn.isSecure()) {
@@ -226,13 +248,14 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		// leave it to the server to close the connection after their
 		// timeout period. Leave it to the JMeter user to decide.
 		if (getUseKeepAlive()) {
-			httpMethod.setRequestHeader("Connection", "keep-alive");
+			httpMethod.setRequestHeader("Connection", "keep-alive"); // $NON-NLS-1$ // $NON-NLS-2$
 		} else {
-			httpMethod.setRequestHeader("Connection", "close");
+			httpMethod.setRequestHeader("Connection", "close"); // $NON-NLS-1$ // $NON-NLS-2$
 		}
 
 		String hdrs = setConnectionHeaders(httpMethod, u, getHeaderManager());
 		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
+		//System.out.println("setupConnection: cookies = " + cookies);
 
 		if (res != null) {
 			StringBuffer sb = new StringBuffer();
@@ -264,6 +287,27 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		if (method.equals(POST)) {
 			setPostHeaders((PostMethod) httpMethod);
 		}
+
+//		System.out.println("Dumping Request Headers:");
+//		System.out.println(method.getRequestHeaders().toString());
+//		Header[] headers = method.getRequestHeaders();
+//		for (int i = 0; i < headers.length; i++)
+//		{
+//			System.out.println("Header["+i+"]:");
+//			org.apache.commons.httpclient.HeaderElement[] elements = headers[i].getElements();
+//			
+//			for (j=0; j<elements.length; j++)
+//			{
+//				System.out.println("Element["+j+"]:");
+//				org.apache.commons.httpclient.NameValuePair[] pairs = elements[j].getParameters();
+//				
+//				for (k=0; k<pairs.length;k++)
+//				{
+//					System.out.println("pair["+k+"]: " + pairs[k].getName() + "=" + pairs[k].getValue());
+//				}
+//			}
+//		}
+
 		return httpConn;
 	}
 
@@ -283,8 +327,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 		for (int i = 0; i < rh.length; i++) {
 			String key = rh[i].getName();
-			if (!key.equalsIgnoreCase("transfer-encoding"))// TODO - why is
-															// this not saved?
+			if (!key.equalsIgnoreCase("transfer-encoding")) // $NON-NLS-1$
+                // TODO - why is this not saved?
 			{
 				headerBuf.append(key);
 				headerBuf.append(": ");
@@ -308,11 +352,25 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            for this <code>UrlConfig</code>
 	 */
 	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {
-		String cookieHeader = null;
-		if (cookieManager != null) {
-			cookieHeader = cookieManager.getCookieHeaderForURL(u);
-			if (cookieHeader != null) {
-				method.setRequestHeader("Cookie", cookieHeader);
+        // TODO recode to use HTTPClient matches methods or similar
+        
+		String cookieHeader = ""; // $NON-NLS-1$
+		String host = "." + u.getHost(); // $NON-NLS-1$
+		
+		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
+			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
+            long exp = cookie.getExpires();
+            long now = System.currentTimeMillis() / 1000 ;
+			if (cookie == null)
+				continue;
+			if ( host.endsWith(cookie.getDomain())
+                    && u.getFile().startsWith(cookie.getPath()) 
+                    && (exp == 0 || exp > now)) {
+				org.apache.commons.httpclient.Cookie newCookie
+                = new org.apache.commons.httpclient.Cookie(cookie.getDomain(), cookie.getName(),
+				     cookie.getValue(), cookie.getPath(), null, false);
+				httpState.addCookie(newCookie);
+				cookieHeader += cookie.getName() + "=" + cookie.getValue(); // $NON-NLS-1$
 			}
 		}
 		return cookieHeader;
@@ -338,11 +396,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			if (headers != null) {
 				PropertyIterator i = headers.iterator();
 				while (i.hasNext()) {
-					org.apache.jmeter.protocol.http.control.Header header = (org.apache.jmeter.protocol.http.control.Header) i
-							.next().getObjectValue();
+					org.apache.jmeter.protocol.http.control.Header header 
+                    = (org.apache.jmeter.protocol.http.control.Header) 
+                       i.next().getObjectValue();
 					String n = header.getName();
 					String v = header.getValue();
-					method.setRequestHeader(n, v);
+					method.addRequestHeader(n, v);
 					hdrs.append(n);
 					hdrs.append(": ");
 					hdrs.append(v);
@@ -370,19 +429,44 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			if (basicAuth) {
 				String authHeader = authManager.getAuthHeaderForURL(u);
 				if (authHeader != null) {
-					method.setRequestHeader("Authorization", authHeader);
+					method.setRequestHeader("Authorization", authHeader); // $NON-NLS-1$
 				}
 			} else {
 				Authorization auth = authManager.getAuthForURL(u);
 				if (auth != null) {
-					// TODO - set up realm, thishost and domain
-					httpState.setCredentials(null, // "realm"
-							auth.getURL(), new NTCredentials(// Includes
-																// other types
-																// of
-																// Credentials
-									auth.getUser(), auth.getPass(), null, // "thishost",
-									null // "targetdomain"
+                    /*
+                     * TODO: better method...
+                     * HACK: if user contains \ and or @
+                     * then assume it is of the form:
+                     * domain \ user @ realm (without spaces)
+                     */
+                    String user = auth.getUser();
+                    String realm=null;
+                    String domain=null;
+                    String username;
+                    int bs=user.indexOf('\\'); // $NON-NLS-1$
+                    int at=user.indexOf('@'); // $NON-NLS-1$
+                    if (bs > 0) {
+                        domain=user.substring(0,bs);
+                    }
+                    if (at > 0 && at > bs+1) {
+                        realm=user.substring(at+1);
+                    } else {
+                        at = user.length();
+                    }
+                    username=user.substring(bs+1,at);
+                    if (log.isDebugEnabled()){
+                        log.debug(user + " >  D="+ username + " D="+domain+" R="+realm);
+                    }
+					httpState.setCredentials(
+                            realm,
+							auth.getURL(),
+                            // NT Includes other types of Credentials
+                            new NTCredentials(
+									username, 
+                                    auth.getPass(), 
+                                    null, // "thishost",
+									domain
 							));
 				}
 			}
@@ -436,17 +520,29 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			int statusCode = httpMethod.execute(httpState, connection);
 
 			// Request sent. Now get the response:
-			byte[] responseData = httpMethod.getResponseBody();
+            InputStream instream = httpMethod.getResponseBodyAsStream();
+            
+            //int contentLength = httpMethod.getResponseContentLength();Not visible ...
+            //TODO size ouststream according to actual content length
+            ByteArrayOutputStream outstream = new ByteArrayOutputStream(4*1024);
+                    //contentLength > 0 ? contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = instream.read(buffer)) > 0) {
+                outstream.write(buffer, 0, len);
+            }
+            outstream.close();
+            
+			byte[] responseData = outstream.toByteArray();
 
 			res.sampleEnd();
 			// Done with the sampling proper.
 
 			// Now collect the results into the HTTPSampleResult:
 
-			res.setSampleLabel(httpMethod.getURI().toString());// Pick up
-																// Actual path
-																// (after
-																// redirects)
+			res.setSampleLabel(httpMethod.getURI().toString());
+            // Pick up Actual path (after redirects)
+            
 			res.setResponseData(responseData);
 
 			res.setResponseCode(Integer.toString(statusCode));
@@ -455,7 +551,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			res.setResponseMessage(httpMethod.getStatusText());
 
 			String ct = null;
-			org.apache.commons.httpclient.Header h = httpMethod.getResponseHeader("Content-Type");
+			org.apache.commons.httpclient.Header h 
+                = httpMethod.getResponseHeader("Content-Type"); // $NON-NLS-1$
 			if (h != null)// Can be missing, e.g. on redirect
 			{
 				ct = h.getValue();
@@ -468,12 +565,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 				// charset=foobar">
 				// or can we leave that to the renderer ?
 				String de = ct.toLowerCase();
-				final String cs = "charset=";
+				final String cs = "charset="; // $NON-NLS-1$
 				int cset = de.indexOf(cs);
 				if (cset >= 0) {
 					res.setDataEncoding(de.substring(cset + cs.length()));
 				}
-				if (ct.startsWith("image/")) {
+				if (ct.startsWith("image/")) { // $NON-NLS-1$
 					res.setDataType(HTTPSampleResult.BINARY);
 				} else {
 					res.setDataType(HTTPSampleResult.TEXT);
@@ -482,7 +579,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 			res.setResponseHeaders(getResponseHeaders(httpMethod));
 			if (res.isRedirect()) {
-				res.setRedirectLocation(httpMethod.getResponseHeader("Location").getValue());
+				res.setRedirectLocation(httpMethod.getResponseHeader("Location").getValue()); // $NON-NLS-1$
 			}
 
 			// Store any cookies received in the cookie manager:
@@ -529,20 +626,78 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			org.apache.commons.httpclient.Cookie [] c = state.getCookies();
 			for (int i = 0; i < c.length; i++) {
 				Date exp = c[i].getExpiryDate();// might be absent
-				cookieManager.add(new org.apache.jmeter.protocol.http.control.Cookie(c[i].getName(), c[i].getValue(),
-						c[i].getDomain(), c[i].getPath(), c[i].getSecure(), exp == null ? 0 : exp.getTime() / 1000));
+				//System.out.println("Cookie[" + i + "]: " + c[i].getName() + " := " + c[i].getValue());
+
+				Cookie cookie = new Cookie(c[i].getName(), 
+					c[i].getValue(), c[i].getDomain(), c[i].getPath(), c[i].getSecure(), exp == null ? 0 : exp.getTime() / 1000);
+				
+				removeExistingCookie( cookie, cookieManager);
+				
+				cookieManager.add( cookie );
 			}
+		}
+	}
+	
+	private void removeExistingCookie( Cookie newCookie, CookieManager cookieManager )
+	{
+		Vector removeIndices = new Vector();
+		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
+			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
+			if (cookie == null)
+				continue;
+			if (cookie.getPath().equals(newCookie.getPath()) && cookie.getDomain().equals(newCookie.getDomain())
+					&& cookie.getName().equals(newCookie.getName())) {
+				if (log.isDebugEnabled()) {
+					//System.out.println("New Cookie = " + newCookie.toString() + " removing matching Cookie "
+									//+ cookie.toString());
+				}
+				removeIndices.addElement(new Integer(i));
+			}
+		}
+
+		int index = 0;
+		for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
+			index = ((Integer) e.nextElement()).intValue();
+			cookieManager.remove(index);
 		}
 	}
 
 	public void threadStarted() {
 		log.debug("Thread Started");
+		
+		System.setProperty("apache.commons.httpclient.cookiespec", "COMPATIBILITY"); // $NON-NLS-1$ // $NON-NLS-2$
+		
+		synchronized ( this.getClass() )
+		{
+			if ( httpClients == null ) {
+				httpClients = new ThreadLocal();
+			}
+			httpClients.set ( new HashMap() );
+		}
 	}
 
 	public void threadFinished() {
 		log.debug("Thread Finished");
-		if (httpConn != null)
-			httpConn.close();
+		//if (httpConn != null)
+		//	httpConn.close();
+		
+		synchronized ( this.getClass() )
+		{
+			Map map = (Map)httpClients.get();
+
+			HttpConnection conn = null;
+			if ( map != null ) {
+				for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
+				{
+					Object obj = it.next();
+					conn = (HttpConnection) ((Map.Entry)obj).getValue();
+					conn.close();
+				}
+				map.clear();
+			}
+			
+			httpClients.set( null );
+		}
 	}
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
