@@ -235,6 +235,11 @@ public class JMeter implements JMeterPlugin {
 			log.info(JMeterUtils.getJMeterCopyright());
             
             updateClassLoader();
+            if (log.isDebugEnabled())
+            {
+                String jcp=System.getProperty("java.class.path");
+                log.debug(jcp);
+            }
 			if (parser.getArgumentById(VERSION_OPT) != null) {
 				System.out.println(JMeterUtils.getJMeterCopyright());
 				System.out.println("Version " + JMeterUtils.getJMeterVersion());
