@@ -15,11 +15,11 @@
  * limitations under the License.
  * 
  */
-package org.apache.jmeter.testelement;
+package org.apache.jmeter.report;
 
 import javax.swing.JComponent;
-import org.apache.jmeter.testelement.TestElement;
 
-public interface Chart {
-	JComponent renderChart(TestElement element);
+
+public interface ReportChart {
+	JComponent renderChart(ReportTable element);
 }

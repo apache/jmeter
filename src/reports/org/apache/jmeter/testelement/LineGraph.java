@@ -19,13 +19,15 @@ package org.apache.jmeter.testelement;
 
 import javax.swing.JComponent;
 
+import org.apache.jmeter.report.ReportTable;
+
 public class LineGraph extends AbstractChart {
 
 	public LineGraph() {
 		super();
 	}
 
-	public JComponent renderChart(TestElement element) {
+	public JComponent renderChart(ReportTable element) {
 		return null;
 	}
 

@@ -19,6 +19,8 @@ package org.apache.jmeter.testelement;
 
 import javax.swing.JComponent;
 
+import org.apache.jmeter.report.ReportTable;
+
 /**
  * The class is reponsible for returning 
  * @author pete
@@ -30,7 +32,7 @@ public class BarChart extends AbstractChart {
 		super();
 	}
 
-	public JComponent renderChart(TestElement element) {
+	public JComponent renderChart(ReportTable element) {
 		return null;
 	}
 }
