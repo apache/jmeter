@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.util.DirectoryPanel;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.report.gui.AbstractReportGui;
 import org.apache.jmeter.report.gui.ReportPageGui;
@@ -50,11 +51,15 @@ public class ReportGui extends AbstractReportGui {
 
 	private JCheckBox serializedMode;
 
-	/** A panel allowing the user to define variables. */
-	private ArgumentsPanel argsPanel;
-
 	/** A panel to contain comments on the test plan. */
 	private JTextField commentPanel;
+
+    private DirectoryPanel baseDir = 
+        new DirectoryPanel(JMeterUtils.getResString("report_base_directory"), "",
+                Color.white);
+    
+    /** A panel allowing the user to define variables. */
+    private ArgumentsPanel argsPanel;
 
 	/**
 	 * Create a new TestPlanGui.
@@ -97,6 +102,7 @@ public class ReportGui extends AbstractReportGui {
 			ReportPlan rp = (ReportPlan) plan;
 			rp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
 			rp.setProperty(ReportPlan.COMMENTS, commentPanel.getText());
+            rp.setBasedir(baseDir.getFilename());
 		}
 	}
 
@@ -132,6 +138,7 @@ public class ReportGui extends AbstractReportGui {
 			argsPanel.configure((Arguments) el.getProperty(ReportPlan.USER_DEFINED_VARIABLES).getObjectValue());
 		}
 		commentPanel.setText(el.getPropertyAsString(ReportPlan.COMMENTS));
+        baseDir.setFilename(el.getPropertyAsString(ReportPlan.BASEDIR));
 	}
 
 	/**
@@ -147,14 +154,19 @@ public class ReportGui extends AbstractReportGui {
 	}
 
 	private Container createCommentPanel() {
-		Container panel = makeTitlePanel();
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.white);
+        panel.setLayout(new BorderLayout(10, 10));
+		Container title = makeTitlePanel();
 		commentPanel = new JTextField();
         commentPanel.setBackground(Color.white);
 		JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
         label.setBackground(Color.white);
 		label.setLabelFor(commentPanel);
-		panel.add(label);
-		panel.add(commentPanel);
+		title.add(label);
+		title.add(commentPanel);
+        panel.add(title,BorderLayout.NORTH);
+        panel.add(baseDir,BorderLayout.CENTER);
 		return panel;
 	}
 
