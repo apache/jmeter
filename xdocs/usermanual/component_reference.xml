@@ -1551,6 +1551,11 @@ information for the user named, "jmeter".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
   <property name="Password" required="Yes">The password to authorize.</property>
 </properties>
+<note>
+For NTLM authentication, enter the user name in the form domain\user[@realm]. This is an experimental feature and may be changed at a later date.
+This should work with the Http Client sampler on all platforms, but with the default Http sampler only on Windows. 
+The realm portion is optional, and only applies to the HttpClient sampler.
+</note>
 <b>Controls:</b>
 <ul>
   <li>Add Button - Add an entry to the authorization table.</li>
