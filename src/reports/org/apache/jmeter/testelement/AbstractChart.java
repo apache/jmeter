@@ -22,6 +22,9 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import org.apache.jmeter.report.ReportChart;
+import org.apache.jmeter.report.ReportTable;
+
 /**
  * The general idea of the chart graphs information for a table.
  * A chart can only be generated from a specific table, though more
@@ -29,7 +32,7 @@ import javax.swing.JComponent;
  * @author Peter Lin
  *
  */
-public abstract class AbstractChart extends AbstractTestElement implements Chart {
+public abstract class AbstractChart extends AbstractTestElement implements ReportChart {
 
     public static final String REPORT_CHART_X_AXIS = "ReportTable.chart.x.axis";
     public static final String REPORT_CHART_Y_AXIS = "ReportTable.chart.y.axis";
@@ -104,5 +107,5 @@ public abstract class AbstractChart extends AbstractTestElement implements Chart
     	return checked;
     }
     
-	public abstract JComponent renderChart(TestElement element);
+	public abstract JComponent renderChart(ReportTable element);
 }

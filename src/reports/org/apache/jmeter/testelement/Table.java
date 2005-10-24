@@ -17,10 +17,19 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.util.List;
+
 public class Table extends AbstractTable {
 
 	public Table() {
 		super();
 	}
 
+    /**
+     * for now the method isn't implemented. I still need to decide how
+     * it should be implemented.
+     */
+    public String[][] getTableData(List data) {
+        return null;
+    }
 }

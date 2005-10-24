@@ -54,6 +54,7 @@ public class ReportPageGui extends AbstractReportGui {
 
     private JLabeledTextArea introduction = 
         new JLabeledTextArea(JMeterUtils.getResString("report_page_intro"), null);
+    
     /**
 	 * 
 	 */

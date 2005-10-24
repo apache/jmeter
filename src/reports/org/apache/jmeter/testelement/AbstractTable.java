@@ -17,13 +17,19 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.jmeter.report.ReportTable;
 
 /**
  * AbstractTable is the base Element for different kinds of report tables.
  * @author pete
  *
  */
-public abstract class AbstractTable extends AbstractTestElement {
+public abstract class AbstractTable extends AbstractTestElement 
+    implements ReportTable 
+{
 
     public static final String REPORT_TABLE_MEAN = "ReportTable.mean";
     public static final String REPORT_TABLE_MEDIAN = "ReportTable.median";
@@ -46,11 +52,17 @@ public abstract class AbstractTable extends AbstractTestElement {
     public static final String[] xitems = { REPORT_TABLE_FILE, REPORT_TABLE_DATE,
     	REPORT_TABLE_URL };
     
-
+    protected ArrayList children = new ArrayList();
+    
     public AbstractTable() {
 		super();
 	}
 
+    public void clear() {
+        super.clear();
+        children.clear();
+    }
+    
     public boolean getMean() {
     	return getPropertyAsBoolean(REPORT_TABLE_MEAN);
     }
@@ -128,5 +140,16 @@ public abstract class AbstractTable extends AbstractTestElement {
 		if (el instanceof AbstractChart) {
 			((AbstractChart)el).setParentTable(this);
 		}
+        this.children.add(el);
 	}
+    
+    /**
+     * method isn't implemented and is left as abstract. Subclasses
+     * need to provide concrete logic
+     */
+    public abstract String[][] getTableData(List data);
+    
+    public List getChartElements() {
+        return this.children;
+    }
 }

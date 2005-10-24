@@ -47,7 +47,6 @@ public class ReportPage extends AbstractTestElement implements Serializable {
 
     public static ReportPage createReportPage(String name) {
         ReportPage page = new ReportPage();
-        // page.setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
         return page;
     }
 
@@ -98,4 +97,5 @@ public class ReportPage extends AbstractTestElement implements Serializable {
     public void setIntroduction(String intro) {
         setProperty(REPORT_PAGE_INTRO,intro);
     }
+    
 }

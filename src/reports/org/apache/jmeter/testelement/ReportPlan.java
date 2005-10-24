@@ -50,7 +50,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
 	public final static String COMMENTS = "ReportPlan.comments";
 
-	public final static String BASEDIR = "basedir";
+	public final static String BASEDIR = "ReportPlan.basedir";
 
 	private transient List reportPages = new LinkedList();
 
