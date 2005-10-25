@@ -2660,6 +2660,36 @@ This is mainly intended for batch (non-GUI) runs.
 </component>
 </section>
 
+<section name="&sect-num;.10 Reports" anchor="Reports">
+<description>
+		<br></br>
+</description>
+
+<component index="&sect-num;.10.1" name="Report Plan" screenshot="">
+<description><p></p></description>
+</component>
+
+<component index="&sect-num;.10.2" name="Report Table" screenshot="">
+<description><p></p></description>
+</component>
+
+<component index="&sect-num;.10.3" name="HTML Report Writer" screenshot="">
+<description><p></p></description>
+</component>
+
+<component index="&sect-num;.10.4" name="Report Page" screenshot="">
+<description><p></p></description>
+</component>
+
+<component index="&sect-num;.10.5" name="Line Graph" screenshot="">
+<description><p></p></description>
+</component>
+
+<component index="&sect-num;.10.6" name="Bar Chart" screenshot="">
+<description><p></p></description>
+</component>
+
+</section>
 </body>
 </document>
 
