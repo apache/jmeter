@@ -36,7 +36,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class JLabeledChoice extends JPanel implements JLabeledField {
-	private JLabel mLabel = new JLabel();
+	private static final Object[] EMPTY_OBJECT_ARRAY = new Object [0];
+
+    private JLabel mLabel = new JLabel();
 
 	private JComboBox choiceList;
 
@@ -172,14 +174,23 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 	/**
 	 * Returns the text in the Text Field.
 	 * 
-	 * @return The text in the Text Field.
+	 * @return The text in the Text Field. Never returns null.
 	 */
 	public String getText() {
-		return (String) choiceList.getSelectedItem();
+        Object item = choiceList.getSelectedItem();
+        if (item == null) {
+            return "";
+        } else {
+    		return (String) item;
+        }
 	}
 
 	public Object[] getSelectedItems() {
-		return choiceList.getSelectedObjects();
+        Object list[]=choiceList.getSelectedObjects();
+        if (list==null) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+		return list;
 	}
 
 	public String[] getItems() {
