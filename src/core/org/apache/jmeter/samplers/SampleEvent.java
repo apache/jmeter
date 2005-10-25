@@ -19,6 +19,8 @@
 package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Packages information regarding the target of a sample event, such as the
@@ -27,9 +29,21 @@ import java.io.Serializable;
  * @version $Revision$
  */
 public class SampleEvent implements Serializable {
+	public static String HOSTNMAME;
+
+	static {
+		try {
+			HOSTNMAME = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+
 	SampleResult result;
 
 	String threadGroup;
+
+	String hostname;
 
 	public SampleEvent() {
 	}
@@ -37,6 +51,7 @@ public class SampleEvent implements Serializable {
 	public SampleEvent(SampleResult result, String threadGroup) {
 		this.result = result;
 		this.threadGroup = threadGroup;
+		this.hostname = HOSTNMAME;
 	}
 
 	public SampleResult getResult() {
@@ -45,5 +60,9 @@ public class SampleEvent implements Serializable {
 
 	public String getThreadGroup() {
 		return threadGroup;
+	}
+
+	public String getHostname() {
+		return hostname;
 	}
 }

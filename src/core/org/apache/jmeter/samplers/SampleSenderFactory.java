@@ -18,9 +18,11 @@
 package org.apache.jmeter.samplers;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.samplers.StatisticalSampleSender;
 
 /**
  * @author Michael Freeman
+ * 10/24/2005 - added statistical mode for distributed testing
  */
 public class SampleSenderFactory {
 	/**
@@ -43,6 +45,9 @@ public class SampleSenderFactory {
 		} else if (type.equalsIgnoreCase("Batch")) {
 			BatchSampleSender b = new BatchSampleSender(listener);
 			return b;
+		} else if (type.equalsIgnoreCase("Statistical")) {
+			StatisticalSampleSender s = new StatisticalSampleSender(listener);
+			return s;
 		} else {
 			StandardSampleSender s = new StandardSampleSender(listener);
 			return s;
