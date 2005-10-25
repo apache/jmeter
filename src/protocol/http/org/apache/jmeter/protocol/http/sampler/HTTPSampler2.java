@@ -258,28 +258,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		//System.out.println("setupConnection: cookies = " + cookies);
 
 		if (res != null) {
-			StringBuffer sb = new StringBuffer();
-			if (method.equals(POST)) {
-				String q = this.getQueryString();
-				res.setQueryString(q);
-				sb.append("Query data:\n");
-				sb.append(q);
-				sb.append('\n');
-			}
-			if (cookies != null) {
-				res.setCookies(cookies);
-				sb.append("\nCookie Data:\n");
-				sb.append(cookies);
-				sb.append('\n');
-			}
-			res.setSamplerData(sb.toString());
-			// TODO rather than stuff all the information in here,
-			// pick it up from the individual fields later
-
-			res.setURL(u);
-			res.setHTTPMethod(method);
-			res.setRequestHeaders(hdrs);
-			res.setQueryString(getQueryString());
+            res.setURL(u);
+            res.setHTTPMethod(method);
+            res.setRequestHeaders(hdrs);
+            res.setCookies(cookies);
+            if (method.equals(POST)) {
+                res.setQueryString(getQueryString());
+            }
 		}
 
 		setConnectionAuthorization(httpMethod, u, getAuthManager());
@@ -355,24 +340,26 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // TODO recode to use HTTPClient matches methods or similar
         
 		String cookieHeader = ""; // $NON-NLS-1$
-		String host = "." + u.getHost(); // $NON-NLS-1$
-		
-		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
-			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
-            long exp = cookie.getExpires();
-            long now = System.currentTimeMillis() / 1000 ;
-			if (cookie == null)
-				continue;
-			if ( host.endsWith(cookie.getDomain())
-                    && u.getFile().startsWith(cookie.getPath()) 
-                    && (exp == 0 || exp > now)) {
-				org.apache.commons.httpclient.Cookie newCookie
-                = new org.apache.commons.httpclient.Cookie(cookie.getDomain(), cookie.getName(),
-				     cookie.getValue(), cookie.getPath(), null, false);
-				httpState.addCookie(newCookie);
-				cookieHeader += cookie.getName() + "=" + cookie.getValue(); // $NON-NLS-1$
-			}
-		}
+        if (cookieManager!=null){
+    		String host = "." + u.getHost(); // $NON-NLS-1$
+    		
+    		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
+    			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
+                long exp = cookie.getExpires();
+                long now = System.currentTimeMillis() / 1000 ;
+    			if (cookie == null)
+    				continue;
+    			if ( host.endsWith(cookie.getDomain())
+                        && u.getFile().startsWith(cookie.getPath()) 
+                        && (exp == 0 || exp > now)) {
+    				org.apache.commons.httpclient.Cookie newCookie
+                    = new org.apache.commons.httpclient.Cookie(cookie.getDomain(), cookie.getName(),
+    				     cookie.getValue(), cookie.getPath(), null, false);
+    				httpState.addCookie(newCookie);
+    				cookieHeader += cookie.getName() + "=" + cookie.getValue(); // $NON-NLS-1$
+    			}
+    		}
+        }
 		return cookieHeader;
 	}
 

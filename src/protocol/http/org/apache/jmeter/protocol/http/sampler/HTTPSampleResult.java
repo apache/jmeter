@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +49,11 @@ public class HTTPSampleResult extends SampleResult {
 	 */
 	public HTTPSampleResult(HTTPSampleResult res) {
 		super(res);
-		setHTTPMethod(res.getHTTPMethod());
+		method=res.method;
 		setURL(res.getURL());
-		setCookies(res.getCookies());
+		cookies=res.cookies;
+        queryString=res.queryString;
+        redirectLocation=res.redirectLocation;
 	}
 
 	private String method;
@@ -92,22 +93,26 @@ public class HTTPSampleResult extends SampleResult {
 
 	/*
 	 * (non-Javadoc)
+     * Overrides version in Sampler data to provide more details
 	 * 
 	 * @see org.apache.jmeter.samplers.SampleResult#getSamplerData()
 	 */
 	public String getSamplerData() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(getHTTPMethod());
+		sb.append(method);
 		URL u = super.getURL();
 		if (u != null) {
 			sb.append(' ');
 			sb.append(u.toString());
-			if ("POST".equals(getHTTPMethod())) {
-				sb.append(getQueryString());
+			if ("POST".equals(method)) {
+				sb.append(queryString);
 			}
 			sb.append("\n");
-			sb.append(getRequestHeaders());
-			sb.append(getCookies());
+            if (cookies.length()>0){
+                sb.append("\nCookie Data:\n");
+    			sb.append(cookies);
+                sb.append("\n");
+            }
 		}
 		return sb.toString();
 	}
@@ -126,7 +131,11 @@ public class HTTPSampleResult extends SampleResult {
 	 *            representing the cookies
 	 */
 	public void setCookies(String string) {
-		cookies = string;
+        if (string == null) {
+            cookies="";
+        } else {
+    		cookies = string;
+        }
 	}
 
 	private String queryString = ""; // never null
@@ -147,7 +156,11 @@ public class HTTPSampleResult extends SampleResult {
 	 *            the query string
 	 */
 	public void setQueryString(String string) {
-		queryString = string;
+        if (string == null ) {
+            queryString="";
+        } else {
+    		queryString = string;
+        }
 	}
 
 }
