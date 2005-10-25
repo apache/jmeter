@@ -151,29 +151,17 @@ public class HTTPSampler extends HTTPSamplerBase {
 		conn.setRequestMethod(method);
 		String hdrs = setConnectionHeaders(conn, u, getHeaderManager());
 		String cookies = setConnectionCookie(conn, u, getCookieManager());
-		if (res != null) {
-			StringBuffer sb = new StringBuffer();
-			if (method.equals(POST)) {
-				String q = this.getQueryString();
-				sb.append("\nQuery data:\n");
-				sb.append(q);
-				res.setQueryString(sb.toString());
-			}
-			if (cookies != null) {
-				StringBuffer temp = new StringBuffer("\nCookie Data:\n");
-				temp.append(cookies);
-				temp.append('\n');
-				res.setCookies(temp.toString());
-				sb.append(temp);
-			}
-			res.setSamplerData(sb.toString());
-			// TODO rather than stuff all the information in here,
-			// pick it up from the individual fields later
 
-			res.setURL(u);
-			res.setHTTPMethod(method);
-			res.setRequestHeaders(hdrs);
-		}
+        if (res != null) {
+            res.setURL(u);
+            res.setHTTPMethod(method);
+            res.setRequestHeaders(hdrs);
+            res.setCookies(cookies);
+            if (method.equals(POST)) {
+                res.setQueryString(getQueryString());
+            }
+        }
+
 		setConnectionAuthorization(conn, u, getAuthManager());
 		if (method.equals(POST)) {
 			setPostHeaders(conn);
