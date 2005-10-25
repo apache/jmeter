@@ -109,9 +109,9 @@ public class SampleResult implements Serializable {
 
 	private long timeStamp = 0;// the time stamp - can be start or end
 
-	private long startTime = 0;
+	private long startTime = 0; // changed to protected for subclass
 
-	private long endTime = 0;
+	private long endTime = 0; // changed to protected for subclass
 
 	private long idleTime = 0;// Allow for non-sample time
 
@@ -545,6 +545,13 @@ public class SampleResult implements Serializable {
 		contentType = string;
 	}
 
+    /**
+     * @return idleTime
+     */
+    public long getIdleTime() {
+        return idleTime;
+    }
+    
 	/**
 	 * @return the end time
 	 */
@@ -572,7 +579,7 @@ public class SampleResult implements Serializable {
 		}
 	}
 
-	private void setEndTime(long end) {
+	protected void setEndTime(long end) {
 		endTime = end;
 		if (!startTimeStamp) {
 			timeStamp = endTime;
