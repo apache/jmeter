@@ -2490,7 +2490,45 @@ generate the template string, and store the result into the given variable name.
 </p>
 </component>
 
-<component index="&sect-num;.8.2" name="Result Status Action Handler" screenshot="resultstatusactionhandler.png">
+<component index="&sect-num;.8.2" name="XPath Extractor" screenshot="xpath_extractor.png">
+	<description>This test element allows the user to extract value from 
+		structured response - XML or (X)HTML - using XPath
+		query language.
+   </description>
+   <properties>
+	   <property name="Use Tidy" required="Yes">If checked use Tidy to parse HTML response into XHTML.
+	   <ul>
+		   <li>"Use Tidy" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
+		   <li>"Use Tidy" should be unchecked for both XHTML or XML response (for example RSS)</li>
+	   </ul>
+	   </property>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+	<property name="XPath Query" required="Yes">Element query in XPath language. </property>
+	<property name="Default Value" required="">Default value returned when no match found</property>
+   </properties>
+   <p>XPath is query language targeted primarily for XSLT transformations. However it is usefull as generic query language for structured data too. See 
+	   <a href="http://www.topxml.com/xsl/xpathref.asp">XPath Reference</a> or <a href="http://www.w3.org/TR/xpath">XPath specification</a> for more information. Here are few examples:
+   </p>
+  <dl> 
+   <dt>/html/head/title</dt>
+     <dd>extracts title element from HTML response</dd>
+     <dt>//form[@name='countryForm']//select[@name='country']/option[text()='Czech Republic'])/@value</dt>
+    <dd>extracts value attribute of option element that match text 'Czech Republic'
+        inside of select element with name attribute  'country' inside of
+        form with name attribute 'countryForm'</dd>
+ </dl>
+ <note>When "Use Tidy" is checked on - resulting XML document may slightly differ from original HTML response:
+	 <ul>
+		 <li>All elements and attribute names are converted to lowercase</li>
+		 <li>Tidy attempts to correct improperly nested elements. For example - original (incorrect) <code>ul/font/li</code> becomes correct <code>ul/li/font</code></li>
+	 </ul>
+	 See <a href="http://jtidy.sf.net">Tidy homepage</a> for more information.
+ </note>
+ 
+</component>
+
+<component index="&sect-num;.8.3" name="Result Status Action Handler" screenshot="resultstatusactionhandler.png">
    <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </description>
    <properties>
@@ -2498,7 +2536,7 @@ generate the template string, and store the result into the given variable name.
    </properties>
 </component>
 
-<component index="&sect-num;.8.3" name="Save Responses to a file" screenshot="savetofile.png">
+<component index="&sect-num;.8.4" name="Save Responses to a file" screenshot="savetofile.png">
 	<description>This test element can be placed anywhere in the test plan.
 		For each sample in its scope, it will create a file of the response Data.
 		The primary use for this is in creating functional tests.
@@ -2511,7 +2549,7 @@ generate the template string, and store the result into the given variable name.
  </properties>
 </component>
 
-<component index="&sect-num;.8.4" name="Generate Summary Results" screenshot="summary.png">
+<component index="&sect-num;.8.5" name="Generate Summary Results" screenshot="summary.png">
 	<description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
