@@ -260,13 +260,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 					// load time label
 
 					log.debug("valueChanged1 : load time - " + res.getTime());
-					if (res != null && res.getSamplerData() != null) {
-						String sd;
+                    String sd=res.getSamplerData();
+					if (sd != null) {
 						String rh = res.getRequestHeaders();
-						if (rh == null) {
-							sd = res.getSamplerData().trim();
-						} else {
-							sd = res.getSamplerData().trim() + "\n" + rh;
+						if (rh != null) {
+							sd = sd + "\n" + rh;
 						}
 						sampleDataField.setText(sd);
 					}
