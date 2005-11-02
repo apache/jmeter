@@ -53,28 +53,82 @@ import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.Converter;
 
 /**
- * @author Mike Stover
- * @author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell </a>
+ * author Mike Stover
+ * author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell </a>
  */
 public class SaveService {
-	private static XStream saver = new XStream();
+    private static final XStream saver = new XStream();
 
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// Version information for test plan header
-	public static final String version = "1.1";
+    // Default file name
+    private static final String SAVESERVICE_PROPERTIES_FILE = "/bin/saveservice.properties";// $NON-NLS-1$
 
-	static String propertiesVersion = "";// read from properties file
-    private static final String PROPVERSION = "1.7";
+    // Property name used to define file name
+    private static final String SAVESERVICE_PROPERTIES = "saveservice_properties";// $NON-NLS-1$
+
+    // Define file format property names
+    private static final String FILE_FORMAT = "file_format"; // $NON-NLS-1$
+    private static final String FILE_FORMAT_TESTPLAN = "file_format.testplan"; // $NON-NLS-1$
+    private static final String FILE_FORMAT_TESTLOG = "file_format.testlog"; // $NON-NLS-1$
+
+    // Define file format versions
+	private static final String VERSION_2_0 = "2.0";  // $NON-NLS-1$
+    //NOT USED private static final String VERSION_2_1 = "2.1";  // $NON-NLS-1$
+    private static final String VERSION_2_2 = "2.2";  // $NON-NLS-1$
+
+    // Default to overall format, and then to version 2.2
+    public static final String TESTPLAN_FORMAT
+        = JMeterUtils.getPropDefault(FILE_FORMAT_TESTPLAN
+        , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
+    
+    public static final String TESTLOG_FORMAT
+        = JMeterUtils.getPropDefault(FILE_FORMAT_TESTLOG
+        , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
+
+    private static final boolean IS_TESTPLAN_FORMAT_20
+        = VERSION_2_0.equals(TESTPLAN_FORMAT);
+    
+    private static final boolean IS_TESTLOG_FORMAT_20
+    = VERSION_2_0.equals(TESTLOG_FORMAT);
+
+    private static final boolean IS_TESTPLAN_FORMAT_22
+        = VERSION_2_2.equals(TESTPLAN_FORMAT);
+
+    // Holds the mappings from the saveservice properties file
+    private static final Properties aliasToClass = new Properties();
+
+    // Holds the reverse mappings
+    private static final Properties classToAlias = new Properties();
+	
+    // Version information for test plan header
+    // This is written to JMX files by ScriptWrapperConverter
+    // Also to JTL files by ResultCollector
+	public static final String version = "1.2"; // $NON-NLS-1$
+
+    // This is written to JMX files by ScriptWrapperConverter
+	static String propertiesVersion = "";// read from properties file; written to JMS files
+    private static final String PROPVERSION = "1.8";// Expected $NON-NLS-1$
 
     // Internal information only
-    private static String fileVersion = ""; // read from properties file
-	private static final String FILEVERSION = "327020";
+    private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
+	private static final String FILEVERSION = "327020";// Expected $NON-NLS-1$
+
+    static {
+        log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
+        initProps();
+        checkVersions();
+    }
 
 	// Helper method to simplify alias creation from properties
 	private static void makeAlias(String alias, String clazz) {
 		try {
 			saver.alias(alias, Class.forName(clazz));
+            aliasToClass.setProperty(alias,clazz);
+            Object oldval=classToAlias.setProperty(clazz,alias);
+            if (oldval != null) {
+                log.error("Duplicate alias detected for "+clazz+": "+alias+" & "+oldval);
+            }
 		} catch (ClassNotFoundException e) {
 			log.warn("Could not set up alias " + alias + " " + e.toString());
 		} catch (NoClassDefFoundError e) {
@@ -87,7 +141,7 @@ public class SaveService {
 		Properties nameMap = new Properties();
 		try {
 			nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome()
-					+ JMeterUtils.getPropDefault("saveservice_properties", "/bin/saveservice.properties")));
+					+ JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE)));
 			// now create the aliases
 			Iterator it = nameMap.entrySet().iterator();
 			while (it.hasNext()) {
@@ -98,21 +152,20 @@ public class SaveService {
 					makeAlias(key, val);
 				} else {
 					// process special keys
-					if (key.equalsIgnoreCase("_version")) {
-						log.info("Using SaveService properties file " + val);
-						propertiesVersion = val;
-                    } else if (key.equalsIgnoreCase("_file_version")) {
-                            val = extractVersion(val);
-                            log.info("Using SaveService properties file " + val);
-                            fileVersion = val;
+					if (key.equalsIgnoreCase("_version")) { // $NON-NLS-1$
+                        propertiesVersion = val;
+						log.info("Using SaveService properties version " + propertiesVersion);
+                    } else if (key.equalsIgnoreCase("_file_version")) { // $NON-NLS-1$
+                            fileVersion = extractVersion(val);
+                            log.info("Using SaveService properties file version " + fileVersion);
 					} else {
-						key = key.substring(1);
+						key = key.substring(1);// Remove the leading "_"
 						try {
-							if (val.trim().equals("collection")) {
+							if (val.trim().equals("collection")) { // $NON-NLS-1$
 								saver.registerConverter((Converter) Class.forName(key).getConstructor(
 										new Class[] { ClassMapper.class, String.class }).newInstance(
-										new Object[] { saver.getClassMapper(), "class" }));
-							} else if (val.trim().equals("mapping")) {
+										new Object[] { saver.getClassMapper(), "class" })); // $NON-NLS-1$
+							} else if (val.trim().equals("mapping")) { // $NON-NLS-1$
 								saver.registerConverter((Converter) Class.forName(key).getConstructor(
 										new Class[] { ClassMapper.class }).newInstance(
 										new Object[] { saver.getClassMapper() }));
@@ -142,28 +195,18 @@ public class SaveService {
 		}
 	}
 
-	static {
-		initProps();
-		/*
-		 * saver.registerConverter(new StringPropertyConverter());
-		 * saver.registerConverter(new BooleanPropertyConverter());
-		 * saver.registerConverter(new IntegerPropertyConverter());
-		 * saver.registerConverter(new LongPropertyConverter());
-		 * saver.registerConverter(new
-		 * TestElementConverter(saver.getClassMapper(), "class"));
-		 * saver.registerConverter(new MultiPropertyConverter(
-		 * saver.getClassMapper(), "class")); saver.registerConverter(new
-		 * TestElementPropertyConverter(saver .getClassMapper(), "class"));
-		 * saver.registerConverter(new HashTreeConverter(saver.getClassMapper(),
-		 * "class")); saver .registerConverter(new ScriptWrapperConverter(saver
-		 * .getClassMapper())); saver.registerConverter(new
-		 * SampleResultConverter(saver.getClassMapper(), "class"));
-		 * saver.registerConverter(new TestResultWrapperConverter(saver
-		 * .getClassMapper(), "class"));
-		 */
-		checkVersions();
-	}
-
+    // For converters to use
+    public static String aliasToClass(String s){
+        String r = aliasToClass.getProperty(s);
+        return r == null ? s : r;
+    }
+    
+    // For converters to use
+    public static String classToAlias(String s){
+        String r = classToAlias.getProperty(s);
+        return r == null ? s : r;
+    }
+    
 	public static void saveTree(HashTree tree, Writer writer) throws Exception {
 		ScriptWrapper wrapper = new ScriptWrapper();
 		wrapper.testPlan = tree;
@@ -197,9 +240,9 @@ public class SaveService {
 
 	// Extract version digits from String of the form #Revision: n.mm #
 	// (where # is actually $ above)
-	private static final String REVPFX = "$Revision: ";
+	private static final String REVPFX = "$Revision$NON-NLS-1$
 
-	private static final String REVSFX = " $";
+	private static final String REVSFX = " $"; // $NON-NLS-1$
 
 	private static String extractVersion(String rev) {
 		if (rev.length() > REVPFX.length() + REVSFX.length()) {
@@ -211,7 +254,7 @@ public class SaveService {
 
 	private static void checkVersion(Class clazz, String expected) {
 
-		String actual = "*NONE*";
+		String actual = "*NONE*"; // $NON-NLS-1$
 		try {
 			actual = (String) clazz.getMethod("getVersion", null).invoke(null, null);
 			actual = extractVersion(actual);
@@ -226,23 +269,23 @@ public class SaveService {
 
 	private static void checkVersions() {
 		versionsOK = true;
-		checkVersion(BooleanPropertyConverter.class, "325542");
-		checkVersion(HashTreeConverter.class, "325542");
-		checkVersion(IntegerPropertyConverter.class, "325542");
-		checkVersion(LongPropertyConverter.class, "325542");
-		checkVersion(MultiPropertyConverter.class, "325542");
-		checkVersion(SampleResultConverter.class, "325542");
+		checkVersion(BooleanPropertyConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(HashTreeConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(IntegerPropertyConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(LongPropertyConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(MultiPropertyConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(SampleResultConverter.class, "325542"); // $NON-NLS-1$
 		/*
 		 * Should check this, but tricky to do, because not built until later.
 		 * 
 		 * checkVersion(HTTPResultConverter.class, "1.6");
 		 * 
 		 */
-		checkVersion(StringPropertyConverter.class, "325542");
-		checkVersion(TestElementConverter.class, "325542");
-		checkVersion(TestElementPropertyConverter.class, "325542");
-		checkVersion(ScriptWrapperConverter.class, "325542");
-		checkVersion(TestResultWrapperConverter.class, "325542");
+		checkVersion(StringPropertyConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(TestElementConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(TestElementPropertyConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(ScriptWrapperConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(TestResultWrapperConverter.class, "325542"); // $NON-NLS-1$
 		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
 		}
@@ -279,14 +322,17 @@ public class SaveService {
 	}
 
 	public static boolean isSaveTestPlanFormat20() {
-		return JMeterUtils.getPropDefault("file_format.testplan", "2.1").equals("2.0")
-				|| JMeterUtils.getPropDefault("file_format", "2.1").equals("2.0");
+		return IS_TESTPLAN_FORMAT_20;
 	}
 
 	public static boolean isSaveTestLogFormat20() {
-		return JMeterUtils.getPropDefault("file_format.testlog", "2.1").equals("2.0")
-				|| JMeterUtils.getPropDefault("file_format", "2.1").equals("2.0");
+		return IS_TESTLOG_FORMAT_20;
 	}
+
+    // New test format - more compressed class names
+    public static boolean isSaveTestPlanFormat22() {
+        return IS_TESTPLAN_FORMAT_22;
+    }
 
 	public static class Test extends JMeterTestCase {
 		public Test() {
@@ -303,7 +349,6 @@ public class SaveService {
         }
         
 		public void testVersions() throws Exception {
-			initProps();
 			checkVersions();
 			assertTrue("Unexpected version found", versionsOK);
 		}
