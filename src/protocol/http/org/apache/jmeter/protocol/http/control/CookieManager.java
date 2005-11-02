@@ -197,7 +197,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			removeCookieNamed(cn);
 		} else {
             if (log.isDebugEnabled()) {
-                log.debug("Add cookie " + c.toString());
+                log.debug("Add cookie to store " + c.toString());
             }
 			getCookies().addItem(c);
             // Store cookie as a thread variable. 
@@ -218,7 +218,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		 * boolean clear = getClearEachIteration(); super.clear();
 		 * setClearEachIteration(clear);
 		 */
-		log.debug("Clear all cookies");
+		log.debug("Clear all cookies from store");
 		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
 	}
 
@@ -250,9 +250,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 */
 	public String getCookieHeaderForURL(URL url) {
 		boolean debugEnabled = log.isDebugEnabled();
-		if (debugEnabled) {
-			log.debug("Get cookie for URL= " + url);
-        }
+
 		if (!url.getProtocol().toUpperCase().trim().equals("HTTP")// $NON-NLS-1$
 				&& !url.getProtocol().toUpperCase().trim().equals("HTTPS"))// $NON-NLS-1$
 			return null;
@@ -260,6 +258,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		StringBuffer header = new StringBuffer();
 		String host = "." + url.getHost();
 		if (debugEnabled) {
+			log.debug("Get cookie for URL= " + url);
 			log.debug("URL Host=" + host);
 			log.debug("Time now (secs)" + (System.currentTimeMillis() / 1000));
         }
@@ -269,7 +268,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			// domain .X. This is a breach of the standard, but it's how
 			// browsers behave:
 			if (debugEnabled) {
-				log.debug("Cookie name=" + cookie.getName() 
+				log.debug("Possible Cookie. Name=" + cookie.getName() 
                         + " domain=" + cookie.getDomain() 
                         + " path=" + cookie.getPath() 
                         + " expires=" + cookie.getExpires());
@@ -282,7 +281,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 					header.append("; ");
 				}
 				if (debugEnabled) {
-					log.debug("matched cookie, value = " + cookie.getValue());
+					log.debug("Matched cookie:"
+							+ " name=" + cookie.getName()
+							+ " value=" + cookie.getValue());
                 }
 				header.append(cookie.getName()).append("=").append(cookie.getValue());
 			}
@@ -310,7 +311,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void addCookieFromHeader(String cookieHeader, URL url) {
         boolean debugEnabled = log.isDebugEnabled(); 
 		if (debugEnabled) {
-			log.debug("addCookieFromHeader(" + cookieHeader + "," + url.toExternalForm() + ")");
+			log.debug("Received Cookie: " + cookieHeader + " From:" + url.toExternalForm());
 		}
 		StringTokenizer st = new StringTokenizer(cookieHeader, ";");// $NON-NLS-1$
 		String nvp;
@@ -359,7 +360,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 				} catch (ParseException pe) {
 					// This means the cookie did not come in the proper format.
 					// Log an error and don't set an expiration time:
-					log.error("Couldn't parse Cookie expiration time.", pe);
+					log.error("Couldn't parse Cookie expiration time: "
+							+cookieHeader, pe);
 				} catch (Exception e) {
 					// DateFormat.parse() has been known to throw various
 					// unchecked exceptions in the past, and does still do that
@@ -370,7 +372,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 					// As a workaround for such issues we will catch all
 					// exceptions and react just as we did for ParseException
 					// above:
-					log.error("Couln't parse Cookie expiration time: likely JDK bug.", e);
+					log.error("Couln't parse Cookie expiration time: likely JDK bug: "
+							+cookieHeader, e);
 				}
 			} else if (key.equalsIgnoreCase("domain")) {// $NON-NLS-1$
 				// trim() is a workaround for bug in Oracle8iAS wherere
