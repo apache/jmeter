@@ -30,6 +30,6 @@ public class Table extends AbstractTable {
      * it should be implemented.
      */
     public String[][] getTableData(List data) {
-        return null;
+        return new String[0][0];
     }
 }
