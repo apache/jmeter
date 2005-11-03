@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -27,8 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -61,6 +58,8 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * ReportMainFrame is based on MainFrame. it uses the same basic structure,
@@ -71,6 +70,8 @@ import org.apache.jorphan.gui.ComponentUtil;
  */
 public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
     /** The menu bar. */
     protected ReportMenuBar menuBar;
 
@@ -84,7 +85,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
     protected JTree tree;
 
     /** An image which is displayed when a test is running. */
-	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
+	//private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
 
 	/** An image which is displayed when a test is not currently running. */
 	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");
@@ -99,11 +100,14 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	private JButton runningIndicator;
 
 	/** The set of currently running hosts. */
-	private Set hosts = new HashSet();
+	//private Set hosts = new HashSet();
 
 	/** A message dialog shown while JMeter threads are stopping. */
 	private JDialog stoppingMessage;
 
+    public ReportMainFrame(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
     /**
 	 * Create a new JMeter frame.
 	 * 
