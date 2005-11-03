@@ -39,7 +39,7 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class SamplingStatCalculator implements Serializable {
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
 
@@ -59,7 +59,8 @@ public class SamplingStatCalculator implements Serializable {
 
 	// private int index;
 
-	private SamplingStatCalculator() {// Don't (can't) use this...
+	public SamplingStatCalculator() {// Don't (can't) use this...
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
 	}
 
 	/**
