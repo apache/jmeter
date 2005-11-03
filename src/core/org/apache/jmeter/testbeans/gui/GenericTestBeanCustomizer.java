@@ -96,7 +96,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer, PropertyChangeListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String GROUP = "group";
 
@@ -153,6 +153,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 */
 	private Map propertyMap;
 
+    public GenericTestBeanCustomizer(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
 	/**
 	 * Create a customizer for a given test bean type.
 	 * 

@@ -87,7 +87,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Class testBeanClass;
 
@@ -136,8 +136,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	}
 
 	// Dummy for JUnit test
-	TestBeanGUI() {
-		log.warn("Only for use in testing");// $NON-NLS-1$
+	public TestBeanGUI() {
+		log.warn("Constructor only for use in testing");// $NON-NLS-1$
 	}
 
 	public TestBeanGUI(Class testBeanClass) {
