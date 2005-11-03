@@ -35,7 +35,7 @@ import java.util.Map;
  *         Created: 2005-okt-04
  */
 public class StatisticalSampleSender implements SampleSender, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;
 
@@ -54,6 +54,11 @@ public class StatisticalSampleSender implements SampleSender, Serializable {
 	private long timeThreshold;
 
 	private long batchSendTime = -1;
+
+    public StatisticalSampleSender(){
+        log.warn("Constructor only intended for use in testing");
+    }
+        
 
 	/**
 	 * Constructor

@@ -19,15 +19,23 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 /**
  * @author Lars Krog-Jensen
  *         Created: 2005-okt-04
  */
 public class StatisticalSampleResult extends SampleResult implements
 		Serializable {
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
+	private int errorCount;
 
-	protected int errorCount;
-
+    public StatisticalSampleResult(){
+       log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
+    
 	public StatisticalSampleResult(SampleResult res) {
 		setSampleLabel(res.getSampleLabel());
 	}

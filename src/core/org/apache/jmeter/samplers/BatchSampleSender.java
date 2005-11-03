@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @author Michael Freeman
  */
 public class BatchSampleSender implements SampleSender, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;
 
@@ -48,6 +48,9 @@ public class BatchSampleSender implements SampleSender, Serializable {
 
 	private long batchSendTime = -1;
 
+    public BatchSampleSender(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
 	/**
 	 * Constructor
 	 * 
@@ -57,9 +60,9 @@ public class BatchSampleSender implements SampleSender, Serializable {
 	BatchSampleSender(RemoteSampleListener listener) {
 		this.listener = listener;
 		init();
-		log
-				.info("Using batching for this run." + " Thresholds: num=" + numSamplesThreshold + ", time="
-						+ timeThreshold);
+		log.info("Using batching for this run." 
+                + " Thresholds: num=" + numSamplesThreshold 
+                + ", time="	+ timeThreshold);
 	}
 
 	/**
