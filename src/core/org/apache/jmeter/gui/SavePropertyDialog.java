@@ -45,14 +45,17 @@ import org.apache.log.Logger;
  * @author mstover
  */
 public class SavePropertyDialog extends JDialog implements ActionListener {
-	protected static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static Map functors = new HashMap();
+	private static Map functors = new HashMap();
 
-	static final long serialVersionUID = 1;
+	private static final long serialVersionUID = 1;
 
-	SampleSaveConfiguration saveConfig;
+	private SampleSaveConfiguration saveConfig;
 
+    public SavePropertyDialog(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
 	/**
 	 * @param owner
 	 * @param title

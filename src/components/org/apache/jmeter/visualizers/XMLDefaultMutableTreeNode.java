@@ -18,6 +18,9 @@
 package org.apache.jmeter.visualizers;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -34,10 +37,15 @@ import org.xml.sax.SAXException;
  * 
  */
 public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 	// private static final int LIMIT_STR_SIZE = 100;
 	// private boolean isRoot;
 	private Node xmlNode;
 
+    public XMLDefaultMutableTreeNode(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
+    
 	public XMLDefaultMutableTreeNode(Node root) throws SAXException {
 		super(root.getNodeName());
 		initAttributeNode(root, this);
