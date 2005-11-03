@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-20045 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,16 @@ import java.io.Serializable;
  */
 
 public class HoldSampleSender implements SampleSender, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	List sampleStore = new ArrayList();
+	private List sampleStore = new ArrayList();
 
-	RemoteSampleListener listener;
+	private RemoteSampleListener listener;
 
+    public HoldSampleSender(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
+    
 	HoldSampleSender(RemoteSampleListener listener) {
 		log.info("Using Sample store for this test run");
 		this.listener = listener;
