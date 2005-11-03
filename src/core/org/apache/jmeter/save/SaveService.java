@@ -240,7 +240,7 @@ public class SaveService {
 
 	// Extract version digits from String of the form #Revision: n.mm #
 	// (where # is actually $ above)
-	private static final String REVPFX = "$Revision$NON-NLS-1$
+	private static final String REVPFX = "$Revision$NON-NLS-1$";
 
 	private static final String REVSFX = " $"; // $NON-NLS-1$
 
