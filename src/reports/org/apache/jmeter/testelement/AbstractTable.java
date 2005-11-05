@@ -45,11 +45,11 @@ public abstract class AbstractTable extends AbstractTestElement
     	REPORT_TABLE_RESPONSE_RATE, REPORT_TABLE_TRANSFER_RATE, REPORT_TABLE_50_PERCENT,
     	REPORT_TABLE_90_PERCENT, REPORT_TABLE_ERROR_RATE };
 
-    public static final String REPORT_TABLE_FILE = "ReportTable.file";
     public static final String REPORT_TABLE_DATE = "ReportTable.test.date";
+    public static final String REPORT_TABLE_TOTAL = "ReportTable.total";
     public static final String REPORT_TABLE_URL = "ReportTable.url";
     
-    public static final String[] xitems = { REPORT_TABLE_FILE, REPORT_TABLE_DATE,
+    public static final String[] xitems = { REPORT_TABLE_DATE, REPORT_TABLE_TOTAL,
     	REPORT_TABLE_URL };
     
     protected ArrayList children = new ArrayList();
@@ -144,8 +144,9 @@ public abstract class AbstractTable extends AbstractTestElement
 	}
     
     /**
-     * method isn't implemented and is left as abstract. Subclasses
-     * need to provide concrete logic
+     * method isn't implemented and is left abstract. Subclasses
+     * need to filter the data in the list and return statistics.
+     * The statistics should be like the aggregate listener.
      */
     public abstract String[][] getTableData(List data);
     
