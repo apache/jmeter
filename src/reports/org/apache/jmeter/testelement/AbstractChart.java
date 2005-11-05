@@ -107,5 +107,12 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     	return checked;
     }
     
+    /**
+     * Subclasses will need to implement the method by doing the following:
+     * 1. get the x and y axis
+     * 2. filter the table data
+     * 3. pass the data to the chart library
+     * 4. return the generated chart
+     */
 	public abstract JComponent renderChart(ReportTable element);
 }

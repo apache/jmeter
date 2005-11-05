@@ -21,5 +21,13 @@ import javax.swing.JComponent;
 
 
 public interface ReportChart {
+    /**
+     * The idea is a report table will be passed to a ReportChart
+     * TestElement. The ReportChart is responsible for choosing which
+     * columns/rows it needs and generate a chart for it. The chart
+     * object is a JComponent.
+     * @param element
+     * @return
+     */
 	JComponent renderChart(ReportTable element);
 }
