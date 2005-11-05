@@ -33,6 +33,7 @@ public class BarChart extends AbstractChart {
 	}
 
 	public JComponent renderChart(ReportTable element) {
+        
 		return null;
 	}
 }
