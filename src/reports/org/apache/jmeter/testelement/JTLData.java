@@ -17,16 +17,21 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.jmeter.report.DataSet;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author Peter Lin
@@ -37,6 +42,8 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
  */
 public class JTLData implements Serializable, DataSet {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
     protected HashMap data = new HashMap();
     protected String jtl_file = null;
     protected long startTimestamp = 0;
@@ -69,20 +76,28 @@ public class JTLData implements Serializable, DataSet {
      * The purpose of the method is to make it convienant to pass a list
      * of the URL's and return a list of the SamplingStatCalculators. If
      * no URL's match, the list is empty.
+     * The SamplingStatCalculators will be returned in the same sequence
+     * as the url list.
      * @param urls
      * @return
      */
     public List getStats(List urls) {
         ArrayList items = new ArrayList();
-        // TODO implement the logic
+        Iterator itr = urls.iterator();
+        if (itr.hasNext()) {
+            SamplingStatCalculator row = (SamplingStatCalculator)itr.next();
+            if (row != null) {
+                items.add(items);
+            }
+        }
         return items;
     }
     
-    public void setPath(String absolutePath) {
+    public void setDataSource(String absolutePath) {
         this.jtl_file = absolutePath;
     }
     
-    public String getPath() {
+    public String getDataSource() {
         return this.jtl_file;
     }
     
@@ -126,13 +141,47 @@ public class JTLData implements Serializable, DataSet {
             return null;
         }
     }
-    
+
+    /**
+     * The implementation loads a single .jtl file and cleans up the
+     * ResultCollector.
+     */
     public void loadData() {
-        
+        if (this.getDataSource() != null) {
+            ResultCollector rc = new ResultCollector();
+            rc.setFilename(this.getDataSource());
+            rc.setListener(this);
+            rc.clear();
+            rc.setListener(null);
+            rc = null;
+            try {
+                rc.loadExistingFile();
+            } catch (IOException e) {
+                log.warn(e.getMessage());
+            }
+        }
     }
     
+    /**
+     * the implementation will set the start timestamp if the HashMap
+     * is empty. otherwise it will set the end timestamp using the
+     * end time
+     */
     public void add(SampleResult sample) {
-        
+        if (data.size() == 0) {
+            this.startTimestamp = sample.getStartTime();
+        } else {
+            this.endTimestamp = sample.getEndTime();
+        }
+        // now add the samples to the HashMap
+        SamplingStatCalculator row = (SamplingStatCalculator)data.get(sample.getSampleLabel());
+        if (row == null) {
+            row = new SamplingStatCalculator();
+            // just like the aggregate listener, we use the sample label to represent
+            // a row. in this case, we use it as a key.
+            this.data.put(sample.getSampleLabel(),row);
+        }
+        row.addSample(sample);
     }
     
     /**
