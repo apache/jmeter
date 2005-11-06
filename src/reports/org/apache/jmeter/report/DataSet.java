@@ -34,14 +34,54 @@ import org.apache.jmeter.visualizers.Visualizer;
  */
 public interface DataSet extends Visualizer {
 
-    public void setPath(String absolutePath);
-    public String getPath();
+    /**
+     * Depending on the implementation, the datasouce could be a file
+     * or a RDBMS. It's up to the implementing class to decide.
+     * @param datasource
+     */
+    public void setDataSource(String datasource);
+    /**
+     * Return the datasource. For files, it should be the absolute path.
+     * For databases, it should be the datasource name created in jmeter.
+     * @return
+     */
+    public String getDataSource();
+    /**
+     * Set the timestamp using the first result from the datasource
+     * @param stamp
+     */
     public void setStartTimestamp(long stamp);
+    /**
+     * return the timestamp in millisecond format.
+     * @return
+     */
     public long getStartTimestamp();
+    /**
+     * Set the timestamp using the last result from the datasource
+     * @param stamp
+     */
     public void setEndTimestamp(long stamp);
+    /**
+     * return the timestamp in millisecond format.
+     * @return
+     */
     public long getEndTimestamp();
+    /**
+     * Return the Date object using the start timestamp
+     * @return
+     */
     public Date getDate();
+    /**
+     * Classes implementing the method should return the URL's in the 
+     * DataSet. It is up to the class to return Strings or URL.
+     * @return
+     */
     public Set getURLs();
+    /**
+     * Classes implementing the method should return instance of 
+     * SamplingStatCalculator.
+     * @return
+     */
     public Set getStats();
     /**
      * Return the SamplingStatCalculate for a specific URL.
