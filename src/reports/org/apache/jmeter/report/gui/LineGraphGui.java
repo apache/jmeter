@@ -43,7 +43,15 @@ public class LineGraphGui extends AbstractReportGui {
     private JLabeledTextField yAxisLabel = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
     
-	private JLabeledChoice checkItems = null;
+    private JLabeledTextField caption = 
+        new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
+                Color.white);
+
+    private JLabeledTextField urls = 
+        new JLabeledTextField(JMeterUtils.getResString("report_line_graph_urls"),
+                Color.white);
+
+    private JLabeledChoice checkItems = null;
 	private JLabeledChoice xItems = null;
 
     public LineGraphGui() {
@@ -96,6 +104,8 @@ public class LineGraphGui extends AbstractReportGui {
         ypanel.add(checkItems);
         options.add(ypanel);
         options.add(yAxisLabel);
+        options.add(caption);
+        options.add(urls);
         
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
@@ -114,6 +124,8 @@ public class LineGraphGui extends AbstractReportGui {
 		bc.setYAxis(checkItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
+        bc.setCaption(caption.getText());
+        bc.setURLs(urls.getText());
 	}
 	
     public void configure(TestElement element) {
@@ -123,6 +135,8 @@ public class LineGraphGui extends AbstractReportGui {
         checkItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
+        caption.setText(bc.getCaption());
+        urls.setText(bc.getURLs());
         if (bc.getCheckedItems() != null && bc.getCheckedItems().size() > 0) {
         	String[] its = new String[bc.getCheckedItems().size()];
         	checkItems.setValues((String[])bc.getCheckedItems().toArray(its));
