@@ -23,10 +23,20 @@ import org.apache.jmeter.report.ReportTable;
 
 public class LineGraph extends AbstractChart {
 
+    public static final String REPORT_CHART_URLS = "ReportChart.chart.urls";
+
 	public LineGraph() {
 		super();
 	}
 
+    public String getURLs() {
+        return getPropertyAsString(REPORT_CHART_URLS);
+    }
+    
+    public void setURLs(String urls) {
+        setProperty(REPORT_CHART_URLS,urls);
+    }
+    
 	public JComponent renderChart(ReportTable element) {
 		return null;
 	}
