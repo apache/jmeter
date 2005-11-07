@@ -34,11 +34,12 @@ import org.apache.jmeter.report.ReportTable;
  */
 public abstract class AbstractChart extends AbstractTestElement implements ReportChart {
 
-    public static final String REPORT_CHART_X_AXIS = "ReportTable.chart.x.axis";
-    public static final String REPORT_CHART_Y_AXIS = "ReportTable.chart.y.axis";
-    public static final String REPORT_CHART_X_LABEL = "ReportTable.chart.x.label";
-    public static final String REPORT_CHART_Y_LABEL = "ReportTable.chart.y.label";
-    public static final String REPORT_CHART_TITLE = "ReportTable.chart.title";
+    public static final String REPORT_CHART_X_AXIS = "ReportChart.chart.x.axis";
+    public static final String REPORT_CHART_Y_AXIS = "ReportChart.chart.y.axis";
+    public static final String REPORT_CHART_X_LABEL = "ReportChart.chart.x.label";
+    public static final String REPORT_CHART_Y_LABEL = "ReportChart.chart.y.label";
+    public static final String REPORT_CHART_TITLE = "ReportChart.chart.title";
+    public static final String REPORT_CHART_CAPTION = "ReportChart.chart.caption";
 
     protected AbstractTable parent = null;
     
@@ -78,12 +79,42 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     	setProperty(REPORT_CHART_Y_LABEL,label);
     }
     
+    /**
+     * The title is a the name for the chart. A page link will
+     * be generated using the title. The title will also be
+     * used for a page index.
+     * @return
+     */
     public String getTitle() {
     	return getPropertyAsString(REPORT_CHART_TITLE);
     }
     
+    /**
+     * The title is a the name for the chart. A page link will
+     * be generated using the title. The title will also be
+     * used for a page index.
+     * @param title
+     */
     public void setTitle(String title) {
     	setProperty(REPORT_CHART_TITLE,title);
+    }
+
+    /**
+     * The caption is a description for the chart explaining
+     * what the chart means.
+     * @return
+     */
+    public String getCaption() {
+        return getPropertyAsString(REPORT_CHART_CAPTION);
+    }
+    
+    /**
+     * The caption is a description for the chart explaining
+     * what the chart means.
+     * @param caption
+     */
+    public void setCaption(String caption) {
+        setProperty(REPORT_CHART_CAPTION,caption);
     }
     
     public void setParentTable(AbstractTable table) {

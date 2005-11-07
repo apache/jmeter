@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.report.ReportTable;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * AbstractTable is the base Element for different kinds of report tables.
@@ -30,6 +32,8 @@ import org.apache.jmeter.report.ReportTable;
 public abstract class AbstractTable extends AbstractTestElement 
     implements ReportTable 
 {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String REPORT_TABLE_MEAN = "ReportTable.mean";
     public static final String REPORT_TABLE_MEDIAN = "ReportTable.median";
@@ -45,11 +49,10 @@ public abstract class AbstractTable extends AbstractTestElement
     	REPORT_TABLE_RESPONSE_RATE, REPORT_TABLE_TRANSFER_RATE, REPORT_TABLE_50_PERCENT,
     	REPORT_TABLE_90_PERCENT, REPORT_TABLE_ERROR_RATE };
 
-    public static final String REPORT_TABLE_DATE = "ReportTable.test.date";
     public static final String REPORT_TABLE_TOTAL = "ReportTable.total";
     public static final String REPORT_TABLE_URL = "ReportTable.url";
     
-    public static final String[] xitems = { REPORT_TABLE_DATE, REPORT_TABLE_TOTAL,
+    public static final String[] xitems = { REPORT_TABLE_TOTAL,
     	REPORT_TABLE_URL };
     
     protected ArrayList children = new ArrayList();
@@ -137,6 +140,7 @@ public abstract class AbstractTable extends AbstractTestElement
     
 	public void addTestElement(TestElement el) {
 		super.addTestElement(el);
+        log.info("TestElement: " + el.getClass().getName());
 		if (el instanceof AbstractChart) {
 			((AbstractChart)el).setParentTable(this);
 		}

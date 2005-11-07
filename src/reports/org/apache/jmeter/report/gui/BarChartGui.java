@@ -43,7 +43,11 @@ public class BarChartGui extends AbstractReportGui {
     private JLabeledTextField yAxisLabel = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
     
-	private JLabeledChoice checkItems = null;
+    private JLabeledTextField caption = 
+        new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
+                Color.white);
+
+    private JLabeledChoice checkItems = null;
 	private JLabeledChoice xItems = null;
 
     public BarChartGui() {
@@ -96,6 +100,7 @@ public class BarChartGui extends AbstractReportGui {
         ypanel.add(checkItems);
         options.add(ypanel);
         options.add(yAxisLabel);
+        options.add(caption);
         
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
@@ -114,6 +119,7 @@ public class BarChartGui extends AbstractReportGui {
 		bc.setYAxis(checkItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
+        bc.setCaption(caption.getText());
 	}
 	
     public void configure(TestElement element) {
@@ -123,6 +129,7 @@ public class BarChartGui extends AbstractReportGui {
         checkItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
+        caption.setText(bc.getCaption());
         if (bc.getCheckedItems() != null && bc.getCheckedItems().size() > 0) {
         	String[] its = new String[bc.getCheckedItems().size()];
         	checkItems.setValues((String[])bc.getCheckedItems().toArray(its));
