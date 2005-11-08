@@ -98,7 +98,12 @@ public class ReportPageGui extends AbstractReportGui {
 		addMenu.add(ReportMenuFactory.makeMenuItem(new TableGui().getStaticLabel(),
 				TableGui.class.getName(),
 				"Add"));
-        // addMenu.add(ReportMenuFactory.makeMenu(ReportMenuFactory.TABLES, "Add"));
+        addMenu.add(ReportMenuFactory.makeMenuItem(new BarChartGui().getStaticLabel(),
+                BarChartGui.class.getName(),
+                "Add"));
+        addMenu.add(ReportMenuFactory.makeMenuItem(new LineGraphGui().getStaticLabel(),
+                LineGraphGui.class.getName(),
+                "Add"));
         pop.add(addMenu);
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);

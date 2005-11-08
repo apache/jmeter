@@ -17,9 +17,6 @@
  */
 package org.apache.jmeter.testelement;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JComponent;
 
 import org.apache.jmeter.report.ReportChart;
@@ -41,8 +38,6 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public static final String REPORT_CHART_TITLE = "ReportChart.chart.title";
     public static final String REPORT_CHART_CAPTION = "ReportChart.chart.caption";
 
-    protected AbstractTable parent = null;
-    
     public AbstractChart() {
 		super();
 	}
@@ -115,27 +110,6 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      */
     public void setCaption(String caption) {
         setProperty(REPORT_CHART_CAPTION,caption);
-    }
-    
-    public void setParentTable(AbstractTable table) {
-    	this.parent = table;
-    }
-
-    /**
-     * Method returns the items that are checked
-     * @return
-     */
-    public List getCheckedItems() {
-    	ArrayList checked = new ArrayList();
-    	if ( this.parent != null) {
-        	for (int idx=0; idx < AbstractTable.items.length; idx++) {
-        		if (this.parent.getPropertyAsString(
-        				AbstractTable.items[idx]).equals(String.valueOf(true))) {
-        			checked.add(AbstractTable.items[idx]);
-        		}
-        	}
-    	}
-    	return checked;
     }
     
     /**

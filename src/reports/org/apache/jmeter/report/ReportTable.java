@@ -25,5 +25,4 @@ import java.util.List;
  */
 public interface ReportTable {
     String[][] getTableData(List data);
-    List getChartElements();
 }
