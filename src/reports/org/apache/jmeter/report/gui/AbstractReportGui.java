@@ -33,6 +33,7 @@ import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.NamePanel;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.logging.LoggingManager;
@@ -65,12 +66,9 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
 		return "report_page";
 	}
 
-    /**
     public void configureTestElement(TestElement element) {
-        log.info("calling super.configureTestElement");
         super.configureTestElement(element);
     }
-    **/
     
     /* (non-Javadoc)
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createPopupMenu()

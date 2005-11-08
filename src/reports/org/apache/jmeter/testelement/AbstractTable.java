@@ -17,7 +17,6 @@
  */
 package org.apache.jmeter.testelement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jmeter.report.ReportTable;
@@ -55,15 +54,12 @@ public abstract class AbstractTable extends AbstractTestElement
     public static final String[] xitems = { REPORT_TABLE_TOTAL,
     	REPORT_TABLE_URL };
     
-    protected ArrayList children = new ArrayList();
-    
     public AbstractTable() {
 		super();
 	}
 
     public void clear() {
         super.clear();
-        children.clear();
     }
     
     public boolean getMean() {
@@ -139,12 +135,10 @@ public abstract class AbstractTable extends AbstractTestElement
     }
     
 	public void addTestElement(TestElement el) {
-		super.addTestElement(el);
-        log.info("TestElement: " + el.getClass().getName());
-		if (el instanceof AbstractChart) {
-			((AbstractChart)el).setParentTable(this);
-		}
-        this.children.add(el);
+        if (el != null) {
+            super.addTestElement(el);
+            log.info("TestElement: " + el.getClass().getName());
+        }
 	}
     
     /**
@@ -154,7 +148,4 @@ public abstract class AbstractTable extends AbstractTestElement
      */
     public abstract String[][] getTableData(List data);
     
-    public List getChartElements() {
-        return this.children;
-    }
 }

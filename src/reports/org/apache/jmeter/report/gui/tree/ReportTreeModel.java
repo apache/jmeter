@@ -109,9 +109,6 @@ public class ReportTreeModel extends DefaultTreeModel {
 		guicomp.configure(component);
 		guicomp.modifyTestElement(component);
 		ReportGuiPackage.getInstance().getCurrentGui(); // put the gui object back
-		if (component instanceof AbstractChart) {
-			((AbstractChart)component).setParentTable((AbstractTable)node.getUserObject());
-		}
 		// to the way it was.
 		ReportTreeNode newNode = new ReportTreeNode(component, this);
 

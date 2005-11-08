@@ -100,14 +100,6 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
     
 	public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
-        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new BarChartGui().getStaticLabel(),
-				BarChartGui.class.getName(),
-				"Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new LineGraphGui().getStaticLabel(),
-				LineGraphGui.class.getName(),
-				"Add"));
-        pop.add(addMenu);
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);
         return pop;
