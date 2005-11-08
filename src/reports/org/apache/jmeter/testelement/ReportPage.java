@@ -42,7 +42,6 @@ public class ReportPage extends AbstractTestElement implements Serializable {
      * No-arg constructor.
      */
     public ReportPage() {
-        // setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
     }
 
     public static ReportPage createReportPage(String name) {

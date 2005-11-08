@@ -47,8 +47,8 @@ public class BarChartGui extends AbstractReportGui {
         new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
                 Color.white);
 
-    private JLabeledChoice checkItems = null;
-	private JLabeledChoice xItems = null;
+    private JLabeledChoice yItems = new JLabeledChoice();
+	private JLabeledChoice xItems = new JLabeledChoice();
 
     public BarChartGui() {
 		super();
@@ -83,7 +83,6 @@ public class BarChartGui extends AbstractReportGui {
         JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
 		HorizontalPanel xpanel = new HorizontalPanel(Color.white);
 		xLabel.setBorder(new EmptyBorder(5,2,5,2));
-        xItems = new JLabeledChoice();
         xItems.setBackground(Color.white);
         xItems.setValues(AbstractTable.xitems);
         xpanel.add(xLabel);
@@ -94,10 +93,10 @@ public class BarChartGui extends AbstractReportGui {
 		JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
 		HorizontalPanel ypanel = new HorizontalPanel(Color.white);
 		yLabel.setBorder(new EmptyBorder(5,2,5,2));
-        checkItems = new JLabeledChoice();
-        checkItems.setBackground(Color.white);
+        yItems.setBackground(Color.white);
+        yItems.setValues(AbstractTable.items);
         ypanel.add(yLabel);
-        ypanel.add(checkItems);
+        ypanel.add(yItems);
         options.add(ypanel);
         options.add(yAxisLabel);
         options.add(caption);
@@ -116,7 +115,7 @@ public class BarChartGui extends AbstractReportGui {
 		this.configureTestElement(element);
 		BarChart bc = (BarChart)element;
 		bc.setXAxis(xItems.getText());
-		bc.setYAxis(checkItems.getText());
+		bc.setYAxis(yItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
         bc.setCaption(caption.getText());
@@ -126,14 +125,10 @@ public class BarChartGui extends AbstractReportGui {
         super.configure(element);
         BarChart bc = (BarChart)element;
         xItems.setText(bc.getXAxis());
-        checkItems.setText(bc.getYAxis());
+        yItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
         caption.setText(bc.getCaption());
-        if (bc.getCheckedItems() != null && bc.getCheckedItems().size() > 0) {
-        	String[] its = new String[bc.getCheckedItems().size()];
-        	checkItems.setValues((String[])bc.getCheckedItems().toArray(its));
-        }
     }
     
 }
