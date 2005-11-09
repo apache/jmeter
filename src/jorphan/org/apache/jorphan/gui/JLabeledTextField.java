@@ -19,6 +19,7 @@
 package org.apache.jorphan.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
@@ -76,6 +77,16 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
 		init();
 	}
 
+    public JLabeledTextField(String pLabel, Color bk) {
+        super();
+        mTextField = createTextField(20);
+        mLabel = new JLabel(pLabel);
+        mLabel.setBackground(bk);
+        mLabel.setLabelFor(mTextField);
+        this.setBackground(bk);
+        init();
+    }
+    
 	public List getComponentList() {
 		List comps = new LinkedList();
 		comps.add(mLabel);
