@@ -130,7 +130,9 @@ public class BeanShellSampler extends AbstractSampler {
 			bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
 			bshInterpreter.set("vars", vars);//$NON-NLS-1$
 
-			Object bshOut;
+            res.setDataType(SampleResult.TEXT); // assume text output - script can override if necessary
+
+            Object bshOut;
 
 			if (fileName.length() == 0) {
 				bshOut = bshInterpreter.eval(request);
@@ -138,14 +140,12 @@ public class BeanShellSampler extends AbstractSampler {
 				bshOut = bshInterpreter.source(fileName);
 			}
 
-			String out;
-			if (bshOut == null) {// Script did not return anything...
-				out = "";
-			} else {
-				out = bshOut.toString();
+			if (bshOut != null) {// Set response data
+                String out = bshOut.toString();
+                res.setResponseData(out.getBytes());
 			}
-			res.setResponseData(out.getBytes());
-			res.setDataType(SampleResult.TEXT);
+            // script can also use setResponseData() so long as it returns null
+            
 			res.setResponseCode(bshInterpreter.get("ResponseCode").toString());//$NON-NLS-1$
 			res.setResponseMessage(bshInterpreter.get("ResponseMessage").toString());//$NON-NLS-1$
 			isSuccessful = Boolean.valueOf(bshInterpreter.get("IsSuccess") //$NON-NLS-1$
