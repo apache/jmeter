@@ -383,6 +383,18 @@ public class SampleResult implements Serializable {
 		responseData = response;
 	}
 
+    /**
+     * Sets the responseData attribute of the SampleResult object.
+     * 
+     * @param response
+     *            the new responseData value (String)
+     * 
+     * @deprecated - only intended for use from BeanShell code
+     */
+    public void setResponseData(String response) {
+        responseData = response.getBytes();
+    }
+
 	/**
 	 * Gets the responseData attribute of the SampleResult object.
 	 * 
