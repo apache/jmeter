@@ -575,7 +575,12 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseMessage - for example "OK"</li>
 			<li>IsSuccess - true/false</li>
 			</ul>
-			<p>The Sampler ResponseData is set from the return value of the script.</p>
+			<p>The Sampler ResponseData is set from the return value of the script.
+			Since version 2.1.2, if the script returns null, it can set the response directly, by using the method 
+			SampleResponse.setResponseData(data), where data is either a String or a byte array.
+			The data type defaults to "text", but can be set to binary by using the method
+			SampleResponse.setDataType(SampleResponse.BINARY).
+			</p>
 			<p>The SampleResult variable gives the script full access to all the fields and
 				methods in the SampleResult. For example, the script has access to the methods
 				setStopThread(boolean) and setStopTest(boolean).
@@ -588,6 +593,9 @@ if (bsh.args[0].equalsIgnoreCase("StopThread")) {
     SampleResult.setStopThread(true);
 }
 return "Data from sample with Label "+Label;
+//or, since version 2.1.2
+SampleResult.setResponseData("My data");
+return null;
 </pre>
 </component>
 
