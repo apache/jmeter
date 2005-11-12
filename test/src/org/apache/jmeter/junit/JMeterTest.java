@@ -435,7 +435,7 @@ public class JMeterTest extends JMeterTestCase {
 		StringWriter writer = new StringWriter();
 		SaveService.saveElement(el, writer);
 		el = (TestElement) SaveService.loadElement(new StringReader(writer.toString()));
-		log.debug("Successfully saved");
+        assertNotNull("Load element failed on: "+name,el);
 		guiItem.configure(el);
 		assertEquals("CONFIGURE-TEST: Failed on " + name, el.getPropertyAsString(TestElement.NAME), guiItem.getName());
 		guiItem.modifyTestElement(el2);
