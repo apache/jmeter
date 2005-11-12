@@ -77,6 +77,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+import com.thoughtworks.xstream.converters.ConversionException;
+
 /**
  * @author mstover
  */
@@ -206,6 +208,9 @@ public class JMeter implements JMeterPlugin {
 				GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
 
 				new Load().insertLoadedTree(1, tree);
+            } catch (ConversionException e) {
+                log.error("Failure loading test file", e);
+                JMeterUtils.reportErrorToUser(SaveService.CEtoString(e));
 			} catch (Exception e) {
 				log.error("Failure loading test file", e);
 				JMeterUtils.reportErrorToUser(e.toString());
