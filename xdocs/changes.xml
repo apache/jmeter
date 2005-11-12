@@ -32,6 +32,9 @@
 <ul>
 <li>Report function</li>
 <li>XPath Extractor</li>
+<li>Simpler JMX file format (2.2)</li>
+<li>BeanshellSampler code can update ResponseData directly</li>
+<li></li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -44,6 +47,9 @@
 <li>Bug 37140 - handle encoding better in RegexFunction</li>
 <li>Load all cookies, not just the first; fix class cast exception</li>
 <li>Fix default Cookie path name (remove page name)</li>
+<li>Fixed resultcode attribute name</li>
+<li></li>
+<li></li>
 </ul>	
 	
 <h4>Other changes</h4>
