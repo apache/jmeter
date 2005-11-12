@@ -22,10 +22,10 @@ import java.io.UnsupportedEncodingException;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
-import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+//import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -41,14 +41,45 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * Preferences - Java - Code Generation - Code and Comments
  */
 public class SampleResultConverter extends AbstractCollectionConverter {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+	//private static final Logger log = LoggingManager.getLoggerForClass();
+ 
+    private static final String JAVA_LANG_STRING = "java.lang.String"; //$NON-NLS-1$
+    private static final String ATT_CLASS = "class"; //$NON-NLS-1$
+
+    // Element tags. Must be unique. Keep sorted.
+    protected static final String TAG_COOKIES           = "cookies";          //$NON-NLS-1$
+    protected static final String TAG_METHOD            = "method";           //$NON-NLS-1$
+    protected static final String TAG_QUERY_STRING      = "queryString";      //$NON-NLS-1$
+    protected static final String TAG_REDIRECT_LOCATION = "redirectLocation"; //$NON-NLS-1$
+    protected static final String TAG_REQUEST_HEADER    = "requestHeader";    //$NON-NLS-1$
+    protected static final String TAG_RESPONSE_DATA     = "responseData";     //$NON-NLS-1$
+    protected static final String TAG_RESPONSE_HEADER   = "responseHeader";   //$NON-NLS-1$
+    protected static final String TAG_SAMPLER_DATA      = "samplerData";      //$NON-NLS-1$
+
+    // samplerData attributes. Must be unique. Keep sorted.
+    private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
+    private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
+    private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
+    private static final String ATT_LATENCY           = "lt"; //$NON-NLS-1$
+
+    // N.B. Originally the response code was saved with the code "rs" 
+    // but retrieved with the code "rc". Changed to always use "rc", but
+    // allow for "rs" when restoring values.
+    private static final String ATT_RESPONSE_CODE     = "rc"; //$NON-NLS-1$
+    private static final String ATT_RESPONSE_MESSAGE  = "rm"; //$NON-NLS-1$
+    private static final String ATT_RESPONSE_CODE_OLD = "rs"; //$NON-NLS-1$
+    
+    private static final String ATT_SUCCESS           = "s";  //$NON-NLS-1$
+    private static final String ATT_TIME              = "t";  //$NON-NLS-1$
+    private static final String ATT_TIME_STAMP        = "ts"; //$NON-NLS-1$
+    private static final String ATT_THREADNAME        = "tn"; //$NON-NLS-1$
 
 	/**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; //$NON-NLS-1$
 	}
 
 	/*
@@ -87,7 +118,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	protected void saveSamplerData(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveSamplerData(res)) {
-			writeString(writer, "samplerData", res.getSamplerData());
+			writeString(writer, TAG_SAMPLER_DATA, res.getSamplerData());
 		}
 	}
 
@@ -99,9 +130,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	protected void saveResponseData(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveResponseData(res)) {
-			writer.startNode("responseData");
+			writer.startNode(TAG_RESPONSE_DATA);
 			try {
-				writer.addAttribute("class", "java.lang.String");
+				writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
 				writer.setValue(new String(res.getResponseData(), res.getDataEncoding()));
 			} catch (UnsupportedEncodingException e) {
 				writer.setValue("Unsupported encoding in response data, can't record.");
@@ -118,7 +149,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	protected void saveRequestHeaders(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveRequestHeaders()) {
-			writeString(writer, "requestHeader", res.getRequestHeaders());
+			writeString(writer, TAG_REQUEST_HEADER, res.getRequestHeaders());
 		}
 	}
 
@@ -130,7 +161,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	protected void saveResponseHeaders(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveResponseHeaders()) {
-			writeString(writer, "responseHeader", res.getResponseHeaders());
+			writeString(writer, TAG_RESPONSE_HEADER, res.getResponseHeaders());
 		}
 	}
 
@@ -175,27 +206,27 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	protected void setAttributes(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveTime())
-			writer.addAttribute("t", Long.toString(res.getTime()));
+			writer.addAttribute(ATT_TIME, Long.toString(res.getTime()));
 		if (save.saveLatency())
-			writer.addAttribute("lt", Long.toString(res.getLatency()));
+			writer.addAttribute(ATT_LATENCY, Long.toString(res.getLatency()));
 		if (save.saveTimestamp())
-			writer.addAttribute("ts", Long.toString(res.getTimeStamp()));
+			writer.addAttribute(ATT_TIME_STAMP, Long.toString(res.getTimeStamp()));
 		if (save.saveSuccess())
-			writer.addAttribute("s", // JDK1.4
-										// Boolean.toString(res.isSuccessful()));
+			writer.addAttribute(ATT_SUCCESS,
 					JOrphanUtils.booleanToString(res.isSuccessful()));
+                  // JDK1.4 Boolean.toString(res.isSuccessful()));
 		if (save.saveLabel())
-			writer.addAttribute("lb", ConversionHelp.encode(res.getSampleLabel()));
+			writer.addAttribute(ATT_LABEL, ConversionHelp.encode(res.getSampleLabel()));
 		if (save.saveCode())
-			writer.addAttribute("rs", ConversionHelp.encode(res.getResponseCode()));
+			writer.addAttribute(ATT_RESPONSE_CODE, ConversionHelp.encode(res.getResponseCode()));
 		if (save.saveMessage())
-			writer.addAttribute("rm", ConversionHelp.encode(res.getResponseMessage()));
+			writer.addAttribute(ATT_RESPONSE_MESSAGE, ConversionHelp.encode(res.getResponseMessage()));
 		if (save.saveThreadName())
-			writer.addAttribute("tn", ConversionHelp.encode(res.getThreadName()));
+			writer.addAttribute(ATT_THREADNAME, ConversionHelp.encode(res.getThreadName()));
 		if (save.saveDataType())
-			writer.addAttribute("dt", ConversionHelp.encode(res.getDataType()));
+			writer.addAttribute(ATT_DATA_TYPE, ConversionHelp.encode(res.getDataType()));
 		if (save.saveEncoding())
-			writer.addAttribute("de", ConversionHelp.encode(res.getDataEncoding()));
+			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncoding()));
 	}
 
 	/**
@@ -205,7 +236,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	protected void writeString(HierarchicalStreamWriter writer, String tag, String value) {
 		if (value != null) {
 			writer.startNode(tag);
-			writer.addAttribute("class", "java.lang.String");
+			writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
 			writer.setValue(value);
 			writer.endNode();
 		}
@@ -240,17 +271,17 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			res.addAssertionResult((AssertionResult) subItem);
 		} else if (subItem instanceof SampleResult) {
 			res.addSubResult((SampleResult) subItem);
-		} else if (reader.getNodeName().equals("responseHeader")) {
+		} else if (reader.getNodeName().equals(TAG_RESPONSE_HEADER)) {
 			res.setResponseHeaders((String) subItem);
-		} else if (reader.getNodeName().equals("requestHeader")) {
+		} else if (reader.getNodeName().equals(TAG_REQUEST_HEADER)) {
 			res.setRequestHeaders((String) subItem);
-		} else if (reader.getNodeName().equals("responseData")) {
+		} else if (reader.getNodeName().equals(TAG_RESPONSE_DATA)) {
 			try {
 				res.setResponseData(((String) subItem).getBytes(res.getDataEncoding()));
 			} catch (UnsupportedEncodingException e) {
 				res.setResponseData(("Can't support the char set: " + res.getDataEncoding()).getBytes());
 			}
-		} else if (reader.getNodeName().equals("samplerData")) {
+		} else if (reader.getNodeName().equals(TAG_SAMPLER_DATA)) {
 			res.setSamplerData((String) subItem);
 		} else {
 			return false;
@@ -263,23 +294,27 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	 * @param res
 	 */
 	protected void retrieveAttributes(HierarchicalStreamReader reader, UnmarshallingContext context, SampleResult res) {
-		res.setSampleLabel(ConversionHelp.decode(reader.getAttribute("lb")));
-		res.setDataEncoding(ConversionHelp.decode(reader.getAttribute("de")));
-		res.setDataType(ConversionHelp.decode(reader.getAttribute("dt")));
-		res.setResponseCode(ConversionHelp.decode(reader.getAttribute("rc")));
-		res.setResponseMessage(ConversionHelp.decode(reader.getAttribute("rm")));
-		res.setSuccessful(Converter.getBoolean(reader.getAttribute("s"), true));
-		res.setThreadName(ConversionHelp.decode(reader.getAttribute("tn")));
-		res.setTime(Converter.getLong(reader.getAttribute("t")));
-		res.setTimeStamp(Converter.getLong(reader.getAttribute("ts")));
-		res.setLatency(Converter.getLong(reader.getAttribute("lt")));
+		res.setSampleLabel(ConversionHelp.decode(reader.getAttribute(ATT_LABEL)));
+		res.setDataEncoding(ConversionHelp.decode(reader.getAttribute(ATT_DATA_ENCODING)));
+		res.setDataType(ConversionHelp.decode(reader.getAttribute(ATT_DATA_TYPE)));
+        String oldrc=reader.getAttribute(ATT_RESPONSE_CODE_OLD);
+        if (oldrc!=null) {
+            res.setResponseCode(ConversionHelp.decode(oldrc));
+        } else {
+            res.setResponseCode(ConversionHelp.decode(reader.getAttribute(ATT_RESPONSE_CODE)));
+        }
+		res.setResponseMessage(ConversionHelp.decode(reader.getAttribute(ATT_RESPONSE_MESSAGE)));
+		res.setSuccessful(Converter.getBoolean(reader.getAttribute(ATT_SUCCESS), true));
+		res.setThreadName(ConversionHelp.decode(reader.getAttribute(ATT_THREADNAME)));
+		res.setTime(Converter.getLong(reader.getAttribute(ATT_TIME)));
+		res.setTimeStamp(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)));
+		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 	}
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public SampleResultConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public SampleResultConverter(ClassMapper arg0) {
+		super(arg0);
 	}
 }

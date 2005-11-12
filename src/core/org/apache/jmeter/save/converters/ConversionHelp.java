@@ -21,21 +21,38 @@
 package org.apache.jmeter.save.converters;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.jmeter.save.SaveService;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
 /**
  * @author mstover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class ConversionHelp {
-	private static final String CHAR_SET = "UTF-8";
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final String CHAR_SET = "UTF-8"; //$NON-NLS-1$
+
+    // Attributes for TestElement and TestElementProperty
+    // Must all be unique
+    public static final String ATT_CLASS         = "class"; //$NON-NLS-1$
+    public static final String ATT_NAME          = "name"; // $NON-NLS-1$
+    public static final String ATT_ELEMENT_TYPE  = "elementType"; // $NON-NLS-1$
+    
+    private static final String ATT_TE_ENABLED   = "enabled"; //$NON-NLS-1$
+    private static final String ATT_TE_TESTCLASS = "testclass"; //$NON-NLS-1$
+    private static final String ATT_TE_GUICLASS  = "guiclass"; //$NON-NLS-1$
+    private static final String ATT_TE_NAME      = "testname"; //$NON-NLS-1$ 
+
 
 	/*
 	 * These must be set before reading/writing the XML. Rather a hack, but
@@ -43,7 +60,7 @@ public class ConversionHelp {
 	 */
 	private static String inVersion;
 
-	private static String outVersion = "1.1"; // Default for writing
+	private static String outVersion = "1.1"; // Default for writing//$NON-NLS-1$
 
 	public static void setInVersion(String v) {
 		inVersion = v;
@@ -54,7 +71,7 @@ public class ConversionHelp {
 	}
 
 	public static String encode(String p) {
-		if (!"1.0".equals(outVersion))
+		if (!"1.0".equals(outVersion))//$NON-NLS-1$
 			return p;
 		// Only encode strings if inVersion = 1.0
 		if (p == null) {
@@ -70,7 +87,7 @@ public class ConversionHelp {
 	}
 
 	public static String decode(String p) {
-		if (!"1.0".equals(inVersion))
+		if (!"1.0".equals(inVersion))//$NON-NLS-1$
 			return p;
 		// Only decode strings if inVersion = 1.0
 		if (p == null) {
@@ -90,4 +107,69 @@ public class ConversionHelp {
 		buf.append("]]>");
 		return buf.toString();
 	}
+    
+    // Names of properties that are handled specially
+    private static final Map propertyToAttribute=new HashMap();
+    
+    private static void mapentry(String prop, String att){
+        propertyToAttribute.put(prop,att);
+    }
+    
+    static{
+        mapentry(TestElement.NAME,ATT_TE_NAME);
+        mapentry(TestElement.GUI_CLASS,ATT_TE_GUICLASS);//$NON-NLS-1$
+        mapentry(TestElement.TEST_CLASS,ATT_TE_TESTCLASS);//$NON-NLS-1$
+        mapentry(TestElement.ENABLED,ATT_TE_ENABLED);
+    }
+    
+    private static void saveClass(TestElement el, HierarchicalStreamWriter writer, String prop){
+        String clazz=el.getPropertyAsString(prop);
+        if (clazz.length()>0) {
+            writer.addAttribute((String)propertyToAttribute.get(prop),SaveService.classToAlias(clazz));
+        }
+    }
+
+    private static void restoreClass(TestElement el, HierarchicalStreamReader reader, String prop) {
+        String att=(String) propertyToAttribute.get(prop);
+        String alias=reader.getAttribute(att);
+        if (alias!=null){
+            el.setProperty(prop,SaveService.aliasToClass(alias));
+        }
+    }
+
+    private static void saveItem(TestElement el, HierarchicalStreamWriter writer, String prop,
+            boolean encode){
+        String item=el.getPropertyAsString(prop);
+        if (item.length() > 0) {
+            if (encode) item=ConversionHelp.encode(item);
+            writer.addAttribute((String)propertyToAttribute.get(prop),item);
+        }
+    }
+
+    private static void restoreItem(TestElement el, HierarchicalStreamReader reader, String prop,
+            boolean decode) {
+        String att=(String) propertyToAttribute.get(prop);
+        String value=reader.getAttribute(att);
+        if (value!=null){
+            if (decode) value=ConversionHelp.decode(value);
+            el.setProperty(prop,value);
+        }
+    }
+
+    public static boolean isSpecialProperty(String name) {
+       return propertyToAttribute.containsKey(name);
+    }
+
+    public static void saveSpecialProperties(TestElement el, HierarchicalStreamWriter writer) {
+        saveClass(el,writer,TestElement.GUI_CLASS);
+        saveClass(el,writer,TestElement.TEST_CLASS);
+        saveItem(el,writer,TestElement.NAME,true);
+        saveItem(el,writer,TestElement.ENABLED,false);
+    }
+    public static void restoreSpecialProperties(TestElement el, HierarchicalStreamReader reader) {
+        restoreClass(el,reader,TestElement.GUI_CLASS);
+        restoreClass(el,reader,TestElement.TEST_CLASS);
+        restoreItem(el,reader,TestElement.NAME,true);
+        restoreItem(el,reader,TestElement.ENABLED,false);
+    }
 }
