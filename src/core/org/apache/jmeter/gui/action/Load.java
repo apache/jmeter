@@ -42,6 +42,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
  * @author Michael Stover
@@ -95,17 +96,20 @@ public class Load implements Command {
 			}
 		} catch (NoClassDefFoundError ex) // Allow for missing optional jars
 		{
+            log.warn("Missing jar file", ex);
 			String msg = ex.getMessage();
 			if (msg == null) {
 				msg = "Missing jar file - see log for details";
-				log.warn("Missing jar file", ex);
 			}
 			JMeterUtils.reportErrorToUser(msg);
+        } catch (ConversionException ex) {
+            log.warn("Could not convert file "+ex);
+            JMeterUtils.reportErrorToUser(SaveService.CEtoString(ex));
 		} catch (Exception ex) {
+            log.warn("Unexpected error", ex);
 			String msg = ex.getMessage();
 			if (msg == null) {
 				msg = "Unexpected error - see log for details";
-				log.warn("Unexpected error", ex);
 			}
 			JMeterUtils.reportErrorToUser(msg);
 		} finally {
