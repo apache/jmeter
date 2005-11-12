@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -20,9 +19,9 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
+//import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +32,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
+//import javax.swing.table.AbstractTableModel;
+//import javax.swing.table.TableModel;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -53,14 +52,20 @@ import org.apache.jorphan.reflect.Functor;
  * @version $Revision$ on $Date$
  */
 public class StatVisualizer extends AbstractVisualizer implements Clearable {
-	private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
-			JMeterUtils.getResString("aggregate_report_count"), JMeterUtils.getResString("average"),
-			JMeterUtils.getResString("aggregate_report_median"), JMeterUtils.getResString("aggregate_report_90%_line"),
-			JMeterUtils.getResString("aggregate_report_min"), JMeterUtils.getResString("aggregate_report_max"),
-			JMeterUtils.getResString("aggregate_report_error%"), JMeterUtils.getResString("aggregate_report_rate"),
-			JMeterUtils.getResString("aggregate_report_bandwidth") };
+	private final String[] COLUMNS = { 
+            JMeterUtils.getResString("URL"),  //$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_count"),  //$NON-NLS-1$
+            JMeterUtils.getResString("average"),  //$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_median"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_90%_line"),  //$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_min"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_max"),  //$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_error%"),  //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_rate"),  //$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_bandwidth") };  //$NON-NLS-1$
 
-	private final String TOTAL_ROW_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
+	private final String TOTAL_ROW_LABEL 
+        = JMeterUtils.getResString("aggregate_report_total_label");  //$NON-NLS-1$
 
 	protected JTable myJTable;
 
@@ -72,19 +77,29 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
 
 	public StatVisualizer() {
 		super();
-		model = new ObjectTableModel(COLUMNS, new Functor[] { new Functor("getLabel"), new Functor("getCount"),
-				new Functor("getMeanAsNumber"), new Functor("getMedian"),
-				new Functor("getPercentPoint", new Object[] { new Float(.900) }), new Functor("getMin"),
-				new Functor("getMax"), new Functor("getErrorPercentageString"), new Functor("getRateString"),
-				new Functor("getPageSizeString") }, new Functor[] { null, null, null, null, null, null, null, null,
-				null, null }, new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
-				Long.class, String.class, String.class, String.class });
+		model = new ObjectTableModel(COLUMNS, 
+                new Functor[] { 
+                    new Functor("getLabel"),   //$NON-NLS-1$
+                    new Functor("getCount"),  //$NON-NLS-1$
+    				new Functor("getMeanAsNumber"),   //$NON-NLS-1$
+                    new Functor("getMedian"),  //$NON-NLS-1$
+    				new Functor("getPercentPoint",  //$NON-NLS-1$
+                            new Object[] { new Float(.900) }), 
+                    new Functor("getMin"),  //$NON-NLS-1$
+                    new Functor("getMax"),   //$NON-NLS-1$
+                    new Functor("getErrorPercentageString"),   //$NON-NLS-1$
+                    new Functor("getRateString"),  //$NON-NLS-1$
+    				new Functor("getPageSizeString")   //$NON-NLS-1$
+                },
+                new Functor[] { null, null, null, null, null, null, null, null, null, null }, 
+                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
+                              Long.class, Long.class, String.class, String.class, String.class });
 		clear();
 		init();
 	}
 
 	public String getLabelResource() {
-		return "aggregate_report";
+		return "aggregate_report";  //$NON-NLS-1$
 	}
 
 	public void add(SampleResult res) {
