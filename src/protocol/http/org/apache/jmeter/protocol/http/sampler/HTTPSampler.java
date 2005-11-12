@@ -200,7 +200,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 			// JDK1.4: }
 			// JDK1.4: else
 			{
-				log.error(e.toString());
+				log.error("readResponse: "+e.toString());
 				// JDK1.4: Throwable cause = e.getCause();
 				// JDK1.4: if (cause != null){
 				// JDK1.4: log.error("Cause: "+cause);
@@ -209,7 +209,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 			}
 			in = new BufferedInputStream(conn.getErrorStream());
 		} catch (Exception e) {
-			log.error(e.toString());
+			log.error("readResponse: "+e.toString());
 			// JDK1.4: Throwable cause = e.getCause();
 			// JDK1.4: if (cause != null){
 			// JDK1.4: log.error("Cause: "+cause);
@@ -237,7 +237,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 			} else {
 				s = "\n" + w.toString();
 			}
-			log.error(s);
+			log.error("readResponse: errorStream:"+s);
 		}
 		return w.toByteArray();
 	}
