@@ -297,7 +297,7 @@
   <property name="avalon-framework.jar" value="${lib.dir}/avalon-framework-4.1.4.jar"/>
   <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.8.jar"/>
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
-  <property name="commons-httpclient.jar" value="${lib.dir}/commons-httpclient-2.0.jar"/>
+  <property name="commons-httpclient.jar" value="${lib.dir}/commons-httpclient-2.0.2.jar"/>
   <property name="commons-logging.jar" value="${lib.dir}/commons-logging.jar"/>
   <property name="excalibur-logger.jar" value="${lib.dir}/excalibur-logger-1.1.jar"/>
   <property name="excalibur-i18n.jar" value="${lib.dir}/excalibur-i18n-1.1.jar"/>
