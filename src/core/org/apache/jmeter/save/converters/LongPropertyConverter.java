@@ -28,17 +28,17 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * @author mstover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class LongPropertyConverter implements Converter {
 
-	/**
+	private static final String ATT_NAME = "name"; // $NON-NLS-1$
+
+    /**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; // $NON-NLS-1$
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class LongPropertyConverter implements Converter {
 	 */
 	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
 		LongProperty prop = (LongProperty) obj;
-		writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
+		writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
 		writer.setValue(prop.getStringValue());
 	}
 
@@ -70,7 +70,7 @@ public class LongPropertyConverter implements Converter {
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-		LongProperty prop = new LongProperty(ConversionHelp.decode(reader.getAttribute("name")), Long.parseLong(reader
+		LongProperty prop = new LongProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Long.parseLong(reader
 				.getValue()));
 		return prop;
 	}

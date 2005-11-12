@@ -41,7 +41,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$";  //$NON-NLS-1$
 	}
 
 	/*
@@ -99,9 +99,8 @@ public class HashTreeConverter extends AbstractCollectionConverter {
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public HashTreeConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public HashTreeConverter(ClassMapper arg0) {
+		super(arg0);
 	}
 }

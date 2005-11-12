@@ -33,12 +33,14 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class BooleanPropertyConverter implements Converter {
 
-	/**
+	private static final String ATT_NAME = "name"; // $NON-NLS-1$
+
+    /**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; // $NON-NLS-1$
 	}
 
 	/*
@@ -59,7 +61,7 @@ public class BooleanPropertyConverter implements Converter {
 	 */
 	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
 		BooleanProperty prop = (BooleanProperty) obj;
-		writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
+		writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
 		writer.setValue(prop.getStringValue());
 
 	}
@@ -71,7 +73,7 @@ public class BooleanPropertyConverter implements Converter {
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-		BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute("name")), Boolean.valueOf(
+		BooleanProperty prop = new BooleanProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Boolean.valueOf(
 				reader.getValue()).booleanValue());
 		return prop;
 	}

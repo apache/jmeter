@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,16 +30,18 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * @author mstover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class ScriptWrapperConverter implements Converter {
-	/**
+    
+	private static final String ATT_PROPERTIES = "properties"; // $NON-NLS-1$
+    private static final String ATT_VERSION = "version"; // $NON-NLS-1$
+
+    /**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; // $NON-NLS-1$
 	}
 
 	ClassMapper classMapper;
@@ -68,8 +70,8 @@ public class ScriptWrapperConverter implements Converter {
 		ScriptWrapper wrap = (ScriptWrapper) arg0;
 		ConversionHelp.setOutVersion(SaveService.version);// Ensure output
 															// follows version
-		writer.addAttribute("version", SaveService.version);
-		writer.addAttribute("properties", SaveService.propertiesVersion);
+		writer.addAttribute(ATT_VERSION, SaveService.version);
+		writer.addAttribute(ATT_PROPERTIES, SaveService.propertiesVersion);
 		writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
 		context.convertAnother(wrap.testPlan);
 		writer.endNode();
@@ -83,7 +85,7 @@ public class ScriptWrapperConverter implements Converter {
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		ScriptWrapper wrap = new ScriptWrapper();
-		wrap.version = reader.getAttribute("version");
+		wrap.version = reader.getAttribute(ATT_VERSION);
 		ConversionHelp.setInVersion(wrap.version);// Make sure decoding
 													// follows input file
 		reader.moveDown();
@@ -92,7 +94,7 @@ public class ScriptWrapperConverter implements Converter {
 	}
 
 	protected Class getNextType(HierarchicalStreamReader reader) {
-		String classAttribute = reader.getAttribute("class");
+		String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
 		Class type;
 		if (classAttribute == null) {
 			type = classMapper.realClass(reader.getNodeName());

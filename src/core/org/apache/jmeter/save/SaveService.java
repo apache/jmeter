@@ -50,6 +50,7 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.alias.CannotResolveClassException;
 import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 
 /**
@@ -62,10 +63,10 @@ public class SaveService {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Default file name
-    private static final String SAVESERVICE_PROPERTIES_FILE = "/bin/saveservice.properties";// $NON-NLS-1$
+    private static final String SAVESERVICE_PROPERTIES_FILE = "/bin/saveservice.properties"; // $NON-NLS-1$
 
     // Property name used to define file name
-    private static final String SAVESERVICE_PROPERTIES = "saveservice_properties";// $NON-NLS-1$
+    private static final String SAVESERVICE_PROPERTIES = "saveservice_properties"; // $NON-NLS-1$
 
     // Define file format property names
     private static final String FILE_FORMAT = "file_format"; // $NON-NLS-1$
@@ -163,8 +164,8 @@ public class SaveService {
 						try {
 							if (val.trim().equals("collection")) { // $NON-NLS-1$
 								saver.registerConverter((Converter) Class.forName(key).getConstructor(
-										new Class[] { ClassMapper.class, String.class }).newInstance(
-										new Object[] { saver.getClassMapper(), "class" })); // $NON-NLS-1$
+										new Class[] { ClassMapper.class }).newInstance(
+										new Object[] { saver.getClassMapper() }));
 							} else if (val.trim().equals("mapping")) { // $NON-NLS-1$
 								saver.registerConverter((Converter) Class.forName(key).getConstructor(
 										new Class[] { ClassMapper.class }).newInstance(
@@ -333,7 +334,32 @@ public class SaveService {
         return IS_TESTPLAN_FORMAT_22;
     }
 
-	public static class Test extends JMeterTestCase {
+    
+//  Normal output
+//  ---- Debugging information ----
+//  required-type       : org.apache.jorphan.collections.ListedHashTree 
+//  cause-message       : WebServiceSampler : WebServiceSampler 
+//  class               : org.apache.jmeter.save.ScriptWrapper 
+//  message             : WebServiceSampler : WebServiceSampler 
+//  line number         : 929 
+//  path                : /jmeterTestPlan/hashTree/hashTree/hashTree[4]/hashTree[5]/WebServiceSampler 
+//  cause-exception     : com.thoughtworks.xstream.alias.CannotResolveClassException 
+//  -------------------------------
+
+    /**
+     * Simplify getMessage() output from XStream ConversionException
+     * @param ce - ConversionException to analyse
+     * @return string with details of error
+     */
+    public static String CEtoString(ConversionException ce){
+        String msg = 
+            "XStream ConversionException at line: " + ce.get("line number")
+            + "\n" + ce.get("message")
+            + "\nPerhaps a missing jar? See log file.";
+        return msg;
+    }
+
+    public static class Test extends JMeterTestCase {
 		public Test() {
 			super();
 		}

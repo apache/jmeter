@@ -36,8 +36,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * @author mstover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class TestResultWrapperConverter extends AbstractCollectionConverter {
 
@@ -46,15 +44,14 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$";  //$NON-NLS-1$
 	}
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public TestResultWrapperConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public TestResultWrapperConverter(ClassMapper arg0) {
+		super(arg0);
 	}
 
 	/*
@@ -87,9 +84,9 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		TestResultWrapper results = new TestResultWrapper();
 		Collection samples = new ArrayList();
-		String ver = reader.getAttribute("version");
+		String ver = reader.getAttribute("version");  //$NON-NLS-1$
 		if (ver == null || ver.length() == 0)
-			ver = "1.0";
+			ver = "1.0";  //$NON-NLS-1$
 		results.setVersion(ver);
 		ConversionHelp.setInVersion(ver);// Make sure decoding follows input
 											// file
@@ -101,8 +98,5 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 		}
 		results.setSampleResults(samples);
 		return results;
-	}
-
-	public static void main(String[] args) {
 	}
 }

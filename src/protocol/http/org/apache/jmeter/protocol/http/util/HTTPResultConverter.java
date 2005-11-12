@@ -44,15 +44,14 @@ public class HTTPResultConverter extends SampleResultConverter {
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$";  //$NON-NLS-1$
 	}
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public HTTPResultConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public HTTPResultConverter(ClassMapper arg0) {
+		super(arg0);
 	}
 
 	/*
@@ -93,10 +92,10 @@ public class HTTPResultConverter extends SampleResultConverter {
 	protected void saveSamplerData(HierarchicalStreamWriter writer, MarshallingContext context, HTTPSampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveSamplerData(res)) {
-			writeString(writer, "cookies", res.getCookies());
-			writeString(writer, "method", res.getHTTPMethod());
-			writeString(writer, "queryString", res.getQueryString());
-			writeString(writer, "redirectLocation", res.getRedirectLocation());
+			writeString(writer, TAG_COOKIES, res.getCookies());
+			writeString(writer, TAG_METHOD, res.getHTTPMethod());
+			writeString(writer, TAG_QUERY_STRING, res.getQueryString());
+			writeString(writer, TAG_REDIRECT_LOCATION, res.getRedirectLocation());
 			writeItem(res.getURL(), context, writer);
 		}
 	}
@@ -125,13 +124,13 @@ public class HTTPResultConverter extends SampleResultConverter {
 			HTTPSampleResult res, Object subItem) {
 		if (subItem instanceof URL) {
 			res.setURL((URL) subItem);
-		} else if (reader.getNodeName().equals("cookies")) {
+		} else if (reader.getNodeName().equals(TAG_COOKIES)) {
 			res.setCookies((String) subItem);
-		} else if (reader.getNodeName().equals("method")) {
+		} else if (reader.getNodeName().equals(TAG_METHOD)) {
 			res.setHTTPMethod((String) subItem);
-		} else if (reader.getNodeName().equals("queryString")) {
+		} else if (reader.getNodeName().equals(TAG_QUERY_STRING)) {
 			res.setQueryString((String) subItem);
-		} else if (reader.getNodeName().equals("redirectLocation")) {
+		} else if (reader.getNodeName().equals(TAG_REDIRECT_LOCATION)) {
 			res.setRedirectLocation((String) subItem);
 		}
 	}
