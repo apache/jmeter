@@ -113,7 +113,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	private static final String FILEVERSION = "327020";// Expected $NON-NLS-1$
+	private static final String FILEVERSION = "332818";// Expected $NON-NLS-1$
 
     static {
         log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
@@ -269,23 +269,23 @@ public class SaveService {
 
 	private static void checkVersions() {
 		versionsOK = true;
-		checkVersion(BooleanPropertyConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(HashTreeConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(IntegerPropertyConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(LongPropertyConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(MultiPropertyConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(SampleResultConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(BooleanPropertyConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(HashTreeConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(IntegerPropertyConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(LongPropertyConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(MultiPropertyConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(SampleResultConverter.class, "332820"); // $NON-NLS-1$
 		/*
 		 * Should check this, but tricky to do, because not built until later.
 		 * 
 		 * checkVersion(HTTPResultConverter.class, "1.6");
 		 * 
 		 */
-		checkVersion(StringPropertyConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(TestElementConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(TestElementPropertyConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(ScriptWrapperConverter.class, "325542"); // $NON-NLS-1$
-		checkVersion(TestResultWrapperConverter.class, "325542"); // $NON-NLS-1$
+		checkVersion(StringPropertyConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(TestElementConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(TestElementPropertyConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(ScriptWrapperConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(TestResultWrapperConverter.class, "332820"); // $NON-NLS-1$
 		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
 		}
