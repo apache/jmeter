@@ -178,7 +178,7 @@ public class CompoundVariable implements Function {
 	static Object getNamedFunction(String functionName) throws InvalidVariableException {
 		if (functions.containsKey(functionName)) {
 			try {
-				return (Function) ((Class) functions.get(functionName)).newInstance();
+				return ((Class) functions.get(functionName)).newInstance();
 			} catch (Exception e) {
 				log.error("", e);
 				throw new InvalidVariableException();

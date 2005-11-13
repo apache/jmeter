@@ -108,6 +108,6 @@ public class ClientPool {
 	}
 
 	public static Object get(Object key) {
-		return (OnMessageSubscriber) client_map.get(key);
+		return client_map.get(key);
 	}
 }
