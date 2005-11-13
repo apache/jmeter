@@ -45,13 +45,16 @@ import org.apache.log.Logger;
  * @author mstover
  */
 public class SavePropertyDialog extends JDialog implements ActionListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Map functors = new HashMap();
 
 	private static final long serialVersionUID = 1;
 
-	private SampleSaveConfiguration saveConfig;
+    private static final String NAME_SAVE_PFX = "save"; // $NON-NLS-1$
+
+    private SampleSaveConfiguration saveConfig;
 
     public SavePropertyDialog(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
@@ -67,15 +70,16 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 	{
 		super(owner, title, modal);
 		saveConfig = s;
-		log.info("SampleSaveConfiguration = " + saveConfig);
+		log.info("SampleSaveConfiguration = " + saveConfig);// $NON-NLS-1$
 		dialogInit();
 	}
 
 	private int countMethods(Method[] m) {
 		int count = 0;
 		for (int i = 0; i < m.length; i++) {
-			if (m[i].getName().startsWith("save"))
+			if (m[i].getName().startsWith(NAME_SAVE_PFX)) {
 				count++;
+            }
 		}
 		return count;
 	}
@@ -91,18 +95,19 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 			this.getContentPane().setLayout(new BorderLayout());
 			Method[] methods = SampleSaveConfiguration.class.getMethods();
 			int x = (countMethods(methods) / 3) + 1;
-			log.info("grid panel is " + 3 + " by " + x);
+			log.debug("grid panel is " + 3 + " by " + x);
 			JPanel checkPanel = new JPanel(new GridLayout(x, 3));
 			for (int i = 0; i < methods.length; i++) {
 				String name = methods[i].getName();
-				if (name.startsWith("save") && methods[i].getParameterTypes().length == 0) {
+				if (name.startsWith(NAME_SAVE_PFX) && methods[i].getParameterTypes().length == 0) {
 					try {
 						name = name.substring(4);
-						JCheckBox check = new JCheckBox(JMeterUtils.getResString("save " + name), ((Boolean) methods[i]
-								.invoke(saveConfig, new Object[0])).booleanValue());
+						JCheckBox check = new JCheckBox(
+                                JMeterUtils.getResString("save_" + name)// $NON-NLS-1$
+                                ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
 						checkPanel.add(check, BorderLayout.NORTH);
 						check.addActionListener(this);
-						check.setActionCommand("set" + name);
+						check.setActionCommand("set" + name);// $NON-NLS-1$
 						if (!functors.containsKey(check.getActionCommand())) {
 							functors.put(check.getActionCommand(), new Functor(check.getActionCommand()));
 						}
@@ -112,7 +117,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 				}
 			}
 			getContentPane().add(checkPanel, BorderLayout.NORTH);
-			JButton exit = new JButton(JMeterUtils.getResString("done"));
+			JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
 			this.getContentPane().add(exit, BorderLayout.SOUTH);
 			exit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -130,7 +135,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		Functor f = (Functor) functors.get(action);
-		f.invoke(saveConfig, new Object[] { new Boolean(((JCheckBox) e.getSource()).isSelected()) });
+		f.invoke(saveConfig, new Object[] {Boolean.valueOf(((JCheckBox) e.getSource()).isSelected()) });
 	}
 
 	/**
