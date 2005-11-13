@@ -48,7 +48,7 @@
 <li>Load all cookies, not just the first; fix class cast exception</li>
 <li>Fix default Cookie path name (remove page name)</li>
 <li>Fixed resultcode attribute name</li>
-<li></li>
+<li>Bug 36898 - apply encoding to RegexExtractor</li>
 <li></li>
 </ul>	
 	
