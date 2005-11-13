@@ -234,10 +234,10 @@ public class JMeterUtils implements UnitTestManager {
 		 * found.
 		 */
 		Locale def = null;
-		if (loc.getLanguage() == Locale.ENGLISH.getLanguage()) {
+		if (loc.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
 			def = Locale.getDefault();
 			// Don't change locale from en_GB to en
-			if (def.getLanguage() != Locale.ENGLISH.getLanguage()) {
+			if (!def.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
 				Locale.setDefault(Locale.ENGLISH);
 			} else {
 				def = null; // no need to reset Locale
