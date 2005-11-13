@@ -450,7 +450,7 @@ public class LDAPSampler extends AbstractSampler {
 				res.setResponseMessage("OK - no results");
 				res.setResponseData("successful - no results".getBytes());
 			} else {
-				res.setResponseCode("200");
+				res.setResponseCodeOK();
 				res.setResponseMessage("OK");
 				res.setResponseData("successful".getBytes());
 			}

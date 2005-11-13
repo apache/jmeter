@@ -540,7 +540,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 					result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes());
 				}
 				result.setSuccessful(true);
-				result.setResponseCode("200");
+				result.setResponseCodeOK();
 				result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
 			} else {
 				result.setSuccessful(false);
