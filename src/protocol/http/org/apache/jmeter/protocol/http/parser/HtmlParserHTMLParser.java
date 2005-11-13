@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,10 +58,17 @@ import org.htmlparser.util.ParserException;
  * @version $Revision$ updated on $Date$
  */
 class HtmlParserHTMLParser extends HTMLParser {
-	/** Used to store the Logger (used for debug and error messages). */
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    /** Used to store the Logger (used for debug and error messages). */
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	protected HtmlParserHTMLParser() {
+    private static final String ATT_HREF = "href"; // $NON-NLS-1$
+    private static final String STYLESHEET = "stylesheet"; // $NON-NLS-1$
+    private static final String ATT_REL = "rel"; // $NON-NLS-1$
+    private static final String ATT_SRC = "src"; // $NON-NLS-1$
+    private static final String ATT_IS_IMAGE = "image"; // $NON-NLS-1$
+    private static final String ATT_TYPE = "type"; // $NON-NLS-1$
+
+    protected HtmlParserHTMLParser() {
 		super();
 	}
 
@@ -120,11 +126,11 @@ class HtmlParserHTMLParser extends HTMLParser {
 					e = body.elements();
 				} else if (node instanceof BaseHrefTag) {
 					BaseHrefTag baseHref = (BaseHrefTag) node;
-					String baseref = baseHref.getBaseUrl().toString();
+					String baseref = baseHref.getBaseUrl();
 					try {
-						if (!baseref.equals(""))// Bugzilla 30713
+						if (!baseref.equals(""))// Bugzilla 30713 // $NON-NLS-1$
 						{
-							baseUrl = new URL(baseUrl, baseHref.getBaseUrl() + "/");
+							baseUrl = new URL(baseUrl, baseHref.getBaseUrl() + "/"); // $NON-NLS-1$
 						}
 					} catch (MalformedURLException e1) {
 						throw new HTMLParseException(e1);
@@ -138,10 +144,10 @@ class HtmlParserHTMLParser extends HTMLParser {
 				} else if (node instanceof InputTag) {
 					InputTag input = (InputTag) node;
 					// we check the input tag type for image
-					String strType = input.getAttribute("type");
-					if (strType != null && strType.equalsIgnoreCase("image")) {
+					String strType = input.getAttribute(ATT_TYPE);
+					if (strType != null && strType.equalsIgnoreCase(ATT_IS_IMAGE)) {
 						// then we need to download the binary
-						binUrlStr = input.getAttribute("src");
+						binUrlStr = input.getAttribute(ATT_SRC);
 					}
 				} else if (node instanceof LinkTag) {
 					LinkTag link = (LinkTag) node;
@@ -151,26 +157,26 @@ class HtmlParserHTMLParser extends HTMLParser {
 					}
 				} else if (node instanceof ScriptTag) {
 					ScriptTag script = (ScriptTag) node;
-					binUrlStr = script.getAttribute("src");
+					binUrlStr = script.getAttribute(ATT_SRC);
 				} else if (node instanceof FrameTag) {
 					FrameTag tag = (FrameTag) node;
-					binUrlStr = tag.getAttribute("src");
+					binUrlStr = tag.getAttribute(ATT_SRC);
 				} else if (node instanceof LinkTagTag) {
 					LinkTagTag script = (LinkTagTag) node;
-					if (script.getAttribute("rel").equalsIgnoreCase("stylesheet")) {
-						binUrlStr = script.getAttribute("href");
+					if (script.getAttribute(ATT_REL).equalsIgnoreCase(STYLESHEET)) {
+						binUrlStr = script.getAttribute(ATT_HREF);
 					}
 				} else if (node instanceof FrameTag) {
 					FrameTag script = (FrameTag) node;
-					binUrlStr = script.getAttribute("src");
+					binUrlStr = script.getAttribute(ATT_SRC);
 				} else if (node instanceof BgSoundTag) {
 					BgSoundTag script = (BgSoundTag) node;
-					binUrlStr = script.getAttribute("src");
+					binUrlStr = script.getAttribute(ATT_SRC);
                 } else if (node instanceof Tag) {
                     Tag tag = (Tag) node;
                     String tagname=tag.getTagName();
                     if (tagname.equalsIgnoreCase("EMBED")){
-                        binUrlStr = tag.getAttribute("src");  
+                        binUrlStr = tag.getAttribute(ATT_SRC);  
                     }
                 }
 
@@ -208,7 +214,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
 		// parser.addScanner(linkScanner);
 		parser.addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
-		parser.addScanner(linkScanner.createBaseHREFScanner("-b"));
+		parser.addScanner(linkScanner.createBaseHREFScanner("-b")); // $NON-NLS-1$
 		// Taken from org.htmlparser.Parser
 		// add input tag scanner
 		parser.addScanner(new InputTagScanner());
