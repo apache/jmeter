@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,29 +31,29 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public abstract class BaseJMSSampler extends AbstractSampler implements TestListener {
 
-	public static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory";
+	public static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory"; // $NON-NLS-1$
 
-	public static final String PROVIDER_URL = "jms.provider_url";
+	public static final String PROVIDER_URL = "jms.provider_url"; // $NON-NLS-1$
 
-	public static final String CONN_FACTORY = "jms.connection_factory";
+	public static final String CONN_FACTORY = "jms.connection_factory"; // $NON-NLS-1$
 
-	public static final String TOPIC = "jms.topic";
+	public static final String TOPIC = "jms.topic"; // $NON-NLS-1$
 
-	public static final String PRINCIPAL = "jms.security_principle";
+	public static final String PRINCIPAL = "jms.security_principle"; // $NON-NLS-1$
 
-	public static final String CREDENTIALS = "jms.security_credentials";
+	public static final String CREDENTIALS = "jms.security_credentials"; // $NON-NLS-1$
 
-	public static final String ITERATIONS = "jms.iterations";
+	public static final String ITERATIONS = "jms.iterations"; // $NON-NLS-1$
 
-	public static final String USE_AUTH = "jms.authenticate";
+	public static final String USE_AUTH = "jms.authenticate"; // $NON-NLS-1$
 
-	public static final String USE_PROPERTIES_FILE = "jms.jndi_properties";
+	public static final String USE_PROPERTIES_FILE = "jms.jndi_properties"; // $NON-NLS-1$
 
-	public static String READ_RESPONSE = "jms.read_response";
+	public static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
 
-	public static String required = JMeterUtils.getResString("jms_auth_required");
+	public static final String required = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
-	public static String not_req = JMeterUtils.getResString("jms_auth_not_required");
+	public static final String not_req = JMeterUtils.getResString("jms_auth_not_required"); // $NON-NLS-1$
 
 	public BaseJMSSampler() {
 	}
