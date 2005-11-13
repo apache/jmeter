@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -46,22 +45,22 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public class ResponseAssertion extends AbstractTestElement implements Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String TEST_FIELD = "Assertion.test_field";
+	public final static String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 
 	// Values for TEST_FIELD
-	public final static String SAMPLE_LABEL = "Assertion.sample_label";
+	public final static String SAMPLE_LABEL = "Assertion.sample_label"; // $NON-NLS-1$
 
-	public final static String RESPONSE_DATA = "Assertion.response_data";
+	public final static String RESPONSE_DATA = "Assertion.response_data"; // $NON-NLS-1$
 
-	public final static String RESPONSE_CODE = "Assertion.response_code";
+	public final static String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
 
-	public final static String RESPONSE_MESSAGE = "Assertion.response_message";
+	public final static String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
 
-	public final static String ASSUME_SUCCESS = "Assertion.assume_success";
+	public final static String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
 
-	public final static String TEST_STRINGS = "Asserion.test_strings";
+	public final static String TEST_STRINGS = "Asserion.test_strings"; // $NON-NLS-1$
 
-	public final static String TEST_TYPE = "Assertion.test_type";
+	public final static String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
 
 	/*
 	 * Mask values for TEST_TYPE TODO: remove either MATCH or CONTAINS - they
@@ -276,15 +275,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		if (ResponseAssertion.RESPONSE_DATA.equals(getTestField())) {
 			// TODO treat header separately from response? (would not apply to
 			// all samplers)
-			String data;
-			try {// get encoding from response and use to generate the string
-					// (bug25052)
-				data = new String(response.responseDataAsBA(), response.getDataEncoding());
-			} catch (UnsupportedEncodingException e) { // Use default encoding
-														// instead
-				log.warn("Problem with response encoding: " + e);
-				data = new String(response.responseDataAsBA());
-			}
+			String data = response.getResponseDataAsString(); // (bug25052)
 			toCheck = new StringBuffer(response.getResponseHeaders()).append(data).toString();
 		} else if (ResponseAssertion.RESPONSE_CODE.equals(getTestField())) {
 			toCheck = response.getResponseCode();
