@@ -32,8 +32,8 @@ import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.util.ReportFileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
  * SaveGraphics action is meant to be a generic reusable Action. The class will
@@ -44,16 +44,16 @@ import org.apache.log.Logger;
  * it will call SaveGraphicsService to save in the format.
  */
 public class ReportSaveGraphics implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	//transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SAVE_GRAPHICS = "save_graphics";
+	public final static String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
 
 	private static Set commands = new HashSet();
 	static {
 		commands.add(SAVE_GRAPHICS);
 	}
 
-	public static String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
+	private static final String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
 
 	/**
 	 * Constructor for the Save object.
@@ -107,20 +107,21 @@ public class ReportSaveGraphics implements Command {
 		}
 	}
 
-	public static class Test extends junit.framework.TestCase {
-		ReportSaveGraphics save;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			save = new ReportSaveGraphics();
-		}
-
-		public void testSomething() {
-			// TODO write some tests
-		}
-	}
+//	public static class Test extends junit.framework.TestCase {
+//		ReportSaveGraphics save;
+//
+//		public Test(String name) {
+//			super(name);
+//		}
+//
+//		public void setUp() throws Exception {
+//            super.setUp();
+//			save = new ReportSaveGraphics();
+//		}
+//
+//		public void testSomething() {
+//			// TODO write some tests
+//		}
+//	}
 
 }
