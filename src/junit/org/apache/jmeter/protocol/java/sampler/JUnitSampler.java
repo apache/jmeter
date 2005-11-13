@@ -455,9 +455,9 @@ public class JUnitSampler extends AbstractSampler {
                     // if the string constructor is null, we use the empty
                     // constructor to get a new instance
                     if (strCon != null) {
-                        testclass = (TestCase)strCon.newInstance(strParams);
+                        testclass = strCon.newInstance(strParams);
                     } else if (con != null){
-                        testclass = (TestCase)con.newInstance(params);
+                        testclass = con.newInstance(params);
                     }
                 } catch (InvocationTargetException e) {
                     log.warn(e.getMessage());
