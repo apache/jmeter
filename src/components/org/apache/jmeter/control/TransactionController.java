@@ -90,7 +90,7 @@ public class TransactionController extends GenericController implements Controll
 				res.sampleEnd();
 				res.setSuccessful(true);
 				res.setSampleLabel(getName());
-				res.setResponseCode("200");
+				res.setResponseCodeOK();
 				res.setResponseMessage("Called: " + calls);
 				res.setThreadName(threadName);
 
