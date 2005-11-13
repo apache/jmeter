@@ -20,6 +20,7 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -298,10 +299,23 @@ public class SampleResult implements Serializable {
 		return responseCode;
 	}
 
+    private static final String OK = Integer.toString(HttpURLConnection.HTTP_OK);
+    
+    /**
+     * Set response code to OK, i.e. "200"
+     *
+     */
+    public void setResponseCodeOK(){
+        responseCode=OK;
+    }
+    
 	public void setResponseCode(String code) {
 		responseCode = code;
 	}
 
+    public boolean isResponseCodeOK(){
+        return responseCode.equals(OK);
+    }
 	public String getResponseMessage() {
 		return responseMessage;
 	}
