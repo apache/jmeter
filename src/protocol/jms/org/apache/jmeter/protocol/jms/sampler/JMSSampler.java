@@ -55,27 +55,27 @@ import org.apache.log.Logger;
  */
 public class JMSSampler extends AbstractSampler {
 
-	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory";
+	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
 
-	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl";
+	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
 
-	public static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties";
+	public static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties"; // $NON-NLS-1$
 
 	private static final int DEFAULT_TIMEOUT = 2000;
 
-	public final static String TIMEOUT = "JMSSampler.timeout";
+	public final static String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
 
-	public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget";
+	public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
 
-	public static final String JMS_PROPERTIES = "arguments";
+	public static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
 
-	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
+	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue"; // $NON-NLS-1$
 
-	public static final String XML_DATA = "HTTPSamper.xml_data";
+	public static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
 
-	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
+	public final static String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
 
-	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory";
+	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
 
 	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
@@ -166,10 +166,11 @@ public class JMSSampler extends AbstractSampler {
 
 	private void addJMSProperties(TextMessage msg) throws JMSException {
 		Map map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
-		Iterator argIt = map.keySet().iterator();
+		Iterator argIt = map.entrySet().iterator();
 		while (argIt.hasNext()) {
-			String name = (String) argIt.next();
-			String value = (String) map.get(name);
+            Map.Entry me = (Map.Entry) argIt.next();
+			String name = (String) me.getKey();
+			String value = (String) me.getValue();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Adding property [" + name + "=" + value + "]");
 			}
