@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,64 +59,67 @@ import org.apache.oro.text.regex.Util;
  * 
  */
 public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final int DEFAULT_HTTPS_PORT = 443;
 
 	public static final int DEFAULT_HTTP_PORT = 80;
 
-	public final static String ARGUMENTS = "HTTPsampler.Arguments";
+	public final static String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
-	public final static String AUTH_MANAGER = "HTTPSampler.auth_manager";
+	public final static String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
 
-	public final static String COOKIE_MANAGER = "HTTPSampler.cookie_manager";
+	public final static String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
 
-	public final static String HEADER_MANAGER = "HTTPSampler.header_manager";
+	public final static String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
 
-	public final static String MIMETYPE = "HTTPSampler.mimetype";
+	public final static String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
 
-	public final static String DOMAIN = "HTTPSampler.domain";
+	public final static String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
 
-	public final static String PORT = "HTTPSampler.port";
+	public final static String PORT = "HTTPSampler.port"; // $NON-NLS-1$
 
-	public final static String METHOD = "HTTPSampler.method";
+	public final static String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
-	public final static String PATH = "HTTPSampler.path";
+	public final static String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
-	public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects";
+	public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects"; // $NON-NLS-1$
 
-	public final static String AUTO_REDIRECTS = "HTTPSampler.auto_redirects";
+	public final static String AUTO_REDIRECTS = "HTTPSampler.auto_redirects"; // $NON-NLS-1$
 
-	public final static String PROTOCOL = "HTTPSampler.protocol";
+	public final static String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
 
-	public final static String DEFAULT_PROTOCOL = "http";
+    public static final String PROTOCOL_HTTPS = "https"; // $NON-NLS-1$
 
-	public final static String URL = "HTTPSampler.URL";
+    public final static String DEFAULT_PROTOCOL = "http"; // $NON-NLS-1$
 
-	public final static String POST = "POST";
+	public final static String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
-	public final static String GET = "GET";
+	public final static String POST = "POST"; // $NON-NLS-1$
 
-	public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive";
+	public final static String GET = "GET"; // $NON-NLS-1$
 
-	public final static String FILE_NAME = "HTTPSampler.FILE_NAME";
+	public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
-	public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD";
+	public final static String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
 
-	public final static String FILE_DATA = "HTTPSampler.FILE_DATA";
+	public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
 
-	public final static String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE";
+	public final static String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
 
-	public final static String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE";
+	public final static String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE"; // $NON-NLS-1$
 
-	public final static String NORMAL_FORM = "normal_form";
+	public final static String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
 
-	public final static String MULTIPART_FORM = "multipart_form";
+	public final static String NORMAL_FORM = "normal_form"; // $NON-NLS-1$
+
+	public final static String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
 
 	// public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
-	public final static String IMAGE_PARSER = "HTTPSampler.image_parser";
+	public final static String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
 
-	public final static String MONITOR = "HTTPSampler.monitor";
+	public final static String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
 	/** A number to indicate that the port has not been set. * */
 	public static final int UNSPECIFIED_PORT = 0;
@@ -127,6 +130,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	protected final static String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
 
+    private static final String ARG_VAL_SEP = "="; // $NON-NLS-1$
+
+    private static final String QRY_SEP = "&"; // $NON-NLS-1$
+
+    private static final String QRY_PFX = "?"; // $NON-NLS-1$
+
+
+    
 	private static Pattern pattern;
 
 	static {
@@ -180,7 +191,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 */
 	public void setPath(String path) {
 		if (GET.equals(getMethod())) {
-			int index = path.indexOf("?");
+			int index = path.indexOf(QRY_PFX); // $NON-NLS-1$
 			if (index > -1) {
 				setProperty(PATH, path.substring(0, index));
 				parseArguments(path.substring(index + 1));
@@ -274,7 +285,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public int getPort() {
 		int port = getPropertyAsInt(PORT);
 		if (port == UNSPECIFIED_PORT) {
-			if ("https".equalsIgnoreCase(getProtocol())) {
+			if (PROTOCOL_HTTPS.equalsIgnoreCase(getProtocol())) {
 				return DEFAULT_HTTPS_PORT;
 			}
 			return DEFAULT_HTTP_PORT;
@@ -382,16 +393,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public URL getUrl() throws MalformedURLException {
 		String pathAndQuery = null;
 		if (this.getMethod().equals(GET) && getQueryString().length() > 0) {
-			if (this.getPath().indexOf("?") > -1) {
-				pathAndQuery = this.getPath() + "&" + getQueryString();
+			if (this.getPath().indexOf(QRY_PFX) > -1) {
+				pathAndQuery = this.getPath() + QRY_SEP + getQueryString();
 			} else {
-				pathAndQuery = this.getPath() + "?" + getQueryString();
+				pathAndQuery = this.getPath() + QRY_PFX + getQueryString();
 			}
 		} else {
 			pathAndQuery = this.getPath();
 		}
-		if (!pathAndQuery.startsWith("/")) {
-			pathAndQuery = "/" + pathAndQuery;
+		if (!pathAndQuery.startsWith("/")) { // $NON-NLS-1$
+			pathAndQuery = "/" + pathAndQuery; // $NON-NLS-1$
 		}
 		if (getPort() == UNSPECIFIED_PORT || getPort() == DEFAULT_HTTP_PORT) {
 			return new URL(getProtocol(), getDomain(), pathAndQuery);
@@ -417,13 +428,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				item = new HTTPArgument((Argument) iter.next().getObjectValue());
 			}
 			if (!first) {
-				buf.append("&");
+				buf.append(QRY_SEP);
 			} else {
 				first = false;
 			}
 			buf.append(item.getEncodedName());
 			if (item.getMetaData() == null) {
-				buf.append("=");
+				buf.append(ARG_VAL_SEP); // $NON-NLS-1$
 			} else {
 				buf.append(item.getMetaData());
 			}
@@ -446,7 +457,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * 
 	 */
 	public void parseArguments(String queryString) {
-		String[] args = JOrphanUtils.split(queryString, "&");
+		String[] args = JOrphanUtils.split(queryString, QRY_SEP); // $NON-NLS-1$
 		for (int i = 0; i < args.length; i++) {
 			// need to handle four cases: string contains name=value
 			// string contains name=
@@ -455,10 +466,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 			// find end of parameter name
 			int endOfNameIndex = 0;
 			String metaData = ""; // records the existance of an equal sign
-			if (args[i].indexOf("=") != -1) {
+			if (args[i].indexOf(ARG_VAL_SEP) != -1) {
 				// case of name=value, name=
-				endOfNameIndex = args[i].indexOf("=");
-				metaData = "=";
+				endOfNameIndex = args[i].indexOf(ARG_VAL_SEP);
+				metaData = ARG_VAL_SEP;
 			} else {
 				metaData = "";
 				if (args[i].length() > 0) {
@@ -552,7 +563,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	protected HTTPSampleResult downloadPageResources(HTTPSampleResult res, HTTPSampleResult container, int frameDepth) {
 		Iterator urls = null;
 		try {
-			if (res.getContentType().toLowerCase().indexOf("text/html") != -1) {
+			if (res.getContentType().toLowerCase().indexOf("text/html") != -1) { // $NON-NLS-1$
 				urls = HTMLParser.getParser().getEmbeddedResourceURLs(res.getResponseData(), res.getURL());
 			}
 		} catch (HTMLParseException e) {
@@ -595,9 +606,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		return path;
 	}
 
-	protected static final int MAX_REDIRECTS = JMeterUtils.getPropDefault("httpsampler.max_redirects", 5);
+	protected static final int MAX_REDIRECTS = JMeterUtils.getPropDefault("httpsampler.max_redirects", 5); // $NON-NLS-1$
 
-	protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5);
+	protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)
