@@ -57,7 +57,7 @@ public class Converter {
 		} else if (toType.equals(long.class) || toType.equals(Long.class)) {
 			return new Long(getLong(value));
 		} else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-			return new Boolean(getBoolean(value));
+			return Boolean.valueOf(getBoolean(value));
 		} else if (toType.equals(java.util.Date.class)) {
 			return getDate(value);
 		} else if (toType.equals(Calendar.class)) {
@@ -212,7 +212,7 @@ public class Converter {
 		} else if (o instanceof Boolean) {
 			return ((Boolean) o).booleanValue();
 		} else
-			return new Boolean(o.toString()).booleanValue();
+			return Boolean.valueOf(o.toString()).booleanValue();
 	}
 
 	/**
