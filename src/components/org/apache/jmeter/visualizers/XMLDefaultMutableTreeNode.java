@@ -141,7 +141,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 		NamedNodeMap nm = node.getAttributes();
 		for (int i = 0; i < nm.getLength(); i++) {
 			Attr nmNode = (Attr) nm.item(i);
-			String value = nmNode.getName() + " = \"" + nmNode.getValue() + "\"";
+			String value = nmNode.getName() + " = \"" + nmNode.getValue() + "\""; // $NON-NLS-1$ $NON-NLS-2$
 			XMLDefaultMutableTreeNode attributeNode = new XMLDefaultMutableTreeNode(value, nmNode);
 			mTreeNode.add(attributeNode);
 
@@ -157,8 +157,8 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 	 */
 	private void initCommentNode(Comment node, DefaultMutableTreeNode mTreeNode) throws SAXException {
 		String data = node.getData();
-		if (data != null || data.length() > 0) {
-			String value = "<!--" + node.getData() + "-->";
+		if (data != null && data.length() > 0) {
+			String value = "<!--" + node.getData() + "-->"; // $NON-NLS-1$ $NON-NLS-2$
 			XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value, node);
 			mTreeNode.add(commentNode);
 		}
@@ -173,8 +173,8 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 	 */
 	private void initCDATASectionNode(CDATASection node, DefaultMutableTreeNode mTreeNode) throws SAXException {
 		String data = node.getData();
-		if (data != null || data.length() > 0) {
-			String value = "<!-[CDATA" + node.getData() + "]]>";
+		if (data != null && data.length() > 0) {
+			String value = "<!-[CDATA" + node.getData() + "]]>"; // $NON-NLS-1$ $NON-NLS-2$
 			XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value, node);
 			mTreeNode.add(commentNode);
 		}
