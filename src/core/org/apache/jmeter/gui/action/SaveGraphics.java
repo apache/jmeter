@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -31,8 +30,6 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * SaveGraphics action is meant to be a generic reusable Action. The class will
@@ -43,16 +40,16 @@ import org.apache.log.Logger;
  * it will call SaveGraphicsService to save in the format.
  */
 public class SaveGraphics implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SAVE_GRAPHICS = "save_graphics";
+	public final static String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
 
 	private static Set commands = new HashSet();
 	static {
 		commands.add(SAVE_GRAPHICS);
 	}
 
-	public static String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
+	private static final String[] extensions 
+        = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
 
 	/**
 	 * Constructor for the Save object.
@@ -106,20 +103,20 @@ public class SaveGraphics implements Command {
 		}
 	}
 
-	public static class Test extends junit.framework.TestCase {
-		SaveGraphics save;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			save = new SaveGraphics();
-		}
-
-		public void testSomething() {
-			// TODO write some tests
-		}
-	}
-
+//	public static class Test extends junit.framework.TestCase {
+//		private SaveGraphics save;
+//
+//		public Test(String name) {
+//			super(name);
+//		}
+//
+//		public void setUp() throws Exception {
+//            super.setUp();
+//			save = new SaveGraphics();
+//		}
+//
+//		public void testSomething() throws Exception {
+//			// TODO write some tests
+//		}
+//	}
 }
