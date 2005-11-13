@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,10 @@ import org.apache.log.Logger;
 /**
  * @author pete
  * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class Publisher {
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
 
@@ -51,9 +49,9 @@ public class Publisher {
 
 	private TopicPublisher PUBLISHER = null;
 
-	private byte[] RESULT = null;
+	//private byte[] RESULT = null;
 
-	private Object OBJ_RESULT = null;
+	//private Object OBJ_RESULT = null;
 
 	/**
 	 * 
@@ -65,7 +63,7 @@ public class Publisher {
 		if (ctx != null) {
 			initConnection(ctx, connfactory, topic);
 		} else {
-			log.equals("Could not initialize JNDI Initial Context Factory");
+			log.error("Could not initialize JNDI Initial Context Factory");
 		}
 	}
 
