@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,12 +44,16 @@ import org.apache.log.output.io.WriterTarget;
  * 
  */
 public class SampleResult implements Serializable {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
 	// Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
 	// However the suggested System.getProperty("file.encoding") is Cp1252 on
 	// Windows
 	// So use a new property with the original value as default
-	private static final String DEFAULT_ENCODING = JMeterUtils.getPropDefault("sampleresult.default.encoding",
-			"ISO-8859-1");
+	private static final String DEFAULT_ENCODING 
+            = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
+			"ISO-8859-1"); // $NON-NLS-1$
 
 	/**
 	 * Data type value indicating that the response data is text.
@@ -56,7 +61,7 @@ public class SampleResult implements Serializable {
 	 * @see #getDataType
 	 * @see #setDataType(java.lang.String)
 	 */
-	public final static String TEXT = "text";
+	public final static String TEXT = "text"; // $NON-NLS-1$
 
 	/**
 	 * Data type value indicating that the response data is binary.
@@ -64,7 +69,7 @@ public class SampleResult implements Serializable {
 	 * @see #getDataType
 	 * @see #setDataType(java.lang.String)
 	 */
-	public final static String BINARY = "bin";
+	public final static String BINARY = "bin"; // $NON-NLS-1$
 
 	/* empty arrays which can be returned instead of null */
 	private static final byte[] EMPTY_BA = new byte[0];
@@ -148,11 +153,10 @@ public class SampleResult implements Serializable {
 	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult
 	// instead?
 
-	private final static String TOTAL_TIME = "totalTime";
+	private final static String TOTAL_TIME = "totalTime"; // $NON-NLS-1$
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	private static final boolean startTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
+	private static final boolean startTimeStamp 
+        = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
 	static {
 		if (startTimeStamp) {
@@ -404,6 +408,20 @@ public class SampleResult implements Serializable {
 		return responseData;
 	}
 
+    /**
+     * Gets the responseData attribute of the SampleResult object.
+     * 
+     * @return the responseData value as a String, converted according to the encoding
+     */
+    public String getResponseDataAsString() {
+        try {
+            return new String(responseData,getDataEncoding());
+        } catch (UnsupportedEncodingException e) {
+            log.warn("Using "+dataEncoding+" caused "+e);
+            return new String(responseData);
+        }
+    }
+
 	/**
 	 * Convenience method to get responseData as a non-null byte array
 	 * 
@@ -411,7 +429,7 @@ public class SampleResult implements Serializable {
 	 *         array is returned rather than null.
 	 * 
 	 */
-	public byte[] responseDataAsBA() {
+	public byte[] getResponseDataAsBA() {
 		return responseData == null ? EMPTY_BA : responseData;
 	}
 
@@ -713,67 +731,6 @@ public class SampleResult implements Serializable {
 		return bytes;
 	}
 
-	// //////////////////////////// Start of Test Code
-	// ///////////////////////////
-
-	// TODO need more tests - particularly for the new functions
-
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testElapsed() throws Exception {
-			SampleResult res = new SampleResult();
-
-			// Check sample increments OK
-			res.sampleStart();
-			Thread.sleep(100);
-			res.sampleEnd();
-			assertTrue(res.getTime() >= 100);
-		}
-
-		public void testPause() throws Exception {
-			SampleResult res = new SampleResult();
-			// Check sample increments OK
-			res.sampleStart();
-			Thread.sleep(100);
-			res.samplePause();
-
-			Thread.sleep(200);
-
-			// Re-increment
-			res.sampleResume();
-			Thread.sleep(100);
-			res.sampleEnd();
-			long sampleTime = res.getTime();
-			if ((sampleTime < 200) || (sampleTime > 290)) {
-				fail("Accumulated time (" + sampleTime + ") was not between 200 and 290 ms");
-			}
-		}
-
-		private static Formatter fmt = new RawFormatter();
-
-		private StringWriter wr = null;
-
-		public void divertLog() {
-			wr = new StringWriter(1000);
-			LogTarget[] lt = { new WriterTarget(wr, fmt) };
-			log.setLogTargets(lt);
-		}
-
-		public void testPause2() throws Exception {
-			divertLog();
-			SampleResult res = new SampleResult();
-			res.sampleStart();
-			res.samplePause();
-			assertTrue(wr.toString().length() == 0);
-			res.samplePause();
-			assertFalse(wr.toString().length() == 0);
-		}
-		// TODO some more invalid sequence tests needed
-	}
-
 	/**
 	 * @return Returns the latency.
 	 */
@@ -825,4 +782,61 @@ public class SampleResult implements Serializable {
 	public void setParent(SampleResult parent) {
 		this.parent = parent;
 	}
+    // TODO need more tests - particularly for the new functions
+
+    public static class Test extends TestCase {
+        public Test(String name) {
+            super(name);
+        }
+
+        public void testElapsed() throws Exception {
+            SampleResult res = new SampleResult();
+
+            // Check sample increments OK
+            res.sampleStart();
+            Thread.sleep(100);
+            res.sampleEnd();
+            assertTrue(res.getTime() >= 100);
+        }
+
+        public void testPause() throws Exception {
+            SampleResult res = new SampleResult();
+            // Check sample increments OK
+            res.sampleStart();
+            Thread.sleep(100);
+            res.samplePause();
+
+            Thread.sleep(200);
+
+            // Re-increment
+            res.sampleResume();
+            Thread.sleep(100);
+            res.sampleEnd();
+            long sampleTime = res.getTime();
+            if ((sampleTime < 200) || (sampleTime > 290)) {
+                fail("Accumulated time (" + sampleTime + ") was not between 200 and 290 ms");
+            }
+        }
+
+        private static Formatter fmt = new RawFormatter();
+
+        private StringWriter wr = null;
+
+        private void divertLog() {// N.B. This needs to divert the log for SampleResult
+            wr = new StringWriter(1000);
+            LogTarget[] lt = { new WriterTarget(wr, fmt) };
+            log.setLogTargets(lt);
+        }
+
+        public void testPause2() throws Exception {
+            divertLog();
+            SampleResult res = new SampleResult();
+            res.sampleStart();
+            res.samplePause();
+            assertTrue(wr.toString().length() == 0);
+            res.samplePause();
+            assertFalse(wr.toString().length() == 0);
+        }
+        // TODO some more invalid sequence tests needed
+    }
 }
