@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 
 	private transient boolean RUN = true;
 
-	public static String CLIENT_CHOICE = "jms.client_choice";
+	public static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
 
 	public SubscriberSampler() {
 	}
