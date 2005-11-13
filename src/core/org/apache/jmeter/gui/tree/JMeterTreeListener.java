@@ -255,10 +255,8 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 				if (tree.getSelectionCount() < 2) {
 					tree.setSelectionPath(currentPath);
 				}
-				if (getCurrentNode() instanceof JMeterTreeNode) {
-					log.debug("About to display pop-up");
-					displayPopUp(e);
-				}
+				log.debug("About to display pop-up");
+				displayPopUp(e);
 			}
 		}
 	}
