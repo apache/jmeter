@@ -29,7 +29,8 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public abstract class AbstractProperty implements JMeterProperty {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    //TODO consider using private logs for each derived class
+	protected static final Logger log = LoggingManager.getLoggerForClass();
 
 	private String name;
 
