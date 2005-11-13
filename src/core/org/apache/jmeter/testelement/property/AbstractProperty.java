@@ -1,26 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- *  
- */
-
-// $Header:
-// /home/cvs/jakarta-jmeter/src/core/org/apache/jmeter/testelement/property/AbstractProperty.java,v
-// 1.19 2004/02/27 11:45:54 sebb Exp $
-/*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -50,7 +29,7 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public abstract class AbstractProperty implements JMeterProperty {
-	protected static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private String name;
 
@@ -341,11 +320,12 @@ public abstract class AbstractProperty implements JMeterProperty {
 	 * objects, appropriate for a MapProperty object.
 	 */
 	protected Map normalizeMap(Map coll) {
-		Iterator iter = coll.keySet().iterator();
+		Iterator iter = coll.entrySet().iterator();
 		Map newColl = null;
 		while (iter.hasNext()) {
-			Object item = iter.next();
-			Object prop = coll.get(item);
+			Map.Entry entry = (Map.Entry) iter.next();
+            Object item = entry.getKey();
+			Object prop = entry.getValue();
 			if (newColl == null) {
 				try {
 					newColl = (Map) coll.getClass().newInstance();
