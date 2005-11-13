@@ -345,10 +345,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     		
     		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
     			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
+                if (cookie == null)
+                    continue;
                 long exp = cookie.getExpires();
                 long now = System.currentTimeMillis() / 1000 ;
-    			if (cookie == null)
-    				continue;
     			if ( host.endsWith(cookie.getDomain())
                         && u.getFile().startsWith(cookie.getPath()) 
                         && (exp == 0 || exp > now)) {
@@ -687,126 +687,4 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testArgumentWithoutEquals() throws Exception {
-			HTTPSampler2 sampler = new HTTPSampler2();
-			sampler.setProtocol("http");
-			sampler.setMethod(GET);
-			sampler.setPath("/index.html?pear");
-			sampler.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?pear", sampler.getUrl().toString());
-		}
-
-		public void testMakingUrl() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.addArgument("param1", "value1");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
-		}
-
-		public void testMakingUrl2() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.addArgument("param1", "value1");
-			config.setPath("/index.html?p1=p2");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1=value1&p1=p2", config.getUrl().toString());
-		}
-
-		public void testMakingUrl3() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(POST);
-			config.addArgument("param1", "value1");
-			config.setPath("/index.html?p1=p2");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?p1=p2", config.getUrl().toString());
-		}
-
-		// test cases for making Url, and exercise method
-		// addArgument(String name,String value,String metadata)
-
-		public void testMakingUrl4() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.addArgument("param1", "value1", "=");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
-		}
-
-		public void testMakingUrl5() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.addArgument("param1", "", "=");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
-		}
-
-		public void testMakingUrl6() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.addArgument("param1", "", "");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
-		}
-
-		// test cases for making Url, and exercise method
-		// parseArguments(String queryString)
-
-		public void testMakingUrl7() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.parseArguments("param1=value1");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
-		}
-
-		public void testMakingUrl8() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.parseArguments("param1=");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1=", config.getUrl().toString());
-		}
-
-		public void testMakingUrl9() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.parseArguments("param1");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html?param1", config.getUrl().toString());
-		}
-
-		public void testMakingUrl10() throws Exception {
-			HTTPSampler2 config = new HTTPSampler2();
-			config.setProtocol("http");
-			config.setMethod(GET);
-			config.parseArguments("");
-			config.setPath("/index.html");
-			config.setDomain("www.apache.org");
-			assertEquals("http://www.apache.org/index.html", config.getUrl().toString());
-		}
-	}
 }
