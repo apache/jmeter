@@ -154,7 +154,7 @@ public class MailReaderSampler extends AbstractSampler {
 			res.setResponseData(data.toString().getBytes());
 			res.setDataType(SampleResult.TEXT);
 
-			res.setResponseCode("200");
+			res.setResponseCodeOK();
 			res.setResponseMessage("OK");
 			isOK = true;
 		} catch (Exception ex) {

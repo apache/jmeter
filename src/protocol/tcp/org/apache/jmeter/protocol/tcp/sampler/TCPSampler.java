@@ -271,7 +271,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 				String in = protocolHandler.read(is);
 				res.setResponseData(in.getBytes());
 				res.setDataType(SampleResult.TEXT);
-				res.setResponseCode("200");
+				res.setResponseCodeOK();
 				res.setResponseMessage("OK");
 				isSuccessful = true;
 				// Reset the status code if the message contains one
