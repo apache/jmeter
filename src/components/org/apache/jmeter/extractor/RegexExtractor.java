@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,21 +49,26 @@ import org.apache.oro.text.regex.Util;
  * @version $Revision$
  */
 public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String USEHEADERS = "RegexExtractor.useHeaders";
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String REGEX = "RegexExtractor.regex";
+	public static final String USEHEADERS = "RegexExtractor.useHeaders"; // $NON-NLS-1$
 
-	public static final String REFNAME = "RegexExtractor.refname";
+	public static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
 
-	public static final String MATCH_NUMBER = "RegexExtractor.match_number";
+	public static final String REFNAME = "RegexExtractor.refname"; // $NON-NLS-1$
 
-	public static final String DEFAULT = "RegexExtractor.default";
+	public static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
 
-	public static final String TEMPLATE = "RegexExtractor.template";
+	public static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
 
-	private Object[] template = null;
+	public static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
+
+    private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
+
+    private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+
+    private Object[] template = null;
 
 	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
@@ -96,8 +100,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		vars.put(refName, getDefaultValue());
 
 		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-		PatternMatcherInput input = new PatternMatcherInput(useHeaders() ? context.getPreviousResult()
-				.getResponseHeaders() : new String(context.getPreviousResult().getResponseData()));
+		PatternMatcherInput input = new PatternMatcherInput(
+                useHeaders() 
+                        ? context.getPreviousResult().getResponseHeaders()
+                        : context.getPreviousResult().getResponseDataAsString()); // Bug 36898
 		log.debug("Regex = " + getRegex());
 		try {
 			Pattern pattern = patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
@@ -125,30 +131,27 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 				} else // < 0 means we save all the matches
 				{
 					int prevCount = 0;
-					String prevString = vars.get(refName + "_matchNr");
+					String prevString = vars.get(refName + REF_MATCH_NR);
 					if (prevString != null) {
 						try {
 							prevCount = Integer.parseInt(prevString);
 						} catch (NumberFormatException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+                            log.warn("Could not parse "+prevString+" "+e1);
 						}
 					}
-					vars.put(refName + "_matchNr", "" + matches.size());// Save
-																		// the
-																		// count
+					vars.put(refName + REF_MATCH_NR, "" + matches.size());// Save the count
 					for (int i = 1; i <= matches.size(); i++) {
 						match = getCorrectMatch(matches, i);
 						if (match != null) {
-							vars.put(refName + "_" + i, generateResult(match));
-							saveGroups(vars, refName + "_" + i, match);
+							vars.put(refName + UNDERSCORE + i, generateResult(match));
+							saveGroups(vars, refName + UNDERSCORE + i, match);
 						}
 					}
 					for (int i = matches.size() + 1; i <= prevCount; i++) {
-						vars.remove(refName + "_" + i);
-						vars.remove(refName + "_" + i + "_g0");// Remove known
-																// groups ...
-						vars.remove(refName + "_" + i + "_g1");// ...
+						vars.remove(refName + UNDERSCORE + i);
+                        // Remove known groups
+						vars.remove(refName + UNDERSCORE + i + "_g0"); // $NON-NLS-1$
+						vars.remove(refName + UNDERSCORE + i + "_g1"); // $NON-NLS-1$
 						// TODO remove other groups if present?
 					}
 				}
@@ -199,7 +202,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		List combined = new LinkedList();
 		String rawTemplate = getTemplate();
 		PatternMatcher matcher = (Perl5Matcher) localMatcher.get();
-		Pattern templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK
+		Pattern templatePattern = patternCache.getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
+                , Perl5Compiler.READ_ONLY_MASK
 				& Perl5Compiler.SINGLELINE_MASK);
 		log.debug("Pattern = " + templatePattern);
 		log.debug("template = " + rawTemplate);
@@ -234,7 +238,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
 	private boolean isFirstElementGroup(String rawData) {
 		try {
-			Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK
+			Pattern pattern = patternCache.getPattern("^\\$\\d+\\$" // $NON-NLS-1$
+                    , Perl5Compiler.READ_ONLY_MASK
 					& Perl5Compiler.SINGLELINE_MASK);
 			return ((Perl5Matcher) localMatcher.get()).contains(rawData, pattern);
 		} catch (RuntimeException e) {
