@@ -87,7 +87,7 @@ public class JTLData implements Serializable, DataSet {
         if (itr.hasNext()) {
             SamplingStatCalculator row = (SamplingStatCalculator)itr.next();
             if (row != null) {
-                items.add(items);
+                items.add(row);
             }
         }
         return items;
@@ -153,11 +153,14 @@ public class JTLData implements Serializable, DataSet {
             rc.setListener(this);
             rc.clear();
             rc.setListener(null);
-            rc = null;
             try {
                 rc.loadExistingFile();
             } catch (IOException e) {
                 log.warn(e.getMessage());
+            } finally {
+                // we clean up the ResultCollector to make sure there's
+                // no slow leaks
+                rc = null;
             }
         }
     }
