@@ -187,6 +187,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 						SampleResult result = OldSaveService.getSampleResult(samples[i]);
 						sendToVisualizer(result);
 					}
+					parsedOK = true;
 				} catch (Exception e1) {
 					log.warn("Error parsing XML results " + e);
 					log.info("Assuming CSV format instead");
