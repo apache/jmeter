@@ -113,7 +113,9 @@ public class ReportLoad implements Command {
 			JMeterUtils.reportErrorToUser(msg);
 		} finally {
 			try {
-				reader.close();
+				if (reader != null) {
+                    reader.close();
+                }
 			} catch (IOException e1) {
 				// ignored
 			}
