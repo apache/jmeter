@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2003-2005 The Apache Software Foundation.
  *
@@ -49,88 +48,75 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /*******************************************************************************
- * Title: JMeter Description: Copyright: Copyright (c) 2000 Company: Apache
- * 
- * @author Dolf Smits(Dolf.Smits@Siemens.com)
- * @created Aug 09 2003 11:00 AM
- * @company Siemens Netherlands N.V..
- * @version 1.0 Based on the work of:
- * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
- * @created Apr 29 2003 11:00 AM
- * @company Sip Technologies and Exports Ltd.
- * @version 1.0
- ******************************************************************************/
-
-/*******************************************************************************
  * Ldap Sampler class is main class for the LDAP test. This will control all the
  * test available in the LDAP Test.
  ******************************************************************************/
 
 public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SERVERNAME = "servername";
+	public final static String SERVERNAME = "servername"; // $NON-NLS-1$
 
-	public final static String PORT = "port";
+	public final static String PORT = "port"; // $NON-NLS-1$
 
-	public final static String ROOTDN = "rootdn";
+	public final static String ROOTDN = "rootdn"; // $NON-NLS-1$
 
-	public final static String TEST = "test";
+	public final static String TEST = "test"; // $NON-NLS-1$
 
-	public final static String ADD = "add";
+	public final static String ADD = "add"; // $NON-NLS-1$
 
-	public final static String MODIFY = "modify";
+	public final static String MODIFY = "modify"; // $NON-NLS-1$
 
-	public final static String BIND = "bind";
+	public final static String BIND = "bind"; // $NON-NLS-1$
 
-	public final static String UNBIND = "unbind";
+	public final static String UNBIND = "unbind"; // $NON-NLS-1$
 
-	public final static String DELETE = "delete";
+	public final static String DELETE = "delete"; // $NON-NLS-1$
 
-	public final static String SEARCHBASE = "search";
+	public final static String SEARCHBASE = "search"; // $NON-NLS-1$
 
-	public final static String SEARCHFILTER = "searchfilter";
+	public final static String SEARCHFILTER = "searchfilter"; // $NON-NLS-1$
 
-	public final static String ARGUMENTS = "arguments";
+	public final static String ARGUMENTS = "arguments"; // $NON-NLS-1$
 
-	public final static String LDAPARGUMENTS = "ldaparguments";
+	public final static String LDAPARGUMENTS = "ldaparguments"; // $NON-NLS-1$
 
-	public final static String BASE_ENTRY_DN = "base_entry_dn";
+	public final static String BASE_ENTRY_DN = "base_entry_dn"; // $NON-NLS-1$
 
-	public final static String SCOPE = "scope";
+	public final static String SCOPE = "scope"; // $NON-NLS-1$
 
-	public final static String COUNTLIM = "countlimit";
+	public final static String COUNTLIM = "countlimit"; // $NON-NLS-1$
 
-	public final static String TIMELIM = "timelimit";
+	public final static String TIMELIM = "timelimit"; // $NON-NLS-1$
 
-	public final static String ATTRIBS = "attributes";
+	public final static String ATTRIBS = "attributes"; // $NON-NLS-1$
 
-	public final static String RETOBJ = "return_object";
+	public final static String RETOBJ = "return_object"; // $NON-NLS-1$
 
-	public final static String DEREF = "deref_aliases";
+	public final static String DEREF = "deref_aliases"; // $NON-NLS-1$
 
-	public final static String USERDN = "user_dn";
+	public final static String USERDN = "user_dn"; // $NON-NLS-1$
 
-	public final static String USERPW = "user_pw";
+	public final static String USERPW = "user_pw"; // $NON-NLS-1$
 
-	public final static String SBIND = "sbind";
+	public final static String SBIND = "sbind"; // $NON-NLS-1$
 
-	public final static String COMPARE = "compare";
+	public final static String COMPARE = "compare"; // $NON-NLS-1$
 
-	public final static String SUSERDN = "suser_dn";
+	public final static String SUSERDN = "suser_dn"; // $NON-NLS-1$
 
-	public final static String SUSERPW = "suser_pw";
+	public final static String SUSERPW = "suser_pw"; // $NON-NLS-1$
 
-	public final static String COMPAREDN = "comparedn";
+	public final static String COMPAREDN = "comparedn"; // $NON-NLS-1$
 
-	public final static String COMPAREFILT = "comparefilt";
+	public final static String COMPAREFILT = "comparefilt"; // $NON-NLS-1$
 
-	public final static String RENAME = "rename";
+	public final static String RENAME = "rename"; // $NON-NLS-1$
 
-	public final static String MODDDN = "modddn";
+	public final static String MODDDN = "modddn"; // $NON-NLS-1$
 
-	public final static String NEWDN = "newdn";
+	public final static String NEWDN = "newdn"; // $NON-NLS-1$
 
 	// For In build test case using this counter
 	// create the new entry in the server
@@ -521,10 +507,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			} else {
 				attr = getBasicAttribute(item.getName(), item.getValue());
 			}
-			if ("add".equals(item.getOpcode())) {
+			if ("add".equals(item.getOpcode())) { // $NON-NLS-1$
 				mods[count] = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
 			} else {
-				if ("delete".equals(item.getOpcode())) {
+				if ("delete".equals(item.getOpcode())) { // $NON-NLS-1$
 					mods[count] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
 				} else {
 					mods[count] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
@@ -724,9 +710,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		res.setResponseMessage("Success");
 		res.setResponseCode("0");
 		boolean isSuccessful = true;
-		SearchResult sr;
-		String iets;
-		NamingEnumeration attrlist;
 		res.setSampleLabel(getName());
 		LdapExtClient temp_client = (LdapExtClient) ldapConnections.get(getThreadName());
 		DirContext dirContext = (DirContext) ldapContexts.get(getThreadName());
@@ -748,18 +731,18 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "<baseobj>" + getRootdn() + "</baseobj>";
 				responseData = responseData + "<binddn>" + getUserDN() + "</binddn></operation>";
 				unbindOp(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals("bind")) {
+			} else if (getPropertyAsString(TEST).equals(BIND)) {
 				res.setSamplerData("Bind as " + getUserDN());
 				responseData = responseData + "<operation><opertype>bind</opertype>";
 				responseData = responseData + "<baseobj>" + getRootdn() + "</baseobj>";
 				responseData = responseData + "<binddn>" + getUserDN() + "</binddn></operation>";
 				bindOp(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals("sbind")) {
+			} else if (getPropertyAsString(TEST).equals(SBIND)) {
 				res.setSamplerData("SingleBind as " + getSuserDN());
 				responseData = responseData + "<operation><opertype>bind</opertype>";
 				responseData = responseData + "<binddn>" + getSuserDN() + "</binddn></operation>";
 				singleBindOp(res);
-			} else if (getPropertyAsString(TEST).equals("compare")) {
+			} else if (getPropertyAsString(TEST).equals(COMPARE)) {
 				res
 						.setSamplerData("Compare " + getPropertyAsString(COMPAREFILT) + " "
 								+ getPropertyAsString(COMPAREDN));
@@ -774,31 +757,31 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 					res.setResponseMessage("compareFalse");
 					isSuccessful = false;
 				}
-			} else if (getPropertyAsString(TEST).equals("add")) {
+			} else if (getPropertyAsString(TEST).equals(ADD)) {
 				res.setSamplerData("Add object " + getPropertyAsString(BASE_ENTRY_DN));
 				responseData = responseData + "<operation><opertype>add</opertype>";
 				responseData = responseData + "<attributes>" + getArguments().toString() + "</attributes>";
 				responseData = responseData + "<dn>" + getPropertyAsString(BASE_ENTRY_DN) + "</dn></operation>";
 				addTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals("delete")) {
+			} else if (getPropertyAsString(TEST).equals(DELETE)) {
 				res.setSamplerData("Delete object " + getPropertyAsString(DELETE));
 				responseData = responseData + "<operation><opertype>delete</opertype>";
 				responseData = responseData + "<dn>" + getPropertyAsString(DELETE) + "</dn></operation>";
 				deleteTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals("modify")) {
+			} else if (getPropertyAsString(TEST).equals(MODIFY)) {
 				res.setSamplerData("Modify object " + getPropertyAsString(BASE_ENTRY_DN));
 				responseData = responseData + "<operation><opertype>modify</opertype>";
 				responseData = responseData + "<dn>" + getPropertyAsString(BASE_ENTRY_DN) + "</dn>";
 				responseData = responseData + "<attributes>" + getLDAPArguments().toString()
 						+ "</attributes></operation>";
 				modifyTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals("rename")) {
+			} else if (getPropertyAsString(TEST).equals(RENAME)) {
 				res.setSamplerData("ModDN object " + getPropertyAsString(MODDDN) + " to " + getPropertyAsString(NEWDN));
 				responseData = responseData + "<operation><opertype>moddn</opertype>";
 				responseData = responseData + "<dn>" + getPropertyAsString(MODDDN) + "</dn>";
 				responseData = responseData + "<newdn>" + getPropertyAsString(NEWDN) + "</newdn></operation>";
 				renameTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals("search")) {
+			} else if (getPropertyAsString(TEST).equals(SEARCHBASE)) {
 				res.setSamplerData("Search with filter " + getPropertyAsString(SEARCHFILTER));
 				responseData = responseData + "<operation><opertype>search</opertype>";
 				responseData = responseData + "<searchfilter>" + getPropertyAsString(SEARCHFILTER) + "</searchfilter>";
@@ -810,19 +793,19 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "</operation><searchresult>";
 				searchTest(temp_client, dirContext, res);
 				while (temp_client.answer.hasMore()) {
-					sr = (SearchResult) temp_client.answer.next();
+                    SearchResult sr = (SearchResult) temp_client.answer.next();
 					responseData = responseData + "<dn>" + sr.getName() + "," + getPropertyAsString(SEARCHBASE) + ","
 							+ getRootdn() + "</dn>";
 					responseData = responseData + "<returnedattr>" + sr.getAttributes().size() + "</returnedattr>";
-					attrlist = sr.getAttributes().getIDs();
+                    NamingEnumeration attrlist = sr.getAttributes().getIDs();
 					while (attrlist.hasMore()) {
-						iets = (String) attrlist.next();
-						responseData = responseData + "<attribute><attributename>" + iets.toString()
+						String iets = (String) attrlist.next();
+						responseData = responseData + "<attribute><attributename>" + iets
 								+ "</attributename>";
 						responseData = responseData
 								+ "<attributevalue>"
-								+ sr.getAttributes().get(iets.toString()).toString().substring(
-										iets.toString().length() + 2) + "</attributevalue></attribute>";
+								+ sr.getAttributes().get(iets).toString().substring(
+										iets.length() + 2) + "</attributevalue></attribute>";
 					}
 				}
 				responseData = responseData + "</searchresult></operation>";
