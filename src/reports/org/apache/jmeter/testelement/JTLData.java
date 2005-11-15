@@ -151,15 +151,16 @@ public class JTLData implements Serializable, DataSet {
             ResultCollector rc = new ResultCollector();
             rc.setFilename(this.getDataSource());
             rc.setListener(this);
-            rc.clear();
-            rc.setListener(null);
             try {
                 rc.loadExistingFile();
             } catch (IOException e) {
                 log.warn(e.getMessage());
+                // e.printStackTrace();
             } finally {
                 // we clean up the ResultCollector to make sure there's
                 // no slow leaks
+                rc.clear();
+                rc.setListener(null);
                 rc = null;
             }
         }
@@ -177,14 +178,21 @@ public class JTLData implements Serializable, DataSet {
             this.endTimestamp = sample.getEndTime();
         }
         // now add the samples to the HashMap
-        SamplingStatCalculator row = (SamplingStatCalculator)data.get(sample.getSampleLabel());
+        System.out.println("label=" + sample.getSampleLabel());
+        System.out.println("url=" + sample.getURL());
+        String url = sample.getSampleLabel();
+        if (url == null) {
+            url = sample.getURL().toString();
+        }
+        SamplingStatCalculator row = (SamplingStatCalculator)data.get(url);
         if (row == null) {
             row = new SamplingStatCalculator();
             // just like the aggregate listener, we use the sample label to represent
             // a row. in this case, we use it as a key.
-            this.data.put(sample.getSampleLabel(),row);
+            this.data.put(url,row);
         }
         row.addSample(sample);
+        System.out.println(" count=" + row.getCount());
     }
     
     /**
