@@ -31,19 +31,17 @@ import org.apache.log.Logger;
 /**
  * @author mstover
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static final public long serialVersionUID = 1;
+	private static final long serialVersionUID = 1;
 
-	transient String filename;
+    private transient String filename;
 
-	transient String variableNames;
+    private transient String variableNames;
 
-	transient String delimiter;
+    private transient String delimiter;
 
 	transient private String[] vars;
 
@@ -56,18 +54,18 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 		FileServer server = FileServer.getFileServer();
 		if (vars == null) {
 			server.reserveFile(getFilename());
-			vars = JOrphanUtils.split(getVariableNames(), ",");
+			vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
 		}
 		try {
 			String delim = getDelimiter();
-			if (delim.equals("\\t"))
-				delim = "\t";// Make it easier to enter a Tab
+			if (delim.equals("\\t")) // $NON-NLS-1$
+				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
 			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim,false);
 			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
 				this.getThreadContext().getVariables().put(vars[a], lineValues[a]);
 			}
 		} catch (IOException e) {
-			log.error("Failed to read file: " + getFilename());
+			log.error(e.toString());
 		}
 	}
 
