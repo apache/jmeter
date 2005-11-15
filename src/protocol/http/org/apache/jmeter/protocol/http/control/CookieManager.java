@@ -35,18 +35,14 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import junit.framework.TestCase;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -460,95 +456,5 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void testIterationStart(LoopIterationEvent event) {
 		if (getClearEachIteration())
 			clear();
-	}
-    
-    ///////////////////////////////////////////// TEST CASES ////////////////////////////////////
-
-	public static class Test extends TestCase {
-		CookieManager man = null;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private JMeterContext jmctx = null;
-
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			man = new CookieManager();
-			man.setThreadContext(jmctx);
-		}
-
-		public void testRemoveCookie() throws Exception {
-			man.setThreadContext(jmctx);
-			man.add(new Cookie("id", "me", "127.0.0.1", "/", false, 0));
-			man.removeCookieNamed("id");
-			assertEquals(0, man.getCookieCount());
-		}
-
-		public void testSendCookie() throws Exception {
-			man.add(new Cookie("id", "value", "jakarta.apache.org", "/", false, 9999999999L));
-			HTTPSamplerBase sampler = new HTTPNullSampler();
-			sampler.setDomain("jakarta.apache.org");
-			sampler.setPath("/index.html");
-			sampler.setMethod(HTTPSamplerBase.GET);
-			assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
-		}
-
-		public void testSendCookie2() throws Exception {
-			man.add(new Cookie("id", "value", ".apache.org", "/", false, 9999999999L));
-			HTTPSamplerBase sampler = new HTTPNullSampler();
-			sampler.setDomain("jakarta.apache.org");
-			sampler.setPath("/index.html");
-			sampler.setMethod(HTTPSamplerBase.GET);
-			assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
-		}
-
-		/**
-		 * Test that the cookie domain field is actually handled as browsers do
-		 * (i.e.: host X matches domain .X):
-		 */
-		public void testDomainHandling() throws Exception {
-			URL url = new URL("http://jakarta.apache.org/");
-			man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
-			assertNotNull(man.getCookieHeaderForURL(url));
-		}
-
-		/**
-		 * Test that we won't be tricked by similar host names (this was a past
-		 * bug, although it never got reported in the bug database):
-		 */
-		public void testSimilarHostNames() throws Exception {
-			URL url = new URL("http://ache.org/");
-			man.addCookieFromHeader("test=1", url);
-			url = new URL("http://jakarta.apache.org/");
-			assertNull(man.getCookieHeaderForURL(url));
-		}
-
-		// Test session cookie is returned
-		public void testSessionCookie() throws Exception {
-			URL url = new URL("http://a.b.c/");
-			man.addCookieFromHeader("test=1", url);
-			String s = man.getCookieHeaderForURL(url);
-			assertNotNull(s);
-			assertEquals("test=1", s);
-		}
-
-		// Test Old cookie is not returned
-		public void testOldCookie() throws Exception {
-			URL url = new URL("http://a.b.c/");
-			man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-1990 00:00:00 GMT", url);
-			String s = man.getCookieHeaderForURL(url);
-			assertNull(s);
-		}
-
-		// Test New cookie is returned
-		public void testNewCookie() throws Exception {
-			URL url = new URL("http://a.b.c/");
-			man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-2990 00:00:00 GMT", url);
-			String s = man.getCookieHeaderForURL(url);
-			assertNotNull(s);
-			assertEquals("test=1", s);
-		}
 	}
 }
