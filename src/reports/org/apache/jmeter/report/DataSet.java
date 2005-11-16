@@ -18,6 +18,7 @@
 package org.apache.jmeter.report;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
@@ -89,6 +90,13 @@ public interface DataSet extends Visualizer {
      * @return
      */
     public SamplingStatCalculator getStatistics(String url);
+    /**
+     * Convienance method for getting all the SamplingStatCalculator for
+     * a given URL.
+     * @param urls
+     * @return
+     */
+    public List getStats(List urls);
     /**
      * Classes implementing the method should load the data from
      * the target location. It doesn't necessarily have to be a
