@@ -46,6 +46,9 @@ public class BarChartGui extends AbstractReportGui {
     private JLabeledTextField caption = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
                 Color.white);
+    private JLabeledTextField url = 
+        new JLabeledTextField(JMeterUtils.getResString("report_bar_graph_url"),
+                Color.white);
 
     private JLabeledChoice yItems = new JLabeledChoice();
 	private JLabeledChoice xItems = new JLabeledChoice();
@@ -100,6 +103,7 @@ public class BarChartGui extends AbstractReportGui {
         options.add(ypanel);
         options.add(yAxisLabel);
         options.add(caption);
+        options.add(url);
         
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
@@ -119,6 +123,7 @@ public class BarChartGui extends AbstractReportGui {
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
         bc.setCaption(caption.getText());
+        bc.setURL(url.getText());
 	}
 	
     public void configure(TestElement element) {
@@ -129,6 +134,7 @@ public class BarChartGui extends AbstractReportGui {
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
         caption.setText(bc.getCaption());
+        url.setText(bc.getURL());
     }
     
 }

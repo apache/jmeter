@@ -178,8 +178,6 @@ public class JTLData implements Serializable, DataSet {
             this.endTimestamp = sample.getEndTime();
         }
         // now add the samples to the HashMap
-        System.out.println("label=" + sample.getSampleLabel());
-        System.out.println("url=" + sample.getURL());
         String url = sample.getSampleLabel();
         if (url == null) {
             url = sample.getURL().toString();
@@ -192,7 +190,6 @@ public class JTLData implements Serializable, DataSet {
             this.data.put(url,row);
         }
         row.addSample(sample);
-        System.out.println(" count=" + row.getCount());
     }
     
     /**

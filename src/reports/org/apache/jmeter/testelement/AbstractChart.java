@@ -17,10 +17,12 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
 import javax.swing.JComponent;
 
 import org.apache.jmeter.report.ReportChart;
-import org.apache.jmeter.report.ReportTable;
 
 /**
  * The general idea of the chart graphs information for a table.
@@ -37,6 +39,10 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public static final String REPORT_CHART_Y_LABEL = "ReportChart.chart.y.label";
     public static final String REPORT_CHART_TITLE = "ReportChart.chart.title";
     public static final String REPORT_CHART_CAPTION = "ReportChart.chart.caption";
+    
+    public static final int DEFAULT_WIDTH = 300;
+    public static final int DEFAULT_HEIGHT = 250;
+    protected BufferedImage image = null;
 
     public AbstractChart() {
 		super();
@@ -119,5 +125,21 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * 3. pass the data to the chart library
      * 4. return the generated chart
      */
-	public abstract JComponent renderChart(ReportTable element);
+	public abstract JComponent renderChart(List data);
+    
+    /**
+     * this makes it easy to get the bufferedImage
+     * @return
+     */
+    public BufferedImage getBufferedImage() {
+        return this.image;
+    }
+    
+    /**
+     * in case an user wants set the bufferdImage
+     * @param img
+     */
+    public void setBufferedImage(BufferedImage img) {
+        this.image = img;
+    }
 }
