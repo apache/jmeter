@@ -34,7 +34,7 @@
 <li>XPath Extractor</li>
 <li>Simpler JMX file format (2.2)</li>
 <li>BeanshellSampler code can update ResponseData directly</li>
-<li></li>
+<li>Bug 37490 - Allow UDV as delay in Duration Assertion</li>
 </ul>
 
 <h4>Bug fixes:</h4>
