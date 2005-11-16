@@ -32,6 +32,7 @@ import org.jCharts.chartData.DataSeries;
 import org.jCharts.properties.AxisProperties;
 import org.jCharts.properties.BarChartProperties;
 import org.jCharts.properties.ChartProperties;
+import org.jCharts.properties.DataAxisProperties;
 import org.jCharts.properties.LegendProperties;
 import org.jCharts.types.ChartType;
 
@@ -124,16 +125,16 @@ public class AxisGraph extends JPanel {
             
             String[] legendLabels= { yAxisLabel };
             Paint[] paints= new Paint[]{ Color.blue.darker() };
-            BarChartProperties barChartProperties= new BarChartProperties();
+            BarChartProperties barChartProperties = new BarChartProperties();
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
                         data, legendLabels, paints, ChartType.BAR, barChartProperties );
             dataSeries.addIAxisPlotDataSet( axisChartDataSet );
 
-            ChartProperties chartProperties= new ChartProperties();
-            AxisProperties axisProperties= new AxisProperties();
+            ChartProperties chartProperties = new ChartProperties();
+            AxisProperties axisProperties = new AxisProperties();
             axisProperties.setXAxisLabelsAreVertical(true);
-            LegendProperties legendProperties= new LegendProperties();
+            LegendProperties legendProperties = new LegendProperties();
             AxisChart axisChart = new AxisChart( 
                     dataSeries, chartProperties, axisProperties, 
                     legendProperties, width, height );
