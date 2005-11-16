@@ -32,7 +32,6 @@ import org.jCharts.chartData.DataSeries;
 import org.jCharts.properties.AxisProperties;
 import org.jCharts.properties.BarChartProperties;
 import org.jCharts.properties.ChartProperties;
-import org.jCharts.properties.DataAxisProperties;
 import org.jCharts.properties.LegendProperties;
 import org.jCharts.types.ChartType;
 
