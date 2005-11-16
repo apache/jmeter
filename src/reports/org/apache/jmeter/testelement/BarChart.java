@@ -17,29 +17,17 @@
  */
 package org.apache.jmeter.testelement;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Paint;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 import org.apache.jmeter.report.DataSet;
+import org.apache.jmeter.visualizers.AxisGraph;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
-
-import org.jCharts.axisChart.AxisChart;
-import org.jCharts.chartData.AxisChartDataSet;
-import org.jCharts.chartData.DataSeries;
-import org.jCharts.properties.AxisProperties;
-import org.jCharts.properties.BarChartProperties;
-import org.jCharts.properties.ChartProperties;
-import org.jCharts.properties.LegendProperties;
-import org.jCharts.types.ChartType;
-
 
 /**
  * The class is reponsible for returning 
@@ -73,6 +61,7 @@ public class BarChart extends AbstractChart {
         for (int idx=0; idx < data.size(); idx++) {
             SamplingStatCalculator stat = (SamplingStatCalculator)data.get(idx);
             dataset[0][idx] = getValue(stat);
+            // System.out.println("data=" + dataset[0][idx]);
         }
         return dataset;
     }
@@ -82,12 +71,12 @@ public class BarChart extends AbstractChart {
         ArrayList xlabels = new ArrayList();
         Iterator itr = data.iterator();
         while (itr.hasNext()) {
-            DataSet ds = (DataSet)itr.next();
-            SamplingStatCalculator ss = ds.getStatistics(this.getURL());
+            DataSet item = (DataSet)itr.next();
+            SamplingStatCalculator ss = item.getStatistics(this.getURL());
             if (ss != null) {
                 // we add the entry
                 dset.add(ss);
-                xlabels.add(ds.getDataSource());
+                xlabels.add(item.getDataSource());
             }
         }
         double[][] dbset = convertToDouble(dset);
@@ -96,37 +85,22 @@ public class BarChart extends AbstractChart {
     
     public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {
         String title = this.getTitle();
-        String xAxisTitle = this.getXAxis();
-        String yAxisTitle = this.getYAxis();
-        String yAxisLabel = this.getYLabel();
-        int width = 350;
-        int height = 300;
-        Graphics g;
-        JPanel panel = new JPanel();
-        try {
-            
-            DataSeries dataSeries = new DataSeries( xAxisLabels, xAxisTitle, yAxisTitle, title );
-            
-            String[] legendLabels= { yAxisLabel };
-            Paint[] paints = new Paint[]{ Color.blue.darker() };
-            BarChartProperties barChartProperties= new BarChartProperties();
-            AxisChartDataSet axisChartDataSet =
-                new AxisChartDataSet(
-                        data, legendLabels, paints, ChartType.BAR, barChartProperties );
-            dataSeries.addIAxisPlotDataSet( axisChartDataSet );
-
-            ChartProperties chartProperties= new ChartProperties();
-            AxisProperties axisProperties= new AxisProperties();
-            axisProperties.setXAxisLabelsAreVertical(true);
-            LegendProperties legendProperties= new LegendProperties();
-            AxisChart axisChart = new AxisChart( 
-                    dataSeries, chartProperties, axisProperties, 
-                    legendProperties, width, height );
-            axisChart.setGraphics2D((Graphics2D) panel.getGraphics());
-            axisChart.render();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        AxisGraph panel = new AxisGraph();
+        panel.setTitle(this.getTitle());
+        panel.setData(data);
+        panel.setXAxisLabels(xAxisLabels);
+        panel.setYAxisLabels(this.getYLabel());
+        panel.setXAxisTitle(this.getXAxis());
+        panel.setYAxisTitle(this.getYAxis());
+        // we should make this configurable eventually
+        int width = 400;
+        int height = 400;
+        panel.setPreferredSize(new Dimension(width,height));
+        panel.setSize(new Dimension(width,height));
+        panel.setWidth(width);
+        panel.setHeight(width);
+        setBufferedImage(new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB));
+        panel.paintComponent(this.getBufferedImage().createGraphics());
         return panel;
     }
     

@@ -17,17 +17,16 @@
  */
 package org.apache.jmeter.report;
 
+import java.util.List;
 import javax.swing.JComponent;
 
 
 public interface ReportChart {
     /**
-     * The idea is a report table will be passed to a ReportChart
-     * TestElement. The ReportChart is responsible for choosing which
-     * columns/rows it needs and generate a chart for it. The chart
-     * object is a JComponent.
-     * @param element
+     * The method takes a list of the DataSet items. It is up to the chart
+     * class to extract the data and use it to render a graphic.
+     * @param list of DataSet 
      * @return
      */
-	JComponent renderChart(ReportTable element);
+	JComponent renderChart(List data);
 }
