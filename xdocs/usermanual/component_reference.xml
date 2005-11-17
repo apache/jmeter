@@ -426,7 +426,6 @@ XML.</p>
 
 
 <component name="WebService(SOAP) Request" index="&sect-num;.1.7" screenshot="webservice_sampler.png">
-<center><h2>(Beta Code)</h2></center>
 <description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
  It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
  The sampler uses Apache SOAP driver to serialize the message and set the header
@@ -452,6 +451,9 @@ XML.</p>
  (true). If you need to maintain the session, add a blank Header Manager. The
  sampler uses the Header Manager to store the SOAPHTTPConnection object, since
  there apache soap does provide a easy way to get and set the cookies.</p>
+ <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
+ cache is checked, it will not iterate to the next value. That means all the requests
+ will use the first value.</p>
 </description>
 
 <properties>
