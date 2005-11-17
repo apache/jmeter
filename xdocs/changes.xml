@@ -35,6 +35,7 @@
 <li>Simpler JMX file format (2.2)</li>
 <li>BeanshellSampler code can update ResponseData directly</li>
 <li>Bug 37490 - Allow UDV as delay in Duration Assertion</li>
+<li>Slow connection emulation for HttpClient</li>
 </ul>
 
 <h4>Bug fixes:</h4>
