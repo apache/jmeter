@@ -651,6 +651,7 @@
         <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <pathelement location="${build.components}"/>
       </classpath>
     </javac>
   </target>
