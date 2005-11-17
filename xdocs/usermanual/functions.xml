@@ -312,7 +312,9 @@ Examples:<br/>
         <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
-<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
+<note>Remember to include any necessary quotes for text strings and JMeter variables. Also, if
+the expression has commas, please make sure to escape them. For example: ${__javaScript('${sp}'.slice(7\,99999))}
+ the comma after 7 is escaped.</note>
 </component>
 
 <component index="19.5.8" name="__Random">
