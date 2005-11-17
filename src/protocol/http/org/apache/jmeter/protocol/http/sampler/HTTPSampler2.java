@@ -33,8 +33,10 @@ import org.apache.commons.httpclient.ConnectMethod;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnection;
+import org.apache.commons.httpclient.HttpConstants;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.commons.httpclient.HttpRecoverableException;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
@@ -48,6 +50,7 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.Cookie;
+import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -63,12 +66,17 @@ import org.apache.log.Logger;
  * 
  */
 public class HTTPSampler2 extends HTTPSamplerBase {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
 
     /*
      * Connection is re-used within the thread if possible
      */
 	transient private static ThreadLocal httpClients = null;
+
+    private static boolean basicAuth 
+    = JMeterUtils.getPropDefault("httpsampler2.basicauth", false); // $NON-NLS-1$
 
 	static {
 		// Set the default to Avalon Logkit, if not already defined:
@@ -76,6 +84,24 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
                     , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
 		}
+        log.info("httpsampler2.basicauth=" + basicAuth); // $NON-NLS-1$
+        
+        int cps =
+            JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$        
+
+        if (cps > 0) {
+            log.info("Setting up HTTP SlowProtocol, cps="+cps);
+            Protocol.registerProtocol(PROTOCOL_HTTP, 
+                    new Protocol(PROTOCOL_HTTP,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTP_PORT));
+        }
+        cps =
+            JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$        
+
+        if (cps > 0) {
+            log.info("Setting up HTTPS SlowProtocol, cps="+cps);
+            Protocol.registerProtocol(PROTOCOL_HTTPS, 
+                    new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
+        }
 	}
 
 	/*
@@ -85,13 +111,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	private transient HttpMethodBase httpMethod = null;
 
 	private transient HttpState httpState = null;
-
-	private static boolean basicAuth 
-        = JMeterUtils.getPropDefault("httpsampler2.basicauth", false); // $NON-NLS-1$
-
-	static {
-		log.info("httpsampler2.basicauth=" + basicAuth); // $NON-NLS-1$
-	}
 
 	/**
 	 * Constructor for the HTTPSampler2 object.
@@ -157,14 +176,14 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 	}
 
+    // Convert \ to \\
 	private String encode(String value) {
 		StringBuffer newValue = new StringBuffer();
-		char[] chars = value.toCharArray();
-		for (int i = 0; i < chars.length; i++) {
-			if (chars[i] == '\\') { // $NON-NLS-1$
+		for (int i = 0; i < value.length(); i++) {
+			if (value.charAt(i) == '\\') { // $NON-NLS-1$
 				newValue.append("\\\\"); // $NON-NLS-1$
 			} else {
-				newValue.append(chars[i]);
+				newValue.append(value.charAt(i));
 			}
 		}
 		return newValue.toString();
@@ -195,7 +214,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 		String schema = uri.getScheme();
 		if ((schema == null) || (schema.equals(""))) { // $NON-NLS-1$
-			schema = "http"; // $NON-NLS-1$
+			schema = PROTOCOL_HTTP;
 		}
 		Protocol protocol = Protocol.getProtocol(schema);
 
