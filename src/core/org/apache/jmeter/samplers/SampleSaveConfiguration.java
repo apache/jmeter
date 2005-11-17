@@ -32,158 +32,168 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
-	static final long serialVersionUID = 1;
+	static final long serialVersionUID = 2;
 
 	// ---------------------------------------------------------------------
 	// PROPERTY FILE CONSTANTS
 	// ---------------------------------------------------------------------
 
 	/** Indicates that the results file should be in XML format. * */
-	public static final String XML = "xml";
+	private static final String XML = "xml"; // $NON_NLS-1$
 
 	/** Indicates that the results file should be in CSV format. * */
-	public static final String CSV = "csv";
+	private static final String CSV = "csv"; // $NON_NLS-1$
 
 	/** Indicates that the results should be stored in a database. * */
-	public static final String DATABASE = "db";
+	private static final String DATABASE = "db"; // $NON_NLS-1$
 
 	/** A properties file indicator for true. * */
-	public static final String TRUE = "true";
+	private static final String TRUE = "true"; // $NON_NLS-1$
 
 	/** A properties file indicator for false. * */
-	public static final String FALSE = "false";
+	private static final String FALSE = "false"; // $NON_NLS-1$
 
 	/** A properties file indicator for milliseconds. * */
-	public static final String MILLISECONDS = "ms";
+	private static final String MILLISECONDS = "ms"; // $NON_NLS-1$
 
 	/** A properties file indicator for none. * */
-	public static final String NONE = "none";
+	private static final String NONE = "none"; // $NON_NLS-1$
 
 	/** A properties file indicator for the first of a series. * */
-	public static final String FIRST = "first";
+	private static final String FIRST = "first"; // $NON_NLS-1$
 
 	/** A properties file indicator for all of a series. * */
-	public static final String ALL = "all";
+	private static final String ALL = "all"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating which assertion results should be
 	 * saved.
 	 **************************************************************************/
-	public static final String ASSERTION_RESULTS_FAILURE_MESSAGE_PROP = "jmeter.save.saveservice.assertion_results_failure_message";
+	private static final String ASSERTION_RESULTS_FAILURE_MESSAGE_PROP = 
+        "jmeter.save.saveservice.assertion_results_failure_message";  // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating which assertion results should be
 	 * saved.
 	 **************************************************************************/
-	public static final String ASSERTION_RESULTS_PROP = "jmeter.save.saveservice.assertion_results";
+	private static final String ASSERTION_RESULTS_PROP = "jmeter.save.saveservice.assertion_results"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating which delimiter should be used when
 	 * saving in a delimited values format.
 	 **************************************************************************/
-	public static final String DEFAULT_DELIMITER_PROP = "jmeter.save.saveservice.default_delimiter";
+	private static final String DEFAULT_DELIMITER_PROP = "jmeter.save.saveservice.default_delimiter"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating which format should be used when
 	 * saving the results, e.g., xml or csv.
 	 **************************************************************************/
-	public static final String OUTPUT_FORMAT_PROP = "jmeter.save.saveservice.output_format";
+	private static final String OUTPUT_FORMAT_PROP = "jmeter.save.saveservice.output_format"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether field names should be printed
 	 * to a delimited file.
 	 **************************************************************************/
-	public static final String PRINT_FIELD_NAMES_PROP = "jmeter.save.saveservice.print_field_names";
+	private static final String PRINT_FIELD_NAMES_PROP = "jmeter.save.saveservice.print_field_names"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the data type should be
 	 * saved.
 	 **************************************************************************/
-	public static final String SAVE_DATA_TYPE_PROP = "jmeter.save.saveservice.data_type";
+	private static final String SAVE_DATA_TYPE_PROP = "jmeter.save.saveservice.data_type"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the label should be saved.
 	 **************************************************************************/
-	public static final String SAVE_LABEL_PROP = "jmeter.save.saveservice.label";
+	private static final String SAVE_LABEL_PROP = "jmeter.save.saveservice.label"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the response code should be
 	 * saved.
 	 **************************************************************************/
-	public static final String SAVE_RESPONSE_CODE_PROP = "jmeter.save.saveservice.response_code";
+	private static final String SAVE_RESPONSE_CODE_PROP = "jmeter.save.saveservice.response_code"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the response data should be
 	 * saved.
 	 **************************************************************************/
-	public static final String SAVE_RESPONSE_DATA_PROP = "jmeter.save.saveservice.response_data";
+	private static final String SAVE_RESPONSE_DATA_PROP = "jmeter.save.saveservice.response_data"; // $NON_NLS-1$
 
-	public static final String SAVE_RESPONSE_DATA_ON_ERROR_PROP = "jmeter.save.saveservice.response_data.on_error";
+	private static final String SAVE_RESPONSE_DATA_ON_ERROR_PROP = "jmeter.save.saveservice.response_data.on_error"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the response message should
 	 * be saved.
 	 **************************************************************************/
-	public static final String SAVE_RESPONSE_MESSAGE_PROP = "jmeter.save.saveservice.response_message";
+	private static final String SAVE_RESPONSE_MESSAGE_PROP = "jmeter.save.saveservice.response_message"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the success indicator should
 	 * be saved.
 	 **************************************************************************/
-	public static final String SAVE_SUCCESSFUL_PROP = "jmeter.save.saveservice.successful";
+	private static final String SAVE_SUCCESSFUL_PROP = "jmeter.save.saveservice.successful"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the thread name should be
 	 * saved.
 	 **************************************************************************/
-	public static final String SAVE_THREAD_NAME_PROP = "jmeter.save.saveservice.thread_name";
+	private static final String SAVE_THREAD_NAME_PROP = "jmeter.save.saveservice.thread_name"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the time should be saved.
 	 **************************************************************************/
-	public static final String SAVE_TIME_PROP = "jmeter.save.saveservice.time";
+	private static final String SAVE_TIME_PROP = "jmeter.save.saveservice.time"; // $NON_NLS-1$
 
 	/***************************************************************************
 	 * The name of the property indicating whether the time stamp should be
 	 * saved.
 	 **************************************************************************/
-	public static final String TIME_STAMP_FORMAT_PROP = "jmeter.save.saveservice.timestamp_format";
+	private static final String TIME_STAMP_FORMAT_PROP = "jmeter.save.saveservice.timestamp_format"; // $NON_NLS-1$
 
+    private static final String SUBRESULTS_PROP      = "jmeter.save.saveservice.subresults"; // $NON_NLS-1$
+    private static final String ASSERTIONS_PROP      = "jmeter.save.saveservice.assertions"; // $NON_NLS-1$
+    private static final String LATENCY_PROP         = "jmeter.save.saveservice.latency"; // $NON_NLS-1$
+    private static final String SAMPLERDATA_PROP     = "jmeter.save.saveservice.samplerData"; // $NON_NLS-1$
+    private static final String RESPONSEHEADERS_PROP = "jmeter.save.saveservice.responseHeaders"; // $NON_NLS-1$
+    private static final String REQUESTHEADERS_PROP  = "jmeter.save.saveservice.requestHeaders"; // $NON_NLS-1$
+    private static final String ENCODING_PROP        = "jmeter.save.saveservice.encoding"; // $NON_NLS-1$
+    
 	// ---------------------------------------------------------------------
 	// XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
 	// ---------------------------------------------------------------------
 
-	public final static String PRESERVE = "preserve";
+    //TODO - these do not appear to be used
+	public final static String PRESERVE = "preserve"; // $NON_NLS-1$
 
-	public final static String XML_SPACE = "xml:space";
+	public final static String XML_SPACE = "xml:space"; // $NON_NLS-1$
 
-	public static final String ASSERTION_RESULT_TAG_NAME = "assertionResult";
+	public static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON_NLS-1$
 
-	public static final String BINARY = "binary";
+	public static final String BINARY = "binary"; // $NON_NLS-1$
 
-	public static final String DATA_TYPE = "dataType";
+	public static final String DATA_TYPE = "dataType"; // $NON_NLS-1$
 
-	public static final String ERROR = "error";
+	public static final String ERROR = "error"; // $NON_NLS-1$
 
-	public static final String FAILURE = "failure";
+	public static final String FAILURE = "failure"; // $NON_NLS-1$
 
-	public static final String FAILURE_MESSAGE = "failureMessage";
+	public static final String FAILURE_MESSAGE = "failureMessage"; // $NON_NLS-1$
 
-	public static final String LABEL = "label";
+	public static final String LABEL = "label"; // $NON_NLS-1$
 
-	public static final String RESPONSE_CODE = "responseCode";
+	public static final String RESPONSE_CODE = "responseCode"; // $NON_NLS-1$
 
-	public static final String RESPONSE_MESSAGE = "responseMessage";
+	public static final String RESPONSE_MESSAGE = "responseMessage"; // $NON_NLS-1$
 
-	public static final String SAMPLE_RESULT_TAG_NAME = "sampleResult";
+	public static final String SAMPLE_RESULT_TAG_NAME = "sampleResult"; // $NON_NLS-1$
 
-	public static final String SUCCESSFUL = "success";
+	public static final String SUCCESSFUL = "success"; // $NON_NLS-1$
 
-	public static final String THREAD_NAME = "threadName";
+	public static final String THREAD_NAME = "threadName"; // $NON_NLS-1$
 
-	public static final String TIME = "time";
+	public static final String TIME = "time"; // $NON_NLS-1$
 
-	public static final String TIME_STAMP = "timeStamp";
+	public static final String TIME_STAMP = "timeStamp"; // $NON_NLS-1$
 
 	// Initialise values from properties
 	private boolean time = _time, latency = _latency, timestamp = _timestamp, success = _success, label = _label,
@@ -237,22 +247,21 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	 */
 	private static final String _delimiter;
 
-	private static final String DEFAULT_DELIMITER = ",";
+	private static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
 
 	/**
 	 * Read in the properties having to do with saving from a properties file.
 	 */
 	static {
-		// TODO - get from properties?
-		_subresults = true;
-		_assertions = true;
-		_latency = true;
-		_samplerData = false;
-		_responseHeaders = false;
-		_requestHeaders = false;
-		_encoding = false;
-
 		Properties props = JMeterUtils.getJMeterProperties();
+
+        _subresults      = TRUE.equalsIgnoreCase(props.getProperty(SUBRESULTS_PROP, TRUE));
+        _assertions      = TRUE.equalsIgnoreCase(props.getProperty(ASSERTIONS_PROP, TRUE));
+        _latency         = TRUE.equalsIgnoreCase(props.getProperty(LATENCY_PROP, TRUE));
+        _samplerData     = TRUE.equalsIgnoreCase(props.getProperty(SAMPLERDATA_PROP, FALSE));
+        _responseHeaders = TRUE.equalsIgnoreCase(props.getProperty(RESPONSEHEADERS_PROP, FALSE));
+        _requestHeaders  = TRUE.equalsIgnoreCase(props.getProperty(REQUESTHEADERS_PROP, FALSE));
+        _encoding        = TRUE.equalsIgnoreCase(props.getProperty(ENCODING_PROP, FALSE));
 
 		_delimiter = props.getProperty(DEFAULT_DELIMITER_PROP, DEFAULT_DELIMITER);
 
@@ -262,8 +271,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 		_label = TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
 
-		_code = // TODO is this correct? - yes
-		TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
+		_code = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
 
 		_responseData = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
 
