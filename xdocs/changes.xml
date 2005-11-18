@@ -36,6 +36,10 @@
 <li>BeanshellSampler code can update ResponseData directly</li>
 <li>Bug 37490 - Allow UDV as delay in Duration Assertion</li>
 <li>Slow connection emulation for HttpClient</li>
+<li>Enhanced JUnitSampler so that by default assert errors and exceptions are not appended to the error message. 
+Users must explicitly check append in the sampler</li>
+<li>Enhanced the documentation for webservice sampler to explain how it works with CSVDataSet</li>
+<li>Ehhanced the documentation for javascript function to explain escaping comma</li>
 </ul>
 
 <h4>Bug fixes:</h4>
