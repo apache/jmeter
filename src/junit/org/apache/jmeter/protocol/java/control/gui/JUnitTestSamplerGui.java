@@ -103,6 +103,8 @@ implements ChangeListener, ActionListener
             JMeterUtils.getResString("junit_pkg_filter"));
 
     JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown"));
+    JCheckBox appendError = new JCheckBox(JMeterUtils.getResString("junit_append_error"));
+    JCheckBox appendExc = new JCheckBox(JMeterUtils.getResString("junit_append_exception"));
     
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
@@ -205,6 +207,8 @@ implements ChangeListener, ActionListener
         panel.add(errorMsg);
         panel.add(errorCode);
         panel.add(doSetup);
+        panel.add(appendError);
+        panel.add(appendExc);
         return panel;
     }
 
@@ -237,6 +241,8 @@ implements ChangeListener, ActionListener
         sampler.setFailure(failureMsg.getText());
         sampler.setFailureCode(failureCode.getText());
         sampler.setDoNotSetUpTearDown(doSetup.isSelected());
+        sampler.setAppendError(appendError.isSelected());
+        sampler.setAppendException(appendExc.isSelected());
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
@@ -280,6 +286,8 @@ implements ChangeListener, ActionListener
             errorCode.setText(JMeterUtils.getResString("junit_error_default_code"));
         }
         doSetup.setSelected(sampler.getDoNotSetUpTearDown());
+        appendError.setSelected(sampler.getAppendError());
+        appendExc.setSelected(sampler.getAppendException());
     }
     
     public void instantiateClass(){

@@ -59,6 +59,8 @@ public class JUnitSampler extends AbstractSampler {
     public static final String SUCCESSCODE = "junitsampler.success.code";
     public static final String FILTER = "junitsampler.pkg.filter";
     public static final String DOSETUP = "junitsampler.exec.setup";
+    public static final String APPEND_ERROR = "junitsampler.append.error";
+    public static final String APPEND_EXCEPTION = "junitsampler.append.exception";
     
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
@@ -269,12 +271,51 @@ public class JUnitSampler extends AbstractSampler {
         setProperty(FILTER,text);
     }
     
+    /**
+     * if the sample shouldn't call setup/teardown, the
+     * method returns true. It's meant for onetimesetup
+     * and onetimeteardown.
+     * @return
+     */
     public boolean getDoNotSetUpTearDown(){
         return getPropertyAsBoolean(DOSETUP);
     }
-    
+
+    /**
+     * set the setup/teardown option
+     * @param setup
+     */
     public void setDoNotSetUpTearDown(boolean setup){
         setProperty(DOSETUP,String.valueOf(setup));
+    }
+
+    /**
+     * If append error is not set, by default it is set to false,
+     * which means users have to explicitly set the sampler to
+     * append the assert errors. Because of how junit works, there
+     * should only be one error
+     * @return
+     */
+    public boolean getAppendError() {
+        return getPropertyAsBoolean(APPEND_ERROR,false);
+    }
+    
+    public void setAppendError(boolean error) {
+        setProperty(APPEND_ERROR,String.valueOf(error));
+    }
+
+    /**
+     * If append exception is not set, by default it is set to false.
+     * Users have to explicitly set it to true to see the exceptions
+     * in the result tree.
+     * @return
+     */
+    public boolean getAppendException() {
+        return getPropertyAsBoolean(APPEND_EXCEPTION,false);
+    }
+    
+    public void setAppendException(boolean exc) {
+        setProperty(APPEND_EXCEPTION,String.valueOf(exc));
     }
     
     /* (non-Javadoc)
@@ -362,16 +403,16 @@ public class JUnitSampler extends AbstractSampler {
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
                 StringBuffer buf = new StringBuffer();
-                buf.append(getFailure() + System.getProperty("line.separator"));
+                buf.append( getFailure() );
                 Enumeration en = tr.errors();
                 while (en.hasMoreElements()){
                     Object item = en.nextElement();
-                    if (item instanceof TestFailure) {
+                    if (getAppendError() && item instanceof TestFailure) {
                         buf.append( "Trace -- ");
                         buf.append( ((TestFailure)item).trace() );
                         buf.append( "Failure -- ");
                         buf.append( ((TestFailure)item).toString() );
-                    } else if (item instanceof Throwable) {
+                    } else if (getAppendException() && item instanceof Throwable) {
                         buf.append( ((Throwable)item).getMessage() );
                     }
                 }
