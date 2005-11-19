@@ -72,12 +72,12 @@ public class SlowSocket extends Socket {
 
     // Override so we can intercept the stream
     public OutputStream getOutputStream() throws IOException {
-        return new SlowOutputStream(super.getOutputStream(),CPS);
+        return new SlowOutputStream(super.getOutputStream());
     }
     
     // Override so we can intercept the stream
     public InputStream getInputStream() throws IOException {
-        return new SlowInputStream(super.getInputStream(),CPS);
+        return new SlowInputStream(super.getInputStream());
     }
 
     // Conversions for milli and nano seconds
@@ -85,9 +85,9 @@ public class SlowSocket extends Socket {
     private static final int NS_PER_SEC = 1000000000;
     private static final int NS_PER_MS  = NS_PER_SEC/MS_PER_SEC;
     
-    private static void pause(int bytes, int cps){
-    	long sleepMS = (bytes*MS_PER_SEC)/cps;
-    	int  sleepNS = (int)(((bytes*MS_PER_SEC)/cps) % NS_PER_MS);
+    private void pause(int bytes){
+    	long sleepMS = (bytes*MS_PER_SEC)/CPS;
+    	int  sleepNS = ((bytes*MS_PER_SEC)/CPS) % NS_PER_MS;
         try {
             Thread.sleep(sleepMS,sleepNS);
         } catch (InterruptedException ignored) {
@@ -96,20 +96,17 @@ public class SlowSocket extends Socket {
     
     private class SlowInputStream extends FilterInputStream {
 
-    	private final int CPS;
-    	
-        public SlowInputStream(InputStream in, int cps) {
+        public SlowInputStream(InputStream in) {
             super(in);
-            CPS=cps;
         }
 
         public int read() throws IOException {
-            pause(1,CPS);
+            pause(1);
             return in.read();
         }
 
         public int read(byte[] b, int off, int len) throws IOException {
-            pause(len,CPS);
+            pause(len);
             return in.read(b, off, len);
         }
 
@@ -117,20 +114,17 @@ public class SlowSocket extends Socket {
     
     private class SlowOutputStream extends FilterOutputStream {
 
-    	private final int CPS;
-    	
-        public SlowOutputStream(OutputStream out, int cps) {
+        public SlowOutputStream(OutputStream out) {
             super(out);
-            CPS=cps;
         }
 
         public void write(byte[] b, int off, int len) throws IOException {
-            pause(len,CPS);
+            pause(len);
             out.write(b, off, len);
         }
 
         public void write(int b) throws IOException {
-            pause(1,CPS);
+            pause(1);
             out.write(b);
         }
     }
