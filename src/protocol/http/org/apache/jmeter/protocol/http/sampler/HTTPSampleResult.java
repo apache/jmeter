@@ -30,7 +30,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class HTTPSampleResult extends SampleResult {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public HTTPSampleResult() {
 		super();
@@ -104,7 +104,7 @@ public class HTTPSampleResult extends SampleResult {
 		if (u != null) {
 			sb.append(' ');
 			sb.append(u.toString());
-			if ("POST".equals(method)) {
+			if (HTTPSamplerBase.POST.equals(method)) {
 				sb.append(queryString);
 			}
 			sb.append("\n");
@@ -132,7 +132,7 @@ public class HTTPSampleResult extends SampleResult {
 	 */
 	public void setCookies(String string) {
         if (string == null) {
-            cookies="";
+            cookies="";// $NON-NLS-1$
         } else {
     		cookies = string;
         }
@@ -157,10 +157,35 @@ public class HTTPSampleResult extends SampleResult {
 	 */
 	public void setQueryString(String string) {
         if (string == null ) {
-            queryString="";
+            queryString="";// $NON-NLS-1$
         } else {
     		queryString = string;
         }
 	}
+    
+    /**
+     * Set Encoding and DataType from ContentType
+     * @param ct - content type (may be null)
+     */
+    public void setEncodingAndType(String ct){
+        if (ct != null) {
+            // Extract charset and store as DataEncoding
+            // TODO do we need process http-equiv META tags, e.g.:
+            // <META http-equiv="content-type" content="text/html;
+            // charset=foobar">
+            // or can we leave that to the renderer ?
+            String de = ct.toLowerCase();
+            final String cs = "charset="; // $NON-NLS-1$
+            int cset = de.indexOf(cs);
+            if (cset >= 0) {
+                setDataEncoding(de.substring(cset + cs.length()));
+            }
+            if (ct.startsWith("image/")) {// $NON-NLS-1$
+                setDataType(HTTPSampleResult.BINARY);
+            } else {
+                setDataType(HTTPSampleResult.TEXT);
+            }
+        }
+    }
 
 }
