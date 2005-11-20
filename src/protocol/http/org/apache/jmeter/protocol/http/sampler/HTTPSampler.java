@@ -27,6 +27,7 @@ import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -48,7 +49,7 @@ import org.apache.log.Logger;
  * 
  */
 public class HTTPSampler extends HTTPSamplerBase {
-	private transient static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final int MAX_CONN_RETRIES = 10; // Maximum connection
 
@@ -361,9 +362,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 */
 	private void setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
 		if (authManager != null) {
-			String authHeader = authManager.getAuthHeaderForURL(u);
-			if (authHeader != null) {
-				conn.setRequestProperty("Authorization", authHeader);
+			Authorization auth = authManager.getAuthForURL(u);
+			if (auth != null) {
+				conn.setRequestProperty("Authorization", auth.toBasicHeader());
 			}
 		}
 	}
@@ -451,24 +452,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 			String ct = conn.getContentType();// getHeaderField("Content-type");
 			res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
-			if (ct != null) {
-				// Extract charset and store as DataEncoding
-				// TODO do we need process http-equiv META tags, e.g.:
-				// <META http-equiv="content-type" content="text/html;
-				// charset=foobar">
-				// or can we leave that to the renderer ?
-				String de = ct.toLowerCase();
-				final String cs = "charset=";
-				int cset = de.indexOf(cs);
-				if (cset >= 0) {
-					res.setDataEncoding(de.substring(cset + cs.length()));
-				}
-				if (ct.startsWith("image/")) {
-					res.setDataType(HTTPSampleResult.BINARY);
-				} else {
-					res.setDataType(HTTPSampleResult.TEXT);
-				}
-			}
+            res.setEncodingAndType(ct);
 
 			res.setResponseHeaders(getResponseHeaders(conn));
 			if (res.isRedirect()) {
