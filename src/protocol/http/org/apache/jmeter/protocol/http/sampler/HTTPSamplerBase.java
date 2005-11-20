@@ -133,6 +133,28 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
 
+    protected static final String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
+
+    protected static final String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
+
+    protected static final String HEADER_CONNECTION = "Connection"; // $NON-NLS-1$
+
+    protected static final String CONNECTION_CLOSE = "close"; // $NON-NLS-1$
+
+    protected static final String KEEP_ALIVE = "keep-alive"; // $NON-NLS-1$
+
+    protected static final String TRANSFER_ENCODING = "transfer-encoding";
+
+    protected static final String HTTP_1_1 = "HTTP/1.1"; // $NON-NLS-1$
+
+    protected static final String HEADER_SET_COOKIE = "set-cookie"; // $NON-NLS-1$
+
+    protected static final String ENCODING_GZIP = "gzip"; // $NON-NLS-1$
+
+    protected static final String HEADER_CONTENT_DISPOSITION = "Content-Disposition"; // $NON-NLS-1$
+
+    protected static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
+
     ////////////////////// Variables //////////////////////
     
     private boolean dynamicPath = false;// Set false if spaces are already encoded
@@ -745,4 +767,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		}
 		return res;
 	}
+    
+    /**
+     * Determine if the HTTP status code is successful or not
+     * i.e. in range 200 to 399 inclusive
+     * 
+     * @return whether in range 200-399 or not
+     */
+    protected boolean isSuccessCode(int code){
+        return (code >= 200 && code <= 399);
+    }
 }

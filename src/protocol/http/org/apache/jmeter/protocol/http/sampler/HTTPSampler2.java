@@ -33,10 +33,8 @@ import org.apache.commons.httpclient.ConnectMethod;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnection;
-import org.apache.commons.httpclient.HttpConstants;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.HttpRecoverableException;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
@@ -68,8 +66,6 @@ import org.apache.log.Logger;
 public class HTTPSampler2 extends HTTPSamplerBase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
-
     /*
      * Connection is re-used within the thread if possible
      */
@@ -86,6 +82,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
         log.info("httpsampler2.basicauth=" + basicAuth); // $NON-NLS-1$
         
+        System.setProperty("apache.commons.httpclient.cookiespec", // $NON-NLS-1$
+                "COMPATIBILITY"); // $NON-NLS-1$
+
         int cps =
             JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$        
 
@@ -165,13 +164,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 				post.setRequestContentLength(EntityEnclosingMethod.CONTENT_LENGTH_CHUNKED);
 			}
 			// TODO - is this correct?
-			post.setRequestHeader("Content-Disposition" // $NON-NLS-1$
+			post.setRequestHeader(HEADER_CONTENT_DISPOSITION
                     , "form-data; name=\"" // $NON-NLS-1$ // $NON-NLS-1$
                     + encode(sampler.getFileField())
 					+ "\"; filename=\""  // $NON-NLS-1$
                     + encode(filename) + "\""); // $NON-NLS-1$
 			// Specify content type and encoding
-			post.setRequestHeader("Content-Type", sampler.getMimetype()); // $NON-NLS-1$
+			post.setRequestHeader(HEADER_CONTENT_TYPE, sampler.getMimetype());
 			post.setRequestBody(new FileInputStream(input));
 		}
 	}
@@ -213,7 +212,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		org.apache.commons.httpclient.URI uri = new org.apache.commons.httpclient.URI(urlStr);
 
 		String schema = uri.getScheme();
-		if ((schema == null) || (schema.equals(""))) { // $NON-NLS-1$
+		if ((schema == null) || (schema.length()==0)) {
 			schema = PROTOCOL_HTTP;
 		}
 		Protocol protocol = Protocol.getProtocol(schema);
@@ -246,7 +245,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		} else {
 			httpMethod = new GetMethod(urlStr);
 			// httpMethod;
-			new DefaultMethodRetryHandler();
+			new DefaultMethodRetryHandler();//TODO what is this doing??
 		}
 
 		httpMethod.setHttp11(!JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0")); // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
@@ -267,14 +266,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		// leave it to the server to close the connection after their
 		// timeout period. Leave it to the JMeter user to decide.
 		if (getUseKeepAlive()) {
-			httpMethod.setRequestHeader("Connection", "keep-alive"); // $NON-NLS-1$ // $NON-NLS-2$
+			httpMethod.setRequestHeader(HEADER_CONNECTION, KEEP_ALIVE);
 		} else {
-			httpMethod.setRequestHeader("Connection", "close"); // $NON-NLS-1$ // $NON-NLS-2$
+			httpMethod.setRequestHeader(HEADER_CONNECTION, CONNECTION_CLOSE);
 		}
 
 		String hdrs = setConnectionHeaders(httpMethod, u, getHeaderManager());
 		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
-		//System.out.println("setupConnection: cookies = " + cookies);
 
 		if (res != null) {
             res.setURL(u);
@@ -327,17 +325,17 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
 		headerBuf.append(method.getStatusLine());// header[0] is not the
 													// status line...
-		headerBuf.append("\n");
+		headerBuf.append("\n"); // $NON-NLS-1$
 
 		for (int i = 0; i < rh.length; i++) {
 			String key = rh[i].getName();
-			if (!key.equalsIgnoreCase("transfer-encoding")) // $NON-NLS-1$
+			if (!key.equalsIgnoreCase(TRANSFER_ENCODING))
                 // TODO - why is this not saved?
 			{
 				headerBuf.append(key);
-				headerBuf.append(": ");
+				headerBuf.append(": "); // $NON-NLS-1$
 				headerBuf.append(rh[i].getValue());
-				headerBuf.append("\n");
+				headerBuf.append("\n"); // $NON-NLS-1$
 			}
 		}
 		return headerBuf.toString();
@@ -358,7 +356,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {
         // TODO recode to use HTTPClient matches methods or similar
         
-		String cookieHeader = ""; // $NON-NLS-1$
+		StringBuffer cookieHeader = new StringBuffer(100);
         if (cookieManager!=null){
     		String host = "." + u.getHost(); // $NON-NLS-1$
     		
@@ -375,11 +373,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     = new org.apache.commons.httpclient.Cookie(cookie.getDomain(), cookie.getName(),
     				     cookie.getValue(), cookie.getPath(), null, false);
     				httpState.addCookie(newCookie);
-    				cookieHeader += cookie.getName() + "=" + cookie.getValue(); // $NON-NLS-1$
+    				cookieHeader.append(cookie.getName());
+                    cookieHeader.append("="); // $NON-NLS-1$
+                    cookieHeader.append(cookie.getValue());
     			}
     		}
         }
-		return cookieHeader;
+		return cookieHeader.toString();
 	}
 
 	/**
@@ -409,9 +409,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 					String v = header.getValue();
 					method.addRequestHeader(n, v);
 					hdrs.append(n);
-					hdrs.append(": ");
+					hdrs.append(": "); // $NON-NLS-1$
 					hdrs.append(v);
-					hdrs.append("\n");
+					hdrs.append("\n"); // $NON-NLS-1$
 				}
 			}
 		}
@@ -432,14 +432,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 */
 	private void setConnectionAuthorization(HttpMethod method, URL u, AuthManager authManager) {
 		if (authManager != null) {
-			if (basicAuth) {
-				String authHeader = authManager.getAuthHeaderForURL(u);
-				if (authHeader != null) {
-					method.setRequestHeader("Authorization", authHeader); // $NON-NLS-1$
-				}
-			} else {
-				Authorization auth = authManager.getAuthForURL(u);
-				if (auth != null) {
+            Authorization auth = authManager.getAuthForURL(u);
+            if (auth != null) {
+    			if (basicAuth) {
+    					method.setRequestHeader(HEADER_AUTHORIZATION, auth.toBasicHeader());
+    			} else {
                     /*
                      * TODO: better method...
                      * HACK: if user contains \ and or @
@@ -552,35 +549,18 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			res.setResponseData(responseData);
 
 			res.setResponseCode(Integer.toString(statusCode));
-			res.setSuccessful(200 <= statusCode && statusCode <= 399);
+			res.setSuccessful(isSuccessCode(statusCode));
 
 			res.setResponseMessage(httpMethod.getStatusText());
 
 			String ct = null;
 			org.apache.commons.httpclient.Header h 
-                = httpMethod.getResponseHeader("Content-Type"); // $NON-NLS-1$
+                = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE); // $NON-NLS-1$
 			if (h != null)// Can be missing, e.g. on redirect
 			{
 				ct = h.getValue();
 				res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
-			}
-			if (ct != null) {
-				// Extract charset and store as DataEncoding
-				// TODO do we need process http-equiv META tags, e.g.:
-				// <META http-equiv="content-type" content="text/html;
-				// charset=foobar">
-				// or can we leave that to the renderer ?
-				String de = ct.toLowerCase();
-				final String cs = "charset="; // $NON-NLS-1$
-				int cset = de.indexOf(cs);
-				if (cset >= 0) {
-					res.setDataEncoding(de.substring(cset + cs.length()));
-				}
-				if (ct.startsWith("image/")) { // $NON-NLS-1$
-					res.setDataType(HTTPSampleResult.BINARY);
-				} else {
-					res.setDataType(HTTPSampleResult.TEXT);
-				}
+                res.setEncodingAndType(ct);
 			}
 
 			res.setResponseHeaders(getResponseHeaders(httpMethod));
@@ -670,8 +650,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 	public void threadStarted() {
 		log.debug("Thread Started");
-		
-		System.setProperty("apache.commons.httpclient.cookiespec", "COMPATIBILITY"); // $NON-NLS-1$ // $NON-NLS-2$
 		
 		synchronized ( this.getClass() )
 		{
