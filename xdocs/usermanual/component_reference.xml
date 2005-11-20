@@ -1943,7 +1943,11 @@ The variables in User Defined Variables components will take precedence over tho
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Filename" required="Yes">Name of the file to be read.</property>
+  <property name="Filename" required="Yes">Name of the file to be read. 
+  Relative file names are resolved with respect to the current test plan.
+  Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
+  unless the remote server has the same directory structure.
+  </property>
   <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
   <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.</property>
 </properties>
