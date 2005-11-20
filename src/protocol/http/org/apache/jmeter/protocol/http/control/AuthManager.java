@@ -136,7 +136,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		Authorization auth = getAuthForURL(url);
 		if (auth == null)
 			return null;
-		return "Basic " + Base64Encoder.encode(auth.getUser() + ":" + auth.getPass());
+		return auth.toBasicHeader();
 	}
 
 	public Authorization getAuthForURL(URL url) {
