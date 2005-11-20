@@ -324,7 +324,32 @@ public final class JOrphanUtils {
 		return source.substring(0, start) + replace + source.substring(start + len);
 	}
 
-	/**
+    /**
+     * Version of String.replaceAll() for JDK1.3
+     * 
+     * @param source
+     *            input string
+     * @param search
+     *            char to look for (no regular expressions)
+     * @param replace
+     *            string to replace the search string
+     * @return the output string
+     */
+    public static String replaceAllChars(String source, char search, String replace) {
+        char[] chars = source.toCharArray();
+        StringBuffer sb = new StringBuffer(source.length()+20);
+        for(int i = 0; i < chars.length; i++){
+            char c = chars[i];
+            if (c == search){
+                sb.append(replace);
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
 	 * Returns a slice of a byte array.
 	 * 
 	 * TODO - add bounds checking?
