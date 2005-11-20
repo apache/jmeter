@@ -53,25 +53,33 @@ import org.apache.log.Logger;
  * test plans to execute on unknown boxes that only have Java installed.
  */
 public class FileServer {
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	File base;
+    private static final String DEFAULT_BASE = JMeterUtils.getProperty("user.dir");
+    
+	private File base;
 
-	Map files = new HashMap();
+    //TODO - make "files" and "random" static as the class is a singleton?
+    
+	private final Map files = new HashMap();
+    
+	private static final FileServer server = new FileServer();
 
-	private static FileServer server = new FileServer();
-
-	private Random random = new Random();
+	private final Random random = new Random();
 
 	private FileServer() {
-		base = new File(JMeterUtils.getProperty("user.dir"));
+		base = new File(DEFAULT_BASE);
 	}
 
 	public static FileServer getFileServer() {
 		return server;
 	}
 
-	public void setBasedir(String basedir) throws IOException {
+    public void resetBase() throws IOException{
+        setBasedir(DEFAULT_BASE);
+    }
+    
+	public synchronized void setBasedir(String basedir) throws IOException {
 		if (filesOpen()) {
 			throw new IOException("Files are still open, cannot change base directory");
 		}
@@ -84,13 +92,22 @@ public class FileServer {
 		}
 	}
 
-	public String getBaseDir() {
+	public synchronized String getBaseDir() {
 		return base.getAbsolutePath();
 	}
 
+    /**
+     * Creates an association between a filename and a File inputOutputObject,
+     * and stores it for later use - unless it is already stored.
+     * 
+     * @param filename - relative (to base) or absolute file name
+     */
 	public synchronized void reserveFile(String filename) {
 		if (!files.containsKey(filename)) {
-			Object[] file = new Object[] { new File(base, filename), null };
+            File f = new File(filename); 
+            FileEntry file = 
+                new FileEntry(f.isAbsolute() ? f : new File(base, filename),null);
+            log.info("Stored: "+filename);
 			files.put(filename, file);
 		}
 	}
@@ -103,42 +120,49 @@ public class FileServer {
 	 * @throws IOException
 	 */
 	public synchronized String readLine(String filename) throws IOException {
-		Object[] file = (Object[]) files.get(filename);
-		if (file != null) {
-			if (file[1] == null) {
-				BufferedReader r = new BufferedReader(new FileReader((File) file[0]));
-				file[1] = r;
-			}
-			BufferedReader reader = (BufferedReader) file[1];
+		FileEntry fileEntry = (FileEntry) files.get(filename);
+		if (fileEntry != null) {
+			if (fileEntry.inputOutputObject == null) {
+				BufferedReader r = new BufferedReader(new FileReader(fileEntry.file));
+				fileEntry.inputOutputObject = r;
+            } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
+                throw new IOException("File " + filename + " already in use");
+            }
+			BufferedReader reader = (BufferedReader) fileEntry.inputOutputObject;
 			String line = reader.readLine();
 			if (line == null) {
 				reader.close();
-				reader = new BufferedReader(new FileReader((File) file[0]));
-				file[1] = reader;
+				reader = new BufferedReader(new FileReader(fileEntry.file));
+				fileEntry.inputOutputObject = reader;
 				line = reader.readLine();
 			}
+            if (log.isDebugEnabled()) log.debug("Read:"+line);
 			return line;
 		}
-		throw new IOException("File never reserved");
+		throw new IOException("File never reserved: "+filename);
 	}
 
 	public synchronized void write(String filename, String value) throws IOException {
-		Object[] file = (Object[]) files.get(filename);
-		if (file != null) {
-			if (file[1] == null) {
-				file[1] = new BufferedWriter(new FileWriter((File) file[0]));
-			} else if (!(file[1] instanceof Writer)) {
+		FileEntry fileEntry = (FileEntry) files.get(filename);
+		if (fileEntry != null) {
+			if (fileEntry.inputOutputObject == null) {
+				fileEntry.inputOutputObject = new BufferedWriter(new FileWriter(fileEntry.file));
+			} else if (!(fileEntry.inputOutputObject instanceof Writer)) {
 				throw new IOException("File " + filename + " already in use");
 			}
-			BufferedWriter writer = (BufferedWriter) file[1];
+			BufferedWriter writer = (BufferedWriter) fileEntry.inputOutputObject;
+            if (log.isDebugEnabled()) log.debug("Write:"+value);
 			writer.write(value);
-		}
+		} else {
+            throw new IOException("File never reserved: "+filename);      
+        }
 	}
 
 	public void closeFiles() throws IOException {
-		Iterator iter = files.keySet().iterator();
+		Iterator iter = files.entrySet().iterator();
 		while (iter.hasNext()) {
-			closeFile((String) iter.next());
+            Map.Entry me = (Map.Entry) iter.next();
+			closeFile((String)me.getKey(),(FileEntry)me.getValue() );
 		}
 		files.clear();
 	}
@@ -148,19 +172,23 @@ public class FileServer {
 	 * @throws IOException
 	 */
 	public synchronized void closeFile(String name) throws IOException {
-		Object[] file = (Object[]) files.get(name);
-		if (file != null && file.length == 2 && file[1] != null) {
-			((Reader) file[1]).close();
-			file[1] = null;
-		}
+		FileEntry fileEntry = (FileEntry) files.get(name);
+		closeFile(name, fileEntry);
 	}
 
+    private void closeFile(String name, FileEntry fileEntry) throws IOException {
+        if (fileEntry != null && fileEntry.inputOutputObject != null) {
+            log.info("Close: "+name);
+			((Reader) fileEntry.inputOutputObject).close();
+			fileEntry.inputOutputObject = null;
+		}
+    }
+
 	protected boolean filesOpen() {
-		Iterator iter = files.keySet().iterator();
+		Iterator iter = files.values().iterator();
 		while (iter.hasNext()) {
-			String name = (String) iter.next();
-			Object[] file = (Object[]) files.get(name);
-			if (file[1] != null) {
+			FileEntry fileEntry = (FileEntry) iter.next();
+            if (fileEntry.inputOutputObject != null) {
 				return true;
 			}
 		}
@@ -187,4 +215,13 @@ public class FileServer {
 		}
 		return input;
 	}
+    
+    private static class FileEntry{
+        private File file;
+        private Object inputOutputObject; // Reader/Writer
+        FileEntry(File f, Object o){
+            file=f;
+            inputOutputObject=o;
+        }
+    }
 }
