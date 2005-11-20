@@ -39,7 +39,8 @@
 <li>Enhanced JUnitSampler so that by default assert errors and exceptions are not appended to the error message. 
 Users must explicitly check append in the sampler</li>
 <li>Enhanced the documentation for webservice sampler to explain how it works with CSVDataSet</li>
-<li>Ehhanced the documentation for javascript function to explain escaping comma</li>
+<li>Enhanced the documentation for javascript function to explain escaping comma</li>
+<li>Allow CSV Data Set file names to be absolute</li>
 </ul>
 
 <h4>Bug fixes:</h4>
