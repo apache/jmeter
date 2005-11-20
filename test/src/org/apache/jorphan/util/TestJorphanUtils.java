@@ -198,4 +198,14 @@ public class TestJorphanUtils extends TestCase {
             assertEquals("a,;bc,;,", out[0]);
         }
 
+        public void testreplaceAllChars(){
+            assertEquals(JOrphanUtils.replaceAllChars("",' ', "+"),"");
+            String in,out;
+            in="source";
+            assertEquals(JOrphanUtils.replaceAllChars(in,' ', "+"),in);
+            out="so+rce";
+            assertEquals(JOrphanUtils.replaceAllChars(in,'u', "+"),out);
+            in="A B  C "; out="A+B++C+";
+            assertEquals(JOrphanUtils.replaceAllChars(in,' ', "+"),out);
+        }
 }
