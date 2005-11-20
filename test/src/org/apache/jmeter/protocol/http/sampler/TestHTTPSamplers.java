@@ -17,12 +17,84 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.config.Arguments;
+
 import junit.framework.TestCase;
 
 public class TestHTTPSamplers extends TestCase {
 
     public TestHTTPSamplers(String arg0) {
         super(arg0);
+    }
+
+    // Parse arguments singly
+    public void testParseArguments(){
+        HTTPSamplerBase sampler = new HTTPNullSampler();
+        Arguments args;
+        Argument arg;
+        
+        args = sampler.getArguments();
+        assertEquals(0,args.getArgumentCount());
+        
+        sampler.parseArguments("");
+        args = sampler.getArguments();
+        assertEquals(0,args.getArgumentCount());
+        
+        sampler.parseArguments("name1");
+        args = sampler.getArguments();
+        assertEquals(1,args.getArgumentCount());
+        arg=args.getArgument(0);
+        assertEquals("name1",arg.getName());
+        assertEquals("",arg.getMetaData());
+        assertEquals("",arg.getValue());
+        
+        sampler.parseArguments("name2=");
+        args = sampler.getArguments();
+        assertEquals(2,args.getArgumentCount());
+        arg=args.getArgument(1);
+        assertEquals("name2",arg.getName());
+        assertEquals("=",arg.getMetaData());
+        assertEquals("",arg.getValue());
+        
+        sampler.parseArguments("name3=value3");
+        args = sampler.getArguments();
+        assertEquals(3,args.getArgumentCount());
+        arg=args.getArgument(2);
+        assertEquals("name3",arg.getName());
+        assertEquals("=",arg.getMetaData());
+        assertEquals("value3",arg.getValue());
+        
+    }
+
+    // Parse arguments all at once
+    public void testParseArguments2(){
+        HTTPSamplerBase sampler = new HTTPNullSampler();
+        Arguments args;
+        Argument arg;
+        
+        args = sampler.getArguments();
+        assertEquals(0,args.getArgumentCount());
+        
+        sampler.parseArguments("&name1&name2=&name3=value3");
+        args = sampler.getArguments();
+        assertEquals(3,args.getArgumentCount());
+        
+        arg=args.getArgument(0);
+        assertEquals("name1",arg.getName());
+        assertEquals("",arg.getMetaData());
+        assertEquals("",arg.getValue());
+        
+        arg=args.getArgument(1);
+        assertEquals("name2",arg.getName());
+        assertEquals("=",arg.getMetaData());
+        assertEquals("",arg.getValue());
+        
+        arg=args.getArgument(2);
+        assertEquals("name3",arg.getName());
+        assertEquals("=",arg.getMetaData());
+        assertEquals("value3",arg.getValue());
+        
     }
 
         public void testArgumentWithoutEquals() throws Exception {
