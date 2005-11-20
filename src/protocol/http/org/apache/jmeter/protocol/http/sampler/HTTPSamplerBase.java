@@ -46,13 +46,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.StringSubstitution;
-import org.apache.oro.text.regex.Substitution;
-import org.apache.oro.text.regex.Util;
 
 /**
  * Common constants and methods for HTTP samplers
@@ -90,9 +83,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
 
+    public static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
+
     public static final String PROTOCOL_HTTPS = "https"; // $NON-NLS-1$
 
-    public final static String DEFAULT_PROTOCOL = "http"; // $NON-NLS-1$
+    public final static String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
 
 	public final static String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
@@ -124,8 +119,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	/** A number to indicate that the port has not been set. * */
 	public static final int UNSPECIFIED_PORT = 0;
 
-	boolean dynamicPath = false;
-
 	protected final static String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
 
 	protected final static String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
@@ -136,20 +129,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     private static final String QRY_PFX = "?"; // $NON-NLS-1$
 
+    protected static final int MAX_REDIRECTS = JMeterUtils.getPropDefault("httpsampler.max_redirects", 5); // $NON-NLS-1$
 
+    protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
+
+    ////////////////////// Variables //////////////////////
     
-	private static Pattern pattern;
+    private boolean dynamicPath = false;// Set false if spaces are already encoded
 
-	static {
-		try {
-			pattern = new Perl5Compiler().compile(" ", Perl5Compiler.READ_ONLY_MASK & Perl5Compiler.SINGLELINE_MASK);
-		} catch (MalformedPatternException e) {
-			log.error("Cant compile pattern.", e);
-			throw new Error(e.toString()); // programming error -- bail out
-		}
-	}
-
-	public HTTPSamplerBase() {
+    ////////////////////// Code ///////////////////////////
+    
+    public HTTPSamplerBase() {
 		setArguments(new Arguments());
 	}
 
@@ -191,7 +181,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 */
 	public void setPath(String path) {
 		if (GET.equals(getMethod())) {
-			int index = path.indexOf(QRY_PFX); // $NON-NLS-1$
+			int index = path.indexOf(QRY_PFX);
 			if (index > -1) {
 				setProperty(PATH, path.substring(0, index));
 				parseArguments(path.substring(index + 1));
@@ -434,7 +424,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 			}
 			buf.append(item.getEncodedName());
 			if (item.getMetaData() == null) {
-				buf.append(ARG_VAL_SEP); // $NON-NLS-1$
+				buf.append(ARG_VAL_SEP);
 			} else {
 				buf.append(item.getMetaData());
 			}
@@ -457,37 +447,28 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * 
 	 */
 	public void parseArguments(String queryString) {
-		String[] args = JOrphanUtils.split(queryString, QRY_SEP); // $NON-NLS-1$
+		String[] args = JOrphanUtils.split(queryString, QRY_SEP);
 		for (int i = 0; i < args.length; i++) {
-			// need to handle four cases: string contains name=value
-			// string contains name=
-			// string contains name
-			// empty string
-			// find end of parameter name
-			int endOfNameIndex = 0;
-			String metaData = ""; // records the existance of an equal sign
-			if (args[i].indexOf(ARG_VAL_SEP) != -1) {
+			// need to handle four cases: 
+            // - string contains name=value
+			// - string contains name=
+			// - string contains name
+			// - empty string
+            
+			String metaData; // records the existance of an equal sign
+            String name;
+            String value;
+            int length = args[i].length();
+            int endOfNameIndex = args[i].indexOf(ARG_VAL_SEP);
+            if (endOfNameIndex != -1) {// is there a separator?
 				// case of name=value, name=
-				endOfNameIndex = args[i].indexOf(ARG_VAL_SEP);
 				metaData = ARG_VAL_SEP;
+                name = args[i].substring(0, endOfNameIndex);
+                value = args[i].substring(endOfNameIndex + 1, length);
 			} else {
 				metaData = "";
-				if (args[i].length() > 0) {
-					endOfNameIndex = args[i].length(); // case name
-				} else {
-					endOfNameIndex = 0; // case where name value string is empty
-				}
-			}
-			// parse name
-			String name = ""; // for empty string
-			if (args[i].length() > 0) {
-				// for non empty string
-				name = args[i].substring(0, endOfNameIndex);
-			}
-			// parse value
-			String value = "";
-			if ((endOfNameIndex + 1) < args[i].length()) {
-				value = args[i].substring(endOfNameIndex + 1, args[i].length());
+                name=args[i];
+                value="";
 			}
 			if (name.length() > 0) {
 				addEncodedArgument(name, value, metaData);
@@ -531,14 +512,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	}
 
 	protected abstract HTTPSampleResult sample(URL u, String s, boolean b, int i);
-
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected synchronized Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
-
-	private static Substitution spaceSub = new StringSubstitution("%20");
 
 	/**
 	 * Download the resources of an HTML page.
@@ -597,18 +570,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	}
 
 	protected String encodeSpaces(String path) {
-		// TODO JDK1.4
-		// this seems to be equivalent to path.replaceAll(" ","%20");
-		// TODO move to JMeterUtils or jorphan.
-		// unless we move to JDK1.4. (including the
-		// 'pattern' initialization code earlier on)
-		path = Util.substitute((Perl5Matcher) localMatcher.get(), pattern, spaceSub, path, Util.SUBSTITUTE_ALL);
-		return path;
+        return JOrphanUtils.replaceAllChars(path, ' ', "%20"); // $NON-NLS-1$
 	}
-
-	protected static final int MAX_REDIRECTS = JMeterUtils.getPropDefault("httpsampler.max_redirects", 5); // $NON-NLS-1$
-
-	protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)
@@ -648,6 +611,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		if (pathP instanceof StringProperty && !"".equals(pathP.getStringValue())) {
 			log.debug("Encoding spaces in path");
 			pathP.setObjectValue(encodeSpaces(pathP.getStringValue()));
+            dynamicPath = false;
 		} else {
 			log.debug("setting dynamic path to true");
 			dynamicPath = true;
