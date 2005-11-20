@@ -49,7 +49,7 @@ import org.apache.log.Logger;
  * 
  */
 public class HTTPSampler extends HTTPSamplerBase {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final int MAX_CONN_RETRIES = 10; // Maximum connection
 
@@ -59,9 +59,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 	private static final PostWriter postWriter = new PostWriter();
 
 	static {// TODO - document what this is doing and why
-		System.setProperty("java.protocol.handler.pkgs", JMeterUtils.getPropDefault("ssl.pkgs",
-				"com.sun.net.ssl.internal.www.protocol"));
-		System.setProperty("javax.net.ssl.debug", "all");
+		System.setProperty("java.protocol.handler.pkgs", // $NON-NLS-1$ 
+                JMeterUtils.getPropDefault("ssl.pkgs", // $NON-NLS-1$
+				"com.sun.net.ssl.internal.www.protocol")); // $NON-NLS-1$
+		System.setProperty("javax.net.ssl.debug", "all"); // $NON-NLS-1$  // $NON-NLS-2$
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		conn = (HttpURLConnection) u.openConnection();
 		// Delegate SSL specific stuff to SSLManager so that compilation still
 		// works otherwise.
-		if ("https".equalsIgnoreCase(u.getProtocol())) {
+		if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
 			try {
 				SSLManager.getInstance().setContext(conn);
 			} catch (Exception e) {
@@ -144,9 +145,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 		// leave it to the server to close the connection after their
 		// timeout period. Leave it to the JMeter user to decide.
 		if (getUseKeepAlive()) {
-			conn.setRequestProperty("Connection", "keep-alive");
+			conn.setRequestProperty(HEADER_CONNECTION, KEEP_ALIVE);
 		} else {
-			conn.setRequestProperty("Connection", "close");
+			conn.setRequestProperty(HEADER_CONNECTION, CONNECTION_CLOSE);
 		}
 
 		conn.setRequestMethod(method);
@@ -184,9 +185,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 		BufferedInputStream in;
 		boolean logError = false; // Should we log the error?
 		try {
-			if ("gzip".equals(conn.getContentEncoding()))// works OK even if
-			// CE is null
-			{
+            // works OK even if ContentEncoding is null
+			if (ENCODING_GZIP.equals(conn.getContentEncoding())) {
 				in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
 			} else {
 				in = new BufferedInputStream(conn.getInputStream());
@@ -260,32 +260,18 @@ public class HTTPSampler extends HTTPSamplerBase {
 		// headerBuf.append(conn.getResponseMessage());
 		headerBuf.append("\n");
 
-		for (int i = 1; conn.getHeaderFieldKey(i) != null; i++) {
-			modifyHeaderValues(conn, i, headerBuf);
+        String hfk;
+		for (int i = 1; (hfk=conn.getHeaderFieldKey(i)) != null; i++) {
+            // TODO - why is this not saved? A: it might be a proxy server specific field.
+            // If JMeter is using a proxy, the browser wouldn't know about that.
+            if (!TRANSFER_ENCODING.equalsIgnoreCase(hfk)) {
+                headerBuf.append(hfk);
+                headerBuf.append(": "); // $NON-NLS-1$
+                headerBuf.append(conn.getHeaderField(i));
+                headerBuf.append("\n"); // $NON-NLS-1$
+            }
 		}
 		return headerBuf.toString();
-	}
-
-	/**
-	 * @param conn
-	 *            connection
-	 * @param headerIndex
-	 *            which header to use
-	 * @param resultBuf
-	 *            output string buffer
-	 */
-	protected void modifyHeaderValues(HttpURLConnection conn, int headerIndex, StringBuffer resultBuf) {
-		if ("transfer-encoding" // TODO - why is this not saved? A: it might be
-		// a proxy server specific field.
-				// If JMeter is using a proxy, the browser wouldn't know about
-				// that.
-				.equalsIgnoreCase(conn.getHeaderFieldKey(headerIndex))) {
-			return;
-		}
-		resultBuf.append(conn.getHeaderFieldKey(headerIndex));
-		resultBuf.append(": ");
-		resultBuf.append(conn.getHeaderField(headerIndex));
-		resultBuf.append("\n");
 	}
 
 	/**
@@ -306,7 +292,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		if (cookieManager != null) {
 			cookieHeader = cookieManager.getCookieHeaderForURL(u);
 			if (cookieHeader != null) {
-				conn.setRequestProperty("Cookie", cookieHeader);
+				conn.setRequestProperty(HEADER_COOKIE, cookieHeader);
 			}
 		}
 		return cookieHeader;
@@ -338,9 +324,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 					String v = header.getValue();
 					conn.setRequestProperty(n, v);
 					hdrs.append(n);
-					hdrs.append(": ");
+					hdrs.append(": "); // $NON-NLS-1$
 					hdrs.append(v);
-					hdrs.append("\n");
+					hdrs.append("\n"); // $NON-NLS-1$
 				}
 			}
 		}
@@ -364,7 +350,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		if (authManager != null) {
 			Authorization auth = authManager.getAuthForURL(u);
 			if (auth != null) {
-				conn.setRequestProperty("Authorization", auth.toBasicHeader());
+				conn.setRequestProperty(HEADER_AUTHORIZATION, auth.toBasicHeader());
 			}
 		}
 	}
@@ -446,11 +432,11 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 			int errorLevel = conn.getResponseCode();
 			res.setResponseCode(Integer.toString(errorLevel));
-			res.setSuccessful(200 <= errorLevel && errorLevel <= 399);
+			res.setSuccessful(isSuccessCode(errorLevel));
 
 			res.setResponseMessage(conn.getResponseMessage());
 
-			String ct = conn.getContentType();// getHeaderField("Content-type");
+			String ct = conn.getContentType();
 			res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
             res.setEncodingAndType(ct);
 
@@ -479,10 +465,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 	protected void disconnect(HttpURLConnection conn) {
 		if (conn != null) {
-			String connection = conn.getHeaderField("Connection");
+			String connection = conn.getHeaderField(HEADER_CONNECTION);
 			String protocol = conn.getHeaderField(0);
-			if ((connection == null && (protocol == null || !protocol.startsWith("HTTP/1.1")))
-					|| (connection != null && connection.equalsIgnoreCase("close"))) {
+			if ((connection == null && (protocol == null || !protocol.startsWith(HTTP_1_1)))
+					|| (connection != null && connection.equalsIgnoreCase(CONNECTION_CLOSE))) {
 				conn.disconnect();
 			}
 		}
@@ -504,7 +490,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	private void saveConnectionCookies(HttpURLConnection conn, URL u, CookieManager cookieManager) {
 		if (cookieManager != null) {
 			for (int i = 1; conn.getHeaderFieldKey(i) != null; i++) {
-				if (conn.getHeaderFieldKey(i).equalsIgnoreCase("set-cookie")) {
+				if (conn.getHeaderFieldKey(i).equalsIgnoreCase(HEADER_SET_COOKIE)) {
 					cookieManager.addCookieFromHeader(conn.getHeaderField(i), u);
 				}
 			}
