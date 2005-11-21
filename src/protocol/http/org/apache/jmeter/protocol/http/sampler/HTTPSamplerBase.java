@@ -187,7 +187,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public String getProtocol() {
 		String protocol = getPropertyAsString(PROTOCOL);
-		if (protocol == null || protocol.equals("")) {
+		if (protocol == null || protocol.length() == 0 ) {
 			return DEFAULT_PROTOCOL;
 		} else {
 			return protocol;
@@ -297,9 +297,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public int getPort() {
 		int port = getPropertyAsInt(PORT);
 		if (port == UNSPECIFIED_PORT) {
-			if (PROTOCOL_HTTPS.equalsIgnoreCase(getProtocol())) {
+			String prot = getProtocol();
+            if (PROTOCOL_HTTPS.equalsIgnoreCase(prot)) {
 				return DEFAULT_HTTPS_PORT;
 			}
+            if (!PROTOCOL_HTTP.equalsIgnoreCase(prot)) {
+                log.warn("Unexpected protocol: "+prot);
+                // TODO - should this return something else?
+            }
 			return DEFAULT_HTTP_PORT;
 		}
 		return port;
@@ -403,23 +408,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * @throws MalformedURLException
 	 */
 	public URL getUrl() throws MalformedURLException {
-		String pathAndQuery = null;
-		if (this.getMethod().equals(GET) && getQueryString().length() > 0) {
-			if (this.getPath().indexOf(QRY_PFX) > -1) {
-				pathAndQuery = this.getPath() + QRY_SEP + getQueryString();
+		StringBuffer pathAndQuery = new StringBuffer(100);
+		String path = this.getPath();
+        if (!path.startsWith("/")){ // $NON-NLS-1$
+            pathAndQuery.append("/"); // $NON-NLS-1$
+        }
+        pathAndQuery.append(path);
+        if (this.getMethod().equals(GET) && getQueryString().length() > 0) {
+			if (path.indexOf(QRY_PFX) > -1) {
+				pathAndQuery.append(QRY_SEP);
 			} else {
-				pathAndQuery = this.getPath() + QRY_PFX + getQueryString();
+				pathAndQuery.append(QRY_PFX);
 			}
-		} else {
-			pathAndQuery = this.getPath();
-		}
-		if (!pathAndQuery.startsWith("/")) { // $NON-NLS-1$
-			pathAndQuery = "/" + pathAndQuery; // $NON-NLS-1$
+            pathAndQuery.append(getQueryString());
 		}
 		if (getPort() == UNSPECIFIED_PORT || getPort() == DEFAULT_HTTP_PORT) {
-			return new URL(getProtocol(), getDomain(), pathAndQuery);
+			return new URL(getProtocol(), getDomain(), pathAndQuery.toString());
 		} else {
-			return new URL(getProtocol(), getPropertyAsString(DOMAIN), getPort(), pathAndQuery);
+			return new URL(getProtocol(), getPropertyAsString(DOMAIN), getPort(), pathAndQuery.toString());
 		}
 	}
 
@@ -434,10 +440,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		boolean first = true;
 		while (iter.hasNext()) {
 			HTTPArgument item = null;
-			try {
-				item = (HTTPArgument) iter.next().getObjectValue();
+            /*
+             * N.B. Revision 323346 introduced the ClassCast check, but then used iter.next()
+             * to fetch the item to be cast, thus skipping the element that did not cast.
+             * Reverted to work more like the original code, but with the check in place.
+             * Added a warning message so can track whether it is necessary
+             */
+			Object objectValue = iter.next().getObjectValue();
+            try {
+				item = (HTTPArgument) objectValue;
 			} catch (ClassCastException e) {
-				item = new HTTPArgument((Argument) iter.next().getObjectValue());
+                log.warn("Unexpected argument type: "+objectValue.getClass().getName());
+				item = new HTTPArgument((Argument) objectValue);
 			}
 			if (!first) {
 				buf.append(QRY_SEP);
