@@ -319,6 +319,7 @@
 #macro (pagelinks)
   #if (($next != "") || ($prev != ""))
 		<table>
+		<tr>
 		<td bgcolor="$bannerbg">
         <div align="right"><a href="index.html"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Index</font></a></div>
         </td>
@@ -332,6 +333,7 @@
         <div align="right"><a href="$prev"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Prev</font></a></div>
         </td>
         #end
+        </tr>
          </table>
       #end
 #end
