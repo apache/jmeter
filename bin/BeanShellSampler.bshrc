@@ -27,4 +27,17 @@ stopThread(t){// Stop a JMeter thread
 	org.apache.jmeter.engine.StandardJMeterEngine.stopThread(t);
 }
 
+String getVariables(){ // Create a listing of the thread variables
+    StringBuffer sb = new StringBuffer(100);
+    Iterator i = vars.getIterator();
+    while(i.hasNext())
+    {
+      Map.Entry me = i.next();
+       if(String.class.equals(me.getValue().getClass())){
+             sb.append(me.toString()).append("\n");
+       }
+    }
+    return sb.toString();
+}
+
 //print("Initialisation complete");
