@@ -173,7 +173,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 
 </component>
 
-<component name="Java Request" index="&sect-num;.1.4" screenshot="java_request.gif">
+<component name="Java Request" index="&sect-num;.1.4" screenshot="java_request.png">
 
 <description><p>This sampler lets you control a java class that implements the
 JavaSamplerClient interface.  By writing your own implementation of this interface,
@@ -181,8 +181,16 @@ you can use JMeter to harness multiple threads, input parameter control, and
 data collection.</p>
 <p>The pull-down menu provides the list of all such implementations found by
 JMeter in its classpath.  The parameters can then be specified in the
-table below - as defined by your implementation.  A simple example (SleepTest) is
-provided.</p></description>
+table below - as defined by your implementation.  Two simple examples (JavaTest and SleepTest) are provided.
+</p>
+<p>
+The JavaTest example sampler can be useful for checking test plans, because it allows one to set
+values in almost all the fields. These can then be used by Assertions, etc.
+The fields allow variables to be used, so the values of these can readily be seen.
+</p>
+</description>
+
+<note>The Add/Delete buttons don't serve any purpose at present.</note>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler
@@ -193,7 +201,6 @@ provided.</p></description>
         arguments that will be passed to the sampled class.  All arguments
         are sent as Strings.</property>
         </properties>
-
 </component>
 
 <component name="SOAP/XML-RPC Request" index="&sect-num;.1.5" screenshot="soap_sampler.png">
@@ -548,7 +555,7 @@ and Samplers are only called from a single thread
 If the property "beanshell.sampler.init" is defined, it is passed to the Interpreter
 as the name of a sourced file.
 This can be used to define common methods and variables. 
-There is a sample init file in the bin directory: BeanShellFunction.bshrc.
+There is a sample init file in the bin directory: BeanShellSampler.bshrc.
 </p><p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p>
 		<p>Before invoking the script, some variables are set up in the BeanShell interpreter:
@@ -598,6 +605,12 @@ return "Data from sample with Label "+Label;
 //or, since version 2.1.2
 SampleResult.setResponseData("My data");
 return null;
+</pre>
+<p>Another example:<br/> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in jmeter.properties. 
+The following script will show the values of all the variables in the ResponseData field:
+</p>
+<pre>
+return getVariables();
 </pre>
 </component>
 
