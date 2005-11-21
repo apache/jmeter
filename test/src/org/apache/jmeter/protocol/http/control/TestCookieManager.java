@@ -44,9 +44,19 @@ public class TestCookieManager extends TestCase {
 
         public void testRemoveCookie() throws Exception {
             man.setThreadContext(jmctx);
-            man.add(new Cookie("id", "me", "127.0.0.1", "/", false, 0));
-            man.removeCookieNamed("id");
+            Cookie c = new Cookie("id", "me", "127.0.0.1", "/", false, 0);
+            man.add(c);
+            assertEquals(1, man.getCookieCount());
+            // This should be ignored, as there is no value
+            Cookie d = new Cookie("id", "", "127.0.0.1", "/", false, 0);
+            man.add(d);
             assertEquals(0, man.getCookieCount());
+            man.add(c);
+            man.add(c);
+            assertEquals(1, man.getCookieCount());
+            Cookie e = new Cookie("id", "me2", "127.0.0.1", "/", false, 0);
+            man.add(e);
+            assertEquals(1, man.getCookieCount());
         }
 
         public void testSendCookie() throws Exception {
