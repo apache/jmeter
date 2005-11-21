@@ -18,7 +18,9 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -78,5 +80,9 @@ public class JMeterVariables {
 
 	public Object getObject(String key) {
 		return variables.get(key);
+	}
+	
+	public Iterator getIterator(){
+		return Collections.unmodifiableMap(variables).entrySet().iterator() ;
 	}
 }
