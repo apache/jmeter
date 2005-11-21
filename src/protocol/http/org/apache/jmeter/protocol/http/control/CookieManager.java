@@ -29,15 +29,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.Vector;
 
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -186,11 +185,12 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void add(Cookie c) {
 		String cv = c.getValue();
         String cn = c.getName();
-		if (DELETE_NULL_COOKIES && (null == cv || "".equals(cv))) {
+        removeMatchingCookies(c); // Can't have two matching cookies
+        
+		if (DELETE_NULL_COOKIES && (null == cv || cv.length()==0)) {
             if (log.isDebugEnabled()) {
-                log.debug("Removing cookie with null value " + c.toString());
+                log.debug("Dropping cookie with null value " + c.toString());
             }
-			removeCookieNamed(cn);
 		} else {
             if (log.isDebugEnabled()) {
                 log.debug("Add cookie to store " + c.toString());
@@ -247,9 +247,11 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public String getCookieHeaderForURL(URL url) {
 		boolean debugEnabled = log.isDebugEnabled();
 
-		if (!url.getProtocol().toUpperCase().trim().equals("HTTP")// $NON-NLS-1$
-				&& !url.getProtocol().toUpperCase().trim().equals("HTTPS"))// $NON-NLS-1$
+        String protocol = url.getProtocol().trim();
+		if (!protocol.equalsIgnoreCase(HTTPSamplerBase.PROTOCOL_HTTP) && 
+             !protocol.equalsIgnoreCase(HTTPSamplerBase.PROTOCOL_HTTP)) {
 			return null;
+        }
 
 		StringBuffer header = new StringBuffer();
 		String host = "." + url.getHost();
@@ -274,14 +276,14 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 													// (bug 27713)
 					|| (System.currentTimeMillis() / 1000) <= cookie.getExpires())) {
 				if (header.length() > 0) {
-					header.append("; ");
+					header.append("; "); // $NON-NLS-1$
 				}
 				if (debugEnabled) {
 					log.debug("Matched cookie:"
 							+ " name=" + cookie.getName()
 							+ " value=" + cookie.getValue());
                 }
-				header.append(cookie.getName()).append("=").append(cookie.getValue());
+				header.append(cookie.getName()).append("=").append(cookie.getValue()); // $NON-NLS-1$
 			}
 		}
 
@@ -317,7 +319,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		int index = nvp.indexOf("=");// $NON-NLS-1$
 		String name = nvp.substring(0, index);
 		String value = nvp.substring(index + 1);
-		String domain = "." + url.getHost(); // this is the default
+		String domain = "." + url.getHost();  // $NON-NLS-1$ // this is the default
 		// the leading dot breaks the standard, but helps in
 		// reproducing actual browser behaviour.
 		// The default is the path of the request URL (upto and including the last slash)
@@ -391,52 +393,44 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			}
 		}
 
-        // Scan for any matching cookies
-        Vector removeIndices = new Vector();
-		for (int i = getCookies().size() - 1; i >= 0; i--) {
-			Cookie cookie = (Cookie) getCookies().get(i).getObjectValue();
-			if (cookie == null)
-				continue;
-			if (cookie.getPath().equals(newCookie.getPath()) 
-                    && cookie.getDomain().equals(newCookie.getDomain())
-					&& cookie.getName().equals(newCookie.getName())) {
-				if (debugEnabled) {
-					log.debug("New Cookie = " + newCookie.toString()
-                              + " removing matching Cookie " + cookie.toString());
-				}
-				removeIndices.addElement(new Integer(i));
-			}
-		}
-
-        // Now remove the matching cookies
-		for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
-			index = ((Integer) e.nextElement()).intValue();
-			remove(index);
-		}
-
 		long exp = newCookie.getExpires();
 		// Store session cookies as well as unexpired ones
 		if (exp == 0 || exp >= System.currentTimeMillis() / 1000) {
-			add(newCookie); // Has its own debug log
+			add(newCookie); // Has its own debug log; removes matching cookies
 		} else {
+            removeMatchingCookies(newCookie);
             if (debugEnabled){
                 log.debug("Dropping expired Cookie: "+newCookie.toString());
             }      
         }
 	}
 
-	public void removeCookieNamed(String name) {
-		if (log.isDebugEnabled())
-			log.debug("Remove cookie named " + name);
-		PropertyIterator iter = getCookies().iterator();
-		while (iter.hasNext()) {
-			Cookie cookie = (Cookie) iter.next().getObjectValue();
-			if (cookie.getName().equals(name)) {
-				iter.remove();
-			}
-		}
-	}
-
+    private boolean match(Cookie a, Cookie b){
+        return 
+        a.getName().equals(b.getName())
+        &&
+        a.getPath().equals(b.getPath())
+        &&
+        a.getDomain().equals(b.getDomain());
+    }
+    
+    private void removeMatchingCookies(Cookie newCookie){
+        // Scan for any matching cookies
+        PropertyIterator iter = getCookies().iterator();
+        while (iter.hasNext()) {
+            Cookie cookie = (Cookie) iter.next().getObjectValue();
+            if (cookie == null)
+                continue;
+            if (match(cookie,newCookie)) { 
+                if (log.isDebugEnabled()) {
+                    log.debug("New Cookie = " + newCookie.toString()
+                              + " removing matching Cookie " + cookie.toString());
+                }
+                iter.remove();
+            }
+        }       
+    }
+    
 	public String getClassLabel() {
 		return JMeterUtils.getResString("cookie_manager_title");// $NON-NLS-1$
 	}
