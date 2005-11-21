@@ -69,9 +69,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     /*
      * Connection is re-used within the thread if possible
      */
-	transient private static ThreadLocal httpClients = null;
+	private static final ThreadLocal httpClients = new ThreadLocal();
 
-    private static boolean basicAuth 
+    private static final boolean basicAuth 
     = JMeterUtils.getPropDefault("httpsampler2.basicauth", false); // $NON-NLS-1$
 
 	static {
@@ -617,71 +617,36 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 				Cookie cookie = new Cookie(c[i].getName(), 
 					c[i].getValue(), c[i].getDomain(), c[i].getPath(), c[i].getSecure(), exp == null ? 0 : exp.getTime() / 1000);
 				
-				removeExistingCookie( cookie, cookieManager);
-				
 				cookieManager.add( cookie );
 			}
 		}
 	}
 	
-	private void removeExistingCookie( Cookie newCookie, CookieManager cookieManager )
-	{
-		Vector removeIndices = new Vector();
-		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
-			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
-			if (cookie == null)
-				continue;
-			if (cookie.getPath().equals(newCookie.getPath()) && cookie.getDomain().equals(newCookie.getDomain())
-					&& cookie.getName().equals(newCookie.getName())) {
-				if (log.isDebugEnabled()) {
-					//System.out.println("New Cookie = " + newCookie.toString() + " removing matching Cookie "
-									//+ cookie.toString());
-				}
-				removeIndices.addElement(new Integer(i));
-			}
-		}
-
-		int index = 0;
-		for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
-			index = ((Integer) e.nextElement()).intValue();
-			cookieManager.remove(index);
-		}
-	}
 
 	public void threadStarted() {
 		log.debug("Thread Started");
-		
-		synchronized ( this.getClass() )
-		{
-			if ( httpClients == null ) {
-				httpClients = new ThreadLocal();
-			}
-			httpClients.set ( new HashMap() );
-		}
+        
+		// Does not need to be synchronised, as all access is from same thread
+		httpClients.set ( new HashMap() );
 	}
 
 	public void threadFinished() {
 		log.debug("Thread Finished");
-		//if (httpConn != null)
-		//	httpConn.close();
-		
-		synchronized ( this.getClass() )
-		{
-			Map map = (Map)httpClients.get();
 
-			HttpConnection conn = null;
-			if ( map != null ) {
-				for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
-				{
-					Object obj = it.next();
-					conn = (HttpConnection) ((Map.Entry)obj).getValue();
-					conn.close();
-				}
-				map.clear();
+        // Does not need to be synchronised, as all access is from same thread
+		Map map = (Map)httpClients.get();
+
+		HttpConnection conn;
+		if ( map != null ) {
+			for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
+			{
+				Object obj = it.next();
+				conn = (HttpConnection) ((Map.Entry)obj).getValue();
+				conn.close();
 			}
-			
-			httpClients.set( null );
+			map.clear();
 		}
+		
+		httpClients.set( null );
 	}
-
 }
