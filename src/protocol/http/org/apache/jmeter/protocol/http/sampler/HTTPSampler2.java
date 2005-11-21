@@ -26,8 +26,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
-import java.util.Enumeration;
 
 import org.apache.commons.httpclient.ConnectMethod;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
@@ -175,6 +173,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 	}
 
+    // TODO: move code to PostWriter or HTTPSamplerBase?
     // Convert \ to \\
 	private String encode(String value) {
 		StringBuffer newValue = new StringBuffer();
