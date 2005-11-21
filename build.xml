@@ -483,8 +483,8 @@
       <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
       <exclude name="org/apache/jmeter/util/keystore/DefaultKeyStore.java" unless="jsse.present"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -505,9 +505,9 @@
       <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/assertions/**/BeanShell*.java" unless="beanshell.present"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -517,9 +517,9 @@
     <javac srcdir="${src.functions}" destdir="${build.functions}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -531,11 +531,11 @@
       <exclude name="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" unless="javamail.complete"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
         <pathelement location="${build.htmlparser}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -544,7 +544,6 @@
     <mkdir dir="${build.test}"/>
     <javac srcdir="${src.test}" destdir="${build.test}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
@@ -559,6 +558,7 @@
         <pathelement location="${build.monitor.components}"/>
         <pathelement location="${build.monitor.model}"/>
         <pathelement location="${build.tcp}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -568,9 +568,9 @@
     <javac srcdir="${src.ftp}" destdir="${build.ftp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -580,9 +580,9 @@
     <javac srcdir="${src.jdbc}" destdir="${build.jdbc}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -593,9 +593,9 @@
     <javac srcdir="${src.ldap}" destdir="${build.ldap}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -609,9 +609,9 @@
     <javac srcdir="${src.mail}" destdir="${build.mail}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -623,9 +623,9 @@
       <exclude name="org/apache/jmeter/protocol/java/**/BeanShell*.java" unless="beanshell.present"/>
       <exclude name="org/apache/jmeter/protocol/java/**/BSF*.java" unless="bsf.present"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -635,9 +635,9 @@
     <javac srcdir="${src.junit}" destdir="${build.junit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -648,10 +648,10 @@
     <javac srcdir="${src.report}" destdir="${build.report}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -661,9 +661,9 @@
     <javac srcdir="${src.tcp}" destdir="${build.tcp}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -675,9 +675,9 @@
     <javac srcdir="${src.examples}" destdir="${build.examples}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -690,12 +690,12 @@
     <javac srcdir="${src.monitor.components}" source="${src.java.version}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.monitor.model}"/>
         <pathelement location="${build.http}"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -705,9 +705,9 @@
     <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -725,15 +725,15 @@
   <target name="compile-rmi" depends="compile-jorphan,compile-core" description="Compile RMI stubs and skeletons.">
     <rmic base="${build.core}" classname="org.apache.jmeter.engine.RemoteJMeterEngineImpl">
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement path="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </rmic>
     <rmic base="${build.core}" classname="org.apache.jmeter.samplers.RemoteSampleListenerImpl">
       <classpath>
-        <path refid="classpath"/>
         <pathelement path="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </rmic>
   </target>
@@ -743,9 +743,9 @@
     <javac srcdir="${src.htmlparser}" destdir="${build.htmlparser}" optimize="${optimize}" debug="on" source="${src.java.version}" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -757,9 +757,9 @@
     <javac srcdir="${src.jms}" destdir="${build.jms}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-        <path refid="classpath"/>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
+        <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
@@ -1388,9 +1388,9 @@ some of its classes - at present JMeter can only run from jar files.
    </echo>
    <java classname="org.apache.jorphan.test.AllTests" fork="yes" dir="${basedir}/bin">
       <classpath>
-	<path refid="classpath"/>
-	<fileset dir="${dest.jar}" includes="*.jar"/>
-	<pathelement location="${build.dir}/test"/>
+    	<fileset dir="${dest.jar}" includes="*.jar"/>
+	    <pathelement location="${build.dir}/test"/>
+    	<path refid="classpath"/>
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
@@ -1416,9 +1416,9 @@ some of its classes - at present JMeter can only run from jar files.
   <formatter type="${test.format}" usefile="no"/>
   <formatter type="xml"/>
       <classpath>
-        <path refid="classpath"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <fileset dir="${lib.opt}" includes="optional.jar"/>
+        <path refid="classpath"/>
       </classpath>
   <test name="${test.case}" todir="reports"/>
   </junit>
