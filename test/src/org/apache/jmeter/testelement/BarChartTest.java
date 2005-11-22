@@ -44,12 +44,16 @@ public class BarChartTest extends JMeterTestCase {
         // String sampleLog = "C:/eclipse3/workspace/jmeter-21/bin/testfiles/sample_log1.jtl";
         String sampleLog = "testfiles/sample_log1.jtl";
         String sampleLog2 = "testfiles/sample_log1b.jtl";
+        String sampleLog3 = "testfiles/sample_log1c.jtl";
         JTLData input = new JTLData();
         JTLData input2 = new JTLData();
+        JTLData input3 = new JTLData();
         input.setDataSource(sampleLog);
         input.loadData();
         input2.setDataSource(sampleLog2);
         input2.loadData();
+        input3.setDataSource(sampleLog3);
+        input3.loadData();
 
         assertTrue((input.getStartTimestamp() > 0));
         assertTrue((input.getEndTimestamp() > input.getStartTimestamp()));
@@ -58,6 +62,7 @@ public class BarChartTest extends JMeterTestCase {
         java.util.ArrayList list = new java.util.ArrayList();
         list.add(input);
         list.add(input2);
+        list.add(input3);
 
         BarChart bchart = new BarChart();
         bchart.setTitle("Sample Chart");
@@ -73,6 +78,6 @@ public class BarChartTest extends JMeterTestCase {
         SaveGraphicsService serv = new SaveGraphicsService();
         String filename = bchart.getTitle();
         filename = filename.replace(' ','_');
-        serv.saveJComponent(filename,SaveGraphicsService.PNG,gr);
+        serv.saveJComponent("./testfiles/" + filename,SaveGraphicsService.PNG,gr);
     }
 }
