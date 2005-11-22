@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -35,7 +34,8 @@ import org.jCharts.properties.PointChartProperties;
 
 public class LineChart extends AbstractChart {
 
-    public static final String REPORT_CHART_URLS = "ReportChart.chart.urls";
+    private static final String URL_DELIM = ","; // $NON-NLS-1$
+	public static final String REPORT_CHART_URLS = "ReportChart.chart.urls"; // $NON-NLS-1$
     public static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
             PointChartProperties.SHAPE_TRIANGLE};
@@ -58,15 +58,13 @@ public class LineChart extends AbstractChart {
     }
     
     public double[][] convertToDouble(List data) {
-        SamplingStatCalculator stat;
-        String[] urls = this.getURLs().split(",");
+        String[] urls = this.getURLs().split(URL_DELIM);
         double[][] dataset = new double[urls.length][data.size()];
         for (int idx=0; idx < urls.length; idx++) {
             for (int idz=0; idz < data.size(); idz++) {
                 DataSet dset = (DataSet)data.get(idz);
                 SamplingStatCalculator ss = dset.getStatistics(urls[idx]);
                 dataset[idx][idz] = getValue(ss);
-                System.out.println("value=" + dataset[idx][idz]);
             }
         }
         return dataset;
@@ -93,7 +91,7 @@ public class LineChart extends AbstractChart {
         panel.setTitle(this.getTitle());
         panel.setData(data);
         panel.setXAxisLabels(xAxisLabels);
-        panel.setYAxisLabels(this.getURLs().split(","));
+        panel.setYAxisLabels(this.getURLs().split(URL_DELIM)); // $NON-NLS-1$
         panel.setXAxisTitle(this.getXAxis());
         panel.setYAxisTitle(this.getYAxis());
         // we should make this configurable eventually
