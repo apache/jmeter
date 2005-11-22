@@ -78,7 +78,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		}
 	};
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+	private static final PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
 	/***************************************************************************
 	 * !ToDo (Constructor description)
@@ -291,6 +291,15 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 			return result.setResultForNull();
 		}
 
+		result.setFailure(false);
+		result.setError(false);
+
+		boolean contains = isContainsType(); // do it once outside loop
+		boolean debugEnabled = log.isDebugEnabled();
+		if (debugEnabled){
+			log.debug("Type:" + (contains?"Contains":"Match") + (not? "(not)": ""));
+		}
+		
 		try {
 			// Get the Matcher for this thread
 			Perl5Matcher localMatcher = (Perl5Matcher) matcher.get();
@@ -299,22 +308,20 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 				String stringPattern = iter.next().getStringValue();
 				Pattern pattern = patternCache.getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
 				boolean found;
-				if ((CONTAINS & getTestType()) > 0) {
+				if (contains) {
 					found = localMatcher.contains(toCheck, pattern);
 				} else {
 					found = localMatcher.matches(toCheck, pattern);
 				}
 				pass = not ? !found : found;
 				if (!pass) {
+					if (debugEnabled){log.debug("Failed: "+pattern);}
 					result.setFailure(true);
 					result.setFailureMessage(getFailText(stringPattern));
 					break;
 				}
+				if (debugEnabled){log.debug("Passed: "+pattern);}
 			}
-			if (pass) {
-				result.setFailure(false);
-			}
-			result.setError(false);
 		} catch (MalformedCachePatternException e) {
 			result.setError(true);
 			result.setFailure(false);
@@ -327,9 +334,9 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	 * Generate the failure reason from the TestType
 	 * 
 	 * @param stringPattern
-	 * @return the message for the assertion report TODO strings ought to be
-	 *         made resources
+	 * @return the message for the assertion report 
 	 */
+	// TODO strings should be resources
 	private String getFailText(String stringPattern) {
 		String text;
 		String what;
