@@ -29,7 +29,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.AbstractTable;
-import org.apache.jmeter.testelement.LineGraph;
+import org.apache.jmeter.testelement.LineChart;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -111,14 +111,14 @@ public class LineGraphGui extends AbstractReportGui {
 	}
 	
 	public TestElement createTestElement() {
-		LineGraph element = new LineGraph();
+		LineChart element = new LineChart();
 		modifyTestElement(element);
 		return element;
 	}
 
 	public void modifyTestElement(TestElement element) {
 		this.configureTestElement(element);
-		LineGraph bc = (LineGraph)element;
+		LineChart bc = (LineChart)element;
 		bc.setXAxis(xItems.getText());
 		bc.setYAxis(yItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
@@ -129,7 +129,7 @@ public class LineGraphGui extends AbstractReportGui {
 	
     public void configure(TestElement element) {
         super.configure(element);
-        LineGraph bc = (LineGraph)element;
+        LineChart bc = (LineChart)element;
         xItems.setText(bc.getXAxis());
         yItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
