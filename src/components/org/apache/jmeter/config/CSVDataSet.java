@@ -24,6 +24,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -61,8 +62,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			if (delim.equals("\\t")) // $NON-NLS-1$
 				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
 			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim,false);
+			JMeterVariables threadVars = this.getThreadContext().getVariables();
 			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-				this.getThreadContext().getVariables().put(vars[a], lineValues[a]);
+				threadVars.put(vars[a], lineValues[a]);
 			}
 		} catch (IOException e) {
 			log.error(e.toString());
