@@ -21,12 +21,16 @@ import javax.swing.JComponent;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @author peter lin
  *
  */
 public class LineGraphTest extends JMeterTestCase {
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * @param arg0
@@ -36,7 +40,7 @@ public class LineGraphTest extends JMeterTestCase {
 	}
 
     public void testGenerateBarChart() {
-        System.out.println("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));
+        log.info("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));
         // String sampleLog = "C:/eclipse3/workspace/jmeter-21/bin/testfiles/sample_log1.jtl";
         String sampleLog = "testfiles/sample_log1.jtl";
         String sampleLog2 = "testfiles/sample_log1b.jtl";
@@ -54,7 +58,7 @@ public class LineGraphTest extends JMeterTestCase {
         assertTrue((input.getStartTimestamp() > 0));
         assertTrue((input.getEndTimestamp() > input.getStartTimestamp()));
         assertTrue((input.getURLs().size() > 0));
-        System.out.println("URL count=" + input.getURLs().size());
+        log.info("URL count=" + input.getURLs().size());
         java.util.ArrayList list = new java.util.ArrayList();
         list.add(input);
         list.add(input2);
