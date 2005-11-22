@@ -18,27 +18,22 @@
 package org.apache.jmeter.testelement;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Paint;
+import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
-import org.jCharts.axisChart.AxisChart;
-import org.jCharts.chartData.AxisChartDataSet;
-import org.jCharts.chartData.DataSeries;
-import org.jCharts.properties.AxisProperties;
-import org.jCharts.properties.ChartProperties;
-import org.jCharts.properties.LegendProperties;
-import org.jCharts.properties.LineChartProperties;
+import org.apache.jmeter.report.DataSet;
+import org.apache.jmeter.visualizers.LineGraph;
+import org.apache.jmeter.visualizers.SamplingStatCalculator;
 import org.jCharts.properties.PointChartProperties;
-import org.jCharts.types.ChartType;
 
-public class LineGraph extends AbstractChart {
+public class LineChart extends AbstractChart {
 
     public static final String REPORT_CHART_URLS = "ReportChart.chart.urls";
     public static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
@@ -50,7 +45,7 @@ public class LineGraph extends AbstractChart {
     
     protected int shape_counter = 0;
 
-	public LineGraph() {
+	public LineChart() {
 		super();
 	}
 
@@ -62,50 +57,54 @@ public class LineGraph extends AbstractChart {
         setProperty(REPORT_CHART_URLS,urls);
     }
     
-	public JComponent renderChart(List dataset) {
-        
-        return renderGraphics(null);
+    public double[][] convertToDouble(List data) {
+        SamplingStatCalculator stat;
+        String[] urls = this.getURLs().split(",");
+        double[][] dataset = new double[urls.length][data.size()];
+        for (int idx=0; idx < urls.length; idx++) {
+            for (int idz=0; idz < data.size(); idz++) {
+                DataSet dset = (DataSet)data.get(idz);
+                SamplingStatCalculator ss = dset.getStatistics(urls[idx]);
+                dataset[idx][idz] = getValue(ss);
+                System.out.println("value=" + dataset[idx][idz]);
+            }
+        }
+        return dataset;
+    }
+
+    public JComponent renderChart(List dataset) {
+        ArrayList dset = new ArrayList();
+        ArrayList xlabels = new ArrayList();
+        Iterator itr = dataset.iterator();
+        while (itr.hasNext()) {
+            DataSet item = (DataSet)itr.next();
+            if (item != null) {
+                // we add the entry
+                dset.add(item);
+                xlabels.add(item.getDataSource());
+            }
+        }
+        double[][] dbset = convertToDouble(dset);
+        return renderGraphics(dbset, (String[])xlabels.toArray(new String[xlabels.size()]));
 	}
 
-    public JComponent renderGraphics(double[][] data) {
-        String title = this.getTitle();
-        String xAxisTitle = this.getXAxis();
-        String yAxisTitle = this.getYAxis();
-        String yAxisLabel = this.getYLabel();
-        String[] xAxisLabels = {this.getXLabel() };
-        Graphics g;
-        JPanel panel = new JPanel();
-        
-        DataSeries dataSeries = new DataSeries( xAxisLabels, xAxisTitle, yAxisTitle, title );
-        
-        String[] legendLabels= { yAxisLabel };
-        Paint[] paints= new Paint[]{ Color.blue.darker() };
-        Shape[] shapes = createShapes(data.length);
-        Stroke[] lstrokes = createStrokes(data.length);
-        LineChartProperties lineChartProperties= new LineChartProperties(lstrokes,shapes);
-
-        try {
-            AxisChartDataSet axisChartDataSet= new AxisChartDataSet( data, 
-                    legendLabels, 
-                    paints, 
-                    ChartType.LINE, 
-                    lineChartProperties );
-            dataSeries.addIAxisPlotDataSet( axisChartDataSet );
-
-            ChartProperties chartProperties= new ChartProperties();
-            AxisProperties axisProperties= new AxisProperties();
-            LegendProperties legendProperties= new LegendProperties();
-
-            AxisChart axisChart = new AxisChart( dataSeries, 
-                    chartProperties, 
-                    axisProperties, 
-                    legendProperties, 
-                    width, 
-                    height );
-        } catch (Exception e) {
-            
-        }
-
+    public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {
+        LineGraph panel = new LineGraph();
+        panel.setTitle(this.getTitle());
+        panel.setData(data);
+        panel.setXAxisLabels(xAxisLabels);
+        panel.setYAxisLabels(this.getURLs().split(","));
+        panel.setXAxisTitle(this.getXAxis());
+        panel.setYAxisTitle(this.getYAxis());
+        // we should make this configurable eventually
+        int width = 400;
+        int height = 400;
+        panel.setPreferredSize(new Dimension(width,height));
+        panel.setSize(new Dimension(width,height));
+        panel.setWidth(width);
+        panel.setHeight(width);
+        setBufferedImage(new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB));
+        panel.paintComponent(this.getBufferedImage().createGraphics());
         return panel;
     }
     

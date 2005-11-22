@@ -61,7 +61,6 @@ public class BarChart extends AbstractChart {
         for (int idx=0; idx < data.size(); idx++) {
             SamplingStatCalculator stat = (SamplingStatCalculator)data.get(idx);
             dataset[0][idx] = getValue(stat);
-            // System.out.println("data=" + dataset[0][idx]);
         }
         return dataset;
     }
@@ -104,35 +103,4 @@ public class BarChart extends AbstractChart {
         return panel;
     }
     
-    /**
-     * convienance method for getting the selected value. Rather than use
-     * Method.invoke(Object,Object[]), it's simpler to just check which
-     * column is selected and call the method directly.
-     * @param stat
-     * @return
-     */
-    public double getValue(SamplingStatCalculator stat) {
-        if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_50_PERCENT)) {
-            return stat.getPercentPoint(.50).doubleValue();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_90_PERCENT)){
-            return stat.getPercentPoint(.90).doubleValue();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_ERROR_RATE)) {
-            return stat.getErrorPercentage();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MAX)) {
-            return stat.getMax().doubleValue();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MEAN)) {
-            return stat.getMean();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MEDIAN)) {
-            return stat.getMedian().doubleValue();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MIN)) {
-            return stat.getMin().doubleValue();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_RESPONSE_RATE)) {
-            return stat.getRate();
-        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_TRANSFER_RATE)) {
-            // return the pagesize divided by 1024 to get kilobytes
-            return stat.getPageSize()/1024;
-        } else {
-            return -1;
-        }
-    }
 }
