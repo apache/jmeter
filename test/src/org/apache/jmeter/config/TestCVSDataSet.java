@@ -24,6 +24,7 @@ package org.apache.jmeter.config;
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -39,6 +40,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     }
 
     public void tearDown() throws IOException{
+    	FileServer.getFileServer().closeFiles();
     }
     
     public void testopen() throws Exception {
