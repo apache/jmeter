@@ -1,6 +1,5 @@
 Which jars are used by which modules?
 Version: $Revision$ $Date$
-Version: $Revision$ $Date$
 
 avalon-framework-4.1.4
 - LogKit (used by HttpClient ?)
