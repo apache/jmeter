@@ -48,6 +48,14 @@ public interface DataSet extends Visualizer {
      */
     public String getDataSource();
     /**
+     * In some cases, we may want to return a string that isn't the full
+     * datasource string or something different. For example, we may
+     * want to return just the filename and not the absolutePath of
+     * a JTL file.
+     * @return
+     */
+    public String getDataSourceName();
+    /**
      * Set the timestamp using the first result from the datasource
      * @param stamp
      */
@@ -72,6 +80,16 @@ public interface DataSet extends Visualizer {
      * @return
      */
     public Date getDate();
+    /**
+     * convienance method for getting the date in mmdd format
+     * @return
+     */
+    public String getMonthDayDate();
+    /**
+     * convienant method for getting the date in yyyymmdd format
+     * @return
+     */
+    public String getMonthDayYearDate();
     /**
      * Classes implementing the method should return the URL's in the 
      * DataSet. It is up to the class to return Strings or URL.
