@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -231,7 +232,9 @@ public final class AllTests {
 				props.load(new FileInputStream(args[1]));
 				LoggingManager.initializeLogging(props);
 			} catch (FileNotFoundException e) {
+				System.out.println(e.getLocalizedMessage());
 			} catch (IOException e) {
+				System.out.println(e.getLocalizedMessage());
 			}
 		}
 	}
@@ -276,9 +279,14 @@ public final class AllTests {
 	 */
 	private static TestSuite suite(String searchPaths) {
 		TestSuite suite = new TestSuite();
+		int tests=0;
+		int suites=0;
 		try {
-			Iterator classes = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
-					new Class[] { TestCase.class }, true).iterator();
+			List classList = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
+					new Class[] { TestCase.class }, true);
+			int sz=classList.size();
+			System.out.println("ClassFinder found: "+sz+ " TestCase classes");
+			Iterator classes = classList.iterator();
 			while (classes.hasNext()) {
 				String name = (String) classes.next();
 				try {
@@ -297,6 +305,7 @@ public final class AllTests {
 					try {
 						Method m = clazz.getMethod("suite", new Class[0]);
 						t = (TestSuite) m.invoke(clazz, null);
+						suites++;
 					} catch (NoSuchMethodException e) {
 					} // this is not an error, the others are
 					// catch (SecurityException e) {}
@@ -308,6 +317,7 @@ public final class AllTests {
 						t = new TestSuite(clazz);
 					}
 
+					tests++;
 					suite.addTest(t);
 				} catch (Exception ex) {
 					System.out.println("Error adding test for class " + name + " " + ex.toString());
@@ -319,6 +329,7 @@ public final class AllTests {
 		} catch (ClassNotFoundException e) {
 			log.error("", e);
 		}
+		System.out.println("Created: "+tests+" tests including "+suites+" suites");
 		return suite;
 	}
 }
