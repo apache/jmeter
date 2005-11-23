@@ -70,8 +70,8 @@ public class BarChartTest extends JMeterTestCase {
         bchart.setName("Sample");
         bchart.setYAxis("milliseconds");
         bchart.setYLabel("Test Runs");
-        bchart.setXAxis(AbstractTable.REPORT_TABLE_MEAN);
-        bchart.setXLabel("x label");
+        bchart.setXAxis(AbstractTable.REPORT_TABLE_90_PERCENT);
+        bchart.setXLabel(AbstractChart.X_DATA_DATE_LABEL);
         bchart.setURL("jakarta_home");
         JComponent gr = bchart.renderChart(list);
         assertNotNull(gr);

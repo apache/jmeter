@@ -39,7 +39,7 @@ public class LineGraphTest extends JMeterTestCase {
 		super(arg0);
 	}
 
-    public void testGenerateBarChart() {
+    public void testGenerateLineChart() {
         log.info("jtl version=" + JMeterUtils.getProperty("file_format.testlog"));
         // String sampleLog = "C:/eclipse3/workspace/jmeter-21/bin/testfiles/sample_log1.jtl";
         String sampleLog = "testfiles/sample_log1.jtl";
@@ -70,8 +70,8 @@ public class LineGraphTest extends JMeterTestCase {
         lgraph.setName("Sample");
         lgraph.setYAxis("milliseconds");
         lgraph.setYLabel("Test Runs");
-        lgraph.setXAxis(AbstractTable.REPORT_TABLE_MEAN);
-        lgraph.setXLabel("x label");
+        lgraph.setXAxis(AbstractTable.REPORT_TABLE_MAX);
+        lgraph.setXLabel(AbstractChart.X_DATA_FILENAME_LABEL);
         lgraph.setURLs("jakarta_home,jmeter_home");
         JComponent gr = lgraph.renderChart(list);
         assertNotNull(gr);
