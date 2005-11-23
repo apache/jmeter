@@ -34,6 +34,7 @@ import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.DataSeries;
 import org.jCharts.properties.AxisProperties;
 import org.jCharts.properties.ChartProperties;
+import org.jCharts.properties.DataAxisProperties;
 import org.jCharts.properties.LegendProperties;
 import org.jCharts.properties.LineChartProperties;
 import org.jCharts.properties.PointChartProperties;
@@ -55,7 +56,17 @@ public class LineGraph extends JPanel {
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
             PointChartProperties.SHAPE_TRIANGLE};
 
+    /**
+     * 12 basic colors for line graphs. If we need more colors than this,
+     * we can add more. Though more than 12 lines per graph will look 
+     * rather busy and be hard to read.
+     */
+    public static final Paint[] PAINT_ARRAY = {Color.BLACK,
+            Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
+            Color.RED,Color.YELLOW,Color.DARK_GRAY,Color.GRAY,Color.LIGHT_GRAY,
+            Color.PINK,Color.CYAN};
     protected int shape_counter = 0;
+    protected int paint_counter = -1;
 
     /**
 	 * 
@@ -112,6 +123,8 @@ public class LineGraph extends JPanel {
     }
     
     public void paintComponent(Graphics g) {
+        // reset the paint counter
+        this.paint_counter = -1;
         if (data != null && this.title != null && this.xAxisLabels != null &&
                 this.xAxisTitle != null && this.yAxisLabel != null &&
                 this.yAxisTitle != null) {
@@ -131,9 +144,8 @@ public class LineGraph extends JPanel {
             }
             this.setPreferredSize(new Dimension(width,height));
             DataSeries dataSeries = new DataSeries( xAxisLabels, xAxisTitle, yAxisTitle, title );
-            
             String[] legendLabels= yAxisLabel;
-            Paint[] paints= this.createPaint(data.length);
+            Paint[] paints = this.createPaint(data.length);
             Shape[] shapes = createShapes(data.length);
             Stroke[] lstrokes = createStrokes(data.length);
             LineChartProperties lineChartProperties= new LineChartProperties(lstrokes,shapes);
@@ -146,7 +158,12 @@ public class LineGraph extends JPanel {
 
             ChartProperties chartProperties = new ChartProperties();
             AxisProperties axisProperties = new AxisProperties();
+            // show the grid lines, to turn it off, set it to zero
+            axisProperties.getYAxisProperties().setShowGridLines(1);
             axisProperties.setXAxisLabelsAreVertical(true);
+            // set the Y Axis to round
+            DataAxisProperties daxp = (DataAxisProperties)axisProperties.getYAxisProperties();
+            daxp.setRoundToNearest(1);
             LegendProperties legendProperties = new LegendProperties();
             AxisChart axisChart = new AxisChart( 
                     dataSeries, chartProperties, axisProperties, 
@@ -177,6 +194,7 @@ public class LineGraph extends JPanel {
      * @return
      */
     public Shape nextShape() {
+        this.shape_counter++;
         if (shape_counter >= (SHAPE_ARRAY.length - 1)) {
             shape_counter = 0;
         }
@@ -196,20 +214,41 @@ public class LineGraph extends JPanel {
         return str;
     }
     
+    /**
+     * method always return a new BasicStroke with 1.0f weight
+     * @return
+     */
     public Stroke nextStroke() {
-        return new BasicStroke(1.5f);
+        return new BasicStroke(1.0f);
     }
     
+    /**
+     * return an array of Paint with different colors. The current
+     * implementation will cycle through 12 colors if a line graph
+     * has more than 12 entries
+     * @param count
+     * @return
+     */
     public Paint[] createPaint(int count) {
         Paint[] pts = new Paint[count];
         for (int idx=0; idx < count; idx++) {
-            pts[idx] = nextPain();
+            pts[idx] = nextPaint();
         }
         return pts;
     }
     
-    public Paint nextPain() {
-        Paint p = Color.blue;
-        return p;
+    /**
+     * The method will return the next paint color in the PAINT_ARRAY.
+     * Rather than return a random color, we want it to always go through
+     * the same sequence. This way, the same charts will always use the
+     * same color and make it easier to compare side by side.
+     * @return
+     */
+    public Paint nextPaint() {
+        this.paint_counter++;
+        if (this.paint_counter == (PAINT_ARRAY.length - 1)) {
+            this.paint_counter = 0;
+        }
+        return PAINT_ARRAY[this.paint_counter];
     }
 }
