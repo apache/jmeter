@@ -75,7 +75,11 @@ public class BarChart extends AbstractChart {
             if (ss != null) {
                 // we add the entry
                 dset.add(ss);
-                xlabels.add(item.getDataSource());
+                if ( getXLabel().equals(X_DATA_FILENAME_LABEL) ) {
+                    xlabels.add(item.getDataSourceName());
+                } else {
+                    xlabels.add(item.getMonthDayYearDate());
+                }
             }
         }
         double[][] dbset = convertToDouble(dset);
@@ -89,11 +93,11 @@ public class BarChart extends AbstractChart {
         panel.setData(data);
         panel.setXAxisLabels(xAxisLabels);
         panel.setYAxisLabels(this.getYLabel());
-        panel.setXAxisTitle(this.getXAxis());
+        panel.setXAxisTitle(this.getFormattedXAxis());
         panel.setYAxisTitle(this.getYAxis());
         // we should make this configurable eventually
-        int width = 400;
-        int height = 400;
+        int width = getWidth();
+        int height = getHeight();
         panel.setPreferredSize(new Dimension(width,height));
         panel.setSize(new Dimension(width,height));
         panel.setWidth(width);

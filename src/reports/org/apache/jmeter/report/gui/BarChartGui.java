@@ -28,6 +28,7 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.testelement.AbstractChart;
 import org.apache.jmeter.testelement.AbstractTable;
 import org.apache.jmeter.testelement.BarChart;
 import org.apache.jmeter.testelement.TestElement;
@@ -37,8 +38,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 public class BarChartGui extends AbstractReportGui {
 
-    private JLabeledTextField xAxisLabel = 
-        new JLabeledTextField(JMeterUtils.getResString("report_chart_x_axis_label"));
+    private JLabeledChoice xAxisLabel = new JLabeledChoice();
     
     private JLabeledTextField yAxisLabel = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
@@ -91,7 +91,15 @@ public class BarChartGui extends AbstractReportGui {
         xpanel.add(xLabel);
         xpanel.add(xItems);
         options.add(xpanel);
-        options.add(xAxisLabel);
+
+        JLabel xALabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis_label"));
+        HorizontalPanel xApanel = new HorizontalPanel(Color.white);
+        xALabel.setBorder(new EmptyBorder(5,2,5,2));
+        xAxisLabel.setBackground(Color.white);
+        xAxisLabel.setValues(AbstractChart.X_LABELS);
+        xApanel.add(xALabel);
+        xApanel.add(xAxisLabel);
+        options.add(xApanel);
         
 		JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
 		HorizontalPanel ypanel = new HorizontalPanel(Color.white);

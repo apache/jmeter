@@ -17,9 +17,11 @@
  */
 package org.apache.jmeter.testelement;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,6 +50,7 @@ public class JTLData implements Serializable, DataSet {
     protected String jtl_file = null;
     protected long startTimestamp = 0;
     protected long endTimestamp = 0;
+    protected File inputFile = null;
     
 	/**
 	 * 
@@ -101,6 +104,13 @@ public class JTLData implements Serializable, DataSet {
         return this.jtl_file;
     }
     
+    public String getDataSourceName() {
+        if (inputFile == null) {
+            inputFile = new File(getDataSource());
+        }
+        return inputFile.getName().substring(0,inputFile.getName().length() - 4);
+    }
+    
     public void setStartTimestamp(long stamp) {
         this.startTimestamp = stamp;
     }
@@ -128,6 +138,21 @@ public class JTLData implements Serializable, DataSet {
         return new Date(this.startTimestamp);
     }
     
+    public String getMonthDayDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(this.startTimestamp);
+        return String.valueOf(cal.get(Calendar.MONTH)) + " - " + 
+        String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+    }
+    
+    public String getMonthDayYearDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(this.startTimestamp);
+        return String.valueOf(cal.get(Calendar.MONTH)) + " - " + 
+            String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) + " - " +
+            String.valueOf(cal.get(Calendar.YEAR));
+    }
+
     /**
      * The method will SamplingStatCalculator for the given URL. If the URL
      * doesn't exist, the method returns null.
@@ -173,9 +198,9 @@ public class JTLData implements Serializable, DataSet {
      */
     public void add(SampleResult sample) {
         if (data.size() == 0) {
-            this.startTimestamp = sample.getStartTime();
+            this.startTimestamp = sample.getTimeStamp();
         } else {
-            this.endTimestamp = sample.getEndTime();
+            this.endTimestamp = sample.getTimeStamp() + sample.getTime();
         }
         // now add the samples to the HashMap
         String url = sample.getSampleLabel();

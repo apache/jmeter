@@ -34,15 +34,15 @@ public abstract class AbstractTable extends AbstractTestElement
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static final String REPORT_TABLE_MEAN = "ReportTable.mean";
-    public static final String REPORT_TABLE_MEDIAN = "ReportTable.median";
-    public static final String REPORT_TABLE_MAX = "ReportTable.max";
-    public static final String REPORT_TABLE_MIN = "ReportTable.min";
-    public static final String REPORT_TABLE_RESPONSE_RATE = "ReportTable.response.rate";
-    public static final String REPORT_TABLE_TRANSFER_RATE = "ReportTable.transfer.rate";
-    public static final String REPORT_TABLE_50_PERCENT = "ReportTable.50.percent";
-    public static final String REPORT_TABLE_90_PERCENT = "ReportTable.90.percent";
-    public static final String REPORT_TABLE_ERROR_RATE = "ReportTable.error.rate";
+    public static final String REPORT_TABLE_MEAN = "ReportTable.Mean";
+    public static final String REPORT_TABLE_MEDIAN = "ReportTable.Median";
+    public static final String REPORT_TABLE_MAX = "ReportTable.Max";
+    public static final String REPORT_TABLE_MIN = "ReportTable.Min";
+    public static final String REPORT_TABLE_RESPONSE_RATE = "ReportTable.Response_rate";
+    public static final String REPORT_TABLE_TRANSFER_RATE = "ReportTable.Transfer_rate";
+    public static final String REPORT_TABLE_50_PERCENT = "ReportTable.50_percent";
+    public static final String REPORT_TABLE_90_PERCENT = "ReportTable.90_percent";
+    public static final String REPORT_TABLE_ERROR_RATE = "ReportTable.Error.rate";
     public static final String[] items = {
     	REPORT_TABLE_MEAN, REPORT_TABLE_MEDIAN, REPORT_TABLE_MAX, REPORT_TABLE_MIN,
     	REPORT_TABLE_RESPONSE_RATE, REPORT_TABLE_TRANSFER_RATE, REPORT_TABLE_50_PERCENT,

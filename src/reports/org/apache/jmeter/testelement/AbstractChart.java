@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 
 import org.apache.jmeter.report.ReportChart;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * The general idea of the chart graphs information for a table.
@@ -40,9 +41,15 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     public static final String REPORT_CHART_Y_LABEL = "ReportChart.chart.y.label";
     public static final String REPORT_CHART_TITLE = "ReportChart.chart.title";
     public static final String REPORT_CHART_CAPTION = "ReportChart.chart.caption";
+    public static final String REPORT_CHART_WIDTH = "ReportChart.chart.width";
+    public static final String REPORT_CHART_HEIGHT = "ReportChart.chart.height";
     
-    public static final int DEFAULT_WIDTH = 300;
-    public static final int DEFAULT_HEIGHT = 250;
+    public static final int DEFAULT_WIDTH = 350;
+    public static final int DEFAULT_HEIGHT = 350;
+    
+    public static final String X_DATA_FILENAME_LABEL = "Filename";
+    public static final String X_DATA_DATE_LABEL = "Date";
+    public static final String[] X_LABELS = { X_DATA_FILENAME_LABEL, X_DATA_DATE_LABEL };
     protected BufferedImage image = null;
 
     public AbstractChart() {
@@ -53,6 +60,14 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     	return getPropertyAsString(REPORT_CHART_X_AXIS);
     }
     
+    public String getFormattedXAxis() {
+        String text = getXAxis();
+        if (text.indexOf('.') > -1) {
+            text = text.substring(text.indexOf('.') + 1);
+            text = JOrphanUtils.replaceAllChars(text,'_'," ");
+        }
+        return text;
+    }
     public void setXAxis(String field) {
     	setProperty(REPORT_CHART_X_AXIS,field);
     }
@@ -69,6 +84,11 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     	return getPropertyAsString(REPORT_CHART_X_LABEL);
     }
     
+    /**
+     * The X data labels should be either the filename, date or some
+     * other series of values
+     * @param label
+     */
     public void setXLabel(String label) {
     	setProperty(REPORT_CHART_X_LABEL,label);
     }
@@ -117,6 +137,48 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      */
     public void setCaption(String caption) {
         setProperty(REPORT_CHART_CAPTION,caption);
+    }
+    
+    /**
+     * if no width is set, the default is returned
+     * @return
+     */
+    public int getWidth() {
+        int w = getPropertyAsInt(REPORT_CHART_WIDTH);
+        if (w <= 0) {
+            return DEFAULT_WIDTH;
+        } else {
+            return w;
+        }
+    }
+    
+    /**
+     * set the width of the graph
+     * @param width
+     */
+    public void setWidth(String width) {
+        setProperty(REPORT_CHART_WIDTH,String.valueOf(width));
+    }
+    
+    /**
+     * if the height is not set, the default is returned
+     * @return
+     */
+    public int getHeight() {
+        int h = getPropertyAsInt(REPORT_CHART_HEIGHT); 
+        if (h <= 0) {
+            return DEFAULT_HEIGHT;
+        } else {
+            return h;
+        }
+    }
+
+    /**
+     * set the height of the graph
+     * @param height
+     */
+    public void setHeight(String height) {
+        setProperty(REPORT_CHART_HEIGHT,String.valueOf(height));
     }
     
     /**
@@ -172,7 +234,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
             // return the pagesize divided by 1024 to get kilobytes
             return stat.getPageSize()/1024;
         } else {
-            return -1;
+            return Double.NaN;
         }
     }
 }
