@@ -557,6 +557,7 @@
         <pathelement location="${build.mail}"/>
         <pathelement location="${build.monitor.components}"/>
         <pathelement location="${build.monitor.model}"/>
+        <pathelement location="${build.report}"/>
         <pathelement location="${build.tcp}"/>
         <path refid="classpath"/>
       </classpath>
