@@ -863,8 +863,13 @@ public class JMeterUtils implements UnitTestManager {
 			errorMsg = "Unknown error - see log file";
 			log.warn("Unknown error", new Throwable("errorMsg == null"));
 		}
+		GuiPackage instance = GuiPackage.getInstance();
+		if (instance == null) {
+			System.out.println(errorMsg);
+			return; // Done
+		}
 		try {
-			JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), errorMsg, "Error",
+			JOptionPane.showMessageDialog(instance.getMainFrame(), errorMsg, "Error",
 					JOptionPane.ERROR_MESSAGE);
 		} catch (RuntimeException e) {
 			if (e.getClass().getName().equals("java.awt.HeadlessException")) // JDK1.4:
