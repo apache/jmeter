@@ -68,7 +68,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	 */
 	private final static int MATCH = 1 << 0;
 
-	private final static int CONTAINS = 1 << 1;
+	final static int CONTAINS = 1 << 1;
 
 	private final static int NOT = 1 << 2;
 
@@ -261,7 +261,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	 *            an instance of SampleResult
 	 * @return an instance of AssertionResult
 	 */
-	private AssertionResult evaluateResponse(SampleResult response) {
+	AssertionResult evaluateResponse(SampleResult response) {
 		boolean pass = true;
 		boolean not = (NOT & getTestType()) > 0;
 		AssertionResult result = new AssertionResult();
@@ -368,58 +368,5 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		}
 
 		return "Test failed, " + what + text + "/" + stringPattern + "/";
-	}
-
-	public static class Test extends junit.framework.TestCase {
-		int threadsRunning;
-
-		int failed;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testThreadSafety() throws Exception {
-			Thread[] threads = new Thread[100];
-			for (int i = 0; i < threads.length; i++) {
-				threads[i] = new TestThread();
-			}
-			failed = 0;
-			for (int i = 0; i < threads.length; i++) {
-				threads[i].start();
-				threadsRunning++;
-			}
-			synchronized (this) {
-				while (threadsRunning > 0) {
-					wait();
-				}
-			}
-			assertEquals(failed, 0);
-		}
-
-		class TestThread extends Thread {
-			static final String TEST_STRING = "DAbale arroz a la zorra el abad.";
-
-			// Used to be 'dábale', but caused trouble on Gump. Reasons
-			// unknown.
-			static final String TEST_PATTERN = ".*A.*\\.";
-
-			public void run() {
-				ResponseAssertion assertion = new ResponseAssertion(RESPONSE_DATA, CONTAINS, TEST_PATTERN);
-				SampleResult response = new SampleResult();
-				response.setResponseData(TEST_STRING.getBytes());
-				for (int i = 0; i < 100; i++) {
-					AssertionResult result;
-					result = assertion.evaluateResponse(response);
-					if (result.isFailure() || result.isError()) {
-						failed++;
-					}
-				}
-				synchronized (Test.this) {
-					threadsRunning--;
-					Test.this.notifyAll();
-				}
-			}
-		}
 	}
 }
