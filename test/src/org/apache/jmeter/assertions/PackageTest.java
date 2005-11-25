@@ -86,9 +86,9 @@ public class PackageTest extends TestCase {
 					failed++;
 				}
 			}
-			synchronized (this) {
+			synchronized (PackageTest.this) {
 				threadsRunning--;
-				this.notifyAll();
+				PackageTest.this.notifyAll();
 			}
 		}
 	}
