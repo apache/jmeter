@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +16,6 @@
  */
 
 package org.apache.jmeter.util;
-
-import junit.framework.TestCase;
 
 /**
  * @version $Revision$
@@ -43,31 +40,4 @@ public final class StringUtilities {
 	private StringUtilities() {
 	}
 
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testSub1() throws Exception {
-			String input = "http://jakarta.apache.org/jmeter/index.html";
-			String pattern = "jakarta.apache.org";
-			String sub = "${server}";
-			assertEquals("http://${server}/jmeter/index.html", StringUtilities.substitute(input, pattern, sub));
-		}
-
-		public void testSub2() throws Exception {
-			String input = "arg1=param1;param1";
-			String pattern = "param1";
-			String sub = "${value}";
-			assertEquals("arg1=${value};${value}", StringUtilities.substitute(input, pattern, sub));
-		}
-
-		public void testSub3() throws Exception {
-			String input = "jakarta.apache.org";
-			String pattern = "jakarta.apache.org";
-			String sub = "${server}";
-			assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
-		}
-
-	}
 }
