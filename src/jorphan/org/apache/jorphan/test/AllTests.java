@@ -279,6 +279,7 @@ public final class AllTests {
 	 */
 	private static TestSuite suite(String searchPaths) {
 		TestSuite suite = new TestSuite();
+        System.out.println("Scanning "+searchPaths+ " for test cases");
 		int tests=0;
 		int suites=0;
 		try {
