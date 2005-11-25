@@ -81,8 +81,9 @@ public class JavaScript extends AbstractFunction implements Serializable {
 			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
 
 			resultStr = Context.toString(result);
-			if (varName != null)
+			if (varName != null && vars != null) {// vars can be null if run from TestPlan
 				vars.put(varName, resultStr);
+            }
 
 		} catch (WrappedException e) {
 			log.error("Error processing Javascript", e);
