@@ -40,6 +40,7 @@ import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.collections.SearchByClass;
@@ -302,7 +303,13 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 			serialized = true;
 		}
         JMeterContextService.startTest();
-		compileTree();
+        try {
+        	compileTree();
+	    } catch (RuntimeException e) {
+	    	log.error("Error occurred compiling the tree:",e);
+	    	JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file");
+	    	return; // no point continuing
+        }
 		/**
 		 * Notification of test listeners needs to happen after function
 		 * replacement, but before setting RunningVersion to true.
