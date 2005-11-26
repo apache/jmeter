@@ -283,9 +283,11 @@ public final class AllTests {
 		int tests=0;
 		int suites=0;
 		try {
+            log.info("ClassFinder(TestCase)");
 			List classList = ClassFinder.findClassesThatExtend(JOrphanUtils.split(searchPaths, ","),
 					new Class[] { TestCase.class }, true);
 			int sz=classList.size();
+            log.info("ClassFinder(TestCase) found: "+sz+ " TestCase classes");
 			System.out.println("ClassFinder found: "+sz+ " TestCase classes");
 			Iterator classes = classList.iterator();
 			while (classes.hasNext()) {
