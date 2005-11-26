@@ -326,6 +326,8 @@ public final class JOrphanUtils {
 
     /**
      * Version of String.replaceAll() for JDK1.3
+     * @see org.apache.jmeter.util.StringUtilities.replace() 
+     * for another version which replaces strings rather than chars
      * 
      * @param source
      *            input string
