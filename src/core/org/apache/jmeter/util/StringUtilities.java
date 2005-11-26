@@ -21,23 +21,34 @@ package org.apache.jmeter.util;
  * @version $Revision$
  */
 public final class StringUtilities {
-	public static String substitute(String input, String pattern, String sub) {
-		StringBuffer ret = new StringBuffer();
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private StringUtilities() {
+    }
+
+    /**
+     * Replace all patterns in a String
+     * 
+     * @see String.replaceAll(regex,replacement) - JDK1.4 only
+     * 
+     * @param input - string to be transformed
+     * @param pattern - pattern to replace
+     * @param sub - replacement
+     * @return the updated string
+     */
+	public static String substitute(final String input, final String pattern, final String sub) {
+		StringBuffer ret = new StringBuffer(input.length());
 		int start = 0;
 		int index = -1;
+        final int length = pattern.length();
 		while ((index = input.indexOf(pattern, start)) >= start) {
 			ret.append(input.substring(start, index));
 			ret.append(sub);
-			start = index + pattern.length();
+            start = index + length;
 		}
 		ret.append(input.substring(start));
 		return ret.toString();
 	}
-
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private StringUtilities() {
-	}
-
 }
