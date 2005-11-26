@@ -55,4 +55,11 @@ public class PackageTest extends TestCase {
 		assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
 	}
 
+    public void testSub4() throws Exception {
+        String input = "//a///b////c";
+        String pattern = "//";
+        String sub = "/";
+        assertEquals("/a//b//c", StringUtilities.substitute(input, pattern, sub));
+    }
+
 }
