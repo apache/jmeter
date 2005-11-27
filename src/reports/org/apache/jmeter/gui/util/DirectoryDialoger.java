@@ -27,7 +27,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author Peter Lin
- * @version $Revision: 325542 $
+ * @version $Revision$
  */
 public final class DirectoryDialoger {
 	/**

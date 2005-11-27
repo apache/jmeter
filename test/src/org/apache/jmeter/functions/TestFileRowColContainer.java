@@ -25,7 +25,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
  * File data container for CSV (and similar delimited) files Data is accessible
  * via row and column number
  * 
- * @version $Revision: 325542 $
+ * @version $Revision$
  */
 public class TestFileRowColContainer {
 
