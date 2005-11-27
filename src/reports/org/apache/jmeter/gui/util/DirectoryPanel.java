@@ -37,7 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author Michael Stover Created April 18, 2002
- * @version $Revision: 325542 $ Last updated: $Date: 2005-07-12 16:51:09 -0400 (Tue, 12 Jul 2005) $
+ * @version $Revision$ Last updated: $Date$
  */
 public class DirectoryPanel extends HorizontalPanel implements ActionListener {
 	protected JTextField filename = new JTextField(20);
