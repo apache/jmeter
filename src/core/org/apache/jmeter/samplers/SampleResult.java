@@ -181,7 +181,7 @@ public class SampleResult implements Serializable {
 	 */
 	public SampleResult(SampleResult res) {
 		setStartTime(res.getStartTime());
-		setTime(0);
+		setElapsed(0);
 
 		setSampleLabel(res.getSampleLabel());
 		setRequestHeaders(res.getRequestHeaders());
@@ -270,9 +270,11 @@ public class SampleResult implements Serializable {
 
 	/**
 	 * Method to set the elapsed time for a sample. Retained for backward
-	 * compatibility with 3rd party add-ons It is assumed that the method is
-	 * called at the end of a sample
+	 * compatibility with 3rd party add-ons.
+     * It is assumed that the method is only called at the end of a sample
 	 * 
+     * Also used by SampleResultConverter when creating results from files.
+     * 
 	 * Must not be used in conjunction with sampleStart()/End()
 	 * 
 	 * @deprecated use sampleStart() and sampleEnd() instead
@@ -280,9 +282,13 @@ public class SampleResult implements Serializable {
 	 *            time in milliseconds
 	 */
 	public void setTime(long elapsed) {
-		long now = System.currentTimeMillis();
-		setTimes(now - elapsed, now);
+        setElapsed(elapsed);
 	}
+
+    private void setElapsed(long elapsed) {
+        long now = System.currentTimeMillis();
+        setTimes(now - elapsed, now);
+    }
 
 	public void setMarked(String filename) {
 		if (files == null) {
@@ -370,7 +376,7 @@ public class SampleResult implements Serializable {
 			subResults = new ArrayList();
 		}
 		subResults.add(subResult);
-		setTime(getTime() + subResult.getTime());
+		setElapsed(getTime() + subResult.getTime());
 		subResult.setParent(this);
 	}
 
@@ -752,11 +758,17 @@ public class SampleResult implements Serializable {
 		return latency;
 	}
 
+    /**
+     * Set the time to the first response
+     *
+     */
 	public void latencyEnd() {
 		latency = System.currentTimeMillis() - startTime - idleTime;
 	}
 
 	/**
+     * This is only intended for use by SampleResultConverter!
+     * 
 	 * @param latency
 	 *            The latency to set.
 	 */
@@ -765,6 +777,8 @@ public class SampleResult implements Serializable {
 	}
 
 	/**
+     * This is only intended for use by SampleResultConverter!
+     *
 	 * @param timeStamp
 	 *            The timeStamp to set.
 	 */
