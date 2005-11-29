@@ -1096,9 +1096,18 @@ some of its classes - at present JMeter can only run from jar files.
     <concat>
       <filelist dir="bin" files="jmeter-test.log" />
     </concat>
+  	<antcall target="gump-check"/>
   </target>
-  
-  <!-- Used by project jakarta-jmeter-javadoc -->
+
+	<target name="gump-check">
+	  	<!-- check if /usr and /x1 are the same -->
+	  	<checksum file="/usr/local/gump/public/workspace/jakarta-jmeter-21/lib/jorphan.jar" property="usrMD5"/>
+	  	<echo>usrMD5 = ${usrMD5}</echo>
+	  	<checksum        file="/x1/gump/public/workspace/jakarta-jmeter-21/lib/jorphan.jar" property="x1MD5"/>
+	  	<echo>x1MD5  = ${x1MD5}</echo>
+	</target>
+
+	<!-- Used by project jakarta-jmeter-javadoc -->
   <target name="gump-javadoc"
       depends="_gump_properties,docs-api"
       description="Create JMeter javadocs">
