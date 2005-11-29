@@ -530,7 +530,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     //contentLength > 0 ? contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
             byte[] buffer = new byte[4096];
             int len;
+            boolean first = true;// first response
             while ((len = instream.read(buffer)) > 0) {
+                if (first) { // save the latency
+                    res.latencyEnd();
+                    first = false;
+                }
                 outstream.write(buffer, 0, len);
             }
             outstream.close();
