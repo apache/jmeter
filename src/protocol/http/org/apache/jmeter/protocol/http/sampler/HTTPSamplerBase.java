@@ -155,6 +155,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
 
+    protected static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
+
     ////////////////////// Variables //////////////////////
     
     private boolean dynamicPath = false;// Set false if spaces are already encoded
