@@ -35,7 +35,6 @@ import org.apache.jmeter.config.Arguments;
 
 public class PostWriterTest extends TestCase {
     
-    // TODO: put PostWriter.CRLF public an use it instead of this one
     private final static byte[] CRLF = { 0x0d, 0x0A };
     
     private PostWriter postWriter;
