@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +21,9 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 /**
  * Packages information regarding the target of a sample event, such as the
  * result from that event and the thread group it ran in.
@@ -29,14 +31,18 @@ import java.net.UnknownHostException;
  * @version $Revision$
  */
 public class SampleEvent implements Serializable {
-	public static String HOSTNMAME;
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    public static final String HOSTNAME;
 
 	static {
+        String hn=null;
 		try {
-			HOSTNMAME = InetAddress.getLocalHost().getHostName();
+			hn = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+            log.error("Cannot obtain local host name "+e);
 		}
+        HOSTNAME=hn;
 	}
 
 	SampleResult result;
@@ -51,7 +57,7 @@ public class SampleEvent implements Serializable {
 	public SampleEvent(SampleResult result, String threadGroup) {
 		this.result = result;
 		this.threadGroup = threadGroup;
-		this.hostname = HOSTNMAME;
+		this.hostname = HOSTNAME;
 	}
 
 	public SampleResult getResult() {
