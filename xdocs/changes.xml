@@ -41,6 +41,7 @@ Users must explicitly check append in the sampler</li>
 <li>Enhanced the documentation for webservice sampler to explain how it works with CSVDataSet</li>
 <li>Enhanced the documentation for javascript function to explain escaping comma</li>
 <li>Allow CSV Data Set file names to be absolute</li>
+<li>Report Tree compiler errors better</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -56,6 +57,10 @@ Users must explicitly check append in the sampler</li>
 <li>Fixed resultcode attribute name</li>
 <li>Bug 36898 - apply encoding to RegexExtractor</li>
 <li>Add properties for saving subresults, assertions, latency, samplerData, responseHeaders, requestHeaders &amp; encoding</li>
+<li>Bug 37705 - Synch Timer now works OK after run is stopped</li>
+<li>Bug 37716 - Proxy request now handles file Post correctly</li>
+<li>HttpClient Sampler now saves latency</li>
+<li>Fix NPE when using JavaScript function on Test Plan</li>
 </ul>	
 	
 <h4>Other changes</h4>
