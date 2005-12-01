@@ -1384,28 +1384,29 @@ The internal viewing capabilities are described in the following subsections.</p
 	<br></br>
 
 </description>
-<component index="&sect-num;.3.1" name="Mailer Visualizer" screenshot="mailer_vis.png">
-<description><p>The mailer visualizer can be set up to send email if a test run receives too many
-failed responses from the server.</p></description>
 
-<properties>
-        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="From" required="Yes">Email address to send messages from.</property>
-        <property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
-        <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
-        server.</property>
-        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
-        <property name="Success Subject" required="No">Email subject line for success messages.</property>
-        <property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
-        email is sent.</property>
-        <property name="Success Limit" required="Yes">Once this number of successful responses are
-        received <strong>after previously reaching the failure limit</strong>, a success email
-        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
-        <property name="Test Mail" required="No"></property>
-        <property name="Failures" required="No">A field that keeps a running total of number
-        of failures so far received.</property>
-</properties>
+<component index="&sect-num;.3.1" name="Sample Result Configuration" screenshot="sample_result_config.png">
+<description>
+<p>
+Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below
+</p>
+<p>Meaning of the sample attributes in the log files:</p>
+<ul>
+<li> t - elapsed time (ms)</li>
+<li>lt - latency = time to initial response (ms)</li>
+<li>ts - timestamp (ms since 1970)</li>
+<li> s - successful (true/false)</li>
+<li>lb - label</li>
+<li>rc - response code (e.g. 200)</li>
+<li>rm - response message (e.g. OK)</li>
+<li>tn - thread name</li>
+<li>dt - data type</li>
+<li>de - data encoding</li>
+</ul>
+</description>
 </component>
+
+
 
 <component index="&sect-num;.3.2" name="Graph Full Results" screenshot="graphfullresults.png">
 <description>No Description</description>
@@ -1535,6 +1536,29 @@ know for sure is to use a profiling tool.</p>
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file. By default, the aggregate graph will generate a bar chart
 450 x 250 pixels.</description>
+</component>
+
+<component index="&sect-num;.3.13" name="Mailer Visualizer" screenshot="mailer_vis.png">
+<description><p>The mailer visualizer can be set up to send email if a test run receives too many
+failed responses from the server.</p></description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+        <property name="From" required="Yes">Email address to send messages from.</property>
+        <property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
+        <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
+        server.</property>
+        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
+        <property name="Success Subject" required="No">Email subject line for success messages.</property>
+        <property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
+        email is sent.</property>
+        <property name="Success Limit" required="Yes">Once this number of successful responses are
+        received <strong>after previously reaching the failure limit</strong>, a success email
+        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
+        <property name="Test Mail" required="No"></property>
+        <property name="Failures" required="No">A field that keeps a running total of number
+        of failures so far received.</property>
+</properties>
 </component>
 
 </section>
