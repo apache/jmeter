@@ -237,7 +237,7 @@ public final class ClassFinder {
             return System.getProperty("user.dir"); // $NON-NLS-1$
         }
         path = path.trim().replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
-        path = JOrphanUtils.replaceAllString(path, "//", "/"); // $NON-NLS-1$// $NON-NLS-2$
+        path = JOrphanUtils.substitute(path, "//", "/"); // $NON-NLS-1$// $NON-NLS-2$
 
         while (path.endsWith("/")) { // $NON-NLS-1$
             path = path.substring(0, path.length() - 1);
