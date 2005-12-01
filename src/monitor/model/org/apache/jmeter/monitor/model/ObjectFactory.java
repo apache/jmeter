@@ -88,7 +88,7 @@ public class ObjectFactory {
 		return new WorkersImpl();
 	}
 
-	protected class MonitorParser extends ParserImpl {
+	protected static class MonitorParser extends ParserImpl {
 		public MonitorParser(ObjectFactory factory) {
 			super(factory);
 		}

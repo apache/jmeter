@@ -408,7 +408,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener, Fo
 	/**
 	 * @version $Revision$
 	 */
-	private class InnerTableModel extends AbstractTableModel {
+	private static class InnerTableModel extends AbstractTableModel {
 		HeaderManager manager;
 
 		public InnerTableModel(HeaderManager man) {

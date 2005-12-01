@@ -271,7 +271,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	/**
 	 * @version $Revision$
 	 */
-	private class InnerTableModel extends AbstractTableModel {
+	private static class InnerTableModel extends AbstractTableModel {
 		AuthManager manager;
 
 		public InnerTableModel(AuthManager man) {
@@ -352,7 +352,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	/**
 	 * @version $Revision$
 	 */
-	private class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
+	private static class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
 		private Border myBorder;
 
 		public PasswordCellRenderer() {

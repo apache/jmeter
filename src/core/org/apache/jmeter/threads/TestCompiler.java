@@ -268,7 +268,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 		}
 	}
 
-	private class ObjectPair // TODO - should this be static?
+	private static class ObjectPair
 	{
 		TestElement child, parent;
 
