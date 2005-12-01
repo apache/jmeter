@@ -59,6 +59,12 @@ public class TestHTMLParser extends JMeterTestCase {
             parserName = parser;
         }
 
+        private static class StaticTestClass // Can't instantiate
+        {
+            private StaticTestClass() {
+            };
+        }
+
         private class TestClass // Can't instantiate
         {
             private TestClass() {
@@ -129,6 +135,7 @@ public class TestHTMLParser extends JMeterTestCase {
             suite.addTest(new TestHTMLParser("testParserMissing"));
             suite.addTest(new TestHTMLParser("testNotParser"));
             suite.addTest(new TestHTMLParser("testNotCreatable"));
+            suite.addTest(new TestHTMLParser("testNotCreatableStatic"));
             for (int i = 0; i < PARSERS.length; i++) {
                 TestSuite ps = new TestSuite(PARSERS[i]);// Identify the
                                                             // subtests
@@ -165,6 +172,7 @@ public class TestHTMLParser extends JMeterTestCase {
         public void testParserMissing() throws Exception {
             try {
                 HTMLParser.getParser("no.such.parser");
+                fail("Should not have been able to create the parser");
             } catch (HTMLParseError e) {
                 if (e.getCause() instanceof ClassNotFoundException) {
                     // This is OK
@@ -177,6 +185,7 @@ public class TestHTMLParser extends JMeterTestCase {
         public void testNotParser() throws Exception {
             try {
                 HTMLParser.getParser("java.lang.String");
+                fail("Should not have been able to create the parser");
             } catch (HTMLParseError e) {
                 if (e.getCause() instanceof ClassCastException)
                     return;
@@ -187,8 +196,20 @@ public class TestHTMLParser extends JMeterTestCase {
         public void testNotCreatable() throws Exception {
             try {
                 HTMLParser.getParser(TestClass.class.getName());
+                fail("Should not have been able to create the parser");
             } catch (HTMLParseError e) {
                 if (e.getCause() instanceof InstantiationException)
+                    return;
+                throw e;
+            }
+        }
+
+        public void testNotCreatableStatic() throws Exception {
+            try {
+                HTMLParser.getParser(StaticTestClass.class.getName());
+                fail("Should not have been able to create the parser");
+            } catch (HTMLParseError e) {
+                if (e.getCause() instanceof ClassCastException)
                     return;
                 throw e;
             }
