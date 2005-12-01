@@ -641,7 +641,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		return resultsPane;
 	}
 
-	private class ResultsNodeRenderer extends DefaultTreeCellRenderer {
+	private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
 				boolean leaf, int row, boolean focus) {
 			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
@@ -688,7 +688,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	 * nodes in the tree using TreePath.
 	 * 
 	 */
-	private class DOMTreePanel extends JPanel {
+	private static class DOMTreePanel extends JPanel {
 
 		private JTree domJTree;
 
@@ -739,7 +739,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		 * automatically wrap line for each 100 characters since tool tip
 		 * support html. author <a href="mailto:d.maung@mdl.com">Dave Maung</a>
 		 */
-		private class DomTreeRenderer extends DefaultTreeCellRenderer {
+		private static class DomTreeRenderer extends DefaultTreeCellRenderer {
 			public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
 					boolean leaf, int row, boolean phasFocus) {
 				super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, phasFocus);
@@ -814,7 +814,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		return str.toString();
 	}
 
-	private class SAXErrorHandler implements ErrorHandler {
+	private static class SAXErrorHandler implements ErrorHandler {
 		private String msg;
 
 		private int messageType;

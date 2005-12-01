@@ -355,7 +355,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		threadGroup.decrNumberOfThreads();
 	}
 
-	private class Traverser implements HashTreeTraverser {
+	private static class Traverser implements HashTreeTraverser {
 		private boolean isStart = false;
 
 		private Traverser(boolean start) {

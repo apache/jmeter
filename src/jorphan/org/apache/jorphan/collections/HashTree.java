@@ -990,7 +990,7 @@ public class HashTree implements Serializable, Map {
 
 	protected Map data;
 
-	private class TreeSearcher implements HashTreeTraverser {
+	private static class TreeSearcher implements HashTreeTraverser {
 		Object target;
 
 		HashTree result;
@@ -1038,7 +1038,7 @@ public class HashTree implements Serializable, Map {
 		}
 	}
 
-	private class ConvertToString implements HashTreeTraverser {
+	private static class ConvertToString implements HashTreeTraverser {
 		StringBuffer string = new StringBuffer(getClass().getName() + "{");
 
 		StringBuffer spaces = new StringBuffer();
