@@ -360,7 +360,7 @@ public final class JOrphanUtils {
      * @param sub - replacement
      * @return the updated string
      */
-    public static String replaceAllString(final String input, final String pattern, final String sub) {
+    public static String substitute(final String input, final String pattern, final String sub) {
         StringBuffer ret = new StringBuffer(input.length());
         int start = 0;
         int index = -1;
