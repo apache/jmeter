@@ -205,7 +205,7 @@ public class PostWriterTest extends TestCase {
      * Mock an HttpURLConnection.
      * extends HttpURLConnection instead of just URLConnection because there is a cast in PostWriter.
      */
-    private class StubURLConnection extends HttpURLConnection {
+    private static class StubURLConnection extends HttpURLConnection {
         private OutputStream output = new ByteArrayOutputStream();
         private Map properties = new HashMap();
         

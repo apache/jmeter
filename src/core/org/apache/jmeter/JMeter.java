@@ -571,7 +571,7 @@ public class JMeter implements JMeterPlugin {
 	 * Listen to test and exit program after test completes, after a 5 second
 	 * delay to give listeners a chance to close out their files.
 	 */
-	private class ListenToTest implements TestListener, Runnable, Remoteable {
+	private static class ListenToTest implements TestListener, Runnable, Remoteable {
 		int started = 0;
 
 		private JMeter _parent;

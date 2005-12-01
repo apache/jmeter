@@ -459,7 +459,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * A window adapter used to detect when the main JMeter frame is being
 	 * closed.
 	 */
-	private class WindowHappenings extends WindowAdapter {
+	private static class WindowHappenings extends WindowAdapter {
 		/**
 		 * Called when the main JMeter frame is being closed. Sends a
 		 * notification so that JMeter can react appropriately.

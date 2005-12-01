@@ -175,7 +175,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 	/**
 	 * SAXErrorHandler class
 	 */
-	private class SAXErrorHandler implements ErrorHandler {
+	private static class SAXErrorHandler implements ErrorHandler {
 		private AssertionResult result;
 
 		public SAXErrorHandler(AssertionResult result) {
