@@ -55,7 +55,7 @@
 	 <menu name="Community">
 		<item name="Get Involved"        href="/site/getinvolved.html"/>
 		<item name="Mailing Lists"       href="/site/mail.html"/>
-		<item name="CVS Repositories"    href="/site/cvsindex.html"/>
+		<item name="SVN Repositories"    href="/site/cvsindex.html"/>
 	 </menu>
 	 </body>
 </project>
