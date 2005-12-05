@@ -211,6 +211,8 @@ public class TestHTMLParser extends JMeterTestCase {
             } catch (HTMLParseError e) {
                 if (e.getCause() instanceof ClassCastException)
                     return;
+                if (e.getCause() instanceof IllegalAccessException)
+                    return;
                 throw e;
             }
         }
