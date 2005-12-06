@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,9 +48,9 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class FileReporter extends JPanel {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	Hashtable data = new Hashtable();
+	private Hashtable data = new Hashtable();
 
 	/** initalize a file reporter from a file */
 	public void init(String file) throws IOException {
@@ -115,7 +114,7 @@ public class FileReporter extends JPanel {
 		JFrame f = new JFrame("Data File Report");
 
 		setLayout(new BorderLayout());
-		graphPanel gp = new graphPanel(data);
+		GraphPanel gp = new GraphPanel(data);
 
 		add(gp, "Center");
 		add(gp.getStats(), BorderLayout.EAST);
@@ -124,14 +123,13 @@ public class FileReporter extends JPanel {
 		f.getContentPane().add(this);
 		f.show();
 	}
-}
 
 /**
  * Graph panel generates all the panels for this reporter. Data is organized
  * based on thread name in a hashtable. The data itself is a Vector of Integer
  * objects
  */
-class graphPanel extends JPanel {
+private static class GraphPanel extends JPanel {
 	// boolean autoScale = true;
 	Hashtable data;
 
@@ -139,10 +137,10 @@ class graphPanel extends JPanel {
 
 	Vector colorList = new Vector();
 
-	public graphPanel() {
+	private GraphPanel() {
 	}
 
-	public graphPanel(Hashtable data) {
+	public GraphPanel(Hashtable data) {
 		this.data = data;
 		Enumeration e = data.keys();
 
@@ -377,4 +375,5 @@ class graphPanel extends JPanel {
 	public void paint(Graphics g) {
 		update(g);
 	}
+  }
 }
