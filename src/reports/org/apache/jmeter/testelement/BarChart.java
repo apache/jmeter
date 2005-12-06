@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -57,7 +56,7 @@ public class BarChart extends AbstractChart {
      */
     public double[][] convertToDouble(List data) {
         double[][] dataset = new double[1][data.size()];
-        Iterator itr = data.iterator();
+        //Iterator itr = data.iterator();
         for (int idx=0; idx < data.size(); idx++) {
             SamplingStatCalculator stat = (SamplingStatCalculator)data.get(idx);
             dataset[0][idx] = getValue(stat);
@@ -87,7 +86,6 @@ public class BarChart extends AbstractChart {
 	}
     
     public JComponent renderGraphics(double[][] data, String[] xAxisLabels) {
-        String title = this.getTitle();
         AxisGraph panel = new AxisGraph();
         panel.setTitle(this.getTitle());
         panel.setData(data);
