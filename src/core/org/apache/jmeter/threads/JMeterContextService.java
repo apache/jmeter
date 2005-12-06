@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +17,10 @@
 
 package org.apache.jmeter.threads;
 
-import java.io.Serializable;
-
 /**
- * @author Thad Smith
  * @version $Revision$
  */
-public final class JMeterContextService implements Serializable {
+public final class JMeterContextService {
 	static private ThreadLocal threadContext = new ThreadLocal() {
 		public Object initialValue() {
 			return new JMeterContext();
@@ -45,7 +41,7 @@ public final class JMeterContextService implements Serializable {
 		return (JMeterContext) threadContext.get();
 	}
 
-	static public void startTest() {
+	static public void startTest() {//TODO should this be synchronized?
 		if (testStart == 0) {
 			numberOfThreads = 0;
 			testStart = System.currentTimeMillis();
@@ -69,12 +65,12 @@ public final class JMeterContextService implements Serializable {
 		return numberOfThreads;
 	}
 
-	static public void endTest() {
+	static public void endTest() {//TODO should this be synchronized?
 		testStart = 0;
 		numberOfThreads = 0;
 	}
 
-	static public long getTestStartTime() {
+	static public long getTestStartTime() {// NOT USED
 		return testStart;
 	}
 
