@@ -250,8 +250,8 @@ public class JMeterTest extends JMeterTestCase {
 	}
 
 	public void checkGuiSet() throws Exception {
-		guiTitles.remove("Example Sampler");// We don't mind if this is left
-											// over
+		guiTitles.remove("Example Sampler");// We don't mind if this is left over
+		guiTitles.remove("Sample_Result_Configuration");// Ditto, not a sampler
 		assertEquals("Should not have any names left over", 0, scanprintMap(guiTitles, "GUI"));
 	}
 
