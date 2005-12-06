@@ -78,6 +78,8 @@ public class BarChartTest extends JMeterTestCase {
         SaveGraphicsService serv = new SaveGraphicsService();
         String filename = bchart.getTitle();
         filename = filename.replace(' ','_');
-        serv.saveJComponent("./testfiles/" + filename,SaveGraphicsService.PNG,gr);
+        if (!"true".equalsIgnoreCase(System.getProperty("java.awt.headless"))){
+            serv.saveJComponent("./testfiles/" + filename,SaveGraphicsService.PNG,gr);
+        }
     }
 }
