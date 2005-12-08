@@ -543,6 +543,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 				result.setResponseCodeOK();
 				result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
 			} else {
+				result.sampleEnd();
 				result.setSuccessful(false);
 				result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
 				result.setResponseCode("000");
