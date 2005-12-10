@@ -15,6 +15,7 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +27,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.ConnectMethod;
 import org.apache.commons.httpclient.DefaultMethodRetryHandler;
@@ -524,6 +526,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			// Request sent. Now get the response:
             InputStream instream = httpMethod.getResponseBodyAsStream();
             
+            if (ENCODING_GZIP.equals(httpMethod.getResponseHeader(TRANSFER_ENCODING))) {
+                instream = new GZIPInputStream(instream);
+            }
+
             //int contentLength = httpMethod.getResponseContentLength();Not visible ...
             //TODO size ouststream according to actual content length
             ByteArrayOutputStream outstream = new ByteArrayOutputStream(4*1024);
