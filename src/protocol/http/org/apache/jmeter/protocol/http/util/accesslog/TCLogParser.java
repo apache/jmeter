@@ -22,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -100,6 +102,11 @@ public class TCLogParser implements LogParser {
 	 */
 	protected Filter FILTER = null;
 
+    /**
+     * by default, we probably should decode the parameter values
+     */
+    protected boolean decode = true;
+    
 	// TODO downcase UPPER case variables
 
 	/**
@@ -116,6 +123,23 @@ public class TCLogParser implements LogParser {
 		setSourceFile(source);
 	}
 
+    /**
+     * by default decode is set to true. if the parameters shouldn't be
+     * decoded, call the method with false
+     * @param decodeparams
+     */
+    public void setDecodeParameterValues(boolean decodeparams) {
+        this.decode = decodeparams;
+    }
+    
+    /**
+     * decode the parameter values is to true by default
+     * @return
+     */
+    public boolean decodeParameterValue() {
+        return this.decode;
+    }
+    
 	/**
 	 * Calls this method to set whether or not to use the path in the log. We
 	 * may want to provide the ability to filter the log file later on. By
@@ -465,7 +489,15 @@ public class TCLogParser implements LogParser {
 		}
 		if (value == null) {
 			value = "";
-		}
+		} else {
+            if (decode) {
+                try {
+                    value = URLDecoder.decode(value,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    log.warn(e.getMessage());
+                }
+            }
+        }
 		return new NVPair(name.trim(), value.trim());
 	}
 
