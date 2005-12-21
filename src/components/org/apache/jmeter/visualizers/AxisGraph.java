@@ -23,16 +23,22 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Paint;
+import java.math.BigDecimal;
 
 import javax.swing.JPanel;
 
 import org.jCharts.axisChart.AxisChart;
+import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelPosition;
+import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelRenderer;
 import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.DataSeries;
 import org.jCharts.properties.AxisProperties;
 import org.jCharts.properties.BarChartProperties;
 import org.jCharts.properties.ChartProperties;
+import org.jCharts.properties.DataAxisProperties;
+import org.jCharts.properties.LabelAxisProperties;
 import org.jCharts.properties.LegendProperties;
+import org.jCharts.properties.PropertyException;
 import org.jCharts.types.ChartType;
 
 /**
@@ -109,9 +115,23 @@ public class AxisGraph extends JPanel {
                     this.yAxisTitle,this.data,this.width,this.height,g);
         }
     }
+
+    private double findMax(double data[][]) {
+        double max = 0;
+        max = data[0][0];
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                if (data[i][j] > max) {
+                    max = data[i][j];
+                }
+            }
+        }
+        return max;
+    }
     
     private void drawSample(String title, String[] xAxisLabels, String xAxisTitle,
             String yAxisTitle, double[][] data, int width, int height, Graphics g) {
+        double max = findMax(data);
         try {
             if (width == 0) {
                 width = 450;
@@ -123,17 +143,36 @@ public class AxisGraph extends JPanel {
             DataSeries dataSeries = new DataSeries( xAxisLabels, xAxisTitle, yAxisTitle, title );
             
             String[] legendLabels= { yAxisLabel };
-            Paint[] paints= new Paint[]{ Color.blue.darker() };
-            BarChartProperties barChartProperties = new BarChartProperties();
+            Paint[] paints= new Paint[] { Color.yellow };
+            BarChartProperties barChartProperties= new BarChartProperties();
+            ValueLabelRenderer valueLabelRenderer = new ValueLabelRenderer(false, false, true, 0);
+            valueLabelRenderer.setValueLabelPosition(ValueLabelPosition.AT_TOP);
+            valueLabelRenderer.useVerticalLabels(true);
+            barChartProperties.addPostRenderEventListener(valueLabelRenderer);
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
                         data, legendLabels, paints, ChartType.BAR, barChartProperties );
             dataSeries.addIAxisPlotDataSet( axisChartDataSet );
 
-            ChartProperties chartProperties = new ChartProperties();
-            AxisProperties axisProperties = new AxisProperties();
+            ChartProperties chartProperties= new ChartProperties();
+            LabelAxisProperties xaxis = new LabelAxisProperties();
+            DataAxisProperties yaxis = new DataAxisProperties();
+
+            try {
+                BigDecimal round = new BigDecimal(max / 1000d);
+                round = round.setScale(0, BigDecimal.ROUND_UP);
+                double topValue = round.doubleValue() * 1000;
+                yaxis.setUserDefinedScale(0, 500);
+                yaxis.setNumItems((int) (topValue / 500)+1);
+                yaxis.setShowGridLines(1);
+            } catch (PropertyException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            AxisProperties axisProperties= new AxisProperties(xaxis, yaxis);
             axisProperties.setXAxisLabelsAreVertical(true);
-            LegendProperties legendProperties = new LegendProperties();
+            LegendProperties legendProperties= new LegendProperties();
             AxisChart axisChart = new AxisChart( 
                     dataSeries, chartProperties, axisProperties, 
                     legendProperties, width, height );
