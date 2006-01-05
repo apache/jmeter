@@ -58,24 +58,9 @@
   be browsed starting from the file called index.html.
 
   If you have downloaded a nightly build, please cd to the jakarta-jmeter
-  directory and type "./build.sh" (Unix/Linux) or "build" (Windows). This
-  should compile the application and enable you to run jmeter from the /bin
+  directory and type "ant".
+  This should compile the application and enable you to run jmeter from the /bin
   directory.
-
-  Changes since 1.8
-  -----------------
-
-  - Bug Fix Release. Many bugs were fixed.
-  - Removed redundant "Root" node from test tree.
-  - Re-introduced Icons in test tree.
-  - Some re-organization of code to improve build process.
-  - View Results Tree has added option to view results as web document
-    (still buggy at this point).
-  - New Total line in Aggregate Listener (still buggy at this point).
-  - Improvements to ability to change JMeter's Locale settings.
-  - Improvements to SSL Manager.
-
-
 
   Licensing and legal issues
   --------------------------
