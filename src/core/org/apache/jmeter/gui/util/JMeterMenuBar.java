@@ -409,6 +409,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 	private void makeEditMenu() {
 		// EDIT MENU
 		editMenu = new JMenu(JMeterUtils.getResString("edit"));
+        editMenu.setMnemonic('E');
 		// From the Java Look and Feel Guidelines: If all items in a menu
 		// are disabled, then disable the menu. Makes sense.
 		editMenu.setEnabled(false);
