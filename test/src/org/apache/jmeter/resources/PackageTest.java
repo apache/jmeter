@@ -147,12 +147,17 @@ public class PackageTest extends TestCase {
 			defaultPRB = getRAS(res);
 		} else if (checkUnexpected) {
 			// Check all the keys are in the default props file
-			Enumeration enumr = getRAS(res).getKeys();
+            PropertyResourceBundle prb = getRAS(res); 
+			Enumeration enumr = prb.getKeys();
 			while (enumr.hasMoreElements()) {
 				String key = null;
 				try {
 					key = (String) enumr.nextElement();
-					defaultPRB.getString(key);
+					String val =defaultPRB.getString(key);
+                    if (val.equals(prb.getString(key))){
+                        System.out.println("Possible duplicate value for "+key+" in "+res);
+                        subTestFailures++;
+                    }
 				} catch (MissingResourceException e) {
 					subTestFailures++;
 					System.out.println("Locale: " + resname + " has unexpected key: " + key);
