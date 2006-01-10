@@ -30,7 +30,7 @@ hosted on Sourceforge at http://htmlparser.sourceforge.net/
 
 The developers of JMeter and Apache are grateful to the developers
 of HTMLParser for giving Apache Software Foundation a non-exclusive
-license.
+license to use HTMLParser under Apache 1 license. 
 
 HTMLParser was originally created by Somik Raha in 2000.
 Derrick Oswald is the current lead developer and was kind
