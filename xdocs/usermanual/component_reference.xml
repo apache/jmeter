@@ -2524,7 +2524,9 @@ generate the template string, and store the result into the given variable name.
         		<li> Negative numbers are used in conjunction with the ForEach controller - see below.</li>
         	</ul>
         </property>
-        <property name="Default Value" required="No">If no matches are found, the default value is stored in the variable.</property>
+        <property name="Default Value" required="No">
+        If no matches are found - and a default is provided - the default value is stored in the variable.
+        </property>
 </properties>
 <p>
 	If the match number is set to a negative number, then all the possible matches in the sampler data are processed.

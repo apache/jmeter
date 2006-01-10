@@ -97,7 +97,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		String refName = getRefName();
 		int matchNumber = getMatchNumber();
 
-		vars.put(refName, getDefaultValue());
+		final String defaultValue = getDefaultValue();
+        if (defaultValue.length() > 0){// Only replace default if it is provided
+            vars.put(refName, defaultValue);
+        }
 
 		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
 		PatternMatcherInput input = new PatternMatcherInput(
@@ -477,5 +480,17 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 			extractor.process();
 			assertEquals("Value1", vars.get("regVal"));
 		}
+
+        public void testNoDefault() throws Exception {
+            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setTemplate("$2$");
+            extractor.setMatchNumber(4);
+            //extractor.setDefaultValue("default");
+            vars.put("regVal", "initial");
+            assertEquals("initial", vars.get("regVal"));
+            extractor.process();
+            assertEquals("initial", vars.get("regVal"));
+        }
+
 	}
 }
