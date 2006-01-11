@@ -66,7 +66,9 @@ Users must explicitly check append in the sampler</li>
 	
 <h4>Other changes</h4>
 <ul>
-<li>Updated to HTTPClient 2.0.2 (from 2.0)</li>
+<li>Updated to HTTPClient 3.0 (from 2.0)</li>
+<li>Updated to Commons Collections 3.1</li>
+<li></li>
 </ul>
 
 <h3>Version 2.1.1</h3>
