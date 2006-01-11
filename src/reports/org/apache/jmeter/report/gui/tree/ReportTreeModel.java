@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -31,8 +30,6 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
-import org.apache.jmeter.testelement.AbstractChart;
-import org.apache.jmeter.testelement.AbstractTable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.property.NullProperty;
