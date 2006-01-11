@@ -22,6 +22,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.apache.commons.httpclient.ConnectTimeoutException;
+import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.jmeter.util.SlowSocket;
 
@@ -50,5 +52,10 @@ public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
     public Socket createSocket(String host, int port) throws IOException,
             UnknownHostException {
         return new SlowSocket(CPS,host,port);
+    }
+
+    public Socket createSocket(String arg0, int arg1, InetAddress arg2, int arg3, HttpConnectionParams arg4) throws IOException, UnknownHostException, ConnectTimeoutException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
