@@ -62,6 +62,7 @@ Users must explicitly check append in the sampler</li>
 <li>Bug 37716 - Proxy request now handles file Post correctly</li>
 <li>HttpClient Sampler now saves latency</li>
 <li>Fix NPE when using JavaScript function on Test Plan</li>
+<li>Fix Base Href parsing in htmlparser</li>
 </ul>	
 	
 <h4>Other changes</h4>
