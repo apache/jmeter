@@ -93,40 +93,46 @@ public class TestHTMLParser extends JMeterTestCase {
         }
 
         // List of parsers to test. Should probably be derived automatically
-        private static final String[] PARSERS = { "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
-                "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
-                "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser" };
+        private static final String[] PARSERS = { 
+            "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
+            "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
+            "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser" 
+            };
 
         private static final TestData[] TESTS = new TestData[] {
-                new TestData("testfiles/HTMLParserTestCase.html", "http://localhost/mydir/myfile.html",
-                        "testfiles/HTMLParserTestCase.set", "testfiles/HTMLParserTestCase.all"),
-                new TestData("testfiles/HTMLParserTestCaseWithBaseHRef.html", "http://localhost/mydir/myfile.html",
-                        "testfiles/HTMLParserTestCase.set", "testfiles/HTMLParserTestCase.all"),
-                new TestData("testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
-                        "http://localhost/mydir/images/myfile.html", "testfiles/HTMLParserTestCase.set",
+                new TestData("testfiles/HTMLParserTestCase.html",
+                        "http://localhost/mydir/myfile.html",
+                        "testfiles/HTMLParserTestCase.set",
                         "testfiles/HTMLParserTestCase.all"),
-                new TestData("testfiles/HTMLParserTestCase2.html", "http:", // Dummy,
-                                                                            // as
-                                                                            // the
-                                                                            // file
-                                                                            // has
-                                                                            // no
-                                                                            // entries
-                        "", ""),
-                new TestData("testfiles/HTMLParserTestCase3.html", "http:", // Dummy,
-                                                                            // as
-                                                                            // the
-                                                                            // file
-                                                                            // has
-                                                                            // no
-                                                                            // entries
-                        "", ""),
-                new TestData("testfiles/HTMLParserTestCaseWithComments.html", "http://localhost/mydir/myfile.html",
-                        "testfiles/HTMLParserTestCase.set", "testfiles/HTMLParserTestCase.all"),
-                new TestData("testfiles/HTMLScript.html", "http://localhost/", "testfiles/HTMLScript.set",
+                new TestData("testfiles/HTMLParserTestCaseWithBaseHRef.html", 
+                        "http://localhost/mydir/myfile.html",
+                        "testfiles/HTMLParserTestCase.set", 
+                        "testfiles/HTMLParserTestCase.all"),
+                new TestData("testfiles/HTMLParserTestCaseWithBaseHRef2.html", 
+                        "http://localhost/mydir/myfile.html",
+                         "testfiles/HTMLParserTestCase.set", 
+                         "testfiles/HTMLParserTestCase.all"),
+                new TestData("testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
+                        "http://localhost/mydir/images/myfile.html", 
+                        "testfiles/HTMLParserTestCase.set",
+                        "testfiles/HTMLParserTestCase.all"),
+                new TestData("testfiles/HTMLParserTestCase2.html",
+                        "http:", "", ""), // Dummy as the file has no entries
+                new TestData("testfiles/HTMLParserTestCase3.html",
+                        "http:", "", ""), // Dummy as the file has no entries
+                new TestData("testfiles/HTMLParserTestCaseWithComments.html",
+                        "http://localhost/mydir/myfile.html",
+                        "testfiles/HTMLParserTestCase.set",
+                        "testfiles/HTMLParserTestCase.all"),
+                new TestData("testfiles/HTMLScript.html",
+                        "http://localhost/",
+                        "testfiles/HTMLScript.set",
                         "testfiles/HTMLScript.all"),
-                new TestData("testfiles/HTMLParserTestFrames.html", "http://localhost/",
-                        "testfiles/HTMLParserTestFrames.all", "testfiles/HTMLParserTestFrames.all"), };
+                new TestData("testfiles/HTMLParserTestFrames.html",
+                        "http://localhost/",
+                        "testfiles/HTMLParserTestFrames.all",
+                        "testfiles/HTMLParserTestFrames.all"), 
+                         };
 
         public static junit.framework.Test suite() {
             TestSuite suite = new TestSuite();
@@ -137,8 +143,7 @@ public class TestHTMLParser extends JMeterTestCase {
             suite.addTest(new TestHTMLParser("testNotCreatable"));
             suite.addTest(new TestHTMLParser("testNotCreatableStatic"));
             for (int i = 0; i < PARSERS.length; i++) {
-                TestSuite ps = new TestSuite(PARSERS[i]);// Identify the
-                                                            // subtests
+                TestSuite ps = new TestSuite(PARSERS[i]);// Identify subtests
                 ps.addTest(new TestHTMLParser("testParserProperty", PARSERS[i], 0));
                 for (int j = 0; j < TESTS.length; j++) {
                     TestSuite ts = new TestSuite(TESTS[j].fileName);
