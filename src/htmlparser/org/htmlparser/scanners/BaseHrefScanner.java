@@ -59,7 +59,7 @@ public class BaseHrefScanner extends TagScanner {
 		String baseUrl = (String) tag.getAttribute("HREF");
 		String absoluteBaseUrl = "";
 		if (baseUrl != null && baseUrl.length() > 0) {
-			absoluteBaseUrl = LinkProcessor.removeLastSlash(baseUrl.trim());
+			absoluteBaseUrl = baseUrl.trim();
 			processor.setBaseUrl(absoluteBaseUrl);
 		}
 		return new BaseHrefTag(tagData, absoluteBaseUrl);

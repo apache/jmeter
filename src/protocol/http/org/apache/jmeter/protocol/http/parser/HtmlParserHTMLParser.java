@@ -130,7 +130,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 					try {
 						if (!baseref.equals(""))// Bugzilla 30713 // $NON-NLS-1$
 						{
-							baseUrl = new URL(baseUrl, baseHref.getBaseUrl() + "/"); // $NON-NLS-1$
+							baseUrl = new URL(baseUrl, baseref);
 						}
 					} catch (MalformedURLException e1) {
 						throw new HTMLParseException(e1);
