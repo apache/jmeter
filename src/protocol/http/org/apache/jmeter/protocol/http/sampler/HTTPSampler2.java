@@ -15,7 +15,6 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +29,8 @@ import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.ConnectMethod;
-import org.apache.commons.httpclient.DefaultMethodRetryHandler;
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnection;
 import org.apache.commons.httpclient.HttpMethod;
@@ -210,7 +210,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 		String urlStr = u.toString();
 
-		org.apache.commons.httpclient.URI uri = new org.apache.commons.httpclient.URI(urlStr);
+		org.apache.commons.httpclient.URI uri = new org.apache.commons.httpclient.URI(urlStr,false);
 
 		String schema = uri.getScheme();
 		if ((schema == null) || (schema.length()==0)) {
@@ -246,7 +246,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		} else {
 			httpMethod = new GetMethod(urlStr);
 			// httpMethod;
-			new DefaultMethodRetryHandler();//TODO what is this doing??
+			new DefaultHttpMethodRetryHandler();//TODO what is this doing??
 		}
 
 		httpMethod.setHttp11(!JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0")); // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
