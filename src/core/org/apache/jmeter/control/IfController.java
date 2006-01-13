@@ -29,21 +29,26 @@ import org.mozilla.javascript.Scriptable;
 /*******************************************************************************
  * 
  * @author Cyrus Montakab created 2003/06/30
- * @version $Date$ $Revision$ This is a Conditional
- *          Controller; it will execute the set of statements
- *          (samplers/controllers, etc) while the 'condition' is true. In a
- *          programming world - this is equivalant of : if (condition) {
- *          statements .... } In JMeter you may have : Thread-Group (set to loop
- *          a number of times or indefinitely, ... Samplers ... (e.g. Counter )
- *          ... Other Controllers .... ... IfController ( condition set to
- *          something like - ${counter}<10) ... statements to perform if
- *          condition is true ... ... Other Controllers /Samplers }
+ * @version $Date$ $Revision$ 
+ * This is a Conditional Controller; it will execute the set of statements
+ * (samplers/controllers, etc) while the 'condition' is true. 
+ * In a programming world - this is equivalant of : 
+ * if (condition) {
+ *          statements .... 
+ *          } 
+ * In JMeter you may have : Thread-Group (set to loop a number of times or indefinitely, 
+ *    ... Samplers ... (e.g. Counter )
+ *    ... Other Controllers .... 
+ *    ... IfController ( condition set to something like - ${counter}<10) 
+ *       ... statements to perform if condition is true 
+ *       ... 
+ *    ... Other Controllers /Samplers }
  * 
  ******************************************************************************/
 
 public class IfController extends GenericController implements Serializable {
 
-	private static Logger logger = LoggingManager.getLoggerForClass();
+	private static final Logger logger = LoggingManager.getLoggerForClass();
 
 	private final static String CONDITION = "IfController.condition";
 
