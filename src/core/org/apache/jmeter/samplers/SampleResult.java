@@ -18,7 +18,6 @@
 package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -27,17 +26,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.LogTarget;
 import org.apache.log.Logger;
-import org.apache.log.format.Formatter;
-import org.apache.log.format.RawFormatter;
-import org.apache.log.output.io.WriterTarget;
 
 /**
  * This is a nice packaging for the various information returned from taking a
@@ -46,7 +39,8 @@ import org.apache.log.output.io.WriterTarget;
  */
 public class SampleResult implements Serializable {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    // Needs to be accessible from Test code
+    static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
 	// However the suggested System.getProperty("file.encoding") is Cp1252 on
@@ -151,8 +145,7 @@ public class SampleResult implements Serializable {
 
 	private int bytes = 0;
 
-	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult
-	// instead?
+	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
 	private final static String TOTAL_TIME = "totalTime"; // $NON-NLS-1$
 
@@ -810,61 +803,4 @@ public class SampleResult implements Serializable {
 	public void setParent(SampleResult parent) {
 		this.parent = parent;
 	}
-    // TODO need more tests - particularly for the new functions
-
-    public static class Test extends TestCase {
-        public Test(String name) {
-            super(name);
-        }
-
-        public void testElapsed() throws Exception {
-            SampleResult res = new SampleResult();
-
-            // Check sample increments OK
-            res.sampleStart();
-            Thread.sleep(100);
-            res.sampleEnd();
-            assertTrue(res.getTime() >= 100);
-        }
-
-        public void testPause() throws Exception {
-            SampleResult res = new SampleResult();
-            // Check sample increments OK
-            res.sampleStart();
-            Thread.sleep(100);
-            res.samplePause();
-
-            Thread.sleep(200);
-
-            // Re-increment
-            res.sampleResume();
-            Thread.sleep(100);
-            res.sampleEnd();
-            long sampleTime = res.getTime();
-            if ((sampleTime < 200) || (sampleTime > 290)) {
-                fail("Accumulated time (" + sampleTime + ") was not between 200 and 290 ms");
-            }
-        }
-
-        private static Formatter fmt = new RawFormatter();
-
-        private StringWriter wr = null;
-
-        private void divertLog() {// N.B. This needs to divert the log for SampleResult
-            wr = new StringWriter(1000);
-            LogTarget[] lt = { new WriterTarget(wr, fmt) };
-            log.setLogTargets(lt);
-        }
-
-        public void testPause2() throws Exception {
-            divertLog();
-            SampleResult res = new SampleResult();
-            res.sampleStart();
-            res.samplePause();
-            assertTrue(wr.toString().length() == 0);
-            res.samplePause();
-            assertFalse(wr.toString().length() == 0);
-        }
-        // TODO some more invalid sequence tests needed
-    }
 }
