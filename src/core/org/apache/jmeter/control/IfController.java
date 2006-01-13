@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -20,9 +19,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -153,62 +150,4 @@ public class IfController extends GenericController implements Serializable {
 				return null;
 			}
 	}
-
-	// //////////////////////////// Start of Test Code
-	// ///////////////////////////
-
-	/**
-	 * JUnit test
-	 */
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testProcessing() throws Exception {
-
-			GenericController controller = new GenericController();
-
-			controller.addTestElement(new IfController("false==false"));
-			controller.addTestElement(new IfController(" \"a\".equals(\"a\")"));
-			controller.addTestElement(new IfController("2<100"));
-
-			/*
-			 * GenericController sub_1 = new GenericController();
-			 * sub_1.addTestElement(new IfController("3==3"));
-			 * controller.addTestElement(sub_1); controller.addTestElement(new
-			 * IfController("false==true"));
-			 */
-
-			/*
-			 * GenericController controller = new GenericController();
-			 * GenericController sub_1 = new GenericController();
-			 * sub_1.addTestElement(new IfController("10<100"));
-			 * sub_1.addTestElement(new IfController("true==false"));
-			 * controller.addTestElement(sub_1); controller.addTestElement(new
-			 * IfController("false==false"));
-			 * 
-			 * IfController sub_2 = new IfController(); sub_2.setCondition( "10<10000");
-			 * GenericController sub_3 = new GenericController();
-			 * 
-			 * sub_2.addTestElement(new IfController( " \"a\".equals(\"a\")" ) );
-			 * sub_3.addTestElement(new IfController("2>100"));
-			 * sub_3.addTestElement(new IfController("false==true"));
-			 * sub_2.addTestElement(sub_3); sub_2.addTestElement(new
-			 * IfController("2==3")); controller.addTestElement(sub_2);
-			 */
-
-			/*
-			 * IfController controller = new IfController("12==12");
-			 * controller.initialize();
-			 */
-			logger.debug(">>>>>   testProcessing : Starting the iteration  ");
-			TestElement sampler = null;
-			while ((sampler = controller.next()) != null) {
-				logger.debug("    ->>>  Gonna assertTrue :" + sampler.getClass().getName() + " Property is   ---->>>"
-						+ sampler.getPropertyAsString(TestElement.NAME));
-			}
-		}
-	}
-
 }
