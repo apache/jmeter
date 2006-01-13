@@ -967,7 +967,7 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="${dest.jar.jmeter}/jmeter*.bat"/>
-    <include name="${dest.jar.jmeter}/jmeter*.properties"/>
+    <include name="${dest.jar.jmeter}/*.properties"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
