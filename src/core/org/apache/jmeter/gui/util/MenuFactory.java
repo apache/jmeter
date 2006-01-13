@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -38,7 +37,6 @@ import javax.swing.MenuElement;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
@@ -383,38 +381,38 @@ public final class MenuFactory {
 		}
 	}
 
-	// //////////////////////////// Test code
-	// ////////////////////////////////////
-
-	public static class Test extends JMeterTestCase {
-
-		public Test() {
-			super();
-		}
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private static void check(String s, int i) throws Exception {
-			assertFalse("The number of " + s + " should not be 0", 0 == i);
-		}
-
-		public void testMenu() throws Exception {
-			check("menumap", menuMap.size());
-
-			check("assertions", assertions.size());
-			check("configElements", configElements.size());
-			check("controllers", controllers.size());
-			check("listeners", listeners.size());
-			check("nonTestElements", nonTestElements.size());
-			check("postProcessors", postProcessors.size());
-			check("preProcessors", preProcessors.size());
-			check("samplers", samplers.size());
-			check("timers", timers.size());
-
-			check("elementstoskip", elementsToSkip.size());
-
-		}
+	// Methods used for Test cases
+	static int menuMap_size() {
+		return menuMap.size();
+	}
+	static int assertions_size() {
+		return assertions.size();
+	}
+	static int configElements_size() {
+		return configElements.size();
+	}
+	static int controllers_size() {
+		return controllers.size();
+	}
+	static int listeners_size() {
+		return listeners.size();
+	}
+	static int nonTestElements_size() {
+		return nonTestElements.size();
+	}
+	static int postProcessors_size() {
+		return postProcessors.size();
+	}
+	static int preProcessors_size() {
+		return preProcessors.size();
+	}
+	static int samplers_size() {
+		return samplers.size();
+	}
+	static int timers_size() {
+		return timers.size();
+	}
+	static int elementsToSkip_size() {
+		return elementsToSkip.size();
 	}
 }
