@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -18,8 +17,8 @@
 
 package org.apache.jmeter.config.gui;
 
-import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -35,8 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
-
-import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -355,7 +352,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * @param table
 	 *            the table to resize columns for
 	 */
-	protected void sizeColumns(JTable table) {
+	protected void sizeColumns(JTable _table) {
 	}
 
 	/**
@@ -441,38 +438,5 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
 		table.revalidate();
 		sizeColumns(table);
-	}
-
-	/**
-	 * Tests for the ArgumentsPanel component.
-	 */
-	public static class Test extends TestCase {
-		/**
-		 * Create a new test.
-		 * 
-		 * @param name
-		 *            the name of the test
-		 */
-		public Test(String name) {
-			super(name);
-		}
-
-		/**
-		 * Test that adding an argument to the table results in an appropriate
-		 * TestElement being created.
-		 * 
-		 * @throws Exception
-		 *             if an exception occurred during the test
-		 */
-		public void testArgumentCreation() throws Exception {
-			ArgumentsPanel gui = new ArgumentsPanel();
-			gui.tableModel.addRow(new Argument());
-			gui.tableModel.setValueAt("howdy", 0, 0);
-			gui.tableModel.addRow(new Argument());
-			gui.tableModel.setValueAt("doody", 0, 1);
-
-			assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
-					.getMetaData());
-		}
 	}
 }
