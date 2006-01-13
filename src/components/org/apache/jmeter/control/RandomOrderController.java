@@ -21,12 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import junit.framework.TestSuite;
-
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.junit.stubs.TestSampler;
-import org.apache.jmeter.testelement.TestElement;
-
 /**
  * A controller that runs its children each at most once, but in a random order.
  * 
@@ -86,64 +80,4 @@ public class RandomOrderController extends GenericController implements Serializ
 		// Replace subControllersAndSamplers with reordered copy.
 		this.subControllersAndSamplers = reordered;
 	}
-
-	public static class Test extends JMeterTestCase {
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testRandomOrder() {
-			testLog.debug("Testing RandomOrderController");
-			RandomOrderController roc = new RandomOrderController();
-			roc.addTestElement(new TestSampler("zero"));
-			roc.addTestElement(new TestSampler("one"));
-			roc.addTestElement(new TestSampler("two"));
-			roc.addTestElement(new TestSampler("three"));
-			TestElement sampler = null;
-			List usedSamplers = new ArrayList();
-			roc.initialize();
-			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getPropertyAsString(TestSampler.NAME);
-				if (usedSamplers.contains(samplerName)) {
-					assertTrue("Duplicate sampler returned from next()", false);
-				}
-				usedSamplers.add(samplerName);
-			}
-			assertTrue("All samplers were returned", usedSamplers.size() == 4);
-		}
-
-		public void testRandomOrderNoElements() {
-			RandomOrderController roc = new RandomOrderController();
-			roc.initialize();
-			assertTrue(roc.next() == null);
-		}
-
-		public void testRandomOrderOneElement() {
-			RandomOrderController roc = new RandomOrderController();
-			roc.addTestElement(new TestSampler("zero"));
-			TestElement sampler = null;
-			List usedSamplers = new ArrayList();
-			roc.initialize();
-			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getPropertyAsString(TestSampler.NAME);
-				if (usedSamplers.contains(samplerName)) {
-					assertTrue("Duplicate sampler returned from next()", false);
-				}
-				usedSamplers.add(samplerName);
-			}
-			assertTrue("All samplers were returned", usedSamplers.size() == 1);
-		}
-	}
-
-	public static void main(String args[]) {
-		junit.textui.TestRunner.run(suite());
-	}
-
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite();
-		suite.addTest(new Test("testRandomOrderController"));
-		return suite;
-	}
-
 }
