@@ -23,14 +23,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.processor.PostProcessor;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -325,172 +321,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		return getPropertyAsString(TEMPLATE);
 	}
 
-	private boolean useHeaders() {
+	boolean useHeaders() {
 		return "true".equalsIgnoreCase(getPropertyAsString(USEHEADERS));
-	}
-
-	public static class Test extends TestCase {
-		RegexExtractor extractor;
-
-		SampleResult result;
-
-		JMeterVariables vars;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private JMeterContext jmctx = null;
-
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			extractor = new RegexExtractor();
-			extractor.setThreadContext(jmctx);// This would be done by the run
-												// command
-			extractor.setRefName("regVal");
-			result = new SampleResult();
-			String data = "<company-xmlext-query-ret>" + "<row>" + "<value field=\"RetCode\">LIS_OK</value>"
-					+ "<value field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value>"
-					+ "<value field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value>"
-					+ "<value field=\"pinposition1\">1</value>" + "<value field=\"pinpositionvalue1\"></value>"
-					+ "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
-					+ "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
-					+ "</row>" + "</company-xmlext-query-ret>";
-			result.setResponseData(data.getBytes());
-			result.setResponseHeaders("Header1: Value1\nHeader2: Value2");
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-		}
-
-		public void testVariableExtraction() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$2$");
-			extractor.setMatchNumber(2);
-			extractor.process();
-			assertEquals("5", vars.get("regVal"));
-			assertEquals("pinposition2", vars.get("regVal_g1"));
-			assertEquals("5", vars.get("regVal_g2"));
-			assertEquals("<value field=\"pinposition2\">5</value>", vars.get("regVal_g0"));
-		}
-
-		static void templateSetup(RegexExtractor rex, String tmp) {
-			rex.setRegex("<company-(\\w+?)-(\\w+?)-(\\w+?)>");
-			rex.setMatchNumber(1);
-			rex.setTemplate(tmp);
-			rex.process();
-		}
-
-		public void testTemplate1() throws Exception {
-			templateSetup(extractor, "");
-			assertEquals("<company-xmlext-query-ret>", vars.get("regVal_g0"));
-			assertEquals("xmlext", vars.get("regVal_g1"));
-			assertEquals("query", vars.get("regVal_g2"));
-			assertEquals("ret", vars.get("regVal_g3"));
-			assertEquals("", vars.get("regVal"));
-		}
-
-		public void testTemplate2() throws Exception {
-			templateSetup(extractor, "ABC");
-			assertEquals("ABC", vars.get("regVal"));
-		}
-
-		public void testTemplate3() throws Exception {
-			templateSetup(extractor, "$2$");
-			assertEquals("query", vars.get("regVal"));
-		}
-
-		public void testTemplate4() throws Exception {
-			templateSetup(extractor, "PRE$2$");
-			assertEquals("PREquery", vars.get("regVal"));
-		}
-
-		public void testTemplate5() throws Exception {
-			templateSetup(extractor, "$2$POST");
-			assertEquals("queryPOST", vars.get("regVal"));
-		}
-
-		public void testTemplate6() throws Exception {
-			templateSetup(extractor, "$2$$1$");
-			assertEquals("queryxmlext", vars.get("regVal"));
-		}
-
-		public void testTemplate7() throws Exception {
-			templateSetup(extractor, "$2$MID$1$");
-			assertEquals("queryMIDxmlext", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction2() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(3);
-			extractor.process();
-			assertEquals("pinposition3", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction6() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$2$");
-			extractor.setMatchNumber(4);
-			extractor.setDefaultValue("default");
-			extractor.process();
-			assertEquals("default", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction3() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("_$1$");
-			extractor.setMatchNumber(2);
-			extractor.process();
-			assertEquals("_pinposition2", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction5() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(-1);
-			extractor.process();
-			assertEquals("3", vars.get("regVal_matchNr"));
-			assertEquals("pinposition1", vars.get("regVal_1"));
-			assertEquals("pinposition2", vars.get("regVal_2"));
-			assertEquals("pinposition3", vars.get("regVal_3"));
-			assertEquals("pinposition1", vars.get("regVal_1_g1"));
-			assertEquals("1", vars.get("regVal_1_g2"));
-			assertEquals("<value field=\"pinposition1\">1</value>", vars.get("regVal_1_g0"));
-			assertNull(vars.get("regVal_4"));
-
-			// Check old values don't hang around:
-			extractor.setRegex("(\\w+)count"); // fewer matches
-			extractor.process();
-			assertEquals("2", vars.get("regVal_matchNr"));
-			assertEquals("position", vars.get("regVal_1"));
-			assertEquals("invalidpin", vars.get("regVal_2"));
-			assertNull("Unused variables should be null", vars.get("regVal_3"));
-			assertNull("Unused variables should be null", vars.get("regVal_3_g0"));
-			assertNull("Unused variables should be null", vars.get("regVal_3_g1"));
-		}
-
-		public void testVariableExtraction7() throws Exception {
-			extractor.setRegex("Header1: (\\S+)");
-			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(1);
-			assertFalse("useHdrs should be false", extractor.useHeaders());
-			extractor.setProperty(USEHEADERS, "true");
-			assertTrue("useHdrs should be true", extractor.useHeaders());
-			extractor.process();
-			assertEquals("Value1", vars.get("regVal"));
-		}
-
-        public void testNoDefault() throws Exception {
-            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-            extractor.setTemplate("$2$");
-            extractor.setMatchNumber(4);
-            //extractor.setDefaultValue("default");
-            vars.put("regVal", "initial");
-            assertEquals("initial", vars.get("regVal"));
-            extractor.process();
-            assertEquals("initial", vars.get("regVal"));
-        }
-
 	}
 }
