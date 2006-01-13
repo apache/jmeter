@@ -150,4 +150,71 @@ public class TestCookieManager extends TestCase {
             assertEquals("test2=a; test=2; test3=b", s);// Assumes some kind of list is use
             // If not using a list that retains the order, then the asserts would need to change
         }
+        
+         
+ 		/** Tests missing cookie path for a trivial URL fetch from the domain 
+ 		 *  Note that this fails prior to a fix for BUG 38256
+ 		 */
+ 		public void testMissingPath0() throws Exception {
+ 			URL url = new URL("http://d.e.f/goo.html");
+ 			man.addCookieFromHeader("test=moo", url);
+ 			String s = man.getCookieHeaderForURL(new URL("http://d.e.f/"));
+ 			assertNotNull(s);
+ 			assertEquals("test=moo", s);
+ 		}
+ 		
+ 		/** Tests missing cookie path for a non-trivial URL fetch from the 
+ 		 *  domain.  Note that this fails prior to a fix for BUG 38256
+ 		 */
+ 		public void testMissingPath1() throws Exception {
+ 			URL url = new URL("http://d.e.f/moo.html");
+ 			man.addCookieFromHeader("test=moo", url);
+ 			String s = man.getCookieHeaderForURL(new URL("http://d.e.f/goo.html"));
+ 			assertNotNull(s);
+ 			assertEquals("test=moo", s);
+ 		}
+ 		
+ 		/** Tests explicit root path with a trivial URL fetch from the domain */
+ 		public void testRootPath0() throws Exception {
+ 			URL url = new URL("http://d.e.f/goo.html");
+ 			man.addCookieFromHeader("test=moo;path=/", url);
+ 			String s = man.getCookieHeaderForURL(new URL("http://d.e.f/"));
+ 			assertNotNull(s);
+ 			assertEquals("test=moo", s);
+ 		}
+ 		
+ 		/** Tests explicit root path with a non-trivial URL fetch from the domain */
+ 		public void testRootPath1() throws Exception {
+ 			URL url = new URL("http://d.e.f/moo.html");
+ 			man.addCookieFromHeader("test=moo;path=/", url);
+ 			String s = man.getCookieHeaderForURL(new URL("http://d.e.f/goo.html"));
+ 			assertNotNull(s);
+ 			assertEquals("test=moo", s);
+ 		}
+        
+        // Test cookie matching
+        public void testCookieMatching() throws Exception {
+            URL url = new URL("http://a.b.c:8080/TopDir/fred.jsp");
+            man.addCookieFromHeader("ID=abcd; Path=/TopDir", url);
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("ID=abcd", s);
+
+            url = new URL("http://a.b.c:8080/other.jsp");
+            s=man.getCookieHeaderForURL(url);
+            assertNull(s);
+            
+            url = new URL("http://a.b.c:8080/TopDir/suub/another.jsp");
+            s=man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            
+            url = new URL("http://a.b.c:8080/TopDir");
+            s=man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            
+            url = new URL("http://a.b.d/");
+            s=man.getCookieHeaderForURL(url);
+            assertNull(s);
+        }
+
 }
