@@ -322,19 +322,24 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		String domain = "." + url.getHost();  // $NON-NLS-1$ // this is the default
 		// the leading dot breaks the standard, but helps in
 		// reproducing actual browser behaviour.
-		// The default is the path of the request URL (upto and including the last slash)
-		String path = url.getPath();
-		if (path.length() == 0) {
-			path = "/"; // $NON-NLS-1$ default if no path specified
-		} else {
-			int lastSlash = path.lastIndexOf("/");// $NON-NLS-1$
-			if (lastSlash > 0) {// Must be after initial character
-                // Upto, but not including, trailing slash for Set-Cookie:
-                // (Set-Cookie2: would need the trailing slash as well
-				path=path.substring(0,lastSlash);
-			}
-		}
 
+		// The default is the path of the request URL (upto and including the last slash)
+//		String path = url.getPath();
+//		if (path.length() == 0) {
+//			path = "/"; // $NON-NLS-1$ default if no path specified
+//		} else {
+//			int lastSlash = path.lastIndexOf("/");// $NON-NLS-1$
+//			if (lastSlash > 0) {// Must be after initial character
+//                // Upto, but not including, trailing slash for Set-Cookie:
+//                // (Set-Cookie2: would need the trailing slash as well
+//				path=path.substring(0,lastSlash);
+//			}
+//		}
+//      Bug 38256 - replaced by the line below:
+		String path="/";
+		
+		//TODO use HttpClient Cookie handling (one day)
+		
 		Cookie newCookie = new Cookie(name, value, domain, path, false
                                     , 0); // No expiry means session cookie
 
