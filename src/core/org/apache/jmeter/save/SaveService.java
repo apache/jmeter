@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.converters.BooleanPropertyConverter;
 import org.apache.jmeter.save.converters.HashTreeConverter;
@@ -109,11 +108,11 @@ public class SaveService {
 
     // This is written to JMX files by ScriptWrapperConverter
 	static String propertiesVersion = "";// read from properties file; written to JMS files
-    private static final String PROPVERSION = "1.8";// Expected $NON-NLS-1$
+    static final String PROPVERSION = "1.8";// Expected $NON-NLS-1$
 
     // Internal information only
-    private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	private static final String FILEVERSION = "332818";// Expected $NON-NLS-1$
+    static String fileVersion = ""; // read from properties file// $NON-NLS-1$
+	static final String FILEVERSION = "332818";// Expected $NON-NLS-1$
 
     static {
         log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
@@ -267,7 +266,7 @@ public class SaveService {
 		}
 	}
 
-	private static void checkVersions() {
+	static void checkVersions() {
 		versionsOK = true;
 		checkVersion(BooleanPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(HashTreeConverter.class, "332820"); // $NON-NLS-1$
@@ -358,24 +357,4 @@ public class SaveService {
             + "\nPerhaps a missing jar? See log file.";
         return msg;
     }
-
-    public static class Test extends JMeterTestCase {
-		public Test() {
-			super();
-		}
-
-		public Test(String name) {
-			super(name);
-		}
-
-        public void testPropfile() throws Exception {
-            assertEquals("Property Version mismatch", PROPVERSION, propertiesVersion);            
-            assertEquals("Property File Version mismatch", FILEVERSION, fileVersion);
-        }
-        
-		public void testVersions() throws Exception {
-			checkVersions();
-			assertTrue("Unexpected version found", versionsOK);
-		}
-	}
 }

@@ -44,6 +44,15 @@ public class TestSaveService extends JMeterTestCase {
 	public TestSaveService(String name) {
 		super(name);
 	}
+    public void testPropfile() throws Exception {
+        assertEquals("Property Version mismatch", SaveService.PROPVERSION, SaveService.propertiesVersion);            
+        assertEquals("Property File Version mismatch", SaveService.FILEVERSION, SaveService.fileVersion);
+    }
+    
+    public void testVersions() throws Exception {
+        SaveService.checkVersions();
+        assertTrue("Unexpected version found", SaveService.versionsOK);
+    }
 
 	public void testLoadAndSave() throws Exception {
 		byte[] original = new byte[1000000];
