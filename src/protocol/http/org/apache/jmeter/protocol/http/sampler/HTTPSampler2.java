@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,18 +28,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.httpclient.ConnectMethod;
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-
 import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpConnection;
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpState;
+import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.NTCredentials;
-import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.config.Argument;
 
@@ -64,15 +66,19 @@ import org.apache.log.Logger;
  * 
  */
 public class HTTPSampler2 extends HTTPSamplerBase {
+
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String PROXY_HOST = 
+        System.getProperty("http.proxyHost",""); // $NON-NLS-1$ 
+
+    private static final int PROXY_PORT = 
+        Integer.parseInt(System.getProperty("http.proxyPort", "80")); // $NON-NLS-1$ $NON-NLS-2$ 
 
     /*
      * Connection is re-used within the thread if possible
      */
 	private static final ThreadLocal httpClients = new ThreadLocal();
-
-    private static final boolean basicAuth 
-    = JMeterUtils.getPropDefault("httpsampler2.basicauth", false); // $NON-NLS-1$
 
 	static {
 		// Set the default to Avalon Logkit, if not already defined:
@@ -80,10 +86,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
                     , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
 		}
-        log.info("httpsampler2.basicauth=" + basicAuth); // $NON-NLS-1$
-        
-        System.setProperty("apache.commons.httpclient.cookiespec", // $NON-NLS-1$
-                "COMPATIBILITY"); // $NON-NLS-1$
 
         int cps =
             JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$        
@@ -102,14 +104,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
         }
 	}
-
-	/*
-	 * These variables are recreated every time Find a better way of passing
-	 * them round
-	 */
-	private transient HttpMethodBase httpMethod = null;
-
-	private transient HttpState httpState = null;
 
 	/**
 	 * Constructor for the HTTPSampler2 object.
@@ -158,12 +152,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		String filename = sampler.getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
 			File input = new File(filename);
-			if (input.length() < Integer.MAX_VALUE) {
-				post.setRequestContentLength((int) input.length());
-			} else {
-				post.setRequestContentLength(EntityEnclosingMethod.CONTENT_LENGTH_CHUNKED);
-			}
-			// TODO - is this correct?
+            // TODO: is this header correct?
 			post.setRequestHeader(HEADER_CONTENT_DISPOSITION
                     , "form-data; name=\"" // $NON-NLS-1$ // $NON-NLS-1$
                     + encode(sampler.getFileField())
@@ -171,7 +160,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     + encode(filename) + "\""); // $NON-NLS-1$
 			// Specify content type and encoding
 			post.setRequestHeader(HEADER_CONTENT_TYPE, sampler.getMimetype());
-			post.setRequestBody(new FileInputStream(input));
+			post.setRequestEntity(
+                    new InputStreamRequestEntity(new FileInputStream(input),input.length()));
 		}
 	}
 
@@ -206,7 +196,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @exception IOException
 	 *                if an I/O Exception occurs
 	 */
-	private HttpConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
+	private HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
 
 		String urlStr = u.toString();
 
@@ -224,40 +214,33 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		HostConfiguration hc = new HostConfiguration();
 		hc.setHost(host, port, protocol); // All needed to ensure re-usablility
 
-		HttpConnection httpConn = null;
-		Map map = (Map)httpClients.get();
-		synchronized ( map ) // TODO: does this need to be synchronized?
+        if (PROXY_HOST.length() > 0) {
+             hc.setProxy(PROXY_HOST, PROXY_PORT);
+        }
+
+        Map map = (Map) httpClients.get();
+		HttpClient httpClient = (HttpClient) map.get(hc);
+		
+		if ( httpClient == null )
 		{
-			httpConn = (HttpConnection)map.get(hc);
-			
-			if ( httpConn == null )
-			{
-				httpConn = new HttpConnection(hc);
-				// TODO check these
-				httpConn.setProxyHost(System.getProperty("http.proxyHost")); // $NON-NLS-1$
-				httpConn.setProxyPort(Integer.parseInt(System.getProperty("http.proxyPort", "80"))); // $NON-NLS-1$
-				
-				map.put(hc, httpConn);
-			}
+			httpClient = new HttpClient(new SimpleHttpConnectionManager());
+			map.put(hc, httpClient);
 		}
 
-		if (method.equals(POST)) {
-			httpMethod = new PostMethod(urlStr);
-		} else {
-			httpMethod = new GetMethod(urlStr);
-			// httpMethod;
-			new DefaultHttpMethodRetryHandler();//TODO what is this doing??
-		}
-
-		httpMethod.setHttp11(!JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0")); // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
+        HttpMethodParams params = httpMethod.getParams();
+        params.setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+        params.setVersion(
+                JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0") // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ 
+                ?
+                HttpVersion.HTTP_1_0 : HttpVersion.HTTP_1_1);
 
 		// Set the timeout (if non-zero)
-		httpConn.setSoTimeout(JMeterUtils.getPropDefault("httpclient.timeout", 0)); // $NON-NLS-1$
+		params.setSoTimeout(JMeterUtils.getPropDefault("httpclient.timeout", 0)); // $NON-NLS-1$
 
-		httpState = new HttpState();
-		if (httpConn.isProxied() && httpConn.isSecure()) {
-			httpMethod = new ConnectMethod(httpMethod);
-		}
+		//httpState = new HttpState();
+//		if (httpConn.isProxied() && httpConn.isSecure()) {
+//			httpMethod = new ConnectMethod(httpMethod);
+//		}
 
 		// Allow HttpClient to handle the redirects:
 		httpMethod.setFollowRedirects(getPropertyAsBoolean(AUTO_REDIRECTS));
@@ -273,23 +256,16 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 
 		String hdrs = setConnectionHeaders(httpMethod, u, getHeaderManager());
-		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
+		String cookies = setConnectionCookie(httpClient, u, getCookieManager());
 
 		if (res != null) {
             res.setURL(u);
-            res.setHTTPMethod(method);
             res.setRequestHeaders(hdrs);
             res.setCookies(cookies);
-            if (method.equals(POST)) {
-                res.setQueryString(getQueryString());
-            }
 		}
 
-		setConnectionAuthorization(httpMethod, u, getAuthManager());
+		setConnectionAuthorization(httpClient, u, getAuthManager());
 
-		if (method.equals(POST)) {
-			setPostHeaders((PostMethod) httpMethod);
-		}
 
 //		System.out.println("Dumping Request Headers:");
 //		System.out.println(method.getRequestHeaders().toString());
@@ -311,7 +287,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 //			}
 //		}
 
-		return httpConn;
+		return httpClient;
 	}
 
 	/**
@@ -354,13 +330,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            the <code>CookieManager</code> containing all the cookies
 	 *            for this <code>UrlConfig</code>
 	 */
-	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {
+	private String setConnectionCookie(HttpClient client, URL u, CookieManager cookieManager) {
         // TODO recode to use HTTPClient matches methods or similar
         
 		StringBuffer cookieHeader = new StringBuffer(100);
         if (cookieManager!=null){
     		String host = "." + u.getHost(); // $NON-NLS-1$
-    		
+    		HttpState state = client.getState();
     		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
     			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
                 if (cookie == null)
@@ -373,7 +349,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     				org.apache.commons.httpclient.Cookie newCookie
                     = new org.apache.commons.httpclient.Cookie(cookie.getDomain(), cookie.getName(),
     				     cookie.getValue(), cookie.getPath(), null, false);
-    				httpState.addCookie(newCookie);
+    				state.addCookie(newCookie);
     				cookieHeader.append(cookie.getName());
                     cookieHeader.append("="); // $NON-NLS-1$
                     cookieHeader.append(cookie.getValue());
@@ -428,16 +404,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @param u
 	 *            <code>URL</code> of the URL request
 	 * @param authManager
-	 *            the <code>AuthManager</code> containing all the cookies for
+	 *            the <code>AuthManager</code> containing all the authorisations for
 	 *            this <code>UrlConfig</code>
 	 */
-	private void setConnectionAuthorization(HttpMethod method, URL u, AuthManager authManager) {
+	private void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
 		if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
-    			if (basicAuth) {
-    					method.setRequestHeader(HEADER_AUTHORIZATION, auth.toBasicHeader());
-    			} else {
                     /*
                      * TODO: better method...
                      * HACK: if user contains \ and or @
@@ -462,9 +435,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     if (log.isDebugEnabled()){
                         log.debug(user + " >  D="+ username + " D="+domain+" R="+realm);
                     }
-					httpState.setCredentials(
-                            realm,
-							auth.getURL(),
+					client.getState().setCredentials(
+                            new AuthScope(u.getHost(),u.getPort(),realm,AuthScope.ANY_SCHEME),
                             // NT Includes other types of Credentials
                             new NTCredentials(
 									username, 
@@ -472,7 +444,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                                     null, // "thishost",
 									domain
 							));
-				}
 			}
 		}
 	}
@@ -503,7 +474,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		log.debug("Start : sample" + urlStr);
 		log.debug("method" + method);
 
-		httpMethod = null;
+        HttpMethodBase httpMethod = null;
+
+        if (method.equals(POST)) {
+            httpMethod = new PostMethod(urlStr);
+        } else {
+            httpMethod = new GetMethod(urlStr);
+        }
 
 		HTTPSampleResult res = new HTTPSampleResult();
 		if (this.getPropertyAsBoolean(MONITOR)) {
@@ -512,16 +489,19 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			res.setMonitor(false);
 		}
 		res.setSampleLabel(urlStr);
+        res.setHTTPMethod(method);
 		res.sampleStart(); // Count the retries as well in the time
-
+        HttpClient client = null;
 		try {
-			HttpConnection connection = setupConnection(url, method, res);
+			client = setupConnection(url, httpMethod, res);
 
 			if (method.equals(POST)) {
+                res.setQueryString(getQueryString());
+                setPostHeaders((PostMethod) httpMethod);
 				sendPostData(httpMethod);
 			}
 
-			int statusCode = httpMethod.execute(httpState, connection);
+			int statusCode = client.executeMethod(httpMethod);
 
 			// Request sent. Now get the response:
             InputStream instream = httpMethod.getResponseBodyAsStream();
@@ -579,7 +559,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			}
 
 			// Store any cookies received in the cookie manager:
-			saveConnectionCookies(httpState, getCookieManager());
+			saveConnectionCookies(client, getCookieManager());
 
 			// Follow redirects and download page resources if appropriate:
 			res = resultProcessing(areFollowingRedirect, frameDepth, res);
@@ -617,9 +597,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            the <code>CookieManager</code> containing all the cookies
 	 *            for this <code>UrlConfig</code>
 	 */
-	private void saveConnectionCookies(HttpState state, CookieManager cookieManager) {
+	private void saveConnectionCookies(HttpClient client, CookieManager cookieManager) {
 		if (cookieManager != null) {
-			org.apache.commons.httpclient.Cookie [] c = state.getCookies();
+			org.apache.commons.httpclient.Cookie [] c = client.getState().getCookies();
 			for (int i = 0; i < c.length; i++) {
 				Date exp = c[i].getExpiryDate();// might be absent
 				//System.out.println("Cookie[" + i + "]: " + c[i].getName() + " := " + c[i].getValue());
@@ -637,8 +617,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		log.debug("Thread Started");
         
 		// Does not need to be synchronised, as all access is from same thread
-		httpClients.set ( new HashMap() );
-	}
+        httpClients.set ( new HashMap() );	
+    }
 
 	public void threadFinished() {
 		log.debug("Thread Finished");
@@ -646,17 +626,15 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // Does not need to be synchronised, as all access is from same thread
 		Map map = (Map)httpClients.get();
 
-		HttpConnection conn;
 		if ( map != null ) {
 			for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
 			{
-				Object obj = it.next();
-				conn = (HttpConnection) ((Map.Entry)obj).getValue();
-				conn.close();
+				Map.Entry entry = (Map.Entry) it.next();
+				//HostConfiguration hc = (HostConfiguration) entry.getKey();
+				HttpClient cl = (HttpClient) entry.getValue();
+                cl.getHttpConnectionManager().closeIdleConnections(-1000);// Closes the connection
 			}
 			map.clear();
 		}
-		
-		httpClients.set( null );
 	}
 }
