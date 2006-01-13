@@ -1117,6 +1117,7 @@ setting is reset when a parent Loop Controller restarts.
 		<ul>
 			<li>${COUNT} &lt; 10</li>
 			<li>"${VAR}" == "abcd"</li>
+			<li>"${JMeterThread.last_sample_ok}" == "true" (check if last sample succeeded)</li>
 		</ul>
 		If there is an error interpreting the code, the condition is assumed to be false, and a message is logged in jmeter.log.
 	</p>
@@ -2011,6 +2012,10 @@ The variables in User Defined Variables components will take precedence over tho
 	Assertions are used to perform additional checks on samplers, and are processed after <b>each sampler</b>
 	in the same scope.
 	<br></br>
+	<note>
+	The variable <b>JMeterThread.last_sample_ok</b> is set to
+	"true" or "false" after all assertions for a sampler have been run.
+	 </note>
 </description>
 <component index="&sect-num;.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
 
