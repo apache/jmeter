@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -24,8 +23,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 /**
  * This class serves as a way to calculate the median of a list of values. It is
@@ -207,35 +204,4 @@ public class StatCalculator implements Serializable {
 			values.add((index * (-1)) - 1, val);
 		}
 	}
-
-	public static class Test extends TestCase {
-		StatCalculator calc;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			calc = new StatCalculator();
-		}
-
-		public void testCalculation() {
-			calc.addValue(18);
-			calc.addValue(10);
-			calc.addValue(9);
-			calc.addValue(11);
-			calc.addValue(28);
-			calc.addValue(3);
-			calc.addValue(30);
-			calc.addValue(15);
-			calc.addValue(15);
-			calc.addValue(21);
-			assertEquals(16, (int) calc.getMean());
-			assertEquals(8.0622577F, (float) calc.getStandardDeviation(), 0F);
-			assertEquals(30, calc.getMax().intValue());
-			assertEquals(3, calc.getMin().intValue());
-			assertEquals(15, calc.getMedian().intValue());
-		}
-	}
-
 }
