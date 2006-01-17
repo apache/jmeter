@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -18,7 +17,6 @@
 
 package org.apache.jmeter.protocol.ldap.config.gui;
 
-import org.apache.jmeter.config.gui.AbstractConfigGui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -36,15 +34,14 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
-import junit.framework.TestCase;
-
+import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
-import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
+//import org.apache.log.Logger;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
@@ -61,7 +58,7 @@ import org.apache.log.Logger;
 
 public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListener {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	//private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** The title label for this component. */
 	private JLabel tableLabel;
@@ -408,38 +405,5 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 
 		table.revalidate();
 		sizeColumns(table);
-	}
-
-	/**
-	 * Tests for the LDAPArgumentsPanel component.
-	 */
-	public static class Test extends TestCase {
-		/**
-		 * Create a new test.
-		 * 
-		 * @param name
-		 *            the name of the test
-		 */
-		public Test(String name) {
-			super(name);
-		}
-
-		/**
-		 * Test that adding an argument to the table results in an appropriate
-		 * TestElement being created.
-		 * 
-		 * @throws Exception
-		 *             if an exception occurred during the test
-		 */
-		public void testLDAPArgumentCreation() throws Exception {
-			LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
-			gui.tableModel.addRow(new LDAPArgument());
-			gui.tableModel.setValueAt("howdy", 0, 0);
-			gui.tableModel.addRow(new LDAPArgument());
-			gui.tableModel.setValueAt("doody", 0, 1);
-
-			assertEquals("=", ((LDAPArgument) ((LDAPArguments) gui.createTestElement()).getArguments().get(0)
-					.getObjectValue()).getMetaData());
-		}
 	}
 }
