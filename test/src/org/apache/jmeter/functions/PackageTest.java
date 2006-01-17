@@ -25,6 +25,7 @@
  */
 package org.apache.jmeter.functions;
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -153,6 +154,13 @@ public class PackageTest extends JMeterTestCase {
 		split.addTest(new PackageTest("SplitTest1"));
 		allsuites.addTest(split);
 
+		TestSuite xpath = new TestSuite("XPath");
+		xpath.addTest(new PackageTest("XPathtestColumns"));
+		xpath.addTest(new PackageTest("XPathtestDefault"));
+		xpath.addTest(new PackageTest("XPathtestNull"));
+		xpath.addTest(new PackageTest("XPathtestrowNum"));
+		allsuites.addTest(xpath);
+		
 		return allsuites;
 	}
 
@@ -612,4 +620,63 @@ public class PackageTest extends JMeterTestCase {
 		}
 
 	}
+
+	// XPathFileContainer tests
+	
+	public void XPathtestNull() throws Exception {
+		try {
+			new XPathFileContainer("nosuch.xml", "/");
+			fail("Should not find the file");
+		} catch (FileNotFoundException e) {
+		}
+	}
+
+	public void XPathtestrowNum() throws Exception {
+		XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/target/@name");
+		assertNotNull(f);
+		// assertEquals("Expected 4 lines",4,f.size());
+
+		int myRow = f.nextRow();
+		assertEquals(0, myRow);
+		assertEquals(1, f.getNextRow());
+
+		myRow = f.nextRow();
+		assertEquals(1, myRow);
+		assertEquals(2, f.getNextRow());
+
+		myRow = f.nextRow();
+		assertEquals(2, myRow);
+		assertEquals(3, f.getNextRow());
+
+		// myRow = f.nextRow();
+		// assertEquals(3,myRow);
+		// assertEquals(0,f.getNextRow());
+
+		// myRow = f.nextRow();
+		// assertEquals(0,myRow);
+		// assertEquals(1,f.getNextRow());
+
+	}
+
+	public void XPathtestColumns() throws Exception {
+		XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/target/@name");
+		assertNotNull(f);
+		assertTrue("Not empty", f.size() > 0);
+		int last = 0;
+		for (int i = 0; i < f.size(); i++) {
+			last = f.nextRow();
+			log.debug("found [" + i + "]" + f.getXPathString(last));
+		}
+		assertEquals(last + 1, f.size());
+
+	}
+
+	public void XPathtestDefault() throws Exception {
+		XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/@default");
+		assertNotNull(f);
+		assertTrue("Not empty", f.size() > 0);
+		assertEquals("all", f.getXPathString(0));
+
+	}
+
 }

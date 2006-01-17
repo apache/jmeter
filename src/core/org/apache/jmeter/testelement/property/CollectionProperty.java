@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
@@ -194,20 +192,6 @@ public class CollectionProperty extends MultiProperty {
 			value = savedValue;
 		}
 		recoverRunningVersionOfSubElements(owner);
-	}
-
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testAddingProperties() throws Exception {
-			CollectionProperty coll = new CollectionProperty();
-			coll.addItem("joe");
-			coll.addProperty(new FunctionProperty());
-			assertEquals("joe", coll.get(0).getStringValue());
-			assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", coll.get(1).getClass().getName());
-		}
 	}
 
 	/*
