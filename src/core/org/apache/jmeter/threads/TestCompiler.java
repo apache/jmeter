@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -31,14 +30,11 @@ import java.util.Set;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -46,7 +42,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
-import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -228,43 +223,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 		if (maybeController instanceof Controller) {
 			log.debug("adding controller: " + maybeController + " to sampler config");
 			controllers.add(maybeController);
-		}
-	}
-
-	/**
-	 * @version $Revision$
-	 */
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testConfigGathering() throws Exception {
-			ListedHashTree testing = new ListedHashTree();
-			GenericController controller = new GenericController();
-			ConfigTestElement config1 = new ConfigTestElement();
-			config1.setName("config1");
-			config1.setProperty("test.property", "A test value");
-			TestSampler sampler = new TestSampler();
-			sampler.setName("sampler");
-			testing.add(controller, config1);
-			testing.add(controller, sampler);
-			TestCompiler.initialize();
-
-			TestCompiler compiler = new TestCompiler(testing, new JMeterVariables());
-			testing.traverse(compiler);
-			sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
-			assertEquals("A test value", sampler.getPropertyAsString("test.property"));
-		}
-
-		class TestSampler extends AbstractSampler {
-			public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
-				return null;
-			}
-
-			public Object clone() {
-				return new TestSampler();
-			}
 		}
 	}
 
