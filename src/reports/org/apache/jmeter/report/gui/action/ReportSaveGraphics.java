@@ -106,22 +106,4 @@ public class ReportSaveGraphics implements Command {
 			}
 		}
 	}
-
-//	public static class Test extends junit.framework.TestCase {
-//		ReportSaveGraphics save;
-//
-//		public Test(String name) {
-//			super(name);
-//		}
-//
-//		public void setUp() throws Exception {
-//            super.setUp();
-//			save = new ReportSaveGraphics();
-//		}
-//
-//		public void testSomething() {
-//			// TODO write some tests
-//		}
-//	}
-
 }

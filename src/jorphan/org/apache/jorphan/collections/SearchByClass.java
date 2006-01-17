@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -104,24 +103,6 @@ public class SearchByClass implements HashTreeTraverser {
 			ListedHashTree tree = new ListedHashTree(node);
 			tree.set(node, subTree);
 			subTrees.put(node, tree);
-		}
-	}
-
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testSearch() throws Exception {
-			ListedHashTree tree = new ListedHashTree();
-			SearchByClass searcher = new SearchByClass(Integer.class);
-			String one = "one";
-			String two = "two";
-			Integer o = new Integer(1);
-			tree.add(one, o);
-			tree.getTree(one).add(o, two);
-			tree.traverse(searcher);
-			assertEquals(1, searcher.getSearchResults().size());
 		}
 	}
 
