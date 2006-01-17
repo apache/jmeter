@@ -894,7 +894,9 @@ some of its classes - at present JMeter can only run from jar files.
       <fileset dir="${src.jms}" includes="**/*.properties" />
     </jar>
     
-    <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"/>
+    <jar jarfile="${lib.dir}/htmlparser.jar" basedir="${build.htmlparser}"
+    	excludes="org/htmlparser/tests/**/*.class"/>
+  	
     <jar jarfile="${lib.dir}/jorphan.jar" basedir="${build.jorphan}"/>
   </target>
 
@@ -1409,11 +1411,12 @@ some of its classes - at present JMeter can only run from jar files.
       <classpath>
     	<fileset dir="${dest.jar}" includes="*.jar"/>
 	    <pathelement location="${build.test}"/>
+	    <pathelement location="${build.htmlparser}"/>
     	<path refid="classpath"/>
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
-      <arg value="${build.test.gump},../lib/ext"/>
+      <arg value="${build.test.gump},${build.htmlparser},../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
