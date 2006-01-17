@@ -35,10 +35,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 
-import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
@@ -85,13 +84,13 @@ public final class ReportMenuFactory {
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
-	private static final String[] MENU_ADD_REPORT_PAGE = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
-			ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS,
-			ReportMenuFactory.TABLES };
-	
-	private static final String[] MENU_ADD_TABLES = new String[] { ReportMenuFactory.TABLES };
-
-	private static final String[] MENU_PARENT_SAMPLER = new String[] { ReportMenuFactory.CONTROLLERS };
+//	private static final String[] MENU_ADD_REPORT_PAGE = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
+//			ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS,
+//			ReportMenuFactory.TABLES };
+//	
+//	private static final String[] MENU_ADD_TABLES = new String[] { ReportMenuFactory.TABLES };
+//
+//	private static final String[] MENU_PARENT_SAMPLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
 	private static List controllers, configElements, listeners, nonTestElements,
 			postProcessors, preProcessors, reportPage, tables;
@@ -364,38 +363,6 @@ public final class ReportMenuFactory {
 		MenuElement[] elements = menu.getSubElements();
 		if ((elements.length > 0) && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
 			menu.addSeparator();
-		}
-	}
-
-	// //////////////////////////// Test code
-	// ////////////////////////////////////
-
-	public static class Test extends JMeterTestCase {
-
-		public Test() {
-			super();
-		}
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private static void check(String s, int i) throws Exception {
-			assertFalse("The number of " + s + " should not be 0", 0 == i);
-		}
-
-		public void testMenu() throws Exception {
-			check("menumap", menuMap.size());
-
-			check("configElements", configElements.size());
-			check("controllers", controllers.size());
-			check("listeners", listeners.size());
-			check("nonTestElements", nonTestElements.size());
-			check("postProcessors", postProcessors.size());
-			check("preProcessors", preProcessors.size());
-
-			check("elementstoskip", elementsToSkip.size());
-
 		}
 	}
 }
