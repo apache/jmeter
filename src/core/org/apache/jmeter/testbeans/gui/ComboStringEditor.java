@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -82,7 +81,8 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	 * non-editable during processing of secondary events.
 	 */
 
-	private static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined"));
+	// Needs to be visible to test cases
+	static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined"));
 
 	private static final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit"));
 
@@ -302,44 +302,6 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 
 		public String toString() {
 			return s;
-		}
-	}
-
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		private void testSetGet(ComboStringEditor e, Object value) throws Exception {
-			e.setValue(value);
-			assertEquals(value, e.getValue());
-		}
-
-		private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
-			e.setAsText(text);
-			assertEquals(text, e.getAsText());
-		}
-
-		public void testSetGet() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
-
-			testSetGet(e, "any string");
-			testSetGet(e, "");
-			testSetGet(e, null);
-			testSetGet(e, "${var}");
-		}
-
-		public void testSetGetAsText() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
-
-			testSetGetAsText(e, "any string");
-			testSetGetAsText(e, "");
-			testSetGetAsText(e, null);
-			testSetGetAsText(e, "${var}");
-
-			// Check "Undefined" does not become a "reserved word":
-			e.setAsText(UNDEFINED.toString());
-			assertNotNull(e.getAsText());
 		}
 	}
 }

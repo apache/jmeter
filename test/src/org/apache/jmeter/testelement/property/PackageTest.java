@@ -309,4 +309,11 @@ public class PackageTest extends TestCase {
 		}
 
 	}
+	public void testAddingProperties() throws Exception {
+		CollectionProperty coll = new CollectionProperty();
+		coll.addItem("joe");
+		coll.addProperty(new FunctionProperty());
+		assertEquals("joe", coll.get(0).getStringValue());
+		assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", coll.get(1).getClass().getName());
+	}
 }
