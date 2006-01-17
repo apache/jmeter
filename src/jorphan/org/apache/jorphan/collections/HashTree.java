@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -29,11 +28,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-
-import junit.framework.TestCase;
-
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class is used to create a tree structure of objects. Each element in the
@@ -1072,69 +1066,6 @@ public class HashTree implements Serializable, Map {
 				spaces.setLength(depth * 2);
 			}
 			return spaces.toString();
-		}
-	}
-
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testAdd1() throws Exception {
-			Logger log = LoggingManager.getLoggerForClass();
-			Collection treePath = Arrays.asList(new String[] { "1", "2", "3", "4" });
-			HashTree tree = new HashTree();
-			log.debug("treePath = " + treePath);
-			tree.add(treePath, "value");
-			log.debug("Now treePath = " + treePath);
-			log.debug(tree.toString());
-			assertEquals(1, tree.list(treePath).size());
-			assertEquals("value", tree.getArray(treePath)[0]);
-		}
-
-		public void testEqualsAndHashCode() throws Exception {
-			HashTree tree1 = new HashTree("abcd");
-			HashTree tree2 = new HashTree("abcd");
-			HashTree tree3 = new HashTree("abcde");
-			HashTree tree4 = new HashTree("abcde");
-
-			assertTrue(tree1.equals(tree1));
-			assertTrue(tree1.equals(tree2));
-			assertTrue(tree2.equals(tree1));
-			assertTrue(tree2.equals(tree2));
-			assertTrue(tree1.hashCode() == tree2.hashCode());
-
-			assertTrue(tree3.equals(tree3));
-			assertTrue(tree3.equals(tree4));
-			assertTrue(tree4.equals(tree3));
-			assertTrue(tree4.equals(tree4));
-			assertTrue(tree3.hashCode() == tree4.hashCode());
-
-			assertNotSame(tree1, tree2);
-			assertNotSame(tree1, tree3);
-			assertNotSame(tree1, tree4);
-			assertNotSame(tree2, tree3);
-			assertNotSame(tree2, tree4);
-
-			assertFalse(tree1.equals(tree3));
-			assertFalse(tree1.equals(tree4));
-			assertFalse(tree2.equals(tree3));
-			assertFalse(tree2.equals(tree4));
-
-			assertNotNull(tree1);
-			assertNotNull(tree2);
-
-			tree1.add("abcd", tree3);
-			assertFalse(tree1.equals(tree2));
-			assertFalse(tree2.equals(tree1));// Check reflexive
-			if (tree1.hashCode() == tree2.hashCode()) {
-				// This is not a requirement
-				System.out.println("WARN: unequal HashTrees should not have equal hashCodes");
-			}
-			tree2.add("abcd", tree4);
-			assertTrue(tree1.equals(tree2));
-			assertTrue(tree2.equals(tree1));
-			assertTrue(tree1.hashCode() == tree2.hashCode());
 		}
 	}
 }

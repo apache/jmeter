@@ -102,21 +102,4 @@ public class SaveGraphics implements Command {
 			}
 		}
 	}
-
-//	public static class Test extends junit.framework.TestCase {
-//		private SaveGraphics save;
-//
-//		public Test(String name) {
-//			super(name);
-//		}
-//
-//		public void setUp() throws Exception {
-//            super.setUp();
-//			save = new SaveGraphics();
-//		}
-//
-//		public void testSomething() throws Exception {
-//			// TODO write some tests
-//		}
-//	}
 }
