@@ -1411,12 +1411,11 @@ some of its classes - at present JMeter can only run from jar files.
       <classpath>
     	<fileset dir="${dest.jar}" includes="*.jar"/>
 	    <pathelement location="${build.test}"/>
-	    <pathelement location="${build.htmlparser}"/>
     	<path refid="classpath"/>
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
-      <arg value="${build.test.gump},${build.htmlparser},../lib/ext"/>
+      <arg value="${build.test.gump},../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
@@ -1460,7 +1459,7 @@ some of its classes - at present JMeter can only run from jar files.
   <!-- Run the HTML Parser unit tests -->
   <target name="testparser" description="run the JUnit tests">
     <echo message="**********************************"/>
-    <echo message="*  Running unit tests....        *"/>
+    <echo message="*  Running HtmlParser unit tests *"/>
     <echo message="**********************************"/>
 <!--
     <javac srcdir="${src}" includes="org/htmlparser/tests/**" debug="on">
@@ -1473,8 +1472,8 @@ some of its classes - at present JMeter can only run from jar files.
 -->
     <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
       <classpath>
+	    <pathelement location="${build.htmlparser}"/>
         <pathelement location="${lib.dir}/htmlparser.jar"/>
-<!--        <pathelement location="${src}"/-->
         <pathelement location="${junit.jar}"/>
         <pathelement location="${log-kit.jar}"/>
       </classpath>
