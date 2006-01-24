@@ -238,6 +238,7 @@ public class JMeter implements JMeterPlugin {
 			log.info("java.version=" + System.getProperty("java.version"));
 			log.info("Locale=" + Locale.getDefault().getDisplayName());
 			log.info(JMeterUtils.getJMeterCopyright());
+			log.info("JMeterHome="+JMeterUtils.getJMeterHome());
             
             updateClassLoader();
             if (log.isDebugEnabled())
