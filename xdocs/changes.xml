@@ -64,6 +64,7 @@ Users must explicitly check append in the sampler</li>
 <li>Fix NPE when using JavaScript function on Test Plan</li>
 <li>Fix Base Href parsing in htmlparser</li>
 <li>Bug 38256 - handle cookie with no path</li>
+<li>Bug 38391 - use long when accumulating timer delays</li>
 </ul>	
 	
 <h4>Other changes</h4>
