@@ -431,7 +431,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	}
 
 	private void delay(List timers) {
-		int sum = 0;
+		long sum = 0;
 		Iterator iter = timers.iterator();
 		while (iter.hasNext()) {
 			Timer timer = (Timer) iter.next();
