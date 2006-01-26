@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -27,12 +26,12 @@ import java.net.URLDecoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
+// For JUnit tests, @see TestTCLogParser
 
 /**
  * Description:<br>
@@ -542,38 +541,4 @@ public class TCLogParser implements LogParser {
 			// do nothing
 		}
 	}
-
-	// TODO write some more tests
-
-	// /////////////////////////// Start of Test Code //////////////////////////
-
-	public static class Test extends JMeterTestCase {
-		private static final TCLogParser tclp = new TCLogParser();
-
-		private static final String URL1 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook/ HTTP/1.1\" 200 1981";
-
-		private static final String URL2 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook?x=y HTTP/1.1\" 200 1981";
-
-		public void testConstruct() throws Exception {
-			TCLogParser tcp;
-			tcp = new TCLogParser();
-			assertNull("Should not have set the filename", tcp.FILENAME);
-
-			String file = "testfiles/access.log";
-			tcp = new TCLogParser(file);
-			assertEquals("Filename should have been saved", file, tcp.FILENAME);
-		}
-
-		public void testcleanURL() throws Exception {
-			String res = tclp.cleanURL(URL1);
-			assertEquals("/addrbook/", res);
-			assertNull(tclp.stripFile(res, new HTTPNullSampler()));
-		}
-
-		public void testcheckURL() throws Exception {
-			assertFalse("URL is not have a query", tclp.checkURL(URL1));
-			assertTrue("URL is a query", tclp.checkURL(URL2));
-		}
-	}
-
 }
