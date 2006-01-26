@@ -25,7 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -42,6 +41,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 import org.xml.sax.SAXException;
+
+// For Junit tests @see TestHtmlParsingUtils
 
 /**
  * @author Michael Stover Created June 14, 2001
@@ -312,42 +313,5 @@ public final class HtmlParsingUtils {
 		String action = atts.getNamedItem("action").getNodeValue();
 		HTTPSamplerBase url = createUrlFromAnchor(action, context);
 		return url;
-	}
-
-	// /////////////////// Start of Test Code /////////////////
-
-	// TODO: need more tests
-
-	public static class Test extends JMeterTestCase {
-
-		public Test(String name) {
-			super(name);
-		}
-
-		protected void setUp() {
-		}
-
-		public void testGetParser() throws Exception {
-			getParser();
-		}
-
-		public void testGetDom() throws Exception {
-			getDOM("<HTML></HTML>");
-			getDOM("");
-		}
-
-		public void testIsArgumentMatched() throws Exception {
-			Argument arg = new Argument();
-			Argument argp = new Argument();
-			assertTrue(isArgumentMatched(arg, argp));
-
-			arg = new Argument("test", "abcd");
-			argp = new Argument("test", "a.*d");
-			assertTrue(isArgumentMatched(arg, argp));
-
-			arg = new Argument("test", "abcd");
-			argp = new Argument("test", "a.*e");
-			assertFalse(isArgumentMatched(arg, argp));
-		}
 	}
 }
