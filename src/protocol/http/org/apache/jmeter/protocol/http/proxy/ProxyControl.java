@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
  *
@@ -25,7 +24,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import junit.framework.TestCase;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.config.Arguments;
@@ -41,7 +39,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -57,16 +54,15 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.apache.jorphan.logging.LoggingManager;
-
 import org.apache.log.Logger;
-
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+
+//For unit tests, @see TestProxyControl
 
 /**
  * @version $Revision$ updated on $Date$
@@ -315,7 +311,8 @@ public class ProxyControl extends GenericController implements Serializable {
 		}
 	}
 
-	private boolean filterUrl(HTTPSamplerBase sampler) {
+    // Package protected to allow test case access
+    boolean filterUrl(HTTPSamplerBase sampler) {
 		String domain = sampler.getDomain();
 		if (domain == null || domain.length() == 0) {
 			return false;
@@ -774,40 +771,5 @@ public class ProxyControl extends GenericController implements Serializable {
 
 	public boolean canRemove() {
 		return null == server;
-	}
-
-	public static class Test extends TestCase {
-		HTTPSamplerBase sampler;
-
-		ProxyControl control;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			control = new ProxyControl();
-			control.addIncludedPattern(".*\\.jsp");
-			control.addExcludedPattern(".*apache.org.*");
-			sampler = new HTTPNullSampler();
-		}
-
-		public void testFilter1() throws Exception {
-			sampler.setDomain("jakarta.org");
-			sampler.setPath("index.jsp");
-			assertTrue("Should find jakarta.org/index.jsp", control.filterUrl(sampler));
-		}
-
-		public void testFilter2() throws Exception {
-			sampler.setPath("index.jsp");
-			sampler.setDomain("www.apache.org");
-			assertFalse("Should not match www.apache.org", control.filterUrl(sampler));
-		}
-
-		public void testFilter3() throws Exception {
-			sampler.setPath("header.gif");
-			sampler.setDomain("jakarta.org");
-			assertFalse("Should not match header.gif", control.filterUrl(sampler));
-		}
 	}
 }
