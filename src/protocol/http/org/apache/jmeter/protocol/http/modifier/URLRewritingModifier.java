@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -20,31 +19,28 @@ package org.apache.jmeter.protocol.http.modifier;
 
 import java.io.Serializable;
 
-import junit.framework.TestCase;
-
-import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
+//For unit tests, @see TestURLRewritingModifier
+
 /**
  * @author mstover
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision$ updated on $Date$
  */
+
 public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor {
 
 	private Pattern pathExtensionEqualsQuestionmarkRegexp;
@@ -190,124 +186,5 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
 	public boolean isPathExtensionNoQuestionmark() {
 		return getPropertyAsBoolean(PATH_EXTENSION_NO_QUESTIONMARK);
-	}
-
-	// TODO: add test cases for new jakarta commons http client
-	public static class Test extends TestCase {
-		private SampleResult response = null;
-
-		private JMeterContext context = null;
-
-		private URLRewritingModifier mod = null;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			context = JMeterContextService.getContext();
-			mod = new URLRewritingModifier();
-			mod.setThreadContext(context);
-		}
-
-		public void testGrabSessionId() throws Exception {
-			String html = "location: http://server.com/index.html" + "?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
-			response = new SampleResult();
-			response.setResponseData(html.getBytes());
-			mod.setArgumentName("session_id");
-			HTTPSamplerBase sampler = createSampler();
-			sampler.addArgument("session_id", "adfasdfdsafasdfasd");
-			context.setCurrentSampler(sampler);
-			context.setPreviousResult(response);
-			mod.process();
-			Arguments args = sampler.getArguments();
-			assertEquals("jfdkjdkf jddkfdfjkdjfdf\"", ((Argument) args.getArguments().get(0).getObjectValue())
-					.getValue());
-			assertEquals("http://server.com/index.html?" + "session_id=jfdkjdkf+jddkfdfjkdjfdf%22", sampler.toString());
-		}
-
-		public void testGrabSessionId2() throws Exception {
-			String html = "<a href=\"http://server.com/index.html?" + "session_id=jfdkjdkfjddkfdfjkdjfdf\">";
-			response = new SampleResult();
-			response.setResponseData(html.getBytes());
-			mod.setArgumentName("session_id");
-			HTTPSamplerBase sampler = createSampler();
-			context.setCurrentSampler(sampler);
-			context.setPreviousResult(response);
-			mod.process();
-			Arguments args = sampler.getArguments();
-			assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
-		}
-
-		private HTTPSamplerBase createSampler() {
-			HTTPSamplerBase sampler = new HTTPNullSampler();
-			sampler.setDomain("server.com");
-			sampler.setPath("index.html");
-			sampler.setMethod(HTTPSamplerBase.GET);
-			sampler.setProtocol("http");
-			return sampler;
-		}
-
-		public void testGrabSessionId3() throws Exception {
-			String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf'";
-			response = new SampleResult();
-			response.setResponseData(html.getBytes());
-			mod.setArgumentName("session_id");
-			HTTPSamplerBase sampler = createSampler();
-			context.setCurrentSampler(sampler);
-			context.setPreviousResult(response);
-			mod.process();
-			Arguments args = sampler.getArguments();
-			assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
-		}
-
-		public void testGrabSessionIdEndedInTab() throws Exception {
-			String html = "href='index.html?session_id=jfdkjdkfjddkfdfjkdjfdf\t";
-			response = new SampleResult();
-			response.setResponseData(html.getBytes());
-			mod.setArgumentName("session_id");
-			HTTPSamplerBase sampler = createSampler();
-			context.setCurrentSampler(sampler);
-			context.setPreviousResult(response);
-			mod.process();
-			Arguments args = sampler.getArguments();
-			assertEquals("jfdkjdkfjddkfdfjkdjfdf", ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
-		}
-
-		public void testGrabSessionId4() throws Exception {
-			String html = "href='index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT'";
-			response = new SampleResult();
-			response.setResponseData(html.getBytes());
-			mod.setArgumentName("%24sid%24");
-			mod.setPathExtension(true);
-			mod.setPathExtensionNoEquals(true);
-			HTTPSamplerBase sampler = createSampler();
-			context.setCurrentSampler(sampler);
-			context.setPreviousResult(response);
-			mod.process();
-			// Arguments args = sampler.getArguments();
-			assertEquals("index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT", sampler.getPath());
-		}
-
-		public void testGrabSessionIdFromForm() throws Exception {
-			String[] html = new String[] { "<input name=\"sid\" value=\"myId\">", "<input name='sid' value='myId'>",
-					"<input value=\"myId\" NAME='sid'>", "<input VALUE='myId' name=\"sid\">",
-					"<input blah blah value=\"myId\" yoda yoda NAME='sid'>", };
-			for (int i = 0; i < html.length; i++) {
-				response = new SampleResult();
-				response.setResponseData(html[i].getBytes());
-				URLRewritingModifier newMod = new URLRewritingModifier();
-				newMod.setThreadContext(context);
-				newMod.setArgumentName("sid");
-				newMod.setPathExtension(false);
-				HTTPSamplerBase sampler = createSampler();
-				context.setCurrentSampler(sampler);
-				context.setPreviousResult(response);
-				newMod.process();
-				Arguments args = sampler.getArguments();
-				assertEquals("For case i=" + i, "myId", ((Argument) args.getArguments().get(0).getObjectValue())
-						.getValue());
-			}
-		}
 	}
 }
