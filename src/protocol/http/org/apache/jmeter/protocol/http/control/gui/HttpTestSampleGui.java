@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
  *
@@ -25,8 +24,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
@@ -36,7 +33,11 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+//For unit tests, @see TestHttpTestSampleGui
+
 /**
+ * The GUI for HttpSampler
+ * 
  * @version $Revision$ on $Date$
  */
 public class HttpTestSampleGui extends AbstractSamplerGui {
@@ -123,28 +124,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	public Dimension getPreferredSize() {
 		return getMinimumSize();
-	}
-
-	public static class Test extends TestCase {
-		HttpTestSampleGui gui;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			gui = new HttpTestSampleGui();
-		}
-
-		public void testCloneSampler() throws Exception {
-			HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
-			sampler.addArgument("param", "value");
-			HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
-			clonedSampler.setRunningVersion(true);
-			sampler.getArguments().getArgument(0).setValue("new value");
-			assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
-					.getValue());
-		}
 	}
 
 	/*

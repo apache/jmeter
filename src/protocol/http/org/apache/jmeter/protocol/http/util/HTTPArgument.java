@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -23,20 +22,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+//For unit tests, @see TestHTTPArgument
+
 /*
- * 
- * @author unattributed
  * 
  * @version $Revision$ $Date$
  */
@@ -165,34 +161,5 @@ public class HTTPArgument extends Argument implements Serializable {
 		}
 		args.removeAllArguments();
 		args.setArguments(newArguments);
-	}
-
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testCloning() throws Exception {
-			HTTPArgument arg = new HTTPArgument("name.?", "value_ here");
-			assertEquals("name.%3F", arg.getEncodedName());
-			assertEquals("value_+here", arg.getEncodedValue());
-			HTTPArgument clone = (HTTPArgument) arg.clone();
-			assertEquals("name.%3F", clone.getEncodedName());
-			assertEquals("value_+here", clone.getEncodedValue());
-		}
-
-		public void testConversion() throws Exception {
-			Arguments args = new Arguments();
-			args.addArgument("name.?", "value_ here");
-			args.addArgument("name$of property", "value_.+");
-			HTTPArgument.convertArgumentsToHTTP(args);
-			CollectionProperty argList = args.getArguments();
-			HTTPArgument httpArg = (HTTPArgument) argList.get(0).getObjectValue();
-			assertEquals("name.%3F", httpArg.getEncodedName());
-			assertEquals("value_+here", httpArg.getEncodedValue());
-			httpArg = (HTTPArgument) argList.get(1).getObjectValue();
-			assertEquals("name%24of+property", httpArg.getEncodedName());
-			assertEquals("value_.%2B", httpArg.getEncodedValue());
-		}
 	}
 }
