@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Provides a Random function which returns a random integer between a min
- * (first argument) and a max (seceond argument).
+ * Provides a Random function which returns a random long integer between a min
+ * (first argument) and a max (second argument).
  * 
  * @author <a href="mailto:sjkwadzo@praize.com">Jonathan Kwadzo</a>
  */
@@ -74,12 +74,12 @@ public class Random extends AbstractFunction implements Serializable {
 
 		JMeterVariables vars = getVariables();
 
-		int min = Integer.parseInt(minimum.execute().trim());
-		int max = Integer.parseInt(maximum.execute().trim());
+		long min = Long.parseLong(minimum.execute().trim());
+		long max = Long.parseLong(maximum.execute().trim());
 
-		int rand = (int) Math.round(min + Math.random() * (max - min));
+		long rand = Math.round(min + Math.random() * (max - min));
 
-		String randString = Integer.toString(rand);
+		String randString = Long.toString(rand);
 		vars.put(varName.execute(), randString);
 
 		return randString;

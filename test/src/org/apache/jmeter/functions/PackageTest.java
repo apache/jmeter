@@ -161,7 +161,11 @@ public class PackageTest extends JMeterTestCase {
 		xpath.addTest(new PackageTest("XPathtestrowNum"));
 		allsuites.addTest(xpath);
 		
-		return allsuites;
+        TestSuite random = new TestSuite("Random");
+        random.addTest(new PackageTest("RandomTest1"));
+        allsuites.addTest(random);
+
+        return allsuites;
 	}
 
 	private JMeterContext jmctx = null;
@@ -679,4 +683,10 @@ public class PackageTest extends JMeterTestCase {
 
 	}
 
+    public void RandomTest1() throws Exception {
+        Random r = new Random();
+        Collection parms = MakeParams("0","10000000000","VAR");
+        r.setParameters(parms);
+        String s = r.execute(null,null);
+    }
 }
