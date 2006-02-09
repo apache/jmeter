@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.SearchResult;
@@ -464,14 +465,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	}
 
 	/***************************************************************************
-	 * Collect all the value from the table (Arguments), using this create the
-	 * basicAttributes This will create the Basic Attributes for the User
+	 * Collect all the values from the table (Arguments), using this create the
+	 * Attributes, this will create the Attributes for the User
 	 * defined TestCase for Add Test
 	 * 
-	 * @return The BasicAttributes
+	 * @return The Attributes
 	 **************************************************************************/
-	public BasicAttributes getUserAttributes() {
-		BasicAttributes attrs = new BasicAttributes(true);
+	public Attributes getUserAttributes() {
+        Attributes attrs = new BasicAttributes(true);
 		Attribute attr;
 		PropertyIterator iter = getArguments().iterator();
 
