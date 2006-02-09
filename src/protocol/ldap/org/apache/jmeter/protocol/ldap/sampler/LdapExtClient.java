@@ -23,7 +23,7 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.NamingEnumeration;
-import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
@@ -160,16 +160,16 @@ public class LdapExtClient {
 	}
 
 	/***************************************************************************
-	 * Create the attribute in the ldap directory for the given string
+	 * Create the entry in the ldap directory for the given string
 	 * 
-	 * @param basicattributes
-	 *            add all the entry in to the basicattribute
+	 * @param attributes
+	 *            add all the attributes and values from the attributes object
 	 * @param string
 	 *            The string (dn) value
 	 **************************************************************************/
-	public void createTest(DirContext dirContext, BasicAttributes basicattributes, String string)
+    public void createTest(DirContext dirContext, Attributes attributes, String string)
 			throws NamingException {
-		dirContext.createSubcontext(string, basicattributes);
+		dirContext.createSubcontext(string, attributes);
 	}
 
 	/***************************************************************************
