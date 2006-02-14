@@ -68,6 +68,7 @@ Users must explicitly check append in the sampler</li>
 <li>Bug 38554 - Random function now uses long numbers</li>
 <li>Bug 35224 - allow duplicate attributes for LDAP sampler</li>
 <li>Bug 37278 - Fix Include controller to allow functions/variables in file name field</li>
+<li>Bug 35792 - Fix WebService Sampler to allow functions/variables in string fields</li>
 </ul>	
 	
 <h4>Other changes</h4>

@@ -44,6 +44,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.util.DOMPool;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.log.Logger;
 import org.apache.soap.Envelope;
@@ -107,7 +108,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * Set the path where XML messages are stored for random selection.
 	 */
 	public void setXmlPathLoc(String path) {
-		setProperty(XML_PATH_LOC, path);
+		setProperty(new StringProperty(XML_PATH_LOC, path));
 	}
 
 	/**
@@ -125,7 +126,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param filename
 	 */
 	public void setXmlFile(String filename) {
-		setProperty(XML_DATA_FILE, filename);
+		setProperty(new StringProperty(XML_DATA_FILE, filename));
 	}
 
 	/**
@@ -193,7 +194,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param data
 	 */
 	public void setXmlData(String data) {
-		setProperty(XML_DATA, data);
+		setProperty(new StringProperty(XML_DATA, data));
 	}
 
 	/**
@@ -211,7 +212,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param data
 	 */
 	public void setSoapAction(String data) {
-		setProperty(SOAP_ACTION, data);
+		setProperty(new StringProperty(SOAP_ACTION, data));
 	}
 
 	/**
@@ -265,7 +266,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param proxy
 	 */
 	public void setUseProxy(boolean proxy) {
-		setProperty(USE_PROXY, String.valueOf(proxy));
+		setProperty(new StringProperty(USE_PROXY, String.valueOf(proxy)));
 	}
 
 	/**
@@ -283,7 +284,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param host
 	 */
 	public void setProxyHost(String host) {
-		setProperty(PROXY_HOST, host);
+		setProperty(new StringProperty(PROXY_HOST, host));
 	}
 
 	/**
@@ -302,7 +303,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param port
 	 */
 	public void setProxyPort(String port) {
-		setProperty(PROXY_PORT, port);
+		setProperty(new StringProperty(PROXY_PORT, port));
 	}
 
 	/**
@@ -320,7 +321,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * @param url
 	 */
 	public void setWsdlURL(String url) {
-		this.setProperty(WSDL_URL, url);
+		this.setProperty(new StringProperty(WSDL_URL, url));
 	}
 
 	/**
