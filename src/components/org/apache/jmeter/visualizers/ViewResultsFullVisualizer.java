@@ -264,10 +264,14 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 					if (sd != null) {
 						String rh = res.getRequestHeaders();
 						if (rh != null) {
-							sd = sd + "\n" + rh;
-						}
+                            StringBuffer sb = new StringBuffer(sd.length()+rh.length()+20);
+                            sb.append(sd);
+                            sb.append("\nRequest Headers:\n");
+                            sb.append(rh);
+							sd = sb.toString();
+                        }
 						sampleDataField.setText(sd);
-					}
+                    }
 
 					statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null);
 
