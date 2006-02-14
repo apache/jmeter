@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -18,10 +17,10 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.util.Collection;
-import java.util.Iterator;
+//import java.util.Collection;
+//import java.util.Iterator;
 
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
@@ -44,7 +43,7 @@ public class IncludeControllerGui extends AbstractControllerGui
 																 */
 {
 
-	private JLabel warningLabel;
+	//NOTUSED private JLabel warningLabel;
 
     private FilePanel includePanel = 
         new FilePanel(JMeterUtils.getResString("include_path"), ".jmx");
@@ -74,22 +73,23 @@ public class IncludeControllerGui extends AbstractControllerGui
         this.includePanel.setFilename(controller.getIncludePath());
 	}
 
-	private String renderPath(Collection path) {
-		Iterator iter = path.iterator();
-		StringBuffer buf = new StringBuffer();
-		boolean first = true;
-		while (iter.hasNext()) {
-			if (first) {
-				first = false;
-				iter.next();
-				continue;
-			}
-			buf.append(iter.next());
-			if (iter.hasNext())
-				buf.append(" > ");
-		}
-		return buf.toString();
-	}
+//NOTUSED
+//	private String renderPath(Collection path) {
+//		Iterator iter = path.iterator();
+//		StringBuffer buf = new StringBuffer();
+//		boolean first = true;
+//		while (iter.hasNext()) {
+//			if (first) {
+//				first = false;
+//				iter.next();
+//				continue;
+//			}
+//			buf.append(iter.next());
+//			if (iter.hasNext())
+//				buf.append(" > ");
+//		}
+//		return buf.toString();
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -131,13 +131,14 @@ public class IncludeControllerGui extends AbstractControllerGui
         add(includePanel);
 	}
 
-	private String spaces(int level) {
-		int multi = 4;
-		StringBuffer spaces = new StringBuffer(level * multi);
-		for (int i = 0; i < level * multi; i++) {
-			spaces.append(" ");
-		}
-		return spaces.toString();
-	}
+//NOTUSED	
+//	private String spaces(int level) {
+//		int multi = 4;
+//		StringBuffer spaces = new StringBuffer(level * multi);
+//		for (int i = 0; i < level * multi; i++) {
+//			spaces.append(" ");
+//		}
+//		return spaces.toString();
+//	}
     
 }
