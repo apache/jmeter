@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
+ * Copyright 2003-20056 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.net.URL;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
@@ -30,7 +30,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class HTTPSampleResult extends SampleResult {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+	//private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public HTTPSampleResult() {
 		super();
@@ -104,15 +104,19 @@ public class HTTPSampleResult extends SampleResult {
 		if (u != null) {
 			sb.append(' ');
 			sb.append(u.toString());
+            sb.append("\n");
 			if (HTTPSamplerBase.POST.equals(method)) {
+                sb.append("\nPOST data:\n");
 				sb.append(queryString);
-			}
-			sb.append("\n");
+                sb.append("\n");
+            }
             if (cookies.length()>0){
                 sb.append("\nCookie Data:\n");
     			sb.append(cookies);
-                sb.append("\n");
+            } else {
+                sb.append("\n[no cookies]");
             }
+            sb.append("\n");
 		}
 		return sb.toString();
 	}
