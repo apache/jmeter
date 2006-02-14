@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -24,6 +23,7 @@ import java.util.Iterator;
 
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -75,7 +75,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      * @param jmxfile
      */
     public void setIncludePath(String jmxfile) {
-        this.setProperty(INCLUDE_PATH,jmxfile);
+        this.setProperty(new StringProperty(INCLUDE_PATH,jmxfile));
     }
     
     /**
