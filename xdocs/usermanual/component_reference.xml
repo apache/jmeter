@@ -1282,6 +1282,11 @@ The include controller is designed to use an external jmx file. To use it, add
 samples to a simple controller, then save the simple controller as a jmx file.
 The file can then be used in a test plan.
 </p>
+<note>
+This element does not support variables/functions in the filename field.<br/>
+However, if the property <b>includecontroller.prefix</b> is defined, 
+the contents are used to prefix the pathname.
+</note>
 </description>
 <properties>
 	<property name="Filename" required="Yes">The file to include.</property>
