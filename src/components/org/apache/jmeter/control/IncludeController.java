@@ -23,7 +23,6 @@ import java.util.Iterator;
 
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -75,7 +74,7 @@ public class IncludeController extends GenericController implements ReplaceableC
      * @param jmxfile
      */
     public void setIncludePath(String jmxfile) {
-        this.setProperty(new StringProperty(INCLUDE_PATH,jmxfile));
+        this.setProperty(INCLUDE_PATH,jmxfile);
     }
     
     /**
@@ -100,10 +99,11 @@ public class IncludeController extends GenericController implements ReplaceableC
      */
     protected HashTree loadIncludedElements() {
         // only try to load the JMX test plan if there is one
-        if (getIncludePath() != null && getIncludePath().length() > 0) {
+        final String includePath = getIncludePath();
+        if (includePath != null && includePath.length() > 0) {
             try {
-                log.info("loadIncludedElements -- try to load included module");
-                InputStream reader = new FileInputStream(getIncludePath());
+                log.info("loadIncludedElements -- try to load included module: "+includePath);
+                InputStream reader = new FileInputStream(includePath);
                 this.SUBTREE = SaveService.loadTree(reader);
                 return this.SUBTREE;
             } catch (NoClassDefFoundError ex) // Allow for missing optional jars
