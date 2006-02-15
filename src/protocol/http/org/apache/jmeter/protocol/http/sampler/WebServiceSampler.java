@@ -86,16 +86,6 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
 
 	/**
-	 * size of File[] array
-	 */
-	private int fileCount = -1;
-
-	/**
-	 * List of files that have .xml extension
-	 */
-	private File[] fileList = null;
-
-	/**
 	 * Random class for generating random numbers.
 	 */
 	private final Random RANDOM = new Random();
@@ -173,9 +163,8 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		if (this.getXmlPathLoc() != null) {
 			File src = new File(this.getXmlPathLoc());
 			if (src.isDirectory() && src.list() != null) {
-				fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }));
-				this.fileCount = fileList.length;
-				File one = fileList[RANDOM.nextInt(fileCount)];
+				File [] fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }));
+				File one = fileList[RANDOM.nextInt(fileList.length)];
 				// return the absolutePath of the file
 				return one.getAbsolutePath();
 			} else {
@@ -369,10 +358,13 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	public org.w3c.dom.Element createDocument() {
 		if (getPropertyAsBoolean(MEMORY_CACHE)) {
 			String next = this.getRandomFileName();
-			if (DOMPool.getDocument(next) != null) {
-				return DOMPool.getDocument(next).getDocumentElement();
+			Document document = DOMPool.getDocument(next);
+			if (document != null) {
+				log.info("Reusing document with key: "+next);
+				return document.getDocumentElement();
 			} else {
                 Document doc = openDocument(next);
+				log.info("Created document with key: "+next);
 				return doc == null ? null : doc.getDocumentElement();
 			}
 		} else {
