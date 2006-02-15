@@ -161,7 +161,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 	public void updateGui(final Sample oneSample) {
 		long h = model.getPercentPoint((float) 0.90).longValue();
 		boolean repaint = false;
-		if ((oneSample.count % 20 == 0 || oneSample.count < 20) && h > (graphMax * 1.2) || graphMax > (h * 1.2)) {
+		if ((oneSample.getCount() % 20 == 0 || oneSample.getCount() < 20) && h > (graphMax * 1.2) || graphMax > (h * 1.2)) {
 			graphMax = h;
 			repaint = true;
 		}
@@ -206,9 +206,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 		int height = getHeight();
 		log.debug("Drawing a sample at " + x);
 		if (wantData) {
-			int data = (int) (oneSample.data * height / graphMax);
+			int data = (int) (oneSample.getData() * height / graphMax);
 
-			if (oneSample.success) {
+			if (oneSample.isSuccess()) {
 				g.setColor(Color.black);
 			} else {
 				g.setColor(JMeterColor.YELLOW);
@@ -218,27 +218,27 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 		}
 
 		if (wantAverage) {
-			int average = (int) (oneSample.average * height / graphMax);
+			int average = (int) (oneSample.getAverage() * height / graphMax);
 
 			g.setColor(Color.blue);
 			g.drawLine(x % width, height - average, x % width, (height - average - 1));
 		}
 
 		if (wantMedian) {
-			int median = (int) (oneSample.median * height / graphMax);
+			int median = (int) (oneSample.getMedian() * height / graphMax);
 
 			g.setColor(JMeterColor.purple);
 			g.drawLine(x % width, height - median, x % width, (height - median - 1));
 		}
 
 		if (wantDeviation) {
-			int deviation = (int) (oneSample.deviation * height / graphMax);
+			int deviation = (int) (oneSample.getDeviation() * height / graphMax);
 
 			g.setColor(Color.red);
 			g.drawLine(x % width, height - deviation, x % width, (height - deviation - 1));
 		}
 		if (wantThroughput) {
-			int throughput = (int) (oneSample.throughput * height / throughputMax);
+			int throughput = (int) (oneSample.getThroughput() * height / throughputMax);
 
 			g.setColor(JMeterColor.dark_green);
 			g.drawLine(x % width, height - throughput, x % width, (height - throughput - 1));

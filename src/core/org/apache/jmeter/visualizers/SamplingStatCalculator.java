@@ -124,9 +124,9 @@ public class SamplingStatCalculator implements Serializable {
 	 * @return how long the samples took
 	 */
 	public long getElapsed() {
-		if (getCurrentSample().endTime == 0)
+		if (getCurrentSample().getEndTime() == 0)
 			return 0;// No samples collected ...
-		return getCurrentSample().endTime - firstTime;
+		return getCurrentSample().getEndTime() - firstTime;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class SamplingStatCalculator implements Serializable {
 		if (calculator.getCount() == 0)
 			return 0.0; // Better behaviour when howLong=0 or lastTime=0
 
-		return getCurrentSample().throughput;
+		return getCurrentSample().getThroughput();
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class SamplingStatCalculator implements Serializable {
 				calculator.addBytes(byteslength);
 			}
 			setStartTime(res);
-			eCount = getCurrentSample().errorCount;
+			eCount = getCurrentSample().getErrorCount();
 			if (!res.isSuccessful()) {
 				eCount++;
 			}
@@ -282,7 +282,7 @@ public class SamplingStatCalculator implements Serializable {
 
 	private long getEndTime(SampleResult res) {
 		long endTime = res.getTimeStamp();
-		long lastTime = getCurrentSample().endTime;
+		long lastTime = getCurrentSample().getEndTime();
 		if (res.isStampedAtStart()) {
 			endTime += res.getTime();
 		}
@@ -320,7 +320,7 @@ public class SamplingStatCalculator implements Serializable {
 		if (calculator.getCount() == 0) {
 			return (rval);
 		}
-		rval = (double) getCurrentSample().errorCount / (double) calculator.getCount();
+		rval = (double) getCurrentSample().getErrorCount() / (double) calculator.getCount();
 		return (rval);
 	}
 
@@ -359,7 +359,7 @@ public class SamplingStatCalculator implements Serializable {
 	 * @return errorCount
 	 */
 	public long getErrorCount() {
-		return getCurrentSample().errorCount;
+		return getCurrentSample().getErrorCount();
 	}
 
 	/**
