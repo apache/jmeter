@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  * 
@@ -71,7 +70,8 @@ import org.apache.log.Logger;
  */
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable,
 ActionListener {
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
 	private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
 			JMeterUtils.getResString("aggregate_report_count"), JMeterUtils.getResString("average"),
 			JMeterUtils.getResString("aggregate_report_median"), JMeterUtils.getResString("aggregate_report_90%_line"),
@@ -106,7 +106,7 @@ ActionListener {
     protected JLabeledChoice columns = 
         new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);
     
-    protected double[][] data = null;
+    //NOT USED protected double[][] data = null;
     
     protected JButton displayButton = 
         new JButton(JMeterUtils.getResString("aggregate_graph_display"));

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -53,7 +52,8 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * @version $Revision$ $Date$
  */
 public class GraphVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener, Clearable {
-	SamplingStatCalculator model;
+    
+	private SamplingStatCalculator model;
 
 	private JTextField maxYField = null;
 
@@ -61,7 +61,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
 	private JTextField noSamplesField = null;
 
-	String minute = JMeterUtils.getResString("minute");
+	private String minute = JMeterUtils.getResString("minute");
 
 	private Graph graph;
 
@@ -110,12 +110,12 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 	public synchronized void updateGui(Sample s) {
 		// We have received one more sample
 		graph.updateGui(s);
-		noSamplesField.setText(Long.toString(s.count));
-		dataField.setText(Long.toString(s.data));
-		averageField.setText(Long.toString(s.average));
-		deviationField.setText(Long.toString(s.deviation));
-		throughputField.setText(Double.toString(60 * s.throughput) + "/" + minute);
-		medianField.setText(Long.toString(s.median));
+		noSamplesField.setText(Long.toString(s.getCount()));
+		dataField.setText(Long.toString(s.getData()));
+		averageField.setText(Long.toString(s.getAverage()));
+		deviationField.setText(Long.toString(s.getDeviation()));
+		throughputField.setText(Double.toString(60 * s.getThroughput()) + "/" + minute);
+		medianField.setText(Long.toString(s.getMedian()));
 		updateYAxis();
 	}
 
