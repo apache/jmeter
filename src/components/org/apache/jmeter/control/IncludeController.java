@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.apache.log.Logger;
 /**
  * 
  * 
- * @author Peter Lin
+ * author Peter Lin
  * @version $Revision$
  */
 public class IncludeController extends GenericController implements ReplaceableController {
@@ -39,6 +39,10 @@ public class IncludeController extends GenericController implements ReplaceableC
 
     public static final String INCLUDE_PATH = "IncludeController.includepath";
 
+    private static  final String prefix;
+    static {
+    	prefix=JMeterUtils.getPropDefault("includecontroller.prefix", "");
+    }
     private HashTree SUBTREE = null;
     private TestElement SUB = null;
 
@@ -102,8 +106,9 @@ public class IncludeController extends GenericController implements ReplaceableC
         final String includePath = getIncludePath();
         if (includePath != null && includePath.length() > 0) {
             try {
-                log.info("loadIncludedElements -- try to load included module: "+includePath);
-                InputStream reader = new FileInputStream(includePath);
+            	String file=prefix+includePath;
+                log.info("loadIncludedElements -- try to load included module: "+file);
+                InputStream reader = new FileInputStream(file);
                 this.SUBTREE = SaveService.loadTree(reader);
                 return this.SUBTREE;
             } catch (NoClassDefFoundError ex) // Allow for missing optional jars
