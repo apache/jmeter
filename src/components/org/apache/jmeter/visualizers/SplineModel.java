@@ -93,11 +93,11 @@ public class SplineModel implements Clearable {
 	}
 
 	public long getCurrent() {
-		return samples.getCurrentSample().data;
+		return samples.getCurrentSample().getData();
 	}
 
 	public long getSample(int i) {
-		return samples.getSample(i).data;
+		return samples.getSample(i).getData();
 	}
 
 	public long getNumberOfCollectedSamples() {
@@ -135,7 +135,7 @@ public class SplineModel implements Clearable {
 
 			for (int i = 0; i < numberOfNodes; i++) {
 				for (int j = 0; j < loadFactor; j++) {
-					floatNode[i] += samples.getSample((int) ((i * loadFactor) + j)).data;
+					floatNode[i] += samples.getSample((int) ((i * loadFactor) + j)).getData();
 				}
 				floatNode[i] = floatNode[i] / loadFactor;
 			}

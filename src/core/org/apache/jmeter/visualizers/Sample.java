@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
  *
@@ -26,29 +25,29 @@ import java.io.Serializable;
  */
 
 public class Sample implements Serializable, Comparable {
-	public long data;
+	private final long data;
 
-	public long average;
+	private final long average;
 
-	public long median;
+	private final long median;
 
-	public long distributionLine;
+	private final long distributionLine;
 
-	public long deviation;
+	private final long deviation;
 
-	public double throughput;
+	private final double throughput;
 
-	public long errorCount;
+	private final long errorCount;
 
-	public boolean success = true;
+	private final boolean success;
 
-	public String label = null;
+	private final String label;
 
-	public long count;
+	private final long count;
 
-	public long endTime;
+	private final long endTime;
 
-	public int bytes = 0;
+    private final int bytes;
 
 	/**
 	 * Constructor for the Sample object
@@ -81,18 +80,37 @@ public class Sample implements Serializable, Comparable {
 		this.errorCount = errorCount;
 		this.count = num;
 		this.endTime = endTime;
+        this.bytes = 0;
 	}
+
+    public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
+            double throughput, long errorCount, boolean success, long num, long endTime, int bytes) {
+        this.data = data;
+        this.average = average;
+        this.deviation = deviation;
+        this.throughput = throughput;
+        this.success = success;
+        this.median = median;
+        this.distributionLine = distributionLine;
+        this.label = name;
+        this.errorCount = errorCount;
+        this.count = num;
+        this.endTime = endTime;
+        this.bytes = bytes;
+    }
 
 	public Sample() {
+        this(null, 0, 0, 0, 0, 0, 0, 0, true, 0, 0);
 	}
 
+    // Appears not to be used - however it is invoked via the Functor class
 	public int getBytes() {
 		return bytes;
 	}
 
-	public void setBytes(int size) {
-		bytes = size;
-	}
+//	public void setBytes(int size) {
+//		bytes = size;
+//	}
 
 	/**
 	 * @return Returns the average.
@@ -101,13 +119,13 @@ public class Sample implements Serializable, Comparable {
 		return average;
 	}
 
-	/**
-	 * @param average
-	 *            The average to set.
-	 */
-	public void setAverage(long average) {
-		this.average = average;
-	}
+//	/**
+//	 * @param average
+//	 *            The average to set.
+//	 */
+//	public void setAverage(long average) {
+//		this.average = average;
+//	}
 
 	/**
 	 * @return Returns the count.
@@ -116,13 +134,13 @@ public class Sample implements Serializable, Comparable {
 		return count;
 	}
 
-	/**
-	 * @param count
-	 *            The count to set.
-	 */
-	public void setCount(long count) {
-		this.count = count;
-	}
+//	/**
+//	 * @param count
+//	 *            The count to set.
+//	 */
+//	public void setCount(long count) {
+//		this.count = count;
+//	}
 
 	/**
 	 * @return Returns the data.
@@ -131,13 +149,13 @@ public class Sample implements Serializable, Comparable {
 		return data;
 	}
 
-	/**
-	 * @param data
-	 *            The data to set.
-	 */
-	public void setData(long data) {
-		this.data = data;
-	}
+//	/**
+//	 * @param data
+//	 *            The data to set.
+//	 */
+//	public void setData(long data) {
+//		this.data = data;
+//	}
 
 	/**
 	 * @return Returns the deviation.
@@ -146,13 +164,13 @@ public class Sample implements Serializable, Comparable {
 		return deviation;
 	}
 
-	/**
-	 * @param deviation
-	 *            The deviation to set.
-	 */
-	public void setDeviation(long deviation) {
-		this.deviation = deviation;
-	}
+//	/**
+//	 * @param deviation
+//	 *            The deviation to set.
+//	 */
+//	public void setDeviation(long deviation) {
+//		this.deviation = deviation;
+//	}
 
 	/**
 	 * @return Returns the distributionLine.
@@ -161,13 +179,13 @@ public class Sample implements Serializable, Comparable {
 		return distributionLine;
 	}
 
-	/**
-	 * @param distributionLine
-	 *            The distributionLine to set.
-	 */
-	public void setDistributionLine(long distributionLine) {
-		this.distributionLine = distributionLine;
-	}
+//	/**
+//	 * @param distributionLine
+//	 *            The distributionLine to set.
+//	 */
+//	public void setDistributionLine(long distributionLine) {
+//		this.distributionLine = distributionLine;
+//	}
 
 	/**
 	 * @return Returns the error.
@@ -176,13 +194,13 @@ public class Sample implements Serializable, Comparable {
 		return success;
 	}
 
-	/**
-	 * @param error
-	 *            The error to set.
-	 */
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+//	/**
+//	 * @param error
+//	 *            The error to set.
+//	 */
+//	public void setSuccess(boolean success) {
+//		this.success = success;
+//	}
 
 	/**
 	 * @return Returns the errorRate.
@@ -191,13 +209,13 @@ public class Sample implements Serializable, Comparable {
 		return errorCount;
 	}
 
-	/**
-	 * @param errorRate
-	 *            The errorRate to set.
-	 */
-	public void setErrorCount(long errorCount) {
-		this.errorCount = errorCount;
-	}
+//	/**
+//	 * @param errorRate
+//	 *            The errorRate to set.
+//	 */
+//	public void setErrorCount(long errorCount) {
+//		this.errorCount = errorCount;
+//	}
 
 	/**
 	 * @return Returns the label.
@@ -206,13 +224,13 @@ public class Sample implements Serializable, Comparable {
 		return label;
 	}
 
-	/**
-	 * @param label
-	 *            The label to set.
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
+//	/**
+//	 * @param label
+//	 *            The label to set.
+//	 */
+//	public void setLabel(String label) {
+//		this.label = label;
+//	}
 
 	/**
 	 * @return Returns the median.
@@ -221,13 +239,13 @@ public class Sample implements Serializable, Comparable {
 		return median;
 	}
 
-	/**
-	 * @param median
-	 *            The median to set.
-	 */
-	public void setMedian(long median) {
-		this.median = median;
-	}
+//	/**
+//	 * @param median
+//	 *            The median to set.
+//	 */
+//	public void setMedian(long median) {
+//		this.median = median;
+//	}
 
 	/**
 	 * @return Returns the throughput.
@@ -236,13 +254,13 @@ public class Sample implements Serializable, Comparable {
 		return throughput;
 	}
 
-	/**
-	 * @param throughput
-	 *            The throughput to set.
-	 */
-	public void setThroughput(double throughput) {
-		this.throughput = throughput;
-	}
+//	/**
+//	 * @param throughput
+//	 *            The throughput to set.
+//	 */
+//	public void setThroughput(double throughput) {
+//		this.throughput = throughput;
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -261,11 +279,11 @@ public class Sample implements Serializable, Comparable {
 		return endTime;
 	}
 
-	/**
-	 * @param endTime
-	 *            The endTime to set.
-	 */
-	public void setEndTime(long endTime) {
-		this.endTime = endTime;
-	}
+//	/**
+//	 * @param endTime
+//	 *            The endTime to set.
+//	 */
+//	public void setEndTime(long endTime) {
+//		this.endTime = endTime;
+//	}
 }
