@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,10 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
+// @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
+
 /**
+ * 
  * @version $Revision$
  */
 public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable {
@@ -126,7 +129,12 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 					if (match != null) {
 						vars.put(refName, generateResult(match));
 						saveGroups(vars, refName, match);
-					}
+					} else {
+                        vars.remove(refName + "_g"); // $NON-NLS-1$
+                        vars.remove(refName + "_g0"); // $NON-NLS-1$
+                        vars.remove(refName + "_g1"); // $NON-NLS-1$
+                        //TODO - remove other groups if present?
+                    }
 				} else // < 0 means we save all the matches
 				{
 					int prevCount = 0;
@@ -164,13 +172,16 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
 	private void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
 		StringBuffer buf = new StringBuffer();
+        buf.append(basename);
+        buf.append("_g"); // $NON-NLS-1$
+        int pfxlen=buf.length();
+        //Note: match.groups() includes group 0
 		for (int x = 0; x < match.groups(); x++) {
-			buf.append(basename);
-			buf.append("_g");
 			buf.append(x);
 			vars.put(buf.toString(), match.group(x));
-			buf.setLength(0);
+			buf.setLength(pfxlen);
 		}
+        vars.put(buf.toString(), Integer.toString(match.groups()-1));
 	}
 
 	public Object clone() {

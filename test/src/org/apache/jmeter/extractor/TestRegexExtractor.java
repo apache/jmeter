@@ -71,6 +71,8 @@ public class TestRegexExtractor extends TestCase {
 			assertEquals("pinposition2", vars.get("regVal_g1"));
 			assertEquals("5", vars.get("regVal_g2"));
 			assertEquals("<value field=\"pinposition2\">5</value>", vars.get("regVal_g0"));
+            assertNull(vars.get("regVal_g3"));
+            assertEquals("2",vars.get("regVal_g"));
 		}
 
 		static void templateSetup(RegexExtractor rex, String tmp) {
@@ -87,6 +89,7 @@ public class TestRegexExtractor extends TestCase {
 			assertEquals("query", vars.get("regVal_g2"));
 			assertEquals("ret", vars.get("regVal_g3"));
 			assertEquals("", vars.get("regVal"));
+            assertEquals("3",vars.get("regVal_g"));
 		}
 
 		public void testTemplate2() throws Exception {
@@ -189,6 +192,39 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("initial", vars.get("regVal"));
             extractor.process();
             assertEquals("initial", vars.get("regVal"));
+        }
+
+        public void testDefault() throws Exception {
+            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setTemplate("$2$");
+            extractor.setMatchNumber(999);
+            extractor.setDefaultValue("default");
+            vars.put("regVal", "initial");
+            assertEquals("initial", vars.get("regVal"));
+            extractor.process();
+            assertEquals("default", vars.get("regVal"));
+            assertNull(vars.get("regVal_g0"));
+            assertNull(vars.get("regVal_g1"));
+        }
+
+        public void testStaleVariables() throws Exception {
+            extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
+            extractor.setTemplate("$2$");
+            extractor.setMatchNumber(1);
+            extractor.setDefaultValue("default");
+            extractor.process();
+            assertEquals("1", vars.get("regVal"));
+            assertEquals("1", vars.get("regVal_g2"));
+            assertEquals("2", vars.get("regVal_g"));
+            assertNotNull(vars.get("regVal_g0"));
+            assertNotNull(vars.get("regVal_g1"));
+            // Now rerun with match fail
+            extractor.setMatchNumber(10);
+            extractor.process();
+            assertEquals("default", vars.get("regVal"));
+            assertNull(vars.get("regVal_g0"));
+            assertNull(vars.get("regVal_g1"));
+            assertNull(vars.get("regVal_g"));
         }
 
 }
