@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +24,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
@@ -47,7 +46,7 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 
 	public final static String VAR_NAME = "CounterConfig.name";
 
-	private int globalCounter = -1;
+	private long globalCounter = -1;
 
 	/**
 	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
@@ -55,25 +54,25 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 	public synchronized void iterationStart(LoopIterationEvent event) {
 		// Cannot use getThreadContext() as not cloned per thread
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
-		int start = getStart(), end = getEnd(), increment = getIncrement();
+		long start = getStart(), end = getEnd(), increment = getIncrement();
 		if (!isPerUser()) {
 			if (globalCounter == -1 || globalCounter > end) {
 				globalCounter = start;
 			}
-			variables.put(getVarName(), Integer.toString(globalCounter));
+			variables.put(getVarName(), Long.toString(globalCounter));
 			globalCounter += increment;
 		} else {
 			String value = variables.get(getVarName());
 			if (value == null) {
-				variables.put(getVarName(), Integer.toString(start));
+				variables.put(getVarName(), Long.toString(start));
 			} else {
 				try {
-					int current = Integer.parseInt(value);
+					long current = Long.parseLong(value);
 					current += increment;
 					if (current > end) {
 						current = start;
 					}
-					variables.put(getVarName(), Integer.toString(current));
+					variables.put(getVarName(), Long.toString(current));
 				} catch (NumberFormatException e) {
 					log.info("Bad number in Counter config", e);
 				}
@@ -81,40 +80,40 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 		}
 	}
 
-	public void setStart(int start) {
-		setProperty(new IntegerProperty(START, start));
+	public void setStart(long start) {
+		setProperty(new LongProperty(START, start));
 	}
 
 	public void setStart(String start) {
 		setProperty(START, start);
 	}
 
-	public int getStart() {
-		return getPropertyAsInt(START);
+	public long getStart() {
+		return getPropertyAsLong(START);
 	}
 
-	public void setEnd(int end) {
-		setProperty(new IntegerProperty(END, end));
+	public void setEnd(long end) {
+		setProperty(new LongProperty(END, end));
 	}
 
 	public void setEnd(String end) {
 		setProperty(END, end);
 	}
 
-	public int getEnd() {
-		return getPropertyAsInt(END);
+	public long getEnd() {
+		return getPropertyAsLong(END);
 	}
 
-	public void setIncrement(int inc) {
-		setProperty(new IntegerProperty(INCREMENT, inc));
+	public void setIncrement(long inc) {
+		setProperty(new LongProperty(INCREMENT, inc));
 	}
 
 	public void setIncrement(String incr) {
 		setProperty(INCREMENT, incr);
 	}
 
-	public int getIncrement() {
-		return getPropertyAsInt(INCREMENT);
+	public long getIncrement() {
+		return getPropertyAsLong(INCREMENT);
 	}
 
 	public void setIsPerUser(boolean isPer) {
