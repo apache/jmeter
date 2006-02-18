@@ -2490,7 +2490,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
 with the start, continuing on like that until the test is ended.  </p>
-<p>The counter uses an int to store the value, so the range is from -2^^31 to 2^^31-1, i.e. -2147483648 to 2147483647.</p>
+<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from -2^63 to 2^63-1.</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
