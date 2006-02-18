@@ -468,7 +468,10 @@ XML.</p>
          that is shown in the tree.</property>
         <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
         <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
-        <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
+        <property name="Protocol" required="Yes">HTTP or HTTPS are acceptable protocol.</property>
+        <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
+        <property name="Port Number" required="Yes">Port Number.</property>
+        <property name="Path" required="Yes">Path for the webservice.</property>
         <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
         <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
         <property name="Soap file" required="No">File containing soap message</property>
