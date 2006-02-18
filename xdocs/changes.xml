@@ -44,6 +44,7 @@ Users must explicitly check append in the sampler</li>
 <li>Report Tree compiler errors better</li>
 <li>Don't reset Regex Extractor variable if default is empty</li>
 <li>includecontroller.prefix property added</li>
+<li>fixed the Webservice sampler bug 38693</li>
 </ul>
 
 <h4>Bug fixes:</h4>
