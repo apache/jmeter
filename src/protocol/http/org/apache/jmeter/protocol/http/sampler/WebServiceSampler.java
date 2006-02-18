@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,31 +124,6 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 */
 	public String getXmlFile() {
 		return getPropertyAsString(XML_DATA_FILE);
-	}
-
-	/**
-	 * Method uses jorphan TextFile class to load the contents of the file. I
-	 * wonder if we should cache the DOM Document to save on parsing the
-	 * message. Parsing XML is CPU intensive, so it could restrict the number of
-	 * threads a test plan can run effectively. To cache the documents, it may
-	 * be good to have an external class to provide caching that is efficient.
-	 * We could just use a HashMap, but for large tests, it will be slow.
-	 * Ideally, the cache would be indexed, so that large tests will run
-	 * efficiently.
-	 * 
-	 * @return String contents of the file
-	 */
-	private File retrieveRuntimeXmlData() {
-		String file = getRandomFileName();
-		if (file.length() > 0) {
-			if (this.getReadResponse()) {
-				TextFile tfile = new TextFile(file);
-				fileContents = tfile.getText();
-			}
-			return new File(file);
-		} else {
-			return null;
-		}
 	}
 
 	/**
@@ -320,12 +295,12 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		return getPropertyAsString(WSDL_URL);
 	}
 
-	/**
+	/*
 	 * The method will check to see if JMeter was started in NonGui mode. If it
 	 * was, it will try to pick up the proxy host and port values if they were
 	 * passed to JMeter.java.
 	 */
-	public void checkProxy() {
+	private void checkProxy() {
 		if (System.getProperty("JMeter.NonGui") != null && System.getProperty("JMeter.NonGui").equals("true")) {
 			this.setUseProxy(true);
 			// we check to see if the proxy host and port are set
@@ -334,54 +309,61 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			if (host == null || host.length() == 0) {
 				// it's not set, lets check if the user passed
 				// proxy host and port from command line
-				if (System.getProperty("http.proxyHost") != null) {
-					host = System.getProperty("http.proxyHost");
+                host = System.getProperty("http.proxyHost");
+				if (host != null) {
 					this.setProxyHost(host);
 				}
 			}
 			if (port == null || port.length() == 0) {
 				// it's not set, lets check if the user passed
 				// proxy host and port from command line
-				if (System.getProperty("http.proxyPort") != null) {
-					port = System.getProperty("http.proxyPort");
+                port = System.getProperty("http.proxyPort");
+				if (port != null) {
 					this.setProxyPort(port);
 				}
 			}
 		}
 	}
 
-	/**
+	/*
 	 * This method uses Apache soap util to create the proper DOM elements.
 	 * 
 	 * @return Element
 	 */
-	public org.w3c.dom.Element createDocument() {
-		if (getPropertyAsBoolean(MEMORY_CACHE)) {
-			String next = this.getRandomFileName();
-			Document document = DOMPool.getDocument(next);
-			if (document != null) {
-				log.info("Reusing document with key: "+next);
-				return document.getDocumentElement();
-			} else {
-                Document doc = openDocument(next);
-				log.info("Created document with key: "+next);
-				return doc == null ? null : doc.getDocumentElement();
-			}
-		} else {
-			Document doc = openDocument(null);
-			if (doc == null)
-				return null;
-			return doc.getDocumentElement();
-		}
+	private org.w3c.dom.Element createDocument() {
+        Document doc = null;
+        String next = this.getRandomFileName();//get filename or ""
+        
+        /* Note that the filename is also used as a key to the pool (if used)
+        ** Documents provided in the testplan are not currently pooled, as they may change
+        *  between samples.
+        */
+        
+        if (next.length() > 0 && getMemoryCache()) {
+			doc = DOMPool.getDocument(next);
+            if (doc == null){
+                doc = openDocument(next);
+                if (doc != null) {// we created the document
+                    DOMPool.putDocument(next, doc);
+                }
+            }
+		} else { // Must be local content - or not using pool
+            doc = openDocument(next);
+        }
+
+        if (doc == null) {
+			return null;
+        }
+		return doc.getDocumentElement();
 	}
 
 	/**
 	 * Open the file and create a Document.
 	 * 
-	 * @param key
+     * @param file - input filename or empty if using data from tesplan
 	 * @return Document
 	 */
-	protected Document openDocument(String key) {
+	protected Document openDocument(String file) {
 		/*
 		 * Consider using Apache commons pool to create a pool of document
 		 * builders or make sure XMLParserUtils creates builders efficiently.
@@ -391,9 +373,13 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		Document doc = null;
 		// if either a file or path location is given,
 		// get the file object.
-		if (getXmlFile().length() > 0 || getXmlPathLoc().length() > 0) {
+		if (file.length() > 0) {// we have a file
 			try {
-				doc = XDB.parse(new FileInputStream(retrieveRuntimeXmlData()));
+                if (this.getReadResponse()) {
+                    TextFile tfile = new TextFile(file);
+                    fileContents = tfile.getText();
+                }
+				doc = XDB.parse(new FileInputStream(file));
 			} catch (SAXException e) {
 				log.warn("Error processing file data: "+e.getMessage());
 			} catch (FileNotFoundException e) {
@@ -401,7 +387,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
             } catch (IOException e) {
                 log.warn(e.getMessage());
             }
-		} else {
+		} else {// must be a "here" document
 			fileContents = getXmlData();
 			if (fileContents != null && fileContents.length() > 0) {
 				try {
@@ -414,10 +400,6 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			} else {
 			    log.warn("No post data provided!");
             }
-		}
-        // don't cache null documents ...
-		if (doc != null && this.getPropertyAsBoolean(MEMORY_CACHE)) {
-			DOMPool.putDocument(key, doc);
 		}
 		return doc;
 	}
@@ -513,7 +495,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// reporting. 5/13/05 peter lin
 			if (st != null && st.receive() != null) {
 				br = st.receive();
-				if (this.getPropertyAsBoolean(READ_RESPONSE)) {
+				if (getReadResponse()) {
 					StringBuffer buf = new StringBuffer();
 					String line;
 					while ((line = br.readLine()) != null) {
@@ -546,8 +528,8 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// sent. if read response is not checked, it will
 			// not set sampler data with the request message.
 			// peter lin.
-			result.setSamplerData(getUrl().getProtocol() + "://" + getUrl().getHost() + "/" + getUrl().getFile() + "\n"
-					+ fileContents);
+            // Removed URL, as that is already stored elsewere
+			result.setSamplerData(fileContents);// WARNING - could be large
 			result.setDataEncoding(st.getResponseSOAPContext().getContentType());
 			// setting this is just a formality, since
 			// soap will return a descriptive error
