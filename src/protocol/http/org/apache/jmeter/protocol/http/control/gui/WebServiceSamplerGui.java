@@ -58,7 +58,9 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
 	JLabeledTextField domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
 
-	JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+    JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"));
+
+    JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
 
 	JLabeledTextField path = new JLabeledTextField(JMeterUtils.getResString("path"));
 
@@ -171,6 +173,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		this.configureTestElement(sampler);
 		sampler.setDomain(domain.getText());
         sampler.setProperty(HTTPSamplerBase.PORT,port.getText());
+        sampler.setProtocol(protocol.getText());
 		sampler.setPath(path.getText());
 		sampler.setWsdlURL(wsdlField.getText());
 		sampler.setMethod(HTTPSamplerBase.POST);
@@ -233,6 +236,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		listPanel.add(selectButton);
 		selectButton.addActionListener(this);
 
+        mainPanel.add(protocol);
 		mainPanel.add(domain);
 		mainPanel.add(port);
 		mainPanel.add(path);
@@ -279,6 +283,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		super.configure(el);
 		WebServiceSampler sampler = (WebServiceSampler) el;
 		wsdlField.setText(sampler.getWsdlURL());
+        protocol.setText(sampler.getProtocol());
 		domain.setText(sampler.getDomain());
         port.setText(sampler.getPropertyAsString(HTTPSamplerBase.PORT));
 		path.setText(sampler.getPath());
@@ -309,13 +314,14 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 	 */
 	public void configureFromWSDL() {
 		if (HELPER.getBinding() != null) {
-			this.domain.setText(HELPER.getURL().getHost());
-			if (HELPER.getURL().getPort() > 0) {
-				this.port.setText(String.valueOf(HELPER.getURL().getPort()));
+            this.protocol.setText(HELPER.getProtocol());
+			this.domain.setText(HELPER.getBindingHost());
+			if (HELPER.getBindingPort() > 0) {
+				this.port.setText(String.valueOf(HELPER.getBindingPort()));
 			} else {
 				this.port.setText("80");
 			}
-			this.path.setText(HELPER.getURL().getPath());
+			this.path.setText(HELPER.getBindingPath());
 		}
 		this.soapAction.setText(HELPER.getSoapAction(this.wsdlMethods.getText()));
 	}
