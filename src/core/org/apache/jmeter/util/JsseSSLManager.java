@@ -168,17 +168,19 @@ public class JsseSSLManager extends SSLManager {
 				log.error("Exception occurred", e);
 			}
 
-			String[] dCiphers = this.context.getSocketFactory().getDefaultCipherSuites();
-			String[] sCiphers = this.context.getSocketFactory().getSupportedCipherSuites();
-			int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
-			for (int i = 0; i < len; i++) {
-				if (i < dCiphers.length) {
-					log.info("Default Cipher: " + dCiphers[i]);
-				}
-				if (i < sCiphers.length) {
-					log.info("Supported Cipher: " + sCiphers[i]);
-				}
-			}
+            if (log.isDebugEnabled()){
+    			String[] dCiphers = this.context.getSocketFactory().getDefaultCipherSuites();
+    			String[] sCiphers = this.context.getSocketFactory().getSupportedCipherSuites();
+    			int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
+    			for (int i = 0; i < len; i++) {
+    				if (i < dCiphers.length) {
+    					log.debug("Default Cipher: " + dCiphers[i]);
+    				}
+    				if (i < sCiphers.length) {
+    					log.debug("Supported Cipher: " + sCiphers[i]);
+    				}
+    			}
+            }
 		}
 		return this.context;
 	}
