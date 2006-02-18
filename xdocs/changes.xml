@@ -72,6 +72,7 @@ Users must explicitly check append in the sampler</li>
 <li>Bug 38693 - Webservice sampler can now use https protocol</li>
 <li>Bug 38646 - Regex Extractor now clears old variables on match failure</li>
 <li>Bug 38640 - fix WebService Sampler pooling</li>
+<li>Bug 38474 - HTML Link Parser doesn't follow frame links</li>
 </ul>	
 	
 <h4>Other changes</h4>

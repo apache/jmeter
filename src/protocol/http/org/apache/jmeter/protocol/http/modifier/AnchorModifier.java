@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		}
 		addAnchorUrls(html, result, sampler, potentialLinks);
 		addFormUrls(html, result, sampler, potentialLinks);
+		addFramesetUrls(html, result, sampler, potentialLinks);
 		if (potentialLinks.size() > 0) {
 			HTTPSamplerBase url = (HTTPSamplerBase) potentialLinks.get(rand.nextInt(potentialLinks.size()));
 			sampler.setDomain(url.getDomain());
@@ -192,4 +193,37 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			}
 		}
 	}
+    private void addFramesetUrls(Document html, HTTPSampleResult result,
+       HTTPSamplerBase config, List potentialLinks) {
+       String base = "";
+       NodeList baseList = html.getElementsByTagName("base");
+       if (baseList.getLength() > 0) {
+           base = baseList.item(0).getAttributes().getNamedItem("href")
+                   .getNodeValue();
+       }
+       NodeList nodeList = html.getElementsByTagName("frame");
+       for (int i = 0; i < nodeList.getLength(); i++) {
+           Node tempNode = nodeList.item(i);
+           NamedNodeMap nnm = tempNode.getAttributes();
+           Node namedItem = nnm.getNamedItem("src");
+           if (namedItem == null) {
+               continue;
+           }
+           String hrefStr = namedItem.getNodeValue();
+           try {
+               HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(
+                       hrefStr, new URL(result.getURL(), base));
+               newUrl.setMethod(HTTPSamplerBase.GET);
+               log.debug("possible match: " + newUrl);
+               if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
+                   log.debug("Is a match! " + newUrl);
+                   potentialLinks.add(newUrl);
+               }
+           } catch (MalformedURLException e) {
+               log.warn("Bad URL "+e);
+           } catch (org.apache.oro.text.regex.MalformedPatternException e) {
+               log.error("Bad pattern", e);
+           }
+       }
+   }
 }
