@@ -2543,6 +2543,21 @@ generate the template string, and store the result into the given variable name.
         </property>
 </properties>
 <p>
+	If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
+	<ul>
+		<li>refName - the value of the template</li>
+		<li>refName_gn, where n=0,1,2 - the groups for the match</li>
+		<li>refName_g - the number of groups in the Regex (excluding 0)</li>
+	</ul>
+	If no match occurs, then the refName variable is set to the default (unless this is absent). 
+	Also, the following variables are removed:
+	<ul>
+		<li>refName_g0</li>
+		<li>refName_g1</li>
+		<li>refName_g</li>
+	</ul>
+</p>
+<p>
 	If the match number is set to a negative number, then all the possible matches in the sampler data are processed.
 	The variables are set as follows:
 	<ul>
