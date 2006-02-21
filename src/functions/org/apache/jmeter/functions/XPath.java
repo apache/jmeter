@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,22 +29,19 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+// @see org.apache.jmeter.functions.TestXPathFunction for unit tests
+
 /**
  * The function represented by this class allows data to be read from XML files.
  * Syntax is similar to the CVSRead function. The function allows the test to
  * line-thru the nodes in the XML file - one node per each test. E.g. inserting
  * the following in the test scripts :
  * 
- * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // match the (first) node of
- * 'c:/BOF/abcd.xml' , return the 1st column ( represented by the '0'),
- * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // read (first) match of '/xpath/'
- * expressions ${_XPath(c:/BOF/abcd.xml,/xpath/)} // Go to next match of
- * '/xpath/' expressions
+ * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // match the (first) node
+ * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // Go to next match of '/xpath/' expression
  * 
- * NOTE: A single instance of each different file is opened and used for all
- * threads.
- * 
- * 
+ * NOTE: A single instance of each different file/expression combination
+ * is opened and used for all threads.
  * 
  */
 public class XPath extends AbstractFunction implements Serializable {
@@ -84,18 +80,15 @@ public class XPath extends AbstractFunction implements Serializable {
 		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
 		String xpathString = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
-		log.debug("execute (" + fileName + " " + xpathString + ")   ");
+        if (log.isDebugEnabled()){
+    		log.debug("execute (" + fileName + " " + xpathString + ")   ");
+        }
 
-		try {
-			myValue = XPathWrapper.getXPathString(fileName, xpathString);
-		} catch (NumberFormatException e) {
-			log.warn(Thread.currentThread().getName() + " - can't parse column number: " + " " + e.toString());
-		} catch (IndexOutOfBoundsException e) {
-			log.warn(Thread.currentThread().getName() + " - invalid column number:  at row "
-					+ XPathWrapper.getCurrentRow(fileName) + " " + e.toString());
-		}
+		myValue = XPathWrapper.getXPathString(fileName, xpathString);
 
-		log.debug("execute value: " + myValue);
+        if (log.isDebugEnabled()){
+    		log.debug("execute value: " + myValue);
+        }
 
 		return myValue;
 	}
