@@ -48,8 +48,12 @@ public class FileWrapper {
 
 	private static String defaultFile = ""; // for omitted file names
 
-	private static Map fileContainers = new HashMap(); // Map file names to
-														// containers
+	/*
+     * This Map serves two purposes:
+     * - maps file names to  containers
+     * - ensures only one container per file across all threads
+	 */
+	private static Map fileContainers = new HashMap(); 
 
 	/*
 	 * Only needed locally
@@ -60,7 +64,7 @@ public class FileWrapper {
 		currentRow = -1;
 	}
 
-	/* The cache of file packs */
+	/* The cache of file packs - used to improve thread access */
 	private static ThreadLocal filePacks = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
