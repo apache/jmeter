@@ -28,6 +28,11 @@
 <b>Changes: for more info, contact <a href="mailto:mstover1@apache.org">Michael Stover</a></b>
 
 <h3>Version 2.1.2</h3>
+<h4>Incompatible changes:</h4>
+<p>
+The time stamp is now set to start time.
+To revert to the previous behaviour, change the property sampleresult.timestamp.start to false (or comment it)
+</p>
 <h4>New functionality:</h4>
 <ul>
 <li>Report function</li>
