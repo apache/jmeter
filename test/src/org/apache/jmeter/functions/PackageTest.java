@@ -159,11 +159,21 @@ public class PackageTest extends JMeterTestCase {
 		xpath.addTest(new PackageTest("XPathtestDefault"));
 		xpath.addTest(new PackageTest("XPathtestNull"));
 		xpath.addTest(new PackageTest("XPathtestrowNum"));
+        xpath.addTest(new PackageTest("XPathEmpty"));
+        xpath.addTest(new PackageTest("XPathFile1"));
+        xpath.addTest(new PackageTest("XPathFile2"));
+        xpath.addTest(new PackageTest("XPathNoFile"));
+
 		allsuites.addTest(xpath);
 		
         TestSuite random = new TestSuite("Random");
         random.addTest(new PackageTest("RandomTest1"));
         allsuites.addTest(random);
+
+        TestSuite par2 = new ActiveTestSuite("ParallelXPath");
+        par2.addTest(new PackageTest("XPathThread1"));
+        par2.addTest(new PackageTest("XPathThread2"));
+        allsuites.addTest(par2);
 
         return allsuites;
 	}
@@ -682,7 +692,88 @@ public class PackageTest extends JMeterTestCase {
 		assertEquals("all", f.getXPathString(0));
 
 	}
+    
+    public void XPathEmpty() throws Exception{
+        XPath xp = setupXPath("","");
+        String val=xp.execute();
+        assertEquals("",val);
+        val=xp.execute();
+        assertEquals("",val);
+        val=xp.execute();
+        assertEquals("",val);
+    }
+    
+    public void XPathNoFile() throws Exception{
+        XPath xp = setupXPath("no-such-file","");
+        String val=xp.execute();
+        assertEquals("",val); // TODO - should check that error has been logged...
+    }
+    
+    public void XPathFile1() throws Exception{
+        XPath xp = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        assertEquals("u1",xp.execute());
+        assertEquals("u2",xp.execute());
+        assertEquals("u3",xp.execute());
+        assertEquals("u4",xp.execute());
+        assertEquals("u5",xp.execute());
+        assertEquals("u1",xp.execute());
+    }
+    
+    public void XPathFile2() throws Exception{
+        XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        XPath xp1a = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        XPath xp2  = setupXPath("testfiles/XPathTest.xml","//user/@password");
+        XPath xp2a = setupXPath("testfiles/XPathTest.xml","//user/@password");
+        assertEquals("u1",xp1.execute());
+        assertEquals("p1",xp2.execute());
+        assertEquals("p2",xp2.execute());
+        assertEquals("u2",xp1a.execute());
+        assertEquals("u3",xp1.execute());
+        assertEquals("u4",xp1.execute());
+        assertEquals("p3",xp2a.execute());
 
+    }
+
+    public void XPathThread1() throws Exception {
+        Thread.currentThread().setName("XPathOne");
+        XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        synchronized (baton) {
+            assertEquals("u1",xp1.execute());
+            assertEquals("u2",xp1.execute());
+            baton.pass();
+            assertEquals("u5",xp1.execute());
+            baton.pass();
+            assertEquals("u2",xp1.execute());
+            baton.done();
+        }
+    }
+
+    public void XPathThread2() throws Exception {
+        Thread.currentThread().setName("XPathTwo");
+        XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        Thread.sleep(500);
+        synchronized (baton) {
+            assertEquals("u3",xp1.execute());
+            assertEquals("u4",xp1.execute());
+            baton.pass();
+            assertEquals("u1",xp1.execute());
+            baton.pass();
+            assertEquals("u3",xp1.execute());
+            baton.done();
+        }
+    }
+
+    private XPath setupXPath(String file, String expr) throws Exception{
+        Collection parms = new LinkedList();
+        parms.add(new CompoundVariable(file));
+        parms.add(new CompoundVariable(expr));
+        XPath xp = new XPath();
+        xp.setParameters(parms);
+        return xp;        
+    }
+    
+
+    
     public void RandomTest1() throws Exception {
         Random r = new Random();
         Collection parms = MakeParams("0","10000000000","VAR");
