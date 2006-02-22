@@ -236,6 +236,9 @@ public class JMeter implements JMeterPlugin {
 			setProxy(parser);
 			log.info("Version " + JMeterUtils.getJMeterVersion());
 			log.info("java.version=" + System.getProperty("java.version"));
+			log.info("os.name=" + System.getProperty("os.name"));
+			log.info("os.arch=" + System.getProperty("os.arch"));
+			log.info("os.version=" + System.getProperty("os.version"));
 			log.info("Locale=" + Locale.getDefault().getDisplayName());
 			log.info(JMeterUtils.getJMeterCopyright());
 			log.info("JMeterHome="+JMeterUtils.getJMeterHome());
