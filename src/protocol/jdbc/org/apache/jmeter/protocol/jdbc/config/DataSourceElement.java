@@ -15,6 +15,8 @@
  */
 package org.apache.jmeter.protocol.jdbc.config;
 
+import java.io.ObjectStreamException;
+
 import org.apache.avalon.excalibur.datasource.DataSourceComponent;
 import org.apache.avalon.excalibur.datasource.ResourceLimitingJdbcDataSource;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
@@ -42,11 +44,19 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 
 	transient ResourceLimitingJdbcDataSource excaliburSource;
 
+	// TODO: why is this an object, and not a plain boolean?
 	transient boolean[] started;
 
 	public DataSourceElement() {
 		started = new boolean[] { false };
 	}
+	
+	// For serialised objects, do the same work as the constructor:
+	private Object readResolve() throws ObjectStreamException {
+		started = new boolean[] { false };
+		return this;
+	}
+
 
 	/*
 	 * (non-Javadoc)
