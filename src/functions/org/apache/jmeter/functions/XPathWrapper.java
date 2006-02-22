@@ -39,19 +39,27 @@ public class XPathWrapper {
 
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-    private XPathWrapper() {// Prevent separate instantiation
-        super();
-    }
-
-	/* The cache of file packs */
+    /*
+     * This Map serves two purposes:
+     * - maps names to  containers
+     * - ensures only one container per file across all threads
+     */
+    private static Map fileContainers = new HashMap();
+    
+	/* The cache of file packs - for faster local access */
 	private static ThreadLocal filePacks = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
 		}
 	};
 
+    private XPathWrapper() {// Prevent separate instantiation
+        super();
+    }
+
 	private static XPathFileContainer open(String file, String xpathString) {
-		log.info("Opening " + file);
+        String tname = Thread.currentThread().getName();
+		log.info(tname+": Opening " + file);
 		XPathFileContainer frcc=null;
 		try {
             frcc = new XPathFileContainer(file, xpathString);
@@ -80,15 +88,23 @@ public class XPathWrapper {
 		Map my = (Map) filePacks.get();
         String key = file+xpathString;
         XPathFileContainer xpfc = (XPathFileContainer) my.get(key);
-		if (xpfc == null) // First call
+		if (xpfc == null) // We don't have a local copy
 		{
-			xpfc=open(file, xpathString);
+            synchronized(fileContainers){
+                xpfc = (XPathFileContainer) fileContainers.get(key);
+                if (xpfc == null) { // There's no global copy either
+                    xpfc=open(file, xpathString);                    
+                }
+                if (xpfc != null) {
+                    fileContainers.put(key, xpfc);// save the global copy
+                }
+            }
 			// TODO improve the error handling
 			if (xpfc == null) {
 				log.error("XPathWrapper is null!");
 				return "";
 			}
-            my.put(key,xpfc);
+            my.put(key,xpfc); // save our local copy
 		}
         int currentRow = xpfc.nextRow();
         log.debug("getting match number " + currentRow);
@@ -99,5 +115,8 @@ public class XPathWrapper {
 		log.debug("clearAll()");
 		Map my = (Map) filePacks.get();
         my.clear();
+        String tname = Thread.currentThread().getName();
+        log.info(tname+": clearing container");
+        fileContainers.clear();
 	}
 }
