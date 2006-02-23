@@ -249,7 +249,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
         String protocol = url.getProtocol().trim();
 		if (!protocol.equalsIgnoreCase(HTTPSamplerBase.PROTOCOL_HTTP) && 
-             !protocol.equalsIgnoreCase(HTTPSamplerBase.PROTOCOL_HTTP)) {
+            !protocol.equalsIgnoreCase(HTTPSamplerBase.PROTOCOL_HTTPS)) {
 			return null;
         }
 
