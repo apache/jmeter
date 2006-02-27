@@ -33,6 +33,8 @@ import org.apache.xpath.XPathAPI;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+//@see org.apache.jmeter.functions.PackageTest for unit tests
+
 /**
  * File data container for XML files Data is accessible via XPath
  * 
