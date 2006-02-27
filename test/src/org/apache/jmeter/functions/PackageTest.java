@@ -170,10 +170,17 @@ public class PackageTest extends JMeterTestCase {
         random.addTest(new PackageTest("RandomTest1"));
         allsuites.addTest(random);
 
-        TestSuite par2 = new ActiveTestSuite("ParallelXPath");
+        allsuites.addTest(new PackageTest("XPathSetup1"));
+        TestSuite par2 = new ActiveTestSuite("ParallelXPath1");
         par2.addTest(new PackageTest("XPathThread1"));
         par2.addTest(new PackageTest("XPathThread2"));
         allsuites.addTest(par2);
+
+        allsuites.addTest(new PackageTest("XPathSetup2"));
+        TestSuite par3 = new ActiveTestSuite("ParallelXPath2");
+        par3.addTest(new PackageTest("XPathThread1"));
+        par3.addTest(new PackageTest("XPathThread2"));
+        allsuites.addTest(par3);
 
         return allsuites;
 	}
@@ -733,32 +740,43 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("p3",xp2a.execute());
 
     }
+    
+    private static XPath sxp1,sxp2;
+    // Use same XPath for both threads
+    public void XPathSetup1() throws Exception{
+        sxp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        sxp2=sxp1;
+    }
+
+    // Use different XPath for both threads
+    public void XPathSetup2() throws Exception{
+        sxp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
+        sxp2  = setupXPath("testfiles/XPathTest.xml","//user/@username");
+    }
 
     public void XPathThread1() throws Exception {
         Thread.currentThread().setName("XPathOne");
-        XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
         synchronized (baton) {
-            assertEquals("u1",xp1.execute());
-            assertEquals("u2",xp1.execute());
+            assertEquals("u1",sxp1.execute());
+            assertEquals("u2",sxp1.execute());
             baton.pass();
-            assertEquals("u5",xp1.execute());
+            assertEquals("u5",sxp1.execute());
             baton.pass();
-            assertEquals("u2",xp1.execute());
+            assertEquals("u2",sxp1.execute());
             baton.done();
         }
     }
 
     public void XPathThread2() throws Exception {
         Thread.currentThread().setName("XPathTwo");
-        XPath xp1  = setupXPath("testfiles/XPathTest.xml","//user/@username");
         Thread.sleep(500);
         synchronized (baton) {
-            assertEquals("u3",xp1.execute());
-            assertEquals("u4",xp1.execute());
+            assertEquals("u3",sxp2.execute());
+            assertEquals("u4",sxp2.execute());
             baton.pass();
-            assertEquals("u1",xp1.execute());
+            assertEquals("u1",sxp2.execute());
             baton.pass();
-            assertEquals("u3",xp1.execute());
+            assertEquals("u3",sxp2.execute());
             baton.done();
         }
     }
