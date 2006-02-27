@@ -29,7 +29,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-// @see org.apache.jmeter.functions.TestXPathFunction for unit tests
+// @see org.apache.jmeter.functions.PackageTest for unit tests
 
 /**
  * The function represented by this class allows data to be read from XML files.
