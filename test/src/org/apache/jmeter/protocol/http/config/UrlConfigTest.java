@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -16,7 +15,7 @@
  * 
  */
 
-package org.apache.jmeter.junit.protocol.http.config;
+package org.apache.jmeter.protocol.http.config;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
