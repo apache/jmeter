@@ -9,6 +9,7 @@ batik-awt-util (org.apache.batik.ext)
 
 commons-codec-1.3
 - used by commons-httpclient-3.0
+- also HtmlParserTester for Base64
 
 commons-collections
 - ListenerNotifier
