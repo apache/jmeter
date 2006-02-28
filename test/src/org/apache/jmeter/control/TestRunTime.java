@@ -59,10 +59,10 @@ public class TestRunTime extends JMeterTestCase {
 				sampler.sample(null);
 			}
 			long elapsed = System.currentTimeMillis() - now;
-			assertTrue("Should be at least 20 loops", loops >= 20);
-			assertTrue("Should be fewer than 30 loops", loops < 30);
-			assertTrue("Should take at least 10 seconds", elapsed >= 10000);
-			assertTrue("Should take less than 12 seconds", elapsed <= 12000);
+			assertTrue("Should be at least 20 loops "+loops, loops >= 20);
+			assertTrue("Should be fewer than 30 loops "+loops, loops < 30);
+			assertTrue("Should take at least 10 seconds "+elapsed, elapsed >= 10000);
+			assertTrue("Should take less than 12 seconds "+elapsed, elapsed <= 12000);
 			assertEquals("Sampler 1 should run 2 times", 2, samp1.getSamples());
 			assertTrue("Sampler 2 should run >= 18 times", samp2.getSamples() >= 18);
 		}
