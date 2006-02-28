@@ -80,7 +80,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		List potentialLinks = new ArrayList();
 		String responseText = "";
 		try {
-			responseText = new String(result.getResponseData(), "8859_1");
+			responseText = new String(result.getResponseData(), result.getDataEncoding());
 		} catch (UnsupportedEncodingException e) {
 		}
 		Document html;
