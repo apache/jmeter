@@ -88,8 +88,8 @@ see <a href="#logic_controller">Logical Controllers</a>.</p>
 
 <subsection name="4.2.1 Samplers" anchor="samplers">
 
-<p>Samplers tell JMeter to send requests to a server. JMeter
-currently has the following samplers:
+<p>Samplers tell JMeter to send requests to a server. 
+JMeter samplers include:
 <ul>
 	<li>FTP Request</li>
 	<li>HTTP Request</li>
@@ -97,11 +97,11 @@ currently has the following samplers:
 	<li>Java object request</li>
 	<li>LDAP Request</li>
 	<li>SOAP/XML-RPC Request</li>
-	<li>WebService (SOAP) Request (Alpha Code)</li>
+	<li>WebService (SOAP) Request</li>
 </ul>
 Each sampler has several properties you can set.
 You can further customize a sampler by adding one or more Configuration Elements to it.
-Also, note that JMeter sends requests in the order that you add them to the tree.</p>
+Note that JMeter sends requests in the order that the samplers appear in the tree.</p>
 
 <p>If you are going to send multiple requests of the same type (for example,
 HTTP Request) to the same server, consider using a Defaults Configuration
