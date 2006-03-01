@@ -25,7 +25,7 @@
 
 <section name="2. Getting Started" anchor="get_started">
 <p>The easiest way to begin using JMeter is to first
-<a href="http://jakarta.apache.org/builds/jakarta-jmeter/release/">download the latest production release</a> and install it.
+<a href="http://jakarta.apache.org/site/downloads/index.html">download the latest production release</a> and install it.
 The release contains all of the files you need to build and run Web, FTP, JDBC, and JNDI tests.</p>
 <p>If you want to perform JDBC testing,
 then you will, of course, need the appropriate JDBC driver from your vendor.  JMeter does not come with
@@ -40,6 +40,10 @@ Other software that you may want to download:
 <li><a href="http://java.sun.com/downloads/">General Java download page</a></li>
 </ul>
 </p>
+<note>
+Any additional jars need to be stored in the JMeter lib directory (or the appropriate JRE directory). 
+Make sure the file extension is .jar, not .zip, as JMeter only looks for .jar files.
+</note>
 <p>Next, start JMeter and go through the <a href="build-test-plan.html">Building a Test Plan</a> section
 of the User Guide to familiarize yourself with JMeter basics (for example, adding and removing elements).</p>
 <p>Finally, go through the appropriate section on how to build a specific type of Test Plan.
@@ -61,15 +65,23 @@ We are making a strong effort currently to be compatible with the 1.3 JVM's, tho
 </p>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
-<note>Java 1.4.1 Beta appears to be buggy, and there are some GUI elements that won't work correctly in this JVM.
-Also, Java 1.3 does not include SSL (HTTPS) support - you'll need to download JSSE.</note>
+<note>
+Java 1.3 does not include SSL (HTTPS) support - you'll need to download JSSE.
+Also, it does not perform as well as later Java versions. 
+Use the latest version of Java 1.4 or 1.5 for best results
+</note>
 </subsection>
 
 <subsection name="2.1.2 Operating Systems" anchor="os">
-<p>JMeter has been tested and works under Unix (Solaris, Linux, etc) and Windows (98,
-NT, 2000, XP). Also works on OpenVMS.
-JMeter is a 100% Java application and should run correctly on any system
-that has a compliant Java implementation.</p>
+<p>JMeter is a 100% Java application and should run correctly on any system
+that has a compliant Java implementation.<br/>
+JMeter has been tested and works under:
+</p>
+<ul>
+<li>Unix (Solaris, Linux, etc)</li>
+<li>Windows (98, NT, 2000, XP)</li>
+<li>OpenVMS Alpha 7.3+</li>
+</ul>
 </subsection>
 </section>
 
@@ -98,7 +110,7 @@ To enable Email support, add Sun's JavaMail packages and the activation packages
 implementation of SSL be provided (such as Sun's <a href="http://java.sun.com/products/jsse/index.html">Java Secure Sockets Extension -- JSSE</a>).
 Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="#configuring_jmeter">jmeter.properties</a>
 by registering the SSL Provider.</p>
-<p>There is also the <complink name="SSL Manager"/>, for greater control of certs.</p>
+<p>There is also the <complink name="SSL Manager"/>, for greater control of certificates.</p>
 <p>Note: if you are running JDK1.4, then you do not have to download JSSE because Sun integrated it into JDK1.4 as a standard library.</p>
 </subsection>
 
@@ -109,15 +121,20 @@ by registering the SSL Provider.</p>
 <subsection name="2.2.6 Apache SOAP" anchor="opt_soap">
 <p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your jmeter/lib directory. Once the files are in there, JMeter will automatically pick them up.</p>
 </subsection>
+<note>
+Any additional jars need to be stored in the JMeter lib directory (or the appropriate JRE directory). 
+Make sure the file extension is .jar, not .zip, as JMeter only looks for .jar files.
+</note>
 </section>
 
 <section name="2.3 Installation" anchor="install">
 <p>Installing JMeter is a snap.  Specifics depend on which release file you
 downloaded.</p>
 
-
+<p><b>Note: avoid installing JMeter in a path with spaces in the name.  
+This causes problems for remote testing.</b></p>
 <subsection name="2.3.1 Downloading the Latest Release" anchor="download_release">
-<p>We recommend that most users run the <a href="http://jakarta.apache.org/builds/jakarta-jmeter/release/">latest release</a>.</p>
+<p>We recommend that most users run the <a href="http://jakarta.apache.org/site/downloads/index.html">latest release</a>.</p>
 <p>To install a release build, simply unzip the zip/tar file into the directory
 where you want JMeter to be installed.  Provided that you have a JDK correctly installed
 and the JAVA_HOME environment variable set, there is nothing more for you to do.</p>
@@ -125,9 +142,8 @@ and the JAVA_HOME environment variable set, there is nothing more for you to do.
 
 <subsection name="2.3.2 Downloading Nightly Builds" anchor="download_nightly">
 <p>If you do not mind working with beta-quality software, then you can download and run the <a href="http://jakarta.apache.org/builds/jakarta-jmeter/nightly">latest nightly build</a>.</p>
-<p>To install a nightly build, unzip the zip/tar file into the directory where you want JMeter
-to be installed.  Then, open a shell or command prompt and change to JMeter's top-level directory.
-Next, type "build install".  Provided that you have a JDK correctly installed
+<p>To install a nightly build, unzip the _bin and _lib zip/tar files into the same directory structure.
+Provided that you have a JDK correctly installed
 and the JAVA_HOME environment variable set, JMeter should be installed successfully.</p>
 </subsection>
 </section>
@@ -145,6 +161,7 @@ If you want to add other JAR files to JMeter's classpath, then
 you must copy them to JMeter's "lib" directory.  If you have developed new JMeter specific components,
 then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
 automatically find JMeter components in any jars found here.</p>
+<p>Note: JMeter will only find .jar files, not .zip.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property user.classpath in jmeter.properties</p>
 <p>Note that setting the CLASSPATH environment variable will have no effect.
 This is because JMeter is started with "java -jar", 
@@ -278,8 +295,7 @@ These are shown below.</p>
 <section name="2.5 Configuring JMeter" anchor="configuring_jmeter">
 <p>If you wish to modify the properties with which JMeter runs you need to
   either modify the jmeter.properties inside of the /bin directory or create
-  your own copy of the jmeter.properties and specify it in the command line
-  (jmeter [properties file]).
+  your own copy of the jmeter.properties and specify it in the command line.
   </p>
   <properties>
 	<property name="ssl.provider">You can specify the class for your SSL
@@ -300,6 +316,9 @@ These are shown below.</p>
   You may list their classname or their class label (the string that appears
   in JMeter's UI) here, and they will no longer appear in the menus.</property>
   </properties>
+<p><b>
+See also the comments in the jmeter.properties file for further information on other settings you can change.
+</b></p>
 </section>
 
 </body>
