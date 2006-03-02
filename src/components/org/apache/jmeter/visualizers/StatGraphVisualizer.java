@@ -42,6 +42,7 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.SaveGraphics;
 import org.apache.jmeter.gui.util.FileDialoger;
@@ -324,8 +325,8 @@ ActionListener {
             saveGraphToFile = true;
             try {
                 ActionRouter.getInstance().getAction(
-                        SaveGraphics.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
-                                new ActionEvent(this,1,SaveGraphics.SAVE_GRAPHICS));
+                        ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
+                                new ActionEvent(this,1,ActionNames.SAVE_GRAPHICS));
             } catch (Exception e) {
                 e.printStackTrace();
             }
