@@ -49,7 +49,6 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.gui.action.GlobalMouseListener;
 import org.apache.jmeter.gui.util.ReportMenuBar;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.tree.ReportCellRenderer;
@@ -333,7 +332,6 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
-		addMouseListener(new GlobalMouseListener());
     }
 
     /**
