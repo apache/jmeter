@@ -62,7 +62,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals(ExitCommand.EXIT)) {
+		if (e.getActionCommand().equals(ActionNames.EXIT)) {
 			doAction(e);
 		}
 	}
