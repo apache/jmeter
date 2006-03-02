@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -37,19 +36,16 @@ import org.apache.log.Logger;
 
 /**
  * 
- * @author unattributed
  * @version $Revision$ $Date$
  */
 public class Help implements Command {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String HELP = "help";
-
 	private static Set commands = new HashSet();
 
-	public static final String HELP_DOCS = "file:///" + JMeterUtils.getJMeterHome() + "/printable_docs/usermanual/";
+	private static final String HELP_DOCS = "file:///" + JMeterUtils.getJMeterHome() + "/printable_docs/usermanual/";
 
-	public static final String HELP_PAGE = HELP_DOCS + "component_reference.html";
+	private static final String HELP_PAGE = HELP_DOCS + "component_reference.html";
 
 	public static final String HELP_FUNCTIONS = HELP_DOCS + "functions.html";
 
@@ -62,7 +58,7 @@ public class Help implements Command {
 	private static String currentPage;
 
 	static {
-		commands.add(HELP);
+		commands.add(ActionNames.HELP);
 		helpDoc = new HtmlPane();
 		scroller = new JScrollPane(helpDoc);
 		helpDoc.setEditable(false);

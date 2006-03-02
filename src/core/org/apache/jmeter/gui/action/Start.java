@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -29,7 +28,6 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -45,9 +43,9 @@ public class Start extends AbstractAction {
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(JMeterMenuBar.ACTION_START);
-		commands.add(JMeterMenuBar.ACTION_STOP);
-		commands.add(JMeterMenuBar.ACTION_SHUTDOWN);
+		commands.add(ActionNames.ACTION_START);
+		commands.add(ActionNames.ACTION_STOP);
+		commands.add(ActionNames.ACTION_SHUTDOWN);
 	}
 
 	private StandardJMeterEngine engine;
@@ -68,16 +66,16 @@ public class Start extends AbstractAction {
 	}
 
 	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals(JMeterMenuBar.ACTION_START)) {
+		if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
 			popupShouldSave(e);
 			startEngine();
-		} else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_STOP)) {
+		} else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
 			if (engine != null) {
 				GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 				engine.stopTest();
 				engine = null;
 			}
-		} else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_SHUTDOWN)) {
+		} else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
 			if (engine != null) {
 				GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 				engine.askThreadsToStop();

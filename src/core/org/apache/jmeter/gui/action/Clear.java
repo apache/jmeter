@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -35,16 +34,12 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class Clear implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	public final static String CLEAR = "action.clear";
-
-	public final static String CLEAR_ALL = "action.clear_all";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(CLEAR);
-		commands.add(CLEAR_ALL);
+		commands.add(ActionNames.CLEAR);
+		commands.add(ActionNames.CLEAR_ALL);
 	}
 
 	public Clear() {
@@ -56,7 +51,7 @@ public class Clear implements Command {
 
 	public void doAction(ActionEvent e) {
 		GuiPackage guiPackage = GuiPackage.getInstance();
-		if (e.getActionCommand().equals(CLEAR)) {
+		if (e.getActionCommand().equals(ActionNames.CLEAR)) {
 			JMeterGUIComponent model = guiPackage.getCurrentGui();
 			try {
 				((Clearable) model).clear();

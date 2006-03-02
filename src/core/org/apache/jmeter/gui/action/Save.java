@@ -45,21 +45,13 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class Save implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	public final static String SAVE_ALL_AS = "save_all_as";
-
-	public final static String SAVE_AS = "save_as";
-
-	public final static String SAVE = "save";
-
-	// NOTUSED private String chosenFile;
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(SAVE_AS);
-		commands.add(SAVE_ALL_AS);
-		commands.add(SAVE);
+		commands.add(ActionNames.SAVE_AS);
+		commands.add(ActionNames.SAVE_ALL_AS);
+		commands.add(ActionNames.SAVE);
 	}
 
 	/**
@@ -82,14 +74,14 @@ public class Save implements Command {
 		if (!commands.contains(e.getActionCommand())) {
 			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
 		}
-		if (e.getActionCommand().equals(SAVE_AS)) {
+		if (e.getActionCommand().equals(ActionNames.SAVE_AS)) {
 			subTree = GuiPackage.getInstance().getCurrentSubTree();
 		} else {
 			subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
 		}
 
 		String updateFile = GuiPackage.getInstance().getTestPlanFile();
-		if (!SAVE.equals(e.getActionCommand()) || updateFile == null) {
+		if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
 			JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
 					.getCurrentNode().getName()
 					+ ".jmx");
@@ -97,14 +89,14 @@ public class Save implements Command {
 				return;
 			}
 			updateFile = chooser.getSelectedFile().getAbsolutePath();
-			if (!e.getActionCommand().equals(SAVE_AS)) {
+			if (!e.getActionCommand().equals(ActionNames.SAVE_AS)) {
 				GuiPackage.getInstance().setTestPlanFile(updateFile);
 			}
 		}
 		// TODO: doesn't putting this here mark the tree as
 		// saved even though a failure may occur later?
 
-		ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), CheckDirty.SUB_TREE_SAVED));
+		ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
 		try {
 			convertSubTree(subTree);
 		} catch (Exception err) {
