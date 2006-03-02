@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -33,8 +32,8 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.UIManager;
 
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.ChangeLanguage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
@@ -49,64 +48,64 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	JMenu fileMenu;
+    private JMenu fileMenu;
 
-	JMenuItem file_save_as;
+    private JMenuItem file_save_as;
 
-	JMenuItem file_load;
+    private JMenuItem file_load;
 
-	JMenuItem file_merge;
+    private JMenuItem file_merge;
 
-	JMenuItem file_exit;
+    private JMenuItem file_exit;
 
-	JMenuItem file_close;
+    private JMenuItem file_close;
 
-	JMenu editMenu;
+    private JMenu editMenu;
 
-	JMenu edit_add;
+    private JMenu edit_add;
 
 	// JMenu edit_add_submenu;
-	JMenuItem edit_remove; // TODO - should this be created?
+    private JMenuItem edit_remove; // TODO - should this be created?
 
-	JMenu runMenu;
+    private JMenu runMenu;
 
-	JMenuItem run_start;
+    private JMenuItem run_start;
 
-	JMenu remote_start;
+    private JMenu remote_start;
 
-	JMenuItem remote_start_all;
+    private JMenuItem remote_start_all;
 
-	Collection remote_engine_start;
+    private Collection remote_engine_start;
 
-	JMenuItem run_stop;
+    private JMenuItem run_stop;
 
-	private JMenuItem run_shut; // all the others could be private too?
+	private JMenuItem run_shut;
+    
+    private JMenu remote_stop;
 
-	JMenu remote_stop;
+    private JMenuItem remote_stop_all;
 
-	JMenuItem remote_stop_all;
+    private Collection remote_engine_stop;
 
-	Collection remote_engine_stop;
+    private JMenuItem run_clear;
 
-	JMenuItem run_clear;
-
-	JMenuItem run_clearAll;
+    private JMenuItem run_clearAll;
 
 	// JMenu reportMenu;
 	// JMenuItem analyze;
-	JMenu optionsMenu;
+    private JMenu optionsMenu;
 
-	JMenu lafMenu;
+    private JMenu lafMenu;
 
-	JMenuItem sslManager;
+    private JMenuItem sslManager;
 
-	JMenu helpMenu;
+    private JMenu helpMenu;
 
-	JMenuItem help_about;
+    private JMenuItem help_about;
 
-	String[] remoteHosts;
+    private String[] remoteHosts;
 
 	private JMenu remote_exit;
 
@@ -231,11 +230,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		helpMenu = new JMenu(JMeterUtils.getResString("help"));
 		helpMenu.setMnemonic('H');
 		JMenuItem contextHelp = new JMenuItem(JMeterUtils.getResString("help"), 'H');
-		contextHelp.setActionCommand("help");
+		contextHelp.setActionCommand(ActionNames.HELP);
 		contextHelp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
 		contextHelp.addActionListener(ActionRouter.getInstance());
 		help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A');
-		help_about.setActionCommand("about");
+		help_about.setActionCommand(ActionNames.ABOUT);
 		help_about.addActionListener(ActionRouter.getInstance());
 		helpMenu.add(contextHelp);
 		helpMenu.add(help_about);
@@ -246,14 +245,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		optionsMenu = new JMenu(JMeterUtils.getResString("option"));
 		JMenuItem functionHelper = new JMenuItem(JMeterUtils.getResString("function_dialog_menu_item"), 'F');
 		functionHelper.addActionListener(ActionRouter.getInstance());
-		functionHelper.setActionCommand("functions");
+		functionHelper.setActionCommand(ActionNames.FUNCTIONS);
 		functionHelper.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_MASK));
 		lafMenu = new JMenu(JMeterUtils.getResString("appearance"));
 		UIManager.LookAndFeelInfo lafs[] = UIManager.getInstalledLookAndFeels();
 		for (int i = 0; i < lafs.length; ++i) {
 			JMenuItem laf = new JMenuItem(lafs[i].getName());
 			laf.addActionListener(ActionRouter.getInstance());
-			laf.setActionCommand("laf:" + lafs[i].getClassName());
+			laf.setActionCommand(ActionNames.LAF_PREFIX + lafs[i].getClassName());
 			lafMenu.setMnemonic('L');
 			lafMenu.add(laf);
 		}
@@ -263,7 +262,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		if (SSLManager.isSSLSupported()) {
 			sslManager = new JMenuItem(JMeterUtils.getResString("sslManager"));
 			sslManager.addActionListener(ActionRouter.getInstance());
-			sslManager.setActionCommand("sslManager");
+			sslManager.setActionCommand(ActionNames.SSL_MANAGER);
 			sslManager.setMnemonic('S');
 			sslManager.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_MASK));
 			optionsMenu.add(sslManager);
@@ -287,63 +286,53 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		// add english
 		JMenuItem english = new JMenuItem(JMeterUtils.getResString("en"), 'E');
 		english.addActionListener(ActionRouter.getInstance());
-		english.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		english.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		english.setName(Locale.ENGLISH.getLanguage());
 		languageMenu.add(english);
 		// add Japanese
 		JMenuItem japanese = new JMenuItem(JMeterUtils.getResString("jp"), 'J');
 		japanese.addActionListener(ActionRouter.getInstance());
-		japanese.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		japanese.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		japanese.setName(Locale.JAPANESE.getLanguage());
 		languageMenu.add(japanese);
 		// add Norwegian
 		JMenuItem norway = new JMenuItem(JMeterUtils.getResString("no"), 'N');
 		norway.addActionListener(ActionRouter.getInstance());
-		norway.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		norway.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		norway.setName("no"); // No default for Norwegian
 		languageMenu.add(norway);
 		// add German
 		JMenuItem german = new JMenuItem(JMeterUtils.getResString("de"), 'G');
 		german.addActionListener(ActionRouter.getInstance());
-		german.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		german.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		german.setName(Locale.GERMAN.getLanguage());
 		languageMenu.add(german);
 		// add French
 		JMenuItem french = new JMenuItem(JMeterUtils.getResString("fr"), 'F');
 		french.addActionListener(ActionRouter.getInstance());
-		french.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		french.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		french.setName(Locale.FRENCH.getLanguage());
 		languageMenu.add(french);
 		// add chinese (simple)
 		JMenuItem chineseSimple = new JMenuItem(JMeterUtils.getResString("zh_cn"));
 		chineseSimple.addActionListener(ActionRouter.getInstance());
-		chineseSimple.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		chineseSimple.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		chineseSimple.setName(Locale.SIMPLIFIED_CHINESE.toString());
 		languageMenu.add(chineseSimple);
 		// add chinese (traditional)
 		JMenuItem chineseTrad = new JMenuItem(JMeterUtils.getResString("zh_TW"));
 		chineseTrad.addActionListener(ActionRouter.getInstance());
-		chineseTrad.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		chineseTrad.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		chineseTrad.setName(Locale.TRADITIONAL_CHINESE.toString());
 		languageMenu.add(chineseTrad);
 		// add spanish
 		JMenuItem spanish = new JMenuItem(JMeterUtils.getResString("es"));
 		spanish.addActionListener(ActionRouter.getInstance());
-		spanish.setActionCommand(ChangeLanguage.CHANGE_LANGUAGE);
+		spanish.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		spanish.setName("es");
 		languageMenu.add(spanish);
 		return languageMenu;
 	}
-
-	/*
-	 * Strings used to set up and process actions in this menu The strings need
-	 * to agree with the those in the Action routines
-	 */
-	public static final String ACTION_SHUTDOWN = "shutdown";
-
-	public static final String ACTION_STOP = "stop";
-
-	public static final String ACTION_START = "start";
 
 	private void makeRunMenu() {
 		// RUN MENU
@@ -352,25 +341,25 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		run_start = new JMenuItem(JMeterUtils.getResString("start"), 'S');
 		run_start.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK));
 		run_start.addActionListener(ActionRouter.getInstance());
-		run_start.setActionCommand(ACTION_START);
+		run_start.setActionCommand(ActionNames.ACTION_START);
 		run_stop = new JMenuItem(JMeterUtils.getResString("stop"), 'T');
 		run_stop.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, KeyEvent.CTRL_MASK));
 		run_stop.setEnabled(false);
 		run_stop.addActionListener(ActionRouter.getInstance());
-		run_stop.setActionCommand(ACTION_STOP);
+		run_stop.setActionCommand(ActionNames.ACTION_STOP);
 
 		run_shut = new JMenuItem(JMeterUtils.getResString("shutdown"), 'Y');
 		run_shut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, KeyEvent.CTRL_MASK));
 		run_shut.setEnabled(false);
 		run_shut.addActionListener(ActionRouter.getInstance());
-		run_shut.setActionCommand(ACTION_SHUTDOWN);
+		run_shut.setActionCommand(ActionNames.ACTION_SHUTDOWN);
 
 		run_clear = new JMenuItem(JMeterUtils.getResString("clear"), 'C');
 		run_clear.addActionListener(ActionRouter.getInstance());
-		run_clear.setActionCommand(org.apache.jmeter.gui.action.Clear.CLEAR);
+		run_clear.setActionCommand(ActionNames.CLEAR);
 		run_clearAll = new JMenuItem(JMeterUtils.getResString("clear_all"), 'a');
 		run_clearAll.addActionListener(ActionRouter.getInstance());
-		run_clearAll.setActionCommand(org.apache.jmeter.gui.action.Clear.CLEAR_ALL);
+		run_clearAll.setActionCommand(ActionNames.CLEAR_ALL);
 		run_clearAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
 		runMenu.add(run_start);
 		if (remote_start != null) {
@@ -380,7 +369,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		remote_start_all.setName("remote_start_all");
 		remote_start_all.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK));
 		remote_start_all.addActionListener(ActionRouter.getInstance());
-		remote_start_all.setActionCommand("remote_start_all");
+		remote_start_all.setActionCommand(ActionNames.REMOTE_START_ALL);
 		runMenu.add(remote_start_all);
 		runMenu.add(run_stop);
 		runMenu.add(run_shut);
@@ -390,7 +379,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		remote_stop_all = new JMenuItem(JMeterUtils.getResString("remote_stop_all"), 'X');
 		remote_stop_all.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.ALT_MASK));
 		remote_stop_all.addActionListener(ActionRouter.getInstance());
-		remote_stop_all.setActionCommand("remote_stop_all");
+		remote_stop_all.setActionCommand(ActionNames.REMOTE_STOP_ALL);
 		runMenu.add(remote_stop_all);
 
 		if (remote_exit != null) {
@@ -398,7 +387,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		}
 		remote_exit_all = new JMenuItem(JMeterUtils.getResString("remote_exit_all"));
 		remote_exit_all.addActionListener(ActionRouter.getInstance());
-		remote_exit_all.setActionCommand("remote_exit_all");
+		remote_exit_all.setActionCommand(ActionNames.REMOTE_EXIT_ALL);
 		runMenu.add(remote_exit_all);
 
 		runMenu.addSeparator();
@@ -421,13 +410,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		fileMenu.setMnemonic('F');
 		JMenuItem file_save = new JMenuItem(JMeterUtils.getResString("save"), 'S');
 		file_save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
-		file_save.setActionCommand("save");
+		file_save.setActionCommand(ActionNames.SAVE);
 		file_save.addActionListener(ActionRouter.getInstance());
 		file_save.setEnabled(true);
 
 		file_save_as = new JMenuItem(JMeterUtils.getResString("save_all_as"), 'A');
 		file_save_as.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
-		file_save_as.setActionCommand("save_all_as");
+		file_save_as.setActionCommand(ActionNames.SAVE_ALL_AS);
 		file_save_as.addActionListener(ActionRouter.getInstance());
 		file_save_as.setEnabled(true);
 
@@ -437,16 +426,16 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		// Set default SAVE menu item to disabled since the default node that
 		// is selected is ROOT, which does not allow items to be inserted.
 		file_load.setEnabled(false);
-		file_load.setActionCommand("open");
+		file_load.setActionCommand(ActionNames.OPEN);
 
 		file_close = new JMenuItem(JMeterUtils.getResString("menu_close"), 'C');
 		file_close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_MASK));
-		file_close.setActionCommand("close");
+		file_close.setActionCommand(ActionNames.CLOSE);
 		file_close.addActionListener(ActionRouter.getInstance());
 
 		file_exit = new JMenuItem(JMeterUtils.getResString("exit"), 'X');
 		file_exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
-		file_exit.setActionCommand("exit");
+		file_exit.setActionCommand(ActionNames.EXIT);
 		file_exit.addActionListener(ActionRouter.getInstance());
 
 		file_merge = new JMenuItem(JMeterUtils.getResString("menu_merge"), 'M');
@@ -456,15 +445,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		// Set default SAVE menu item to disabled since the default node that
 		// is selected is ROOT, which does not allow items to be inserted.
 		file_merge.setEnabled(false);
-		file_merge.setActionCommand("merge");
+		file_merge.setActionCommand(ActionNames.MERGE);
 
 		fileMenu.add(file_close);
 		fileMenu.add(file_load);
 		fileMenu.add(file_merge);
 		fileMenu.add(file_save);
 		fileMenu.add(file_save_as);
-		fileMenu.addSeparator();
-		fileMenu.add(file_exit);
+        fileMenu.addSeparator();
+        fileMenu.add(file_exit);
 	}
 
 	public void setRunning(boolean running, String host) {
@@ -507,20 +496,20 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 			for (int i = 0; i < remoteHosts.length; i++) {
 				remoteHosts[i] = remoteHosts[i].trim();
 				JMenuItem item = new JMenuItem(remoteHosts[i]);
-				item.setActionCommand("remote_start");
+				item.setActionCommand(ActionNames.REMOTE_START);
 				item.setName(remoteHosts[i]);
 				item.addActionListener(ActionRouter.getInstance());
 				remote_engine_start.add(item);
 				remote_start.add(item);
 				item = new JMenuItem(remoteHosts[i]);
-				item.setActionCommand("remote_stop");
+				item.setActionCommand(ActionNames.REMOTE_STOP);
 				item.setName(remoteHosts[i]);
 				item.addActionListener(ActionRouter.getInstance());
 				item.setEnabled(false);
 				remote_engine_stop.add(item);
 				remote_stop.add(item);
 				item = new JMenuItem(remoteHosts[i]);
-				item.setActionCommand("remote_exit");
+				item.setActionCommand(ActionNames.REMOTE_EXIT);
 				item.setName(remoteHosts[i]);
 				item.addActionListener(ActionRouter.getInstance());
 				item.setEnabled(false);
