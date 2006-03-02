@@ -33,11 +33,9 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ExitCommand implements Command {
 
-	public static final String EXIT = "exit";
-
 	private static Set commands = new HashSet();
 	static {
-		commands.add(EXIT);
+		commands.add(ActionNames.EXIT);
 	}
 
 	/**

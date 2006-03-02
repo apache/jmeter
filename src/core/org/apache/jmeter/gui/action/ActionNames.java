@@ -45,6 +45,7 @@ public class ActionNames {
     public final static String DRAG_ADD         = "drag_n_drop.add";//$NON-NLS-1$
     public static final String EDIT             = "edit"; // $NON-NLS-1$
     public static final String ENABLE           = "enable"; // $NON-NLS-1$
+    public static final String EXIT             = "exit"; // $NON-NLS-1$
     public static final String FUNCTIONS        = "functions"; // $NON-NLS-1$
     public final static String HELP             = "help"; // $NON-NLS-1$
     public final static String INSERT_AFTER     = "drag_n_drop.insert_after";//$NON-NLS-1$
