@@ -36,6 +36,7 @@ import javax.swing.MenuElement;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -52,7 +53,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public final class MenuFactory {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public final static String TIMERS = "menu_timer";
 
@@ -78,20 +79,27 @@ public final class MenuFactory {
 
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
-	private static final String[] MENU_ADD_CONTROLLER = new String[] { MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-			MenuFactory.ASSERTIONS, MenuFactory.CONFIG_ELEMENTS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
-			MenuFactory.POST_PROCESSORS };
+	private static final String[] MENU_ADD_CONTROLLER = new String[] {
+        MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
+		MenuFactory.ASSERTIONS, MenuFactory.CONFIG_ELEMENTS, 
+        MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
+		MenuFactory.POST_PROCESSORS };
 
-	private static final String[] MENU_PARENT_CONTROLLER = new String[] { MenuFactory.CONTROLLERS };
+	private static final String[] MENU_PARENT_CONTROLLER = new String[] { 
+        MenuFactory.CONTROLLERS };
 
-	private static final String[] MENU_ADD_SAMPLER = new String[] { MenuFactory.CONFIG_ELEMENTS,
-			MenuFactory.ASSERTIONS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
-			MenuFactory.POST_PROCESSORS };
+	private static final String[] MENU_ADD_SAMPLER = new String[] { 
+        MenuFactory.CONFIG_ELEMENTS,
+		MenuFactory.ASSERTIONS, MenuFactory.TIMERS, MenuFactory.LISTENERS, 
+        MenuFactory.PRE_PROCESSORS,
+		MenuFactory.POST_PROCESSORS };
 
-	private static final String[] MENU_PARENT_SAMPLER = new String[] { MenuFactory.CONTROLLERS };
+	private static final String[] MENU_PARENT_SAMPLER = new String[] { 
+        MenuFactory.CONTROLLERS };
 
-	private static List timers, controllers, samplers, configElements, assertions, listeners, nonTestElements,
-			postProcessors, preProcessors;
+	private static List timers, controllers, samplers, configElements, 
+        assertions, listeners, nonTestElements,
+		postProcessors, preProcessors;
 
 	// private static JMenu timerMenu;
 	// private static JMenu controllerMenu;
@@ -129,31 +137,37 @@ public final class MenuFactory {
 	public static void addEditMenu(JPopupMenu menu, boolean removable) {
 		addSeparator(menu);
 		if (removable) {
-			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", "remove", KeyStroke.getKeyStroke(
-					KeyEvent.VK_DELETE, 0)));
+			menu.add(makeMenuItem(JMeterUtils.getResString("remove"),
+                    "Remove", ActionNames.REMOVE,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0)));
 		}
-		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut", KeyStroke.getKeyStroke(KeyEvent.VK_X,
-				KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C,
-				KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste", KeyStroke.getKeyStroke(
-				KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), "Paste Insert", "Paste Insert"));
+		menu.add(makeMenuItem(JMeterUtils.getResString("cut"),
+                "Cut", ActionNames.CUT,
+                KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK)));
+		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), 
+                "Copy", ActionNames.COPY,
+                KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK)));
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste"),
+                "Paste", ActionNames.PASTE,
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"),
+                "Paste Insert", ActionNames.PASTE));
 	}
 
 	public static void addFileMenu(JPopupMenu menu) {
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
-        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"), "Merge", "merge"));
-        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
-		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics",
+		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", ActionNames.OPEN));
+        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"), "Merge", ActionNames.MERGE));
+        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", ActionNames.SAVE_AS));
+		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),
+                "Save Image", ActionNames.SAVE_GRAPHICS,
 				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
 		menu.add(savePicture);
 		if (!(GuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
 			savePicture.setEnabled(false);
 		}
-		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", "disable");
-		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", "enable");
+		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", ActionNames.DISABLE);
+		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", ActionNames.ENABLE);
 		boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
 		if (isEnabled) {
 			disabled.setEnabled(true);
@@ -165,7 +179,7 @@ public final class MenuFactory {
 		menu.add(enabled);
 		menu.add(disabled);
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("help"), "Help", "help"));
+		menu.add(makeMenuItem(JMeterUtils.getResString("help"), "Help", ActionNames.HELP));
 	}
 
 	public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
@@ -179,9 +193,9 @@ public final class MenuFactory {
 	public static JPopupMenu getDefaultControllerMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
+				ActionNames.ADD));
 		pop.add(makeMenus(MENU_PARENT_CONTROLLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
+				ActionNames.ADD_PARENT));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
@@ -190,9 +204,9 @@ public final class MenuFactory {
 	public static JPopupMenu getDefaultSamplerMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
+                ActionNames.ADD));
 		pop.add(makeMenus(MENU_PARENT_SAMPLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
+                ActionNames.ADD_PARENT));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
