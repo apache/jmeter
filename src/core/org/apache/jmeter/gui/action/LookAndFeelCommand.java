@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -38,7 +37,7 @@ public class LookAndFeelCommand implements Command {
 	static {
 		UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
 		for (int i = 0; i < lfs.length; i++) {
-			commands.add("laf:" + lfs[i].getClassName());
+			commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
 		}
 
 		try {

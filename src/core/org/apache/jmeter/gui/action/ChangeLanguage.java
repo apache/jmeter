@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -34,12 +33,10 @@ import org.apache.log.Logger;
 public class ChangeLanguage implements Command {
 	private static final Set commands = new HashSet();
 
-	public final static String CHANGE_LANGUAGE = "change_language";
-
-	private Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	static {
-		commands.add(CHANGE_LANGUAGE);
+		commands.add(ActionNames.CHANGE_LANGUAGE);
 	}
 
 	/**

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -42,16 +41,21 @@ import org.apache.log.Logger;
  * @version $Revision$ Last updated $Date$
  */
 public class RemoteStart extends AbstractAction {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final String LOCAL_HOST = "127.0.0.1"; // $NON-NLS-1$
+
+    private static final String REMOTE_HOSTS = "remote_hosts"; // $NON-NLS-1$ jmeter.properties
+
+    private static Set commands = new HashSet();
 	static {
-		commands.add("remote_start");
-		commands.add("remote_stop");
-		commands.add("remote_start_all");
-		commands.add("remote_stop_all");
-		commands.add("remote_exit");
-		commands.add("remote_exit_all");
+		commands.add(ActionNames.REMOTE_START);
+		commands.add(ActionNames.REMOTE_STOP);
+		commands.add(ActionNames.REMOTE_START_ALL);
+		commands.add(ActionNames.REMOTE_STOP_ALL);
+		commands.add(ActionNames.REMOTE_EXIT);
+		commands.add(ActionNames.REMOTE_EXIT_ALL);
 	}
 
 	private Map remoteEngines = new HashMap();
@@ -65,15 +69,15 @@ public class RemoteStart extends AbstractAction {
 			name = name.trim();
 		}
 		String action = e.getActionCommand();
-		if (action.equals("remote_stop")) {
+		if (action.equals(ActionNames.REMOTE_STOP)) {
 			doRemoteStop(name);
-		} else if (action.equals("remote_start")) {
+		} else if (action.equals(ActionNames.REMOTE_START)) {
 			popupShouldSave(e);
 			doRemoteInit(name);
 			doRemoteStart(name);
-		} else if (action.equals("remote_start_all")) {
+		} else if (action.equals(ActionNames.REMOTE_START_ALL)) {
 			popupShouldSave(e);
-			String remote_hosts_string = JMeterUtils.getPropDefault("remote_hosts", "127.0.0.1");
+			String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
 			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();
@@ -84,17 +88,17 @@ public class RemoteStart extends AbstractAction {
 				String el = (String) st.nextElement();
 				doRemoteStart(el.trim());
 			}
-		} else if (action.equals("remote_stop_all")) {
-			String remote_hosts_string = JMeterUtils.getPropDefault("remote_hosts", "127.0.0.1");
+		} else if (action.equals(ActionNames.REMOTE_STOP_ALL)) {
+			String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
 			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();
 				doRemoteStop(el.trim());
 			}
-		} else if (action.equals("remote_exit")) {
+		} else if (action.equals(ActionNames.REMOTE_EXIT)) {
 			doRemoteExit(name);
-		} else if (action.equals("remote_exit_all")) {
-			String remote_hosts_string = JMeterUtils.getPropDefault("remote_hosts", "127.0.0.1");
+		} else if (action.equals(ActionNames.REMOTE_EXIT_ALL)) {
+			String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
 			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();

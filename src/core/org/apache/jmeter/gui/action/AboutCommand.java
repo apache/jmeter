@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -54,8 +53,8 @@ public class AboutCommand implements Command {
 
 	static {
 		HashSet commands = new HashSet();
-		commands.add("about");
-		AboutCommand.commandSet = Collections.unmodifiableSet(commands);
+		commands.add(ActionNames.ABOUT);
+		commandSet = Collections.unmodifiableSet(commands);
 	}
 
 	/**
@@ -64,7 +63,7 @@ public class AboutCommand implements Command {
 	 * if at all possible.
 	 */
 	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals("about")) {
+		if (e.getActionCommand().equals(ActionNames.ABOUT)) {
 			this.about();
 		}
 	}

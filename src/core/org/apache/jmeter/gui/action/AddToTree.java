@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -19,8 +18,8 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -33,17 +32,21 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author unattributed
  * @version $Revision$ Last updated: $Date$
  */
 public class AddToTree implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Map allJMeterComponentCommands;
+    private static Set commandSet;
+    
+    static {
+        HashSet commands = new HashSet();
+        commands.add(ActionNames.ADD);
+        commandSet = Collections.unmodifiableSet(commands);
+    }
+
 
 	public AddToTree() {
-		allJMeterComponentCommands = new HashMap();
-		allJMeterComponentCommands.put("Add", "Add");
 	}
 
 	/**
@@ -52,7 +55,7 @@ public class AddToTree implements Command {
 	 * @return the ActionNames value
 	 */
 	public Set getActionNames() {
-		return allJMeterComponentCommands.keySet();
+		return commandSet;
 	}
 
 	/**

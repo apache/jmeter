@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -30,11 +29,9 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  * @version $Revision$
  */
 public class Cut extends AbstractAction {
-	public final static String CUT = "Cut";
-
 	private static Set commands = new HashSet();
 	static {
-		commands.add(CUT);
+		commands.add(ActionNames.CUT);
 	}
 
 	/**

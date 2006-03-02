@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -42,32 +41,19 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 
 	private static Map previousGuiItems;
 
-	public static final String CHECK_DIRTY = "check_dirty";
+	private boolean checkMode = false;
 
-	public static final String SUB_TREE_SAVED = "sub_tree_saved";
+	private boolean removeMode = false;
 
-	public static final String SUB_TREE_LOADED = "sub_tree_loaded";
-
-	public static final String ADD_ALL = "add_all";
-
-	// Not implemented: public static final String SAVE = "save_as";
-	// Not implemented: public static final String SAVE_ALL = "save_all";
-	// Not implemented: public static final String SAVE_TO_PREVIOUS = "save";
-	public static final String REMOVE = "check_remove";
-
-	boolean checkMode = false;
-
-	boolean removeMode = false;
-
-	boolean dirty = false;
+	private boolean dirty = false;
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(CHECK_DIRTY);
-		commands.add(SUB_TREE_SAVED);
-		commands.add(SUB_TREE_LOADED);
-		commands.add(ADD_ALL);
-		commands.add(REMOVE);
+		commands.add(ActionNames.CHECK_DIRTY);
+		commands.add(ActionNames.SUB_TREE_SAVED);
+		commands.add(ActionNames.SUB_TREE_LOADED);
+		commands.add(ActionNames.ADD_ALL);
+		commands.add(ActionNames.CHECK_REMOVE);
 	}
 
 	public CheckDirty() {
@@ -86,16 +72,16 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 	 */
 	public void doAction(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action.equals(SUB_TREE_SAVED)) {
+		if (action.equals(ActionNames.SUB_TREE_SAVED)) {
 			HashTree subTree = (HashTree) e.getSource();
 			subTree.traverse(this);
-		} else if (action.equals(SUB_TREE_LOADED)) {
+		} else if (action.equals(ActionNames.SUB_TREE_LOADED)) {
 			ListedHashTree addTree = (ListedHashTree) e.getSource();
 			addTree.traverse(this);
-		} else if (action.equals(ADD_ALL)) {
+		} else if (action.equals(ActionNames.ADD_ALL)) {
 			previousGuiItems.clear();
 			GuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
-		} else if (action.equals(REMOVE)) {
+		} else if (action.equals(ActionNames.CHECK_REMOVE)) {
 			GuiPackage guiPackage = GuiPackage.getInstance();
 			JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
 			removeMode = true;
