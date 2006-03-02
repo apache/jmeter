@@ -48,8 +48,8 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.CheckDirty;
 import org.apache.jmeter.gui.action.Load;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
@@ -197,7 +197,7 @@ public class JMeter implements JMeterPlugin {
 		main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());
 		ComponentUtil.centerComponentInWindow(main, 80);
 		main.show();
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, CheckDirty.ADD_ALL));
+		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
 		if (testFile != null) {
 			try {
 				File f = new File(testFile.getArgument());
