@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -46,7 +45,7 @@ public final class ActionRouter implements ActionListener {
 
 	private static ActionRouter router;
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Map preActionListeners = new HashMap();
 
