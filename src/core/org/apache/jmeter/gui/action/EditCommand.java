@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -32,7 +31,7 @@ import org.apache.jmeter.gui.NamePanel;
 public class EditCommand implements Command {
 	private static Set commands = new HashSet();
 	static {
-		commands.add("edit");
+		commands.add(ActionNames.EDIT);
 	}
 
 	public EditCommand() {

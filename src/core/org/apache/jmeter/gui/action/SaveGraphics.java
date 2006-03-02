@@ -41,11 +41,9 @@ import org.apache.jmeter.visualizers.Printable;
  */
 public class SaveGraphics implements Command {
 
-	public final static String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
-
 	private static Set commands = new HashSet();
 	static {
-		commands.add(SAVE_GRAPHICS);
+		commands.add(ActionNames.SAVE_GRAPHICS);
 	}
 
 	private static final String[] extensions 
@@ -72,7 +70,7 @@ public class SaveGraphics implements Command {
 		if (!commands.contains(e.getActionCommand())) {
 			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
 		}
-		if (e.getActionCommand().equals(SAVE_GRAPHICS)) {
+		if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {
 			component = GuiPackage.getInstance().getCurrentGui();
 			// get the JComponent from the visualizer
 			if (component instanceof Printable) {

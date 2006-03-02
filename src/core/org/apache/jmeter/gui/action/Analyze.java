@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -36,7 +35,7 @@ public class Analyze implements Command {
 	private static Set commands = new HashSet();
 
 	static {
-		commands.add("Analyze File");
+		commands.add(ActionNames.ANALYZE_FILE);
 	}
 
 	public Analyze() {

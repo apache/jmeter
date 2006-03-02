@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -63,7 +62,7 @@ public class ExitCommand implements Command {
 	 *            Description of Parameter
 	 */
 	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		if (GuiPackage.getInstance().isDirty()) {
 			int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
 					.getResString("cancel_exit_to_save"), JMeterUtils.getResString("Save?"),
@@ -71,7 +70,7 @@ public class ExitCommand implements Command {
 			if (chosenOption == JOptionPane.NO_OPTION) {
 				System.exit(0);
 			} else if (chosenOption == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL_AS));
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE_ALL_AS));
 				if (!GuiPackage.getInstance().isDirty()) {
 					System.exit(0);
 				}

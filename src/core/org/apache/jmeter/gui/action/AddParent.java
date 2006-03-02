@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -34,11 +33,11 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class AddParent implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add("Add Parent");
+		commands.add(ActionNames.ADD_PARENT);
 	}
 
 	public AddParent() {

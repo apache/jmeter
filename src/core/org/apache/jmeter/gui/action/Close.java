@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -39,7 +38,7 @@ public class Close implements Command {
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add("close");
+		commands.add(ActionNames.CLOSE);
 	}
 
 	/**
@@ -64,13 +63,13 @@ public class Close implements Command {
 	 *            the generic UI action event
 	 */
 	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		if (guiPackage.isDirty()) {
 			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
 					.getResString("cancel_new_to_save"), JMeterUtils.getResString("Save?"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE));
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
 			}
 		}
 		guiPackage.getTreeModel().clearTestPlan();
@@ -79,6 +78,6 @@ public class Close implements Command {
 		// Clear the name of the test plan file
 		GuiPackage.getInstance().setTestPlanFile(null);
 
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));
+		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
 	}
 }

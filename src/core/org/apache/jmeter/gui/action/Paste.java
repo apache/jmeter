@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -34,11 +33,9 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  */
 public class Paste extends AbstractAction {
 
-	public final static String PASTE = "Paste";
-
 	private static Set commands = new HashSet();
 	static {
-		commands.add(PASTE);
+		commands.add(ActionNames.PASTE);
 	}
 
 	/**

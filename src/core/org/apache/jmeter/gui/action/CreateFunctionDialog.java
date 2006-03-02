@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -33,7 +32,7 @@ public class CreateFunctionDialog extends AbstractAction {
 	private static Set commands;
 	static {
 		commands = new HashSet();
-		commands.add("functions");
+		commands.add(ActionNames.FUNCTIONS);
 	}
 
 	public CreateFunctionDialog() {

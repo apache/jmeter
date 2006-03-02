@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -52,7 +51,7 @@ public class SSLManagerCommand implements Command {
 	private static Set commandSet;
 	static {
 		HashSet commands = new HashSet();
-		commands.add("sslManager");
+		commands.add(ActionNames.SSL_MANAGER);
 		SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
 	}
 
@@ -64,7 +63,7 @@ public class SSLManagerCommand implements Command {
 	 * if at all possible.
 	 */
 	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals("sslManager")) {
+		if (e.getActionCommand().equals(ActionNames.SSL_MANAGER)) {
 			this.sslManager();
 		}
 	}

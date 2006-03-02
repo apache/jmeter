@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -34,9 +33,10 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class Remove implements Command {
-	private static Set commands = new HashSet();
+	
+    private static Set commands = new HashSet();
 	static {
-		commands.add("remove");
+		commands.add(ActionNames.REMOVE);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Remove implements Command {
 	}
 
 	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), CheckDirty.REMOVE));
+		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_REMOVE));
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
 		TreePath newTreePath = // Save parent node for later

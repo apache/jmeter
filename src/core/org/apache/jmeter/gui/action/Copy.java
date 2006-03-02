@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2005 The Apache Software Foundation.
  *
@@ -42,11 +41,10 @@ public class Copy extends AbstractAction {
 
 	private static JMeterTreeNode copiedNodes[] = null;
 
-	private static String COPY = "Copy";
-
 	private static HashSet commands = new HashSet();
+    
 	static {
-		commands.add(COPY);
+		commands.add(ActionNames.COPY);
 	}
 
 	/*

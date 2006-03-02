@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -31,16 +30,12 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class EnableComponent implements Command {
-	private static Logger log = LoggingManager.getLoggerForClass();
-
-	public static final String ENABLE = "enable";
-
-	public static final String DISABLE = "disable";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(ENABLE);
-		commands.add(DISABLE);
+		commands.add(ActionNames.ENABLE);
+		commands.add(ActionNames.DISABLE);
 	}
 
 	/**
@@ -49,10 +44,10 @@ public class EnableComponent implements Command {
 	public void doAction(ActionEvent e) {
 		JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
 
-		if (e.getActionCommand().equals(ENABLE)) {
+		if (e.getActionCommand().equals(ActionNames.ENABLE)) {
 			log.debug("enabling currently selected gui objects");
 			enableComponents(nodes, true);
-		} else if (e.getActionCommand().equals(DISABLE)) {
+		} else if (e.getActionCommand().equals(ActionNames.DISABLE)) {
 			log.debug("disabling currently selected gui objects");
 			enableComponents(nodes, false);
 		}

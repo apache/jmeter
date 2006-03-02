@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -41,7 +40,6 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
@@ -49,14 +47,12 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * @version $Revision$
  */
 public class Load implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	XStream loadService = new XStream();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add("open");
-		commands.add("merge");
+		commands.add(ActionNames.OPEN);
+		commands.add(ActionNames.MERGE);
 	}
 
 	public Load() {
@@ -68,7 +64,7 @@ public class Load implements Command {
 	}
 
 	public void doAction(ActionEvent e) {
-		boolean merging = e.getActionCommand().equals("merge");
+		boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
 
 		if (!merging) {
 			ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), "close"));
@@ -144,7 +140,7 @@ public class Load implements Command {
 				new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
 		tree = GuiPackage.getInstance().getCurrentSubTree();
 		ActionRouter.getInstance().actionPerformed(
-				new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, CheckDirty.SUB_TREE_LOADED));
+				new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_LOADED));
 
 		return isTestPlan;
 	}
