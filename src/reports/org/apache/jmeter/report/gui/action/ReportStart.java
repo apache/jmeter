@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -23,9 +22,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
-import org.apache.jmeter.report.gui.action.AbstractAction;
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -38,9 +36,9 @@ public class ReportStart extends AbstractAction {
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(JMeterMenuBar.ACTION_START);
-		commands.add(JMeterMenuBar.ACTION_STOP);
-		commands.add(JMeterMenuBar.ACTION_SHUTDOWN);
+		commands.add(ActionNames.ACTION_START);
+		commands.add(ActionNames.ACTION_STOP);
+		commands.add(ActionNames.ACTION_SHUTDOWN);
 	}
 
 	private StandardJMeterEngine engine;
@@ -61,16 +59,16 @@ public class ReportStart extends AbstractAction {
 	}
 
 	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals(JMeterMenuBar.ACTION_START)) {
+		if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
 			popupShouldSave(e);
 			startEngine();
-		} else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_STOP)) {
+		} else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
 			if (engine != null) {
 				ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 				engine.stopTest();
 				engine = null;
 			}
-		} else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_SHUTDOWN)) {
+		} else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
 			if (engine != null) {
 				ReportGuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 				engine.askThreadsToStop();
@@ -80,9 +78,9 @@ public class ReportStart extends AbstractAction {
 	}
 
 	protected void startEngine() {
-		ReportGuiPackage gui = ReportGuiPackage.getInstance();
         /**
          * this will need to be changed
+        ReportGuiPackage gui = ReportGuiPackage.getInstance();
 		engine = new StandardJMeterEngine();
 		HashTree testTree = gui.getTreeModel().getTestPlan();
 		convertSubTree(testTree);
