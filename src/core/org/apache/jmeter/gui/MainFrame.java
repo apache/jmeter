@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -52,8 +51,8 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.GlobalMouseListener;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
@@ -362,7 +361,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
-		addMouseListener(new GlobalMouseListener());
 	}
 
 	/**
@@ -468,7 +466,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		 *            the WindowEvent to handle
 		 */
 		public void windowClosing(WindowEvent event) {
-			ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), "exit"));
+			ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), ActionNames.EXIT));
 		}
 	}
 }
