@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -91,7 +90,7 @@ public abstract class AbstractAction implements Command {
 			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
 					.getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE));
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(),ActionNames.SAVE));
 			}
 		}
 	}
