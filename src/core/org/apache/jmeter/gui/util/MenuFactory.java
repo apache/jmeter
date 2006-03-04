@@ -166,6 +166,12 @@ public final class MenuFactory {
 		if (!(GuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
 			savePicture.setEnabled(false);
 		}
+        
+        JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),
+                "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,
+                KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK| KeyEvent.SHIFT_DOWN_MASK));
+        menu.add(savePictureAll);
+        
 		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", ActionNames.DISABLE);
 		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", ActionNames.ENABLE);
 		boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
