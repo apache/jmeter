@@ -43,8 +43,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 	 */
 	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
-
+        
 	}
 
 	/*
@@ -55,9 +54,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 	public void focusLost(FocusEvent e) {
 		firePropertyChange();
 
-	}
-
-	public static void main(String[] args) {
 	}
 
 	protected void init() {
@@ -142,7 +138,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 	 * @see java.beans.PropertyEditor#supportsCustomEditor()
 	 */
 	public boolean supportsCustomEditor() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }
