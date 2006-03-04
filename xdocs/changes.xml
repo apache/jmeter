@@ -50,6 +50,7 @@ Users must explicitly check append in the sampler</li>
 <li>Don't reset Regex Extractor variable if default is empty</li>
 <li>includecontroller.prefix property added</li>
 <li>Regular Expression Extractor sets group count</li>
+<li>Can now save entire screen as an image, not just the right-hand pane</li>
 </ul>
 
 <h4>Bug fixes:</h4>

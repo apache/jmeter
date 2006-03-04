@@ -65,6 +65,7 @@ public class ActionNames {
     public final static String SAVE_ALL_AS      = "save_all_as";  // $NON-NLS-1$
     public final static String SAVE_AS          = "save_as"; // $NON-NLS-1$
     public static final String SAVE_GRAPHICS    = "save_graphics"; // $NON-NLS-1$
+    public static final String SAVE_GRAPHICS_ALL= "save_graphics_all"; // $NON-NLS-1$
     public static final String SSL_MANAGER      = "sslManager"; // $NON-NLS-1$
     public static final String SUB_TREE_LOADED  = "sub_tree_loaded"; // $NON-NLS-1$
     public static final String SUB_TREE_SAVED   = "sub_tree_saved"; // $NON-NLS-1$

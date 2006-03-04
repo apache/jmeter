@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -44,6 +44,7 @@ public class SaveGraphics implements Command {
 	private static Set commands = new HashSet();
 	static {
 		commands.add(ActionNames.SAVE_GRAPHICS);
+        commands.add(ActionNames.SAVE_GRAPHICS_ALL);
 	}
 
 	private static final String[] extensions 
@@ -75,29 +76,39 @@ public class SaveGraphics implements Command {
 			// get the JComponent from the visualizer
 			if (component instanceof Printable) {
 				comp = ((Printable) component).getPrintableComponent();
-
-				String filename;
-				JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
-						.getCurrentNode().getName(), extensions);
-				if (chooser == null) {
-					return;
-				}
-				// Get the string given from the choose and check
-				// the file extension.
-				filename = chooser.getSelectedFile().getAbsolutePath();
-				if (filename != null) {
-					SaveGraphicsService save = new SaveGraphicsService();
-					String ext = filename.substring(filename.length() - 4);
-					String name = filename.substring(0, filename.length() - 4);
-					if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
-						save.saveJComponent(name, SaveGraphicsService.PNG, comp);
-					} else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
-						save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
-					} else {
-						save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
-					}
-				}
+                saveImage(comp);
 			}
 		}
+        if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS_ALL)) {
+            component = GuiPackage.getInstance().getCurrentGui();
+            comp=((JComponent) component).getRootPane();
+            saveImage(comp);
+        }
 	}
+
+    private void saveImage(JComponent comp){
+
+        String filename;
+        JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+                .getCurrentNode().getName(), extensions);
+        if (chooser == null) {
+            return;
+        }
+        // Get the string given from the choose and check
+        // the file extension.
+        filename = chooser.getSelectedFile().getAbsolutePath();
+        if (filename != null) {
+            SaveGraphicsService save = new SaveGraphicsService();
+            String ext = filename.substring(filename.length() - 4);
+            String name = filename.substring(0, filename.length() - 4);
+            if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
+                save.saveJComponent(name, SaveGraphicsService.PNG, comp);
+            } else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
+                save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
+            } else {
+                save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
+            }
+        }
+
+    }
 }
