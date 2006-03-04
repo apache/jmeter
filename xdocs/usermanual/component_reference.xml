@@ -1547,7 +1547,7 @@ the graph as a PNG file. By default, the aggregate graph will generate a bar cha
 450 x 250 pixels.</description>
 </component>
 
-<component index="&sect-num;.3.13" name="Mailer Visualizer" screenshot="mailer_vis.png">
+<component index="&sect-num;.3.13" name="Mailer Visualizer" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 
@@ -1635,7 +1635,7 @@ to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, nam
 "/index.html".</p>
 
 <figure image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
-<figure image="http-config/auth-manager-example1b.gif">Figure 11 - Authorization Manager Control Panel</figure>
+<figure image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
