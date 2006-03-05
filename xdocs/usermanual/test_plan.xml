@@ -54,16 +54,24 @@ JMeter will take 100 seconds to get all 10 threads up and running.  Each thread 
 start 10 (100/10) seconds after the previous thread was begun.  If there are 30 threads
 and a ramp-up period of 120 seconds, then each successive thread will be delayed by 4 seconds.</p>
 
-<p>By default, a thread group is configured to loop indefinitely through its elements.
-Alternatively, you can set the number of times the thread group will loop before ending.  If the number
-is set at one, then JMeter will execute the test only once before stopping.</p>
+<p>Ramp-up needs to be long enough to avoid too large a work-load at the start
+of a test, and short enough that the last threads start running before
+the first ones finish (unless one wants that to happen).
+</p>
+<p>
+Start with Ramp-up = number of threads and adjust as needed.
+</p>
+
+<p>By default, the thread group is configured to loop once through its elements.</p>
 
 <p>Version 1.9 introduces a test run <b>scheduler</b>. 
-	Click the checkbox at the bottom of the Thread Group panel to reveal two extra fields
+	Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
 	 in which you can enter the start and end times of the run. 
 	 When the test is started, JMeter will wait if necessary until the start-time has been reached.
 	 At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
 	 otherwise the test is allowed to continue until the iteration limit is reached.</p>
+	 <p>Alternatively, one can use the relative delay and duration fields. 
+	 Note that delay overrides start-time, and duration over-rides end-time.</p>
 </subsection>
 
 <subsection name="4.2 Controllers" anchor="controllers">

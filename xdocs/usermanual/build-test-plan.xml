@@ -47,7 +47,6 @@ your elements are saved.  JMeter will load the elements into the tree.</p>
 JMeter will save the element selected, plus all child elements beneath it.  In this way,
 you can save test tree fragments, individual elements, or the entire test plan.</p>
 
-<note>The test plan file format changed with version 1.7. Versions later than 1.8 are no longer capable of reading test plans in the old format. If you need to use an old test plan, use JMeter 1.7 or 1.8 to load and re-save it in the new format.</note>
 </subsection>
 
 <subsection name="3.3 Configuring Tree Elements" anchor="config_element">
