@@ -15,6 +15,8 @@
  * 
  */
 
+// For unit tests @see TestCookieManager
+
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;
@@ -95,17 +97,6 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
 	public void setClearEachIteration(boolean clear) {
 		setProperty(new BooleanProperty(CLEAR, clear));
-	}
-
-	// Incorrect method. Always returns String. I changed CookiePanel code to
-	// perform this lookup.
-	// public Class getColumnClass(int column)
-	// {
-	// return columnNames[column].getClass();
-	// }
-
-	public Cookie getCookie(int row) {
-		return (Cookie) getCookies().get(row);
 	}
 
 	/**
