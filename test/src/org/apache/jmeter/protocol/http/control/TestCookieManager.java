@@ -107,6 +107,18 @@ public class TestCookieManager extends TestCase {
             assertEquals("test=1", s);
         }
 
+        // Bug 2063
+        public void testCookieWithEquals() throws Exception {
+            URL url = new URL("http://a.b.c/");
+            man.addCookieFromHeader("NSCP_USER_LOGIN1_NEW=SHA=xxxxx", url);
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("NSCP_USER_LOGIN1_NEW=SHA=xxxxx", s);
+            Cookie c=man.get(0);
+            assertEquals("NSCP_USER_LOGIN1_NEW",c.getName());
+            assertEquals("SHA=xxxxx",c.getValue());
+        }
+
         // Test Old cookie is not returned
         public void testOldCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
