@@ -16,6 +16,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '16'>
+]>
 	
 <document prev="remote-test.html" next="boss.html" date="$Date$">
 
@@ -25,30 +29,30 @@
 
 <body>
 
-<section name="16. Best Practices" anchor="best_practices">
+<section name="&sect-num;. Best Practices" anchor="best_practices">
 </section>
 
-<section name="16.1 Limit the Number of Threads" anchor="limit_threads">
+<section name="&sect-num;.1 Limit the Number of Threads" anchor="limit_threads">
 <p>Your hardware's capabilities will limit the number of threads you can effectively
 run with JMeter.  It will also depend on how fast your server is (a faster server
 gives makes JMeter work harder since it returns request quicker).  The more
 JMeter works, the less accurate its timing information will be.  The more work
 JMeter does, the more each thread has to wait to get access to the CPU, the more
 inflated the timing information gets.  If you need large-scale load testing, consider
-<a href="remote-test.html">running JMeter remotely</a> across multiple machines.</p>
+running multiple non-GUI JMeter instances on multiple machines.</p>
 </section>
 
-<section name="16.2 Where to Put the Cookie Manager" anchor="put_cookie_manager">
+<section name="&sect-num;.2 Where to Put the Cookie Manager" anchor="put_cookie_manager">
 <p>See <a href="build-web-test-plan.html#adding_cookie_support">Building a Web Test</a>
 for information.</p>
 </section>
 
-<section name="16.3 Where to Put the Authorization Manager" anchor="put_auth_manager">
+<section name="&sect-num;.3 Where to Put the Authorization Manager" anchor="put_auth_manager">
 <p>See <a href="build-adv-web-test-plan.html#header_manager">Building an Advanced
 Web Test</a> for information.</p>
 </section>
 
-<section name="16.4 Using the Proxy Server" anchor="proxy_server">
+<section name="&sect-num;.4 Using the Proxy Server" anchor="proxy_server">
 <p>Refer to <complink name="HTTP Proxy Server"/> for details on setting up the proxy
 server. The most important thing to do is filter out all requests you aren't
 interested in.  For instance, there's no point in recording image requests (JMeter can
@@ -88,6 +92,24 @@ a good similar example for the variables is http vs. https.-->
 <!--SUMMARY of all TODO's above: we need some actual usage to identify best practices
 with this new features.-->
 </section>
+
+<section name="&sect-num;.5 Reducing resource requirements" anchor="lean_mean">
+<p>
+Some suggestions on reducing resource usage.
+</p>
+<ul>
+<li>Use non-GUI mode: jmeter -n -t test.jmx -l test.jtl</li>
+<li>Use as few Listeners as possible; if using the -l flag as above they can all be deleted or disabled.</li>
+<li>Rather than using lots of similar samplers, 
+use the same sampler in a loop, and use variables (CSV Data Set) to vary the sample. 
+Or perhaps use the Access Log Sampler.
+</li>
+<li>Don't use functional mode</li>
+<li>Use CSV output rather than XML</li>
+<li>Only record the sample items that are needed</li>
+</ul>
+</section>
+
 
 </body>
 </document>
