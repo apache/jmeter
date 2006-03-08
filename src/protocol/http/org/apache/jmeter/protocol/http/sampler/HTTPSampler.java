@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -431,10 +431,19 @@ public class HTTPSampler extends HTTPSamplerBase {
 			res.setResponseData(responseData);
 
 			int errorLevel = conn.getResponseCode();
+            String respMsg = conn.getResponseMessage();
+            if (errorLevel == -1){// Bug 38902 - sometimes -1 seems to be returned unnecessarily
+                try {
+                    errorLevel = Integer.parseInt(respMsg.substring(0, 3));
+                    log.warn("ResponseCode==-1; parsed "+respMsg+ " as "+errorLevel);
+                  } catch (NumberFormatException e) {
+                    log.warn("ResponseCode==-1; could not parse "+respMsg);
+                  }                
+            }
 			res.setResponseCode(Integer.toString(errorLevel));
 			res.setSuccessful(isSuccessCode(errorLevel));
 
-			res.setResponseMessage(conn.getResponseMessage());
+			res.setResponseMessage(respMsg);
 
 			String ct = conn.getContentType();
 			res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
