@@ -150,7 +150,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 
 </component>
 
-<component name="JDBC Request" index="&sect-num;.1.3" screenshot="gen-controller/jdbc-request.gif">
+<component name="JDBC Request" index="&sect-num;.1.3" screenshot="gen-controller/jdbc-request.png">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
@@ -160,7 +160,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 		<property name="Variable Name" required="Yes">Name of the JMeter variable that the connection pool is bound to</property>
-		<property name="Query Only" required="Yes">Set this to true for Selects, otherwise False</property>
+		<property name="Query Type" required="Yes">Set this according to the statement type</property>
         <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
 </properties>
 
@@ -224,14 +224,14 @@ XML.</p>
 </component>
 
 <component name="LDAP Request" index="&sect-num;.1.6" screenshot="ldap_request.png">
-  <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to a LDAP server.
+  <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
       Configuration Element so you do not have to enter the same information for each
       LDAP Request.</p> The same way the <complink name="Login Config Element"/> also using for Login and password.
   </description>
 
-  <p>There are two ways to create test cases for testing a LDAP Server.</p>
+  <p>There are two ways to create test cases for testing an LDAP Server.</p>
   <ol><li>Inbuilt Test cases.</li>
     <li>User defined Test cases.</li></ol>
 
@@ -298,13 +298,13 @@ XML.</p>
                                       </properties>
 
                                       <links>
-                                        <link href="build-ldap-test-plan.html">Building a Ldap Test Plan</link>
+                                        <link href="build-ldap-test-plan.html">Building an Ldap Test Plan</link>
                                         <complink name="LDAP Request Defaults"/>
                                       </links>
 
 </component>
 <component name="LDAP Extended Request (ALPHA)" index="&sect-num;.1.6b" screenshot="ldapext_request.png">
-  <description>This Sampler can send all 8 different LDAP request to a LDAP server. It is an extended version of the LDAP sampler,
+  <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Extended Request Defaults (ALPHA)"/>
@@ -314,7 +314,7 @@ XML.</p>
    <p>There are nine test operations defined. These operations are given below:</p>
     <ol>
       <li>Thread bind</li>
-      <p>Any LDAP request is part of a LDAP session, so the first thing that should be done is starting a session to the LDAP server.
+      <p>Any LDAP request is part of an LDAP session, so the first thing that should be done is starting a session to the LDAP server.
        For starting this session a thread bind is used, which is equal to the LDAP "bind" operation.
        The user is requested to give a username (Distinghuised name) and password, 
        which will be used to initiate a session.
@@ -425,7 +425,7 @@ XML.</p>
     </ol>
        
     <links>
-      <link href="build-ldapext-test-plan.html">Building a Ldap Test Plan</link>
+      <link href="build-ldapext-test-plan.html">Building an LDAP Test Plan</link>
       <complink name="LDAP Extended Request Defaults (ALPHA)"/>
     </links>
 
@@ -578,7 +578,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseMessage = "OK"</li>
 			<li>IsSuccess = true</li>
 			<li>ctx - JMeterContext</li>
-			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value");</li>
+			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
 		</ul>
 		<p>When the script completes, control is returned to the Sampler, and it copies the contents
 			of the following script variables into the corresponding variables in the SampleResult:</p>
@@ -615,6 +615,10 @@ The following script will show the values of all the variables in the ResponseDa
 <pre>
 return getVariables();
 </pre>
+<p>
+For details on the methods available for the various classes (JMeterVariables, SampleResult etc) please check the Javadoc or the source code.
+Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
+</p>
 </component>
 
 
@@ -876,6 +880,11 @@ Here are some general guidelines for writing Junit tests so they work well with 
 </properties>
 </component>
 
+<component name="Mail Reader Sampler"  index="&sect-num;.1.17" screenshot="mailreader_sampler.png">
+<description>TBA</description>
+</component>
+
+
 </section>
 
 <section name="&sect-num;.2 Logic Controllers" anchor="logic_controllers">
@@ -1114,7 +1123,7 @@ setting is reset when a parent Loop Controller restarts.
 	</description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Condition" required="yes">Javascript code that returns "true" or "false"</property>
+	<property name="Condition" required="Yes"><b>Javascript</b> code that returns "true" or "false"</property>
 </properties>
 	<p>Examples:
 		<ul>
@@ -1580,7 +1589,7 @@ failed responses from the server.</p></description>
 	i.e. before any samplers in the same scope.
 	<br></br>
 </description>
-<component index="&sect-num;.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
+<component name="HTTP Authorization Manager" index="&sect-num;.4.1" screenshot="http-config/http-auth-manager.gif">
 <note>If there is more than one Authorization Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
@@ -1646,10 +1655,10 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component index="&sect-num;.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.2" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
-there is currently no way to sepcify which one is to be used.</note>
+there is currently no way to specify which one is to be used.</note>
 
 <description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
@@ -1665,7 +1674,7 @@ the cookie will be shared by all JMeter threads.</p>
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-  <property name="Clear Cookies each Iteration" required="Yes">If selected, all cookies are cleared each time the thread group script is executed. 
+  <property name="Clear Cookies each Iteration" required="Yes">If selected, all cookies are cleared each time the main Thread Group loop is executed.
   This includes all the Cookies stored in the manager, so they will never be sent.</property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.</property>
@@ -1680,7 +1689,7 @@ cookie table entries.</property>
 
 </component>
 
-<component index="&sect-num;.4.3" name="HTTP Proxy Server" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.4.3" screenshot="proxy_control.png">
 <note>The Proxy Server can only record HTTP traffic. 
 There is currently no support for recording HTTPS (SSL) sessions.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
@@ -1796,7 +1805,7 @@ You can also add a <complink name="Save Responses to a file"/> Post-Processor wh
 
 </component>
 
-<component index="&sect-num;.4.4" name="HTTP Request Defaults"
+<component name="HTTP Request Defaults" index="&sect-num;.4.4" 
         screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
@@ -1824,12 +1833,12 @@ resource requires query string parameters, add them below in the
 </properties>
 </component>
 
-<component index="&sect-num;.4.5" name="FTP Request Defaults"
+<component name="FTP Request Defaults" index="&sect-num;.4.5" 
                 screenshot="ftp-config/ftp-request-defaults.gif">
 <description></description>
 </component>
 
-<component index="&sect-num;.4.6" name="JDBC Connection Configuration"
+<component name="JDBC Connection Configuration" index="&sect-num;.4.6" 
                 screenshot="jdbc-config/jdbc-conn-config.png">
 	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
 	 with JDBC Connection settings.
@@ -1856,7 +1865,7 @@ resource requires query string parameters, add them below in the
 	</properties>
 </component>
 
-<component index="&sect-num;.4.7" name="JDBC SQL Query Defaults"
+<component name="JDBC SQL Query Defaults" index="&sect-num;.4.7" 
 	screenshot="jdbc-config/jdbc-sql-query.png">
 <description>Defines a default query for the <complink name="JDBC Request"/>Sampler.
 	<br></br>
@@ -1864,13 +1873,7 @@ resource requires query string parameters, add them below in the
 	</description>
 </component>
 
-<component index="&sect-num;.4.8" name="Mail Reader Sampler">
-<description>TBA</description>
-</component>
-
-
-
-<component index="&sect-num;.4.9" name="HTTP Header Manager" screenshot="http-config/http-header-manager.gif">
+<component name="HTTP Header Manager" index="&sect-num;.4.8" screenshot="http-config/http-header-manager.gif">
 <note>If there is more than one Header Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
@@ -1902,7 +1905,7 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="&sect-num;.4.10" name="Login Config Element" screenshot="login-config.png">
+<component name="Login Config Element" index="&sect-num;.4.9" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -1914,7 +1917,7 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="&sect-num;.4.11" name="Simple Config Element" screenshot="simple_config_element.png">
+<component name="Simple Config Element" index="&sect-num;.4.10" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
@@ -1929,26 +1932,26 @@ GUI that they can use while developing new JMeter components.</p>
 
 </component>
 
-<component index="&sect-num;.4.12" name="LDAP Request Defaults" screenshot="ldap_defaults.png">
+<component name="LDAP Request Defaults" index="&sect-num;.4.11" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component index="&sect-num;.4.12b" name="LDAP Extended Request Defaults (ALPHA)" screenshot="ldapext_defaults.png">
+<component name="LDAP Extended Request Defaults (ALPHA)" index="&sect-num;.4.12" screenshot="ldapext_defaults.png">
 <description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request (ALPHA)"/>.</p>
 </description>
 
 </component>
 
 
-<component index="&sect-num;.4.13" name="Java Request Defaults" screenshot="java_defaults.png">
+<component name="Java Request Defaults" index="&sect-num;.4.13" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request"/>.</p>
 </description>
 
 </component>
 
-<component index="&sect-num;.4.14" name="User Defined Variables" screenshot="user_defined_variables.png">
+<component name="User Defined Variables" index="&sect-num;.4.14" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan"/>.
 The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
 </description>
@@ -1960,7 +1963,7 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="tcpsamplerconfig.png">
+<component name="TCP Sampler Config" index="&sect-num;.4.15" screenshot="tcpsamplerconfig.png">
 	<note>ALPHA CODE</note>
 <description>
         <p>
@@ -1977,7 +1980,7 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="csvdatasetconfig.png">
+<component name="CSV Data Set Config" index="&sect-num;.4.16" screenshot="csvdatasetconfig.png">
 <description>
         <p>
 	CSV DataSet Config is used to read lines from a file, and split them into variables.
