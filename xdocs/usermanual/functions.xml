@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-   Copyright 2001-2005 The Apache Software Foundation
+   Copyright 2001-2006 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,7 +14,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="component_reference.html" next="glossary.html" date="2004/06/12">
+<!DOCTYPE document
+[
+<!ENTITY sect-num '19'>
+]>
+<document prev="component_reference.html" next="regular_expressions.html" date="2004/06/12">
 
 <properties>
   <title>User's Manual: Functions</title>
@@ -22,7 +26,7 @@
 
 <body>
 
-<section name="19. Functions" anchor="functions">
+<section name="&sect-num;. Functions" anchor="functions">
 <p>
 JMeter functions are special values that can populate fields of any Sampler or other configuration
 element in a test tree.  A function looks like this:</p>
@@ -54,7 +58,7 @@ is wrapped in ${}.</p>
         <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
 </ul>
 
-<subsection name="19.1 What can functions do" anchor="what_can_do">
+<subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
 <p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
@@ -70,7 +74,7 @@ thread the function is in, the time, and many other sources.  These values are g
 request throughout the course of the test. </p>
 </subsection>
 
-<subsection name="19.2 Where can functions be used?" anchor="where">
+<subsection name="&sect-num;.2 Where can functions be used?" anchor="where">
 <p>A user-defined function can be written into any field of any test component.  Some fields do not allow random strings 
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
 functions.</p>
@@ -87,7 +91,7 @@ SELECT item from table where name=${VAR}
 </note>
 </subsection>
 
-<subsection name="19.3 Writing the function string" anchor="how">
+<subsection name="&sect-num;.3 Writing the function string" anchor="how">
 <p>User-defined functions take the form: <code>${varName}</code>.  In the TestPlan tree element, a two-column table
 of user-defined values is kept, matching up variable names with static values.  Referencing the
 variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
@@ -101,7 +105,7 @@ function calls for various built-in functions, which you can then copy-paste.  I
 variable will override the built-in function.</note>
 </subsection>
 
-<subsection name="19.4 The Function Helper Dialog" anchor="function_helper">
+<subsection name="&sect-num;.4 The Function Helper Dialog" anchor="function_helper">
 <p>The Function Helper dialog is available from JMeter's Tools menu.</p>
 <figure image="function_helper_dialog.png">Function Helper Dialog</figure>
 <p>Using the Function Helper, you can select a function from the pull down, and assign
@@ -112,9 +116,9 @@ functions take different arguments.</p>
 for you to copy-paste into your test plan wherever you like.</p>
 </subsection>
 
-<subsection name="19.5 Functions" anchor="functions">
+<subsection name="&sect-num;.5 Functions" anchor="functions">
 
-<component index="19.5.1" name="__regexFunction">
+<component index="&sect-num;.5.1" name="__regexFunction">
 <description><p>The Regex Function is used to parse the previous response using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p>
@@ -163,7 +167,7 @@ replacement string") parsed by this function</li>
 </properties>
 </component>
 
-<component index="19.5.2" name="__counter">
+<component index="&sect-num;.5.2" name="__counter">
 <description><p>The counter generates a new number each time it is called, starting with 1
 and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
 separate, or to use the same counter for all user.  If each user's values is incremented separately,
@@ -180,7 +184,7 @@ counting how many times that request was run.</p></description>
 </properties>
 </component>
 
-<component index="19.5.3" name="__threadNum">
+<component index="&sect-num;.5.3" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
@@ -189,7 +193,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 </component>
 
-<component index="19.5.4" name="__intSum">
+<component index="&sect-num;.5.4" name="__intSum">
 <description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
@@ -204,7 +208,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 
 <!-- Alternate spelling -->
 <a name="__StringFromFile"/>
-<component index="19.5.5" name="_StringFromFile">
+<component index="&sect-num;.5.5" name="_StringFromFile">
 
 <description>
 	<p>
@@ -285,7 +289,7 @@ Examples:<br/>
 	</p>
 </component>
 
-<component index="19.5.6" name="__machineName">
+<component index="&sect-num;.5.6" name="__machineName">
 <description><p>The machineName function returns the local host name</p></description>
 
 <properties>
@@ -294,7 +298,7 @@ Examples:<br/>
 </properties>
 </component>
 
-<component index="19.5.7" name="__javaScript">
+<component index="&sect-num;.5.7" name="__javaScript">
 <description><p>The javaScript function executes a piece of JavaScript (not Java!) code and returns its value</p>
 	</description>
 
@@ -317,7 +321,7 @@ the expression has commas, please make sure to escape them. For example: ${__jav
  the comma after 7 is escaped.</note>
 </component>
 
-<component index="19.5.8" name="__Random">
+<component index="&sect-num;.5.8" name="__Random">
 <description><p>The random function returns a random number that lies between the given min and max values.</p></description>
 
 <properties>
@@ -328,7 +332,7 @@ the expression has commas, please make sure to escape them. For example: ${__jav
 </properties>
 </component>
 
-<component index="19.5.8" name="__CSVRead">
+<component index="&sect-num;.5.8" name="__CSVRead">
 <description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
 	<p>NOTE: versions up to 1.9.1 only supported a single file. 
 		JMeter versions since 1.9.1 support multiple file names.
@@ -368,7 +372,7 @@ the expression has commas, please make sure to escape them. For example: ${__jav
 </properties>
 </component>
 
-<component index="19.5.9" name="__property">
+<component index="&sect-num;.5.9" name="__property">
 <description><p>The property function returns the value of a JMeter property. 
 	If the property value cannot be found, and no default has been supplied, it returns the property name.
 	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
@@ -390,7 +394,7 @@ the expression has commas, please make sure to escape them. For example: ${__jav
 </properties>
 </component>
 
-<component index="19.5.10" name="__P">
+<component index="&sect-num;.5.10" name="__P">
 <description><p>This is a simplified property function which is
 	intended for use with properties defined on the command line.
 	Unlike the __property function, there is no option to save the value in a variable,
@@ -426,7 +430,7 @@ the second would return 1 and the last would return www.dummy.org
 </properties>
 </component>
 
-<component index="19.5.11" name="__log">
+<component index="&sect-num;.5.11" name="__log">
 <description>
 	<p>
 	The log function logs a message, and returns its input string
@@ -443,7 +447,7 @@ the second would return 1 and the last would return www.dummy.org
 </p>
 </component>
 
-<component index="19.5.12" name="__logn">
+<component index="&sect-num;.5.12" name="__logn">
 <description>
 	<p>
 	The logn function logs a message, and returns the empty string
@@ -460,7 +464,7 @@ the second would return 1 and the last would return www.dummy.org
 </p>
 </component>
 
-<component index="19.5.13" name="__BeanShell">
+<component index="&sect-num;.5.13" name="__BeanShell">
 <description>
 	<p>
 	The BeanShell function evaluates the script passed to it, and returns the result.
@@ -515,7 +519,7 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 <note>Remember to include any necessary quotes for text strings and JMeter variables</note>
 </component>
 
-<component index="19.5.14" name="__split">
+<component index="&sect-num;.5.14" name="__split">
 <description>
 	<p>
 	The split function splits the string passed to it according to the delimiter,
@@ -556,7 +560,7 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
         
 </properties>
 </component>
-<component index="19.5.15" name="__XPath">
+<component index="&sect-num;.5.15" name="__XPath">
 <description>
 	<p>
 	The XPath function reads an XML file and matches the XPath, each
@@ -580,7 +584,7 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
 </properties>
 </component>
 
-<component index="19.5.16" name="__setProperty">
+<component index="&sect-num;.5.16" name="__setProperty">
 <description>
 	<p>The setProperty function sets the value of a JMeter property. 
 		The default return value from the function is the empty string,
