@@ -51,6 +51,7 @@ Users must explicitly check append in the sampler</li>
 <li>includecontroller.prefix property added</li>
 <li>Regular Expression Extractor sets group count</li>
 <li>Can now save entire screen as an image, not just the right-hand pane</li>
+<li>Bug 38901 - Add optional SOAPAction header to SOAP Sampler</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -82,6 +83,7 @@ Users must explicitly check append in the sampler</li>
 <li>Bug 36430 - Counter now uses long rather than int to increase the range</li>
 <li>Bug 38302 - fix XPath function</li>
 <li>Bug 38748 - JDBC DataSourceElement fails with remote testing</li>
+<li>Bug 38902 - sometimes -1 seems to be returned unnecessarily for response code</li>
 </ul>	
 	
 <h4>Other changes</h4>

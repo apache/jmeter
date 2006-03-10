@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +44,10 @@ public class SoapSampler extends HTTPSampler {
 
 	public static final String URL_DATA = "SoapSampler.URL_DATA";
 
+	public static final String SOAP_ACTION = "SoapSampler.SOAP_ACTION";
+
+	public static final String SEND_SOAP_ACTION = "SoapSampler.SEND_SOAP_ACTION";
+
 	public void setXmlData(String data) {
 		setProperty(XML_DATA, data);
 	}
@@ -59,6 +62,22 @@ public class SoapSampler extends HTTPSampler {
 
 	public void setURLData(String url) {
 		setProperty(URL_DATA, url);
+	}
+
+	public String getSOAPAction() {
+		return getPropertyAsString(SOAP_ACTION);
+	}
+
+	public void setSOAPAction(String action) {
+		setProperty(SOAP_ACTION, action);
+	}
+
+	public boolean getSendSOAPAction() {
+		return getPropertyAsBoolean(SEND_SOAP_ACTION);
+	}
+
+	public void setSendSOAPAction(boolean action) {
+		setProperty(SEND_SOAP_ACTION, String.valueOf(action));
 	}
 
 	/**
@@ -90,6 +109,7 @@ public class SoapSampler extends HTTPSampler {
 		} else {
 			// otherwise we use "text/xml" as the default
 			connection.setRequestProperty("Content-Type", "text/xml");
+			if(getSendSOAPAction()) connection.setRequestProperty("SOAPAction", "\"" + getSOAPAction() + "\"");
 		}
 		connection.setDoOutput(true);
 	}
