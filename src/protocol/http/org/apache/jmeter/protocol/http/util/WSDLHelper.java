@@ -151,8 +151,7 @@ public class WSDLHelper {
 			}
 			for (int idx = 0; idx < ports.getLength(); idx++) {
 				Element pnode = (Element) ports.item(idx);
-				String portname = pnode.getAttribute("name");// TODO - why
-																// not used?
+				// NOTUSED String portname = pnode.getAttribute("name");
 				// used to check binding, but now it doesn't. it was
 				// failing when wsdl did not using binding as expected
 				NodeList servlist = pnode.getElementsByTagName("soap:address");
@@ -369,7 +368,9 @@ public class WSDLHelper {
 				// if the first child is soap:operation
 				// we add it to the array
 				Element child = (Element) opnodes.item(idz);
-				NodeList soapnode = child.getElementsByTagName(soapOp);
+				
+                // TODO - the following code looks wrong - it does the same in both cases
+                NodeList soapnode = child.getElementsByTagName(soapOp);
 				if (soapnode.getLength() > 0) {
 					ops.add(child);
 				} else {
