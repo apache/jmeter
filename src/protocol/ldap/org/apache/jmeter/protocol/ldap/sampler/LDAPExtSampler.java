@@ -149,7 +149,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * @return The username
 	 **************************************************************************/
 
-	public void SetUserDN(String newUserDN) {
+	public void setUserDN(String newUserDN) {
 		setProperty(new StringProperty(USERDN, newUserDN));
 	}
 
@@ -189,7 +189,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * @return The username
 	 **************************************************************************/
 
-	public void SetSuserDN(String newUserDN) {
+	public void setSuserDN(String newUserDN) {
 		setProperty(new StringProperty(SUSERDN, newUserDN));
 	}
 
@@ -641,9 +641,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			ctx.close();
 		}
 		res.sampleStart();
-		dirContext = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw());
+		ctx = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw());
 		res.sampleEnd();
-		ldapContexts.put(getThreadName(), dirContext);
+		ldapContexts.put(getThreadName(), ctx);
 	}
 
 	/***************************************************************************
