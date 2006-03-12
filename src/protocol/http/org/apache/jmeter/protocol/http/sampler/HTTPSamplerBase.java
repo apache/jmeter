@@ -261,9 +261,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		return this.getPropertyAsBoolean(MONITOR);
 	}
 
-	public void addEncodedArgument(String name, String value, String metaData) {
-		log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData);
+    /**
+     * Add an argument which has already been encoded
+     */
+    public void addEncodedArgument(String name, String value) {
+        this.addEncodedArgument(name, value, ARG_VAL_SEP);
+    }
 
+	public void addEncodedArgument(String name, String value, String metaData) {
+        if (log.isDebugEnabled()){
+		    log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData);
+        }
+
+        
 		HTTPArgument arg = new HTTPArgument(name, value, metaData, true);
 
 		if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue())) {
