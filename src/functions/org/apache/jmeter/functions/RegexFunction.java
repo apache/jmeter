@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.functions;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
-	private Pattern templatePattern;// initialised to the regex \$(\d+)\$
+	private transient Pattern templatePattern;// initialised to the regex \$(\d+)\$
 
 	private static ThreadLocal localMatcher = new ThreadLocal() {
 		protected Object initialValue() {
@@ -83,6 +84,13 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	public RegexFunction() {
 		templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
 	}
+
+    // For serialised objects, do the same work as the constructor:
+    private Object readResolve() throws ObjectStreamException {
+        templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
+        return this;
+    }
+
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
