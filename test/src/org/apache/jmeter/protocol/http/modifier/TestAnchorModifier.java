@@ -21,7 +21,6 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
@@ -281,11 +280,9 @@ public class TestAnchorModifier extends JMeterTestCase {
             assertEquals("te%24st=goto", config.getQueryString());
         }
 
-        public void testBase64Parse() throws Exception {
-        String base64Fixture = Base64.encodeBase64("foo+bar=foobar".getBytes()).toString();
-        String htmlEncodedFixture = JOrphanUtils.encode(base64Fixture, "UTF-8");
-        testLog.info("base64Fixture= " + base64Fixture);
-        testLog.info("htmlEncodedFixture= " + htmlEncodedFixture);
+        public void testSpecialCharParse() throws Exception {
+        String specialChars = "-_.!~*'()%25";// These are some of the special characters
+        String htmlEncodedFixture = JOrphanUtils.encode(specialChars, "UTF-8");
         
         HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("test", ".*");
@@ -294,8 +291,6 @@ public class TestAnchorModifier extends JMeterTestCase {
         String responseText = "<html><head><title>Test page</title></head><body>"
             + "<form action=\"index.html\" method=\"POST\">" + "<input type=\"hidden\" name=\"test\""
             + " value=\"" + htmlEncodedFixture + "\">Goto index page</form></body></html>";
-        
-        testLog.info("responseText= " + responseText);
         
         HTTPSampleResult result = new HTTPSampleResult();
         result.setResponseData(responseText.getBytes());
@@ -306,10 +301,6 @@ public class TestAnchorModifier extends JMeterTestCase {
         jmctx.setPreviousResult(result);
         parser.process();
         assertEquals("http://www.apache.org/subdir/index.html", config.getUrl().toString());
-        
-        testLog.info("config.getQueryString() " + config.getQueryString());
-        testLog.info("double encoded base64Fixture=" + JOrphanUtils.encode(JOrphanUtils.encode(base64Fixture, "UTF-8"),"UTF-8"));
-        
         assertEquals("test=" + htmlEncodedFixture, config.getQueryString());
       }
 
