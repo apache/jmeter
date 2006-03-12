@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +17,7 @@
 
 package org.apache.jmeter.assertions;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 
@@ -25,10 +25,11 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 /**
- * Checks if the result is a well-formed XML content.
+ * Checks if the result is a well-formed XML content using jdom
  * 
  * @author <a href="mailto:gottfried@szing.at">Gottfried Szing</a>
  * @version $Revision$, $Date$
@@ -36,8 +37,12 @@ import org.jdom.input.SAXBuilder;
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// one builder for all requests
-	private static SAXBuilder builder = null;
+	// one builder for all requests in a thread
+    private static ThreadLocal myBuilder = new ThreadLocal() {
+        protected Object initialValue() {
+            return new SAXBuilder();
+        }
+    };
 
 	/**
 	 * Returns the result of the Assertion. Here it checks wether the Sample
@@ -56,30 +61,19 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 		// the result data
 		String resultData = new String(getResultBody(response.getResponseData()));
 
-		// create parser like (!) a singleton
-		if (builder == null) {
-			try {
-				// This builds a document of whatever's in the given resource
-				builder = new SAXBuilder();
-			} catch (Exception e) {
-				log.error("Unable to instantiate DOM Builder", e);
-
-				result.setFailure(true);
-				result.setFailureMessage("Unable to instantiate DOM Builder");
-
-				// return with an error
-				return result;
-			}
-		}
+        SAXBuilder builder = (SAXBuilder) myBuilder.get();
 
 		try {
 			builder.build(new StringReader(resultData));
-		} catch (Exception e) {
-			log.debug("Cannot parse result content", e);
-
+		} catch (JDOMException e) {
+			log.debug("Cannot parse result content", e); // may well happen
 			result.setFailure(true);
 			result.setFailureMessage(e.getMessage());
-		}
+		} catch (IOException e) {
+            log.error("Cannot read result content", e); // should never happen
+            result.setError(true);
+            result.setFailureMessage(e.getMessage());
+        }
 
 		return result;
 	}
