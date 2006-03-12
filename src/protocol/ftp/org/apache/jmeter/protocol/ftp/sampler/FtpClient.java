@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,20 +39,19 @@ import org.apache.log.Logger;
  * @version $Revision$ Last updated: $Date$
  */
 public class FtpClient {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// File f = new File("e:\\");
-	BufferedWriter out;
+	private BufferedWriter out;
 
-	BufferedReader in;
+	private BufferedReader in;
 
-	Socket s;
+	private Socket s;
 
-	boolean passive = false;
+	private boolean passive = false;
 
-	static int port = 21;
+	private static int port = 21;
 
-	static int dataPort = 4096;
+	private static int dataPort = 4096;
 
 	/**
 	 * Constructor for the FtpClient object.
@@ -111,7 +109,8 @@ public class FtpClient {
 			log.info("port:" + ports);
 			send("PORT " + ports);
 			getResponse();
-			dataGrabber grab = new dataGrabber(ip, dataPort);
+			DataGrabber grab = new DataGrabber(ip, dataPort);
+            grab.begin();
 			while (!grab.isPortCreated()) {
 			}
 			send("RETR " + file);
@@ -143,8 +142,9 @@ public class FtpClient {
 			int upper = Integer.parseInt(portResp.substring(d + 1, e));
 			int lower = Integer.parseInt(portResp.substring(e + 1));
 			send("RETR " + file);
-			dataGrabber grab = new dataGrabber(ip, getPort(upper, lower));
-			getResponse();
+			DataGrabber grab = new DataGrabber(ip, getPort(upper, lower));
+            grab.begin();
+            getResponse();
 			while (!grab.isDone()) {
 			}
 			data = grab.getData();
@@ -230,28 +230,33 @@ public class FtpClient {
 	 * @author mike Created August 31, 2001
 	 * @version $Revision$ Last updated: $Date$
 	 */
-	public class dataGrabber implements Runnable {
-		StringBuffer buffer = new StringBuffer();
+	private class DataGrabber implements Runnable {
+		private StringBuffer buffer = new StringBuffer();
 
-		Socket sock;
+        private Socket sock;
 
-		boolean done = false;
+        private boolean done = false;
 
-		boolean portCreated = false;
+        private boolean portCreated = false;
 
-		String host = "";
+        private String host = "";
 
-		int dgPort = 22;
+        private int dgPort = 22;
+
+        private Thread thread;
 
 		/**
 		 * Constructor for the dataGrabber object.
 		 */
-		public dataGrabber(String host, int port) throws Exception {
+		public DataGrabber(String host, int port) throws Exception {
 			this.host = host;
 			this.dgPort = port;
-			new Thread(this).start();
+			this.thread = new Thread(this);
 		}
 
+        public void begin(){
+            thread.start();
+        }
 		/**
 		 * Gets the Done attribute of the dataGrabber object.
 		 * 
@@ -294,8 +299,9 @@ public class FtpClient {
 					sock = server.accept();
 					log.info("accepted");
 				}
-			} catch (Exception e) {
-			}
+            } catch (IOException e) {
+            } catch (SecurityException e) {
+            }
 			try {
 				InputStream inStr = sock.getInputStream();
 				BufferedInputStream dataIn = new BufferedInputStream(inStr);
@@ -307,7 +313,7 @@ public class FtpClient {
 				}
 				dataIn.close();
 				sock.close();
-			} catch (Exception e) {
+			} catch (IOException e) {
 				log.error("FTP client: dataGrabber", e);
 			}
 			done = true;
