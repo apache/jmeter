@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyEditorSupport;
+import java.util.Arrays;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -274,7 +275,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	 * @param strings
 	 */
 	public void setTags(String[] strings) {
-		if (tags.equals(strings))
+		if (Arrays.equals(tags,strings))
 			return;
 
 		for (int i = 0; i < tags.length; i++)
