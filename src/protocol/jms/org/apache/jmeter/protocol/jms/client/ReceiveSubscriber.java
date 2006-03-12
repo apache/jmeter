@@ -17,17 +17,16 @@
 
 package org.apache.jmeter.protocol.jms.client;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -52,17 +51,14 @@ public class ReceiveSubscriber implements Runnable {
 
 	private byte[] RESULT = null;
 
-	private Object OBJ_RESULT = null;// TODO never read
-
-	// private long time = System.currentTimeMillis();
 	private int counter;
 
 	private int loop = 1; // TODO never read
 
 	private StringBuffer buffer = new StringBuffer();
 
-	private volatile boolean RUN = true;// Needs to be volatile to ensure value
-										// is picked up
+	private volatile boolean RUN = true;
+    // Needs to be volatile to ensure value is picked up
 
 	private Thread CLIENTTHREAD = null;
 
@@ -116,8 +112,6 @@ public class ReceiveSubscriber implements Runnable {
 	 */
 	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
-			TopicConnectionFactory connfac = // TODO never read
-			ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
 			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
@@ -192,7 +186,6 @@ public class ReceiveSubscriber implements Runnable {
 			this.CLIENTTHREAD = null;
 			this.buffer.setLength(0);
 			this.buffer = null;
-			this.finalize();
 		} catch (JMSException e) {
 			log.error(e.getMessage());
 		} catch (Throwable e) {
@@ -207,7 +200,6 @@ public class ReceiveSubscriber implements Runnable {
 	public void clear() {
 		this.buffer.setLength(0);
 		this.RESULT = null;
-		this.OBJ_RESULT = null;
 	}
 
 	/**
