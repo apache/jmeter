@@ -26,7 +26,6 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
@@ -82,7 +81,6 @@ public class Publisher {
 
 	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
-			TopicConnectionFactory connfac = ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
 			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
@@ -123,7 +121,6 @@ public class Publisher {
 			this.PUBLISHER = null;
 			this.SESSION = null;
 			this.CONN = null;
-			this.finalize();
 		} catch (JMSException e) {
 			log.error(e.getMessage());
 		} catch (Throwable e) {
