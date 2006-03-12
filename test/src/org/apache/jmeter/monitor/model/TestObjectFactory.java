@@ -22,6 +22,9 @@ public class TestObjectFactory extends TestCase {
 
     // TODO turn this into a proper test case
     
+    public void testSomething() throws Exception{
+        
+    }
 	/**
 	 * Basic method for testing the class
 	 * 
