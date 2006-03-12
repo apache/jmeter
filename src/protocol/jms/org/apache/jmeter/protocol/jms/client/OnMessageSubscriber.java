@@ -24,7 +24,6 @@ import javax.jms.JMSException;
 import javax.jms.MessageListener;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
@@ -117,7 +116,6 @@ public class OnMessageSubscriber {
 	 */
 	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
-			TopicConnectionFactory connfac = ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
 			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
@@ -151,7 +149,6 @@ public class OnMessageSubscriber {
 			this.SUBSCRIBER = null;
 			this.SESSION = null;
 			this.CONN = null;
-			this.finalize();
 		} catch (JMSException e) {
 			log.error(e.getMessage());
 		} catch (Throwable e) {
