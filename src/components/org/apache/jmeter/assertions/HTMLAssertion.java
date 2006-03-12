@@ -115,7 +115,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 			}
 			log.debug("HTMLAssertions.getResult(): Tidy instance created!");
 
-		} catch (Exception e) {
+		} catch (Exception e) {//TODO replace with proper Exception
 			log.error("Unable to instantiate tidy parser", e);
 			result.setFailure(true);
 			result.setFailureMessage("Unable to instantiate tidy parser");
@@ -167,7 +167,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 				result.setFailure(false);
 			}
 
-		} catch (Exception e) {
+		} catch (Exception e) {//TODO replace with proper Exception
 			// return with an error
 			log.warn("Cannot parse result content", e);
 			result.setFailure(true);
@@ -207,7 +207,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 				if (lOutputWriter != null) {
 					try {
 						lOutputWriter.close();
-					} catch (Exception e) {
+					} catch (IOException e) {
 					}
 				}
 			}
