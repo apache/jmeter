@@ -81,7 +81,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	/** Command for removing a row from the table. */
 	private static final String DELETE = "delete";
 
-	public static final String[] COLUMN_NAMES = { JMeterUtils.getResString("attribute"),
+	private static final String[] COLUMN_NAMES = { JMeterUtils.getResString("attribute"),
 			JMeterUtils.getResString("value"), JMeterUtils.getResString("opcode"), JMeterUtils.getResString("metadata") };
 
 	/**
@@ -341,7 +341,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	 * @param table
 	 *            the table to resize columns for
 	 */
-	protected void sizeColumns(JTable table) {
+	protected void sizeColumns(JTable _table) {
 	}
 
 	/**
