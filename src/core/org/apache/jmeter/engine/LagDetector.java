@@ -76,7 +76,7 @@ public class LagDetector extends Thread {
 			time = System.currentTimeMillis();
 			try {
 				Thread.sleep(incr);
-			} catch (Exception e) {
+			} catch (InterruptedException e) {
 			}
 			time = System.currentTimeMillis() - time;
 			totalLag += time - incr;
