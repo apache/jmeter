@@ -38,4 +38,7 @@ public interface SampleSender {
 	 *            a Sample Event
 	 */
 	public void SampleOccurred(SampleEvent e);
+    // TODO consider renaming this method
+    // - should begin with lower-case letter
+    // - should be less like the SampleListener method (sampleOccurred)
 }
