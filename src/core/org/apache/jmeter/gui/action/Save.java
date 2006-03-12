@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -136,7 +137,7 @@ public class Save implements Command {
 		if (writer != null) {
 			try {
 				writer.close();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				log.error("", ex);
 			}
 		}
@@ -146,7 +147,7 @@ public class Save implements Command {
 		if (fos != null) {
 			try {
 				fos.close();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				log.error("", ex);
 			}
 		}
