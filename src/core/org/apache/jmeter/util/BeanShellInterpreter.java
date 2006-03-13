@@ -135,7 +135,8 @@ public class BeanShellInterpreter {
      * @param init initialisation file
      * @param log logger to pass to interpreter; also used to log errors in this method
      */
-    public BeanShellInterpreter(String init, Logger _log) {
+    public BeanShellInterpreter(String init, Logger _log)  throws ClassNotFoundException {
+        this();
         try {
             this.init(init, _log);
         } catch (IOException e) {
