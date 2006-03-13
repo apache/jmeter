@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
    $Header$
-   Copyright 2001-2004 The Apache Software Foundation
+   Copyright 2001-2004,2006 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ To construct the Test Plan, you will use the following elements:
 <a href="test_plan.html#thread_group">Thread Group</a>,
 <complink name="JDBC Request"/>, <complink name="Graph Results"/>.</p>
 
-<note>This example uses the PostgreSQL <b>org.postgresql.Driver</b> database driver.
+<note>This example uses the MySQL database driver.
 To use this driver, its containing .jar file must be copied to the extension
 .../lib/ directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
 for more details). Otherwise, expect a substantial amount of stack traces when
@@ -61,7 +61,7 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure 7.1
 below)</p>
 
-<figure image="webtest/threadgroup.png">
+<figure image="jdbctest/threadgroup1.png">
 Figure 7.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
@@ -105,17 +105,28 @@ Figure 7.2. JDBC Users Thread Group</figure>
 will be performing.  In this section, you will specify the JDBC requests to
 perform.</p>
 
-<note>Although there are <complink name="JDBC Database Connection Pool Defaults"/>,
-<complink name="JDBC Database Login Defaults"/>, and
-<complink name="JDBC SQL Query Defaults"/> components, they will not be used
-in this example.</note>
-
 <p>Begin by selecting the JDBC Users element. Click your right mouse button
-to get the Add menu, and then select Add --&gt; Sampler --&gt; JDBC Request.
+to get the Add menu, and then select Add --&gt; Config Element --&gt; JDBC Connection Configuration.
 Then, select this new element to view its Control Panel (see Figure 7.3).</p>
 
+<p>Set up the following fields (these assume we will be using a local MySQL database called test):</p>
+<ul>
+<li>Variable name bound to pool. This needs to uniquely identify the configuration.</li>
+<li>Database URL: jdbc:mysql://localhost:3306/test</li>
+<li>JDBC Driver class: com.mysql.jdbc.Driver</li>
+<li>Username: guest</li>
+<li>Password: password for guest</li>
+</ul>
+<p>The other fields on the screen can be left as the defaults.</p>
+<figure image="jdbctest/jdbc-config.png">
+Figure 7.3. JDBC Configuration</figure>
+
+<p>Selecting the JDBC Users element again. Click your right mouse button
+to get the Add menu, and then select Add --&gt; Sampler --&gt; JDBC Request.
+Then, select this new element to view its Control Panel (see Figure 7.4).</p>
+
 <figure image="jdbctest/JDBCRequest.png">
-Figure 7.3. JDBC Request</figure>
+Figure 7.4. JDBC Request</figure>
 
 <p>In our Test Plan, we will make two JDBC requests. The first one is for
 Eastman Kodak stock, and the second is Pfizer stock (obviously you should
@@ -124,34 +135,23 @@ are illustrated below.</p>
 
 <note>JMeter sends requests in the order that you add them to the tree.</note>
 
-<p>Start by editing the following properties (see Figure 7.4):
-<ol>
+<p>Start by editing the following properties (see Figure 7.5):
+<ul>
 <li>Change the Name to "Kodak".</li>
-<li>Enter the JDBC URL field.</li>
-<li>Enter the Driver Class field.</li>
-<li>Change the Number of Connections in Pool field to "1".</li>
-<li>Change the Max. Usage For Each Connection field to "1".</li>
-<li>Enter the Username field.</li>
-<li>Enter the Password field.</li>
+<li>Enter the Pool Name: MySQL (same as in the configuration element)</li>
 <li>Enter the SQL Query String field.</li>
-</ol>
+</ul>
 </p>
 
 <figure image="jdbctest/JDBCRequest2.png">
-Figure 7.4. JDBC Request for Eastman Kodak stock</figure>
+Figure 7.5. JDBC Request for Eastman Kodak stock</figure>
 
 <p>Next, add the second JDBC Request and edit the following properties (see
-Figure 7.5):
-<ol>
+Figure 7.6):
+<ul>
 <li>Change the Name to "Pfizer".</li>
-<li>Enter the JDBC URL field.</li>
-<li>Enter the Driver Class field.</li>
-<li>Change the Number of Connections in Pool field to "1".</li>
-<li>Change the Max. Usage For Each Connection field to "1".</li>
-<li>Enter the Username field.</li>
-<li>Enter the Password field.</li>
 <li>Enter the SQL Query String field.</li>
-</ol>
+</ul>
 </p>
 
 <figure image="jdbctest/JDBCRequest3.png">
@@ -169,7 +169,7 @@ and presenting a visual model of the data.</p>
 listener (Add --&gt; Listener --&gt; Graph Results).</p>
 
 <figure image="jdbctest/graph-results.png">
-Figure 7.6. Graph results Listener</figure>
+Figure 7.7. Graph results Listener</figure>
 
 </section>
 
@@ -197,6 +197,20 @@ the Edit menu.
 test is currently running.  The square is turned gray when all tests stop.  Even after
 you select "stop", the green light will stay on until all test threads have exited.</note>
 
+</section>
+
+<section name="7.7 JDBC settings" anchor="running">
+<p>Different databases and JDBC drivers require different JDBC settings. 
+The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation</p>
+<p>Some possible settings are shown below. Please check the exact details in the JDBC driver documentation</p>
+
+<table>
+<tr><td>Database</td><td>Driver class</td><td>Database URL</td></tr>
+<tr><td>MySQL</td><td>com.mysql.jdbc.Driver</td><td>jdbc:mysql://host:port/{dbname}</td></tr>
+<tr><td>PostgreSQL</td><td>org.postgresql.Driver</td><td>jdbc:postgresql:{dbname}</td></tr>
+<tr><td>Oracle</td><td>oracle.jdbc.driver.OracleDriver</td><td>jdbc:oracle:thin:user/pass@//host:port/service</td></tr>
+</table>
+<note>The above may not be correct - please check the JDBC driver documentation.</note>
 </section>
 
 </body>
