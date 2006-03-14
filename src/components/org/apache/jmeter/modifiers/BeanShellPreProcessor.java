@@ -15,11 +15,13 @@
  *  
  */
 
-package org.apache.jmeter.extractor;
+package org.apache.jmeter.modifiers;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterContext;
@@ -31,7 +33,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
-public class BeanShellExtractor extends AbstractTestElement implements PostProcessor, Serializable, TestBean {
+public class BeanShellPreProcessor extends AbstractTestElement implements PreProcessor, Serializable, TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
     private static final long serialVersionUID = 2;
@@ -41,35 +43,34 @@ public class BeanShellExtractor extends AbstractTestElement implements PostProce
     transient private BeanShellInterpreter bshInterpreter = null;
 
     // can be specified in jmeter.properties
-    private static final String INIT_FILE = "beanshell.timer.init"; //$NON-NLS-1$
+    private static final String INIT_FILE = "beanshell.preprocessor.init"; //$NON-NLS-1$
 
-    public BeanShellExtractor() throws ClassNotFoundException {
+    public BeanShellPreProcessor() throws ClassNotFoundException {
         super();
         bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.timers.Timer#delay()
-	 */
-     long xdelay() {
-        String ret="";
+
+    public void process(){
+        JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
+		Sampler sam = jmctx.getCurrentSampler();
+		SampleResult prev = jmctx.getPreviousResult();
         try {
             // Add variables for access to context and variables
-            JMeterContext jmctx = JMeterContextService.getContext();
-            JMeterVariables vars = jmctx.getVariables();
             bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
-            ret = bshInterpreter.eval(script).toString();
+            bshInterpreter.set("sampler", sam);//$NON-NLS-1$
+            bshInterpreter.set("prev", prev);//$NON-NLS-1$
+            
+            bshInterpreter.eval(script);
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }
-		return Long.decode(ret).longValue();
 	}
 
 	public Object clone() {
-        BeanShellExtractor o = (BeanShellExtractor) super.clone();
+        BeanShellPreProcessor o = (BeanShellPreProcessor) super.clone();
         o.script = script;
 		return o;
 	}
@@ -81,8 +82,4 @@ public class BeanShellExtractor extends AbstractTestElement implements PostProce
     public void setScript(String s){
         script=s;
     }
-
-	public void process() {
-		throw new Error("Not yet implemented");
-	}
 }
