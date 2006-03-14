@@ -21,13 +21,13 @@ import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 
-public class BeanShellExtractorBeanInfo extends BeanInfoSupport {
+public class BeanShellPostProcessorBeanInfo extends BeanInfoSupport {
 
 	/**
 	 * @param beanClass
 	 */
-	public BeanShellExtractorBeanInfo() {
-		super(BeanShellExtractor.class);
+	public BeanShellPostProcessorBeanInfo() {
+		super(BeanShellPostProcessor.class);
 
         createPropertyGroup("scripting", new String[] { "script" });
 
