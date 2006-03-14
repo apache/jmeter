@@ -53,18 +53,24 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
 	 * @see org.apache.jmeter.timers.Timer#delay()
 	 */
 	public long delay() {
-        String ret="";
+        String ret="0";
+        JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
         try {
             // Add variables for access to context and variables
-            JMeterContext jmctx = JMeterContextService.getContext();
-            JMeterVariables vars = jmctx.getVariables();
             bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
-            ret = bshInterpreter.eval(script).toString();
+            Object o = bshInterpreter.eval(script);
+            if (o != null) ret=o.toString();
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }
-		return Long.decode(ret).longValue();
+        try {
+        	return Long.decode(ret).longValue();
+        } catch (NumberFormatException e){
+        	log.warn(e.getLocalizedMessage());
+        	return 0;
+        }
 	}
 
 	public Object clone() {
