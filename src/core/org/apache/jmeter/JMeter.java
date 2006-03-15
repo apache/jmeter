@@ -38,6 +38,7 @@ import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.control.gui.TestPlanGui;
 import org.apache.jmeter.control.gui.WorkBenchGui;
@@ -55,8 +56,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
-// import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
-// import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
@@ -529,31 +528,23 @@ public class JMeter implements JMeterPlugin {
 					tp.setFunctionalMode(tp.isFunctionalMode());
 					tp.setSerialized(tp.isSerialized());
 				}
-				// TODO handle ReplaceableControllers
-				// if (item instanceof ReplaceableController)
-				// {
-				// System.out.println("Replaceable "+item.getClass().getName());
-				// HashTree subTree = tree.getTree(item);
-				//
-				// if (subTree != null)
-				// {
-				// ReplaceableController rc =
-				// (ReplaceableController) item;//.createTestElement();
-				// rc.replace(subTree);
-				// convertSubTree(subTree);
-				// tree.replace(item, rc.getReplacement());
-				// }
-				// }
-				// else
-				{
-					// System.out.println("NonReplaceable
-					// "+item.getClass().getName());
-					convertSubTree(tree.getTree(item));
-					// TestElement testElement = item.createTestElement();
-					// tree.replace(item, testElement);
-				}
-			} else {
-				// System.out.println("Disabled "+item.getClass().getName());
+                // TODO: this is a bit of a hack, but seems to work for the Include Controller
+				if (item instanceof ReplaceableController) {
+                    // HACK: force the controller to load its tree
+                     ReplaceableController rc = (ReplaceableController) item.clone();
+                     HashTree subTree = tree.getTree(item);
+    				 if (subTree != null) {
+                         HashTree replacementTree = rc.getReplacementSubTree();
+                         convertSubTree(replacementTree);
+                         tree.replace(item,rc);
+                         tree.set(rc,replacementTree);
+                     } else {
+    					convertSubTree(tree.getTree(item));
+    				 }
+                } else {
+                    convertSubTree(tree.getTree(item));                    
+                } // ReplaceableController
+			} else {// disabled
 				tree.remove(item);
 			}
 		}
