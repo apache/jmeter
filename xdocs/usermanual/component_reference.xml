@@ -2042,9 +2042,11 @@ to <b>match</b> the entire response, or if the response is only expected to <b>c
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
 <p>Note that the pattern string should not include the enclosing delimiters, 
 	i.e. use <b>Price: \d+</b> not <b>/Price: \d+/</b>.
+	</p>
+	<p>
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
     In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
-    - not just the start and end of the entire string.
+    - not just the start and end of the entire string. Note that \s does match new-line.
 	Case is also significant. To override these settings, one can use the extended regular expression syntax.
 	For example:
 </p>
@@ -2335,6 +2337,27 @@ points of the test plan.
 
 </component>
 
+<component index="&sect-num;.6.6" name="BeanShell Timer" screenshot="timers/beanshell_timer.png">
+<description>
+<p>
+The BeanShell Timer can be used to generate a delay.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">
+        The BeanShell script. The return value is used as the number of milliseconds to wait.
+        </property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file.</p>
+</component>
+
 </section>
 
 <section name="&sect-num;.7 Pre Processors" anchor="preprocessors">
@@ -2510,6 +2533,27 @@ with the start, continuing on like that until the test is ended.  </p>
 </properties>
 </component>
 
+<component index="&sect-num;.7.7" name="BeanShell PreProcessor" screenshot="beanshell_preprocessor.png">
+<description>
+<p>
+The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file.</p>
+</component>
+
 </section>
 
 <section name="&sect-num;.8 Post-Processors" anchor="postprocessors">
@@ -2647,6 +2691,27 @@ This is mainly intended for batch (non-GUI) runs.
  <properties>
  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
  </properties>
+</component>
+
+<component index="&sect-num;.8.6" name="BeanShell PostProcessor"  screenshot="beanshell_postprocessor.png">
+<description>
+<p>
+The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult</li>
+<li>data - (byte [])- gives access to the current sample data</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file.</p>
 </component>
 
 </section>
