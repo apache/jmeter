@@ -34,7 +34,7 @@ public class TestRunTime extends JMeterTestCase {
 			RunTime controller = new RunTime();
 			controller.setRuntime(10);
 			TestSampler samp1 = new TestSampler("Sample 1", 500);
-			TestSampler samp2 = new TestSampler("Sample 2", 500);
+			TestSampler samp2 = new TestSampler("Sample 2", 490);
 
 			LoopController sub1 = new LoopController();
 			sub1.setLoops(2);
