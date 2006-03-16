@@ -90,6 +90,8 @@ import org.xml.sax.SAXParseException;
  */
 public class ViewResultsFullVisualizer extends AbstractVisualizer implements ActionListener, TreeSelectionListener,
 		Clearable {
+	private static final String XML_PFX = "<?xml ";
+
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	public final static Color SERVER_ERROR_COLOR = Color.red;
@@ -361,8 +363,20 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
 
 	private void showRenderXMLResponse(String response) {
+		String parsable="";
+		if (response == null) {
+			results.setText("");
+			parsable = "";
+		} else {
+			results.setText(response);
+			int start = response.indexOf(XML_PFX);
+			if (start > 0) {
+			    parsable = response.substring(start);				
+			} else {
+			    parsable=response;
+			}
+		}
 		results.setContentType("text/xml");
-		results.setText(response == null ? "" : response);
 		results.setCaretPosition(0);
 
 		Component view = results;
@@ -382,7 +396,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			DocumentBuilder parser = parserFactory.newDocumentBuilder();
 
 			parser.setErrorHandler(saxErrorHandler);
-			document = parser.parse(new InputSource(new StringReader(response)));
+			document = parser.parse(new InputSource(new StringReader(parsable)));
 
 			JPanel domTreePanel = new DOMTreePanel(document);
 
