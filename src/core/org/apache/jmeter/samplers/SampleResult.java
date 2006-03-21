@@ -97,7 +97,7 @@ public class SampleResult implements Serializable {
 
 	private String samplerData;
 
-	private String threadName;
+	private String threadName = ""; // Never return null
 
 	private String responseMessage = "";
 
