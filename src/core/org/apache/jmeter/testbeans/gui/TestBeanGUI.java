@@ -234,7 +234,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 			Object value = propertyMap.get(name);
 			log.debug("Modify " + name + " to " + value);
 			if (value == null) {
-				if (((Boolean) props[i].getValue(BeanInfoSupport.NOT_UNDEFINED)).booleanValue()) {
+				Object valueNotUnDefined = props[i].getValue(BeanInfoSupport.NOT_UNDEFINED);
+				if (valueNotUnDefined != null && ((Boolean) valueNotUnDefined).booleanValue()) {
 					setPropertyInElement(element, name, props[i].getValue(BeanInfoSupport.DEFAULT));
 				} else {
 					element.removeProperty(name);
