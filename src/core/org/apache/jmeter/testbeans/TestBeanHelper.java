@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  * 
@@ -77,7 +76,8 @@ public class TestBeanHelper {
 				// We can't assign null to primitive types.
 				{
 					param[0] = value;
-					invokeOrBailOut(el, desc[x].getWriteMethod(), param);
+					Method writeMethod = desc[x].getWriteMethod();
+					if (writeMethod!=null) invokeOrBailOut(el, writeMethod, param);
 				}
 			}
 		} catch (IntrospectionException e) {
