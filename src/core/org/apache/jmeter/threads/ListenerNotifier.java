@@ -26,6 +26,8 @@ import org.apache.commons.collections.BufferUtils;
 import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.testbeans.TestBeanHelper;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -222,7 +224,9 @@ public class ListenerNotifier {
 		Iterator iter = listeners.iterator();
 		while (iter.hasNext()) {
 			try {
-				((SampleListener) iter.next()).sampleOccurred(res);
+				SampleListener sampleListener = ((SampleListener) iter.next());
+				TestBeanHelper.prepare((TestElement) sampleListener);
+				sampleListener.sampleOccurred(res);
 			} catch (RuntimeException e) {
 				log.error("Detected problem in Listener: ", e);
 				log.info("Continuing to process further listeners");
