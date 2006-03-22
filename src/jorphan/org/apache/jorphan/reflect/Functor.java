@@ -194,9 +194,10 @@ public class Functor {
 	protected Class[] getNewArray(int i, Class replacement, Class[] orig) {
 		Class[] newArray = new Class[orig.length];
 		for (int j = 0; j < newArray.length; j++) {
-			newArray[j] = orig[j];
 			if (j == i) {
 				newArray[j] = replacement;
+			} else {
+				newArray[j] = orig[j];				
 			}
 		}
 		return newArray;
