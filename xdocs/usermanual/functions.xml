@@ -532,11 +532,11 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 	Example:
 	<code>
 	<br/>
-	Define VAR="a,,c," in the test plan.
+	Define VAR="a||c|" in the test plan.
 	<br/>
-	${__split(${VAR},VAR)}
+	${__split(${VAR},VAR),|}
 	<br/>
-	This will return the contents of VAR, i.e. "a,,c," and set the following variables:
+	This will return the contents of VAR, i.e. "a||c|" and set the following variables:
 	<br/>
         VAR_n=4 (3 in JMeter 2.1.1 and earlier)
 	<br/>
@@ -554,8 +554,8 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
         <property name="String to split" required="Yes">A delimited string, e.g. "a|b|c"</property>
         <property name="Name of variable" required="Yes">A reference name for reusing the value
                computed by this function.</property>
-        <property name="Delimiter" required="No">The delimiter character, e.g. "|". 
-If omitted, "," is used. Note that "," would need to be specified as "\,".
+        <property name="Delimiter" required="No">The delimiter character, e.g. <b>|</b>. 
+If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <b>\,</b>.
 </property>
         
 </properties>
