@@ -27,11 +27,25 @@
 
 
 <h3>Version 2.1.2</h3>
+
 <h4>Incompatible changes:</h4>
 <p>
 The time stamp is now set to start time.
 To revert to the previous behaviour, change the property <b>sampleresult.timestamp.start</b> to false (or comment it)
 </p>
+
+
+<h4>Known problems:</h4>
+<ul>
+<li>Module Controller does not work in non-GUI mode</li>
+<li>Aggregate Report and some other listeners use increasing amounts of memory as a test progresses</li>
+<li>Does not always handle non-default encoding properly</li>
+<li>Spaces in the installation path cause problems for client-server mode</li>
+<li>Change of Language does not propagate to all test elements</li>
+<li></li>
+<li></li>
+</ul>
+
 <h4>New functionality:</h4>
 <ul>
 <li>Report function</li>
@@ -96,6 +110,7 @@ Users must explicitly check append in the sampler</li>
 <li>Improved formatting of Request Data in Tree View</li>
 <li>Expanded user documentation</li>
 </ul>
+
 <hr/>
 <h3>Version 2.1.1</h3>
 <h4>New functionality:</h4>
