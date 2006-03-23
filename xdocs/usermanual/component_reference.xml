@@ -83,9 +83,14 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <p>There are two versions of the sampler
          - one uses the default Java HTTP implementation, the other uses Commons HttpClient</p>
          
-        <p>If the request requires a login authorization, you will also have to add an
-        <complink name="HTTP Authorization Manager"/>
-        Configuration Element. And, if the request uses cookies, then you will also need an
+        <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
+         you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
+         For normal logins (i.e. where the user enters login information in a form), you will need to work out what the form submit button does,
+         and create an HTTP request with the appropriate method (usually POST) 
+         and the appropriate parameters from the form definition. 
+         If the page uses HTTP, you can use the JMeter Proxy to capture the login sequence.
+        </p>
+        <p>If the request uses cookies, then you will also need an
         <complink name="HTTP Cookie Manager"/>.  You can
         add either of these elements to the Thread Group or the HTTP Request.  If you have
         more than one HTTP Request that needs authorizations or cookies, then add the
@@ -1579,6 +1584,27 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
+<component index="&sect-num;.3.14" name="BeanShell Listener"  screenshot="beanshell_listener.png">
+<description>
+<p>
+The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>sampleResult - (SampleResult) - gives access to the previous SampleResult</li>
+<li>sampleEvent (SampleEvent) gives access to the current sample event</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+</component>
+
 </section>
 
 <section name="&sect-num;.4 Configuration Elements" anchor="config_elements">
@@ -2355,7 +2381,7 @@ The BeanShell Timer can be used to generate a delay.
 <li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file.</p>
+<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
 </section>
@@ -2551,7 +2577,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file.</p>
+<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
 </section>
@@ -2711,7 +2737,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <li>data - (byte [])- gives access to the current sample data</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
-<p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file.</p>
+<p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
 </section>
