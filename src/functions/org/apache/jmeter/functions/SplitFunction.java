@@ -30,6 +30,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+// @see org.apache.jmeter.functions.PackageTest for unit tests
+
 /**
  * Function to log a message
  * 
@@ -89,7 +91,8 @@ public class SplitFunction extends AbstractFunction implements Serializable {
                 log.debug(parts[i-1]);
             }
 			vars.put(varNamePrefix + "_" + i, parts[i - 1]);// $NON-NLS-1$
-		}
+		} 
+		vars.remove(varNamePrefix + "_" + (parts.length+1));
 		return stringToSplit;
 
 	}

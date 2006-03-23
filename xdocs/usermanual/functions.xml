@@ -527,6 +527,8 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
     The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
     The count of variables is returned in ${VAR_n}. 
     From JMeter 2.1.2 onwards, a trailing delimiter is treated as a missing variable, and "?" is returned.
+    Also, to allow it to work better with the ForEach controller, 
+    __split now deletes the first unused variable in case it was set by a previous split.
 	</p>
 	<p/>
 	Example:
@@ -547,6 +549,8 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
         VAR_3=c
 	<br/>
         VAR_4=? (null in JMeter 2.1.1 and earlier)
+	<br/>
+        VAR_5=null (in JMeter 2.1.2 and later)
 	</code>
 </description>
 
