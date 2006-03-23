@@ -324,7 +324,16 @@ public class PackageTest extends JMeterTestCase {
 		assertEquals("a", vars.get("VAR_1"));
 		assertEquals("?", vars.get("VAR_2"));
 		assertEquals("c", vars.get("VAR_3"));
-        assertNull(vars.get("VAR3_4"));
+        assertNull(vars.get("VAR_4"));
+
+		src = "a,b";
+		vars.put("VAR", src);
+		split = SplitParams("${VAR}", "VAR", null);
+		assertEquals(src, split.execute());
+		assertEquals("2", vars.get("VAR_n"));
+		assertEquals("a", vars.get("VAR_1"));
+		assertEquals("b", vars.get("VAR_2"));
+        assertNull(vars.get("VAR_3"));
 
         src = "a,,c,";
         vars.put("VAR", src);
@@ -796,6 +805,7 @@ public class PackageTest extends JMeterTestCase {
         Random r = new Random();
         Collection parms = MakeParams("0","10000000000","VAR");
         r.setParameters(parms);
-        String s = r.execute(null,null);
+        //String s = 
+        	r.execute(null,null);
     }
 }
