@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -17,22 +16,20 @@
 package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
-import org.apache.jmeter.samplers.Clearable;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.monitor.model.ObjectFactory;
 import org.apache.jmeter.monitor.model.Status;
 import org.apache.jmeter.monitor.util.Stats;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
-import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.SampleResult;
 
 public class MonitorAccumModel implements Clearable, Serializable {
 
