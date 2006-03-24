@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -55,7 +54,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * @author Kaarle Kaila 23.10.2001
  */
 public class Tag extends Node {
-	public static final String TYPE = "TAG";
+	private static final String TYPE = "TAG";
 
 	/**
 	 * Constant used as value for the value of the tag name in parseParameters
