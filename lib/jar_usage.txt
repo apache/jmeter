@@ -52,7 +52,7 @@ jdom-b9
 
 (jorphan)
 
-js (Rhino)
+js (Rhino) appears to be version 1.5R4 see http://www.mozilla.org/rhino/download.html
 - javascript function
 
 junit
