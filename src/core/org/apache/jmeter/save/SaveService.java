@@ -107,7 +107,7 @@ public class SaveService {
 	public static final String version = "1.2"; // $NON-NLS-1$
 
     // This is written to JMX files by ScriptWrapperConverter
-	static String propertiesVersion = "";// read from properties file; written to JMS files
+	static String propertiesVersion = "";// read from properties file; written to JMX files
     static final String PROPVERSION = "1.8";// Expected $NON-NLS-1$
 
     // Internal information only
@@ -136,13 +136,18 @@ public class SaveService {
 		}
 	}
 
+    public static Properties loadProperties() throws IOException{
+        Properties nameMap = new Properties();
+            nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome()
+                    + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE)));
+            return nameMap;
+    }
 	private static void initProps() {
 		// Load the alias properties
 		Properties nameMap = new Properties();
 		try {
-			nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome()
-					+ JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE)));
-			// now create the aliases
+            nameMap = loadProperties();
+            // now create the aliases
 			Iterator it = nameMap.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry me = (Map.Entry) it.next();
