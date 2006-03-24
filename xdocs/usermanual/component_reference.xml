@@ -667,8 +667,9 @@ TBC
 		<ul>
 			<li>tcp.status.prefix - text that precedes a status number</li>
 			<li>tcp.status.suffix - text that follows a status number</li>
-			<li>tcp.status.properties - name of property file</li>
+			<li>tcp.status.properties - name of property file to convert status codes to messages</li>
 			<li>tcp.handler - Name of TCP Handler class (default TCPClientImpl)</li>
+			<li>tcp.eolByte - decimal value. Defines the end of line byte value; used to determine when a response has been received</li>
 		</ul>
 		The class that handles the connection is defined by the property tcp.handler. 
 		If not found, the class is then searched for in the package org.apache.jmeter.protocol.tcp.sampler.
