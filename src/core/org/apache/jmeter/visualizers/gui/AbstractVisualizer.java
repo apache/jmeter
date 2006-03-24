@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
  *
@@ -109,7 +108,7 @@ import org.apache.log.Logger;
 public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent implements Visualizer, ChangeListener,
 		UnsharedComponent, Printable {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** A panel allowing results to be saved. */
 	private FilePanel filePanel;
@@ -242,12 +241,12 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	 *            the event that has occurred
 	 */
 	public void stateChanged(ChangeEvent e) {
-		log.info("getting new collector");
+		log.debug("getting new collector");
 		collector = (ResultCollector) createTestElement();
 		try {
 			collector.loadExistingFile();
 		} catch (Exception err) {
-			log.debug("Error occurred while loading file", err);
+			log.warn("Error occurred while loading file", err);
 		}
 	}
 
