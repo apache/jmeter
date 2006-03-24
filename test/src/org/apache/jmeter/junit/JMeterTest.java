@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -75,6 +75,8 @@ public class JMeterTest extends JMeterTestCase {
 
 	private static Map funcTitles;
 
+    private static Properties nameMap;
+    
 	public JMeterTest(String name) {
 		super(name);
 	}
@@ -143,6 +145,7 @@ public class JMeterTest extends JMeterTestCase {
 		}
 
 		TestSuite suite = new TestSuite();
+        suite.addTest(new JMeterTest("readAliases"));
 		suite.addTest(new JMeterTest("createTitleSet"));
 		suite.addTest(new JMeterTest("createTagSet"));
 		suite.addTest(suiteGUIComponents());
@@ -390,7 +393,7 @@ public class JMeterTest extends JMeterTestCase {
 	}
 
 	/*
-	 * Test GUI elements - run the test
+	 * Test GUI elements - run for all components
 	 */
 	public void GUIComponents1() throws Exception {
 		String name = guiItem.getClass().getName();
@@ -408,10 +411,11 @@ public class JMeterTest extends JMeterTestCase {
 				log.warn("Class has not yet implemented getLabelResource " + name);
 			}
 		}
+        checkElementAlias(guiItem);
 	}
 
 	/*
-	 * Test GUI elements - run the test
+	 * Test GUI elements - not run for TestBeanGui items
 	 */
 	public void GUIComponents2() throws Exception {
 		String name = guiItem.getClass().getName();
@@ -502,9 +506,24 @@ public class JMeterTest extends JMeterTestCase {
 	public void runTestElement() throws Exception {
 		checkElementCloning(testItem);
 		assertTrue(testItem.getClass().getName() + " must implement Serializable", testItem instanceof Serializable);
+        checkElementAlias(testItem);
 	}
 
-	private static Collection getObjects(Class extendsClass) throws Exception {
+    public void readAliases() throws Exception {
+        nameMap = SaveService.loadProperties();        
+        assertNotNull("nameMap should not be null",nameMap);
+    }
+    
+	private void checkElementAlias(Object item) {
+        String name=item.getClass().getName();
+        boolean contains = nameMap.values().contains(name);
+        if (!contains){
+            //System.out.println(name.substring(name.lastIndexOf('.')+1)+"="+name);
+            fail("nameMap should contain "+name);
+        }
+    }
+
+    private static Collection getObjects(Class extendsClass) throws Exception {
 		String exName = extendsClass.getName();
 		Object myThis = "";
 		Iterator classes = ClassFinder
