@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -56,7 +55,7 @@ public class BaseHrefScanner extends TagScanner {
 	}
 
 	protected Tag createTag(TagData tagData, Tag tag, String url) throws ParserException {
-		String baseUrl = (String) tag.getAttribute("HREF");
+		String baseUrl = tag.getAttribute("HREF");
 		String absoluteBaseUrl = "";
 		if (baseUrl != null && baseUrl.length() > 0) {
 			absoluteBaseUrl = baseUrl.trim();
