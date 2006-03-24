@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -206,10 +205,10 @@ public class TagParser {
 		StringBuffer result = new StringBuffer();
 		StringTokenizer tok = new StringTokenizer(absorbedText.toString(), "=", false);
 		String token;
-		token = (String) tok.nextToken();
+		token = tok.nextToken();
 		result.append(token + "=");
 		for (; tok.hasMoreTokens();) {
-			token = (String) tok.nextToken();
+			token = tok.nextToken();
 			token = pruneSpaces(token);
 			result.append('"');
 			int lastIndex = token.lastIndexOf(' ');
