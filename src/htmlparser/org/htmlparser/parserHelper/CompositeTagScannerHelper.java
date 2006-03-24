@@ -137,6 +137,7 @@ public class CompositeTagScannerHelper {
 		endTag = new EndTag(new TagData(endTagBegin, endTagEnd, endTagName, currLine));
 	}
 
+    // NOTUSED ??
 	private StringBuffer createModifiedLine(String endTagName, int endTagBegin) {
 		StringBuffer newLine = new StringBuffer();
 		newLine.append(currLine.substring(0, endTagBegin));
@@ -202,9 +203,9 @@ public class CompositeTagScannerHelper {
 				.equals(tag.getTagName()));
 	}
 
-	public boolean isXmlEndTag(Tag tag) {
-		String tagText = tag.getText();
+	public boolean isXmlEndTag(Tag _tag) {
+		String tagText = _tag.getText();
 		int lastSlash = tagText.lastIndexOf("/");
-		return (lastSlash == tagText.length() - 1 || tag.isEmptyXmlTag()) && tag.getText().indexOf("://") == -1;
+		return (lastSlash == tagText.length() - 1 || _tag.isEmptyXmlTag()) && _tag.getText().indexOf("://") == -1;
 	}
 }
