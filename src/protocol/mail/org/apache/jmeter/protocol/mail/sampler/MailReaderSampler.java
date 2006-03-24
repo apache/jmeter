@@ -79,6 +79,7 @@ public class MailReaderSampler extends AbstractSampler {
 		boolean isOK = false; // Did sample succeed?
 
 		res.setSampleLabel(getName());
+        res.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
 		/*
 		 * Perform the sampling
 		 */
@@ -150,15 +151,18 @@ public class MailReaderSampler extends AbstractSampler {
 			/*
 			 * Set up the sample result details
 			 */
-			res.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
 			res.setResponseData(data.toString().getBytes());
 			res.setDataType(SampleResult.TEXT);
 
 			res.setResponseCodeOK();
 			res.setResponseMessage("OK");
 			isOK = true;
+        } catch (NoClassDefFoundError ex) {
+            log.debug("",ex);// No need to log normally, as we set the status
+            res.setResponseCode("500");
+            res.setResponseMessage(ex.toString());
 		} catch (Exception ex) {
-			log.debug("", ex);
+			log.debug("", ex);// No need to log normally, as we set the status
 			res.setResponseCode("500");
 			res.setResponseMessage(ex.toString());
 		}
