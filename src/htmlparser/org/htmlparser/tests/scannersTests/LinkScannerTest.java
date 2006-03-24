@@ -262,7 +262,7 @@ public class LinkScannerTest extends ParserTestCase {
 		Node[] dataNode = new Node[10];
 		int i = 0;
 		for (SimpleNodeIterator e = linkTag.children(); e.hasMoreNodes();) {
-			dataNode[i++] = (Node) e.nextNode();
+			dataNode[i++] = e.nextNode();
 		}
 		assertEquals("Number of data nodes", new Integer(2), new Integer(i));
 		assertTrue("First data node should be an Image Node", dataNode[0] instanceof ImageTag);
@@ -502,7 +502,7 @@ public class LinkScannerTest extends ParserTestCase {
 		Node insideNodes[] = new Node[10];
 		int j = 0;
 		for (SimpleNodeIterator e = linkTag.children(); e.hasMoreNodes();) {
-			insideNodes[j++] = (Node) e.nextNode();
+			insideNodes[j++] = e.nextNode();
 		}
 		assertEquals("Number of contained internal nodes", 1, j);
 		assertTrue(insideNodes[0] instanceof ImageTag);
