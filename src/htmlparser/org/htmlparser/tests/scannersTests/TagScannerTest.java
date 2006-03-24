@@ -59,9 +59,9 @@ public class TagScannerTest extends ParserTestCase {
 		Parser.setLineSeparator("\r\n");
 		NodeIterator e = parser.elements();
 
-		Node node = e.nextNode();
+		Node _node = e.nextNode();
 		try {
-			String result = TagScanner.extractXMLData(node, "MESSAGE", parser.getReader());
+			String result = TagScanner.extractXMLData(_node, "MESSAGE", parser.getReader());
 			assertEquals("Result", "Abhi\r\nSri\r\n", result);
 		} catch (ParserException ex) {
 			assertTrue(e.toString(), false);
@@ -72,9 +72,9 @@ public class TagScannerTest extends ParserTestCase {
 		createParser("<MESSAGE>Test</MESSAGE>");
 		NodeIterator e = parser.elements();
 
-		Node node = (Node) e.nextNode();
+		Node _node = e.nextNode();
 		try {
-			String result = TagScanner.extractXMLData(node, "MESSAGE", parser.getReader());
+			String result = TagScanner.extractXMLData(_node, "MESSAGE", parser.getReader());
 			assertEquals("Result", "Test", result);
 		} catch (ParserException ex) {
 			assertTrue(e.toString(), false);
@@ -94,16 +94,16 @@ public class TagScannerTest extends ParserTestCase {
 	 */
 	public void testIsXMLTag() throws ParserException {
 		createParser("<OPTION value=\"#\">Select a destination</OPTION>");
-		Node node;
+		Node _node;
 		NodeIterator e = parser.elements();
-		node = (Node) e.nextNode();
-		assertTrue("OPTION tag could not be identified", TagScanner.isXMLTagFound(node, "OPTION"));
+		_node = e.nextNode();
+		assertTrue("OPTION tag could not be identified", TagScanner.isXMLTagFound(_node, "OPTION"));
 	}
 
 	public void testRemoveChars() {
 		String test = "hello\nworld\n\tqsdsds";
-		TagScanner scanner = new TagScanner() {
-			public Tag scan(Tag tag, String url, NodeReader reader, String currLine) {
+		TagScanner _scanner = new TagScanner() {// TODO: NOTUSED
+			public Tag scan(Tag tag, String url, NodeReader _reader, String currLine) {
 				return null;
 			}
 
@@ -123,7 +123,7 @@ public class TagScannerTest extends ParserTestCase {
 	public void testRemoveChars2() {
 		String test = "hello\r\nworld\r\n\tqsdsds";
 		TagScanner scanner = new TagScanner() {
-			public Tag scan(Tag tag, String url, NodeReader reader, String currLine) {
+			public Tag scan(Tag tag, String url, NodeReader _reader, String currLine) {
 				return null;
 			}
 
