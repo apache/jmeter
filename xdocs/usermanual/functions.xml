@@ -14,10 +14,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <!DOCTYPE document
 [
 <!ENTITY sect-num '19'>
 ]>
+
 <document prev="component_reference.html" next="regular_expressions.html" date="2004/06/12">
 
 <properties>
@@ -26,6 +28,16 @@
 
 <body>
 
+<!--
+	Because this is an XML document, all tags must be properly closed, including ones
+	which are passed unchanged into the HTML output, e.g. <br/>, not just <br>.
+	
+	Unfortunately Java does not currently allow for this - it outputs the trailing > -
+	which messes up the Help display. 
+	To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
+
+ -->
+
 <section name="&sect-num;. Functions" anchor="functions">
 <p>
 JMeter functions are special values that can populate fields of any Sampler or other configuration
@@ -33,7 +45,7 @@ element in a test tree.  A function looks like this:</p>
 
 <p><code>${__functionName(var1,var2,var3)}</code></p>
 
-<p>Where "__functionName" matches the name of an existing built-in or user-defined function.<br/>
+<p>Where "__functionName" matches the name of an existing built-in or user-defined function.<br></br>
 Parentheses surround the parameters sent to the function.  The actual parameters vary from function 
 to function.  Functions that require no parameters can leave off the parentheses.  The function itself
 is wrapped in ${}.</p>
@@ -59,7 +71,7 @@ is wrapped in ${}.</p>
 </ul>
 
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
-<p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
+<p>There are two kinds of functions: user-defined static values, and built-in functions.<br></br>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
 run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
@@ -255,34 +267,34 @@ A reference name - refName - for reusing the value created by this function. Sto
 	</p>
 	<p>
 <code>
-# - insert the number, with no leading zeros or spaces<br/>
+# - insert the number, with no leading zeros or spaces<br></br>
 000 - insert the number packed out to 3 digits with leading zeros if necessary
 <p/>
-Examples:<br/>
- pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
- pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
+Examples:<br></br>
+ pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br></br>
+ pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br></br>
  pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999
 </code><p/>
 	If more digits are required than there are formatting characters, the number will be
-	expanded as necessary.<br/>
+	expanded as necessary.<br></br>
 	<b>To prevent a formatting character from being interpreted,
 	enclose it in single quotes. Note that "." is a formatting character,
 	and must be enclosed in single quotes</b>
 	(though #. and 000. work as expected in locales where the decimal point is also ".")
-	<br/>
+	<br></br>
 	In other locales (e.g. fr), the decimal point is "," - which means that "#."
-	becomes "nnn,".<br/>
-	See the documentation for DecimalFormat for full details.<br/>
+	becomes "nnn,".<br></br>
+	See the documentation for DecimalFormat for full details.<br></br>
 	If the path name does not contain any special formatting characters,
 	the current sequence number will be appended to the name, otherwise
-	the number will be inserted aaccording to the fomatting instructions.<br/>
+	the number will be inserted aaccording to the fomatting instructions.<br></br>
 	If the start sequence number is omitted, and the end sequence number is specified,
 	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
 	In this case the filename is not formatted.
 	<code>
-	<br/>
-	${_StringFromFile(PIN#'.'DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT<br/>
-	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice<br/>
+	<br></br>
+	${_StringFromFile(PIN#'.'DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT<br></br>
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice<br></br>
 	</code>
 	Note that the "." in PIN.DAT above should <u>not</u> be quoted.
 	In this case the start number is omitted, so the file name is used exactly as is.
@@ -404,18 +416,18 @@ the expression has commas, please make sure to escape them. For example: ${__jav
 	</p>For example:<p>
 <code>
 Define the property value:
-<br/>
+<br></br>
 jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
-<br/>
+<br></br>
 
 Fetch the values:
-<br/>
+<br></br>
 ${__P(group1.threads)} - return the value of group1.threads
-<br/>
+<br></br>
 ${__P(group1.loops)} - return the value of group1.loops
-<br/>
+<br></br>
 ${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
-<br/>
+<br></br>
 </code>
 In the examples above, the first function call would return 7, 
 the second would return 1 and the last would return www.dummy.org
@@ -471,7 +483,7 @@ the second would return 1 and the last would return www.dummy.org
 </p>
 <p>
 <b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-<br/>
+<br></br>
 For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 <p>
@@ -533,23 +545,23 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 	<p/>
 	Example:
 	<code>
-	<br/>
+	<br></br>
 	Define VAR="a||c|" in the test plan.
-	<br/>
+	<br></br>
 	${__split(${VAR},VAR),|}
-	<br/>
+	<br></br>
 	This will return the contents of VAR, i.e. "a||c|" and set the following variables:
-	<br/>
+	<br></br>
         VAR_n=4 (3 in JMeter 2.1.1 and earlier)
-	<br/>
+	<br></br>
         VAR_1=a
-	<br/>
+	<br></br>
         VAR_2=?
-	<br/>
+	<br></br>
         VAR_3=c
-	<br/>
+	<br></br>
         VAR_4=? (null in JMeter 2.1.1 and earlier)
-	<br/>
+	<br></br>
         VAR_5=null (in JMeter 2.1.2 and later)
 	</code>
 </description>
@@ -573,11 +585,11 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
 	<p/>
 	Example:
 	<code>
-	<br/>
+	<br></br>
 		
-	<br/>
+	<br></br>
 	${__XPath(/path/to/build.xml, //target/@name)}
-	<br/>
+	<br></br>
 	This will match all targets in build.xml and return the name variable
 	</code>
 </description>
