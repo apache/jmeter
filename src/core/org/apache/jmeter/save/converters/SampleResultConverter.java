@@ -132,8 +132,14 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		if (save.saveResponseData(res)) {
 			writer.startNode(TAG_RESPONSE_DATA);
 			try {
-				writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-				writer.setValue(new String(res.getResponseData(), res.getDataEncoding()));
+                String ct = res.getContentType();
+                if (ct.startsWith("text/")){// $NON-NLS-1$
+    				writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
+    				writer.setValue(new String(res.getResponseData(), res.getDataEncoding()));
+                } else {
+                    writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
+                    writer.setValue(res.getURL().toExternalForm());//TODO - better representation                  
+                }
 			} catch (UnsupportedEncodingException e) {
 				writer.setValue("Unsupported encoding in response data, can't record.");
 			}
