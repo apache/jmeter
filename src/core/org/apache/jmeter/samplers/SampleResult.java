@@ -364,7 +364,9 @@ public class SampleResult implements Serializable {
 	}
 
 	public void addSubResult(SampleResult subResult) {
-		subResult.setThreadName(getThreadName());
+		String tn = getThreadName();
+        if (tn.length()==0) Thread.currentThread().getName();//TODO do this more efficiently
+        subResult.setThreadName(tn);
 		if (subResults == null) {
 			subResults = new ArrayList();
 		}
