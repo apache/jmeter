@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -39,7 +38,7 @@ public class OptionTag extends CompositeTag {
 
 	public OptionTag(TagData tagData, CompositeTagData compositeTagData) {
 		super(tagData, compositeTagData);
-		this.value = (String) this.getAttribute("VALUE");
+		this.value = this.getAttribute("VALUE");
 	}
 
 	public String getValue() {
