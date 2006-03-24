@@ -123,7 +123,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 			}
 		} else {
 			sampler.getArguments().removeArgument(getArgumentName());
-			sampler.getArguments().addArgument(new HTTPArgument(getArgumentName(), value, false));
+			sampler.getArguments().addArgument(new HTTPArgument(getArgumentName(), value, true));
 		}
 	}
 
