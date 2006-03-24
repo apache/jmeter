@@ -109,7 +109,7 @@ public class BeanTest extends TestCase {
 		enumeration = parser.elements();
 		while (enumeration.hasMoreNodes())
 			assertEquals("Nodes before and after serialization differ", ((Node) vector.remove(0)).toHtml(),
-					((Node) enumeration.nextNode()).toHtml());
+					enumeration.nextNode().toHtml());
 	}
 
 	public void testSerializableScanners() throws IOException, ClassNotFoundException, ParserException {
@@ -131,7 +131,7 @@ public class BeanTest extends TestCase {
 		enumeration = parser.elements();
 		while (enumeration.hasMoreNodes())
 			assertEquals("Nodes before and after serialization differ", ((Node) vector.remove(0)).toHtml(),
-					((Node) enumeration.nextNode()).toHtml());
+					enumeration.nextNode().toHtml());
 	}
 
 	public void testSerializableStringBean() throws IOException, ClassNotFoundException, ParserException {
