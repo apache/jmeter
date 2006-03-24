@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -100,13 +99,13 @@ public class LineChart extends AbstractChart {
         panel.setXAxisTitle(this.getFormattedXAxis());
         panel.setYAxisTitle(this.getYAxis());
         // we should make this configurable eventually
-        int width = getWidth();
-        int height = getHeight();
-        panel.setPreferredSize(new Dimension(width,height));
-        panel.setSize(new Dimension(width,height));
-        panel.setWidth(width);
-        panel.setHeight(width);
-        setBufferedImage(new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB));
+        int _width = getWidth();
+        int _height = getHeight();
+        panel.setPreferredSize(new Dimension(_width,_height));
+        panel.setSize(new Dimension(_width,_height));
+        panel.setWidth(_width);
+        panel.setHeight(_width);
+        setBufferedImage(new BufferedImage(_width,_height,BufferedImage.TYPE_INT_RGB));
         panel.paintComponent(this.getBufferedImage().createGraphics());
         return panel;
     }

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -113,8 +112,8 @@ public class Daemon extends Thread {
 	 * @param daemonPort
 	 *            the port to listen on
 	 */
-	public void configureProxy(int daemonPort) {
-		this.daemonPort = daemonPort;
+	public void configureProxy(int _daemonPort) {
+		this.daemonPort = _daemonPort;
 		log.info("Proxy: OK");
 	}
 

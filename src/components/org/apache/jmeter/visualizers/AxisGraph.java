@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  * 
@@ -27,6 +26,8 @@ import java.math.BigDecimal;
 
 import javax.swing.JPanel;
 
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.jCharts.axisChart.AxisChart;
 import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelPosition;
 import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelRenderer;
@@ -48,6 +49,8 @@ import org.jCharts.types.ChartType;
  */
 public class AxisGraph extends JPanel {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
     protected double[][] data = null;
     protected String title, xAxisTitle, yAxisTitle, yAxisLabel;
     protected String[] xAxisLabels;
@@ -116,31 +119,31 @@ public class AxisGraph extends JPanel {
         }
     }
 
-    private double findMax(double data[][]) {
+    private double findMax(double _data[][]) {
         double max = 0;
-        max = data[0][0];
-        for (int i = 0; i < data.length; i++) {
-            for (int j = 0; j < data[i].length; j++) {
-                if (data[i][j] > max) {
-                    max = data[i][j];
+        max = _data[0][0];
+        for (int i = 0; i < _data.length; i++) {
+            for (int j = 0; j < _data[i].length; j++) {
+                if (_data[i][j] > max) {
+                    max = _data[i][j];
                 }
             }
         }
         return max;
     }
     
-    private void drawSample(String title, String[] xAxisLabels, String xAxisTitle,
-            String yAxisTitle, double[][] data, int width, int height, Graphics g) {
-        double max = findMax(data);
+    private void drawSample(String _title, String[] _xAxisLabels, String _xAxisTitle,
+            String _yAxisTitle, double[][] _data, int _width, int _height, Graphics g) {
+        double max = findMax(_data);
         try {
-            if (width == 0) {
-                width = 450;
+            if (_width == 0) {
+                _width = 450;
             }
-            if (height == 0) {
-                height = 250;
+            if (_height == 0) {
+                _height = 250;
             }
-            this.setPreferredSize(new Dimension(width,height));
-            DataSeries dataSeries = new DataSeries( xAxisLabels, xAxisTitle, yAxisTitle, title );
+            this.setPreferredSize(new Dimension(_width,_height));
+            DataSeries dataSeries = new DataSeries( _xAxisLabels, _xAxisTitle, _yAxisTitle, _title );
             
             String[] legendLabels= { yAxisLabel };
             Paint[] paints= new Paint[] { Color.yellow };
@@ -151,7 +154,7 @@ public class AxisGraph extends JPanel {
             barChartProperties.addPostRenderEventListener(valueLabelRenderer);
             AxisChartDataSet axisChartDataSet =
                 new AxisChartDataSet(
-                        data, legendLabels, paints, ChartType.BAR, barChartProperties );
+                        _data, legendLabels, paints, ChartType.BAR, barChartProperties );
             dataSeries.addIAxisPlotDataSet( axisChartDataSet );
 
             ChartProperties chartProperties= new ChartProperties();
@@ -166,8 +169,7 @@ public class AxisGraph extends JPanel {
                 yaxis.setNumItems((int) (topValue / 500)+1);
                 yaxis.setShowGridLines(1);
             } catch (PropertyException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.warn("",e);
             }
             
             AxisProperties axisProperties= new AxisProperties(xaxis, yaxis);
@@ -175,7 +177,7 @@ public class AxisGraph extends JPanel {
             LegendProperties legendProperties= new LegendProperties();
             AxisChart axisChart = new AxisChart( 
                     dataSeries, chartProperties, axisProperties, 
-                    legendProperties, width, height );
+                    legendProperties, _width, _height );
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
         } catch (Exception e) {

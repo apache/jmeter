@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -46,34 +45,34 @@ public class DefaultKeyStore extends JmeterKeyStore {
 
 	public void load(InputStream is, String pword) throws Exception {
 		store.load(is, pword.toCharArray());
-		PrivateKey key = null;
-		X509Certificate[] certChain = null;
+		PrivateKey _key = null;
+		X509Certificate[] _certChain = null;
 
 		Enumeration aliases = store.aliases();
 		while (aliases.hasMoreElements()) {
 			this.alias = (String) aliases.nextElement();
 			if (store.isKeyEntry(alias)) {
-				key = (PrivateKey) store.getKey(alias, pword.toCharArray());
+				_key = (PrivateKey) store.getKey(alias, pword.toCharArray());
 				Certificate[] chain = store.getCertificateChain(alias);
-				certChain = new X509Certificate[chain.length];
+				_certChain = new X509Certificate[chain.length];
 
 				for (int i = 0; i < chain.length; i++) {
-					certChain[i] = (X509Certificate) chain[i];
+					_certChain[i] = (X509Certificate) chain[i];
 				}
 
 				break;
 			}
 		}
 
-		if (null == key) {
+		if (null == _key) {
 			throw new Exception("No key found");
 		}
-		if (null == certChain) {
+		if (null == _certChain) {
 			throw new Exception("No certificate chain found");
 		}
 
-		this.key = key;
-		this.certChain = certChain;
+		this.key = _key;
+		this.certChain = _certChain;
 	}
 
 	public final X509Certificate[] getCertificateChain() {
