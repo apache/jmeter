@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -96,7 +95,7 @@ public class FunctionalTests extends TestCase {
 		int parserImgTagCount = 0;
 		Node node;
 		for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
-			node = (Node) e.nextNode();
+			node = e.nextNode();
 			if (node instanceof ImageTag) {
 				parserImgTagCount++;
 			}
