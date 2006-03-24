@@ -101,6 +101,7 @@ Users must explicitly check append in the sampler</li>
 <li>Bug 38902 - sometimes -1 seems to be returned unnecessarily for response code</li>
 <li>Bug 38840 - make XML Assertion thread-safe</li>
 <li>Bug 38681 - Include controller now works in non-GUI mode</li>
+<li>Add write(OS,IS) implementation to TCPClientImpl</li>
 </ul>	
 	
 <h4>Other changes</h4>
