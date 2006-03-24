@@ -25,10 +25,9 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 
 /**
- * @author Administrator
+ * Dummy Sampler used to pause or stop a thread or the test;
+ * intended for use in Conditional Controllers.
  * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class TestAction extends AbstractSampler {
 	// Actions
@@ -112,7 +111,7 @@ public class TestAction extends AbstractSampler {
 		// res.setResponseData(response.toString().getBytes());
 		// res.sampleEnd();
 		// return res;
-		return null;
+		return null; // This means no sample is saved
 	}
 
 	public void setTarget(int target) {
@@ -137,9 +136,5 @@ public class TestAction extends AbstractSampler {
 
 	public int getDuration() {
 		return getPropertyAsInt(DURATION);
-	}
-
-	private String getTitle() {
-		return this.getName();
 	}
 }
