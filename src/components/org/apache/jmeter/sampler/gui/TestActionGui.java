@@ -198,7 +198,7 @@ public class TestActionGui extends AbstractSamplerGui {
 			public void focusGained(FocusEvent e) {
 			}
 		});
-		durationPanel.add(new JLabel("Duration"));
+		durationPanel.add(new JLabel(durationLabel));
 		durationPanel.add(durationField);
 		add(durationPanel);
 	}

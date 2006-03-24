@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -83,10 +82,10 @@ public class Proxy extends Thread {
 	 * @param target
 	 *            the ProxyControl which will receive the generated sampler
 	 */
-	void configure(Socket clientSocket, ProxyControl target) {
-		this.target = target;
-		this.clientSocket = clientSocket;
-		this.captureHttpHeaders = target.getCaptureHttpHeaders();
+	void configure(Socket _clientSocket, ProxyControl _target) {
+		this.target = _target;
+		this.clientSocket = _clientSocket;
+		this.captureHttpHeaders = _target.getCaptureHttpHeaders();
 	}
 
 	/**

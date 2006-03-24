@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  * 
@@ -133,23 +132,23 @@ public class LineGraph extends JPanel {
         }
     }
     
-    private void drawSample(String title, String[] xAxisLabels, String xAxisTitle,
-            String yAxisTitle, double[][] data, int width, int height, Graphics g) {
+    private void drawSample(String _title, String[] _xAxisLabels, String _xAxisTitle,
+            String _yAxisTitle, double[][] _data, int _width, int _height, Graphics g) {
         try {
-            if (width == 0) {
-                width = 450;
+            if (_width == 0) {
+                _width = 450;
             }
-            if (height == 0) {
-                height = 250;
+            if (_height == 0) {
+                _height = 250;
             }
-            this.setPreferredSize(new Dimension(width,height));
-            DataSeries dataSeries = new DataSeries( xAxisLabels, xAxisTitle, yAxisTitle, title );
+            this.setPreferredSize(new Dimension(_width,_height));
+            DataSeries dataSeries = new DataSeries( _xAxisLabels, _xAxisTitle, _yAxisTitle, _title );
             String[] legendLabels= yAxisLabel;
-            Paint[] paints = this.createPaint(data.length);
-            Shape[] shapes = createShapes(data.length);
-            Stroke[] lstrokes = createStrokes(data.length);
+            Paint[] paints = this.createPaint(_data.length);
+            Shape[] shapes = createShapes(_data.length);
+            Stroke[] lstrokes = createStrokes(_data.length);
             LineChartProperties lineChartProperties= new LineChartProperties(lstrokes,shapes);
-            AxisChartDataSet axisChartDataSet= new AxisChartDataSet( data, 
+            AxisChartDataSet axisChartDataSet= new AxisChartDataSet( _data, 
                     legendLabels, 
                     paints, 
                     ChartType.LINE, 
@@ -167,7 +166,7 @@ public class LineGraph extends JPanel {
             LegendProperties legendProperties = new LegendProperties();
             AxisChart axisChart = new AxisChart( 
                     dataSeries, chartProperties, axisProperties, 
-                    legendProperties, width, height );
+                    legendProperties, _width, _height );
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
         } catch (Exception e) {

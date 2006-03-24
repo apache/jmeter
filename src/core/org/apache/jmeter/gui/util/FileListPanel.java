@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -158,11 +157,11 @@ public class FileListPanel extends JPanel implements ActionListener {
     }
     
     public String[] getFiles() {
-        String[] files = new String[tableModel.getRowCount()];
-        for (int idx=0; idx < files.length; idx++) {
-            files[idx] = (String)tableModel.getValueAt(idx,0);
+        String[] _files = new String[tableModel.getRowCount()];
+        for (int idx=0; idx < _files.length; idx++) {
+            _files[idx] = (String)tableModel.getValueAt(idx,0);
         }
-        return files;
+        return _files;
     }
     
     protected void deleteFile() {

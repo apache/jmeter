@@ -42,10 +42,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	private static final String XML = "xml"; // $NON_NLS-1$
 
 	/** Indicates that the results file should be in CSV format. * */
-	private static final String CSV = "csv"; // $NON_NLS-1$
+	//NOTUSED private static final String CSV = "csv"; // $NON_NLS-1$
 
 	/** Indicates that the results should be stored in a database. * */
-	private static final String DATABASE = "db"; // $NON_NLS-1$
+	//NOTUSED private static final String DATABASE = "db"; // $NON_NLS-1$
 
 	/** A properties file indicator for true. * */
 	private static final String TRUE = "true"; // $NON_NLS-1$
@@ -163,37 +163,37 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	// ---------------------------------------------------------------------
 
     //TODO - these do not appear to be used
-	public final static String PRESERVE = "preserve"; // $NON_NLS-1$
-
-	public final static String XML_SPACE = "xml:space"; // $NON_NLS-1$
-
-	public static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON_NLS-1$
-
-	public static final String BINARY = "binary"; // $NON_NLS-1$
-
-	public static final String DATA_TYPE = "dataType"; // $NON_NLS-1$
-
-	public static final String ERROR = "error"; // $NON_NLS-1$
-
-	public static final String FAILURE = "failure"; // $NON_NLS-1$
-
-	public static final String FAILURE_MESSAGE = "failureMessage"; // $NON_NLS-1$
-
-	public static final String LABEL = "label"; // $NON_NLS-1$
-
-	public static final String RESPONSE_CODE = "responseCode"; // $NON_NLS-1$
-
-	public static final String RESPONSE_MESSAGE = "responseMessage"; // $NON_NLS-1$
-
-	public static final String SAMPLE_RESULT_TAG_NAME = "sampleResult"; // $NON_NLS-1$
-
-	public static final String SUCCESSFUL = "success"; // $NON_NLS-1$
-
-	public static final String THREAD_NAME = "threadName"; // $NON_NLS-1$
-
-	public static final String TIME = "time"; // $NON_NLS-1$
-
-	public static final String TIME_STAMP = "timeStamp"; // $NON_NLS-1$
+//	public final static String PRESERVE = "preserve"; // $NON_NLS-1$
+//
+//	public final static String XML_SPACE = "xml:space"; // $NON_NLS-1$
+//
+//	public static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON_NLS-1$
+//
+//	public static final String BINARY = "binary"; // $NON_NLS-1$
+//
+//	public static final String DATA_TYPE = "dataType"; // $NON_NLS-1$
+//
+//	public static final String ERROR = "error"; // $NON_NLS-1$
+//
+//	public static final String FAILURE = "failure"; // $NON_NLS-1$
+//
+//	public static final String FAILURE_MESSAGE = "failureMessage"; // $NON_NLS-1$
+//
+//	public static final String LABEL = "label"; // $NON_NLS-1$
+//
+//	public static final String RESPONSE_CODE = "responseCode"; // $NON_NLS-1$
+//
+//	public static final String RESPONSE_MESSAGE = "responseMessage"; // $NON_NLS-1$
+//
+//	public static final String SAMPLE_RESULT_TAG_NAME = "sampleResult"; // $NON_NLS-1$
+//
+//	public static final String SUCCESSFUL = "success"; // $NON_NLS-1$
+//
+//	public static final String THREAD_NAME = "threadName"; // $NON_NLS-1$
+//
+//	public static final String TIME = "time"; // $NON_NLS-1$
+//
+//	public static final String TIME_STAMP = "timeStamp"; // $NON_NLS-1$
 
 	// Initialise values from properties
 	private boolean time = _time, latency = _latency, timestamp = _timestamp, success = _success, label = _label,
