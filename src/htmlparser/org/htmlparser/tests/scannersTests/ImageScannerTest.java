@@ -170,26 +170,26 @@ public class ImageScannerTest extends ParserTestCase {
 				"<small><a href=s/5926>Air</a>, <a href=s/5927>Hotel</a>, <a href=s/5928>Vacations</a>, <a href=s/5929>Cruises</a></small></td><td align=center><a href=\"http://rd.yahoo.com/M=218794.2020165.3500581.220161/D=yahoo_top/S=2716149:NP/A=1041273/?http://adfarm.mediaplex.com/ad/ck/990-1736-1039-211\" target=\"_top\"><img width=230 height=33 src=\"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif\" alt=\"\" border=0></a></td><td nowrap align=center width=215>Find your match on<br><a href=s/2734><b>Yahoo! Personals</b></a></td></tr><tr><td colspan=3 align=center><input size=30 name=p>\n"
 						+ "<input type=submit value=Search> <a href=r/so>advanced search</a></td></tr></table><table border=0 cellspacing=0 cellpadding=3 width=640><tr><td nowrap align=center><table border=0 cellspacing=0 cellpadding=0><tr><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif\" width=20 height=20 border=0></a></td><td> &nbsp; &nbsp; <a href=s/1048><b>Yahooligans!</b></a> - <a href=s/5282>Eet & Ern</a>, <a href=s/5283>Games</a>, <a href=s/5284>Science</a>, <a href=s/5285>Sports</a>, <a href=s/5286>Movies</a>, <a href=s/1048>more</a> &nbsp; &nbsp; </td><td><a href=s/5948><img src=\"http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif\" width=20 height=20 border=0></a></td></tr></table></td></tr><tr><td nowrap align=center><small><b>Shop</b>&nbsp;\n",
 				"http://www.yahoo.com");
-		Node[] node = new Node[10];
+		Node[] _node = new Node[10];
 		// Register the image scanner
 		parser.addScanner(new ImageScanner("-i", new LinkProcessor()));
 		int i = 0;
 		Node thisNode;
 		for (NodeIterator e = parser.elements(); e.hasMoreNodes();) {
-			thisNode = (Node) e.nextNode();
+			thisNode = e.nextNode();
 			if (thisNode instanceof ImageTag)
-				node[i++] = thisNode;
+				_node[i++] = thisNode;
 		}
 		assertEquals("Number of nodes identified should be 3", 3, i);
-		assertTrue("Node identified should be HTMLImageTag", node[0] instanceof ImageTag);
-		ImageTag imageTag = (ImageTag) node[0];
+		assertTrue("Node identified should be HTMLImageTag", _node[0] instanceof ImageTag);
+		ImageTag imageTag = (ImageTag) _node[0];
 		assertEquals("Expected Image",
 				"http://us.a1.yimg.com/us.yimg.com/a/co/columbiahouse/4for49Freesh_230x33_redx2.gif", imageTag
 						.getImageURL());
-		ImageTag imageTag2 = (ImageTag) node[1];
+		ImageTag imageTag2 = (ImageTag) _node[1];
 		assertEquals("Expected Image 2", "http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/eet.gif", imageTag2
 				.getImageURL());
-		ImageTag imageTag3 = (ImageTag) node[2];
+		ImageTag imageTag3 = (ImageTag) _node[2];
 		assertEquals("Expected Image 3", "http://us.i1.yimg.com/us.yimg.com/i/ligans/klgs/ern.gif", imageTag3
 				.getImageURL());
 	}
