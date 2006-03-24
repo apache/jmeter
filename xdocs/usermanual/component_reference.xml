@@ -37,7 +37,6 @@
 	To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
 
  -->
-
 <section name="&sect-num;.1 Samplers" anchor="samplers">
 <description>
 	<br></br>
@@ -546,7 +545,7 @@ StandardGenerator and TCLogParser.
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br/>
+		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 	</description>
@@ -614,7 +613,7 @@ return "Data from sample with Label "+Label;
 SampleResult.setResponseData("My data");
 return null;
 </pre>
-<p>Another example:<br/> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in jmeter.properties. 
+<p>Another example:<br></br> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in jmeter.properties. 
 The following script will show the values of all the variables in the ResponseData field:
 </p>
 <pre>
@@ -890,6 +889,7 @@ Here are some general guidelines for writing Junit tests so they work well with 
 <description>TBA</description>
 </component>
 
+<a href="#">^</a>
 
 </section>
 
@@ -1301,7 +1301,7 @@ samples to a simple controller, then save the simple controller as a jmx file.
 The file can then be used in a test plan.
 </p>
 <note>
-This element does not support variables/functions in the filename field.<br/>
+This element does not support variables/functions in the filename field.<br></br>
 However, if the property <b>includecontroller.prefix</b> is defined, 
 the contents are used to prefix the pathname.
 </note>
@@ -1310,6 +1310,9 @@ the contents are used to prefix the pathname.
 	<property name="Filename" required="Yes">The file to include.</property>
 </properties>
 </component>
+
+
+<a href="#">^</a>
 
 </section>
 
@@ -1605,6 +1608,9 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
+
+
+<a href="#">^</a>
 
 </section>
 
@@ -2042,6 +2048,9 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.5 Assertions" anchor="assertions">
@@ -2164,7 +2173,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 <p>
 <b>Please note that the BeanShell jar file is not included with JMeter;
 it needs to be downloaded separately and placed in the lib directory.
-<br/>
+<br></br>
 For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p><p>
 Note that a different Interpreter is used for each independent occurence of the assertion
@@ -2272,6 +2281,9 @@ on XPath.
 <property name="File Name" required="Yes">Specify XML Schema File Name</property>
 </properties>
 </component>
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.6 Timers" anchor="timers">
@@ -2384,6 +2396,9 @@ The BeanShell Timer can be used to generate a delay.
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
+
+
+<a href="#">^</a>
 
 </section>
 
@@ -2581,6 +2596,9 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 <p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.8 Post-Processors" anchor="postprocessors">
@@ -2741,6 +2759,9 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.9 Miscellaneous Features" anchor="Miscellaneous_Features">
@@ -2835,6 +2856,9 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
   installed.
 </p>
 </component>
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.10 Reports" anchor="Reports">
@@ -2865,6 +2889,9 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <component index="&sect-num;.10.6" name="Bar Chart" screenshot="">
 <description><p></p></description>
 </component>
+
+
+<a href="#">^</a>
 
 </section>
 </body>
