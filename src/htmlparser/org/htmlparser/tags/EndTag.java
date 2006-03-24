@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -39,7 +38,7 @@ import org.htmlparser.visitors.NodeVisitor;
  * EndTag can identify closing tags, like &lt;/A&gt;, &lt;/FORM&gt;, etc.
  */
 public class EndTag extends Tag {
-	public final static String TYPE = "END_TAG";
+	private final static String TYPE = "END_TAG";
 
 	public final static int ENDTAG_BEFORE_PARSING_STATE = 0;
 
