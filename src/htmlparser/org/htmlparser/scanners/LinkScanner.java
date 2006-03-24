@@ -1,4 +1,3 @@
-// $Header$
 /*
  * ====================================================================
  * Copyright 2002-2004 The Apache Software Foundation.
@@ -172,12 +171,12 @@ public class LinkScanner extends CompositeTagScanner {
 		return tag.getAttribute("ACCESSKEY");
 	}
 
-	public BaseHrefScanner createBaseHREFScanner(String filter) {
-		return new BaseHrefScanner(filter, processor);
+	public BaseHrefScanner createBaseHREFScanner(String _filter) {
+		return new BaseHrefScanner(_filter, processor);
 	}
 
-	public ImageScanner createImageScanner(String filter) {
-		return new ImageScanner(filter, processor);
+	public ImageScanner createImageScanner(String _filter) {
+		return new ImageScanner(_filter, processor);
 	}
 
 	/**
