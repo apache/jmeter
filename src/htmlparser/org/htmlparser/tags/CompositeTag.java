@@ -133,7 +133,7 @@ public abstract class CompositeTag extends Tag {
 		Tag tag = null;
 		boolean found = false;
 		for (SimpleNodeIterator e = children(); e.hasMoreNodes() && !found;) {
-			node = (Node) e.nextNode();
+			node = e.nextNode();
 			if (node instanceof Tag) {
 				tag = (Tag) node;
 				String nameAttribute = tag.getAttribute("NAME");
@@ -282,7 +282,7 @@ public abstract class CompositeTag extends Tag {
 	public String getChildrenHTML() {
 		StringBuffer buff = new StringBuffer();
 		for (SimpleNodeIterator e = children(); e.hasMoreNodes();) {
-			Node node = (Node) e.nextNode();
+			Node node = e.nextNode();
 			buff.append(node.toHtml());
 		}
 		return buff.toString();
@@ -293,7 +293,7 @@ public abstract class CompositeTag extends Tag {
 			startTag.accept(visitor);
 			SimpleNodeIterator children = children();
 			while (children.hasMoreNodes()) {
-				Node child = (Node) children.nextNode();
+				Node child = children.nextNode();
 				child.accept(visitor);
 			}
 			endTag.accept(visitor);
