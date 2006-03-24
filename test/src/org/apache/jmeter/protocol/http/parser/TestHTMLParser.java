@@ -272,14 +272,14 @@ public class TestHTMLParser extends JMeterTestCase {
 
             while (expected.hasNext()) {
                 Object next = expected.next();
-                assertTrue(parserName + "::Expecting another result " + next, result.hasNext());
+                assertTrue(file+"::"+parserName + "::Expecting another result " + next, result.hasNext());
                 try {
-                    assertEquals(parserName + "(" + file + ")", next, ((URL) result.next()).toString());
+                    assertEquals(file+"::"+parserName + "(" + file + ")", next, ((URL) result.next()).toString());
                 } catch (ClassCastException e) {
-                    fail(parserName + "::Expected URL, but got " + e.toString());
+                    fail(file+"::"+parserName + "::Expected URL, but got " + e.toString());
                 }
             }
-            assertFalse(parserName + "::Should have reached the end of the results", result.hasNext());
+            assertFalse(file+"::"+parserName + "::Should have reached the end of the results", result.hasNext());
         }
 
         // Get expected results as a List
