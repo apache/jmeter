@@ -212,7 +212,7 @@ public class FormScannerTest extends ParserTestCase {
 		RemarkNode[] remarkNode = new RemarkNode[10];
 		int i = 0;
 		for (SimpleNodeIterator e = formTag.children(); e.hasMoreNodes();) {
-			Node formNode = (Node) e.nextNode();
+			Node formNode = e.nextNode();
 			if (formNode instanceof RemarkNode) {
 				remarkNode[i++] = (RemarkNode) formNode;
 			}
@@ -234,7 +234,7 @@ public class FormScannerTest extends ParserTestCase {
 		RemarkNode[] remarkNode = new RemarkNode[10];
 		int i = 0;
 		for (SimpleNodeIterator e = formTag.children(); e.hasMoreNodes();) {
-			Node formNode = (Node) e.nextNode();
+			Node formNode = e.nextNode();
 			if (formNode instanceof RemarkNode) {
 				remarkNode[i++] = (RemarkNode) formNode;
 			}
