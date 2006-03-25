@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry output="build/jorphan" kind="src" path="src/jorphan"/>
+	<classpathentry output="build/examples" kind="src" path="src/examples"/>
 	<classpathentry output="build/junit" kind="src" path="src/junit"/>
 	<classpathentry output="build/reports" kind="src" path="src/reports"/>
 	<classpathentry output="build/test" kind="src" path="test/src"/>
