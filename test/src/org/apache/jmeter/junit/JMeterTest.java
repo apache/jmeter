@@ -336,19 +336,23 @@ public class JMeterTest extends JMeterTestCase {
 		if (guiTitles.size() > 0) {
 			String title = guiItem.getDocAnchor();
 			boolean ct = guiTitles.containsKey(title);
-			if (ct)
-				guiTitles.put(title, Boolean.TRUE);// So we can detect extra
-													// entries
+			if (ct) {
+				guiTitles.put(title, Boolean.TRUE);// So we can detect extra entries
+            }
+            String name = guiItem.getClass().getName();
 			if (// Is this a work in progress or an internal GUI component?
-			(title != null && title.length() > 0) // Will be "" for internal components
-					&& (title.toUpperCase().indexOf("(ALPHA") == -1) && (title.toUpperCase().indexOf("(BETA") == -1)
-					&& (!title.equals("Example1")) // Skip the example samplers
-													// ...
-					&& (!title.equals("Example2"))) {// No, not a work in
-														// progress ...
-				String s = "component_reference.xml needs '" + title + "' anchor for " + guiItem.getClass().getName();
-				if (!ct)
+			    (title != null && title.length() > 0) // Will be "" for internal components
+				&& (title.toUpperCase().indexOf("(ALPHA") == -1) 
+                && (title.toUpperCase().indexOf("(BETA") == -1)
+				&& (!title.equals("Example1")) // Skip the example samplers ...
+				&& (!title.equals("Example2"))
+                && (!name.startsWith("org.apache.jmeter.examples."))
+                )
+            {// No, not a work in progress ...
+                String s = "component_reference.xml needs '" + title + "' anchor for " + name;
+				if (!ct) {
 					log.warn(s); // Record in log as well
+                }
 				assertTrue(s, ct);
 			}
 		}
@@ -399,6 +403,9 @@ public class JMeterTest extends JMeterTestCase {
 		String name = guiItem.getClass().getName();
 
 		assertEquals("Name should be same as static label for " + name, guiItem.getStaticLabel(), guiItem.getName());
+        if (name.startsWith("org.apache.jmeter.examples.")){
+            return;
+        }
 		if (!name.endsWith("TestBeanGUI")) {
 			try {
 				String label = guiItem.getLabelResource();
@@ -505,7 +512,11 @@ public class JMeterTest extends JMeterTestCase {
 	 */
 	public void runTestElement() throws Exception {
 		checkElementCloning(testItem);
-		assertTrue(testItem.getClass().getName() + " must implement Serializable", testItem instanceof Serializable);
+		String name = testItem.getClass().getName();
+        assertTrue(name + " must implement Serializable", testItem instanceof Serializable);
+        if (name.startsWith("org.apache.jmeter.examples.")){
+            return;
+        }
         checkElementAlias(testItem);
 	}
 
