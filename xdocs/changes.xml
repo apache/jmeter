@@ -105,6 +105,7 @@ Users must explicitly check append in the sampler</li>
 <li>Add write(OS,IS) implementation to TCPClientImpl</li>
 <li>Sample Result converter saves response code as "rc". Previously it saved as "rs" but read with "rc"; it will now also read with "rc".
 The XSL stylesheets also now accept either "rc" or "rs"</li>
+<li>Fix counter function so each counter instance is independent (previously the per-user counters were shared between instances of the function)</li>
 </ul>	
 	
 <h4>Other changes</h4>

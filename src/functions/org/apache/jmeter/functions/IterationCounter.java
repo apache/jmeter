@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004, 2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +34,12 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 	private static final String KEY = "__counter";
 
-	private static final String perThreadCounter = "perThreadCounter";
-
+    private transient ThreadLocal perThreadInt = new ThreadLocal(){
+        protected synchronized Object initialValue() {
+            return new Integer(0);
+        }
+    };
+    
 	static {
 		desc.add(JMeterUtils.getResString("iteration_counter_arg_1"));
 		desc.add(JMeterUtils.getResString("function_name_param"));
@@ -44,20 +47,15 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 	transient private Object[] variables;
 
-	transient private int[] counter;
-
-	transient private String key; // Used to keep track of counter
+	transient private int globalCounter;//MAXINT = 2,147,483,647
 
 	public IterationCounter() {
-		counter = new int[1];
-		// TODO use better key if poss. Can't use varName - it may not be
-		// present
-		key = KEY + System.identityHashCode(this);
-	}
+        globalCounter=0;
+    }
 
 	public Object clone() {
 		IterationCounter newCounter = new IterationCounter();
-		newCounter.counter = counter;
+		newCounter.globalCounter = globalCounter;
 		return newCounter;
 	}
 
@@ -68,29 +66,28 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		counter[0]++;
+
+        new Integer(1);
+        globalCounter++;
 
 		JMeterVariables vars = getVariables();
 
 		boolean perThread = Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
 
-		String varName = ((CompoundVariable) variables[variables.length - 1]).execute();
-		String counterString = "";
+		String varName = "";
+        if (variables.length >=2) {// Ensure variable has been provided
+            varName = ((CompoundVariable) variables[1]).execute();
+        }
+		
+        String counterString = "";
 
 		if (perThread) {
-			// counterString = Integer.toString(vars.getIteration());
-			int counterInt;
-			try {
-				counterInt = ((Integer) vars.getObject(perThreadCounter)).intValue() + 1;
-
-			} catch (NullPointerException e) {
-				// First Time! Initialize
-				counterInt = 1;
-			}
-			vars.putObject(perThreadCounter, new Integer(counterInt));
-			counterString = Integer.toString(counterInt);
+			int threadCounter;
+            threadCounter = ((Integer) perThreadInt.get()).intValue() + 1;                
+            perThreadInt.set(new Integer(threadCounter));
+			counterString = String.valueOf(threadCounter);
 		} else {
-			counterString = String.valueOf(counter[0]);
+			counterString = String.valueOf(globalCounter);
 		}
 
 		if (varName.length() > 0)
@@ -107,8 +104,8 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 		variables = parameters.toArray();
 
-		if (variables.length < 2) {
-			throw new InvalidVariableException("Fewer than 2 parameters");
+		if (variables.length < 1) {
+			throw new InvalidVariableException("Need at least 1 parameter");
 		}
 	}
 
