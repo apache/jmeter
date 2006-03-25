@@ -1,2 +1,6 @@
 Manifest-Version: 1.0
-Main-Class: org.apache.jmeter.NewDriver
+Extension-Name: JMeter
+Specification-Title: Apache Jakarta JMeter
+Specification-Vendor: Apache Software Foundation
+Implementation-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
