@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '18'>
 ]>
-<document index="yes" index-level-2="yes" colbreak="&sect-num;.4"
+<document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
   prev="boss.html" next="functions.html" date="$Date$">
 
 <properties>
@@ -39,7 +39,7 @@
  -->
 <section name="&sect-num;.1 Samplers" anchor="samplers">
 <description>
-	<br></br>
+	<br>Samplers perform the actual work of JMeter.</br>
 </description>
 <component name="FTP Request" index="&sect-num;.1.1" screenshot="gen-controller/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
@@ -227,7 +227,59 @@ XML.</p>
 
 </component>
 
-<component name="LDAP Request" index="&sect-num;.1.6" screenshot="ldap_request.png">
+<component name="WebService(SOAP) Request" index="&sect-num;.1.6" screenshot="webservice_sampler.png">
+<description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
+ It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
+ The sampler uses Apache SOAP driver to serialize the message and set the header
+ with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
+ handling, since Apache SOAP currently does not provide support for it. Both IBM
+ and SUN provide WSDL drivers. There are 3 options for the post data: text area,
+ external file, or directory. If you want the sampler to randomly select a message,
+ use the directory. Otherwise, use the text area or a file. The if either the
+ file or path are set, it will not use the message in the text area. If you need
+ to test a soap service that uses different encoding, use the file or path. If you
+ paste the message in to text area, it will not retain the encoding and will result
+ in errors. Save your message to a file with the proper encoding, and the sampler
+ will read it as java.io.FileInputStream.</p>
+ <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
+ requires the libs. Because mail.jar and activation.jar are distributed by Sun,
+ you have to download it separately.</p>
+ <p>An important note on the sampler is it will automatically use the proxy host
+ and port passed to JMeter from command line, if thoe fields in the sampler are
+ left blank. If a sampler has values in the proxy host and port text field, it
+ will use the ones provided by the user. This behavior may not be what users
+ expect.</p>
+ <p>By default, the webservice sampler set SOAPHTTPConnection.setMaintainSession
+ (true). If you need to maintain the session, add a blank Header Manager. The
+ sampler uses the Header Manager to store the SOAPHTTPConnection object, since
+ there apache soap does provide a easy way to get and set the cookies.</p>
+ <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
+ cache is checked, it will not iterate to the next value. That means all the requests
+ will use the first value.</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this sampler
+         that is shown in the tree.</property>
+        <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
+        <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
+        <property name="Protocol" required="Yes">HTTP or HTTPS are acceptable protocol.</property>
+        <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
+        <property name="Port Number" required="Yes">Port Number.</property>
+        <property name="Path" required="Yes">Path for the webservice.</property>
+        <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
+        <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
+        <property name="Soap file" required="No">File containing soap message</property>
+        <property name="Message Folder" required="No">Folder containing soap files</property>
+        <property name="Memory cache" required="Yes">caches the request data</property>
+        <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
+        <property name="Proxy Host" required="No">Proxy hostname</property>
+        <property name="Proxy Port" required="No">Proxy host port</property>
+        </properties>
+
+</component>
+
+<component name="LDAP Request" index="&sect-num;.1.7" screenshot="ldap_request.png">
   <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
@@ -307,7 +359,8 @@ XML.</p>
                                       </links>
 
 </component>
-<component name="LDAP Extended Request (ALPHA)" index="&sect-num;.1.6b" screenshot="ldapext_request.png">
+
+<component name="LDAP Extended Request (ALPHA)" index="&sect-num;.1.8" screenshot="ldapext_request.png">
   <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
@@ -436,59 +489,9 @@ XML.</p>
 </component>
 
 
-<component name="WebService(SOAP) Request" index="&sect-num;.1.7" screenshot="webservice_sampler.png">
-<description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
- It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
- The sampler uses Apache SOAP driver to serialize the message and set the header
- with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
- handling, since Apache SOAP currently does not provide support for it. Both IBM
- and SUN provide WSDL drivers. There are 3 options for the post data: text area,
- external file, or directory. If you want the sampler to randomly select a message,
- use the directory. Otherwise, use the text area or a file. The if either the
- file or path are set, it will not use the message in the text area. If you need
- to test a soap service that uses different encoding, use the file or path. If you
- paste the message in to text area, it will not retain the encoding and will result
- in errors. Save your message to a file with the proper encoding, and the sampler
- will read it as java.io.FileInputStream.</p>
- <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
- requires the libs. Because mail.jar and activation.jar are distributed by Sun,
- you have to download it separately.</p>
- <p>An important note on the sampler is it will automatically use the proxy host
- and port passed to JMeter from command line, if thoe fields in the sampler are
- left blank. If a sampler has values in the proxy host and port text field, it
- will use the ones provided by the user. This behavior may not be what users
- expect.</p>
- <p>By default, the webservice sampler set SOAPHTTPConnection.setMaintainSession
- (true). If you need to maintain the session, add a blank Header Manager. The
- sampler uses the Header Manager to store the SOAPHTTPConnection object, since
- there apache soap does provide a easy way to get and set the cookies.</p>
- <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
- cache is checked, it will not iterate to the next value. That means all the requests
- will use the first value.</p>
-</description>
 
-<properties>
-        <property name="Name" required="No">Descriptive name for this sampler
-         that is shown in the tree.</property>
-        <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
-        <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
-        <property name="Protocol" required="Yes">HTTP or HTTPS are acceptable protocol.</property>
-        <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
-        <property name="Port Number" required="Yes">Port Number.</property>
-        <property name="Path" required="Yes">Path for the webservice.</property>
-        <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
-        <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
-        <property name="Soap file" required="No">File containing soap message</property>
-        <property name="Message Folder" required="No">Folder containing soap files</property>
-        <property name="Memory cache" required="Yes">caches the request data</property>
-        <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
-        <property name="Proxy Host" required="No">Proxy hostname</property>
-        <property name="Proxy Port" required="No">Proxy host port</property>
-        </properties>
 
-</component>
-
-<component name="Access Log Sampler" index="&sect-num;.1.8" screenshot="accesslogsampler.png">
+<component name="Access Log Sampler" index="&sect-num;.1.9" screenshot="accesslogsampler.png">
 <center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
@@ -541,7 +544,7 @@ StandardGenerator and TCLogParser.
 
 </component>
 
-<component name="BeanShell Sampler" index="&sect-num;.1.9" screenshot="beanshellsampler.png">
+<component name="BeanShell Sampler" index="&sect-num;.1.10" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
@@ -626,7 +629,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.10" screenshot="bsfsampler.png">
+<component name="BSF Sampler" index="&sect-num;.1.11" screenshot="bsfsampler.png">
 <note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
@@ -645,7 +648,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 TBC
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.11" screenshot="tcpsampler.png">
+<component name="TCP Sampler" index="&sect-num;.1.12" screenshot="tcpsampler.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -706,7 +709,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.12" screenshot="jmspublisher.png">
+<component name="JMS Publisher" index="&sect-num;.1.13" screenshot="jmspublisher.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -732,7 +735,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.13" screenshot="jmssubscriber.png">
+<component name="JMS Subscriber" index="&sect-num;.1.14" screenshot="jmssubscriber.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -758,7 +761,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.14" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15" screenshot="jms/JMS_Point-to-Point.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -813,18 +816,7 @@ TBC
 </properties>
 </component>
 
-<component name="Test Action" index="&sect-num;.1.15" screenshot="test_action.png">
-<description>
-The Test Action sampler is a sampler that is intended for use in a conditional controller.
-Rather than generate a sample, the test element pauses or stops the selected target.
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Target" required="Yes">Current Thread / All Threads</property>
-  <property name="Action" required="Yes">Pause / Stop</property>
-  <property name="Duration" required="Yes">How long to pause for (milliseconds)</property>
-</properties>
-</component>
+
 
 <component name="JUnit Sampler" index="&sect-num;.1.16" screenshot="junit_sampler.png">
 <description>
@@ -889,16 +881,117 @@ Here are some general guidelines for writing Junit tests so they work well with 
 <description>TBA</description>
 </component>
 
-<a href="#">^</a>
+<component name="Test Action" index="&sect-num;.1.18" screenshot="test_action.png">
+<description>
+The Test Action sampler is a sampler that is intended for use in a conditional controller.
+Rather than generate a sample, the test element pauses or stops the selected target.
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Target" required="Yes">Current Thread / All Threads</property>
+  <property name="Action" required="Yes">Pause / Stop</property>
+  <property name="Duration" required="Yes">How long to pause for (milliseconds)</property>
+</properties>
+</component><a href="#">^</a>
 
 </section>
 
 <section name="&sect-num;.2 Logic Controllers" anchor="logic_controllers">
 <description>
-	<br></br>
+	<br>Logic Controllers determine the order in which Samplers are processed.</br>
 </description>
 
-<component index="&sect-num;.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.png">
+<component name="Simple Controller" index="&sect-num;.2.1" anchor="simple_controller" screenshot="logic-controller/simple-controller.gif">
+<description>
+<p>The Simple Logic Controller lets  you organize your Samplers and other
+Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
+storage device.</p>
+</description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+
+<example title="Using the Simple Controller" anchor="simple_controller_example">
+<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure 6).
+In this example, we created a Test Plan that sends two Ant HTTP requests and two
+Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
+Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
+processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
+following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
+Note, the File Reporter
+is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
+<figure image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
+
+</example>
+</component>
+
+<component name="Loop Controller" index="&sect-num;.2.2" anchor="loop" screenshot="logic-controller/loop-controller.gif">
+<description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
+loop through them a certain number of times, in addition to the loop value you
+specified for the Thread Group.  For example, if you add one HTTP Request to a
+Loop Controller with a loop count of two, and configure the Thread Group loop
+count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
+</p></description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Loop Count" required="Yes, unless &quot;Forever&quot; is checked">
+                The number of times the subelements of this controller will be iterated each time
+                through a test run.
+                <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
+                element behaves slightly differently.  Unless set to forever, it stops the test after
+                the given number of iterations have been done.</p></property>
+</properties>
+
+<example title="Looping Example" anchor="loop_example">
+
+<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 4).
+In this example, we created a Test Plan that sends a particular HTTP Request
+only once and sends another HTTP Request five times.</p>
+
+<figure image="logic-controller/loop-example.gif">Figure 4 - Loop Controller Example</figure>
+
+<p>We configured the Thread Group for a single thread and a loop count value of
+one. Instead of letting the Thread Group control the looping, we used a Loop
+Controller.  You can see that we added one HTTP Request to the Thread Group and
+another HTTP Request to a Loop Controller.  We configured the Loop Controller
+with a loop count value of five.</p>
+<p>JMeter will send the requests in the following order: Home Page, News Page,
+News Page, News Page, News Page, and News Page. Note, the File Reporter
+is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
+
+</example>
+
+</component>
+
+<component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller" screenshot="logic-controller/once-only-controller.gif">
+<description>
+<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
+during further iterations through the test plan.</p>
+
+<p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller (ie, every 5 times).  Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test), but now the user has more flexibility in the use of the Once Only Controller.</p>
+
+<p>For testing that requires a login, consider placing the login request in this controller since each thread only needs
+to login once to establish a session.</p>
+</description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+
+<example title="Once Only Example" anchor="once_only_example">
+<p><a href="../demos/OnceOnlyTestPlan.jmx">Download</a> this example (see Figure 5).
+In this example, we created a Test Plan that has two threads that send HTTP request.
+Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
+Although we configured the Thread Group to iterate three times, each JMeter thread only
+sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
+<figure image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
+<p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
+Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
+
+</example>
+</component>
+
+<component name="Interleave Controller" index="&sect-num;.2.4" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
@@ -970,98 +1063,7 @@ Note, the File Reporter is configured to store the results in a file named "inte
 </example>
 </component>
 
-<component index="&sect-num;.2.2" name="Loop Controller" anchor="loop" screenshot="logic-controller/loop-controller.gif">
-<description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
-loop through them a certain number of times, in addition to the loop value you
-specified for the Thread Group.  For example, if you add one HTTP Request to a
-Loop Controller with a loop count of two, and configure the Thread Group loop
-count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
-</p></description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Loop Count" required="Yes, unless &quot;Forever&quot; is checked">
-                The number of times the subelements of this controller will be iterated each time
-                through a test run.
-                <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
-                element behaves slightly differently.  Unless set to forever, it stops the test after
-                the given number of iterations have been done.</p></property>
-</properties>
-
-<example title="Looping Example" anchor="loop_example">
-
-<p><a href="../demos/LoopTestPlan.jmx">Download</a> this example (see Figure 4).
-In this example, we created a Test Plan that sends a particular HTTP Request
-only once and sends another HTTP Request five times.</p>
-
-<figure image="logic-controller/loop-example.gif">Figure 4 - Loop Controller Example</figure>
-
-<p>We configured the Thread Group for a single thread and a loop count value of
-one. Instead of letting the Thread Group control the looping, we used a Loop
-Controller.  You can see that we added one HTTP Request to the Thread Group and
-another HTTP Request to a Loop Controller.  We configured the Loop Controller
-with a loop count value of five.</p>
-<p>JMeter will send the requests in the following order: Home Page, News Page,
-News Page, News Page, News Page, and News Page. Note, the File Reporter
-is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
-
-</example>
-
-</component>
-
-<component index="&sect-num;.2.3" name="Once Only Controller" anchor="once_only_controller"
-screenshot="logic-controller/once-only-controller.gif">
-<description>
-<p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
-during further iterations through the test plan.</p>
-
-<p>The Once Only Controller will now execute always during the first iteration of any looping parent controller.  Thus, if the Once Only Controller is placed under a Loop Controller specified to loop 5 times, then the Once Only Controller will execute only on the first iteration through the Loop Controller (ie, every 5 times).  Note this means the Once Only Controller will still behave as previously expected if put under a Thread Group (runs only once per test), but now the user has more flexibility in the use of the Once Only Controller.</p>
-
-<p>For testing that requires a login, consider placing the login request in this controller since each thread only needs
-to login once to establish a session.</p>
-</description>
-<properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-</properties>
-
-<example title="Once Only Example" anchor="once_only_example">
-<p><a href="../demos/OnceOnlyTestPlan.jmx">Download</a> this example (see Figure 5).
-In this example, we created a Test Plan that has two threads that send HTTP request.
-Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
-Although we configured the Thread Group to iterate three times, each JMeter thread only
-sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-<figure image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
-<p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
-Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
-
-</example>
-</component>
-
-<component index="&sect-num;.2.4" name="Simple Controller" anchor="simple_controller" screenshot="logic-controller/simple-controller.gif">
-<description>
-<p>The Simple Logic Controller lets  you organize your Samplers and other
-Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
-storage device.</p>
-</description>
-<properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-</properties>
-
-<example title="Using the Simple Controller" anchor="simple_controller_example">
-<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure 6).
-In this example, we created a Test Plan that sends two Ant HTTP requests and two
-Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
-Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
-processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
-following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
-Note, the File Reporter
-is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-<figure image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
-
-</example>
-</component>
-
-<component index="&sect-num;.2.5" name="Random Controller" screenshot="logic-controller/random-controller.gif">
+<component name="Random Controller" index="&sect-num;.2.5" screenshot="logic-controller/random-controller.gif">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
@@ -1076,38 +1078,19 @@ what results any given interaction will give</note>
 
 </component>
 
-<component index="&sect-num;.2.6" name="Recording Controller" screenshot="logic-controller/recording-controller.gif">
-<description>
-<p>The Recording Controller is a place holder indicating where the proxy server should
-record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
-recording using the <complink name="HTTP Proxy Server"/>, all recorded samples will by default
-be saved under the Recording Controller.</p>
 
-</description>
+
+<component name="Random Order Controller" index="&sect-num;.2.6" screenshot="randomordercontroller.png">
+	<description>
+		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
+		 element at most once, but the order of execution of the nodes will be random.</p>
+	</description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
-
 </component>
 
-<component index="&sect-num;.2.7" name="Module Controller" screenshot="module_controller.png">
-<description>
-<p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
-module effectively, one might have a number of Controllers under the <complink name="WorkBench"/>, each with a different series of
-samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
-the appropriate controller in it's drop down box.  This provides convenience for running many alternate test plans quickly and easily.
-</p>
-</description>
-<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
-<properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
-        the one you want to substitute in at runtime.</property>
-</properties>
-
-</component>
-
-<component index="&sect-num;.2.8" name="Throughput Controller" screenshot="throughput_controller.png">
+<component name="Throughput Controller" index="&sect-num;.2.7" screenshot="throughput_controller.png">
 <description>
 <p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
 executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
@@ -1123,6 +1106,18 @@ setting is reset when a parent Loop Controller restarts.
 </properties>
 
 </component>
+
+<component name="Runtime Controller" index="&sect-num;.2.8" screenshot="runtimecontroller.png">
+	<description>
+		<p>The Runtime Controller controls how long its children are allowed to run.
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+</properties>
+</component>
+
 <component name="If Controller" index="&sect-num;.2.9" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
@@ -1141,17 +1136,62 @@ setting is reset when a parent Loop Controller restarts.
 	</p>
 </component>
 
-<component name="Random Order Controller" index="&sect-num;.2.10" screenshot="randomordercontroller.png">
+
+
+
+
+
+
+
+<component name="While Controller" index="&sect-num;.2.10" screenshot="whilecontroller.png">
 	<description>
-		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
-		 element at most once, but the order of execution of the nodes will be random.</p>
+<p>
+The While Controller runs its children until the condition is "false".
+</p>
+
+<p>Possible condition values:</p>
+<ul>
+<li>blank - exit loop when last sample in loop fails</li>
+<li>LAST - exit loop when last sample in loop fails. 
+If the last sample just before the loop failed, don't enter loop.</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
+</ul>
+<note>In contrast to the IfController, the condition is not evaluated as a JavaScript expression.
+The condition can be any variable or function that eventually evaluates to the string "false". 
+This allows the use of JavaScript, BeanShell, properties or variables as needed.
+</note>
+<br></br>
+For example:
+<ul>
+	<li>${VAR} - where VAR is set to false by some other test element</li>
+	<li>${__javaScript(${C}==10,dummy)}</li>
+	<li>${__javaScript("${VAR2}"=="abcd",dummy)}</li>
+	<li>${_P(property)} - where property is set to "false" somewhere else</li>
+</ul>
 	</description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Condition" required="Yes">blank, LAST, or variable/function</property>
 </properties>
 </component>
 
-<component name="ForEach Controller" index="&sect-num;.2.11" anchor="loop" screenshot="logic-controller/foreach-controller.png">
+<component name="Switch Controller" index="&sect-num;.2.11" screenshot="switchcontroller.png">
+	<description>
+<p>
+The Switch Controller acts like the <complink name="Interleave Controller"/> 
+in that it runs one of the subordinate elements on each iteration, but rather than
+run them in sequence, the controller runs the element number defined by the switch value.
+</p>
+<p>If the switch value is out of range, it will run the zeroth element, 
+which therefore acts as the default.</p>
+</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
+</properties>
+</component>
+
+<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop" screenshot="logic-controller/foreach-controller.png">
 <description><p>A ForEach controller loops through the values of a set of related variables. 
 When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
 is executed one or more times, where during every loop the variable has a new value.
@@ -1223,77 +1263,24 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </example>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.12" screenshot="transactioncontroller.png">
-	<description>
-		<p>The Transaction Controller times how long it takes for all its children to run.
-			It then adds a "sample" entry to the test output with the total elapsed time.
-			The name of the element is used to name the "sample".
-		</p>
-	</description>
-<properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-</properties>
-</component>
-
-<component name="Runtime Controller" index="&sect-num;.2.12" screenshot="runtimecontroller.png">
-	<description>
-		<p>The Runtime Controller controls how long its children are allowed to run.
-		</p>
-	</description>
-<properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
-</properties>
-</component>
-<component name="While Controller" index="15.2.13" screenshot="whilecontroller.png">
-	<description>
-<p>
-The While Controller runs its children until the condition is "false".
+<component name="Module Controller" index="&sect-num;.2.13" screenshot="module_controller.png">
+<description>
+<p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
+module effectively, one might have a number of Controllers under the <complink name="WorkBench" />, each with a different series of
+samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
+the appropriate controller in it's drop down box.  This provides convenience for running many alternate test plans quickly and easily.
 </p>
-
-<p>Possible condition values:</p>
-<ul>
-<li>blank - exit loop when last sample in loop fails</li>
-<li>LAST - exit loop when last sample in loop fails. 
-If the last sample just before the loop failed, don't enter loop.</li>
-<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
-</ul>
-<note>In contrast to the IfController, the condition is not evaluated as a JavaScript expression.
-The condition can be any variable or function that eventually evaluates to the string "false". 
-This allows the use of JavaScript, BeanShell, properties or variables as needed.
-</note>
-<br></br>
-For example:
-<ul>
-	<li>${VAR} - where VAR is set to false by some other test element</li>
-	<li>${__javaScript(${C}==10,dummy)}</li>
-	<li>${__javaScript("${VAR2}"=="abcd",dummy)}</li>
-	<li>${_P(property)} - where property is set to "false" somewhere else</li>
-</ul>
-	</description>
-<properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Condition" required="Yes">blank, LAST, or variable/function</property>
-</properties>
-</component>
-
-<component name="Switch Controller" index="&sect-num;.2.14" screenshot="switchcontroller.png">
-	<description>
-<p>
-The Switch Controller acts like the <complink name="Interleave Controller"/> 
-in that it runs one of the subordinate elements on each iteration, but rather than
-run them in sequence, the controller runs the element number defined by the switch value.
-</p>
-<p>If the switch value is out of range, it will run the zeroth element, 
-which therefore acts as the default.</p>
 </description>
+<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
 <properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
+        the one you want to substitute in at runtime.</property>
 </properties>
+
 </component>
 
-<component name="Include Controller" index="&sect-num;.2.15" screenshot="includecontroller.png">
+<component name="Include Controller" index="&sect-num;.2.14" screenshot="includecontroller.png">
 	<description>
 <p>
 The include controller is designed to use an external jmx file. To use it, add
@@ -1309,6 +1296,32 @@ the contents are used to prefix the pathname.
 <properties>
 	<property name="Filename" required="Yes">The file to include.</property>
 </properties>
+</component>
+
+<component name="Transaction Controller" index="&sect-num;.2.15" screenshot="transactioncontroller.png">
+	<description>
+		<p>The Transaction Controller times how long it takes for all its children to run.
+			It then adds a "sample" entry to the test output with the total elapsed time.
+			The name of the element is used to name the "sample".
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+</properties>
+</component>
+
+<component name="Recording Controller" index="&sect-num;.2.16" screenshot="logic-controller/recording-controller.gif">
+<description>
+<p>The Recording Controller is a place holder indicating where the proxy server should
+record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
+recording using the <complink name="HTTP Proxy Server" />, all recorded samples will by default
+be saved under the Recording Controller.</p>
+
+</description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+
 </component>
 
 
@@ -1412,7 +1425,7 @@ The internal viewing capabilities are described in the following subsections.</p
 
 </description>
 
-<component index="&sect-num;.3.1" name="Sample Result Configuration" screenshot="sample_result_config.png">
+<component name="Sample Result Configuration" index="&sect-num;.3.1" screenshot="sample_result_config.png">
 <description>
 <p>
 Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below
@@ -1435,11 +1448,11 @@ Listeners can be configured to save different items to the result log files (JTL
 
 
 
-<component index="&sect-num;.3.2" name="Graph Full Results" screenshot="graphfullresults.png">
+<component name="Graph Full Results" index="&sect-num;.3.2" screenshot="graphfullresults.png">
 <description>No Description</description>
 </component>
 
-<component index="&sect-num;.3.3" name="Graph Results" screenshot="graph_results.png">
+<component name="Graph Results" index="&sect-num;.3.3" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -1452,14 +1465,14 @@ that factored out delays and JMeter's processing, it would be unclear what you c
 number.</p></description>
 </component>
 
-<component index="&sect-num;.3.4" name="Spline Visualizer" screenshot="spline_visualizer.png">
+<component name="Spline Visualizer" index="&sect-num;.3.4" screenshot="spline_visualizer.png">
 <description><p>The Spline Visualizer provides a view of all sample times from the start
 of the test till the end, regardless of how many samples have been taken.  The spline
 has 10 points, each representing 10% of the samples, and connected using spline
 logic to show a single continuous line.</p></description>
 </component>
 
-<component index="&sect-num;.3.5" name="Assertion Results" screenshot="assertion_results.png">
+<component name="Assertion Results" index="&sect-num;.3.5" screenshot="assertion_results.png">
 <description><p>The Assertion Results visualizer shows the URL of each sample taken (no time information
 is shown).  It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
 are part of the test plan.</p></description>
@@ -1469,7 +1482,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component index="&sect-num;.3.6" name="View Results Tree" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
@@ -1497,27 +1510,27 @@ Any DTD nodes or Prolog nodes will not show up in tree; however, response may co
 </p>
 </component>
 
-<component index="&sect-num;.3.7" name="Aggregate Report" screenshot="aggregate_report.png">
+<component name="Aggregate Report" index="&sect-num;.3.7" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
 Once the test is done, the throughput is the actual through for the duration of the entire test.</description>
 </component>
 
-<component index="&sect-num;.3.8" name="View Results in Table" screenshot="table_results.png">
+<component name="View Results in Table" index="&sect-num;.3.8" screenshot="table_results.png">
 <description>This visualizer creates a row for every sample result.  Each sample result's URL,
 time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
 this visualizer uses a lot of memory. The last column shows the number of bytes for the
 response from the server.</description>
 </component>
 
-<component index="&sect-num;.3.9" name="Simple Data Writer" screenshot="simpledatawriter.png">
+<component name="Simple Data Writer" index="&sect-num;.3.9" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.</description>
 </component>
 
-<component index="&sect-num;.3.10" name="Monitor Results" screenshot="monitor_screencap.png">
+<component name="Monitor Results" index="&sect-num;.3.10" screenshot="monitor_screencap.png">
 <description>
 <p>Monitor Results is a new Visualizer for displaying server
 status. It is designed for Tomcat 5, but any servlet container
@@ -1540,7 +1553,7 @@ the performance history of each machine for the last hour.</p>
 </description>
 </component>
 
-<component index="&sect-num;.3.11" name="Distribution Graph (alpha)" screenshot="distribution_graph.png">
+<component name="Distribution Graph (alpha)" index="&sect-num;.3.11" screenshot="distribution_graph.png">
 <description>
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
@@ -1558,14 +1571,14 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
-<component index="&sect-num;.3.12" name="Aggregate Graph" screenshot="aggregate_graph.png">
+<component name="Aggregate Graph" index="&sect-num;.3.12" screenshot="aggregate_graph.png">
 <description>The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
 the graph as a PNG file. By default, the aggregate graph will generate a bar chart
 450 x 250 pixels.</description>
 </component>
 
-<component index="&sect-num;.3.13" name="Mailer Visualizer" screenshot="mailervisualizer.png">
+<component name="Mailer Visualizer" index="&sect-num;.3.13" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
 
@@ -1588,7 +1601,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.3.14" name="BeanShell Listener"  screenshot="beanshell_listener.png">
+<component name="BeanShell Listener"  index="&sect-num;.3.14" screenshot="beanshell_listener.png">
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
@@ -2064,7 +2077,7 @@ The variables in User Defined Variables components will take precedence over tho
 	"true" or "false" after all assertions for a sampler have been run.
 	 </note>
 </description>
-<component index="&sect-num;.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
+<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion" screenshot="assertion/assertion.gif">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
@@ -2131,7 +2144,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 
 </component>
 
-<component index="&sect-num;.5.2" name="Duration Assertion" screenshot="duration_assertion.png">
+<component name="Duration Assertion" index="&sect-num;.5.2" screenshot="duration_assertion.png">
 <description><p>The Duration Assertion tests that each response was received within a given amount
 of time.  Any response that takes longer than the given number of milliseconds (specified by the
 user) is marked as a failed response.</p></description>
@@ -2144,7 +2157,7 @@ user) is marked as a failed response.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.5.3" name="Size Assertion" screenshot="size_assertion.png">
+<component name="Size Assertion" index="&sect-num;.5.3" screenshot="size_assertion.png">
 <description><p>The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
 the size be equal to, greater than, less than, or not equal to a given number of bytes.</p></description>
 
@@ -2157,7 +2170,7 @@ the size be equal to, greater than, less than, or not equal to a given number of
 </properties>
 </component>
 
-<component index="&sect-num;.5.4" name="XML Assertion" screenshot="xml_assertion.png">
+<component name="XML Assertion" index="&sect-num;.5.4" screenshot="xml_assertion.png">
 <description><p>The XML Assertion tests that the response data consists of a formally correct XML document.  It does not
 validate the XML based on a DTD or schema or do any further validation.</p></description>
 
@@ -2167,7 +2180,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </properties>
 </component>
 
-<component index="&sect-num;.5.5" name="BeanShell Assertion" screenshot="bsh_assertion.png">
+<component name="BeanShell Assertion" index="&sect-num;.5.5" screenshot="bsh_assertion.png">
 <description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
 </p>
 <p>
@@ -2230,7 +2243,7 @@ These are strings unless otherwise noted:
 </ul></p>
 </component>
 
-<component index="&sect-num;.5.6" name="MD5Hex Assertion">
+<component name="MD5Hex Assertion" index="&sect-num;.5.6">
 <description><p>The MD5Hex Assertion allows the user to check the MD5 hash of the response data.</p></description>
 
 <properties>
@@ -2240,7 +2253,7 @@ These are strings unless otherwise noted:
 </properties>
 </component>
 
-<component index="&sect-num;.5.7" name="HTML Assertion" screenshot="assertion/HTMLAssertion.png">
+<component name="HTML Assertion" index="&sect-num;.5.7" screenshot="assertion/HTMLAssertion.png">
 <description><p>The HTML Assertion allows the user to check the HTML syntax of the response data using JTidy.</p></description>
 
 <properties>
@@ -2254,7 +2267,7 @@ These are strings unless otherwise noted:
 
 </properties>
 </component>
-<component index="&sect-num;.5.8" name="XPath Assertion" screenshot="xpath_assertion.png">
+<component name="XPath Assertion" index="&sect-num;.5.8" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
@@ -2273,7 +2286,7 @@ on XPath.
 <property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
 </component>
-<component index="&sect-num;.5.9" name="XML Schema Assertion" screenshot="assertion/XMLSchemaAssertion.png">
+<component name="XML Schema Assertion" index="&sect-num;.5.9" screenshot="assertion/XMLSchemaAssertion.png">
 <description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
 
 <properties>
@@ -2297,7 +2310,7 @@ on XPath.
 	child of a simple logic controller immediately after the sampler.
 	<br></br>
 </description>
-<component index="&sect-num;.6.1" name="Constant Timer" anchor="constant" screenshot="timers/constant_timer.gif">
+<component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" screenshot="timers/constant_timer.gif">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
 requests, use this timer.</p></description>
@@ -2308,7 +2321,7 @@ requests, use this timer.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.6.2" name="Gaussian Random Timer" screenshot="timers/gauss_random_timer.gif">
+<component name="Gaussian Random Timer" index="&sect-num;.6.2" screenshot="timers/gauss_random_timer.gif">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals ocurring near a particular value.  The total delay is the
@@ -2325,7 +2338,7 @@ to the random delay.</property>
 
 </component>
 
-<component index="&sect-num;.6.3" name="Uniform Random Timer" screenshot="timers/uniform_random_timer.gif">
+<component name="Uniform Random Timer" index="&sect-num;.6.3" screenshot="timers/uniform_random_timer.gif">
 
 <description><p>This timer pauses each thread request for a random amount of time, with
 each time interval having the same probability of occurring. The total delay
@@ -2341,7 +2354,7 @@ to the random delay.</property>
 
 </component>
 
-<component index="&sect-num;.6.4" name="Constant Throughput Timer" screenshot="timers/constant_throughput_timer.png">
+<component name="Constant Throughput Timer" index="&sect-num;.6.4" screenshot="timers/constant_throughput_timer.png">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
 
@@ -2359,7 +2372,7 @@ to the random delay.</property>
 
 </component>
 
-<component index="&sect-num;.6.5" name="Synchronizing Timer" screenshot="timers/sync_timer.png">
+<component name="Synchronizing Timer" index="&sect-num;.6.5" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
@@ -2376,7 +2389,7 @@ points of the test plan.
 
 </component>
 
-<component index="&sect-num;.6.6" name="BeanShell Timer" screenshot="timers/beanshell_timer.png">
+<component name="BeanShell Timer" index="&sect-num;.6.6" screenshot="timers/beanshell_timer.png">
 <description>
 <p>
 The BeanShell Timer can be used to generate a delay.
@@ -2408,7 +2421,7 @@ The BeanShell Timer can be used to generate a delay.
 		Preprocessors are used to modify the Samplers in their scope.
 	<br></br>
 	</description>
-<component index="&sect-num;.7.1" name="HTML Link Parser" anchor="html_link_parser">
+<component name="HTML Link Parser" index="&sect-num;.7.1" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
 links and forms.  A URL test sample that passes through this modifier will be examined to
@@ -2458,7 +2471,7 @@ your dynamic test sample.</note>
 
 </component>
 
-<component index="&sect-num;.7.2" name="HTTP URL Re-writing Modifier" screenshot="url_rewriter.png">
+<component name="HTTP URL Re-writing Modifier" index="&sect-num;.7.2" screenshot="url_rewriter.png">
 <description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
@@ -2482,7 +2495,7 @@ Clever users will even determine that this modifier can be used to grab values t
 </properties>
 </component>
 
-<component index="&sect-num;.7.3" name="HTML Parameter Mask" useinstead="Counter" screenshot="parameter_mask.png">
+<component name="HTML Parameter Mask" index="&sect-num;.7.3" useinstead="Counter" screenshot="parameter_mask.png">
 <description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
 specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
@@ -2510,7 +2523,7 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.7.4" name="HTTP User Parameter Modifier" useinstead="User Parameters" screenshot="user_param_modifier.gif">
+<component name="HTTP User Parameter Modifier" index="&sect-num;.7.4" useinstead="User Parameters" screenshot="user_param_modifier.gif">
 <description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
@@ -2529,7 +2542,7 @@ any other thread</note>
 </properties>
 </component>
 
-<component index="&sect-num;.7.5" name="User Parameters" screenshot="user_params.png">
+<component name="User Parameters" index="&sect-num;.7.5" screenshot="user_params.png">
 <description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
@@ -2553,7 +2566,7 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 </properties>
 </component>
 
-<component index="&sect-num;.7.6" name="Counter" screenshot="counter.png">
+<component name="Counter" index="&sect-num;.7.6" screenshot="counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
@@ -2575,7 +2588,7 @@ with the start, continuing on like that until the test is ended.  </p>
 </properties>
 </component>
 
-<component index="&sect-num;.7.7" name="BeanShell PreProcessor" screenshot="beanshell_preprocessor.png">
+<component name="BeanShell PreProcessor" index="&sect-num;.7.7" screenshot="beanshell_preprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
@@ -2609,7 +2622,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 		is applied only to a particular sampler, add it as a child of the sampler.
 	<br></br>
 	</description>
-<component index="&sect-num;.8.1" name="Regular Expression Extractor" screenshot="regex_extractor.png">
+<component name="Regular Expression Extractor" index="&sect-num;.8.1" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
@@ -2664,7 +2677,7 @@ generate the template string, and store the result into the given variable name.
 </p>
 </component>
 
-<component index="&sect-num;.8.2" name="XPath Extractor" screenshot="xpath_extractor.png">
+<component name="XPath Extractor" index="&sect-num;.8.2" screenshot="xpath_extractor.png">
 	<description>This test element allows the user to extract value from 
 		structured response - XML or (X)HTML - using XPath
 		query language.
@@ -2702,7 +2715,7 @@ generate the template string, and store the result into the given variable name.
  
 </component>
 
-<component index="&sect-num;.8.3" name="Result Status Action Handler" screenshot="resultstatusactionhandler.png">
+<component name="Result Status Action Handler" index="&sect-num;.8.3" screenshot="resultstatusactionhandler.png">
    <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </description>
    <properties>
@@ -2710,7 +2723,7 @@ generate the template string, and store the result into the given variable name.
    </properties>
 </component>
 
-<component index="&sect-num;.8.4" name="Save Responses to a file" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.8.4" screenshot="savetofile.png">
 	<description>This test element can be placed anywhere in the test plan.
 		For each sample in its scope, it will create a file of the response Data.
 		The primary use for this is in creating functional tests.
@@ -2723,7 +2736,7 @@ generate the template string, and store the result into the given variable name.
  </properties>
 </component>
 
-<component index="&sect-num;.8.5" name="Generate Summary Results" screenshot="summary.png">
+<component name="Generate Summary Results" index="&sect-num;.8.5" screenshot="summary.png">
 	<description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
@@ -2738,7 +2751,7 @@ This is mainly intended for batch (non-GUI) runs.
  </properties>
 </component>
 
-<component index="&sect-num;.8.6" name="BeanShell PostProcessor"  screenshot="beanshell_postprocessor.png">
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.6" screenshot="beanshell_postprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
@@ -2768,13 +2781,13 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 <description>
 		<br></br>
 </description>
-<component index="&sect-num;.9.1" name="Test Plan" screenshot="testplan.png">
+<component name="Test Plan" index="&sect-num;.9.1" screenshot="testplan.png">
 <description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
 <p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
 <p>In jmeter.properties, edit "user.classpath" to include additional libraries. Note that paths with spaces may cause problems for Java.</p></description>
 </component>
 
-<component index="&sect-num;.9.2" name="Thread Group" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2" screenshot="threadgroup.png">
 <description><p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p></description>
 
 <properties>
@@ -2799,11 +2812,11 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 </properties>
 </component>
 
-<component index="&sect-num;.9.3" name="WorkBench" screenshot="workbench.png">
+<component name="WorkBench" index="&sect-num;.9.3" screenshot="workbench.png">
 <description><p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire.  When you save your test plan, WorkBench items are not saved with it.  Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p></description>
 </component>
 
-<component index="&sect-num;.9.4" name="SSL Manager" screenshot="">
+<component name="SSL Manager" index="&sect-num;.9.4" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
   applications that use Public Key Infrastructure (PKI).  In order to use it,
@@ -2866,27 +2879,27 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 		<br></br>
 </description>
 
-<component index="&sect-num;.10.1" name="Report Plan" screenshot="">
+<component name="Report Plan" index="&sect-num;.10.1" screenshot="">
 <description><p></p></description>
 </component>
 
-<component index="&sect-num;.10.2" name="Report Table" screenshot="">
+<component name="Report Table" index="&sect-num;.10.2" screenshot="">
 <description><p></p></description>
 </component>
 
-<component index="&sect-num;.10.3" name="HTML Report Writer" screenshot="">
+<component name="HTML Report Writer" index="&sect-num;.10.3" screenshot="">
 <description><p></p></description>
 </component>
 
-<component index="&sect-num;.10.4" name="Report Page" screenshot="">
+<component name="Report Page" index="&sect-num;.10.4" screenshot="">
 <description><p></p></description>
 </component>
 
-<component index="&sect-num;.10.5" name="Line Graph" screenshot="">
+<component name="Line Graph" index="&sect-num;.10.5" screenshot="">
 <description><p></p></description>
 </component>
 
-<component index="&sect-num;.10.6" name="Bar Chart" screenshot="">
+<component name="Bar Chart" index="&sect-num;.10.6" screenshot="">
 <description><p></p></description>
 </component>
 
