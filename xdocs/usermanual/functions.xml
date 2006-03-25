@@ -84,6 +84,8 @@ functions allow one to replace only part of any given value, not just filling in
 With built-in functions users can compute new values at run-time based on previous response data, which
 thread the function is in, the time, and many other sources.  These values are generated fresh for every
 request throughout the course of the test. </p>
+<note>Functions are shared between threads. 
+Each occurrence of a function call in a test plan is handled by a separate function instance.</note>
 </subsection>
 
 <subsection name="&sect-num;.2 Where can functions be used?" anchor="where">
@@ -182,17 +184,24 @@ replacement string") parsed by this function</li>
 <component index="&sect-num;.5.2" name="__counter">
 <description><p>The counter generates a new number each time it is called, starting with 1
 and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
-separate, or to use the same counter for all user.  If each user's values is incremented separately,
+separate, or to use the same counter for all users.  If each user's values is incremented separately,
 that is like counting the number of iterations through the test plan.  A global counter is like
-counting how many times that request was run.</p></description>
-
+counting how many times that request was run.
+</p>
+<p>The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.</p>
+<p>The counter function instances are now completely independent. 
+[JMeter 2.1.1 and earlier used a fixed thread variable to keep track of the per-user count, 
+so multiple counter functions operated on the same value.] 
+The global counter - "FALSE" - is separately maintained by each counter instance.
+</p>
+</description>
 <properties>
         <property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
         to be kept independent and separate from the other users.  FALSE for a global counter.</property>
 
-<property name="Second argument" required="Yes">A reference name for reusing the value created by this function.<br></br>
+<property name="Second argument" required="No">A reference name for reusing the value created by this function.<br></br>
                 Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
-                multiple places.</property>
+                multiple places. [For JMeter 2.1.1 and earlier this parameter was required.]</property>
 </properties>
 </component>
 
