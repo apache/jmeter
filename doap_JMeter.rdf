@@ -26,7 +26,7 @@
     </release>
     <repository>
       <SVNRepository>
-        <location rdf:resource="http://svn.apache.org/repos/asf/jakarta/jmeter/trunk/"/>
+        <location rdf:resource="http://svn.apache.org/repos/asf/jakarta/jmeter/"/>
         <browse rdf:resource="http://svn.apache.org/viewcvs.cgi/jakarta/jmeter/"/>
       </SVNRepository>
     </repository>
