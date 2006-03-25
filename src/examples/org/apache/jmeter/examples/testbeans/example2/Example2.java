@@ -1,6 +1,5 @@
-//$Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,17 +29,30 @@ import org.apache.jmeter.testbeans.TestBean;
  * do nothing -- nothing useful, in any case.
  */
 public class Example2 extends AbstractSampler implements TestBean {
+    
 	public SampleResult sample(Entry e) {
-		return new SampleResult();
+        SampleResult res = new SampleResult();
+        res.setSampleLabel(getName());
+        res.setSamplerData(myStringProperty);
+        res.sampleStart();
+        // Do something ...
+        res.setResponseData(myStringProperty.toLowerCase().getBytes());
+        res.setDataType(SampleResult.TEXT);
+        res.sampleEnd();
+        res.setSuccessful(true);
+        return res;
 	}
 
+    private String myStringProperty;
+    
 	// A TestBean is a Java Bean. Just define some properties and they will
-	// autmagically show up in the GUI.
+	// automagically show up in the GUI.
 	// A String property:
 	public void setMyStringProperty(String s) {
+        myStringProperty=s;
 	};
 
 	public String getMyStringProperty() {
-		return "";
+		return myStringProperty;
 	}
 }
