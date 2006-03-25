@@ -276,6 +276,9 @@
 			 <a name="$component.getAttributeValue("name").replace($space,$udsc)"><h3>$!component.getAttributeValue("index") $component.getAttributeValue("name")</h3></a>
 		  </font>
 		</td></tr>
+		#if($component.getAttribute("useinstead"))
+			<tr><td><em>* - This element is deprecated.  Use <a href="$relativePath/usermanual/component_reference.html#$component.getAttributeValue("useinstead").replace($space,$udsc)">$component.getAttributeValue("useinstead")</a> instead</td></tr>
+		#end
 		<tr><td>
 		  #foreach ( $items in $component.getChildren() )
 				#if ($items.getName().equals("description"))
@@ -376,6 +379,8 @@
 
 #macro (makeIndex $subsections)
 #set ($level2 = $root.getAttributeValue("index-level-2"))
+<!-- Show we display numbers for index level 2 ? (useful for checking numbering) -->
+#set ($index2 = $root.getAttributeValue("index-numbers"))
 #set ($colbreak = $root.getAttributeValue("colbreak"))
 #if  ("$!colbreak" != "")
 <table width="100%">
@@ -390,7 +395,11 @@
 		#if ("$!level2" != "no")
 		<ul>
 		#foreach ($comp in $sect.getChildren("component"))
-			<li><a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")</a></li>
+			<li>
+			#if ("$!index2" == "yes")
+			$comp.getAttributeValue("index")
+			#end
+			<a href="#$comp.getAttributeValue("name").replace($space,$udsc)">$comp.getAttributeValue("name")</a></li>
 		#end
 		</ul>
 		#end
