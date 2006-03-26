@@ -172,7 +172,6 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
-        <complink name="JDBC SQL Query Defaults"/>
 </links>
 
 </component>
@@ -1635,7 +1634,34 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 	i.e. before any samplers in the same scope.
 	<br></br>
 </description>
-<component name="HTTP Authorization Manager" index="&sect-num;.4.1" screenshot="http-config/http-auth-manager.gif">
+
+<component name="CSV Data Set Config" index="&sect-num;.4.1" screenshot="csvdatasetconfig.png">
+<description>
+        <p>
+	CSV DataSet Config is used to read lines from a file, and split them into variables.
+	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	</p>
+	<p>
+	As a special case, the string "\t" (without quotes) is treated as a Tab.
+	</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Filename" required="Yes">Name of the file to be read. 
+  Relative file names are resolved with respect to the current test plan.
+  Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
+  unless the remote server has the same directory structure.
+  </property>
+  <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
+  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.</property>
+</properties>
+</component>
+
+<component name="FTP Request Defaults" index="&sect-num;.4.2" screenshot="ftp-config/ftp-request-defaults.gif">
+<description></description>
+</component>
+
+<component name="HTTP Authorization Manager" index="&sect-num;.4.3" screenshot="http-config/http-auth-manager.gif">
 <note>If there is more than one Authorization Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
@@ -1701,7 +1727,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component name="HTTP Cookie Manager" index="&sect-num;.4.2" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.4" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.</note>
@@ -1735,7 +1761,7 @@ cookie table entries.</property>
 
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.4.3" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.4.5" screenshot="proxy_control.png">
 <note>The Proxy Server can only record HTTP traffic. 
 There is currently no support for recording HTTPS (SSL) sessions.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
@@ -1851,7 +1877,7 @@ You can also add a <complink name="Save Responses to a file"/> Post-Processor wh
 
 </component>
 
-<component name="HTTP Request Defaults" index="&sect-num;.4.4" 
+<component name="HTTP Request Defaults" index="&sect-num;.4.6" 
         screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
@@ -1879,47 +1905,7 @@ resource requires query string parameters, add them below in the
 </properties>
 </component>
 
-<component name="FTP Request Defaults" index="&sect-num;.4.5" 
-                screenshot="ftp-config/ftp-request-defaults.gif">
-<description></description>
-</component>
-
-<component name="JDBC Connection Configuration" index="&sect-num;.4.6" 
-                screenshot="jdbc-config/jdbc-conn-config.png">
-	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
-	 with JDBC Connection settings.
-	</description>
-	<properties>
-		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
-		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
-		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
-		to select the pool to draw connections from.</property>
-		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool</property>
-		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
-		process of trying to retrieve a connection</property>
-		<property name="Idle Cleanup Interval (ms)" required="Yes">Uncertain what exactly this does.</property>
-		<property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
-		<property name="Keep-alive" required="Yes">Uncertain what exactly this does.</property>
-		<property name="Max Connection Age (ms)" required="Yes">Uncertain what exactly this does.</property>
-		<property name="Validation Query" required="Yes">A simple query used to determine if the database is still
-		responding.</property>
-		<property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
-		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
-		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
-		<property name="Username" required="Yes">Name of user to connect as.</property>
-		<property name="Password" required="Yes">Password to connect with.</property>
-	</properties>
-</component>
-
-<component name="JDBC SQL Query Defaults" index="&sect-num;.4.7" 
-	screenshot="jdbc-config/jdbc-sql-query.png">
-<description>Defines a default query for the <complink name="JDBC Request"/>Sampler.
-	<br></br>
-	 Connection settings are defined by the <complink name="JDBC Connection Configuration"/>element.
-	</description>
-</component>
-
-<component name="HTTP Header Manager" index="&sect-num;.4.8" screenshot="http-config/http-header-manager.gif">
+<component name="HTTP Header Manager" index="&sect-num;.4.7" screenshot="http-config/http-header-manager.gif">
 <note>If there is more than one Header Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
@@ -1951,7 +1937,55 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component name="Login Config Element" index="&sect-num;.4.9" screenshot="login-config.png">
+<component name="Java Request Defaults" index="&sect-num;.4.8" screenshot="java_defaults.png">
+<description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request" />.</p>
+</description>
+
+</component>
+
+<component name="JDBC Connection Configuration" index="&sect-num;.4.9" 
+                screenshot="jdbc-config/jdbc-conn-config.png">
+	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
+	 with JDBC Connection settings.
+	</description>
+	<properties>
+		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
+		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
+		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
+		to select the pool to draw connections from.</property>
+		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool</property>
+		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
+		process of trying to retrieve a connection</property>
+		<property name="Idle Cleanup Interval (ms)" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
+		<property name="Keep-alive" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Max Connection Age (ms)" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Validation Query" required="Yes">A simple query used to determine if the database is still
+		responding.</property>
+		<property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
+		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
+		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
+		<property name="Username" required="Yes">Name of user to connect as.</property>
+		<property name="Password" required="Yes">Password to connect with.</property>
+	</properties>
+</component>
+
+<component name="JNDI Default Configuration" index="&sect-num;.4.10" screenshot="jndi_config.png">
+<description>
+	<p>
+		TBA.
+	</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Initial Context Factory" required="No">TBA</property>
+  <property name="Provider URL" required="No">TBA</property>
+</properties>
+</component>
+
+
+
+<component name="Login Config Element" index="&sect-num;.4.11" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -1963,53 +1997,21 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component name="Simple Config Element" index="&sect-num;.4.10" screenshot="simple_config_element.png">
-<description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
-and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
-GUI that they can use while developing new JMeter components.</p>
-</description>
 
-<properties>
-        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-  <property name="Parameter Name" required="Yes">The name of each parameter.  These values are internal to JMeter's workings and
-  are not generally documented.  Only those familiar with the code will know these values.</property>
-  <property name="Parameter Value" required="Yes">The value to apply to that parameter.</property>
-</properties>
 
-</component>
-
-<component name="LDAP Request Defaults" index="&sect-num;.4.11" screenshot="ldap_defaults.png">
+<component name="LDAP Request Defaults" index="&sect-num;.4.12" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component name="LDAP Extended Request Defaults (ALPHA)" index="&sect-num;.4.12" screenshot="ldapext_defaults.png">
+<component name="LDAP Extended Request Defaults (ALPHA)" index="&sect-num;.4.13" screenshot="ldapext_defaults.png">
 <description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request (ALPHA)"/>.</p>
 </description>
 
 </component>
 
-
-<component name="Java Request Defaults" index="&sect-num;.4.13" screenshot="java_defaults.png">
-<description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request"/>.</p>
-</description>
-
-</component>
-
-<component name="User Defined Variables" index="&sect-num;.4.14" screenshot="user_defined_variables.png">
-<description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan"/>.
-The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
-  	column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
-  	whole ${...} will then be replaced by the string in the "Value" column.</property>
-</properties>
-</component>
-
-<component name="TCP Sampler Config" index="&sect-num;.4.15" screenshot="tcpsamplerconfig.png">
+<component name="TCP Sampler Config" index="&sect-num;.4.14" screenshot="tcpsamplerconfig.png">
 	<note>ALPHA CODE</note>
 <description>
         <p>
@@ -2026,39 +2028,31 @@ The variables in User Defined Variables components will take precedence over tho
 </properties>
 </component>
 
-<component name="CSV Data Set Config" index="&sect-num;.4.16" screenshot="csvdatasetconfig.png">
-<description>
-        <p>
-	CSV DataSet Config is used to read lines from a file, and split them into variables.
-	It is easier to use than the __CSVRead() and _StringFromFile() functions.
-	</p>
-	<p>
-	As a special case, the string "\t" (without quotes) is treated as a Tab.
-	</p>
+<component name="User Defined Variables" index="&sect-num;.4.15" screenshot="user_defined_variables.png">
+<description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan" />.
+The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Filename" required="Yes">Name of the file to be read. 
-  Relative file names are resolved with respect to the current test plan.
-  Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
-  unless the remote server has the same directory structure.
-  </property>
-  <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
-  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.</property>
+  <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
+  	column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
+  	whole ${...} will then be replaced by the string in the "Value" column.</property>
 </properties>
 </component>
 
-<component name="JNDI Default Configuration" index="&sect-num;.4.17" screenshot="jndi_config.png">
-<description>
-	<p>
-		TBA.
-	</p>
+<component name="Simple Config Element" index="&sect-num;.4.16" screenshot="simple_config_element.png">
+<description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
+and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
+GUI that they can use while developing new JMeter components.</p>
 </description>
+
 <properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Initial Context Factory" required="No">TBA</property>
-  <property name="Provider URL" required="No">TBA</property>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Parameter Name" required="Yes">The name of each parameter.  These values are internal to JMeter's workings and
+  are not generally documented.  Only those familiar with the code will know these values.</property>
+  <property name="Parameter Value" required="Yes">The value to apply to that parameter.</property>
 </properties>
+
 </component>
 
 
