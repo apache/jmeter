@@ -117,6 +117,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Expanded user documentation</li>
 <li>Added MANIFEST, NOTICE and LICENSE to all jars</li>
 <li>Extract htmlparser interface into separate jarfile to make it possible to replace the parser</li>
+<li>Removed SQL Config GUI as no longer needed (or working!)</li>
 </ul>
 
 <hr/>
