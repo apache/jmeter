@@ -68,6 +68,7 @@ Users must explicitly check append in the sampler</li>
 <li>Bug 38901 - Add optional SOAPAction header to SOAP Sampler</li>
 <li>New BeanShell test elements: Timer, PreProcessor, PostProcessor, Listener</li>
 <li>__split() function now clears next variable, so it can be used with ForEach Controller</li>
+<li>Bug 38682 - add CallableStatement functionality to JDBC Sampler</li>
 </ul>
 
 <h4>Bug fixes:</h4>
