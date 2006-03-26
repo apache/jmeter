@@ -50,7 +50,7 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport {
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, JDBCSampler.SELECT);
 		p.setValue(NOT_OTHER,Boolean.TRUE);
-		p.setValue(TAGS,new String[]{JDBCSampler.SELECT,"Update Statement"});
+		p.setValue(TAGS,new String[]{JDBCSampler.SELECT,JDBCSampler.UPDATE,JDBCSampler.CALLABLE});
 
 		p = property("query");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
