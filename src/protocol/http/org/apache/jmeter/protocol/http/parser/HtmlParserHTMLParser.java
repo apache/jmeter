@@ -61,15 +61,9 @@ class HtmlParserHTMLParser extends HTMLParser {
     /** Used to store the Logger (used for debug and error messages). */
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String ATT_HREF = "href"; // $NON-NLS-1$
-    private static final String STYLESHEET = "stylesheet"; // $NON-NLS-1$
-    private static final String ATT_REL = "rel"; // $NON-NLS-1$
-    private static final String ATT_SRC = "src"; // $NON-NLS-1$
-    private static final String ATT_IS_IMAGE = "image"; // $NON-NLS-1$
-    private static final String ATT_TYPE = "type"; // $NON-NLS-1$
-
     protected HtmlParserHTMLParser() {
 		super();
+        log.info("Using htmlparser implementation provided with JMeter");
 	}
 
 	protected boolean isReusable() {
@@ -83,7 +77,10 @@ class HtmlParserHTMLParser extends HTMLParser {
 	 *      java.net.URL)
 	 */
 	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) throws HTMLParseException {
-		Parser htmlParser = null;
+        
+        if (log.isDebugEnabled()) log.debug("Parsing html of: " + baseUrl);
+        
+        Parser htmlParser = null;
 		try {
 			String contents = new String(html);
 			StringReader reader = new StringReader(contents);
@@ -113,7 +110,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 				// to the child elements inside the body
 				if (node instanceof BodyTag) {
 					BodyTag body = (BodyTag) node;
-					binUrlStr = body.getAttribute("background");
+					binUrlStr = body.getAttribute(ATT_BACKGROUND);
 					// if the body tag exists, we get the elements
 					// within the body tag. if we don't we won't
 					// see the body of the page. The only catch
@@ -175,7 +172,7 @@ class HtmlParserHTMLParser extends HTMLParser {
                 } else if (node instanceof Tag) {
                     Tag tag = (Tag) node;
                     String tagname=tag.getTagName();
-                    if (tagname.equalsIgnoreCase("EMBED")){
+                    if (tagname.equalsIgnoreCase(TAG_EMBED)){
                         binUrlStr = tag.getAttribute(ATT_SRC);  
                     }
                 }

@@ -36,6 +36,22 @@ public abstract class HTMLParser {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    protected static final String ATT_BACKGROUND    = "background";// $NON-NLS-1$
+    protected static final String ATT_HREF          = "href";// $NON-NLS-1$
+    protected static final String ATT_REL           = "rel";// $NON-NLS-1$
+    protected static final String ATT_SRC           = "src";// $NON-NLS-1$
+    protected static final String ATT_TYPE          = "type";// $NON-NLS-1$
+    protected static final String ATT_IS_IMAGE      = "image";// $NON-NLS-1$
+    protected static final String TAG_APPLET        = "applet";// $NON-NLS-1$
+    protected static final String TAG_BASE          = "base";// $NON-NLS-1$
+    protected static final String TAG_BGSOUND       = "bgsound";// $NON-NLS-1$
+    protected static final String TAG_EMBED         = "embed";// $NON-NLS-1$
+    protected static final String TAG_FRAME         = "frame";// $NON-NLS-1$
+    protected static final String TAG_INPUT         = "input";// $NON-NLS-1$
+    protected static final String TAG_LINK          = "link";// $NON-NLS-1$
+    protected static final String TAG_SCRIPT        = "script";// $NON-NLS-1$
+    protected static final String STYLESHEET        = "stylesheet";// $NON-NLS-1$
+
 	// Cache of parsers - parsers must be re-usable
 	private static Hashtable parsers = new Hashtable(3);
 
@@ -143,6 +159,7 @@ public abstract class HTMLParser {
 
 	// See whether we can use LinkedHashSet or not:
 	private static final boolean hasLinkedHashSet;
+
 	static {
 		boolean b;
 		try {
