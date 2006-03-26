@@ -859,9 +859,10 @@ some of its classes - at present JMeter can only run from jar files.
     	</manifest>
     </jar>
 
-    <!-- http -->
+    <!-- http without HtmlParserHTMLParser -->
     <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="${src.dir}/MANIFEST">
-      <fileset dir="${build.http}" includes="**/*.class" />
+      <fileset dir="${build.http}" includes="**/*.class" 
+      	excludes="**/HtmlParserHTMLParser.class"/>
       <fileset dir="${src.http}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
@@ -872,6 +873,18 @@ some of its classes - at present JMeter can only run from jar files.
     	</manifest>
     </jar>
     
+    <!-- HtmlParserHTMLParser -->
+    <jar jarfile="${lib.dir}/htmlparserparser.jar" manifest="${src.dir}/MANIFEST">
+      <fileset dir="${build.http}" includes="**/HtmlParserHTMLParser.class"/>
+        <metainf dir="." includes="LICENSE,NOTICE"/>
+    	<manifest>
+           <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
+           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
+    	</manifest>
+    </jar>
+  	    
     <!-- ftp -->
     <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="${src.dir}/MANIFEST">
       <fileset dir="${build.ftp}" includes="**/*.class" />
@@ -1087,6 +1100,7 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${extras.dir}/**"/>
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/htmlparser.jar"/>
+    <include name="${lib.dir}/htmlparserparser.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
   </patternset>
 
