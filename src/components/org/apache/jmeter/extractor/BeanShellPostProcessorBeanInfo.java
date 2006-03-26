@@ -20,6 +20,7 @@ package org.apache.jmeter.extractor;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 public class BeanShellPostProcessorBeanInfo extends BeanInfoSupport {
 
@@ -34,6 +35,8 @@ public class BeanShellPostProcessorBeanInfo extends BeanInfoSupport {
 		PropertyDescriptor p = property("script");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");
+        p.setPropertyEditorClass(TextAreaEditor.class);
+        
 	}
 
 }
