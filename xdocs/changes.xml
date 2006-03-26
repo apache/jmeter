@@ -115,6 +115,8 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Updated to Commons Collections 3.1</li>
 <li>Improved formatting of Request Data in Tree View</li>
 <li>Expanded user documentation</li>
+<li>Added MANIFEST, NOTICE and LICENSE to all jars</li>
+<li>Extract htmlparser interface into separate jarfile to make it possible to replace the parser</li>
 </ul>
 
 <hr/>
