@@ -42,9 +42,7 @@ import org.apache.log.Logger;
 public class JDBCSampler extends AbstractSampler implements TestBean {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    static final String QUERY = "query";
-    
-    // Query types
+    // Query types (used to communicate with GUI)
 	static final String SELECT   = "Select Statement";
 	static final String UPDATE   = "Update Statement";
 	static final String CALLABLE = "Callable Statement";
