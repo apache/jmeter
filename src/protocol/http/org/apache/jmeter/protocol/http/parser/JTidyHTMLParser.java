@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 /**
  * HtmlParser implementation using JTidy.
  * 
- * @version $Revision$ updated on $Date$
  */
 class JTidyHTMLParser extends HTMLParser {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -109,7 +108,7 @@ class JTidyHTMLParser extends HTMLParser {
 				break;
 			}
 
-			if (name.equalsIgnoreCase(ATT_IS_IMAGE) || name.equalsIgnoreCase(TAG_EMBED)) {
+			if (name.equalsIgnoreCase(TAG_IMAGE) || name.equalsIgnoreCase(TAG_EMBED)) {
 				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
 				break;
 			}
