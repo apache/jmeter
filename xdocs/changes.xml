@@ -67,6 +67,7 @@ Users must explicitly check append in the sampler</li>
 <li>New BeanShell test elements: Timer, PreProcessor, PostProcessor, Listener</li>
 <li>__split() function now clears next variable, so it can be used with ForEach Controller</li>
 <li>Bug 38682 - add CallableStatement functionality to JDBC Sampler</li>
+<li>Make it easier to change the RMI/Server port</li>
 </ul>
 
 <h4>Bug fixes:</h4>
