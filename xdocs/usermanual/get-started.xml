@@ -101,7 +101,8 @@ implementation.</p>
 </subsection>
 
 <subsection name="2.2.3 Email Support" anchor="opt_email">
-<p>JMeter has limited Email capabilities (it can send email based on test results).
+<p>JMeter has limited Email capabilities. It can send email based on test results, and has a POP/IMAP sampler.
+It does not currently support SMTP sampling.
 To enable Email support, add Sun's JavaMail packages and the activation packages to JMeter's <a href="#classpath">classpath</a>.</p>
 </subsection>
 
@@ -112,10 +113,13 @@ Include the necessary encryption packages in JMeter's <a href="#classpath">class
 by registering the SSL Provider.</p>
 <p>There is also the <complink name="SSL Manager"/>, for greater control of certificates.</p>
 <p>Note: if you are running JDK1.4, then you do not have to download JSSE because Sun integrated it into JDK1.4 as a standard library.</p>
+<p>The JMeter proxy server (see below) does not support recording SSL (https).</p>
 </subsection>
 
 <subsection name="2.2.5 JDBC Driver" anchor="opt_jdbc">
-<p>You will need to add your database vendor's JDBC driver to the <a href="#classpath">classpath</a> if you want to do JDBC testing.</p>
+<p>You will need to add your database vendor's JDBC driver to the <a href="#classpath">classpath</a> if you want to do JDBC testing.
+Make sure the file is a jar file, not a zip.
+</p>
 </subsection>
 
 <subsection name="2.2.6 Apache SOAP" anchor="opt_soap">
@@ -136,14 +140,14 @@ This causes problems for remote testing.</b></p>
 <subsection name="2.3.1 Downloading the Latest Release" anchor="download_release">
 <p>We recommend that most users run the <a href="http://jakarta.apache.org/site/downloads/index.html">latest release</a>.</p>
 <p>To install a release build, simply unzip the zip/tar file into the directory
-where you want JMeter to be installed.  Provided that you have a JDK correctly installed
+where you want JMeter to be installed.  Provided that you have a JRE/JDK correctly installed
 and the JAVA_HOME environment variable set, there is nothing more for you to do.</p>
 </subsection>
 
 <subsection name="2.3.2 Downloading Nightly Builds" anchor="download_nightly">
 <p>If you do not mind working with beta-quality software, then you can download and run the <a href="http://jakarta.apache.org/builds/jakarta-jmeter/nightly">latest nightly build</a>.</p>
 <p>To install a nightly build, unzip the _bin and _lib zip/tar files into the same directory structure.
-Provided that you have a JDK correctly installed
+Provided that you have a JRE/JDK correctly installed
 and the JAVA_HOME environment variable set, JMeter should be installed successfully.</p>
 </subsection>
 </section>
@@ -157,10 +161,11 @@ The jmeter.bat file attempts to change to the appropriate directory if it can.
 
 <subsection name="2.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in its /lib and /lib/ext directories.  
-If you want to add other JAR files to JMeter's classpath, then
-you must copy them to JMeter's "lib" directory.  If you have developed new JMeter specific components,
+If you have developed new JMeter components,
 then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
-automatically find JMeter components in any jars found here.</p>
+automatically find JMeter components in any jars found here. 
+Other jars (such as JDBC, and any support libaries needed by the JMeter code)
+ should be placed in the lib directory.</p>
 <p>Note: JMeter will only find .jar files, not .zip.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property user.classpath in jmeter.properties</p>
 <p>Note that setting the CLASSPATH environment variable will have no effect.
@@ -179,6 +184,9 @@ from a command line with the following parameters:</p>
 -a [password for proxy authentication - if required]</p>
 <p><b>Example</b>: jmeter -H my.proxy.server -P 8000 -u username -a password</p>
 <p>Alternatively, you can use --proxyHost, --proxyPort, --username, and --password</p>
+<note>JMeter also has its own in-built <complink name="Proxy Server">Proxy Server</complink>,
+which can be used for recording HTTP (but not HTTPS) browser sessions.
+This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.</note>
 </subsection>
 
 <subsection name="2.4.3 Non-GUI Mode (Command Line mode)" anchor="non_gui">

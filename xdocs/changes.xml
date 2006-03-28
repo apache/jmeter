@@ -43,8 +43,6 @@ To revert to the previous behaviour, change the property <b>sampleresult.timesta
 <li>Does not always handle non-default encoding properly</li>
 <li>Spaces in the installation path cause problems for client-server mode</li>
 <li>Change of Language does not propagate to all test elements</li>
-<li></li>
-<li></li>
 </ul>
 
 <h4>New functionality:</h4>

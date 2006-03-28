@@ -24,13 +24,28 @@
 <body>
 
 <section name="14. Introduction to listeners" anchor="intro">
-<p>For those new to JMeter, a listener is a component that shows the results of the
+<p>A listener is a component that shows the results of the
 samples. The results can be shown in a tree, tables, graphs or simply written to a log
-file. To view the contents of a response from any given sampler, add either view
-results tree or in table to a test plan. To view the response time graphically, add
-graph results, spline results or distribution graph. For detailed explanation, of
-each listener, please go to the components page.</p>
+file. To view the contents of a response from any given sampler, add either of the Listeners "View
+Results Tree" or "View Results in table" to a test plan. To view the response time graphically, add
+graph results, spline results or distribution graph. 
+The <complink name="listeners">Listeners</complink> 
+section of the components page has full descriptions of all the listeners.</p>
 
+<note>
+Different listeners display the response information in different ways. 
+However, they all write the same raw data to the output file - if one is specified.
+</note>
+<p>
+The "Configure" button can be used to specify which fields to write to the file, and whether to 
+write it as CSV or XML. 
+CSV files are much smaller than XML files, so use CSV if you are generating lots of samples.
+</p>
+<p>
+If you only wish to record certain samples, add the Listener as a child of the sampler.
+Or you can use a Simple Controller to group a set of samplers, and add the Listener to that.
+The same filename can be used by multiple samplers - but make sure they all use the same configuration!
+</p>
 </section>
 
 <section name="14.1 Screen captures" anchor="screencap">
@@ -40,6 +55,38 @@ appear. Enter the desired name and save the listener.
 </p>
 <figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
 
+</section>
+<section name="14.2 non-GUI (batch) test runs" anchor="batch">
+<p>
+When running in non-GUI mode, the -l flag can be used to create a top-level listener for the test run.
+This is in addition to any Listeners defined in the test plan.
+The configuration of this listener is controlled by entries in the file jmeter.properties.
+</p>
+<p>
+This feature can be used to specify a different data log file for each test run, for example:
+<code>
+jmeter -n -t testplan.jmx -l testplan_01.jtl
+jmeter -n -t testplan.jmx -l testplan_02.jtl
+</code>
+</p>
+<p>
+However, note that jmeter logging messages are always written to jmeter.log by default.
+This file is recreated each time, so if you want to keep the log files for each run, 
+you will need to rename it after the run has finished.
+Or you can use the environment variable JVM_ARGS to pass in the option -Dlog_file=filename.
+This will define the Java system property, 
+which will be used as the default JMeter property if not overridden in jmeter.properties
+If you are using an OS such as VMS just use a logical name for the log file in jmeter.properties
+and define the logical before starting JMeter.
+</p>
+</section>
+
+<section name="14.3 Resource usage" anchor="resources">
+<p>
+Listeners can be quite resource intensive so use as few as possible. 
+For minimum resource usage, remove all listeners, and run the test in non-GUI mode with the -l flag to define a single listener.
+The result log file can be read back into a Listener after a test has completed.
+</p>
 </section>
 
 </body>
