@@ -15,6 +15,14 @@ rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
 
+rem   =====================================================
+rem   Environment variables that can be defined externally:
+rem
+rem   JM_LAUNCH - java.exe (default) or javaw.exe
+rem   JVM_ARGS - additional java options, e.g. -Dprop=val
+rem
+rem   =====================================================
+
 if .%JM_LAUNCH% == . set JM_LAUNCH=java.exe
 
 if not "%OS%"=="Windows_NT" goto win9xStart
