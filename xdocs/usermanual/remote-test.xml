@@ -34,8 +34,6 @@ all the data from them.  This offers the following features:
 
 
 <ul>
-<li>True performance measurment without network bottlenecks </li>
-<li>Fast responsive GUI </li>
 <li>Saving of test samples to a local machine </li>
 <li>Managment of multiple JMeterEngines from a single machine </li>
 </ul>
@@ -108,6 +106,33 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
     <li> `dirname $0`/jmeter $HOST -s "$@"</li>
 </ul>
 <p>Also create a policy file and add [computer_name][computer_domain] line to /etc/hosts.</p>
+</subsection>
+<subsection name="15.3 Using a different port" anchor="portchange">
+<p>By default, JMeter uses the standard RMI port 1099. It is possible to change this. For this to work successfully, all the following need to agree:</p>
+<ul>
+<li>On the server, start rmiregistry using the new port number</li>
+<li>On the server, start JMeter with the property server_port defined</li>
+<li>On the client, update the remote_hosts property to include the new remote host:port settings</li>
+</ul>
+
+<p>Since Jmeter 2.1.1, the jmeter-server scripts provide support for changing the port.
+For example, assume you want to use port 1664 (perhaps 1099 is already used).</p>
+<pre>
+On Windows (in a DOS box)
+C:\JMETER> SET SERVER_PORT=1664
+C:\JMETER> JMETER-SERVER [other options]
+
+On Unix:
+$ SERVER_PORT=1664 jmeter-server [other options]
+[N.B. use upper case for the environment variable]
+</pre>
+<p>
+In both cases, the script starts rmiregistry on the specified port, 
+and then starts JMeter in server mode, having defined the "server_port" property.
+</p>
+<p>
+The chosen port will be logged in the server jmeter.log file (rmiregistry does not create a log file).
+</p>
 </subsection>
 
 
