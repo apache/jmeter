@@ -70,6 +70,13 @@ behavior under heavy concurrent load.
 <li><a href="api/index.html">Javadoc API documentation</a></li>
 <li><a href="localising/index.html">JMeter Localisation (Translator's Guide)</a></li>
 </ul>
+<h2>Tutorials (PDF)</h2>
+<ul>
+<li><a href="/usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li>
+<li><a href="/usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li>
+<li><a href="/usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li>
+<li><a href="/usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li>
+</ul>
 <h2>Further Information About JMeter</h2>
 <ul>
 <li><a href="changes.html">Change List</a></li>

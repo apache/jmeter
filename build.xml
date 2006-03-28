@@ -1501,6 +1501,9 @@ some of its classes - at present JMeter can only run from jar files.
     <copy todir="${dest.printable_docs}/demos">
       <fileset dir="${src.demos}"/>
     </copy>
+    <copy todir="${dest.printable_docs}/usermanual">
+        <fileset file="${src.docs}/usermanual/*.pdf"/>
+    </copy>
   </target>
 
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" 
