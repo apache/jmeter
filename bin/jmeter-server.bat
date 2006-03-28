@@ -1,7 +1,7 @@
 @echo off
 
 rem   $Id$
-rem   Copyright 2001-2004 The Apache Software Foundation
+rem   Copyright 2001-2004,2006 The Apache Software Foundation
 rem 
 rem   Licensed under the Apache License, Version 2.0 (the "License");
 rem   you may not use this file except in compliance with the License.
@@ -14,6 +14,15 @@ rem   distributed under the License is distributed on an "AS IS" BASIS,
 rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
+
+rem   ===============================================================
+rem   Enviroment variables
+rem   SERVER_PORT (optional) - define the rmiregistry and server port
+rem
+rem   JVM_ARGS - Java flags - these are handled by jmeter.bat
+rem
+rem   ===============================================================
+
 
 REM Protect environment against changes if possible:
 if "%OS%"=="Windows_NT" setlocal
@@ -41,7 +50,8 @@ goto exit
 :setCP
 echo Found ApacheJMeter_core.jar
 set CLASSPATH=%JMETER_HOME%\lib\ext\ApacheJMeter_core.jar;%JMETER_HOME%\lib\jorphan.jar;%JMETER_HOME%\lib\logkit-1.2.jar
-START rmiregistry
+
+START rmiregistry %SERVER_PORT%
 
 if not "%OS%"=="Windows_NT" goto win9xStart
 :winNTStart
@@ -73,6 +83,15 @@ goto setupArgs
 rem This label provides a place for the argument list loop to break out 
 rem and for NT handling to skip to.
 
+if not "%SERVER_PORT%" == "" goto port
+
 jmeter -s %JMETER_CMD_LINE_ARGS%
+goto end
+
+
+:port
+jmeter -Dserver_port=%SERVER_PORT% -s %JMETER_CMD_LINE_ARGS%
+
+:end
 
 :exit
