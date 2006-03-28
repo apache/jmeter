@@ -15,6 +15,13 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+##   ==============================================
+##   Environment variables:
+##   JVM_ARGS - optional java args, e.g. -Dprop=val
+##
+##   ==============================================
+
+
 # The following should be reasonably good values for most tests running
 # on Sun JVMs. Following is the analysis on which it is based. If it's total
 # gibberish to you, please study my article at
@@ -77,4 +84,4 @@ SERVER="-server"
 
 ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM $DEBUG"
 
-java -server -jar `dirname $0`/ApacheJMeter.jar "$@"
+java $JVM_ARGS $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
