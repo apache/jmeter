@@ -87,10 +87,8 @@ information, see
 
 <p>Logical Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  For example, you can add an Interleave
-Logic Controller to alternate between two HTTP Request Samplers.  Also,
-one particular Logic Controller, the Modification Manager, lets you modify
-the results of a request.  For more information,
-see <a href="#logic_controller">Logical Controllers</a>.</p>
+Logic Controller to alternate between two HTTP Request Samplers.
+For more information, see <a href="#logic_controller">Logical Controllers</a>.</p>
 
 </subsection>
 
@@ -214,9 +212,11 @@ Logic Controllers</a>.</p>
 
 <subsection name="4.3 Listeners" anchor="listeners">
 <p>Listeners provide access to the information JMeter gathers about the test cases while
-JMeter runs.  The simplest listener, the <complink name="Graph
-Results"/> listener plots the response times on a graph.  Listeners provide a
-graphical view of the data that JMeter generates.</p>
+JMeter runs.  The  <complink name="Graph
+Results"/> listener plots the response times on a graph.  
+The "View Results Tree" Listener shows details of sampler requests and responses, and can display basic HTML and XML representations of the response.
+Other listeners provide summary or aggregation information.
+</p>
 
 <p>Additionally, listeners can direct the data they collect to a file for later use.  Every 
 listener in JMeter provides a field to indicate the file to store data to.</p>
@@ -240,7 +240,7 @@ request that a thread makes.</p>
 
 <p>
 If you choose to add more than one timer to a Thread Group, JMeter takes the sum of
-the timers and pauses for that amount of time.</p>
+the timers and pauses for that amount of time before executing the samplers to which they apply.</p>
 </subsection>
 
 <subsection name="4.5 Assertions" anchor="assertions">
@@ -255,7 +255,7 @@ you can indicate that the response is to contain the text, or that it should mat
 the whole response.</p>
 
 <p>You can add an assertion to any Sampler. For example, you can
-add an assertion to a HTTP Request that checks for the text, "&lt;/HTML&gt;".  JMeter
+add an assertion to a HTTP Request that checks for the text, "&amp;lt;/HTML&amp;gt;".  JMeter
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
 
