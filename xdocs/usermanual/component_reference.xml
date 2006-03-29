@@ -255,6 +255,18 @@ XML.</p>
  <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
  cache is checked, it will not iterate to the next value. That means all the requests
  will use the first value.</p>
+ <p>Make sure you use &amp;lt;soap:Envelope rather than &amp;lt;Envelope. For example:</p>
+ <pre>
+&amp;lt;?xml version="1.0" encoding="utf-8"?>
+&amp;lt;soap:Envelope 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+&amp;lt;soap:Body>
+&amp;lt;foo xmlns="http://clients-xlmns"/>
+&amp;lt;/soap:Body>
+&amp;lt;/soap:Envelope>
+</pre>
 </description>
 
 <properties>
