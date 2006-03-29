@@ -18,6 +18,7 @@
 package org.apache.jmeter.save.converters;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
@@ -132,13 +133,17 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		if (save.saveResponseData(res)) {
 			writer.startNode(TAG_RESPONSE_DATA);
 			try {
-                String ct = res.getContentType();
-                if (ct.startsWith("text/")){// $NON-NLS-1$
+                if (SampleResult.TEXT.equals(res.getDataType())){
     				writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
     				writer.setValue(new String(res.getResponseData(), res.getDataEncoding()));
                 } else {
                     writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-                    writer.setValue(res.getURL().toExternalForm());//TODO - better representation                  
+                    URL url = res.getURL();
+                    if (url != null) {
+					    writer.setValue(url.toExternalForm());//TODO - better representation
+                    } else {
+                    	writer.setValue("Non-text data, but URL is null");
+                    }
                 }
 			} catch (UnsupportedEncodingException e) {
 				writer.setValue("Unsupported encoding in response data, can't record.");
