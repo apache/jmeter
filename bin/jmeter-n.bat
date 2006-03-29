@@ -48,6 +48,6 @@ pause
 goto :EOF
 :winNT3
 
-call jmeter -n -t %1 -l %~dpn1.jtl
-pause
+jmeter -n -t %1 -l %~dpn1.jtl
+
 :END
