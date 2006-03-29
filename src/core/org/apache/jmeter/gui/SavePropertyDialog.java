@@ -42,6 +42,11 @@ import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
 /**
+ * Generates Configure pop-up dialogue for Listeners from all methods in SampleSaveConfiguration
+ * with the signature "boolean saveXXX()". 
+ * There must be a corresponding "void setXXX(boolean)" method, and a property save_XXX which is
+ * used to name the field on the dialogue.
+ * 
  * @author mstover
  */
 public class SavePropertyDialog extends JDialog implements ActionListener {
@@ -52,7 +57,9 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1;
 
-    private static final String NAME_SAVE_PFX = "save"; // $NON-NLS-1$
+    private static final String NAME_SAVE_PFX   = "save";  // $NON-NLS-1$ i.e. boolean saveXXX()
+    private static final String NAME_SET_PREFIX = "set";   // $NON-NLS-1$ i.e. void setXXX(boolean)
+    private static final String RESOURCE_PREFIX = "save_"; // $NON-NLS-1$ e.g. save_XXX property
 
     private SampleSaveConfiguration saveConfig;
 
@@ -103,13 +110,14 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 					try {
 						name = name.substring(4);
 						JCheckBox check = new JCheckBox(
-                                JMeterUtils.getResString("save_" + name)// $NON-NLS-1$
+                                JMeterUtils.getResString(RESOURCE_PREFIX + name)// $NON-NLS-1$
                                 ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
 						checkPanel.add(check, BorderLayout.NORTH);
 						check.addActionListener(this);
-						check.setActionCommand("set" + name);// $NON-NLS-1$
-						if (!functors.containsKey(check.getActionCommand())) {
-							functors.put(check.getActionCommand(), new Functor(check.getActionCommand()));
+                        String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$
+						check.setActionCommand(actionCommand);
+                        if (!functors.containsKey(actionCommand)) {
+							functors.put(actionCommand, new Functor(actionCommand));
 						}
 					} catch (Exception e) {
 						log.warn("Problem creating save config dialog", e);
