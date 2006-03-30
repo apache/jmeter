@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-20056 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -28,6 +28,12 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
+ * Holds details of which sample attributes to save.
+ * 
+ * The pop-up dialogue for this is created by the class SavePropertyDialog, which assumes:
+ * - methods have the signature "boolean saveXXX()" 
+ * - a corresponding "void setXXX(boolean)" method
+ * 
  * @author mstover
  * 
  */
@@ -145,8 +151,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	private static final String SAVE_TIME_PROP = "jmeter.save.saveservice.time"; // $NON_NLS-1$
 
 	/***************************************************************************
-	 * The name of the property indicating whether the time stamp should be
-	 * saved.
+	 * The name of the property giving the format of the time stamp
 	 **************************************************************************/
 	private static final String TIME_STAMP_FORMAT_PROP = "jmeter.save.saveservice.timestamp_format"; // $NON_NLS-1$
 
@@ -158,42 +163,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final String REQUESTHEADERS_PROP  = "jmeter.save.saveservice.requestHeaders"; // $NON_NLS-1$
     private static final String ENCODING_PROP        = "jmeter.save.saveservice.encoding"; // $NON_NLS-1$
     
-	// ---------------------------------------------------------------------
-	// XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
-	// ---------------------------------------------------------------------
 
-    //TODO - these do not appear to be used
-//	public final static String PRESERVE = "preserve"; // $NON_NLS-1$
-//
-//	public final static String XML_SPACE = "xml:space"; // $NON_NLS-1$
-//
-//	public static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON_NLS-1$
-//
-//	public static final String BINARY = "binary"; // $NON_NLS-1$
-//
-//	public static final String DATA_TYPE = "dataType"; // $NON_NLS-1$
-//
-//	public static final String ERROR = "error"; // $NON_NLS-1$
-//
-//	public static final String FAILURE = "failure"; // $NON_NLS-1$
-//
-//	public static final String FAILURE_MESSAGE = "failureMessage"; // $NON_NLS-1$
-//
-//	public static final String LABEL = "label"; // $NON_NLS-1$
-//
-//	public static final String RESPONSE_CODE = "responseCode"; // $NON_NLS-1$
-//
-//	public static final String RESPONSE_MESSAGE = "responseMessage"; // $NON_NLS-1$
-//
-//	public static final String SAMPLE_RESULT_TAG_NAME = "sampleResult"; // $NON_NLS-1$
-//
-//	public static final String SUCCESSFUL = "success"; // $NON_NLS-1$
-//
-//	public static final String THREAD_NAME = "threadName"; // $NON_NLS-1$
-//
-//	public static final String TIME = "time"; // $NON_NLS-1$
-//
-//	public static final String TIME_STAMP = "timeStamp"; // $NON_NLS-1$
+    // optional processing instruction for line 2; e.g.
+    // <?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
+    private static final String XML_PI               = "jmeter.save.saveservice.xml_pi"; // $NON_NLS-1$
 
 	// Initialise values from properties
 	private boolean time = _time, latency = _latency, timestamp = _timestamp, success = _success, label = _label,
@@ -330,7 +303,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	public SampleSaveConfiguration() {
 	}
 
-	public Object clone() {
+// TODO: may need to implement this to allow for adding new attributes to the config,
+// otherwise XStream will not populate the missing attributes
+ 
+//    private Object readResolve() throws ObjectStreamException{
+//       return this;
+//    }
+
+    public Object clone() {
 		SampleSaveConfiguration s = new SampleSaveConfiguration();
 		s.time = time;
 		s.latency = latency;
@@ -651,4 +631,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	public String getDelimiter() {
 		return delimiter;
 	}
+
+    public String getXmlPi() {
+        return JMeterUtils.getJMeterProperties().getProperty(XML_PI, ""); // Defaults to empty;
+    }
 }
