@@ -67,24 +67,25 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		TestListener, Remoteable, NoThreadClone {
 	static final long serialVersionUID = 2;
 
-	private static final String TESTRESULTS_START = "<testResults>";
+	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
-	private static final String TESTRESULTS_START_V1_1 = "<testResults version=\"" + SaveService.version + "\">";
+	private static final String TESTRESULTS_START_V1_1 = "<testResults version=\""  // $NON-NLS-1$
+        + SaveService.version + "\">"; // $NON-NLS-1$
 
-	private static final String TESTRESULTS_END = "</testResults>";
+	private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
-	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; // $NON-NLS-1$
 
 	private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
 			+ TESTRESULTS_END.length();
 
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String FILENAME = "filename";
+	public final static String FILENAME = "filename"; // $NON-NLS-1$
 
-	public final static String SAVE_CONFIG = "saveConfig";
+	public final static String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
 
-	public static final String ERROR_LOGGING = "ResultCollector.error_logging";
+	public static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
 	// protected List results = Collections.synchronizedList(new ArrayList());
 	// private int current;
@@ -214,6 +215,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	private static void writeFileStart(PrintWriter writer, SampleSaveConfiguration saveConfig) {
 		if (saveConfig.saveAsXml()) {
 			writer.println(XML_HEADER);
+            String pi=saveConfig.getXmlPi();
+            if (pi.length() > 0) {
+                writer.println(pi);
+            }
 			writer.println(TESTRESULTS_START_V1_1);
 		} else if (saveConfig.saveFieldNames()) {
 			writer.println(OldSaveService.printableFieldNamesToString(saveConfig));
@@ -222,9 +227,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static void writeFileEnd(PrintWriter pw, SampleSaveConfiguration saveConfig) {
 		if (saveConfig.saveAsXml()) {
-			pw.print("\n");
+			pw.print("\n"); // $NON-NLS-1$
 			pw.print(TESTRESULTS_END);
-			pw.print("\n");// Added in version 1.1
+			pw.print("\n");// Added in version 1.1 // $NON-NLS-1$
 		}
 	}
 
@@ -248,7 +253,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			if (pdir != null)
 				pdir.mkdirs();
 			writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-					trimmed)), "UTF-8"), true);
+					trimmed)), "UTF-8"), true); // $NON-NLS-1$
 			files.put(filename, writer);
 		}
 		if (!trimmed) {
@@ -261,7 +266,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	private static boolean trimLastLine(String filename) {
 		RandomAccessFile raf = null;
 		try {
-			raf = new RandomAccessFile(filename, "rw");
+			raf = new RandomAccessFile(filename, "rw"); // $NON-NLS-1$
 			long len = raf.length();
 			if (len < MIN_XML_FILE_LEN) {
 				return false;
@@ -421,7 +426,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 		serializer.serialize(tempOut, OldSaveService.getConfiguration(result, getSaveConfig()));
 		String serVer = tempOut.toString();
-        String lineSep=System.getProperty("line.separator");
+        String lineSep=System.getProperty("line.separator"); // $NON-NLS-1$
         /*
          * Remove the <?xml ... ?> prefix.
          * When using the x-jars (xakan etc) or Java 1.4, the serialised output has a 
@@ -432,8 +437,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		if (index > -1) {// Yes, assume it follows the prefix
 			return serVer.substring(index);
 		} else { // no new-line; check for prefix and repace with new-line
-            if (serVer.startsWith("<?xml")){
-                index=serVer.indexOf("?>");// must exist
+            if (serVer.startsWith("<?xml")){ // $NON-NLS-1$
+                index=serVer.indexOf("?>");// must exist // $NON-NLS-1$
                 return lineSep + serVer.substring(index+2);// +2 for ?>
             }
 			return serVer;
