@@ -68,6 +68,7 @@ Users must explicitly check append in the sampler</li>
 <li>__split() function now clears next variable, so it can be used with ForEach Controller</li>
 <li>Bug 38682 - add CallableStatement functionality to JDBC Sampler</li>
 <li>Make it easier to change the RMI/Server port</li>
+<li>Add property jmeter.save.saveservice.xml_pi to provide optional xml processing instruction in JTL files</li>
 </ul>
 
 <h4>Bug fixes:</h4>
