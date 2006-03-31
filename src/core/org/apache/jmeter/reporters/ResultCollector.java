@@ -83,9 +83,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	public final static String FILENAME = "filename"; // $NON-NLS-1$
 
-	public final static String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
+	private final static String SAVE_CONFIG = "saveConfig"; // $NON-NLS-1$
 
-	public static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
+	private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
 	// protected List results = Collections.synchronizedList(new ArrayList());
 	// private int current;
