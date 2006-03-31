@@ -2308,12 +2308,14 @@ on XPath.
 <section name="&sect-num;.6 Timers" anchor="timers">
 <description>
 	<br></br>
-	Note that timers are processed at the start of the scope in which they are found;
-	if there are several timers in the same scope, all the timers will be processed.
+	Note that timers are processed before <b>each sampler</b> in the scope in which they are found;
+	if there are several timers in the same scope, <b>all</b> the timers will be processed before
+	<b>each</b> sampler.
 	To apply a timer to a single sampler, add the timer as a child element to the sampler.
 	The timer will be applied before the sampler is executed.
 	To apply a timer after a sampler, either add it to the next sampler, or add it as the
-	child of a simple logic controller immediately after the sampler.
+	child of a simple logic controller immediately after the sampler. 
+	The Simple Controller must contain a sampler or the timer will not be applied.
 	<br></br>
 </description>
 <component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" screenshot="timers/constant_timer.gif">
