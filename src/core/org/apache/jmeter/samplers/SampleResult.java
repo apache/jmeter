@@ -743,7 +743,7 @@ public class SampleResult implements Serializable {
 	 * @return
 	 */
 	public int getBytes() {
-		return bytes;
+		return bytes == 0 ? responseData.length : bytes;
 	}
 
 	/**
