@@ -79,7 +79,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 		// no error as default
 		AssertionResult result = new AssertionResult();
 
-		if (inResponse.getResponseData() == null) {
+		if (inResponse.getResponseData().length == 0) {
 			return result.setResultForNull();
 		}
 

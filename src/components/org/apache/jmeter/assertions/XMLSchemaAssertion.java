@@ -66,7 +66,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 		// Note: initialised with error = failure = false
 
 		byte data[] = response.getResponseData();
-		if (data == null || data.length == 0) {
+		if (data.length == 0) {
 			return result.setResultForNull();
 		}
 		String resultData = new String(getResultBody(data));

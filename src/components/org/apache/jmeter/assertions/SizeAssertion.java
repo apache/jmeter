@@ -66,12 +66,12 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public AssertionResult getResult(SampleResult response) {
 		AssertionResult result = new AssertionResult();
 		result.setFailure(false);
-		if (response.getResponseData() == null) {
+		resultData = response.getResponseData();
+		long resultSize = resultData.length;
+		if (resultSize==0) {
 			return result.setResultForNull();
 		}
 		// is the Sample the correct size?
-		resultData = response.getResponseData();
-		long resultSize = resultData.length;
 		if ((!(compareSize(resultSize)) && (getAllowedSize() > 0))) {
 			result.setFailure(true);
 			Object[] arguments = { new Long(resultSize), comparatorErrorMessage, new Long(getAllowedSize()) };

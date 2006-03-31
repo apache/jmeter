@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
@@ -86,7 +87,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 	public void process() {
 		initTemplate();
 		JMeterContext context = getThreadContext();
-		if (context.getPreviousResult() == null || context.getPreviousResult().getResponseData() == null) {
+		SampleResult previousResult = context.getPreviousResult();
+		if (previousResult == null || previousResult.getResponseData().length == 0) {
 			return;
 		}
 		log.debug("RegexExtractor processing result");
@@ -104,8 +106,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
 		PatternMatcherInput input = new PatternMatcherInput(
                 useHeaders() 
-                        ? context.getPreviousResult().getResponseHeaders()
-                        : context.getPreviousResult().getResponseDataAsString()); // Bug 36898
+                        ? previousResult.getResponseHeaders()
+                        : previousResult.getResponseDataAsString()); // Bug 36898
 		log.debug("Regex = " + getRegex());
 		try {
 			Pattern pattern = patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);

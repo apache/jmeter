@@ -69,7 +69,8 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 	public AssertionResult getResult(SampleResult response) {
 		// no error as default
 		AssertionResult result = new AssertionResult();
-		if (response.getResponseData() == null) {
+		byte[] responseData = response.getResponseData();
+		if (responseData.length == 0) {
 			return result.setResultForNull();
 		}
 		result.setFailure(false);
@@ -84,7 +85,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 		Document doc = null;
 
 		try {
-			doc = XPathUtil.makeDocument(new ByteArrayInputStream(response.getResponseData()), isValidating(),
+			doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
 					isWhitespace(), isNamespace(), isTolerant());
 		} catch (SAXException e) {
 			log.debug("Caught sax exception: " + e);
