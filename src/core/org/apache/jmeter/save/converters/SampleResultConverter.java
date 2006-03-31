@@ -53,6 +53,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_QUERY_STRING      = "queryString";      //$NON-NLS-1$
     protected static final String TAG_REDIRECT_LOCATION = "redirectLocation"; //$NON-NLS-1$
     protected static final String TAG_REQUEST_HEADER    = "requestHeader";    //$NON-NLS-1$
+
+    // Not needed by HTTPResultConverter
+	private   static final String TAG_URL               = "requestUrl";       //$NON-NLS-1$
+
     protected static final String TAG_RESPONSE_DATA     = "responseData";     //$NON-NLS-1$
     protected static final String TAG_RESPONSE_HEADER   = "responseHeader";   //$NON-NLS-1$
     protected static final String TAG_SAMPLER_DATA      = "samplerData";      //$NON-NLS-1$
@@ -110,6 +114,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		saveRequestHeaders(writer, context, res, save);
 		saveResponseData(writer, context, res, save);
 		saveSamplerData(writer, context, res, save);
+		if (save.saveUrl()) {
+			writeString(writer, TAG_URL, res.getURL().toExternalForm());
+		}
 	}
 
 	/**
@@ -281,22 +288,24 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	 */
 	protected boolean retrieveItem(HierarchicalStreamReader reader, UnmarshallingContext context, SampleResult res,
 			Object subItem) {
+		String nodeName = reader.getNodeName();
 		if (subItem instanceof AssertionResult) {
 			res.addAssertionResult((AssertionResult) subItem);
 		} else if (subItem instanceof SampleResult) {
 			res.addSubResult((SampleResult) subItem);
-		} else if (reader.getNodeName().equals(TAG_RESPONSE_HEADER)) {
+		} else if (nodeName.equals(TAG_RESPONSE_HEADER)) {
 			res.setResponseHeaders((String) subItem);
-		} else if (reader.getNodeName().equals(TAG_REQUEST_HEADER)) {
+		} else if (nodeName.equals(TAG_REQUEST_HEADER)) {
 			res.setRequestHeaders((String) subItem);
-		} else if (reader.getNodeName().equals(TAG_RESPONSE_DATA)) {
+		} else if (nodeName.equals(TAG_RESPONSE_DATA)) {
 			try {
 				res.setResponseData(((String) subItem).getBytes(res.getDataEncoding()));
 			} catch (UnsupportedEncodingException e) {
 				res.setResponseData(("Can't support the char set: " + res.getDataEncoding()).getBytes());
 			}
-		} else if (reader.getNodeName().equals(TAG_SAMPLER_DATA)) {
+		} else if (nodeName.equals(TAG_SAMPLER_DATA)) {
 			res.setSamplerData((String) subItem);
+		// Don't try restoring the URL
 		} else {
 			return false;
 		}
