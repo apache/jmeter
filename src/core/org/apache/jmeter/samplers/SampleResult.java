@@ -442,7 +442,8 @@ public class SampleResult implements Serializable {
 	 * 
 	 * @return the responseData. If responseData is null then an empty byte
 	 *         array is returned rather than null.
-	 * 
+	 *
+	 * @deprecated - no longer needed, as getResponseData() does not return null
 	 */
 	public byte[] getResponseDataAsBA() {
 		return responseData == null ? EMPTY_BA : responseData;
