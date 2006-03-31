@@ -103,7 +103,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		synchronized (calc) {
 			calc.addValue(res.getTime());
 			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0, res.isSuccessful(), calc
-					.getCount(), res.getTimeStamp(),res.getResponseData().length);
+					.getCount(), res.getTimeStamp(),res.getBytes());
 			model.addRow(newS);
 		}
 		currentData = res.getTime();
