@@ -145,6 +145,12 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	 **************************************************************************/
 	private static final String SAVE_THREAD_NAME_PROP = "jmeter.save.saveservice.thread_name"; // $NON_NLS-1$
 
+	// Save bytes read
+	private static final String SAVE_BYTES_PROP = "jmeter.save.saveservice.bytes"; // $NON_NLS-1$
+
+	// Save URL
+	private static final String SAVE_URL_PROP = "jmeter.save.saveservice.url"; // $NON_NLS-1$
+
 	/***************************************************************************
 	 * The name of the property indicating whether the time should be saved.
 	 **************************************************************************/
@@ -177,6 +183,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
+	private boolean saveUrl = _saveUrl, saveBytes = _saveBytes;
+	
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
 	private String delimiter = _delimiter;
@@ -212,6 +220,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private static final boolean _printMilliseconds;
 
+	private static final boolean _saveBytes;
+
+	private static final boolean _saveUrl;
+	
 	private static final SimpleDateFormat _formatter;
 
 	/**
@@ -255,6 +267,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		_success = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
 
 		_threadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
+
+		_saveBytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
+		
+		_saveUrl = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
 
 		_time = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
@@ -339,6 +355,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		return s;
 	}
 
+    ///////////////////// Start of standard save/set access methods /////////////////////
+    
 	public boolean saveResponseHeaders() {
 		return responseHeaders;
 	}
@@ -355,116 +373,62 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		requestHeaders = r;
 	}
 
-	/**
-	 * @return Returns the assertions.
-	 */
 	public boolean saveAssertions() {
 		return assertions;
 	}
 
-	/**
-	 * @param assertions
-	 *            The assertions to set.
-	 */
 	public void setAssertions(boolean assertions) {
 		this.assertions = assertions;
 	}
 
-	/**
-	 * @return Returns the code.
-	 */
 	public boolean saveCode() {
 		return code;
 	}
 
-	/**
-	 * @param code
-	 *            The code to set.
-	 */
 	public void setCode(boolean code) {
 		this.code = code;
 	}
 
-	/**
-	 * @return Returns the dataType.
-	 */
 	public boolean saveDataType() {
 		return dataType;
 	}
 
-	/**
-	 * @param dataType
-	 *            The dataType to set.
-	 */
 	public void setDataType(boolean dataType) {
 		this.dataType = dataType;
 	}
 
-	/**
-	 * @return Returns the encoding.
-	 */
 	public boolean saveEncoding() {
 		return encoding;
 	}
 
-	/**
-	 * @param encoding
-	 *            The encoding to set.
-	 */
 	public void setEncoding(boolean encoding) {
 		this.encoding = encoding;
 	}
 
-	/**
-	 * @return Returns the label.
-	 */
 	public boolean saveLabel() {
 		return label;
 	}
 
-	/**
-	 * @param label
-	 *            The label to set.
-	 */
 	public void setLabel(boolean label) {
 		this.label = label;
 	}
 
-	/**
-	 * @return Returns the latency.
-	 */
 	public boolean saveLatency() {
 		return latency;
 	}
 
-	/**
-	 * @param latency
-	 *            The latency to set.
-	 */
 	public void setLatency(boolean latency) {
 		this.latency = latency;
 	}
 
-	/**
-	 * @return Returns the message.
-	 */
 	public boolean saveMessage() {
 		return message;
 	}
 
-	/**
-	 * @param message
-	 *            The message to set.
-	 */
 	public void setMessage(boolean message) {
 		this.message = message;
 	}
 
-	/**
-	 * Should samplerData be saved for the current result?
-	 * 
-	 * @return Returns whether to save the samplerData.
-	 */
 	public boolean saveResponseData(SampleResult res) {
 		return responseData || TestPlan.getFunctionalMode() || (responseDataOnError && !res.isSuccessful());
 	}
@@ -474,17 +438,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         return responseData;
     }
 
-	/**
-	 * @param responseData
-	 *            The responseData to set.
-	 */
 	public void setResponseData(boolean responseData) {
 		this.responseData = responseData;
 	}
 
-	/**
-	 * @return Returns whether to save the samplerData.
-	 */
 	public boolean saveSamplerData(SampleResult res) {
 		return samplerData || TestPlan.getFunctionalMode() // as per 2.0 branch
 				|| (responseDataOnError && !res.isSuccessful());
@@ -495,125 +452,80 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         return samplerData;
     }
 
-	/**
-	 * @param samplerData
-	 *            The samplerData to set.
-	 */
 	public void setSamplerData(boolean samplerData) {
 		this.samplerData = samplerData;
 	}
 
-	/**
-	 * @return Returns the subresults.
-	 */
 	public boolean saveSubresults() {
 		return subresults;
 	}
 
-	/**
-	 * @param subresults
-	 *            The subresults to set.
-	 */
 	public void setSubresults(boolean subresults) {
 		this.subresults = subresults;
 	}
 
-	/**
-	 * @return Returns the success.
-	 */
 	public boolean saveSuccess() {
 		return success;
 	}
 
-	/**
-	 * @param success
-	 *            The success to set.
-	 */
 	public void setSuccess(boolean success) {
 		this.success = success;
 	}
 
-	/**
-	 * @return Returns the threadName.
-	 */
 	public boolean saveThreadName() {
 		return threadName;
 	}
 
-	/**
-	 * @param threadName
-	 *            The threadName to set.
-	 */
 	public void setThreadName(boolean threadName) {
 		this.threadName = threadName;
 	}
 
-	/**
-	 * @return Returns the time.
-	 */
 	public boolean saveTime() {
 		return time;
 	}
 
-	/**
-	 * @param time
-	 *            The time to set.
-	 */
 	public void setTime(boolean time) {
 		this.time = time;
 	}
 
-	/**
-	 * @return Returns the timestamp.
-	 */
 	public boolean saveTimestamp() {
 		return timestamp;
 	}
 
-	/**
-	 * @param timestamp
-	 *            The timestamp to set.
-	 */
 	public void setTimestamp(boolean timestamp) {
 		this.timestamp = timestamp;
 	}
 
-	/**
-	 * @return Returns the xml.
-	 */
 	public boolean saveAsXml() {
 		return xml;
 	}
 
-	/**
-	 * @param xml
-	 *            The xml to set.
-	 */
 	public void setAsXml(boolean xml) {
 		this.xml = xml;
 	}
 
-	/**
-	 * @return Returns the printFieldNames.
-	 */
 	public boolean saveFieldNames() {
 		return fieldNames;
 	}
 
-	/**
-	 * @param printFieldNames -
-	 *            should field names be printed?
-	 */
 	public void setFieldNames(boolean printFieldNames) {
 		this.fieldNames = printFieldNames;
 	}
 
-	public boolean printMilliseconds() {
-		return printMilliseconds;
+	public boolean saveUrl() {
+		return saveUrl;
 	}
 
-	public SimpleDateFormat formatter() {
-		return formatter;
+	public void setUrl(boolean save) {
+		this.saveUrl = save;
+	}
+
+	public boolean saveBytes() {
+		return saveBytes;
+	}
+
+	public void setBytes(boolean save) {
+		this.saveBytes = save;
 	}
 
 	public boolean saveAssertionResultsFailureMessage() {
@@ -622,6 +534,16 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	public void setAssertionResultsFailureMessage(boolean b) {
 		saveAssertionResultsFailureMessage = b;
+	}
+
+	///////////////// End of standard field accessors /////////////////////
+	
+	public boolean printMilliseconds() {
+		return printMilliseconds;
+	}
+
+	public SimpleDateFormat formatter() {
+		return formatter;
 	}
 
 	public int assertionsResultsToSave() {
