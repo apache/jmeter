@@ -54,7 +54,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 		result.setFailure(false);
 		byte[] resultData = response.getResponseData();
 
-		if (resultData == null) {
+		if (resultData.length == 0) {
 			result.setError(false);
 			result.setFailure(true);
 			result.setFailureMessage("Response was null");

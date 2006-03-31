@@ -131,7 +131,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		JMeterVariables vars = getVariables();// Relatively expensive
 												// operation, so do it once
 		vars.put(name, defaultValue);
-		if (previousResult == null || previousResult.getResponseData() == null) {
+		if (previousResult == null || previousResult.getResponseData().length == 0) {
 			return defaultValue;
 		}
 

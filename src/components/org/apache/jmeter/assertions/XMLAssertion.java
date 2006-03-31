@@ -53,13 +53,14 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 	public AssertionResult getResult(SampleResult response) {
 		// no error as default
 		AssertionResult result = new AssertionResult();
-		if (response.getResponseData() == null) {
+		byte[] responseData = response.getResponseData();
+		if (responseData.length == 0) {
 			return result.setResultForNull();
 		}
 		result.setFailure(false);
 
 		// the result data
-		String resultData = new String(getResultBody(response.getResponseData()));
+		String resultData = new String(getResultBody(responseData));
 
         SAXBuilder builder = (SAXBuilder) myBuilder.get();
 
