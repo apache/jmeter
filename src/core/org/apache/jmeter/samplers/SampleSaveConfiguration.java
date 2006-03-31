@@ -31,6 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Holds details of which sample attributes to save.
  * 
  * The pop-up dialogue for this is created by the class SavePropertyDialog, which assumes:
+ * For each field XXX
  * - methods have the signature "boolean saveXXX()" 
  * - a corresponding "void setXXX(boolean)" method
  * 
@@ -183,7 +184,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
-	private boolean saveUrl = _saveUrl, saveBytes = _saveBytes;
+	private boolean url = _url, bytes = _bytes;
 	
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
@@ -220,9 +221,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private static final boolean _printMilliseconds;
 
-	private static final boolean _saveBytes;
+	private static final boolean _bytes;
 
-	private static final boolean _saveUrl;
+	private static final boolean _url;
 	
 	private static final SimpleDateFormat _formatter;
 
@@ -268,9 +269,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 		_threadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
 
-		_saveBytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
+		_bytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
 		
-		_saveUrl = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
+		_url = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
 
 		_time = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
@@ -513,19 +514,19 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	}
 
 	public boolean saveUrl() {
-		return saveUrl;
+		return url;
 	}
 
 	public void setUrl(boolean save) {
-		this.saveUrl = save;
+		this.url = save;
 	}
 
 	public boolean saveBytes() {
-		return saveBytes;
+		return bytes;
 	}
 
 	public void setBytes(boolean save) {
-		this.saveBytes = save;
+		this.bytes = save;
 	}
 
 	public boolean saveAssertionResultsFailureMessage() {
