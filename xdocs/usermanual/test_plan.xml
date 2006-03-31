@@ -287,6 +287,17 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 <p>A Post-Processor executes some action after a Sampler Request has been made.  If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.  A Post-Processor is most often used to process the response data, often to extract values from it.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
 </subsection>
 
+<subsection name="4.9 Execution order" anchor="executionorder">
+<ol>
+<li>Timers - if any</li>
+<li>Sampler</li>
+<li>Post-Processors (unless SampleResult is null)</li>
+<li>Assertions (unless SampleResult is null)</li>
+<li>Listeners (unless SampleResult is null)</li>
+</ol>
+
+</subsection>
+
 </section>
 
 </body>
