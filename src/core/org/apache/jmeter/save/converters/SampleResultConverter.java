@@ -58,6 +58,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_SAMPLER_DATA      = "samplerData";      //$NON-NLS-1$
 
     // samplerData attributes. Must be unique. Keep sorted.
+    private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
     private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
     private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
     private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
@@ -238,6 +239,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute(ATT_DATA_TYPE, ConversionHelp.encode(res.getDataType()));
 		if (save.saveEncoding())
 			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncoding()));
+		if (save.saveBytes())
+			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
 	}
 
 	/**
@@ -320,6 +323,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		res.setTime(Converter.getLong(reader.getAttribute(ATT_TIME)));
 		res.setTimeStamp(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)));
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
+		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
 	}
 
 	/**
