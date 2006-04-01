@@ -37,7 +37,10 @@ import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+//@see org.apache.jmeter.extractor.TestXPathExtractor for unit tests
 
 /**
  * Extracts text from (X)HTML response using XPath query language
@@ -59,7 +62,8 @@ import org.xml.sax.SAXException;
  */
 public class XPathExtractor extends AbstractTestElement implements
         PostProcessor, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final String MATCH_NR = "matchNr";
+    transient private static Logger log = LoggingManager.getLoggerForClass();
 	protected static final String KEY_PREFIX = "XPathExtractor.";
 	public static final String XPATH_QUERY = KEY_PREFIX +"xpathQuery";
 	public static final String REFNAME = KEY_PREFIX +"refname";
@@ -67,6 +71,10 @@ public class XPathExtractor extends AbstractTestElement implements
 	public static final String TOLERANT = KEY_PREFIX +"tolerant";
 
 
+    private String concat(String s1,String s2){
+        return new StringBuffer(s1).append("_").append(s2).toString();
+    }
+    
 	/**
 	 * Do the job - extract value from (X)HTML response using XPath Query.
 	 * Return value as variable defined by REFNAME. Returns DEFAULT value
@@ -77,25 +85,22 @@ public class XPathExtractor extends AbstractTestElement implements
 		JMeterVariables vars = context.getVariables();
 		String refName = getRefName();
 		vars.put(refName, getDefaultValue());
+        vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails
+        vars.remove(concat(refName,"1")); // In case parse fails
 
 		try{			
 			Document d = parseResponse(context.getPreviousResult());		
-			String val = getValueForXPath(d,getXPathQuery());
-			if ( val!=null){
-			    vars.put(getRefName(),val);
-			}
-		}catch(IOException e){
+			getValuesForXPath(d,getXPathQuery(),vars, refName);
+		}catch(IOException e){// Should not happen
 			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
 			throw new RuntimeException(e);
-		} catch (ParserConfigurationException e) {
+		} catch (ParserConfigurationException e) {// Should not happen
 			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
 			throw new RuntimeException(e);
-		} catch (SAXException e) {
-			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
-			throw new RuntimeException(e);
-		} catch (TransformerException e) {
-			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
-			throw new RuntimeException(e);
+		} catch (SAXException e) {// Can happen for bad input document
+			log.warn("error on "+XPATH_QUERY+"("+getXPathQuery()+")"+e.getLocalizedMessage());
+		} catch (TransformerException e) {// Can happen for incorrect XPath expression
+			log.warn("error on "+XPATH_QUERY+"("+getXPathQuery()+")"+e.getLocalizedMessage());
 		}
     }    
             
@@ -173,12 +178,15 @@ public class XPathExtractor extends AbstractTestElement implements
      *  data were not found
      * @throws TransformerException
      */
-    private String getValueForXPath(Document d,String query)
+    private void getValuesForXPath(Document d,String query, JMeterVariables vars, String refName)
      throws TransformerException
     {
-		String val = null;
-		Node match = XPathAPI.selectSingleNode(d,query);
-		if ( match!=null){
+     	String val = null;
+		NodeList matches = XPathAPI.selectNodeList(d,query);
+		int length = matches.getLength();
+        vars.put(concat(refName,MATCH_NR), String.valueOf(length));
+        for (int i = 0 ; i < length; i++) {
+            Node match = matches.item(i);
 			if ( match instanceof Element){
 			   // elements have empty nodeValue, but we are usually
 			   // interested in their content
@@ -186,11 +194,14 @@ public class XPathExtractor extends AbstractTestElement implements
 			} else {				
 			   val = match.getNodeValue();
 			}
+            if ( val!=null){
+                if (i==0) {// Treat 1st match specially
+                    vars.put(refName,val);                    
+                }
+                vars.put(concat(refName,String.valueOf(i+1)),val);
+            }
 		}
-		if ( log.isDebugEnabled()){
-			log.debug(XPATH_QUERY+"("+query+") is '"+val+"'");
-		}
-		return val;
+        vars.remove(concat(refName,String.valueOf(length+1)));
     }
     
 }
