@@ -39,7 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
-	static final long serialVersionUID = 2;
+	static final long serialVersionUID = 3;
 
 	// ---------------------------------------------------------------------
 	// PROPERTY FILE CONSTANTS
@@ -175,6 +175,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // <?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
     private static final String XML_PI               = "jmeter.save.saveservice.xml_pi"; // $NON_NLS-1$
 
+    // N.B. Remember to update the clone method when adding new variables.
+    
 	// Initialise values from properties
 	private boolean time = _time, latency = _latency, timestamp = _timestamp, success = _success, label = _label,
 			code = _code, message = _message, threadName = _threadName, dataType = _dataType, encoding = _encoding,
@@ -353,6 +355,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		s.delimiter = delimiter;
 		s.printMilliseconds = printMilliseconds;
 		s.responseDataOnError = responseDataOnError;
+        s.url = url;
+        s.bytes = bytes;
 		return s;
 	}
 
