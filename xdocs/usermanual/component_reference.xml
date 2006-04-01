@@ -2699,15 +2699,29 @@ generate the template string, and store the result into the given variable name.
 	   </property>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
-	<property name="XPath Query" required="Yes">Element query in XPath language. </property>
+	<property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match. </property>
 	<property name="Default Value" required="">Default value returned when no match found</property>
    </properties>
+   <p>To allow for use in a ForEach Controller, the following variables are set on return:</p>
+   <ul>
+   <li>refName - set to first (or only) match; if no match, then set to default</li>
+   <li>refName_matchNr - set to number of matches (may be 0)</li>
+   <li>refName_n - n=1,2,3 etc. Set to the 1st, 2nd 3rd match etc. 
+   </li>
+   </ul>
+   <p>Note: The next refName_n variable is set to null - e.g. if there are 2 matches, then refName_3 is set to null,
+   and if there are no matches, then refName_1 is set to null.
+   </p>
    <p>XPath is query language targeted primarily for XSLT transformations. However it is usefull as generic query language for structured data too. See 
 	   <a href="http://www.topxml.com/xsl/xpathref.asp">XPath Reference</a> or <a href="http://www.w3.org/TR/xpath">XPath specification</a> for more information. Here are few examples:
    </p>
   <dl> 
    <dt>/html/head/title</dt>
      <dd>extracts title element from HTML response</dd>
+   <dt>/book/page[2]</dt>
+     <dd>extracts 2nd page from a book</dd>
+   <dt>/book/page</dt>
+     <dd>extracts all pages from a book</dd>
      <dt>//form[@name='countryForm']//select[@name='country']/option[text()='Czech Republic'])/@value</dt>
     <dd>extracts value attribute of option element that match text 'Czech Republic'
         inside of select element with name attribute  'country' inside of
