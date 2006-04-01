@@ -30,6 +30,7 @@
 	Additional options:
 		-Dshow-data=y - include response data in Failure Details
 		-Dbasedir=xyz - path to test file(s)
+		-Dformat=2.0 - use version 2.0 JTL files rather than 2.1
 	
 	</description>
 	
@@ -37,10 +38,20 @@
 		
 	</property>
 	<!-- Name of test (without .jmx) -->
-    <property name="test" value="Test"/>
+	<property name="test" value="Test"/>
 	
 	<!-- Should report include response data for failures? -->
-    <property name="show-data" value="n"/>
+	<property name="show-data" value="n"/>
+
+	<property name="format" value="2.1"/>
+		
+	<condition property="style_version" value="">
+		<equals arg1="${format}" arg2="2.0"/>
+	</condition>
+
+	<condition property="style_version" value="_21">
+		<equals arg1="${format}" arg2="2.1"/>
+	</condition>
 
 	<condition property="funcMode">
 		<equals arg1="${show-data}" arg2="y"/>
@@ -79,7 +90,8 @@
 			<!-- Force suitable defaults -->
 			<property name="jmeter.save.saveservice.output_format" value="xml"/>
 			<property name="jmeter.save.saveservice.assertion_results" value="all"/>
-			<property name="file_format.testlog" value="2.0"/>
+			<property name="jmeter.save.saveservice.bytesx" value="true"/>
+			<property name="file_format.testlog" value="${format}"/>
 			<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
 		</jmeter>
 	</target>
@@ -89,7 +101,7 @@
 			force="true"
 		    in="${basedir}/${test}.jtl"
 		    out="${basedir}/${test}.html"
-		    style="../extras/jmeter-results-detail-report.xsl">
+		    style="../extras/jmeter-results-detail-report${style_version}.xsl">
 			<param name="showData" expression="${show-data}"/>
 		</xslt>
 	</target>
