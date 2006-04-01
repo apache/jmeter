@@ -115,7 +115,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		saveResponseData(writer, context, res, save);
 		saveSamplerData(writer, context, res, save);
 		if (save.saveUrl()) {
-			writeString(writer, TAG_URL, res.getURL().toExternalForm());
+			URL url = res.getURL();
+            if (url != null) {
+                writeString(writer, TAG_URL, url.toExternalForm());
+            }
 		}
 	}
 
