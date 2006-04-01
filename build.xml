@@ -310,7 +310,7 @@
   <property name="excalibur-datasource.jar" value="${lib.dir}/excalibur-datasource-1.1.1.jar"/>
   <property name="excalibur-pool.jar" value="${lib.dir}/excalibur-pool-1.2.jar"/>
   <property name="excalibur-instrument.jar" value="${lib.dir}/excalibur-instrument-1.0.jar"/>
-  <property name="xstream.jar" value="${lib.dir}/xstream-1.1.2.jar"/>
+  <property name="xstream.jar" value="${lib.dir}/xstream-1.1.3.jar"/>
   <property name="xpp3.jar" value="${lib.dir}/xpp3_min-1.1.3.4.I.jar"/>
 	  
   <!-- The following 3 jars are probably optional for JDK1.4 -->

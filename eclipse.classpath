@@ -39,7 +39,7 @@
 	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.I.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
