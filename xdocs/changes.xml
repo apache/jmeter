@@ -48,7 +48,7 @@ To revert to the previous behaviour, change the property <b>sampleresult.timesta
 <h4>New functionality:</h4>
 <ul>
 <li>Report function</li>
-<li>XPath Extractor</li>
+<li>XPath Extractor Post-Processor. Handles single and multiple matches.</li>
 <li>Simpler JMX file format (2.2)</li>
 <li>BeanshellSampler code can update ResponseData directly</li>
 <li>Bug 37490 - Allow UDV as delay in Duration Assertion</li>
