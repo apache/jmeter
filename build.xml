@@ -331,6 +331,7 @@
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
+    <include name="MANIFEST"/>
     <include name="${lib.dir}/*.html"/>
     <include name="${lib.dir}/LICENSE*.*"/>
     <include name="${avalon-framework.jar}"/>
@@ -1086,13 +1087,17 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
+    <include name="MANIFEST"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
+    <exclude name="${dest.jar.jmeter}/jmetertest.properties"/>
+    <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
     <include name="${dest.jar.jmeter}/saveservice.properties"/>
-    <include name="${dest.jar.jmeter}/users.*"/>
+    <include name="${dest.jar.jmeter}/users.dtd"/>
+    <include name="${dest.jar.jmeter}/users.xml"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar}/"/>
@@ -1114,13 +1119,12 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="LICENSE"/>
     <include name="NOTICE"/>
     <include name="README"/>
+    <include name="MANIFEST"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
-    <include name="${dest.jar.jmeter}/jmeter*.bat"/>
-    <include name="${dest.jar.jmeter}/*.properties"/>
-    <include name="${dest.jar.jmeter}/log4j.conf"/>
+    <include name="${dest.jar.jmeter}/jmetertest.properties"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <include name="eclipse.classpath"/>
