@@ -800,7 +800,7 @@ some of its classes - at present JMeter can only run from jar files.
     <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar" 
     	includes="**/NewDriver*,**/DynamicClassLoader*" 
         basedir="${build.core}" 
-    	manifest="${src.dir}/MANIFEST">
+    	manifest="MANIFEST">
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Main-Class" value="org.apache.jmeter.NewDriver"/>
@@ -814,7 +814,7 @@ some of its classes - at present JMeter can only run from jar files.
     <!-- core -->    
     <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" 
     	excludes="**/NewDriver*,**/DynamicClassLoader*"
-    	manifest="${src.dir}/MANIFEST">
+    	manifest="MANIFEST">
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"/>
       <fileset dir="${src.core}" includes="org/apache/jmeter/images/**" 
@@ -834,7 +834,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- components -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" manifest="MANIFEST">
       <fileset dir="${build.components}" includes="**/*.class" />
       <fileset dir="${src.components}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -847,7 +847,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- functions -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" manifest="MANIFEST">
       <fileset dir="${build.functions}" includes="**/*.class" />
       <fileset dir="${src.functions}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -860,7 +860,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
 
     <!-- http without HtmlParserHTMLParser -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="MANIFEST">
       <fileset dir="${build.http}" includes="**/*.class" 
       	excludes="**/HtmlParserHTMLParser.class"/>
       <fileset dir="${src.http}" includes="**/*.properties" />
@@ -874,7 +874,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- HtmlParserHTMLParser -->
-    <jar jarfile="${lib.dir}/htmlparserparser.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${lib.dir}/htmlparserparser.jar" manifest="MANIFEST">
       <fileset dir="${build.http}" includes="**/HtmlParserHTMLParser.class"/>
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
@@ -886,7 +886,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
   	    
     <!-- ftp -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="MANIFEST">
       <fileset dir="${build.ftp}" includes="**/*.class" />
       <fileset dir="${src.ftp}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -899,7 +899,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- jdbc -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" manifest="MANIFEST">
       <fileset dir="${build.jdbc}" includes="**/*.class" />
       <fileset dir="${src.jdbc}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -912,7 +912,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- java -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" manifest="MANIFEST">
       <fileset dir="${build.java}" includes="**/*.class" />
       <fileset dir="${src.java}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -925,7 +925,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- junit -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="MANIFEST">
       <fileset dir="${build.junit}" includes="**/*.class" />
       <fileset dir="${src.junit}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -938,7 +938,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
 
     <!-- report -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="MANIFEST">
       <fileset dir="${build.report}" includes="**/*.class" />
       <fileset dir="${src.report}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -951,7 +951,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
 
     <!-- ldap -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" manifest="MANIFEST">
       <fileset dir="${build.ldap}" includes="**/*.class" />
       <fileset dir="${src.ldap}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -964,7 +964,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- mail -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="MANIFEST">
       <fileset dir="${build.mail}" includes="**/*.class"  />
       <fileset dir="${src.mail}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -977,7 +977,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- tcp -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" manifest="MANIFEST">
       <fileset dir="${build.tcp}" includes="**/*.class" />
       <fileset dir="${src.tcp}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -990,7 +990,7 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
     
     <!-- monitor -->
-    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar" manifest="MANIFEST">
       <fileset dir="${build.monitor.model}" includes="**/*.class" />
       <fileset dir="${build.monitor.components}" includes="**/*.class" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1005,7 +1005,7 @@ some of its classes - at present JMeter can only run from jar files.
     <!-- jms -->
     <!-- Ensure that build dir exists, even if JMS has not been built -->
     <mkdir dir="${build.jms}"/>
-    <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar" manifest="MANIFEST">
       <fileset dir="${build.jms}" includes="**/*.class" />
       <fileset dir="${src.jms}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1017,7 +1017,7 @@ some of its classes - at present JMeter can only run from jar files.
     	</manifest>
     </jar>
     
-    <jar jarfile="${lib.dir}/htmlparser.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${lib.dir}/htmlparser.jar" manifest="MANIFEST">
         <fileset dir="${build.htmlparser}" includes="**/*.class" excludes="org/htmlparser/tests/**/*.class"/>
         <fileset dir="${src.htmlparser}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1029,7 +1029,7 @@ some of its classes - at present JMeter can only run from jar files.
     	</manifest>
     </jar>
   	
-    <jar jarfile="${lib.dir}/jorphan.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${lib.dir}/jorphan.jar" manifest="MANIFEST">
         <fileset dir="${build.jorphan}" includes="**/*.class"/>
         <fileset dir="${src.jorphan}" includes="**/*.properties"/>
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1050,7 +1050,7 @@ some of its classes - at present JMeter can only run from jar files.
     description="Default: build from source. Does not create docs."/>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
-    <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="${src.dir}/MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="MANIFEST">
       <fileset dir="${build.examples}" includes="**/*.class" />
       <fileset dir="${src.examples}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
