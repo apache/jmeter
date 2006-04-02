@@ -70,7 +70,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
 	private static final String TESTRESULTS_START_V1_1 = "<testResults version=\""  // $NON-NLS-1$
-        + SaveService.version + "\">"; // $NON-NLS-1$
+        + SaveService.getVERSION() + "\">"; // $NON-NLS-1$
 
 	private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
