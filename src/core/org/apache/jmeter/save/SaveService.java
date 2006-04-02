@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,15 +104,15 @@ public class SaveService {
     // Version information for test plan header
     // This is written to JMX files by ScriptWrapperConverter
     // Also to JTL files by ResultCollector
-	public static final String version = "1.2"; // $NON-NLS-1$
+	private static final String VERSION = "1.2"; // $NON-NLS-1$
 
     // This is written to JMX files by ScriptWrapperConverter
-	static String propertiesVersion = "";// read from properties file; written to JMX files
-    static final String PROPVERSION = "1.8";// Expected $NON-NLS-1$
+	private static String propertiesVersion = "";// read from properties file; written to JMX files
+    private static final String PROPVERSION = "1.8";// Expected version $NON-NLS-1$
 
     // Internal information only
-    static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	static final String FILEVERSION = "390699";// Expected $NON-NLS-1$
+    private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
+	private static final String FILEVERSION = "390699";// Expected value $NON-NLS-1$
 
     static {
         log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
@@ -241,7 +241,7 @@ public class SaveService {
 		writer.write('\n');
 	}
 
-	static boolean versionsOK = true;
+	private static boolean versionsOK = true;
 
 	// Extract version digits from String of the form #Revision: n.mm #
 	// (where # is actually $ above)
@@ -271,7 +271,16 @@ public class SaveService {
 		}
 	}
 
-	static void checkVersions() {
+    // Routines for TestSaveService
+    static boolean checkPropertyVersion(){
+        return SaveService.PROPVERSION.equals(SaveService.propertiesVersion);
+    }
+    
+    static boolean checkFileVersion(){
+        return SaveService.FILEVERSION.equals(SaveService.fileVersion);
+    }
+
+    static boolean checkVersions() {
 		versionsOK = true;
 		checkVersion(BooleanPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(HashTreeConverter.class, "332820"); // $NON-NLS-1$
@@ -303,6 +312,7 @@ public class SaveService {
 		if (versionsOK) {
 			log.info("All converter versions present and correct");
 		}
+        return versionsOK;
 	}
 
 	public static TestResultWrapper loadTestResults(InputStream reader) throws Exception {
@@ -365,5 +375,13 @@ public class SaveService {
             + "\n" + ce.get("message")
             + "\nPerhaps a missing jar? See log file.";
         return msg;
+    }
+
+    public static String getPropertiesVersion() {
+        return propertiesVersion;
+    }
+
+    public static String getVERSION() {
+        return VERSION;
     }
 }

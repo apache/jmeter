@@ -68,10 +68,10 @@ public class ScriptWrapperConverter implements Converter {
 	 */
 	public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
 		ScriptWrapper wrap = (ScriptWrapper) arg0;
-		ConversionHelp.setOutVersion(SaveService.version);// Ensure output
-															// follows version
-		writer.addAttribute(ATT_VERSION, SaveService.version);
-		writer.addAttribute(ATT_PROPERTIES, SaveService.propertiesVersion);
+		String version = SaveService.getVERSION();
+        ConversionHelp.setOutVersion(version);// Ensure output follows version
+		writer.addAttribute(ATT_VERSION, version);
+		writer.addAttribute(ATT_PROPERTIES, SaveService.getPropertiesVersion());
 		writer.startNode(classMapper.serializedClass(wrap.testPlan.getClass()));
 		context.convertAnother(wrap.testPlan);
 		writer.endNode();
