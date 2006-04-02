@@ -36,6 +36,7 @@ import org.apache.jmeter.save.converters.IntegerPropertyConverter;
 import org.apache.jmeter.save.converters.LongPropertyConverter;
 import org.apache.jmeter.save.converters.MultiPropertyConverter;
 import org.apache.jmeter.save.converters.SampleResultConverter;
+import org.apache.jmeter.save.converters.SampleSaveConfigurationConverter;
 import org.apache.jmeter.save.converters.StringPropertyConverter;
 import org.apache.jmeter.save.converters.TestElementConverter;
 import org.apache.jmeter.save.converters.TestElementPropertyConverter;
@@ -301,9 +302,11 @@ public class SaveService {
 		checkVersion(StringPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(TestElementConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(TestElementPropertyConverter.class, "332820"); // $NON-NLS-1$
-		checkVersion(ScriptWrapperConverter.class, "332820"); // $NON-NLS-1$
+		checkVersion(ScriptWrapperConverter.class, "390848"); // $NON-NLS-1$
 		checkVersion(TestResultWrapperConverter.class, "332820"); // $NON-NLS-1$
-		if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
+        checkVersion(SampleSaveConfigurationConverter.class,"390698"); // $NON-NLS-1$
+
+        if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
 		}
         if (!FILEVERSION.equalsIgnoreCase(fileVersion)) {
