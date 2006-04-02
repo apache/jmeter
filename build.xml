@@ -1158,7 +1158,6 @@ some of its classes - at present JMeter can only run from jar files.
 	<!-- Invoke with -Djmeter.version=m.n 
 	Creates clean build and all documentation
 	Creates runtime and source distributions
-	Creates archives for updating web-site
 	-->
 	<target name="distribution" 
 		depends="assume-libs-present,clean,install,docs-all,test,_distribution"
