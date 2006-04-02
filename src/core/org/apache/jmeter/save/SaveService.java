@@ -112,7 +112,7 @@ public class SaveService {
 
     // Internal information only
     static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	static final String FILEVERSION = "388545";// Expected $NON-NLS-1$
+	static final String FILEVERSION = "390699";// Expected $NON-NLS-1$
 
     static {
         log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
