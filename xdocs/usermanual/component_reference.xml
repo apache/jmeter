@@ -2640,6 +2640,7 @@ generate the template string, and store the result into the given variable name.
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
         This must contain at least one set of parentheses "()" to capture a portion of the string, unless using the group $0$.
+        Do not enclose the expression in / / - unless of course you want to match these characters as well.
         </property>
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '$1$' to refer to
@@ -2682,6 +2683,7 @@ generate the template string, and store the result into the given variable name.
 	</ul>
 	Note that the refName variable is always set to the default value in this case, 
 	and the associated group variables are not set.
+	<p>See also <a href="regular_expressions.html">further information on regular expressions.</a></p>
 </p>
 </component>
 
