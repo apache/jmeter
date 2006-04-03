@@ -69,8 +69,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
-	private static final String TESTRESULTS_START_V1_1 = "<testResults version=\""  // $NON-NLS-1$
-        + SaveService.getVERSION() + "\">"; // $NON-NLS-1$
+	private static final String TESTRESULTS_START_V1_1_PREVER = "<testResults version=\"";  // $NON-NLS-1$
+        private static final String TESTRESULTS_START_V1_1_POSTVER="\">"; // $NON-NLS-1$
 
 	private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
@@ -219,7 +219,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             if (pi.length() > 0) {
                 writer.println(pi);
             }
-			writer.println(TESTRESULTS_START_V1_1);
+            // Can't do it as a static initialisation, because SaveService 
+            // is being constructed when this is called
+			writer.print(TESTRESULTS_START_V1_1_PREVER);
+            writer.print(SaveService.getVERSION());
+            writer.println(TESTRESULTS_START_V1_1_POSTVER);
 		} else if (saveConfig.saveFieldNames()) {
 			writer.println(OldSaveService.printableFieldNamesToString(saveConfig));
 		}
