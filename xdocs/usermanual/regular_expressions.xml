@@ -106,10 +106,11 @@ The JMeter Regex Extractor saves the values of the groups in additional variable
 For example, assume:
 </p>
 <ul>
-<li>Reference Name: is MYREF</li>
+<li>Reference Name: MYREF</li>
 <li>Regex: name="(.+?)" value="(.+?)"</li>
 <li>Template: $1$$2$</li>
 </ul>
+<note>Do not enclose the regular expression in / /</note>
 <p>
 The following variables would be set:
 </p>
