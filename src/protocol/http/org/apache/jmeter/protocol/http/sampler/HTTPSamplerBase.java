@@ -584,7 +584,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	protected HTTPSampleResult downloadPageResources(HTTPSampleResult res, HTTPSampleResult container, int frameDepth) {
 		Iterator urls = null;
 		try {
-			if (res.getContentType().toLowerCase().indexOf("text/html") != -1) { // $NON-NLS-1$
+			if (res.getContentType().toLowerCase().indexOf("text/html") != -1  // $NON-NLS-1$
+                    && res.getResponseData().length > 0) // Bug 39205
+            {
 				urls = HTMLParser.getParser().getEmbeddedResourceURLs(res.getResponseData(), res.getURL());
 			}
 		} catch (HTMLParseException e) {
