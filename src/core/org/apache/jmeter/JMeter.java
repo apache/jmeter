@@ -82,42 +82,46 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * @author mstover
  */
 public class JMeter implements JMeterPlugin {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static final int PROPFILE_OPT = 'p';
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final int PROPFILE2_OPT = 'q'; // Bug 33920 - additional
-													// prop files
+    public static final String HTTP_PROXY_PASS = "http.proxyPass"; // $NON-NLS-1$
 
-	private static final int TESTFILE_OPT = 't';
+    public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
 
-	private static final int LOGFILE_OPT = 'l';
+    private static final int PROPFILE_OPT = 'p';// $NON-NLS-1$
 
-	private static final int NONGUI_OPT = 'n';
+	private static final int PROPFILE2_OPT = 'q'; // Bug 33920 - additional prop files $NON-NLS-1$
 
-	private static final int HELP_OPT = 'h';
+	private static final int TESTFILE_OPT = 't';// $NON-NLS-1$
 
-	private static final int VERSION_OPT = 'v';
+	private static final int LOGFILE_OPT = 'l';// $NON-NLS-1$
 
-	private static final int SERVER_OPT = 's';
+	private static final int NONGUI_OPT = 'n';// $NON-NLS-1$
 
-	private static final int PROXY_HOST = 'H';
+	private static final int HELP_OPT = 'h';// $NON-NLS-1$
 
-	private static final int PROXY_PORT = 'P';
+	private static final int VERSION_OPT = 'v';// $NON-NLS-1$
 
-	private static final int PROXY_USERNAME = 'u';
+	private static final int SERVER_OPT = 's';// $NON-NLS-1$
 
-	private static final int PROXY_PASSWORD = 'a';
+	private static final int PROXY_HOST = 'H';// $NON-NLS-1$
 
-	private static final int JMETER_PROPERTY = 'J';
+	private static final int PROXY_PORT = 'P';// $NON-NLS-1$
 
-	private static final int SYSTEM_PROPERTY = 'D';
+	private static final int PROXY_USERNAME = 'u';// $NON-NLS-1$
 
-	private static final int LOGLEVEL = 'L';
+	private static final int PROXY_PASSWORD = 'a';// $NON-NLS-1$
 
-	private static final int REMOTE_OPT = 'r';
+	private static final int JMETER_PROPERTY = 'J';// $NON-NLS-1$
 
-	private static final int JMETER_HOME_OPT = 'd';
+	private static final int SYSTEM_PROPERTY = 'D';// $NON-NLS-1$
+
+	private static final int LOGLEVEL = 'L';// $NON-NLS-1$
+
+	private static final int REMOTE_OPT = 'r';// $NON-NLS-1$
+
+	private static final int JMETER_HOME_OPT = 'd';// $NON-NLS-1$
 
 	/**
 	 * Define the understood options. Each CLOptionDescriptor contains:
@@ -192,8 +196,8 @@ public class JMeter implements JMeterPlugin {
 		GuiPackage.getInstance(treeLis, treeModel);
 		org.apache.jmeter.gui.MainFrame main = new org.apache.jmeter.gui.MainFrame(ActionRouter.getInstance(),
 				treeModel, treeLis);
-		main.setTitle("Apache JMeter");
-		main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());
+		main.setTitle("Apache JMeter");// $NON-NLS-1$
+		main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
 		ComponentUtil.centerComponentInWindow(main, 80);
 		main.show();
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
@@ -234,27 +238,27 @@ public class JMeter implements JMeterPlugin {
 			initializeProperties(parser);
 			setProxy(parser);
 			log.info("Version " + JMeterUtils.getJMeterVersion());
-			log.info("java.version=" + System.getProperty("java.version"));
-			log.info("os.name=" + System.getProperty("os.name"));
-			log.info("os.arch=" + System.getProperty("os.arch"));
-			log.info("os.version=" + System.getProperty("os.version"));
-			log.info("Locale=" + Locale.getDefault().getDisplayName());
+			log.info("java.version=" + System.getProperty("java.version"));// $NON-NLS-1$ $NON-NLS-2$
+			log.info("os.name=" + System.getProperty("os.name"));// $NON-NLS-1$ $NON-NLS-2$
+			log.info("os.arch=" + System.getProperty("os.arch"));// $NON-NLS-1$ $NON-NLS-2$
+			log.info("os.version=" + System.getProperty("os.version"));// $NON-NLS-1$ $NON-NLS-2$
+			log.info("Locale=" + Locale.getDefault().getDisplayName());// $NON-NLS-1$
 			log.info(JMeterUtils.getJMeterCopyright());
-			log.info("JMeterHome="+JMeterUtils.getJMeterHome());
+			log.info("JMeterHome="+JMeterUtils.getJMeterHome());// $NON-NLS-1$
             
             updateClassLoader();
             if (log.isDebugEnabled())
             {
-                String jcp=System.getProperty("java.class.path");
+                String jcp=System.getProperty("java.class.path");// $NON-NLS-1$
                 log.debug(jcp);
             }
 			if (parser.getArgumentById(VERSION_OPT) != null) {
 				System.out.println(JMeterUtils.getJMeterCopyright());
 				System.out.println("Version " + JMeterUtils.getJMeterVersion());
 			} else if (parser.getArgumentById(HELP_OPT) != null) {
-				System.out.println(JMeterUtils.getResourceFileAsText("org/apache/jmeter/help.txt"));
+				System.out.println(JMeterUtils.getResourceFileAsText("org/apache/jmeter/help.txt"));// $NON-NLS-1$
 			} else if (parser.getArgumentById(SERVER_OPT) != null) {
-				startServer(JMeterUtils.getPropDefault("server_port", 0));
+				startServer(JMeterUtils.getPropDefault("server_port", 0));// $NON-NLS-1$
 				startBSH();
 			} else if (parser.getArgumentById(NONGUI_OPT) == null) {
 				startGui(parser.getArgumentById(TESTFILE_OPT));
@@ -277,9 +281,9 @@ public class JMeter implements JMeterPlugin {
 
     // Update classloader if necessary
 	private void updateClassLoader() {
-        String userpath= JMeterUtils.getPropDefault("user.classpath","");
+        String userpath= JMeterUtils.getPropDefault("user.classpath","");// $NON-NLS-1$
         if (userpath.length()> 0){
-            log.info("user.classpath="+userpath);
+            log.info("user.classpath="+userpath);// $NON-NLS-1$
             StringTokenizer tok = new StringTokenizer(userpath, File.pathSeparator);
             while(tok.hasMoreTokens()) {
                 String path=tok.nextToken();
@@ -289,7 +293,7 @@ public class JMeter implements JMeterPlugin {
                 } else {
                     URL url;
                     try {
-                        url = new URL("file","",path);
+                        url = new URL("file","",path);// $NON-NLS-1$
                         NewDriver.addURL(url);
                     } catch (MalformedURLException e) {
                         log.warn("Can't create URL for "+path+" "+e);
@@ -303,8 +307,8 @@ public class JMeter implements JMeterPlugin {
 	 * 
 	 */
 	private void startBSH() {
-		int bshport = JMeterUtils.getPropDefault("beanshell.server.port", 0);
-		String bshfile = JMeterUtils.getPropDefault("beanshell.server.file", "");
+		int bshport = JMeterUtils.getPropDefault("beanshell.server.port", 0);// $NON-NLS-1$
+		String bshfile = JMeterUtils.getPropDefault("beanshell.server.file", "");// $NON-NLS-1$ $NON-NLS-2$
 		if (bshport > 0) {
 			log.info("Starting Beanshell server (" + bshport + "," + bshfile + ")");
 			Runnable t = new BeanShellServer(bshport, bshfile);
@@ -318,27 +322,31 @@ public class JMeter implements JMeterPlugin {
 	 */
 	private void setProxy(CLArgsParser parser) throws IllegalUserActionException {
 		if (parser.getArgumentById(PROXY_USERNAME) != null) {
+            Properties jmeterProps = JMeterUtils.getJMeterProperties();
 			if (parser.getArgumentById(PROXY_PASSWORD) != null) {
 				String u, p;
 				Authenticator.setDefault(new ProxyAuthenticator(u = parser.getArgumentById(PROXY_USERNAME)
 						.getArgument(), p = parser.getArgumentById(PROXY_PASSWORD).getArgument()));
 				log.info("Set Proxy login: " + u + "/" + p);
+                jmeterProps.setProperty(HTTP_PROXY_USER, u);
+                jmeterProps.setProperty(HTTP_PROXY_PASS, p);
 			} else {
 				String u;
 				Authenticator.setDefault(new ProxyAuthenticator(u = parser.getArgumentById(PROXY_USERNAME)
 						.getArgument(), ""));
 				log.info("Set Proxy login: " + u);
+                jmeterProps.setProperty(HTTP_PROXY_USER, u);
 			}
 		}
 		if (parser.getArgumentById(PROXY_HOST) != null && parser.getArgumentById(PROXY_PORT) != null) {
 			String h, p;
-			System.setProperty("http.proxyHost", h = parser.getArgumentById(PROXY_HOST).getArgument());
-			System.setProperty("https.proxyHost", parser.getArgumentById(PROXY_HOST).getArgument());
-			System.setProperty("http.proxyPort", p = parser.getArgumentById(PROXY_PORT).getArgument());
-			System.setProperty("https.proxyPort", parser.getArgumentById(PROXY_PORT).getArgument());
+			System.setProperty("http.proxyHost", h = parser.getArgumentById(PROXY_HOST).getArgument());// $NON-NLS-1$
+			System.setProperty("https.proxyHost", parser.getArgumentById(PROXY_HOST).getArgument());// $NON-NLS-1$
+			System.setProperty("http.proxyPort", p = parser.getArgumentById(PROXY_PORT).getArgument());// $NON-NLS-1$
+			System.setProperty("https.proxyPort", parser.getArgumentById(PROXY_PORT).getArgument());// $NON-NLS-1$
 			log.info("Set http[s].proxyHost: " + h + " Port: " + p);
 		} else if (parser.getArgumentById(PROXY_HOST) != null || parser.getArgumentById(PROXY_PORT) != null) {
-			throw new IllegalUserActionException(JMeterUtils.getResString("proxy_cl_error"));
+			throw new IllegalUserActionException(JMeterUtils.getResString("proxy_cl_error"));// $NON-NLS-1$
 		}
 	}
 
@@ -346,8 +354,9 @@ public class JMeter implements JMeterPlugin {
 		if (parser.getArgumentById(PROPFILE_OPT) != null) {
 			JMeterUtils.getProperties(parser.getArgumentById(PROPFILE_OPT).getArgument());
 		} else {
-			JMeterUtils.getProperties(NewDriver.getJMeterDir() + File.separator + "bin" + File.separator
-					+ "jmeter.properties");
+			JMeterUtils.getProperties(NewDriver.getJMeterDir() + File.separator
+                    + "bin" + File.separator // $NON-NLS-1$
+					+ "jmeter.properties");// $NON-NLS-1$
 		}
 
 		// Bug 33845 - allow direct override of Home dir
@@ -431,7 +440,7 @@ public class JMeter implements JMeterPlugin {
 			throws IllegalUserActionException {
 		// add a system property so samplers can check to see if JMeter
 		// is running in NonGui mode
-		System.setProperty("JMeter.NonGui", "true");
+		System.setProperty("JMeter.NonGui", "true");// $NON-NLS-1$
 		JMeter driver = new JMeter();
 		driver.parent = this;
 		PluginManager.install(this, false);
@@ -446,11 +455,8 @@ public class JMeter implements JMeterPlugin {
 		}
 	}
 
-	private void run(String testFile, String logFile, boolean remoteStart) { // run
-																				// test
-																				// in
-																				// batch
-																				// mode
+    // run test in batch mode
+	private void run(String testFile, String logFile, boolean remoteStart) {
 		FileInputStream reader = null;
 		try {
 			File f = new File(testFile);
@@ -490,8 +496,10 @@ public class JMeter implements JMeterPlugin {
 				println("Starting the test");
 				engine.runTest();
 			} else {
-				String remote_hosts_string = JMeterUtils.getPropDefault("remote_hosts", "127.0.0.1");
-				java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
+				String remote_hosts_string = JMeterUtils.getPropDefault(
+                        "remote_hosts", //$NON-NLS-1$ 
+                        "127.0.0.1");//$NON-NLS-1$
+				java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");//$NON-NLS-1$
 				List engines = new LinkedList();
 				while (st.hasMoreElements()) {
 					String el = (String) st.nextElement();
@@ -594,7 +602,7 @@ public class JMeter implements JMeterPlugin {
 		}
 
 		public void testStarted() {
-			log.info(JMeterUtils.getResString("running_test"));
+			log.info(JMeterUtils.getResString("running_test"));//$NON-NLS-1$
 		}
 
 		/**
@@ -634,11 +642,11 @@ public class JMeter implements JMeterPlugin {
 	}
 
 	private static final String[][] DEFAULT_ICONS = {
-			{ TestPlanGui.class.getName(), "org/apache/jmeter/images/beaker.gif" },
-			{ AbstractTimerGui.class.getName(), "org/apache/jmeter/images/timer.gif" },
-			{ ThreadGroupGui.class.getName(), "org/apache/jmeter/images/thread.gif" },
-			{ AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },
-			{ AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },
+			{ TestPlanGui.class.getName(), "org/apache/jmeter/images/beaker.gif" },//$NON-NLS-1$
+			{ AbstractTimerGui.class.getName(), "org/apache/jmeter/images/timer.gif" },//$NON-NLS-1$
+			{ ThreadGroupGui.class.getName(), "org/apache/jmeter/images/thread.gif" },//$NON-NLS-1$
+			{ AbstractVisualizer.class.getName(), "org/apache/jmeter/images/meter.png" },//$NON-NLS-1$
+			{ AbstractConfigGui.class.getName(), "org/apache/jmeter/images/testtubes.png" },//$NON-NLS-1$
 			// Note: these were the original settings (just moved to a static
 			// array)
 			// Commented out because there is no such file
@@ -648,14 +656,15 @@ public class JMeter implements JMeterPlugin {
 			// {
 			// AbstractPostProcessorGui.class.getName(),
 			// "org/apache/jmeter/images/testtubes.gif" },
-			{ AbstractControllerGui.class.getName(), "org/apache/jmeter/images/knob.gif" },
-			{ WorkBenchGui.class.getName(), "org/apache/jmeter/images/clipboard.gif" },
-			{ AbstractSamplerGui.class.getName(), "org/apache/jmeter/images/pipet.png" }
+			{ AbstractControllerGui.class.getName(), "org/apache/jmeter/images/knob.gif" },//$NON-NLS-1$
+			{ WorkBenchGui.class.getName(), "org/apache/jmeter/images/clipboard.gif" },//$NON-NLS-1$
+			{ AbstractSamplerGui.class.getName(), "org/apache/jmeter/images/pipet.png" }//$NON-NLS-1$
 	// AbstractAssertionGUI not defined
 	};
 
 	public String[][] getIconMappings() {
-		String iconProp = JMeterUtils.getPropDefault("jmeter.icons", "org/apache/jmeter/images/icon.properties");
+		String iconProp = JMeterUtils.getPropDefault("jmeter.icons",//$NON-NLS-1$
+                "org/apache/jmeter/images/icon.properties");//$NON-NLS-1$
 		Properties p = JMeterUtils.loadProperties(iconProp);
 		if (p == null) {
 			log.info(iconProp + " not found - using default icon set");
@@ -667,7 +676,7 @@ public class JMeter implements JMeterPlugin {
 		int i = 0;
 		while (pe.hasMoreElements()) {
 			String key = (String) pe.nextElement();
-			String icons[] = JOrphanUtils.split(p.getProperty(key), " ");
+			String icons[] = JOrphanUtils.split(p.getProperty(key), " ");//$NON-NLS-1$
 			iconlist[i][0] = key;
 			iconlist[i][1] = icons[0];
 			if (icons.length > 1)
