@@ -65,7 +65,9 @@ import org.xml.sax.SAXException;
  */
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
 		TestListener, Remoteable, NoThreadClone {
-	static final long serialVersionUID = 2;
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final long serialVersionUID = 2;
 
 	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
@@ -78,8 +80,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
 			+ TESTRESULTS_END.length();
-
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	public final static String FILENAME = "filename"; // $NON-NLS-1$
 
@@ -163,11 +163,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	}
 
 	public void testEnded() {
-		testEnded("local");
+		testEnded("local"); // $NON-NLS-1$
 	}
 
 	public void testStarted() {
-		testStarted("local");
+		testStarted("local"); // $NON-NLS-1$
 	}
 
 	public void loadExistingFile() throws IOException {
@@ -314,26 +314,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		return true;
 	}
 
-	/**
-	 * Gets the serializedSampleResult attribute of the ResultCollector object.
-	 * 
-	 * @param result
-	 *            description of the Parameter
-	 * @return the serializedSampleResult value
-	 */
-	// NOTUSED
-	// private String getSerializedSampleResult(SampleResult result)
-	// throws SAXException, IOException, ConfigurationException
-	// {
-	// ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-	//
-	// serializer.serialize(tempOut, OldSaveService.getConfiguration(result,
-	// getFunctionalMode()));
-	// String serVer = tempOut.toString();
-	//
-	// return serVer.substring(serVer.indexOf(System
-	// .getProperty("line.separator")));
-	// }
 	private void readSamples(TestResultWrapper testResults) throws Exception {
 		Collection samples = testResults.getSampleResults();
 		Iterator iter = samples.iterator();
@@ -361,10 +341,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		}
 		finalizeFileOutput();
 	}
-
-	// public void setListener(Object l)
-	// {
-	// }
 
 	public void sampleStarted(SampleEvent e) {
 	}
@@ -440,13 +416,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		int index = serVer.indexOf(lineSep); // Is there a new-line?
 		if (index > -1) {// Yes, assume it follows the prefix
 			return serVer.substring(index);
-		} else { // no new-line; check for prefix and repace with new-line
-            if (serVer.startsWith("<?xml")){ // $NON-NLS-1$
-                index=serVer.indexOf("?>");// must exist // $NON-NLS-1$
-                return lineSep + serVer.substring(index+2);// +2 for ?>
-            }
-			return serVer;
 		}
+		if (serVer.startsWith("<?xml")){ // $NON-NLS-1$
+		    index=serVer.indexOf("?>");// must exist // $NON-NLS-1$
+		    return lineSep + serVer.substring(index+2);// +2 for ?>
+		}
+		return serVer;
 	}
 
 	/**
