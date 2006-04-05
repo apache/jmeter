@@ -45,6 +45,12 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 
 	private int groupSize;
 
+	// Ensure transient object is created by the server
+	private Object readResolve(){
+		sync = new Object();
+		return this;
+	}
+
 	/**
 	 * @return Returns the numThreads.
 	 */
