@@ -40,11 +40,11 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class ValueReplacer {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	CompoundVariable masterFunction = new CompoundVariable();
+	private CompoundVariable masterFunction = new CompoundVariable();
 
-	Map variables = new HashMap();
+	private Map variables = new HashMap();
 
 	public ValueReplacer() {
 	}
