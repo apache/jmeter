@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -35,14 +34,14 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class Entry {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	Map configSet;
+	private Map configSet;
 
 	// Set clonedSet;
-	Class sampler;
+	private Class sampler;
 
-	List assertions;
+	private List assertions;
 
 	public Entry() {
 		configSet = new HashMap();
@@ -92,16 +91,15 @@ public class Entry {
 	private ConfigElement cloneIfNecessary(ConfigElement config) {
 		if (config.expectsModification()) {
 			return config;
-		} else {
-			return (ConfigElement) config.clone();
 		}
+		return (ConfigElement) config.clone();
 	}
 
 	public Object clone() {
 		try {
 			return super.clone();
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 		return null;
 	}
