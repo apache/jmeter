@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -38,7 +37,7 @@ import org.apache.log.Logger;
  */
 public class FileWrapper {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private FileRowColContainer container;
 
@@ -46,7 +45,7 @@ public class FileWrapper {
 
 	private static final int NO_LINE = -1;
 
-	private static String defaultFile = ""; // for omitted file names
+	private static String defaultFile = ""; // for omitted file names //$NON-NLS-1$
 
 	/*
      * This Map serves two purposes:
@@ -149,7 +148,7 @@ public class FileWrapper {
 		FileWrapper fw = (FileWrapper) (my).get(file);
 		if (fw == null) // First call
 		{
-			if (file.startsWith("*")) {
+			if (file.startsWith("*")) { //$NON-NLS-1$
 				log.warn("Cannot perform initial open using alias " + file);
 			} else {
 				file = checkDefault(file);
@@ -185,9 +184,8 @@ public class FileWrapper {
 		if (fw == null) // Not yet open
 		{
 			return -1;
-		} else {
-			return fw.currentRow;
 		}
+		return fw.currentRow;
 	}
 
 	/**
@@ -202,6 +200,6 @@ public class FileWrapper {
 			i.remove();
 		}
 		fileContainers.clear();
-		defaultFile = "";
+		defaultFile = ""; //$NON-NLS-1$
 	}
 }

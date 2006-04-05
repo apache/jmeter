@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
  */
 public class XPathFileContainer {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private NodeList nodeList;
 

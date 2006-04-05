@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
  */
 public class XPathWrapper {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     /*
      * This Map serves two purposes:
@@ -102,7 +102,7 @@ public class XPathWrapper {
 			// TODO improve the error handling
 			if (xpfc == null) {
 				log.error("XPathWrapper is null!");
-				return "";
+				return ""; //$NON-NLS-1$
 			}
             my.put(key,xpfc); // save our local copy
 		}
