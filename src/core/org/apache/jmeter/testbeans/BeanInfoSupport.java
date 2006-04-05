@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -62,7 +61,7 @@ import org.apache.log.Logger;
  */
 public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Some known attribute names, just for convenience:
 	public static final String TAGS = GenericTestBeanCustomizer.TAGS;
@@ -99,14 +98,15 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 		}
 
 		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(beanClass.getName() + "Resources", JMeterUtils
-					.getLocale());
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(
+					beanClass.getName() + "Resources",  // $NON-NLS-1$ 
+					JMeterUtils.getLocale());
 
 			// Store the resource bundle as an attribute of the BeanDescriptor:
 			getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
 			// Localize the bean name
 			try {
-				getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName"));
+				getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$ 
 			} catch (MissingResourceException e) {
 				log.debug("Localized display name not available for bean " + beanClass.getName());
 			}
@@ -115,7 +115,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 			for (int i = 0; i < properties.length; i++) {
 				String name = properties[i].getName();
 				try {
-					properties[i].setDisplayName(resourceBundle.getString(name + ".displayName"));
+					properties[i].setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$ 
 				} catch (MissingResourceException e) {
 					log.debug("Localized display name not available for property " + name);
 				}
