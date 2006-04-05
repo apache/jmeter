@@ -40,7 +40,7 @@ import org.apache.log.Logger;
 
 public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 	// class attributes
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	 private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JTextField xmlSchema;
 
@@ -55,7 +55,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 	 * Returns the label to be shown within the JTree-Component.
 	 */
 	public String getLabelResource() {
-		return "xmlschema_assertion_title";
+		return "xmlschema_assertion_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 		// doctype
 		HorizontalPanel xmlSchemaPanel = new HorizontalPanel();
 
-		xmlSchemaPanel.add(new JLabel(JMeterUtils.getResString("xmlschema_assertion_label")));
+		xmlSchemaPanel.add(new JLabel(JMeterUtils.getResString("xmlschema_assertion_label"))); //$NON-NLS-1$
 
 		xmlSchema = new JTextField(26);
 		xmlSchemaPanel.add(xmlSchema);
