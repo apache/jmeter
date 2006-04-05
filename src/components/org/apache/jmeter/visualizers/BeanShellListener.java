@@ -49,11 +49,24 @@ public class BeanShellListener extends AbstractTestElement
 
     private String script = "";
     
-    public BeanShellListener()  throws ClassNotFoundException {
-        bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+    public BeanShellListener() {
+    	init();
     }
 
 
+	private void init() {
+		try {
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+		} catch (ClassNotFoundException e) {
+			log.error(e.getLocalizedMessage());
+		}
+	}
+
+    private Object readResolve() {
+    	init();
+    	return this;
+    }
+    
 	public String getScript() {
 		return script;
 	}
