@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -44,7 +43,7 @@ import org.apache.log.Logger;
 
 public class BeanShell extends AbstractFunction implements Serializable {
 
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
@@ -85,12 +84,12 @@ public class BeanShell extends AbstractFunction implements Serializable {
 		JMeterVariables vars = jmctx.getVariables();
 
 		String script = ((CompoundVariable) values[0]).execute();
-		String varName = "";
+		String varName = ""; //$NON-NLS-1$
 		if (values.length > 1) {
 			varName = ((CompoundVariable) values[1]).execute();
 		}
 
-		String resultStr = "";
+		String resultStr = ""; //$NON-NLS-1$
 
 		log.debug("Script=" + script);
 
