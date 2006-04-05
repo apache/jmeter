@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001,2003-2004 The Apache Software Foundation.
  *
@@ -60,7 +59,7 @@ import org.apache.log.Logger;
  */
 public final class GuiPackage implements LocaleChangeListener {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** Singleton instance. */
 	private static GuiPackage guiPack;
@@ -159,13 +158,13 @@ public final class GuiPackage implements LocaleChangeListener {
 		String guiClassName = node.getPropertyAsString(TestElement.GUI_CLASS);
 		try {
 			Class testClass;
-			if (testClassName.equals("")) {
+			if (testClassName.equals("")) { // $NON-NLS-1$
 				testClass = node.getClass();
 			} else {
 				testClass = Class.forName(testClassName);
 			}
 			Class guiClass = null;
-			if (!guiClassName.equals("")) {
+			if (!guiClassName.equals("")) { // $NON-NLS-1$
 				guiClass = Class.forName(guiClassName);
 			}
 			return getGui(node, guiClass, testClass);
