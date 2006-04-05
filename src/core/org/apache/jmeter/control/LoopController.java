@@ -25,20 +25,16 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-// NOTUSED import org.apache.jorphan.logging.LoggingManager;
-// NOTUSED import org.apache.log.Logger;
-
 /**
  * @author Michael Stover
  * @author Thad Smith
  * @version $Revision$
  */
 public class LoopController extends GenericController implements Serializable {
-	// NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String LOOPS = "LoopController.loops";
+	private final static String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
-	private final static String CONTINUE_FOREVER = "LoopController.continue_forever";
+	private final static String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
 
 	private transient int loopCount = 0;
 
@@ -89,9 +85,8 @@ public class LoopController extends GenericController implements Serializable {
 	public boolean isDone() {
 		if (getLoops() != 0) {
 			return super.isDone();
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	private boolean endOfLoop() {
@@ -112,9 +107,8 @@ public class LoopController extends GenericController implements Serializable {
 				resetLoopCount();
 			}
 			return null;
-		} else {
-			return next();
 		}
+		return next();
 	}
 
 	protected void incrementLoopCount() {
