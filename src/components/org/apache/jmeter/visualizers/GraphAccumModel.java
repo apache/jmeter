@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -37,7 +36,7 @@ import org.apache.log.Logger;
  */
 
 public class GraphAccumModel implements Clearable, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	protected String name;
 
