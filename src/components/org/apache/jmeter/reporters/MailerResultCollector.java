@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -23,16 +22,13 @@ import java.io.Serializable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
-// import org.apache.jorphan.logging.LoggingManager;
-// import org.apache.log.Logger;
 
 /**
  * @author Michael Stover
  * @version $Revision$
  */
 public class MailerResultCollector extends ResultCollector implements Serializable {
-	// transient private static Logger log = LoggingManager.getLoggerForClass();
-	public static final String MAILER_MODEL = "MailerResultCollector.mailer_model";
+	public static final String MAILER_MODEL = "MailerResultCollector.mailer_model"; //$NON-NLS-1$
 
 	public MailerResultCollector() {
 		super();
