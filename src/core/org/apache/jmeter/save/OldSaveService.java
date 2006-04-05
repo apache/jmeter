@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
  *
@@ -63,7 +62,7 @@ import org.xml.sax.SAXException;
  * @version $Revision$ $Date$
  */
 public final class OldSaveService implements SaveServiceConstants {
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
@@ -252,12 +251,12 @@ public final class OldSaveService implements SaveServiceConstants {
             Vector row = (Vector)data.elementAt(idx);
             for (int idy=0; idy < row.size(); idy++) {
                 if (idy > 0) {
-                    writer.write(",");
+                    writer.write(","); // $NON-NLS-1$
                 }
                 Object item = row.elementAt(idy);
                 writer.write( String.valueOf(item) );
             }
-            writer.write(System.getProperty("line.separator"));
+            writer.write(System.getProperty("line.separator")); // $NON-NLS-1$
         }
     }
 
@@ -265,12 +264,12 @@ public final class OldSaveService implements SaveServiceConstants {
 		SampleResult result = new SampleResult(config.getAttributeAsLong(TIME_STAMP, 0L), config.getAttributeAsLong(
 				TIME, 0L));
 
-		result.setThreadName(config.getAttribute(THREAD_NAME, ""));
+		result.setThreadName(config.getAttribute(THREAD_NAME, "")); // $NON-NLS-1$
 		result.setDataType(config.getAttribute(DATA_TYPE, ""));
-		result.setResponseCode(config.getAttribute(RESPONSE_CODE, ""));
-		result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, ""));
+		result.setResponseCode(config.getAttribute(RESPONSE_CODE, "")); // $NON-NLS-1$
+		result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, "")); // $NON-NLS-1$
 		result.setSuccessful(config.getAttributeAsBoolean(SUCCESSFUL, false));
-		result.setSampleLabel(config.getAttribute(LABEL, ""));
+		result.setSampleLabel(config.getAttribute(LABEL, "")); // $NON-NLS-1$
 		result.setResponseData(getBinaryData(config.getChild(BINARY)));
 		Configuration[] subResults = config.getChildren(SAMPLE_RESULT_TAG_NAME);
 
@@ -283,9 +282,9 @@ public final class OldSaveService implements SaveServiceConstants {
 			result.addAssertionResult(getAssertionResult(assResults[i]));
 		}
 
-		Configuration[] samplerData = config.getChildren("property");
+		Configuration[] samplerData = config.getChildren("property"); // $NON-NLS-1$
 		for (int i = 0; i < samplerData.length; i++) {
-			result.setSamplerData(samplerData[i].getValue(""));
+			result.setSamplerData(samplerData[i].getValue("")); // $NON-NLS-1$
 		}
 		return result;
 	}
@@ -296,7 +295,7 @@ public final class OldSaveService implements SaveServiceConstants {
 
 		while (iter.hasNext()) {
 			TestElement item = (TestElement) iter.next();
-			DefaultConfiguration config = new DefaultConfiguration("node", "node");
+			DefaultConfiguration config = new DefaultConfiguration("node", "node"); // $NON-NLS-1$ // $NON-NLS-2$
 
 			config.addChild(getConfigForTestElement(null, item));
 			List configList = getConfigsFromTree(subTree.getTree(item));
@@ -311,12 +310,12 @@ public final class OldSaveService implements SaveServiceConstants {
 	}
 
 	public static Configuration getConfiguration(byte[] bin) {
-		DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service");
+		DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service"); // $NON-NLS-1$
 
 		try {
-			config.setValue(new String(bin, "UTF-8"));
+			config.setValue(new String(bin, "UTF-8")); // $NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
-			log.error("", e);
+			log.error("", e); // $NON-NLS-1$
 		}
 		return config;
 	}
@@ -326,7 +325,7 @@ public final class OldSaveService implements SaveServiceConstants {
 			return new byte[0];
 		}
 		try {
-			return config.getValue("").getBytes("UTF-8");
+			return config.getValue("").getBytes("UTF-8"); // $NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
 			return new byte[0];
 		}
@@ -359,10 +358,10 @@ public final class OldSaveService implements SaveServiceConstants {
 	 *            an indicator of whether the user wants all data recorded.
 	 */
 	public static Configuration getConfiguration(SampleResult result, SampleSaveConfiguration saveConfig) {
-		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service");
+		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service"); // $NON-NLS-1$
 
 		if (saveConfig.saveTime()) {
-			config.setAttribute(TIME, "" + result.getTime());
+			config.setAttribute(TIME, String.valueOf(result.getTime()));
 		}
 		if (saveConfig.saveLabel()) {
 			config.setAttribute(LABEL, result.getSampleLabel());
@@ -381,7 +380,7 @@ public final class OldSaveService implements SaveServiceConstants {
 		}
 
 		if (saveConfig.printMilliseconds()) {
-			config.setAttribute(TIME_STAMP, "" + result.getTimeStamp());
+			config.setAttribute(TIME_STAMP, String.valueOf(result.getTimeStamp()));
 		} else if (saveConfig.formatter() != null) {
 			String stamp = saveConfig.formatter().format(new Date(result.getTimeStamp()));
 
@@ -403,7 +402,7 @@ public final class OldSaveService implements SaveServiceConstants {
 		AssertionResult[] assResults = result.getAssertionResults();
 
 		if (saveConfig.saveSamplerData(result)) {
-			config.addChild(createConfigForString("samplerData", result.getSamplerData()));
+			config.addChild(createConfigForString("samplerData", result.getSamplerData())); // $NON-NLS-1$
 		}
 		if (saveConfig.saveAssertions() && assResults != null) {
 			for (int i = 0; i < assResults.length; i++) {
@@ -545,36 +544,6 @@ public final class OldSaveService implements SaveServiceConstants {
 		return config;
 	}
 
-	/*
-	 * 
-	 * NOTUSED private static Configuration createConfigForCollection( String
-	 * propertyName, Collection list) { DefaultConfiguration config = new
-	 * DefaultConfiguration("collection", "collection");
-	 * 
-	 * if (propertyName != null) { config.setAttribute("name", propertyName); }
-	 * config.setAttribute("class", list.getClass().getName()); Iterator iter =
-	 * list.iterator();
-	 * 
-	 * while (iter.hasNext()) { Object item = iter.next();
-	 * 
-	 * if (item instanceof TestElement) { config.addChild(
-	 * getConfigForTestElement(null, (TestElement) item)); } else if (item
-	 * instanceof Collection) { config.addChild( createConfigForCollection(null,
-	 * (Collection) item)); } else {
-	 * config.addChild(createConfigForString(item.toString())); } } return
-	 * config; }
-	 */
-
-	/*
-	 * NOTUSED
-	 * 
-	 * private static Configuration createConfigForString(String value) {
-	 * DefaultConfiguration config = new DefaultConfiguration("string",
-	 * "string");
-	 * 
-	 * config.setValue(value); config.setAttribute(XML_SPACE, PRESERVE); return
-	 * config; }
-	 */
 
 	private static Configuration createConfigForString(String name, String value) {
 		if (value == null) {
@@ -609,13 +578,13 @@ public final class OldSaveService implements SaveServiceConstants {
 			ClassNotFoundException, IllegalAccessException, InstantiationException {
 		TestElement element = null;
 
-		String testClass = config.getAttribute("class");
+		String testClass = config.getAttribute("class"); // $NON-NLS-1$
 		
-        String gui_class="";
+        String gui_class=""; // $NON-NLS-1$
 		Configuration[] children = config.getChildren();
         for (int i = 0; i < children.length; i++) {
-            if (children[i].getName().equals("property")) {
-                if (children[i].getAttribute("name").equals(TestElement.GUI_CLASS)){
+            if (children[i].getName().equals("property")) { // $NON-NLS-1$
+                if (children[i].getAttribute("name").equals(TestElement.GUI_CLASS)){ // $NON-NLS-1$
                     gui_class=children[i].getValue();
                 }
             }  
@@ -626,22 +595,22 @@ public final class OldSaveService implements SaveServiceConstants {
         element = (TestElement) Class.forName(newClass).newInstance();
 
         for (int i = 0; i < children.length; i++) {
-			if (children[i].getName().equals("property")) {
+			if (children[i].getName().equals("property")) { // $NON-NLS-1$
 				try {
                     JMeterProperty prop = createProperty(children[i], newClass);
 					if (prop!=null) element.setProperty(prop);
 				} catch (Exception ex) {
 					log.error("Problem loading property", ex);
-					element.setProperty(children[i].getAttribute("name"), "");
+					element.setProperty(children[i].getAttribute("name"), ""); // $NON-NLS-1$ // $NON-NLS-2$
 				}
-			} else if (children[i].getName().equals("testelement")) {
-				element.setProperty(new TestElementProperty(children[i].getAttribute("name", ""),
+			} else if (children[i].getName().equals("testelement")) { // $NON-NLS-1$
+				element.setProperty(new TestElementProperty(children[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createTestElement(children[i])));
-			} else if (children[i].getName().equals("collection")) {
-				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""),
+			} else if (children[i].getName().equals("collection")) { // $NON-NLS-1$
+				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
                         createCollection(children[i], newClass)));
-			} else if (children[i].getName().equals("map")) {
-				element.setProperty(new MapProperty(children[i].getAttribute("name", ""),
+			} else if (children[i].getName().equals("map")) { // $NON-NLS-1$
+				element.setProperty(new MapProperty(children[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
                         createMap(children[i],newClass)));
 			}
 		}
@@ -650,23 +619,23 @@ public final class OldSaveService implements SaveServiceConstants {
 
 	private static Collection createCollection(Configuration config, String testClass) throws ConfigurationException,
 			ClassNotFoundException, IllegalAccessException, InstantiationException {
-		Collection coll = (Collection) Class.forName(config.getAttribute("class")).newInstance();
+		Collection coll = (Collection) Class.forName(config.getAttribute("class")).newInstance(); // $NON-NLS-1$ 
 		Configuration[] items = config.getChildren();
 
 		for (int i = 0; i < items.length; i++) {
-			if (items[i].getName().equals("property")) {
+			if (items[i].getName().equals("property")) { // $NON-NLS-1$ 
                 JMeterProperty prop = createProperty(items[i], testClass);
 				if (prop!=null) coll.add(prop);
-			} else if (items[i].getName().equals("testelement")) {
-				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i])));
-			} else if (items[i].getName().equals("collection")) {
-				coll.add(new CollectionProperty(items[i].getAttribute("name", ""),
+			} else if (items[i].getName().equals("testelement")) { // $NON-NLS-1$ 
+				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i]))); // $NON-NLS-1$ // $NON-NLS-2$
+			} else if (items[i].getName().equals("collection")) { // $NON-NLS-1$ 
+				coll.add(new CollectionProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createCollection(items[i], testClass)));
-			} else if (items[i].getName().equals("string")) {
+			} else if (items[i].getName().equals("string")) { // $NON-NLS-1$ 
                 JMeterProperty prop = createProperty(items[i], testClass);
 				if (prop!=null) coll.add(prop);
-			} else if (items[i].getName().equals("map")) {
-				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass)));
+			} else if (items[i].getName().equals("map")) { // $NON-NLS-1$ 
+				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass))); // $NON-NLS-1$ // $NON-NLS-2$
 			}
 		}
 		return coll;
@@ -674,10 +643,10 @@ public final class OldSaveService implements SaveServiceConstants {
 
 	private static JMeterProperty createProperty(Configuration config, String testClass) throws IllegalAccessException,
 			ClassNotFoundException, InstantiationException {
-		String value = config.getValue("");
-		String name = config.getAttribute("name", value);
+		String value = config.getValue(""); // $NON-NLS-1$ 
+		String name = config.getAttribute("name", value); // $NON-NLS-1$ 
         String oname = name;
-		String type = config.getAttribute("propType", StringProperty.class.getName());
+		String type = config.getAttribute("propType", StringProperty.class.getName()); // $NON-NLS-1$ 
 
 		// Do upgrade translation:
 		name = NameUpdater.getCurrentName(name, testClass);
@@ -708,17 +677,19 @@ public final class OldSaveService implements SaveServiceConstants {
 		Configuration[] items = config.getChildren();
 
 		for (int i = 0; i < items.length; i++) {
-			if (items[i].getName().equals("property")) {
+			if (items[i].getName().equals("property")) { // $NON-NLS-1$ 
 				JMeterProperty prop = createProperty(items[i], testClass);
 				if (prop!=null) map.put(prop.getName(), prop);
-			} else if (items[i].getName().equals("testelement")) {
-				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""),
+			} else if (items[i].getName().equals("testelement")) { // $NON-NLS-1$ 
+				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createTestElement(items[i])));
-			} else if (items[i].getName().equals("collection")) {
-				map.put(items[i].getAttribute("name"), new CollectionProperty(items[i].getAttribute("name", ""),
+			} else if (items[i].getName().equals("collection")) { // $NON-NLS-1$ 
+				map.put(items[i].getAttribute("name"),  // $NON-NLS-1$ 
+						new CollectionProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createCollection(items[i], testClass)));
-			} else if (items[i].getName().equals("map")) {
-				map.put(items[i].getAttribute("name", ""), new MapProperty(items[i].getAttribute("name", ""),
+			} else if (items[i].getName().equals("map")) { // $NON-NLS-1$ 
+				map.put(items[i].getAttribute("name", ""),  // $NON-NLS-1$ // $NON-NLS-2$
+						new MapProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createMap(items[i], testClass)));
 			}
 		}
@@ -729,13 +700,13 @@ public final class OldSaveService implements SaveServiceConstants {
 		TestElement element = null;
 
 		try {
-			element = createTestElement(config.getChild("testelement"));
+			element = createTestElement(config.getChild("testelement")); // $NON-NLS-1$ 
 		} catch (Exception e) {
 			log.error("Problem loading part of file", e);
 			return null;
 		}
 		HashTree subTree = new ListedHashTree(element);
-		Configuration[] subNodes = config.getChildren("node");
+		Configuration[] subNodes = config.getChildren("node"); // $NON-NLS-1$ 
 
 		for (int i = 0; i < subNodes.length; i++) {
 			HashTree t = generateNode(subNodes[i]);
