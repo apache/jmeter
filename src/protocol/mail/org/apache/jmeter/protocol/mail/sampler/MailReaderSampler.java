@@ -16,14 +16,18 @@
  */
 package org.apache.jmeter.protocol.mail.sampler;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Properties;
 
 import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -37,30 +41,21 @@ import org.apache.log.Logger;
  * @author Thad Smith
  */
 public class MailReaderSampler extends AbstractSampler {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// Where we keep all of the mail connection information
-	// NOTUSED private Properties props = new Properties();
+	private final static String SERVER_TYPE = "host_type"; // $NON-NLS-1$
+	private final static String SERVER = "host"; // $NON-NLS-1$
+	private final static String USERNAME = "username"; // $NON-NLS-1$
+	private final static String PASSWORD = "password"; // $NON-NLS-1$
+	private final static String FOLDER = "folder"; // $NON-NLS-1$
+	private final static String DELETE = "delete"; // $NON-NLS-1$
+	private final static String NUM_MESSAGES = "num_messages"; // $NON-NLS-1$
+	private static final String NEW_LINE = "\n"; // $NON-NLS-1$
+	
+	// Needed by GUI
+	public final static String TYPE_POP3 = "pop3"; // $NON-NLS-1$
+	public final static String TYPE_IMAP = "imap"; // $NON-NLS-1$
 
-	// Static data identifiers
-	private final static String SERVER_TYPE = "host_type";
-
-	private final static String SERVER = "host";
-
-	private final static String USERNAME = "username";
-
-	private final static String PASSWORD = "password";
-
-	private final static String FOLDER = "folder";
-
-	private final static String DELETE = "delete";
-
-	private final static String NUM_MESSAGES = "num_messages";
-
-	// Static data values
-	public final static String TYPE_POP3 = "pop3";
-
-	public final static String TYPE_IMAP = "imap";
 
 	public MailReaderSampler() {
 		setServerType(TYPE_POP3);
@@ -77,6 +72,7 @@ public class MailReaderSampler extends AbstractSampler {
 	public SampleResult sample(Entry e) {
 		SampleResult res = new SampleResult();
 		boolean isOK = false; // Did sample succeed?
+		boolean deleteMessages = getDeleteMessages();
 
 		res.setSampleLabel(getName());
         res.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
@@ -97,49 +93,88 @@ public class MailReaderSampler extends AbstractSampler {
 
 			// Get folder
 			Folder folder = store.getFolder(getFolder());
-			folder.open(Folder.READ_WRITE);
+			if (deleteMessages) {
+			    folder.open(Folder.READ_WRITE);
+			} else {
+			    folder.open(Folder.READ_ONLY);
+			}
 
 			// Get directory
 			Message messages[] = folder.getMessages();
 			Message message;
 			StringBuffer data = new StringBuffer();
-			data.append(messages.length + " new messages\n");
+			data.append(messages.length);
+			data.append(" messages found\n");
 
 			int n = getNumMessages();
 			if (n == -1 || n > messages.length)
 				n = messages.length;
 
+			// TODO - create a sample result for each message?
 			for (int i = 0; i < n; i++) {
 				message = messages[i];
 
-				if (i == 0)
+				if (i == 0) { // Assumes all the messaged have the same type ...
 					res.setContentType(message.getContentType());
+				}
 
-				data.append("Message " + message.getMessageNumber() + ":\n");
-				data.append("Date: " + message.getSentDate() + "\n");
+				data.append("Message "); // $NON-NLS-1$
+				data.append(message.getMessageNumber());
+				data.append(":\n"); // $NON-NLS-1$
+				
+				data.append("Date: "); // $NON-NLS-1$
+				data.append(message.getSentDate());
+				data.append(NEW_LINE);
 
-				data.append("To: ");
+				data.append("To: "); // $NON-NLS-1$
 				Address[] recips = message.getAllRecipients();
 				for (int j = 0; j < recips.length; j++) {
 					data.append(recips[j].toString());
 					if (j < recips.length - 1)
-						data.append("; ");
+						data.append("; "); // $NON-NLS-1$
 				}
-				data.append("\n");
+				data.append(NEW_LINE);
 
-				data.append("From: ");
+				data.append("From: "); // $NON-NLS-1$
 				Address[] from = message.getFrom();
 				for (int j = 0; j < from.length; j++) {
 					data.append(from[j].toString());
 					if (j < from.length - 1)
-						data.append("; ");
+						data.append("; "); // $NON-NLS-1$
 				}
-				data.append("\n");
+				data.append(NEW_LINE);
 
-				data.append("Subject: " + message.getSubject() + "\n");
-				data.append("\n" + message.getContent());
+				data.append("Subject: "); // $NON-NLS-1$
+				data.append(message.getSubject());
+				data.append(NEW_LINE);
+				
+				data.append(NEW_LINE);
+				Object content = message.getContent();
+				if (content instanceof MimeMultipart) {
+					MimeMultipart mmp = (MimeMultipart) content;
+					int count = mmp.getCount();
+					data.append("Multipart. Count: ");
+					data.append(count);
+					data.append(NEW_LINE);
+					for (int j=0; j<count;j++){
+						BodyPart bodyPart = mmp.getBodyPart(j);
+						data.append("Type: ");
+						data.append(bodyPart.getContentType());
+						data.append(NEW_LINE);
+						try {
+							data.append(bodyPart.getContent());
+						} catch (UnsupportedEncodingException ex){
+							data.append(ex.getLocalizedMessage());
+						}
+						data.append(NEW_LINE);
+					}
+				} else {
+				    data.append(content);
+					data.append(NEW_LINE);
+				}
+				data.append(NEW_LINE);
 
-				if (getDeleteMessages()) {
+				if (deleteMessages) {
 					message.setFlag(Flags.Flag.DELETED, true);
 				}
 			}
@@ -155,15 +190,15 @@ public class MailReaderSampler extends AbstractSampler {
 			res.setDataType(SampleResult.TEXT);
 
 			res.setResponseCodeOK();
-			res.setResponseMessage("OK");
+			res.setResponseMessage("OK"); // $NON-NLS-1$
 			isOK = true;
         } catch (NoClassDefFoundError ex) {
             log.debug("",ex);// No need to log normally, as we set the status
-            res.setResponseCode("500");
+            res.setResponseCode("500"); // $NON-NLS-1$
             res.setResponseMessage(ex.toString());
 		} catch (Exception ex) {
 			log.debug("", ex);// No need to log normally, as we set the status
-			res.setResponseCode("500");
+			res.setResponseCode("500"); // $NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 		}
 
