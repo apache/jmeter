@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -33,9 +32,9 @@ import org.apache.log.Logger;
 
 public class RemoteSampleListenerWrapper extends AbstractTestElement implements SampleListener, Serializable,
 		NoThreadClone {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	RemoteSampleListener listener;
+	private RemoteSampleListener listener;
 
 	public RemoteSampleListenerWrapper(RemoteSampleListener l) {
 		listener = l;
@@ -48,7 +47,7 @@ public class RemoteSampleListenerWrapper extends AbstractTestElement implements 
 		try {
 			listener.sampleOccurred(e);
 		} catch (RemoteException err) {
-			log.error("", err);
+			log.error("", err); // $NON-NLS-1$
 		}
 	}
 
@@ -56,7 +55,7 @@ public class RemoteSampleListenerWrapper extends AbstractTestElement implements 
 		try {
 			listener.sampleStarted(e);
 		} catch (RemoteException err) {
-			log.error("", err);
+			log.error("", err); // $NON-NLS-1$
 		}
 	}
 
@@ -64,7 +63,7 @@ public class RemoteSampleListenerWrapper extends AbstractTestElement implements 
 		try {
 			listener.sampleStopped(e);
 		} catch (RemoteException err) {
-			log.error("", err);
+			log.error("", err); // $NON-NLS-1$
 		}
 	}
 }
