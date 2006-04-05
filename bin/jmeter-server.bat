@@ -85,13 +85,15 @@ rem and for NT handling to skip to.
 
 if not "%SERVER_PORT%" == "" goto port
 
-jmeter -s %JMETER_CMD_LINE_ARGS%
+call jmeter -s %JMETER_CMD_LINE_ARGS%
 goto end
 
 
 :port
-jmeter -Dserver_port=%SERVER_PORT% -s %JMETER_CMD_LINE_ARGS%
+call jmeter -Dserver_port=%SERVER_PORT% -s %JMETER_CMD_LINE_ARGS%
 
 :end
+
+taskkill /F /IM rmiregistry.exe
 
 :exit
