@@ -44,11 +44,24 @@ public class BeanShellPostProcessor extends AbstractTestElement implements PostP
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.postprocessor.init"; //$NON-NLS-1$
 
-    public BeanShellPostProcessor() throws ClassNotFoundException {
+    public BeanShellPostProcessor() {
         super();
-        bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+        init();
     }
 
+	private void init() {
+		try {
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+		} catch (ClassNotFoundException e) {
+			log.error(e.getLocalizedMessage());
+		}
+	}
+
+    private Object readResolve() {
+    	init();
+    	return this;
+    }
+    
      public void process() {
         JMeterContext jmctx = JMeterContextService.getContext();
 
