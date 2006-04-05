@@ -62,17 +62,17 @@ import org.xml.sax.SAXException;
  */
 public class XPathExtractor extends AbstractTestElement implements
         PostProcessor, Serializable {
-	private static final String MATCH_NR = "matchNr";
-    transient private static Logger log = LoggingManager.getLoggerForClass();
-	protected static final String KEY_PREFIX = "XPathExtractor.";
-	public static final String XPATH_QUERY = KEY_PREFIX +"xpathQuery";
-	public static final String REFNAME = KEY_PREFIX +"refname";
-	public static final String DEFAULT = KEY_PREFIX +"default";
-	public static final String TOLERANT = KEY_PREFIX +"tolerant";
+    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final String MATCH_NR = "matchNr"; // $NON-NLS-1$
+	protected static final String KEY_PREFIX = "XPathExtractor."; // $NON-NLS-1$
+	public static final String XPATH_QUERY = KEY_PREFIX +"xpathQuery"; // $NON-NLS-1$
+	public static final String REFNAME = KEY_PREFIX +"refname"; // $NON-NLS-1$
+	public static final String DEFAULT = KEY_PREFIX +"default"; // $NON-NLS-1$
+	public static final String TOLERANT = KEY_PREFIX +"tolerant"; // $NON-NLS-1$
 
 
     private String concat(String s1,String s2){
-        return new StringBuffer(s1).append("_").append(s2).toString();
+        return new StringBuffer(s1).append("_").append(s2).toString(); // $NON-NLS-1$
     }
     
 	/**
@@ -85,8 +85,8 @@ public class XPathExtractor extends AbstractTestElement implements
 		JMeterVariables vars = context.getVariables();
 		String refName = getRefName();
 		vars.put(refName, getDefaultValue());
-        vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails
-        vars.remove(concat(refName,"1")); // In case parse fails
+        vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails // $NON-NLS-1$
+        vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
 
 		try{			
 			Document d = parseResponse(context.getPreviousResult());		
@@ -164,7 +164,7 @@ public class XPathExtractor extends AbstractTestElement implements
       String unicodeData = new String(result.getResponseData(),
 		                      result.getDataEncoding());
       // convert unicode String -> UTF-8 bytes
-      byte[] utf8data = unicodeData.getBytes("UTF-8");
+      byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
       // this method assumes UTF-8 input data
       return XPathUtil.makeDocument(in,false,false,false,isTolerant());
