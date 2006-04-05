@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -39,7 +38,7 @@ import org.apache.log.Logger;
  * @version $Revision$ Updated on: $Date$
  */
 public class BeanShellAssertion extends AbstractTestElement implements Serializable, Assertion {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String FILENAME = "BeanShellAssertion.filename"; //$NON-NLS-1$
 
@@ -47,12 +46,23 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 
 	public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
 
+	// Not serialised - recreated as needed
 	transient private BeanShellInterpreter bshInterpreter = null;
 
 	// can be specified in jmeter.properties
 	public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
 
 	public BeanShellAssertion() {
+		init();
+	}
+
+	// Ensure deserialisation works in server
+	private Object readResolve(){
+		init();
+		return this;
+	}
+
+	private void init(){
 		try {
 			bshInterpreter = new BeanShellInterpreter();
 			String init = JMeterUtils.getProperty(INIT_FILE);
@@ -65,9 +75,8 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 			}
 		} catch (ClassNotFoundException e) {
 			log.error("Could not establish BeanShellInterpreter: " + e);
-		}
+		}		
 	}
-
 	public String getScript() {
 		return getPropertyAsString(SCRIPT);
 	}
@@ -99,19 +108,14 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 			String fileName = getFilename();
 
 			bshInterpreter.set("FileName", getFilename());//$NON-NLS-1$
-			bshInterpreter.set("Parameters", getParameters());// as a single
-																// line
-																// $NON-NLS-1$
+			// Set params as a single line
+			bshInterpreter.set("Parameters", getParameters()); // $NON-NLS-1$
 			bshInterpreter.set("bsh.args",//$NON-NLS-1$
 					JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
 
 			// Add SamplerData for consistency with BeanShell Sampler
-			bshInterpreter.set("SampleResult", response);// Raw access to the
-															// response
-															// //$NON-NLS-1$
-			bshInterpreter.set("Response", response);// Raw access to the
-														// response
-														// //$NON-NLS-1$
+			bshInterpreter.set("SampleResult", response); //$NON-NLS-1$
+			bshInterpreter.set("Response", response); //$NON-NLS-1$
 			bshInterpreter.set("ResponseData", response.getResponseData());//$NON-NLS-1$
 			bshInterpreter.set("ResponseCode", response.getResponseCode());//$NON-NLS-1$
 			bshInterpreter.set("ResponseMessage", response.getResponseMessage());//$NON-NLS-1$
