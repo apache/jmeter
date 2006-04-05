@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -49,7 +48,7 @@ import org.apache.log.Logger;
  * @version $Revision$ $Date$
  */
 public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphAccumListener, Clearable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	protected transient GraphAccumModel model;
 
