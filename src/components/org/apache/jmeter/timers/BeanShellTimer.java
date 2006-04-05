@@ -42,11 +42,24 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.timer.init"; //$NON-NLS-1$
 
-    public BeanShellTimer() throws ClassNotFoundException {
+    public BeanShellTimer() {
         super();
-        bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+        init();
     }
 
+	private void init() {
+		try {
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+		} catch (ClassNotFoundException e) {
+			log.error(e.getLocalizedMessage());
+		}
+	}
+
+    private Object readResolve() {
+    	init();
+    	return this;
+    }
+    
     /*
 	 * (non-Javadoc)
 	 * 
