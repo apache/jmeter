@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -50,7 +49,7 @@ import org.apache.log.Logger;
  * @version $Revision$ Last updated: $Date$
  */
 public class JMeterTreeListener implements TreeSelectionListener, MouseListener, KeyListener, MouseMotionListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Container endWindow;
 	// JPopupMenu pop;
@@ -66,7 +65,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 
 	private JMeterTreeNode[] draggedNodes;
 
-	private JLabel dragIcon = new JLabel(JMeterUtils.getImage("leafnode.gif"));
+	private JLabel dragIcon = new JLabel(JMeterUtils.getImage("leafnode.gif")); // $NON-NLS-1$
 
 	/**
 	 * Constructor for the JMeterTreeListener object.
@@ -134,12 +133,10 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 		if (currentPath != null) {
 			if (currentPath.getLastPathComponent() != null) {
 				return (JMeterTreeNode) currentPath.getLastPathComponent();
-			} else {
-				return (JMeterTreeNode) currentPath.getParentPath().getLastPathComponent();
 			}
-		} else {
-			return (JMeterTreeNode) model.getRoot();
+			return (JMeterTreeNode) currentPath.getParentPath().getLastPathComponent();
 		}
+		return (JMeterTreeNode) model.getRoot();
 	}
 
 	public JMeterTreeNode[] getSelectedNodes() {
@@ -163,7 +160,7 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 	public void valueChanged(TreeSelectionEvent e) {
 		log.debug("value changed, updating currentPath");
 		currentPath = e.getNewLeadSelectionPath();
-		actionHandler.actionPerformed(new ActionEvent(this, 3333, "edit"));
+		actionHandler.actionPerformed(new ActionEvent(this, 3333, "edit")); // $NON-NLS-1$
 	}
 
 	public void mouseClicked(MouseEvent ev) {
@@ -173,20 +170,20 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 		if (dragging && isValidDragAction(draggedNodes, getCurrentNode())) {
 			dragging = false;
 			JPopupMenu dragNdrop = new JPopupMenu();
-			JMenuItem item = new JMenuItem(JMeterUtils.getResString("Insert Before"));
+			JMenuItem item = new JMenuItem(JMeterUtils.getResString("Insert Before")); // $NON-NLS-1$
 			item.addActionListener(actionHandler);
 			item.setActionCommand(ActionNames.INSERT_BEFORE);
 			dragNdrop.add(item);
-			item = new JMenuItem(JMeterUtils.getResString("Insert After"));
+			item = new JMenuItem(JMeterUtils.getResString("Insert After")); // $NON-NLS-1$
 			item.addActionListener(actionHandler);
 			item.setActionCommand(ActionNames.INSERT_AFTER);
 			dragNdrop.add(item);
-			item = new JMenuItem(JMeterUtils.getResString("Add as Child"));
+			item = new JMenuItem(JMeterUtils.getResString("Add as Child")); // $NON-NLS-1$
 			item.addActionListener(actionHandler);
 			item.setActionCommand(ActionNames.DRAG_ADD);
 			dragNdrop.add(item);
 			dragNdrop.addSeparator();
-			item = new JMenuItem(JMeterUtils.getResString("Cancel"));
+			item = new JMenuItem(JMeterUtils.getResString("Cancel")); // $NON-NLS-1$
 			dragNdrop.add(item);
 			displayPopUp(e, dragNdrop);
 		} else {
@@ -292,14 +289,6 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 	private boolean isRightClick(MouseEvent e) {
 		return (MouseEvent.BUTTON2_MASK & e.getModifiers()) > 0 || (MouseEvent.BUTTON3_MASK == e.getModifiers());
 	}
-
-	/*
-	 * NOTUSED private void updateMainMenu(JPopupMenu menu) { try { MainFrame
-	 * mainFrame = GuiPackage.getInstance().getMainFrame();
-	 * mainFrame.setEditMenu(menu); } catch (NullPointerException e) {
-	 * log.error("Null pointer: JMeterTreeListener.updateMenuItem()", e);
-	 * log.error("", e); } }
-	 */
 
 	private void displayPopUp(MouseEvent e) {
 		JPopupMenu pop = getCurrentNode().createPopupMenu();
