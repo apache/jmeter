@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -38,7 +37,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class PreCompiler implements HashTreeTraverser {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private ValueReplacer replacer;
 
