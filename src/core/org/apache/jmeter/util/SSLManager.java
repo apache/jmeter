@@ -45,7 +45,15 @@ import org.apache.log.Logger;
  * @version CVS $Revision$ $Date$
  */
 public abstract class SSLManager {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final String SSL_TRUST_STORE = "javax.net.ssl.trustStore";// $NON-NLS-1$
+
+	private static final String KEY_STORE_PASSWORD = "javax.net.ssl.keyStorePassword"; // $NON-NLS-1$
+
+	private static final String JAVAX_NET_SSL_KEY_STORE = "javax.net.ssl.keyStore"; // $NON-NLS-1$
+
+	private static final String PKCS12 = "pkcs12"; // $NON-NLS-1$
 
 	/** Singleton instance of the manager */
 	private static SSLManager manager;
@@ -63,7 +71,8 @@ public abstract class SSLManager {
 	private KeyStore trustStore;
 
 	/** Have the password available */
-	protected String defaultpw = JMeterUtils.getJMeterProperties().getProperty("javax.net.ssl.keyStorePassword");
+	protected String defaultpw = JMeterUtils.getJMeterProperties()
+	    .getProperty(KEY_STORE_PASSWORD); // $NON-NLS-1$
 
 	/**
 	 * Resets the SSLManager so that we can create a new one with a new keystore
@@ -92,44 +101,48 @@ public abstract class SSLManager {
 		String password = this.defaultpw;
 
 		if (null == this.keyStore) {
-			String defaultName = JMeterUtils.getJMeterProperties().getProperty("user.home") + File.separator
-					+ ".keystore";
-			String fileName = JMeterUtils.getJMeterProperties().getProperty("javax.net.ssl.keyStore", defaultName);
-			System.setProperty("javax.net.ssl.keyStore", fileName);
+			String defaultName = JMeterUtils.getJMeterProperties()
+			    .getProperty("user.home")  // $NON-NLS-1$
+			    + File.separator
+				+ ".keystore"; // $NON-NLS-1$
+			String fileName = JMeterUtils.getJMeterProperties()
+			.getProperty(JAVAX_NET_SSL_KEY_STORE, defaultName);
+			System.setProperty(JAVAX_NET_SSL_KEY_STORE, fileName); // $NON-NLS-1$
 
 			try {
-				if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) {
-					this.keyStore = JmeterKeyStore.getInstance("pkcs12");
+				if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) { // $NON-NLS-1$ // $NON-NLS-2$
+					this.keyStore = JmeterKeyStore.getInstance(PKCS12);
 					log.info("KeyStore Type: PKCS 12");
-					System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
+					System.setProperty("javax.net.ssl.keyStoreType", PKCS12); // $NON-NLS-1$
 				} else {
-					this.keyStore = JmeterKeyStore.getInstance("JKS");
+					this.keyStore = JmeterKeyStore.getInstance("JKS"); // $NON-NLS-1$
 					log.info("KeyStore Type: JKS");
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), e, JMeterUtils
-						.getResString("ssl_error_title"), JOptionPane.ERROR_MESSAGE);
+						.getResString("ssl_error_title"), JOptionPane.ERROR_MESSAGE); // $NON-NLS-1$
 				this.keyStore = null;
 				throw new RuntimeException("KeyStore Problem");
 			}
 
 			if (null == password) {
 				if (null == defaultpw) {
-					this.defaultpw = JMeterUtils.getJMeterProperties().getProperty("javax.net.ssl.keyStorePassword");
+					this.defaultpw = JMeterUtils.getJMeterProperties().getProperty(KEY_STORE_PASSWORD);
 
 					if (null == defaultpw) {
 						synchronized (this) {
 							this.defaultpw = JOptionPane.showInputDialog(GuiPackage.getInstance().getMainFrame(),
-									JMeterUtils.getResString("ssl_pass_prompt"), JMeterUtils
-											.getResString("ssl_pass_title"), JOptionPane.QUESTION_MESSAGE);
-							JMeterUtils.getJMeterProperties().setProperty("javax.net.ssl.keyStorePassword",
+									JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
+									JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
+									JOptionPane.QUESTION_MESSAGE);
+							JMeterUtils.getJMeterProperties().setProperty(KEY_STORE_PASSWORD,
 									this.defaultpw);
 						}
 					}
 				}
 
 				password = this.defaultpw;
-				System.setProperty("javax.net.ssl.keyStorePassword", password);
+				System.setProperty(KEY_STORE_PASSWORD, password);
 			}
 
 			try {
@@ -156,8 +169,8 @@ public abstract class SSLManager {
 	 */
 	protected KeyStore getTrustStore() {
 		if (null == this.trustStore) {
-			String fileName = JMeterUtils.getPropDefault("javax.net.ssl.trustStore", "");
-			System.setProperty("javax.net.ssl.trustStore", fileName);
+			String fileName = JMeterUtils.getPropDefault(SSL_TRUST_STORE, "");
+			System.setProperty(SSL_TRUST_STORE, fileName);
 
 			try {
 				if (fileName.endsWith(".iaik")) {
@@ -168,7 +181,8 @@ public abstract class SSLManager {
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), e, JMeterUtils
-						.getResString("ssl_error_title"), JOptionPane.ERROR_MESSAGE);
+						.getResString("ssl_error_title"),  // $NON-NLS-1$
+						JOptionPane.ERROR_MESSAGE);
 				this.trustStore = null;
 				throw new RuntimeException("TrustStore Problem");
 			}
@@ -208,9 +222,9 @@ public abstract class SSLManager {
 			if (SSLManager.isSSLSupported) {
 				String classname = null;
 				if (SSLManager.isIAIKProvider) {
-					classname = "org.apache.jmeter.util.IaikSSLManager";
+					classname = "org.apache.jmeter.util.IaikSSLManager"; // $NON-NLS-1$
 				} else {
-					classname = "org.apache.jmeter.util.JsseSSLManager";
+					classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
 				}
 
 				try {
@@ -218,7 +232,7 @@ public abstract class SSLManager {
 					Constructor con = clazz.getConstructor(new Class[] { Provider.class });
 					SSLManager.manager = (SSLManager) con.newInstance(new Object[] { SSLManager.sslProvider });
 				} catch (Exception e) {
-					log.error("", e);
+					log.error("", e); // $NON-NLS-1$
 					SSLManager.isSSLSupported = false;
 					return null;
 				}
