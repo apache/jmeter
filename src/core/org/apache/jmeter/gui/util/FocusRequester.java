@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -33,7 +32,7 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class FocusRequester implements Runnable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Component comp;
 
@@ -42,7 +41,7 @@ public class FocusRequester implements Runnable {
 		try {
 			SwingUtilities.invokeLater(this);
 		} catch (Exception e) {
-			log.error("", e);
+			log.error("", e); // $NON-NLS-1$
 		}
 	}
 
