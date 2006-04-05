@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -35,7 +34,7 @@ import org.apache.log.Logger;
  * @version $Revision$ Updated on: $Date$
  */
 public class ClientJMeterEngine implements JMeterEngine, Runnable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	RemoteJMeterEngine remote;
 
@@ -49,7 +48,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 
 	private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
 			NotBoundException {
-		return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine");
+		return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine"); // $NON-NLS-1$ $NON-NLS-2$
 	}
 
 	public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
@@ -83,7 +82,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 		try {
 			remote.stopTest();
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 	}
 
@@ -96,7 +95,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 				remote.reset();
 			}
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 	}
 
@@ -127,7 +126,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 			remote.runTest();
 			log.info("sent run command");
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 	}
 
