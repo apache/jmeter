@@ -44,6 +44,9 @@ import org.apache.log.Logger;
  * Created 2001/08/11
  */
 public class GraphAccum extends JComponent implements Scrollable, GraphAccumListener {
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
 	private GraphAccumModel model;
 
 	private GraphAccumVisualizer visualizer;
@@ -67,8 +70,6 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
 	protected final static int width = 2000;
 
 	private final static int PLOT_X_WIDTH = 10;
-
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Constructor.
