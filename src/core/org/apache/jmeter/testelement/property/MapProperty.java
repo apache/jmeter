@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -26,9 +25,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class MapProperty extends MultiProperty {
-	Map value;
+	private Map value;
 
-	transient Map savedValue = null;
+	private transient Map savedValue = null;
 
 	public MapProperty(String name, Map value) {
 		super(name);
@@ -73,9 +72,8 @@ public class MapProperty extends MultiProperty {
 	protected Class getPropertyType() {
 		if (value.size() > 0) {
 			return valueIterator().next().getClass();
-		} else {
-			return NullProperty.class;
 		}
+		return NullProperty.class;
 	}
 
 	/**

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -24,9 +23,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class StringProperty extends AbstractProperty {
-	String value;
+	private String value;
 
-	transient String savedValue;
+	private transient String savedValue;
 
 	public StringProperty(String name, String value) {
 		super(name);

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -24,9 +23,9 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class TestElementProperty extends MultiProperty {
-	TestElement value;
+	private TestElement value;
 
-	transient TestElement savedValue = null;
+	private transient TestElement savedValue = null;
 
 	public TestElementProperty(String name, TestElement value) {
 		super(name);
