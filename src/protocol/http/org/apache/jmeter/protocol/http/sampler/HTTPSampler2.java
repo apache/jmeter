@@ -21,11 +21,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
 import java.util.Date;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.HostConfiguration;
@@ -43,15 +42,15 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.jmeter.config.Argument;
 
+import org.apache.jmeter.JMeter;
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
+import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
-
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -75,6 +74,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     private static final int PROXY_PORT = 
         Integer.parseInt(System.getProperty("http.proxyPort", "80")); // $NON-NLS-1$ $NON-NLS-2$ 
 
+    private static final String PROXY_USER = 
+        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
+    
+    private static final String PROXY_PASS = 
+        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
+    
     /*
      * Connection is re-used within the thread if possible
      */
@@ -154,7 +159,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			File input = new File(filename);
             // TODO: is this header correct?
 			post.setRequestHeader(HEADER_CONTENT_DISPOSITION
-                    , "form-data; name=\"" // $NON-NLS-1$ // $NON-NLS-1$
+                    , "form-data; name=\"" // $NON-NLS-1$
                     + encode(sampler.getFileField())
 					+ "\"; filename=\""  // $NON-NLS-1$
                     + encode(filename) + "\""); // $NON-NLS-1$
@@ -214,10 +219,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		HostConfiguration hc = new HostConfiguration();
 		hc.setHost(host, port, protocol); // All needed to ensure re-usablility
 
-        if (PROXY_HOST.length() > 0) {
-             hc.setProxy(PROXY_HOST, PROXY_PORT);
-        }
-
         Map map = (Map) httpClients.get();
 		HttpClient httpClient = (HttpClient) map.get(hc);
 		
@@ -226,6 +227,21 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			httpClient = new HttpClient(new SimpleHttpConnectionManager());
 			map.put(hc, httpClient);
 		}
+
+        if (PROXY_HOST.length() > 0) {
+            hc.setProxy(PROXY_HOST, PROXY_PORT);
+            if (PROXY_USER.length() > 0){
+                httpClient.getState().setProxyCredentials(
+                    new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
+                    // NT Includes other types of Credentials
+                    new NTCredentials(
+                            PROXY_USER, 
+                            PROXY_PASS, 
+                            null, // "thishost",
+                            null // domain
+                ));
+            }
+        }
 
         HttpMethodParams params = httpMethod.getParams();
         params.setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
