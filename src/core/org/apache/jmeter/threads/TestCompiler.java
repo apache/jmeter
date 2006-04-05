@@ -50,18 +50,13 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class TestCompiler implements HashTreeTraverser, SampleListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private LinkedList stack = new LinkedList();
 
 	private Map samplerConfigMap = new HashMap();
 
-	// Set objectsWithFunctions = new HashSet();
 	private HashTree testTree;
-
-	// NOTREAD SampleResult previousResult;
-	// NOTREAD Sampler currentSampler;
-	// NOTREAD JMeterVariables threadVars;
 
 	/*
 	 * This set keeps track of which ObjectPairs have been seen Its purpose is
@@ -72,7 +67,6 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 	List loopIterListeners = new ArrayList();
 
 	public TestCompiler(HashTree testTree, JMeterVariables vars) {
-		// NOTREAD threadVars = vars;
 		this.testTree = testTree;
 	}
 
@@ -98,12 +92,10 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 	}
 
 	public SamplePackage configureSampler(Sampler sampler) {
-		// NOTREAD currentSampler = sampler;
 		SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
 		pack.setSampler(sampler);
 		configureWithConfigElements(sampler, pack.getConfigs());
 		runPreProcessors(pack.getPreProcessors());
-		// replaceStatics(ret);
 		return pack;
 	}
 
@@ -154,12 +146,11 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 				TestElement item = (TestElement) iter.previous();
 				if (item == child) {
 					continue;
-				} else {
-					if (item instanceof Controller) {
-						TestBeanHelper.prepare(child);
-						((Controller) item).addIterationListener((LoopIterationListener) child);
-						break;
-					}
+				}
+				if (item instanceof Controller) {
+					TestBeanHelper.prepare(child);
+					((Controller) item).addIterationListener((LoopIterationListener) child);
+					break;
 				}
 			}
 		}

@@ -58,27 +58,12 @@ import org.xml.sax.XMLReader;
  * @version $Revision$ updated on $Date$
  */
 public class JMeterUtils implements UnitTestManager {
+	private static Logger log = LoggingManager.getLoggerForClass();
+
 	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
 
-	private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode";
-
-	// Not used currently
-	// private static final SAXParserFactory xmlFactory;
-	// static {
-	// SAXParserFactory temp = null;
-	// try
-	// {
-	// temp = SAXParserFactory.newInstance();
-	// }
-	// catch (Exception e)
-	// {
-	// log.error("", e);
-	// temp = null;
-	// }
-	// xmlFactory = temp;
-	// }
 	private static Properties appProperties;
 
 	private static Vector localeChangeListeners = new Vector();
@@ -119,7 +104,8 @@ public class JMeterUtils implements UnitTestManager {
 			p.load(new FileInputStream(f));
 		} catch (IOException e) {
 			try {
-				InputStream is = ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties");
+				InputStream is = 
+					ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
 				if (is == null)
 					throw new RuntimeException("Could not read JMeter properties file");
 				p.load(is);
@@ -131,9 +117,9 @@ public class JMeterUtils implements UnitTestManager {
 		appProperties = p;
 		LoggingManager.initializeLogging(appProperties);
 		log = LoggingManager.getLoggerForClass();
-		String loc = appProperties.getProperty("language");
+		String loc = appProperties.getProperty("language"); // $NON-NLS-1$
 		if (loc != null) {
-			setLocale(new Locale(loc, ""));
+			setLocale(new Locale(loc, "")); // $NON-NLS-1$
 		} else {
 			setLocale(Locale.getDefault());
 		}
@@ -177,14 +163,14 @@ public class JMeterUtils implements UnitTestManager {
 		System.out.println("Initializing Properties: " + file);
 		getProperties(file);
 		String home;
-		int pathend = file.lastIndexOf("/");
+		int pathend = file.lastIndexOf("/"); // $NON-NLS-1$
 		if (pathend == -1) {// No path separator found, must be in current
 							// directory
-			home = ".";
+			home = "."; // $NON-NLS-1$
 		} else {
 			home = file.substring(0, pathend);
 		}
-		home = new File(home + "/..").getAbsolutePath();
+		home = new File(home + "/..").getAbsolutePath(); // $NON-NLS-1$
 		System.out.println("Setting JMeter home: " + home);
 		setJMeterHome(home);
 	}
@@ -194,14 +180,14 @@ public class JMeterUtils implements UnitTestManager {
 		String[] result = new String[1];
 
 		if (p != null) {
-			String[] paths = JOrphanUtils.split(p, ";");// was p.split(";") -
+			String[] paths = JOrphanUtils.split(p, ";");// was p.split(";") - // $NON-NLS-1$
 														// JDK1.4
 			result = new String[paths.length + 1];
 			for (int i = 1; i < result.length; i++) {
 				result[i] = paths[i - 1];
 			}
 		}
-		result[0] = getJMeterHome() + "/lib/ext";
+		result[0] = getJMeterHome() + "/lib/ext"; // $NON-NLS-1$
 		return result;
 	}
 
@@ -243,7 +229,7 @@ public class JMeterUtils implements UnitTestManager {
 				def = null; // no need to reset Locale
 			}
 		}
-		resources = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", locale);
+		resources = ResourceBundle.getBundle("org.apache.jmeter.resources.messages", locale); // $NON-NLS-1$
 		notifyLocaleChangeListeners();
 		/*
 		 * Reset Locale if necessary so other locales are properly handled
@@ -304,10 +290,10 @@ public class JMeterUtils implements UnitTestManager {
 	 *         "[res_key="+key+"]"
 	 */
 	public static String getResString(String key) {
-		return getResStringDefault(key, RES_KEY_PFX + key + "]");
+		return getResStringDefault(key, RES_KEY_PFX + key + "]"); // $NON-NLS-1$
 	}
 
-	public static final String RES_KEY_PFX = "[res_key=";
+	public static final String RES_KEY_PFX = "[res_key="; // $NON-NLS-1$
 
 	/**
 	 * Gets the resource string for this key.
@@ -336,7 +322,7 @@ public class JMeterUtils implements UnitTestManager {
 		if (key == null) {
 			return null;
 		}
-		key = key.replace(' ', '_'); // TODO - why does it do this?
+		key = key.replace(' ', '_'); // TODO - why does it do this? // $NON-NLS-1$ // $NON-NLS-2$
 		key = key.toLowerCase(); // (it's been here since v1.1)
 		String resString = null;
 		try {
@@ -369,7 +355,7 @@ public class JMeterUtils implements UnitTestManager {
 	public static ImageIcon getImage(String name) {
 		try {
 			return new ImageIcon(JMeterUtils.class.getClassLoader().getResource(
-					"org/apache/jmeter/images/" + name.trim()));
+					"org/apache/jmeter/images/" + name.trim())); // $NON-NLS-1$
 		} catch (NullPointerException e) {
 			log.warn("no icon for " + name);
 			return null;
@@ -379,11 +365,11 @@ public class JMeterUtils implements UnitTestManager {
 	public static String getResourceFileAsText(String name) {
 		BufferedReader fileReader = null;
 		try {
-			String lineEnd = System.getProperty("line.separator");
+			String lineEnd = System.getProperty("line.separator"); // $NON-NLS-1$
 			fileReader = new BufferedReader(new InputStreamReader(JMeterUtils.class.getClassLoader()
 					.getResourceAsStream(name)));
 			StringBuffer text = new StringBuffer();
-			String line = "NOTNULL";
+			String line = "NOTNULL"; // $NON-NLS-1$
 			while (line != null) {
 				line = fileReader.readLine();
 				if (line != null) {
@@ -395,9 +381,9 @@ public class JMeterUtils implements UnitTestManager {
 			return text.toString();
 		} catch (NullPointerException e) // Cannot find file
 		{
-			return "";
+			return ""; // $NON-NLS-1$
 		} catch (IOException e) {
-			return "";
+			return ""; // $NON-NLS-1$
 		} finally {
 			if (fileReader != null)
 				try {
@@ -415,7 +401,8 @@ public class JMeterUtils implements UnitTestManager {
 	 * @return The Timers value
 	 */
 	public static Vector getTimers(Properties properties) {
-		return instantiate(getVector(properties, "timer."), "org.apache.jmeter.timers.Timer");
+		return instantiate(getVector(properties, "timer."), // $NON-NLS-1$
+				"org.apache.jmeter.timers.Timer"); // $NON-NLS-1$
 	}
 
 	/**
@@ -426,7 +413,8 @@ public class JMeterUtils implements UnitTestManager {
 	 * @return The Visualizers value
 	 */
 	public static Vector getVisualizers(Properties properties) {
-		return instantiate(getVector(properties, "visualizer."), "org.apache.jmeter.visualizers.Visualizer");
+		return instantiate(getVector(properties, "visualizer."), // $NON-NLS-1$
+				"org.apache.jmeter.visualizers.Visualizer"); // $NON-NLS-1$
 	}
 
 	/**
@@ -438,13 +426,14 @@ public class JMeterUtils implements UnitTestManager {
 	 */
 	// TODO - does not appear to be called directly
 	public static Vector getControllers(Properties properties) {
-		String name = "controller.";
+		String name = "controller."; // $NON-NLS-1$
 		Vector v = new Vector();
 		Enumeration names = properties.keys();
 		while (names.hasMoreElements()) {
 			String prop = (String) names.nextElement();
 			if (prop.startsWith(name)) {
-				Object o = instantiate(properties.getProperty(prop), "org.apache.jmeter.control.SamplerController");
+				Object o = instantiate(properties.getProperty(prop), 
+						"org.apache.jmeter.control.SamplerController"); // $NON-NLS-1$
 				v.addElement(o);
 			}
 		}
@@ -461,7 +450,7 @@ public class JMeterUtils implements UnitTestManager {
 	 * @return The TestSamples value
 	 */
 	public static String[] getTestSamples(Properties properties, String name) {
-		return (String[]) getVector(properties, name + ".testsample").toArray(new String[0]);
+		return (String[]) getVector(properties, name + ".testsample").toArray(new String[0]); // $NON-NLS-1$
 	}
 
 	/**
@@ -472,12 +461,14 @@ public class JMeterUtils implements UnitTestManager {
 	public static XMLReader getXMLParser() {
 		XMLReader reader = null;
 		try {
-			reader = (XMLReader) instantiate(getPropDefault("xml.parser", "org.apache.xerces.parsers.SAXParser"),
-					"org.xml.sax.XMLReader");
+			reader = (XMLReader) instantiate(getPropDefault("xml.parser", // $NON-NLS-1$
+					"org.apache.xerces.parsers.SAXParser"), // $NON-NLS-1$
+					"org.xml.sax.XMLReader"); // $NON-NLS-1$
 			// reader = xmlFactory.newSAXParser().getXMLReader();
 		} catch (Exception e) {
-			reader = (XMLReader) instantiate(getPropDefault("xml.parser", "org.apache.xerces.parsers.SAXParser"),
-					"org.xml.sax.XMLReader");
+			reader = (XMLReader) instantiate(getPropDefault("xml.parser", // $NON-NLS-1$
+					"org.apache.xerces.parsers.SAXParser"), // $NON-NLS-1$
+					"org.xml.sax.XMLReader"); // $NON-NLS-1$
 		}
 		return reader;
 	}
@@ -490,7 +481,7 @@ public class JMeterUtils implements UnitTestManager {
 	 * @return The Alias value
 	 */
 	public static Hashtable getAlias(Properties properties) {
-		return getHashtable(properties, "alias.");
+		return getHashtable(properties, "alias."); // $NON-NLS-1$
 	}
 
 	/**
@@ -570,9 +561,9 @@ public class JMeterUtils implements UnitTestManager {
 		boolean ans;
 		try {
 			String strVal = appProperties.getProperty(propName, JOrphanUtils.booleanToString(defaultVal)).trim();
-			if (strVal.equalsIgnoreCase("true") || strVal.equalsIgnoreCase("t")) {
+			if (strVal.equalsIgnoreCase("true") || strVal.equalsIgnoreCase("t")) { // $NON-NLS-1$  // $NON-NLS-2$
 				ans = true;
-			} else if (strVal.equalsIgnoreCase("false") || strVal.equalsIgnoreCase("f")) {
+			} else if (strVal.equalsIgnoreCase("false") || strVal.equalsIgnoreCase("f")) { // $NON-NLS-1$  // $NON-NLS-2$
 				ans = false;
 			} else {
 				ans = ((Integer.valueOf(strVal)).intValue() == 1);
@@ -688,9 +679,8 @@ public class JMeterUtils implements UnitTestManager {
 				Object res = o.newInstance();
 				if (c.isInstance(res)) {
 					return res;
-				} else {
-					throw new IllegalArgumentException(className + " is not an instance of " + impls);
 				}
+				throw new IllegalArgumentException(className + " is not an instance of " + impls);
 			} catch (ClassNotFoundException e) {
 				log.error("Error loading class " + className + ": class is not found");
 			} catch (IllegalAccessException e) {
@@ -772,10 +762,10 @@ public class JMeterUtils implements UnitTestManager {
 	 * @return Description of the Returned Value
 	 */
 	public static JButton createButton(String name, ActionListener listener) {
-		JButton button = new JButton(getImage(name + ".on.gif"));
-		button.setDisabledIcon(getImage(name + ".off.gif"));
-		button.setRolloverIcon(getImage(name + ".over.gif"));
-		button.setPressedIcon(getImage(name + ".down.gif"));
+		JButton button = new JButton(getImage(name + ".on.gif")); // $NON-NLS-1$
+		button.setDisabledIcon(getImage(name + ".off.gif")); // $NON-NLS-1$
+		button.setRolloverIcon(getImage(name + ".over.gif")); // $NON-NLS-1$
+		button.setPressedIcon(getImage(name + ".down.gif")); // $NON-NLS-1$
 		button.setActionCommand(name);
 		button.addActionListener(listener);
 		button.setRolloverEnabled(true);
@@ -796,7 +786,7 @@ public class JMeterUtils implements UnitTestManager {
 	 * @return Description of the Returned Value
 	 */
 	public static JButton createSimpleButton(String name, ActionListener listener) {
-		JButton button = new JButton(getImage(name + ".gif"));
+		JButton button = new JButton(getImage(name + ".gif")); // $NON-NLS-1$
 		button.setActionCommand(name);
 		button.addActionListener(listener);
 		button.setFocusPainted(false);
@@ -872,7 +862,7 @@ public class JMeterUtils implements UnitTestManager {
 			JOptionPane.showMessageDialog(instance.getMainFrame(), errorMsg, "Error",
 					JOptionPane.ERROR_MESSAGE);
 		} catch (RuntimeException e) {
-			if (e.getClass().getName().equals("java.awt.HeadlessException")) // JDK1.4:
+			if (e.getClass().getName().equals("java.awt.HeadlessException")) // JDK1.4: // $NON-NLS-1$
 			{
 				// System.out.println(errorMsg+"[HeadlessException]");
 				// throw e;
@@ -920,7 +910,7 @@ public class JMeterUtils implements UnitTestManager {
 	 */
     //TODO - move to JOrphanUtils?
 	public static String unsplit(Object[] splittee, Object splitChar) {
-		StringBuffer retVal = new StringBuffer("");
+		StringBuffer retVal = new StringBuffer();
 		int count = -1;
 		while (++count < splittee.length) {
 			if (splittee[count] != null) {
@@ -950,7 +940,7 @@ public class JMeterUtils implements UnitTestManager {
 	 */
     //TODO - move to JOrphanUtils?
 	public static String unsplit(Object[] splittee, Object splitChar, String def) {
-		StringBuffer retVal = new StringBuffer("");
+		StringBuffer retVal = new StringBuffer();
 		int count = -1;
 		while (++count < splittee.length) {
 			if (splittee[count] != null) {
@@ -976,29 +966,30 @@ public class JMeterUtils implements UnitTestManager {
 
 	private static String jmDir;
 
-	public static final String JMETER = "jmeter";
-
-	public static final String ENGINE = "jmeter.engine";
-
-	public static final String ELEMENTS = "jmeter.elements";
-
-	public static final String GUI = "jmeter.gui";
-
-	public static final String UTIL = "jmeter.util";
-
-	public static final String CLASSFINDER = "jmeter.util.classfinder";
-
-	public static final String TEST = "jmeter.test";
-
-	public static final String HTTP = "jmeter.protocol.http";
-
-	public static final String JDBC = "jmeter.protocol.jdbc";
-
-	public static final String FTP = "jmeter.protocol.ftp";
-
-	public static final String JAVA = "jmeter.protocol.java";
-
-	public static final String PROPERTIES = "jmeter.elements.properties";
+	// TODO remove
+//	public static final String JMETER = "jmeter"; // $NON-NLS-1$
+//
+//	public static final String ENGINE = "jmeter.engine"; // $NON-NLS-1$
+//
+//	public static final String ELEMENTS = "jmeter.elements"; // $NON-NLS-1$
+//
+//	public static final String GUI = "jmeter.gui"; // $NON-NLS-1$
+//
+//	public static final String UTIL = "jmeter.util"; // $NON-NLS-1$
+//
+//	public static final String CLASSFINDER = "jmeter.util.classfinder"; // $NON-NLS-1$
+//
+//	public static final String TEST = "jmeter.test"; // $NON-NLS-1$
+//
+//	public static final String HTTP = "jmeter.protocol.http"; // $NON-NLS-1$
+//
+//	public static final String JDBC = "jmeter.protocol.jdbc"; // $NON-NLS-1$
+//
+//	public static final String FTP = "jmeter.protocol.ftp"; // $NON-NLS-1$
+//
+//	public static final String JAVA = "jmeter.protocol.java"; // $NON-NLS-1$
+//
+//	public static final String PROPERTIES = "jmeter.elements.properties"; // $NON-NLS-1$
 
 	/**
 	 * Gets the JMeter Version.
@@ -1031,13 +1022,13 @@ public class JMeterUtils implements UnitTestManager {
 		// file New operation may set to null, so just return
 		// app name
 		if (fname == null) {
-			return "Apache JMeter";
+			return "Apache JMeter"; // $NON-NLS-1$
 		}
 
 		// allow for windows / chars in filename
 		String temp = fname.replace('\\', '/');
 		String simpleName = temp.substring(temp.lastIndexOf("/") + 1);
-		return simpleName + " (" + fname + ") - Apache JMeter";
+		return simpleName + " (" + fname + ") - Apache JMeter"; // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
 	}
 
 	/**
