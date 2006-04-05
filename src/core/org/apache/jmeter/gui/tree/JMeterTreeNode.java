@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -43,11 +42,9 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JMeterTreeModel treeModel;
-
-	// boolean enabled = true;
 
 	public JMeterTreeNode() {// Allow serializable test to work
 		// TODO: is the serializable test necessary now that JMeterTreeNode is
@@ -94,10 +91,9 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 					log.error("Can't obtain icon", e1);
 					throw new org.apache.jorphan.util.JMeterError(e1);
 				}
-			} else {
-				return GUIFactory.getIcon(Class.forName(getTestElement().getPropertyAsString(TestElement.GUI_CLASS)),
-						enabled);
 			}
+			return GUIFactory.getIcon(Class.forName(getTestElement().getPropertyAsString(TestElement.GUI_CLASS)),
+						enabled);
 		} catch (ClassNotFoundException e) {
 			log.warn("Can't get icon for class " + getTestElement(), e);
 			return null;
