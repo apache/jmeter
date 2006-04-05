@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -58,7 +57,7 @@ import org.apache.log.Logger;
  * @version $Revision$ Updated on: $Date$
  */
 public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
@@ -341,7 +340,7 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	}
 
 	public void testEnded() {
-		this.testEnded("");
+		this.testEnded(""); //$NON-NLS-1$
 	}
 
 	public void testEnded(String host) {

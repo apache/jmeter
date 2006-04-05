@@ -38,12 +38,12 @@ public class Random extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__Random";
+	private static final String KEY = "__Random"; //$NON-NLS-1$
 
 	static {
-		desc.add(JMeterUtils.getResString("minimum_param"));
-		desc.add(JMeterUtils.getResString("maximum_param"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("minimum_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("maximum_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private transient CompoundVariable varName, minimum, maximum;
@@ -96,11 +96,10 @@ public class Random extends AbstractFunction implements Serializable {
 
 		if (values.length < 3) {
 			throw new InvalidVariableException();
-		} else {
-			varName = (CompoundVariable) values[2];
-			minimum = (CompoundVariable) values[0];
-			maximum = (CompoundVariable) values[1];
 		}
+		varName = (CompoundVariable) values[2];
+		minimum = (CompoundVariable) values[0];
+		maximum = (CompoundVariable) values[1];
 
 	}
 

@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -54,17 +53,17 @@ import org.apache.log.Logger;
  * @version $Revision$ Last Updated: $Date$
  */
 public class CSVRead extends AbstractFunction implements Serializable {
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String KEY = "__CSVRead"; // Function name
+	private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 
 	private static final List desc = new LinkedList();
 
 	private Object[] values; // Parameter list
 
 	static {
-		desc.add(JMeterUtils.getResString("csvread_file_file_name"));
-		desc.add(JMeterUtils.getResString("column_number"));
+		desc.add(JMeterUtils.getResString("csvread_file_file_name")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("column_number")); //$NON-NLS-1$
 	}
 
 	public CSVRead() {
@@ -80,7 +79,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		String myValue = "";
+		String myValue = ""; //$NON-NLS-1$
 
 		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
 		String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
@@ -88,16 +87,16 @@ public class CSVRead extends AbstractFunction implements Serializable {
 		log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
 
 		// Process __CSVRead(filename,*ALIAS)
-		if (columnOrNext.startsWith("*")) {
+		if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
 			FileWrapper.open(fileName, columnOrNext);
 			/*
 			 * All done, so return
 			 */
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		// if argument is 'next' - go to the next line
-		if (columnOrNext.equals("next()") || columnOrNext.equals("next")) {
+		if (columnOrNext.equals("next()") || columnOrNext.equals("next")) { //$NON-NLS-1$ //$NON-NLS-2$
 			FileWrapper.endRow(fileName);
 
 			/*
@@ -109,7 +108,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 			 * otherwise the wrong line can be retrieved when using multiple
 			 * threads.
 			 */
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		try {
@@ -166,8 +165,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 		 * for functions to detect that a run is starting seems to be the
 		 * setParameters() call.
 		 */
-		FileWrapper.clearAll();// TODO only clear the relevant entry - if
-								// possible...
+		FileWrapper.clearAll();// TODO only clear the relevant entry - if possible...
 
 	}
 }

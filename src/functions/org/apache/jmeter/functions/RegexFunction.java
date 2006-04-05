@@ -44,13 +44,13 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
 public class RegexFunction extends AbstractFunction implements Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String ALL = "ALL";
+	public static final String ALL = "ALL"; //$NON-NLS-1$
 
-	public static final String RAND = "RAND";
+	public static final String RAND = "RAND"; //$NON-NLS-1$
 
-	public static final String KEY = "__regexFunction";
+	public static final String KEY = "__regexFunction"; //$NON-NLS-1$
 
 	private Object[] values;// Parameters are stored here
 
@@ -73,16 +73,17 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 	private static final int MAX_PARAMETER_COUNT = 6;
 	static {
-		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex
-		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template
-		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match
-		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text
-		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	public RegexFunction() {
-		templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
+		templatePattern = patternCache.getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
+				Perl5Compiler.READ_ONLY_MASK);
 	}
 
     // For serialised objects, do the same work as the constructor:
@@ -94,8 +95,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		String valueIndex = "", defaultValue = "", between = "";
-		String name = "";
+		String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String name = ""; //$NON-NLS-1$
 		Pattern searchPattern;
 		Object[] tmplt;
 		try {
@@ -106,8 +107,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			if (values.length > 2) {
 				valueIndex = ((CompoundVariable) values[2]).execute();
 			}
-			if (valueIndex.equals("")) {
-				valueIndex = "1";
+			if (valueIndex.equals("")) { //$NON-NLS-1$
+				valueIndex = "1"; //$NON-NLS-1$
 			}
 
 			if (values.length > 3) {
@@ -116,7 +117,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 			if (values.length > 4) {
 				String dv = ((CompoundVariable) values[4]).execute();
-				if (!dv.equals("")) {
+				if (!dv.equals("")) { //$NON-NLS-1$
 					defaultValue = dv;
 				}
 			}
@@ -146,13 +147,13 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 				collectAllMatches.add(match);
 			}
 		} catch (NumberFormatException e) {//TODO: can this occur?
-			log.error("", e);
+			log.error("", e); //$NON-NLS-1$
 			return defaultValue;
 		} catch (UnsupportedEncodingException e) {
             log.error("Can't convert ResponseData", e);
 			return defaultValue;
 		} finally {
-			vars.put(name + "_matchNr", "" + collectAllMatches.size());
+			vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		if (collectAllMatches.size() == 0) {
@@ -195,7 +196,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
 		if (result != null) {
 			for (int x = 0; x < result.groups(); x++) {
-				vars.put(namep + "_g" + x, result.group(x));
+				vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
 			}
 		}
 	}
@@ -262,7 +263,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	}
 
 	private boolean isFirstElementGroup(String rawData) {
-		Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK);
+		Pattern pattern = patternCache.getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
+				Perl5Compiler.READ_ONLY_MASK);
 		return new Perl5Matcher().contains(rawData, pattern);
 	}
 
