@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -40,13 +39,12 @@ import org.apache.log.Logger;
  */
 public class ExampleSampler extends AbstractSampler {
 
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// The name of the property used to hold our data
 	public final static String DATA = "ExampleSampler.data"; //$NON-NLS-1$
 
-	private transient static int classCount = 0; // keep track of classes
-													// created
+	private static int classCount = 0; // keep track of classes created
 
 	// (for instructional purposes only!)
 
@@ -86,11 +84,11 @@ public class ExampleSampler extends AbstractSampler {
 			res.setDataType(SampleResult.TEXT);
 
 			res.setResponseCodeOK();
-			res.setResponseMessage("OK");
+			res.setResponseMessage("OK");// $NON-NLS-1$
 			isOK = true;
 		} catch (Exception ex) {
 			log.debug("", ex);
-			res.setResponseCode("500");
+			res.setResponseCode("500");// $NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 		}
 		res.sampleEnd(); // End timimg
