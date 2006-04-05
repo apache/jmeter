@@ -45,11 +45,23 @@ public class BeanShellPreProcessor extends AbstractTestElement implements PrePro
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.preprocessor.init"; //$NON-NLS-1$
 
-    public BeanShellPreProcessor() throws ClassNotFoundException {
+    public BeanShellPreProcessor() {
         super();
-        bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+        init();
     }
 
+	private void init() {
+		try {
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
+		} catch (ClassNotFoundException e) {
+			log.error(e.getLocalizedMessage());
+		}
+	}
+
+    private Object readResolve() {
+    	init();
+    	return this;
+    }
 
     public void process(){
         JMeterContext jmctx = JMeterContextService.getContext();
