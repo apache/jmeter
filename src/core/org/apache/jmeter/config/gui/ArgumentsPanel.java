@@ -79,14 +79,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	private boolean standalone = true;
 
 	/** Command for adding a row to the table. */
-	private static final String ADD = "add";
+	private static final String ADD = "add"; // $NON-NLS-1$
 
 	/** Command for removing a row from the table. */
-	private static final String DELETE = "delete";
+	private static final String DELETE = "delete"; // $NON-NLS-1$
 
-	public static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name");
+	public static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
 
-	public static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value");
+	public static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
 
 	// NOTUSED private static final String COLUMN_NAMES_2 =
 	// JMeterUtils.getResString("metadata");
@@ -95,7 +95,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * Create a new ArgumentsPanel as a standalone component.
 	 */
 	public ArgumentsPanel() {
-		tableLabel = new JLabel(JMeterUtils.getResString("user_defined_variables"));
+		tableLabel = new JLabel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
 		standalone = true;
 		init();
 	}
@@ -136,13 +136,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	public Collection getMenuCategories() {
 		if (standalone) {
 			return super.getMenuCategories();
-		} else {
-			return null;
-		}
+		} 
+		return null;
 	}
 
 	public String getLabelResource() {
-		return "user_defined_variables";
+		return "user_defined_variables"; // $NON-NLS-1$
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */
@@ -162,7 +161,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 			arguments.clear();
 			while (modelData.hasNext()) {
 				Argument arg = (Argument) modelData.next();
-				arg.setMetaData("=");
+				arg.setMetaData("="); // $NON-NLS-1$
 				arguments.addArgument(arg);
 			}
 		}
@@ -323,7 +322,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * @return a new Argument object
 	 */
 	protected Object makeNewArgument() {
-		return new Argument("", "");
+		return new Argument("", ""); // $NON-NLS-1$ // $NON-NLS-2$
 	}
 
 	/**
@@ -342,8 +341,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 */
 	protected void initializeTableModel() {
 		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 }, new Functor[] {
-				new Functor("getName"), new Functor("getValue") }, new Functor[] { new Functor("setName"),
-				new Functor("setValue") }, new Class[] { String.class, String.class });
+				new Functor("getName"), // $NON-NLS-1$
+				new Functor("getValue") },  // $NON-NLS-1$
+				new Functor[] { new Functor("setName"), // $NON-NLS-1$
+				new Functor("setValue") }, // $NON-NLS-1$
+				new Class[] { String.class, String.class });
 	}
 
 	/**
@@ -390,11 +392,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * @return a GUI panel containing the buttons
 	 */
 	private JPanel makeButtonPanel() {
-		add = new JButton(JMeterUtils.getResString("add"));
+		add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
 		add.setActionCommand(ADD);
 		add.setEnabled(true);
 
-		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 		delete.setActionCommand(DELETE);
 
 		checkDeleteStatus();
