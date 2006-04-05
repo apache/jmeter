@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -43,19 +42,19 @@ import org.apache.log.Logger;
  * @version $Id$
  */
 public class CompoundVariable implements Function {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private String rawParameters;
 
-	static FunctionParser functionParser = new FunctionParser();
+	private static FunctionParser functionParser = new FunctionParser();
 
-	static Map functions = new HashMap();
+	private static Map functions = new HashMap();
 
 	private boolean hasFunction, isDynamic;
 
-	private String permanentResults = "";
+	private String permanentResults = ""; // $NON-NLS-1$
 
-	LinkedList compiledComponents = new LinkedList();
+	private LinkedList compiledComponents = new LinkedList();
 
 	static {
 		try {
@@ -91,9 +90,8 @@ public class CompoundVariable implements Function {
 			SampleResult previousResult = context.getPreviousResult();
 			Sampler currentSampler = context.getCurrentSampler();
 			return execute(previousResult, currentSampler);
-		} else {
-			return permanentResults;
 		}
+		return permanentResults; // $NON-NLS-1$
 	}
 
 	/**
@@ -112,7 +110,7 @@ public class CompoundVariable implements Function {
 	 */
 	public String execute(SampleResult previousResult, Sampler currentSampler) {
 		if (compiledComponents == null || compiledComponents.size() == 0) {
-			return "";
+			return ""; // $NON-NLS-1$
 		}
 		boolean testDynamic = false;
 		StringBuffer results = new StringBuffer();
@@ -180,12 +178,11 @@ public class CompoundVariable implements Function {
 			try {
 				return ((Class) functions.get(functionName)).newInstance();
 			} catch (Exception e) {
-				log.error("", e);
+				log.error("", e); // $NON-NLS-1$
 				throw new InvalidVariableException();
 			}
-		} else {
-			return new SimpleVariable(functionName);
 		}
+		return new SimpleVariable(functionName);
 	}
 
 	public boolean hasFunction() {
@@ -196,12 +193,6 @@ public class CompoundVariable implements Function {
 	 * @see Function#getReferenceKey()
 	 */
 	public String getReferenceKey() {
-		return "";
+		return ""; // $NON-NLS-1$
 	}
-	/*
-	 * NOT USED
-	 * 
-	 * private JMeterVariables getVariables() { return
-	 * JMeterContextService.getContext().getVariables(); }
-	 */
 }
