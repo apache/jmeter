@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -38,11 +37,11 @@ import org.apache.log.Logger;
  */
 public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestListener, Serializable,
 		NoThreadClone {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private RemoteSampleListener listener = null;
 
-	SampleSender mode;
+	private SampleSender mode;
 
 	public RemoteListenerWrapper(RemoteSampleListener l) {
 		listener = l;
