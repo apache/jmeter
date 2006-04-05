@@ -62,7 +62,7 @@ import org.apache.log.Logger;
  * @version $Revision$ $Date$
  */
 public class MailerVisualizer extends AbstractVisualizer implements ActionListener, Clearable, ChangeListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JButton testerButton;
 
@@ -228,7 +228,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	}
 
 	public String getLabelResource() {
-		return "mailer_visualizer_title";
+		return "mailer_visualizer_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	 * @return The title of the component.
 	 */
 	public String getAttributesTitle() {
-		return JMeterUtils.getResString("mailer_attributes_panel");
+		return JMeterUtils.getResString("mailer_attributes_panel"); //$NON-NLS-1$
 	}
 
 	// ////////////////////////////////////////////////////////////
@@ -259,16 +259,18 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 			try {
 				MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
 				model.sendTestMail();
-				displayMessage(JMeterUtils.getResString("mail_sent"), false);
+				displayMessage(JMeterUtils.getResString("mail_sent"), false); //$NON-NLS-1$
 			} catch (UnknownHostException e1) {
 				log.error("Invalid Mail Server ", e1);
-				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true); //$NON-NLS-1$
 			} catch (AddressException ex) {
 				log.error("Invalid mail address ", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail_address") + "\n" + ex.getMessage(), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail_address") //$NON-NLS-1$
+						+ "\n" + ex.getMessage(), true); //$NON-NLS-1$
 			} catch (MessagingException ex) {
 				log.error("Couldn't send mail...", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail") + "\n" + ex.getMessage(), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail") //$NON-NLS-1$
+						+ "\n" + ex.getMessage(), true); //$NON-NLS-1$
 			}
 		}
 	}
