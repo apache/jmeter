@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -32,11 +31,12 @@ import org.apache.log.Logger;
  * @version $Revision$ Updated on: $Date$
  */
 public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject implements RemoteJMeterEngine {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	JMeterEngine backingEngine;
+	private JMeterEngine backingEngine;
 
-	public static final int DEFAULT_RMI_PORT = JMeterUtils.getPropDefault("server.rmi.port", 1099);
+	public static final int DEFAULT_RMI_PORT = 
+		JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
 
 	public RemoteJMeterEngineImpl() throws RemoteException {
 		init(DEFAULT_RMI_PORT);
@@ -52,7 +52,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 		try {
 			Registry reg = LocateRegistry.getRegistry(port);
 			backingEngine = new StandardJMeterEngine(InetAddress.getLocalHost().getHostName());
-			reg.rebind("JMeterEngine", this);
+			reg.rebind("JMeterEngine", this); // $NON-NLS-1$
 			log.info("Bound to registry on port " + port);
 		} catch (Exception ex) {
 			log.error("rmiregistry needs to be running to start JMeter in server " + "mode\n\t" + ex.toString());
@@ -113,7 +113,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 				Thread.sleep(Long.MAX_VALUE);
 			}
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 
 	}
