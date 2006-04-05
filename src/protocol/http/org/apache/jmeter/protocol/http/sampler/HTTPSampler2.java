@@ -117,21 +117,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	}
 
 	/**
-	 * Set request headers in preparation to opening a connection.
-	 * 
-	 * @param conn
-	 *            <code>URLConnection</code> to set headers on
-	 * @exception IOException
-	 *                if an I/O exception occurs
-	 */
-	private void setPostHeaders(PostMethod post) throws IOException {
-		// Probably nothing needed, because the PostMethod class takes care of
-		// it
-		// /*postWriter.*/
-		// setHeaders(post, this);
-	}
-
-	/**
 	 * Send POST data from <code>Entry</code> to the open connection.
 	 * 
 	 * @param connection
@@ -238,7 +223,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                             PROXY_USER, 
                             PROXY_PASS, 
                             null, // "thishost",
-                            null // domain
+                            "" // domain
                 ));
             }
         }
@@ -316,8 +301,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	protected String getResponseHeaders(HttpMethod method) throws IOException {
 		StringBuffer headerBuf = new StringBuffer();
 		org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
-		headerBuf.append(method.getStatusLine());// header[0] is not the
-													// status line...
+		headerBuf.append(method.getStatusLine());// header[0] is not the status line...
 		headerBuf.append("\n"); // $NON-NLS-1$
 
 		for (int i = 0; i < rh.length; i++) {
@@ -513,7 +497,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 			if (method.equals(POST)) {
                 res.setQueryString(getQueryString());
-                setPostHeaders((PostMethod) httpMethod);
 				sendPostData(httpMethod);
 			}
 
