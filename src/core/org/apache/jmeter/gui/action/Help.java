@@ -39,15 +39,17 @@ import org.apache.log.Logger;
  * @version $Revision$ $Date$
  */
 public class Help implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 
-	private static final String HELP_DOCS = "file:///" + JMeterUtils.getJMeterHome() + "/printable_docs/usermanual/";
+	private static final String HELP_DOCS = "file:///"  // $NON-NLS-1$
+		+ JMeterUtils.getJMeterHome() 
+		+ "/printable_docs/usermanual/"; // $NON-NLS-1$
 
-	private static final String HELP_PAGE = HELP_DOCS + "component_reference.html";
+	private static final String HELP_PAGE = HELP_DOCS + "component_reference.html"; // $NON-NLS-1$
 
-	public static final String HELP_FUNCTIONS = HELP_DOCS + "functions.html";
+	public static final String HELP_FUNCTIONS = HELP_DOCS + "functions.html"; // $NON-NLS-1$
 
 	private static JDialog helpWindow;
 
@@ -68,7 +70,7 @@ public class Help implements Command {
 		} catch (IOException err) {
 			String msg = "Couldn't load help file " + err.toString();
 			log.error(msg);
-			currentPage = "";// Avoid NPE in resetPage()
+			currentPage = "";// Avoid NPE in resetPage() // $NON-NLS-1$
 		}
 	}
 
@@ -107,7 +109,7 @@ public class Help implements Command {
 			} catch (IOException err) {
 				log.error(err.toString());
 				JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
-				currentPage = "";
+				currentPage = ""; // $NON-NLS-1$
 			}
 		}
 	}
