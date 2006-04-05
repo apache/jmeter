@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -54,7 +53,7 @@ import com.sun.net.ssl.X509TrustManager;
  * @version $Revision$ $Date$
  */
 public class JsseSSLManager extends SSLManager {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Cache the SecureRandom instance because it takes a long time to create
@@ -81,7 +80,7 @@ public class JsseSSLManager extends SSLManager {
 		setProvider(provider);
 		try {
 			Class iaikProvider = SSLManager.class.getClassLoader().loadClass(
-					"iaik.security.jsse.provider.IAIKJSSEProvider");
+					"iaik.security.jsse.provider.IAIKJSSEProvider"); // $NON-NLS-1$
 			setProvider((Provider) iaikProvider.newInstance());
 		} catch (Exception e) {
 		}
@@ -89,8 +88,9 @@ public class JsseSSLManager extends SSLManager {
 			this.rand = new SecureRandom();
 		}
 
-		if ("all".equalsIgnoreCase(JMeterUtils.getPropDefault("javax.net.debug", "none"))) {
-			System.setProperty("javax.net.debug", "all");
+		if ("all".equalsIgnoreCase( // $NON-NLS-1$
+				JMeterUtils.getPropDefault("javax.net.debug", "none"))) { // $NON-NLS-1$ // $NON-NLS-2$
+			System.setProperty("javax.net.debug", "all"); // $NON-NLS-1$ // $NON-NLS-2$
 		}
 		this.getContext();
 		log.info("JsseSSLManager installed");
@@ -135,16 +135,16 @@ public class JsseSSLManager extends SSLManager {
 		if (null == this.context) {
 			try {
 				if (pro != null) {
-					this.context = SSLContext.getInstance("TLS", pro);
+					this.context = SSLContext.getInstance("TLS", pro); // $NON-NLS-1$
 				} else {
-					this.context = SSLContext.getInstance("TLS");
+					this.context = SSLContext.getInstance("TLS"); // $NON-NLS-1$
 				}
 				log.debug("SSL context = " + context);
 			} catch (Exception ee) {
 				log.error("Exception occurred", ee);
 			}
 			try {
-				KeyManagerFactory managerFactory = KeyManagerFactory.getInstance("SunX509");
+				KeyManagerFactory managerFactory = KeyManagerFactory.getInstance("SunX509"); // $NON-NLS-1$
 				JmeterKeyStore keys = this.getKeyStore();
 				managerFactory.init(null, this.defaultpw.toCharArray());
 				KeyManager[] managers = managerFactory.getKeyManagers();
@@ -247,12 +247,10 @@ public class JsseSSLManager extends SSLManager {
 		}
 
 		public boolean isClientTrusted(X509Certificate[] arg0) {
-			// TODO Auto-generated method stub
 			return true;
 		}
 
 		public boolean isServerTrusted(X509Certificate[] arg0) {
-			// TODO Auto-generated method stub
 			return true;
 		}
 
