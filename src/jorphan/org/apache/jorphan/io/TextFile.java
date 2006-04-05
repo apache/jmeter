@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -45,7 +44,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class TextFile extends File {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * File encoding. null means use the platform's default.
@@ -136,7 +135,7 @@ public class TextFile extends File {
 	 * @return the content of the file
 	 */
 	public String getText() {
-		String lineEnd = System.getProperty("line.separator");
+		String lineEnd = System.getProperty("line.separator"); //$NON-NLS-1$
 		StringBuffer sb = new StringBuffer();
 		Reader reader = null;
 		try {
@@ -146,7 +145,7 @@ public class TextFile extends File {
 				reader = new InputStreamReader(new FileInputStream(this), encoding);
 			}
 			BufferedReader br = new BufferedReader(reader);
-			String line = "NOTNULL";
+			String line = "NOTNULL"; //$NON-NLS-1$
 			while (line != null) {
 				line = br.readLine();
 				if (line != null) {
@@ -154,7 +153,7 @@ public class TextFile extends File {
 				}
 			}
 		} catch (IOException ioe) {
-			log.error("", ioe);
+			log.error("", ioe); //$NON-NLS-1$
 		} finally {
 			if (reader != null)
 				try {
