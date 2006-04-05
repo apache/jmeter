@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -50,6 +49,8 @@ import org.apache.log.Logger;
  */
 public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener, ChangeListener {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
 	// instance attributes
 	private JTextField errorThresholdField = null;
 
@@ -66,9 +67,6 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 	private JRadioButton xmlRadioButton = null;
 
 	private FilePanel filePanel = null;
-
-	// class attributes
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The constructor.
