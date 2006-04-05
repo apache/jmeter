@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -53,7 +52,7 @@ import org.apache.log.Logger;
  * @version $Revision$ Last updated: $Date$
  */
 public class JMeterThread implements Runnable, java.io.Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// NOT USED private static Map samplers = new HashMap();
 	private int initialDelay = 0;
