@@ -50,7 +50,7 @@ import org.apache.log.Logger;
 /**
  */
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private transient Thread runningThread;
 
@@ -126,12 +126,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				if (t != null) {
 					t.interrupt();
 				}
-
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	// End of code to allow engine to be controlled remotely
