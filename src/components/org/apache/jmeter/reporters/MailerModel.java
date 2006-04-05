@@ -48,7 +48,10 @@ import org.apache.log.Logger;
  * @version $Revision$ $Date$
  */
 public class MailerModel extends AbstractTestElement implements Serializable {
-	private static final String MAIL_SMTP_HOST = "mail.smtp.host";
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final String MAIL_SMTP_HOST = "mail.smtp.host"; //$NON-NLS-1$
 
 	private long failureCount = 0;
 
@@ -60,21 +63,21 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
 	private boolean successMsgSent = false;
 
-	private static final String FROM_KEY = "MailerModel.fromAddress";
+	private static final String FROM_KEY = "MailerModel.fromAddress"; //$NON-NLS-1$
 
-	private static final String TO_KEY = "MailerModel.addressie";
+	private static final String TO_KEY = "MailerModel.addressie"; //$NON-NLS-1$
 
-	private static final String HOST_KEY = "MailerModel.smtpHost";
+	private static final String HOST_KEY = "MailerModel.smtpHost"; //$NON-NLS-1$
 
-	private static final String SUCCESS_SUBJECT = "MailerModel.successSubject";
+	private static final String SUCCESS_SUBJECT = "MailerModel.successSubject"; //$NON-NLS-1$
 
-	private static final String FAILURE_SUBJECT = "MailerModel.failureSubject";
+	private static final String FAILURE_SUBJECT = "MailerModel.failureSubject"; //$NON-NLS-1$
 
-	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
+	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit"; //$NON-NLS-1$
 
-	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
+	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit"; //$NON-NLS-1$
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final String DEFAULT_LIMIT = "2"; //$NON-NLS-1$
 
 	/** The listener for changes. */
 	ChangeListener changeListener;
@@ -85,8 +88,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	public MailerModel() {
 		super();
 
-		setProperty(SUCCESS_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.successlimit", "2"));
-		setProperty(FAILURE_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.failurelimit", "2"));
+		setProperty(SUCCESS_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.successlimit", DEFAULT_LIMIT)); //$NON-NLS-1$
+		setProperty(FAILURE_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.failurelimit", DEFAULT_LIMIT)); //$NON-NLS-1$
 	}
 
 	public void addChangeListener(ChangeListener list) {
@@ -129,14 +132,14 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 		Vector addressVector = new Vector();
 
 		if (theAddressie != null) {
-			String addressSep = ",";
+			String addressSep = ","; //$NON-NLS-1$
 
 			StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
 
 			while (next.hasMoreTokens()) {
 				String theToken = next.nextToken().trim();
 
-				if (theToken.indexOf("@") > 0) {
+				if (theToken.indexOf("@") > 0) { //$NON-NLS-1$
 					addressVector.addElement(theToken);
 				}
 			}
