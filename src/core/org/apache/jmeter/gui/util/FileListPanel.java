@@ -48,27 +48,29 @@ import org.apache.jorphan.reflect.Functor;
  * @version $Revision$ Last updated: $Date$
  */
 public class FileListPanel extends JPanel implements ActionListener {
-	protected JTable files = null;
+	private JTable files = null;
 
-    protected transient ObjectTableModel tableModel = null;
+    private transient ObjectTableModel tableModel = null;
     
-	JButton browse = new JButton(JMeterUtils.getResString("browse"));
+	private static final String ACTION_BROWSE = "browse"; // $NON-NLS-1$
 
-    JButton clear = new JButton(JMeterUtils.getResString("clear"));
+    private JButton browse = new JButton(JMeterUtils.getResString(ACTION_BROWSE));
 
-    private JButton delete = new JButton(JMeterUtils.getResString("delete"));
+	private JButton clear = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
 
-    List listeners = new LinkedList();
+    private JButton delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 
-	String title;
+    private List listeners = new LinkedList();
 
-	String filetype;
+    private String title;
+
+    private String filetype;
 
 	/**
 	 * Constructor for the FilePanel object.
 	 */
 	public FileListPanel() {
-		title = "";
+		title = ""; // $NON-NLS-1$
 		init();
 	}
 
@@ -117,7 +119,7 @@ public class FileListPanel extends JPanel implements ActionListener {
         scrollpane.setPreferredSize(new Dimension(400,140));
         add(scrollpane,BorderLayout.CENTER);
 
-		browse.setActionCommand("browse");
+		browse.setActionCommand(ACTION_BROWSE); // $NON-NLS-1$
 		browse.addActionListener(this);
         clear.addActionListener(this);
         delete.addActionListener(this);
@@ -184,7 +186,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 	}
 
     protected void initializeTableModel() {
-        tableModel = new ObjectTableModel(new String[] { "Library" }, new Functor[0],
+        tableModel = new ObjectTableModel(new String[] { "Library" }, new Functor[0], // $NON-NLS-1$
                 new Functor[0],
                 new Class[] { String.class });
     }
@@ -192,9 +194,9 @@ public class FileListPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == clear) {
             this.clearFiles();
-        } else if (e.getActionCommand().equals("browse")) {
+        } else if (e.getActionCommand().equals(ACTION_BROWSE)) {
 			JFileChooser chooser = new JFileChooser();
-            String start = JMeterUtils.getPropDefault("user.dir", "");
+            String start = JMeterUtils.getPropDefault("user.dir", ""); // $NON-NLS-1$ // $NON-NLS-2$
             chooser.setCurrentDirectory(new File(start));
             chooser.setFileFilter(new JMeterFileFilter(new String[] { filetype }));
             chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
