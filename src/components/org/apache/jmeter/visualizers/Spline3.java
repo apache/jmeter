@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -83,7 +82,7 @@ import org.apache.log.Logger;
  * @version $Revison$ updated $Date$
  */
 public class Spline3 {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	protected float[][] _coefficients;
 
