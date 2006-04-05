@@ -43,23 +43,21 @@ import org.w3c.tidy.Tidy;
  */
 public class HTMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-	// constants
-	public static final String DEFAULT_DOCTYPE = "omit";
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String DOCTYPE_KEY = "html_assertion_doctype";
+	public static final String DEFAULT_DOCTYPE = "omit"; //$NON-NLS-1$
 
-	public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly";
+	public static final String DOCTYPE_KEY = "html_assertion_doctype"; //$NON-NLS-1$
 
-	public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold";
+	public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly"; //$NON-NLS-1$
 
-	public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold";
+	public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold"; //$NON-NLS-1$
 
-	public static final String FORMAT_KEY = "html_assertion_format";
+	public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold"; //$NON-NLS-1$
 
-	public static final String FILENAME_KEY = "html_assertion_filename";
+	public static final String FORMAT_KEY = "html_assertion_format"; //$NON-NLS-1$
 
-	// class attributes
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	public static final String FILENAME_KEY = "html_assertion_filename"; //$NON-NLS-1$
 
 	/**
 	 * 
@@ -279,7 +277,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 	 */
 	public void setErrorThreshold(long inErrorThreshold) {
 		if (inErrorThreshold < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
 		}
 		if (inErrorThreshold == Long.MAX_VALUE) {
 			setProperty(new LongProperty(ERROR_THRESHOLD_KEY, 0));
@@ -295,7 +293,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 	 */
 	public void setWarningThreshold(long inWarningThreshold) {
 		if (inWarningThreshold < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
 		}
 		if (inWarningThreshold == Long.MAX_VALUE) {
 			setProperty(new LongProperty(WARNING_THRESHOLD_KEY, 0));
