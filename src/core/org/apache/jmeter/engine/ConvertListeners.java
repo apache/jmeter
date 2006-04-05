@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -39,7 +38,7 @@ import org.apache.log.Logger;
  * @author mstover
  */
 public class ConvertListeners implements HashTreeTraverser {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/*
 	 * (non-Javadoc)
@@ -56,7 +55,8 @@ public class ConvertListeners implements HashTreeTraverser {
 			if (item instanceof ThreadGroup) {
 				log.info("num threads = " + ((ThreadGroup) item).getNumThreads());
 			}
-			if (item instanceof Remoteable && (item instanceof TestListener || item instanceof SampleListener)) {
+			if (item instanceof Remoteable 
+					&& (item instanceof TestListener || item instanceof SampleListener)) {
 				try {
 					RemoteSampleListener rtl = new RemoteSampleListenerImpl(item);
 					if (item instanceof TestListener && item instanceof SampleListener) {
@@ -70,7 +70,7 @@ public class ConvertListeners implements HashTreeTraverser {
 						subTree.replace(item, wrap);
 					}
 				} catch (RemoteException e) {
-					log.error("", e);
+					log.error("", e); // $NON-NLS-1$
 				}
 			}
 		}
