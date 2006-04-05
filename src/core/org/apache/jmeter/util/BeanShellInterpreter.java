@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -41,7 +40,7 @@ import org.apache.log.Logger;
  */
 
 public class BeanShellInterpreter {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final Method bshGet;
 
@@ -89,12 +88,12 @@ public class BeanShellInterpreter {
 		}
 	}
 
-	transient private Object bshInstance = null; // The interpreter instance
-													// for this class
+	// This class is not serialised
+	private Object bshInstance = null; // The interpreter instance for this class
 
 	public BeanShellInterpreter() throws ClassNotFoundException {
 		if (bshClass == null) {
-			throw new ClassNotFoundException("bsh.Interpreter");
+			throw new ClassNotFoundException("bsh.Interpreter");//$NON-NLS-1$
 		}
 		try {
 			bshInstance = bshClass.newInstance();
@@ -110,7 +109,7 @@ public class BeanShellInterpreter {
 	public void init(String initFile, Object logger) throws IOException, JMeterException {
 		if (logger != null) {// Do this before starting the script
 			try {
-				set("log", logger);
+				set("log", logger);//$NON-NLS-1$
 			} catch (JMeterException e) {
 				log.error("Can't set logger variable", e);
 				throw e;
@@ -124,9 +123,8 @@ public class BeanShellInterpreter {
 			}
 			if (!in.canRead()) {
 				throw new IOException("initFile");
-			} else {
-				source(initFile);
 			}
+			source(initFile);
 		}
 	}
 
