@@ -45,21 +45,21 @@ import org.apache.log.Logger;
  * 
  */
 public class XPath extends AbstractFunction implements Serializable {
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// static {
 	// LoggingManager.setPriority("DEBUG","jmeter");
 	// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
 	// }
-	private static final String KEY = "__XPath"; // Function name
+	private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
 	private static final List desc = new LinkedList();
 
 	private Object[] values; // Parameter list
 
 	static {
-		desc.add(JMeterUtils.getResString("xpath_file_file_name"));
-		desc.add(JMeterUtils.getResString("xpath_expression"));
+		desc.add(JMeterUtils.getResString("xpath_file_file_name")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("xpath_expression")); //$NON-NLS-1$
 	}
 
 	public XPath() {
@@ -75,7 +75,7 @@ public class XPath extends AbstractFunction implements Serializable {
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		String myValue = "";
+		String myValue = ""; //$NON-NLS-1$
 
 		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
 		String xpathString = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
@@ -130,8 +130,7 @@ public class XPath extends AbstractFunction implements Serializable {
 		 * for functions to detect that a run is starting seems to be the
 		 * setParameters() call.
 		 */
-		XPathWrapper.clearAll();// TODO only clear the relevant entry - if
-								// possible...
+		XPathWrapper.clearAll();// TODO only clear the relevant entry - if possible...
 
 	}
 }

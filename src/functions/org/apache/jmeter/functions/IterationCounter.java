@@ -41,8 +41,8 @@ public class IterationCounter extends AbstractFunction implements Serializable {
     };
     
 	static {
-		desc.add(JMeterUtils.getResString("iteration_counter_arg_1"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	transient private Object[] variables;
@@ -74,12 +74,12 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 		boolean perThread = Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
 
-		String varName = "";
+		String varName = ""; //$NON-NLS-1$
         if (variables.length >=2) {// Ensure variable has been provided
             varName = ((CompoundVariable) variables[1]).execute();
         }
 		
-        String counterString = "";
+        String counterString = ""; //$NON-NLS-1$
 
 		if (perThread) {
 			int threadCounter;
