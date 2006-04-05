@@ -90,9 +90,9 @@ import org.xml.sax.SAXParseException;
  */
 public class ViewResultsFullVisualizer extends AbstractVisualizer implements ActionListener, TreeSelectionListener,
 		Clearable {
-	private static final String XML_PFX = "<?xml ";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final String XML_PFX = "<?xml "; // $NON-NLS-1$
 
 	public final static Color SERVER_ERROR_COLOR = Color.red;
 
@@ -115,6 +115,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	private static final String XML_COMMAND = "xml"; // $NON-NLS-1$
 
 	private static final String TEXT_COMMAND = "text"; // $NON-NLS-1$
+
+	private static final String STYLE_SERVER_ERROR = "ServerError"; // $NON-NLS-1$
+
+	private static final String STYLE_CLIENT_ERROR = "ClientError"; // $NON-NLS-1$
+
+	private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
 	private boolean textMode = true;
 
@@ -162,7 +168,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	}
 
 	public String getLabelResource() {
-		return "view_results_tree_title";
+		return "view_results_tree_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -216,8 +222,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
 		}
 
-		results.setText("");// Response Data
-		sampleDataField.setText("");// Request Data
+		results.setText("");// Response Data // $NON-NLS-1$
+		sampleDataField.setText("");// Request Data // $NON-NLS-1$
 		log.debug("End : clear1");
 	}
 
@@ -249,8 +255,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		StyledDocument statsDoc = stats.getStyledDocument();
 		try {
 			statsDoc.remove(0, statsDoc.getLength());
-			sampleDataField.setText("");
-			results.setText("");
+			sampleDataField.setText(""); // $NON-NLS-1$
+			results.setText(""); // $NON-NLS-1$
 			if (node != null) {
 				SampleResult res = (SampleResult) node.getUserObject();
 
@@ -292,13 +298,13 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 					Style style = null;
 					switch (responseLevel) {
 					case 3:
-						style = statsDoc.getStyle("Redirect");
+						style = statsDoc.getStyle(STYLE_REDIRECT);
 						break;
 					case 4:
-						style = statsDoc.getStyle("ClientError");
+						style = statsDoc.getStyle(STYLE_CLIENT_ERROR);
 						break;
 					case 5:
-						style = statsDoc.getStyle("ServerError");
+						style = statsDoc.getStyle(STYLE_SERVER_ERROR);
 						break;
 					}
 					statsDoc.insertString(statsDoc.getLength(), "HTTP response code: " + responseCode + "\n", style);
@@ -350,8 +356,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	}
 
 	protected void showTextResponse(String response) {
-		results.setContentType("text/plain");
-		results.setText(response == null ? "" : response);
+		results.setContentType("text/plain"); // $NON-NLS-1$
+		results.setText(response == null ? "" : response); // $NON-NLS-1$
 		results.setCaretPosition(0);
 		resultsScrollPane.setViewportView(results);
 
@@ -365,8 +371,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	private void showRenderXMLResponse(String response) {
 		String parsable="";
 		if (response == null) {
-			results.setText("");
-			parsable = "";
+			results.setText(""); // $NON-NLS-1$
+			parsable = ""; // $NON-NLS-1$
 		} else {
 			results.setText(response);
 			int start = response.indexOf(XML_PFX);
@@ -376,7 +382,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			    parsable=response;
 			}
 		}
-		results.setContentType("text/xml");
+		results.setContentType("text/xml"); // $NON-NLS-1$
 		results.setCaretPosition(0);
 
 		Component view = results;
@@ -492,11 +498,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			return;
 		}
 
-		int htmlIndex = response.indexOf("<HTML"); // could be <HTML lang="">
+		int htmlIndex = response.indexOf("<HTML"); // could be <HTML lang=""> // $NON-NLS-1$
 
 		// Look for a case variation
 		if (htmlIndex < 0) {
-			htmlIndex = response.indexOf("<html"); // ditto
+			htmlIndex = response.indexOf("<html"); // ditto // $NON-NLS-1$
 		}
 
 		// If we still can't find it, just try using all of the text
@@ -529,7 +535,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		 * 
 		 * Is this due to a bug in Java?
 		 */
-		results.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE);
+		results.getDocument().putProperty("IgnoreCharsetDirective", Boolean.TRUE); // $NON-NLS-1$
 
 		results.setText(html);
 		results.setCaretPosition(0);
@@ -585,9 +591,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		Component leftSide = createLeftPanel();
 		JTabbedPane rightSide = new JTabbedPane();
 
-		rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel());
-		rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), createRequestPanel());
-		rightSide.addTab(JMeterUtils.getResString("view_results_tab_response"), createResponseDataPanel());
+		rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
+		rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), createRequestPanel()); // $NON-NLS-1$
+		rightSide.addTab(JMeterUtils.getResString("view_results_tab_response"), createResponseDataPanel()); // $NON-NLS-1$
 
 		JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
 		add(mainSplit, BorderLayout.CENTER);
@@ -620,13 +626,13 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		// Add styles to use for different types of status messages
 		StyledDocument doc = (StyledDocument) stats.getDocument();
 
-		Style style = doc.addStyle("Redirect", null);
+		Style style = doc.addStyle(STYLE_REDIRECT, null);
 		StyleConstants.setForeground(style, REDIRECT_COLOR);
 
-		style = doc.addStyle("ClientError", null);
+		style = doc.addStyle(STYLE_CLIENT_ERROR, null);
 		StyleConstants.setForeground(style, CLIENT_ERROR_COLOR);
 
-		style = doc.addStyle("ServerError", null);
+		style = doc.addStyle(STYLE_SERVER_ERROR, null);
 		StyleConstants.setForeground(style, SERVER_ERROR_COLOR);
 
 		JScrollPane pane = makeScrollPane(stats);
@@ -763,7 +769,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 				super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, phasFocus);
 
 				DefaultMutableTreeNode valueTreeNode = (DefaultMutableTreeNode) value;
-				setToolTipText(getHTML(valueTreeNode.toString(), "<br>", 100));
+				setToolTipText(getHTML(valueTreeNode.toString(), "<br>", 100)); // $NON-NLS-1$
 				return this;
 			}
 
@@ -776,7 +782,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			 * @return
 			 */
 			private String getHTML(String str, String separator, int maxChar) {
-				StringBuffer strBuf = new StringBuffer("<html><body bgcolor=\"yellow\"><b>");
+				StringBuffer strBuf = new StringBuffer("<html><body bgcolor=\"yellow\"><b>"); // $NON-NLS-1$
 				char[] chars = str.toCharArray();
 				for (int i = 0; i < chars.length; i++) {
 
@@ -785,7 +791,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 					strBuf.append(encode(chars[i]));
 
 				}
-				strBuf.append("</b></body></html>");
+				strBuf.append("</b></body></html>"); // $NON-NLS-1$
 				return strBuf.toString();
 
 			}
@@ -793,17 +799,17 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			private String encode(char c) {
 				String toReturn = String.valueOf(c);
 				switch (c) {
-				case '<':
-					toReturn = "&lt;";
+				case '<': // $NON-NLS-1$
+					toReturn = "&lt;"; // $NON-NLS-1$
 					break;
-				case '>':
-					toReturn = "&gt;";
+				case '>': // $NON-NLS-1$
+					toReturn = "&gt;"; // $NON-NLS-1$
 					break;
-				case '\'':
-					toReturn = "&apos;";
+				case '\'': // $NON-NLS-1$
+					toReturn = "&apos;"; // $NON-NLS-1$
 					break;
-				case '\"':
-					toReturn = "&quot;";
+				case '\"': // $NON-NLS-1$
+					toReturn = "&quot;"; // $NON-NLS-1$
 					break;
 
 				}
@@ -838,7 +844,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		private int messageType;
 
 		public SAXErrorHandler() {
-			msg = "";
+			msg = ""; // $NON-NLS-1$
 
 		}
 
