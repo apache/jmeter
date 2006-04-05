@@ -40,7 +40,7 @@ import org.xml.sax.SAXParseException;
  * 
  */
 public class XPathUtil {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private XPathUtil() {
 		super();
