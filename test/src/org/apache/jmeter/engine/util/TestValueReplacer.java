@@ -58,7 +58,7 @@ public class TestValueReplacer extends TestCase {
 		public void testReverseReplacement() throws Exception {
 			ValueReplacer replacer = new ValueReplacer(variables);
 			assertTrue(variables.getUserDefinedVariables().containsKey("server"));
-			assertTrue(replacer.variables.containsKey("server"));
+			assertTrue(replacer.containsKey("server"));
 			TestElement element = new TestPlan();
 			element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
 			List args = new ArrayList();

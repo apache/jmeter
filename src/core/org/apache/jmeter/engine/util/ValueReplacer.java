@@ -53,6 +53,9 @@ public class ValueReplacer {
 		setUserDefinedVariables(tp.getUserDefinedVariables());
 	}
 
+	boolean containsKey(String k){
+		return variables.containsKey(k);
+	}
 	public void setUserDefinedVariables(Map variables) {
 		this.variables = variables;
 	}
