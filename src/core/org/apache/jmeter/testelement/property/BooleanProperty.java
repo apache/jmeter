@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -25,9 +24,9 @@ import org.apache.jorphan.util.JOrphanUtils;
  * @version $Revision$
  */
 public class BooleanProperty extends AbstractProperty {
-	boolean value; // TODO: should these be private?
+	private boolean value;
 
-	transient boolean savedValue;
+	private transient boolean savedValue;
 
 	public BooleanProperty(String name, boolean v) {
 		super(name);

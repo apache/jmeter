@@ -27,7 +27,7 @@ import org.apache.jmeter.testelement.TestElement;
  * @version $Revision$
  */
 public class CollectionProperty extends MultiProperty {
-	protected Collection value;
+	private Collection value;
 
 	transient private Collection savedValue;
 
@@ -78,9 +78,8 @@ public class CollectionProperty extends MultiProperty {
 	public JMeterProperty get(int row) {
 		if (value instanceof List) {
 			return (JMeterProperty) ((List) value).get(row);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	public void remove(int index) {
@@ -177,9 +176,8 @@ public class CollectionProperty extends MultiProperty {
 	protected Class getPropertyType() {
 		if (value.size() > 0) {
 			return value.iterator().next().getClass();
-		} else {
-			return NullProperty.class;
 		}
+		return NullProperty.class;
 	}
 
 	/*
