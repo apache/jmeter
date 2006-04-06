@@ -419,8 +419,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                      */
                     String user = auth.getUser();
                     String realm=null;
-                    String domain=null;
-                    String username;
+                    String domain="";// $NON-NLS-1$
+                    String username="";// $NON-NLS-1$
                     int bs=user.indexOf('\\'); // $NON-NLS-1$
                     int at=user.indexOf('@'); // $NON-NLS-1$
                     if (bs > 0) {
