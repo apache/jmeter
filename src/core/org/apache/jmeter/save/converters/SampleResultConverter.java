@@ -60,6 +60,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_RESPONSE_DATA     = "responseData";     //$NON-NLS-1$
     protected static final String TAG_RESPONSE_HEADER   = "responseHeader";   //$NON-NLS-1$
     protected static final String TAG_SAMPLER_DATA      = "samplerData";      //$NON-NLS-1$
+    protected static final String TAG_RESPONSE_FILE     = "responseFile";     //$NON-NLS-1$
 
     // samplerData attributes. Must be unique. Keep sorted.
     private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
@@ -161,6 +162,12 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			}
 			writer.endNode();
 		}
+        if (save.saveFileName()){
+            writer.startNode(TAG_RESPONSE_FILE);
+            writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
+            writer.setValue(res.getResultFileName());
+            writer.endNode();            
+        }
 	}
 
 	/**

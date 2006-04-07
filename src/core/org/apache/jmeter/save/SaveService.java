@@ -304,7 +304,7 @@ public class SaveService {
 		checkVersion(TestElementPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(ScriptWrapperConverter.class, "390848"); // $NON-NLS-1$
 		checkVersion(TestResultWrapperConverter.class, "332820"); // $NON-NLS-1$
-        checkVersion(SampleSaveConfigurationConverter.class,"390698"); // $NON-NLS-1$
+        checkVersion(SampleSaveConfigurationConverter.class,"392354"); // $NON-NLS-1$
 
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");

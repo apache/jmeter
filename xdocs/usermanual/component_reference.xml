@@ -2752,7 +2752,9 @@ generate the template string, and store the result into the given variable name.
 		For each sample in its scope, it will create a file of the response Data.
 		The primary use for this is in creating functional tests.
 		The file name is created from the specified prefix, plus a number.
-		The file extension is created from the document type, if know.
+		The file extension is created from the document type, if known.
+		The generated file name is stored in the sample response, and can be saved
+		in the test log output file if required.
 	</description>
  <properties>
  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>

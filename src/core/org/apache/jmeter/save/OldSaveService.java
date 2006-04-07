@@ -94,6 +94,7 @@ public final class OldSaveService {
     private static final String CSV_TIME = "elapsed"; // $NON-NLS-1$
     private static final String CSV_BYTES= "bytes"; // $NON-NLS-1$
     private static final String CSV_URL = "URL"; // $NON-NLS-1$
+    private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     
     // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
@@ -248,6 +249,11 @@ public final class OldSaveService {
 
         if (saveConfig.saveUrl()) {
             text.append(CSV_URL);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveFileName()) {
+            text.append(CSV_FILENAME);
             text.append(delim);
         }
 
@@ -549,6 +555,11 @@ public final class OldSaveService {
 
         if (saveConfig.saveUrl()) {
             text.append(sample.getURL());
+            text.append(delimiter);
+        }
+
+        if (saveConfig.saveFileName()) {
+            text.append(sample.getResultFileName());
             text.append(delimiter);
         }
 
