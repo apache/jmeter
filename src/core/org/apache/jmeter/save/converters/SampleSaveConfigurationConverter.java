@@ -35,9 +35,14 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  */
 public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
-    private static final ReflectionProvider rp = new JVM().bestReflectionProvider();
+	private static final ReflectionProvider rp = new JVM().bestReflectionProvider();
 
-    static class MyWrapper extends MapperWrapper{
+    private static final String TRUE = "true"; // $NON-NLS-1$
+	private static final String NODE_FILENAME = "fileName"; // $NON-NLS-1$
+	private static final String NODE_URL = "url"; // $NON-NLS-1$
+	private static final String NODE_BYTES = "bytes"; // $NON-NLS-1$
+
+	static class MyWrapper extends MapperWrapper{
 
         public MyWrapper(ClassMapper wrapped) {
             super(wrapped);
@@ -45,8 +50,9 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         
         public boolean shouldSerializeMember(Class definedIn, String fieldName) {
             if (SampleSaveConfiguration.class != definedIn) return true;
-            if (fieldName.equals("url")) return false; 
-            if (fieldName.equals("bytes")) return false; 
+            if (fieldName.equals(NODE_BYTES)) return false; 
+            if (fieldName.equals(NODE_URL)) return false; 
+            if (fieldName.equals(NODE_FILENAME)) return false; 
             return true;
         }
     }
@@ -86,14 +92,20 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         // Save the new fields - but only if they are not the default
         if (prop.saveBytes())
         {
-            writer.startNode("bytes");
-            writer.setValue("true");
+            writer.startNode(NODE_BYTES);
+            writer.setValue(TRUE);
             writer.endNode();
         }
         if (prop.saveUrl())
         {
-            writer.startNode("url");
-            writer.setValue("true");
+            writer.startNode(NODE_URL);
+            writer.setValue(TRUE);
+            writer.endNode();
+        }
+        if (prop.saveFileName())
+        {
+            writer.startNode(NODE_FILENAME);
+            writer.setValue(TRUE);
             writer.endNode();
         }
 	}

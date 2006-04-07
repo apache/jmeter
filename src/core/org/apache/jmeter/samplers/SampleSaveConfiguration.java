@@ -152,6 +152,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	// Save URL
 	private static final String SAVE_URL_PROP = "jmeter.save.saveservice.url"; // $NON_NLS-1$
 
+	// Save fileName for ResultSaver
+	private static final String SAVE_FILENAME_PROP = "jmeter.save.saveservice.filename"; // $NON_NLS-1$
+
 	/***************************************************************************
 	 * The name of the property indicating whether the time should be saved.
 	 **************************************************************************/
@@ -186,7 +189,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
-	private boolean url = _url, bytes = _bytes;
+	private boolean url = _url, bytes = _bytes , fileName = _fileName;
 	
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
@@ -227,6 +230,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private static final boolean _url;
 	
+	private static final boolean _fileName;
+
 	private static final SimpleDateFormat _formatter;
 
 	/**
@@ -274,6 +279,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		_bytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
 		
 		_url = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
+
+		_fileName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_FILENAME_PROP, FALSE));
 
 		_time = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
@@ -531,6 +538,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	public void setBytes(boolean save) {
 		this.bytes = save;
+	}
+
+	public boolean saveFileName() {
+		return fileName;
+	}
+
+	public void setFileName(boolean save) {
+		this.fileName = save;
 	}
 
 	public boolean saveAssertionResultsFailureMessage() {
