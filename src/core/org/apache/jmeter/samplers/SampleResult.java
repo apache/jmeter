@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +95,8 @@ public class SampleResult implements Serializable {
 
 	private String label;
 
+    private String resultFileName = ""; // Filename used by ResultSaver
+    
 	private String samplerData;
 
 	private String threadName = ""; // Never return null
@@ -109,9 +111,9 @@ public class SampleResult implements Serializable {
 
 	private long timeStamp = 0;// the time stamp - can be start or end
 
-	private long startTime = 0; // changed to protected for subclass
+	private long startTime = 0;
 
-	private long endTime = 0; // changed to protected for subclass
+	private long endTime = 0;
 
 	private long idleTime = 0;// Allow for non-sample time
 
@@ -125,7 +127,7 @@ public class SampleResult implements Serializable {
 
 	private boolean success;
 
-	private Set files;
+	private Set files; // files that this sample has been saved in
 
 	private String dataEncoding;// (is this really the character set?) e.g.
 								// ISO-8895-1, UTF-8
@@ -806,4 +808,12 @@ public class SampleResult implements Serializable {
 	public void setParent(SampleResult parent) {
 		this.parent = parent;
 	}
+
+    public String getResultFileName() {
+        return resultFileName;
+    }
+
+    public void setResultFileName(String resultFileName) {
+        this.resultFileName = resultFileName;
+    }
 }
