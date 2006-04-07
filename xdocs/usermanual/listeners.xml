@@ -183,6 +183,7 @@ Content-Type: image/gif
 &amp;lt;/responseHeader>
     &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
     &amp;lt;responseData class="java.lang.String">http://www.apache.org/images/asf_logo_wide.gif&amp;lt;/responseData>
+      &amp;lt;responseFile class="java.lang.String">Mixed1.html&amp;lt;/responseFile>
     &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
     &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
     &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
@@ -218,6 +219,7 @@ Content-Type: text/html; charset=ISO-8859-1
   &amp;lt;responseHeader class="java.lang.String">&amp;lt;/responseHeader>
   &amp;lt;requestHeader class="java.lang.String">&amp;lt;/requestHeader>
   &amp;lt;responseData class="java.lang.String">Listen 1-1&amp;lt;/responseData>
+  &amp;lt;responseFile class="java.lang.String">Mixed2.unknown&amp;lt;/responseFile>
   &amp;lt;samplerData class="java.lang.String">ssssss&amp;lt;/samplerData>
 &amp;lt;/sample>
 
@@ -246,6 +248,19 @@ The sample attributes have the following meaning:
 <p>
 Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
 This has been corrected so that it is always saved as "rc"; either "rc" or "rs" can be read.
+</p>
+</section>
+
+<section name="14.7 Saving response data" anchor="saving">
+<p>
+As shown above, the response data can be saved in the XML log file if required.
+However, this can make the file rather large, and the text has to be encoded so
+that it is still valid XML. Also, images cannot be included.
+<br/>
+Another solution is to use the Post-Processor <complink name="Save_Responses_to_a_file">Save Responses to a file</complink>.
+This generates a new file for each sample, and saves the file name with the sample.
+The file name can then be included in the sample log output.
+The data will be retrieved from the file if necessary when the sample log file is reloaded.
 </p>
 </section>
 
