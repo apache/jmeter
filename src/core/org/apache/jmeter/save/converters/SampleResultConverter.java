@@ -17,6 +17,11 @@
 
 package org.apache.jmeter.save.converters;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
@@ -288,6 +293,13 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			retrieveItem(reader, context, res, subItem);
 			reader.moveUp();
 		}
+
+        // If we have a file, but no data, then read the file
+        String resultFileName = res.getResultFileName();
+        if (resultFileName.length()>0 
+        &&  res.getResponseData().length == 0) {
+            readFile(resultFileName,res);
+        }
 		return res;
 	}
 
@@ -315,6 +327,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			}
 		} else if (nodeName.equals(TAG_SAMPLER_DATA)) {
 			res.setSamplerData((String) subItem);
+        } else if (nodeName.equals(TAG_RESPONSE_FILE)) {
+            res.setResultFileName((String) subItem);
 		// Don't try restoring the URL
 		} else {
 			return false;
@@ -344,6 +358,33 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
 	}
+
+    protected void readFile(String resultFileName, SampleResult res) {
+        File in = null;
+        FileInputStream fis = null;
+        try {
+            in = new File(resultFileName);
+            fis = new FileInputStream(in);
+            ByteArrayOutputStream outstream = new ByteArrayOutputStream(res.getBytes());
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = fis.read(buffer)) > 0) {
+                outstream.write(buffer, 0, len);
+            }
+            outstream.close();
+            res.setResponseData(outstream.toByteArray());
+        } catch (FileNotFoundException e) {
+            //log.warn(e.getLocalizedMessage());
+        } catch (IOException e) {
+            //log.warn(e.getLocalizedMessage());
+        } finally {
+            try {
+                if (fis != null) fis.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
 
 	/**
 	 * @param arg0
