@@ -149,19 +149,12 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			SampleSaveConfiguration save) {
 		if (save.saveResponseData(res)) {
 			writer.startNode(TAG_RESPONSE_DATA);
+            writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
 			try {
                 if (SampleResult.TEXT.equals(res.getDataType())){
-    				writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
     				writer.setValue(new String(res.getResponseData(), res.getDataEncoding()));
-                } else {
-                    writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
-                    URL url = res.getURL();
-                    if (url != null) {
-					    writer.setValue(url.toExternalForm());//TODO - better representation
-                    } else {
-                    	writer.setValue("Non-text data, but URL is null");
-                    }
                 }
+                // Otherwise don't save anything - no point
 			} catch (UnsupportedEncodingException e) {
 				writer.setValue("Unsupported encoding in response data, can't record.");
 			}
