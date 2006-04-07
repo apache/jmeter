@@ -42,6 +42,9 @@ write it as CSV or XML.
 CSV files are much smaller than XML files, so use CSV if you are generating lots of samples.
 </p>
 <p>
+
+</p>
+<p>
 If you only wish to record certain samples, add the Listener as a child of the sampler.
 Or you can use a Simple Controller to group a set of samplers, and add the Listener to that.
 The same filename can be used by multiple samplers - but make sure they all use the same configuration!
@@ -70,7 +73,7 @@ jmeter -n -t testplan.jmx -l testplan_02.jtl
 </code>
 </p>
 <p>
-However, note that jmeter logging messages are always written to jmeter.log by default.
+However, note that jmeter logging messages are written to jmeter.log by default.
 This file is recreated each time, so if you want to keep the log files for each run, 
 you will need to rename it after the run has finished.
 Or you can use the environment variable JVM_ARGS to pass in the option -Dlog_file=filename.
@@ -86,6 +89,163 @@ and define the logical before starting JMeter.
 Listeners can be quite resource intensive so use as few as possible. 
 For minimum resource usage, remove all listeners, and run the test in non-GUI mode with the -l flag to define a single listener.
 The result log file can be read back into a Listener after a test has completed.
+</p>
+</section>
+
+<section name="14.4 CSV Log format" anchor="csvlogformat">
+<p>
+The CSV log format depends on which data items are selected in the configuration.
+Only the specified data items are recorded in the file.
+The order of appearance of columns is fixed, and is as follows:
+</p>
+<ul>
+<li>timeStamp - in milliseconds since 1/1/1970</li>
+<li>elapsed - in milliseconds</li>
+<li>label - sampler label</li>
+<li>responseCode - e.g. 200, 404</li>
+<li>responseMessage - e.g. OK</li>
+<li>threadName</li>
+<li>dataType - e.g. text</li>
+<li>success - true or false</li>
+<li>failureMessage - if any</li>
+<li>bytes - number of bytes in the sample</li>
+<li>URL</li>
+</ul>
+<p>
+The format of the XML files is as follows:
+</p>
+</section>
+
+<section name="14.5 XML Log format 2.0" anchor="xmlformat2.0">
+<p>
+The format of the original XML (2.0) is as follows (line breaks will be different):
+</p>
+<pre>
+&amp;lt;?xml version="1.0" encoding="UTF-8"?>
+&amp;lt;testResults version="1.2">
+&amp;lt;sampleResult timeStamp="1144365463297" dataType="text" threadName="Listen 1-1" label="HTTP Request" time="1502" responseMessage="OK" responseCode="200" success="true">
+ &amp;lt;sampleResult timeStamp="1144365464238" dataType="text" threadName="Listen 1-1" label="http://www.apache.org/style/style.css" time="171" responseMessage="OK" responseCode="200" success="true">
+ &amp;lt;property xml:space="preserve" name="samplerData">
+ GET http://www.apache.org/style/style.css
+ &amp;lt;/property>
+ &amp;lt;binary>
+ body, td, th {
+    font-size: 95%;
+    font-family: Arial, Geneva, Helvetica, sans-serif;
+    color: black;
+    background-color: white;
+ }
+ ...
+ &amp;lt;/binary>
+ &amp;lt;/sampleResult>
+&amp;lt;/sampleResult>
+...
+&amp;lt;/testResults>
+</pre>
+</section>
+
+<section name="14.6 XML Log format 2.1" anchor="xmlformat2.1">
+<p>
+The format of the updated XML (2.1) is as follows (line breaks will be different):
+</p>
+<pre>
+&amp;lt;?xml version="1.0" encoding="UTF-8"?>
+&amp;lt;testResults version="1.2">
+
+-- HTTP Sample, with nested samples 
+
+&amp;lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" lb="HTTP Request" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407">
+  &amp;lt;httpSample t="170" lt="170" ts="1144371015471" s="true" lb="http://www.apache.org/style/style.css" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002">
+    &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
+Date: Fri, 07 Apr 2006 00:50:14 GMT
+...
+Content-Type: text/css
+&amp;lt;/responseHeader>
+    &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
+    &amp;lt;responseData class="java.lang.String">body, td, th {
+    font-size: 95%;
+    font-family: Arial, Geneva, Helvetica, sans-serif;
+    color: black;
+    background-color: white;
+}
+...
+&amp;lt;/responseData>
+    &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
+    &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
+    &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
+    &amp;lt;url>http://www.apache.org/style/style.css&amp;lt;/url>
+  &amp;lt;/httpSample>
+  &amp;lt;httpSample t="200" lt="180" ts="1144371015641" s="true" lb="http://www.apache.org/images/asf_logo_wide.gif" rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866">
+    &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
+Date: Fri, 07 Apr 2006 00:50:14 GMT
+...
+Content-Type: image/gif
+&amp;lt;/responseHeader>
+    &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
+    &amp;lt;responseData class="java.lang.String">http://www.apache.org/images/asf_logo_wide.gif&amp;lt;/responseData>
+    &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
+    &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
+    &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
+    &amp;lt;url>http://www.apache.org/images/asf_logo_wide.gif&amp;lt;/url>
+  &amp;lt;/httpSample>
+  &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
+Date: Fri, 07 Apr 2006 00:50:13 GMT
+...
+Content-Type: text/html; charset=ISO-8859-1
+&amp;lt;/responseHeader>
+  &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
+  &amp;lt;responseData class="java.lang.String">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
+               &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+...
+&amp;amp;lt;html&amp;amp;gt;
+ &amp;amp;lt;head&amp;amp;gt;
+...
+ &amp;amp;lt;/head&amp;amp;gt;
+ &amp;amp;lt;body&amp;amp;gt;        
+...
+ &amp;amp;lt;/body&amp;amp;gt;
+&amp;amp;lt;/html&amp;amp;gt;
+&amp;lt;/responseData>
+  &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
+  &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
+  &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
+  &amp;lt;url>http://www.apache.org/&amp;lt;/url>
+&amp;lt;/httpSample>
+
+-- nonHTTPP Sample
+
+&amp;lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10">
+  &amp;lt;responseHeader class="java.lang.String">&amp;lt;/responseHeader>
+  &amp;lt;requestHeader class="java.lang.String">&amp;lt;/requestHeader>
+  &amp;lt;responseData class="java.lang.String">Listen 1-1&amp;lt;/responseData>
+  &amp;lt;samplerData class="java.lang.String">ssssss&amp;lt;/samplerData>
+&amp;lt;/sample>
+
+&amp;lt;/testResults>
+</pre>
+<p>
+Note that the sample node name may be either "sample" or "httpSample".
+</p>
+<p>
+The sample attributes have the following meaning:
+</p>
+<table>
+<tr><th>Attribute</th><th>Content</th></tr>
+<tr><td>t</td><td>elapsed time (ms)</td></tr>
+<tr><td>lt</td><td>latency (ms) - not all samplers support this</td></tr>
+<tr><td>ts</td><td>timeStamp</td></tr>
+<tr><td>s</td><td>Success</td></tr>
+<tr><td>lb</td><td>Label</td></tr>
+<tr><td>rc</td><td>Response Code</td></tr>
+<tr><td>rm</td><td>Response Message</td></tr>
+<tr><td>tn</td><td>Thread Name</td></tr>
+<tr><td>dt</td><td>Data type</td></tr>
+<tr><td>de</td><td>Data encoding</td></tr>
+<tr><td>by</td><td>Bytes</td></tr>
+</table>
+<p>
+Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
+This has been corrected so that it is always saved as "rc"; either "rc" or "rs" can be read.
 </p>
 </section>
 
