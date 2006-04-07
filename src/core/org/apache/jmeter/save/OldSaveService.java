@@ -61,10 +61,41 @@ import org.xml.sax.SAXException;
  * 
  * @version $Revision$ $Date$
  */
-public final class OldSaveService implements SaveServiceConstants {
+public final class OldSaveService {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// Initial config from properties
+    // ---------------------------------------------------------------------
+    // XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
+    // ---------------------------------------------------------------------
+
+    // Shared with TestElementSaver
+    final static String PRESERVE = "preserve"; // $NON-NLS-1$
+    final static String XML_SPACE = "xml:space"; // $NON-NLS-1$
+
+    private static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON-NLS-1$
+    private static final String BINARY = "binary"; // $NON-NLS-1$
+    private static final String DATA_TYPE = "dataType"; // $NON-NLS-1$
+    private static final String ERROR = "error"; // $NON-NLS-1$
+    private static final String FAILURE = "failure"; // $NON-NLS-1$
+    private static final String FAILURE_MESSAGE = "failureMessage"; // $NON-NLS-1$
+    private static final String LABEL = "label"; // $NON-NLS-1$
+    private static final String RESPONSE_CODE = "responseCode"; // $NON-NLS-1$
+    private static final String RESPONSE_MESSAGE = "responseMessage"; // $NON-NLS-1$
+    private static final String SAMPLE_RESULT_TAG_NAME = "sampleResult"; // $NON-NLS-1$
+    private static final String SUCCESSFUL = "success"; // $NON-NLS-1$
+    private static final String THREAD_NAME = "threadName"; // $NON-NLS-1$
+    private static final String TIME = "time"; // $NON-NLS-1$
+    private static final String TIME_STAMP = "timeStamp"; // $NON-NLS-1$
+
+    // ---------------------------------------------------------------------
+    // ADDITIONAL CSV RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
+    // ---------------------------------------------------------------------
+
+    private static final String CSV_TIME = "elapsed"; // $NON-NLS-1$
+    private static final String CSV_BYTES= "bytes"; // $NON-NLS-1$
+    private static final String CSV_URL = "URL"; // $NON-NLS-1$
+    
+    // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
 
 	private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
@@ -166,49 +197,59 @@ public final class OldSaveService implements SaveServiceConstants {
 		String delim = saveConfig.getDelimiter();
 
 		if (saveConfig.saveTimestamp() || (saveConfig.formatter() != null)) {
-			text.append(SaveServiceConstants.TIME_STAMP);
+			text.append(TIME_STAMP);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveTime()) {
-			text.append(SaveServiceConstants.TIME);
+			text.append(CSV_TIME);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveLabel()) {
-			text.append(SaveServiceConstants.LABEL);
+			text.append(LABEL);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveCode()) {
-			text.append(SaveServiceConstants.RESPONSE_CODE);
+			text.append(RESPONSE_CODE);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveMessage()) {
-			text.append(SaveServiceConstants.RESPONSE_MESSAGE);
+			text.append(RESPONSE_MESSAGE);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveThreadName()) {
-			text.append(SaveServiceConstants.THREAD_NAME);
+			text.append(THREAD_NAME);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveDataType()) {
-			text.append(SaveServiceConstants.DATA_TYPE);
+			text.append(DATA_TYPE);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveSuccess()) {
-			text.append(SaveServiceConstants.SUCCESSFUL);
+			text.append(SUCCESSFUL);
 			text.append(delim);
 		}
 
 		if (saveConfig.saveAssertionResultsFailureMessage()) {
-			text.append(SaveServiceConstants.FAILURE_MESSAGE);
+			text.append(FAILURE_MESSAGE);
 			text.append(delim);
 		}
+
+        if (saveConfig.saveBytes()) {
+            text.append(CSV_BYTES);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveUrl()) {
+            text.append(CSV_URL);
+            text.append(delim);
+        }
 
 		String resultString = null;
 		int size = text.length();
@@ -500,8 +541,16 @@ public final class OldSaveService implements SaveServiceConstants {
 			}
 			text.append(delimiter);
 		}
-		// text.append(sample.getSamplerData().toString());
-		// text.append(getAssertionResult(sample));
+
+        if (saveConfig.saveBytes()) {
+            text.append(sample.getBytes());
+            text.append(delimiter);
+        }
+
+        if (saveConfig.saveUrl()) {
+            text.append(sample.getURL());
+            text.append(delimiter);
+        }
 
 		String resultString = null;
 		int size = text.length();

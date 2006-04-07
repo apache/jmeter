@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -31,14 +30,14 @@ import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 
 /**
- * @version $Revision$
+ * Helper class for OldSaveService
  */
-public class TestElementSaver implements TestElementTraverser, SaveServiceConstants {
-	String name;
+public class TestElementSaver implements TestElementTraverser {
+    private String name;
 
-	LinkedList stack = new LinkedList();
+    private LinkedList stack = new LinkedList();
 
-	DefaultConfiguration rootConfig = null;
+    private DefaultConfiguration rootConfig = null;
 
 	public TestElementSaver(String name) {
 		this.name = name;
@@ -94,7 +93,7 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
 				DefaultConfiguration config = new DefaultConfiguration("property", "property");
 				config.setValue(value != null ? value.toString() : "");
 				config.setAttribute("name", parent.toString());
-				config.setAttribute(XML_SPACE, PRESERVE);
+				config.setAttribute(OldSaveService.XML_SPACE, OldSaveService.PRESERVE);
 				stack.removeLast();
 				stack.add(config);
 			}
@@ -104,7 +103,7 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
 			} else if (parent instanceof DefaultConfiguration && !(value instanceof Configuration)) {
 				DefaultConfiguration config = new DefaultConfiguration("string", "string");
 				config.setValue(value.toString());
-				config.setAttribute(XML_SPACE, PRESERVE);
+				config.setAttribute(OldSaveService.XML_SPACE, OldSaveService.PRESERVE);
 				((DefaultConfiguration) parent).addChild(config);
 			}
 		} catch (NoSuchElementException e) {
@@ -181,7 +180,7 @@ public class TestElementSaver implements TestElementTraverser, SaveServiceConsta
 			config.setValue(key.getStringValue());
 			config.setAttribute("name", key.getName());
 			config.setAttribute("propType", key.getClass().getName());
-			config.setAttribute(XML_SPACE, PRESERVE);
+			config.setAttribute(OldSaveService.XML_SPACE, OldSaveService.PRESERVE);
 			stack.addLast(config);
 		}
 
