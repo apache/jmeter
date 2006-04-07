@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		nextNumber();
 		String fileName = makeFileName(s.getContentType());
 		log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
-		// System.out.println(fileName);
+        s.setResultFileName(fileName);// Associate sample with file name
 		File out = new File(fileName);
 		FileOutputStream pw = null;
 		try {
