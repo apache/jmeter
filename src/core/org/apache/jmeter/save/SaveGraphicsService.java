@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -44,7 +43,7 @@ import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
  * to JAI. Hurray for Apache projects. I don't see any noticeable differences
  * between Batik and JAI.
  */
-public class SaveGraphicsService implements SaveServiceConstants {
+public class SaveGraphicsService {
 
 	public static final int PNG = 0;
 
