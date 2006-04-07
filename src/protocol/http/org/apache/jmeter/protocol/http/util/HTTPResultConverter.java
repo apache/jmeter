@@ -21,9 +21,15 @@
  */
 package org.apache.jmeter.protocol.http.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.converters.SampleResultConverter;
 
@@ -117,10 +123,17 @@ public class HTTPResultConverter extends SampleResultConverter {
 			}
 			reader.moveUp();
 		}
+
+        // If we have a file, but no data, then read the file
+        String resultFileName = res.getResultFileName();
+        if (resultFileName.length()>0 
+        &&  res.getResponseData().length == 0) {
+            readFile(resultFileName,res);
+        }
 		return res;
 	}
 
-	protected void retrieveHTTPItem(HierarchicalStreamReader reader, UnmarshallingContext context,
+    protected void retrieveHTTPItem(HierarchicalStreamReader reader, UnmarshallingContext context,
 			HTTPSampleResult res, Object subItem) {
 		if (subItem instanceof URL) {
 			res.setURL((URL) subItem);
