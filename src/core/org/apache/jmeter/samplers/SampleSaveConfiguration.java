@@ -27,6 +27,15 @@ import java.util.Properties;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 
+/*
+ * N.B. to add a new field, remember the following
+ * - static _xyz
+ * - instance xyz=_xyz
+ * - clone s.xyz = xyz
+ * - setXyz(boolean)
+ * - saveXyz()
+ * - update SampleSaveConfigurationConverter to add new field
+ */
 /**
  * Holds details of which sample attributes to save.
  * 
@@ -36,7 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * - a corresponding "void setXXX(boolean)" method
  * 
  * @author mstover
- * 
+ *
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
 	static final long serialVersionUID = 3;
@@ -364,6 +373,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		s.responseDataOnError = responseDataOnError;
         s.url = url;
         s.bytes = bytes;
+        s.fileName = fileName;
 		return s;
 	}
 
