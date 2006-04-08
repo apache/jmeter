@@ -75,6 +75,7 @@ Users must explicitly check append in the sampler</li>
 <li>The Post-Processor "Save Responses to a File" now saves the generated file name with the
 sample, and the file name can be included in the sample log file.
 </li>
+<li>Change jmeter DOS batch scripts so they work from any directory (except jmeter-server.bat)</li>
 </ul>
 
 <h4>Bug fixes:</h4>

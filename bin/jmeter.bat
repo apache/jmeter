@@ -33,8 +33,9 @@ rem Need to check if we are using the 4NT shell...
 if "%eval[2+2]" == "4" goto setup4NT
 
 if exist jmeter.bat goto winNT1
-echo Changing to JMeter home directory
-cd /D %~dp0
+if .%JM_BIN% == . set JM_BIN=%~dp0
+
+echo Setting JMeter bin directory to %JM_BIN%
 
 :winNT1
 rem On NT/2K grab all arguments at once
@@ -88,4 +89,4 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 rem Collect the settings defined above
 set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG% %DDRAW%
 
-%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar %JM_BIN%ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
