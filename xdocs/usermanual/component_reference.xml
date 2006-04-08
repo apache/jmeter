@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- 
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,21 @@ JMeter assumes the FTP server is listening on the default port.</property>
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
         also lets you control whether or not JMeter parses HTML files for images and
-        Java applets and sends HTTP requests to retrieve them.</p>
+        other embedded resources and sends HTTP requests to retrieve them.
+        The following types of embedded resource are retrieved:</p>
+        <ul>
+        <li>images</li>
+        <li>applets</li>
+        <li>stylesheets</li>
+        <li>external scripts</li>
+        <li>frames</li>
+        <li>background images (body, table, TD, TR)</li>
+        <li>background sound</li>
+        </ul>
+        <p>
+        The default parser is htmlparser.
+        This can be changed by using the property "htmlparser.classname" - see jmeter.properties for details.
+        </p>
         <p>If you are going to send multiple requests to the same web server, consider
         using an <complink name="HTTP Request Defaults"/>
         Configuration Element so you do not have to enter the same information for each
@@ -105,8 +119,8 @@ JMeter assumes the FTP server is listening on the default port.</property>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
-        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
-        <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
+        <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
+        <property name="Protocol" required="No">HTTP or HTTPS. Default: HTTP</property>
         <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
 		<property name="Redirect Automatically" required="No">Set the http connection to automatically follow redirects. 
                   If set, the redirects will not appear as samples, as JMeter never sees them.
