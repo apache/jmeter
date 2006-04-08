@@ -320,8 +320,17 @@ Examples:<br></br>
 </component>
 
 <component index="&sect-num;.5.7" name="__javaScript">
-<description><p>The javaScript function executes a piece of JavaScript (not Java!) code and returns its value</p>
-	</description>
+<description>
+<p>
+The javaScript function executes a piece of JavaScript (not Java!) code and returns its value
+</p>
+<p>
+The JMeter Javascript function calls a standalone JavaScript interpreter.
+Javascript is used as a scripting language, so you can do calculations etc.</p>
+<note>
+JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
+</note>
+</description>
 
 <properties>
         <property name="Expression" required="Yes">The JavaScript expression to be executed. For example:
@@ -338,8 +347,11 @@ Examples:<br></br>
                 computed by this function.</property>
 </properties>
 <note>Remember to include any necessary quotes for text strings and JMeter variables. Also, if
-the expression has commas, please make sure to escape them. For example: ${__javaScript('${sp}'.slice(7\,99999))}
- the comma after 7 is escaped.</note>
+the expression has commas, please make sure to escape them. For example in:
+<br></br>
+${__javaScript('${sp}'.slice(7\,99999))}
+<br></br>
+the comma after 7 is escaped.</note>
 </component>
 
 <component index="&sect-num;.5.8" name="__Random">
