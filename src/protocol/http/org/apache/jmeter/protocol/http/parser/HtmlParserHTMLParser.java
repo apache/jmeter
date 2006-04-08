@@ -174,6 +174,8 @@ class HtmlParserHTMLParser extends HTMLParser {
                     String tagname=tag.getTagName();
                     if (tagname.equalsIgnoreCase(TAG_EMBED)){
                         binUrlStr = tag.getAttribute(ATT_SRC);  
+                    } else {
+                        binUrlStr = tag.getAttribute(ATT_BACKGROUND);
                     }
                 }
 
