@@ -140,7 +140,6 @@ class JTidyHTMLParser extends HTMLParser {
 			String back = getValue(attrs, ATT_BACKGROUND);
 			if (back != null) {
 				urls.addURL(back, baseUrl);
-				break;
 			}
 			if (name.equalsIgnoreCase(TAG_BGSOUND)) {
 				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
