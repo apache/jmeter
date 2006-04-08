@@ -146,10 +146,6 @@ class JTidyHTMLParser extends HTMLParser {
 				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase(TAG_FRAME)) {
-				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
-				break;
-			}
 
 			NodeList children = node.getChildNodes();
 			if (children != null) {
