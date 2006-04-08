@@ -115,6 +115,8 @@ sample, and the file name can be included in the sample log file.
 The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Fix counter function so each counter instance is independent (previously the per-user counters were shared between instances of the function)</li>
 <li>Fix TestBean Examples so that they work</li>
+<li>Fix JTidy parser so it does not skip body tags with background images</li>
+<li>Fix HtmlParser parser so it catches all background images</li>
 </ul>	
 	
 <h4>Other changes</h4>
