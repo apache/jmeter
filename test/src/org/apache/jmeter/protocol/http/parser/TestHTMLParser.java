@@ -106,24 +106,24 @@ public class TestHTMLParser extends JMeterTestCase {
                         "testfiles/HTMLParserTestCase.all"),
                 new TestData("testfiles/HTMLParserTestCaseWithBaseHRef.html", 
                         "http://localhost/mydir/myfile.html",
-                        "testfiles/HTMLParserTestCase.set", 
-                        "testfiles/HTMLParserTestCase.all"),
+                        "testfiles/HTMLParserTestCaseBase.set", 
+                        "testfiles/HTMLParserTestCaseBase.all"),
                 new TestData("testfiles/HTMLParserTestCaseWithBaseHRef2.html", 
                         "http://localhost/mydir/myfile.html",
-                         "testfiles/HTMLParserTestCase.set", 
-                         "testfiles/HTMLParserTestCase.all"),
+                         "testfiles/HTMLParserTestCaseBase.set", 
+                         "testfiles/HTMLParserTestCaseBase.all"),
                 new TestData("testfiles/HTMLParserTestCaseWithMissingBaseHRef.html",
                         "http://localhost/mydir/images/myfile.html", 
-                        "testfiles/HTMLParserTestCase.set",
-                        "testfiles/HTMLParserTestCase.all"),
+                        "testfiles/HTMLParserTestCaseBase.set",
+                        "testfiles/HTMLParserTestCaseBase.all"),
                 new TestData("testfiles/HTMLParserTestCase2.html",
                         "http:", "", ""), // Dummy as the file has no entries
                 new TestData("testfiles/HTMLParserTestCase3.html",
                         "http:", "", ""), // Dummy as the file has no entries
                 new TestData("testfiles/HTMLParserTestCaseWithComments.html",
                         "http://localhost/mydir/myfile.html",
-                        "testfiles/HTMLParserTestCase.set",
-                        "testfiles/HTMLParserTestCase.all"),
+                        "testfiles/HTMLParserTestCaseBase.set",
+                        "testfiles/HTMLParserTestCaseBase.all"),
                 new TestData("testfiles/HTMLScript.html",
                         "http://localhost/",
                         "testfiles/HTMLScript.set",
@@ -237,7 +237,8 @@ public class TestHTMLParser extends JMeterTestCase {
         private static void filetest(HTMLParser p, String file, String url, String resultFile, Collection c,
                 boolean orderMatters) // Does the order matter?
                 throws Exception {
-            String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser".length());
+            String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser.".length());
+            String fname = file.substring(file.indexOf("/")+1);
             log.debug("file   " + file);
             File f = findTestFile(file);
             byte[] buffer = new byte[(int) f.length()];
@@ -272,14 +273,14 @@ public class TestHTMLParser extends JMeterTestCase {
 
             while (expected.hasNext()) {
                 Object next = expected.next();
-                assertTrue(file+"::"+parserName + "::Expecting another result " + next, result.hasNext());
+                assertTrue(fname+"::"+parserName + "::Expecting another result " + next, result.hasNext());
                 try {
-                    assertEquals(file+"::"+parserName + "(" + file + ")", next, ((URL) result.next()).toString());
+                    assertEquals(fname+"::"+parserName + "(next)", next, ((URL) result.next()).toString());
                 } catch (ClassCastException e) {
-                    fail(file+"::"+parserName + "::Expected URL, but got " + e.toString());
+                    fail(fname+"::"+parserName + "::Expected URL, but got " + e.toString());
                 }
             }
-            assertFalse(file+"::"+parserName + "::Should have reached the end of the results", result.hasNext());
+            assertFalse(fname+"::"+parserName + "::Should have reached the end of the results", result.hasNext());
         }
 
         // Get expected results as a List
