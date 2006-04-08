@@ -32,9 +32,8 @@ pause
 goto END
 :WinNT
 
-rem change to the directory in which this script resides, i.e. bin
-cd /D %~dp0
+rem Prepend the directory in which this script resides in case not on path
 
-jmeter -t %1
+%~dp0jmeter -t %1
 
 :END
