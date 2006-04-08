@@ -34,10 +34,6 @@ pause
 goto END
 :WinNT
 
-rem Change to directory containing this file, which must be in bin
-echo Changing to JMeter home directory
-cd /D %~dp0
-
 rem Check file is supplied
 if a == a%1 goto winNT2
 rem Check it has extension .jmx
@@ -48,6 +44,7 @@ pause
 goto :EOF
 :winNT3
 
-jmeter -n -t %1 -l %~dpn1.jtl
+rem use same directory to find jmeter script
+%~dp0jmeter -n -t %1 -l %~dpn1.jtl
 
 :END
