@@ -78,7 +78,7 @@ Users must explicitly check append in the sampler</li>
 <li>The Post-Processor "Save Responses to a File" now saves the generated file name with the
 sample, and the file name can be included in the sample log file.
 </li>
-<li>Change jmeter DOS batch scripts so they work from any directory (except jmeter-server.bat)</li>
+<li>Change jmeter.bat DOS script so it works from any directory</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -120,6 +120,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Fix TestBean Examples so that they work</li>
 <li>Fix JTidy parser so it does not skip body tags with background images</li>
 <li>Fix HtmlParser parser so it catches all background images</li>
+<li>Bug 39252 set SoapSampler sample result from XML data</li>
 </ul>	
 	
 <h4>Other changes</h4>
