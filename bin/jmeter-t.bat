@@ -32,8 +32,11 @@ pause
 goto END
 :WinNT
 
+rem Start in directory with JMX file
+cd /d %~dp1
+
 rem Prepend the directory in which this script resides in case not on path
 
-%~dp0jmeter -t %1
+%~dp0jmeter -t %~nx1
 
 :END
