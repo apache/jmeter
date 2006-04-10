@@ -65,9 +65,11 @@ public abstract class AbstractAction implements Command {
 
 					if (subTree != null) {
 						HashTree replacementTree = rc.getReplacementSubTree();
-						convertSubTree(replacementTree);
-						tree.replace(item,rc);
-						tree.set(rc,replacementTree);
+                        if (replacementTree != null) {
+    						convertSubTree(replacementTree);
+    						tree.replace(item,rc);
+    						tree.set(rc,replacementTree);
+                        }
 					}
 				} else {
 					convertSubTree(tree.getTree(item));

@@ -543,9 +543,11 @@ public class JMeter implements JMeterPlugin {
                      HashTree subTree = tree.getTree(item);
     				 if (subTree != null) {
                          HashTree replacementTree = rc.getReplacementSubTree();
-                         convertSubTree(replacementTree);
-                         tree.replace(item,rc);
-                         tree.set(rc,replacementTree);
+                         if (replacementTree != null) {
+                             convertSubTree(replacementTree);
+                             tree.replace(item,rc);
+                             tree.set(rc,replacementTree);
+                         }
                      } else {
     					convertSubTree(tree.getTree(item));
     				 }
