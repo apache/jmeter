@@ -34,7 +34,10 @@ The time stamp is now set to start time.
 To revert to the previous behaviour, change the property <b>sampleresult.timestamp.start</b> to false (or comment it)
 </p>
 <p>The JMX output format has been simplified and files are not backwards compatible</p>
-
+<p>
+The JMeter.BAT file no longer changes directory to JMeter home, but runs from the current working directory.
+The jmeter-n.bat and jmeter-t.bat files change to the directory containing the input file.
+</p>
 
 <h4>Known problems:</h4>
 <ul>
