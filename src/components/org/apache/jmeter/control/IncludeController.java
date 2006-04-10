@@ -18,6 +18,8 @@
 package org.apache.jmeter.control;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
@@ -104,11 +106,12 @@ public class IncludeController extends GenericController implements ReplaceableC
     protected HashTree loadIncludedElements() {
         // only try to load the JMX test plan if there is one
         final String includePath = getIncludePath();
+        InputStream reader = null;
         if (includePath != null && includePath.length() > 0) {
             try {
             	String file=prefix+includePath;
                 log.info("loadIncludedElements -- try to load included module: "+file);
-                InputStream reader = new FileInputStream(file);
+                reader = new FileInputStream(file);
                 this.SUBTREE = SaveService.loadTree(reader);
                 return this.SUBTREE;
             } catch (NoClassDefFoundError ex) // Allow for missing optional jars
@@ -116,14 +119,27 @@ public class IncludeController extends GenericController implements ReplaceableC
                 String msg = ex.getMessage();
                 if (msg == null) {
                     msg = "Missing jar file - see log for details";
-                    log.warn("Missing jar file", ex);
                 }
+                log.warn("Missing jar file", ex);
                 JMeterUtils.reportErrorToUser(msg);
+            } catch (FileNotFoundException ex) {
+                String msg = ex.getMessage();
+                JMeterUtils.reportErrorToUser(msg);
+                log.warn(msg);
             } catch (Exception ex) {
                 String msg = ex.getMessage();
                 if (msg == null) {
                     msg = "Unexpected error - see log for details";
-                    log.warn("Unexpected error", ex);
+                }
+                JMeterUtils.reportErrorToUser(msg);
+                log.warn("Unexpected error", ex);
+            }
+            finally{
+                if (reader!=null){
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                    }
                 }
             }
         }
