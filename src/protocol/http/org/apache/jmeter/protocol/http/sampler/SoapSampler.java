@@ -153,7 +153,11 @@ public class SoapSampler extends HTTPSampler {
 		} catch (IOException e1) {
 			log.error("Bad url: " + getURLData(), e1);
 		}
-		return super.sample(e);
+        // Bug 39252 set SoapSampler sample result from XML data
+		SampleResult sampleResult = super.sample(e);
+        sampleResult.setSamplerData(getXmlData());
+        sampleResult.setDataType(SampleResult.TEXT);
+        return sampleResult;
 	}
 
 	public String toString() {
