@@ -122,23 +122,6 @@ public class UrlConfigGui extends JPanel {
 		return element;
 	}
 
-	// Does not appear to be used
-	// public void configureSampler(HTTPSampler sampler)
-	// {
-	// sampler.setArguments((Arguments) argsPanel.createTestElement());
-	// sampler.setDomain(domain.getText());
-	// sampler.setProtocol(protocol.getText());
-	// sampler.setPath(path.getText());
-	// sampler.setFollowRedirects(followRedirects.isSelected());
-	// sampler.setDelegateRedirects(autoRedirects.isSelected());
-	// sampler.setUseKeepAlive(useKeepAlive.isSelected());
-	// if (port.getText().length() > 0)
-	// {
-	// sampler.setPort(Integer.parseInt(port.getText()));
-	// }
-	// sampler.setMethod((post.isSelected() ? "POST" : "GET"));
-	// }
-
 	/**
 	 * Set the text, etc. in the UI.
 	 * 
@@ -153,7 +136,7 @@ public class UrlConfigGui extends JPanel {
 		String portString = el.getPropertyAsString(HTTPSamplerBase.PORT);
 
 		// Only display the port number if it is meaningfully specified
-		if (portString.equals("" + HTTPSamplerBase.UNSPECIFIED_PORT)) {
+		if (portString.equals(HTTPSamplerBase.UNSPECIFIED_PORT_AS_STRING)) {
 			port.setText("");
 		} else {
 			port.setText(portString);
@@ -274,7 +257,7 @@ public class UrlConfigGui extends JPanel {
 
 	protected JPanel getProtocolAndMethodPanel() {
 		// PROTOCOL
-		protocol = new JTextField(4);
+		protocol = new JTextField(20);
 		protocol.setName(PROTOCOL);
 
 		JLabel protocolLabel = new JLabel(JMeterUtils.getResString("protocol"));
