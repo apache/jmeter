@@ -21,10 +21,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.HostConfiguration;
@@ -42,7 +47,6 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
-
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -54,9 +58,7 @@ import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.apache.jorphan.logging.LoggingManager;
-
 import org.apache.log.Logger;
 
 /**
@@ -70,6 +72,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static final String PROXY_HOST = 
         System.getProperty("http.proxyHost",""); // $NON-NLS-1$ 
+
+    private static final String NONPROXY_HOSTS = 
+        System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$ 
 
     private static final int PROXY_PORT = 
         Integer.parseInt(System.getProperty("http.proxyPort", "80")); // $NON-NLS-1$ $NON-NLS-2$ 
@@ -85,7 +90,35 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      */
 	private static final ThreadLocal httpClients = new ThreadLocal();
 
+    private static Set nonProxyHostFull   = new HashSet();// www.apache.org
+    private static List nonProxyHostSuffix = new ArrayList();// .apache.org
+    private static final int nonProxyHostSuffixSize;
+
+    private static boolean isNonProxy(String host){
+        return nonProxyHostFull.contains(host) || isPartialMatch(host);
+    }
+
+    private static boolean isPartialMatch(String host) {    
+        for (int i=0;i<nonProxyHostSuffixSize;i++){
+            if (host.endsWith((String)nonProxyHostSuffix.get(i)))
+                return true;
+        }
+        return false;
+    }
+
 	static {
+        if (NONPROXY_HOSTS.length() > 0){
+            StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
+            while (s.hasMoreTokens()){
+                String t = s.nextToken();
+                if (t.indexOf("*") ==0){// e.g. *.apache.org // $NON-NLS-1$
+                    nonProxyHostSuffix.add(t.substring(1));
+                } else {
+                    nonProxyHostFull.add(t);// e.g. www.apache.org
+                }
+            }
+        }
+        nonProxyHostSuffixSize=nonProxyHostSuffix.size();
 		// Set the default to Avalon Logkit, if not already defined:
 		if (System.getProperty("org.apache.commons.logging.Log") == null) { // $NON-NLS-1$
 			System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
@@ -213,7 +246,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			map.put(hc, httpClient);
 		}
 
-        if (PROXY_HOST.length() > 0) {
+        if (PROXY_HOST.length() > 0 && !isNonProxy(host)) {
+            if (log.isDebugEnabled()){
+                log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
+            }
             hc.setProxy(PROXY_HOST, PROXY_PORT);
             if (PROXY_USER.length() > 0){
                 httpClient.getState().setProxyCredentials(
