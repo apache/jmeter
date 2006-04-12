@@ -79,6 +79,8 @@ Users must explicitly check append in the sampler</li>
 sample, and the file name can be included in the sample log file.
 </li>
 <li>Change jmeter.bat DOS script so it works from any directory</li>
+<li>New -N option to define nonProxyHosts from command-line</li>
+<li>New -S option to define system properties from input file</li>
 </ul>
 
 <h4>Bug fixes:</h4>
