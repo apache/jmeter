@@ -122,13 +122,15 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 		panel.add((Component) item.get(0), gbc.clone());
 		gbc.gridx++;
 		gbc.weightx = 1;
-		panel.add((Component) item.get(1), gbc.clone());
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add((Component) item.get(1), gbc.clone());
 	}
 
 	private void resetContraints(GridBagConstraints gbc) {
 		gbc.gridx = 0;
 		gbc.gridy++;
 		gbc.weightx = 0;
+        gbc.fill=GridBagConstraints.NONE;
 	}
 
 	private void initConstraints(GridBagConstraints gbc) {
