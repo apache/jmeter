@@ -118,6 +118,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	/** A number to indicate that the port has not been set. * */
 	public static final int UNSPECIFIED_PORT = 0;
+    public static final String UNSPECIFIED_PORT_AS_STRING = "0";
 
 	protected final static String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
 
