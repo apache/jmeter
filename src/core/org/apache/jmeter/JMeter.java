@@ -89,39 +89,33 @@ public class JMeter implements JMeterPlugin {
 
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
 
-    private static final int PROPFILE_OPT = 'p';// $NON-NLS-1$
 
-	private static final int PROPFILE2_OPT = 'q'; // Bug 33920 - additional prop files $NON-NLS-1$
+    private static final int PROXY_PASSWORD     = 'a';// $NON-NLS-1$
+    private static final int JMETER_HOME_OPT    = 'd';// $NON-NLS-1$
+    private static final int HELP_OPT           = 'h';// $NON-NLS-1$
+    private static final int LOGFILE_OPT        = 'l';// $NON-NLS-1$
+    private static final int NONGUI_OPT         = 'n';// $NON-NLS-1$
+    private static final int PROPFILE_OPT       = 'p';// $NON-NLS-1$
+	private static final int PROPFILE2_OPT      = 'q';// $NON-NLS-1$
+    private static final int REMOTE_OPT         = 'r';// $NON-NLS-1$
+    private static final int SERVER_OPT         = 's';// $NON-NLS-1$
+	private static final int TESTFILE_OPT       = 't';// $NON-NLS-1$
+    private static final int PROXY_USERNAME     = 'u';// $NON-NLS-1$
+    private static final int VERSION_OPT        = 'v';// $NON-NLS-1$
 
-	private static final int TESTFILE_OPT = 't';// $NON-NLS-1$
+    private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
+	private static final int PROXY_HOST         = 'H';// $NON-NLS-1$
+    private static final int JMETER_PROPERTY    = 'J';// $NON-NLS-1$
+    private static final int LOGLEVEL           = 'L';// $NON-NLS-1$
+    private static final int NONPROXY_HOSTS     = 'N';// $NON-NLS-1$
+	private static final int PROXY_PORT         = 'P';// $NON-NLS-1$
+    private static final int SYSTEM_PROPFILE    = 'S';// $NON-NLS-1$
 
-	private static final int LOGFILE_OPT = 'l';// $NON-NLS-1$
 
-	private static final int NONGUI_OPT = 'n';// $NON-NLS-1$
 
-	private static final int HELP_OPT = 'h';// $NON-NLS-1$
 
-	private static final int VERSION_OPT = 'v';// $NON-NLS-1$
 
-	private static final int SERVER_OPT = 's';// $NON-NLS-1$
 
-	private static final int PROXY_HOST = 'H';// $NON-NLS-1$
-
-	private static final int PROXY_PORT = 'P';// $NON-NLS-1$
-
-	private static final int PROXY_USERNAME = 'u';// $NON-NLS-1$
-
-	private static final int PROXY_PASSWORD = 'a';// $NON-NLS-1$
-
-	private static final int JMETER_PROPERTY = 'J';// $NON-NLS-1$
-
-	private static final int SYSTEM_PROPERTY = 'D';// $NON-NLS-1$
-
-	private static final int LOGLEVEL = 'L';// $NON-NLS-1$
-
-	private static final int REMOTE_OPT = 'r';// $NON-NLS-1$
-
-	private static final int JMETER_HOME_OPT = 'd';// $NON-NLS-1$
 
 	/**
 	 * Define the understood options. Each CLOptionDescriptor contains:
@@ -159,17 +153,23 @@ public class JMeter implements JMeterPlugin {
 					"Set a proxy server for JMeter to use"),
 			new CLOptionDescriptor("proxyPort", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_PORT,
 					"Set proxy server port for JMeter to use"),
+            new CLOptionDescriptor("nonProxyHosts", CLOptionDescriptor.ARGUMENT_REQUIRED, NONPROXY_HOSTS,
+                    "Set nonproxy host list (e.g. *.apache.org|localhost)"),
 			new CLOptionDescriptor("username", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_USERNAME,
 					"Set username for proxy server that JMeter is to use"),
 			new CLOptionDescriptor("password", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_PASSWORD,
 					"Set password for proxy server that JMeter is to use"),
 			new CLOptionDescriptor("jmeterproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
-					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_PROPERTY, "Define additional JMeter properties"),
+					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_PROPERTY, 
+                    "Define additional JMeter properties"),
 			new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
-					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY, "Define additional JMeter properties"),
+					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY, 
+                    "Define additional system properties"),
+            new CLOptionDescriptor("systemPropertyFile", CLOptionDescriptor.ARGUMENT_REQUIRED, SYSTEM_PROPFILE,
+                    "Define system properties from a file"),
 			new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
-					"Define loglevel: [category=]level e.g. jorphan=INFO or " + "jmeter.util=DEBUG"),
+					"[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
 			new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
 					"Start remote servers from non-gui mode"),
 			new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
@@ -328,8 +328,8 @@ public class JMeter implements JMeterPlugin {
 				Authenticator.setDefault(new ProxyAuthenticator(u = parser.getArgumentById(PROXY_USERNAME)
 						.getArgument(), p = parser.getArgumentById(PROXY_PASSWORD).getArgument()));
 				log.info("Set Proxy login: " + u + "/" + p);
-                jmeterProps.setProperty(HTTP_PROXY_USER, u);
-                jmeterProps.setProperty(HTTP_PROXY_PASS, p);
+                jmeterProps.setProperty(HTTP_PROXY_USER, u);//for Httpclient
+                jmeterProps.setProperty(HTTP_PROXY_PASS, p);//for Httpclient
 			} else {
 				String u;
 				Authenticator.setDefault(new ProxyAuthenticator(u = parser.getArgumentById(PROXY_USERNAME)
@@ -339,15 +339,23 @@ public class JMeter implements JMeterPlugin {
 			}
 		}
 		if (parser.getArgumentById(PROXY_HOST) != null && parser.getArgumentById(PROXY_PORT) != null) {
-			String h, p;
-			System.setProperty("http.proxyHost", h = parser.getArgumentById(PROXY_HOST).getArgument());// $NON-NLS-1$
-			System.setProperty("https.proxyHost", parser.getArgumentById(PROXY_HOST).getArgument());// $NON-NLS-1$
-			System.setProperty("http.proxyPort", p = parser.getArgumentById(PROXY_PORT).getArgument());// $NON-NLS-1$
-			System.setProperty("https.proxyPort", parser.getArgumentById(PROXY_PORT).getArgument());// $NON-NLS-1$
+			String h = parser.getArgumentById(PROXY_HOST).getArgument();
+            String p = parser.getArgumentById(PROXY_PORT).getArgument();
+			System.setProperty("http.proxyHost",  h );// $NON-NLS-1$
+			System.setProperty("https.proxyHost", h);// $NON-NLS-1$
+			System.setProperty("http.proxyPort",  p);// $NON-NLS-1$
+			System.setProperty("https.proxyPort", p);// $NON-NLS-1$
 			log.info("Set http[s].proxyHost: " + h + " Port: " + p);
 		} else if (parser.getArgumentById(PROXY_HOST) != null || parser.getArgumentById(PROXY_PORT) != null) {
 			throw new IllegalUserActionException(JMeterUtils.getResString("proxy_cl_error"));// $NON-NLS-1$
 		}
+        
+        if (parser.getArgumentById(NONPROXY_HOSTS) != null) {
+            String n = parser.getArgumentById(NONPROXY_HOSTS).getArgument();
+            System.setProperty("http.nonProxyHosts",  n );// $NON-NLS-1$
+            System.setProperty("https.nonProxyHosts", n );// $NON-NLS-1$
+            log.info("Set http[s].nonProxyHosts: "+n);
+        }
 	}
 
 	private void initializeProperties(CLArgsParser parser) {
@@ -376,18 +384,42 @@ public class JMeter implements JMeterPlugin {
 			CLOption option = (CLOption) clOptions.get(i);
 			String name = option.getArgument(0);
 			String value = option.getArgument(1);
+            FileInputStream fis = null;            
 
 			switch (option.getDescriptor().getId()) {
 			case PROPFILE2_OPT: // Bug 33920 - allow multiple props
-				File f = new File(name);
 				try {
-					jmeterProps.load(new FileInputStream(f));
+                    fis = new FileInputStream(new File(name));
+					jmeterProps.load(fis);
 				} catch (FileNotFoundException e) {
 					log.warn("Can't find additional property file: " + name, e);
 				} catch (IOException e) {
 					log.warn("Error loading additional property file: " + name, e);
+                } finally {
+                    if (fis != null) {
+                        try {
+                            fis.close();
+                        } catch (IOException e) {
+                        }
+                    }
 				}
 				break;
+            case SYSTEM_PROPFILE:
+                log.info("Setting System propertyies from file: " + name);
+                try {
+                    fis = new FileInputStream(new File(name));
+                    System.getProperties().load(fis);
+                } catch (IOException e) {
+                    log.warn("Cannot find system property file "+e.getLocalizedMessage());
+                } finally {
+                    if (fis != null) {
+                        try {
+                            fis.close();
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+                break;
 			case SYSTEM_PROPERTY:
 				if (value.length() > 0) { // Set it
 					log.info("Setting System property: " + name + "=" + value);

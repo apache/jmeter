@@ -178,11 +178,14 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 <p>If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
 the firewall/proxy server hostname and port number.  To do so, run the jmeter.bat/jmeter file
 from a command line with the following parameters:</p>
-<p>-H [proxy server hostname or ip address]<br/>
+<p>
+-H [proxy server hostname or ip address]<br/>
 -P [proxy server port]<br/>
+-N [nonproxy hosts] (e.g. *.apache.org|localhost)<br/>
 -u [username for proxy authentication - if required]<br/>
--a [password for proxy authentication - if required]</p>
-<p><b>Example</b>: jmeter -H my.proxy.server -P 8000 -u username -a password</p>
+-a [password for proxy authentication - if required]<br/>
+</p>
+<p><b>Example</b>: jmeter -H my.proxy.server -P 8000 -u username -a password -N localhost</p>
 <p>Alternatively, you can use --proxyHost, --proxyPort, --username, and --password</p>
 <note>JMeter also has its own in-built <complink name="HTTP Proxy Server">HTTP Proxy Server</complink>,
 which can be used for recording HTTP (but not HTTPS) browser sessions.
