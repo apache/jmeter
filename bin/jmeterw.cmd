@@ -2,7 +2,7 @@
 rem   Run JMeter using javaw
 
 rem   $Id$
-rem   Copyright 2001-2004 The Apache Software Foundation
+rem   Copyright 2004,2006 The Apache Software Foundation
 rem 
 rem   Licensed under the Apache License, Version 2.0 (the "License");
 rem   you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ rem   limitations under the License.
 
 set JM_START=start
 set JM_LAUNCH=javaw.exe
+
+rem Only works in Win2K
 call jmeter %*
+
 set JM_START=
 set JM_LAUNCH=
