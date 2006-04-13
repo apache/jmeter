@@ -480,6 +480,30 @@ public class SampleResult implements Serializable {
 	public String getDataType() {
 		return dataType;
 	}
+    /**
+     * Set Encoding and DataType from ContentType
+     * @param ct - content type (may be null)
+     */
+    public void setEncodingAndType(String ct){
+        if (ct != null) {
+            // Extract charset and store as DataEncoding
+            // TODO do we need process http-equiv META tags, e.g.:
+            // <META http-equiv="content-type" content="text/html;
+            // charset=foobar">
+            // or can we leave that to the renderer ?
+            String de = ct.toLowerCase();
+            final String cs = "charset="; // $NON-NLS-1$
+            int cset = de.indexOf(cs);
+            if (cset >= 0) {
+                setDataEncoding(de.substring(cset + cs.length()));
+            }
+            if (ct.startsWith("image/")) {// $NON-NLS-1$
+                setDataType(BINARY);
+            } else {
+                setDataType(TEXT);
+            }
+        }
+    }
 
 	/**
 	 * Sets the successful attribute of the SampleResult object.
