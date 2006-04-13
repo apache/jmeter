@@ -134,6 +134,8 @@ public class SoapSampler extends HTTPSampler {
 	 * @see Sampler#sample(Entry)
 	 */
 	public SampleResult sample(Entry e) {
+		HTTPSampleResult sampleResult = null;
+		Exception ex = null;
 		try {
 			URL url = new URL(getURLData());
 			setDomain(url.getHost());
@@ -148,27 +150,44 @@ public class SoapSampler extends HTTPSampler {
 			// make sure the Post header is set
 			URLConnection conn = url.openConnection();
 			setPostHeaders(conn);
+			sampleResult = (HTTPSampleResult) super.sample(e);
 		} catch (MalformedURLException e1) {
+			ex=e1;
 			log.error("Bad url: " + getURLData(), e1);
 		} catch (IOException e1) {
+			ex=e1;
 			log.error("Bad url: " + getURLData(), e1);
 		}
-        // Bug 39252 set SoapSampler sample result from XML data
-		SampleResult sampleResult = super.sample(e);
+		if (ex != null){
+			if (sampleResult == null) {
+				sampleResult = new HTTPSampleResult();
+				sampleResult.setSampleLabel(getName());
+			}
+			sampleResult.setResponseCode("000");
+			sampleResult.setResponseMessage(ex.getLocalizedMessage());
+		}
+        // Bug 39252 set SoapSampler sampler data from XML data
+		// TODO: need to set both at present, because POST data for some reason
+		// is stored in the query string, not as sampler data ...
         sampleResult.setSamplerData(getXmlData());
-        sampleResult.setDataType(SampleResult.TEXT);
+        sampleResult.setQueryString(getXmlData());
         return sampleResult;
 	}
 
 	public String toString() {
+		StringBuffer sb = new StringBuffer(150);
 		try {
-			String xml = getXmlData();
-			if (xml.length() > 100) {
-				xml = xml.substring(0, 100);
-			}
-			return this.getUrl().toString() + "\nXML Data: " + xml;
+			sb.append(this.getUrl().toString());
 		} catch (MalformedURLException e) {
-			return "";
+			sb.append(e.getLocalizedMessage());
 		}
+		sb.append("\nXML Data: ");
+		String xml = getXmlData();
+		if (xml.length() > 100) {
+			sb.append(xml.substring(0, 100));
+		} else {
+			sb.append(xml);
+		}
+		return sb.toString();
 	}
 }
