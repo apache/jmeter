@@ -176,8 +176,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		if (new File(getFilename()).exists()) {
 			clearVisualizer();
 			BufferedReader dataReader = null;
+            BufferedInputStream bufferedInputStream = null;
 			try {
-				readSamples(SaveService.loadTestResults(new BufferedInputStream(new FileInputStream(getFilename()))));
+                bufferedInputStream = new BufferedInputStream(new FileInputStream(getFilename()));
+                readSamples(SaveService.loadTestResults(bufferedInputStream));
 				parsedOK = true;
 			} catch (Exception e) {
 				log.warn("File load failure, trying old data format.");
@@ -202,6 +204,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			} finally {
 				if (dataReader != null)
 					dataReader.close();
+                if (bufferedInputStream != null)
+                    bufferedInputStream.close();
 				if (!parsedOK) {
 					SampleResult sr = new SampleResult();
 					sr.setSampleLabel("Error loading results file - see log file");
