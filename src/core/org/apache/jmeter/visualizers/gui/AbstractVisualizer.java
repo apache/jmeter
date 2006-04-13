@@ -127,19 +127,21 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	public AbstractVisualizer() {
 		super();
 
-		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only"));
-		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings"));
+		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
+		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
 		saveConfigButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SavePropertyDialog d = new SavePropertyDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-						.getResString("Sample Result Save Configuration"), true, collector.getSaveConfig());
+				SavePropertyDialog d = new SavePropertyDialog(
+                        GuiPackage.getInstance().getMainFrame(), 
+                        JMeterUtils.getResString("sample_result_save_configuration"), // $NON-NLS-1$
+                        true, collector.getSaveConfig());
 				d.pack();
 				ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), d);
 				d.setVisible(true);
 			}
 		});
 
-		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl");
+		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl"); // $NON-NLS-1$ $NON-NLS-2$
 		filePanel.addChangeListener(this);
 		filePanel.add(errorLogging);
 		filePanel.add(saveConfigButton);
