@@ -422,9 +422,11 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 */
 	public SampleResult sample() {
 		SampleResult result = new SampleResult();
+		result.setSuccessful(false); // Assume it will fail
+		result.setResponseCode("000"); // ditto $NON-NLS-1$
+		result.setSampleLabel(getName());
 		try {
 			result.setURL(this.getUrl());
-			result.setSampleLabel(getName());
 			org.w3c.dom.Element rdoc = createDocument();
 			if (rdoc == null)
 				throw new SOAPException("Could not create document", null);
@@ -519,7 +521,6 @@ public class WebServiceSampler extends HTTPSamplerBase {
 				result.sampleEnd();
 				result.setSuccessful(false);
 				result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
-				result.setResponseCode("000");
 				result.setResponseHeaders("error");
 			}
 			// 1-22-04 updated the sampler so that when read
@@ -538,27 +539,29 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			if (br != null) {
 				br.close();
 			}
-			msg = null;
-			st = null;
 			// reponse code doesn't really apply, since
 			// the soap driver doesn't provide a
 			// response code
+		} catch (IllegalArgumentException exception){
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
 		} catch (SOAPException exception) {
-			log.warn(exception.getMessage());
-			result.setSuccessful(false);
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
 		} catch (MalformedURLException exception) {
-			// keep this debug, since a bad URL, means the
-			// soap driver can't get to it anyways
-			log.warn(exception.getMessage());
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
 		} catch (IOException exception) {
-			// if the Webservice is unable or the stream
-			// is null for some reason we can continue
-			log.warn(exception.getMessage());
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
 		} catch (MessagingException exception) {
-			// keep this one debug, since it means soap isn't
-			// able to parse the document, so it can't continue
-			// anyways
-			log.warn(exception.getMessage());
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
 		}
 		return result;
 	}
