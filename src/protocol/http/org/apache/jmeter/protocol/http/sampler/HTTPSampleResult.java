@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-20056 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -167,29 +167,4 @@ public class HTTPSampleResult extends SampleResult {
         }
 	}
     
-    /**
-     * Set Encoding and DataType from ContentType
-     * @param ct - content type (may be null)
-     */
-    public void setEncodingAndType(String ct){
-        if (ct != null) {
-            // Extract charset and store as DataEncoding
-            // TODO do we need process http-equiv META tags, e.g.:
-            // <META http-equiv="content-type" content="text/html;
-            // charset=foobar">
-            // or can we leave that to the renderer ?
-            String de = ct.toLowerCase();
-            final String cs = "charset="; // $NON-NLS-1$
-            int cset = de.indexOf(cs);
-            if (cset >= 0) {
-                setDataEncoding(de.substring(cset + cs.length()));
-            }
-            if (ct.startsWith("image/")) {// $NON-NLS-1$
-                setDataType(HTTPSampleResult.BINARY);
-            } else {
-                setDataType(HTTPSampleResult.TEXT);
-            }
-        }
-    }
-
 }
