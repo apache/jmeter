@@ -18,6 +18,7 @@ rem   limitations under the License.
 rem   =====================================================
 rem   Environment variables that can be defined externally:
 rem
+rem   JM_BIN - JMeter bin directory (must end in \)
 rem   JM_LAUNCH - java.exe (default) or javaw.exe
 rem   JVM_ARGS - additional java options, e.g. -Dprop=val
 rem
@@ -35,8 +36,6 @@ if "%eval[2+2]" == "4" goto setup4NT
 if exist jmeter.bat goto winNT1
 if .%JM_BIN% == . set JM_BIN=%~dp0
 
-echo Setting JMeter bin directory to %JM_BIN%
-
 :winNT1
 rem On NT/2K grab all arguments at once
 set JMETER_CMD_LINE_ARGS=%*
@@ -48,7 +47,7 @@ goto doneStart
 
 :win9xStart
 rem Slurp the command line arguments.  This loop allows for an unlimited number of 
-rem agruments (up to the command line limit, anyway).
+rem arguments (up to the command line limit, anyway).
 
 set JMETER_CMD_LINE_ARGS=
 
