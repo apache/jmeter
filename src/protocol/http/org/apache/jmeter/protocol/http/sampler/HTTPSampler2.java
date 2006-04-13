@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -85,6 +87,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     private static final String PROXY_PASS = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
     
+    private static InetAddress localAddress = null;
+    
     /*
      * Connection is re-used within the thread if possible
      */
@@ -140,6 +144,17 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             log.info("Setting up HTTPS SlowProtocol, cps="+cps);
             Protocol.registerProtocol(PROTOCOL_HTTPS, 
                     new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
+        }
+
+        String localHostOrIP = 
+            JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
+        if (localHostOrIP.length() > 0){
+            try {
+                localAddress = InetAddress.getByName(localHostOrIP);
+                log.info("Using localAddress "+localAddress.getHostAddress());
+            } catch (UnknownHostException e) {
+                log.warn(e.getLocalizedMessage());
+            }
         }
 	}
 
@@ -237,6 +252,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		HostConfiguration hc = new HostConfiguration();
 		hc.setHost(host, port, protocol); // All needed to ensure re-usablility
 
+        // Set up the local address if one exists
+        if (localAddress != null){
+            hc.setLocalAddress(localAddress);
+        }
+        
         Map map = (Map) httpClients.get();
 		HttpClient httpClient = (HttpClient) map.get(hc);
 		
@@ -665,7 +685,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			for ( Iterator it = map.entrySet().iterator(); it.hasNext(); )
 			{
 				Map.Entry entry = (Map.Entry) it.next();
-				//HostConfiguration hc = (HostConfiguration) entry.getKey();
 				HttpClient cl = (HttpClient) entry.getValue();
                 cl.getHttpConnectionManager().closeIdleConnections(-1000);// Closes the connection
 			}
