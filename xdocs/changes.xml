@@ -81,6 +81,7 @@ sample, and the file name can be included in the sample log file.
 <li>Change jmeter.bat DOS script so it works from any directory</li>
 <li>New -N option to define nonProxyHosts from command-line</li>
 <li>New -S option to define system properties from input file</li>
+<li>Bug 26136 - allow configuration of local address</li>
 </ul>
 
 <h4>Bug fixes:</h4>
