@@ -12,7 +12,6 @@ It has exclusion filters for all the source files that depend on optional jars.
 
 The optional jars are:
 jsse (included with JVM 1.4+)
-iSaSiLk (?)
 javamail (available from java.sun.com)
 Two jars are required for javamail:
 mail.jar - http://java.sun.com/products/javamail/downloads/index.html
@@ -25,7 +24,6 @@ The usage of the jars is as follows:
 core
 ----
 org/apache/jmeter/util/JsseSSLManager.java - requires jsse
-org/apache/jmeter/util/keystore/PKCS12KeyStore.java - requires isasilk
 org/apache/jmeter/util/keystore/DefaultKeyStore.java - requires jsse
 
 components
