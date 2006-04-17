@@ -129,12 +129,20 @@ public class HTTPSampler extends HTTPSamplerBase {
 		// They do seem to work on JVM 1.4.1_03 (Sun/WinXP)
 		HttpURLConnection.setFollowRedirects(getPropertyAsBoolean(AUTO_REDIRECTS));
 
-		conn = (HttpURLConnection) u.openConnection();
-		// Delegate SSL specific stuff to SSLManager so that compilation still
-		// works otherwise.
-		if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
+        SSLManager sslmgr = null;
+        if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
+            try {
+                sslmgr=SSLManager.getInstance();
+            } catch (Exception e) {
+                log.warn("You may have forgotten to set the ssl.provider property " + "in jmeter.properties", e);
+            }
+        }
+		
+        conn = (HttpURLConnection) u.openConnection();
+
+        if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
 			try {
-				SSLManager.getInstance().setContext(conn);
+				sslmgr.setContext(conn);
 			} catch (Exception e) {
 				log.warn("You may have forgotten to set the ssl.provider property " + "in jmeter.properties", e);
 			}
