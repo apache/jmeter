@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +30,7 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -57,8 +57,6 @@ public abstract class SSLManager {
 
 	/** Singleton instance of the manager */
 	private static SSLManager manager;
-
-	private static boolean isIAIKProvider = false;
 
 	private static boolean isSSLSupported = false;
 
@@ -145,17 +143,21 @@ public abstract class SSLManager {
 				System.setProperty(KEY_STORE_PASSWORD, password);
 			}
 
+            FileInputStream fileInputStream = null;
 			try {
 				File initStore = new File(fileName);
 
 				if (initStore.exists()) {
-					this.keyStore.load(new FileInputStream(initStore), password);
+					fileInputStream = new FileInputStream(initStore);
+                    this.keyStore.load(fileInputStream, password);
 				} else {
 					this.keyStore.load(null, password);
 				}
 			} catch (Exception e) {
 				log.error("Couldn't load keystore", e);
-			}
+			} finally {
+                JOrphanUtils.closeQuietly(fileInputStream);
+            }
 
 			log.info("JmeterKeyStore Location: " + fileName);
 			log.info("JmeterKeyStore type: " + this.keyStore.getClass().toString());
@@ -173,12 +175,8 @@ public abstract class SSLManager {
 			System.setProperty(SSL_TRUST_STORE, fileName);
 
 			try {
-				if (fileName.endsWith(".iaik")) {
-					this.trustStore = KeyStore.getInstance("IAIKKeyStore", "IAIK");
-				} else {
-					this.trustStore = KeyStore.getInstance("JKS");
-					log.info("KeyStore Type: JKS");
-				}
+				this.trustStore = KeyStore.getInstance("JKS");
+				log.info("KeyStore Type: JKS");
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), e, JMeterUtils
 						.getResString("ssl_error_title"),  // $NON-NLS-1$
@@ -187,16 +185,20 @@ public abstract class SSLManager {
 				throw new RuntimeException("TrustStore Problem");
 			}
 
+            FileInputStream fileInputStream = null;
 			try {
 				File initStore = new File(fileName);
 
 				if (initStore.exists()) {
-					this.trustStore.load(new FileInputStream(initStore), null);
+					fileInputStream = new FileInputStream(initStore);
+                    this.trustStore.load(fileInputStream, null);
 				} else {
 					this.trustStore.load(null, null);
 				}
 			} catch (Exception e) {
 				throw new RuntimeException("Can't load TrustStore: " + e.toString());
+            } finally {
+                JOrphanUtils.closeQuietly(fileInputStream);
 			}
 
 			log.info("TrustStore Location: " + fileName);
@@ -221,11 +223,7 @@ public abstract class SSLManager {
 		if (null == SSLManager.manager) {
 			if (SSLManager.isSSLSupported) {
 				String classname = null;
-				if (SSLManager.isIAIKProvider) {
-					classname = "org.apache.jmeter.util.IaikSSLManager"; // $NON-NLS-1$
-				} else {
-					classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
-				}
+				classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
 
 				try {
 					Class clazz = Class.forName(classname);
@@ -243,41 +241,14 @@ public abstract class SSLManager {
 	}
 
 	/**
-	 * Test wether SSL is supported or not.
+	 * Test whether SSL is supported or not.
 	 */
 	public static final boolean isSSLSupported() {
 		return SSLManager.isSSLSupported;
 	}
 
-	// Moved from SSLStaticProvider so all SSL specific management is done in
-	// one place.
 	static {
 		SSLManager.isSSLSupported = true;
 		SSLManager.sslProvider = null;
-		/*
-		 * try { // Class.forName() was choking if the property wasn't set on
-		 * the // line below.. String strSSLProvider =
-		 * JMeterUtils.getPropDefault("ssl.provider", null); if (strSSLProvider !=
-		 * null) { SSLManager.sslProvider = (Provider)
-		 * Class.forName(strSSLProvider).newInstance();
-		 * SSLManager.isSSLSupported = true; } } catch (Exception noSSL) {
-		 * log.error("",noSSL); }
-		 * 
-		 * try { if(SSLManager.sslProvider != null) { log.info("SSL Provider is: " +
-		 * SSLManager.sslProvider);
-		 * Security.addProvider(SSLManager.sslProvider); // register jsse
-		 * provider } } catch (Exception ssl) { // ignore }
-		 * 
-		 * String protocol = JMeterUtils.getPropDefault( "ssl.pkgs",
-		 * JMeterUtils.getPropDefault("java.protocol.handler.pkgs", null));
-		 * SSLManager.sslProvider = null; // register https protocol handler.
-		 * JSSE needs a provider--but iSaSiLk // does not. if (null != protocol) {
-		 * System.setProperty("java.protocol.handler.pkgs", protocol); if
-		 * ("iaik.protocol".equals(protocol)) { SSLManager.isSSLSupported =
-		 * true; SSLManager.isIAIKProvider = true; } else { // This is the case
-		 * where a provider is set and // java.protocol.handler.pkgs is set
-		 * SSLManager.isSSLSupported = true; } } else {
-		 * SSLManager.isSSLSupported = true; }
-		 */
 	}
 }
