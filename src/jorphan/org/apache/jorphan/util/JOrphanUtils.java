@@ -17,7 +17,12 @@
 
 package org.apache.jorphan.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -397,4 +402,48 @@ public final class JOrphanUtils {
 
 		return slice;
 	}
+
+    /**
+     * close a stream with no error thrown
+     * @param is - InputStream (may be null)
+     */
+    public static void closeQuietly(InputStream is){
+        try {
+            if (is != null) is.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * close a stream with no error thrown
+     * @param os - OutputStream (may be null)
+     */
+    public static void closeQuietly(OutputStream os){
+        try {
+            if (os != null) os.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * close a Writer with no error thrown
+     * @param os - Writer (may be null)
+     */
+    public static void closeQuietly(Writer wr){
+        try {
+            if (wr != null) wr.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * close a Reader with no error thrown
+     * @param os - Reader (may be null)
+     */
+    public static void closeQuietly(Reader rd){
+        try {
+            if (rd != null) rd.close();
+        } catch (IOException e) {
+        }
+    }
 }
