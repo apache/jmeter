@@ -58,7 +58,7 @@ public abstract class SSLManager {
 	/** Singleton instance of the manager */
 	private static SSLManager manager;
 
-	private static boolean isSSLSupported = false;
+	private static boolean isSSLSupported = true;
 
 	private static Provider sslProvider = null;
 
@@ -176,7 +176,7 @@ public abstract class SSLManager {
 
 			try {
 				this.trustStore = KeyStore.getInstance("JKS");
-				log.info("KeyStore Type: JKS");
+				log.info("TrustStore Type: JKS");
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), e, JMeterUtils
 						.getResString("ssl_error_title"),  // $NON-NLS-1$
@@ -245,10 +245,5 @@ public abstract class SSLManager {
 	 */
 	public static final boolean isSSLSupported() {
 		return SSLManager.isSSLSupported;
-	}
-
-	static {
-		SSLManager.isSSLSupported = true;
-		SSLManager.sslProvider = null;
 	}
 }
