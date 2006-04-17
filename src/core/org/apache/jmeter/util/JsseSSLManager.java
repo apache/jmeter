@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ import com.sun.net.ssl.X509TrustManager;
  * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a> Created March 21,
  *         2002
- * @version $Revision$ $Date$
  */
 public class JsseSSLManager extends SSLManager {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -78,12 +77,6 @@ public class JsseSSLManager extends SSLManager {
 	public JsseSSLManager(Provider provider) {
 		log.debug("ssl Provider =  " + provider);
 		setProvider(provider);
-		try {
-			Class iaikProvider = SSLManager.class.getClassLoader().loadClass(
-					"iaik.security.jsse.provider.IAIKJSSEProvider"); // $NON-NLS-1$
-			setProvider((Provider) iaikProvider.newInstance());
-		} catch (Exception e) {
-		}
 		if (null == this.rand) {
 			this.rand = new SecureRandom();
 		}
