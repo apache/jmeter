@@ -1358,18 +1358,29 @@ be saved under the Recording Controller.</p>
 <description>
 	<br></br>
 Most of the listeners perform several roles in addition to "listening"
-to the test results.  They frequently also provide means to view,
-save, and read saved test results.
+to the test results.  
+They also provide means to view, save, and read saved test results.
 <p>Note that Listeners are processed at the end of the scope in which they are found.</p>
 <p>
 The saving and reading of test results is generic.  The various
-listeners generally have a panel whereby one can specify the file to
-which the results will be written (or read).  By default,
-the results are stored as CSV
+listeners have a panel whereby one can specify the file to
+which the results will be written (or read from).
+By default, the results are stored as CSV
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
 <note>To read existing results and display them, use the file panel Browse button to open the file.
 </note>
-<p>To change the format, in jmeter.properties, find the following line:</p>
+<p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
+Most of the listeners currently keep a copy of every sample in their scope, apart from:
+</p>
+<ul>
+<li>Simple Data Writer</li>
+<li>BeanShell Listener</li>
+<li>Assertion Results</li>
+<li>Mailer Visualizer</li>
+<li>Monitor Results</li>
+</ul>
+<p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
+<p>To change the default format, find the following line in jmeter.properties:</p>
 <p>jmeter.save.saveservice.output_format=csv</p>
 <p>Change "csv" to "xml" for greater detail.</p>
 <p>
@@ -1444,16 +1455,23 @@ HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
 Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
+<note>The entries in jmeter.properties are used to define the defaults; 
+these can be overriden for individual listeners by using the Configure button,
+as shown below. 
+The settings in jmeter.properties also apply to the listener that is added
+by using the -l command-line flag.
+</note>
 <p>
 The internal viewing capabilities are described in the following subsections.</p>
 	<br></br>
 
 </description>
 
-<component name="Sample Result Configuration" index="&sect-num;.3.1" screenshot="sample_result_config.png">
+<component name="Sample Result Save Configuration" index="&sect-num;.3.1" screenshot="sample_result_config.png">
 <description>
 <p>
-Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below
+Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
+The defaults are defined as described in the previous section.
 </p>
 <p>Meaning of the sample attributes in the log files:</p>
 <ul>
@@ -1539,7 +1557,18 @@ Any DTD nodes or Prolog nodes will not show up in tree; however, response may co
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
-Once the test is done, the throughput is the actual through for the duration of the entire test.</description>
+Once the test is done, the throughput is the actual through for the duration of the entire test.
+<p>
+The thoughput is calculated from the point of view of the sampler target 
+(e.g. the remote server in the case of HTTP samples).
+JMeter takes into account the total time over which the requests have been generated.
+If other samplers and timers are in the same thread, these will increase the total time,
+and therefore reduce the throughput value. 
+So two identical samplers with different names will have half the throughput of two samplers with the same name.
+It is important to choose the sampler names correctly to get the best results from
+the Aggregate Report.
+</p>
+</description>
 </component>
 
 <component name="View Results in Table" index="&sect-num;.3.8" screenshot="table_results.png">
