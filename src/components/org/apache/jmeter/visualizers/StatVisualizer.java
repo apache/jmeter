@@ -53,7 +53,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class StatVisualizer extends AbstractVisualizer implements Clearable {
 	private final String[] COLUMNS = { 
-            JMeterUtils.getResString("URL"),  //$NON-NLS-1$
+            JMeterUtils.getResString("url"),  //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_count"),  //$NON-NLS-1$
             JMeterUtils.getResString("average"),  //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_median"),  //$NON-NLS-1$
