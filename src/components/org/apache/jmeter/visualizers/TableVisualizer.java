@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
  *
@@ -52,11 +51,14 @@ import org.apache.log.Logger;
  * @version $Revision$ Updated on $Date$
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final String[] COLUMNS = new String[] { JMeterUtils.getResString("table_visualizer_sample_num"),
-			JMeterUtils.getResString("url"), JMeterUtils.getResString("table_visualizer_sample_time"),
-			JMeterUtils.getResString("Success?"), JMeterUtils.getResString("table_visualizer_bytes") };
+	private final String[] COLUMNS = new String[] {
+            JMeterUtils.getResString("table_visualizer_sample_num"),
+			JMeterUtils.getResString("url"), 
+            JMeterUtils.getResString("table_visualizer_sample_time"),
+			JMeterUtils.getResString("success?"), 
+            JMeterUtils.getResString("table_visualizer_bytes") };
 
 	private ObjectTableModel model = null;
 
