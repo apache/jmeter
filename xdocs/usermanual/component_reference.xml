@@ -1506,6 +1506,19 @@ real - your server in fact handled that many requests per minute, and you can in
 and/or decrease the delays to discover your server's maximum throughput.  Whereas if you made calculations
 that factored out delays and JMeter's processing, it would be unclear what you could conclude from that
 number.</p></description>
+<p>The following table briefly describes the items on the graph. 
+Further details on the precise meaning of the statistical terms can be found on the web
+ - e.g. Wikipedia - or by consulting a book on statistics.
+ </p>
+ <ul>
+ <li>Data - plot the actual data values</li>
+ <li>Average - plot the Average</li>
+ <li>Median - plot the Median (midway value)</li>
+ <li>Deviation - plot the Standard Deviation (a measure of the variation)</li>
+ <li>Throughput - plot the number of samples per unit of time</li>
+ </ul>
+ <p>The individual figures at the bottom of the display are the current values. 
+ "Latest Sample" is the current elapsed sample time, shown on the graph as "Data".</p>
 </component>
 
 <component name="Spline Visualizer" index="&sect-num;.3.4" screenshot="spline_visualizer.png">
