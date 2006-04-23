@@ -1,6 +1,5 @@
-//$Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +46,7 @@ import org.apache.log.Logger;
  * LDAP functionality available
  ******************************************************************************/
 public class LdapExtClient {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	// Used by Sampler
-	NamingEnumeration answer;
-
-	NamingEnumeration compareAnswer;
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Constructor for the LdapClient object
@@ -111,13 +105,13 @@ public class LdapExtClient {
 	 * @param search
 	 *            filter filter this value from the base
 	 **************************************************************************/
-	public void searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
+	public NamingEnumeration searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
 			int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
 		SearchControls searchcontrols = null;
 		searchcontrols = new SearchControls(scope, countlim, timelim, attrs, retobj, deref);
 		log.debug("scope, countlim, timelim, attrs, retobj, deref= " + searchFilter + scope + countlim + timelim
 				+ attrs + retobj + deref);
-		answer = dirContext.search(searchBase, searchFilter, searchcontrols);
+		return dirContext.search(searchBase, searchFilter, searchcontrols);
 	}
 
 	/***************************************************************************
@@ -128,9 +122,9 @@ public class LdapExtClient {
 	 * @param search
 	 *            filter filter this value from the base
 	 **************************************************************************/
-	public void compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
+	public NamingEnumeration compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
 		SearchControls searchcontrols = new SearchControls(0, 1, 0, new String[0], false, false);
-		compareAnswer = dirContext.search(entrydn, filter, searchcontrols);
+		return dirContext.search(entrydn, filter, searchcontrols);
 	}
 
 	/***************************************************************************
@@ -167,9 +161,9 @@ public class LdapExtClient {
 	 * @param string
 	 *            The string (dn) value
 	 **************************************************************************/
-    public void createTest(DirContext dirContext, Attributes attributes, String string)
+    public DirContext createTest(DirContext dirContext, Attributes attributes, String string)
 			throws NamingException {
-		dirContext.createSubcontext(string, attributes);
+		return dirContext.createSubcontext(string, attributes);
 	}
 
 	/***************************************************************************
