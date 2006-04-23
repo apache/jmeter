@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +21,22 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.SearchResult;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
-import javax.naming.NamingEnumeration;
+import javax.naming.directory.SearchResult;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArgument;
 import org.apache.jmeter.protocol.ldap.config.gui.LDAPArguments;
-import org.apache.jmeter.protocol.ldap.sampler.LdapExtClient;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -123,6 +122,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	// create the new entry in the server
 	// private static int counter=0;
 
+    // TODO replace these with ThreadLocal
 	private static Hashtable ldapConnections = new Hashtable();
 
 	private static Hashtable ldapContexts = new Hashtable();
@@ -589,6 +589,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	private void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
 		res.sampleStart();
 		ldap.createTest(dirContext, getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+        // Returned DirContext is not currently used
 		res.sampleEnd();
 	}
 
@@ -600,20 +601,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	private void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
 		res.sampleStart();
 		ldap.deleteTest(dirContext, getPropertyAsString(DELETE));
-		res.sampleEnd();
-	}
-
-	/***************************************************************************
-	 * This will do the search test for the User defined TestCase
-	 * 
-	 * @return executed time for the give test case
-	 **************************************************************************/
-	private void searchTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-		res.sampleStart();
-		ldap.searchTest(dirContext, getPropertyAsString(SEARCHBASE), getPropertyAsString(SEARCHFILTER),
-				getPropertyAsInt(SCOPE), getPropertyAsLong(COUNTLIM), getPropertyAsInt(TIMELIM),
-				getRequestAttributes(getPropertyAsString(ATTRIBS)), getPropertyAsBoolean(RETOBJ),
-				getPropertyAsBoolean(DEREF));
 		res.sampleEnd();
 	}
 
@@ -657,17 +644,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		res.sampleStart();
 		DirContext ctx = ldap_temp.connect(getServername(), getPort(), getRootdn(), getSuserDN(), getSuserPw());
 		ldap_temp.disconnect(ctx);
-		res.sampleEnd();
-	}
-
-	/***************************************************************************
-	 * This will do a compare Opp for the User and attribute/value pair defined
-	 * 
-	 * @return executed time for the compare op
-	 **************************************************************************/
-	private void compareOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-		res.sampleStart();
-		ldap.compare(dirContext, getPropertyAsString(COMPAREFILT), getPropertyAsString(COMPAREDN));
 		res.sampleEnd();
 	}
 
@@ -751,8 +727,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "<comparedn>" + getPropertyAsString(COMPAREDN) + "</comparedn>";
 				responseData = responseData + "<comparefilter>" + getPropertyAsString(COMPAREFILT)
 						+ "</comparefilter></operation>";
-				compareOp(temp_client, dirContext, res);
-				if (temp_client.compareAnswer.hasMore()) {
+                res.sampleStart();
+                NamingEnumeration cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT), getPropertyAsString(COMPAREDN));
+                res.sampleEnd();
+				if (cmp.hasMore()) {
 				} else {
 					res.setResponseCode("49");
 					res.setResponseMessage("compareFalse");
@@ -792,9 +770,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "<countlimit>" + getPropertyAsString(COUNTLIM) + "</countlimit>";
 				responseData = responseData + "<timelimit>" + getPropertyAsString(TIMELIM) + "</timelimit>";
 				responseData = responseData + "</operation><searchresult>";
-				searchTest(temp_client, dirContext, res);
-				while (temp_client.answer.hasMore()) {
-                    SearchResult sr = (SearchResult) temp_client.answer.next();
+                res.sampleStart();
+                NamingEnumeration srch = temp_client.searchTest(dirContext, getPropertyAsString(SEARCHBASE), getPropertyAsString(SEARCHFILTER),
+                        getPropertyAsInt(SCOPE), getPropertyAsLong(COUNTLIM), getPropertyAsInt(TIMELIM),
+                        getRequestAttributes(getPropertyAsString(ATTRIBS)), getPropertyAsBoolean(RETOBJ),
+                        getPropertyAsBoolean(DEREF));
+                res.sampleEnd();
+				while (srch.hasMore()) {
+                    SearchResult sr = (SearchResult) srch.next();
 					responseData = responseData + "<dn>" + sr.getName() + "," + getPropertyAsString(SEARCHBASE) + ","
 							+ getRootdn() + "</dn>";
 					responseData = responseData + "<returnedattr>" + sr.getAttributes().size() + "</returnedattr>";
