@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -49,17 +48,18 @@ public abstract class JmeterKeyStore {
 	public abstract PrivateKey getPrivateKey();
 
 	public static final JmeterKeyStore getInstance(String type) throws Exception {
-		if ("PKCS12".equalsIgnoreCase(type)) {
-			try {
-				Class PKCS12 = Class.forName("org.apache.jmeter.util.keystore.PKCS12KeyStore");
-				Constructor con = PKCS12.getConstructor(new Class[] { String.class });
-				return (JmeterKeyStore) con.newInstance(new Object[] { type });
-			} catch (Exception e) {
-			}
-		}
+        
+        // PKCS12 is now handled by JSSE (Java 1.4+)
+        // The PKCS12KeyStore JMeter class depended on IsAsIlK, and has been removed 
+//		if ("PKCS12".equalsIgnoreCase(type)) {
+//			try {
+//				Class PKCS12 = Class.forName("org.apache.jmeter.util.keystore.PKCS12KeyStore");
+//				Constructor con = PKCS12.getConstructor(new Class[] { String.class });
+//				return (JmeterKeyStore) con.newInstance(new Object[] { type });
+//			} catch (Exception e) {
+//			}
+//		}
 
-		Class keyStore = Class.forName("org.apache.jmeter.util.keystore.DefaultKeyStore");
-		Constructor con = keyStore.getConstructor(new Class[] { String.class });
-		return (JmeterKeyStore) con.newInstance(new Object[] { type });
+        return new DefaultKeyStore(type);
 	}
 }
