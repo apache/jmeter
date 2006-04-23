@@ -93,7 +93,31 @@ a good similar example for the variables is http vs. https.-->
 with this new features.-->
 </section>
 
-<section name="&sect-num;.5 Reducing resource requirements" anchor="lean_mean">
+<section name="&sect-num;.5 User variables" anchor="user_variables">
+<p>
+Some test plans need to use different values for different users/threads. 
+For example, you might want to test a sequence that requires a unique login for each user.
+This is easy to achieve with the facilities provided by JMeter.
+</p>
+<p>For example:</p>
+<ul>
+<li>Create a text file containing the user names and passwords, separated by commas.
+Put this in the same directory as your test plan.
+</li>
+<li>
+Add a CSV DataSet configuration element to the test plan.
+Name the variables USER and PASS.
+</li>
+<li>
+Replace the login name with ${USER} and the password with ${PASS} on the appropriate
+samplers
+</li>
+</ul>
+<p>The CSV Data Set element will read a new line for each thread. 
+</p>
+</section>
+
+<section name="&sect-num;.6 Reducing resource requirements" anchor="lean_mean">
 <p>
 Some suggestions on reducing resource usage.
 </p>
@@ -106,7 +130,6 @@ Or perhaps use the Access Log Sampler.
 </li>
 <li>Don't use functional mode</li>
 <li>Use CSV output rather than XML</li>
-<li>Only record the sample items that are needed</li>
 </ul>
 </section>
 
