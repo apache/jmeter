@@ -1581,6 +1581,16 @@ So two identical samplers with different names will have half the throughput of 
 It is important to choose the sampler names correctly to get the best results from
 the Aggregate Report.
 </p>
+<p>URL - The URL of the sample.</p>
+<p># Samples - The number of samples for the URL</p>
+<p>Average - The average time of a set of results</p>
+<p>Median - The median is the time in the middle of a set of results.</p>
+<p>90% Line - 90% of the results finished faster than the line.</p>
+<p>Min - The lowest time for the samples of the given URL</p>
+<p>Max - The longest time for the samples of the given URL</p>
+<p>Error % - Percent of requests with errors</p>
+<p>Throughput - Throughput measured in requests per second/minute/hour</p>
+<p>Kb/sec - The throughput measured in Kilobytes per second</p>
 </description>
 </component>
 
