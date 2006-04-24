@@ -82,6 +82,7 @@ sample, and the file name can be included in the sample log file.
 <li>New -N option to define nonProxyHosts from command-line</li>
 <li>New -S option to define system properties from input file</li>
 <li>Bug 26136 - allow configuration of local address</li>
+<li>Expand tree by default when loading a test plan - can be disabled by setting property onload.expandtree=false</li>
 </ul>
 
 <h4>Bug fixes:</h4>
