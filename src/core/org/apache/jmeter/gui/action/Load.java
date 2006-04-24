@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
+import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
@@ -49,6 +50,8 @@ import com.thoughtworks.xstream.converters.ConversionException;
 public class Load implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", true);
+	
 	private static Set commands = new HashSet();
 	static {
 		commands.add(ActionNames.OPEN);
@@ -141,6 +144,12 @@ public class Load implements Command {
 		tree = GuiPackage.getInstance().getCurrentSubTree();
 		ActionRouter.getInstance().actionPerformed(
 				new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_LOADED));
+	    if (expandTree) {
+			JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
+			   for(int i = 0; i < jTree.getRowCount(); i++) {
+			     jTree.expandRow(i);
+			   }
+	    }
 
 		return isTestPlan;
 	}
