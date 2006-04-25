@@ -44,8 +44,9 @@ import org.apache.log.Logger;
  *          June 8, 2001
  */
 public class Proxy extends Thread {
-	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String NEW_LINE = "\n"; // $NON-NLS-1$
 
 	/** Socket to client. */
 	private Socket clientSocket = null;
@@ -57,9 +58,9 @@ public class Proxy extends Thread {
 	private boolean captureHttpHeaders;
 
 	/**
-	 * Default constructor.
+	 * Default constructor - not used
 	 */
-	public Proxy() {
+	private Proxy() {
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class Proxy extends Thread {
 		SampleResult result = null;
 		HeaderManager headers = null;
 
-		HTTPSamplerBase sampler = new HTTPSampler();
+		HTTPSamplerBase sampler = null;
 		try {
 			request.parse(new BufferedInputStream(clientSocket.getInputStream()));
 
@@ -113,7 +114,7 @@ public class Proxy extends Thread {
 			/*
 			 * We don't want to store any cookies in the generated test plan
 			 */
-			headers.removeHeaderNamed("cookie");// Always remove cookies
+			headers.removeHeaderNamed("cookie");// Always remove cookies // $NON-NLS-1$
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.", uhe);
 			writeErrorToClient(HttpReplyHdr.formServerNotFound());
@@ -121,6 +122,9 @@ public class Proxy extends Thread {
 			log.error("", e);
 			writeErrorToClient(HttpReplyHdr.formTimeout());
 		} finally {
+            if (sampler == null){
+                sampler = new HTTPSampler();
+            }
 			target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
 			try {
 				clientSocket.close();
@@ -143,7 +147,8 @@ public class Proxy extends Thread {
 	private void writeToClient(SampleResult res, OutputStream out) throws IOException {
 		try {
 			String responseHeaders = massageResponseHeaders(res, res.getResponseHeaders());
-			out.write((responseHeaders + "\n").getBytes());
+            out.write(responseHeaders.getBytes());
+			out.write('\n'); // $NON-NLS-1$
 			out.write(res.getResponseData());
 			out.flush();
 			log.debug("Done writing to client");
@@ -168,14 +173,14 @@ public class Proxy extends Thread {
 	 * @return
 	 */
 	private String massageResponseHeaders(SampleResult res, String headers) {
-		int encodingHeaderLoc = headers.indexOf(": gzip");
+		int encodingHeaderLoc = headers.indexOf(": gzip"); // $NON-NLS-1$
 		String newHeaders = headers;
 		if (encodingHeaderLoc > -1) {
-			int end = headers.indexOf("\n", encodingHeaderLoc);
-			int begin = headers.lastIndexOf("\n", encodingHeaderLoc);
+			int end = headers.indexOf(NEW_LINE, encodingHeaderLoc);
+			int begin = headers.lastIndexOf(NEW_LINE, encodingHeaderLoc);
 			newHeaders = newHeaders.substring(0, begin) + newHeaders.substring(end);
-			int lengthIndex = newHeaders.indexOf("ength: ");
-			end = newHeaders.indexOf("\n", lengthIndex);
+			int lengthIndex = newHeaders.indexOf("ength: "); // $NON-NLS-1$
+			end = newHeaders.indexOf(NEW_LINE, lengthIndex);
 			newHeaders = newHeaders.substring(0, lengthIndex + 7) + res.getResponseData().length
 					+ newHeaders.substring(end);
 		}
