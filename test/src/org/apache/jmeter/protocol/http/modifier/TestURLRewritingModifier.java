@@ -23,7 +23,9 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.samplers.NullSampler;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
@@ -44,7 +46,15 @@ public class TestURLRewritingModifier extends TestCase {
 			mod.setThreadContext(context);
 		}
 
-		public void testGrabSessionId() throws Exception {
+        public void testNonHTTPSampler() throws Exception {
+            Sampler sampler = new NullSampler();
+            response = new SampleResult();
+            context.setCurrentSampler(sampler);
+            context.setPreviousResult(response);
+            mod.process();
+        }
+
+        public void testGrabSessionId() throws Exception {
 			String html = "location: http://server.com/index.html" + "?session_id=jfdkjdkf%20jddkfdfjkdjfdf%22;";
 			response = new SampleResult();
 			response.setResponseData(html.getBytes());
