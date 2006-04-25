@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 	public void process() {
 		JMeterContext ctx = getThreadContext();
 		Sampler sampler = ctx.getCurrentSampler();
+        if (!(sampler instanceof HTTPSamplerBase)) {// Ignore non-HTTP samplers
+            return;
+        }
 		SampleResult responseText = ctx.getPreviousResult();
 		if (responseText == null) {
 			return;
