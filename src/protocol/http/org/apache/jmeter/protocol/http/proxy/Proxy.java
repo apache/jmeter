@@ -58,9 +58,9 @@ public class Proxy extends Thread {
 	private boolean captureHttpHeaders;
 
 	/**
-	 * Default constructor - not used
+	 * Default constructor - used by newInstance call in Daemon
 	 */
-	private Proxy() {
+	public Proxy() {
 	}
 
 	/**
