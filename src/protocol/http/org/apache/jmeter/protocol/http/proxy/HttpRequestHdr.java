@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,34 +46,39 @@ import org.apache.log.Logger;
  * 
  */
 public class HttpRequestHdr {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String HTTP = "http"; // $NON-NLS-1$
+    private static final String HTTPS = "https"; // $NON-NLS-1$
+    private static final String PROXY_CONNECTION = "proxy-connection"; // $NON-NLS-1$
+    private static final String CONTENT_TYPE = "content-type"; // $NON-NLS-1$
+    private static final String CONTENT_LENGTH = "content-length"; // $NON-NLS-1$
 
 	/**
 	 * Http Request method. Such as get or post.
 	 */
-	public String method = "";
+	private String method = ""; // $NON-NLS-1$
 
 	/**
 	 * The requested url. The universal resource locator that hopefully uniquely
 	 * describes the object or service the client is requesting.
 	 */
-	public String url = "";
+	private String url = ""; // $NON-NLS-1$
 
 	/**
 	 * Version of http being used. Such as HTTP/1.0.
 	 */
-	public String version = "";
+	private String version = ""; // NOTREAD // $NON-NLS-1$
 
-	public String postData = "";
-
-	static String CR = "\r\n";
+	private String postData = ""; // $NON-NLS-1$
 
 	private Map headers = new HashMap();
 
 	/*
 	 * Optionally number the requests
 	 */
-	private static boolean numberRequests = JMeterUtils.getPropDefault("proxy.number.requests", false);
+	private static final boolean numberRequests = 
+        JMeterUtils.getPropDefault("proxy.number.requests", false); // $NON-NLS-1$
 
 	private static int requestNumber = 0;// running number
 
@@ -95,7 +100,7 @@ public class HttpRequestHdr {
 		while ((inHeaders || readLength < dataLength) && ((x = in.read()) != -1)) {
 			line.write(x);
 			clientRequest.write(x);
-			if (inHeaders && (byte) x == (byte) '\n') {
+			if (inHeaders && (byte) x == (byte) '\n') { // $NON-NLS-1$
 				if (line.size() < 3) {
 					inHeaders = false;
 				}
@@ -105,28 +110,38 @@ public class HttpRequestHdr {
 				} else {
 					dataLength = Math.max(parseLine(line.toString()), dataLength);
 				}
-				log.debug("Client Request Line: " + line.toString());
+                if (log.isDebugEnabled()){
+    				log.debug("Client Request Line: " + line.toString());
+                }
 				line.reset();
 			} else if (!inHeaders) {
 				readLength++;
 			}
 		}
 		postData = line.toString().trim();
-		log.debug("postData: " + postData);
-		log.debug("Request: " + clientRequest.toString());
+        if (log.isDebugEnabled()){
+    		log.debug("postData: " + postData);
+    		log.debug("Request: " + clientRequest.toString());
+        }
 		return clientRequest.toByteArray();
 	}
 
-	public void parseFirstLine(String firstLine) {
-		log.debug("browser request: " + firstLine);
+	private void parseFirstLine(String firstLine) {
+        if (log.isDebugEnabled())
+    		log.debug("browser request: " + firstLine);
 		StringTokenizer tz = new StringTokenizer(firstLine);
 		method = getToken(tz).toUpperCase();
 		url = getToken(tz);
-		log.debug("parsed url: " + url);
+        if (log.isDebugEnabled())
+    		log.debug("parsed url: " + url);
 		version = getToken(tz);
 	}
 
-	public int parseLine(String nextLine) {
+    /*
+     * Split line into name/value pairs and store in headers if relevant
+     * If name = "content-length", then return value as int, else return 0
+     */
+	private int parseLine(String nextLine) {
 		StringTokenizer tz;
 		tz = new StringTokenizer(nextLine);
 		String token = getToken(tz);
@@ -134,10 +149,11 @@ public class HttpRequestHdr {
 		if (0 == token.length()) {
 			return 0;
 		} else {
-			String name = token.trim().substring(0, token.trim().length() - 1);
+			String trimmed = token.trim();
+            String name = trimmed.substring(0, trimmed.length() - 1);// drop ':'
 			String value = getRemainder(tz);
 			headers.put(name.toLowerCase(), new Header(name, value));
-			if (name.equalsIgnoreCase("content-length")) {
+			if (name.equalsIgnoreCase(CONTENT_LENGTH)) {
 				return Integer.parseInt(value);
 			}
 		}
@@ -149,7 +165,7 @@ public class HttpRequestHdr {
 		Iterator keys = headers.keySet().iterator();
 		while (keys.hasNext()) {
 			String key = (String) keys.next();
-			if (!key.equals("proxy-connection") && !key.equals("content-length")) {
+			if (!key.equals(PROXY_CONNECTION) && !key.equals(CONTENT_LENGTH)) {
 				manager.add((Header) headers.get(key));
 			}
 		}
@@ -168,19 +184,20 @@ public class HttpRequestHdr {
 		tempGui.modifyTestElement(result);
 		result.setFollowRedirects(false);
 		result.setUseKeepAlive(true);
-		log.debug("getSampler: sampler path = " + result.getPath());
+        if (log.isDebugEnabled())
+    		log.debug("getSampler: sampler path = " + result.getPath());
 		return result;
 	}
 
-	public String getContentType() {
-		Header contentTypeHeader = (Header) headers.get("content-type");
+	private String getContentType() {
+		Header contentTypeHeader = (Header) headers.get(CONTENT_TYPE);
 		if (contentTypeHeader != null) {
 			return contentTypeHeader.getValue();
 		}
-		return "";
+		return ""; // $NON-NLS-1$
 	}
 
-	public static MultipartUrlConfig isMultipart(String contentType) {
+	private MultipartUrlConfig isMultipart(String contentType) {
 		if (contentType != null && contentType.startsWith(MultipartUrlConfig.MULTIPART_FORM)) {
 			return new MultipartUrlConfig(contentType.substring(contentType.indexOf("oundary=") + 8));
 		} else {
@@ -192,11 +209,13 @@ public class HttpRequestHdr {
 		MultipartUrlConfig urlConfig = null;
 		HTTPSamplerBase sampler = new HTTPSampler();
 		sampler.setDomain(serverName());
-		log.debug("Proxy: setting server: " + sampler.getDomain());
+        if (log.isDebugEnabled())
+    		log.debug("Proxy: setting server: " + sampler.getDomain());
 		sampler.setMethod(method);
 		log.debug("Proxy: method server: " + sampler.getMethod());
 		sampler.setPath(serverUrl());
-		log.debug("Proxy: setting path: " + sampler.getPath());
+        if (log.isDebugEnabled())
+    		log.debug("Proxy: setting path: " + sampler.getPath());
 		if (numberRequests) {
 			requestNumber++;
 			sampler.setName(requestNumber + " " + sampler.getPath());
@@ -204,17 +223,21 @@ public class HttpRequestHdr {
 			sampler.setName(sampler.getPath());
 		}
 		sampler.setPort(serverPort());
-		log.debug("Proxy: setting port: " + sampler.getPort());
+        if (log.isDebugEnabled())
+            log.debug("Proxy: setting port: " + sampler.getPort());
 		if (url.indexOf("//") > -1) {
 			String protocol = url.substring(0, url.indexOf(":"));
-			log.debug("Proxy: setting protocol to : " + protocol);
+            if (log.isDebugEnabled())
+    			log.debug("Proxy: setting protocol to : " + protocol);
 			sampler.setProtocol(protocol);
 		} else if (sampler.getPort() == 443) {
-			sampler.setProtocol("https");
-			log.debug("Proxy: setting protocol to https");
+			sampler.setProtocol(HTTPS);
+            if (log.isDebugEnabled())
+    			log.debug("Proxy: setting protocol to https");
 		} else {
-			log.debug("Proxy setting default protocol to: http");
-			sampler.setProtocol("http");
+            if (log.isDebugEnabled())
+    			log.debug("Proxy setting default protocol to: http");
+			sampler.setProtocol(HTTP);
 		}
 		if ((urlConfig = isMultipart(getContentType())) != null) {
 			urlConfig.parseArguments(postData);
@@ -225,7 +248,8 @@ public class HttpRequestHdr {
 		} else {
 			sampler.parseArguments(postData);
 		}
-		log.debug("sampler path = " + sampler.getPath());
+        if (log.isDebugEnabled())
+    		log.debug("sampler path = " + sampler.getPath());
 		return sampler;
 	}
 
@@ -238,20 +262,20 @@ public class HttpRequestHdr {
 	 * 
 	 * @return server's internet name
 	 */
-	public String serverName() {
+	private String serverName() {
 		// chop to "server.name:x/thing"
 		String str = url;
-		int i = str.indexOf("//");
+		int i = str.indexOf("//"); // $NON-NLS-1$
 		if (i > 0) {
 			str = str.substring(i + 2);
 		}
 		// chop to server.name:xx
-		i = str.indexOf("/");
+		i = str.indexOf("/"); // $NON-NLS-1$
 		if (0 < i) {
 			str = str.substring(0, i);
 		}
 		// chop to server.name
-		i = str.indexOf(":");
+		i = str.indexOf(":"); // $NON-NLS-1$
 		if (0 < i) {
 			str = str.substring(0, i);
 		}
@@ -308,12 +332,11 @@ public class HttpRequestHdr {
 	 *            String that is partially tokenized.
 	 * @return The remainder
 	 */
-	String getToken(StringTokenizer tk) {
-		String str = "";
+	private String getToken(StringTokenizer tk) {
 		if (tk.hasMoreTokens()) {
-			str = tk.nextToken();
+			return tk.nextToken();
 		}
-		return str;
+		return "";// $NON-NLS-1$
 	}
 
 	/**
@@ -323,15 +346,16 @@ public class HttpRequestHdr {
 	 *            String that is partially tokenized.
 	 * @return The remainder
 	 */
-	String getRemainder(StringTokenizer tk) {
-		String str = "";
+	private String getRemainder(StringTokenizer tk) {
+		StringBuffer strBuff = new StringBuffer();
 		if (tk.hasMoreTokens()) {
-			str = tk.nextToken();
+			strBuff.append(tk.nextToken());
 		}
 		while (tk.hasMoreTokens()) {
-			str += " " + tk.nextToken();
+            strBuff.append(" "); // $NON-NLS-1$
+            strBuff.append(tk.nextToken());
 		}
-		return str;
+		return strBuff.toString();
 	}
 
 }
