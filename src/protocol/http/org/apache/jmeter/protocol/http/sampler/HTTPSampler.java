@@ -200,14 +200,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 				in = new BufferedInputStream(conn.getInputStream());
 			}
 		} catch (IOException e) {
-			// TODO: try to improve error discrimination when using JDK1.3
-			// and/or conditionally call .getCause()
-
-			// JDK1.4: if (e.getCause() instanceof FileNotFoundException)
+			// TODO JDK1.4: if (!e.getCause() instanceof FileNotFoundException)
 			// JDK1.4: {
-			// JDK1.4: log.warn(e.getCause().toString());
-			// JDK1.4: }
-			// JDK1.4: else
+			if (conn.getResponseCode() != 404) // for JDK1.3
 			{
 				log.error("readResponse: "+e.toString());
 				// JDK1.4: Throwable cause = e.getCause();
@@ -216,6 +211,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 				// JDK1.4: }
 				logError = true;
 			}
+			// Normal InputStream is not available
 			in = new BufferedInputStream(conn.getErrorStream());
 		} catch (Exception e) {
 			log.error("readResponse: "+e.toString());
@@ -258,7 +254,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *            connection from which the headers are read
 	 * @return string containing the headers, one per line
 	 */
-	protected String getResponseHeaders(HttpURLConnection conn) throws IOException {
+	protected String getResponseHeaders(HttpURLConnection conn) {
 		StringBuffer headerBuf = new StringBuffer();
 		headerBuf.append(conn.getHeaderField(0));// Leave header as is
 		// headerBuf.append(conn.getHeaderField(0).substring(0, 8));
