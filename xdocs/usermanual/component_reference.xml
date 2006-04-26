@@ -1672,7 +1672,7 @@ failed responses from the server.</p></description>
         <property name="Success Limit" required="Yes">Once this number of successful responses are
         received <strong>after previously reaching the failure limit</strong>, a success email
         is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
-        <property name="Test Mail" required="No"></property>
+        <property name="Test Mail" required="No">Press this button to send a test mail</property>
         <property name="Failures" required="No">A field that keeps a running total of number
         of failures so far received.</property>
 </properties>
