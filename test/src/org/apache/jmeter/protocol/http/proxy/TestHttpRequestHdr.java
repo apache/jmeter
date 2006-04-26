@@ -17,8 +17,12 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.log.output.jms.PropertyInfo;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
 		public TestHttpRequestHdr(String name) {
@@ -30,12 +34,32 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
 
 		public void testRepeatedArguments() throws Exception {
 			String TEST_REQ = 
-                "GET http://localhost/matrix.html?" 
-                + "update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d="
-					+ "&d= HTTP/1.0\n\n";
+                "GET http://localhost/matrix.html" 
+                + "?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= "
+                + "HTTP/1.0\n\n";
 			HttpRequestHdr req = new HttpRequestHdr();
 			req.parse(new java.io.ByteArrayInputStream(TEST_REQ.getBytes()));
 			HTTPSamplerBase s = req.getSampler();
 			assertEquals(13,s.getArguments().getArguments().size());
 		}
+        
+        // TODO: will need changing if arguments can be saved in decoded form 
+        public void testEncodedArguments() throws Exception {
+            String TEST_REQ = 
+                "GET http://localhost:80/matrix.html"
+                + "?abc"
+                + "?SPACE=a+b"
+                +"&space=a%20b"
+                +"&query=What?"
+                + " HTTP/1.1\n\n";
+            HttpRequestHdr req = new HttpRequestHdr();
+            req.parse(new java.io.ByteArrayInputStream(TEST_REQ.getBytes()));
+            Arguments arguments = req.getSampler().getArguments();
+            assertEquals(3,arguments.getArguments().size());
+            PropertyIterator pi= arguments.iterator();
+            JMeterProperty next;
+            next = pi.next(); assertEquals("abc?SPACE=a+b",next.getStringValue());
+            next = pi.next(); assertEquals("space=a%20b",next.getStringValue());
+            next = pi.next(); assertEquals("query=What?",next.getStringValue());
+        }
 }
