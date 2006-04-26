@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
 public class PostWriterTest extends TestCase {
     
@@ -116,7 +117,7 @@ public class PostWriterTest extends TestCase {
      * @param httpSampler
      * @throws IOException
      */
-    private void setupNoFilename(HTTPSampler httpSampler) throws IOException {
+    private void setupNoFilename(HTTPSampler httpSampler) {
         httpSampler.setFilename("");
         httpSampler.setMimetype("application/octet-stream");
     }
@@ -127,7 +128,7 @@ public class PostWriterTest extends TestCase {
      * @param httpSampler
      * @throws IOException
      */
-    private void setupFilename(HTTPSampler httpSampler) throws IOException {
+    private void setupFilename(HTTPSampler httpSampler) {
         // httpSampler.setFilename("test/src/org/apache/jmeter/protocol/http/sampler/foo.txt");
         httpSampler.setFilename(temporaryFile.getAbsolutePath());
         httpSampler.setMimetype("text/plain");
@@ -139,11 +140,11 @@ public class PostWriterTest extends TestCase {
      * @param httpSampler
      * @throws IOException
      */
-    private void setupCommons(HTTPSampler httpSampler) throws IOException {
+    private void setupCommons(HTTPSampler httpSampler) {
         httpSampler.setFileField("upload");
         Arguments args = new Arguments();
-        args.addArgument("title", "mytitle");
-        args.addArgument("description", "mydescription");
+        args.addArgument(new HTTPArgument("title", "mytitle"));
+        args.addArgument(new HTTPArgument("description", "mydescription"));
         httpSampler.setArguments(args);
     }
     
