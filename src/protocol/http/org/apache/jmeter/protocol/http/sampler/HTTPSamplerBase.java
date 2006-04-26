@@ -192,9 +192,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		String protocol = getPropertyAsString(PROTOCOL);
 		if (protocol == null || protocol.length() == 0 ) {
 			return DEFAULT_PROTOCOL;
-		} else {
-			return protocol;
 		}
+		return protocol;
 	}
 
 	/**
@@ -437,9 +436,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		}
 		if (getPort() == UNSPECIFIED_PORT || getPort() == DEFAULT_HTTP_PORT) {
 			return new URL(getProtocol(), getDomain(), pathAndQuery.toString());
-		} else {
-			return new URL(getProtocol(), getPropertyAsString(DOMAIN), getPort(), pathAndQuery.toString());
 		}
+		return new URL(getProtocol(), getPropertyAsString(DOMAIN), getPort(), pathAndQuery.toString());
 	}
 
 	/**
