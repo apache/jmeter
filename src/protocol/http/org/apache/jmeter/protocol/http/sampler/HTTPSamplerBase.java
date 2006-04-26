@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -489,7 +489,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * browser's output stream to be parsed and stored correctly into the
 	 * UrlConfig object.
 	 * 
-	 * For each name found, addEncodedArgument() is called
+	 * For each name found, addArgument() is called
 	 * 
 	 * @param queryString -
 	 *            the query string
@@ -520,8 +520,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
                 value="";
 			}
 			if (name.length() > 0) {
-				addEncodedArgument(name, value, metaData);
-			}
+                // The browser has already done the encoding, so save the values as is 
+                HTTPArgument arg = new HTTPArgument(name, value, metaData, false);
+                // and make sure they stay that way:
+                arg.setAlwaysEncoded(false);
+                // Note that URL.encode()/decode() do not follow RFC3986 entirely
+				this.getArguments().addArgument(arg);
+				// TODO: this leaves the arguments in encoded form, which may be difficult to read
+                // if we can find proper coding methods, this could be tidied up 
+            }
 		}
 	}
 
