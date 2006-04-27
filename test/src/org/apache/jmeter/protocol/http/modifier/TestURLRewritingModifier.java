@@ -17,10 +17,9 @@
 
 package org.apache.jmeter.protocol.http.modifier;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.NullSampler;
@@ -28,8 +27,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.util.JMeterUtils;
 
-public class TestURLRewritingModifier extends TestCase {
+public class TestURLRewritingModifier extends JMeterTestCase {
 		private SampleResult response = null;
 
 		private JMeterContext context = null;
@@ -134,13 +134,17 @@ public class TestURLRewritingModifier extends TestCase {
 		}
 
 		public void testGrabSessionIdFromForm() throws Exception {
-			String[] html = new String[] { "<input name=\"sid\" value=\"myId\">", "<input name='sid' value='myId'>",
-					"<input value=\"myId\" NAME='sid'>", "<input VALUE='myId' name=\"sid\">",
-					"<input blah blah value=\"myId\" yoda yoda NAME='sid'>", };
+			String[] html = new String[] { 
+                    "<input name=\"sid\" value=\"myId\">", 
+                    "<input name='sid' value='myId'>",
+					"<input value=\"myId\" NAME='sid'>",
+                    "<input VALUE='myId' name=\"sid\">",
+					"<input blah blah value=\"myId\" yoda yoda NAME='sid'>",
+                    };
 			for (int i = 0; i < html.length; i++) {
 				response = new SampleResult();
 				response.setResponseData(html[i].getBytes());
-				URLRewritingModifier newMod = new URLRewritingModifier();
+                URLRewritingModifier newMod = new URLRewritingModifier();
 				newMod.setThreadContext(context);
 				newMod.setArgumentName("sid");
 				newMod.setPathExtension(false);
@@ -149,8 +153,53 @@ public class TestURLRewritingModifier extends TestCase {
 				context.setPreviousResult(response);
 				newMod.process();
 				Arguments args = sampler.getArguments();
-				assertEquals("For case i=" + i, "myId", ((Argument) args.getArguments().get(0).getObjectValue())
-						.getValue());
+				assertEquals("For case i=" + i, "myId", 
+                        ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
 			}
 		}
+
+        public void testCache() throws Exception {
+            String[] html = new String[] { 
+                    "<input name=\"sid\" value=\"myId\">", 
+                    "<html></html>", // No entry; check it is still present
+                    };
+            URLRewritingModifier newMod = new URLRewritingModifier();
+            newMod.setShouldCache(true);
+            newMod.setThreadContext(context);
+            newMod.setArgumentName("sid");
+            newMod.setPathExtension(false);
+            for (int i = 0; i < html.length; i++) {
+                response = new SampleResult();
+                response.setResponseData(html[i].getBytes());
+                HTTPSamplerBase sampler = createSampler();
+                context.setCurrentSampler(sampler);
+                context.setPreviousResult(response);
+                newMod.process();
+                Arguments args = sampler.getArguments();
+                assertEquals("For case i=" + i, "myId", 
+                        ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            }
+        }
+        public void testNoCache() throws Exception {
+            String[] html = new String[] { 
+                    "<input name=\"sid\" value=\"myId\">",  "myId",
+                    "<html></html>", "",
+                    };
+            URLRewritingModifier newMod = new URLRewritingModifier();
+            newMod.setThreadContext(context);
+            newMod.setArgumentName("sid");
+            newMod.setPathExtension(false);
+            newMod.setShouldCache(false);
+            for (int i = 0; i < html.length/2; i++) {
+                response = new SampleResult();
+                response.setResponseData(html[i*2].getBytes());
+                HTTPSamplerBase sampler = createSampler();
+                context.setCurrentSampler(sampler);
+                context.setPreviousResult(response);
+                newMod.process();
+                Arguments args = sampler.getArguments();
+                assertEquals("For case i=" + i, html[i*2+1], 
+                        ((Argument) args.getArguments().get(0).getObjectValue()).getValue());
+            }
+        }
 }

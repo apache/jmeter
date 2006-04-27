@@ -37,7 +37,10 @@ then you'll need to do a bit of extra work to test your site.</p>
 <p>To respond correctly to URL rewriting, JMeter needs to parse the HTML
 received from the server and retrieve the unique session ID.  Use the appropriate <complink name="HTTP URL Re-writing Modifier"/>
 to accomplish this.  Simply enter the name of your session ID parameter into the modifier, and it
-will find it and add it to each request.  If the request already has a value, it will be replaced.</p>
+will find it and add it to each request.  If the request already has a value, it will be replaced.
+If "Cache Session Id?" is checked, then the last found session id will be saved,
+and will be used if the previous HTTP sample does not contain a session id.
+</p>
 
 <example title="URL Rewriting Example">
 <p>Download <a href="../demos/URLRewritingExample.jmx">this example</a>. In Figure 1 is shown a 
@@ -47,7 +50,7 @@ thus assuring that it will affect every request in that ThreadGroup.</p>
 <p>In Figure 2, we see the URL Re-writing modifier GUI, which just has a field for the user to specify
 the name of the session ID parameter.  There is also a checkbox for indicating that the session ID should
 be part of the path (separated by a ";"), rather than a request parameter</p>
-<figure image="url_rewrite_example_b.gif">Figure 2 - Request parameters</figure>
+<figure image="url_rewrite_example_b.png">Figure 2 - Request parameters</figure>
 </example>
 </section>
 
