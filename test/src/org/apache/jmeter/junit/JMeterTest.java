@@ -144,7 +144,7 @@ public class JMeterTest extends JMeterTestCase {
 			System.out.println("Cannot create MainFrame: " + e);
 		}
 
-		TestSuite suite = new TestSuite();
+		TestSuite suite = new TestSuite("JMeterTest");
         suite.addTest(new JMeterTest("readAliases"));
 		suite.addTest(new JMeterTest("createTitleSet"));
 		suite.addTest(new JMeterTest("createTagSet"));
