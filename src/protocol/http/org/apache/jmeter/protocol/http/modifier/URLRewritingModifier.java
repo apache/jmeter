@@ -43,7 +43,9 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor {
 
-	private Pattern pathExtensionEqualsQuestionmarkRegexp;
+	private static final String SEMI_COLON = ";"; // $NON-NLS-1$
+
+    private Pattern pathExtensionEqualsQuestionmarkRegexp;
 
 	private Pattern pathExtensionEqualsNoQuestionmarkRegexp;
 
@@ -54,14 +56,19 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 	private Pattern pathExtensionNoEqualsNoQuestionmarkRegexp;
 
 	// transient Perl5Compiler compiler = new Perl5Compiler();
-	private final static String ARGUMENT_NAME = "argument_name";
+	private final static String ARGUMENT_NAME = "argument_name"; // $NON-NLS-1$
 
-	private final static String PATH_EXTENSION = "path_extension";
+	private final static String PATH_EXTENSION = "path_extension"; // $NON-NLS-1$
 
-	private final static String PATH_EXTENSION_NO_EQUALS = "path_extension_no_equals";
+	private final static String PATH_EXTENSION_NO_EQUALS = "path_extension_no_equals"; // $NON-NLS-1$
 
-	private final static String PATH_EXTENSION_NO_QUESTIONMARK = "path_extension_no_questionmark";
+	private final static String PATH_EXTENSION_NO_QUESTIONMARK = "path_extension_no_questionmark"; // $NON-NLS-1$
 
+    private final static String SHOULD_CACHE = "cache_value"; // $NON-NLS-1$
+
+    // PreProcessors are cloned per-thread, so this will be saved per-thread
+    private String savedValue = ""; // $NON-NLS-1$
+    
 	public void process() {
 		JMeterContext ctx = getThreadContext();
 		Sampler sampler = ctx.getCurrentSampler();
@@ -114,15 +121,23 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 			}
 		}
 
+        // Bug 15025 - save session value across samplers
+        if (shouldCache()){
+            if (value == null || value.length() == 0) {
+                value = savedValue;
+            } else {
+                savedValue = value;
+            }
+        }
 		modify((HTTPSamplerBase) sampler, value);
 	}
 
-	private void modify(HTTPSamplerBase sampler, String value) {
+    private void modify(HTTPSamplerBase sampler, String value) {
 		if (isPathExtension()) {
 			if (isPathExtensionNoEquals()) {
-				sampler.setPath(sampler.getPath() + ";" + getArgumentName() + value);
+				sampler.setPath(sampler.getPath() + SEMI_COLON + getArgumentName() + value); // $NON-NLS-1$
 			} else {
-				sampler.setPath(sampler.getPath() + ";" + getArgumentName() + "=" + value);
+				sampler.setPath(sampler.getPath() + SEMI_COLON + getArgumentName() + "=" + value); // $NON-NLS-1$ // $NON-NLS-2$
 			}
 		} else {
 			sampler.getArguments().removeArgument(getArgumentName());
@@ -136,26 +151,36 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
 	private void initRegex(String argName) {
 		pathExtensionEqualsQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				";" + argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
+				SEMI_COLON + argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		pathExtensionEqualsNoQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				";" + argName + "=([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?",
+				SEMI_COLON + argName + "=([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		pathExtensionNoEqualsQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				";" + argName + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?",
+				SEMI_COLON + argName + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		pathExtensionNoEqualsNoQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				";" + argName + "([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?",
+				SEMI_COLON + argName + "([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		parameterRegexp = JMeterUtils.getPatternCache().getPattern(
-				"[;\\?&]" + argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?" + "|\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']" + argName
-						+ "[\"']" + "[^>]*" + "\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']" + "([^\"']*)" + "[\"']"
-						+ "|\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']" + "([^\"']*)" + "[\"']" + "[^>]*"
-						+ "\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']" + argName + "[\"']",
+                // ;sessionid=value
+				"[;\\?&]" + argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?" +  // $NON-NLS-1$
+                
+                // name="sessionid" value="value"
+                "|\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']" + argName
+				+ "[\"']" + "[^>]*"  // $NON-NLS-1$ 
+                + "\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']" // $NON-NLS-1$
+                + "([^\"']*)" + "[\"']" // $NON-NLS-1$
+				
+                //  value="value" name="sessionid" 
+                + "|\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']" // $NON-NLS-1$
+                + "([^\"']*)" + "[\"']" + "[^>]*" // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
+				+ "\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']"  // $NON-NLS-1$
+                + argName + "[\"']", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 		// NOTE: the handling of simple- vs. double-quotes could be formally
 		// more accurate, but I can't imagine a session id containing
@@ -179,6 +204,10 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 		setProperty(new BooleanProperty(PATH_EXTENSION_NO_QUESTIONMARK, pathExtNoQuestionmark));
 	}
 
+    public void setShouldCache(boolean b) {
+        setProperty(new BooleanProperty(SHOULD_CACHE, b));
+    }
+
 	public boolean isPathExtension() {
 		return getPropertyAsBoolean(PATH_EXTENSION);
 	}
@@ -190,4 +219,10 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 	public boolean isPathExtensionNoQuestionmark() {
 		return getPropertyAsBoolean(PATH_EXTENSION_NO_QUESTIONMARK);
 	}
+    
+    public boolean shouldCache() {
+        return getPropertyAsBoolean(SHOULD_CACHE,true);
+    }
+
+
 }
