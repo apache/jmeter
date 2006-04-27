@@ -174,7 +174,7 @@ public class PackageTest extends TestCase {
 	 * Use a suite to ensure that the default is done first
 	 */
 	public static Test suite() {
-		TestSuite ts = new TestSuite();
+		TestSuite ts = new TestSuite("Resources PackageTest");
 		ts.addTest(new PackageTest("atestDefault"));
 		ts.addTest(new PackageTest("atestDE"));
 		ts.addTest(new PackageTest("atestNO"));
