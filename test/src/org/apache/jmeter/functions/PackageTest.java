@@ -119,7 +119,7 @@ public class PackageTest extends JMeterTestCase {
 	}
 
 	public static Test suite() throws Exception {
-		TestSuite allsuites = new TestSuite();
+		TestSuite allsuites = new TestSuite("Function PackageTest");
 
 		TestSuite bsh = new TestSuite("BeanShell");
 		bsh.addTest(new PackageTest("BSH1"));

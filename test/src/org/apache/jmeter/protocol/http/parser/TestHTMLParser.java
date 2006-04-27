@@ -87,9 +87,9 @@ public class TestHTMLParser extends JMeterTestCase {
                 expectedList = l;
             }
 
-            private TestData(String f, String b, String s) {
-                this(f, b, s, null);
-            }
+//            private TestData(String f, String b, String s) {
+//                this(f, b, s, null);
+//            }
         }
 
         // List of parsers to test. Should probably be derived automatically
@@ -135,7 +135,7 @@ public class TestHTMLParser extends JMeterTestCase {
                          };
 
         public static junit.framework.Test suite() {
-            TestSuite suite = new TestSuite();
+            TestSuite suite = new TestSuite("TestHTMLParser");
             suite.addTest(new TestHTMLParser("testDefaultParser"));
             suite.addTest(new TestHTMLParser("testParserDefault"));
             suite.addTest(new TestHTMLParser("testParserMissing"));
