@@ -189,8 +189,22 @@ public final class AllTests {
 		// --
 		System.out.println("Creating test suite");
 		TestSuite suite = suite(args[0]);
-		System.out.println("Starting test run");
-
+		int countTestCases = suite.countTestCases();
+        System.out.println("Starting test run, test count = "+countTestCases);
+//        for (int i=0;i<suite.testCount();i++){
+//           Test testAt = suite.testAt(i);
+//           int testCases = testAt.countTestCases();
+//           if (testAt instanceof junit.framework.TestCase){
+//                System.out.print(((junit.framework.TestCase) testAt).getName());
+//            }
+//            if (testAt instanceof TestSuite){
+//                TestSuite testSuite = ((TestSuite) testAt);
+//                String name = testSuite.getName();
+//                System.out.print(name);
+//                System.out.println(" "+testCases);
+//            }                
+//        }
+        
 		// Jeremy Arnold: This method used to attempt to write results to
 		// a file, but it had a bug and instead just wrote to System.out.
 		// Since nobody has complained about this behavior, I'm changing
@@ -280,7 +294,7 @@ public final class AllTests {
 	 * @return The test suite
 	 */
 	private static TestSuite suite(String searchPaths) {
-		TestSuite suite = new TestSuite();
+		TestSuite suite = new TestSuite("All Tests");
         System.out.println("Scanning "+searchPaths+ " for test cases");
 		int tests=0;
 		int suites=0;
