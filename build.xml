@@ -399,7 +399,7 @@
   <target name="init-version">
   	<tstamp/>
   	<!-- JMeter version -->
-  <property name="jmeter.version" value="2.1.1.${DSTAMP}"/>
+  <property name="jmeter.version" value="2.1.2.${DSTAMP}"/>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
@@ -1317,6 +1317,8 @@ some of its classes - at present JMeter can only run from jar files.
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.binaries"/>
@@ -1333,6 +1335,8 @@ some of its classes - at present JMeter can only run from jar files.
       </tarfileset>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="external.jars"/>
@@ -1347,6 +1351,8 @@ some of its classes - at present JMeter can only run from jar files.
       <tarfileset includes="${dest.docs.api}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset includes="${dest.docs.api}/" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
@@ -1362,6 +1368,8 @@ some of its classes - at present JMeter can only run from jar files.
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <gzip zipfile="${dist.dir}/${pack.name}.tgz" src="${dist.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
     <zip  zipfile="${dist.dir}/${pack.name}.zip">
       <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist.sources"/>
@@ -1389,6 +1397,8 @@ some of its classes - at present JMeter can only run from jar files.
       <tarfileset dir="${dest.docs}" includes="**" excludes="api/**" prefix="" defaultexcludes="yes"/>
      </tar>
     <gzip zipfile="${site.dir}/${pack.name}.tgz" src="${site.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
      <!-- no point in creating Zip version as well -->
     </target>
 
@@ -1399,6 +1409,8 @@ some of its classes - at present JMeter can only run from jar files.
       <tarfileset dir="${dest.docs.api}" includes="**"  prefix="api" defaultexcludes="yes"/>
      </tar>
     <gzip zipfile="${site.dir}/${pack.name}.tgz" src="${site.dir}/${pack.name}.tar" />
+	<!-- no longer needed -->
+	<delete file="${dist.dir}/${pack.name}.tar"/>
      <!-- no point in creating Zip version as well -->
     </target>
     
