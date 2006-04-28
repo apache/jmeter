@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,12 +51,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 
 	public void add(SampleResult sample) {
 		StringBuffer sb = new StringBuffer(100);
-		String sd = sample.getSamplerData();
-		if (null != sd) {
-			sb.append(sd);
-		} else {
-			sb.append(sample.getSampleLabel());
-		}
+		sb.append(sample.getSampleLabel());
 		sb.append(getAssertionResult(sample));
 		sb.append("\n");
 		synchronized (textArea) {
@@ -77,7 +71,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 				AssertionResult item = assertionResults[i];
 
 				if (item.isFailure() || item.isError()) {
-					display.append("\n\t\t");
+					display.append("\n\t"); // $NON-NLS-1$
 					display.append(item.getFailureMessage());
 				}
 			}
