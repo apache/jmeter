@@ -1529,8 +1529,8 @@ logic to show a single continuous line.</p></description>
 </component>
 
 <component name="Assertion Results" index="&sect-num;.3.5" screenshot="assertion_results.png">
-<description><p>The Assertion Results visualizer shows the URL of each sample taken (no time information
-is shown).  It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
+<description><p>The Assertion Results visualizer shows the Label of each sample taken.
+It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
 are part of the test plan.</p></description>
 
 <links>
