@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -27,8 +26,7 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import javax.swing.JTextArea;
 import org.apache.jmeter.examples.sampler.ExampleSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -47,7 +45,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ExampleSamplerGui extends AbstractSamplerGui {
 
-	private JTextField data;
+	private JTextArea data;
 
 	public ExampleSamplerGui() {
 		init();
@@ -116,7 +114,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 	private Component createDataPanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("example_data"));
 
-		data = new JTextField(10);
+		data = new JTextArea();
 		data.setName(ExampleSampler.DATA);
 		label.setLabelFor(data);
 
