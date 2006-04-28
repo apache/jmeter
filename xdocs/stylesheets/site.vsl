@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--
    $Header$
-   Copyright 1999-2004 The Apache Software Foundation
+   Copyright 1999-2004,2006 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@
 	 #set ($udsc = $udsc.charAt(0))
 	 #set ($imgdir = "$relativePath/images")
 	 #set ($sshotdir = "$imgdir/screenshots" )
+	 #set ($year = $date.getYear()+1900)
 
 <!-- start the processing -->
 #document()
@@ -437,7 +438,7 @@
 					 </td></tr>
 					 <tr><td colspan="2">
 						  <div align="center"><font color="$bodylink" size="-1"><em>
-						  Copyright &#169; 1999-2005, Apache Software Foundation
+						  Copyright &#169; 1999-$year, Apache Software Foundation
 						  </em></font></div>
 					 </td></tr>
 				</table>
