@@ -113,7 +113,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	private static final String FILEVERSION = "390699";// Expected value $NON-NLS-1$
+	private static final String FILEVERSION = "397955";// Expected value $NON-NLS-1$
 
     static {
         log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
@@ -252,9 +252,8 @@ public class SaveService {
 	private static String extractVersion(String rev) {
 		if (rev.length() > REVPFX.length() + REVSFX.length()) {
 			return rev.substring(REVPFX.length(), rev.length() - REVSFX.length());
-		} else {
-			return rev;
 		}
+		return rev;
 	}
 
 	private static void checkVersion(Class clazz, String expected) {
