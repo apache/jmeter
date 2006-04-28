@@ -25,12 +25,12 @@
 	<h2>Where are the nightly builds?</h2>
 	<p>There are currently no regular nightly builds - sorry.</p>
     <p>However, occasional builds are made available via the 
-<a href="http://jakarta.apache.org/site/binindex.cgi">Binary Downloads</a> in the 
-<a href="http://jakarta.apache.org/site/binindex.cgi#Nightly%20Builds">Nightly builds</a> section.
+<a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Binary Downloads</a> 
+page - follow <b>Nightly builds</b> link.
 </p>
 	<h2>What do they consist of?</h2>
 <p>
-JMeter is distributed as a set of zip (or tar or tar-gz) archive files.
+JMeter is distributed as a set of zip (or tar-gz) archive files.
 
 The files are called:
 <ul>
@@ -50,8 +50,8 @@ The other archives are not needed to run JMeter.
 <h2>Warning - please note!</h2>
 <p>
 	The nightly builds may or may not work properly - or at all.<br/>
-	Check the corresponding test log (if it still exists) to see if the build has any major problems.
-	If there is a problem with a particular version, it may be worth trying again in a day or two.
+	If there is a problem with a particular version, 
+    it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
 </p>
 </section> 
 </body> 
