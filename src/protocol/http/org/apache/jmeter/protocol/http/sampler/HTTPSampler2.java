@@ -45,8 +45,10 @@ import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
@@ -160,6 +162,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 	/**
 	 * Constructor for the HTTPSampler2 object.
+     * 
+     * Consider using HTTPSamplerFactory.newInstance() instead
 	 */
 	public HTTPSampler2() {
 	}
@@ -534,6 +538,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
         if (method.equals(POST)) {
             httpMethod = new PostMethod(urlStr);
+        } else if (method.equals(PUT)){
+            httpMethod = new PutMethod(urlStr);
+        } else if (method.equals(HEAD)){
+            httpMethod = new HeadMethod(urlStr);
         } else {
             httpMethod = new GetMethod(urlStr);
         }
@@ -544,7 +552,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		} else {
 			res.setMonitor(false);
 		}
-		res.setSampleLabel(urlStr);
+		res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(method);
 		res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
@@ -561,28 +569,32 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			// Request sent. Now get the response:
             InputStream instream = httpMethod.getResponseBodyAsStream();
             
-            if (ENCODING_GZIP.equals(httpMethod.getResponseHeader(TRANSFER_ENCODING))) {
-                instream = new GZIPInputStream(instream);
-            }
-
-            //int contentLength = httpMethod.getResponseContentLength();Not visible ...
-            //TODO size ouststream according to actual content length
-            ByteArrayOutputStream outstream = new ByteArrayOutputStream(4*1024);
-                    //contentLength > 0 ? contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
-            byte[] buffer = new byte[4096];
-            int len;
-            boolean first = true;// first response
-            while ((len = instream.read(buffer)) > 0) {
-                if (first) { // save the latency
-                    res.latencyEnd();
-                    first = false;
-                }
-                outstream.write(buffer, 0, len);
-            }
-            outstream.close();
+            if (instream != null) {// will be null for HEAD
             
-			byte[] responseData = outstream.toByteArray();
+                if (ENCODING_GZIP.equals(httpMethod.getResponseHeader(TRANSFER_ENCODING))) {
+                    instream = new GZIPInputStream(instream);
+                }
+    
+                //int contentLength = httpMethod.getResponseContentLength();Not visible ...
+                //TODO size ouststream according to actual content length
+                ByteArrayOutputStream outstream = new ByteArrayOutputStream(4*1024);
+                        //contentLength > 0 ? contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
+                byte[] buffer = new byte[4096];
+                int len;
+                boolean first = true;// first response
+                while ((len = instream.read(buffer)) > 0) {
+                    if (first) { // save the latency
+                        res.latencyEnd();
+                        first = false;
+                    }
+                    outstream.write(buffer, 0, len);
+                }
+    
+                res.setResponseData(outstream.toByteArray());
+                outstream.close();            
 
+            }
+            
 			res.sampleEnd();
 			// Done with the sampling proper.
 
@@ -591,8 +603,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			res.setSampleLabel(httpMethod.getURI().toString());
             // Pick up Actual path (after redirects)
             
-			res.setResponseData(responseData);
-
 			res.setResponseCode(Integer.toString(statusCode));
 			res.setSuccessful(isSuccessCode(statusCode));
 

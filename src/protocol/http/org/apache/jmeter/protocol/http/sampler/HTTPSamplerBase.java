@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -75,7 +78,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
-	public final static String PATH = "HTTPSampler.path"; // $NON-NLS-1$
+    public final static String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
 	public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects"; // $NON-NLS-1$
 
@@ -91,10 +94,26 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
+    public final static String HEAD = "HEAD"; // $NON-NLS-1$
+    
 	public final static String POST = "POST"; // $NON-NLS-1$
+
+    public final static String PUT = "PUT"; // $NON-NLS-1$
 
 	public final static String GET = "GET"; // $NON-NLS-1$
 
+    public final static String DEFAULT_METHOD = "GET"; // $NON-NLS-1$
+    // Supported methods:
+    private final static String [] METHODS = {
+        DEFAULT_METHOD,
+        HEAD,
+        POST,
+        PUT,
+        };
+    
+    public final static List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
+
+    
 	public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
 	public final static String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
@@ -830,5 +849,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      */
     protected boolean isSuccessCode(int code){
         return (code >= 200 && code <= 399);
+    }
+       
+    public static String[] getValidMethodsAsArray(){
+        return (String[]) METHODLIST.toArray(new String[0]);
     }
 }
