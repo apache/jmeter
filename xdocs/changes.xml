@@ -130,6 +130,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 38694 - WebServiceSampler not setting data encoding correctly</li>
 <li>Result Collector now closes input files read by listeners</li>
 <li>Bug 25505 - First HTTP sampling fails with "HTTPS hostname wrong: should be 'localhost'"</li>
+<li>Bug 25236 - remove double scrollbar from Assertion Result Listener</li>
 </ul>	
 	
 <h4>Other changes</h4>
