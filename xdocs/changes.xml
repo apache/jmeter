@@ -131,6 +131,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Result Collector now closes input files read by listeners</li>
 <li>Bug 25505 - First HTTP sampling fails with "HTTPS hostname wrong: should be 'localhost'"</li>
 <li>Bug 25236 - remove double scrollbar from Assertion Result Listener</li>
+<li>Bug 38234 - Graph Listener divide by zero problem</li>
 </ul>	
 	
 <h4>Other changes</h4>
