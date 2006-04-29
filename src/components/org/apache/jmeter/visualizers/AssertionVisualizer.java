@@ -18,6 +18,7 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -46,21 +47,21 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 	}
 
 	public String getLabelResource() {
-		return "assertion_visualizer_title";
+		return "assertion_visualizer_title"; // $NON-NLS-1$
 	}
 
 	public void add(SampleResult sample) {
 		StringBuffer sb = new StringBuffer(100);
 		sb.append(sample.getSampleLabel());
 		sb.append(getAssertionResult(sample));
-		sb.append("\n");
+		sb.append("\n"); // $NON-NLS-1$
 		synchronized (textArea) {
 			textArea.append(sb.toString());
 		}
 	}
 
 	public void clear() {
-		textArea.setText("");
+		textArea.setText(""); // $NON-NLS-1$
 	}
 
 	private String getAssertionResult(SampleResult res) {
@@ -92,7 +93,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 		this.add(makeTitlePanel(), BorderLayout.NORTH);
 
 		// TEXTAREA LABEL
-		JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
+		JLabel textAreaLabel = 
+            new JLabel(JMeterUtils.getResString("assertion_textarea_label")); // $NON-NLS-1$
 		Box mainPanel = Box.createVerticalBox();
 		mainPanel.add(textAreaLabel);
 
@@ -105,8 +107,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+        areaScrollPane.setPreferredSize(new Dimension(mainPanel.getWidth(),mainPanel.getHeight()));
 		mainPanel.add(areaScrollPane);
-		mainPanel.add(Box.createVerticalGlue());
 		this.add(mainPanel, BorderLayout.CENTER);
 	}
 }
