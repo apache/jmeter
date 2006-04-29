@@ -58,7 +58,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 	}
 
 	public String getLabelResource() {
-		return "url_config_title";
+		return "url_config_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -108,18 +108,17 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		Box mainPanel = Box.createVerticalBox();
 
 		VerticalPanel urlPanel = new VerticalPanel();
-		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
-		urlPanel.add(protocol);
+		protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
+		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
+		path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
+		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
 
-		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
-		urlPanel.add(domain);
-
-		path = new JLabeledTextField(JMeterUtils.getResString("path"));
-		urlPanel.add(path);
-
-		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+        
+        urlPanel.add(domain);
 		urlPanel.add(port);
-
+        urlPanel.add(protocol);
+        urlPanel.add(path);
+        
 		mainPanel.add(urlPanel);
 
 		argPanel = new HTTPArgumentsPanel();
@@ -127,7 +126,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
 		add(mainPanel, BorderLayout.CENTER);
 
-		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
 		add(imageParser, BorderLayout.SOUTH);
 	}
 
