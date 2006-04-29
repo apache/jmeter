@@ -67,6 +67,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 	/**
 	 * Constructor for the HTTPSampler object.
+     * 
+     * Consider using HTTPSamplerFactory.newInstance() instead
 	 */
 	public HTTPSampler() {
 	}
