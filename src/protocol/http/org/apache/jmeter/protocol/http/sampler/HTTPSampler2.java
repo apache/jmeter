@@ -51,6 +51,7 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.TraceMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -571,7 +572,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			if (method.equals(POST)) {
                 res.setQueryString(getQueryString());
 				sendPostData(httpMethod);
-			}
+			}else if (method.equals(PUT)) {
+                setPutHeaders((PutMethod) httpMethod);
+            }
 
 			int statusCode = client.executeMethod(httpMethod);
 
@@ -659,7 +662,22 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 	}
 
-	/**
+    /**
+     * Set up the PUT data (if present)
+     */
+	private void setPutHeaders(PutMethod put) 
+         throws IOException
+     {
+         String filename = getFilename();
+         if ((filename != null) && (filename.trim().length() > 0))
+         {
+             RequestEntity requestEntity = new InputStreamRequestEntity(
+                     new FileInputStream(filename),getMimetype());
+             put.setRequestEntity(requestEntity);
+         }
+     }
+
+    /**
 	 * From the <code>HttpState</code>, store all the "set-cookie" key-pair
 	 * values in the cookieManager of the <code>UrlConfig</code>.
 	 * 
