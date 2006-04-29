@@ -117,6 +117,25 @@ public class TestAnchorModifier extends JMeterTestCase {
             parser.process();
             assertEquals("http://www.apache.org/subdir/index.html", config.getUrl().toString());
         }
+        
+        // Test https works too
+        public void testSimpleParse1() throws Exception {
+            HTTPSamplerBase config = makeUrlConfig(".*/index\\.html");
+            config.setProtocol("https");
+            HTTPSamplerBase context = makeContext("https://www.apache.org/subdir/previous.html");
+            String responseText = "<html><head><title>Test page</title></head><body>"
+                    + "<a href=\"index.html\">Goto index page</a></body></html>";
+            HTTPSampleResult result = new HTTPSampleResult();
+            jmctx.setCurrentSampler(context);
+            jmctx.setCurrentSampler(config);
+            result.setResponseData(responseText.getBytes());
+            result.setSampleLabel(context.toString());
+            result.setSamplerData(context.toString());
+            result.setURL(context.getUrl());
+            jmctx.setPreviousResult(result);
+            parser.process();
+            assertEquals("https://www.apache.org/subdir/index.html", config.getUrl().toString());
+        }
 
         public void testSimpleParse2() throws Exception {
             HTTPSamplerBase config = makeUrlConfig("/index\\.html");
