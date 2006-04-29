@@ -34,6 +34,7 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -207,7 +208,7 @@ public class HttpRequestHdr {
 
 	private HTTPSamplerBase createSampler() {
 		MultipartUrlConfig urlConfig = null;
-		HTTPSamplerBase sampler = new HTTPSampler();
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance();
 		sampler.setDomain(serverName());
         if (log.isDebugEnabled())
     		log.debug("Proxy: setting server: " + sampler.getDomain());
