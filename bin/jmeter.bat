@@ -18,7 +18,7 @@ rem   limitations under the License.
 rem   =====================================================
 rem   Environment variables that can be defined externally:
 rem
-rem   JM_BIN - JMeter bin directory (must end in \)
+rem   JMETER_BIN - JMeter bin directory (must end in \)
 rem   JM_LAUNCH - java.exe (default) or javaw.exe
 rem   JVM_ARGS - additional java options, e.g. -Dprop=val
 rem
@@ -34,7 +34,7 @@ rem Need to check if we are using the 4NT shell...
 if "%eval[2+2]" == "4" goto setup4NT
 
 if exist jmeter.bat goto winNT1
-if .%JM_BIN% == . set JM_BIN=%~dp0
+if .%JMETER_BIN% == . set JMETER_BIN=%~dp0
 
 :winNT1
 rem On NT/2K grab all arguments at once
@@ -88,4 +88,4 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 rem Collect the settings defined above
 set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG% %DDRAW%
 
-%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar %JM_BIN%ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar %JMETER_BIN%ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
