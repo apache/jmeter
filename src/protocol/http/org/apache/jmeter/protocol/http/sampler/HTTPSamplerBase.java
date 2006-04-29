@@ -102,6 +102,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String GET = "GET"; // $NON-NLS-1$
 
+    public final static String OPTIONS = "OPTIONS"; // $NON-NLS-1$
+    public final static String TRACE = "TRACE"; // $NON-NLS-1$
+    public final static String DELETE = "DELETE"; // $NON-NLS-1$
+
     public final static String DEFAULT_METHOD = "GET"; // $NON-NLS-1$
     // Supported methods:
     private final static String [] METHODS = {
@@ -109,6 +113,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         HEAD,
         POST,
         PUT,
+        OPTIONS,
+        TRACE,
+        DELETE,
         };
     
     public final static List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
