@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,107 +49,105 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
  * therefore the notes address those situations. <br>
  * Created on: Jun 26, 2003
  * 
- * @author Peter Lin
- * @version $Id: WebServiceSamplerGui.java,v 1.18 2005/06/07 02:04:31 woolfel
- *          Exp $
+ * author Peter Lin
  */
 public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt.event.ActionListener {
 
-	JLabeledTextField domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
+	private JLabeledTextField domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
 
-    JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol"));
+    private JLabeledTextField protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
 
-    JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+    private JLabeledTextField port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
 
-	JLabeledTextField path = new JLabeledTextField(JMeterUtils.getResString("path"));
+    private JLabeledTextField path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
 
-	JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action"));
+    private JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action")); // $NON-NLS-1$
 
-	JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
+    private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null); // $NON-NLS-1$
 
-	JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url"));
+    private JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url")); // $NON-NLS-1$
 
-	JButton wsdlButton = new JButton(JMeterUtils.getResString("load_wsdl"));
+    private JButton wsdlButton = new JButton(JMeterUtils.getResString("load_wsdl")); // $NON-NLS-1$
 
-	JButton selectButton = new JButton(JMeterUtils.getResString("configure_wsdl"));
+    private JButton selectButton = new JButton(JMeterUtils.getResString("configure_wsdl")); // $NON-NLS-1$
 
-	JLabeledChoice wsdlMethods = null;
+    private JLabeledChoice wsdlMethods = null;
 
-	WSDLHelper HELPER = null;
+    private WSDLHelper HELPER = null;
 
-	FilePanel soapXmlFile = new FilePanel(JMeterUtils.getResString("get_xml_from_file"), ".xml");
+    private FilePanel soapXmlFile = new FilePanel(JMeterUtils.getResString("get_xml_from_file"), ".xml"); // $NON-NLS-1$
 
-	JLabeledTextField randomXmlFile = new JLabeledTextField(JMeterUtils.getResString("get_xml_from_random"));
+    private JLabeledTextField randomXmlFile = new JLabeledTextField(JMeterUtils.getResString("get_xml_from_random")); // $NON-NLS-1$
 
 	/**
 	 * We create several JLabel objects to display usage instructions in the
 	 * GUI. The reason there are multiple labels is to make sure it displays
 	 * correctly.
 	 */
-	JLabel wsdlMessage = new JLabel(JMeterUtils.getResString("get_xml_message"));
+    private JLabel wsdlMessage = new JLabel(JMeterUtils.getResString("get_xml_message")); // $NON-NLS-1$
 
-	JLabel wsdlMessage2 = new JLabel(JMeterUtils.getResString("get_xml_message2"));
+    private JLabel wsdlMessage2 = new JLabel(JMeterUtils.getResString("get_xml_message2")); // $NON-NLS-1$
 
-	JLabel wsdlMessage3 = new JLabel(JMeterUtils.getResString("get_xml_message3"));
+    private JLabel wsdlMessage3 = new JLabel(JMeterUtils.getResString("get_xml_message3")); // $NON-NLS-1$
 
-	JLabel wsdlMessage4 = new JLabel(JMeterUtils.getResString("get_xml_message4"));
+    private JLabel wsdlMessage4 = new JLabel(JMeterUtils.getResString("get_xml_message4")); // $NON-NLS-1$
 
-	JLabel wsdlMessage5 = new JLabel(JMeterUtils.getResString("get_xml_message5"));
+    private JLabel wsdlMessage5 = new JLabel(JMeterUtils.getResString("get_xml_message5")); // $NON-NLS-1$
 
 	/**
 	 * This is the font for the note.
 	 */
-	Font plainText = new Font("plain", Font.PLAIN, 10);
+    private Font plainText = new Font("plain", Font.PLAIN, 10); // $NON-NLS-1$
 
 	/**
 	 * checkbox for memory cache.
 	 */
-	JCheckBox memCache = new JCheckBox(JMeterUtils.getResString("memory_cache"), true);
+    private JCheckBox memCache = new JCheckBox(JMeterUtils.getResString("memory_cache"), true); // $NON-NLS-1$
 
 	/**
 	 * checkbox for reading the response
 	 */
-	JCheckBox readResponse = new JCheckBox(JMeterUtils.getResString("read_soap_response"));
+    private JCheckBox readResponse = new JCheckBox(JMeterUtils.getResString("read_soap_response")); // $NON-NLS-1$
 
 	/**
 	 * checkbox for use proxy
 	 */
-	JCheckBox useProxy = new JCheckBox(JMeterUtils.getResString("webservice_use_proxy"));
+    private JCheckBox useProxy = new JCheckBox(JMeterUtils.getResString("webservice_use_proxy")); // $NON-NLS-1$
 
 	/**
 	 * text field for the proxy host
 	 */
-	JLabeledTextField proxyHost = new JLabeledTextField(JMeterUtils.getResString("webservice_proxy_host"));
+    private JLabeledTextField proxyHost = new JLabeledTextField(JMeterUtils.getResString("webservice_proxy_host")); // $NON-NLS-1$
 
 	/**
 	 * text field for the proxy port
 	 */
-	JLabeledTextField proxyPort = new JLabeledTextField(JMeterUtils.getResString("webservice_proxy_port"));
+    private JLabeledTextField proxyPort = new JLabeledTextField(JMeterUtils.getResString("webservice_proxy_port")); // $NON-NLS-1$
 
 	/**
-	 * Text note about read response and it's usage.
+	 * Text note about read response and its usage.
 	 */
-	JLabel readMessage = new JLabel(JMeterUtils.getResString("read_response_note"));
+    private JLabel readMessage = new JLabel(JMeterUtils.getResString("read_response_note")); // $NON-NLS-1$
 
-	JLabel readMessage2 = new JLabel(JMeterUtils.getResString("read_response_note2"));
+    private JLabel readMessage2 = new JLabel(JMeterUtils.getResString("read_response_note2")); // $NON-NLS-1$
 
-	JLabel readMessage3 = new JLabel(JMeterUtils.getResString("read_response_note3"));
+    private JLabel readMessage3 = new JLabel(JMeterUtils.getResString("read_response_note3")); // $NON-NLS-1$
 
 	/**
 	 * Text note for proxy
 	 */
-	JLabel proxyMessage = new JLabel(JMeterUtils.getResString("webservice_proxy_note"));
+    private JLabel proxyMessage = new JLabel(JMeterUtils.getResString("webservice_proxy_note")); // $NON-NLS-1$
 
-	JLabel proxyMessage2 = new JLabel(JMeterUtils.getResString("webservice_proxy_note2"));
+    private JLabel proxyMessage2 = new JLabel(JMeterUtils.getResString("webservice_proxy_note2")); // $NON-NLS-1$
 
-	JLabel proxyMessage3 = new JLabel(JMeterUtils.getResString("webservice_proxy_note3"));
+    private JLabel proxyMessage3 = new JLabel(JMeterUtils.getResString("webservice_proxy_note3")); // $NON-NLS-1$
 
 	public WebServiceSamplerGui() {
 		init();
 	}
 
 	public String getLabelResource() {
-		return "webservice_sampler_title";
+		return "webservice_sampler_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -313,17 +310,19 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 	 * will work, since that's how IIS works.
 	 */
 	public void configureFromWSDL() {
-		if (HELPER.getBinding() != null) {
-            this.protocol.setText(HELPER.getProtocol());
-			this.domain.setText(HELPER.getBindingHost());
-			if (HELPER.getBindingPort() > 0) {
-				this.port.setText(String.valueOf(HELPER.getBindingPort()));
-			} else {
-				this.port.setText("80");
-			}
-			this.path.setText(HELPER.getBindingPath());
-		}
-		this.soapAction.setText(HELPER.getSoapAction(this.wsdlMethods.getText()));
+		if (HELPER != null) {
+            if(HELPER.getBinding() != null) {
+                this.protocol.setText(HELPER.getProtocol());
+    			this.domain.setText(HELPER.getBindingHost());
+    			if (HELPER.getBindingPort() > 0) {
+    				this.port.setText(String.valueOf(HELPER.getBindingPort()));
+    			} else {
+    				this.port.setText("80"); // $NON-NLS-1$
+    			}
+    			this.path.setText(HELPER.getBindingPath());
+    		}
+    		this.soapAction.setText(HELPER.getSoapAction(this.wsdlMethods.getText()));
+        }
 	}
 
 	/**
@@ -346,7 +345,9 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 			HELPER.parse();
 			return HELPER.getWebMethods();
 		} catch (Exception exception) {
-			JOptionPane.showConfirmDialog(this, JMeterUtils.getResString("wsdl_helper_error"), "Warning",
+			JOptionPane.showConfirmDialog(this,
+                    JMeterUtils.getResString("wsdl_helper_error"), // $NON-NLS-1$
+                    "Warning",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
@@ -380,7 +381,9 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 					wsdlMethods.repaint();
 				}
 			} else {
-				JOptionPane.showConfirmDialog(this, JMeterUtils.getResString("wsdl_url_error"), "Warning",
+				JOptionPane.showConfirmDialog(this,
+                        JMeterUtils.getResString("wsdl_url_error"), // $NON-NLS-1$
+                        "Warning",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 		}
