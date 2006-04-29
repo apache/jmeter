@@ -44,11 +44,14 @@ import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.TraceMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
@@ -542,6 +545,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             httpMethod = new PutMethod(urlStr);
         } else if (method.equals(HEAD)){
             httpMethod = new HeadMethod(urlStr);
+        } else if (method.equals(TRACE)){
+            httpMethod = new TraceMethod(urlStr);
+        } else if (method.equals(OPTIONS)){
+            httpMethod = new OptionsMethod(urlStr);
+        } else if (method.equals(DELETE)){
+            httpMethod = new DeleteMethod(urlStr);
         } else {
             httpMethod = new GetMethod(urlStr);
         }
