@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +30,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * @version $Revision$ on $Date$
  */
 public class CounterConfigGui extends AbstractPreProcessorGui {
-	private JLabeledTextField startField, incrField, endField, varNameField;
+	private JLabeledTextField startField, incrField, endField, varNameField, formatField;
 
 	private JCheckBox perUserField;
 
@@ -68,6 +67,7 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 			}
 			config.setIncrement(incrField.getText());
 			config.setVarName(varNameField.getText());
+            config.setFormat(formatField.getText());
 			config.setIsPerUser(perUserField.isSelected());
 		}
 		super.configureTestElement(c);
@@ -79,6 +79,7 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 		startField.setText(config.getPropertyAsString(CounterConfig.START));
 		endField.setText(config.getPropertyAsString(CounterConfig.END));
 		incrField.setText(config.getPropertyAsString(CounterConfig.INCREMENT));
+        formatField.setText(config.getFormat());
 		varNameField.setText(config.getVarName());
 		perUserField.setSelected(config.isPerUser());
 	}
@@ -93,12 +94,14 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 		incrField = new JLabeledTextField(JMeterUtils.getResString("increment"));
 		endField = new JLabeledTextField(JMeterUtils.getResString("max"));
 		varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));
+        formatField = new JLabeledTextField(JMeterUtils.getResString("format"));
 		perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));
 
 		add(makeTitlePanel());
 		add(startField);
 		add(incrField);
 		add(endField);
+        add(formatField);
 		add(varNameField);
 		add(perUserField);
 	}
