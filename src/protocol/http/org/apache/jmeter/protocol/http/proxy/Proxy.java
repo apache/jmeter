@@ -28,6 +28,7 @@ import java.net.UnknownHostException;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -123,7 +124,7 @@ public class Proxy extends Thread {
 			writeErrorToClient(HttpReplyHdr.formTimeout());
 		} finally {
             if (sampler == null){
-                sampler = new HTTPSampler();
+                sampler = HTTPSamplerFactory.newInstance();
             }
 			target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
 			try {
