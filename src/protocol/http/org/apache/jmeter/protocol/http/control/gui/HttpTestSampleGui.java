@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-20056 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,8 @@ import org.apache.jmeter.util.JMeterUtils;
 //For unit tests, @see TestHttpTestSampleGui
 
 /**
- * The GUI for HttpSampler
+ * HTTP Sampler GUI
  * 
- * @version $Revision$ on $Date$
  */
 public class HttpTestSampleGui extends AbstractSamplerGui {
 	private UrlConfigGui urlConfigGui;
@@ -59,7 +58,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	}
 
 	public TestElement createTestElement() {
-		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler");
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_JAVA);
 		modifyTestElement(sampler);
 		return sampler;
 	}
