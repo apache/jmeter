@@ -18,6 +18,7 @@
 package org.apache.jmeter.modifiers;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
@@ -27,26 +28,34 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
- * @version $Revision$
+ * Provides a counter per-thread/user or globally
+ * The long value can be 
  */
 public class CounterConfig extends AbstractTestElement implements Serializable, LoopIterationListener, NoThreadClone {
-	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String START = "CounterConfig.start";
+	public final static String START = "CounterConfig.start"; // $NON-NLS-1$
 
-	public final static String END = "CounterConfig.end";
+	public final static String END = "CounterConfig.end"; // $NON-NLS-1$
 
-	public final static String INCREMENT = "CounterConfig.incr";
+	public final static String INCREMENT = "CounterConfig.incr"; // $NON-NLS-1$
 
-	public final static String PER_USER = "CounterConfig.per_user";
+	private final static String FORMAT = "CounterConfig.format"; // $NON-NLS-1$
 
-	public final static String VAR_NAME = "CounterConfig.name";
+    public final static String PER_USER = "CounterConfig.per_user"; // $NON-NLS-1$
 
-	private long globalCounter = -1;
+	public final static String VAR_NAME = "CounterConfig.name"; // $NON-NLS-1$
+
+	// This class is not cloned per thread, so this is shared
+	private long globalCounter = Long.MIN_VALUE;
+    
+    // Used for per-thread/user numbers
+    private ThreadLocal perTheadNumber = new ThreadLocal() {
+        protected synchronized Object initialValue() {
+            return new Long(getStart());
+        }
+    };
 
 	/**
 	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
@@ -56,30 +65,36 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 		JMeterVariables variables = JMeterContextService.getContext().getVariables();
 		long start = getStart(), end = getEnd(), increment = getIncrement();
 		if (!isPerUser()) {
-			if (globalCounter == -1 || globalCounter > end) {
+			if (globalCounter == Long.MIN_VALUE || globalCounter > end) {
 				globalCounter = start;
 			}
-			variables.put(getVarName(), Long.toString(globalCounter));
+			variables.put(getVarName(), formatNumber(globalCounter));
 			globalCounter += increment;
 		} else {
-			String value = variables.get(getVarName());
-			if (value == null) {
-				variables.put(getVarName(), Long.toString(start));
-			} else {
-				try {
-					long current = Long.parseLong(value);
-					current += increment;
-					if (current > end) {
-						current = start;
-					}
-					variables.put(getVarName(), Long.toString(current));
-				} catch (NumberFormatException e) {
-					log.info("Bad number in Counter config", e);
-				}
-			}
+            long current = ((Long) perTheadNumber.get()).longValue();
+            variables.put(getVarName(), formatNumber(current));
+            current += increment;
+            if (current > end) {
+                current = start;
+            }
+            perTheadNumber.set(new Long(current));
 		}
 	}
 
+    // Use format to create number; if it fails, use the default
+    private String formatNumber(long value){
+        String format = getFormat();
+        if (format != null && format.length() > 0) {
+            try {
+                DecimalFormat myFormatter = new DecimalFormat(format);
+                return myFormatter.format(value);
+            } catch (NumberFormatException ignored) {
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return Long.toString(value);
+    }
+    
 	public void setStart(long start) {
 		setProperty(new LongProperty(START, start));
 	}
@@ -131,4 +146,12 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 	public String getVarName() {
 		return getPropertyAsString(VAR_NAME);
 	}
+
+    public void setFormat(String format) {
+        setProperty(FORMAT, format);
+    }
+
+    public String getFormat() {
+        return getPropertyAsString(FORMAT);
+    }
 }

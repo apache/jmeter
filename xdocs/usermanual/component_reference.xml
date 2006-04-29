@@ -2657,6 +2657,11 @@ with the start, continuing on like that until the test is ended.  </p>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
         <property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
+        <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
+        This is passed to DecimalFormat, so any valid formats can be used.
+        If there is a problem interpreting the format, then it is ignored.
+	[The default format is generated using Long.toString()]
+        </property>
         <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
         as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
