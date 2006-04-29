@@ -51,7 +51,7 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 	private long globalCounter = Long.MIN_VALUE;
     
     // Used for per-thread/user numbers
-    private ThreadLocal perTheadNumber = new ThreadLocal() {
+    transient private ThreadLocal perTheadNumber = new ThreadLocal() {
         protected synchronized Object initialValue() {
             return new Long(getStart());
         }
