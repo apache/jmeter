@@ -17,7 +17,10 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.net.BindException;
 import java.net.HttpURLConnection;
@@ -85,6 +88,18 @@ public class HTTPSampler extends HTTPSamplerBase {
 		postWriter.setHeaders(conn, this);
 	}
 
+    private void setPutHeaders(URLConnection conn)
+         throws IOException
+     {
+         String filename = getFilename();
+         if ((filename != null) && (filename.trim().length() > 0))
+         {
+             conn.setRequestProperty("Content-Type", getMimetype());
+             conn.setDoOutput(true);
+             conn.setDoInput(true);
+        }
+    }
+
 	/**
 	 * Send POST data from <code>Entry</code> to the open connection.
 	 * 
@@ -96,6 +111,23 @@ public class HTTPSampler extends HTTPSamplerBase {
 	protected void sendPostData(URLConnection connection) throws IOException {
 		postWriter.sendPostData(connection, this);
 	}
+
+    private void sendPutData(URLConnection conn) throws IOException {
+        String filename = getFilename();
+        if ((filename != null) && (filename.trim().length() > 0)) {
+            OutputStream out = conn.getOutputStream();
+            byte[] buf = new byte[1024];
+            int read;
+            InputStream in = new BufferedInputStream(new FileInputStream(filename));
+            while ((read = in.read(buf)) > 0) {
+                out.write(buf, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        }
+    }
+
 
 	/**
 	 * Returns an <code>HttpURLConnection</code> fully ready to attempt
@@ -177,7 +209,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 		setConnectionAuthorization(conn, u, getAuthManager());
 		if (method.equals(POST)) {
 			setPostHeaders(conn);
-		}
+		} else if (method.equals(PUT)) {
+            setPutHeaders(conn);
+        }
 		return conn;
 	}
 
@@ -204,6 +238,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		} catch (IOException e) {
 			// TODO JDK1.4: if (!e.getCause() instanceof FileNotFoundException)
 			// JDK1.4: {
+            // TODO: what about other 4xx errors? Do we need to log them?
 			if (conn.getResponseCode() != 404) // for JDK1.3
 			{
 				log.error("readResponse: "+e.toString());
@@ -425,7 +460,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 			// Nice, we've got a connection. Finish sending the request:
 			if (method.equals(POST)) {
 				sendPostData(conn);
-			}
+			} else if (method.equals(PUT)) {
+                sendPutData(conn);
+            }
 			// Request sent. Now get the response:
 			byte[] responseData = readResponse(conn, res);
 
