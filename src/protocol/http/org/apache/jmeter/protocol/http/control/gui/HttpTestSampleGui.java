@@ -58,7 +58,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	}
 
 	public TestElement createTestElement() {
-		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_JAVA);
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance();// create default sampler
 		modifyTestElement(sampler);
 		return sampler;
 	}
