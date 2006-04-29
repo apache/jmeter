@@ -56,6 +56,7 @@ public class HTTPSamplerFactory {
      * @throws UnsupportedOperationException if alias is not recognised
      */
 	public static HTTPSamplerBase newInstance(String alias) {
+        if (alias.length() == 0) alias = DEFAULT_CLASSNAME;
 		if (alias.equals(HTTP_SAMPLER_JAVA)) {
 			return new HTTPSampler();
 		}
