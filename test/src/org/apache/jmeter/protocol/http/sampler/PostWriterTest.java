@@ -46,7 +46,7 @@ public class PostWriterTest extends TestCase {
     protected void setUp() throws Exception {
         postWriter = new PostWriter();
         connection = new StubURLConnection("http://fake_url/test");
-        sampler = new HTTPSampler();
+        sampler = new HTTPSampler();// This must be the original (Java) HTTP sampler
         
         // create a temporary file to make sure we always have a file to give to the PostWriter 
         // Whereever we are or Whatever the current path is.
