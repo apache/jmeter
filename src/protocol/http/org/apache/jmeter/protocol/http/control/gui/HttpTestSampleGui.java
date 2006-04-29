@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-20056 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,15 +78,15 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
 		if (isMon.isSelected()) {
-			((HTTPSamplerBase) sampler).setMonitor("true");
+			((HTTPSamplerBase) sampler).setMonitor("true"); // $NON-NLS-1$
 		} else {
-			((HTTPSamplerBase) sampler).setMonitor("false");
+			((HTTPSamplerBase) sampler).setMonitor("false"); // $NON-NLS-1$
 		}
 		this.configureTestElement(sampler);
 	}
 
 	public String getLabelResource() {
-		return "web_testing_title";
+		return "web_testing_title"; // $NON-NLS-1$
 	}
 
 	protected void init() {
@@ -107,14 +107,14 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		// OPTIONAL TASKS
 		HorizontalPanel optionalTasksPanel = new HorizontalPanel();
 		optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("optional_tasks")));
+				.getResString("optional_tasks"))); // $NON-NLS-1$
 
 		// RETRIEVE IMAGES
 		JPanel retrieveImagesPanel = new JPanel();
-		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
 		retrieveImagesPanel.add(getImages);
 		JPanel isMonitorPanel = new JPanel();
-		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title"));
+		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
 		isMonitorPanel.add(isMon);
 		optionalTasksPanel.add(retrieveImagesPanel);
 		optionalTasksPanel.add(isMonitorPanel);
