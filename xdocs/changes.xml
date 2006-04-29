@@ -85,6 +85,8 @@ sample, and the file name can be included in the sample log file.
 <li>Expand tree by default when loading a test plan - can be disabled by setting property onload.expandtree=false</li>
 <li>Bug 11843 - URL Rewriter can now cache the session id</li>
 <li>Counter Pre-Processor now supports formatted numbers</li>
+<li>Add support for HEAD and PUT methods</li>
+<li>Allow default HTTP implementation to be changed</li>
 </ul>
 
 <h4>Bug fixes:</h4>
