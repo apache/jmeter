@@ -107,7 +107,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 * @param u
 	 *            <code>URL</code> of the URL request
 	 * @param method
-	 *            http/https
+	 *            GET, POST etc
 	 * @param res
 	 *            sample result to save request infos to
 	 * @return <code>HttpURLConnection</code> ready for .connect
