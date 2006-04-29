@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +18,14 @@
 package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 
 /**
  * Description:<br>
@@ -48,9 +48,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
  * so the user can pass the desired listener to the tool.
  * <p>
  * 
- * @author Peter Lin<br>
- * @version $Revision$ last updated $Date$ Created
- *          on: Jul 1, 2003<br>
+ * author Peter Lin<br>
+ * Created on: Jul 1, 2003<br>
  */
 
 public class StandardGenerator implements Generator, Serializable {
@@ -216,7 +215,7 @@ public class StandardGenerator implements Generator, Serializable {
 	 */
 	public Object generateRequest() {
 		try {
-			SAMPLE = new HTTPSampler();
+			SAMPLE = HTTPSamplerFactory.newInstance();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
