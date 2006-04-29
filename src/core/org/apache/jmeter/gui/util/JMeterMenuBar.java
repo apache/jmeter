@@ -233,10 +233,17 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		contextHelp.setActionCommand(ActionNames.HELP);
 		contextHelp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
 		contextHelp.addActionListener(ActionRouter.getInstance());
-		help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A');
+
+        JMenuItem whatClass = new JMenuItem(JMeterUtils.getResString("help_node"), 'W');
+        whatClass.setActionCommand(ActionNames.WHAT_CLASS);
+        whatClass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_MASK));
+        whatClass.addActionListener(ActionRouter.getInstance());
+
+        help_about = new JMenuItem(JMeterUtils.getResString("about"), 'A');
 		help_about.setActionCommand(ActionNames.ABOUT);
 		help_about.addActionListener(ActionRouter.getInstance());
 		helpMenu.add(contextHelp);
+        helpMenu.add(whatClass);
 		helpMenu.add(help_about);
 	}
 
