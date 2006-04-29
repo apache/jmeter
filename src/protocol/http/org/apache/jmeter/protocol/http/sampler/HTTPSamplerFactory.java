@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,27 +26,42 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class HTTPSamplerFactory {
 
-	private static final String HTTP_SAMPLER = "HTTPSampler"; //$NON-NLS-1$
+    /** Use the the default Java HTTP implementation */
+	public static final String HTTP_SAMPLER_JAVA = "HTTPSampler"; //$NON-NLS-1$
 
-	private static final String HTTP_SAMPLER_APACHE = "HTTPSampler2"; //$NON-NLS-1$
+    /** Use Apache HTTPClient HTTP implementation */
+	public static final String HTTP_SAMPLER_APACHE = "HTTPSampler2"; //$NON-NLS-1$
 
-	private static final String DEFAULT_CLASSNAME = JMeterUtils.getPropDefault("jmeter.httpsampler", HTTP_SAMPLER); //$NON-NLS-1$
+	public static final String DEFAULT_CLASSNAME = 
+        JMeterUtils.getPropDefault("jmeter.httpsampler", HTTP_SAMPLER_JAVA); //$NON-NLS-1$
 
 	private HTTPSamplerFactory() {
 		// Not intended to be instantiated
 	}
 
+    /**
+     * Create a new instance of the default sampler
+     * 
+     * @return instance of default sampler
+     */
 	public static HTTPSamplerBase newInstance() {
 		return newInstance(DEFAULT_CLASSNAME);
 	}
 
-	public static HTTPSamplerBase newInstance(String classname) {
-		if (classname.equals(HTTP_SAMPLER)) {
+    /**
+     * Create a new instance of the required sampler type
+     * 
+     * @param alias HTTP_SAMPLER or HTTP_SAMPLER_APACHE
+     * @return the appropriate sampler
+     * @throws UnsupportedOperationException if alias is not recognised
+     */
+	public static HTTPSamplerBase newInstance(String alias) {
+		if (alias.equals(HTTP_SAMPLER_JAVA)) {
 			return new HTTPSampler();
 		}
-		if (classname.equals(HTTP_SAMPLER_APACHE)) {
+		if (alias.equals(HTTP_SAMPLER_APACHE)) {
 			return new HTTPSampler2();
 		}
-		throw new UnsupportedOperationException("Cannot create class: " + classname);
+		throw new UnsupportedOperationException("Cannot create class: " + alias);
 	}
 }
