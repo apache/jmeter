@@ -31,7 +31,7 @@ public class Sample implements Serializable, Comparable {
 
 	private final long median;
 
-	private final long distributionLine;
+	private final long distributionLine; // TODO: what is this for?
 
 	private final long deviation;
 
@@ -49,20 +49,13 @@ public class Sample implements Serializable, Comparable {
 
     private final int bytes;
 
-	/**
-	 * Constructor for the Sample object
-	 * 
-	 * @param data
-	 *            Description of Parameter
-	 * @param average
-	 *            Description of Parameter
-	 * @param deviation
-	 *            Description of Parameter
-	 */
-	public Sample(long data, long average, long deviation, double throughput, long median, boolean success) {
+
+    // TODO - is this used?
+    public Sample(long data, long average, long deviation, double throughput, long median, boolean success) {
 		this(null, data, average, deviation, median, 0, throughput, 0, success, 0, 0);
 	}
 
+    // TODO - is this used?
 	public Sample(long data) {
 		this(null, data, 0, 0, 0, 0, 0, 0, false, 0, 0);
 	}
