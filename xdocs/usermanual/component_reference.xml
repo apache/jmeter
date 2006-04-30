@@ -2194,6 +2194,8 @@ pattern. You can attach multiple assertions to any controller for additional fle
                 HTTP Responses with statuses in the 4xx and 5xx ranges are normally
                 regarded as unsuccessful. 
                 The "Ignore status" checkbox can be used to set the status successful before performing further checks.
+                Note that this will have the effect of clearing any previous assertion failures,
+                so make sure that this is only set on the first assertion.
                 </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
         must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
@@ -2201,7 +2203,11 @@ pattern. You can attach multiple assertions to any controller for additional fle
         <property name="Patterns to Test" required="Yes">A list of regular expressions to
         be tested.  Each pattern is tested separately.  There is no difference between setting up
         one Assertion with multiple patterns and setting up multiple Assertions with one
-        pattern each (assuming the other options are the same).</property>
+        pattern each (assuming the other options are the same).
+        <b>However, when the Ignore Status checkbox is selected, this has the effect of cancelling any
+        previous assertion failures - so make sure that the Ignore Status checkbox is only used on
+        the first Assertion.</b>
+        </property>
 </properties>
 <p>
 	The pattern is a Perl5-style regular expression, but without the enclosing brackets.
