@@ -2116,6 +2116,7 @@ The variables in User Defined Variables components will take precedence over tho
   	column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
   	whole ${...} will then be replaced by the string in the "Value" column.</property>
 </properties>
+<note>If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.</note>
 </component>
 
 <component name="Simple Config Element" index="&sect-num;.4.16" screenshot="simple_config_element.png">
