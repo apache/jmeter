@@ -91,9 +91,9 @@ public class SampleResult implements Serializable {
 
 	private byte[] responseData = EMPTY_BA;
 
-	private String responseCode;
+	private String responseCode = "";// Never return null
 
-	private String label;
+	private String label = "";// Never return null
 
     private String resultFileName = ""; // Filename used by ResultSaver
     
@@ -324,6 +324,10 @@ public class SampleResult implements Serializable {
 	public void setResponseMessage(String msg) {
 		responseMessage = msg;
 	}
+
+    public void setResponseMessageOK() {
+        responseMessage = "OK"; // $NON-NLS-1$       
+    }
 
 	public String getThreadName() {
 		return threadName;
