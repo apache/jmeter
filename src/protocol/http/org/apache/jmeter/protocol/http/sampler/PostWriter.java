@@ -121,25 +121,29 @@ public class PostWriter {
 	/**
 	 * Writes out the contents of a file in correct multipart format.
 	 */
-	private void writeFileToURL(OutputStream out, String filename, String fieldname, InputStream in, String mimetype)
-			throws IOException {
-		writeln(out, "Content-Disposition: form-data; name=\"" + encode(fieldname) + "\"; filename=\"" // $NON-NLS-1$ // $NON-NLS-2$
-				+ encode(filename) + "\""); // $NON-NLS-1$
-		writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
-		out.write(CRLF);
+	private void writeFileToURL(OutputStream out, String filename,
+            String fieldname, InputStream in, String mimetype)
+            throws IOException {
+        write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
+        write(out, HTTPSamplerBase.encodeBackSlashes(fieldname));
+        write(out, "\"; filename=\"");// $NON-NLS-1$
+        write(out, HTTPSamplerBase.encodeBackSlashes(filename));
+        writeln(out, "\""); // $NON-NLS-1$
+        writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
+        out.write(CRLF);
 
-		byte[] buf = new byte[1024];
-		// 1k - the previous 100k made no sense (there's tons of buffers
-		// elsewhere in the chain) and it caused OOM when many concurrent
-		// uploads were being done. Could be fixed by increasing the evacuation
-		// ratio in bin/jmeter[.bat], but this is better.
-		int read;
-		while ((read = in.read(buf)) > 0) {
-			out.write(buf, 0, read);
-		}
-		out.write(CRLF);
-		in.close();
-	}
+        byte[] buf = new byte[1024];
+        // 1k - the previous 100k made no sense (there's tons of buffers
+        // elsewhere in the chain) and it caused OOM when many concurrent
+        // uploads were being done. Could be fixed by increasing the evacuation
+        // ratio in bin/jmeter[.bat], but this is better.
+        int read;
+        while ((read = in.read(buf)) > 0) {
+            out.write(buf, 0, read);
+        }
+        out.write(CRLF);
+        in.close();
+    }
 
 	/**
 	 * Writes form data in multipart format.
@@ -150,24 +154,12 @@ public class PostWriter {
 		writeln(out, value);
 	}
 
-	private String encode(String value) {
-		StringBuffer newValue = new StringBuffer(value.length());
-		char[] chars = value.toCharArray();
-		for (int i = 0; i < chars.length; i++) {
-			if (chars[i] == '\\') { // $NON-NLS-1$
-				newValue.append("\\\\"); // $NON-NLS-1$
-			} else {
-				newValue.append(chars[i]);
-			}
-		}
-		return newValue.toString();
-	}
-
-	/*
-	 * NOTUSED private void write(OutputStream out, String value) throws
-	 * UnsupportedEncodingException, IOException {
-	 * out.write(value.getBytes(encoding)); }
-	 */
+    private void write(OutputStream out, String value) 
+    throws UnsupportedEncodingException, IOException 
+    {
+    	out.write(value.getBytes(encoding)); 
+    }
+	
 
 	private void writeln(OutputStream out, String value) throws UnsupportedEncodingException, IOException {
 		out.write(value.getBytes(encoding));
