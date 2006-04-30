@@ -59,8 +59,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_REDIRECT_LOCATION = "redirectLocation"; //$NON-NLS-1$
     protected static final String TAG_REQUEST_HEADER    = "requestHeader";    //$NON-NLS-1$
 
-    // Not needed by HTTPResultConverter
-	private   static final String TAG_URL               = "requestUrl";       //$NON-NLS-1$
+	protected   static final String TAG_URL               = "requestUrl";       //$NON-NLS-1$
 
     protected static final String TAG_RESPONSE_DATA     = "responseData";     //$NON-NLS-1$
     protected static final String TAG_RESPONSE_HEADER   = "responseHeader";   //$NON-NLS-1$
