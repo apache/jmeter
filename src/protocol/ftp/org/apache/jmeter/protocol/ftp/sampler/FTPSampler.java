@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +25,11 @@ import org.apache.jmeter.samplers.SampleResult;
 /**
  * A sampler which understands FTP file requests.
  * 
- * @version $Revision$ last updated $Date$
  */
 public class FTPSampler extends AbstractSampler {
-	public final static String SERVER = "FTPSampler.server";
+	public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
 
-	public final static String FILENAME = "FTPSampler.filename";
+	public final static String FILENAME = "FTPSampler.filename"; // $NON-NLS-1$
 
 	public FTPSampler() {
 	}
@@ -67,7 +65,7 @@ public class FTPSampler extends AbstractSampler {
 	 * @return a formatted string label describing this sampler
 	 */
 	public String getLabel() {
-		return ("ftp://" + this.getServer() + "/" + this.getFilename());
+		return ("ftp://" + this.getServer() + "/" + this.getFilename()); // $NON-NLS-1$ $NON-NLS-2$
 	}
 
 	public SampleResult sample(Entry e) {
@@ -75,28 +73,31 @@ public class FTPSampler extends AbstractSampler {
 		boolean isSuccessful = false;
 		// FtpConfig ftpConfig = (FtpConfig)e.getConfigElement(FtpConfig.class);
 		res.setSampleLabel(getName());
+        res.setSamplerData(getLabel());
 		// LoginConfig loginConfig =
 		// (LoginConfig)e.getConfigElement(LoginConfig.class);
 		res.sampleStart();
+        FtpClient ftp = new FtpClient();
 		try {
-			FtpClient ftp = new FtpClient();
 			ftp.connect(getServer(), getUsername(), getPassword());
-			ftp.setPassive(true);
-			// this should probably come from the setup dialog
+			ftp.setPassive(true);// should probably come from the setup dialog
 			String s = ftp.get(getFilename());
 			res.setResponseData(s.getBytes());
-			// TODO set the response code here somewhere
-			ftp.disconnect();
+            res.setResponseCodeOK();
+            res.setResponseMessageOK();
+            ftp.disconnect();            
 			isSuccessful = true;
-		} catch (java.net.ConnectException cex) {
+		} catch (java.net.ConnectException ex) {
 			// java.net.ConnectException -- 502 error code?
 			// in the future, possibly define and place error codes into the
 			// result so we know exactly what happened.
-			res.setResponseData(cex.toString().getBytes());
+			res.setResponseData(ex.toString().getBytes());
+            res.setResponseMessage(ex.getLocalizedMessage());
 		} catch (Exception ex) {
 			// general exception
 			res.setResponseData(ex.toString().getBytes());
-		}
+            res.setResponseMessage(ex.getLocalizedMessage());
+        }
 
 		res.sampleEnd();
 
