@@ -244,6 +244,8 @@ The sample attributes have the following meaning:
 <tr><td>dt</td><td>Data type</td></tr>
 <tr><td>de</td><td>Data encoding</td></tr>
 <tr><td>by</td><td>Bytes</td></tr>
+<tr><td>ng</td><td>Number of active threads in this group</td></tr>
+<tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
 </table>
 <p>
 Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".

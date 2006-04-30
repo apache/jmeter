@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -93,6 +94,8 @@ public final class OldSaveService {
 
     private static final String CSV_TIME = "elapsed"; // $NON-NLS-1$
     private static final String CSV_BYTES= "bytes"; // $NON-NLS-1$
+    private static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
+    private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
     private static final String CSV_URL = "URL"; // $NON-NLS-1$
     private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     
@@ -107,6 +110,11 @@ public final class OldSaveService {
 	private OldSaveService() {
 	}
 
+    //////////////////////////////////////////////////////////////////////////////
+    //                  Start of CSV methods
+    
+    // TODO - move to separate file? If so, remember that some of the
+    
 	/**
 	 * Make a SampleResult given a delimited string.
 	 * 
@@ -247,6 +255,13 @@ public final class OldSaveService {
             text.append(delim);
         }
 
+        if (saveConfig.saveThreadCounts()) {
+            text.append(CSV_THREAD_COUNT1);
+            text.append(delim);
+            text.append(CSV_THREAD_COUNT2);
+            text.append(delim);
+        }
+
         if (saveConfig.saveUrl()) {
             text.append(CSV_URL);
             text.append(delim);
@@ -270,21 +285,7 @@ public final class OldSaveService {
 		return resultString;
 	}
 
-	public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException {
-		Configuration config = (Configuration) getConfigsFromTree(subTree).get(0);
-		DefaultConfigurationSerializer saver = new DefaultConfigurationSerializer();
-
-		saver.setIndent(true);
-		try {
-			saver.serialize(writer, config);
-		} catch (SAXException e) {
-			throw new IOException("SAX implementation problem");
-		} catch (ConfigurationException e) {
-			throw new IOException("Problem using Avalon Configuration tools");
-		}
-	}
-    
-    /**
+	/**
      * Method will save aggregate statistics as CSV. For now I put it here.
      * Not sure if it should go in the newer SaveService instead of here.
      * if we ever decide to get rid of this class, we'll need to move this
@@ -307,7 +308,145 @@ public final class OldSaveService {
         }
     }
 
-	public static SampleResult getSampleResult(Configuration config) {
+    /**
+     * Convert a result into a string, where the fields of the result are
+     * separated by the default delimiter.
+     * 
+     * @param sample
+     *            the test result to be converted
+     * @return the separated value representation of the result
+     */
+    public static String resultToDelimitedString(SampleResult sample) {
+    	return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
+    }
+
+    /**
+     * Convert a result into a string, where the fields of the result are
+     * separated by a specified String.
+     * 
+     * @param sample
+     *            the test result to be converted
+     * @param delimiter
+     *            the separation string
+     * @return the separated value representation of the result
+     */
+    public static String resultToDelimitedString(SampleResult sample, String delimiter) {
+    	StringBuffer text = new StringBuffer();
+    	SampleSaveConfiguration saveConfig = sample.getSaveConfig();
+    
+    	if (saveConfig.saveTimestamp()) {
+    		if (saveConfig.printMilliseconds()){
+    			text.append(sample.getTimeStamp());
+    			text.append(delimiter);
+    		} else if (saveConfig.formatter() != null) {
+    			String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
+    			text.append(stamp);
+    			text.append(delimiter);
+    		}
+    	}
+    
+    	if (saveConfig.saveTime()) {
+    		text.append(sample.getTime());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveLabel()) {
+    		text.append(sample.getSampleLabel());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveCode()) {
+    		text.append(sample.getResponseCode());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveMessage()) {
+    		text.append(sample.getResponseMessage());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveThreadName()) {
+    		text.append(sample.getThreadName());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveDataType()) {
+    		text.append(sample.getDataType());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveSuccess()) {
+    		text.append(sample.isSuccessful());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveAssertionResultsFailureMessage()) {
+    		String message = null;
+    		AssertionResult[] results = sample.getAssertionResults();
+    
+    		if ((results != null) && (results.length > 0)) {
+    			message = results[0].getFailureMessage();
+    		}
+    
+    		if (message != null) {
+    			text.append(message);
+    		}
+    		text.append(delimiter);
+    	}
+    
+        if (saveConfig.saveBytes()) {
+            text.append(sample.getBytes());
+            text.append(delimiter);
+        }
+    
+        if (saveConfig.saveThreadCounts()) {
+            text.append(JMeterContextService.getContext().getThreadGroup().getNumberOfThreads());
+            text.append(delimiter);
+            text.append(JMeterContextService.getNumberOfThreads());
+            text.append(delimiter);
+        }
+        if (saveConfig.saveUrl()) {
+            text.append(sample.getURL());
+            text.append(delimiter);
+        }
+    
+        if (saveConfig.saveFileName()) {
+            text.append(sample.getResultFileName());
+            text.append(delimiter);
+        }
+    
+    	String resultString = null;
+    	int size = text.length();
+    	int delSize = delimiter.length();
+    
+    	// Strip off the trailing delimiter
+    	if (size >= delSize) {
+    		resultString = text.substring(0, size - delSize);
+    	} else {
+    		resultString = text.toString();
+    	}
+    	return resultString;
+    }
+
+    //              End of CSV methods
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //              Start of Avalon methods
+    
+    public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException {
+		Configuration config = (Configuration) getConfigsFromTree(subTree).get(0);
+		DefaultConfigurationSerializer saver = new DefaultConfigurationSerializer();
+
+		saver.setIndent(true);
+		try {
+			saver.serialize(writer, config);
+		} catch (SAXException e) {
+			throw new IOException("SAX implementation problem");
+		} catch (ConfigurationException e) {
+			throw new IOException("Problem using Avalon Configuration tools");
+		}
+	}
+    
+    public static SampleResult getSampleResult(Configuration config) {
 		SampleResult result = new SampleResult(config.getAttributeAsLong(TIME_STAMP, 0L), config.getAttributeAsLong(
 				TIME, 0L));
 
@@ -460,120 +599,6 @@ public final class OldSaveService {
 			config.addChild(getConfiguration(result.getResponseData()));
 		}
 		return config;
-	}
-
-	/**
-	 * Convert a result into a string, where the fields of the result are
-	 * separated by the default delimiter.
-	 * 
-	 * @param sample
-	 *            the test result to be converted
-	 * @return the separated value representation of the result
-	 */
-	public static String resultToDelimitedString(SampleResult sample) {
-		return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
-	}
-
-	/**
-	 * Convert a result into a string, where the fields of the result are
-	 * separated by a specified String.
-	 * 
-	 * @param sample
-	 *            the test result to be converted
-	 * @param delimiter
-	 *            the separation string
-	 * @return the separated value representation of the result
-	 */
-	public static String resultToDelimitedString(SampleResult sample, String delimiter) {
-		StringBuffer text = new StringBuffer();
-		SampleSaveConfiguration saveConfig = sample.getSaveConfig();
-
-		if (saveConfig.saveTimestamp()) {
-			if (saveConfig.printMilliseconds()){
-				text.append(sample.getTimeStamp());
-				text.append(delimiter);
-			} else if (saveConfig.formatter() != null) {
-				String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
-				text.append(stamp);
-				text.append(delimiter);
-			}
-		}
-
-		if (saveConfig.saveTime()) {
-			text.append(sample.getTime());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveLabel()) {
-			text.append(sample.getSampleLabel());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveCode()) {
-			text.append(sample.getResponseCode());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveMessage()) {
-			text.append(sample.getResponseMessage());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveThreadName()) {
-			text.append(sample.getThreadName());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveDataType()) {
-			text.append(sample.getDataType());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveSuccess()) {
-			text.append(sample.isSuccessful());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveAssertionResultsFailureMessage()) {
-			String message = null;
-			AssertionResult[] results = sample.getAssertionResults();
-
-			if ((results != null) && (results.length > 0)) {
-				message = results[0].getFailureMessage();
-			}
-
-			if (message != null) {
-				text.append(message);
-			}
-			text.append(delimiter);
-		}
-
-        if (saveConfig.saveBytes()) {
-            text.append(sample.getBytes());
-            text.append(delimiter);
-        }
-
-        if (saveConfig.saveUrl()) {
-            text.append(sample.getURL());
-            text.append(delimiter);
-        }
-
-        if (saveConfig.saveFileName()) {
-            text.append(sample.getResultFileName());
-            text.append(delimiter);
-        }
-
-		String resultString = null;
-		int size = text.length();
-		int delSize = delimiter.length();
-
-		// Strip off the trailing delimiter
-		if (size >= delSize) {
-			resultString = text.substring(0, size - delSize);
-		} else {
-			resultString = text.toString();
-		}
-		return resultString;
 	}
 
 	public static Configuration getConfigForTestElement(String named, TestElement item) {

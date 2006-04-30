@@ -86,6 +86,7 @@ sample, and the file name can be included in the sample log file.
 <li>Counter Pre-Processor now supports formatted numbers</li>
 <li>Add support for HEAD and PUT methods</li>
 <li>Allow default HTTP implementation to be changed</li>
+<li>Optionally save active thread counts (group and all) to result files</li>
 </ul>
 
 <h4>Bug fixes:</h4>
