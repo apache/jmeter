@@ -1,7 +1,6 @@
 <?xml version="1.0"?> 
 <!--
-   $Header$
-   Copyright 2001-2005 The Apache Software Foundation
+   Copyright 2001-2006 The Apache Software Foundation
  
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -134,6 +133,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 25505 - First HTTP sampling fails with "HTTPS hostname wrong: should be 'localhost'"</li>
 <li>Bug 25236 - remove double scrollbar from Assertion Result Listener</li>
 <li>Bug 38234 - Graph Listener divide by zero problem</li>
+<li>Bug 38824 - clarify behaviour of Ignore Status</li>
 </ul>	
 	
 <h4>Other changes</h4>
