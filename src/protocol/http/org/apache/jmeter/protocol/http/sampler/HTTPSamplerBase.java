@@ -125,6 +125,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
 
+    /* Shown as Parameter Name on the GUI */
 	public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
 
 	public final static String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
@@ -671,6 +672,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		return res;
 	}
 
+    // TODO: make static?
 	protected String encodeSpaces(String path) {
         return JOrphanUtils.replaceAllChars(path, ' ', "%20"); // $NON-NLS-1$
 	}
@@ -857,7 +859,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     protected boolean isSuccessCode(int code){
         return (code >= 200 && code <= 399);
     }
-       
+
+    protected static String encodeBackSlashes(String value) {
+    	StringBuffer newValue = new StringBuffer();
+    	for (int i = 0; i < value.length(); i++) {
+    		char charAt = value.charAt(i);
+            if (charAt == '\\') { // $NON-NLS-1$
+    			newValue.append("\\\\"); // $NON-NLS-1$
+    		} else {
+    			newValue.append(charAt);
+    		}
+    	}
+    	return newValue.toString();
+    }
+
     public static String[] getValidMethodsAsArray(){
         return (String[]) METHODLIST.toArray(new String[0]);
     }
