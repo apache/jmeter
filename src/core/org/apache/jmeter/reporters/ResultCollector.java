@@ -182,7 +182,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 readSamples(SaveService.loadTestResults(bufferedInputStream));
 				parsedOK = true;
 			} catch (Exception e) {
-				log.warn("File load failure, trying old data format.");
+				log.warn("File load failure, trying old data format: "+e.getLocalizedMessage());
 				try {
 					Configuration savedSamples = getConfiguration(getFilename());
 					Configuration[] samples = savedSamples.getChildren();
