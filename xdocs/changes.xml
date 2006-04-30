@@ -134,6 +134,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 25236 - remove double scrollbar from Assertion Result Listener</li>
 <li>Bug 38234 - Graph Listener divide by zero problem</li>
 <li>Bug 38824 - clarify behaviour of Ignore Status</li>
+<li>Bug 38250 - allow locale of zh_CN and zh_TW</li>
 </ul>	
 	
 <h4>Other changes</h4>
