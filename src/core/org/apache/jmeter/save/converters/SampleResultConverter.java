@@ -23,15 +23,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
-//import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.Converter;
 import org.apache.jorphan.util.JOrphanUtils;
-//import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -41,10 +39,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * @author mstover
- * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
+ * XStream Converter for the SampleResult class
  */
 public class SampleResultConverter extends AbstractCollectionConverter {
 	//private static final Logger log = LoggingManager.getLoggerForClass();
@@ -66,12 +61,15 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_SAMPLER_DATA      = "samplerData";      //$NON-NLS-1$
     protected static final String TAG_RESPONSE_FILE     = "responseFile";     //$NON-NLS-1$
 
-    // samplerData attributes. Must be unique. Keep sorted.
+    // samplerData attributes. Must be unique. Keep sorted by string value.
     private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
     private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
     private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
     private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
     private static final String ATT_LATENCY           = "lt"; //$NON-NLS-1$
+
+    private static final String ATT_ALL_THRDS         = "na"; //$NON-NLS-1$
+    private static final String ATT_GRP_THRDS         = "ng"; //$NON-NLS-1$
 
     // N.B. Originally the response code was saved with the code "rs" 
     // but retrieved with the code "rc". Changed to always use "rc", but
@@ -252,6 +250,12 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncoding()));
 		if (save.saveBytes())
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
+        if (save.saveThreadCounts()){// These cannot be restored
+            writer.addAttribute(ATT_GRP_THRDS,
+                    String.valueOf(JMeterContextService.getContext().getThreadGroup().getNumberOfThreads()));
+            writer.addAttribute(ATT_ALL_THRDS,
+                    String.valueOf(JMeterContextService.getNumberOfThreads()));
+        }
 	}
 
 	/**
@@ -348,6 +352,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		res.setTimeStamp(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)));
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
+        // ATT_GRP_THRDS and ATT_ALL_THRDS are write only
 	}
 
     protected void readFile(String resultFileName, SampleResult res) {

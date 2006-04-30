@@ -35,6 +35,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * - setXyz(boolean)
  * - saveXyz()
  * - update SampleSaveConfigurationConverter to add new field
+ * - update SampleResultConverter and/or HTTPSampleConverter
+ * - update CSV routines in OldSaveService
+ * - update messages.properties to add save_xyz entry
+ * 
  */
 /**
  * Holds details of which sample attributes to save.
@@ -43,12 +47,13 @@ import org.apache.jmeter.util.JMeterUtils;
  * For each field XXX
  * - methods have the signature "boolean saveXXX()" 
  * - a corresponding "void setXXX(boolean)" method
+ * - messages.properties contains the key save_XXX
  * 
  * @author mstover
  *
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
-	static final long serialVersionUID = 3;
+	static final long serialVersionUID = 4;
 
 	// ---------------------------------------------------------------------
 	// PROPERTY FILE CONSTANTS
@@ -187,6 +192,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // <?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
     private static final String XML_PI               = "jmeter.save.saveservice.xml_pi"; // $NON_NLS-1$
 
+    private static final String SAVE_THREAD_COUNTS = "jmeter.save.saveservice.thread_counts"; // $NON_NLS-1$
+
     // N.B. Remember to update the clone method when adding new variables.
     
 	// Initialise values from properties
@@ -200,6 +207,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	private boolean url = _url, bytes = _bytes , fileName = _fileName;
 	
+    private boolean threadCounts = _threadCounts;
+    
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
 	private String delimiter = _delimiter;
@@ -241,6 +250,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	
 	private static final boolean _fileName;
 
+    private static final boolean _threadCounts;
+    
 	private static final SimpleDateFormat _formatter;
 
 	/**
@@ -326,6 +337,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 			_xml = false;
 		}
 
+        _threadCounts=TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_COUNTS, FALSE));
 	}
 
 	private static final SampleSaveConfiguration _static = new SampleSaveConfiguration();
@@ -374,6 +386,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         s.url = url;
         s.bytes = bytes;
         s.fileName = fileName;
+        s.threadCounts = threadCounts;
 		return s;
 	}
 
@@ -565,6 +578,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	public void setAssertionResultsFailureMessage(boolean b) {
 		saveAssertionResultsFailureMessage = b;
 	}
+
+    public boolean saveThreadCounts() {
+        return threadCounts;
+    }
+
+    public void setThreadCounts(boolean save) {
+        this.threadCounts = save;
+    }
 
 	///////////////// End of standard field accessors /////////////////////
 	

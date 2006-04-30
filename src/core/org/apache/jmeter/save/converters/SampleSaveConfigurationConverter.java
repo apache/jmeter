@@ -37,10 +37,12 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
 	private static final ReflectionProvider rp = new JVM().bestReflectionProvider();
 
+    // N.B. These must agree with the names in SampleSaveConfiguration
     private static final String TRUE = "true"; // $NON-NLS-1$
 	private static final String NODE_FILENAME = "fileName"; // $NON-NLS-1$
 	private static final String NODE_URL = "url"; // $NON-NLS-1$
 	private static final String NODE_BYTES = "bytes"; // $NON-NLS-1$
+    private static final String NODE_THREAD_COUNT = "threadCounts"; // $NON-NLS-1$
 
 	static class MyWrapper extends MapperWrapper{
 
@@ -53,6 +55,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             if (fieldName.equals(NODE_BYTES)) return false; 
             if (fieldName.equals(NODE_URL)) return false; 
             if (fieldName.equals(NODE_FILENAME)) return false; 
+            if (fieldName.equals(NODE_THREAD_COUNT)) return false; 
             return true;
         }
     }
@@ -90,25 +93,19 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         SampleSaveConfiguration prop = (SampleSaveConfiguration) obj;
         
         // Save the new fields - but only if they are not the default
-        if (prop.saveBytes())
-        {
-            writer.startNode(NODE_BYTES);
-            writer.setValue(TRUE);
-            writer.endNode();
-        }
-        if (prop.saveUrl())
-        {
-            writer.startNode(NODE_URL);
-            writer.setValue(TRUE);
-            writer.endNode();
-        }
-        if (prop.saveFileName())
-        {
-            writer.startNode(NODE_FILENAME);
-            writer.setValue(TRUE);
-            writer.endNode();
-        }
+        createNode(writer,prop.saveBytes(),NODE_BYTES);
+        createNode(writer,prop.saveUrl(),NODE_URL);
+        createNode(writer,prop.saveFileName(),NODE_FILENAME);
+        createNode(writer,prop.saveThreadCounts(),NODE_THREAD_COUNT);
 	}
+
+    // Helper method to simplify marshall routine
+    private void createNode(HierarchicalStreamWriter writer, boolean save, String node) {
+        if (!save) return;
+        writer.startNode(node);
+        writer.setValue(TRUE);
+        writer.endNode();
+    }
 
 	/*
 	 * (non-Javadoc)
