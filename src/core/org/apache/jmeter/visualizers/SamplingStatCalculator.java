@@ -248,6 +248,7 @@ public class SamplingStatCalculator implements Serializable {
             cstdv = (long)calculator.getStandardDeviation();
             cmedian = calculator.getMedian().longValue();
             cpercent = calculator.getPercentPoint( 0.500 ).longValue();
+// TODO cpercent is the same as cmedian here - why? and why pass it to "distributionLine"? 
             rbool = res.isSuccessful();
         }
 
