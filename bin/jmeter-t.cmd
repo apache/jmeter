@@ -37,6 +37,6 @@ cd /d %~dp1
 
 rem Prepend the directory in which this script resides in case not on path
 
-%~dp0jmeter -t %~nx1
+%~dp0jmeter -t "%~nx1"
 
 :END
