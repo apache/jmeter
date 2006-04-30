@@ -119,12 +119,6 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		saveRequestHeaders(writer, context, res, save);
 		saveResponseData(writer, context, res, save);
 		saveSamplerData(writer, context, res, save);
-		if (save.saveUrl()) {
-			URL url = res.getURL();
-            if (url != null) {
-                writeString(writer, TAG_URL, url.toExternalForm());
-            }
-		}
 	}
 
 	/**
@@ -137,6 +131,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		if (save.saveSamplerData(res)) {
 			writeString(writer, TAG_SAMPLER_DATA, res.getSamplerData());
 		}
+        if (save.saveUrl()) {
+            writeItem(res.getURL(), context, writer);
+        }
 	}
 
 	/**
@@ -296,9 +293,11 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	}
 
 	/**
+     * 
 	 * @param reader
 	 * @param context
 	 * @param res
+     * @return true if the item was processed (for HTTPResultConverter)
 	 */
 	protected boolean retrieveItem(HierarchicalStreamReader reader, UnmarshallingContext context, SampleResult res,
 			Object subItem) {
@@ -321,7 +320,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			res.setSamplerData((String) subItem);
         } else if (nodeName.equals(TAG_RESPONSE_FILE)) {
             res.setResultFileName((String) subItem);
-		// Don't try restoring the URL
+		// Don't try restoring the URL TODO: wy not?
 		} else {
 			return false;
 		}
