@@ -49,7 +49,6 @@ import org.apache.log.Logger;
  * The JMeter interface to the sampling process, allowing JMeter to see the
  * timing, add listeners for sampling events and to stop the sampling process.
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class JMeterThread implements Runnable, java.io.Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -307,13 +306,12 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	 * 
 	 */
 	protected void initRun() {
-		JMeterContextService.incrNumberOfThreads();
-		threadGroup.incrNumberOfThreads();
 		threadContext = JMeterContextService.getContext();
 		threadContext.setVariables(threadVars);
 		threadContext.setThreadNum(getThreadNum());
 		threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
 		threadContext.setThread(this);
+        threadContext.setThreadGroup(threadGroup);
 		testTree.traverse(compiler);
 		// listeners = controller.getListeners();
 		if (scheduler) {
@@ -322,6 +320,8 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		}
 		rampUpDelay();
 		log.info("Thread " + Thread.currentThread().getName() + " started");
+        JMeterContextService.incrNumberOfThreads();
+        threadGroup.incrNumberOfThreads();
 		/*
 		 * Setting SamplingStarted before the contollers are initialised allows
 		 * them to access the running values of functions and variables (however
