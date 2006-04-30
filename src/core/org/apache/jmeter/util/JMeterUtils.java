@@ -55,7 +55,6 @@ import org.xml.sax.XMLReader;
 /**
  * This class contains the static utility methods used by JMeter.
  * 
- * @version $Revision$ updated on $Date$
  */
 public class JMeterUtils implements UnitTestManager {
 	private static Logger log = LoggingManager.getLoggerForClass();
@@ -99,12 +98,14 @@ public class JMeterUtils implements UnitTestManager {
 	 */
 	public static Properties getProperties(String file) {
 		Properties p = new Properties(System.getProperties());
+        InputStream is = null;
 		try {
 			File f = new File(file);
-			p.load(new FileInputStream(f));
+			is = new FileInputStream(f);
+            p.load(is);
 		} catch (IOException e) {
 			try {
-				InputStream is = 
+				is = 
 					ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
 				if (is == null)
 					throw new RuntimeException("Could not read JMeter properties file");
@@ -113,13 +114,21 @@ public class JMeterUtils implements UnitTestManager {
 				// JMeter.fail("Could not read internal resource. " +
 				// "Archive is broken.");
 			}
-		}
+		} finally {
+            JOrphanUtils.closeQuietly(is);            
+        }
 		appProperties = p;
 		LoggingManager.initializeLogging(appProperties);
 		log = LoggingManager.getLoggerForClass();
 		String loc = appProperties.getProperty("language"); // $NON-NLS-1$
 		if (loc != null) {
-			setLocale(new Locale(loc, "")); // $NON-NLS-1$
+            String []parts = JOrphanUtils.split(loc,"_");// $NON-NLS-1$
+            if (parts.length==2) {
+                setLocale(new Locale(parts[0], parts[1]));              
+            } else {
+    			setLocale(new Locale(loc, "")); // $NON-NLS-1$
+            }
+            
 		} else {
 			setLocale(Locale.getDefault());
 		}
@@ -136,12 +145,14 @@ public class JMeterUtils implements UnitTestManager {
 	 */
 	public static Properties loadProperties(String file) {
 		Properties p = new Properties();
+        InputStream is = null;
 		try {
 			File f = new File(file);
-			p.load(new FileInputStream(f));
+			is = new FileInputStream(f);
+            p.load(is);
 		} catch (IOException e) {
 			try {
-				InputStream is = JMeterUtils.class.getClassLoader().getResource(file).openStream();
+				is = JMeterUtils.class.getClassLoader().getResource(file).openStream();
 				if (is == null) {
 					log.warn("Cannot find " + file);
 					return null;
@@ -151,7 +162,9 @@ public class JMeterUtils implements UnitTestManager {
 				log.warn("Error reading " + file + " " + ex.toString());
 				return null;
 			}
-		}
+		} finally {
+            JOrphanUtils.closeQuietly(is);            
+        }
 		return p;
 	}
 
