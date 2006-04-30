@@ -287,13 +287,13 @@ public class SaveService {
 		checkVersion(IntegerPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(LongPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(MultiPropertyConverter.class, "332820"); // $NON-NLS-1$
-		checkVersion(SampleResultConverter.class, "392452"); // $NON-NLS-1$
+		checkVersion(SampleResultConverter.class, "398321"); // $NON-NLS-1$
 
         // Not built until later, so need to use this method:
         try {
             checkVersion(
                     Class.forName("org.apache.jmeter.protocol.http.util.HTTPResultConverter"), // $NON-NLS-1$
-                    "392445"); // $NON-NLS-1$
+                    "398320"); // $NON-NLS-1$
         } catch (ClassNotFoundException e) {
             versionsOK = false;
             log.warn(e.getLocalizedMessage());
