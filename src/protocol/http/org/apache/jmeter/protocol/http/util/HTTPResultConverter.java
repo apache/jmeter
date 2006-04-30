@@ -21,15 +21,9 @@
  */
 package org.apache.jmeter.protocol.http.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.converters.SampleResultConverter;
 
@@ -102,8 +96,10 @@ public class HTTPResultConverter extends SampleResultConverter {
 			writeString(writer, TAG_METHOD, res.getHTTPMethod());
 			writeString(writer, TAG_QUERY_STRING, res.getQueryString());
 			writeString(writer, TAG_REDIRECT_LOCATION, res.getRedirectLocation());
-			writeItem(res.getURL(), context, writer);
 		}
+        if (save.saveUrl()) {
+            writeItem(res.getURL(), context, writer);
+        }
 	}
 
 	/*
