@@ -48,11 +48,16 @@ import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.TraceMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
@@ -180,52 +185,25 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @exception IOException
 	 *                if an I/O exception occurs
 	 */
-	private void sendPostData(HttpMethod connection) throws IOException {
-		/* postWriter. */
-		sendPostData((PostMethod) connection, this);
-	}
-
-	/**
-	 * Send POST data from Entry to the open connection.
-	 */
-	public void sendPostData(PostMethod post, HTTPSampler2 sampler) throws IOException {
-		PropertyIterator args = sampler.getArguments().iterator();
+	private void sendPostData(PostMethod post) throws IOException {
+		PropertyIterator args = getArguments().iterator();
 		while (args.hasNext()) {
 			Argument arg = (Argument) args.next().getObjectValue();
 			post.addParameter(arg.getName(), arg.getValue());
 		}
 		// If filename was specified then send the post using multipart syntax
-		String filename = sampler.getFilename();
+		String filename = getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
 			File input = new File(filename);
-            // TODO: is this header correct?
-			post.setRequestHeader(HEADER_CONTENT_DISPOSITION
-                    , "form-data; name=\"" // $NON-NLS-1$
-                    + encode(sampler.getFileField())
-					+ "\"; filename=\""  // $NON-NLS-1$
-                    + encode(filename) + "\""); // $NON-NLS-1$
-			// Specify content type and encoding
-			post.setRequestHeader(HEADER_CONTENT_TYPE, sampler.getMimetype());
-			post.setRequestEntity(
-                    new InputStreamRequestEntity(new FileInputStream(input),input.length()));
+            Part[] parts = {
+                    //TODO should allow charset to be defined ...
+                    new FilePart(getFileField(), input, getMimetype(), "UTF-8" )//$NON-NLS-1$
+                };
+                post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
 		}
 	}
-
-    // TODO: move code to PostWriter or HTTPSamplerBase?
-    // Convert \ to \\
-	private String encode(String value) {
-		StringBuffer newValue = new StringBuffer();
-		for (int i = 0; i < value.length(); i++) {
-			if (value.charAt(i) == '\\') { // $NON-NLS-1$
-				newValue.append("\\\\"); // $NON-NLS-1$
-			} else {
-				newValue.append(value.charAt(i));
-			}
-		}
-		return newValue.toString();
-	}
-
-	/**
+     
+    /**
 	 * Returns an <code>HttpConnection</code> fully ready to attempt
 	 * connection. This means it sets the request method (GET or POST), headers,
 	 * cookies, and authorization for the URL request.
@@ -571,7 +549,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 			if (method.equals(POST)) {
                 res.setQueryString(getQueryString());
-				sendPostData(httpMethod);
+				sendPostData((PostMethod)httpMethod);
 			}else if (method.equals(PUT)) {
                 setPutHeaders((PutMethod) httpMethod);
             }
