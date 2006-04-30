@@ -287,7 +287,7 @@ public class SaveService {
 		checkVersion(IntegerPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(LongPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(MultiPropertyConverter.class, "332820"); // $NON-NLS-1$
-		checkVersion(SampleResultConverter.class, "398321"); // $NON-NLS-1$
+		checkVersion(SampleResultConverter.class, "398454"); // $NON-NLS-1$
 
         // Not built until later, so need to use this method:
         try {
@@ -303,7 +303,7 @@ public class SaveService {
 		checkVersion(TestElementPropertyConverter.class, "332820"); // $NON-NLS-1$
 		checkVersion(ScriptWrapperConverter.class, "390848"); // $NON-NLS-1$
 		checkVersion(TestResultWrapperConverter.class, "332820"); // $NON-NLS-1$
-        checkVersion(SampleSaveConfigurationConverter.class,"392354"); // $NON-NLS-1$
+        checkVersion(SampleSaveConfigurationConverter.class,"398454"); // $NON-NLS-1$
 
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
