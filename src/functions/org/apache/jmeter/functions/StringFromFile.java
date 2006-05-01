@@ -219,7 +219,6 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
 
-		JMeterVariables vars = getVariables();
 
 		if (values.length >= PARAM_NAME) {
 			myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute();
@@ -270,6 +269,7 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 		}
 
 		if (myName.length() > 0) {
+            JMeterVariables vars = getVariables();
 			vars.put(myName, myValue);
 		}
 
