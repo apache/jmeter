@@ -41,14 +41,18 @@
 <section name="&sect-num;. Functions" anchor="functions">
 <p>
 JMeter functions are special values that can populate fields of any Sampler or other configuration
-element in a test tree.  A function looks like this:</p>
+element in a test tree.  A function call looks like this:</p>
 
 <p><code>${__functionName(var1,var2,var3)}</code></p>
 
-<p>Where "__functionName" matches the name of an existing built-in or user-defined function.<br></br>
-Parentheses surround the parameters sent to the function.  The actual parameters vary from function 
-to function.  Functions that require no parameters can leave off the parentheses.  The function itself
-is wrapped in ${}.</p>
+<p>
+Where "__functionName" matches the name of a function.
+<br></br>
+Parentheses surround the parameters sent to the function, for example ${__time(YMD)}
+The actual parameters vary from function to function.  
+Functions that require no parameters can leave off the parentheses, for example ${__threadNum}.
+</p>
+
 <p>List of functions:</p>
 <ul>
         <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
@@ -72,7 +76,7 @@ is wrapped in ${}.</p>
 </ul>
 
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
-<p>There are two kinds of functions: user-defined static values, and built-in functions.<br></br>
+<p>There are two kinds of functions: user-defined static values (or variables), and built-in functions.<br></br>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
 run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
@@ -670,6 +674,28 @@ time.YMD=yyMMdd
 
 </subsection>
 
+<subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
+<p>
+Most variables are set by calling functions or by test elements such as User Defined Variables; 
+in which case the user has full control over the variable name that is used.
+However some variables are defined internally by JMeter. These are listed below.
+</p>
+<ul>
+<li>cookiename - contains the cookie value</li>
+<li>JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false</li>
+</ul>
+</subsection>
+<subsection name="&sect-num;.6 Pre-defined Properties" anchor="predefinedprops">
+<p>
+Properties are defined in jmeter.properties, or on the command line.
+Some additional properties are defined by JMeter. These are listed below.
+</p>
+<ul>
+<li>START.MS - start time in milliseconds</li>
+<li>START.YMD - start time as yyyyMMdd</li>
+<li>START.HMS - start time as HHmmss</li>
+</ul>
+</subsection>
 </section>
 
 </body>
