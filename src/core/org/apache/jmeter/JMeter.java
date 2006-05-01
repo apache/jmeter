@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
+ * Copyright 2000-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -253,6 +255,15 @@ public class JMeter implements JMeterPlugin {
                 String jcp=System.getProperty("java.class.path");// $NON-NLS-1$
                 log.debug(jcp);
             }
+
+            // Set some (hopefully!) useful properties
+            long now=System.currentTimeMillis();
+            JMeterUtils.setProperty("START.MS",Long.toString(now));
+            Date today=new Date(now); // so it agrees with above
+            // TODO perhaps should share code with __time() function for this...
+            JMeterUtils.setProperty("START.YMD",new SimpleDateFormat("yyyyMMdd").format(today));
+            JMeterUtils.setProperty("START.HMS",new SimpleDateFormat("HHmmss").format(today));
+            
 			if (parser.getArgumentById(VERSION_OPT) != null) {
 				System.out.println(JMeterUtils.getJMeterCopyright());
 				System.out.println("Version " + JMeterUtils.getJMeterVersion());
