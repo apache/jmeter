@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -27,7 +26,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
 /**
- * @version $Revision$
+ * TODO: should this extend AbstractFunction?
  */
 public class ThreadNumber implements Function, Serializable {
 
