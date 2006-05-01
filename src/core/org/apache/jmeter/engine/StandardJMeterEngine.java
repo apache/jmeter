@@ -72,6 +72,15 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
 	private transient ListenerNotifier notifier;
 
+    private static final boolean startListenersLater = 
+        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true);
+
+    static {
+        if (startListenersLater){
+            log.info("Listeners will be started after enabling running version");
+            log.info("To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false");
+        }
+    }
 	// Allow engine and threads to be stopped from outside a thread
 	// e.g. from beanshell server
 	// Assumes that there is only one instance of the engine
@@ -317,8 +326,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		Collection col = testListeners.getSearchResults();
 		col.addAll(testList);
 		testList = null;
-		notifyTestListenersOfStart();
+		if (!startListenersLater )notifyTestListenersOfStart();
 		getTestTree().traverse(new TurnElementsOn());
+        if (startListenersLater)notifyTestListenersOfStart();
 
 		List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
 		removeThreadGroups(testLevelElements);
