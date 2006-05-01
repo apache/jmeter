@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,6 @@ import org.apache.log.Logger;
  * CompoundFunction.
  * 
  * @author mstover
- * @version $Id$
  */
 public class CompoundVariable implements Function {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -63,7 +62,12 @@ public class CompoundVariable implements Function {
 			Iterator iter = classes.iterator();
 			while (iter.hasNext()) {
 				Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
-				functions.put(tempFunc.getReferenceKey(), tempFunc.getClass());
+				String referenceKey = tempFunc.getReferenceKey();
+                functions.put(referenceKey, tempFunc.getClass());
+                // TODO: find better way to include aliases for rename of function(s)
+                if (referenceKey.equals("__StringFromFile")){//$NON-NLS-1$
+                    functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
+                }
 			}
 		} catch (Exception err) {
 			log.error("", err);

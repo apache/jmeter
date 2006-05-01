@@ -228,8 +228,8 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </component>
 
 <!-- Alternate spelling -->
-<a name="__StringFromFile"/>
-<component index="&sect-num;.5.5" name="_StringFromFile">
+<a name="_StringFromFile"/>
+<component index="&sect-num;.5.5" name="__StringFromFile">
 
 <description>
 	<p>
