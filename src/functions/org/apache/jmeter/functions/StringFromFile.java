@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,28 +40,31 @@ import org.apache.log.Logger;
 /**
  * StringFromFile Function to read a String from a text file.
  * 
- * Parameters: - file name - variable name (optional - defaults to
- * StringFromFile_)
+ * Parameters: 
+ * - file name 
+ * - variable name (optional - defaults to StringFromFile_)
  * 
- * Returns: - the next line from the file - or **ERR** if an error occurs -
- * value is also saved in the variable for later re-use.
+ * Returns: 
+ * - the next line from the file
+ * - or **ERR** if an error occurs
+ * - value is also saved in the variable for later re-use.
  * 
  * Ensure that different variable names are used for each call to the function
  * 
  * 
- * Notes: - JMeter instantiates a copy of each function for every reference in a
- * Sampler or elsewhere; each instance will open its own copy of the the file -
- * the file name is resolved at file (re-)open time - the output variable name
- * is resolved every time the function is invoked
+ * Notes: 
+ * - JMeter instantiates a copy of each function for every reference in a
+ * Sampler or elsewhere; each instance will open its own copy of the the file
+ * - the file name is resolved at file (re-)open time
+ * - the output variable name is resolved every time the function is invoked
  * 
- * @version $Revision$ Updated on: $Date$
  */
 public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "_StringFromFile";//$NON-NLS-1$
+	private static final String KEY = "__StringFromFile";//$NON-NLS-1$
 
 	// Function name (only 1 _)
 
