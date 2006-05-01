@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -15,6 +14,17 @@
  * limitations under the License.
  * 
  */
+
+/////////////////////////////////////////
+////////
+//////// This code is mostly unused at present
+//////// it seems that only notifyListeners()
+//////// is used.
+////////
+//////// However, it does look useful.
+//////// And it may one day be used...
+////////
+/////////////////////////////////////////
 
 package org.apache.jmeter.threads;
 
