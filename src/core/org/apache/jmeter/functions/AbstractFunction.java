@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
  *
@@ -18,11 +17,7 @@
 
 package org.apache.jmeter.functions;
 
-// import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-// import java.util.LinkedList;
-// import java.util.List;
-// import java.util.StringTokenizer;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -30,10 +25,8 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-// import org.apache.jorphan.util.JOrphanUtils;
-
 /**
- * @version $Revision$ on $Date$
+ * Provides common methods for all functions
  */
 public abstract class AbstractFunction implements Function {
 
@@ -51,6 +44,8 @@ public abstract class AbstractFunction implements Function {
 
 	/**
 	 * @see Function#setParameters(Collection)
+     * Note: This may not be called (e.g. if no parameters are provided)
+     * 
 	 */
 	abstract public void setParameters(Collection parameters) throws InvalidVariableException;
 
@@ -59,70 +54,23 @@ public abstract class AbstractFunction implements Function {
 	 */
 	abstract public String getReferenceKey();
 
-	// Not used
-	// /**
-	// * Provides a convenient way to parse the given argument string into a
-	// * collection of individual arguments. Takes care of splitting the string
-	// * based on commas, generates blank strings for values between adjacent
-	// * commas, and decodes the string using URLDecoder.
-	// *
-	// * @deprecated
-	// */
-	// protected Collection parseArguments(String params)
-	// {
-	// StringTokenizer tk = new StringTokenizer(params, ",", true);
-	// List arguments = new LinkedList();
-	// String previous = "";
-	// while (tk.hasMoreTokens())
-	// {
-	// String arg = tk.nextToken();
-	//
-	// if (arg.equals(",") && previous.equals(","))
-	// {
-	// arguments.add("");
-	// }
-	// else if (!arg.equals(","))
-	// {
-	// try
-	// {
-	// arguments.add(JOrphanUtils.decode(arg, "UTF-8"));
-	// }
-	// catch (UnsupportedEncodingException e)
-	// {
-	// // UTF-8 unsupported? You must be joking!
-	// throw new Error("Should not happen: "+e.toString());
-	// }
-	// }
-	// previous = arg;
-	// }
-	// return arguments;
-	// }
-
-	/**
-	 * Provides a convenient way to parse the given argument string into a
-	 * collection of individual arguments. Takes care of splitting the string
-	 * based on commas, generates blank strings for values between adjacent
-	 * commas, and decodes the string using URLDecoder.
-	 */
-	/*
-	 * protected Collection parseArguments2(String params) { StringTokenizer tk =
-	 * new StringTokenizer(params, ",", true); List arguments = new
-	 * LinkedList(); String previous = ""; while (tk.hasMoreTokens()) { String
-	 * arg = tk.nextToken();
-	 * 
-	 * if (arg.equals(",") && (previous.equals(",") || previous.length() == 0)) {
-	 * arguments.add(new CompoundVariable()); } else if (!arg.equals(",")) { try {
-	 * CompoundVariable compoundArg = new CompoundVariable();
-	 * compoundArg.setParameters(URLDecoder.decode(arg));
-	 * arguments.add(compoundArg); } catch (InvalidVariableException e) { } }
-	 * previous = arg; }
-	 * 
-	 * if (previous.equals(",")) { arguments.add(new CompoundVariable()); }
-	 * 
-	 * return arguments; }
-	 */
-
 	protected JMeterVariables getVariables() {
 		return JMeterContextService.getContext().getVariables();
 	}
+    
+    /*
+     * Utility method to check parameter counts 
+     */
+    protected void checkParameterCount(Collection parameters, int min, int max) 
+        throws InvalidVariableException
+    {
+        int num = parameters.size();
+        if ((num > max) || (num < min)) {
+            throw new InvalidVariableException(
+                    "Wrong number of parameters. Actual: "+num+
+                    ". Expected: >= "+min
+                    +" and <= "+max
+                    );
+        }
+    }
 }
