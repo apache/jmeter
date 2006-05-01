@@ -68,6 +68,7 @@ is wrapped in ${}.</p>
         <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
         <li><a href="#__split">split - Split a string into variables</a></li>
         <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
+        <li><a href="#__time">time - return current time in various formats</a></li>
 </ul>
 
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -634,10 +635,38 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
 <properties>
         <property name="Property Name" required="Yes">The property name to be set.</property>
         <property name="Property Value" required="Yes">The value for the property.</property>
-        <property name="Property Value" required="No">Should the original value be returned?</property>
+        <property name="True/False" required="No">Should the original value be returned?</property>
 </properties>
 </component>
 
+
+<component index="&sect-num;.5.17" name="__time">
+<description>
+	<p>The time function returns the current time in various formats.</p>
+	</description>
+
+<properties>
+        <property name="Format" required="No">
+        The format to be passed to SimpleDateFormat. 
+        The function supports various shorthand aliases, see below.
+        </property>
+        <property name="Variable" required="No">The name of the variable to set.</property>
+</properties>
+<p>If the format string is omitted, then the function returns the current time in milliseconds.
+Otherwise, the current time is passed to SimpleDateFormat.
+The following shorthand aliases are provided:
+</p>
+<ul>
+<li>YMD = yyyyMMdd</li>
+<li>HMS = HHmmss</li>
+<li>YMDHMS = yyyyMMdd-HHmmss</li>
+<li>USER1 = whatever is in the Jmeter property time.USER1</li>
+<li>USER2 = whatever is in the Jmeter property time.USER2</li>
+</ul>
+<p>The defaults can be changed by setting the appropriate JMeter property, e.g.
+time.YMD=yyMMdd
+</p>
+</component>
 
 </subsection>
 
