@@ -24,18 +24,25 @@
 <p><b>Changes are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>  
 
+<!--  ===================  -->
 
 <h3>Version 2.1.2</h3>
 
 <h4>Incompatible changes:</h4>
 <p>
-The time stamp is now set to start time.
+The time stamp is now set to the sampler start time (it was the end).
 To revert to the previous behaviour, change the property <b>sampleresult.timestamp.start</b> to false (or comment it)
 </p>
 <p>The JMX output format has been simplified and files are not backwards compatible</p>
 <p>
 The JMeter.BAT file no longer changes directory to JMeter home, but runs from the current working directory.
 The jmeter-n.bat and jmeter-t.bat files change to the directory containing the input file.
+</p>
+<p>
+Listeners are now started slightly later in order to allow variable names to be used.
+This may cause some problems; if so define the following in jmeter.properties:
+<br/>
+jmeterengine.startlistenerslater=false
 </p>
 
 <h4>Known problems:</h4>
@@ -87,6 +94,7 @@ sample, and the file name can be included in the sample log file.
 <li>Add support for HEAD and PUT methods</li>
 <li>Allow default HTTP implementation to be changed</li>
 <li>Optionally save active thread counts (group and all) to result files</li>
+<li>Variables/functions can now be used in Listener file names</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -135,7 +143,8 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 25236 - remove double scrollbar from Assertion Result Listener</li>
 <li>Bug 38234 - Graph Listener divide by zero problem</li>
 <li>Bug 38824 - clarify behaviour of Ignore Status</li>
-<li>Bug 38250 - allow locale of zh_CN and zh_TW</li>
+<li>Bug 38250 - jmeter.properties "language" now supports country suffix, for zh_CN and zh_TW etc</li>
+<li>jmeter.properties file is now closed after it has been read</li>
 </ul>	
 	
 <h4>Other changes</h4>
@@ -148,7 +157,11 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Extract htmlparser interface into separate jarfile to make it possible to replace the parser</li>
 <li>Removed SQL Config GUI as no longer needed (or working!)</li>
 <li>HTTPSampler no longer logs a warning for Page not found (404)</li>
+<li>StringFromFile now callable as __StringFromFile (as well as _StringFromFile)</li>
 </ul>
+
+<!--  ===================  -->
+
 
 <hr/>
 <h3>Version 2.1.1</h3>
@@ -171,6 +184,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 </ul>	
 	
 
+<!--  ===================  -->
 
 <h3>Version 2.1</h3>
 <h4>New functionality:</h4>
@@ -231,7 +245,9 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>TCP sampler - only share sockets with same host:port details; correct the manual</li>
 <li>Extract src attribute for embed tags in JTidy and Html Parsers</li>
 </ul>	
-	
+
+<!--  ===================  -->
+
 <h3>Version 2.0.3</h3>
 <h4>New functionality:</h4>
 <ul>
@@ -274,6 +290,8 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 33919 - increase Counter field sizes</li>
 <li>Bug 32252 - ForEach was not initialising counters</li>
 </ul>
+
+<!--  ===================  -->
 
 <h3>Version 2.0.2</h3>
 <h4>New functionality:</h4>
