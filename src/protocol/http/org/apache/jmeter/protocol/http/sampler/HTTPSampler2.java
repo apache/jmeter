@@ -284,7 +284,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 //		}
 
 		// Allow HttpClient to handle the redirects:
-		httpMethod.setFollowRedirects(getPropertyAsBoolean(AUTO_REDIRECTS));
+		httpMethod.setFollowRedirects(getFollowRedirects());
 
 		// a well-behaved browser is supposed to send 'Connection: close'
 		// with the last request to an HTTP server. Instead, most browsers
@@ -533,11 +533,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         }
 
 		HTTPSampleResult res = new HTTPSampleResult();
-		if (this.getPropertyAsBoolean(MONITOR)) {
-			res.setMonitor(true);
-		} else {
-			res.setMonitor(false);
-		}
+		res.setMonitor(isMonitor());
+        
 		res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(method);
 		res.sampleStart(); // Count the retries as well in the time
