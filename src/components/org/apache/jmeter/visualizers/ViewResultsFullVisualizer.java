@@ -281,6 +281,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 						sampleDataField.setText(sd);
                     }
 
+					statsDoc.insertString(statsDoc.getLength(), "Thread Name: "+res.getThreadName()+"\n", null);
 					statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null);
 
 					String responseCode = res.getResponseCode();
