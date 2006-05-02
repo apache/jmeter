@@ -117,7 +117,7 @@ public class Functor {
 		try {
 			return createMethod(getTypes()).invoke(invokee, getArgs());
 		} catch (Exception e) {
-			log.warn("Trouble functing method: ", e);
+			log.warn("Trouble functing method: "+methodName+" invokee: "+invokee.getClass().getName(), e);
 			throw new org.apache.jorphan.util.JMeterError(e); // JDK1.4
 		}
 	}
