@@ -43,6 +43,8 @@ public class Sample implements Serializable, Comparable {
 
 	private final String label;
 
+	private final String threadName;
+
 	private final long count;
 
 	private final long endTime;
@@ -74,6 +76,7 @@ public class Sample implements Serializable, Comparable {
 		this.count = num;
 		this.endTime = endTime;
         this.bytes = 0;
+        this.threadName = "";
 	}
 
     public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
@@ -90,6 +93,24 @@ public class Sample implements Serializable, Comparable {
         this.count = num;
         this.endTime = endTime;
         this.bytes = bytes;
+        this.threadName = "";
+    }
+
+    public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
+            double throughput, long errorCount, boolean success, long num, long endTime, int bytes, String threadName) {
+        this.data = data;
+        this.average = average;
+        this.deviation = deviation;
+        this.throughput = throughput;
+        this.success = success;
+        this.median = median;
+        this.distributionLine = distributionLine;
+        this.label = name;
+        this.errorCount = errorCount;
+        this.count = num;
+        this.endTime = endTime;
+        this.bytes = bytes;
+        this.threadName = threadName;
     }
 
 	public Sample() {
@@ -155,6 +176,13 @@ public class Sample implements Serializable, Comparable {
 	 */
 	public String getLabel() {
 		return label;
+	}
+
+	/**
+	 * @return Returns the threadName.
+	 */
+	public String getThreadName() {
+		return threadName;
 	}
 
 	/**
