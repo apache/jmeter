@@ -55,6 +55,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private final String[] COLUMNS = new String[] {
             JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_thread_name"),// $NON-NLS-1$
 			JMeterUtils.getResString("sampler_label"),  // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_sample_time"), // $NON-NLS-1$
 			JMeterUtils.getResString("success?"),  // $NON-NLS-1$
@@ -85,13 +86,14 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		super();
 		model = new ObjectTableModel(COLUMNS, new Functor[] {
                 new Functor("getCount"), // $NON-NLS-1$
+                new Functor("getThreadName"), // $NON-NLS-1$
                 new Functor("getLabel"), // $NON-NLS-1$
 				new Functor("getData"), // $NON-NLS-1$
                 new Functor("isSuccess"), // $NON-NLS-1$
                 new Functor("getBytes") }, // $NON-NLS-1$
-                new Functor[] { null, null, null, null, null }, 
-                new Class[] { Long.class, String.class, Long.class, Boolean.class,
-				Integer.class });
+                new Functor[] { null, null, null, null, null, null }, 
+                new Class[] { 
+				Long.class, String.class, String.class, Long.class, Boolean.class, Integer.class });
 		init();
 	}
 
@@ -109,8 +111,11 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	public void add(SampleResult res) {
 		synchronized (calc) {
 			calc.addValue(res.getTime());
+			int count = calc.getCount();
+			// TODO: does the rest need to be synch?
 			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
-                    res.isSuccessful(), calc.getCount(), res.getTimeStamp(),res.getBytes());
+                    res.isSuccessful(), count, res.getTimeStamp(),res.getBytes(),
+                    res.getThreadName());
 			model.addRow(newS);
 		}
 		currentData = res.getTime();
