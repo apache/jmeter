@@ -422,11 +422,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 		log.debug("Start : sample" + urlStr);
 
 		HTTPSampleResult res = new HTTPSampleResult();
-		if (this.getPropertyAsBoolean(MONITOR)) {
-			res.setMonitor(true);
-		} else {
-			res.setMonitor(false);
-		}
+		res.setMonitor(isMonitor());
+        
 		res.setSampleLabel(urlStr);
 		res.sampleStart(); // Count the retries as well in the time
 		try {
