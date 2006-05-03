@@ -47,7 +47,7 @@ public class PostWriter {
 	/**
 	 * Send POST data from Entry to the open connection.
 	 */
-	public void sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
+	public static void sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
 		// If filename was specified then send the post using multipart syntax
 		String filename = sampler.getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
@@ -78,7 +78,7 @@ public class PostWriter {
 		}
 	}
 
-	public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
+	public static void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
 		((HttpURLConnection) connection).setRequestMethod(HTTPSamplerBase.POST);
 
 		// If filename was specified then send the post using multipart syntax
@@ -99,7 +99,7 @@ public class PostWriter {
 		}
 	}
 
-	private InputStream getFileStream(String filename) throws IOException {
+	private static InputStream getFileStream(String filename) throws IOException {
 		return new BufferedInputStream(new FileInputStream(filename));
 	}
 
@@ -121,7 +121,7 @@ public class PostWriter {
 	/**
 	 * Writes out the contents of a file in correct multipart format.
 	 */
-	private void writeFileToURL(OutputStream out, String filename,
+	private static void writeFileToURL(OutputStream out, String filename,
             String fieldname, InputStream in, String mimetype)
             throws IOException {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
@@ -148,20 +148,20 @@ public class PostWriter {
 	/**
 	 * Writes form data in multipart format.
 	 */
-	private void writeFormMultipartStyle(OutputStream out, String name, String value) throws IOException {
+	private static void writeFormMultipartStyle(OutputStream out, String name, String value) throws IOException {
 		writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$
 		out.write(CRLF);
 		writeln(out, value);
 	}
 
-    private void write(OutputStream out, String value) 
+    private static void write(OutputStream out, String value) 
     throws UnsupportedEncodingException, IOException 
     {
     	out.write(value.getBytes(encoding)); 
     }
 	
 
-	private void writeln(OutputStream out, String value) throws UnsupportedEncodingException, IOException {
+	private static void writeln(OutputStream out, String value) throws UnsupportedEncodingException, IOException {
 		out.write(value.getBytes(encoding));
 		out.write(CRLF);
 	}
