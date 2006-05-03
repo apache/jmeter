@@ -89,7 +89,7 @@ public class SoapSampler extends HTTPSampler {
 	 * @exception IOException
 	 *                if an I/O exception occurs
 	 */
-	public void setPostHeaders(URLConnection connection) throws IOException {
+	protected void setPostHeaders(URLConnection connection) throws IOException {
 		((HttpURLConnection) connection).setRequestMethod("POST");
 		connection.setRequestProperty("Content-Length", "" + getXmlData().length());
 		// my first attempt at fixing the bug failed, due to user
@@ -122,7 +122,7 @@ public class SoapSampler extends HTTPSampler {
 	 * @exception IOException
 	 *                if an I/O exception occurs
 	 */
-	public void sendPostData(URLConnection connection) throws IOException {
+	protected void sendPostData(URLConnection connection) throws IOException {
 		PrintWriter out = new PrintWriter(connection.getOutputStream());
 		out.print(getXmlData());
 		out.close();
