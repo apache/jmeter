@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2005,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
+import org.apache.jmeter.assertions.gui.AssertionGui;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -38,6 +40,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
+import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
+import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -65,38 +69,51 @@ import org.apache.oro.text.regex.Perl5Matcher;
 //For unit tests, @see TestProxyControl
 
 /**
- * @version $Revision$ updated on $Date$
+ * Class handles storing of generated samples, etc
  */
 public class ProxyControl extends GenericController implements Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    /*
+     * Use class names so the complier can detect if a class is renamed/deleted
+     */
+    //  TODO - allow for HttpClient sampler ...
+	private static final String HTTP_TEST_SAMPLE_GUI = HttpTestSampleGui.class.getName();
+
+    private static final String ASSERTION_GUI = AssertionGui.class.getName();
+
+    private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName(); 
+
+    private static final String HEADER_PANEL = HeaderPanel.class.getName(); 
 
 	private transient Daemon server;
 
 	public static final int DEFAULT_PORT = 8080;
 
-	public static final String DEFAULT_PORT_S = Integer.toString(DEFAULT_PORT);// Used
-																				// by
-																				// GUI
+    // and as a string
+	public static final String DEFAULT_PORT_S =
+        Integer.toString(DEFAULT_PORT);// Used by GUI
 
 	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
 	transient Perl5Matcher matcher;
 
-	public static final String PORT = "ProxyControlGui.port";
+	public static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
 
-	public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
+	public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list"; // $NON-NLS-1$
 
-	public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
+	public static final String INCLUDE_LIST = "ProxyControlGui.include_list"; // $NON-NLS-1$
 
-	public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
+	public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers"; // $NON-NLS-1$
 
-	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
+	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion"; // $NON-NLS-1$
 
-	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode";
+	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
 
-	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive";
+	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
 
-	public static final String REGEX_MATCH = "ProxyControlGui.regex_match";
+	public static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
 	public static final int GROUPING_NO_GROUPS = 0;
 
@@ -108,14 +125,9 @@ public class ProxyControl extends GenericController implements Serializable {
 
 	private long lastTime = 0;// When was the last sample seen?
 
-	private static final long sampleGap = JMeterUtils.getPropDefault("proxy.pause", 1000);// Detect
-																							// if
-																							// user
-																							// has
-																							// pressed
-																							// a
-																							// new
-																							// link
+	private static final long sampleGap =
+        JMeterUtils.getPropDefault("proxy.pause", 1000); // $NON-NLS-1$
+    // Detect if user has pressed a new link
 
 	private boolean addAssertions;
 
@@ -288,10 +300,7 @@ public class ProxyControl extends GenericController implements Serializable {
 			removeValuesFromSampler(sampler, defaultConfigurations);
 			replaceValues(sampler, subConfigs, userDefinedVariables);
 			sampler.setUseKeepAlive(useKeepAlive);
-			sampler.setProperty(TestElement.GUI_CLASS, // TODO - allow for
-														// HttpClient sampler
-														// ...
-					"org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
+			sampler.setProperty(TestElement.GUI_CLASS, HTTP_TEST_SAMPLE_GUI);
 
 			placeSampler(sampler, subConfigs, myTarget);
 
@@ -341,7 +350,7 @@ public class ProxyControl extends GenericController implements Serializable {
 	 */
 	private void addAssertion(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
 		ResponseAssertion ra = new ResponseAssertion();
-		ra.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.assertions.gui.AssertionGui");
+		ra.setProperty(TestElement.GUI_CLASS, ASSERTION_GUI);
 		ra.setName("Check response");
 		ra.setTestField(ResponseAssertion.RESPONSE_DATA);
 		model.addComponent(ra, node);
@@ -352,8 +361,8 @@ public class ProxyControl extends GenericController implements Serializable {
 	 */
 	private void addDivider(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
 		GenericController sc = new GenericController();
-		sc.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
-		sc.setName("-------------------");
+		sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
+		sc.setName("-------------------"); // $NON-NLS-1$
 		model.addComponent(sc, node);
 	}
 
@@ -370,7 +379,7 @@ public class ProxyControl extends GenericController implements Serializable {
 	private void addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name)
 			throws IllegalUserActionException {
 		GenericController sc = new GenericController();
-		sc.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
+		sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
 		sc.setName(name);
 		model.addComponent(sc, node);
 	}
@@ -599,7 +608,7 @@ public class ProxyControl extends GenericController implements Serializable {
 
 			for (int i = 0; subConfigs != null && i < subConfigs.length; i++) {
 				if (subConfigs[i] instanceof HeaderManager) {
-					subConfigs[i].setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.protocol.http.gui.HeaderPanel");
+					subConfigs[i].setProperty(TestElement.GUI_CLASS, HEADER_PANEL);
 					treeModel.addComponent(subConfigs[i], newNode);
 				}
 			}
@@ -637,7 +646,7 @@ public class ProxyControl extends GenericController implements Serializable {
 
 				if (configValue != null && configValue.length() > 0) {
 					if (configValue.equals(value))
-						sampler.setProperty(name, "");
+						sampler.setProperty(name, ""); // $NON-NLS-1$
 					// Property was found in a config element. Whether or not
 					// it matched the value in the sampler, we're done with
 					// this property -- don't look at lower-priority configs:
