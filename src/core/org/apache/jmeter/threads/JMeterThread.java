@@ -28,6 +28,7 @@ import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -321,6 +322,7 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		rampUpDelay();
 		log.info("Thread " + Thread.currentThread().getName() + " started");
         JMeterContextService.incrNumberOfThreads();
+        GuiPackage.getInstance().getMainFrame().updateCounts();
         threadGroup.incrNumberOfThreads();
 		/*
 		 * Setting SamplingStarted before the contollers are initialised allows
@@ -351,7 +353,8 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		Traverser shut = new Traverser(false);
 		testTree.traverse(shut);
 		JMeterContextService.decrNumberOfThreads();
-		threadGroup.decrNumberOfThreads();
+        GuiPackage.getInstance().getMainFrame().updateCounts();
+        threadGroup.decrNumberOfThreads();
 	}
 
 	private static class Traverser implements HashTreeTraverser {
