@@ -353,10 +353,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		schcdule_run = true;
 		JMeterContextService.getContext().setSamplingStarted(true);
 		int groupCount = 0;
+        JMeterContextService.clearTotalThreads();
 		while (iter.hasNext()) {
 			groupCount++;
 			ThreadGroup group = (ThreadGroup) iter.next();
 			int numThreads = group.getNumThreads();
+            JMeterContextService.addTotalThreads(numThreads);
 			boolean onErrorStopTest = group.getOnErrorStopTest();
 			boolean onErrorStopThread = group.getOnErrorStopThread();
 			String groupName = group.getName();
