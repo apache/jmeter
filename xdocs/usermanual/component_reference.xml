@@ -115,13 +115,13 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
-
+<note>The HTTP methods HEAD, TRACE, OPTIONS, PUT, DELETE are new in 2.1.2, and may have some teething problems.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
         <property name="Protocol" required="No">HTTP or HTTPS. Default: HTTP</property>
-        <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
+        <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
 		<property name="Redirect Automatically" required="No">Set the http connection to automatically follow redirects. 
                   If set, the redirects will not appear as samples, as JMeter never sees them.
         </property>
@@ -146,7 +146,7 @@ resource requires query string parameters, add them below in the
         <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.</property>
-        <property name="Parameter Name" required="No (Yes if Filename filled in)">Name of the web request parameter.</property>
+        <property name="Value for 'name' attribute" required="No (Yes if Filename filled in)">Value of the "name" web request parameter.</property>
         <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.</property>
