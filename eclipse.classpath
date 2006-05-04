@@ -43,5 +43,6 @@
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.I.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/bsf-2.3.0.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
