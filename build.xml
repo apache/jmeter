@@ -295,6 +295,7 @@
 
   <!-- 3rd party libraries to be included in the binary distribution -->
   <property name="avalon-framework.jar" value="${lib.dir}/avalon-framework-4.1.4.jar"/>
+  <property name="apache-bsf.jar" value="${lib.dir}/bsf-2.3.0.jar"/>
   <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.8.jar"/>
   <property name="commons-codec.jar" value="${lib.dir}/commons-codec-1.3.jar"/>
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
@@ -335,6 +336,7 @@
     <include name="${lib.dir}/*.html"/>
     <include name="${lib.dir}/LICENSE*.*"/>
     <include name="${avalon-framework.jar}"/>
+    <include name="${apache-bsf.jar}"/>
     <include name="${jakarta-oro.jar}"/>
     <include name="${commons-codec.jar}"/>
     <include name="${commons-collections.jar}"/>
