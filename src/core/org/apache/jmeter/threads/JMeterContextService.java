@@ -29,7 +29,9 @@ public final class JMeterContextService {
 
 	private static long testStart = 0;
 
-	private static int numberOfThreads = 0;
+	private static int numberOfThreads = 0; // Active thread count
+    
+    private static int totalThreads = 0;
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -74,4 +76,15 @@ public final class JMeterContextService {
 		return testStart;
 	}
 
+    public static synchronized int getTotalThreads() {
+        return totalThreads;
+    }
+
+    public static synchronized void addTotalThreads(int thisGroup) {
+        totalThreads += thisGroup;
+    }
+
+    public static synchronized void clearTotalThreads() {
+        totalThreads = 0;
+    }
 }
