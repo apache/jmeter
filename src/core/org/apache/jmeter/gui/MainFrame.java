@@ -71,7 +71,7 @@ import org.apache.jorphan.gui.ComponentUtil;
  */
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
-	/** The menu bar. */
+    /** The menu bar. */
 	private JMeterMenuBar menuBar;
 
 	/** The main panel where components display their GUIs. */
@@ -104,6 +104,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	/** A message dialog shown while JMeter threads are stopping. */
 	private JDialog stoppingMessage;
 
+    private JLabel totalThreads;
+    private JLabel activeThreads;
+    
 	/**
 	 * Create a new JMeter frame.
 	 * 
@@ -123,6 +126,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		runningIndicator.setMargin(new Insets(0, 0, 0, 0));
 		runningIndicator.setBorder(BorderFactory.createEmptyBorder());
 
+        totalThreads = new JLabel("0");
+        activeThreads = new JLabel("0");
+        
 		tree = makeTree(treeModel, treeListener);
 
 		GuiPackage.getInstance().setMainFrame(this);
@@ -256,6 +262,15 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		});
 	}
 
+    public void updateCounts() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
+                totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
+            }
+        });
+    }
+
 	/***************************************************************************
 	 * !ToDo (Method description)
 	 * 
@@ -298,6 +313,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	public void testStarted(String host) {
 		hosts.add(host);
 		runningIndicator.setIcon(runningIcon);
+        activeThreads.setText("0");
+        totalThreads.setText("0");
 		menuBar.setRunning(true, host);
 	}
 
@@ -329,6 +346,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 			stoppingMessage.dispose();
 			stoppingMessage = null;
 		}
+        activeThreads.setText("0");
+        totalThreads.setText("0");
 	}
 
 	/* Implements TestListener#testIterationStart(LoopIterationEvent) */
@@ -372,7 +391,11 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		Box toolPanel = new Box(BoxLayout.X_AXIS);
 		toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
 		toolPanel.add(Box.createGlue());
-		toolPanel.add(runningIndicator);
+        toolPanel.add(activeThreads);
+        toolPanel.add(new JLabel(" / "));
+        toolPanel.add(totalThreads);
+        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(runningIndicator);
 		return toolPanel;
 	}
 
