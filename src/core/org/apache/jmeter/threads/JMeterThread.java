@@ -243,12 +243,9 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 						sampler.setThreadContext(threadContext);
 						sampler.setThreadName(threadName);
 						TestBeanHelper.prepare(sampler);
-						SampleResult result = sampler.sample(null); // TODO:
-																	// remove
-																	// this
-																	// useless
-																	// Entry
-																	// parameter
+						SampleResult result = sampler.sample(null); 
+                        // TODO: remove this useless Entry parameter
+                        
 						if (result != null) {
 							result.setThreadName(threadName);
 							threadContext.setPreviousResult(result);
@@ -322,7 +319,10 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		rampUpDelay();
 		log.info("Thread " + Thread.currentThread().getName() + " started");
         JMeterContextService.incrNumberOfThreads();
-        GuiPackage.getInstance().getMainFrame().updateCounts();
+        GuiPackage gp =GuiPackage.getInstance();
+        if (gp != null) {// check there is a GUI
+            gp.getMainFrame().updateCounts();
+        }
         threadGroup.incrNumberOfThreads();
 		/*
 		 * Setting SamplingStarted before the contollers are initialised allows
@@ -353,7 +353,10 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		Traverser shut = new Traverser(false);
 		testTree.traverse(shut);
 		JMeterContextService.decrNumberOfThreads();
-        GuiPackage.getInstance().getMainFrame().updateCounts();
+        GuiPackage gp = GuiPackage.getInstance();
+        if (gp != null){
+            gp.getMainFrame().updateCounts();
+        }
         threadGroup.decrNumberOfThreads();
 	}
 
