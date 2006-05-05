@@ -203,9 +203,10 @@ public class JMeter implements JMeterPlugin {
 		ComponentUtil.centerComponentInWindow(main, 80);
 		main.show();
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
-		if (testFile != null) {
+        String arg; 
+		if (testFile != null && (arg = testFile.getArgument()) != null) {
 			try {
-				File f = new File(testFile.getArgument());
+                File f = new File(arg);
 				log.info("Loading file: " + f);
 				FileInputStream reader = new FileInputStream(f);
 				HashTree tree = SaveService.loadTree(reader);
@@ -492,10 +493,14 @@ public class JMeter implements JMeterPlugin {
 		if (testFile == null) {
 			throw new IllegalUserActionException();
 		}
-		if (logFile == null) {
-			driver.run(testFile.getArgument(), null, remoteStart != null);
+		String argument = testFile.getArgument();
+        if (argument == null) {
+            throw new IllegalUserActionException();
+        }
+        if (logFile == null) {
+			driver.run(argument, null, remoteStart != null);
 		} else {
-			driver.run(testFile.getArgument(), logFile.getArgument(), remoteStart != null);
+			driver.run(argument, logFile.getArgument(), remoteStart != null);
 		}
 	}
 
