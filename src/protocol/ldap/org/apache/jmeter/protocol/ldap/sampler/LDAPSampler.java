@@ -456,7 +456,6 @@ public class LDAPSampler extends AbstractSampler {
 			}
 			res.setDataType(SampleResult.TEXT);
 			isSuccessful = true;
-			ldap.disconnect();
 		} catch (Exception ex) {
 			log.error("Ldap client - ", ex);
 			// Could time this
@@ -464,9 +463,10 @@ public class LDAPSampler extends AbstractSampler {
 			// if sampleEnd() is not called, elapsed time will remain zero
 			res.setResponseCode("500");// TODO distinguish errors better
 			res.setResponseMessage(ex.toString());
-			ldap.disconnect();
 			isSuccessful = false;
-		}
+		} finally {
+            ldap.disconnect();
+        }
 
 		// Set if we were successful or not
 		res.setSuccessful(isSuccessful);
