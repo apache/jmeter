@@ -86,6 +86,6 @@ rem Setting this flag to true enables hardware-accelerated scaling.
 rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Collect the settings defined above
-set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG% %DDRAW%
+set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
 
 %JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar %JMETER_BIN%ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
