@@ -33,7 +33,7 @@ import org.apache.log.Logger;
  * 
  */
 public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestListener, TestBean {
-	private static final long serialVersionUID = 2;
+	private static final long serialVersionUID = 3;
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -95,14 +95,20 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	 * 
 	 * @see org.apache.jmeter.timers.Timer#delay()
 	 */
-	public synchronized long delay() {
+	public long delay() {
 		long currentTime = System.currentTimeMillis();
-		long currentTarget = previousTime == 0 ? currentTime : previousTime;
-		previousTime = currentTarget + calculateDelay();
+
+        /* 
+         * If previous time is zero, then target will be in the past.
+         * This is what we want, so first sample is run without a delay.
+        */
+        long currentTarget = previousTime  + calculateDelay();
 		if (currentTime > currentTarget) {
 			// We're behind schedule -- try to catch up:
+            previousTime = currentTime;
 			return 0;
 		}
+        previousTime = currentTarget;
 		return currentTarget - currentTime;
 	}
 
@@ -110,6 +116,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	 * @param currentTime
 	 * @return new Target time
 	 */
+    // TODO - is this used?
 	protected long calculateCurrentTarget(long currentTime) {
 		return currentTime + calculateDelay();
 	}
@@ -117,14 +124,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	// Calculate the delay based on the mode
 	private long calculateDelay() {
 		long offset = 0;
+        // N.B. we fetch the throughput each time, as it may vary during a test
 		long rate = (long) (MILLISEC_PER_MIN / getThroughput());
 		switch (modeInt) {
 		case 1: // Total number of threads
-			offset = (
-			// previousTime == 0 ? //TODO - why is this needed?
-					// (JMeterContextService.getContext().getThreadNum() + 1)
-					// :
-					JMeterContextService.getNumberOfThreads()) * rate;
+			offset = JMeterContextService.getNumberOfThreads() * rate;
 			break;
 		case 2: // Active threads in this group
 			offset = JMeterContextService.getContext().getThread().getThreadGroup().getNumberOfThreads() * rate;
