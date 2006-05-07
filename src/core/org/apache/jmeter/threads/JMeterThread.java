@@ -319,11 +319,11 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		rampUpDelay();
 		log.info("Thread " + Thread.currentThread().getName() + " started");
         JMeterContextService.incrNumberOfThreads();
+        threadGroup.incrNumberOfThreads();
         GuiPackage gp =GuiPackage.getInstance();
         if (gp != null) {// check there is a GUI
             gp.getMainFrame().updateCounts();
         }
-        threadGroup.incrNumberOfThreads();
 		/*
 		 * Setting SamplingStarted before the contollers are initialised allows
 		 * them to access the running values of functions and variables (however
@@ -353,11 +353,11 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 		Traverser shut = new Traverser(false);
 		testTree.traverse(shut);
 		JMeterContextService.decrNumberOfThreads();
+        threadGroup.decrNumberOfThreads();
         GuiPackage gp = GuiPackage.getInstance();
         if (gp != null){
             gp.getMainFrame().updateCounts();
         }
-        threadGroup.decrNumberOfThreads();
 	}
 
 	private static class Traverser implements HashTreeTraverser {
