@@ -2438,17 +2438,18 @@ to the random delay.</property>
 <component name="Constant Throughput Timer" index="&sect-num;.6.4" screenshot="timers/constant_throughput_timer.png">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
-
-<p>Only samples within the container where you put the timer count towards the calculated throughput. Also note that the total time (used in the denominator to calculate the throughput) starts counting with the first such sample -- not with the test start.</p></description>
-
+</description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
+  <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
   <property name="Target Throughput" required="Yes">Throughput we want the timer to try to generate.</property>
-  <property name="Legacy Mode" required="Yes">
-	If True, calculate throughput for each thread separately.
-	<br></br>
-	If False, calculate throughput based on the total number of threads.
-	</property>
+  <property name="Calculate Throughput based on" required="Yes">
+   <ul>
+    <li>this thread only - each thread will try to maintain the target throughput. The overall throughput will be proportional to the number of active threads.</li>
+    <li>all active threads in current thread group - the target throughput is divided amongst all the active threads in the group.</li>
+    <li>all active threads - the target throughput is divided amongst all the active threads in all Thread Groups. 
+    In this case, each other Thread Group will need a Constant Throughput timer with the same settings.</li>
+   </ul>
+  </property>
 </properties>
 
 </component>
