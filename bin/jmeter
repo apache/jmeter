@@ -82,6 +82,6 @@ DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
 
 SERVER="-server"
 
-ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM $DEBUG"
+ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM"
 
 java $JVM_ARGS $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"
