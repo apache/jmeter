@@ -61,11 +61,16 @@ public class Clear implements Command {
 		} else {
 			Iterator iter = guiPackage.getTreeModel().getNodesOfType(Clearable.class).iterator();
 			while (iter.hasNext()) {
+                JMeterTreeNode node = null;
+                JMeterGUIComponent guiComp = null;
 				try {
-					Clearable item = (Clearable) guiPackage.getGui(((JMeterTreeNode) iter.next()).getTestElement());
+					Object next = iter.next();
+                    node = (JMeterTreeNode) next;
+                    guiComp = guiPackage.getGui(node.getTestElement());
+                    Clearable item = (Clearable) guiComp;
 					item.clear();
 				} catch (Exception ex) {
-					log.error("", ex);
+					log.error("Can't clear: "+node+" "+guiComp, ex);
 				}
 			}
 		}
