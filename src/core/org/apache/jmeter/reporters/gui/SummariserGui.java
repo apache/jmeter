@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +20,7 @@ package org.apache.jmeter.reporters.gui;
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.reporters.Summariser;
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 
@@ -30,9 +30,8 @@ import org.apache.jmeter.testelement.TestElement;
  * Note: This is not really a PostProcessor, but that seems to be the closest of
  * the existing types.
  * 
- * @version $Revision$ Last updated: $Date$
  */
-public class SummariserGui extends AbstractPostProcessorGui {
+public class SummariserGui extends AbstractPostProcessorGui implements Clearable {
 
 	public SummariserGui() {
 		super();
