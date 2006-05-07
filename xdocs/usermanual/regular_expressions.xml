@@ -42,7 +42,8 @@ There is also documentation on an older incarnation of the product at
 <p>
 The pattern matching is very similar to the pattern matching in Perl. 
 A full installation of Perl will include plenty of documentation on regular expressions - look for perlrequick, perlretut, perlre, perlreref.
-
+</p>
+<p>
 It is worth stressing the difference between "contains" and "matches", as used on the Response Assertion test element:
 </p>
 <ul>
@@ -122,6 +123,29 @@ The following variables would be set:
 </ul>
 These variables can be referred to later on in the JMeter test plan, as ${MYREF}, ${MYREF_g1} etc 
 </p>
+</subsection>
+<subsection name="&sect-num;.3 Line mode">
+<p>The pattern matching behave in various slightly different ways, 
+depending on the setting of the multi-line and single-line modifiers.
+</p>
+<p>There are the four possible combinations:</p>
+
+<ul>
+<li>
+Default behavior. '.' matches any character except "\n". ^ matches only at the beginning of the string and $ matches only at the end or before a newline at the end. 
+</li>
+<li>
+Single-line modifier (?s): Treat string as a single long line. '.' matches any character, even "\n". ^ matches only at the beginning of the string and $ matches only at the end or before a newline at the end. 
+</li>
+<li>
+
+Multi-line modifier (?m): Treat string as a set of multiple lines. '.' matches any character except "\n". ^ and $ are able to match at the start or end of any line within the string. 
+</li>
+<li>
+
+Both modifiers (?sm): Treat string as a single long line, but detect multiple lines. '.' matches any character, even "\n". ^ and $, however, are able to match at the start or end of any line within the string. 
+</li>
+</ul>
 </subsection>
 </section>
 
