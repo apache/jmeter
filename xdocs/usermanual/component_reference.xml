@@ -2450,7 +2450,6 @@ to the random delay.</property>
     <li>all active threads - the target throughput is divided amongst all the active threads in all Thread Groups.
     Each thread will delay as needed, based on when it last ran.
     In this case, each other Thread Group will need a Constant Throughput timer with the same settings.</li>
-   </ul>
     <li>all active threads in current thread group (shared) - as above, but each thread is delayed based on when any thread in the group last ran.</li>
     <li>all active threads (shared) - as above; each thread is delayed based on when any thread last ran.</li>
    </ul>
