@@ -79,7 +79,7 @@ public class BaseHREFScannerTest extends ParserTestCase {
 		// Base href tag should be the 4th tag
 		assertTrue(node[3] instanceof BaseHrefTag);
 		BaseHrefTag baseRefTag = (BaseHrefTag) node[3];
-		assertEquals("Base HREF Url", "http://www.abc.com", baseRefTag.getBaseUrl());
+		assertEquals("Base HREF Url", "http://www.abc.com/", baseRefTag.getBaseUrl());
 	}
 
 }
