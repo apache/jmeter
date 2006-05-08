@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.timers;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -28,13 +31,20 @@ import org.apache.log.Logger;
 
 /**
  * This class implements a constant throughput timer. A Constant Throughtput
- * Timer paces the samplers under it's influence so that the total number of
+ * Timer paces the samplers under its influence so that the total number of
  * samples per unit of time approaches a given constant as much as possible.
  * 
+ * There are two different ways of pacing the requests:
+ * - delay each thread according to when it last ran
+ * - delay each thread according to when any thread last ran 
  */
 public class ConstantThroughputTimer extends AbstractTestElement implements Timer, TestListener, TestBean {
 	private static final long serialVersionUID = 3;
 
+    private static class ThroughputInfo{
+        final Object MUTEX = new Object();
+        long lastScheduledTime = 0;
+    }
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final double MILLISEC_PER_MIN = 60000.0;
@@ -54,6 +64,13 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	 * Desired throughput, in samples per minute.
 	 */
 	private double throughput;
+
+    //For calculating throughput across all threads
+    private final static ThroughputInfo allThreadsInfo = new ThroughputInfo();
+    
+    //For holding the ThrougputInfo objects for all ThreadGroups. Keyed by ThreadGroup objects
+    private final static Map threadGroupsInfoMap = new Hashtable();
+    
 
 	/**
 	 * Constructor for a non-configured ConstantThroughputTimer.
@@ -85,9 +102,9 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	}
 
 	public void setCalcMode(String mode) {
-		// TODO find better way to get modeInt
+        this.calcMode = mode;
+        // TODO find better way to get modeInt
 		this.modeInt = ConstantThroughputTimerBeanInfo.getCalcModeAsInt(calcMode);
-		this.calcMode = mode;
 	}
 
 	/**
@@ -123,22 +140,63 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
 	// Calculate the delay based on the mode
 	private long calculateDelay() {
-		long offset = 0;
+		long delay = 0;
         // N.B. we fetch the throughput each time, as it may vary during a test
-		long rate = (long) (MILLISEC_PER_MIN / getThroughput());
+		long msPerRequest = (long) (MILLISEC_PER_MIN / getThroughput());
 		switch (modeInt) {
 		case 1: // Total number of threads
-			offset = JMeterContextService.getNumberOfThreads() * rate;
+			delay = JMeterContextService.getNumberOfThreads() * msPerRequest;
 			break;
+            
 		case 2: // Active threads in this group
-			offset = JMeterContextService.getContext().getThread().getThreadGroup().getNumberOfThreads() * rate;
+			delay = JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest;
 			break;
+            
+        case 3: // All threads - alternate calculation
+            delay = calculateSharedDelay(allThreadsInfo,msPerRequest);
+            break;
+            
+        case 4: //All threads in this group - alternate calculation
+            final org.apache.jmeter.threads.ThreadGroup group = 
+                JMeterContextService.getContext().getThreadGroup();
+            ThroughputInfo groupInfo;
+            synchronized (threadGroupsInfoMap) {
+                groupInfo = (ThroughputInfo)threadGroupsInfoMap.get(group);
+                if (groupInfo == null) {
+                    groupInfo = new ThroughputInfo();
+                    threadGroupsInfoMap.put(group, groupInfo);
+                }
+            }
+            delay = calculateSharedDelay(groupInfo,msPerRequest);
+            break;
+            
 		default:
-			offset = rate; // i.e. rate * 1
+			delay = msPerRequest; // i.e. * 1
 			break;
 		}
-		return offset;
+		return delay;
 	}
+
+    private long calculateSharedDelay(ThroughputInfo info, long milliSecPerRequest) {
+        final long now = System.currentTimeMillis();
+        final long calculatedDelay;
+
+        //Synchronize on the info object's MUTEX to ensure
+        //Multiple threads don't update the scheduled time simultaneously
+        synchronized (info.MUTEX) {
+            final long nextRequstTime = info.lastScheduledTime + milliSecPerRequest;
+            info.lastScheduledTime = Math.max(now, nextRequstTime);
+            calculatedDelay = info.lastScheduledTime - now;
+        }
+        
+        return Math.max(calculatedDelay, 0);
+    }
+
+    private synchronized void reset() {
+        allThreadsInfo.lastScheduledTime = 0;
+        threadGroupsInfoMap.clear();
+        previousTime = 0;
+    }   
 
 	/**
 	 * Provide a description of this timer class.
@@ -157,10 +215,10 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	 * 
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
 	 */
-	public synchronized void testStarted()// synch to protect targetTime
+	public void testStarted()
 	{
 		log.debug("Test started - reset throughput calculation.");
-		previousTime = 0;
+        reset();
 	}
 
 	/*
