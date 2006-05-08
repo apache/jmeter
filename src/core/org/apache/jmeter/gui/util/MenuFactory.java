@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,23 +55,23 @@ import org.apache.log.Logger;
 public final class MenuFactory {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String TIMERS = "menu_timer";
+	public final static String TIMERS = "menu_timer"; //$NON-NLS-1$
 
-	public final static String CONTROLLERS = "menu_logic_controller";
+	public final static String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
 
-	public final static String SAMPLERS = "menu_generative_controller";
+	public final static String SAMPLERS = "menu_generative_controller"; //$NON-NLS-1$
 
-	public final static String CONFIG_ELEMENTS = "menu_config_element";
+	public final static String CONFIG_ELEMENTS = "menu_config_element"; //$NON-NLS-1$
 
-	public final static String POST_PROCESSORS = "menu_post_processors";
+	public final static String POST_PROCESSORS = "menu_post_processors"; //$NON-NLS-1$
 
-	public final static String PRE_PROCESSORS = "menu_pre_processors";
+	public final static String PRE_PROCESSORS = "menu_pre_processors"; //$NON-NLS-1$
 
-	public final static String ASSERTIONS = "menu_assertions";
+	public final static String ASSERTIONS = "menu_assertions"; //$NON-NLS-1$
 
-	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements";
+	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements"; //$NON-NLS-1$
 
-	public final static String LISTENERS = "menu_listener";
+	public final static String LISTENERS = "menu_listener"; //$NON-NLS-1$
 
 	private static Map menuMap = new HashMap();
 
@@ -101,19 +101,10 @@ public final class MenuFactory {
         assertions, listeners, nonTestElements,
 		postProcessors, preProcessors;
 
-	// private static JMenu timerMenu;
-	// private static JMenu controllerMenu;
-	// private static JMenu generativeControllerMenu;
-	// private static JMenu listenerMenu;
-	// private static JMenu assertionMenu;
-	// private static JMenu configMenu;
-	// private static JMenu insertControllerMenu;
-	// private static JMenu postProcessorMenu;
-	// private static JMenu preProcessorMenu;
-
 	static {
 		try {
-			String[] classesToSkip = JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ",");
+			String[] classesToSkip = 
+                JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ","); //$NON-NLS-1$
 			for (int i = 0; i < classesToSkip.length; i++) {
 				elementsToSkip.add(classesToSkip[i].trim());
 			}
@@ -137,43 +128,48 @@ public final class MenuFactory {
 	public static void addEditMenu(JPopupMenu menu, boolean removable) {
 		addSeparator(menu);
 		if (removable) {
-			menu.add(makeMenuItem(JMeterUtils.getResString("remove"),
-                    "Remove", ActionNames.REMOVE,
+			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
+                    "Remove", ActionNames.REMOVE, //$NON-NLS-1$
                     KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0)));
 		}
-		menu.add(makeMenuItem(JMeterUtils.getResString("cut"),
-                "Cut", ActionNames.CUT,
+		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
+                "Cut", ActionNames.CUT, //$NON-NLS-1$
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), 
-                "Copy", ActionNames.COPY,
+		menu.add(makeMenuItem(JMeterUtils.getResString("copy"),  //$NON-NLS-1$
+                "Copy", ActionNames.COPY, //$NON-NLS-1$
                 KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste"),
-                "Paste", ActionNames.PASTE,
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
+                "Paste", ActionNames.PASTE, //$NON-NLS-1$
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"),
-                "Paste Insert", ActionNames.PASTE));
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
+                "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
 	}
 
 	public static void addFileMenu(JPopupMenu menu) {
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", ActionNames.OPEN));
-        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"), "Merge", ActionNames.MERGE));
-        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", ActionNames.SAVE_AS));
-		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),
-                "Save Image", ActionNames.SAVE_GRAPHICS,
+		menu.add(makeMenuItem(JMeterUtils.getResString("open"),// $NON-NLS-1$
+                "Open", ActionNames.OPEN));// $NON-NLS-1$
+        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"),// $NON-NLS-1$
+                "Merge", ActionNames.MERGE));// $NON-NLS-1$
+        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"),// $NON-NLS-1$
+                "Save As", ActionNames.SAVE_AS));// $NON-NLS-1$
+		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),// $NON-NLS-1$
+                "Save Image", ActionNames.SAVE_GRAPHICS,// $NON-NLS-1$
 				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
 		menu.add(savePicture);
 		if (!(GuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
 			savePicture.setEnabled(false);
 		}
         
-        JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),
-                "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,
+        JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),// $NON-NLS-1$
+                "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,// $NON-NLS-1$
                 KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK| KeyEvent.SHIFT_DOWN_MASK));
         menu.add(savePictureAll);
         
-		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", ActionNames.DISABLE);
-		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", ActionNames.ENABLE);
+		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),// $NON-NLS-1$
+                "Disable", ActionNames.DISABLE);// $NON-NLS-1$
+		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"),// $NON-NLS-1$
+                "Enable", ActionNames.ENABLE);// $NON-NLS-1$
 		boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
 		if (isEnabled) {
 			disabled.setEnabled(true);
@@ -185,7 +181,8 @@ public final class MenuFactory {
 		menu.add(enabled);
 		menu.add(disabled);
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("help"), "Help", ActionNames.HELP));
+		menu.add(makeMenuItem(JMeterUtils.getResString("help"), // $NON-NLS-1$
+                "Help", ActionNames.HELP));// $NON-NLS-1$
 	}
 
 	public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
@@ -323,7 +320,8 @@ public final class MenuFactory {
 				 * 
 				 * TODO: find a better way of checking this
 				 */
-				if (name.endsWith("JMeterTreeNode") || name.endsWith("TestBeanGUI")) {
+				if (name.endsWith("JMeterTreeNode") // $NON-NLS-1$
+                        || name.endsWith("TestBeanGUI")) {// $NON-NLS-1$
 					continue;// Don't try to instantiate these
 				}
 
