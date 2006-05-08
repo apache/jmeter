@@ -26,11 +26,14 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.logging.LoggingManager;
 
 /**
  * 
  * Debug class to show details of the currently selected object
  * Currently shows TestElement and GUI class names
+ * 
+ * Also enables/disables debug for the test element.
  *
  */
 public class What implements Command {
@@ -40,6 +43,8 @@ public class What implements Command {
     static {
         HashSet commands = new HashSet();
         commands.add(ActionNames.WHAT_CLASS);
+        commands.add(ActionNames.DEBUG_ON);
+        commands.add(ActionNames.DEBUG_OFF);
         commandSet = Collections.unmodifiableSet(commands);
     }
 
@@ -47,9 +52,15 @@ public class What implements Command {
     public void doAction(ActionEvent e) throws IllegalUserActionException {
         JMeterTreeNode node= GuiPackage.getInstance().getTreeListener().getCurrentNode();
         TestElement te = (TestElement)node.getUserObject();
-        String guiClassName = te.getPropertyAsString(TestElement.GUI_CLASS);
-        System.out.println(te.getClass().getName());
-        System.out.println(guiClassName);
+        if (ActionNames.WHAT_CLASS.equals(e.getActionCommand())){
+            String guiClassName = te.getPropertyAsString(TestElement.GUI_CLASS);
+            System.out.println(te.getClass().getName());
+            System.out.println(guiClassName);
+        } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())){
+            LoggingManager.setPriorityFullName("DEBUG",te.getClass().getName());//$NON-NLS-1$
+        } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){            
+            LoggingManager.setPriorityFullName("INFO",te.getClass().getName());//$NON-NLS-1$
+        }
     }
 
     /**
