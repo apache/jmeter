@@ -232,12 +232,15 @@ public final class LoggingManager {
 	 */
 	private static String getCallerClassName() {
 		String name = ClassContext.getCallerClassNameAt(3);
-		if (name.startsWith(PACKAGE_PREFIX)) { // remove the package prefix
-			name = name.substring(PACKAGE_PREFIX.length());
-		}
 		return name;
 	}
 
+    public static String removePrefix(String name){
+        if (name.startsWith(PACKAGE_PREFIX)) { // remove the package prefix
+            name = name.substring(PACKAGE_PREFIX.length());
+        }
+        return name;
+    }
 	/**
 	 * Get the Logger for a class - no argument needed because the calling class
 	 * name is derived automatically from the call stack.
@@ -246,16 +249,29 @@ public final class LoggingManager {
 	 */
 	public static Logger getLoggerForClass() {
 		String className = getCallerClassName();
-		return Hierarchy.getDefaultHierarchy().getLoggerFor(className);
+		return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(className));
 	}
 
 	public static Logger getLoggerFor(String category) {
 		return Hierarchy.getDefaultHierarchy().getLoggerFor(category);
 	}
 
+    public static Logger getLoggerForShortName(String category) {
+        return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(category));
+    }
+    
 	public static void setPriority(String p, String category) {
 		setPriority(Priority.getPriorityForName(p), category);
 	}
+
+    /**
+     * 
+     * @param p - priority, e.g. DEBUG, INFO
+     * @param fullName - e.g. org.apache.jmeter.etc
+     */
+    public static void setPriorityFullName(String p, String fullName) {
+        setPriority(Priority.getPriorityForName(p), removePrefix(fullName));
+    }
 
 	public static void setPriority(Priority p, String category) {
 		Hierarchy.getDefaultHierarchy().getLoggerFor(category).setPriority(p);

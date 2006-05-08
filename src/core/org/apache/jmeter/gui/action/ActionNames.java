@@ -41,6 +41,8 @@ public class ActionNames {
     public static final String CLOSE            = "close"; // $NON-NLS-1$
     public static final String COPY             = "Copy"; // $NON-NLS-1$
     public final static String CUT              = "Cut"; // $NON-NLS-1$
+    public static final String DEBUG_ON        = "debug_on"; // $NON-NLS-1$
+    public static final String DEBUG_OFF        = "debug_off"; // $NON-NLS-1$
     public static final String DISABLE          = "disable"; // $NON-NLS-1$
     public final static String DRAG_ADD         = "drag_n_drop.add";//$NON-NLS-1$
     public static final String EDIT             = "edit"; // $NON-NLS-1$
