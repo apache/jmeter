@@ -149,6 +149,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 38824 - clarify behaviour of Ignore Status</li>
 <li>Bug 38250 - jmeter.properties "language" now supports country suffix, for zh_CN and zh_TW etc</li>
 <li>jmeter.properties file is now closed after it has been read</li>
+<li>Bug 39533 - items added from wrong object</li>
 </ul>	
 	
 <h4>Other changes</h4>
