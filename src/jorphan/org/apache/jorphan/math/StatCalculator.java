@@ -77,7 +77,7 @@ public class StatCalculator implements Serializable {
 	}
 
 	public void addAll(StatCalculator calc) {
-		Iterator iter = values.iterator();
+		Iterator iter = calc.values.iterator();
 		while (iter.hasNext()) {
 			addValue((Number) iter.next());
 		}
