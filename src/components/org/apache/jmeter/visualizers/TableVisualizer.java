@@ -37,7 +37,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.math.StatCalculator;
+import org.apache.jorphan.math.Calculator;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
@@ -75,7 +75,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private JScrollPane tableScrollPanel = null;
 
-	private StatCalculator calc = new StatCalculator();
+	private Calculator calc = new Calculator();
 
 	private long currentData = 0;
 
