@@ -109,10 +109,9 @@ public class ForeachController extends GenericController implements Serializable
 		if (context.getVariables().get(inputVariable) != null) {
 			log.debug("ForEach resultstring eofArgs= false");
 			return false;
-		} else {
-			log.debug("ForEach resultstring eofArgs= true");
-			return true;
 		}
+		log.debug("ForEach resultstring eofArgs= true");
+		return true;
 	}
 
 	// Prevent entry if nothing to do
@@ -134,10 +133,9 @@ public class ForeachController extends GenericController implements Serializable
 		String inputVariable = getInputVal() + getSeparator() + "1";
 		if (context.getVariables().get(inputVariable) != null) {
 			return false;
-		} else {
-			log.debug("No entries found - null first entry: " + inputVariable);
-			return true;
 		}
+		log.debug("No entries found - null first entry: " + inputVariable);
+		return true;
 	}
 
 	/*
@@ -151,9 +149,8 @@ public class ForeachController extends GenericController implements Serializable
 			// setDone(true);
 			resetLoopCount();
 			return null;
-		} else {
-			return next();
 		}
+		return next();
 	}
 
 	protected void incrementLoopCount() {

@@ -146,13 +146,13 @@ public class IfController extends GenericController implements Serializable {
 	 */
 	public Sampler next() {
 		boolean result = evaluateCondition(getCondition());
-		if (result)
+		if (result) {
 			return super.next();
-		else
-			try {
-				return nextIsNull();
-			} catch (NextIsNullException e1) {
-				return null;
-			}
+		}
+		try {
+			return nextIsNull();
+		} catch (NextIsNullException e1) {
+			return null;
+		}
 	}
 }

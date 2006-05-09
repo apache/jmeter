@@ -106,9 +106,8 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 		CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
 		if (threadValues.size() > 0) {
 			return (CollectionProperty) threadValues.get(getThreadContext().getThreadNum() % threadValues.size());
-		} else {
-			return new CollectionProperty("noname", new LinkedList());
 		}
+		return new CollectionProperty("noname", new LinkedList());
 	}
 
 	public boolean isPerIteration() {

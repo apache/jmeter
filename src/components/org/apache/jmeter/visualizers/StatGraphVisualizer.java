@@ -278,9 +278,8 @@ ActionListener {
                 data[0][idx] = ((Number)model.getValueAt(idx,col)).doubleValue();
             }
             return data;
-        } else {
-            return new double[][]{ { 250, 45, 36, 66, 145, 80, 55  } };
         }
+		return new double[][]{ { 250, 45, 36, 66, 145, 80, 55  } };
     }
     
     public String[] getAxisLabels() {
@@ -291,9 +290,8 @@ ActionListener {
                 labels[idx] = (String)model.getValueAt(idx,0);
             }
             return labels;
-        } else {
-            return new String[]{ "/", "/samples", "/jsp-samples", "/manager", "/manager/status", "/hello", "/world" };
         }
+		return new String[]{ "/", "/samples", "/jsp-samples", "/manager", "/manager/status", "/hello", "/world" };
     }
     
     /**
@@ -354,8 +352,7 @@ ActionListener {
             graphPanel.setBounds(graphPanel.getLocation().x,graphPanel.getLocation().y,
                     graphPanel.width,graphPanel.height);
             return graphPanel;
-        } else {
-            return this;
         }
+		return this;
     }
 }
