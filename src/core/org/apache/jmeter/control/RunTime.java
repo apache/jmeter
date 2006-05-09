@@ -65,9 +65,8 @@ public class RunTime extends GenericController implements Serializable {
 	public boolean isDone() {
 		if (getRuntime() > 0 && getSubControllers().size() > 0) {
 			return super.isDone();
-		} else {
-			return true; // Runtime is zero - no point staying around
 		}
+		return true; // Runtime is zero - no point staying around
 	}
 
 	private boolean endOfLoop() {
@@ -95,9 +94,8 @@ public class RunTime extends GenericController implements Serializable {
 		if (endOfLoop()) {
 			resetLoopCount();
 			return null;
-		} else {
-			return next();
 		}
+		return next();
 	}
 
 	protected void incrementLoopCount() {

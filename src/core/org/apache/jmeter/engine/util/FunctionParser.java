@@ -121,9 +121,8 @@ class FunctionParser {
 							StandardJMeterEngine.register((TestListener) function);
 						}
 						return function;
-					} else {
-						continue;
 					}
+					continue;
 				} else if (current[0] == '}') {
 					function = CompoundVariable.getNamedFunction(buffer.toString());
 					buffer.setLength(0);

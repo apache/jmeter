@@ -94,10 +94,9 @@ public class WhileController extends GenericController implements Serializable {
 		reInitialize();
 		if (!endOfLoop(true)) {
 			return super.next();
-		} else {
-			setDone(true);
-			return null;
 		}
+		setDone(true);
+		return null;
 	}
 
 	/*
@@ -114,10 +113,9 @@ public class WhileController extends GenericController implements Serializable {
 		// Must be start of loop
 		if (!endOfLoop(false)) {
 			return super.next(); // OK to continue
-		} else {
-			reInitialize(); // Don't even start the loop
-			return null;
 		}
+		reInitialize(); // Don't even start the loop
+		return null;
 	}
 
 	/**
