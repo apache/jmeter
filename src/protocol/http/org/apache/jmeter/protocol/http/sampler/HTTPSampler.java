@@ -54,12 +54,7 @@ import org.apache.log.Logger;
 public class HTTPSampler extends HTTPSamplerBase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final int MAX_CONN_RETRIES = 10; // Maximum connection
-
-	// retries
-
-	// protected static String encoding= "iso-8859-1";
-	private static final PostWriter postWriter = new PostWriter();
+	private static final int MAX_CONN_RETRIES = 10; // Maximum connection retries
 
 	static {// TODO - document what this is doing and why
 		System.setProperty("java.protocol.handler.pkgs", // $NON-NLS-1$ 
@@ -85,11 +80,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	protected void setPostHeaders(URLConnection conn) throws IOException {
-		postWriter.setHeaders(conn, this);
+		PostWriter.setHeaders(conn, this);
 	}
 
     private void setPutHeaders(URLConnection conn)
-         throws IOException
      {
          String filename = getFilename();
          if ((filename != null) && (filename.trim().length() > 0))
@@ -109,7 +103,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	protected void sendPostData(URLConnection connection) throws IOException {
-		postWriter.sendPostData(connection, this);
+		PostWriter.sendPostData(connection, this);
 	}
 
     private void sendPutData(URLConnection conn) throws IOException {
