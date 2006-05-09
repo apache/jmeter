@@ -204,9 +204,8 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		JMeterProperty type = getProperty(TEST_TYPE);
 		if (type instanceof NullProperty) {
 			return CONTAINS;
-		} else {
-			return type.getIntValue();
 		}
+		return type.getIntValue();
 	}
 
 	/***************************************************************************

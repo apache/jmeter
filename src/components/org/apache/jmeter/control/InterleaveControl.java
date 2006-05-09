@@ -95,16 +95,15 @@ public class InterleaveControl extends GenericController implements Serializable
 		if (sampler == null) {
 			currentReturnedNull(controller);
 			return next();
-		} else {
-			currentReturnedAtLeastOne = true;
-			if (getStyle() == IGNORE_SUB_CONTROLLERS) {
-				incrementCurrent();
-				skipNext = true;
-			} else {
-				searchStart = null;
-			}
-			return sampler;
 		}
+		currentReturnedAtLeastOne = true;
+		if (getStyle() == IGNORE_SUB_CONTROLLERS) {
+			incrementCurrent();
+			skipNext = true;
+		} else {
+			searchStart = null;
+		}
+		return sampler;
 	}
 
 	/*

@@ -165,9 +165,8 @@ public class ThroughputController extends GenericController implements Serializa
 	protected int getExecutions() {
 		if (!isPerThread()) {
 			return globalNumExecutions;
-		} else {
-			return numExecutions;
 		}
+		return numExecutions;
 	}
 
 	private void increaseExecutions() {
@@ -184,9 +183,8 @@ public class ThroughputController extends GenericController implements Serializa
 	protected int getIteration() {
 		if (!isPerThread()) {
 			return globalIteration;
-		} else {
-			return iteration;
 		}
+		return iteration;
 	}
 
 	private void increaseIteration() {
@@ -213,9 +211,8 @@ public class ThroughputController extends GenericController implements Serializa
 		iterations = getIteration();
 		if (getStyle() == BYNUMBER) {
 			return executions < getMaxThroughputAsInt();
-		} else {
-			return (100.0 * executions + 50.0) / (iterations + 1) < getPercentThroughputAsFloat();
 		}
+		return (100.0 * executions + 50.0) / (iterations + 1) < getPercentThroughputAsFloat();
 	}
 
 	/**
