@@ -534,9 +534,8 @@ public class SampleResult implements Serializable {
 	public String getDataEncoding() {
 		if (dataEncoding != null) {
 			return dataEncoding;
-		} else {
-			return DEFAULT_ENCODING;
 		}
+		return DEFAULT_ENCODING;
 	}
 
 	/**
