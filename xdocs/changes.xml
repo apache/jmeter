@@ -98,6 +98,7 @@ sample, and the file name can be included in the sample log file.
 <li>New __time() function; define START.MS/START.YMD/START.HMS properties</li>
 <li>Add Thread Name to Tree and Table Views</li>
 <li>Add debug functions: What class, debug on, debug off</li>
+<li>Non-caching Calculator - used by Table Visualiser to reduce memory footprint</li>
 </ul>
 
 <h4>Bug fixes:</h4>
