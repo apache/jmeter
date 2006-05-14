@@ -221,7 +221,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 	protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
 		byte[] readBuffer = getThreadContext().getReadBuffer();
 		BufferedInputStream in;
-		boolean logError = false; // Should we log the error?
 		try {
             // works OK even if ContentEncoding is null
 			if (ENCODING_GZIP.equals(conn.getContentEncoding())) {
@@ -240,7 +239,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 				// JDK1.4: if (cause != null){
 				// JDK1.4: log.error("Cause: "+cause);
 				// JDK1.4: }
-				logError = true;
 			}
 			// Normal InputStream is not available
 			in = new BufferedInputStream(conn.getErrorStream());
@@ -251,7 +249,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 			// JDK1.4: log.error("Cause: "+cause);
 			// JDK1.4: }
 			in = new BufferedInputStream(conn.getErrorStream());
-			logError = true;
 		}
 		java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
 		int x = 0;
@@ -266,15 +263,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 		in.close();
 		w.flush();
 		w.close();
-		if (logError) {
-			String s;
-			if (w.size() > 1000) {
-				s = "\n" + w.toString().substring(0, 1000) + "\n\t...";
-			} else {
-				s = "\n" + w.toString();
-			}
-			log.error("readResponse: errorStream:"+s);
-		}
 		return w.toByteArray();
 	}
 
@@ -497,12 +485,15 @@ public class HTTPSampler extends HTTPSamplerBase {
 			return res;
 		} catch (IOException e) {
 			res.sampleEnd();
+			// We don't want to continue using this connection, even if KeepAlive is set
+            conn.disconnect();
+            conn=null; // Don't process again
 			return errorResult(e, res);
 		} finally {
 			// calling disconnect doesn't close the connection immediately,
 			// but indicates we're through with it. The JVM should close
 			// it when necessary.
-			disconnect(conn);
+			disconnect(conn); // Disconnect unless using KeepAlive
 		}
 	}
 
