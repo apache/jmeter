@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -186,8 +186,8 @@ public class FileListPanel extends JPanel implements ActionListener {
 	}
 
     protected void initializeTableModel() {
-        tableModel = new ObjectTableModel(new String[] { "Library" }, new Functor[0], // $NON-NLS-1$
-                new Functor[0],
+        tableModel = new ObjectTableModel(new String[] { "Library" },
+                new Functor[0] , new Functor[0] , // i.e. bypass the Functors
                 new Class[] { String.class });
     }
     
