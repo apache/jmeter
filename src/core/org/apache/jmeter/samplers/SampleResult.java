@@ -337,6 +337,14 @@ public class SampleResult implements Serializable {
 		this.threadName = threadName;
 	}
 
+    /**
+     * Get the sample timestamp, which may be either the start time or the end time.
+     * 
+     * @see #getStartTime()
+     * @see #getEndTime()
+     * 
+     * @return timeStamp in milliseconds
+     */
 	public long getTimeStamp() {
 		return timeStamp;
 	}
