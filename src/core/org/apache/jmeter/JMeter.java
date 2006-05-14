@@ -286,6 +286,9 @@ public class JMeter implements JMeterPlugin {
 			System.out.println("Incorrect Usage");
 			System.out.println(CLUtil.describeOptions(options).toString());
 		} catch (Exception e) {
+            if (log != null){
+                log.fatalError("An error occurred: ",e);
+            }
 			e.printStackTrace();
 			System.out.println("An error occurred: " + e.getMessage());
 			System.exit(-1);
