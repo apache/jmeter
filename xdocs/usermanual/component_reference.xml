@@ -1587,16 +1587,22 @@ So two identical samplers with different names will have half the throughput of 
 It is important to choose the sampler names correctly to get the best results from
 the Aggregate Report.
 </p>
-<p>URL - The URL of the sample.</p>
-<p># Samples - The number of samples for the URL</p>
-<p>Average - The average time of a set of results</p>
-<p>Median - The median is the time in the middle of a set of results.</p>
-<p>90% Line - 90% of the results finished faster than the line.</p>
-<p>Min - The lowest time for the samples of the given URL</p>
-<p>Max - The longest time for the samples of the given URL</p>
-<p>Error % - Percent of requests with errors</p>
-<p>Throughput - Throughput measured in requests per second/minute/hour</p>
-<p>Kb/sec - The throughput measured in Kilobytes per second</p>
+<note>
+Calculation of the Median and 90% Line values requires a lot of memory as details of every Sample have to be saved.
+See the <complink name="Summary Report"/> for a similar Listener that does not need so much memory.
+</note>
+<ul>
+<li>Label - The label of the sample.</li>
+<li># Samples - The number of samples for the URL</li>
+<li>Average - The average time of a set of results</li>
+<li>Median - The median is the time in the middle of a set of results.</li>
+<li>90% Line - 90% of the results finished faster than the line.</li>
+<li>Min - The lowest time for the samples of the given URL</li>
+<li>Max - The longest time for the samples of the given URL</li>
+<li>Error % - Percent of requests with errors</li>
+<li>Throughput - Throughput measured in requests per second/minute/hour</li>
+<li>Kb/sec - The throughput measured in Kilobytes per second</li>
+</ul>
 </description>
 </component>
 
@@ -1703,6 +1709,33 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+</component>
+
+<component name="Summary Report" index="&sect-num;.3.15" screenshot="summary_report.png">
+<description>The summary report creates a table row for each differently named request in your
+test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
+<p>
+The thoughput is calculated from the point of view of the sampler target 
+(e.g. the remote server in the case of HTTP samples).
+JMeter takes into account the total time over which the requests have been generated.
+If other samplers and timers are in the same thread, these will increase the total time,
+and therefore reduce the throughput value. 
+So two identical samplers with different names will have half the throughput of two samplers with the same name.
+It is important to choose the sampler labels correctly to get the best results from
+the Report.
+</p>
+<ul>
+<li>Label - The label of the sample.</li>
+<li># Samples - The number of samples for the URL</li>
+<li>Average - The average time of a set of results</li>
+<li>Min - The lowest time for the samples of the given URL</li>
+<li>Max - The longest time for the samples of the given URL</li>
+<li>Error % - Percent of requests with errors</li>
+<li>Throughput - Throughput measured in requests per second/minute/hour</li>
+<li>Kb/sec - The throughput measured in Kilobytes per second</li>
+<li>Avg. Bytes - average size of the sample response in bytes.</li>
+</ul>
+</description>
 </component>
 
 
