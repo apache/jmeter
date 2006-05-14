@@ -58,6 +58,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
@@ -170,42 +171,61 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		testStarted("local"); // $NON-NLS-1$
 	}
 
-	public void loadExistingFile() throws IOException {
-		// inLoading = true;
+    /**
+     * Loads an existing sample data (JTL) file.
+     * This can be one of:
+     * - XStream format
+     * - Avalon format
+     * - CSV format
+     * 
+     */
+	public void loadExistingFile() {
 		boolean parsedOK = false;
-		if (new File(getFilename()).exists()) {
+		String filename = getFilename();
+        File file = new File(filename);
+        if (file.exists()) {
 			clearVisualizer();
 			BufferedReader dataReader = null;
             BufferedInputStream bufferedInputStream = null;
-			try {
-                bufferedInputStream = new BufferedInputStream(new FileInputStream(getFilename()));
-                readSamples(SaveService.loadTestResults(bufferedInputStream));
-				parsedOK = true;
-			} catch (Exception e) {
-				log.warn("File load failure, trying old data format: "+e.getLocalizedMessage());
-				try {
-					Configuration savedSamples = getConfiguration(getFilename());
-					Configuration[] samples = savedSamples.getChildren();
-					for (int i = 0; i < samples.length; i++) {
-						SampleResult result = OldSaveService.getSampleResult(samples[i]);
-						sendToVisualizer(result);
-					}
-					parsedOK = true;
-				} catch (Exception e1) {
-					log.warn("Error parsing XML results " + e);
-					log.info("Assuming CSV format instead");
-					dataReader = new BufferedReader(new FileReader(getFilename()));
-					String line;
-					while ((line = dataReader.readLine()) != null) {
-						sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
-					}
-					parsedOK = true;
-				}
-			} finally {
-				if (dataReader != null)
-					dataReader.close();
-                if (bufferedInputStream != null)
-                    bufferedInputStream.close();
+            try {
+                dataReader = new BufferedReader(new FileReader(file));
+                // Get the first line, and see if it is XML
+                String line = dataReader.readLine();
+                if (line == null) {
+                    log.warn(filename+" is empty");
+                } else {
+                    if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
+                        while (line != null) { // Already read 1st line
+                            sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
+                            line = dataReader.readLine();
+                        }
+                        parsedOK = true;                                
+                    } else { // We are processing XML
+                        try { // Assume XStream
+                            bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+                            readSamples(SaveService.loadTestResults(bufferedInputStream));
+                            parsedOK = true;
+                        } catch (Exception e) {
+                            log.info("File load failure, trying old XML format. "+e.getLocalizedMessage());
+                            try {
+                                Configuration savedSamples = getConfiguration(filename);
+                                Configuration[] samples = savedSamples.getChildren();
+                                for (int i = 0; i < samples.length; i++) {
+                                    SampleResult result = OldSaveService.getSampleResult(samples[i]);
+                                    sendToVisualizer(result);
+                                }
+                                parsedOK = true;
+                            } catch (Exception e1) {
+                                log.warn("Error parsing Avalon XML. " + e1.getLocalizedMessage());
+                            }
+                        }
+                    }
+                }
+			} catch (IOException e) {
+                log.warn("Problem reading JTL file "+e.getLocalizedMessage());
+            } finally {
+                JOrphanUtils.closeQuietly(dataReader);
+                JOrphanUtils.closeQuietly(bufferedInputStream);
 				if (!parsedOK) {
 					SampleResult sr = new SampleResult();
 					sr.setSampleLabel("Error loading results file - see log file");
@@ -213,7 +233,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 				}
 			}
 		}
-		// inLoading = false;
 	}
 
 	private static void writeFileStart(PrintWriter writer, SampleSaveConfiguration saveConfig) {
