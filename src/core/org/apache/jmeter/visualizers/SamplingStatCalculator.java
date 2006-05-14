@@ -178,9 +178,11 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	/**
-	 * calculates the average page size, which means divide the bytes by number
-	 * of samples.
+	 * Should calculate the average page size, which means divide the bytes by number
+	 * of samples - actually calculates the throughput in bytes / second
 	 * 
+     * TODO - fix the name and comment
+     * 
 	 * @return
 	 */
 	public double getPageSize() {
@@ -195,7 +197,7 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	/**
-	 * formats the rate
+	 * formats the Page Size
 	 * 
 	 * @return
 	 */
@@ -290,10 +292,7 @@ public class SamplingStatCalculator implements Serializable {
 	 * @param res
 	 */
 	private void setStartTime(SampleResult res) {
-		long startTime = res.getTimeStamp();
-		if (!res.isStampedAtStart()) {
-			startTime -= res.getTime();
-		}
+		long startTime = res.getStartTime();
 		if (firstTime > startTime) {
 			// this is our first sample, set the start time to current timestamp
 			firstTime = startTime;
