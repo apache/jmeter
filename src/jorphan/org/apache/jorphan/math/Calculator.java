@@ -17,6 +17,10 @@
 
 package org.apache.jorphan.math;
 
+import java.text.DecimalFormat;
+
+import org.apache.jmeter.samplers.SampleResult;
+
 /**
  * Class to calculate various items that don't require all previous results to be saved:
  * - mean = average
@@ -25,6 +29,12 @@ package org.apache.jorphan.math;
  * - maximum
  */
 public class Calculator {
+
+    private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
+
+    private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
+
+    private static DecimalFormat kbFormatter = new DecimalFormat("#0.00");
 
 	private double sum = 0;
 
@@ -41,8 +51,20 @@ public class Calculator {
 	private long maximum = Long.MIN_VALUE;
 	
 	private long minimum = Long.MAX_VALUE;
+    
+    private int errors = 0;
 	
-	public void clear() {
+    private final String label;
+    
+    public Calculator() {
+        this.label = "";
+    }
+
+	public Calculator(String label) {
+        this.label = label;
+    }
+
+    public void clear() {
 		maximum = Long.MIN_VALUE;
 		minimum = Long.MAX_VALUE;
 		sum = 0;
@@ -78,6 +100,10 @@ public class Calculator {
 		return mean;
 	}
 
+    public Number getMeanAsNumber() {
+        return new Long((long) mean);
+    }
+
 	public double getStandardDeviation() {
 		return deviation;
 	}
@@ -93,4 +119,148 @@ public class Calculator {
 	public int getCount() {
 		return count;
 	}
+
+    public String getLabel() {
+        return label;
+    }
+
+    private long startTime = 0;
+    private long elapsedTime = 0;
+    
+    public void addSample(SampleResult res) {
+        addBytes(res.getBytes());
+        addValue(res.getTime());
+        if (!res.isSuccessful()) errors++;
+        if (startTime == 0){
+            startTime=res.getStartTime();
+        }
+        elapsedTime=res.getEndTime()-startTime;
+    }
+
+    /**
+     * Returns the raw double value of the percentage of samples with errors
+     * that were recorded. (Between 0.0 and 1.0) If you want a nicer return
+     * format, see {@link #getErrorPercentageString()}.
+     * 
+     * @return the raw double value of the percentage of samples with errors
+     *         that were recorded.
+     */
+    public double getErrorPercentage() {
+        double rval = 0.0;
+
+        if (count == 0) {
+            return (rval);
+        }
+        rval = (double) errors / (double) count;
+        return (rval);
+    }
+
+    /**
+     * Returns a String which represents the percentage of sample errors that
+     * have occurred. ("0.00%" through "100.00%")
+     * 
+     * @return a String which represents the percentage of sample errors that
+     *         have occurred.
+     */
+    public String getErrorPercentageString() {
+        double myErrorPercentage = this.getErrorPercentage();
+        if (myErrorPercentage < 0) {
+            myErrorPercentage = 0.0;
+        }
+
+        return (errorFormatter.format(myErrorPercentage));
+    }
+
+    /**
+     * Returns the throughput associated to this sampler in requests per second.
+     * May be slightly skewed because it takes the timestamps of the first and
+     * last samples as the total time passed, and the test may actually have
+     * started before that start time and ended after that end time.
+     */
+    public double getRate() {
+        if (elapsedTime == 0)
+            return 0.0;
+
+        return ((double) count / (double) elapsedTime ) * 1000;
+    }
+
+    /**
+     * Returns a String that represents the throughput associated for this
+     * sampler, in units appropriate to its dimension:
+     * <p>
+     * The number is represented in requests/second or requests/minute or
+     * requests/hour.
+     * <p>
+     * Examples: "34.2/sec" "0.1/sec" "43.0/hour" "15.9/min"
+     * 
+     * @return a String representation of the rate the samples are being taken
+     *         at.
+     */
+    public String getRateString() {
+        double rate = getRate();
+
+        if (rate == Double.MAX_VALUE) {
+            return "N/A";
+        }
+
+        String unit = "sec";
+
+        if (rate < 1.0) {
+            rate *= 60.0;
+            unit = "min";
+        }
+        if (rate < 1.0) {
+            rate *= 60.0;
+            unit = "hour";
+        }
+
+        String rval = rateFormatter.format(rate) + "/" + unit;
+
+        return (rval);
+    }
+
+    /**
+     * calculates the average page size, which means divide the bytes by number
+     * of samples.
+     * 
+     * @return
+     */
+    public double getPageSize() {
+        if (count > 0 && bytes > 0) {
+            return bytes / count;
+        }
+        return 0.0;
+    }
+
+    /**
+     * formats the rate
+     * 
+     * @return
+     */
+    public String getPageSizeString() {
+        double rate = getPageSize() / 1024;
+        return kbFormatter.format(rate);
+    }
+
+    /**
+     * Throughput in bytes / second
+     * 
+     * @return
+     */
+    public double getBytesPerSecond() {
+        if (elapsedTime > 0) {
+            return bytes / ((double) elapsedTime / 1000);
+        }
+        return 0.0;
+    }
+
+    /**
+     * formats the Page Size
+     * 
+     * @return
+     */
+    public String getKBPerSecondString() {
+        double rate = getBytesPerSecond() / 1024;
+        return kbFormatter.format(rate);
+    }
 }

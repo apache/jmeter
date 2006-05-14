@@ -99,6 +99,7 @@ sample, and the file name can be included in the sample log file.
 <li>Add Thread Name to Tree and Table Views</li>
 <li>Add debug functions: What class, debug on, debug off</li>
 <li>Non-caching Calculator - used by Table Visualiser to reduce memory footprint</li>
+<li>Summary Report - similar to Aggregate Report, but uses less memory</li>
 </ul>
 
 <h4>Bug fixes:</h4>
