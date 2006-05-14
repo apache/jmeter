@@ -19,8 +19,6 @@ package org.apache.jorphan.math;
 
 import java.text.DecimalFormat;
 
-import org.apache.jmeter.samplers.SampleResult;
-
 /**
  * Class to calculate various items that don't require all previous results to be saved:
  * - mean = average
@@ -91,6 +89,20 @@ public class Calculator {
 		bytes += newValue;
 	}
 
+    private long startTime = 0;
+    private long elapsedTime = 0;
+
+    public void addSample(long _bytes, long _elapsed, boolean _isSuccess, long _startTime, long _endTime) {
+        addBytes(_bytes);
+        addValue(_elapsed);
+        if (!_isSuccess) errors++;
+        if (startTime == 0){
+            startTime=_startTime;
+        }
+        elapsedTime=_endTime-startTime;
+    }
+
+
 	public long getTotalBytes() {
 		return bytes;
 	}
@@ -122,19 +134,6 @@ public class Calculator {
 
     public String getLabel() {
         return label;
-    }
-
-    private long startTime = 0;
-    private long elapsedTime = 0;
-    
-    public void addSample(SampleResult res) {
-        addBytes(res.getBytes());
-        addValue(res.getTime());
-        if (!res.isSuccessful()) errors++;
-        if (startTime == 0){
-            startTime=res.getStartTime();
-        }
-        elapsedTime=res.getEndTime()-startTime;
     }
 
     /**

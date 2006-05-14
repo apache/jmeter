@@ -102,8 +102,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
 				model.insertRow(row, model.getRowCount() - 1);
 			}
 		}
-		row.addSample(res);
-		((Calculator) tableRows.get(TOTAL_ROW_LABEL)).addSample(res);
+		row.addSample(res.getBytes(),res.getTime(),res.isSuccessful(),res.getStartTime(),res.getEndTime());
+		Calculator tot = ((Calculator) tableRows.get(TOTAL_ROW_LABEL));
+        tot.addSample(res.getBytes(),res.getTime(),res.isSuccessful(),res.getStartTime(),res.getEndTime());
 		model.fireTableDataChanged();
 	}
 
