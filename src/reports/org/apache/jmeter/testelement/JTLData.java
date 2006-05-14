@@ -176,18 +176,12 @@ public class JTLData implements Serializable, DataSet {
             ResultCollector rc = new ResultCollector();
             rc.setFilename(this.getDataSource());
             rc.setListener(this);
-            try {
-                rc.loadExistingFile();
-            } catch (IOException e) {
-                log.warn(e.getMessage());
-                // e.printStackTrace();
-            } finally {
-                // we clean up the ResultCollector to make sure there's
-                // no slow leaks
-                rc.clear();
-                rc.setListener(null);
-                rc = null;
-            }
+            rc.loadExistingFile();
+            // we clean up the ResultCollector to make sure there's
+            // no slow leaks
+            rc.clear();
+            rc.setListener(null);
+            rc = null;
         }
     }
     
