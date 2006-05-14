@@ -220,6 +220,12 @@ The fields allow variables to be used, so the values of these can readily be see
         </properties>
 </component>
 
+<p>The sleep time is calculated as follows:</p>
+<pre>
+SleepTime is in milliseconds
+SleepMask is used to add a "random" element to the time:
+totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
+</pre>
 <component name="SOAP/XML-RPC Request" index="&sect-num;.1.5" screenshot="soap_sampler.png">
 
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
