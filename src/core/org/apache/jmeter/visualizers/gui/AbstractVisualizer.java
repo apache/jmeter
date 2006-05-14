@@ -245,11 +245,7 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	public void stateChanged(ChangeEvent e) {
 		log.debug("getting new collector");
 		collector = (ResultCollector) createTestElement();
-		try {
-			collector.loadExistingFile();
-		} catch (Exception err) {
-			log.warn("Error occurred while loading file", err);
-		}
+        collector.loadExistingFile();
 	}
 
 	/**
