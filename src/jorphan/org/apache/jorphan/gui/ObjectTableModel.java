@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
+ * Copyright 2003-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +51,23 @@ public class ObjectTableModel extends DefaultTableModel {
 		this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
 		this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
 
+        int numHeaders = headers.length;
+
+        int numClasses = classes.size();
+        if (numClasses != numHeaders){
+            log.warn("Header count="+numHeaders+" but classes count="+numClasses);
+        }
+        
+        // Functor count = 0 is handled specially 
+        int numWrite = writeFunctors.length;
+        if (numWrite > 0 && numWrite != numHeaders){
+            log.warn("Header count="+numHeaders+" but writeFunctor count="+numWrite);
+        }
+        
+        int numRead = readFunctors.length;
+        if (numRead > 0 && numRead != numHeaders){
+            log.warn("Header count="+numHeaders+" but readFunctor count="+numRead);
+        }
 	}
 
 	public Iterator iterator() {
