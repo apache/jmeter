@@ -56,6 +56,7 @@ import org.apache.commons.httpclient.methods.TraceMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
@@ -184,21 +185,28 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	private void sendPostData(PostMethod post) throws IOException {
-		PropertyIterator args = getArguments().iterator();
-		while (args.hasNext()) {
-			Argument arg = (Argument) args.next().getObjectValue();
-			post.addParameter(arg.getName(), arg.getValue());
-		}
 		// If filename was specified then send the post using multipart syntax
 		String filename = getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
-			File input = new File(filename);
-            Part[] parts = {
+            int argc = getArguments().getArgumentCount();
+            Part[] parts = new Part[argc+1]; 
+            PropertyIterator args = getArguments().iterator();
+            int i = 0;
+            while (args.hasNext()) {
+                Argument arg = (Argument) args.next().getObjectValue();
+                parts[i++] = new StringPart(arg.getName(), arg.getValue());
+            }
+            File input = new File(filename);
                     //TODO should allow charset to be defined ...
-                    new FilePart(getFileField(), input, getMimetype(), "UTF-8" )//$NON-NLS-1$
-                };
-                post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
-		}
+            parts[i]= new FilePart(getFileField(), input, getMimetype(), "UTF-8" );//$NON-NLS-1$
+            post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
+		} else {
+            PropertyIterator args = getArguments().iterator();
+            while (args.hasNext()) {
+                Argument arg = (Argument) args.next().getObjectValue();
+                post.addParameter(arg.getName(), arg.getValue());
+            }
+        }
 	}
      
     /**
