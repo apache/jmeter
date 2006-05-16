@@ -60,7 +60,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 		System.setProperty("java.protocol.handler.pkgs", // $NON-NLS-1$ 
                 JMeterUtils.getPropDefault("ssl.pkgs", // $NON-NLS-1$
 				"com.sun.net.ssl.internal.www.protocol")); // $NON-NLS-1$
-		System.setProperty("javax.net.ssl.debug", "all"); // $NON-NLS-1$  // $NON-NLS-2$
 	}
 
 	/**
