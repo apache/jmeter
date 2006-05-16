@@ -916,6 +916,8 @@ Here are some general guidelines for writing Junit tests so they work well with 
 <description>
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
 Rather than generate a sample, the test element pauses or stops the selected target.
+<p>This sampler can be useful in conjunction with the Transaction Controller, as it allows
+pauses to be included without needing to generate a sample.</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -2434,6 +2436,7 @@ on XPath.
 	child of a simple logic controller immediately after the sampler. 
 	The Simple Controller must contain a sampler or the timer will not be applied.
 	<br></br>
+	<p>An alternative is to use the <complink name="Test Action"/> Sampler</p>
 </description>
 <component name="Constant Timer" index="&sect-num;.6.1" anchor="constant" screenshot="timers/constant_timer.gif">
 <description>
