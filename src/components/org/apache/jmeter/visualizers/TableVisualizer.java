@@ -32,12 +32,12 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.math.Calculator;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
