@@ -44,6 +44,7 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -180,7 +181,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * 
      */
 	public void loadExistingFile() {
-		boolean parsedOK = false;
+		boolean parsedOK = false, errorDetected = false;
 		String filename = getFilename();
         File file = new File(filename);
         if (file.exists()) {
@@ -196,7 +197,13 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
                         while (line != null) { // Already read 1st line
-                            sendToVisualizer(OldSaveService.makeResultFromDelimitedString(line));
+                            // TODO parse the header line if there is one
+                            try {
+                                SampleResult result = OldSaveService.makeResultFromDelimitedString(line);
+                                if (result != null) sendToVisualizer(result);
+                            } catch (NumberFormatException ignored){
+                                errorDetected = true;
+                            }
                             line = dataReader.readLine();
                         }
                         parsedOK = true;                                
@@ -226,10 +233,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
-				if (!parsedOK) {
-					SampleResult sr = new SampleResult();
-					sr.setSampleLabel("Error loading results file - see log file");
-					sendToVisualizer(sr);
+				if (!parsedOK || errorDetected) {
+                    GuiPackage.showErrorMessage(
+                                "Error loading results file - see log file",
+                                "CSV Result file loader");
 				}
 			}
 		}
