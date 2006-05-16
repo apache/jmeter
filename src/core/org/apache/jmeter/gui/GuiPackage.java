@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
@@ -622,4 +623,27 @@ public final class GuiPackage implements LocaleChangeListener {
 	public String getTestPlanFile() {
 		return testPlanFile;
 	}
+
+
+    public static void showErrorMessage(final String message, final String title){
+        showMessage(message,title,JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showInfoMessage(final String message, final String title){
+        showMessage(message,title,JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void showWarningMessage(final String message, final String title){
+        showMessage(message,title,JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void showMessage(final String message, final String title, final int type){
+        if (guiPack == null) return ;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JOptionPane.showMessageDialog(null,message,title,type);
+            }
+        });
+        
+    }
 }
