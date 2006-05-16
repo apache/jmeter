@@ -15,9 +15,11 @@
  * 
  */
 
-package org.apache.jorphan.math;
+package org.apache.jmeter.util;
 
 import java.text.DecimalFormat;
+
+import org.apache.jmeter.samplers.SampleResult;
 
 /**
  * Class to calculate various items that don't require all previous results to be saved:
@@ -73,16 +75,20 @@ public class Calculator {
 	}
 
 	public void addValue(long newValue) {
-		count++;
-		minimum=Math.min(newValue, minimum);
-		maximum=Math.max(newValue, maximum);
-		double currentVal = newValue;
-		sum += currentVal;
-		sumOfSquares += currentVal * currentVal;
-		// Calculate each time, as likely to be called for each add
-		mean = sum / count;
-		deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
+        addValue(newValue,1);
 	}
+
+    private void addValue(long newValue, int sampleCount) {
+        count =+ sampleCount;
+        minimum=Math.min(newValue, minimum);
+        maximum=Math.max(newValue, maximum);
+        double currentVal = newValue;
+        sum += currentVal;
+        sumOfSquares += currentVal * currentVal;
+        // Calculate each time, as likely to be called for each add
+        mean = sum / count;
+        deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
+    }
 
 
 	public void addBytes(long newValue) {
@@ -92,18 +98,18 @@ public class Calculator {
     private long startTime = 0;
     private long elapsedTime = 0;
 
-    public void addSample(long _bytes, long _elapsed, boolean _isSuccess, long _startTime, long _endTime) {
-        addBytes(_bytes);
-        addValue(_elapsed);
-        if (!_isSuccess) errors++;
+    public void addSample(SampleResult res) {
+        addBytes(res.getBytes());
+        addValue(res.getTime(),res.getSampleCount());
+        if (!res.isSuccessful()) errors++;
         if (startTime == 0){
-            startTime=_startTime;
+            startTime=res.getStartTime();
         }
-        elapsedTime=_endTime-startTime;
+        elapsedTime=res.getEndTime()-startTime;
     }
 
 
-	public long getTotalBytes() {
+    public long getTotalBytes() {
 		return bytes;
 	}
 
