@@ -1375,6 +1375,10 @@ By default, the results are stored as CSV
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
 <note>To read existing results and display them, use the file panel Browse button to open the file.
 </note>
+<p>Results can be read from XML or CSV format files.
+When reading from CSV results files, the header (if present) is ignored.
+<b>In order to interpret a CSV file correctly, the appropriate properties must be set in jmeter.properties.</b>
+</p>
 <p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
 Most of the listeners currently keep a copy of every sample in their scope, apart from:
 </p>
@@ -1384,6 +1388,7 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 <li>Assertion Results</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
+<li>Summary Report</li>
 </ul>
 <p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 <p>To change the default format, find the following line in jmeter.properties:</p>
