@@ -33,10 +33,10 @@ import javax.swing.border.EmptyBorder;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
-import org.apache.jorphan.math.Calculator;
 import org.apache.jorphan.reflect.Functor;
 
 /**
@@ -102,9 +102,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
 				model.insertRow(row, model.getRowCount() - 1);
 			}
 		}
-		row.addSample(res.getBytes(),res.getTime(),res.isSuccessful(),res.getStartTime(),res.getEndTime());
+		row.addSample(res);
 		Calculator tot = ((Calculator) tableRows.get(TOTAL_ROW_LABEL));
-        tot.addSample(res.getBytes(),res.getTime(),res.isSuccessful(),res.getStartTime(),res.getEndTime());
+        tot.addSample(res);
 		model.fireTableDataChanged();
 	}
 
