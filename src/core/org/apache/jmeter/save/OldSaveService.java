@@ -117,66 +117,106 @@ public final class OldSaveService {
     
 	/**
 	 * Make a SampleResult given a delimited string.
+     * Note that this assumes that the fields are present as per jmeter.properties.
 	 * 
-	 * @param delim
+	 * @param inputLine
 	 * @return SampleResult
 	 */
-	public static SampleResult makeResultFromDelimitedString(String delim) {
+	public static SampleResult makeResultFromDelimitedString(String inputLine) {
+        return makeResultFromDelimitedString(inputLine, _saveConfig);
+    }
+    
+    /**
+     * Make a SampleResult given a delimited string.
+     * 
+     * @param inputLine - line from CSV file
+     * @param config - configuration
+     * @return SampleResult or null if header line detected
+     * 
+     * @throws NumberFormatException, ParseException
+     */
+    public static SampleResult makeResultFromDelimitedString(String inputLine, SampleSaveConfiguration saveConfig) {
+        // Check for a header line
+        if (inputLine.startsWith(TIME_STAMP) || inputLine.startsWith(CSV_TIME)){
+            return null;
+        }
 		SampleResult result = null;
 		long timeStamp = 0;
 		long elapsed = 0;
-		StringTokenizer splitter = new StringTokenizer(delim, _saveConfig.getDelimiter());
+		StringTokenizer splitter = new StringTokenizer(inputLine, _saveConfig.getDelimiter());
 		String text = null;
 
 		try {
-			if (_saveConfig.printMilliseconds()) {
+			if (saveConfig.printMilliseconds()) {
 				text = splitter.nextToken();
 				timeStamp = Long.parseLong(text);
-			} else if (_saveConfig.formatter() != null) {
+			} else if (saveConfig.formatter() != null) {
 				text = splitter.nextToken();
-				Date stamp = _saveConfig.formatter().parse(text);
+				Date stamp = saveConfig.formatter().parse(text);
 				timeStamp = stamp.getTime();
 			}
 
-			if (_saveConfig.saveTime()) {
+			if (saveConfig.saveTime()) {
 				text = splitter.nextToken();
 				elapsed = Long.parseLong(text);
 			}
 
 			result = new SampleResult(timeStamp, elapsed);
 
-			if (_saveConfig.saveLabel()) {
+			if (saveConfig.saveLabel()) {
 				text = splitter.nextToken();
 				result.setSampleLabel(text);
 			}
-			if (_saveConfig.saveCode()) {
+			if (saveConfig.saveCode()) {
 				text = splitter.nextToken();
 				result.setResponseCode(text);
 			}
 
-			if (_saveConfig.saveMessage()) {
+			if (saveConfig.saveMessage()) {
 				text = splitter.nextToken();
 				result.setResponseMessage(text);
 			}
 
-			if (_saveConfig.saveThreadName()) {
+			if (saveConfig.saveThreadName()) {
 				text = splitter.nextToken();
 				result.setThreadName(text);
 			}
 
-			if (_saveConfig.saveDataType()) {
+			if (saveConfig.saveDataType()) {
 				text = splitter.nextToken();
 				result.setDataType(text);
 			}
 
-			if (_saveConfig.saveSuccess()) {
+			if (saveConfig.saveSuccess()) {
 				text = splitter.nextToken();
 				result.setSuccessful(Boolean.valueOf(text).booleanValue());
 			}
 
-			if (_saveConfig.saveAssertionResultsFailureMessage()) {
+			if (saveConfig.saveAssertionResultsFailureMessage()) {
 				text = splitter.nextToken();
+                // TODO - should this be restored?
 			}
+            
+            if (saveConfig.saveBytes()) {
+                text = splitter.nextToken();
+                result.setBytes(Integer.parseInt(text));
+            }
+        
+            if (saveConfig.saveThreadCounts()) {
+                text = splitter.nextToken();
+                // Not saved, as not part of a result
+            }
+
+            if (saveConfig.saveUrl()) {
+                text = splitter.nextToken();
+                // TODO: should this be restored?
+            }
+        
+            if (saveConfig.saveFileName()) {
+                text = splitter.nextToken();
+                result.setResultFileName(text);
+            }            
+            
 		} catch (NumberFormatException e) {
 			log.warn("Error parsing number " + e);
 			throw e;
