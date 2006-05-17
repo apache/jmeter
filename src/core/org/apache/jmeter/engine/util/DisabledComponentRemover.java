@@ -23,11 +23,16 @@ import java.util.LinkedList;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @version $Revision$
  */
 public class DisabledComponentRemover implements HashTreeTraverser {
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
 	HashTree tree;
 
 	LinkedList stack = new LinkedList();
@@ -41,7 +46,12 @@ public class DisabledComponentRemover implements HashTreeTraverser {
 	}
 
 	public void subtractNode() {
-		TestElement lastNode = (TestElement) stack.removeLast();
+		Object removeLast = stack.removeLast();
+        if (!(removeLast instanceof TestElement)) {
+            log.warn("Expected class TestElement, found "+removeLast.getClass().getName());
+            return;
+        }
+        TestElement lastNode = (TestElement) removeLast;
 		if (!lastNode.getPropertyAsBoolean(TestElement.ENABLED)) {
 			tree.getTree(stack).remove(lastNode);
 		}
