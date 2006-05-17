@@ -79,7 +79,7 @@ public class Calculator {
 	}
 
     private void addValue(long newValue, int sampleCount) {
-        count =+ sampleCount;
+        count += sampleCount;
         minimum=Math.min(newValue, minimum);
         maximum=Math.max(newValue, maximum);
         double currentVal = newValue;
