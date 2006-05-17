@@ -75,13 +75,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		if (getImages.isSelected()) {
 			((HTTPSamplerBase) sampler).setImageParser(true);
 		} else {
-			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
+			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);// TODO - why?
 		}
-		if (isMon.isSelected()) {
-			((HTTPSamplerBase) sampler).setMonitor("true"); // $NON-NLS-1$
-		} else {
-			((HTTPSamplerBase) sampler).setMonitor("false"); // $NON-NLS-1$
-		}
+        ((HTTPSamplerBase) sampler).setMonitor(isMon.isSelected());
 		this.configureTestElement(sampler);
 	}
 
