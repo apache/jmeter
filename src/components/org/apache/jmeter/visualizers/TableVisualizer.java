@@ -109,16 +109,15 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	}
 
 	public void add(SampleResult res) {
+        currentData = res.getTime();
 		synchronized (calc) {
-			calc.addValue(res.getTime());
+			calc.addValue(currentData);
 			int count = calc.getCount();
-			// TODO: does the rest need to be synch?
 			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
                     res.isSuccessful(), count, res.getTimeStamp(),res.getBytes(),
                     res.getThreadName());
 			model.addRow(newS);
 		}
-		currentData = res.getTime();
 		updateTextFields();
 	}
 
