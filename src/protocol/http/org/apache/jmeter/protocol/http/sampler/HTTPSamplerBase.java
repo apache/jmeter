@@ -78,6 +78,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
+    public final static String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
+
     public final static String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
 	public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects"; // $NON-NLS-1$
@@ -109,9 +111,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     public final static String DEFAULT_METHOD = "GET"; // $NON-NLS-1$
     // Supported methods:
     private final static String [] METHODS = {
-        DEFAULT_METHOD,
-        HEAD,
+        DEFAULT_METHOD, // i.e. GET
         POST,
+        HEAD,
         PUT,
         OPTIONS,
         TRACE,
@@ -260,6 +262,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		return getPropertyAsBoolean(FOLLOW_REDIRECTS);
 	}
 
+    public void setAutoRedirects(boolean value) {
+        setProperty(new BooleanProperty(AUTO_REDIRECTS, value));
+    }
+
+    public boolean getAutoRedirects() {
+        return getPropertyAsBoolean(AUTO_REDIRECTS);
+    }
+
 	public void setMethod(String value) {
 		setProperty(METHOD, value);
 	}
@@ -280,6 +290,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		this.setProperty(MONITOR, value);
 	}
 
+    public void setMonitor(boolean truth) {
+        this.setProperty(MONITOR, JOrphanUtils.booleanToString(truth));
+    }
+
 	public String getMonitor() {
 		return this.getPropertyAsString(MONITOR);
 	}
@@ -287,6 +301,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public boolean isMonitor() {
 		return this.getPropertyAsBoolean(MONITOR);
 	}
+
+    public void setImplementation(String value) {
+        this.setProperty(IMPLEMENTATION, value);
+    }
+
+    public String getImplementation() {
+        return this.getPropertyAsString(IMPLEMENTATION);
+    }
 
     /**
      * Add an argument which has already been encoded
