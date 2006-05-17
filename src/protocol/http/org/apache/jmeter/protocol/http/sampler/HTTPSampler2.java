@@ -292,7 +292,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 //		}
 
 		// Allow HttpClient to handle the redirects:
-		httpMethod.setFollowRedirects(getFollowRedirects());
+		httpMethod.setFollowRedirects(getAutoRedirects());
 
 		// a well-behaved browser is supposed to send 'Connection: close'
 		// with the last request to an HTTP server. Instead, most browsers
@@ -391,17 +391,35 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     continue;
                 long exp = cookie.getExpires();
                 long now = System.currentTimeMillis() / 1000 ;
-    			if ( host.endsWith(cookie.getDomain())
-                        && u.getFile().startsWith(cookie.getPath()) 
+    			String urlPath = u.getPath();
+                if (log.isDebugEnabled()){
+                    log.debug("Should we send cookie: "+cookie.toString());
+                    log.debug("Host="+host+" Path="+urlPath+" Now="+now);
+                }                
+                String cookiePath = cookie.getPath();
+                String cookieDomain = cookie.getDomain();
+                if ( host.endsWith(cookieDomain)
+                        && urlPath.startsWith(cookiePath) 
                         && (exp == 0 || exp > now)) {
-    				org.apache.commons.httpclient.Cookie newCookie
-                    = new org.apache.commons.httpclient.Cookie(cookie.getDomain(), cookie.getName(),
-    				     cookie.getValue(), cookie.getPath(), null, false);
+    				String cookieName = cookie.getName();
+                    String cookieValue = cookie.getValue();
+                    org.apache.commons.httpclient.Cookie newCookie
+                    = new org.apache.commons.httpclient.Cookie(cookieDomain, cookieName,
+    				     cookieValue, cookiePath, null, false);
     				state.addCookie(newCookie);
-    				cookieHeader.append(cookie.getName());
+    				cookieHeader.append(cookieName);
                     cookieHeader.append("="); // $NON-NLS-1$
-                    cookieHeader.append(cookie.getValue());
-    			}
+                    cookieHeader.append(cookieValue);
+                    if (log.isDebugEnabled()){
+                        log.debug("Matched cookie");
+                    }
+                    
+    			} else {
+                    if (log.isDebugEnabled()){
+                        log.debug("Did not match cookie.");
+                    }
+                    
+                }
     		}
         }
 		return cookieHeader.toString();
@@ -675,12 +693,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			org.apache.commons.httpclient.Cookie [] c = client.getState().getCookies();
 			for (int i = 0; i < c.length; i++) {
 				Date exp = c[i].getExpiryDate();// might be absent
-				//System.out.println("Cookie[" + i + "]: " + c[i].getName() + " := " + c[i].getValue());
-
 				Cookie cookie = new Cookie(c[i].getName(), 
 					c[i].getValue(), c[i].getDomain(), c[i].getPath(), c[i].getSecure(), exp == null ? 0 : exp.getTime() / 1000);
 				
 				cookieManager.add( cookie );
+                if (log.isDebugEnabled()){
+                    log.debug("Saved Cookie: " + cookie.toString());
+                }
 			}
 		}
 	}
