@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -30,7 +29,14 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class DisabledComponentRemover implements HashTreeTraverser {
-    
+
+    /*
+     * TODO - does this class work? and is it needed? 
+     * It is only called by Start, and then only after
+     * having called convertTree - which removes the disabled elements anyway.
+     * When tried in IncludeController, it failed to work.
+    */
+
     private static final Logger log = LoggingManager.getLoggerForClass();
     
 	HashTree tree;
@@ -53,6 +59,7 @@ public class DisabledComponentRemover implements HashTreeTraverser {
         }
         TestElement lastNode = (TestElement) removeLast;
 		if (!lastNode.getPropertyAsBoolean(TestElement.ENABLED)) {
+            log.info("*** Removing *** "+lastNode);// TODO not sure this is ever called
 			tree.getTree(stack).remove(lastNode);
 		}
 	}
