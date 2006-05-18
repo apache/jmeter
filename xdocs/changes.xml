@@ -166,6 +166,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Removed SQL Config GUI as no longer needed (or working!)</li>
 <li>HTTPSampler no longer logs a warning for Page not found (404)</li>
 <li>StringFromFile now callable as __StringFromFile (as well as _StringFromFile)</li>
+<li>Updated to Commons Logging 1.1</li>
 </ul>
 
 <!--  ===================  -->
