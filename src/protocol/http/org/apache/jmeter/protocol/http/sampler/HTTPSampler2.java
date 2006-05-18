@@ -133,11 +133,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
         }
         nonProxyHostSuffixSize=nonProxyHostSuffix.size();
-		// Set the default to Avalon Logkit, if not already defined:
-		if (System.getProperty("org.apache.commons.logging.Log") == null) { // $NON-NLS-1$
-			System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
-                    , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
-		}
 
         int cps =
             JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0); // $NON-NLS-1$        
