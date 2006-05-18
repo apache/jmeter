@@ -24,17 +24,16 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.XPathUtil;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,7 +46,7 @@ import org.xml.sax.SAXException;
 public class XPathPanel extends JPanel {
 	private static Document testDoc = null;
 
-	private final static Log log = LogFactory.getLog(XPathPanel.class);
+	private final static Logger log = LoggingManager.getLoggerForClass();
 
 	private JCheckBox negated;
 
@@ -144,7 +143,7 @@ public class XPathPanel extends JPanel {
 	 */
 	public JCheckBox getNegatedCheckBox() {
 		if (negated == null) {
-			negated = new JCheckBox(JMeterUtils.getResString("xpath_assertion_negate"), false);
+			negated = new JCheckBox(JMeterUtils.getResString("xpath_assertion_negate"), false); //$NON-NLS-1$
 		}
 
 		return negated;
@@ -157,7 +156,7 @@ public class XPathPanel extends JPanel {
 	 */
 	public JButton getCheckXPathButton() {
 		if (checkXPath == null) {
-			checkXPath = new JButton(JMeterUtils.getResString("xpath_assertion_button"));
+			checkXPath = new JButton(JMeterUtils.getResString("xpath_assertion_button")); //$NON-NLS-1$
 			checkXPath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					validXPath(xpath.getText(), true);
@@ -170,7 +169,7 @@ public class XPathPanel extends JPanel {
 	public JTextField getXPathTextField() {
 		if (xpath == null) {
 			xpath = new JTextField(50);
-			xpath.setText("/");
+			xpath.setText("/"); //$NON-NLS-1$
 		}
 		return xpath;
 	}
@@ -206,7 +205,7 @@ public class XPathPanel extends JPanel {
 		try {
 			if (testDoc == null) {
 				testDoc = XPathUtil.makeDocumentBuilder(false, false, false).newDocument();
-				Element el = testDoc.createElement("root");
+				Element el = testDoc.createElement("root"); //$NON-NLS-1$
 				testDoc.appendChild(el);
 
 			}
@@ -233,27 +232,12 @@ public class XPathPanel extends JPanel {
 		}
 
 		if (showDialog) {
-			JOptionPane.showMessageDialog(null, (success) ? JMeterUtils.getResString("xpath_assertion_valid") : ret,
-					(success) ? JMeterUtils.getResString("xpath_assertion_valid") : JMeterUtils
-							.getResString("xpath_assertion_failed"), (success) ? JOptionPane.INFORMATION_MESSAGE
+			JOptionPane.showMessageDialog(null, (success) ? JMeterUtils.getResString("xpath_assertion_valid") : ret, //$NON-NLS-1$
+					(success) ? JMeterUtils.getResString("xpath_assertion_valid") : JMeterUtils //$NON-NLS-1$
+							.getResString("xpath_assertion_failed"), (success) ? JOptionPane.INFORMATION_MESSAGE //$NON-NLS-1$
 							: JOptionPane.ERROR_MESSAGE);
 		}
 		return success;
 
-	}
-
-	/**
-	 * Just a simple main to run this panel, It would be nice if it loaded up
-	 * all the stuff for JMeterUtil but for a little test it is overkill.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		JMeterUtils.setJMeterHome("/eclipse/workspace/jakarta-jmeter/bin");
-		JFrame frame = new JFrame();
-		frame.add(new XPathPanel());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
 	}
 }
