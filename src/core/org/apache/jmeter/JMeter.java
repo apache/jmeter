@@ -238,17 +238,17 @@ public class JMeter implements JMeterPlugin {
 			return;
 		}
 		try {
-			initializeProperties(parser);
-			setProxy(parser);
-			log.info("Version " + JMeterUtils.getJMeterVersion());
+			initializeProperties(parser); // Also initialises logging
+            log.info(JMeterUtils.getJMeterCopyright());
+            log.info("Version " + JMeterUtils.getJMeterVersion());
 			log.info("java.version=" + System.getProperty("java.version"));// $NON-NLS-1$ $NON-NLS-2$
 			log.info("os.name=" + System.getProperty("os.name"));// $NON-NLS-1$ $NON-NLS-2$
 			log.info("os.arch=" + System.getProperty("os.arch"));// $NON-NLS-1$ $NON-NLS-2$
 			log.info("os.version=" + System.getProperty("os.version"));// $NON-NLS-1$ $NON-NLS-2$
 			log.info("Default Locale=" + Locale.getDefault().getDisplayName());// $NON-NLS-1$
             log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());// $NON-NLS-1$
-			log.info(JMeterUtils.getJMeterCopyright());
 			log.info("JMeterHome="+JMeterUtils.getJMeterHome());// $NON-NLS-1$
+            setProxy(parser);
             
             updateClassLoader();
             if (log.isDebugEnabled())
