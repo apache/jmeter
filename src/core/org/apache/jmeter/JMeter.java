@@ -577,7 +577,7 @@ public class JMeter implements JMeterPlugin {
 	 * 
 	 * @param tree
 	 */
-	private void convertSubTree(HashTree tree) {// TODO check build dependencies
+	private void convertSubTree(HashTree tree) {
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext()) {
 			TestElement item = (TestElement) iter.next();
