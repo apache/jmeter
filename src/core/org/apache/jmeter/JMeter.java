@@ -238,7 +238,19 @@ public class JMeter implements JMeterPlugin {
 			return;
 		}
 		try {
-			initializeProperties(parser); // Also initialises logging
+			initializeProperties(parser); // Also initialises JMeter logging
+
+            /* 
+             * The following is needed for HTTPClient.
+             * (originally tried doing this in HTTPSampler2, 
+             * but it appears that it was done too late when running in GUI mode)
+             * Set the commons logging default to Avalon Logkit, if not already defined
+             */
+            if (System.getProperty("org.apache.commons.logging.Log") == null) { // $NON-NLS-1$
+                System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
+                        , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
+            }
+
             log.info(JMeterUtils.getJMeterCopyright());
             log.info("Version " + JMeterUtils.getJMeterVersion());
 			log.info("java.version=" + System.getProperty("java.version"));// $NON-NLS-1$ $NON-NLS-2$
