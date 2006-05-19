@@ -1,9 +1,12 @@
 // remote.bsh
 // Sample remote file for use with bsh.remote
+// Usage:
+// java -cp bsh.jar bsh.Remote bsh://localhost:9000 bsh.remote
+// 
 //
 print("Remote starting");
-print(args);
 printprop("user.home");
 printprop("user.dir");
 // loglevel("DEBUG","jmeter");
 print("Remote ended");
+print("Press ^C to exit");

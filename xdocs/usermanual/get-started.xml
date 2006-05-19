@@ -163,6 +163,11 @@ The jmeter.bat file attempts to change to the appropriate directory if it can.
 If you have developed new JMeter components,
 then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
 automatically find JMeter components in any jars found here. 
+If you don't want to put the extension jars in the lib/ext directory,
+then define the property <b>search_paths</b> in jmeter.properties.
+Do not use lib/ext for utility jars; it is only intended for JMeter components.
+</p>
+<p>
 Other jars (such as JDBC, and any support libaries needed by the JMeter code)
  should be placed in the lib directory.</p>
 <p>Note: JMeter will only find .jar files, not .zip.</p>
