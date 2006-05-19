@@ -2485,6 +2485,20 @@ to the random delay.</property>
 <component name="Constant Throughput Timer" index="&sect-num;.6.4" screenshot="timers/constant_throughput_timer.png">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
+<p>
+N.B. although the Timer is called the Constant Throughput timer, the throughput value does not need to be constant.
+It can be defined in terms of a variable or function call, and the value can be changed during a test.
+The value can be changed in various ways:
+</p>
+<ul>
+<li>using a counter variable</li>
+<li>using a JavaScript or BeanShell function to provide a changing value</li>
+<li>using the remote BeanShell server to change a JMeter property</li>
+</ul>
+<p>See <a href="best-practices.html">Best Practices</a> for further details.
+Note that the throughput value should not be changed too often during a test
+- it will take a while for the new value to take effect.
+</p>
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
@@ -2505,7 +2519,6 @@ to the random delay.</property>
   The shared algorithm should generate a more accurate overall transaction rate.
   The non-shared algortihm should generate a more even spread of transactions across threads.</p>
 </properties>
-
 </component>
 
 <component name="Synchronizing Timer" index="&sect-num;.6.5" screenshot="timers/sync_timer.png">
