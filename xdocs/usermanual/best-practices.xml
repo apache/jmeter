@@ -127,10 +127,58 @@ Some suggestions on reducing resource usage.
 <li>Rather than using lots of similar samplers, 
 use the same sampler in a loop, and use variables (CSV Data Set) to vary the sample. 
 Or perhaps use the Access Log Sampler.
+[The Include Controller does not help here, as it adds all the test elements in the file to the test plan.]
 </li>
 <li>Don't use functional mode</li>
 <li>Use CSV output rather than XML</li>
+<li>Only save the data that you need</li>
 </ul>
+</section>
+
+<section name="&sect-num;.7 BeanShell server" anchor="beanshell_server">
+<p>
+The BeanShell interpreter has a very useful feature - it can act as a server,
+which is accessible by telnet or http.
+</p>
+<note>
+There is no security. Anyone who can connect to the port can issue any BeanShell commands.
+These can provide unrestricted access to the JMeter application and the host.
+<b>Do not enable the server unless the ports are protected against access, e.g. by a firewall.</b>
+</note>
+<p>
+If you do wish to use the server, define the following in jmeter.properties:
+</p>
+<pre>
+beanshell.server.port=9000
+beanshell.server.file=../extras/startup.bsh
+</pre>
+<p>
+In the above example, the server will be started, and will listen on ports 9000 and 9001.
+Port 9000 will be used for http access. Port 9001 will be used for telnet access.
+The startup.bsh file will be processed by the server, and can be used to define various functions and set up variables.
+The sample file defines methods for setting and printing JMeter properties.
+This is what you should see in the JMeter console:
+</p>
+<pre>
+Startup script running
+Startup script completed
+Httpd started on port: 9000
+Sessiond started on port: 9001
+</pre>
+<p>
+As a practical example, assume you have a long-running JMeter test running in non-GUI mode,
+and you want to vary the throughput at various times during the test. 
+The test-plan includes a Constant Throughput Timer which is defined in terms of a property,
+e.g. ${__P(throughput)}. The following BeanShell commands could be used to monitor and change the test:
+</p>
+<pre>
+printprop("throughput");
+setprop("throughput","70");
+Thread.sleep(20000);
+setprop("throughput","80");
+</pre>
+These can be stored in a file, and sent to the server using the bsh.Remote class.
+See for example bshremote.cmd and remote.bsh in the extras/ directory.
 </section>
 
 
