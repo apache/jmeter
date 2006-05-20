@@ -9,6 +9,12 @@
 //
 //
 
+// Stop exit() from calling System.exit();
+bsh.system.shutdownOnExit = false;
+
+// Disable prompt
+bsh.prompt="";
+
 print("Startup script running");
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -61,4 +67,19 @@ System.out.println("Stop Thread Now "+t+" called");
 ok=org.apache.jmeter.engine.StandardJMeterEngine.stopThreadNow(t);
 if (ok){print("Thread stopped");} else { print("Thread not found");}
 }
+
+getsysprop(p){// get a system property
+return System.getProperty(p,"");
+}
+
+setsysprop(p,v){// set a system property
+System.out.println("Setting property '"+p+"' to '"+v+"'.");
+System.setProperty(p, v);
+}
+
+printsysprop(p){// print a system property
+print(p + " = " + getsysprop(p));
+}
+
+
 print("Startup script completed");
