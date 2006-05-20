@@ -927,6 +927,19 @@ some of its classes - at present JMeter can only run from jar files.
     	</manifest>
     </jar>
     
+    <!-- BeanShell Client -->
+    <jar jarfile="${lib.dir}/bshclient.jar" manifest="MANIFEST">
+      <fileset dir="${build.core}" includes="**/BeanShellClient*.class" />
+        <metainf dir="." includes="LICENSE,NOTICE"/>
+    	<manifest>
+	   <attribute name="Main-Class" value="org.apache.jmeter.util.BeanShellClient"/>
+           <attribute name="Built-By" value="${user.name}"/>
+           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
+           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
+    	</manifest>
+    </jar>
+  	    
     <!-- junit -->
     <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="MANIFEST">
       <fileset dir="${build.junit}" includes="**/*.class" />
@@ -1105,6 +1118,7 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${dest.jar}/"/>
     <include name="${dest.printable_docs}/**"/>
     <include name="${extras.dir}/**"/>
+    <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/htmlparser.jar"/>
     <include name="${lib.dir}/htmlparserparser.jar"/>
