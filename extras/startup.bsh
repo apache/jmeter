@@ -12,9 +12,6 @@
 // Stop exit() from calling System.exit();
 bsh.system.shutdownOnExit = false;
 
-// Disable prompt
-bsh.prompt="";
-
 print("Startup script running");
 
 import org.apache.jmeter.util.JMeterUtils;

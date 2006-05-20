@@ -57,6 +57,8 @@ public class BeanShellClient {
         
         new SockRead(is).start();
         
+        sendLine("bsh.prompt=\"\";",os);// Prompt is unnecessary
+        
         sendLine("String [] args={",os);
         for (int i=MINARGS; i<args.length;i++){
             sendLine("\""+args[i]+"\",\n",os);
@@ -67,6 +69,7 @@ public class BeanShellClient {
         while ((b=fis.read()) != -1){
             os.write(b);
         }
+        sendLine("bsh.prompt=\"bsh % \";",os);// Reset for other users
         os.flush();
         sock.shutdownOutput(); // Tell server that we are done
     } 
