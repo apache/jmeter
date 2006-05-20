@@ -156,7 +156,7 @@ beanshell.server.file=../extras/startup.bsh
 In the above example, the server will be started, and will listen on ports 9000 and 9001.
 Port 9000 will be used for http access. Port 9001 will be used for telnet access.
 The startup.bsh file will be processed by the server, and can be used to define various functions and set up variables.
-The sample file defines methods for setting and printing JMeter properties.
+The startup file defines methods for setting and printing JMeter and system properties.
 This is what you should see in the JMeter console:
 </p>
 <pre>
@@ -169,16 +169,28 @@ Sessiond started on port: 9001
 As a practical example, assume you have a long-running JMeter test running in non-GUI mode,
 and you want to vary the throughput at various times during the test. 
 The test-plan includes a Constant Throughput Timer which is defined in terms of a property,
-e.g. ${__P(throughput)}. The following BeanShell commands could be used to monitor and change the test:
+e.g. ${__P(throughput)}. 
+The following BeanShell commands could be used to change the test:
 </p>
 <pre>
 printprop("throughput");
-setprop("throughput","70");
-Thread.sleep(20000);
-setprop("throughput","80");
+curr=Integer.decode(args[0]); // Start value
+inc=Integer.decode(args[1]);  // Increment
+end=Integer.decode(args[2]);  // Final value
+secs=Integer.decode(args[3]); // Wait between changes
+while(curr &lt;= end){
+  setprop("throughput",curr.toString()); // Needs to be a string here
+  Thread.sleep(secs*1000);
+  curr += inc;
+}
+printprop("throughput");
 </pre>
-These can be stored in a file, and sent to the server using the bsh.Remote class.
-See for example bshremote.cmd and remote.bsh in the extras/ directory.
+<p>The script can be stored in a file (throughput.bsh, say), and sent to the server using bshclient.jar.
+For example:
+</p>
+<pre>
+java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
+</pre>
 </section>
 
 
