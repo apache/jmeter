@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.jmeter.util.JMeterUtils;
+
 /**
  * @version $Revision$
  */
@@ -30,9 +32,25 @@ public class JMeterVariables {
 	private Map variables = new HashMap();
 
 	private int iteration = 0;
+    
+    // Property names to preload into JMeter variables:
+    private static final String [] PRE_LOAD = {
+      "START.MS", "START.YMD", "START.HMS"  
+    };
 
 	public JMeterVariables() {
+        preloadVariables();
 	}
+
+    private void preloadVariables(){
+        for (int i = 0; i<PRE_LOAD.length;i++){
+            String property=PRE_LOAD[i];
+            String value=JMeterUtils.getProperty(property);
+            if (value != null){
+                variables.put(property,value);
+            }
+        }
+    }
 
 	public String getThreadName() {
 		return Thread.currentThread().getName();
@@ -46,8 +64,10 @@ public class JMeterVariables {
 		iteration++;
 	}
 
+    // Does not appear to be used
 	public void initialize() {
 		variables.clear();
+        preloadVariables();
 	}
 
 	public Object remove(String key) {
