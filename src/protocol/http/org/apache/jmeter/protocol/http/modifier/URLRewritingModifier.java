@@ -45,15 +45,15 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 
 	private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
-    private Pattern pathExtensionEqualsQuestionmarkRegexp;
+    private transient Pattern pathExtensionEqualsQuestionmarkRegexp;
 
-	private Pattern pathExtensionEqualsNoQuestionmarkRegexp;
+	private transient Pattern pathExtensionEqualsNoQuestionmarkRegexp;
 
-	private Pattern parameterRegexp;
+	private transient Pattern parameterRegexp;
 
-	private Pattern pathExtensionNoEqualsQuestionmarkRegexp;
+	private transient Pattern pathExtensionNoEqualsQuestionmarkRegexp;
 
-	private Pattern pathExtensionNoEqualsNoQuestionmarkRegexp;
+	private transient Pattern pathExtensionNoEqualsNoQuestionmarkRegexp;
 
 	// transient Perl5Compiler compiler = new Perl5Compiler();
 	private final static String ARGUMENT_NAME = "argument_name"; // $NON-NLS-1$
@@ -67,7 +67,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
     private final static String SHOULD_CACHE = "cache_value"; // $NON-NLS-1$
 
     // PreProcessors are cloned per-thread, so this will be saved per-thread
-    private String savedValue = ""; // $NON-NLS-1$
+    private transient String savedValue = ""; // $NON-NLS-1$
     
 	public void process() {
 		JMeterContext ctx = getThreadContext();

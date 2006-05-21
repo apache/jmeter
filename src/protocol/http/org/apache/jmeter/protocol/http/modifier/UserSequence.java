@@ -35,14 +35,14 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class UserSequence implements Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// -------------------------------------------
 	// Constants and Data Members
 	// -------------------------------------------
 	private List allUsers;
 
-	private Iterator indexOfUsers;
+	private transient Iterator indexOfUsers;
 
 	// -------------------------------------------
 	// Constructors
