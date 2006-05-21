@@ -309,7 +309,6 @@ public class JsseSSLManager extends SSLManager {
 		 */
 		public String[] getServerAliases(String keyType, Principal[] issuers) {
 			log.info("WrappedX509Manager: getServerAliases: ");
-			log.info(this.manager.getServerAliases(keyType, issuers).toString());
 			return this.manager.getServerAliases(keyType, issuers);
 		}
 
@@ -322,7 +321,6 @@ public class JsseSSLManager extends SSLManager {
 		 */
 		public X509Certificate[] getCertificateChain(String alias) {
 			log.info("WrappedX509Manager: getCertificateChain(" + alias + ")");
-			log.info(this.store.getCertificateChain().toString());
 			return this.store.getCertificateChain();
 		}
 
