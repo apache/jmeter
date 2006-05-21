@@ -94,7 +94,17 @@ JMeter assumes the FTP server is listening on the default port.</property>
         parameters.</p>
 
         <p>There are two versions of the sampler
-         - one uses the default Java HTTP implementation, the other uses Commons HttpClient</p>
+         - one uses the default Java HTTP implementation, the other uses Commons HttpClient.
+         The default (Java) implementation has some limitations:</p>
+         <ul>
+         <li>There is no control over how connections are re-used. 
+         When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
+         <li>The API is best suited to single-threaded usage - various settings (e.g. proxy) 
+         are defined via system properties, and therefore apply to all connections.</li>
+         <li>There is a bug in the handling of HTTPS via a Proxy (the CONNECT is not handled correctly).
+         See Java bugs 6226610 and 6208335.
+         </li>
+         </ul>
          
         <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
          you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
