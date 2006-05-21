@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -579,7 +580,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             
             if (instream != null) {// will be null for HEAD
             
-                if (ENCODING_GZIP.equals(httpMethod.getResponseHeader(TRANSFER_ENCODING).getValue())) {
+                Header responseHeader = httpMethod.getResponseHeader(TRANSFER_ENCODING);
+                if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
                     instream = new GZIPInputStream(instream);
                 }
     
