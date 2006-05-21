@@ -25,6 +25,7 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -36,7 +37,10 @@ import org.apache.log.Logger;
 public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 1;
+	private static final long serialVersionUID = 2;
+
+    private static final String EOFVALUE = // value to return at EOF 
+        JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private transient String filename;
 
@@ -44,6 +48,8 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     private transient String delimiter;
 
+    private transient boolean recycle;
+    
 	transient private String[] vars;
 
 	/*
@@ -61,11 +67,19 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			String delim = getDelimiter();
 			if (delim.equals("\\t")) // $NON-NLS-1$
 				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
-			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim,false);
-			JMeterVariables threadVars = this.getThreadContext().getVariables();
-			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-				threadVars.put(vars[a], lineValues[a]);
-			}
+            JMeterVariables threadVars = this.getThreadContext().getVariables();
+			String line = server.readLine(getFilename(),getRecycle());
+            if (line!=null) {// i.e. not EOF
+                String[] lineValues = JOrphanUtils.split(line, delim,false);
+    			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+    				threadVars.put(vars[a], lineValues[a]);
+    			}
+    			// TODO - provide option to set unused variables ?
+            } else {
+                for (int a = 0; a < vars.length ; a++) {
+                    threadVars.put(vars[a], EOFVALUE);
+                }
+            }
 		} catch (IOException e) {
 			log.error(e.toString());
 		}
@@ -108,5 +122,13 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
+
+    public boolean getRecycle() {
+        return recycle;
+    }
+
+    public void setRecycle(boolean recycle) {
+        this.recycle = recycle;
+    }
 
 }

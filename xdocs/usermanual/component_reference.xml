@@ -1762,11 +1762,16 @@ the Report.
 <component name="CSV Data Set Config" index="&sect-num;.4.1" screenshot="csvdatasetconfig.png">
 <description>
         <p>
-	CSV DataSet Config is used to read lines from a file, and split them into variables.
+	CSV Data Set Config is used to read lines from a file, and split them into variables.
 	It is easier to use than the __CSVRead() and _StringFromFile() functions.
 	</p>
 	<p>
 	As a special case, the string "\t" (without quotes) is treated as a Tab.
+	</p>
+	<p>
+	When the end of file is reached, and the recycle option is true, reading starts again with the first line of the file.
+	If the recycle option is false, then all the variables are set to <b>&amp;lt;EOF&gt;</b> when the end of file is reached.
+	This value can be changed by setting the JMeter property <b>csvdataset.eofstring</b>.
 	</p>
 </description>
 <properties>
@@ -1777,7 +1782,10 @@ the Report.
   unless the remote server has the same directory structure.
   </property>
   <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
-  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.</property>
+  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.
+  If there are fewer values on the line than there are variables the remaining variables are not updated -
+  so they will retain their previous value (if any).</property>
+  <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching EOF? (default is true)</property>
 </properties>
 </component>
 

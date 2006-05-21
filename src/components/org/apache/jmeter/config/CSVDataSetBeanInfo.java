@@ -29,23 +29,38 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
  */
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
-	/**
+    // These names must agree case-wise with the variable and property names
+    private static final String FILENAME = "filename";               //$NON-NLS-1$
+    private static final String VARIABLE_NAMES = "variableNames";    //$NON-NLS-1$
+    private static final String DELIMITER = "delimiter";             //$NON-NLS-1$
+    private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
+
+    /**
 	 * @param beanClass
 	 */
 	public CSVDataSetBeanInfo() {
 		super(CSVDataSet.class);
-		createPropertyGroup("csv_data", new String[] { "filename", "variableNames", "delimiter" });
-		PropertyDescriptor p = property("filename");
+		createPropertyGroup("csv_data",             //$NON-NLS-1$
+                new String[] { FILENAME, VARIABLE_NAMES, DELIMITER, RECYCLE });
+        
+		PropertyDescriptor p = property(FILENAME);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+		p.setValue(DEFAULT, "");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-		p = property("variableNames");
+        
+		p = property(VARIABLE_NAMES);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+		p.setValue(DEFAULT, "");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-		p = property("delimiter");
+		
+        p = property(DELIMITER);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, ",");
+		p.setValue(DEFAULT, ",");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        
+        p = property(RECYCLE);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 	}
 }
