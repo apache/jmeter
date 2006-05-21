@@ -689,6 +689,7 @@ However some variables are defined internally by JMeter. These are listed below.
 <p>
 Properties are defined in jmeter.properties, or on the command line.
 Some additional properties are defined by JMeter. These are listed below.
+The START properties are also copied to variables with the same names.
 </p>
 <ul>
 <li>START.MS - start time in milliseconds</li>
