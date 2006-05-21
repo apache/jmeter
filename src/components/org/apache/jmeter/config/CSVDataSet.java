@@ -48,7 +48,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     private transient String delimiter;
 
-    private transient boolean recycle;
+    private transient boolean recycle = true;
     
 	transient private String[] vars;
 
