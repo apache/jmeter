@@ -51,7 +51,7 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
 	}
 
 	public String getAsText() {
-		return textField.getPassword().toString();
+		return new String(textField.getPassword());
 	}
 
 	public void setAsText(String value) {
