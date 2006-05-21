@@ -71,6 +71,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -560,6 +561,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         res.setHTTPMethod(method);
 		res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
+        InputStream instream = null;
 		try {
 			client = setupConnection(url, httpMethod, res);
 
@@ -573,11 +575,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			int statusCode = client.executeMethod(httpMethod);
 
 			// Request sent. Now get the response:
-            InputStream instream = httpMethod.getResponseBodyAsStream();
+            instream = httpMethod.getResponseBodyAsStream();
             
             if (instream != null) {// will be null for HEAD
             
-                if (ENCODING_GZIP.equals(httpMethod.getResponseHeader(TRANSFER_ENCODING))) {
+                if (ENCODING_GZIP.equals(httpMethod.getResponseHeader(TRANSFER_ENCODING).getValue())) {
                     instream = new GZIPInputStream(instream);
                 }
     
@@ -651,6 +653,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			err.setSampleLabel("Error: " + url.toString());
 			return err;
 		} finally {
+            JOrphanUtils.closeQuietly(instream);
 			if (httpMethod != null)
 				httpMethod.releaseConnection();
 		}
