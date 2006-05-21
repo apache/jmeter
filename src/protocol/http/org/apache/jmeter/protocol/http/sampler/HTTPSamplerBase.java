@@ -681,14 +681,26 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 			while (urls.hasNext()) {
 				Object binURL = urls.next();
 				try {
-					HTTPSampleResult binRes = sample((URL) binURL, GET, false, frameDepth + 1);
+					URL url = (URL) binURL;
+                    String urlstr = url.toString();
+                    String urlStrEnc=encodeSpaces(urlstr);
+                    if (!urlstr.equals(urlStrEnc)){// There were some spaces in the URL
+                        try {
+                            url = new URL(urlStrEnc);
+                        } catch (MalformedURLException e) {
+                            res.addSubResult(errorResult(new Exception(urlStrEnc + " is not a correct URI"), res));
+                            res.setSuccessful(false);
+                            continue;
+                        }
+                    }
+                    HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
 					res.addSubResult(binRes);
 					res.setSuccessful(res.isSuccessful() && binRes.isSuccessful());
 				} catch (ClassCastException e) {
 					res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), res));
 					res.setSuccessful(false);
 					continue;
-				}
+                }
 			}
 		}
 		return res;
