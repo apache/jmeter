@@ -101,6 +101,7 @@ sample, and the file name can be included in the sample log file.
 <li>Non-caching Calculator - used by Table Visualiser to reduce memory footprint</li>
 <li>Summary Report - similar to Aggregate Report, but uses less memory</li>
 <li>Bug 39580 - recycle option for CSV Dataset</li>
+<li>Bug 37652 - support for Ajp Tomcat protocol</li>
 </ul>
 
 <h4>Bug fixes:</h4>
