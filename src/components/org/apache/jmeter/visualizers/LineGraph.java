@@ -51,7 +51,7 @@ public class LineGraph extends JPanel {
     protected String[] xAxisLabels, yAxisLabel;
     protected int width, height;
     
-    public static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
+    private static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
             PointChartProperties.SHAPE_TRIANGLE};
 
@@ -60,7 +60,7 @@ public class LineGraph extends JPanel {
      * we can add more. Though more than 12 lines per graph will look 
      * rather busy and be hard to read.
      */
-    public static final Paint[] PAINT_ARRAY = {Color.BLACK,
+    private static final Paint[] PAINT_ARRAY = {Color.BLACK,
             Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
             Color.RED,Color.YELLOW,Color.DARK_GRAY,Color.GRAY,Color.LIGHT_GRAY,
             Color.PINK,Color.CYAN};
