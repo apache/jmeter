@@ -323,7 +323,7 @@ private static class GraphPanel extends JPanel {
 		// draw grid
 		g.setColor(Color.gray);
 		int dataWidth = getDataWidth();
-		int increment = Math.round((width - 1) / (dataWidth - 1));
+		int increment = Math.round((float)(width - 1) / (dataWidth - 1));
 
 		/*
 		 * for (int t = 0; t < dataWidth; t++) { g.drawLine(t * increment, 0, t *
