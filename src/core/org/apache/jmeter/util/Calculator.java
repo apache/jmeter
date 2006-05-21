@@ -232,7 +232,7 @@ public class Calculator {
      */
     public double getPageSize() {
         if (count > 0 && bytes > 0) {
-            return bytes / count;
+            return (double) bytes / count;
         }
         return 0.0;
     }
