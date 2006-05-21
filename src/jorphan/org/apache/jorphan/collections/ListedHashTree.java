@@ -208,11 +208,11 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 		return data.size();
 	}
 
-	void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
 	}
 
-	void writeObject(ObjectOutputStream oos) throws IOException {
+	private void writeObject(ObjectOutputStream oos) throws IOException {
 		oos.defaultWriteObject();
 	}
 
