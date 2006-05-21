@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.threads;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -51,7 +52,7 @@ import org.apache.log.Logger;
  * timing, add listeners for sampling events and to stop the sampling process.
  * 
  */
-public class JMeterThread implements Runnable, java.io.Serializable {
+public class JMeterThread implements Runnable, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// NOT USED private static Map samplers = new HashMap();
@@ -405,13 +406,6 @@ public class JMeterThread implements Runnable, java.io.Serializable {
 	private void stopThread() {
 		running = false;
 		log.info("Stop Thread detected by thread " + threadName);
-	}
-
-	public void pauseThread(int milis) {
-		try {
-			Thread.sleep(milis);
-		} catch (InterruptedException e) {
-		}
 	}
 
 	private void checkAssertions(List assertions, SampleResult result) {
