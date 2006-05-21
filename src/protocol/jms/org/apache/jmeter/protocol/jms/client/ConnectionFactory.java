@@ -42,11 +42,11 @@ import org.apache.log.Logger;
  */
 public class ConnectionFactory implements TestListener {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
 	private static TopicConnectionFactory factory = null;
 
 	private static QueueConnectionFactory qfactory = null;
-
-	static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * 
@@ -68,7 +68,7 @@ public class ConnectionFactory implements TestListener {
 	 * @see junit.framework.TestListener#endTest(junit.framework.Test)
 	 */
 	public void testEnded() {
-		factory = null;
+        ConnectionFactory.factory = null;//N.B. static reference
 	}
 
 	/**
