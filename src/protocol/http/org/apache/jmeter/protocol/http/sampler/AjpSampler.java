@@ -55,7 +55,7 @@ public class AjpSampler extends HTTPSamplerBase {
     /**
      *  Translates integer codes to request header names    
      */
-    public static final String []headerTransArray = {
+    private static final String []headerTransArray = {
         "accept",               //$NON-NLS-1$
         "accept-charset",       //$NON-NLS-1$
         "accept-encoding",      //$NON-NLS-1$
@@ -79,7 +79,7 @@ public class AjpSampler extends HTTPSamplerBase {
 
     static final int MAX_SEND_SIZE = 8*1024 - 4 - 4;
 
-    private Socket channel = null;
+    private transient Socket channel = null;
     private int lastPort = -1;
     private String lastHost = null;
     private String localName = null;
@@ -89,7 +89,7 @@ public class AjpSampler extends HTTPSamplerBase {
     private transient ByteArrayOutputStream responseData = new ByteArrayOutputStream();
     private int inpos = 0;
     private int outpos = 0;
-    private InputStream body = null;
+    private transient InputStream body = null;
 
     public AjpSampler() {
     }
