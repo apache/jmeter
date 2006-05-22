@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy
@@ -20,15 +20,14 @@
  */
 package org.apache.jorphan.math;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * @author pete
  * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class NumberComparator implements Comparator {
+public class NumberComparator implements Comparator, Serializable {
 
 	/**
 	 * 
