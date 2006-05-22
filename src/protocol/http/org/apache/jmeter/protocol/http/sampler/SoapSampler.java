@@ -19,6 +19,9 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,19 +37,20 @@ import org.apache.jmeter.protocol.http.control.Header;
 /**
  * Sampler to handle SOAP Requests.
  * 
- * @author Jordi Salvat i Alabart
- * @version $Id$
+ * author Jordi Salvat i Alabart
  */
 public class SoapSampler extends HTTPSampler {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String XML_DATA = "HTTPSamper.xml_data";
+	public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
-	public static final String URL_DATA = "SoapSampler.URL_DATA";
+	public static final String URL_DATA = "SoapSampler.URL_DATA"; //$NON-NLS-1$
 
-	public static final String SOAP_ACTION = "SoapSampler.SOAP_ACTION";
+	public static final String SOAP_ACTION = "SoapSampler.SOAP_ACTION"; //$NON-NLS-1$
 
-	public static final String SEND_SOAP_ACTION = "SoapSampler.SEND_SOAP_ACTION";
+	public static final String SEND_SOAP_ACTION = "SoapSampler.SEND_SOAP_ACTION"; //$NON-NLS-1$
+
+	public static final String XML_DATA_FILE = "SoapSampler.xml_data_file"; //$NON-NLS-1$
 
 	public void setXmlData(String data) {
 		setProperty(XML_DATA, data);
@@ -55,6 +59,25 @@ public class SoapSampler extends HTTPSampler {
 	public String getXmlData() {
 		return getPropertyAsString(XML_DATA);
 	}
+
+    /**
+     * it's kinda obvious, but we state it anyways. Set the xml file with a
+     * string path.
+     *
+     * @param filename
+     */
+    public void setXmlFile(String filename) {
+        setProperty(XML_DATA_FILE, filename);
+    }
+
+    /**
+     * Get the file location of the xml file.
+     *
+     * @return String file path.
+     */
+    public String getXmlFile() {
+        return getPropertyAsString(XML_DATA_FILE);
+    }
 
 	public String getURLData() {
 		return getPropertyAsString(URL_DATA);
@@ -90,8 +113,8 @@ public class SoapSampler extends HTTPSampler {
 	 *                if an I/O exception occurs
 	 */
 	protected void setPostHeaders(URLConnection connection) throws IOException {
-		((HttpURLConnection) connection).setRequestMethod("POST");
-		connection.setRequestProperty("Content-Length", "" + getXmlData().length());
+		((HttpURLConnection) connection).setRequestMethod(POST);
+		connection.setRequestProperty(HEADER_CONTENT_LENGTH, String.valueOf(getXmlData().length()));
 		// my first attempt at fixing the bug failed, due to user
 		// error on my part. HeaderManager does not use the normal
 		// setProperty, and getPropertyAsString methods. Instead,
@@ -108,8 +131,10 @@ public class SoapSampler extends HTTPSampler {
 			}
 		} else {
 			// otherwise we use "text/xml" as the default
-			connection.setRequestProperty("Content-Type", "text/xml");
-			if(getSendSOAPAction()) connection.setRequestProperty("SOAPAction", "\"" + getSOAPAction() + "\"");
+			connection.setRequestProperty(HEADER_CONTENT_TYPE, "text/xml"); //$NON-NLS-1$
+			if(getSendSOAPAction()) {
+                connection.setRequestProperty("SOAPAction", "\"" + getSOAPAction() + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            }
 		}
 		connection.setDoOutput(true);
 	}
@@ -123,9 +148,27 @@ public class SoapSampler extends HTTPSampler {
 	 *                if an I/O exception occurs
 	 */
 	protected void sendPostData(URLConnection connection) throws IOException {
-		PrintWriter out = new PrintWriter(connection.getOutputStream());
-		out.print(getXmlData());
-		out.close();
+        String xmlFile = getXmlFile();
+        if (xmlFile != null && getXmlFile().length() > 0) {
+            OutputStream out = connection.getOutputStream();
+            byte[] buf = new byte[1024];
+            // 1k - the previous 100k made no sense (there's tons of buffers
+            // elsewhere in the chain) and it caused OOM when many concurrent
+            // uploads were being done. Could be fixed by increasing the evacuation
+            // ratio in bin/jmeter[.bat], but this is better.
+            int read;
+            InputStream in = new FileInputStream(xmlFile);
+            while ((read = in.read(buf)) > 0) {
+                out.write(buf, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        } else {
+    		PrintWriter out = new PrintWriter(connection.getOutputStream());
+    		out.print(getXmlData());
+    		out.close();
+    	}
 	}
 
 	/*
@@ -142,8 +185,8 @@ public class SoapSampler extends HTTPSampler {
 			setPort(url.getPort());
 			setProtocol(url.getProtocol());
 			setMethod(POST);
-			if (url.getQuery() != null && url.getQuery().compareTo("") != 0) {
-				setPath(url.getPath() + "?" + url.getQuery());
+			if (url.getQuery() != null && url.getQuery().length() >  0) {
+				setPath(url.getPath() + "?" + url.getQuery()); //$NON-NLS-1$
 			} else {
 				setPath(url.getPath());
 			}
@@ -163,7 +206,7 @@ public class SoapSampler extends HTTPSampler {
 				sampleResult = new HTTPSampleResult();
 				sampleResult.setSampleLabel(getName());
 			}
-			sampleResult.setResponseCode("000");
+			sampleResult.setResponseCode("000"); //$NON-NLS-1$
 			sampleResult.setResponseMessage(ex.getLocalizedMessage());
 		}
         // Bug 39252 set SoapSampler sampler data from XML data

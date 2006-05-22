@@ -31,11 +31,11 @@ import org.apache.jmeter.protocol.http.sampler.SoapSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * @version $Revision$ on $Date$
  */
 public class SoapSamplerGui extends AbstractSamplerGui {
 	private JLabeledTextField urlField;
@@ -43,12 +43,14 @@ public class SoapSamplerGui extends AbstractSamplerGui {
     private JCheckBox sendSoapAction;
 	private JLabeledTextArea soapXml;
 
+    private FilePanel soapXmlFile = new FilePanel();
+
 	public SoapSamplerGui() {
 		init();
 	}
 
 	public String getLabelResource() {
-		return "soap_sampler_title";
+		return "soap_sampler_title"; //$NON-NLS-1$
 	}
 
 	/*
@@ -73,6 +75,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 			SoapSampler sampler = (SoapSampler) s;
 			sampler.setURLData(urlField.getText());
 			sampler.setXmlData(soapXml.getText());
+            sampler.setXmlFile(soapXmlFile.getFilename());
 			sampler.setSOAPAction(soapAction.getText());
 			sampler.setSendSOAPAction(sendSoapAction.isSelected());
 		}
@@ -84,10 +87,10 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 
 		add(makeTitlePanel(), BorderLayout.NORTH);
 
-		urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10);
-		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null);
-		soapAction = new JLabeledTextField("", 10);
-		sendSoapAction = new JCheckBox("Send SOAPAction: ", true);
+		urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10); //$NON-NLS-1$
+		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null); //$NON-NLS-1$
+		soapAction = new JLabeledTextField("", 10); //$NON-NLS-1$
+		sendSoapAction = new JCheckBox(JMeterUtils.getResString("soap_send_action"), true); //$NON-NLS-1$
 
 		JPanel mainPanel = new JPanel(new BorderLayout());
 	    JPanel soapActionPanel = new JPanel();
@@ -110,6 +113,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 		soapActionPanel.add(soapAction, c);
 		mainPanel.add(soapActionPanel, BorderLayout.NORTH);
 		mainPanel.add(soapXml, BorderLayout.CENTER);
+        mainPanel.add(soapXmlFile, BorderLayout.SOUTH);
 
         sendSoapAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -127,6 +131,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 		sendSoapAction.setSelected(sampler.getSendSOAPAction());
 		soapAction.setText(sampler.getSOAPAction());
 		soapXml.setText(sampler.getXmlData());
+        soapXmlFile.setFilename(sampler.getXmlFile());
 	}
 
 	public Dimension getPreferredSize() {
