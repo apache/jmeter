@@ -925,13 +925,14 @@ Here are some general guidelines for writing Junit tests so they work well with 
 <component name="Test Action" index="&sect-num;.1.18" screenshot="test_action.png">
 <description>
 The Test Action sampler is a sampler that is intended for use in a conditional controller.
-Rather than generate a sample, the test element pauses or stops the selected target.
-<p>This sampler can be useful in conjunction with the Transaction Controller, as it allows
-pauses to be included without needing to generate a sample.</p>
+Rather than generate a sample, the test element eithers pauses - or stops the selected target.
+<p>This sampler can also be useful in conjunction with the Transaction Controller, as it allows
+pauses to be included without needing to generate a sample. 
+For variable delays, set the pause time to zero, and add a Timer as a child.</p>
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Target" required="Yes">Current Thread / All Threads</property>
+  <property name="Target" required="Yes">Current Thread / All Threads (ignored for Pause)</property>
   <property name="Action" required="Yes">Pause / Stop</property>
   <property name="Duration" required="Yes">How long to pause for (milliseconds)</property>
 </properties>
