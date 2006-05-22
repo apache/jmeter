@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +38,15 @@ import org.apache.log.Logger;
  */
 public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
-	public static final String INPUT_FILE = "jms.input_file";
+	public static final String INPUT_FILE = "jms.input_file"; //$NON-NLS-1$
 
-	public static final String RANDOM_PATH = "jms.random_path";
+	public static final String RANDOM_PATH = "jms.random_path"; //$NON-NLS-1$
 
-	public static final String TEXT_MSG = "jms.text_message";
+	public static final String TEXT_MSG = "jms.text_message"; //$NON-NLS-1$
 
-	public static final String CONFIG_CHOICE = "jms.config_choice";
+	public static final String CONFIG_CHOICE = "jms.config_choice"; //$NON-NLS-1$
 
-	public static final String MESSAGE_CHOICE = "jms.config_msg_type";
+	public static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
 
 	private Publisher PUB = null;
 
@@ -87,11 +87,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 		this.BUFFER.setLength(0);
 		this.BUFFER = null;
 		ClientPool.clearClient();
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			log.error(e.getMessage());
-		}
 	}
 
 	/**
