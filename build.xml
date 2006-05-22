@@ -106,6 +106,8 @@
    -->
    <property name="findbugs.homedir" value="/findbugs" />
    <property name="findbugs.level" value="medium" />
+   <property name="findbugs.xsldir" value="${findbugs.homedir}/src/xsl" />
+   <property name="findbugs.xslname" value="fancy" />
    <property name="findbugs.outName" value="reports/jmeter-fb" />
    <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
@@ -114,7 +116,7 @@
         classpath="${findbugs.homedir}/lib/findbugs-ant.jar" 
         classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
     <findbugs home="${findbugs.homedir}"
-              output="xml"
+              output="xml:withMessages"
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
               outputFile="${findbugs.outName}.xml" >
@@ -156,6 +158,7 @@
 
     </findbugs>
     <antcall target="findbugs-style"/>
+    <antcall target="findbugs-xsl"/>
   </target>
   
   <!-- Convert findbugs XML output to CSV -->
@@ -164,6 +167,15 @@
        force="true"
        in="${findbugs.outName}.xml" 
        out="${findbugs.outName}.csv">
+     </xslt>
+   </target>
+
+  <!-- Convert findbugs XML output to HTML -->
+   <target name="findbugs-xsl">
+     <xslt style="${findbugs.xsldir}/${findbugs.xslname}.xsl" 
+       force="true"
+       in="${findbugs.outName}.xml" 
+       out="${findbugs.outName}_${findbugs.xslname}.html">
      </xslt>
    </target>
 
