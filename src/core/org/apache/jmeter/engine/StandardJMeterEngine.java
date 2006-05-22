@@ -447,19 +447,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		}
 	}
 
-	public synchronized void pauseTest(int milis) {
-		Iterator iter = new HashSet(allThreads.keySet()).iterator();
-		while (iter.hasNext()) {
-			Thread t = (Thread) allThreads.get(iter.next());
-			if (t != null && t.isAlive()) {
-				try {
-					Thread.sleep(milis);
-				} catch (InterruptedException e) {
-				}
-			}
-		}
-	}
-
 	private boolean verifyThreadsStopped() {
 		boolean stoppedAll = true;
 		Iterator iter = new HashSet(allThreads.keySet()).iterator();
