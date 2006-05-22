@@ -60,14 +60,16 @@ public final class FileDialoger {
 		// JFileChooser jfc = null;
 
 		if (lastJFCDirectory == null) {
-			String start = JMeterUtils.getPropDefault("user.dir", "");
+			String start = JMeterUtils.getPropDefault("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
 
-			if (!start.equals("")) {
+			if (start.length() > 0) {
 				jfc.setCurrentDirectory(new File(start));
 			}
 		}
 		clearFileFilters();
-		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+        if(exts != null && exts.length > 0) {
+    		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+        }
 		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
@@ -114,17 +116,17 @@ public final class FileDialoger {
 	 */
 	public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
 		if (lastJFCDirectory == null) {
-			String start = JMeterUtils.getPropDefault("user.dir", "");
-			if (!start.equals("")) {
+			String start = JMeterUtils.getPropDefault("user.dir", "");//$NON-NLS-1$//$NON-NLS-2$
+			if (start.length() > 0) {
 				jfc = new JFileChooser(new File(start));
 			}
 			lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 		}
-		String ext = ".jmx";
+		String ext = ".jmx";//$NON-NLS-1$
 		if (filename != null) {
 			jfc.setSelectedFile(new File(lastJFCDirectory, filename));
 			int i = -1;
-			if ((i = filename.lastIndexOf(".")) > -1) {
+			if ((i = filename.lastIndexOf(".")) > -1) {//$NON-NLS-1$
 				ext = filename.substring(i);
 			}
 		}

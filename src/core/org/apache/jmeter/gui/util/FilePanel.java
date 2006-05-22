@@ -36,17 +36,18 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author Michael Stover Created April 18, 2002
- * @version $Revision$ Last updated: $Date$
+ * author Michael Stover Created April 18, 2002
  */
 public class FilePanel extends HorizontalPanel implements ActionListener {
 	JTextField filename = new JTextField(20);
 
-	JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename"));
+	JLabel label = new JLabel(JMeterUtils.getResString("file_visualizer_filename")); //$NON-NLS-1$
 
-	JButton browse = new JButton(JMeterUtils.getResString("browse"));
+	JButton browse = new JButton(JMeterUtils.getResString("browse")); //$NON-NLS-1$
 
-	List listeners = new LinkedList();
+    private static final String ACTION_BROWSE = "browse"; //$NON-NLS-1$
+
+    List listeners = new LinkedList();
 
 	String title;
 
@@ -56,7 +57,7 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
 	 * Constructor for the FilePanel object.
 	 */
 	public FilePanel() {
-		title = "";
+		title = ""; //$NON-NLS-1$
 		init();
 	}
 
@@ -91,7 +92,7 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
 		add(Box.createHorizontalStrut(5));
 		filename.addActionListener(this);
 		add(browse);
-		browse.setActionCommand("browse");
+		browse.setActionCommand(ACTION_BROWSE);
 		browse.addActionListener(this);
 
 	}
@@ -133,8 +134,13 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("browse")) {
-			JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { filetype });
+		if (e.getActionCommand().equals(ACTION_BROWSE)) {
+			JFileChooser chooser;
+            if(filetype == null){
+                chooser = FileDialoger.promptToOpenFile();
+            } else {
+                chooser = FileDialoger.promptToOpenFile(new String[] { filetype });
+            }
 			if (chooser != null && chooser.getSelectedFile() != null) {
 				filename.setText(chooser.getSelectedFile().getPath());
 				fireFileChanged();
