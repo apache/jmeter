@@ -35,7 +35,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @author mike
- * 
+ * TODO does not appear to be used anywhere (except by the test class)
  */
 public class ConfigurationTree implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1;
@@ -637,6 +637,7 @@ public class ConfigurationTree implements Serializable, Cloneable {
 	protected static boolean fromXML(Reader buf, ConfigurationTree tree, String[] line) throws IOException {
 		boolean done = false;
 		try {
+            //TODO BUG: readLine returns a String array - which one should be compared?
 			while (!done && !(line = readLine(buf, line)).equals("}")) {
 				int equals = line[0].indexOf("=");
 				if (line[0].endsWith("{")) {
