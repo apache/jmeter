@@ -81,11 +81,6 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 		if (this.SUBSCRIBER != null) {
 			this.SUBSCRIBER = null;
 		}
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			log.error(e.getMessage());
-		}
 	}
 
 	/*
