@@ -102,6 +102,7 @@ sample, and the file name can be included in the sample log file.
 <li>Summary Report - similar to Aggregate Report, but uses less memory</li>
 <li>Bug 39580 - recycle option for CSV Dataset</li>
 <li>Bug 37652 - support for Ajp Tomcat protocol</li>
+<li>Bug 39626 - Loading SOAP/XML-RPC requests from file</li>
 </ul>
 
 <h4>Bug fixes:</h4>

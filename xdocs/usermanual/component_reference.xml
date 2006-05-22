@@ -240,7 +240,7 @@ totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
 
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
-POST content. To change the "Content-type", use the HeaderManager. The sampler will pick up any
+POST content. To change the "Content-type" from the default of "text/html", use a HeaderManager. The sampler will pick up any
 required headers from the HeaderManager. The primary difference between the soap sampler and
 webservice sampler, is the soap sampler uses raw post and does not require conformance to
 XML.</p>
@@ -250,8 +250,11 @@ XML.</p>
         <property name="Name" required="No">Descriptive name for this sampler
          that is shown in the tree.</property>
         <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
-        <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC
-        instructions.</property>
+        <property name="Send SOAP action" required="No">Send a SOAP action header? (ignored if there is a HeaderManager)</property>
+        <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC instructions.
+        Not used if the filename is provided.
+        </property>
+        <property name="Filename" required="No">If specified, then the contents of the file are sent, and the Data field is ignored</property>
         </properties>
 
 </component>
