@@ -26,6 +26,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -512,7 +513,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	/**
 	 * Comparator used to sort properties for presentation in the GUI.
 	 */
-	private class PropertyComparator implements Comparator {
+	private class PropertyComparator implements Comparator, Serializable {
 		public int compare(Object o1, Object o2) {
 			return compare((PropertyDescriptor) o1, (PropertyDescriptor) o2);
 		}
