@@ -78,7 +78,6 @@
               <responseDataOnError>false</responseDataOnError>
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
-              <printMilliseconds>false</printMilliseconds>
             </value>
             <name>saveConfig</name>
           </objProp>
@@ -110,7 +109,6 @@
               <responseDataOnError>false</responseDataOnError>
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
-              <printMilliseconds>false</printMilliseconds>
             </value>
             <name>saveConfig</name>
           </objProp>
