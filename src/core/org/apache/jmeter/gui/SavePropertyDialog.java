@@ -60,6 +60,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
     private static final String NAME_SAVE_PFX   = "save";  // $NON-NLS-1$ i.e. boolean saveXXX()
     private static final String NAME_SET_PREFIX = "set";   // $NON-NLS-1$ i.e. void setXXX(boolean)
     private static final String RESOURCE_PREFIX = "save_"; // $NON-NLS-1$ e.g. save_XXX property
+    private static final int    NAME_SAVE_PFX_LEN = NAME_SAVE_PFX.length();
 
     private SampleSaveConfiguration saveConfig;
 
@@ -108,7 +109,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 				String name = methods[i].getName();
 				if (name.startsWith(NAME_SAVE_PFX) && methods[i].getParameterTypes().length == 0) {
 					try {
-						name = name.substring(4);
+						name = name.substring(NAME_SAVE_PFX_LEN);
 						JCheckBox check = new JCheckBox(
                                 JMeterUtils.getResString(RESOURCE_PREFIX + name)// $NON-NLS-1$
                                 ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
