@@ -21,9 +21,11 @@ import org.apache.jmeter.samplers.SampleSaveConfiguration;
 
 import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.core.JVM;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -113,8 +115,12 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
-//	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-//        SampleSaveConfiguration prop = new SampleSaveConfiguration();
-//		return prop;
-//	}
+	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
+		Object obj = super.unmarshal(reader, arg1);
+        SampleSaveConfiguration prop = (SampleSaveConfiguration) obj;
+        // Fix the variables that can't (yet) be set via the configuration GUI
+        prop.setDefaultDelimiter();
+        prop.setDefaultTimeStampFormat();
+		return prop;
+	}
 }

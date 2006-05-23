@@ -209,11 +209,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	
     private boolean threadCounts = _threadCounts;
     
+    // Does not appear to be used (yet)
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
-	private String delimiter = _delimiter;
+	// Don't save this, as not settable via GUI
+	private transient String delimiter = _delimiter;
 
-	private boolean printMilliseconds = _printMilliseconds;
+	// Don't save this, as it is derived from the time format
+	private transient boolean printMilliseconds = _printMilliseconds;
 
 	/** A formatter for the time stamp. */
 	private transient SimpleDateFormat formatter = _formatter;
@@ -608,4 +611,15 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public String getXmlPi() {
         return JMeterUtils.getJMeterProperties().getProperty(XML_PI, ""); // Defaults to empty;
     }
+
+    // Used by SampleSaveConfigurationConverter.unmarshall()
+	public void setDefaultDelimiter() {
+		delimiter=_delimiter;
+	}
+
+    // Used by SampleSaveConfigurationConverter.unmarshall()
+	public void setDefaultTimeStampFormat() {
+		printMilliseconds=_printMilliseconds;
+		formatter=_formatter;
+	}
 }
