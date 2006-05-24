@@ -73,20 +73,25 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-	private final String[] COLUMNS = { JMeterUtils.getResString("URL"),
-			JMeterUtils.getResString("aggregate_report_count"), JMeterUtils.getResString("average"),
-			JMeterUtils.getResString("aggregate_report_median"), JMeterUtils.getResString("aggregate_report_90%_line"),
-			JMeterUtils.getResString("aggregate_report_min"), JMeterUtils.getResString("aggregate_report_max"),
-			JMeterUtils.getResString("aggregate_report_error%"), JMeterUtils.getResString("aggregate_report_rate"),
-			JMeterUtils.getResString("aggregate_report_bandwidth") };
+	private final String[] COLUMNS = { JMeterUtils.getResString("URL"), //$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_count"),			//$NON-NLS-1$
+			JMeterUtils.getResString("average"),						//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_median"),		//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_90%_line"),		//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_min"),			//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_max"),			//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_error%"),		//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_rate"),			//$NON-NLS-1$
+			JMeterUtils.getResString("aggregate_report_bandwidth") };	//$NON-NLS-1$
     
-    private final String[] GRAPH_COLUMNS = {JMeterUtils.getResString("average"),
-            JMeterUtils.getResString("aggregate_report_median"),
-            JMeterUtils.getResString("aggregate_report_90%_line"),
-            JMeterUtils.getResString("aggregate_report_min"),
-            JMeterUtils.getResString("aggregate_report_max")};
+    private final String[] GRAPH_COLUMNS = {JMeterUtils.getResString("average"),//$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_median"),		//$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_90%_line"),		//$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_min"),			//$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_max")};			//$NON-NLS-1$
 
-	private final String TOTAL_ROW_LABEL = JMeterUtils.getResString("aggregate_report_total_label");
+	private final String TOTAL_ROW_LABEL =
+		JMeterUtils.getResString("aggregate_report_total_label");		//$NON-NLS-1$
 
 	protected JTable myJTable;
 
@@ -105,29 +110,33 @@ ActionListener {
     protected JSplitPane spane = null;
     
     protected JLabeledChoice columns = 
-        new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);
+        new JLabeledChoice(JMeterUtils.getResString("aggregate_graph_column"),GRAPH_COLUMNS);//$NON-NLS-1$
     
     //NOT USED protected double[][] data = null;
     
     protected JButton displayButton = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_display"));
+        new JButton(JMeterUtils.getResString("aggregate_graph_display"));				//$NON-NLS-1$
     
     protected JButton saveGraph = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_save"));
+        new JButton(JMeterUtils.getResString("aggregate_graph_save"));					//$NON-NLS-1$
     
     protected JButton saveTable = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));			//$NON-NLS-1$
     
     JLabeledTextField graphTitle = 
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));	//$NON-NLS-1$
+    
+    JLabeledTextField maxLengthXAxisLabel = 
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_max_length_xaxis_label"));//$NON-NLS-1$
+    
     JLabeledTextField graphWidth = 
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_width"));		//$NON-NLS-1$
     JLabeledTextField graphHeight = 
-        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));
+        new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_height"));		//$NON-NLS-1$
     
-    protected String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");
+    protected String yAxisLabel = JMeterUtils.getResString("aggregate_graph_response_time");//$NON-NLS-1$
     
-    protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");
+    protected String yAxisTitle = JMeterUtils.getResString("aggregate_graph_ms");		//$NON-NLS-1$
     
     protected boolean saveGraphToFile = false;
     
@@ -137,19 +146,27 @@ ActionListener {
 
 	public StatGraphVisualizer() {
 		super();
-		model = new ObjectTableModel(COLUMNS, new Functor[] { new Functor("getLabel"), new Functor("getCount"),
-				new Functor("getMeanAsNumber"), new Functor("getMedian"),
-				new Functor("getPercentPoint", new Object[] { new Float(.900) }), new Functor("getMin"),
-				new Functor("getMax"), new Functor("getErrorPercentageString"), new Functor("getRateString"),
-				new Functor("getPageSizeString") }, new Functor[] { null, null, null, null, null, null, null, null,
-				null, null }, new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
+		model = new ObjectTableModel(COLUMNS, new Functor[] {
+				new Functor("getLabel"),					//$NON-NLS-1$
+				new Functor("getCount"),					//$NON-NLS-1$
+				new Functor("getMeanAsNumber"),				//$NON-NLS-1$
+				new Functor("getMedian"),					//$NON-NLS-1$
+				new Functor("getPercentPoint",				//$NON-NLS-1$
+				new Object[] { new Float(.900) }),
+				new Functor("getMin"),						//$NON-NLS-1$
+				new Functor("getMax"), 						//$NON-NLS-1$
+				new Functor("getErrorPercentageString"),	//$NON-NLS-1$
+				new Functor("getRateString"),				//$NON-NLS-1$
+				new Functor("getPageSizeString") },			//$NON-NLS-1$
+				new Functor[] { null, null, null, null, null, null, null, null,	null, null }, 
+				new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
 				Long.class, String.class, String.class, String.class });
 		clear();
 		init();
 	}
 
 	public String getLabelResource() {
-		return "aggregate_graph_title";
+		return "aggregate_graph_title";						//$NON-NLS-1$
 	}
 
 	public void add(SampleResult res) {
@@ -209,7 +226,7 @@ ActionListener {
         graph.setBorder(margin2);
 
 
-        JLabel graphLabel = new JLabel(JMeterUtils.getResString("aggregate_graph"));
+        JLabel graphLabel = new JLabel(JMeterUtils.getResString("aggregate_graph")); //$NON-NLS-1$
         graphPanel = new AxisGraph();
         graphPanel.setPreferredSize(new Dimension(defaultWidth,defaultHeight));
 
@@ -222,6 +239,7 @@ ActionListener {
         
         graph.add(graphLabel);
         graph.add(graphTitle);
+        graph.add(maxLengthXAxisLabel);
         graph.add(graphWidth);
         graph.add(graphHeight);
         graph.add(buttonpanel);
@@ -246,19 +264,25 @@ ActionListener {
     public void makeGraph() {
         String wstr = graphWidth.getText();
         String hstr = graphHeight.getText();
+        String lstr = maxLengthXAxisLabel.getText();
         if (wstr.length() == 0) {
-            wstr = "450";
+            wstr = "450";//$NON-NLS-1$
         }
         if (hstr.length() == 0) {
-            hstr = "250";
+            hstr = "250";//$NON-NLS-1$
+        }
+        if (lstr.length() == 0) {
+            lstr = "20";//$NON-NLS-1$
         }
         int width = Integer.parseInt(wstr);
         int height = Integer.parseInt(hstr);
+        int maxLength = Integer.parseInt(lstr);
 
         graphPanel.setData(this.getData());
         graphPanel.setHeight(height);
         graphPanel.setWidth(width);
         graphPanel.setTitle(graphTitle.getText());
+        graphPanel.setMaxLength(maxLength);
         graphPanel.setXAxisLabels(getAxisLabels());
         graphPanel.setXAxisTitle(columns.getText());
         graphPanel.setYAxisLabels(this.yAxisLabel);
@@ -330,7 +354,7 @@ ActionListener {
             }
         } else if (event.getSource() == saveTable) {
             JFileChooser chooser = FileDialoger.promptToSaveFile(
-                    "statistics.csv");
+                    "statistics.csv");		//$NON-NLS-1$
             File output = chooser.getSelectedFile();
             FileWriter writer = null;
             try {
