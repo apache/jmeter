@@ -141,20 +141,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 */
 	protected HttpURLConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
 		HttpURLConnection conn;
-		// [Jordi <jsalvata@atg.com>]
-		// I've not been able to find out why we're not using this
-		// feature of HttpURLConnections and we're doing redirection
-		// by hand instead. Everything would be so much simpler...
-		// [/Jordi]
-		// Mike: answer - it didn't work. Maybe in JDK1.4 it works, but
-		// honestly, it doesn't seem like they're working on this.
-		// My longer term plan is to use Apache's home grown HTTP Client, or
-		// maybe even HTTPUnit's classes. I'm sure both would be better than
-		// Sun's.
-
-		// [sebb] Make redirect following configurable (see bug 19004)
-		// They do seem to work on JVM 1.4.1_03 (Sun/WinXP)
-		HttpURLConnection.setFollowRedirects(getPropertyAsBoolean(AUTO_REDIRECTS));
 
         SSLManager sslmgr = null;
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
@@ -166,6 +152,8 @@ public class HTTPSampler extends HTTPSamplerBase {
         }
 		
         conn = (HttpURLConnection) u.openConnection();
+        // Update follow redirects setting just for this connection
+        conn.setInstanceFollowRedirects(getAutoRedirects());
 
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
 			try {
@@ -475,6 +463,11 @@ public class HTTPSampler extends HTTPSamplerBase {
 				res.setRedirectLocation(conn.getHeaderField("Location"));
 			}
 
+            // If we redirected automatically, the URL may have changed
+            if (getAutoRedirects()){
+                res.setURL(conn.getURL());
+            }
+            
 			// Store any cookies received in the cookie manager:
 			saveConnectionCookies(conn, url, getCookieManager());
 
