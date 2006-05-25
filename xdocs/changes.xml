@@ -158,6 +158,7 @@ The XSL stylesheets also now accept either "rc" or "rs"</li>
 <li>Bug 39533 - StatCalculator added wrong items</li>
 <li>Bug 39599 - ConcurrentModificationException</li>
 <li>HTTPSampler2 now handles Auto and Follow redirects correctly</li>
+<li>Bug 29481 - fix reloading sample results so subresults not counted twice</li>
 </ul>	
 	
 <h4>Other changes</h4>

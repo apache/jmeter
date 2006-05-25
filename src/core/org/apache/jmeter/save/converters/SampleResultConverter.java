@@ -309,7 +309,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		if (subItem instanceof AssertionResult) {
 			res.addAssertionResult((AssertionResult) subItem);
 		} else if (subItem instanceof SampleResult) {
-			res.addSubResult((SampleResult) subItem);
+			res.storeSubResult((SampleResult) subItem);
 		} else if (nodeName.equals(TAG_RESPONSE_HEADER)) {
 			res.setResponseHeaders((String) subItem);
 		} else if (nodeName.equals(TAG_REQUEST_HEADER)) {

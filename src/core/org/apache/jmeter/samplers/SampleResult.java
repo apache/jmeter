@@ -389,6 +389,21 @@ public class SampleResult implements Serializable {
 		subResult.setParent(this);
 	}
 
+    /**
+     * Add a subresult read from a results file.
+     * 
+     * As for addSubResult(), except that the fields don't need to be accumulated
+     * 
+     * @param subResult
+     */
+    public void storeSubResult(SampleResult subResult) {
+        if (subResults == null) {
+            subResults = new ArrayList();
+        }
+        subResults.add(subResult);
+        subResult.setParent(this);
+    }
+
 	/**
 	 * Gets the subresults associated with this sample.
 	 * 
