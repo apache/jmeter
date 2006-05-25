@@ -1137,7 +1137,6 @@ some of its classes - at present JMeter can only run from jar files.
     <property name="jsse.present" value="assume"/>
     <property name="javamail.complete" value="assume"/>
     <property name="beanshell.present" value="assume"/>
-    <property name="htmlparser16.present" value="assume"/>
     <property name="jms.present" value="assume"/>
   </target>
 
