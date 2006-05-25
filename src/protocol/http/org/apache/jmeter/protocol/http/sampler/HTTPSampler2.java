@@ -633,6 +633,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 				res.setRedirectLocation(httpMethod.getResponseHeader("Location").getValue()); // $NON-NLS-1$
 			}
 
+            // If we redirected automatically, the URL may have changed
+            if (getAutoRedirects()){
+                res.setURL(new URL(httpMethod.getURI().toString()));
+            }
+            
 			// Store any cookies received in the cookie manager:
 			saveConnectionCookies(client, getCookieManager());
 
