@@ -500,7 +500,7 @@ public final class OldSaveService {
 		Configuration[] subResults = config.getChildren(SAMPLE_RESULT_TAG_NAME);
 
 		for (int i = 0; i < subResults.length; i++) {
-			result.addSubResult(getSampleResult(subResults[i]));
+			result.storeSubResult(getSampleResult(subResults[i]));
 		}
 		Configuration[] assResults = config.getChildren(ASSERTION_RESULT_TAG_NAME);
 
