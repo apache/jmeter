@@ -648,9 +648,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * 
 	 * @param res
 	 *            result of the initial request - must contain an HTML response
-	 * @param createContainerResult
-	 *            whether to create a "container" or just use the provided
-	 *            <code>res</code> for that purpose
+	 * @param container
+	 *            for storing the results
 	 * @param frameDepth
 	 *            Depth of this target in the frame structure. Used only to
 	 *            prevent infinite recursion.
