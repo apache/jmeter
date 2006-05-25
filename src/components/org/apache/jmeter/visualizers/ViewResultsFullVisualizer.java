@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -282,6 +283,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
                     }
 
 					statsDoc.insertString(statsDoc.getLength(), "Thread Name: "+res.getThreadName()+"\n", null);
+                    String startTime = new Date(res.getStartTime()).toString();
+                    statsDoc.insertString(statsDoc.getLength(), "Sample Start: "+startTime+"\n", null);
 					statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null);
 
 					String responseCode = res.getResponseCode();
