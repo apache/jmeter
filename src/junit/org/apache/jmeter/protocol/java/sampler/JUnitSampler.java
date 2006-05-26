@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.ComparisonFailure;
 import junit.framework.Protectable;
 import junit.framework.TestCase;
@@ -345,7 +346,18 @@ public class JUnitSampler extends AbstractSampler {
             try {
                 
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
-                    SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
+                    try {
+                        SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
+                    } catch (InvocationTargetException e) {
+                        tr.addFailure(this.TEST_INSTANCE, 
+                                new AssertionFailedError(e.getMessage()));
+                    } catch (IllegalAccessException e) {
+                        tr.addFailure(this.TEST_INSTANCE, 
+                                new AssertionFailedError(e.getMessage()));
+                    } catch (IllegalArgumentException e) {
+                        tr.addFailure(this.TEST_INSTANCE, 
+                                new AssertionFailedError(e.getMessage()));
+                    }
                 }
                 final Method m = getMethod(this.TEST_INSTANCE,getMethod());
                 final TestCase theClazz = this.TEST_INSTANCE;
