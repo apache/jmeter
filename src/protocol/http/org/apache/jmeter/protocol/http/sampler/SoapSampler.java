@@ -52,6 +52,10 @@ public class SoapSampler extends HTTPSampler {
 
 	public static final String XML_DATA_FILE = "SoapSampler.xml_data_file"; //$NON-NLS-1$
 
+	private static final String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
+
+	private static final String SOAPACTION = "SOAPAction"; //$NON-NLS-1$
+
 	public void setXmlData(String data) {
 		setProperty(XML_DATA, data);
 	}
@@ -89,6 +93,15 @@ public class SoapSampler extends HTTPSampler {
 
 	public String getSOAPAction() {
 		return getPropertyAsString(SOAP_ACTION);
+	}
+
+	public String getSOAPActionQuoted() {
+		String action = getSOAPAction();
+		StringBuffer sb = new StringBuffer(action.length()+2);
+		sb.append(DOUBLE_QUOTE);
+		sb.append(action);
+		sb.append(DOUBLE_QUOTE);
+		return sb.toString();
 	}
 
 	public void setSOAPAction(String action) {
@@ -132,10 +145,10 @@ public class SoapSampler extends HTTPSampler {
 		} else {
 			// otherwise we use "text/xml" as the default
 			connection.setRequestProperty(HEADER_CONTENT_TYPE, "text/xml"); //$NON-NLS-1$
-			if(getSendSOAPAction()) {
-                connection.setRequestProperty("SOAPAction", "\"" + getSOAPAction() + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            }
 		}
+		if(getSendSOAPAction()) {
+            connection.setRequestProperty(SOAPACTION, getSOAPActionQuoted());
+        }
 		connection.setDoOutput(true);
 	}
 
