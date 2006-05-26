@@ -25,7 +25,7 @@ import java.io.Serializable;
  */
 
 public class Sample implements Serializable, Comparable {
-	private final long data;
+	private final long data; // = elapsed
 
 	private final long average;
 
@@ -137,7 +137,7 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @return Returns the data.
+	 * @return Returns the data (usually elapsed time)
 	 */
 	public long getData() {
 		return data;
@@ -215,5 +215,12 @@ public class Sample implements Serializable, Comparable {
 	public long getEndTime() {
 		return endTime;
 	}
+
+    /**
+     * @return Returns the (calculated) startTime, assuming Data is the elapsed time.
+     */
+    public long getStartTime() {
+        return endTime-data;
+    }
 
 }
