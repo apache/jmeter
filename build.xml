@@ -549,6 +549,8 @@
 
   <target name="compile-http" depends="compile-jorphan,compile-core,compile-components,compile-htmlparser" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
+    <!-- Directory needs to exist, or jar will fail -->
+    <mkdir dir="${build.htmlparser16}"/>
     <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java" unless="javamail.complete"/>
