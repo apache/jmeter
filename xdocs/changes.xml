@@ -105,6 +105,7 @@ sample, and the file name can be included in the sample log file.
 <li>Bug 39626 - Loading SOAP/XML-RPC requests from file</li>
 <li>Bug 39652 - Allow truncation of labels on AxisGraph</li>
 <li>Allow use of htmlparser 1.6</li>
+<li>Bug 39656 - always use SOAP action if it is provided</li>
 </ul>
 
 <h4>Bug fixes:</h4>
