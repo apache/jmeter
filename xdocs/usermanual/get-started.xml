@@ -40,8 +40,7 @@ Other software that you may want to download:
 </ul>
 </p>
 <note>
-Any additional jars need to be stored in the JMeter lib directory (or the appropriate JRE directory). 
-Make sure the file extension is .jar, not .zip, as JMeter only looks for .jar files.
+See the <a href="#classpath">JMeter Classpath</a> section for details on installing additional jars.
 </note>
 <p>Next, start JMeter and go through the <a href="build-test-plan.html">Building a Test Plan</a> section
 of the User Guide to familiarize yourself with JMeter basics (for example, adding and removing elements).</p>
@@ -125,8 +124,7 @@ Make sure the file is a jar file, not a zip.
 <p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your jmeter/lib directory. Once the files are in there, JMeter will automatically pick them up.</p>
 </subsection>
 <note>
-Any additional jars need to be stored in the JMeter lib directory (or the appropriate JRE directory). 
-Make sure the file extension is .jar, not .zip, as JMeter only looks for .jar files.
+See the <a href="#classpath">JMeter Classpath</a> section for details on installing additional jars.
 </note>
 </section>
 
@@ -311,9 +309,14 @@ These are shown below.</p>
 
 <section name="2.5 Configuring JMeter" anchor="configuring_jmeter">
 <p>If you wish to modify the properties with which JMeter runs you need to
-  either modify the jmeter.properties inside of the /bin directory or create
+  either modify the jmeter.properties in the /bin directory or create
   your own copy of the jmeter.properties and specify it in the command line.
   </p>
+  <note>
+  Note: since 2.1.2, you can define additional properties in the file <b>user.properties</b>.
+  This will be automatically loaded if it is found in the current directory.
+  To change this behaviour, define the jmeter property <b>load.user_properties=false</b>
+  </note>
   <properties>
 	<property name="ssl.provider">You can specify the class for your SSL
 	implementation.  If you are using the JSSE from sun, then it is:<br/>
@@ -321,8 +324,6 @@ These are shown below.</p>
 	using JDK1.4 or if you use JDK1.3 with the JSSE class jars in your JMeter classpath.</property>
 	<property name="xml.parser">You can specify an implementation as your XML
 	parser.  The default value is: org.apache.xerces.parsers.SAXParser</property>
-  <property name="user.dir">The directory JMeter will first go to for saving and
-	loading test scripts.</property>
   <property name="remote_hosts">Comma-delimited list of remote JMeter hosts.
 	If you are running JMeter in a distributed environment, list the machines where
   you have JMeter remote servers running.  This will allow you to control those
@@ -332,6 +333,15 @@ These are shown below.</p>
   customize your JMeter to show only those components you are interested in.
   You may list their classname or their class label (the string that appears
   in JMeter's UI) here, and they will no longer appear in the menus.</property>
+  <property name="search_paths">
+  List of paths (separated by ;) that JMeter will search for JMeter add-on classes;
+  for example additional samplers.
+  This is in addition to any jars found in the lib/ext directory.
+  </property>
+  <property name="user.classpath">
+  List of paths that JMeter will search for utility classes.
+  This is in addition to any jars found in the lib directory.
+  </property>
   </properties>
 <p><b>
 See also the comments in the jmeter.properties file for further information on other settings you can change.
