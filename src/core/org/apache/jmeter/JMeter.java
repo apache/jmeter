@@ -430,28 +430,18 @@ public class JMeter implements JMeterPlugin {
 				} catch (IOException e) {
 					log.warn("Error loading additional property file: " + name, e);
                 } finally {
-                    if (fis != null) {
-                        try {
-                            fis.close();
-                        } catch (IOException e) {
-                        }
-                    }
+                	JOrphanUtils.closeQuietly(fis);
 				}
 				break;
             case SYSTEM_PROPFILE:
-                log.info("Setting System propertyies from file: " + name);
+                log.info("Setting System properties from file: " + name);
                 try {
                     fis = new FileInputStream(new File(name));
                     System.getProperties().load(fis);
                 } catch (IOException e) {
                     log.warn("Cannot find system property file "+e.getLocalizedMessage());
                 } finally {
-                    if (fis != null) {
-                        try {
-                            fis.close();
-                        } catch (IOException e) {
-                        }
-                    }
+                	JOrphanUtils.closeQuietly(fis);
                 }
                 break;
 			case SYSTEM_PROPERTY:
@@ -484,6 +474,24 @@ public class JMeter implements JMeterPlugin {
 			}
 		}
 
+		// Add local properties, if the file is found
+		if (JMeterUtils.getPropDefault("load.user_properties", true)){ //$NON-NLS-1$
+			final String name="user.properties"; //$NON-NLS-1$
+			FileInputStream fis=null;
+			try {
+                File file = new File(name);
+                if (file.canRead()){
+                	log.info("Loading user properties from: "+name);
+					fis = new FileInputStream(file);
+					jmeterProps.load(fis);
+                }
+			} catch (IOException e) {
+				log.warn("Error loading user property file: " + name, e);
+            } finally {
+            	JOrphanUtils.closeQuietly(fis);
+			}
+			
+		}
 	}
 
 	public void startServer() {
