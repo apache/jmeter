@@ -73,6 +73,7 @@ Functions that require no parameters can leave off the parentheses, for example 
         <li><a href="#__split">split - Split a string into variables</a></li>
         <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
         <li><a href="#__time">time - return current time in various formats</a></li>
+        <li><a href="#__jexl">jexl - evaluate a Commons Jexl expression</a></li>
 </ul>
 
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -670,6 +671,20 @@ The following shorthand aliases are provided:
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 time.YMD=yyMMdd
 </p>
+</component>
+
+<component index="&sect-num;.5.18" name="__jexl">
+<description>
+	<p>The jexl function returns the result of evaluating a 
+	<a href="http://jakarta.apache.org/commons/jexl">Commons JEXL expression</a>.
+	</p>
+	</description>
+
+<properties>
+        <property name="Expression" required="Yes">
+        The expression to be evaluated. 
+        </property>
+</properties>
 </component>
 
 </subsection>
