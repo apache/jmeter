@@ -253,13 +253,15 @@ public class JMeter implements JMeterPlugin {
 
             log.info(JMeterUtils.getJMeterCopyright());
             log.info("Version " + JMeterUtils.getJMeterVersion());
-			log.info("java.version=" + System.getProperty("java.version"));// $NON-NLS-1$ $NON-NLS-2$
-			log.info("os.name=" + System.getProperty("os.name"));// $NON-NLS-1$ $NON-NLS-2$
-			log.info("os.arch=" + System.getProperty("os.arch"));// $NON-NLS-1$ $NON-NLS-2$
-			log.info("os.version=" + System.getProperty("os.version"));// $NON-NLS-1$ $NON-NLS-2$
+			logProperty("java.version"); //$NON-NLS-1$
+			logProperty("os.name"); //$NON-NLS-1$
+			logProperty("os.arch"); //$NON-NLS-1$
+			logProperty("os.version"); //$NON-NLS-1$
 			log.info("Default Locale=" + Locale.getDefault().getDisplayName());// $NON-NLS-1$
             log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());// $NON-NLS-1$
-			log.info("JMeterHome="+JMeterUtils.getJMeterHome());// $NON-NLS-1$
+			log.info("JMeterHome="     + JMeterUtils.getJMeterHome());// $NON-NLS-1$
+			logProperty("user.dir"); //$NON-NLS-1$
+			log.info(   "PWD     ="+new File(".").getCanonicalPath());//$NON-NLS-1$
             setProxy(parser);
             
             updateClassLoader();
@@ -309,27 +311,31 @@ public class JMeter implements JMeterPlugin {
 
     // Update classloader if necessary
 	private void updateClassLoader() {
-        String userpath= JMeterUtils.getPropDefault("user.classpath","");// $NON-NLS-1$
-        if (userpath.length()> 0){
-            log.info("user.classpath="+userpath);// $NON-NLS-1$
-            StringTokenizer tok = new StringTokenizer(userpath, File.pathSeparator);
-            while(tok.hasMoreTokens()) {
-                String path=tok.nextToken();
-                File f=new File(path);
-                if (!f.canRead() && !f.isDirectory()) {
-                    log.warn("Can't read "+path);   
-                } else {
-                    URL url;
-                    try {
-                        url = new URL("file","",path);// $NON-NLS-1$
-                        NewDriver.addURL(url);
-                    } catch (MalformedURLException e) {
-                        log.warn("Can't create URL for "+path+" "+e);
-                    }
-                }
-            }
-        }
+            updatePath("search_paths",";"); //$NON-NLS-1$//$NON-NLS-2$
+            updatePath("user.classpath",File.pathSeparator);//$NON-NLS-1$
     }
+
+	private void updatePath(String property, String sep) {
+        String userpath= JMeterUtils.getPropDefault(property,"");// $NON-NLS-1$
+        if (userpath.length() <= 0) return;
+        log.info(property+"="+userpath); //$NON-NLS-1$
+		StringTokenizer tok = new StringTokenizer(userpath, sep);
+		while(tok.hasMoreTokens()) {
+		    String path=tok.nextToken();
+		    File f=new File(path);
+		    if (!f.canRead() && !f.isDirectory()) {
+		        log.warn("Can't read "+path);   
+		    } else {
+		        URL url;
+		        try {
+		            url = new URL("file","",path);// $NON-NLS-1$
+		            NewDriver.addURL(url);
+		        } catch (MalformedURLException e) {
+		            log.warn("Can't create URL for "+path+" "+e);
+		        }
+		    }
+		}
+	}
 
     /**
 	 * 
@@ -754,5 +760,9 @@ public class JMeter implements JMeterPlugin {
 
 	public String[][] getResourceBundles() {
 		return new String[0][];
+	}
+	
+	private void logProperty(String prop){
+		log.info(prop+"="+System.getProperty(prop));//$NON-NLS-1$
 	}
 }
