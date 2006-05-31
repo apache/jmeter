@@ -315,6 +315,7 @@
   <property name="commons-codec.jar" value="${lib.dir}/commons-codec-1.3.jar"/>
   <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
   <property name="commons-httpclient.jar" value="${lib.dir}/commons-httpclient-3.0.jar"/>
+  <property name="commons-jexl.jar" value="${lib.dir}/commons-jexl-1.0.jar"/>
   <property name="commons-logging.jar" value="${lib.dir}/commons-logging-1.1.jar"/>
   <property name="excalibur-logger.jar" value="${lib.dir}/excalibur-logger-1.1.jar"/>
   <property name="excalibur-i18n.jar" value="${lib.dir}/excalibur-i18n-1.1.jar"/>
@@ -356,6 +357,7 @@
     <include name="${commons-codec.jar}"/>
     <include name="${commons-collections.jar}"/>
     <include name="${commons-httpclient.jar}"/>
+    <include name="${commons-jexl.jar}"/>
     <include name="${commons-logging.jar}"/>
     <include name="${excalibur-logger.jar}"/>
     <include name="${excalibur-i18n.jar}"/>
