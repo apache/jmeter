@@ -313,9 +313,10 @@ These are shown below.</p>
   your own copy of the jmeter.properties and specify it in the command line.
   </p>
   <note>
-  Note: since 2.1.2, you can define additional properties in the file <b>user.properties</b>.
-  This will be automatically loaded if it is found in the current directory.
-  To change this behaviour, define the jmeter property <b>load.user_properties=false</b>
+  Note: since 2.1.2, you can define additional JMeter properties in the file defined by the
+  JMeter property <b>user.properties</b> which has the default value <b>user.properties</b>.
+  The file will be automatically loaded if it is found in the current directory.
+  Similarly, <b>system.properties</b> is used to update system properties.
   </note>
   <properties>
 	<property name="ssl.provider">You can specify the class for your SSL
@@ -341,6 +342,14 @@ These are shown below.</p>
   <property name="user.classpath">
   List of paths that JMeter will search for utility classes.
   This is in addition to any jars found in the lib directory.
+  </property>
+  <property name="user.properties">
+  Name of file containing additional JMeter properties. 
+  These are added after the initial property file, but before the -q and -J options are processed.
+  </property>
+  <property name="system.properties">
+  Name of file containing additional system properties.
+  These are added before the -S and -D options are processed.
   </property>
   </properties>
 <p><b>
