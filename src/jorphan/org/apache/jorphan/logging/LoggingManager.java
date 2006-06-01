@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,12 +199,12 @@ public final class LoggingManager {
 		return wt;
 	}
 
-	/*
+	/**
 	 * Handle LOG_PRIORITY.category=priority and LOG_FILE.category=file_name
 	 * properties. If the prefix is detected, then remove it to get the
 	 * category.
 	 */
-	private static void setLoggingLevels(Properties appProperties) {
+	public static void setLoggingLevels(Properties appProperties) {
 		Iterator props = appProperties.keySet().iterator();
 		while (props.hasNext()) {
 			String prop = (String) props.next();
