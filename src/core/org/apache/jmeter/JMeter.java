@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -138,11 +137,8 @@ public class JMeter implements JMeterPlugin {
 			new CLOptionDescriptor("propfile", CLOptionDescriptor.ARGUMENT_REQUIRED, PROPFILE_OPT,
 					"the jmeter property file to use"),
 			new CLOptionDescriptor("addprop", CLOptionDescriptor.ARGUMENT_REQUIRED
-					| CLOptionDescriptor.DUPLICATES_ALLOWED, // Bug 33920 -
-																// allow
-																// multiple
-																// props
-					PROPFILE2_OPT, "additional property file(s)"),
+					| CLOptionDescriptor.DUPLICATES_ALLOWED, PROPFILE2_OPT,
+					"additional JMeter property file(s)"),
 			new CLOptionDescriptor("testfile", CLOptionDescriptor.ARGUMENT_REQUIRED, TESTFILE_OPT,
 					"the jmeter test(.jmx) file to run"),
 			new CLOptionDescriptor("logfile", CLOptionDescriptor.ARGUMENT_REQUIRED, LOGFILE_OPT,
@@ -167,8 +163,9 @@ public class JMeter implements JMeterPlugin {
 			new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY, 
                     "Define additional system properties"),
-            new CLOptionDescriptor("systemPropertyFile", CLOptionDescriptor.ARGUMENT_REQUIRED, SYSTEM_PROPFILE,
-                    "Define system properties from a file"),
+            new CLOptionDescriptor("systemPropertyFile", CLOptionDescriptor.DUPLICATES_ALLOWED
+            		| CLOptionDescriptor.ARGUMENT_REQUIRED, SYSTEM_PROPFILE,
+                    "additional system property file(s)"),
 			new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
 					"[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
@@ -326,13 +323,12 @@ public class JMeter implements JMeterPlugin {
 		    if (!f.canRead() && !f.isDirectory()) {
 		        log.warn("Can't read "+path);   
 		    } else {
-		        URL url;
-		        try {
-		            url = new URL("file","",path);// $NON-NLS-1$
-		            NewDriver.addURL(url);
-		        } catch (MalformedURLException e) {
-		            log.warn("Can't create URL for "+path+" "+e);
-		        }
+	            log.info("Adding to classpath: "+path);
+	            try {
+					NewDriver.addPath(path);
+				} catch (MalformedURLException e) {
+					log.warn("Error adding: "+path+" "+e.getLocalizedMessage());
+				}
 		    }
 		}
 	}
@@ -408,9 +404,50 @@ public class JMeter implements JMeterPlugin {
 			JMeterUtils.setJMeterHome(parser.getArgumentById(JMETER_HOME_OPT).getArgument());
 		}
 
-		// Process command line property definitions (can occur multiple times)
-
 		Properties jmeterProps = JMeterUtils.getJMeterProperties();
+
+		// Add local JMeter properties, if the file is found
+		String userProp = JMeterUtils.getPropDefault("user.properties",""); //$NON-NLS-1$
+		if (userProp.length() > 0){ //$NON-NLS-1$
+			FileInputStream fis=null;
+			try {
+                File file = new File(userProp);
+                if (file.canRead()){
+                	log.info("Loading user properties from: "+userProp);
+					fis = new FileInputStream(file);
+					Properties tmp = new Properties();
+					tmp.load(fis);
+					jmeterProps.putAll(tmp);
+					LoggingManager.setLoggingLevels(tmp);//Do what would be done earlier
+                }
+			} catch (IOException e) {
+				log.warn("Error loading user property file: " + userProp, e);
+            } finally {
+            	JOrphanUtils.closeQuietly(fis);
+			}			
+		}
+
+		// Add local system properties, if the file is found
+		String sysProp = JMeterUtils.getPropDefault("system.properties",""); //$NON-NLS-1$
+		if (sysProp.length() > 0){ //$NON-NLS-1$
+			FileInputStream fis=null;
+			try {
+                File file = new File(sysProp);
+                if (file.canRead()){
+                	log.info("Loading system properties from: "+sysProp);
+					fis = new FileInputStream(file);
+					System.getProperties().load(fis);
+                }
+			} catch (IOException e) {
+				log.warn("Error loading system property file: " + sysProp, e);
+            } finally {
+            	JOrphanUtils.closeQuietly(fis);
+			}			
+		}
+
+		// Process command line property definitions
+		// These can potentially occur multiple times
+		
 		List clOptions = parser.getArguments();
 		int size = clOptions.size();
 
@@ -424,7 +461,10 @@ public class JMeter implements JMeterPlugin {
 			case PROPFILE2_OPT: // Bug 33920 - allow multiple props
 				try {
                     fis = new FileInputStream(new File(name));
-					jmeterProps.load(fis);
+					Properties tmp = new Properties();
+					tmp.load(fis);
+					jmeterProps.putAll(tmp);
+					LoggingManager.setLoggingLevels(tmp);//Do what would be done earlier
 				} catch (FileNotFoundException e) {
 					log.warn("Can't find additional property file: " + name, e);
 				} catch (IOException e) {
@@ -473,25 +513,7 @@ public class JMeter implements JMeterPlugin {
 				break;
 			}
 		}
-
-		// Add local properties, if the file is found
-		if (JMeterUtils.getPropDefault("load.user_properties", true)){ //$NON-NLS-1$
-			final String name="user.properties"; //$NON-NLS-1$
-			FileInputStream fis=null;
-			try {
-                File file = new File(name);
-                if (file.canRead()){
-                	log.info("Loading user properties from: "+name);
-					fis = new FileInputStream(file);
-					jmeterProps.load(fis);
-                }
-			} catch (IOException e) {
-				log.warn("Error loading user property file: " + name, e);
-            } finally {
-            	JOrphanUtils.closeQuietly(fis);
-			}
-			
-		}
+	
 	}
 
 	public void startServer() {
@@ -657,10 +679,10 @@ public class JMeter implements JMeterPlugin {
 	private static class ListenToTest implements TestListener, Runnable, Remoteable {
 		int started = 0;
 
-		private JMeter _parent;
+		//NOT YET USED private JMeter _parent;
 
 		private ListenToTest(JMeter parent) {
-			_parent = parent;
+			//_parent = parent;
 		}
 
 		public synchronized void testEnded(String host) {

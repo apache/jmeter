@@ -108,6 +108,7 @@ sample, and the file name can be included in the sample log file.
 <li>Bug 39656 - always use SOAP action if it is provided</li>
 <li>Automatically include properties from user.properties file</li>
 <li>Add __jexl() function - evaluates Commons JEXL expressions</li>
+<li>Optionally load JMeter properties from user.properties and system properties from system.properties.</li>
 </ul>
 
 <h4>Bug fixes:</h4>
