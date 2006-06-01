@@ -355,6 +355,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		setProperty(new IntegerProperty(PORT, value));
 	}
 
+    public static int getDefaultPort(String protocol,int port){
+        if (port==-1){
+            return 
+                protocol.equalsIgnoreCase(PROTOCOL_HTTP)  ? DEFAULT_HTTP_PORT :
+                protocol.equalsIgnoreCase(PROTOCOL_HTTPS) ? DEFAULT_HTTPS_PORT :
+                    port;
+        }
+        return port;
+    }
+    
 	public int getPort() {
 		int port = getPropertyAsInt(PORT);
 		if (port == UNSPECIFIED_PORT) {
