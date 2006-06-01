@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +17,7 @@
 
 package org.apache.jmeter;
 
+// N.B. this must only use standard Java packages
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -29,8 +29,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
+ * Main class for JMeter - sets up initial classpath.
+ * 
  * @author Michael Stover
- * @version $Revision$
  */
 public final class NewDriver {
 	/** The class loader to use for loading JMeter classes. */
@@ -98,6 +99,7 @@ public final class NewDriver {
 			}
 		}
 
+		// ClassFinder needs this
 		System.setProperty("java.class.path", System.getProperty("java.class.path") + classpath.toString());
 		loader = new DynamicClassLoader((URL[]) jars.toArray(new URL[0]));
 	}
@@ -119,6 +121,16 @@ public final class NewDriver {
     
     public static void addURL(URL url) {
         loader.addURL(url);
+    }
+    
+    public static void addPath(String path) throws MalformedURLException {
+		URL url = new URL("file","",path);
+        loader.addURL(url);
+    	StringBuffer sb = new StringBuffer(System.getProperty("java.class.path"));
+    	sb.append(System.getProperty("path.separator"));
+    	sb.append(path);
+		// ClassFinder needs this
+		System.setProperty("java.class.path",sb.toString());
     }
     
 	/**
