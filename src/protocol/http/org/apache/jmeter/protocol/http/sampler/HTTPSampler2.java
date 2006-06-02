@@ -39,7 +39,6 @@ import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
@@ -91,7 +90,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$ 
 
     private static final int PROXY_PORT = 
-        Integer.parseInt(System.getProperty("http.proxyPort", "80")); // $NON-NLS-1$ $NON-NLS-2$ 
+        Integer.parseInt(System.getProperty("http.proxyPort", DEFAULT_HTTP_PORT_STRING)); // $NON-NLS-1$ 
 
     private static final String PROXY_USER = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
@@ -274,7 +273,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         }
 
         HttpMethodParams params = httpMethod.getParams();
-        params.setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+        params.setCookiePolicy(CookiePolicy.IGNORE_COOKIES);// We do our own cookie handling
         params.setVersion(
                 JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0") // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ 
                 ?
@@ -302,7 +301,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 
 		String hdrs = setConnectionHeaders(httpMethod, u, getHeaderManager());
-		String cookies = setConnectionCookie(httpClient, u, getCookieManager());
+		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
 
 		if (res != null) {
             res.setURL(u);
@@ -311,27 +310,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 
 		setConnectionAuthorization(httpClient, u, getAuthManager());
-
-
-//		System.out.println("Dumping Request Headers:");
-//		System.out.println(method.getRequestHeaders().toString());
-//		Header[] headers = method.getRequestHeaders();
-//		for (int i = 0; i < headers.length; i++)
-//		{
-//			System.out.println("Header["+i+"]:");
-//			org.apache.commons.httpclient.HeaderElement[] elements = headers[i].getElements();
-//			
-//			for (j=0; j<elements.length; j++)
-//			{
-//				System.out.println("Element["+j+"]:");
-//				org.apache.commons.httpclient.NameValuePair[] pairs = elements[j].getParameters();
-//				
-//				for (k=0; k<pairs.length;k++)
-//				{
-//					System.out.println("pair["+k+"]: " + pairs[k].getName() + "=" + pairs[k].getValue());
-//				}
-//			}
-//		}
 
 		return httpClient;
 	}
@@ -367,63 +345,25 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * Extracts all the required cookies for that particular URL request and
 	 * sets them in the <code>HttpMethod</code> passed in.
 	 * 
-	 * @param method
-	 *            <code>HttpMethod</code> which represents the request
-	 * @param u
-	 *            <code>URL</code> of the request
-	 * @param cookieManager
-	 *            the <code>CookieManager</code> containing all the cookies
-	 *            for this <code>UrlConfig</code>
+	 * @param method <code>HttpMethod</code> for the request
+	 * @param u <code>URL</code> of the request
+	 * @param cookieManager the <code>CookieManager</code> containing all the cookies
+     * @return a String containing the cookie details (for the response)
+     * May be null
 	 */
-	private String setConnectionCookie(HttpClient client, URL u, CookieManager cookieManager) {
-        // TODO recode to use HTTPClient matches methods or similar
-        
-		StringBuffer cookieHeader = new StringBuffer(100);
-        if (cookieManager!=null){
-    		String host = "." + u.getHost(); // $NON-NLS-1$
-    		HttpState state = client.getState();
-    		for (int i = cookieManager.getCookies().size() - 1; i >= 0; i--) {
-    			Cookie cookie = (Cookie) cookieManager.getCookies().get(i).getObjectValue();
-                if (cookie == null)
-                    continue;
-                long exp = cookie.getExpires();
-                long now = System.currentTimeMillis() / 1000 ;
-    			String urlPath = u.getPath();
-                if (log.isDebugEnabled()){
-                    log.debug("Should we send cookie: "+cookie.toString());
-                    log.debug("Host="+host+" Path="+urlPath+" Now="+now);
-                }                
-                String cookiePath = cookie.getPath();
-                String cookieDomain = cookie.getDomain();
-                if ( host.endsWith(cookieDomain)
-                        && urlPath.startsWith(cookiePath) 
-                        && (exp == 0 || exp > now)) {
-    				String cookieName = cookie.getName();
-                    String cookieValue = cookie.getValue();
-                    org.apache.commons.httpclient.Cookie newCookie
-                    = new org.apache.commons.httpclient.Cookie(cookieDomain, cookieName,
-    				     cookieValue, cookiePath, null, false);
-    				state.addCookie(newCookie);
-    				cookieHeader.append(cookieName);
-                    cookieHeader.append("="); // $NON-NLS-1$
-                    cookieHeader.append(cookieValue);
-                    if (log.isDebugEnabled()){
-                        log.debug("Matched cookie");
-                    }
-                    
-    			} else {
-                    if (log.isDebugEnabled()){
-                        log.debug("Did not match cookie.");
-                    }
-                    
-                }
-    		}
+	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {        
+        String cookieHeader = null;
+        if (cookieManager != null) {
+            cookieHeader = cookieManager.getCookieHeaderForURL(u);
+            if (cookieHeader != null) {
+                method.setRequestHeader(HEADER_COOKIE, cookieHeader);
+            }
         }
-		return cookieHeader.toString();
+		return cookieHeader;
 	}
 
 	/**
-	 * Extracts all the required headers for that particular URL request and
+	 * Extracts all the required non-cookie headers for that particular URL request and
 	 * sets them in the <code>HttpMethod</code> passed in
 	 * 
 	 * @param method
@@ -620,7 +560,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 			String ct = null;
 			org.apache.commons.httpclient.Header h 
-                = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE); // $NON-NLS-1$
+                = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
 			if (h != null)// Can be missing, e.g. on redirect
 			{
 				ct = h.getValue();
@@ -630,7 +570,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 			res.setResponseHeaders(getResponseHeaders(httpMethod));
 			if (res.isRedirect()) {
-				res.setRedirectLocation(httpMethod.getResponseHeader("Location").getValue()); // $NON-NLS-1$
+				res.setRedirectLocation(httpMethod.getResponseHeader(HEADER_LOCATION).getValue());
 			}
 
             // If we redirected automatically, the URL may have changed
