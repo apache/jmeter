@@ -36,6 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
+ * Regular Expression Extractor Post-Processor GUI
  */
 public class RegexExtractorGui extends AbstractPostProcessorGui {
 	private JLabeledTextField regexField;
@@ -98,11 +99,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 		super.configureTestElement(extractor);
 		if (extractor instanceof RegexExtractor) {
 			RegexExtractor regex = (RegexExtractor) extractor;
-			regex.setUseField(group.getSelection().getActionCommand());
-//			regex.setUseHeaders(useHeaders.isSelected());
-//			regex.setUseBody(useBody.isSelected());
-//			regex.setUseUrl(useURL.isSelected());
-			
+			regex.setUseField(group.getSelection().getActionCommand());			
 			regex.setRefName(refNameField.getText());
 			regex.setRegex(regexField.getText());
 			regex.setTemplate(templateField.getText());
@@ -141,9 +138,11 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
 		useBody.setSelected(true);
 		
+		// So we know which button is selected
 		useBody.setActionCommand(RegexExtractor.USE_BODY);
 		useHeaders.setActionCommand(RegexExtractor.USE_HDRS);
 		useURL.setActionCommand(RegexExtractor.USE_URL);
+		
 		return panel;
 	}
 
@@ -179,6 +178,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 		panel.add((Component) item.get(1), gbc.clone());
 	}
 
+	// Next line
 	private void resetContraints(GridBagConstraints gbc) {
 		gbc.gridx = 0;
 		gbc.gridy++;
