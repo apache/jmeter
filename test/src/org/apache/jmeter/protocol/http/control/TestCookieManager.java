@@ -19,14 +19,13 @@ package org.apache.jmeter.protocol.http.control;
 
 import java.net.URL;
 
-import junit.framework.TestCase;
-
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
-public class TestCookieManager extends TestCase {
+public class TestCookieManager extends JMeterTestCase {
         private CookieManager man = null;
 
         public TestCookieManager(String name) {
@@ -131,9 +130,29 @@ public class TestCookieManager extends TestCase {
         public void testNewCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-2990 00:00:00 GMT", url);
+            assertEquals(1,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
             assertEquals("test=1", s);
+        }
+
+        // Test multi-cookie header handling
+        public void testCookies1() throws Exception {
+            URL url = new URL("http://a.b.c.d/testCookies1");
+            man.addCookieFromHeader("test1=1; comment=\"how,now\", test2=2; version=1", url);
+            assertEquals(2,man.getCookieCount());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("test1=1; test2=2", s);
+        }
+        
+        public void testCookies2() throws Exception {
+            URL url = new URL("https://a.b.c.d/testCookies2");
+            man.addCookieFromHeader("test1=1;secure, test2=2;secure", url);
+            assertEquals(2,man.getCookieCount());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("test1=1; test2=2", s);
         }
 
         // Test duplicate cookie handling
