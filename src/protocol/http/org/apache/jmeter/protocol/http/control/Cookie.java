@@ -1,6 +1,5 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,14 +105,27 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	}
 
 	/**
-	 * get the expires for this object.
+	 * get the expiry time for the cookie
+     * 
+     * @return Expiry time in seconds since the Java epoch
 	 */
 	public synchronized long getExpires() {
 		return getPropertyAsLong(EXPIRES);
 	}
 
+    /**
+     * get the expiry time for the cookie
+     * 
+     * @return Expiry time in milli-seconds since the Java epoch, 
+     * i.e. same as System.currentTimeMillis()
+     */
+    public synchronized long getExpiresMillis() {
+        return getPropertyAsLong(EXPIRES)*1000;
+    }
+
 	/**
-	 * set the expires for this object.
+	 * set the expiry time for the cookie
+     * @param expires - expiry time in seconds since the Java epoch
 	 */
 	public synchronized void setExpires(long expires) {
 		setProperty(new LongProperty(EXPIRES, expires));
