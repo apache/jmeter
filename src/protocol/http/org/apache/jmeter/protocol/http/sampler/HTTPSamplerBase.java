@@ -60,7 +60,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public static final int DEFAULT_HTTPS_PORT = 443;
 
-	public static final int DEFAULT_HTTP_PORT = 80;
+	public static final int    DEFAULT_HTTP_PORT = 80;
+    public static final String DEFAULT_HTTP_PORT_STRING = "80"; // $NON-NLS-1$
 
 	public final static String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
@@ -186,6 +187,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     protected static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
 
     protected static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
+
+    protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 
     ////////////////////// Variables //////////////////////
     
