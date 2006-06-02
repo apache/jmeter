@@ -102,11 +102,11 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
 		writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
 		PropertyIterator cookies = getCookies().iterator();
-		long now = System.currentTimeMillis() / 1000;
+		long now = System.currentTimeMillis();
 		while (cookies.hasNext()) {
 			Cookie cook = (Cookie) cookies.next().getObjectValue();
 			// Note: now is always > 0, so no need to check for that separately
-			if (cook.getExpires() > now) { // only save unexpired cookies
+			if (cook.getExpiresMillis() > now) { // only save unexpired cookies
 				writer.println(cook.toString());
 			}
 		}
@@ -214,7 +214,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
      * Create an HttpClient cookie from a JMeter cookie
      */
     private org.apache.commons.httpclient.Cookie makeCookie(Cookie jmc){
-        long exp = jmc.getExpires() * 1000;
+        long exp = jmc.getExpiresMillis();
         return new org.apache.commons.httpclient.Cookie(
                 jmc.getDomain(),
                 jmc.getName(),
@@ -300,7 +300,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
             Date expiryDate = cookies[i].getExpiryDate();
             long exp = 0;
             if (expiryDate!= null) {
-                exp=expiryDate.getTime() / 1000;
+                exp=expiryDate.getTime();
             }
             Cookie newCookie = new Cookie(
                     cookies[i].getName(),
@@ -308,10 +308,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                     cookies[i].getDomain(),
                     cookies[i].getPath(),
                     cookies[i].getSecure(), 
-                    exp);
+                    exp / 1000);
 
             // Store session cookies as well as unexpired ones
-            if (exp == 0 || exp >= (System.currentTimeMillis() / 1000)) {
+            if (exp == 0 || exp >= System.currentTimeMillis()) {
                 add(newCookie); // Has its own debug log; removes matching cookies
             } else {
                 removeMatchingCookies(newCookie);
