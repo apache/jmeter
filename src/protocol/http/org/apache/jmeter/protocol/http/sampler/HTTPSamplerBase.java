@@ -919,4 +919,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     public static String[] getValidMethodsAsArray(){
         return (String[]) METHODLIST.toArray(new String[0]);
     }
+
+    public static boolean isSecure(String protocol){
+        return PROTOCOL_HTTPS.equalsIgnoreCase(protocol);
+    }
+    
+    public static boolean isSecure(URL url){
+        return isSecure(url.getProtocol());
+    }
 }
+
