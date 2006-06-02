@@ -18,6 +18,8 @@
 package org.apache.jmeter.extractor;
 
 
+import java.net.URL;
+
 import junit.framework.TestCase;
 
 import org.apache.jmeter.samplers.SampleResult;
@@ -176,11 +178,38 @@ public class TestRegexExtractor extends TestCase {
 			extractor.setRegex("Header1: (\\S+)");
 			extractor.setTemplate("$1$");
 			extractor.setMatchNumber(1);
+			assertTrue("useBody should be true", extractor.useBody());
 			assertFalse("useHdrs should be false", extractor.useHeaders());
-			extractor.setProperty(RegexExtractor.USEHEADERS, "true");
+			assertFalse("useURL should be false", extractor.useUrl());
+			extractor.setUseField(RegexExtractor.USE_BODY);
+			assertTrue("useBody should be true", extractor.useBody());
+			assertFalse("useHdrs should be false", extractor.useHeaders());
+			assertFalse("useURL should be false", extractor.useUrl());
+			extractor.setUseField(RegexExtractor.USE_HDRS);
 			assertTrue("useHdrs should be true", extractor.useHeaders());
+			assertFalse("useBody should be false", extractor.useBody());
+			assertFalse("useURL should be false", extractor.useUrl());
 			extractor.process();
 			assertEquals("Value1", vars.get("regVal"));
+			extractor.setUseField(RegexExtractor.USE_URL);
+			assertFalse("useHdrs should be false", extractor.useHeaders());
+			assertFalse("useBody should be false", extractor.useBody());
+			assertTrue("useURL should be true", extractor.useUrl());
+		}
+
+		public void testVariableExtraction8() throws Exception {
+			extractor.setRegex("http://jakarta\\.apache\\.org/(\\w+)");
+			extractor.setTemplate("$1$");
+			extractor.setMatchNumber(1);
+			extractor.setUseField(RegexExtractor.USE_URL);
+			assertFalse("useHdrs should be false", extractor.useHeaders());
+			assertFalse("useBody should be false", extractor.useBody());
+			assertTrue("useURL should be true", extractor.useUrl());
+			extractor.process();
+			assertNull(vars.get("regVal"));
+			result.setURL(new URL("http://jakarta.apache.org/index.html?abcd"));
+			extractor.process();
+			assertEquals("index",vars.get("regVal"));
 		}
 
         public void testNoDefault() throws Exception {
