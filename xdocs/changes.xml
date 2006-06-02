@@ -109,6 +109,7 @@ sample, and the file name can be included in the sample log file.
 <li>Automatically include properties from user.properties file</li>
 <li>Add __jexl() function - evaluates Commons JEXL expressions</li>
 <li>Optionally load JMeter properties from user.properties and system properties from system.properties.</li>
+<li>Bug 39707 - allow Regex match against URL</li>
 </ul>
 
 <h4>Bug fixes:</h4>

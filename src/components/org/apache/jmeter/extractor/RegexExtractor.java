@@ -50,23 +50,38 @@ import org.apache.oro.text.regex.Util;
  */
 public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String USEHEADERS = "RegexExtractor.useHeaders"; // $NON-NLS-1$
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
+	// What to match against. N.B. do not change the string value or test plans will break!
+	private static final String MATCH_AGAINST = "RegexExtractor.useHeaders"; // $NON-NLS-1$
+	/*
+	 * Permissible values: 
+	 *  true - match against headers
+	 *  false or absent - match against body (this was the original default)
+	 *  URL - match against URL
+	 *  These are passed to the setUseField() method
+	 *  
+	 *  Do not change these values!
+	*/
+	public static final String USE_HDRS = "true"; // $NON-NLS-1$
+	public static final String USE_BODY = "false"; // $NON-NLS-1$
+    public static final String USE_URL = "URL"; // $NON-NLS-1$
 
-	public static final String REFNAME = "RegexExtractor.refname"; // $NON-NLS-1$
+	private static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
 
-	public static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
+	private static final String REFNAME = "RegexExtractor.refname"; // $NON-NLS-1$
 
-	public static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
+	private static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
 
-	public static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
+	private static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
+
+	private static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
 
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+
 
     private Object[] template = null;
 
@@ -104,13 +119,22 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
         }
 
 		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-		PatternMatcherInput input = new PatternMatcherInput(
-                useHeaders() 
-                        ? previousResult.getResponseHeaders()
-                        : previousResult.getResponseDataAsString()); // Bug 36898
-		log.debug("Regex = " + getRegex());
+		String inputString = 
+			useUrl() ? previousResult.getUrlAsString() // Bug 39707 
+			:
+			useHeaders() ? previousResult.getResponseHeaders()
+		    : previousResult.getResponseDataAsString() // Bug 36898
+		    ; 
+   		if (log.isDebugEnabled()) {
+   			log.debug("Input = " + inputString);
+   		}
+		PatternMatcherInput input = new PatternMatcherInput(inputString);
+   		String regex = getRegex();
+		if (log.isDebugEnabled()) {
+			log.debug("Regex = " + regex);
+   		}
 		try {
-			Pattern pattern = patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
+			Pattern pattern = patternCache.getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
 			List matches = new ArrayList();
 			int x = 0;
 			boolean done = false;
@@ -168,7 +192,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 				log.warn("Error while generating result");
 			}
 		} catch (MalformedCachePatternException e) {
-			log.warn("Error in pattern: " + getRegex());
+			log.warn("Error in pattern: " + regex);
 		}
 	}
 
@@ -309,8 +333,16 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
 	}
 
+	public void setMatchNumber(String matchNumber) {
+		setProperty(MATCH_NUMBER, matchNumber);
+	}
+
 	public int getMatchNumber() {
 		return getPropertyAsInt(MATCH_NUMBER);
+	}
+
+	public String getMatchNumberAsString() {
+		return getPropertyAsString(MATCH_NUMBER);
 	}
 
 	/**
@@ -334,7 +366,23 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		return getPropertyAsString(TEMPLATE);
 	}
 
-	boolean useHeaders() {
-		return "true".equalsIgnoreCase(getPropertyAsString(USEHEADERS));
+	public boolean useHeaders() {
+		return USE_HDRS.equalsIgnoreCase( getPropertyAsString(MATCH_AGAINST));
+	}
+
+	// Allow for property not yet being set (probably only applies to Test cases)
+	public boolean useBody() {
+    	String body = getPropertyAsString(MATCH_AGAINST);
+        return body.length()==0 || USE_BODY.equalsIgnoreCase(body);// $NON-NLS-1$
+    }
+
+	public boolean useUrl() {
+    	String body = getPropertyAsString(MATCH_AGAINST);
+        return USE_URL.equalsIgnoreCase(body);
+    }
+	public void setUseField(String actionCommand) {
+		setProperty(MATCH_AGAINST,actionCommand);
+		// TODO Auto-generated method stub
+		
 	}
 }
