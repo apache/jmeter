@@ -87,7 +87,7 @@ public class HTTPSampler extends HTTPSamplerBase {
          String filename = getFilename();
          if ((filename != null) && (filename.trim().length() > 0))
          {
-             conn.setRequestProperty("Content-Type", getMimetype());
+             conn.setRequestProperty(HEADER_CONTENT_TYPE, getMimetype());
              conn.setDoOutput(true);
              conn.setDoInput(true);
         }
@@ -268,7 +268,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		// headerBuf.append(conn.getResponseCode());
 		// headerBuf.append(" ");
 		// headerBuf.append(conn.getResponseMessage());
-		headerBuf.append("\n");
+		headerBuf.append("\n"); //$NON-NLS-1$
 
         String hfk;
 		for (int i = 1; (hfk=conn.getHeaderFieldKey(i)) != null; i++) {
@@ -460,7 +460,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 			res.setResponseHeaders(getResponseHeaders(conn));
 			if (res.isRedirect()) {
-				res.setRedirectLocation(conn.getHeaderField("Location"));
+				res.setRedirectLocation(conn.getHeaderField(HEADER_LOCATION));
 			}
 
             // If we redirected automatically, the URL may have changed
