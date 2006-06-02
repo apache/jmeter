@@ -843,6 +843,15 @@ public class SampleResult implements Serializable {
 	public URL getURL() {
 		return location;
 	}
+	
+	/**
+	 * Get a String representation of the URL (if defined).
+	 * 
+	 * @return ExternalForm of URL, or empty string if url is null
+	 */
+	public String getUrlAsString() {
+		return location == null ? "" : location.toExternalForm();
+	}
 
 	/**
 	 * @return Returns the parent.
