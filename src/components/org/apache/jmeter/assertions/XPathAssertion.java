@@ -148,20 +148,6 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 	}
 
 	/**
-	 * Get a Property or return the default string
-	 * 
-	 * @param key
-	 *            Property Key
-	 * @param defaultValue
-	 *            Default Value
-	 * @return String property
-	 */
-	private String getPropertyAsString(String key, String defaultValue) {
-		String str = getPropertyAsString(key);
-		return (str == null || str.length() == 0) ? defaultValue : str;
-	}
-
-	/**
 	 * Set the XPath String this will be used as an xpath
 	 * 
 	 * @param xpath
