@@ -195,6 +195,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		return getProperty(key).getStringValue();
 	}
 
+    public String getPropertyAsString(String key, String defaultValue) {
+        JMeterProperty jmp = getProperty(key);
+        return jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
+    }
+
 	protected void addProperty(JMeterProperty property) {
 		if (isRunningVersion()) {
 			setTemporary(property);
