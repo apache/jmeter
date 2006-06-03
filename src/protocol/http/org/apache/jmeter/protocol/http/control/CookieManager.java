@@ -56,24 +56,41 @@ import org.apache.log.Logger;
  * @version $Revision$ $Date$
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
 
 	public static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
 
+    public static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
+
+	private static final String TAB = "\t"; //$NON-NLS-1$
+
 	// See bug 33796
 	private static final boolean DELETE_NULL_COOKIES 
         = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
 
-    // TODO implement other policies
-    private transient CookieSpec cookieSpec = CookiePolicy.getCookieSpec(CookiePolicy.BROWSER_COMPATIBILITY);
+    private transient CookieSpec cookieSpec;
+
+    public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
 
 	public CookieManager() {
-		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
-		setProperty(new BooleanProperty(CLEAR, false));
+        setProperty(new CollectionProperty(COOKIES, new ArrayList()));
+        setProperty(new BooleanProperty(CLEAR, false));
+        setCookiePolicy(DEFAULT_POLICY);
 	}
 
+    public String getPolicy() {
+        return getPropertyAsString(POLICY,DEFAULT_POLICY);
+    }
+
+    public void setCookiePolicy(String policy){
+        cookieSpec = CookiePolicy.getCookieSpec(policy);
+        if (!DEFAULT_POLICY.equals(policy)){// Don't clutter the JMX file
+            setProperty(POLICY,policy);
+        }
+    }
+    
 	public CollectionProperty getCookies() {
 		return (CollectionProperty) getProperty(COOKIES);
 	}
@@ -105,9 +122,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		long now = System.currentTimeMillis();
 		while (cookies.hasNext()) {
 			Cookie cook = (Cookie) cookies.next().getObjectValue();
-			// Note: now is always > 0, so no need to check for that separately
-			if (cook.getExpiresMillis() > now) { // only save unexpired cookies
-				writer.println(cook.toString());
+			final long expiresMillis = cook.getExpiresMillis();
+			if (expiresMillis == 0 || expiresMillis > now) { // only save unexpired cookies
+				writer.println(cookieToString(cook));
 			}
 		}
 		writer.flush();
@@ -129,30 +146,57 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			throw new IOException("The file you specified cannot be read.");
 		}
 
+        // N.B. this must agree with the save() and cookieToString() methods
 		String line;
-		while ((line = reader.readLine()) != null) {
-			try {
-				if (line.startsWith("#") || line.trim().length() == 0)
-					continue;
-				String[] st = JOrphanUtils.split(line, "\t", " ");
-				int domain = 0;
-				int path = 2;
-				if (st[path].equals(" "))
-					st[path] = "/";
-				boolean secure = Boolean.valueOf(st[3]).booleanValue();
-				long expires = new Long(st[4]).longValue();
-				int name = 5;
-				int value = 6;
-				Cookie cookie = new Cookie(st[name], st[value], st[domain], st[path], secure, expires);
-				getCookies().addItem(cookie);
-			} catch (Exception e) {
-				reader.close();
-				throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
-			}
-		}
-		reader.close();
+        try {
+            final CollectionProperty cookies = getCookies();
+    		while ((line = reader.readLine()) != null) {
+    			try {
+    				if (line.startsWith("#") || line.trim().length() == 0)//$NON-NLS-1$
+    					continue;
+                    String[] st = JOrphanUtils.split(line, TAB, false);
+    				
+                    final int _domain = 0;
+                    //final int _ignored = 1;
+                    final int _path = 2;
+                    final int _secure = 3;
+                    final int _expires = 4;
+                    final int _name = 5;
+                    final int _value = 6;
+                    final int _fields = 7;
+                    if (st.length!=_fields) {
+                        throw new IOException("Expected "+_fields+" fields, found "+st.length+" in "+line);
+                    }
+    
+                    if (st[_path].length()==0)
+    					st[_path] = "/"; //$NON-NLS-1$
+                    boolean secure = Boolean.valueOf(st[_secure]).booleanValue();
+                    long expires = new Long(st[_expires]).longValue();
+                    if (expires==Long.MAX_VALUE) expires=0;
+                    //long max was used to represent a non-expiring cookie, but that caused problems
+    				Cookie cookie = new Cookie(st[_name], st[_value], st[_domain], st[_path], secure, expires);
+                    cookies.addItem(cookie);
+    			} catch (NumberFormatException e) {
+    				throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
+                }
+            }
+        } finally { 
+            reader.close();
+         }
 	}
 
+    private String cookieToString(Cookie c){
+        StringBuffer sb=new StringBuffer(80);
+        sb.append(c.getDomain());
+        sb.append(TAB).append("TRUE"); //TODO - what does this represent?
+        sb.append(TAB).append(c.getPath());
+        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(c.getSecure())); 
+        sb.append(TAB).append(c.getExpires());
+        sb.append(TAB).append(c.getName());
+        sb.append(TAB).append(c.getValue());
+        return sb.toString();
+    }
+    
 	public void recoverRunningVersion() {
 		// do nothing, the cookie manager has to accept changes.
 	}
@@ -215,7 +259,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
      */
     private org.apache.commons.httpclient.Cookie makeCookie(Cookie jmc){
         long exp = jmc.getExpiresMillis();
-        return new org.apache.commons.httpclient.Cookie(
+        org.apache.commons.httpclient.Cookie ret=
+            new org.apache.commons.httpclient.Cookie(
                 jmc.getDomain(),
                 jmc.getName(),
                 jmc.getValue(),
@@ -223,6 +268,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                 exp > 0 ? new Date(exp) : null, // use null for no expiry
                 jmc.getSecure()
                );
+        ret.setPathAttributeSpecified(jmc.isPathSpecified());
+        ret.setDomainAttributeSpecified(jmc.isDomainSpecified());
+        return ret;
     }
     
     /**
@@ -260,20 +308,18 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     public String getCookieHeaderForURL(URL url) {
         org.apache.commons.httpclient.Cookie[] c = getCookiesForUrl(url);
         int count = c.length;
-        log.debug("*** Cookies for "+url.toExternalForm()+" = "+count);
+        boolean debugEnabled = log.isDebugEnabled();
+        if (debugEnabled){
+            log.debug("Found "+count+" cookies for "+url.toExternalForm());
+        }
         if (count <=0){
             return null;
         }
-        StringBuffer sb = new StringBuffer(count*20);
-        for(int i=0;i<count;i++){
-            if (i>0){
-                sb.append("; "); //$NON-NLS-1$ separator
-            }
-            sb.append(c[i].getName());
-            sb.append("="); //$NON-NLS-1$
-            sb.append(c[i].getValue());
+        String hdr=cookieSpec.formatCookieHeader(c).getValue();
+        if (debugEnabled){
+            log.debug("Cookie: "+hdr);
         }
-        return sb.toString();
+        return hdr;
     }
     
 
@@ -308,7 +354,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                     cookies[i].getDomain(),
                     cookies[i].getPath(),
                     cookies[i].getSecure(), 
-                    exp / 1000);
+                    exp / 1000,
+                    cookies[i].isPathAttributeSpecified(),
+                    cookies[i].isDomainAttributeSpecified()
+                    );
 
             // Store session cookies as well as unexpired ones
             if (exp == 0 || exp >= System.currentTimeMillis()) {
