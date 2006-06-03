@@ -20,6 +20,8 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -55,6 +57,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private final String[] COLUMNS = new String[] {
             JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_start_time"), // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_thread_name"),// $NON-NLS-1$
 			JMeterUtils.getResString("sampler_label"),  // $NON-NLS-1$
             JMeterUtils.getResString("table_visualizer_sample_time"), // $NON-NLS-1$
@@ -79,6 +82,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private long currentData = 0;
 
+    private Format format = new SimpleDateFormat("HH:mm:ss.SSS");
+    
 	/**
 	 * Constructor for the TableVisualizer object.
 	 */
@@ -86,14 +91,16 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		super();
 		model = new ObjectTableModel(COLUMNS, new Functor[] {
                 new Functor("getCount"), // $NON-NLS-1$
+                new Functor("getStartTimeFormatted",  // $NON-NLS-1$
+                        new Object[]{format}),
                 new Functor("getThreadName"), // $NON-NLS-1$
                 new Functor("getLabel"), // $NON-NLS-1$
 				new Functor("getData"), // $NON-NLS-1$
                 new Functor("isSuccess"), // $NON-NLS-1$
                 new Functor("getBytes") }, // $NON-NLS-1$
-                new Functor[] { null, null, null, null, null, null }, 
+                new Functor[] { null, null, null, null, null, null, null }, 
                 new Class[] { 
-				Long.class, String.class, String.class, Long.class, Boolean.class, Integer.class });
+				Long.class, String.class, String.class, String.class, Long.class, Boolean.class, Integer.class });
 		init();
 	}
 
@@ -114,7 +121,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 			calc.addValue(currentData);
 			int count = calc.getCount();
 			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
-                    res.isSuccessful(), count, res.getTimeStamp(),res.getBytes(),
+                    res.isSuccessful(), count, res.getEndTime(),res.getBytes(),
                     res.getThreadName());
 			model.addRow(newS);
 		}
