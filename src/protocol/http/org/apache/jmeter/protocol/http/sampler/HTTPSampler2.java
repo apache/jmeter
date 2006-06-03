@@ -24,7 +24,6 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,7 +62,6 @@ import org.apache.jmeter.JMeter;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
-import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
@@ -579,7 +577,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
             
 			// Store any cookies received in the cookie manager:
-			saveConnectionCookies(client, getCookieManager());
+			saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
 
 			// Follow redirects and download page resources if appropriate:
 			res = resultProcessing(areFollowingRedirect, frameDepth, res);
@@ -622,29 +620,21 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      }
 
     /**
-	 * From the <code>HttpState</code>, store all the "set-cookie" key-pair
+	 * From the <code>HttpMethod</code>, store all the "set-cookie" key-pair
 	 * values in the cookieManager of the <code>UrlConfig</code>.
 	 * 
-	 * @param state
-	 *            <code>HttpState</code> which represents the request
+	 * @param method
+	 *            <code>HttpMethod</code> which represents the request
 	 * @param u
 	 *            <code>URL</code> of the URL request
 	 * @param cookieManager
 	 *            the <code>CookieManager</code> containing all the cookies
-	 *            for this <code>UrlConfig</code>
 	 */
-	private void saveConnectionCookies(HttpClient client, CookieManager cookieManager) {
+	private void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
 		if (cookieManager != null) {
-			org.apache.commons.httpclient.Cookie [] c = client.getState().getCookies();
-			for (int i = 0; i < c.length; i++) {
-				Date exp = c[i].getExpiryDate();// might be absent
-				Cookie cookie = new Cookie(c[i].getName(), 
-					c[i].getValue(), c[i].getDomain(), c[i].getPath(), c[i].getSecure(), exp == null ? 0 : exp.getTime() / 1000);
-				
-				cookieManager.add( cookie );
-                if (log.isDebugEnabled()){
-                    log.debug("Saved Cookie: " + cookie.toString());
-                }
+            Header hdr[] = method.getResponseHeaders(HEADER_SET_COOKIE);            
+			for (int i = 0; i < hdr.length; i++) {
+                cookieManager.addCookieFromHeader(hdr[i].getValue(),u);
 			}
 		}
 	}
