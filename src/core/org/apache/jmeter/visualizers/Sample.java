@@ -18,6 +18,8 @@
 package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.util.Date;
 
 /**
  * @author Michael Stover
@@ -223,4 +225,11 @@ public class Sample implements Serializable, Comparable {
         return endTime-data;
     }
 
+    /**
+     * @return the start time using the specified format
+     * Intended for use from Functors
+     */
+    public String getStartTimeFormatted(Format format) {
+        return format.format(new Date(getStartTime()));
+    }
 }
