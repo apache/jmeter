@@ -19,6 +19,8 @@ package org.apache.jmeter.protocol.http.control;
 
 import java.net.URL;
 
+import org.apache.commons.httpclient.cookie.CookiePolicy;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -248,4 +250,132 @@ public class TestCookieManager extends JMeterTestCase {
             assertNull(s);
         }
 
+        public void testCookieOrdering1() throws Exception {
+            URL url = new URL("http://order.now/sub1/moo.html");
+            man.addCookieFromHeader("test1=moo1;path=/", url);
+            man.addCookieFromHeader("test2=moo2;path=/sub1", url);
+            man.addCookieFromHeader("test2=moo3;path=/", url);
+            assertEquals(3,man.getCookieCount());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("test2=moo2; test1=moo1; test2=moo3", s);
+        }
+
+        public void testCookieOrdering2() throws Exception {
+            URL url = new URL("http://order.now/sub1/moo.html");
+            man.addCookieFromHeader("test1=moo1;", url);
+            man.addCookieFromHeader("test2=moo2;path=/sub1", url);
+            man.addCookieFromHeader("test2=moo3;path=/", url);
+            assertEquals(3,man.getCookieCount());
+            assertEquals("/sub1",man.get(0).getPath()); // Defaults to caller URL
+            assertEquals("/sub1",man.get(1).getPath());
+            assertEquals("/",man.get(2).getPath());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            org.apache.commons.httpclient.Cookie[] c = man.getCookiesForUrl(url);
+            assertEquals("/sub1",c[0].getPath());
+            assertFalse(c[0].isPathAttributeSpecified());
+            assertEquals("/sub1",c[1].getPath());
+            assertTrue(c[1].isPathAttributeSpecified());
+            assertEquals("/",c[2].getPath());
+            assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
+        }
+        
+        public void testCookiePolicy2109() throws Exception {
+            man.setCookiePolicy(CookiePolicy.RFC_2109);
+            URL url = new URL("http://order.now/sub1/moo.html");
+            man.addCookieFromHeader("test1=moo1;", url);
+            man.addCookieFromHeader("test2=moo2;path=/sub1", url);
+            man.addCookieFromHeader("test2=moo3;path=/", url);
+            assertEquals(3,man.getCookieCount());
+            //assertEquals("/",man.get(0).getPath());
+            assertEquals("/sub1",man.get(1).getPath());
+            assertEquals("/",man.get(2).getPath());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            org.apache.commons.httpclient.Cookie[] c = man.getCookiesForUrl(url);
+            assertEquals("/sub1",c[0].getPath());
+            assertFalse(c[0].isPathAttributeSpecified());
+            assertEquals("/sub1",c[1].getPath());
+            assertTrue(c[1].isPathAttributeSpecified());
+            assertEquals("/",c[2].getPath());
+            assertTrue(c[2].isPathAttributeSpecified());
+            assertEquals("$Version=0; test1=moo1; test2=moo2; $Path=/sub1; test2=moo3; $Path=/", s);
+        }
+
+        public void testCookiePolicyNetscape() throws Exception {
+            man.setCookiePolicy(CookiePolicy.NETSCAPE);
+            URL url = new URL("http://order.now/sub1/moo.html");
+            man.addCookieFromHeader("test1=moo1;", url);
+            man.addCookieFromHeader("test2=moo2;path=/sub1", url);
+            man.addCookieFromHeader("test2=moo3;path=/", url);
+            assertEquals(3,man.getCookieCount());
+            assertEquals("/sub1",man.get(0).getPath());
+            assertEquals("/sub1",man.get(1).getPath());
+            assertEquals("/",man.get(2).getPath());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            org.apache.commons.httpclient.Cookie[] c = man.getCookiesForUrl(url);
+            assertEquals("/sub1",c[0].getPath());
+            assertFalse(c[0].isPathAttributeSpecified());
+            assertEquals("/sub1",c[1].getPath());
+            assertTrue(c[1].isPathAttributeSpecified());
+            assertEquals("/",c[2].getPath());
+            assertTrue(c[2].isPathAttributeSpecified());
+            assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
+        }
+
+        public void testCookiePolicyIgnore() throws Exception {
+            man.setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+            URL url = new URL("http://order.now/sub1/moo.html");
+            man.addCookieFromHeader("test1=moo1;", url);
+            man.addCookieFromHeader("test2=moo2;path=/sub1", url);
+            man.addCookieFromHeader("test2=moo3;path=/", url);
+            assertEquals(0,man.getCookieCount());// Cookies are ignored
+            Cookie cc;
+            cc=new Cookie("test1","moo1",null,"/sub1",false,0,false,false);
+            man.add(cc);
+            cc=new Cookie("test2","moo2",null,"/sub1",false,0,true,false);
+            man.add(cc);
+            cc=new Cookie("test3","moo3",null,"/",false,0,false,false);
+            man.add(cc);
+            assertEquals(3,man.getCookieCount());
+            assertEquals("/sub1",man.get(0).getPath());
+            assertEquals("/sub1",man.get(1).getPath());
+            assertEquals("/",man.get(2).getPath());
+            String s = man.getCookieHeaderForURL(url);
+            assertNull(s);
+            org.apache.commons.httpclient.Cookie[] c = man.getCookiesForUrl(url);
+            assertEquals(0,c.length); // Cookies again ignored
+        }
+
+        public void testLoad() throws Exception{
+            assertEquals(0,man.getCookieCount());
+            man.addFile("testfiles/cookies.txt");
+            assertEquals(3,man.getCookieCount());
+
+            int num = 0;
+            assertEquals("name",man.get(num).getName());
+            assertEquals("value",man.get(num).getValue());
+            assertEquals("path",man.get(num).getPath());
+            assertEquals("domain",man.get(num).getDomain());
+            assertTrue(man.get(num).getSecure());
+            assertEquals(num,man.get(num).getExpires());
+
+            num++;
+            assertEquals("name2",man.get(num).getName());
+            assertEquals("value2",man.get(num).getValue());
+            assertEquals("/",man.get(num).getPath());
+            assertEquals("",man.get(num).getDomain());
+            assertFalse(man.get(num).getSecure());
+            assertEquals(0,man.get(num).getExpires());
+
+            num++;
+            assertEquals("a",man.get(num).getName());
+            assertEquals("b",man.get(num).getValue());
+            assertEquals("d",man.get(num).getPath());
+            assertEquals("c",man.get(num).getDomain());
+            assertTrue(man.get(num).getSecure());
+            assertEquals(0,man.get(num).getExpires()); // Show that maxlong now saved as 0
+        }
 }
