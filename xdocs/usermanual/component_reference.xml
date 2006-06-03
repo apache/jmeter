@@ -1897,6 +1897,12 @@ the cookie will be shared by all JMeter threads.</p>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Clear Cookies each Iteration" required="Yes">If selected, all cookies are cleared each time the main Thread Group loop is executed.
   This includes all the Cookies stored in the manager, so they will never be sent.</property>
+  <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
+  "compatibility" is the default, and should work in most cases.
+  See http://jakarta.apache.org/commons/httpclient/cookies.html and 
+  http://jakarta.apache.org/commons/httpclient/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
+  [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
+    </property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
   gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.</property>
   <property name="Add Button" required="N/A">Add an entry to the cookie table.</property>
