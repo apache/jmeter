@@ -163,7 +163,7 @@ public final class MenuFactory {
         
         JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),// $NON-NLS-1$
                 "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,// $NON-NLS-1$
-                KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK| KeyEvent.SHIFT_DOWN_MASK));
+                KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
         menu.add(savePictureAll);
         
 		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),// $NON-NLS-1$
