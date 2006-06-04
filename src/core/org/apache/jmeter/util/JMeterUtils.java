@@ -626,11 +626,11 @@ public class JMeterUtils implements UnitTestManager {
 	}
 
 	/**
-	 * Get a String value with NO default if not present.
+	 * Get the value of a JMeter property.
 	 * 
 	 * @param propName
 	 *            the name of the property.
-	 * @return The PropDefault value
+	 * @return the value of the JMeter property, or null if not defined
 	 */
 	public static String getProperty(String propName) {
 		String ans = null;
@@ -822,7 +822,8 @@ public class JMeterUtils implements UnitTestManager {
 	 *            nothing between them
 	 * @return Array of all the tokens.
      * @deprecated 
-     * Use rewritten version in JOrphanUtils (handles leading tokenisers better)
+     * Use rewritten version in JOrphanUtils (handles leading/trailing delimiters better)
+     * TODO: remove in version 2.2
      * 
 	 */
 	public static String[] split(String splittee, String splitChar, String def) {
