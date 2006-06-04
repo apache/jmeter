@@ -68,10 +68,16 @@ public class TestJorphanUtils extends TestCase {
         // Tests for split(String,String,boolean)
         public void testSplit1() {
             String in = "a,bc,,"; // Test ignore trailing split characters
-            String out[] = JOrphanUtils.split(in, ",",true);
+            String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
             assertEquals(2, out.length);
             assertEquals("a", out[0]);
             assertEquals("bc", out[1]);
+            out = JOrphanUtils.split(in, ",",false);
+            assertEquals("Should detect the trailing split chars; ", 4, out.length);
+            assertEquals("a", out[0]);
+            assertEquals("bc", out[1]);
+            assertEquals("", out[2]);
+            assertEquals("", out[3]);
         }
 
         public void testSplit2() {
@@ -93,11 +99,20 @@ public class TestJorphanUtils extends TestCase {
             String in = "a,b,,,d,e,,f";
             String[] out = JOrphanUtils.split(in,",",true);
             assertEquals(5, out.length);
+            assertEquals("a",out[0]);
+            assertEquals("b",out[1]);
             assertEquals("d",out[2]);
+            assertEquals("e",out[3]);
             assertEquals("f",out[4]);
             out = JOrphanUtils.split(in,",",false);
             assertEquals(8, out.length);
-            assertEquals("",out[2]);
+            assertEquals("a",out[0]);
+            assertEquals("b",out[1]);
+            assertEquals("", out[2]);
+            assertEquals("", out[3]);
+            assertEquals("d",out[4]);
+            assertEquals("e",out[5]);
+            assertEquals("", out[6]);
             assertEquals("f",out[7]);
             
         }
@@ -137,11 +152,15 @@ public class TestJorphanUtils extends TestCase {
             assertEquals(5, out.length);
             assertEquals("a", out[0]);
             assertEquals("b", out[1]);
+            assertEquals("c", out[2]);
+            assertEquals("?", out[3]);
             assertEquals("?", out[4]);
             out = JOrphanUtils.split(in, ",;","");
             assertEquals(5, out.length);
             assertEquals("a", out[0]);
             assertEquals("b", out[1]);
+            assertEquals("c", out[2]);
+            assertEquals("", out[3]);
             assertEquals("", out[4]);
         }
 
@@ -167,7 +186,6 @@ public class TestJorphanUtils extends TestCase {
             }
             try{
                 out = JOrphanUtils.split(in, null,"?");
-                assertEquals(0, out.length);
                 assertEquals(0, out.length);
                 fail("Expecting NullPointerException");
             } catch (NullPointerException ignored){
@@ -208,4 +226,13 @@ public class TestJorphanUtils extends TestCase {
             in="A B  C "; out="A+B++C+";
             assertEquals(JOrphanUtils.replaceAllChars(in,' ', "+"),out);
         }
+        
+        public void testTrim(){
+            assertEquals("",JOrphanUtils.trim("", " ;"));
+            assertEquals("",JOrphanUtils.trim(" ", " ;"));
+            assertEquals("",JOrphanUtils.trim("; ", " ;"));
+            assertEquals("",JOrphanUtils.trim(";;", " ;"));
+            assertEquals("",JOrphanUtils.trim("  ", " ;"));
+            assertEquals("abc",JOrphanUtils.trim("abc ;", " ;"));
+}
 }
