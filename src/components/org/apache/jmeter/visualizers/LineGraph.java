@@ -60,10 +60,10 @@ public class LineGraph extends JPanel {
      * we can add more. Though more than 12 lines per graph will look 
      * rather busy and be hard to read.
      */
-    private static final Paint[] PAINT_ARRAY = {Color.BLACK,
-            Color.BLUE,Color.GREEN,Color.MAGENTA,Color.ORANGE,
-            Color.RED,Color.YELLOW,Color.DARK_GRAY,Color.GRAY,Color.LIGHT_GRAY,
-            Color.PINK,Color.CYAN};
+    private static final Paint[] PAINT_ARRAY = {Color.black,
+            Color.blue,Color.green,Color.magenta,Color.orange,
+            Color.red,Color.yellow,Color.darkGray,Color.gray,Color.lightGray,
+            Color.pink,Color.cyan};// Using lower-case for JDK 1.3 compatibility
     protected int shape_counter = 0;
     protected int paint_counter = -1;
 
