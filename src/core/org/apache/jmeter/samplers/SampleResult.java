@@ -30,6 +30,7 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -630,11 +631,19 @@ public class SampleResult implements Serializable {
 	}
 
 	/**
-	 * @return the content type - e.g. text/html [;charset=utf-8 ]
+	 * @return the full content type - e.g. text/html [;charset=utf-8 ]
 	 */
 	public String getContentType() {
 		return contentType;
 	}
+
+    /**
+     * Get the media type from the Content Type
+     * @return the media type - e.g. text/html (without charset, if any)
+     */
+    public String getMediaType() {
+        return JOrphanUtils.trim(contentType," ;").toLowerCase();
+    }
 
 	/**
 	 * @param string
