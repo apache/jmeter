@@ -54,7 +54,7 @@ public final class JOrphanUtils {
 	 * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
 	 * here to enable us to support earlier JDKs.
 	 * 
-	 * Note that unlike JDK1.4 split(), it ignores leading split Characters,
+	 * Note that unlike JDK1.4 split(), it optionally ignores leading split Characters,
      * and the splitChar parameter is not a Regular expression
 	 * 
 	 * <P>
@@ -66,7 +66,7 @@ public final class JOrphanUtils {
 	 * @param splitChar
 	 *            Character to split the string on
      * @param truncate
-     *            Should adjacent and leading splitChars be removed?
+     *            Should adjacent and leading/trailing splitChars be removed?
      *            
 	 * @return Array of all the tokens.
      * 
@@ -379,6 +379,18 @@ public final class JOrphanUtils {
         return ret.toString();
     }
 
+    /**
+     * Trim a string by the tokens provided.
+     *  
+     * @param input string to trim
+     * @param delims list of delimiters
+     * @return input trimmed at the first delimiter
+     */
+    public static String trim(final String input, final String delims){
+        StringTokenizer tokens = new StringTokenizer(input,delims);
+        return tokens.hasMoreTokens() ? tokens.nextToken() : "";
+    }
+    
     /**
 	 * Returns a slice of a byte array.
 	 * 
