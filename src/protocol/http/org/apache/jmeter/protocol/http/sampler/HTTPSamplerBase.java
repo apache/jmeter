@@ -22,8 +22,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
@@ -190,6 +192,36 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 
+    // Derive the mapping of content types to parsers
+    private static Map parsersForType = new HashMap();
+    // Not synch, but it is not modified after creation
+    
+    private static final String RESPONSE_PARSERS= // list of parsers
+        JMeterUtils.getPropDefault("HTTPResponse.parsers",//$NON-NLS-1$
+                "htmlParser");  //$NON-NLS-1$ (this is the original one)
+    static{
+        String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);
+        for (int i=0;i<parsers.length;i++){
+            final String parser = parsers[i];
+            String classname=JMeterUtils.getProperty(parser+".className");
+            if (classname == null){
+                log.info("Cannot find .className property for "+parser+", using default");
+                classname="";
+            }
+            String typelist=JMeterUtils.getProperty(parser+".types");
+            if (typelist != null){
+                String []types=JOrphanUtils.split(typelist, " " , true);
+                for (int j=0;j<types.length;j++){
+                    final String type = types[j];
+                    log.info("Parser for "+type+" is "+classname);
+                    parsersForType.put(type,classname);
+                }
+            } else {
+                log.warn("Cannot find .types property for "+parser);
+            }
+        }
+    }
+    
     ////////////////////// Variables //////////////////////
     
     private boolean dynamicPath = false;// Set false if spaces are already encoded
@@ -671,11 +703,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	protected HTTPSampleResult downloadPageResources(HTTPSampleResult res, HTTPSampleResult container, int frameDepth) {
 		Iterator urls = null;
 		try {
-			if (res.getContentType().toLowerCase().indexOf("text/html") != -1  // $NON-NLS-1$
-                    && res.getResponseData().length > 0) // Bug 39205
-            {
-				urls = HTMLParser.getParser().getEmbeddedResourceURLs(res.getResponseData(), res.getURL());
-			}
+			final byte[] responseData = res.getResponseData();
+            if (responseData.length > 0){  // Bug 39205
+                String parserName = getParserClass(res);
+                if(parserName != null)
+                {
+    				final HTMLParser parser =
+                        parserName.length() > 0 ? // we have a name
+                        HTMLParser.getParser(parserName) 
+                        : 
+                        HTMLParser.getParser(); // we don't; use the default parser
+                    urls = parser.getEmbeddedResourceURLs(responseData, res.getURL());
+    			} 
+            }
 		} catch (HTMLParseException e) {
 			// Don't break the world just because this failed:
 			res.addSubResult(errorResult(e, res));
@@ -717,6 +757,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		}
 		return res;
 	}
+
+    /*
+     * @param res HTTPSampleResult to check
+     * @return parser class name (may be "") or null if entry does not exist
+     */
+    private String getParserClass(HTTPSampleResult res) {
+        final String ct = res.getMediaType();
+        return (String)parsersForType.get(ct);
+    }
 
     // TODO: make static?
 	protected String encodeSpaces(String path) {
