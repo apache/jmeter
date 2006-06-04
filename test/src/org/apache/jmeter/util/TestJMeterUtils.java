@@ -36,16 +36,27 @@ public class TestJMeterUtils extends TestCase {
 
         public void testSplit1() {
             String in = "a,bc,,"; // Test ignore trailing split characters
-            String out[] = JMeterUtils.split(in, ",","?");
+            String out[] = JMeterUtils.split(in, ",","?");// with default
             assertEquals(3, out.length);
             assertEquals("a", out[0]);
             assertEquals("bc", out[1]);
+            assertEquals("?", out[2]);
+        }
+
+        public void testSplit1a() {
+            String in = "a,bc,,"; // Test ignore trailing split characters
+            String out[] = JMeterUtils.split(in, ",",""); // with no default
+            assertEquals(3, out.length);
+            assertEquals("a", out[0]);
+            assertEquals("bc", out[1]);
+            assertEquals("", out[2]);
         }
 
         public void testSplit2() {
             String in = ",,a,bc"; // Test leading split characters with default
             String out[] = JMeterUtils.split(in, ",","?");
             assertEquals(3, out.length);
+            assertEquals("?", out[0]);
             assertEquals("a", out[1]);
             assertEquals("bc", out[2]);
         }
@@ -57,5 +68,15 @@ public class TestJMeterUtils extends TestCase {
             assertEquals("", out[0]);
             assertEquals("a", out[1]);
             assertEquals("bc", out[2]);
+        }        
+
+        public void testSplit4() {
+            String in = ",,,a,bc"; // Test leading split characters no default
+            String out[] = JMeterUtils.split(in, ",","");
+            assertEquals(4, out.length);
+            assertEquals("", out[0]);
+            assertEquals("", out[1]);
+            assertEquals("a", out[2]);
+            assertEquals("bc", out[3]);
         }        
 }
