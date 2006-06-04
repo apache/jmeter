@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
@@ -93,10 +94,10 @@ public class XPathExtractor extends AbstractTestElement implements
 			getValuesForXPath(d,getXPathQuery(),vars, refName);
 		}catch(IOException e){// Should not happen
 			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
-			throw new RuntimeException(e);
+			throw new JMeterError(e);
 		} catch (ParserConfigurationException e) {// Should not happen
 			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
-			throw new RuntimeException(e);
+			throw new JMeterError(e);
 		} catch (SAXException e) {// Can happen for bad input document
 			log.warn("error on "+XPATH_QUERY+"("+getXPathQuery()+")"+e.getLocalizedMessage());
 		} catch (TransformerException e) {// Can happen for incorrect XPath expression
