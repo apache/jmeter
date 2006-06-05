@@ -94,17 +94,68 @@ public class TestJorphanUtils extends TestCase {
             assertEquals("bc", out[3]);
         }
         
+        public void testSplit3() {
+            String in = "a,bc,,"; // Test ignore trailing split characters
+            String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
+            assertEquals(2, out.length);
+            assertEquals("a", out[0]);
+            assertEquals("bc", out[1]);
+            out = JOrphanUtils.split(in, ",",false);
+            assertEquals("Should detect the trailing split chars; ", 4, out.length);
+            assertEquals("a", out[0]);
+            assertEquals("bc", out[1]);
+            assertEquals("", out[2]);
+            assertEquals("", out[3]);
+        }
+
+        public void testSplit4() {
+            String in = " , ,a ,bc"; // Test leading split characters
+            String out[] = JOrphanUtils.split(in, " ,",true);
+            assertEquals(2, out.length);
+            assertEquals("a", out[0]);
+            assertEquals("bc", out[1]);
+            out = JOrphanUtils.split(in, " ,",false);
+            assertEquals("Should detect the leading split chars; ", 4, out.length);
+            assertEquals("", out[0]);
+            assertEquals("", out[1]);
+            assertEquals("a", out[2]);
+            assertEquals("bc", out[3]);
+        }
+        
         public void testTruncate() throws Exception
         {
-            String in = "a,b,,,d,e,,f";
-            String[] out = JOrphanUtils.split(in,",",true);
+            String in = "a;,b;,;,;,d;,e;,;,f";
+            String[] out = JOrphanUtils.split(in,";,",true);
             assertEquals(5, out.length);
             assertEquals("a",out[0]);
             assertEquals("b",out[1]);
             assertEquals("d",out[2]);
             assertEquals("e",out[3]);
             assertEquals("f",out[4]);
-            out = JOrphanUtils.split(in,",",false);
+            out = JOrphanUtils.split(in,";,",false);
+            assertEquals(8, out.length);
+            assertEquals("a",out[0]);
+            assertEquals("b",out[1]);
+            assertEquals("", out[2]);
+            assertEquals("", out[3]);
+            assertEquals("d",out[4]);
+            assertEquals("e",out[5]);
+            assertEquals("", out[6]);
+            assertEquals("f",out[7]);
+            
+        }
+
+        public void testSplit5() throws Exception
+        {
+            String in = "a;;b;;;;;;d;;e;;;;f";
+            String[] out = JOrphanUtils.split(in,";;",true);
+            assertEquals(5, out.length);
+            assertEquals("a",out[0]);
+            assertEquals("b",out[1]);
+            assertEquals("d",out[2]);
+            assertEquals("e",out[3]);
+            assertEquals("f",out[4]);
+            out = JOrphanUtils.split(in,";;",false);
             assertEquals(8, out.length);
             assertEquals("a",out[0]);
             assertEquals("b",out[1]);
