@@ -64,7 +64,7 @@ public final class JOrphanUtils {
 	 * @param splittee
 	 *            String to be split
 	 * @param splitChar
-	 *            Character to split the string on
+	 *            Character(s) to split the string on, these are treated as a single unit
      * @param truncate
      *            Should adjacent and leading/trailing splitChars be removed?
      *            
@@ -77,31 +77,39 @@ public final class JOrphanUtils {
 		if (splittee == null || splitChar == null) {
 			return new String[0];
 		}
+        final String EMPTY_ELEMENT = "";
 		int spot;
+        final int splitLength = splitChar.length();
+        final String adjacentSplit = splitChar + splitChar;
+        final int adjacentSplitLength = adjacentSplit.length();
         if(truncate) {
-    		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
-    			splittee = splittee.substring(0, spot + splitChar.length())
-    					+ splittee.substring(spot + 2 * splitChar.length(), splittee.length());
+            while ((spot = splittee.indexOf(adjacentSplit)) != -1) {
+    			splittee = splittee.substring(0, spot + splitLength)
+    					+ splittee.substring(spot + adjacentSplitLength, splittee.length());
     		}
-            if(splittee.startsWith(splitChar)) splittee = splittee.substring(splitChar.length());
+            if(splittee.startsWith(splitChar)) splittee = splittee.substring(splitLength);
+            if(splittee.endsWith(splitChar)) // Remove trailing splitter
+                splittee = splittee.substring(0,splittee.length()-splitLength);
         }
 		Vector returns = new Vector();
+        final int length = splittee.length(); // This is the new length
 		int start = 0;
-		int length = splittee.length();
 		spot = 0;
-		while (start < length && (spot = splittee.indexOf(splitChar, start)) > -1) {
+        while (start < length && (spot = splittee.indexOf(splitChar, start)) > -1) {
 			if (spot > 0) {
 				returns.addElement(splittee.substring(start, spot));
 			}
             else
             {
-                returns.addElement("");
+                returns.addElement(EMPTY_ELEMENT);
             }
-			start = spot + splitChar.length();
+			start = spot + splitLength;
 		}
 		if (start < length) {
 			returns.add(splittee.substring(start));
-		}
+		} else if (spot == length - splitLength){// Found splitChar at end of line
+            returns.addElement(EMPTY_ELEMENT);
+        }
 		String[] values = new String[returns.size()];
 		returns.copyInto(values);
 		return values;
