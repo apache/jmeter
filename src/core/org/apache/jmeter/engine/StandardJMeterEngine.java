@@ -338,7 +338,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		// for each thread group, generate threads
 		// hand each thread the sampler controller
 		// and the listeners, and the timer
-		JMeterThread[] threads;
 		Iterator iter = searcher.getSearchResults().iterator();
 
 		/*
@@ -364,8 +363,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 			String groupName = group.getName();
 			int rampUp = group.getRampUp();
 			float perThreadDelay = ((float) (rampUp * 1000) / (float) numThreads);
-			threads = new JMeterThread[numThreads];
-
 			log.info("Starting " + numThreads + " threads for group " + groupName + ". Ramp up = " + rampUp + ".");
 
 			if (onErrorStopTest) {
@@ -378,26 +375,25 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
             ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
             threadGroupTree.add(group, testLevelElements);
-			for (int i = 0; running && i < threads.length; i++) {
-				threads[i] = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
-				threads[i].setThreadNum(i);
-				threads[i].setThreadGroup(group);
-				threads[i].setInitialContext(JMeterContextService.getContext());
-				threads[i].setInitialDelay((int) (perThreadDelay * i));
-				threads[i].setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
+			for (int i = 0; running && i < numThreads; i++) {
+                final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
+                jmeterThread.setThreadNum(i);
+				jmeterThread.setThreadGroup(group);
+				jmeterThread.setInitialContext(JMeterContextService.getContext());
+				jmeterThread.setInitialDelay((int) (perThreadDelay * i));
+				jmeterThread.setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
 
-				scheduleThread(threads[i], group);
+				scheduleThread(jmeterThread, group);
 
 				// Set up variables for stop handling
-				threads[i].setEngine(this);
-				threads[i].setOnErrorStopTest(onErrorStopTest);
-				threads[i].setOnErrorStopThread(onErrorStopThread);
+				jmeterThread.setEngine(this);
+				jmeterThread.setOnErrorStopTest(onErrorStopTest);
+				jmeterThread.setOnErrorStopThread(onErrorStopThread);
 
-				Thread newThread = new Thread(threads[i]);
-				newThread.setName(threads[i].getThreadName());
-				allThreads.put(threads[i], newThread);
-				if (serialized && !iter.hasNext() && i == threads.length - 1) // last
-				// thread
+				Thread newThread = new Thread(jmeterThread);
+				newThread.setName(jmeterThread.getThreadName());
+				allThreads.put(jmeterThread, newThread);
+				if (serialized && !iter.hasNext() && i == numThreads - 1) // last thread
 				{
 					serialized = false;
 				}
