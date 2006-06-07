@@ -197,18 +197,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     // Not synch, but it is not modified after creation
     
     private static final String RESPONSE_PARSERS= // list of parsers
-        JMeterUtils.getPropDefault("HTTPResponse.parsers",//$NON-NLS-1$
-                "htmlParser");  //$NON-NLS-1$ (this is the original one)
+        JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
+
     static{
-        String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);
+        String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
         for (int i=0;i<parsers.length;i++){
             final String parser = parsers[i];
-            String classname=JMeterUtils.getProperty(parser+".className");
+            String classname=JMeterUtils.getProperty(parser+".className");//$NON-NLS-1$
             if (classname == null){
                 log.info("Cannot find .className property for "+parser+", using default");
                 classname="";
             }
-            String typelist=JMeterUtils.getProperty(parser+".types");
+            String typelist=JMeterUtils.getProperty(parser+".types");//$NON-NLS-1$
             if (typelist != null){
                 String []types=JOrphanUtils.split(typelist, " " , true);
                 for (int j=0;j<types.length;j++){
@@ -219,6 +219,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
             } else {
                 log.warn("Cannot find .types property for "+parser);
             }
+        }
+        if (parsers.length==0){ // revert to previous behaviour
+        	parsersForType.put("text/html", ""); //$NON-NLS-1$ //$NON-NLS-2$
+        	log.info("No response parsers defined: text/html only will be scanned for embedded resources");
         }
     }
     
