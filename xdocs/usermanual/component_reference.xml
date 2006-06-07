@@ -159,10 +159,22 @@ resource requires query string parameters, add them below in the
         <property name="Value for 'name' attribute" required="No (Yes if Filename filled in)">Value of the "name" web request parameter.</property>
         <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
-and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.</property>
+and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
+        See below for more details.
+        </property>
         <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
 </properties>
-
+<p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
+embedded resources. Other content-types were assumed to be something other than HTML.
+JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is a list of parser ids,
+ e.g. <b>htmlParser</b> and <b>wmlParser</b>. For each id found, JMeter checks two further properties:</p>
+ <ul>
+ <li>id.types - a list of content types</li>
+ <li>id.className - the parser to be used to extract the embedded resources</li>
+ </ul>
+ <p>See jmeter.properties file for the details of the settings. 
+ If the HTTPResponse.parser property is not set, JMeter reverts to the previous behaviour,
+ i.e. only text/html responses will be scanned</p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-web-test-plan.html">Building a Web Test Plan</link>
