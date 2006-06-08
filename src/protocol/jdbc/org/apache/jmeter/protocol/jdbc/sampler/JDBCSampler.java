@@ -102,14 +102,18 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 					close(rs);
 				}
 			} else if (CALLABLE.equals(_queryType)) {
-				try {
 					cs = conn.prepareCall(getQuery());
-					cs.execute();
-					String results = "Executed";
-					res.setResponseData(results.getBytes());
-				} finally {
-					close(cs);
-				}
+					boolean hasResultSet = cs.execute();
+					if (hasResultSet){
+						ResultSet rs=cs.getResultSet();
+						Data data = getDataFromResultSet(rs);
+						res.setResponseData(data.toString().getBytes());
+					} else {
+						int updateCount = cs.getUpdateCount();
+						String results = updateCount + " updates";
+						res.setResponseData(results.getBytes());
+					}
+					//TODO process additional results (if any) using getMoreResults()
             } else if (UPDATE.equals(_queryType)) {
 				stmt.execute(getQuery());
 				int updateCount = stmt.getUpdateCount();
@@ -127,6 +131,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			res.setResponseMessage(ex.toString());
 			res.setSuccessful(false);
 		} finally {
+			close(cs);
 			close(stmt);
 			close(conn);
 		}
