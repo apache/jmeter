@@ -119,10 +119,10 @@ public class BeanShellInterpreter {
 			// Check file so we can distinguish file error from script error
 			File in = new File(initFile);
 			if (!in.exists()) {
-				throw new FileNotFoundException("initFile");
+				throw new FileNotFoundException(initFile);
 			}
 			if (!in.canRead()) {
-				throw new IOException("initFile");
+				throw new IOException("Cannot read" + initFile);
 			}
 			source(initFile);
 		}
