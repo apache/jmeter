@@ -81,33 +81,33 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String PROXY_HOST = 
+    static final String PROXY_HOST = 
         System.getProperty("http.proxyHost",""); // $NON-NLS-1$ 
 
     private static final String NONPROXY_HOSTS = 
         System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$ 
 
-    private static final int PROXY_PORT = 
+    static final int PROXY_PORT = 
         Integer.parseInt(System.getProperty("http.proxyPort", DEFAULT_HTTP_PORT_STRING)); // $NON-NLS-1$ 
 
-    private static final String PROXY_USER = 
+    static final String PROXY_USER = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
     
-    private static final String PROXY_PASS = 
+    static final String PROXY_PASS = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
     
-    private static InetAddress localAddress = null;
+    static InetAddress localAddress = null;
     
     /*
      * Connection is re-used within the thread if possible
      */
-	private static final ThreadLocal httpClients = new ThreadLocal();
+	static final ThreadLocal httpClients = new ThreadLocal();
 
     private static Set nonProxyHostFull   = new HashSet();// www.apache.org
     private static List nonProxyHostSuffix = new ArrayList();// .apache.org
     private static final int nonProxyHostSuffixSize;
 
-    private static boolean isNonProxy(String host){
+    static boolean isNonProxy(String host){
         return nonProxyHostFull.contains(host) || isPartialMatch(host);
     }
 
@@ -220,7 +220,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @exception IOException
 	 *                if an I/O Exception occurs
 	 */
-	private HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
+	HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
 
 		String urlStr = u.toString();
 
@@ -349,7 +349,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      * @return a String containing the cookie details (for the response)
      * May be null
 	 */
-	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {        
+	String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {        
         String cookieHeader = null;
         if (cookieManager != null) {
             cookieHeader = cookieManager.getCookieHeaderForURL(u);
@@ -373,7 +373,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            for this <code>UrlConfig</code>
 	 * @return the headers as a string
 	 */
-	private String setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager) {
+	String setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager) {
 		StringBuffer hdrs = new StringBuffer(100);
 		if (headerManager != null) {
 			CollectionProperty headers = headerManager.getHeaders();
@@ -408,7 +408,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            the <code>AuthManager</code> containing all the authorisations for
 	 *            this <code>UrlConfig</code>
 	 */
-	private void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
+	void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
 		if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
@@ -630,7 +630,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @param cookieManager
 	 *            the <code>CookieManager</code> containing all the cookies
 	 */
-	private void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
+	void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
 		if (cookieManager != null) {
             Header hdr[] = method.getResponseHeaders(HEADER_SET_COOKIE);            
 			for (int i = 0; i < hdr.length; i++) {
