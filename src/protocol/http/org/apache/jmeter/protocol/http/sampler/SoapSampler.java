@@ -17,30 +17,30 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.OutputStream;
-import java.io.InputStream;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.jmeter.protocol.http.control.Header;
+import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.net.HttpURLConnection;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-
-import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.control.Header;
+import java.util.zip.GZIPInputStream;
 
 /**
- * Sampler to handle SOAP Requests.
- * 
- * author Jordi Salvat i Alabart
+ * Commons HTTPClient based soap sampler
  */
-public class SoapSampler extends HTTPSampler {
-	private static final Logger log = LoggingManager.getLoggerForClass();
+public class SoapSampler extends HTTPSampler2 {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
@@ -116,134 +116,205 @@ public class SoapSampler extends HTTPSampler {
 		setProperty(SEND_SOAP_ACTION, String.valueOf(action));
 	}
 
-	/**
-	 * Set the HTTP request headers in preparation to open the connection and
-	 * sending the POST data.
-	 * 
-	 * @param connection
-	 *            <code>URLConnection</code> to set headers on
-	 * @exception IOException
-	 *                if an I/O exception occurs
-	 */
-	protected void setPostHeaders(URLConnection connection) throws IOException {
-		((HttpURLConnection) connection).setRequestMethod(POST);
-		connection.setRequestProperty(HEADER_CONTENT_LENGTH, String.valueOf(getXmlData().length()));
-		// my first attempt at fixing the bug failed, due to user
-		// error on my part. HeaderManager does not use the normal
-		// setProperty, and getPropertyAsString methods. Instead,
-		// it uses it's own String array and Header object.
-		if (getHeaderManager() != null) {
-			// headerManager was set, so let's set the connection
-			// to use it.
-			HeaderManager mngr = getHeaderManager();
-			int headerSize = mngr.size();
-			// we set all the header properties
-			for (int idx = 0; idx < headerSize; idx++) {
-				Header hd = mngr.getHeader(idx);
-				connection.setRequestProperty(hd.getName(), hd.getValue());
-			}
-		} else {
-			// otherwise we use "text/xml" as the default
-			connection.setRequestProperty(HEADER_CONTENT_TYPE, "text/xml"); //$NON-NLS-1$
-		}
-		if(getSendSOAPAction()) {
-            connection.setRequestProperty(SOAPACTION, getSOAPActionQuoted());
-        }
-		connection.setDoOutput(true);
-	}
-
-	/**
-	 * Send POST data from <code>Entry</code> to the open connection.
-	 * 
-	 * @param connection
-	 *            <code>URLConnection</code> of where POST data should be sent
-	 * @exception IOException
-	 *                if an I/O exception occurs
-	 */
-	protected void sendPostData(URLConnection connection) throws IOException {
-        String xmlFile = getXmlFile();
-        if (xmlFile != null && getXmlFile().length() > 0) {
-            OutputStream out = connection.getOutputStream();
-            byte[] buf = new byte[1024];
-            // 1k - the previous 100k made no sense (there's tons of buffers
-            // elsewhere in the chain) and it caused OOM when many concurrent
-            // uploads were being done. Could be fixed by increasing the evacuation
-            // ratio in bin/jmeter[.bat], but this is better.
-            int read;
-            InputStream in = new FileInputStream(xmlFile);
-            while ((read = in.read(buf)) > 0) {
-                out.write(buf, 0, read);
+    protected void setPostHeaders(PostMethod post) throws IOException {
+        if (getHeaderManager() != null) {
+            // headerManager was set, so let's set the connection
+            // to use it.
+            HeaderManager mngr = getHeaderManager();
+            int headerSize = mngr.size();
+            // we set all the header properties
+            for (int idx = 0; idx < headerSize; idx++) {
+                Header hd = mngr.getHeader(idx);
+                post.addParameter(hd.getName(), hd.getValue());
             }
-            in.close();
-            out.flush();
-            out.close();
         } else {
-    		PrintWriter out = new PrintWriter(connection.getOutputStream());
-    		out.print(getXmlData());
-    		out.close();
-    	}
-	}
+            // otherwise we use "text/xml" as the default
+            post.addParameter(HEADER_CONTENT_TYPE, "text/xml"); //$NON-NLS-1$
+        }
+        if (getSendSOAPAction()) {
+            post.setRequestHeader(SOAPACTION, getSOAPActionQuoted());
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see Sampler#sample(Entry)
-	 */
-	public SampleResult sample(Entry e) {
-		HTTPSampleResult sampleResult = null;
-		Exception ex = null;
-		try {
-			URL url = new URL(getURLData());
-			setDomain(url.getHost());
-			setPort(url.getPort());
-			setProtocol(url.getProtocol());
-			setMethod(POST);
-			if (url.getQuery() != null && url.getQuery().length() >  0) {
-				setPath(url.getPath() + "?" + url.getQuery()); //$NON-NLS-1$
-			} else {
-				setPath(url.getPath());
-			}
-			// make sure the Post header is set
-			URLConnection conn = url.openConnection();
-			setPostHeaders(conn);
-			sampleResult = (HTTPSampleResult) super.sample(e);
-		} catch (MalformedURLException e1) {
-			ex=e1;
-			log.error("Bad url: " + getURLData(), e1);
-		} catch (IOException e1) {
-			ex=e1;
-			log.error("Bad url: " + getURLData(), e1);
-		}
-		if (ex != null){
-			if (sampleResult == null) {
-				sampleResult = new HTTPSampleResult();
-				sampleResult.setSampleLabel(getName());
-			}
-			sampleResult.setResponseCode("000"); //$NON-NLS-1$
-			sampleResult.setResponseMessage(ex.getLocalizedMessage());
-		}
-        // Bug 39252 set SoapSampler sampler data from XML data
-		// TODO: need to set both at present, because POST data for some reason
-		// is stored in the query string, not as sampler data ...
-        sampleResult.setSamplerData(getXmlData());
-        sampleResult.setQueryString(getXmlData());
-        return sampleResult;
-	}
+    /**
+     * Send POST data from <code>Entry</code> to the open connection.
+     *
+     * @param post
+     * @throws IOException if an I/O exception occurs
+     */
+    protected void sendPostData(PostMethod post) throws IOException {
+        final String xmlFile = getXmlFile();
+        if (xmlFile != null && getXmlFile().length() > 0) {
+            post.setRequestEntity(new RequestEntity() {
+                public boolean isRepeatable() {
+                    return true;
+                }
 
-	public String toString() {
-		StringBuffer sb = new StringBuffer(150);
-		try {
-			sb.append(this.getUrl().toString());
-		} catch (MalformedURLException e) {
-			sb.append(e.getLocalizedMessage());
-		}
-		sb.append("\nXML Data: ");
-		String xml = getXmlData();
-		if (xml.length() > 100) {
-			sb.append(xml.substring(0, 100));
-		} else {
-			sb.append(xml);
-		}
-		return sb.toString();
-	}
+                public void writeRequest(OutputStream out) throws IOException {
+                    byte[] buf = new byte[1024];
+                    // 1k - the previous 100k made no sense (there's tons of buffers
+                    // elsewhere in the chain) and it caused OOM when many concurrent
+                    // uploads were being done. Could be fixed by increasing the evacuation
+                    // ratio in bin/jmeter[.bat], but this is better.
+                    int read;
+                    InputStream in = new FileInputStream(xmlFile);
+                    while ((read = in.read(buf)) > 0) {
+                        out.write(buf, 0, read);
+                    }
+                    in.close();
+                    out.flush();
+                }
+
+                public long getContentLength() {
+                    return -1;
+                }
+
+                public String getContentType() {
+                    return "text/xml";
+                }
+            });
+        } else {
+            post.setRequestEntity(new RequestEntity() {
+                public boolean isRepeatable() {
+                    return true;
+                }
+
+                public void writeRequest(OutputStream out) throws IOException {
+                    PrintWriter printer = new PrintWriter(out);
+                    printer.print(getXmlData());
+                    printer.flush();
+                }
+
+                public long getContentLength() {
+                    return -1;
+                }
+
+                public String getContentType() {
+                    return "text/xml";
+                }
+            });
+        }
+    }
+
+    protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
+
+        String urlStr = url.toString();
+
+        log.debug("Start : sample" + urlStr);
+        log.debug("method" + method);
+
+        PostMethod httpMethod;
+        httpMethod = new PostMethod(urlStr);
+
+        HTTPSampleResult res = new HTTPSampleResult();
+        res.setMonitor(isMonitor());
+
+        res.setSampleLabel(urlStr); // May be replaced later
+        res.setHTTPMethod(method);
+        res.sampleStart(); // Count the retries as well in the time
+        HttpClient client = null;
+        InputStream instream = null;
+        try {
+            setPostHeaders(httpMethod);
+            client = setupConnection(url, httpMethod, res);
+
+            res.setQueryString(getQueryString());
+            sendPostData(httpMethod);
+
+            int statusCode = client.executeMethod(httpMethod);
+
+            // Request sent. Now get the response:
+            instream = httpMethod.getResponseBodyAsStream();
+
+            if (instream != null) {// will be null for HEAD
+
+                org.apache.commons.httpclient.Header responseHeader = httpMethod.getResponseHeader(TRANSFER_ENCODING);
+                if (responseHeader != null && ENCODING_GZIP.equals(responseHeader.getValue())) {
+                    instream = new GZIPInputStream(instream);
+                }
+
+                //int contentLength = httpMethod.getResponseContentLength();Not visible ...
+                //TODO size ouststream according to actual content length
+                ByteArrayOutputStream outstream = new ByteArrayOutputStream(4 * 1024);
+                //contentLength > 0 ? contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
+                byte[] buffer = new byte[4096];
+                int len;
+                boolean first = true;// first response
+                while ((len = instream.read(buffer)) > 0) {
+                    if (first) { // save the latency
+                        res.latencyEnd();
+                        first = false;
+                    }
+                    outstream.write(buffer, 0, len);
+                }
+
+                res.setResponseData(outstream.toByteArray());
+                outstream.close();
+
+            }
+
+            res.sampleEnd();
+            // Done with the sampling proper.
+
+            // Now collect the results into the HTTPSampleResult:
+
+            res.setSampleLabel(httpMethod.getURI().toString());
+            // Pick up Actual path (after redirects)
+
+            res.setResponseCode(Integer.toString(statusCode));
+            res.setSuccessful(isSuccessCode(statusCode));
+
+            res.setResponseMessage(httpMethod.getStatusText());
+
+            String ct = null;
+            org.apache.commons.httpclient.Header h
+                    = httpMethod.getResponseHeader(HEADER_CONTENT_TYPE);
+            if (h != null)// Can be missing, e.g. on redirect
+            {
+                ct = h.getValue();
+                res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+                res.setEncodingAndType(ct);
+            }
+
+            res.setResponseHeaders(getResponseHeaders(httpMethod));
+            if (res.isRedirect()) {
+                res.setRedirectLocation(httpMethod.getResponseHeader(HEADER_LOCATION).getValue());
+            }
+
+            // If we redirected automatically, the URL may have changed
+            if (getAutoRedirects()) {
+                res.setURL(new URL(httpMethod.getURI().toString()));
+            }
+
+            // Store any cookies received in the cookie manager:
+            saveConnectionCookies(httpMethod, res.getURL(), getCookieManager());
+
+            // Follow redirects and download page resources if appropriate:
+            res = resultProcessing(areFollowingRedirect, frameDepth, res);
+
+            log.debug("End : sample");
+            if (httpMethod != null)
+                httpMethod.releaseConnection();
+            return res;
+        } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
+        {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } catch (IOException e) {
+            res.sampleEnd();
+            HTTPSampleResult err = errorResult(e, res);
+            err.setSampleLabel("Error: " + url.toString());
+            return err;
+        } finally {
+            JOrphanUtils.closeQuietly(instream);
+            if (httpMethod != null)
+                httpMethod.releaseConnection();
+        }
+    }
+
+    public URL getUrl() throws MalformedURLException {
+        return new URL(getURLData());
+    }
 }
