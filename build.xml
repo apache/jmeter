@@ -1142,6 +1142,7 @@ some of its classes - at present JMeter can only run from jar files.
     <property name="javamail.complete" value="assume"/>
     <property name="beanshell.present" value="assume"/>
     <property name="jms.present" value="assume"/>
+    <property name="htmlparser16.present" value="assume"/>
   </target>
 
   <!-- list of files needed for a binary distribution (excluding library files) -->
