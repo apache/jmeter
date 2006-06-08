@@ -1068,7 +1068,7 @@ add three HTTP Requests to an Interleave Controller and configure the Thread
 Group to loop, here is the sequence in which JMeter sends the requests:
 </p>
 <table border="1" cellspacing="0" cellpadding="4">
-<tr valign="top"><td>Loop Iteration</td><td>Description</td></tr>
+<tr valign="top"><th>Loop Iteration</th><th>Description</th></tr>
 <tr valign="top"><td>1</td><td>JMeter sends the first HTTP Request.</td></tr>
 <tr valign="top"><td>2</td><td>JMeter sends the second HTTP Request.</td></tr>
 <tr valign="top"><td>3</td><td>JMeter sends the third HTTP Request.</td></tr>
@@ -1086,7 +1086,7 @@ requests per thread. See the table below for the sequence JMeter sends the HTTP 
 <figure image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
 
 <table border="1" cellspacing="0" cellpadding="4">
-<tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
+<tr valign="top"><th>Loop Iteration</th><th>Each JMeter Thread Sends These HTTP Requests</th></tr>
 <tr valign="top"><td>1</td><td>News Page</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>2</td><td>FAQ Page</td></tr>
