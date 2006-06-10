@@ -98,6 +98,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     
     static InetAddress localAddress = null;
     
+    private static final String localHost;
+    
     /*
      * Connection is re-used within the thread if possible
      */
@@ -105,6 +107,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static Set nonProxyHostFull   = new HashSet();// www.apache.org
     private static List nonProxyHostSuffix = new ArrayList();// .apache.org
+
     private static final int nonProxyHostSuffixSize;
 
     static boolean isNonProxy(String host){
@@ -159,7 +162,16 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             } catch (UnknownHostException e) {
                 log.warn(e.getLocalizedMessage());
             }
+        } else {
+            try {
+                InetAddress addr = InetAddress.getLocalHost();
+                // Get hostname
+                localHostOrIP = addr.getHostName();
+            } catch (UnknownHostException e) {
+                log.warn("Cannot determine localhost name, and httpclient.localaddress was not specified");
+            }
         }
+        localHost = localHostOrIP;
 	}
 
 	/**
@@ -442,7 +454,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                             new NTCredentials(
 									username, 
                                     auth.getPass(), 
-                                    null, // "thishost",
+                                    localHost,
 									domain
 							));
 			}
