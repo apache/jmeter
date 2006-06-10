@@ -172,6 +172,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
         }
         localHost = localHostOrIP;
+        log.info("Local host = "+localHost);
 	}
 
 	/**
