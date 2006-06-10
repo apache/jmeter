@@ -1224,13 +1224,13 @@ some of its classes - at present JMeter can only run from jar files.
 		depends="init-version,docs-site,docs-api,pack-site"
 		description="Build site documentation separately (see: distribution)"/>
 
-	<!-- Invoke with -Djmeter.version=m.n 
+	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org
 	Creates clean build and all documentation
-	Creates runtime and source distributions
+	Creates runtime and source distributions and site documentation
 	-->
 	<target name="distribution" 
-		depends="assume-libs-present,clean,install,docs-all,test,_distribution"
-		description="Build JMeter for end-user distribution (excludes site)"/>
+		depends="assume-libs-present,clean,install,docs-all,test,_distribution,pack-site"
+		description="Build JMeter for end-user distribution (includes site)"/>
 
 	<!-- Internal target -->
 	<target name="_distribution">
