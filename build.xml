@@ -1161,6 +1161,9 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${dest.jar.jmeter}/saveservice.properties"/>
     <include name="${dest.jar.jmeter}/users.dtd"/>
     <include name="${dest.jar.jmeter}/users.xml"/>
+    <!-- Sample override properties files -->
+    <include name="${dest.jar.jmeter}/system.properties"/>
+    <include name="${dest.jar.jmeter}/user.properties"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar}/"/>
