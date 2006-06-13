@@ -1,0 +1,37 @@
+
+To run Apache JMeter in GUI mode:
+Double-click on the ApacheJMeter.jar file.  
+If this doesn't work, open a command prompt and type:
+
+java -jar ApacheJMeter.jar [-p property-file]
+
+--------------------------------------------------
+
+To run Apache JMeter in NON_GUI mode:
+Open a command prompt (or Unix shell) and type:
+
+java -jar ApacheJMeter.jar -n -t test-file [-p property-file] [-l log-file]
+
+--------------------------------------------------
+
+To tell Apache JMeter to use a proxy server:
+Open a command prompt and type:
+
+java -jar ApacheJMeter.jar -H [your.proxy.server] -P [your proxy server port]
+
+---------------------------------------------------
+
+To run Apache JMeter in server mode:
+Open a command prompty and type
+
+java -jar ApacheJMeter.jar -s
+
+Or, use the provided script file: jmeter-server.bat(Windows)/jmeter-server(Linux)
+
+---------------------------------------------------
+
+Please note that a script file is provided: 
+jmeter.bat(Windows)/jmeter(Linux) that can be
+used in place of "java -jar ApacheJMeter.jar".  Example:
+
+jmeter -p jmeter.properties -H my.proxy.com -P 9999

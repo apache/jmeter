@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<!--
+   Copyright 2006 The Apache Software Foundation
+ 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE document
+[
+<!ENTITY sect-num '20'>
+]>
+<document prev="functions.html" next="glossary.html" date="$Date$">
+
+<properties>
+  <title>User's Manual: Regular Expressions</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Regular Expressions" anchor="regex">
+<subsection name="&sect-num;.1 Overview">
+<p>
+JMeter includes the pattern matching software <a href="http://jakarta.apache.org/oro/">Apache Jakarta ORO</a>
+<br/>
+There is some documentation for this on the Jakarta web-site, for example 
+<a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">
+a summary of the pattern matching characters</a>
+</p>
+<p>
+There is also documentation on an older incarnation of the product at 
+<a href="http://www.savarese.org/oro/docs/OROMatcher/index.html">OROMatcher User's guide</a>, which might prove useful. 
+</p>
+<p>
+The pattern matching is very similar to the pattern matching in Perl. 
+A full installation of Perl will include plenty of documentation on regular expressions - look for perlrequick, perlretut, perlre, perlreref.
+</p>
+<p>
+It is worth stressing the difference between "contains" and "matches", as used on the Response Assertion test element:
+</p>
+<ul>
+<li>
+"contains" means that the regular expression matched at least some part of the target, 
+so 'alphabet' "contains" 'ph.b.' because the regular expression matches the substring 'phabe'.
+</li>
+<li>
+"matches" means that the regular expression matched the whole target. 
+So 'alphabet' is "matched" by 'al.*t'. 
+</li>
+</ul>
+<p>In this case, it is equivalent to wrapping the regular expression in ^ and $, viz '^al.*t$'. 
+</p>
+<p>However, this is not always the case. 
+For example, the regular expression 'alp|.lp.*' is "contained" in 'alphabet', but does not match 'alphabet'.
+</p>
+<p>Why? Because when the pattern matcher finds the sequence 'alp' in 'alphabet', it stops trying any other combinations - and 'alp' is not the same as 'alphabet', as it does not include 'habet'.
+</p>
+<p>
+Note: unlike Perl, there is no need to (i.e. do not) enclose the regular expression in //. 
+So how does one use the Perl modifiers ismx etc if there is no trailing /? 
+The solution is to use Perl5 extended regular expressions, i.e. /abc/i becomes (?i)abc
+</p>
+</subsection>
+<subsection name="&sect-num;.2 Examples">
+<p>
+Extract single string
+<br/>
+Suppose you want to match the following portion of a web-page: 
+<br/>
+name="file" value="readme.txt" and you want to extract readme.txt.
+<br/>
+A suitable reqular expression would be:
+<br/>
+name="file" value="(.+?)"
+<p>
+The special characters above are:
+</p>
+<ul>
+<li>( and ) - these enclose the portion of the match string to be returned</li>
+<li>. - match any character. + - one or more times. 
+? - don't be greedy, i.e. stop when first match succeeds</li>
+</ul>
+<p>
+Note: without the ?, the .+ would continue past the first " until it found the last possible " - probably not what was intended.
+</p>
+<p>Extract multiple strings</p>
+
+Suppose you want to match the following portion of a web-page: name="file.name" value="readme.txt" and you want to extract file.name and readme.txt.
+<br/>
+A suitable reqular expression would be:
+<br/>
+name="(.+?)" value="(.+?)"
+<br/>
+This would create 2 groups, which could be used in the JMeter Regular Expression Extractor template as $1$ and $2$.
+<p>
+The JMeter Regex Extractor saves the values of the groups in additional variables.
+</p>
+<p>
+For example, assume:
+</p>
+<ul>
+<li>Reference Name: MYREF</li>
+<li>Regex: name="(.+?)" value="(.+?)"</li>
+<li>Template: $1$$2$</li>
+</ul>
+<note>Do not enclose the regular expression in / /</note>
+<p>
+The following variables would be set:
+</p>
+<ul>
+<li>MYREF: file.namereadme.txt</li>
+<li>MYREF_g0: name="file.name" value="readme.txt"</li>
+<li>MYREF_g1: file.name</li>
+<li>MYREF_g2: readme.txt</li>
+</ul>
+These variables can be referred to later on in the JMeter test plan, as ${MYREF}, ${MYREF_g1} etc 
+</p>
+</subsection>
+<subsection name="&sect-num;.3 Line mode">
+<p>The pattern matching behave in various slightly different ways, 
+depending on the setting of the multi-line and single-line modifiers.
+</p>
+<p>There are the four possible combinations:</p>
+
+<ul>
+<li>
+Default behavior. '.' matches any character except "\n". ^ matches only at the beginning of the string and $ matches only at the end or before a newline at the end. 
+</li>
+<li>
+Single-line modifier (?s): Treat string as a single long line. '.' matches any character, even "\n". ^ matches only at the beginning of the string and $ matches only at the end or before a newline at the end. 
+</li>
+<li>
+
+Multi-line modifier (?m): Treat string as a set of multiple lines. '.' matches any character except "\n". ^ and $ are able to match at the start or end of any line within the string. 
+</li>
+<li>
+
+Both modifiers (?sm): Treat string as a single long line, but detect multiple lines. '.' matches any character, even "\n". ^ and $, however, are able to match at the start or end of any line within the string. 
+</li>
+</ul>
+</subsection>
+</section>
+
+</body>
+</document>
