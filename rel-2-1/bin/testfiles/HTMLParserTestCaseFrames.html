@@ -1,0 +1,20 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Frame test case</title>
+</head>
+<bgsound src="audio/clap.wav">
+<frameset rows="48,*" frameborder=0 framespacing=0 border="0"> 
+  <frame name="banner" scrolling="no" noresize target="home" 
+  src="banner.html"  marginwidth="0" marginheight="0" frameborder="NO">
+  <frameset cols="126,*" frameborder=0 framespacing=0 border="0"> 
+    <frame name="nav" scrolling="no" noresize target="main" 
+    src="home_nav.html"  marginwidth="0" marginheight="0" frameborder="NO">
+    <frame name="main" marginwidth=10 marginheight=10 noresize frameborder="NO" src="http://localhost/main.html">
+</frameset>
+  <noframes> 
+  <body>
+  <p>This page uses frames, but your browser doesn't support them.</p>
+  </body>
+  </noframes> </frameset>
+</html>

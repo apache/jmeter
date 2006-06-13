@@ -1,0 +1,132 @@
+This file contains the PGP keys of various developers.
+
+Please don't use them for email unless you have to. 
+Their main purpose is code signing.
+
+Users: pgp < KEYS
+       gpg --import KEYS
+
+Developers: 
+        pgp -kxa <your name> and append it to this file.
+        (pgpk -ll <your name> && pgpk -xa <your name>) >> this file.
+        (gpg --list-sigs <your name>
+             && gpg --armor --export <your name>) >> this file.
+
+
+================================
+
+key for: Mike Stover <mstover1@apache.org>
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: PGP 6.5.8
+
+mQGiBD4+15ARBADvCziq8/67M9oBALgVybInCd8NAHKQvMvGMVWTYw/OEotzy62d
+50VZJWer2y31kosFuS7lw6EYNXdj+1Fho7qVXHKar0W3ON8S9JC3xySmrMjCufNb
+lfIhf51AnnvVoILIs6pwrROdb7gcfDN0FbpOl4Sl0jc7UiRXZc7rzm2p5wCg/w33
+1sd9v3hhqNy0k8IVQlgKVisD/3vVqtZILA0uq6Mpqby+Gjy8rZ+cgtZLRNl1d5+U
+QEVgj3cGSzgvP0BDul8ArAupcnxmKYtnSIkxZcezbxTOI/gsl7C4Zh8kttXcH/Mn
+6vFFXkGOWbsm1uGItL3B7jwD/xVxUJzzWBIh0AZZ4WSwvDCIviHqjBioAlpt8I1z
+M0VDBADseG8vpKCzE1I1SG4Ygr5MOC7ZdOpsrYsVvFfb/c6+H8yMj+5pf3hpVzs+
+5bcYOvhmrMfymBE9d197KzrO6U72uf/TXn9TnfOdH/Pkczo93Wcl7lDdLdjdO8M3
+M7upReM7uzEK/Yp1Jy95QDQ2w5u0kxNV1XA2c6gf4kiYOHDpH7QhTWlrZSBTdG92
+ZXIgPG1zdG92ZXIxQGFwYWNoZS5vcmc+iQBOBBARAgAOBQI+PteQBAsDAQICGQEA
+CgkQWnLVFf6Z0Qbn0QCgjkuNnVtJ4GbDAWHDpxNQ8lCbX28AoJs365z6GNEkxET+
+Juas+h9Dy7uz
+=Acn0
+-----END PGP PUBLIC KEY BLOCK-----
+
+
+pub  1024D/B1313DE2 2003-01-15 Robert Burrell Donkin (CODE SIGNING KEY) <rdonkin@apache.org>
+sig 3       B1313DE2 2003-01-15   Robert Burrell Donkin (CODE SIGNING KEY) <rdonkin@apache.org>
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+mQGiBD4lztcRBAClmlgorzoHH7IVYYerQY0e7QU0X3+4PRGGZVcbkZA3qMZV8rG3
+FSB4qp3cLX7rnco26oQbP4jSqXe1piEzYloyzYvgW9t0uFOFF7N8h9XtgA3E836v
+DE/dbrteJ6wZZvS0BR1J0u2/+3nSf4bdmzjd8JPMCIp4q4ztTMTNsWKUswCg3vRA
+NpL1bO0lTi5M013YhY+8wHcD/0Swc47PQuruwL+54ZMFFEHu+24UukU/7T6X2hos
+ERgq9HkUyqK5mOEqp4Y4AfhwPfzp/qOFbg+Jn0IIVg3XGZhTLyeBiwHpXBhJw2TT
+FXhLxm9G2PoYgkhMSgOo4wrHLCMszfvOABzCEZ4TAw3k4s3X4PSfNjHjOHUNYWhb
+1BNLA/wIVDCdOyHoUvw6R0rCTKFcHSXu7XQxjYIBKGAQkcNlCZElqNVlqa+eQTPW
+3AHXor/TUDzzd4afjkvmWaayGDZwOSWlsfqfPItvzTNzmE44wqfICa0/aMgkU6aZ
+m/k+UMFegH1YVBaAl0aj8Gx+T5B7JqA9i7+lmw3nwB1Ge0miBbQ9Um9iZXJ0IEJ1
+cnJlbGwgRG9ua2luIChDT0RFIFNJR05JTkcgS0VZKSA8cmRvbmtpbkBhcGFjaGUu
+b3JnPohZBBMRAgAZBQI+Jc7XBAsHAwIDFQIDAxYCAQIeAQIXgAAKCRDVM051sTE9
+4qflAJ9B2L8SOnFRnoJktHImJU9JO72IdwCgpM08Fi8O0dI5WuOFdz5sLobqioY=
+=nk3Z
+-----END PGP PUBLIC KEY BLOCK-----
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.2.3 (GNU/Linux)
+
+mQGiBEAsS1ERBADdpu3nk5zArXssCL1kdFIu97gJEE0B3X0dQn1lB+0mnzGD3Gfr
+3CtiwHfu77aRAM+GNE6xu3nNr5J0z2Zm8L+Lycb+idsCZGCM+NUHQ6JqVFkECHiE
+cFqiQhPIhJgHjeUuzScr2bpSZ9J5JQ4IdhYMLr6hi0FOiJmHEHXqY6H0BwCgrjJs
+t+CswKAqmmOpXamYZQyG4VUD/AwnFQnStl5JpK1WiaxIIA9lf+5KE/Ec/hJMHAtN
+T3U69imqPzw5VjODdggiF+IfTXH62IjUW6OHOkcn2ayy74SJ2hwRefeRPgcZDTh6
+/enyYokcEw4kvxi6A40q4OLrJ1Jv7mMzmwOmYZn5nXsmnThfGdCILgbzFJj0vQy1
+rzA1A/4n1JL9wlWias+EUMrQKm2bSQZz/DnCxVmr+CIFQTKFrQ7pm7M55mBuxldt
+VDSPempK8FaAZL8gDV2U0AIjAtvzQL2QFPAfW7kdHI5KUDBPz+Jgiqpekb0v6E92
+mqsc1MPiBt7u+b3G/v86P06HMHhFk9Dcq9XFzdHwD3yjjxb9y7Q+TWljaGFlbCBT
+dG92ZXIgKEFQQUNIRSBDT0RFX1NJR05JTkcgS0VZKSA8bXN0b3ZlcjFAYXBhY2hl
+Lm9yZz6IXgQTEQIAHgUCQCxLUQIbAwYLCQgHAwIDFQIDAxYCAQIeAQIXgAAKCRAs
+34R9OgFxO/4RAJ9OCXHCkkTg8mfacGnRUrBKdO313gCeLZ6Zlv8bWMyvkTii+ojZ
+xF3XvqO5AQ0EQCxLUhAEAKDK7B23dx84mZkQ4d4l5h07NgIJo1QUqCnpHwmc1/7P
+egiahOdU6LL33yZlorndYv8W2IGnYzCaeta1b84WHxZ+f3KnQB4e37tedML2LsJ7
+6ZmYJ49v5aBH7HUODkG5HPFHNg+Or92ifIZTKny0ysEPfRa+E4nwKWC+G3s9V93z
+AAMFA/45vCdItmz/G8sJP4kqq56BN79XcRzJ/lqt7n9f02FO2ejTRKc+Ld90Bc6n
+vJ9kwFDpi1jnoR+evIJJoWBIBr9DfFa0zx08QwWuvI1bu+X5tOLUDrLBmpCBA4Dp
+rDr9weWp5msVg0O6F+FgoNbogKJDcnE+q1xOGAkGSqux1ItHJIhJBBgRAgAJBQJA
+LEtSAhsMAAoJECzfhH06AXE7IE8AniSz9Vw04Jrfv6bRRtbcoShuWpJHAKCoxDR+
+mxWttRHhexCFvISgGUJc6Q==
+=o4aH
+-----END PGP PUBLIC KEY BLOCK-----
+
+
+
+pub  1024D/BCA973AC 2004-10-06 Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
+sig 3       BCA973AC 2004-11-18   Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
+sub  1024g/E8B59CC4 2004-10-06 [expires: 2007-11-18]
+sig         BCA973AC 2004-11-18   Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.2.5 (MingW32)
+
+mQGiBEFkZy8RBACFosOpu8fhs01GpbiS6g45Go4TZGLdFh1xz7gIZazd3ry/3tJr
+HlZi49a3h/2+CJ/FX9qbALx/vjOu6dj1Fcgjop+mzFQJBqNB1o9bFa+WnmVoW2pi
+m6JcKPJd4h63TdOjfGclpsKIbLrEwA5OgQtIwsayaeaqHQDvpjOF5hrROwCgrbrN
+HvLXe3UBDgOJ6aoO3RsWP9cD/iTju/VFA5uDNdaWm2cQUSv53SVo1czLl+YZGM+A
+a3c9TuvVIdC428iOyUF6mABXj1K0ZOd7mNbShXnPOd+/hl65iM8WG946O3yEZj6U
+VTTluvuVnnrS+tnt5RY3jYOp/ReSBXMQ1zLFnL7v87lMHSTZwBXfmsyuYpYnobm4
+ZannA/93lEKSYcFIqQkOfsvNM7QULwHyBwBsW8U+odaJFO/9uS2JEeUSk+AouQaT
+P1jCAjnxMV0M/bYXXdXsM+bcy6HG4lY3w/Y15N56uDpA7Kj8vWn8y7NKyd791KLA
+15WuANT1F32IACz3Setwn4M4cavkStLB59TbBgURGskdH5YP7bQ0U2ViYXN0aWFu
+IEJhemxleSAoQVNGIFNpZ25pbmcgS2V5KSA8c2ViYkBhcGFjaGUub3JnPohkBBMR
+AgAkAhsDBgsJCAcDAgMVAgMDFgIBAh4BAheABQJBnS27BQkF3GEMAAoJED/gwWG8
+qXOsAKcAn2c7/KynbjQfboCgcW5Dg8ZIl0dQAJ9GK01+hG6gBdN8Dik9pvmA4vhv
+v7kBDQRBZGc0EAQA/X04t3FJySqx1HgOifb4hG+xT7YuGzCkrG3hgNg6E2wl4SvA
+CkWMS43RwQgCd1MWNEwnASNBmJJwfDet8F3Z3cS0WRldcBSOwtOK0rnYwpuTWD51
+2bkXm+dskXQSUdPn2pQBfyOsCX8aBzicrnCKjHsWh8iziHRdVxisdLPrDocAAwUD
+/iuTQ0oi1G/NNJTEtRy5Ukia7gkqLf5/LMIM3poodj+BCYcyHXvzn5fFa2lGHX5E
+gnXGB2zZQnVDByQOkfbGOOKfiObETyeA1H/08p6yjIRQt8aKSYdc9cuEfmXg8MYQ
+4PylXFEHoS2aFuRM8lJciWYnLm9T994rmZcJSQraSPYZiE8EGBECAA8CGwwFAkGd
+LY8FCQXcYNsACgkQP+DBYbypc6yBbwCeOvnv0jFl9vF0s8xhSAoL//sVh+AAni2E
+MqhkiC8tJZdEK9EAd9T0HkeT
+=Y6NQ
+-----END PGP PUBLIC KEY BLOCK-----
+
+key for: Peter Lin <woolfel@apache.org>
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.2 (MingW32)
+
+mIsEQvwEgAEEALtlIFI5TYGenY7iQhhoU26lca2z7PTIGlCZ3eAPxjQNek/oCEPR
+nl39NtNKjEo4V2eJPrZz4nlA2pUxwkzVWGe9yULQT73mB0pkQxr40iH2vIdpkW3y
+CV3NymyH77XrvELhQrnLpK1pbzMdPTnpr04Wq4BCysEcGzJJT7mlIDiBAAYptDtQ
+ZXRlciBMaW4gKFBldGVyIExpbiBKTWV0ZXIgY29tbWl0dGVyKSA8d29vbGZlbEBh
+cGFjaGUub3JnPoi8BBMBAgAmBQJC/ASAAhsDBQkDwmcABgsJCAcDAgQVAggDBBYC
+AwECHgECF4AACgkQlell0l24rA970wP/WhOKLRrpF8IrjgpZsJ4X7CpdOhRQRfXd
+8u7TxhdxTRom6XFW14LyUH9i7teRB3RC8F809jFwfmR2oa4fhNhv36QkXQI9npmS
+gebbL9RMq3mjdXwtpDYbcA4r2pbz+Wf2m+BV38Gz8k+WOm5X8QW3sRbZ1QnxUjTu
+NGHyeqz14hs=
+=rMW+
+-----END PGP PUBLIC KEY BLOCK-----

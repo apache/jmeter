@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.jmeter.NewDriver"/>
+    <listAttribute key="org.eclipse.jdt.launching.CLASSPATH">
+        <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;runtimeClasspathEntry     containerPath=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; path=&quot;2&quot; type=&quot;4&quot;/&gt; "/>
+        <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;runtimeClasspathEntry     internalArchive=&quot;/jmeter-cvs/bin/ApacheJMeter.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt; "/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.jdt.launching.SOURCE_PATH">
+        <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;runtimeClasspathEntry path=&quot;3&quot; projectName=&quot;jmeter-cvs&quot; type=&quot;1&quot;/&gt; "/>
+        <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;runtimeClasspathEntry     internalArchive=&quot;/jmeter-cvs/bin/ApacheJMeter.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt; "/>
+        <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;runtimeClasspathEntry     containerPath=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; path=&quot;2&quot; type=&quot;4&quot;/&gt; "/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.debug.ui.target_debug_perspective" value="perspective_default"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="jmeter-cvs/bin"/>
+    <booleanAttribute
+        key="org.eclipse.jdt.launching.DEFAULT_SOURCE_PATH" value="false"/>
+    <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="perspective_default"/>
+    <stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.eclipse.jdt.debug.ui.javaSourceLocator"/>
+</launchConfiguration>

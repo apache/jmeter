@@ -1,0 +1,97 @@
+/*
+ * Copyright 2003-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+package org.apache.jmeter.testelement.property;
+
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jorphan.util.JOrphanUtils;
+
+/**
+ * @version $Revision$
+ */
+public class BooleanProperty extends AbstractProperty {
+	private boolean value;
+
+	private transient boolean savedValue;
+
+	public BooleanProperty(String name, boolean v) {
+		super(name);
+		value = v;
+	}
+
+	public BooleanProperty() {
+		super();
+	}
+
+	public void setObjectValue(Object v) {
+		if (v instanceof Boolean) {
+			value = ((Boolean) v).booleanValue();
+		} else {
+			value = Boolean.valueOf(v.toString()).booleanValue();
+		}
+	}
+
+	/**
+	 * @see JMeterProperty#getStringValue()
+	 */
+	public String getStringValue() {
+		return JOrphanUtils.booleanToString(value);
+	}
+
+	/**
+	 * @see JMeterProperty#getObjectValue()
+	 */
+	public Object getObjectValue() {
+		return JOrphanUtils.valueOf(value);
+	}
+
+	/**
+	 * @see Object#clone()
+	 */
+	public Object clone() {
+		BooleanProperty prop = (BooleanProperty) super.clone();
+		prop.value = value;
+		return prop;
+	}
+
+	/**
+	 * @see JMeterProperty#getBooleanValue()
+	 */
+	public boolean getBooleanValue() {
+		return value;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#setRunningVersion(boolean)
+	 */
+	public void setRunningVersion(boolean runningVersion) {
+		savedValue = value;
+		super.setRunningVersion(runningVersion);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.jmeter.testelement.property.JMeterProperty#recoverRunningVersion(org.apache.jmeter.testelement.TestElement)
+	 */
+	public void recoverRunningVersion(TestElement owner) {
+		value = savedValue;
+	}
+
+}
