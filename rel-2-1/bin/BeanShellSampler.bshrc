@@ -1,0 +1,43 @@
+// Sample BeanShell Sampler initialisation file
+
+//print("Initialisation started");
+
+import org.apache.jmeter.util.JMeterUtils;
+
+i = j = k = 0; // for counters
+
+getprop(p){// get a JMeter property
+	return JMeterUtils.getPropDefault(p,"");
+}
+
+getprop(p,d){// get a JMeter property with default
+	return JMeterUtils.getPropDefault(p,d);
+}
+
+setprop(p,v){// set a JMeter property
+	JMeterUtils.getJMeterProperties().setProperty(p, v);
+}
+
+// Define routines to stop the test or a thread
+stopEngine(){// Stop the JMeter test
+	org.apache.jmeter.engine.StandardJMeterEngine.stopEngine();
+}
+
+stopThread(t){// Stop a JMeter thread
+	org.apache.jmeter.engine.StandardJMeterEngine.stopThread(t);
+}
+
+String getVariables(){ // Create a listing of the thread variables
+    StringBuffer sb = new StringBuffer(100);
+    Iterator i = vars.getIterator();
+    while(i.hasNext())
+    {
+      Map.Entry me = i.next();
+       if(String.class.equals(me.getValue().getClass())){
+             sb.append(me.toString()).append("\n");
+       }
+    }
+    return sb.toString();
+}
+
+//print("Initialisation complete");

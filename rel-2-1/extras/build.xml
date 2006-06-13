@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!--
+   Copyright 2005 The Apache Software Foundation
+ 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="ant-jmeter" default="all">
+	<description>
+	To run a test and create the output report:
+		ant -Dtest=script
+	
+	To run a test only:
+		ant -Dtest=script run
+		
+	To run report on existing test output
+		ant -Dtest=script report
+	
+	The "script" parameter is the name of the script without the .jmx suffix.
+	
+	Additional options:
+		-Dshow-data=y - include response data in Failure Details
+		-Dbasedir=xyz - path to test file(s)
+		-Dformat=2.0 - use version 2.0 JTL files rather than 2.1
+	
+	</description>
+	
+	<property name="basedir" value=".">
+		
+	</property>
+	<!-- Name of test (without .jmx) -->
+	<property name="test" value="Test"/>
+	
+	<!-- Should report include response data for failures? -->
+	<property name="show-data" value="n"/>
+
+	<property name="format" value="2.1"/>
+		
+	<condition property="style_version" value="">
+		<equals arg1="${format}" arg2="2.0"/>
+	</condition>
+
+	<condition property="style_version" value="_21">
+		<equals arg1="${format}" arg2="2.1"/>
+	</condition>
+
+	<condition property="funcMode">
+		<equals arg1="${show-data}" arg2="y"/>
+	</condition>
+	
+	<condition property="funcMode" value="false">
+	  <not>
+		<equals arg1="${show-data}" arg2="y"/>
+	  </not>
+	</condition>
+
+	<taskdef
+	    name="jmeter"
+	    classpath="../extras/ant-jmeter.jar"
+	    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
+	
+	
+    <target name="init">
+    </target>
+
+
+	<target name="all" depends="run,report"/>
+
+	<target name="run" depends="init">
+		<echo>funcMode = ${funcMode}</echo>
+		<delete file="${basedir}/${test}.html"/>
+		<jmeter
+		    jmeterhome=".."
+		    testplan ="${basedir}/${test}.jmx"
+		    resultlog="${basedir}/${test}.jtl">
+		<!--
+			<jvmarg value="-Xincgc"/>
+			<jvmarg value="-Xmx128m"/>
+			<jvmarg value="-Dproperty=value"/>
+		-->
+			<!-- Force suitable defaults -->
+			<property name="jmeter.save.saveservice.output_format" value="xml"/>
+			<property name="jmeter.save.saveservice.assertion_results" value="all"/>
+			<property name="jmeter.save.saveservice.bytesx" value="true"/>
+			<property name="file_format.testlog" value="${format}"/>
+			<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
+		</jmeter>
+	</target>
+
+	<target name="report">
+		<xslt
+			force="true"
+		    in="${basedir}/${test}.jtl"
+		    out="${basedir}/${test}.html"
+		    style="../extras/jmeter-results-detail-report${style_version}.xsl">
+			<param name="showData" expression="${show-data}"/>
+		</xslt>
+	</target>
+</project>

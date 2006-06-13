@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+   $Header$
+   Copyright 2001-2004 The Apache Software Foundation
+ 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document prev="get-started.html" next="test_plan.html" date="$Date$">
+
+<properties>
+  <title>User's Manual: Building a Test Plan</title>
+</properties>
+
+<body>
+
+<section name="3. Building a Test Plan">
+<p>A test plan describes a series of steps JMeter will execute when run.  A complete
+test plan will consiste of one or more Thread Groups, logic conrollers, sample generating
+controllers, listeners, timers, assertions, and configuration elements.
+</p>
+
+<subsection name="3.1 Adding and Removing Elements" anchor="add_remove">
+<p>Adding <a href="test_plan.html">elements to a test plan</a> can be done by right-clicking on an element in the
+tree, and choosing a new element from the "add" list.  Alternatively, elements can
+be loaded from file and added by choosing the "open" option.  </p>
+
+<p>To remove an element, make sure the element is selected, right-click on the element,
+and choose the "remove" option.</p>
+</subsection>
+
+<subsection name="3.2 Loading and Saving Elements" anchor="load_save">
+<p>To load an element from file, right click on the existing tree element to which
+you want to add the loaded element, and select the "open" option.  Choose the file where
+your elements are saved.  JMeter will load the elements into the tree.</p>
+
+<p>To save tree elements, right click on an element and choose the "save" option.
+JMeter will save the element selected, plus all child elements beneath it.  In this way,
+you can save test tree fragments, individual elements, or the entire test plan.</p>
+
+</subsection>
+
+<subsection name="3.3 Configuring Tree Elements" anchor="config_element">
+<p>Any element in the test tree will present controls in JMeter's right-hand frame.  These
+controls allow you to configure the behavior of that particular test element.  What can be
+configured for an element depends on what type of element it is.</p>
+
+<note>The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</note>
+</subsection>
+
+<subsection name="3.4 Running a Test Plan" anchor="run">
+<p>To run your test plan, choose "start" from the "run" menu item.  To stop your test
+plan, choose "stop" from the same menu.  JMeter does not automatically give any
+indication of whether it is currently running.  Some listeners make it obvious if
+JMeter is running, but the only way to be sure is to check the "run" menu.  If "start"
+is disabled, and "stop" is enabled, JMeter is running your test plan (or, at least, it
+thinks it is).</p>
+</subsection>
+
+<subsection name="3.5 Scoping Rules" anchor="scoping_rules">
+<p>
+The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
+<figure image="scoping1.png">Example test tree</figure>
+<p>The order of requests will be, One, Two, Three, Four.</p>
+<p>Some controllers affect the order of their subelements, and you can read about these specific controllers in <a href="component_reference.html">the component reference</a>.</p>
+<p>Other elements are hierarchical.  An Assertion, for instance, is hierarchical in the test tree.  
+If its parent is a request, then it is applied to that request. If its
+parent is a Controller, then it affects all requests that are descendants of
+that Controller.  In the following test tree:</p>
+<figure image="scoping2.png">Hierarchy example</figure>
+<p>Assertion #1 is applied only to Request One, while Assertion #2 is applied to Requests Two and Three.</p>
+<p>Another example, this time using Timers:</p>
+<figure image="scoping3.png">complex example</figure>
+<p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
+<p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc, and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
+<b>
+The Configuration elements Header Manager, Cookie Manager and Authorization manager are
+treated differently from the Configuration Default elements.
+The settings from the Configuration Default elements are merged into a set of values that the Sampler has access to.
+However, the settings from the Managers are not merged.
+If more than one Manager is in the scope of a Sampler, 
+only one Manager is used, but there is currently no way to specify <b>which</b> is used.
+</b>
+</subsection>
+
+</section>
+
+</body>
+</document>
+

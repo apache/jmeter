@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<TestPlan>
+<threadgroups>
+<ThreadGroup name="ThreadGroup" numThreads="1">
+<controllers>
+<Controller type="org.apache.jmeter.control.LoopController" name="Loop Controller" iterations="2">
+<configElements>
+<CookieManager name="Cookie Manager">
+</CookieManager>
+
+</configElements>
+<controllers>
+<HttpTestSample type="org.apache.jmeter.protocol.http.control.HttpTestSample" name="Web Testing">
+<defaultUrl>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="port">80</property>
+<property name="PROTOCOL">http</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="domain">13.231.197.158</property>
+<property name="path">xdx</property>
+<property name="method">GET</property>
+</ConfigElement></defaultUrl>
+<urlList>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="name">Url Sample</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="domain"></property>
+<property name="path">nowway</property>
+</ConfigElement>
+<ConfigElement type="org.apache.jmeter.protocol.http.config.UrlConfig">
+<property name="name">Url Sample</property>
+<property name="arguments"><Arguments>
+</Arguments>
+</property>
+<property name="domain"></property>
+<property name="path">xdx/login.html</property>
+</ConfigElement>
+</urlList>
+<configElements>
+<HeaderManager name="Header Manager">
+<ConfigElement type="org.apache.jmeter.protocol.http.control.Header">
+<property name="name">user-agent</property>
+<property name="value">jmeter</property>
+</ConfigElement>
+</HeaderManager>
+
+</configElements>
+<controllers>
+</controllers>
+</HttpTestSample>
+
+</controllers>
+</Controller>
+</controllers>
+<timers>
+</timers>
+<listeners>
+</listeners>
+</ThreadGroup>
+
+</threadgroups>
+<configElements>
+</configElements>
+</TestPlan>

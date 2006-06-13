@@ -1,0 +1,99 @@
+// $Header$
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+package org.apache.jmeter.protocol.http.control;
+
+import java.io.Serializable;
+
+import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.testelement.AbstractTestElement;
+
+/**
+ * This class is an HTTP Header encapsulator.
+ * 
+ * @author <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
+ * @version $Revision$ last updated $Date$
+ */
+public class Header extends AbstractTestElement implements Serializable {
+	private static final String HNAME = "Header.name"; // See
+														// TestElementPropertyConverter
+
+	private static final String VALUE = "Header.value";
+
+	/**
+	 * Create the header.
+	 */
+	public Header() {
+		this.setName("");
+		this.setValue("");
+	}
+
+	/**
+	 * Create the coookie.
+	 */
+	public Header(String name, String value) {
+		this.setName(name);
+		this.setValue(value);
+	}
+
+	public void addConfigElement(ConfigElement config) {
+	}
+
+	public boolean expectsModification() {
+		return false;
+	}
+
+	public String getClassLabel() {
+		return "Header";
+	}
+
+	/**
+	 * Get the name for this object.
+	 */
+	public synchronized String getName() {
+		return getPropertyAsString(HNAME);
+	}
+
+	/**
+	 * Set the name for this object.
+	 */
+	public synchronized void setName(String name) {
+		this.setProperty(HNAME, name);
+	}
+
+	/**
+	 * Get the value for this object.
+	 */
+	public synchronized String getValue() {
+		return getPropertyAsString(VALUE);
+	}
+
+	/**
+	 * Set the value for this object.
+	 */
+	public synchronized void setValue(String value) {
+		this.setProperty(VALUE, value);
+	}
+
+	/**
+	 * Creates a string representation of this header.
+	 */
+	public String toString() {
+		return getName() + "\t" + getValue();
+	}
+}

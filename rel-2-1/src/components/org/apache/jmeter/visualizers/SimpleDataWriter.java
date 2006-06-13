@@ -1,0 +1,75 @@
+// $Header$
+/*
+ * Copyright 2000-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+package org.apache.jmeter.visualizers;
+
+import java.awt.BorderLayout;
+
+import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+
+/*******************************************************************************
+ * This listener can record results to a file but not to the UI. It is meant to
+ * provide an efficient means of recording data by eliminating GUI overhead.
+ * 
+ * @version $Revision$ $Date$
+ ******************************************************************************/
+
+public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
+	/***************************************************************************
+	 * Create the SimpleDataWriter.
+	 **************************************************************************/
+
+	public SimpleDataWriter() {
+		init();
+		setName(getStaticLabel());
+	}
+
+	public String getLabelResource() {
+		return "simple_data_writer_title";
+	}
+
+	/**
+	 * Initialize the component in the UI
+	 */
+
+	private void init() {
+		setLayout(new BorderLayout());
+		setBorder(makeBorder());
+
+		add(makeTitlePanel(), BorderLayout.NORTH);
+	}
+
+	/**
+	 * Does nothing, but required by interface.
+	 */
+
+	public void clear() {
+	}
+
+	/**
+	 * Does nothing, but required by interface.
+	 * 
+	 * @param sample
+	 *            ignored
+	 */
+
+	public void add(SampleResult sample) {
+	}
+}

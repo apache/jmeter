@@ -1,0 +1,104 @@
+
+                         A P A C H E   J M E T E R
+
+
+  What is it?
+  -----------
+
+  Apache JMeter is a 100% pure Java application designed to test
+  and measure performance.  It may be used
+  as a highly portable server benchmark as well as multiclient
+  load generator.
+
+  The Latest Version
+  ------------------
+
+  Details of the latest version can be found on the Java Apache 
+  Project web site (http://jakarta.apache.org/jmeter).
+
+  Requirements
+  ------------
+
+  The following requirements exist for running Apache JMeter:
+
+   o  Java Interpreter:
+
+      A fully compliant Java 1.3 Runtime Environment is required (a Java 1.4
+      Runtime Environment is recomended) for Apache JMeter to execute. 
+
+   o  Optional jars:
+   
+      Some jars are not included with JMeter. 
+      If required, these should be downloaded and placed in the lib directory
+   
+      BeanShell (bsh.jar) - www.beanshell.org
+      JavaMail (activation.jar, mail.jar) - java.sun.com
+      JMS (jms.jar) - java.sun.com
+
+   o  Java Compiler [OPTIONAL]:
+
+      A Java compiler is not needed since the distribution includes a 
+      precompiled java binary archive. Note that a compiler is required
+      if you plan to build plugin classes for Apache JMeter.
+
+  Installation Instructions
+  -------------------------
+
+  Note that spaces in directory names can cause problems.
+
+  - Release builds
+  Unpack the binary archive into a suitable directory structure.
+  
+  - Nightly builds
+  Unpack BOTH the _bin and _lib archives into the SAME directory structure
+  
+  Running JMeter
+  --------------
+  
+  Change to the bin directory and run the jmeter (Un*x) or jmeter.bat (Windows) file.
+  
+  For Windows, there are also some other scripts:
+  
+  jmeter-n.bat - drop a JMX file on this and it will run it as a non-GUI test
+  jmeter-t.bat - drop a JMX file on this and it will open the file for running a GUI test
+  
+  Documentation
+  -------------
+  The documentation available as of the date of this release is
+  also included, in HTML format, in the docs/ directory, and it may
+  be browsed starting from the file called index.html.
+
+  Build instructions
+  ------------------
+  
+  - Release builds
+  Unpack both the binary and source archives into the same directory structure
+  
+  - Nightly builds
+  Unpack the _src and _lib archives into the same directory structure
+  
+  In both cases, any optional jars (see above) can be placed in either lib or lib/opt.
+  Jars in lib/opt will be used for building JMeter, but won't be used at run-time.
+  [This is useful for testing what happens if the optional jars are not downloaded
+  by other JMeter users].
+
+  JMeter is built using Ant.
+  
+  Change to the top-level directory and issue the command:
+  
+  ant
+
+  This will compile the application and enable you to run jmeter from the bin
+  directory.
+
+  Licensing and legal issues
+  --------------------------
+
+  For legal and licensing issues, please look the files:
+  LICENSE
+  NOTICE
+  lib/LICENSE*
+
+
+
+  Thanks for using Apache JMeter.
