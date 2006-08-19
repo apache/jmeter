@@ -1947,6 +1947,18 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 		<property name="Set Keep-Alive" required="Yes">Automatically set Keep-Alive in the generated samplers?</property>
 		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
 		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
+        <property name="Attempt https Spoofing" required="Yes">
+          When you enable https spoofing, the following  happens:
+          <ul>
+            <li>All http requests from the client are turned into https (between the proxy
+              and the web server).</li>
+            <li>All text response data is scanned and any occurrence of the string "https" 
+              is replaced with &quot;http.&quot;</li>
+          </ul>
+          So if you want to use this feature, while you are browsing in your client,
+          instead of typing "https://..." into the browser, type &quot;http://...&quot;.  JMeter
+          will request and record <i>everything</i> as https, whether it should be or not.
+        </property>
         <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
