@@ -103,6 +103,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 	 */
 	private JCheckBox regexMatch;
 
+	/*
+	 * Spoof the client into thinking that it is communicating with http
+	 * even if it is really https.
+	 */
+	private JCheckBox httpsSpoof;
+	
 	/**
 	 * List of available target controllers
 	 */
@@ -177,6 +183,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 			model.setAssertions(addAssertions.isSelected());
 			model.setUseKeepAlive(useKeepAlive.isSelected());
 			model.setRegexMatch(regexMatch.isSelected());
+			model.setHttpsSpoof(httpsSpoof.isSelected());			
 			TreeNodeWrapper nw = (TreeNodeWrapper) targetNodes.getSelectedItem();
 			if (nw == null) {
 				model.setTarget(null);
@@ -223,6 +230,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		addAssertions.setSelected(model.getAssertions());
 		useKeepAlive.setSelected(model.getUseKeepalive());
 		regexMatch.setSelected(model.getRegexMatch());
+		httpsSpoof.setSelected(model.getHttpsSpoof());
 
 		reinitializeTargetCombo();// Set up list of potential targets and
 									// enable listener
@@ -282,7 +290,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 			model.stopProxy();
 			startProxy();
 		} else if (command.equals(ProxyControl.CAPTURE_HTTP_HEADERS) || command.equals(ProxyControl.ADD_ASSERTIONS)
-				|| command.equals(ProxyControl.USE_KEEPALIVE) || command.equals(ProxyControl.REGEX_MATCH)) {
+				|| command.equals(ProxyControl.USE_KEEPALIVE) || command.equals(ProxyControl.REGEX_MATCH)
+				|| command.equals(ProxyControl.HTTPS_SPOOF)) {
 			enableRestart();
 		} else if (command.equals(ADD_EXCLUDE)) {
 			excludeModel.addNewRow();
@@ -462,6 +471,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		regexMatch.addActionListener(this);
 		regexMatch.setActionCommand(ProxyControl.REGEX_MATCH);
 
+		httpsSpoof = new JCheckBox(JMeterUtils.getResString("proxy_httpsspoofing"));
+		httpsSpoof.setName(ProxyControl.HTTPS_SPOOF);
+		httpsSpoof.setSelected(false);
+		httpsSpoof.addActionListener(this);
+		httpsSpoof.setActionCommand(ProxyControl.HTTPS_SPOOF);		
+		
 		HorizontalPanel panel = new HorizontalPanel();
 		panel.add(label);
 		panel.add(portField);
@@ -472,6 +487,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		panel.add(useKeepAlive);
 		panel.add(addAssertions);
 		panel.add(regexMatch);
+		panel.add(httpsSpoof);
 
 		return panel;
 	}

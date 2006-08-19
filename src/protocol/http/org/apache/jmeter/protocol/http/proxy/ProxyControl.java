@@ -115,6 +115,8 @@ public class ProxyControl extends GenericController implements Serializable {
 
 	public static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
+	public static final String HTTPS_SPOOF = "ProxyControlGui.https_spoof";
+
 	public static final int GROUPING_NO_GROUPS = 0;
 
 	public static final int GROUPING_ADD_SEPARATORS = 1;
@@ -136,7 +138,7 @@ public class ProxyControl extends GenericController implements Serializable {
 	private boolean useKeepAlive;
 
 	private boolean regexMatch = false;// Should we match using regexes?
-
+	
 	/**
 	 * Tree node where the samples should be stored.
 	 * <p>
@@ -197,7 +199,14 @@ public class ProxyControl extends GenericController implements Serializable {
 		regexMatch = b;
 		setProperty(new BooleanProperty(REGEX_MATCH, b));
 	}
-
+	
+	/**
+	 * @param b
+	 */
+	public void setHttpsSpoof(boolean b) {
+		setProperty(new BooleanProperty(HTTPS_SPOOF, b));
+	}
+	
 	public String getClassLabel() {
 		return JMeterUtils.getResString("proxy_title");
 	}
@@ -233,6 +242,12 @@ public class ProxyControl extends GenericController implements Serializable {
 	public boolean getRegexMatch() {
 		return getPropertyAsBoolean(REGEX_MATCH, false);
 	}
+	
+	public boolean getHttpsSpoof() {
+		return getPropertyAsBoolean(HTTPS_SPOOF, false);
+	}
+	
+	
 
 	public Class getGuiClass() {
 		return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;

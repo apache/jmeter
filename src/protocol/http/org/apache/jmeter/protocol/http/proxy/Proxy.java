@@ -57,6 +57,9 @@ public class Proxy extends Thread {
 	/** Whether or not to capture the HTTP headers. */
 	private boolean captureHttpHeaders;
 
+	/** Whether to try to spoof as https **/
+	private boolean httpsSpoof;
+
 	/**
 	 * Default constructor - used by newInstance call in Daemon
 	 */
@@ -87,6 +90,7 @@ public class Proxy extends Thread {
 		this.target = _target;
 		this.clientSocket = _clientSocket;
 		this.captureHttpHeaders = _target.getCaptureHttpHeaders();
+		this.httpsSpoof = target.getHttpsSpoof();
 	}
 
 	/**
@@ -109,7 +113,25 @@ public class Proxy extends Thread {
 			 */
 			headers = request.getHeaderManager();
 			sampler.setHeaderManager(headers);
+			
+			/* 
+			 * If we are trying to spoof https, change the protocol
+			 */
+			if (httpsSpoof) {
+				sampler.setProtocol("https");
+			}
 			result = sampler.sample();
+			
+			/*
+			 * If we're dealing with text data, and if we're spoofing https, 
+			 * replace all occurences of "https" with "http" for the client. 
+			 */
+			if (httpsSpoof && result.getDataType() == result.TEXT)
+			{
+				String noHttpsResult = new String(result.getResponseData());
+				result.setResponseData(noHttpsResult.replaceAll("https", "http").getBytes());
+			}
+				
 			writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
 			/*
 			 * We don't want to store any cookies in the generated test plan
