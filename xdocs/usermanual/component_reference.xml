@@ -199,7 +199,10 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-		<property name="Variable Name" required="Yes">Name of the JMeter variable that the connection pool is bound to</property>
+		<property name="Variable Name" required="Yes">
+		Name of the JMeter variable that the connection pool is bound to.
+		This must agree with the 'Variable Name' field of a JDBC Connection Configuration.
+		</property>
 		<property name="Query Type" required="Yes">Set this according to the statement type</property>
         <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
 </properties>
