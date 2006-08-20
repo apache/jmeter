@@ -1326,9 +1326,9 @@ some of its classes - at present JMeter can only run from jar files.
 
 	<target name="gump-check">
 	  	<!-- check if /usr and /x1 are the same -->
-	  	<checksum file="/usr/local/gump/public/workspace/jakarta-jmeter-21/lib/jorphan.jar" property="usrMD5"/>
+	  	<checksum file="/usr/local/gump/public/workspace/jakarta-jmeter-22/lib/jorphan.jar" property="usrMD5"/>
 	  	<echo>usrMD5 = ${usrMD5}</echo>
-	  	<checksum        file="/x1/gump/public/workspace/jakarta-jmeter-21/lib/jorphan.jar" property="x1MD5"/>
+	  	<checksum        file="/x1/gump/public/workspace/jakarta-jmeter-22/lib/jorphan.jar" property="x1MD5"/>
 	  	<echo>x1MD5  = ${x1MD5}</echo>
 	</target>
 
