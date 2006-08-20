@@ -111,13 +111,19 @@ Then, select this new element to view its Control Panel (see Figure 7.3).</p>
 
 <p>Set up the following fields (these assume we will be using a local MySQL database called test):</p>
 <ul>
-<li>Variable name bound to pool. This needs to uniquely identify the configuration.</li>
+<li>Variable name bound to pool. This needs to uniquely identify the configuration. It is used by the JDBC Sampler to identify the configuration to be used.</li>
 <li>Database URL: jdbc:mysql://localhost:3306/test</li>
 <li>JDBC Driver class: com.mysql.jdbc.Driver</li>
 <li>Username: guest</li>
 <li>Password: password for guest</li>
 </ul>
 <p>The other fields on the screen can be left as the defaults.</p>
+<p>JMeter creates a database connection pool with the configuration settings as specified in the Control Panel.
+The pool is referred to in JDBC Requests in the 'Variable Name' field.
+Several different JDBC Configuration elements can be used, but they must have unique names.
+Every JDBC Request must refer to a JDBC Configuration pool.
+More than one JDBC Request can refer to the same pool.
+</p>
 <figure image="jdbctest/jdbc-config.png">
 Figure 7.3. JDBC Configuration</figure>
 
