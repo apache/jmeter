@@ -277,8 +277,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     new NTCredentials(
                             PROXY_USER, 
                             PROXY_PASS, 
-                            null, // "thishost",
-                            "" // domain
+                            localHost,
+                            ""  // domain
                 ));
             }
         }
