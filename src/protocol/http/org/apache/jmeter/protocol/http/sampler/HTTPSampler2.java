@@ -262,6 +262,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		if ( httpClient == null )
 		{
 			httpClient = new HttpClient(new SimpleHttpConnectionManager());
+			httpClient.setHostConfiguration(hc);
 			map.put(hc, httpClient);
 		}
 
