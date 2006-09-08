@@ -1876,7 +1876,7 @@ other is open to everyone.  See figure 10 to see the makeup of our Test Plan.  O
 directory named, "secret", which contains two files, "index.html" and "index2.html".  We created a login id named, "kevin",
 which has a password of "spot".  So, in our Authorization Manager, we created an entry for the restricted directory and
 a username and password (see figure 11).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests
-to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
+to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
 "/index.html".</p>
 
 <figure image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
