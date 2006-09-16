@@ -1,0 +1,28 @@
+# Properties file used to define additional httpclient parameters
+#
+# See: http://jakarta.apache.org/commons/httpclient/preference-api.html
+#
+# This file is enabled by setting the JMeter property: httpclient.parameters.file
+# entries are of the form:
+#
+# property=value (for strings)
+# property$Type=value (for other types)
+#
+# where Type can be:
+# Integer
+# Long
+# Boolean
+# HttpVersion
+# 
+# N.B. Other types are not yet implemented, so not all parameters are supported
+#
+
+# Examples:
+
+#http.protocol.version$HttpVersion=1.0
+
+#http.protocol.element-charset=ISO-8859-1
+
+#http.socket.timeout$Integer=10000
+
+#http.protocol.reject-relative-redirect$Boolean=true
