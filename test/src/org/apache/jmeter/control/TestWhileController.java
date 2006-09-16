@@ -164,8 +164,7 @@ public class TestWhileController extends JMeterTestCase {
 			runTestAlwaysFail(true); // Should be OK
 		}
 
-		// TODO - re-enable when fix found
-		public void disabletestAlwaysFailBAD() throws Exception {
+		public void testAlwaysFailBAD() throws Exception {
 			runTestAlwaysFail(false); // Currently fails
 		}
 
