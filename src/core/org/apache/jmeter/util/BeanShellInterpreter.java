@@ -52,16 +52,15 @@ public class BeanShellInterpreter {
 
 	private static final Class bshClass;
 
+    private static final String BSH_INTERPRETER = "bsh.Interpreter"; //$NON-NLS-1$
+
 	static {
-		Method get = null, eval = null, set = null, source = null;// Temporary,
-																	// so can
-																	// set the
-																	// final
-																	// ones
+        // Temporary copies, so can set the final ones
+		Method get = null, eval = null, set = null, source = null;
 		Class clazz = null;
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		try {
-			clazz = loader.loadClass("bsh.Interpreter");
+			clazz = loader.loadClass(BSH_INTERPRETER);
 			Class string = String.class;
 			Class object = Object.class;
 
@@ -93,7 +92,7 @@ public class BeanShellInterpreter {
 
 	public BeanShellInterpreter() throws ClassNotFoundException {
 		if (bshClass == null) {
-			throw new ClassNotFoundException("bsh.Interpreter");//$NON-NLS-1$
+			throw new ClassNotFoundException(BSH_INTERPRETER);
 		}
 		try {
 			bshInstance = bshClass.newInstance();
@@ -191,8 +190,7 @@ public class BeanShellInterpreter {
 	}
 
 	public Object set(String s, boolean b) throws JMeterException {
-		return bshInvoke(bshSet, s, b ? Boolean.TRUE : Boolean.FALSE);// JDK1.4
-																		// Boolean.vaueof
+		return bshInvoke(bshSet, s, Boolean.valueOf(b));
 	}
 
 	public Object source(String s) throws JMeterException {
