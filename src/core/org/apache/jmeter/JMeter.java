@@ -68,12 +68,14 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
+import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -344,6 +346,20 @@ public class JMeter implements JMeterPlugin {
 			Runnable t = new BeanShellServer(bshport, bshfile);
 			t.run();
 		}
+        
+        // Should we run a beanshell script on startup?
+        String bshinit = JMeterUtils.getProperty("beanshell.init.file");// $NON-NLS-1$
+        if (bshinit != null){
+            log.info("Run Beanshell on file: "+bshinit);
+            try {
+                BeanShellInterpreter bsi = new BeanShellInterpreter();//bshinit,log);
+                bsi.source(bshinit);
+            } catch (ClassNotFoundException e) {
+                log.warn("Could not start Beanshell: "+e.getLocalizedMessage());
+            } catch (JMeterException e) {
+                log.warn("Could not process Beanshell file: "+e.getLocalizedMessage());
+            }
+        }
 	}
 
 	/**
