@@ -40,7 +40,9 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.NTCredentials;
+import org.apache.commons.httpclient.ProtocolException;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.DeleteMethod;
@@ -56,7 +58,9 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.config.Argument;
@@ -88,8 +92,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         System.getProperty("http.nonProxyHosts",""); // $NON-NLS-1$ 
 
     static final int PROXY_PORT = 
-        Integer.parseInt(System.getProperty("http.proxyPort", DEFAULT_HTTP_PORT_STRING)); // $NON-NLS-1$ 
+        Integer.parseInt(System.getProperty("http.proxyPort","0")); // $NON-NLS-1$ 
 
+    // Have proxy details been provided?
+    private static final boolean PROXY_DEFINED = PROXY_HOST.length() > 0 && PROXY_PORT > 0;
+    
     static final String PROXY_USER = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
     
@@ -173,9 +180,38 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         }
         localHost = localHostOrIP;
         log.info("Local host = "+localHost);
+        
+        setDefaultParams();
 	}
 
-	/**
+    // Set default parameters as needed
+    private static void setDefaultParams(){
+        HttpParams params = DefaultHttpParams.getDefaultParams();
+        
+        // Process httpclient parameters file
+        String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
+        if (file != null) {
+            HttpClientDefaultParameters.load(file,params);
+        }
+        
+        // Handle old-style JMeter properties
+        String ver=JMeterUtils.getProperty("httpclient.version"); // $NON-NLS-1$
+        try {
+            params.setParameter(HttpMethodParams.PROTOCOL_VERSION, HttpVersion.parse("HTTP/"+ver));
+        } catch (ProtocolException e) {
+            log.warn("Problem setting protocol version "+e.getLocalizedMessage());
+        }
+        String to= JMeterUtils.getProperty("httpclient.timeout");
+        if (to != null){
+            params.setIntParameter(HttpMethodParams.SO_TIMEOUT, Integer.parseInt(to));
+        }
+
+        // This must be done last, as must not be overridden
+        params.setParameter(HttpMethodParams.COOKIE_POLICY,CookiePolicy.IGNORE_COOKIES);
+        // We do our own cookie handling
+    }
+    
+    /**
 	 * Constructor for the HTTPSampler2 object.
      * 
      * Consider using HTTPSamplerFactory.newInstance() instead
@@ -248,12 +284,27 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		String host = uri.getHost();
 		int port = uri.getPort();
 
+        /*
+         *  We use the HostConfiguration as the key to retrieve the HttpClient,
+         *  so need to ensure that any items used in its equals/hashcode methods are
+         *  not changed after use, i.e.:
+         *  host, port, protocol, localAddress, proxy
+         *  
+        */
 		HostConfiguration hc = new HostConfiguration();
 		hc.setHost(host, port, protocol); // All needed to ensure re-usablility
 
         // Set up the local address if one exists
         if (localAddress != null){
             hc.setLocalAddress(localAddress);
+        }
+        
+        boolean useProxy = PROXY_DEFINED && !isNonProxy(host);
+        if (useProxy) {
+            if (log.isDebugEnabled()){
+                log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
+            }
+            hc.setProxy(PROXY_HOST, PROXY_PORT);
         }
         
         Map map = (Map) httpClients.get();
@@ -264,40 +315,17 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			httpClient = new HttpClient(new SimpleHttpConnectionManager());
 			httpClient.setHostConfiguration(hc);
 			map.put(hc, httpClient);
+            // These items don't change, so only need to be done once
+            if (useProxy) {
+                if (PROXY_USER.length() > 0){
+                    httpClient.getState().setProxyCredentials(
+                        new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
+                        new UsernamePasswordCredentials(PROXY_USER,PROXY_PASS)
+                    );
+                }
+            }
+
 		}
-
-        if (PROXY_HOST.length() > 0 && !isNonProxy(host)) {
-            if (log.isDebugEnabled()){
-                log.debug("Setting proxy: "+PROXY_HOST+":"+PROXY_PORT);
-            }
-            hc.setProxy(PROXY_HOST, PROXY_PORT);
-            if (PROXY_USER.length() > 0){
-                httpClient.getState().setProxyCredentials(
-                    new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
-                    // NT Includes other types of Credentials
-                    new NTCredentials(
-                            PROXY_USER, 
-                            PROXY_PASS, 
-                            localHost,
-                            ""  // domain
-                ));
-            }
-        }
-
-        HttpMethodParams params = httpMethod.getParams();
-        params.setCookiePolicy(CookiePolicy.IGNORE_COOKIES);// We do our own cookie handling
-        params.setVersion(
-                JMeterUtils.getPropDefault("httpclient.version", "1.1").equals("1.0") // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$ 
-                ?
-                HttpVersion.HTTP_1_0 : HttpVersion.HTTP_1_1);
-
-		// Set the timeout (if non-zero)
-		params.setSoTimeout(JMeterUtils.getPropDefault("httpclient.timeout", 0)); // $NON-NLS-1$
-
-		//httpState = new HttpState();
-//		if (httpConn.isProxied() && httpConn.isSecure()) {
-//			httpMethod = new ConnectMethod(httpMethod);
-//		}
 
 		// Allow HttpClient to handle the redirects:
 		httpMethod.setFollowRedirects(getAutoRedirects());
@@ -460,7 +488,15 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 									domain
 							));
 			}
+            else
+            {
+                client.getState().clearCredentials();
+            }
 		}
+        else
+        {
+            client.getState().clearCredentials();
+        }
 	}
 
 	/**
