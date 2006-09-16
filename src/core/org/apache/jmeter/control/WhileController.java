@@ -20,12 +20,15 @@ package org.apache.jmeter.control;
 import java.io.Serializable;
 
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
+// @see TestWhileController for unit tests
 
 /**
  * @version $Revision$
@@ -132,7 +135,9 @@ public class WhileController extends GenericController implements Serializable {
 	 */
 	public String getCondition() {
 		String cnd;
-		cnd = getPropertyAsString(CONDITION);
+        JMeterProperty prop=getProperty(CONDITION);
+        prop.recoverRunningVersion(this);
+		cnd = prop.getStringValue();
 		log.debug("getCondition() => " + cnd);
 		return cnd;
 	}
