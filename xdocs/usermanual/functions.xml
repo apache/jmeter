@@ -116,7 +116,7 @@ SELECT item from table where name=${VAR}
 of user-defined values is kept, matching up variable names with static values.  Referencing the
 variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
 <p>Built-in functions are written in the same manner, but by convention, the names of built-in
-parameters begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
+functions begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
 configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
 be left out.  A further complication for argument values that themselves contain commas is that the value
 should be escaped as necessary.  Thus, if you need to include a comma in your parameter value, escape it like so: '\,'.  JMeter provides a tool to help you construct
