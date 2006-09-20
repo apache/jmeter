@@ -44,8 +44,8 @@ and will be used if the previous HTTP sample does not contain a session id.
 
 <example title="URL Rewriting Example">
 <p>Download <a href="../demos/URLRewritingExample.jmx">this example</a>. In Figure 1 is shown a 
-test plan using URL rewriting.  Note that the URL Re-writing modifier is attached to the ThreadGroup,
-thus assuring that it will affect every request in that ThreadGroup.</p>
+test plan using URL rewriting.  Note that the URL Re-writing modifier is added to the SimpleController,
+thus assuring that it will only affect requests under that SimpleController.</p>
 <figure image="url_rewrite_example_a.png">Figure 1 - Test Tree</figure>
 <p>In Figure 2, we see the URL Re-writing modifier GUI, which just has a field for the user to specify
 the name of the session ID parameter.  There is also a checkbox for indicating that the session ID should
