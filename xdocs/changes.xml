@@ -43,6 +43,7 @@
 <li>Bug 40419 - Chinese messages translation fix</li>
 <li>Bug 39861 - fix typo</li>
 <li>Bug 40562 - redirects no longer invoke RE post processors</li>
+<li>Bug 40451 - set label if not set by sampler</li>
 </ul>
 
 <h3>Version 2.2</h3>
