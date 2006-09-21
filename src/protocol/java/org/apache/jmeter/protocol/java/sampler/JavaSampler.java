@@ -159,9 +159,16 @@ public class JavaSampler extends AbstractSampler implements TestListener {
 			createJavaClient();
 			javaClient.setupTest(context);
 		}
+        
+        SampleResult result = createJavaClient().runTest(context);
+        
+        // Only set the default label if it has not been set
+        if (result != null && result.getSampleLabel().length() == 0) {
+            result.setSampleLabel(getName());
+        }
 
-		return createJavaClient().runTest(context);
-	}
+        return result;
+    }
 
 	/**
 	 * Returns reference to <code>JavaSamplerClient</code>.
