@@ -26,7 +26,26 @@
 
 <!--  ===================  -->
 
-<h3>Version 2.1.2</h3>
+<h3>Version 2.2.1</h3>
+<h4>Known problems:</h4>
+<p>As for 2.2</p>
+
+<h4>New functionality:</h4>
+<ul>
+<li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
+<li>Added beanshell.init.file property to run a BeanShell script at startup</li>
+</ul>
+
+<h4>Bug fixes:</h4>
+<ul>
+<li>Bug 39773 - NTLM now needs local host name - fix other call</li>
+<li>Bug 40438 - setting "httpclient.localaddress" has no effect</li>
+<li>Bug 40419 - Chinese messages translation fix</li>
+<li>Bug 39861 - fix typo</li>
+<li>Bug 40562 - redirects no longer invoke RE post processors</li>
+</ul>
+
+<h3>Version 2.2</h3>
 
 <h4>Incompatible changes:</h4>
 <p>
