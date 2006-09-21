@@ -103,7 +103,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		initTemplate();
 		JMeterContext context = getThreadContext();
 		SampleResult previousResult = context.getPreviousResult();
-		if (previousResult == null || previousResult.getResponseData().length == 0) {
+		if (previousResult == null) {
 			return;
 		}
 		log.debug("RegexExtractor processing result");
