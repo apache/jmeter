@@ -139,6 +139,8 @@ public class TestURLRewritingModifier extends JMeterTestCase {
 					"<input value=\"myId\" NAME='sid'>",
                     "<input VALUE='myId' name=\"sid\">",
 					"<input blah blah value=\"myId\" yoda yoda NAME='sid'>",
+                    "<input type=\"HIDDEN\" name=\"sid\"      value=\"myId\">",
+                    "<input type=\"HIDDEN\" name=\"sid\"\tvalue=\"myId\">",
                     };
 			for (int i = 0; i < html.length; i++) {
 				response = new SampleResult();
