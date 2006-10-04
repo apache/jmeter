@@ -44,6 +44,7 @@
 <li>Bug 39861 - fix typo</li>
 <li>Bug 40562 - redirects no longer invoke RE post processors</li>
 <li>Bug 40451 - set label if not set by sampler</li>
+<li>Fix NPE in CounterConfig.java in Remote mode</li>
 </ul>
 
 <h3>Version 2.2</h3>
