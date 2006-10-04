@@ -17,6 +17,7 @@
 
 package org.apache.jmeter.modifiers;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
@@ -51,12 +52,26 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 	private long globalCounter = Long.MIN_VALUE;
     
     // Used for per-thread/user numbers
-    transient private ThreadLocal perTheadNumber = new ThreadLocal() {
-        protected synchronized Object initialValue() {
-            return new Long(getStart());
-        }
-    };
+    transient private ThreadLocal perTheadNumber;
 
+    private void init() {
+        perTheadNumber = new ThreadLocal() {
+            protected synchronized Object initialValue() {
+                return new Long(getStart());
+            }
+        };
+    }
+
+    
+    public CounterConfig() {
+        super();
+        init();
+    }
+
+    private Object readResolve() throws ObjectStreamException{
+        init();
+        return this;
+    }
 	/**
 	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
 	 */
