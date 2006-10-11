@@ -79,6 +79,8 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     private JLabeledTextField randomXmlFile = new JLabeledTextField(JMeterUtils.getResString("get_xml_from_random")); // $NON-NLS-1$
 
+    private JLabeledTextField connectTimeout = new JLabeledTextField(JMeterUtils.getResString("webservice_timeout")); // $NON-NLS-1$
+
 	/**
 	 * We create several JLabel objects to display usage instructions in the
 	 * GUI. The reason there are multiple labels is to make sure it displays
@@ -178,6 +180,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		sampler.setXmlData(soapXml.getText());
 		sampler.setXmlFile(soapXmlFile.getFilename());
 		sampler.setXmlPathLoc(randomXmlFile.getText());
+        sampler.setTimeout(connectTimeout.getText());
 		sampler.setMemoryCache(memCache.isSelected());
 		sampler.setReadResponse(readResponse.isSelected());
 		sampler.setUseProxy(useProxy.isSelected());
@@ -237,6 +240,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		mainPanel.add(domain);
 		mainPanel.add(port);
 		mainPanel.add(path);
+        mainPanel.add(connectTimeout);
 		mainPanel.add(soapAction);
 		// OPTIONAL TASKS
 		// we create a preferred size for the soap text area
@@ -288,6 +292,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		soapXml.setText(sampler.getXmlData());
 		soapXmlFile.setFilename(sampler.getXmlFile());
 		randomXmlFile.setText(sampler.getXmlPathLoc());
+        connectTimeout.setText(sampler.getTimeout());
 		memCache.setSelected(sampler.getMemoryCache());
 		readResponse.setSelected(sampler.getReadResponse());
 		useProxy.setSelected(sampler.getUseProxy());

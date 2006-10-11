@@ -85,7 +85,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 
 	public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
 
-	/**
+    public static final String TIMEOUT = "WebserviceSampler.timeout";
+
+	/*
 	 * Random class for generating random numbers.
 	 */
 	private final Random RANDOM = new Random();
@@ -444,6 +446,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			} else {
 				spconn = new SOAPHTTPConnection();
 			}
+            
+            spconn.setTimeout(getTimeoutAsInt());
+            
 			// set the auth. thanks to KiYun Roe for contributing the patch
 			// I cleaned up the patch slightly. 5-26-05
 			if (getAuthManager() != null) {
@@ -583,4 +588,16 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		}
 		return buf.toString();
 	}
+
+    public String getTimeout() {
+        return getPropertyAsString(TIMEOUT);
+    }
+
+    public int getTimeoutAsInt() {
+        return getPropertyAsInt(TIMEOUT);
+    }
+
+    public void setTimeout(String text) {
+        setProperty(TIMEOUT, text);
+    }
 }
