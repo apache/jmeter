@@ -22,6 +22,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
@@ -90,10 +91,13 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
 			p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 			p.setValue(DEFAULT, Boolean.FALSE);
 			p.setValue(NOT_OTHER, Boolean.TRUE);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log.warn("couldn't find classes and set up properties", e);
 			throw new RuntimeException("Could not find classes with class finder");
-		}
+        } catch (ClassNotFoundException e) {
+            log.warn("couldn't find classes and set up properties", e);
+            throw new RuntimeException("Could not find classes with class finder");
+        }
 		log.info("Got to end of access log samper bean info init");
 	}
 
