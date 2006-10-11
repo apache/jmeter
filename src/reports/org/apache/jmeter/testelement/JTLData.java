@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -18,7 +17,6 @@
 package org.apache.jmeter.testelement;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
