@@ -259,9 +259,8 @@ public final class JOrphanUtils {
 			decodeMethod = URLDecoder.getMethod("decode", argTypes);
 			encodeMethod = URLEncoder.getMethod("encode", argTypes);
 			// System.out.println("Using JDK1.4 xxcode() calls");
-		} catch (Exception e) {
-			// e.printStackTrace();
-		}
+        } catch (NoSuchMethodException e) {
+        }
 		// System.out.println("java.version="+System.getProperty("java.version"));
 	}
 
