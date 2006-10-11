@@ -23,6 +23,7 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
@@ -44,8 +45,11 @@ public class LookAndFeelCommand implements Command {
 			String defaultUI = JMeterUtils.getPropDefault("jmeter.laf", UIManager
 					.getCrossPlatformLookAndFeelClassName());
 			UIManager.setLookAndFeel(defaultUI);
-		} catch (Exception e) {
-		}
+		} catch (IllegalAccessException e) {
+		} catch (ClassNotFoundException e) {
+        } catch (InstantiationException e) {
+        } catch (UnsupportedLookAndFeelException e) {
+        }
 	}
 
 	public LookAndFeelCommand() {
