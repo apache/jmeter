@@ -69,7 +69,7 @@ public class JLabeledRadio extends JPanel implements JLabeledField, ActionListen
 	 * 
 	 * @param items
 	 */
-	public void init(String[] items, String selected) {
+	private void init(String[] items, String selected) {
 		this.add(mLabel);
 		for (int idx = 0; idx < items.length; idx++) {
 			JRadioButton btn = new JRadioButton(items[idx]);
