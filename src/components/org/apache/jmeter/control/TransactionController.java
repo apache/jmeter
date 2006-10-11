@@ -1,4 +1,3 @@
-// $Header$
 /*
  * Copyright 2004 The Apache Software Foundation.
  *
@@ -34,7 +33,6 @@ import org.apache.log.Logger;
 /**
  * Transaction Controller to measure transaction times
  * 
- * @version $Revision$
  */
 public class TransactionController extends GenericController implements Controller, Serializable {
 	protected static final Logger log = LoggingManager.getLoggerForClass();
@@ -42,10 +40,6 @@ public class TransactionController extends GenericController implements Controll
 	transient private String threadName;
 
 	transient private ListenerNotifier lnf;
-
-	transient private JMeterContext threadContext;
-
-	transient private JMeterVariables threadVars;
 
 	transient private SampleResult res;
 
@@ -57,7 +51,13 @@ public class TransactionController extends GenericController implements Controll
 		lnf = new ListenerNotifier();
 	}
 
-	private void log_debug(String s) {
+    private Object readResolve(){
+        threadName = Thread.currentThread().getName();
+        lnf = new ListenerNotifier();
+        return this;
+    }
+
+    private void log_debug(String s) {
 		String n = this.getName();
 		log.debug(threadName + " " + n + " " + s);
 	}
@@ -95,8 +95,8 @@ public class TransactionController extends GenericController implements Controll
 				res.setThreadName(threadName);
 
 				// TODO could these be done earlier (or just once?)
-				threadContext = getThreadContext();
-				threadVars = threadContext.getVariables();
+                JMeterContext threadContext = getThreadContext();
+                JMeterVariables threadVars = threadContext.getVariables();
 
 				SamplePackage pack = (SamplePackage) threadVars.getObject(JMeterThread.PACKAGE_OBJECT);
 				if (pack == null) {
