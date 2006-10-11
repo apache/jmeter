@@ -18,6 +18,7 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -387,9 +388,11 @@ public final class MenuFactory {
 				}
 
 			}
-		} catch (Exception e) {
-			log.error("", e);
-		}
+		} catch (IOException e) {
+            log.error("", e);
+        } catch (ClassNotFoundException e) {
+            log.error("", e);
+        }
 	}
 
 	private static void addSeparator(JPopupMenu menu) {
