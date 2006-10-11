@@ -318,7 +318,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 			_formatter = null;
 		}
 
-		_timestamp = !_timeStampFormat.equalsIgnoreCase(NONE);
+		_timestamp = !NONE.equalsIgnoreCase(_timeStampFormat);// reversed compare allows for null
 
 		_saveAssertionResultsFailureMessage = TRUE.equalsIgnoreCase(props.getProperty(
 				ASSERTION_RESULTS_FAILURE_MESSAGE_PROP, FALSE));
