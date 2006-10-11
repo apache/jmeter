@@ -34,13 +34,17 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 	private static final String KEY = "__counter";
 
-    private transient ThreadLocal perThreadInt = new ThreadLocal(){
-        protected synchronized Object initialValue() {
-            return new Integer(0);
-        }
-    };
+    private transient ThreadLocal perThreadInt;
     
-	static {
+	private void init(){
+        perThreadInt = new ThreadLocal(){
+            protected synchronized Object initialValue() {
+                return new Integer(0);
+            };
+        };
+    }
+        
+    static {
 		desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
@@ -50,9 +54,16 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 	transient private int globalCounter;//MAXINT = 2,147,483,647
 
 	public IterationCounter() {
+        init();
         globalCounter=0;
     }
 
+    private Object readResolve(){
+        init();
+        globalCounter=0;
+        return this;
+    }
+    
 	public Object clone() {
 		IterationCounter newCounter = new IterationCounter();
 		newCounter.globalCounter = globalCounter;
