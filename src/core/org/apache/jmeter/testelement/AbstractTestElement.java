@@ -67,8 +67,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 				clonedElement.setProperty((JMeterProperty) iter.next().clone());
 			}
 			clonedElement.setRunningVersion(runningVersion);
-		} catch (Exception e) {
-		}
+		} catch (InstantiationException e) {
+        } catch (IllegalAccessException e) {
+        }
 		return clonedElement;
 	}
 
