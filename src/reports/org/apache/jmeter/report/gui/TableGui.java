@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -21,7 +20,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JCheckBox;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
