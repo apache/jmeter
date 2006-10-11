@@ -34,6 +34,7 @@
 <ul>
 <li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
 <li>Added beanshell.init.file property to run a BeanShell script at startup</li>
+<li>Added timeout for WebService (SOAP) Sampler</li>
 </ul>
 
 <h4>Bug fixes:</h4>
