@@ -52,6 +52,10 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     
 	transient private String[] vars;
 
+    private Object readResolve(){
+        recycle = true;
+        return this;
+    }
 	/*
 	 * (non-Javadoc)
 	 * 
