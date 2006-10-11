@@ -32,6 +32,7 @@ import org.jCharts.axisChart.AxisChart;
 import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelPosition;
 import org.jCharts.axisChart.customRenderers.axisValue.renderers.ValueLabelRenderer;
 import org.jCharts.chartData.AxisChartDataSet;
+import org.jCharts.chartData.ChartDataException;
 import org.jCharts.chartData.DataSeries;
 import org.jCharts.properties.AxisProperties;
 import org.jCharts.properties.BarChartProperties;
@@ -210,8 +211,10 @@ public class AxisGraph extends JPanel {
                     legendProperties, _width, _height );
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ChartDataException e) {
+            log.warn("",e);
+        } catch (PropertyException e) {
+            log.warn("",e);
         }
     }
     
