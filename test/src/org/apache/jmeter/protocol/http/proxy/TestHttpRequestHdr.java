@@ -22,7 +22,6 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.log.output.jms.PropertyInfo;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
 		public TestHttpRequestHdr(String name) {
