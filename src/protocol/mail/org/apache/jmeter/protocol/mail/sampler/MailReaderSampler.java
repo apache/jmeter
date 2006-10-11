@@ -17,7 +17,6 @@
 package org.apache.jmeter.protocol.mail.sampler;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Properties;
 
 import javax.mail.Address;
