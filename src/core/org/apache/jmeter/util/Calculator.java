@@ -105,7 +105,8 @@ public class Calculator {
         if (startTime == 0){
             startTime=res.getStartTime();
         }
-        elapsedTime=res.getEndTime()-startTime;
+        startTime = Math.min(startTime, res.getStartTime());
+        elapsedTime = Math.max(elapsedTime, res.getEndTime()-startTime);
     }
 
 
