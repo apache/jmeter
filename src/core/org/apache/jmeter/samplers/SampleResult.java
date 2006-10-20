@@ -177,7 +177,8 @@ public class SampleResult implements Serializable {
 	 */
 	public SampleResult(SampleResult res) {
 		setStartTime(res.getStartTime());
-		setElapsed(0);
+		setEndTime(res.getStartTime()); 
+		// was setElapsed(0) which is the same as setStartTime=setEndTime=now
 
 		setSampleLabel(res.getSampleLabel());
 		setRequestHeaders(res.getRequestHeaders());
@@ -249,14 +250,18 @@ public class SampleResult implements Serializable {
 	 * Allow users to create a sample with specific timestamp and elapsed times
 	 * for cloning purposes, but don't allow the times to be changed later
 	 * 
-	 * Currently used by SaveService only
+	 * Currently used by OldSaveService only
 	 * 
 	 * @param stamp -
 	 *            this may be a start time or an end time
 	 * @param elapsed
 	 */
 	public SampleResult(long stamp, long elapsed) {
-		// Maintain the timestamp relationships
+		stampAndTime(stamp, elapsed);
+	}
+
+	// Helper method to maintain timestamp relationships
+	private void stampAndTime(long stamp, long elapsed) {
 		if (startTimeStamp) {
 			setTimes(stamp, stamp + elapsed);
 		} else {
@@ -264,10 +269,25 @@ public class SampleResult implements Serializable {
 		}
 	}
 
+	/*
+	 * For use by SaveService only.
+	 *  
+	 * @param stamp -
+	 *            this may be a start time or an end time
+	 * @param elapsed
+	 */
+	public void setStampAndTime(long stamp, long elapsed) {
+		if (startTime != 0 || endTime != 0){
+			throw new RuntimeException("Calling setStampAndTime() after start/end times have been set");
+		}
+		stampAndTime(stamp, elapsed);
+	}
+
 	/**
 	 * Method to set the elapsed time for a sample. Retained for backward
 	 * compatibility with 3rd party add-ons.
      * It is assumed that the method is only called at the end of a sample
+     * and that timeStamps are end-times
 	 * 
      * Also used by SampleResultConverter when creating results from files.
      * 
@@ -278,13 +298,12 @@ public class SampleResult implements Serializable {
 	 *            time in milliseconds
 	 */
 	public void setTime(long elapsed) {
-        setElapsed(elapsed);
+		if (startTime != 0 || endTime != 0){
+			throw new RuntimeException("Calling setTime() after start/end times have been set");
+		}
+		long now = System.currentTimeMillis();
+	    setTimes(now - elapsed, now);
 	}
-
-    private void setElapsed(long elapsed) {
-        long now = System.currentTimeMillis();
-        setTimes(now - elapsed, now);
-    }
 
 	public void setMarked(String filename) {
 		if (files == null) {
@@ -386,7 +405,7 @@ public class SampleResult implements Serializable {
 			subResults = new ArrayList();
 		}
 		subResults.add(subResult);
-		setElapsed(getTime() + subResult.getTime());
+		setEndTime(subResult.getEndTime());// Extend the time to the end of the added sample
 		subResult.setParent(this);
 	}
 

@@ -48,6 +48,7 @@
 <li>Fix NPE in CounterConfig.java in Remote mode</li>
 <li>Bug 40791 - Calculator used by Summary Report</li>
 <li>Bug 40772 - correctly parse missing fields</li>
+<li>Bug 40773 - XML JTL not parsed correctly</li>
 </ul>
 
 <h3>Version 2.2</h3>
