@@ -348,8 +348,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		res.setResponseMessage(ConversionHelp.decode(reader.getAttribute(ATT_RESPONSE_MESSAGE)));
 		res.setSuccessful(Converter.getBoolean(reader.getAttribute(ATT_SUCCESS), true));
 		res.setThreadName(ConversionHelp.decode(reader.getAttribute(ATT_THREADNAME)));
-		res.setTime(Converter.getLong(reader.getAttribute(ATT_TIME)));
-		res.setTimeStamp(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)));
+		res.setStampAndTime(Converter.getLong(reader.getAttribute(ATT_TIME_STAMP)),
+				Converter.getLong(reader.getAttribute(ATT_TIME)));
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
         // ATT_GRP_THRDS and ATT_ALL_THRDS are write only
