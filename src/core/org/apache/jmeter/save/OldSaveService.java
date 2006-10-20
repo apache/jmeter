@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.avalon.framework.configuration.Configuration;
@@ -143,77 +142,83 @@ public final class OldSaveService {
 		SampleResult result = null;
 		long timeStamp = 0;
 		long elapsed = 0;
-		StringTokenizer splitter = new StringTokenizer(inputLine, _saveConfig.getDelimiter());
+		/*
+		 * Bug 40772: replaced StringTokenizer with String.split(), as the
+		 * former does not return empty tokens.
+		 */
+		// The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
+		String parts[]=inputLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
 		String text = null;
+		int i=0;
 
 		try {
 			if (saveConfig.printMilliseconds()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				timeStamp = Long.parseLong(text);
 			} else if (saveConfig.formatter() != null) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				Date stamp = saveConfig.formatter().parse(text);
 				timeStamp = stamp.getTime();
 			}
 
 			if (saveConfig.saveTime()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				elapsed = Long.parseLong(text);
 			}
 
 			result = new SampleResult(timeStamp, elapsed);
 
 			if (saveConfig.saveLabel()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				result.setSampleLabel(text);
 			}
 			if (saveConfig.saveCode()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				result.setResponseCode(text);
 			}
 
 			if (saveConfig.saveMessage()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				result.setResponseMessage(text);
 			}
 
 			if (saveConfig.saveThreadName()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				result.setThreadName(text);
 			}
 
 			if (saveConfig.saveDataType()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				result.setDataType(text);
 			}
 
 			if (saveConfig.saveSuccess()) {
-				text = splitter.nextToken();
+				text = parts[i++];
 				result.setSuccessful(Boolean.valueOf(text).booleanValue());
 			}
 
 			if (saveConfig.saveAssertionResultsFailureMessage()) {
-				text = splitter.nextToken();
+				text = parts[i++];
                 // TODO - should this be restored?
 			}
             
             if (saveConfig.saveBytes()) {
-                text = splitter.nextToken();
+                text = parts[i++];
                 result.setBytes(Integer.parseInt(text));
             }
         
             if (saveConfig.saveThreadCounts()) {
-                text = splitter.nextToken();
+                text = parts[i++];
                 // Not saved, as not part of a result
             }
 
             if (saveConfig.saveUrl()) {
-                text = splitter.nextToken();
+                text = parts[i++];
                 // TODO: should this be restored?
             }
         
             if (saveConfig.saveFileName()) {
-                text = splitter.nextToken();
+                text = parts[i++];
                 result.setResultFileName(text);
             }            
             
