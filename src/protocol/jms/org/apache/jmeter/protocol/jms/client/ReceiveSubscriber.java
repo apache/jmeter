@@ -112,6 +112,7 @@ public class ReceiveSubscriber implements Runnable {
 	 */
 	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
+			ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
 			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
