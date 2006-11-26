@@ -204,10 +204,11 @@ public class JMeter implements JMeterPlugin {
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
         String arg; 
 		if (testFile != null && (arg = testFile.getArgument()) != null) {
+            FileInputStream reader = null;
 			try {
                 File f = new File(arg);
 				log.info("Loading file: " + f);
-				FileInputStream reader = new FileInputStream(f);
+				reader = new FileInputStream(f);
 				HashTree tree = SaveService.loadTree(reader);
 
 				GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
@@ -219,7 +220,9 @@ public class JMeter implements JMeterPlugin {
 			} catch (Exception e) {
 				log.error("Failure loading test file", e);
 				JMeterUtils.reportErrorToUser(e.toString());
-			}
+			} finally {
+                JOrphanUtils.closeQuietly(reader);
+            }
 		}
 	}
 
