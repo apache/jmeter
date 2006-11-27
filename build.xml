@@ -119,6 +119,7 @@
               output="xml:withMessages"
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
+    	      jvmargs="-Xms512m -Xmx512m"
               outputFile="${findbugs.outName}.xml" >
       <class location="${dest.jar}/*.jar" />
       <class location="${dest.jar.jmeter}/*.jar" />
