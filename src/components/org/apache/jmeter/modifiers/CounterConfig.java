@@ -130,8 +130,16 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 		setProperty(END, end);
 	}
 
+    /**
+     * 
+     * @return counter upper limit (default Long.MAX_VALUE)
+     */
 	public long getEnd() {
-		return getPropertyAsLong(END);
+       long propertyAsLong = getPropertyAsLong(END);
+       if (propertyAsLong == 0 && "".equals(getProperty(END).getStringValue())) {
+          propertyAsLong = Long.MAX_VALUE;
+       }
+       return propertyAsLong;
 	}
 
 	public void setIncrement(long inc) {
