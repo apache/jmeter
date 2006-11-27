@@ -2793,7 +2793,9 @@ with the start, continuing on like that until the test is ended.  </p>
         number during the first iteration.</property>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
-        <property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
+        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the Start value.
+        Since version 2.2.1, the default is Long.MAX_VALUE (previously it was 0).
+        </property>
         <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
         This is passed to DecimalFormat, so any valid formats can be used.
         If there is a problem interpreting the format, then it is ignored.
