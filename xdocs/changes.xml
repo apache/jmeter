@@ -35,6 +35,7 @@
 <li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
 <li>Added beanshell.init.file property to run a BeanShell script at startup</li>
 <li>Added timeout for WebService (SOAP) Sampler</li>
+<li>Bug 40804 - Change Counter default to max = Long.MAX_VALUE</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -49,6 +50,8 @@
 <li>Bug 40791 - Calculator used by Summary Report</li>
 <li>Bug 40772 - correctly parse missing fields</li>
 <li>Bug 40773 - XML JTL not parsed correctly</li>
+<li>Bug 41029 - JMeter -t fails to close input JMX file</li>
+<li>Bug 40954 - Statistical mode in distributed testing shows wrong results</li>
 </ul>
 
 <h3>Version 2.2</h3>
