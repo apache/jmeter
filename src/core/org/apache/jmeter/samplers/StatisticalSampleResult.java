@@ -52,7 +52,11 @@ public class StatisticalSampleResult extends SampleResult implements
 		}
 
 		// Set start/end times
-		this.setStartTime(Math.min(getStartTime(), res.getStartTime()));
+        if (getStartTime()==0){ // Bug 40954 - ensure start time gets started!
+            this.setStartTime(res.getStartTime());
+        } else {
+		    this.setStartTime(Math.min(getStartTime(), res.getStartTime()));
+        }
 		this.setEndTime(Math.max(getEndTime(), res.getEndTime()));
 	}
 
