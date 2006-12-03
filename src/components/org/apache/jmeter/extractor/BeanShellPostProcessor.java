@@ -53,7 +53,7 @@ public class BeanShellPostProcessor extends AbstractTestElement implements PostP
 		try {
 			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
 		} catch (ClassNotFoundException e) {
-			log.error(e.getLocalizedMessage());
+			log.error("Cannot find BeanShell: "+e.getLocalizedMessage());
 		}
 	}
 
@@ -66,7 +66,7 @@ public class BeanShellPostProcessor extends AbstractTestElement implements PostP
         JMeterContext jmctx = JMeterContextService.getContext();
 
         SampleResult prev = jmctx.getPreviousResult();
-		if (prev == null) {
+		if (prev == null || bshInterpreter == null) {
 			return;
 		}
 
