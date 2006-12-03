@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class BeanShellPreProcessor extends AbstractTestElement implements PreProcessor, Serializable, TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 2;
+    private static final long serialVersionUID = 3;
 
     private String script;
     
@@ -54,7 +54,7 @@ public class BeanShellPreProcessor extends AbstractTestElement implements PrePro
 		try {
 			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
 		} catch (ClassNotFoundException e) {
-			log.error(e.getLocalizedMessage());
+			log.error("Cannot find BeanShell: "+e.getLocalizedMessage());
 		}
 	}
 
@@ -64,6 +64,9 @@ public class BeanShellPreProcessor extends AbstractTestElement implements PrePro
     }
 
     public void process(){
+        if (bshInterpreter == null) {
+            return;
+        }
         JMeterContext jmctx = JMeterContextService.getContext();
         JMeterVariables vars = jmctx.getVariables();
 		Sampler sam = jmctx.getCurrentSampler();
