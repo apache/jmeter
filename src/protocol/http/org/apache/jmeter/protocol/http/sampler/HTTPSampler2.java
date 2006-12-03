@@ -195,7 +195,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         }
         
         // Handle old-style JMeter properties
-        String ver=JMeterUtils.getProperty("httpclient.version"); // $NON-NLS-1$
+        // Default to HTTP version 1.1
+        String ver=JMeterUtils.getPropDefault("httpclient.version","1.1"); // $NON-NLS-1$ $NON-NLS-2$
         try {
             params.setParameter(HttpMethodParams.PROTOCOL_VERSION, HttpVersion.parse("HTTP/"+ver));
         } catch (ProtocolException e) {
