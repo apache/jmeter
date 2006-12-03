@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 public class BeanShellPostProcessor extends AbstractTestElement implements PostProcessor, Serializable, TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 2;
+    private static final long serialVersionUID = 3;
 
     private String script;
     
