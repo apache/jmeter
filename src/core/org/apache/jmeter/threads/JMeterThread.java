@@ -260,7 +260,9 @@ public class JMeterThread implements Runnable, Serializable {
 							if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
 								stopTest();
 							}
-						}
+						} else {
+                            compiler.done(pack); // Finish up
+                        }
 						if (scheduler) {
 							// checks the scheduler to stop the iteration
 							stopScheduler();
