@@ -66,7 +66,7 @@ public class BeanShellPostProcessor extends AbstractTestElement implements PostP
         JMeterContext jmctx = JMeterContextService.getContext();
 
         SampleResult prev = jmctx.getPreviousResult();
-		if (prev == null || prev.getResponseData().length == 0) {
+		if (prev == null) {
 			return;
 		}
 
