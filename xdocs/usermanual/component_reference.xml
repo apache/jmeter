@@ -2814,6 +2814,7 @@ with the start, continuing on like that until the test is ended.  </p>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 </p>
+<p>Since version 2.2.1, the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>

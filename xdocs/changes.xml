@@ -36,6 +36,7 @@
 <li>Added beanshell.init.file property to run a BeanShell script at startup</li>
 <li>Added timeout for WebService (SOAP) Sampler</li>
 <li>Bug 40804 - Change Counter default to max = Long.MAX_VALUE</li>
+<li>BeanShell Post-Processor no longer ignores samples with zero-length result data</li>
 </ul>
 
 <h4>Bug fixes:</h4>
