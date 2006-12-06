@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -664,11 +665,51 @@ public class HTTPSampler2 extends HTTPSamplerBase {
          String filename = getFilename();
          if ((filename != null) && (filename.trim().length() > 0))
          {
-             RequestEntity requestEntity = new InputStreamRequestEntity(
-                     new FileInputStream(filename),getMimetype());
+             RequestEntity requestEntity = 
+            	 new FileRequestEntity(new File(filename),getMimetype());
              put.setRequestEntity(requestEntity);
          }
      }
+
+	// Implement locally, as current implementation (3.1Beta) does not close file...
+	private class FileRequestEntity implements RequestEntity {
+
+	    final File file;
+	    final String contentType;
+	    
+	    public FileRequestEntity(final File file, final String contentType) {
+	        super();
+	        if (file == null) {
+	            throw new IllegalArgumentException("File may not be null");
+	        }
+	        this.file = file;
+	        this.contentType = contentType;
+	    }
+	    public long getContentLength() {
+	        return this.file.length();
+	    }
+
+	    public String getContentType() {
+	        return this.contentType;
+	    }
+
+	    public boolean isRepeatable() {
+	        return true;
+	    }
+
+	    public void writeRequest(OutputStream out) throws IOException {
+	        InputStream in = new FileInputStream(this.file);
+	        try {
+	            int l;
+	            byte[] buffer = new byte[1024];
+	            while ((l = in.read(buffer)) != -1) {
+	                out.write(buffer, 0, l);
+	            }
+	        } finally {
+	            in.close();
+	        }
+	    }
+	}
 
     /**
 	 * From the <code>HttpMethod</code>, store all the "set-cookie" key-pair
