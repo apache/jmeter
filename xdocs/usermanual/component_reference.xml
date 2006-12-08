@@ -207,7 +207,14 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 		Name of the JMeter variable that the connection pool is bound to.
 		This must agree with the 'Variable Name' field of a JDBC Connection Configuration.
 		</property>
-		<property name="Query Type" required="Yes">Set this according to the statement type</property>
+		<property name="Query Type" required="Yes">Set this according to the statement type:
+		    <ul>
+		    <li>Select Statement</li>
+		    <li>Update Statement - use this for Inserts as well</li>
+		    <li>Callable Statement</li>
+		    <li>Edit - this should be a variable reference that evaluates to one of the above</li>
+		    </ul>
+		</property>
         <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
 </properties>
 
@@ -1737,6 +1744,11 @@ failed responses from the server.</p></description>
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
 </p>
 </description>
 <properties>
@@ -2605,6 +2617,11 @@ points of the test plan.
 <p>
 The BeanShell Timer can be used to generate a delay.
 </p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -2815,6 +2832,11 @@ with the start, continuing on like that until the test is ended.  </p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 </p>
 <p>Since version 2.2.1, the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -2995,6 +3017,11 @@ This is mainly intended for batch (non-GUI) runs.
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
+</p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
 </description>
 <properties>
