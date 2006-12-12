@@ -242,7 +242,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	public synchronized void threadFinished(JMeterThread thread) {
 		try {
             allThreads.remove(thread);
-            log.info("Ending thread " + thread.getThreadNum());
+            log.info("Ending thread " + thread.getThreadName());
             if (!serialized && allThreads.size() == 0 && !schcdule_run) {
             	log.info("Stopping test");
             	stopTest();
