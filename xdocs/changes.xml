@@ -77,6 +77,7 @@ jmeterengine.startlistenerslater=false
 
 <h4>Known problems:</h4>
 <ul>
+<li>Post-processors run in reverse order (see bug 41140)</li>
 <li>Module Controller does not work in non-GUI mode</li>
 <li>Aggregate Report and some other listeners use increasing amounts of memory as a test progresses</li>
 <li>Does not always handle non-default encoding properly</li>
