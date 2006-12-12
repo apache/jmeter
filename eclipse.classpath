@@ -5,7 +5,7 @@
 	<classpathentry output="build/junit" kind="src" path="src/junit"/>
 	<classpathentry output="build/reports" kind="src" path="src/reports"/>
 	<classpathentry output="build/test" kind="src" path="test/src"/>
-	<classpathentry output="build/protocol/jms" kind="src" path="src/protocol/jms"/>
+	<classpathentry excluding="org/apache/jmeter/protocol/jms/" output="build/protocol/jms" kind="src" path="src/protocol/jms"/>
 	<classpathentry excluding="org/apache/jmeter/protocol/mail/" output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
 	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties" output="build/core" kind="src" path="src/core"/>
 	<classpathentry output="build/components" excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java" kind="src" path="src/components"/>
