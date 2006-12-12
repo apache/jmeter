@@ -6,11 +6,11 @@
 	<classpathentry output="build/reports" kind="src" path="src/reports"/>
 	<classpathentry output="build/test" kind="src" path="test/src"/>
 	<classpathentry output="build/protocol/jms" kind="src" path="src/protocol/jms"/>
-	<classpathentry output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
+	<classpathentry excluding="org/apache/jmeter/protocol/mail/" output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
 	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties" output="build/core" kind="src" path="src/core"/>
-	<classpathentry output="build/components" kind="src" path="src/components"/>
+	<classpathentry output="build/components" excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java" kind="src" path="src/components"/>
 	<classpathentry output="build/functions" kind="src" path="src/functions"/>
-	<classpathentry output="build/protocol/http" kind="src" path="src/protocol/http"/>
+	<classpathentry excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" output="build/protocol/http" kind="src" path="src/protocol/http"/>
 	<classpathentry output="build/protocol/ftp" kind="src" path="src/protocol/ftp"/>
 	<classpathentry output="build/protocol/jdbc" kind="src" path="src/protocol/jdbc"/>
 	<classpathentry output="build/protocol/java" kind="src" path="src/protocol/java"/>
@@ -35,7 +35,7 @@
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
@@ -44,5 +44,6 @@
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.3.0.jar"/>
+    <classpathentry kind="lib" path="lib/commons-jexl-1.0.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
