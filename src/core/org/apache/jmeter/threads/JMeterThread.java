@@ -38,6 +38,7 @@ import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.timers.Timer;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.apache.jorphan.collections.SearchByClass;
@@ -214,8 +215,11 @@ public class JMeterThread implements Runnable, Serializable {
 	 * See below for reason for this change. Just in case this causes problems,
 	 * allow the change to be backed out
 	 */
-	private static final boolean startEarlier = org.apache.jmeter.util.JMeterUtils.getPropDefault(
-			"jmeterthread.startearlier", true);
+	private static final boolean startEarlier = 
+        JMeterUtils.getPropDefault("jmeterthread.startearlier", true); // $NON-NLS-1$
+
+    private static final boolean reversePostProcessors = 
+        JMeterUtils.getPropDefault("jmeterthread.reversePostProcessors",false); // $NON-NLS-1$
 
 	static {
 		if (startEarlier) {
@@ -223,6 +227,11 @@ public class JMeterThread implements Runnable, Serializable {
 		} else {
 			log.info("jmeterthread.startearlier=false (see jmeter.properties)");
 		}
+        if (reversePostProcessors) {
+            log.info("Running PostProcessors in reverse order");
+        } else {
+            log.info("Running PostProcessors in forward order");            
+        }
 	}
 
 	public void run() {
@@ -424,11 +433,19 @@ public class JMeterThread implements Runnable, Serializable {
 
 	private void runPostProcessors(List extractors) {
 		ListIterator iter = extractors.listIterator(extractors.size());
-		while (iter.hasPrevious()) {
-			PostProcessor ex = (PostProcessor) iter.previous();
-			TestBeanHelper.prepare((TestElement) ex);
-			ex.process();
-		}
+        if (reversePostProcessors) {// Original (rather odd) behaviour
+    		while (iter.hasPrevious()) {
+    			PostProcessor ex = (PostProcessor) iter.previous();
+    			TestBeanHelper.prepare((TestElement) ex);
+    			ex.process();
+    		}
+        } else {
+            while (iter.hasNext()) {
+                PostProcessor ex = (PostProcessor) iter.next();
+                TestBeanHelper.prepare((TestElement) ex);
+                ex.process();
+            }            
+        }
 	}
 
 	private void delay(List timers) {
