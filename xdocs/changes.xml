@@ -28,7 +28,16 @@
 
 <h3>Version 2.2.1</h3>
 <h4>Known problems:</h4>
-<p>As for 2.2</p>
+<p>As for 2.2 except as noted below.</p>
+
+<h4>Incompatible changes:</h4>
+<p>
+Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
+(as they appear in the test plan) rather than reverse order as previously.
+The original behaviour can be restored by setting the following JMeter property:
+<br/>
+jmeterthread.reversePostProcessors=true
+</p>
 
 <h4>New functionality:</h4>
 <ul>
