@@ -1,4 +1,5 @@
 Which jars are used by which modules?
+====================================
 
 avalon-framework-4.1.4 (org.apache.avalon.framework)
 - LogKit (used by HttpClient ?)
@@ -35,7 +36,7 @@ excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
 - used by excalibur-datasource
 
-(htmlparser)
+htmlparser
 - http: parsing html
 
 jakarta-oro
@@ -52,7 +53,7 @@ jdom-b9
 
 (jorphan)
 
-js (Rhino) appears to be version 1.5R4 see http://www.mozilla.org/rhino/download.html
+js_rhino1_6R5
 - javascript function
 
 junit
