@@ -338,7 +338,7 @@
   <property name="xml-apis.jar" value="${lib.dir}/xml-apis.jar"/>
   
   <property name="jdom.jar" value="${lib.dir}/jdom-1.0.jar"/>
-  <property name="js.jar" value="${lib.dir}/js.jar"/>
+  <property name="js.jar" value="${lib.dir}/js_rhino1_6R5.jar"/>
   <property name="soap.jar" value="${lib.dir}/soap.jar"/>
   <property name="tidy.jar" value="${lib.dir}/Tidy.jar"/>
 
