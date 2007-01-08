@@ -205,6 +205,10 @@
 Third party license pointers
 ============================
 
+jCharts - see LICENSE(jCharts).txt
 JDOM - see CPL V1.0 at http://www.opensource.org/licenses/cpl.php
-JUnit - see lib/junit_license.html
-Mozilla Rhino JavaScript - see lib/js_jar_license(mozilla).html
+JTidy - see LICENSE(jtidy).html
+JUnit - see LICENSE(junit).html
+Mozilla Rhino JavaScript - see MPL 1.1 at http://www.mozilla.org/MPL/MPL-1.1.html
+XPP3 - see LICENSE(XPP3).txt
+XStream - see LICENSE(XStream).txt
