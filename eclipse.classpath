@@ -19,11 +19,12 @@
 	<classpathentry output="build/monitor/model" kind="src" path="src/monitor/model"/>
 	<classpathentry output="build/monitor/components" kind="src" path="src/monitor/components"/>
 	<classpathentry output="build/htmlparser" kind="src" path="src/htmlparser"/>
+	<classpathentry output="build/htmlparser16" kind="src" path="src/htmlparser16"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/js.jar"/>
+	<classpathentry kind="lib" path="lib/js_rhino1_6R5.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/Tidy.jar"/>
