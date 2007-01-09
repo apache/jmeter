@@ -927,7 +927,7 @@ some of its classes - at present JMeter can only run from jar files.
   	    
     <!-- HtmlParserHTMLParser16 -->
     <jar jarfile="${lib.dir}/htmlparserparser16.jar" manifest="MANIFEST">
-      <fileset dir="${build.htmlparser16}" includes="**/HtmlParserHTMLParser16.class"/>
+      <fileset dir="${build.htmlparser16}" includes="**/*.class"/>
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
@@ -1660,6 +1660,22 @@ some of its classes - at present JMeter can only run from jar files.
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
+  </target>
+
+  <target name="_test_htmlparser16" depends="check-libs" if="htmlparser16.present">
+    <junit printsummary="on" fork="yes" dir="${basedir}/bin">
+       <sysproperty key="htmlParser.className" value="org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser16"/>
+       <classpath>
+     	<fileset dir="${dest.jar}" includes="*.jar"/>
+         <pathelement location="${build.test}"/>
+     	<path refid="classpath"/>
+     	<fileset dir="${lib.opt}" includes="htmlparser1_6.jar"/>
+     	<fileset dir="${lib.dir}" includes="htmlparserparser16.jar"/>
+       </classpath>
+       <formatter type="plain" usefile="no"/>
+       <test name="org.apache.jmeter.protocol.http.parser.TestHTMLParser16"/>
+     </junit>
+  	<echo>Done!</echo>
   </target>
 
 <!--
