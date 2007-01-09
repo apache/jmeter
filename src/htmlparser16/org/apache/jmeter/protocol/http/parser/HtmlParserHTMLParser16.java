@@ -46,6 +46,9 @@ import org.htmlparser.util.ParserException;
 class HtmlParserHTMLParser16 extends HTMLParser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    static{
+    	org.htmlparser.scanners.ScriptScanner.STRICT = false; // Try to ensure that more javascript code is processed OK ...
+    }
 	protected HtmlParserHTMLParser16() {
 		super();
         log.info("Using htmlparser version 1.6");
