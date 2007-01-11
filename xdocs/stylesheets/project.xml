@@ -19,7 +19,7 @@
 
 	 <title>JMeter</title>
 	 <!---->
-	 <logo href="/images/logo.jpg">JMeter</logo>
+	 <logo width="221" height="102" href="/images/logo.jpg">JMeter</logo>
 	 <!---->
 	 <body>
 	 <menu name="About">
