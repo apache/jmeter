@@ -127,7 +127,7 @@ public class Proxy extends Thread {
 			 * If we're dealing with text data, and if we're spoofing https, 
 			 * replace all occurences of "https" with "http" for the client. 
 			 */
-			if (httpsSpoof && result.getDataType() == result.TEXT)
+			if (httpsSpoof && SampleResult.TEXT.equals(result.getDataType()))
 			{
 				String noHttpsResult = new String(result.getResponseData());
 				result.setResponseData(noHttpsResult.replaceAll("https", "http").getBytes());
