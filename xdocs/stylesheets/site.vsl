@@ -271,6 +271,14 @@
 #macro ( component $component)
 	#set ($screenshot = "")
 	#set ($screenshot = $component.getAttributeValue('screenshot') )
+	#set ($width = "")
+	#set ($width = $component.getAttributeValue('width') )
+	#set ($height = "")
+	#set ($height = $component.getAttributeValue('height') )
+	#set ($dim= "")
+	#if  ($width != "")
+	    #set ($dim = "width=\"$width\" height=\"$height\"")
+	#end
 	<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
@@ -286,7 +294,7 @@
 					#runloop($c_items)
 					#if ($screenshot != "")						
 						<p><b>Control Panel</b></p>
-						<div align="center"><img src="$sshotdir/$screenshot"></div>
+						<div align="center"><img $dim src="$sshotdir/$screenshot"></div>
 					#end
 				#else
 					 #unknown($c_items)
@@ -372,19 +380,21 @@
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
-<a href="http://jakarta.apache.org"><img src="$relativePath/images/jakarta-logo.gif" border="0"/></a>
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="$relativePath/images/jakarta-logo.gif" border="0"/></a>
 </td>
 <td align="right">
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
+#set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
+#set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
 #if ( $logoString.startsWith("/") )
-<a href="$project.getAttributeValue("href")"><img src="$relativePath$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+<a href="$project.getAttributeValue("href")"><img width="$logoWidth" height="$logoHeight" src="$relativePath$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #else
-<a href="$project.getAttributeValue("href")"><img src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" border="0"/></a>
+<a href="$project.getAttributeValue("href")"><img  width="$logoWidth" height="$logoHeight" src="$relativePath/$logoString" alt="$project.getChild("logo").getText()" title="$project.getChild("logo").getText()" border="0"/></a>
 #end
 </td>
 #else
 <td colspan="2">
-<a href="http://jakarta.apache.org"><img src="$relativePath/images/jakarta-logo.gif" align="left" border="0"/></a>
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="$relativePath/images/jakarta-logo.gif" align="left" border="0"/></a>
 </td>
 #end
 #end
