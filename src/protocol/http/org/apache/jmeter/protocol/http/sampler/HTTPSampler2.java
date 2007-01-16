@@ -50,7 +50,6 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
-import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
@@ -661,7 +660,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      * Set up the PUT data (if present)
      */
 	private void setPutHeaders(PutMethod put) 
-         throws IOException
      {
          String filename = getFilename();
          if ((filename != null) && (filename.trim().length() > 0))
