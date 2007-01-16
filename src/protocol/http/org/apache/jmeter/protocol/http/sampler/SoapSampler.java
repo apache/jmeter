@@ -117,7 +117,7 @@ public class SoapSampler extends HTTPSampler2 {
 		setProperty(SEND_SOAP_ACTION, String.valueOf(action));
 	}
 
-    protected void setPostHeaders(PostMethod post) throws IOException {
+    protected void setPostHeaders(PostMethod post) {
         if (getHeaderManager() != null) {
             // headerManager was set, so let's set the connection
             // to use it.
@@ -143,7 +143,7 @@ public class SoapSampler extends HTTPSampler2 {
      * @param post
      * @throws IOException if an I/O exception occurs
      */
-    protected void sendPostData(PostMethod post) throws IOException {
+    protected void sendPostData(PostMethod post) {
         final String xmlFile = getXmlFile();
         if (xmlFile != null && getXmlFile().length() > 0) {
             post.setRequestEntity(new RequestEntity() {
