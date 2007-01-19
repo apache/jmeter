@@ -199,7 +199,7 @@ public final class OldSaveService {
 			}
 
 			if (saveConfig.saveAssertionResultsFailureMessage()) {
-				text = parts[i++];
+				i++;
                 // TODO - should this be restored?
 			}
             
@@ -209,12 +209,12 @@ public final class OldSaveService {
             }
         
             if (saveConfig.saveThreadCounts()) {
-                text = parts[i++];
+                i+=2;// two counts
                 // Not saved, as not part of a result
             }
 
             if (saveConfig.saveUrl()) {
-                text = parts[i++];
+                i++;
                 // TODO: should this be restored?
             }
         
