@@ -98,6 +98,8 @@ public final class OldSaveService {
     private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
     private static final String CSV_URL = "URL"; // $NON-NLS-1$
     private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
+    private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
+    private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
     
     // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
@@ -222,6 +224,16 @@ public final class OldSaveService {
                 text = parts[i++];
                 result.setResultFileName(text);
             }            
+            if (saveConfig.saveLatency()) {
+                text = parts[i++];
+                result.setLatency(Long.parseLong(text));
+            }
+
+            if (saveConfig.saveEncoding()) {
+                text = parts[i++];
+                result.setEncodingAndType(text);
+            }
+
             
 		} catch (NumberFormatException e) {
 			log.warn("Error parsing number " + e);
@@ -315,6 +327,16 @@ public final class OldSaveService {
 
         if (saveConfig.saveFileName()) {
             text.append(CSV_FILENAME);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveLatency()) {
+            text.append(CSV_LATENCY);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveEncoding()) {
+            text.append(CSV_ENCODING);
             text.append(delim);
         }
 
@@ -461,6 +483,16 @@ public final class OldSaveService {
             text.append(delimiter);
         }
     
+        if (saveConfig.saveLatency()) {
+            text.append(sample.getLatency());
+            text.append(delimiter);
+        }
+
+        if (saveConfig.saveEncoding()) {
+            text.append(sample.getDataEncoding());
+            text.append(delimiter);
+        }
+
     	String resultString = null;
     	int size = text.length();
     	int delSize = delimiter.length();

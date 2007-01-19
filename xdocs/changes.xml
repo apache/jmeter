@@ -64,6 +64,7 @@ jmeterthread.reversePostProcessors=true
 <li>Bug 41029 - JMeter -t fails to close input JMX file</li>
 <li>Bug 40954 - Statistical mode in distributed testing shows wrong results</li>
 <li>Fix ClassCast Exception when using sampler that returns null, e..g TestAction</li>
+<li>Bug 41277 - add Latency and Encoding to CSV output</li>
 </ul>
 
 <h3>Version 2.2</h3>
