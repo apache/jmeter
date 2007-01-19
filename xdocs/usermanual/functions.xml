@@ -399,6 +399,12 @@ the comma after 7 is escaped.</note>
 	the array, so each thread will access a different row from all other threads.
 	[Unless there are more threads than there are rows in the array.]
 	</p>
+	<p>
+	Note: the function splits the line at every comma by default.
+	If you want to enter columns containing commas, then you will need
+	to change the delimiter to a character that does not appear in any
+	column data, by setting the property: csvread.delimiter
+	</p>
 </description>
 
 <properties>
