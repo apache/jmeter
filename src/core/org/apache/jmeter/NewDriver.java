@@ -47,15 +47,22 @@ public final class NewDriver {
 
 		// Find JMeter home dir
 		StringTokenizer tok = new StringTokenizer(cp, File.pathSeparator);
-		if (tok.countTokens() == 1) {
+		if (tok.countTokens() == 1 
+				|| (tok.countTokens()  == 2 
+				    && System.getProperty("os.name").toLowerCase().startsWith("mac os x")
+				   )
+		   ) {
 			File jar = new File(tok.nextToken());
 			try {
 				jmDir = jar.getCanonicalFile().getParentFile().getParent();
 			} catch (IOException e) {
 			}
-		} else {
-			File userDir = new File(System.getProperty("user.dir"));
-			jmDir = userDir.getAbsoluteFile().getParent();
+		} else {// e.g. started from IDE with full classpath
+			jmDir = System.getProperty("jmeter.home","");// Allow override
+			if (jmDir.length() == 0) {
+				File userDir = new File(System.getProperty("user.dir"));
+				jmDir = userDir.getAbsoluteFile().getParent();
+			}
 		}
 
 		/*
