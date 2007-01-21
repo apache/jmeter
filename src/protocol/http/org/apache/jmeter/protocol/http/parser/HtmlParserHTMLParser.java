@@ -143,7 +143,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 					InputTag input = (InputTag) node;
 					// we check the input tag type for image
 					String strType = input.getAttribute(ATT_TYPE);
-					if (strType != null && strType.equalsIgnoreCase(ATT_IS_IMAGE)) {
+					if (ATT_IS_IMAGE.equalsIgnoreCase(strType)) {
 						// then we need to download the binary
 						binUrlStr = input.getAttribute(ATT_SRC);
 					}
@@ -161,7 +161,7 @@ class HtmlParserHTMLParser extends HTMLParser {
 					binUrlStr = tag.getAttribute(ATT_SRC);
 				} else if (node instanceof LinkTagTag) {
 					LinkTagTag script = (LinkTagTag) node;
-					if (script.getAttribute(ATT_REL).equalsIgnoreCase(STYLESHEET)) {
+					if (STYLESHEET.equalsIgnoreCase(script.getAttribute(ATT_REL))) {
 						binUrlStr = script.getAttribute(ATT_HREF);
 					}
 				} else if (node instanceof FrameTag) {

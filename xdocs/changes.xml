@@ -69,6 +69,7 @@ jmeterthread.reversePostProcessors=true
 <li>Bug 41277 - add Latency and Encoding to CSV output</li>
 <li>Bug 41414 - Mac OS X may add extra item to -jar classpath</li>
 <li>Fix NPE when saving thread counts in remote testing</li>
+<li>Bug 34261 - NPE in HtmlParser (allow for missing attributes)</li>
 </ul>
 
 <h3>Version 2.2</h3>
