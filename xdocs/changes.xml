@@ -29,7 +29,8 @@
 
 <h3>Version 2.2.1</h3>
 <h4>Known problems:</h4>
-<p>As for 2.2 except as noted below.</p>
+<p>Thread active counts are always zero in CSV and XML files when running remote tests.
+</p>
 
 <h4>Incompatible changes:</h4>
 <p>
@@ -67,6 +68,7 @@ jmeterthread.reversePostProcessors=true
 <li>Fix ClassCast Exception when using sampler that returns null, e..g TestAction</li>
 <li>Bug 41277 - add Latency and Encoding to CSV output</li>
 <li>Bug 41414 - Mac OS X may add extra item to -jar classpath</li>
+<li>Fix NPE when saving thread counts in remote testing</li>
 </ul>
 
 <h3>Version 2.2</h3>
