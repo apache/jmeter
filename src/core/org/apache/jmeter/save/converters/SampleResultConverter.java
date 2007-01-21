@@ -252,8 +252,14 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		if (save.saveBytes())
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
         if (save.saveThreadCounts()){// These cannot be restored
+        	org.apache.jmeter.threads.ThreadGroup 
+        	threadGroup=JMeterContextService.getContext().getThreadGroup();
+        	int numThreads =0;
+        	if (threadGroup != null) { // can be null for remote testing
+        	    numThreads = threadGroup.getNumberOfThreads();
+        	}
             writer.addAttribute(ATT_GRP_THRDS,
-                    String.valueOf(JMeterContextService.getContext().getThreadGroup().getNumberOfThreads()));
+                    String.valueOf(numThreads));
             writer.addAttribute(ATT_ALL_THRDS,
                     String.valueOf(JMeterContextService.getNumberOfThreads()));
         }
