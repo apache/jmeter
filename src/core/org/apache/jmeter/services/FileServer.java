@@ -192,7 +192,13 @@ public class FileServer {
     private void closeFile(String name, FileEntry fileEntry) throws IOException {
         if (fileEntry != null && fileEntry.inputOutputObject != null) {
             log.info("Close: "+name);
-			((Reader) fileEntry.inputOutputObject).close();
+            if (fileEntry.inputOutputObject instanceof Reader) {
+                ((Reader) fileEntry.inputOutputObject).close();
+            } else if (fileEntry.inputOutputObject instanceof Writer) {
+                ((Writer) fileEntry.inputOutputObject).close();
+            } else { 
+                log.error("Unknown inputOutputObject type : " + fileEntry.inputOutputObject.getClass());
+            }
 			fileEntry.inputOutputObject = null;
 		}
     }
