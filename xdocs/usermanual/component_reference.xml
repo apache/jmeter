@@ -897,16 +897,16 @@ TBC
 The current implementation supports standard Junit convention and extensions. It also
 includes extensions like oneTimeSetUp and oneTimeTea Down. The sampler works like the
 JavaSampler with some differences.
-1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
-2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
-3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
-4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
-5. Each time the test method is called, Jmeter will pass the result to the listeners.
-6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
-7. The sampler reports unexpected exceptions as errors.
+<br></br>1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
+<br></br>2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
+<br></br>3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
+<br></br>4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
+<br></br>5. Each time the test method is called, Jmeter will pass the result to the listeners.
+<br></br>6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
+<br></br>7. The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
-creates 1 instance per sampler and reuses it.&lt;br>
+creates 1 instance per sampler and reuses it.<br></br>
 The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:&lt;br>
 &lt;br>
 Empty Constructor:&lt;br>
@@ -921,8 +921,9 @@ public class myTestCase {&lt;br>
   }&lt;br>
 }&lt;br>
 By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.&lt;br>
-General Guidelines&lt;br>
-&lt;br>
+General Guidelines<br></br>
+If you use setUp and tearDown, make sure the methods are declared public. If you do not, the test may not run properly.
+<br></br>
 Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.&lt;br>
 &lt;br>
 1. Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.&lt;br>
