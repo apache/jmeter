@@ -433,14 +433,16 @@ public class JMeterThread implements Runnable, Serializable {
 	}
 
 	private void runPostProcessors(List extractors) {
-		ListIterator iter = extractors.listIterator(extractors.size());
+		ListIterator iter;
         if (reversePostProcessors) {// Original (rather odd) behaviour
+        	iter = extractors.listIterator(extractors.size());// start at the end
     		while (iter.hasPrevious()) {
     			PostProcessor ex = (PostProcessor) iter.previous();
     			TestBeanHelper.prepare((TestElement) ex);
     			ex.process();
     		}
         } else {
+        	iter = extractors.listIterator(); // start at the beginning
             while (iter.hasNext()) {
                 PostProcessor ex = (PostProcessor) iter.next();
                 TestBeanHelper.prepare((TestElement) ex);
