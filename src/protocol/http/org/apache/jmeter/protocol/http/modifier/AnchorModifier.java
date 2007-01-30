@@ -85,15 +85,11 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		} catch (UnsupportedEncodingException e) {
 		}
 		Document html;
-		try {
-			int index = responseText.indexOf("<");
-			if (index == -1) {
-				index = 0;
-			}
-			html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
-		} catch (SAXException e) {
-			return;
+		int index = responseText.indexOf("<");
+		if (index == -1) {
+			index = 0;
 		}
+		html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
 		addAnchorUrls(html, result, sampler, potentialLinks);
 		addFormUrls(html, result, sampler, potentialLinks);
 		addFramesetUrls(html, result, sampler, potentialLinks);
@@ -154,13 +150,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		Iterator iter = urls.iterator();
 		while (iter.hasNext()) {
 			HTTPSamplerBase newUrl = (HTTPSamplerBase) iter.next();
-			try {
-				newUrl.setMethod(HTTPSamplerBase.POST);
-				if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
-					potentialLinks.add(newUrl);
-				}
-			} catch (org.apache.oro.text.regex.MalformedPatternException e) {
-				log.error("Bad pattern", e);
+			newUrl.setMethod(HTTPSamplerBase.POST);
+			if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
+				potentialLinks.add(newUrl);
 			}
 		}
 	}
@@ -189,8 +181,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 					potentialLinks.add(newUrl);
 				}
 			} catch (MalformedURLException e) {
-			} catch (org.apache.oro.text.regex.MalformedPatternException e) {
-				log.error("Bad pattern", e);
+	            log.warn("Bad URL "+e);
 			}
 		}
 	}
@@ -222,8 +213,6 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
                }
            } catch (MalformedURLException e) {
                log.warn("Bad URL "+e);
-           } catch (org.apache.oro.text.regex.MalformedPatternException e) {
-               log.error("Bad pattern", e);
            }
        }
    }
