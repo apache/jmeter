@@ -32,8 +32,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.jorphan.util.JOrphanUtils;
-
 /**
  * @author mike
  * TODO does not appear to be used anywhere (except by the test class)
@@ -261,8 +259,7 @@ public class ConfigurationTree implements Serializable, Cloneable {
 
 	protected String[] getPath(String key) {
 		if (key != null) {
-            //JDK 1.4 String[] keys = key.split("/");
-			String[] keys = JOrphanUtils.split(key,"/");
+			String[] keys = key.split("/"); // $NON-NLS-1$
 			return keys;
 		}
 		return new String[0];
@@ -451,8 +448,7 @@ public class ConfigurationTree implements Serializable, Cloneable {
 	 * @return
 	 */
 	public String remove(String key) {
-		//JDK 1.4 String[] keys = key.split("/");
-        String[] keys = JOrphanUtils.split(key,"/");
+        String[] keys = key.split("/");
 		String prop = null;
 		HashTree tree = propTree;
 		for (int i = 0; i < keys.length && tree != null; i++) {

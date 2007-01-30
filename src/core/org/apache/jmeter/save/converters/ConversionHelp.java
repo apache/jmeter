@@ -22,6 +22,8 @@
 package org.apache.jmeter.save.converters;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +81,7 @@ public class ConversionHelp {
 			return "";
 		}
 		try {
-			String p1 = JOrphanUtils.encode(p, CHAR_SET);
+			String p1 = URLEncoder.encode(p, CHAR_SET);
 			return p1;
 		} catch (UnsupportedEncodingException e) {
 			log.warn("System doesn't support " + CHAR_SET, e);
@@ -95,7 +97,7 @@ public class ConversionHelp {
 			return null;
 		}
 		try {
-			return JOrphanUtils.decode(p, CHAR_SET);
+			return URLDecoder.decode(p, CHAR_SET);
 		} catch (UnsupportedEncodingException e) {
 			log.warn("System doesn't support " + CHAR_SET, e);
 			return p;
