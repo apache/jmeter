@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Modifier;
@@ -283,13 +284,10 @@ public final class ActionRouter implements ActionListener {
                     }
                 }
 			}
+		} catch (HeadlessException e){
+			log.warn(e.toString());
 		} catch (Exception e) {
-			if ("java.awt.HeadlessException".equals(e.getClass().getName())) // JDK1.4:
-			{
-				log.warn(e.toString());
-			} else {
-				log.error("exception finding action handlers", e);
-			}
+			log.error("exception finding action handlers", e);
 		}
 	}
 

@@ -58,7 +58,7 @@ public class Converter {
 		} else if (toType.equals(long.class) || toType.equals(Long.class)) {
 			return new Long(getLong(value));
 		} else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-			return  JOrphanUtils.valueOf(getBoolean(value));//JDK1.4 was Boolean.valueOf()
+			return  Boolean.valueOf(getBoolean(value));
 		} else if (toType.equals(java.util.Date.class)) {
 			return getDate(value);
 		} else if (toType.equals(Calendar.class)) {
