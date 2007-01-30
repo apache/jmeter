@@ -243,6 +243,9 @@ public final class JOrphanUtils {
 	 * @param value
 	 *            boolean to convert
 	 * @return Boolean.TRUE or Boolean.FALSE
+	 * 
+	 * @deprecated use Boolean.valueOf(boolean)
+	 * 
 	 */
 	public static Boolean valueOf(boolean value) {
 		return value ? Boolean.TRUE : Boolean.FALSE;
@@ -274,6 +277,9 @@ public final class JOrphanUtils {
 	 * @param encoding
 	 *            (ignored for JDK1.3)
 	 * @return the encoded string
+	 * 
+	 * @deprecated Use URLEncoder.encode(string, encoding)
+	 * 
 	 */
 	public static String encode(String string, String encoding) throws UnsupportedEncodingException {
 		if (encodeMethod != null) {
@@ -300,6 +306,9 @@ public final class JOrphanUtils {
 	 * @param encoding
 	 *            (ignored for JDK1.3)
 	 * @return the encoded string
+	 * 
+	 * @deprecated Use URLDencoder.decode(string, encoding)
+	 * 
 	 */
 	public static String decode(String string, String encoding) throws UnsupportedEncodingException {
 		if (decodeMethod != null) {
