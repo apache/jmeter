@@ -154,7 +154,7 @@ class RegexpHTMLParser extends HTMLParser {
 		} catch (MalformedPatternException mpe) {
 			log.error("Internal error compiling regular expression in ParseRegexp.");
 			log.error("MalformedPatternException - " + mpe);
-			throw new Error(mpe.toString());// JDK1.4: remove .toString()
+			throw new Error(mpe);
 		}
 	}
 
