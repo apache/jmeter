@@ -22,19 +22,17 @@ import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.config.Argument;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
-import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.w3c.dom.Document;
@@ -42,7 +40,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-import org.xml.sax.SAXException;
 
 // For Junit tests @see TestHtmlParsingUtils
 
@@ -72,14 +69,14 @@ public final class HtmlParsingUtils {
 	}
 
 	public static synchronized boolean isAnchorMatched(HTTPSamplerBase newLink, HTTPSamplerBase config)
-			throws MalformedPatternException {
+	{
 		boolean ok = true;
 		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
 		PropertyIterator iter = config.getArguments().iterator();
 
 		String query = null;
 		try {
-			query = JOrphanUtils.decode(newLink.getQueryString(), "UTF-8");
+			query = URLDecoder.decode(newLink.getQueryString(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// UTF-8 unsupported? You must be joking!
 			log.error("UTF-8 encoding not supported!");
@@ -125,8 +122,7 @@ public final class HtmlParsingUtils {
 		return ok;
 	}
 
-	public static synchronized boolean isArgumentMatched(Argument arg, Argument patternArg)
-			throws MalformedPatternException {
+	public static synchronized boolean isArgumentMatched(Argument arg, Argument patternArg) {
 		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
 		return (arg.getName().equals(patternArg.getName()) || matcher.matches(arg.getName(), patternCache.getPattern(
 				patternArg.getName(), Perl5Compiler.READ_ONLY_MASK)))
@@ -162,11 +158,11 @@ public final class HtmlParsingUtils {
 	 *            an xml document
 	 * @return a node representing a whole xml
 	 */
-	public static Node getDOM(String text) throws SAXException {
+	public static Node getDOM(String text) {
 		log.debug("Start : getDOM1");
 
 		try {
-			Node node = getParser().parseDOM(new ByteArrayInputStream(text.getBytes("UTF-8")), null);
+			Node node = getParser().parseDOM(new ByteArrayInputStream(text.getBytes("UTF-8")), null);// $NON-NLS-1$
 
 			if (log.isDebugEnabled()) {
 				log.debug("node : " + node);
