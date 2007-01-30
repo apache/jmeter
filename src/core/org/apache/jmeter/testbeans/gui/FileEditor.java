@@ -69,7 +69,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
 		// Create a panel containing the combo and the button:
 		panel = new JPanel(new BorderLayout(5, 0));
 		panel.add(editor.getCustomEditor(), BorderLayout.CENTER);
-		panel.add(button, BorderLayout.EAST);// JDK1.4: was LINE_END
+		panel.add(button, BorderLayout.EAST);
 	}
 
 	/*
