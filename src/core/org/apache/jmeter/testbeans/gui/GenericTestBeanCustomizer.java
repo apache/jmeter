@@ -367,15 +367,15 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 * @return the index of that property in the descriptors array, or -1 if
 	 *         there's no property of this name.
 	 */
-	private int descriptorIndex(String name) // NOTUSED
-	{
-		for (int i = 0; i < descriptors.length; i++) {
-			if (descriptors[i].getName().equals(name)) {
-				return i;
-			}
-		}
-		return -1;
-	}
+//	private int descriptorIndex(String name) // NOTUSED
+//	{
+//		for (int i = 0; i < descriptors.length; i++) {
+//			if (descriptors[i].getName().equals(name)) {
+//				return i;
+//			}
+//		}
+//		return -1;
+//	}
 
 	/**
 	 * Initialize the GUI.
@@ -385,7 +385,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
 		GridBagConstraints cl = new GridBagConstraints(); // for labels
 		cl.gridx = 0;
-		cl.anchor = GridBagConstraints.EAST;// JDK1.4: was LINE_END
+		cl.anchor = GridBagConstraints.EAST;
 		cl.insets = new Insets(0, 1, 0, 1);
 
 		GridBagConstraints ce = new GridBagConstraints(); // for editors
@@ -442,9 +442,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
 			cl.gridy = y;
 			cl.gridwidth = multiLineEditor ? 2 : 1;
-			cl.anchor = multiLineEditor ? GridBagConstraints.CENTER : GridBagConstraints.EAST;// JDK1.4:
-																								// was
-																								// LINE_END
+			cl.anchor = multiLineEditor ? GridBagConstraints.CENTER : GridBagConstraints.EAST;
 			currentPanel.add(label, cl);
 
 			ce.gridx = multiLineEditor ? 0 : 1;
