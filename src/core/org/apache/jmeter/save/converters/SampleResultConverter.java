@@ -30,8 +30,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.Converter;
-import org.apache.jorphan.util.JOrphanUtils;
-
 import com.thoughtworks.xstream.alias.ClassMapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -235,8 +233,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute(ATT_TIME_STAMP, Long.toString(res.getTimeStamp()));
 		if (save.saveSuccess())
 			writer.addAttribute(ATT_SUCCESS,
-					JOrphanUtils.booleanToString(res.isSuccessful()));
-                  // JDK1.4 Boolean.toString(res.isSuccessful()));
+					Boolean.toString(res.isSuccessful()));
 		if (save.saveLabel())
 			writer.addAttribute(ATT_LABEL, ConversionHelp.encode(res.getSampleLabel()));
 		if (save.saveCode())

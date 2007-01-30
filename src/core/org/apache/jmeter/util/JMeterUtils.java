@@ -19,6 +19,7 @@
 package org.apache.jmeter.util;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -194,8 +195,7 @@ public class JMeterUtils implements UnitTestManager {
 		String[] result = new String[1];
 
 		if (p != null) {
-			String[] paths = JOrphanUtils.split(p, ";");// was p.split(";") - // $NON-NLS-1$
-														// JDK1.4
+			String[] paths = p.split(";"); // $NON-NLS-1$
 			result = new String[paths.length + 1];
 			for (int i = 1; i < result.length; i++) {
 				result[i] = paths[i - 1];
@@ -876,15 +876,8 @@ public class JMeterUtils implements UnitTestManager {
 		try {
 			JOptionPane.showMessageDialog(instance.getMainFrame(), errorMsg, "Error",
 					JOptionPane.ERROR_MESSAGE);
-		} catch (RuntimeException e) {
-			if (e.getClass().getName().equals("java.awt.HeadlessException")) // JDK1.4: // $NON-NLS-1$
-			{
-				// System.out.println(errorMsg+"[HeadlessException]");
-				// throw e;
+		} catch (HeadlessException e) {
 				log.warn("reportErrorToUser(\"" + errorMsg + "\") caused", e);
-			} else {
-				throw e;
-			}
 		}
 	}
 
