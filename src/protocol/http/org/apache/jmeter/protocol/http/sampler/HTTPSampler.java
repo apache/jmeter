@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -217,25 +218,22 @@ public class HTTPSampler extends HTTPSamplerBase {
 				in = new BufferedInputStream(conn.getInputStream());
 			}
 		} catch (IOException e) {
-			// TODO JDK1.4: if (!e.getCause() instanceof FileNotFoundException)
-			// JDK1.4: {
-            // TODO: what about other 4xx errors? Do we need to log them?
-			if (conn.getResponseCode() != 404) // for JDK1.3
+			if (! (e.getCause() instanceof FileNotFoundException))
 			{
 				log.error("readResponse: "+e.toString());
-				// JDK1.4: Throwable cause = e.getCause();
-				// JDK1.4: if (cause != null){
-				// JDK1.4: log.error("Cause: "+cause);
-				// JDK1.4: }
+				Throwable cause = e.getCause();
+				if (cause != null){
+				    log.error("Cause: "+cause);
+				}
 			}
 			// Normal InputStream is not available
 			in = new BufferedInputStream(conn.getErrorStream());
 		} catch (Exception e) {
 			log.error("readResponse: "+e.toString());
-			// JDK1.4: Throwable cause = e.getCause();
-			// JDK1.4: if (cause != null){
-			// JDK1.4: log.error("Cause: "+cause);
-			// JDK1.4: }
+			Throwable cause = e.getCause();
+			if (cause != null){
+			    log.error("Cause: "+cause);
+			}
 			in = new BufferedInputStream(conn.getErrorStream());
 		}
 		java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
