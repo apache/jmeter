@@ -75,11 +75,15 @@ public interface TestElement extends Cloneable {
 	 */
 	public boolean getPropertyAsBoolean(String key);
 
+	public boolean getPropertyAsBoolean(String key, boolean defaultValue);
+
 	public long getPropertyAsLong(String key);
 
 	public int getPropertyAsInt(String key);
 
 	public float getPropertyAsFloat(String key);
+	
+	public double getPropertyAsDouble(String key);
 
 	/**
 	 * Make the test element the running version, or make it no longer the
@@ -103,6 +107,8 @@ public interface TestElement extends Cloneable {
 	public void clear();
 
 	public String getPropertyAsString(String key);
+
+	public String getPropertyAsString(String key, String defaultValue);
 
 	/**
 	 * Sets and overwrites a property in the TestElement. This call will be
@@ -174,4 +180,8 @@ public interface TestElement extends Cloneable {
 	 * @return true if safe to remove the element
 	 */
 	public boolean canRemove();
+	
+	public String getName();
+	
+	public void setName(String name);
 }
