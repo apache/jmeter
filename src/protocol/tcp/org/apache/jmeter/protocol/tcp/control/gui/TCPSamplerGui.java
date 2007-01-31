@@ -61,8 +61,8 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 	 */
 	public void modifyTestElement(TestElement sampler) {
 		sampler.clear();
-		((TCPSampler) sampler).addTestElement(TcpDefaultPanel.createTestElement());
-		((TCPSampler) sampler).addTestElement(loginPanel.createTestElement());
+        sampler.addTestElement(TcpDefaultPanel.createTestElement());
+		sampler.addTestElement(loginPanel.createTestElement());
 		this.configureTestElement(sampler);
 	}
 
