@@ -60,6 +60,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 	public final static String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
+	public final static String RE_USE_CONNECTION = "TCPSampler.reUseConnection"; //$NON-NLS-1$
+
 	private final static String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
 
 	private final static String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
@@ -121,10 +123,13 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 	private Socket getSocket() {
 		Map cp = (Map) tp.get();
-		Socket con = (Socket) cp.get(TCPKEY);
-		if (con != null) {
-			log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
-			return con;
+		Socket con = null;
+		if (isReUseConnection()) {
+			con = (Socket) cp.get(TCPKEY);
+			if (con != null) {
+				log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
+				return con;
+			}
 		}
 
 		// Not in cache, so create new one and cache it
@@ -160,6 +165,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 	public String getServer() {
 		return getPropertyAsString(SERVER);
+	}
+
+	public void setReUseConnection(String newServer) {
+		this.setProperty(RE_USE_CONNECTION, newServer);
+	}
+
+	public boolean isReUseConnection() {
+		return getPropertyAsBoolean(RE_USE_CONNECTION);
 	}
 
 	public void setPort(String newFilename) {
@@ -306,14 +319,17 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     
     		// Set if we were successful or not
     		res.setSuccessful(isSuccessful);
+
+			if (!isReUseConnection()) {
+				closeSocket();
+			}
         }
 
 		return res;
 	}
 
-    /**
-	 * @param rc
-	 *            response code
+	/**
+	 * @param rc response code
 	 * @return whether this represents success or not
 	 */
 	private boolean checkResponseCode(String rc) {
