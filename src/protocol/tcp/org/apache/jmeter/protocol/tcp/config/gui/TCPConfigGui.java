@@ -39,7 +39,9 @@ import org.apache.jorphan.util.JOrphanUtils;
 public class TCPConfigGui extends AbstractConfigGui {
 	private final static String SERVER = "server"; //$NON-NLS-1$
 
-	private final static String PORT = "port"; //$NON-NLS-1$   
+	private final static String RE_USE_CONNECTION = "reUseConnection"; //$NON-NLS-1$
+
+	private final static String PORT = "port"; //$NON-NLS-1$
 
 	// NOTUSED yet private final static String FILENAME = "filename";
 	// //$NON-NLS-1$
@@ -50,6 +52,8 @@ public class TCPConfigGui extends AbstractConfigGui {
 	private final static String REQUEST = "request"; //$NON-NLS-1$
 
 	private JTextField server;
+
+    private JCheckBox reUseConnection;
 
 	private JTextField port;
 
@@ -78,6 +82,8 @@ public class TCPConfigGui extends AbstractConfigGui {
 	public void configure(TestElement element) {
 		super.configure(element);
 		server.setText(element.getPropertyAsString(TCPSampler.SERVER));
+		// Default to original behaviour, i.e. re-use connection
+		reUseConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.RE_USE_CONNECTION,true));
 		port.setText(element.getPropertyAsString(TCPSampler.PORT));
 		// filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
 		timeout.setText(element.getPropertyAsString(TCPSampler.TIMEOUT));
@@ -99,6 +105,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	public void modifyTestElement(TestElement element) {
 		configureTestElement(element);
 		element.setProperty(TCPSampler.SERVER, server.getText());
+		element.setProperty(TCPSampler.RE_USE_CONNECTION, JOrphanUtils.booleanToString(reUseConnection.isSelected()));
 		element.setProperty(TCPSampler.PORT, port.getText());
 		// element.setProperty(TCPSampler.FILENAME, filename.getText());
 		element.setProperty(TCPSampler.NODELAY, JOrphanUtils.booleanToString(setNoDelay.isSelected()));
@@ -143,6 +150,19 @@ public class TCPConfigGui extends AbstractConfigGui {
 		serverPanel.add(label, BorderLayout.WEST);
 		serverPanel.add(server, BorderLayout.CENTER);
 		return serverPanel;
+	}
+
+	private JPanel createClosePortPanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("reUseConnection"));
+
+        reUseConnection = new JCheckBox("", true);
+		reUseConnection.setName(RE_USE_CONNECTION);
+		label.setLabelFor(reUseConnection);
+
+		JPanel closePortPanel = new JPanel(new BorderLayout(5, 0));
+		closePortPanel.add(label, BorderLayout.WEST);
+		closePortPanel.add(reUseConnection, BorderLayout.CENTER);
+		return closePortPanel;
 	}
 
 	private JPanel createPortPanel() {
@@ -197,6 +217,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.add(createServerPanel());
+		mainPanel.add(createClosePortPanel());
 		mainPanel.add(createPortPanel());
 		mainPanel.add(createTimeoutPanel());
 		mainPanel.add(createNoDelayPanel());
