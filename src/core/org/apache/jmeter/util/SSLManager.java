@@ -52,7 +52,7 @@ public abstract class SSLManager {
 
 	private static final String KEY_STORE_PASSWORD = "javax.net.ssl.keyStorePassword"; // $NON-NLS-1$
 
-	private static final String JAVAX_NET_SSL_KEY_STORE = "javax.net.ssl.keyStore"; // $NON-NLS-1$
+	public static final String JAVAX_NET_SSL_KEY_STORE = "javax.net.ssl.keyStore"; // $NON-NLS-1$
 
 	private static final String PKCS12 = "pkcs12"; // $NON-NLS-1$
 
@@ -152,10 +152,11 @@ public abstract class SSLManager {
 					fileInputStream = new FileInputStream(initStore);
                     this.keyStore.load(fileInputStream, password);
 				} else {
+					log.warn("Keystore not found, creating empty keystore");
 					this.keyStore.load(null, password);
 				}
 			} catch (Exception e) {
-				log.error("Couldn't load keystore", e);
+				log.warn("Problem loading keystore: " +e.getMessage()); // Does not seem to matter much
 			} finally {
                 JOrphanUtils.closeQuietly(fileInputStream);
             }
