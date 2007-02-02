@@ -70,8 +70,7 @@ public abstract class SSLManager {
 	private KeyStore trustStore;
 
 	/** Have the password available */
-	protected String defaultpw = JMeterUtils.getJMeterProperties()
-	    .getProperty(KEY_STORE_PASSWORD); // $NON-NLS-1$
+	protected String defaultpw = System.getProperty(KEY_STORE_PASSWORD);
 
 	/**
 	 * Resets the SSLManager so that we can create a new one with a new keystore
@@ -97,17 +96,12 @@ public abstract class SSLManager {
 	 * no PasswordEntryField available from JOptionPane.
 	 */
 	protected JmeterKeyStore getKeyStore() {
-		String password = this.defaultpw;
-
 		if (null == this.keyStore) {
 			String defaultName = JMeterUtils.getJMeterProperties()
 			    .getProperty("user.home")  // $NON-NLS-1$
 			    + File.separator
 				+ ".keystore"; // $NON-NLS-1$
-			String fileName = JMeterUtils.getJMeterProperties()
-			.getProperty(JAVAX_NET_SSL_KEY_STORE, defaultName);
-			System.setProperty(JAVAX_NET_SSL_KEY_STORE, fileName); // $NON-NLS-1$
-
+			String fileName = System.getProperty(JAVAX_NET_SSL_KEY_STORE, defaultName);
 			try {
 				if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) { // $NON-NLS-1$ // $NON-NLS-2$
 					this.keyStore = JmeterKeyStore.getInstance(PKCS12);
@@ -124,36 +118,17 @@ public abstract class SSLManager {
 				throw new RuntimeException("KeyStore Problem");
 			}
 
-			if (null == password) {
-				if (null == defaultpw) {
-					this.defaultpw = JMeterUtils.getJMeterProperties().getProperty(KEY_STORE_PASSWORD);
-
-					if (null == defaultpw) {
-						synchronized (this) {
-							this.defaultpw = JOptionPane.showInputDialog(GuiPackage.getInstance().getMainFrame(),
-									JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
-									JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
-									JOptionPane.QUESTION_MESSAGE);
-							JMeterUtils.getJMeterProperties().setProperty(KEY_STORE_PASSWORD,
-									this.defaultpw);
-						}
-					}
-				}
-
-				password = this.defaultpw;
-				System.setProperty(KEY_STORE_PASSWORD, password);
-			}
-
-            FileInputStream fileInputStream = null;
+			FileInputStream fileInputStream = null;
 			try {
 				File initStore = new File(fileName);
 
 				if (initStore.exists()) {
 					fileInputStream = new FileInputStream(initStore);
-                    this.keyStore.load(fileInputStream, password);
+                    this.keyStore.load(fileInputStream, getPassword());
 				} else {
 					log.warn("Keystore not found, creating empty keystore");
-					this.keyStore.load(null, password);
+					this.defaultpw = ""; // Ensure not null
+					this.keyStore.load(null, "");
 				}
 			} catch (Exception e) {
 				log.warn("Problem loading keystore: " +e.getMessage()); // Does not seem to matter much
@@ -166,6 +141,29 @@ public abstract class SSLManager {
 		}
 
 		return this.keyStore;
+	}
+
+	private String getPassword() {
+		String password = this.defaultpw;
+		if (null == password) {
+			if (null == defaultpw) {
+				this.defaultpw = System.getProperty(KEY_STORE_PASSWORD);
+
+				if (null == defaultpw) {
+					synchronized (this) {
+						this.defaultpw = JOptionPane.showInputDialog(GuiPackage.getInstance().getMainFrame(),
+								JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
+								JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
+								JOptionPane.QUESTION_MESSAGE);
+						System.setProperty(KEY_STORE_PASSWORD, this.defaultpw);
+					}
+				}
+			}
+
+			password = this.defaultpw;
+			System.setProperty(KEY_STORE_PASSWORD, password);
+		}
+		return password;
 	}
 
 	/**
