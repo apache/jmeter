@@ -58,12 +58,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 	private static final int MAX_CONN_RETRIES = 10; // Maximum connection retries
 
-	static {// TODO - document what this is doing and why
-		System.setProperty("java.protocol.handler.pkgs", // $NON-NLS-1$ 
-                JMeterUtils.getPropDefault("ssl.pkgs", // $NON-NLS-1$
-				"com.sun.net.ssl.internal.www.protocol")); // $NON-NLS-1$
-	}
-
 	/**
 	 * Constructor for the HTTPSampler object.
      * 
