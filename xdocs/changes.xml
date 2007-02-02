@@ -73,6 +73,7 @@ jmeterthread.reversePostProcessors=true
 <li>Fix NPE when saving thread counts in remote testing</li>
 <li>Bug 34261 - NPE in HtmlParser (allow for missing attributes)</li>
 <li>Bug 40100 - check FileServer type before calling close</li>
+<li>Replace com.sun.net classes with javax.net</li>
 </ul>
 
 <h3>Version 2.2</h3>
