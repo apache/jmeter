@@ -41,7 +41,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
 import org.apache.jorphan.logging.LoggingManager;
