@@ -50,6 +50,7 @@ jmeterthread.reversePostProcessors=true
 <li>BeanShell Post-Processor no longer ignores samples with zero-length result data</li>
 <li>Use property jmeter.home (if present) to override user.dir when starting JMeter</li>
 <li>Bug 41457 - Add TCP Sampler option to not re-use connections</li>
+<li>Bug 41522 - Use JUnit sampler name in sample results</li>
 </ul>
 
 <h4>Bug fixes:</h4>

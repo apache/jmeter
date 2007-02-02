@@ -331,7 +331,7 @@ public class JUnitSampler extends AbstractSampler {
         } else {
             rlabel = JUnitSampler.class.getName();
         }
-        sresult.setSampleLabel(rlabel);
+        sresult.setSampleLabel(getName());// Bug 41522 - don't use rlabel here
         sresult.setSamplerData(getClassname() + "." + getMethod());   
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
