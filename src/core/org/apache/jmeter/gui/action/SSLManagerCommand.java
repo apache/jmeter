@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -92,9 +93,9 @@ public class SSLManagerCommand implements Command {
 		if (JFileChooser.APPROVE_OPTION == retVal) {
 			File selectedFile = keyStoreChooser.getSelectedFile();
 			try {
-				JMeterUtils.getJMeterProperties()
-						.setProperty("javax.net.ssl.keyStore", selectedFile.getCanonicalPath());
-			} catch (Exception e) {
+				System.setProperty(SSLManager.JAVAX_NET_SSL_KEY_STORE, selectedFile.getCanonicalPath());
+			} catch (IOException e) {
+				//Ignored
 			}
 		}
 
