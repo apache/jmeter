@@ -94,12 +94,11 @@ public class JsseSSLManager extends SSLManager {
 	 *            The new Context value
 	 */
 	public void setContext(HttpURLConnection conn) {
-		if (conn instanceof javax.net.ssl.HttpsURLConnection) {
-			javax.net.ssl.HttpsURLConnection secureConn = (javax.net.ssl.HttpsURLConnection) conn;
+		if (conn instanceof HttpsURLConnection) {
+			HttpsURLConnection secureConn = (HttpsURLConnection) conn;
 			secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
-		} else if (conn instanceof sun.net.www.protocol.https.HttpsURLConnectionImpl) {
-			sun.net.www.protocol.https.HttpsURLConnectionImpl secureConn = (sun.net.www.protocol.https.HttpsURLConnectionImpl) conn;
-			secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+		} else {
+			log.warn("Unexpected HttpURLConnection class: "+conn.getClass().getName());
 		}
 	}
 
