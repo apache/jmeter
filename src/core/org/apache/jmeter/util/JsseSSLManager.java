@@ -32,14 +32,15 @@ import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import com.sun.net.ssl.HostnameVerifier;
-import com.sun.net.ssl.HttpsURLConnection;
-import com.sun.net.ssl.KeyManager;
-import com.sun.net.ssl.KeyManagerFactory;
-import com.sun.net.ssl.SSLContext;
-import com.sun.net.ssl.TrustManager;
-import com.sun.net.ssl.X509KeyManager;
-import com.sun.net.ssl.X509TrustManager;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * The SSLManager handles the KeyStore information for JMeter. Basically, it
@@ -82,10 +83,6 @@ public class JsseSSLManager extends SSLManager {
 			this.rand = new SecureRandom();
 		}
 
-		if ("all".equalsIgnoreCase( // $NON-NLS-1$
-				JMeterUtils.getPropDefault("javax.net.debug", "none"))) { // $NON-NLS-1$ // $NON-NLS-2$
-			System.setProperty("javax.net.debug", "all"); // $NON-NLS-1$ // $NON-NLS-2$
-		}
 		this.getContext();
 		log.info("JsseSSLManager installed");
 	}
@@ -97,8 +94,8 @@ public class JsseSSLManager extends SSLManager {
 	 *            The new Context value
 	 */
 	public void setContext(HttpURLConnection conn) {
-		if (conn instanceof com.sun.net.ssl.HttpsURLConnection) {
-			com.sun.net.ssl.HttpsURLConnection secureConn = (com.sun.net.ssl.HttpsURLConnection) conn;
+		if (conn instanceof javax.net.ssl.HttpsURLConnection) {
+			javax.net.ssl.HttpsURLConnection secureConn = (javax.net.ssl.HttpsURLConnection) conn;
 			secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
 		} else if (conn instanceof sun.net.www.protocol.https.HttpsURLConnectionImpl) {
 			sun.net.www.protocol.https.HttpsURLConnectionImpl secureConn = (sun.net.www.protocol.https.HttpsURLConnectionImpl) conn;
@@ -135,10 +132,11 @@ public class JsseSSLManager extends SSLManager {
 				}
 				log.debug("SSL context = " + context);
 			} catch (Exception ee) {
-				log.error("Exception occurred", ee);
+				log.error("Could not create SSLContext", ee);
 			}
 			try {
-				KeyManagerFactory managerFactory = KeyManagerFactory.getInstance("SunX509"); // $NON-NLS-1$
+				KeyManagerFactory managerFactory = 
+					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());				
 				JmeterKeyStore keys = this.getKeyStore();
 				managerFactory.init(null, this.defaultpw.toCharArray());
 				KeyManager[] managers = managerFactory.getKeyManagers();
@@ -153,13 +151,13 @@ public class JsseSSLManager extends SSLManager {
 				context.init(managers, trusts, this.rand);
 				HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 				HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-					public boolean verify(String urlHostname, String certHostname) {
+					public boolean verify(String hostname, SSLSession session) {
 						return true;
 					}
 				});
 				log.debug("SSL stuff all set");
 			} catch (Exception e) {
-				log.error("Exception occurred", e);
+				log.error("Could not set up default SSL socket factory", e);
 			}
 
             if (log.isDebugEnabled()){
@@ -362,15 +360,11 @@ public class JsseSSLManager extends SSLManager {
 		 *      java.security.Principal, java.net.Socket)
 		 */
 		public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
-			return this.manager.chooseServerAlias(arg0, arg1);
+			return this.manager.chooseServerAlias(arg0, arg1, arg2);
 		}
 
 		public String chooseClientAlias(String arg0, Principal[] arg1) {
 			return store.getAlias();
-		}
-
-		public String chooseServerAlias(String arg0, Principal[] arg1) {
-			return manager.chooseServerAlias(arg0, arg1);
 		}
 	}
 }
