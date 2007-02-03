@@ -73,6 +73,7 @@ import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -263,8 +264,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * 
 	 * @param u
 	 *            <code>URL</code> of the URL request
-	 * @param method
-	 *            http/https
+	 * @param method 
+	 *            GET/PUT/HEAD etc
 	 * @param res
 	 *            sample result to save request infos to
 	 * @return <code>HttpConnection</code> ready for .connect
@@ -281,6 +282,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		if ((schema == null) || (schema.length()==0)) {
 			schema = PROTOCOL_HTTP;
 		}
+		
+		if (PROTOCOL_HTTPS.equalsIgnoreCase(schema)){
+			SSLManager.getInstance(); // ensure the manager is initialised
+			// we don't currently need to do anything further, as this sets the default https protocol
+		}
+		
 		Protocol protocol = Protocol.getProtocol(schema);
 
 		String host = uri.getHost();
@@ -541,7 +548,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             httpMethod = new OptionsMethod(urlStr);
         } else if (method.equals(DELETE)){
             httpMethod = new DeleteMethod(urlStr);
+        } else if (method.equals(GET)){
+            httpMethod = new GetMethod(urlStr);
         } else {
+        	log.error("Unexpected method (converted to GET): "+method);
             httpMethod = new GetMethod(urlStr);
         }
 
