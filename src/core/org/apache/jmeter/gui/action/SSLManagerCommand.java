@@ -32,6 +32,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
+// 
 /**
  * SSL Manager Command. The SSL Manager provides a mechanism to change your
  * client authentication if required by the server. If you have JSSE 1.0.2
@@ -45,9 +46,12 @@ import org.apache.jmeter.util.SSLManager;
  * can have a whopping one key keystore. The advantage is that you can test a
  * connection using the assigned Certificate from a Certificate Authority.
  * </p>
+ * TODO ? 
+ * N.B. The present implementation does not seem to allow selection of keys,
+ * it only allows a change of keystore at run-time, or to provide one if not
+ * already defined via the property.
  * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public class SSLManagerCommand implements Command {
 	private static Set commandSet;
@@ -78,9 +82,8 @@ public class SSLManagerCommand implements Command {
 	}
 
 	/**
-	 * Called by sslManager button. Raises sslManager dialog. Currently the
-	 * sslManager box has the product image and the copyright notice. The dialog
-	 * box is centered over the MainFrame.
+	 * Called by sslManager button. Raises sslManager dialog.
+	 * I.e. a FileChooser for PCSI12 (.p12|.P12) files.
 	 */
 	private void sslManager() {
 		SSLManager.reset();
