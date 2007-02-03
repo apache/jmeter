@@ -32,8 +32,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * A property editor for File properties.
@@ -45,7 +43,6 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class FileEditor implements PropertyEditor, ActionListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The editor's panel.
