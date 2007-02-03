@@ -83,20 +83,20 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	private static boolean haveStatusProps = false;
 
 	static {
-		log.info("Protocol Handler name=" + getClassname());
-		log.info("Status prefix=" + STATUS_PREFIX);
-		log.info("Status suffix=" + STATUS_SUFFIX);
-		log.info("Status properties=" + STATUS_PROPERTIES);
+		log.debug("Protocol Handler name=" + getClassname());
+		log.debug("Status prefix=" + STATUS_PREFIX);
+		log.debug("Status suffix=" + STATUS_SUFFIX);
+		log.debug("Status properties=" + STATUS_PROPERTIES);
 		if (STATUS_PROPERTIES.length() > 0) {
 			File f = new File(STATUS_PROPERTIES);
 			try {
 				statusProps.load(new FileInputStream(f));
-				log.info("Successfully loaded properties");
+				log.debug("Successfully loaded properties");
 				haveStatusProps = true;
 			} catch (FileNotFoundException e) {
-				log.info("Property file not found");
+				log.debug("Property file not found");
 			} catch (IOException e) {
-				log.info("Property file error " + e.toString());
+				log.debug("Property file error " + e.toString());
 			}
 		}
 	}
