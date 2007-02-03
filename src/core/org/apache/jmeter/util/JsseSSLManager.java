@@ -28,6 +28,8 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -69,8 +71,7 @@ public class JsseSSLManager extends SSLManager {
 	private Provider pro = null;
 
 	/**
-	 * Private Constructor to remove the possibility of directly instantiating
-	 * this object. Create the SSLContext, and wrap all the X509KeyManagers with
+	 * Create the SSLContext, and wrap all the X509KeyManagers with
 	 * our X509KeyManager so that we can choose our alias.
 	 * 
 	 * @param provider
@@ -84,7 +85,7 @@ public class JsseSSLManager extends SSLManager {
 		}
 
 		this.getContext();
-		log.info("JsseSSLManager installed");
+		log.debug("JsseSSLManager installed");
 	}
 
 	/**
@@ -95,8 +96,13 @@ public class JsseSSLManager extends SSLManager {
 	 */
 	public void setContext(HttpURLConnection conn) {
 		if (conn instanceof HttpsURLConnection) {
-			HttpsURLConnection secureConn = (HttpsURLConnection) conn;
-			secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
+/*
+ * No point doing this on a per-connection basis, as there is currently no way to configure it.
+ * So we leave it to the defaults set up in the SSL Context
+ * 
+ */
+//			HttpsURLConnection secureConn = (HttpsURLConnection) conn;
+//			secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
 		} else {
 			log.warn("Unexpected HttpURLConnection class: "+conn.getClass().getName());
 		}
@@ -139,7 +145,7 @@ public class JsseSSLManager extends SSLManager {
 				JmeterKeyStore keys = this.getKeyStore();
 				managerFactory.init(null, this.defaultpw.toCharArray());
 				KeyManager[] managers = managerFactory.getKeyManagers();
-				log.info(keys.getClass().toString());
+				log.debug(keys.getClass().toString());
 				for (int i = 0; i < managers.length; i++) {
 					if (managers[i] instanceof X509KeyManager) {
 						X509KeyManager manager = (X509KeyManager) managers[i];
@@ -148,15 +154,29 @@ public class JsseSSLManager extends SSLManager {
 				}
 				TrustManager[] trusts = new TrustManager[] { new AlwaysTrustManager(this.getTrustStore()) };
 				context.init(managers, trusts, this.rand);
+				
+				/*
+				 * The following will need to be removed if the SSL properties are to be
+				 * applied on a per-connection basis
+				 */
 				HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 				HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
 					public boolean verify(String hostname, SSLSession session) {
 						return true;
 					}
 				});
+				/*
+				 * Also set up HttpClient defaults
+				 */
+				Protocol protocol = new Protocol(
+						"https",
+						(ProtocolSocketFactory) new HttpClientSSLProtocolSocketFactory(context),
+						443
+						);
+				Protocol.registerProtocol("https", protocol);
 				log.debug("SSL stuff all set");
 			} catch (Exception e) {
-				log.error("Could not set up default SSL socket factory", e);
+				log.error("Could not set up SSLContext", e);
 			}
 
             if (log.isDebugEnabled()){
