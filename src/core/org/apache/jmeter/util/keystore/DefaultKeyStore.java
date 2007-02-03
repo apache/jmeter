@@ -29,7 +29,6 @@ import java.util.Enumeration;
  * Use this Keystore to wrap the normal KeyStore implementation.
  * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public class DefaultKeyStore extends JmeterKeyStore {
 	private X509Certificate[] certChain;
@@ -49,29 +48,32 @@ public class DefaultKeyStore extends JmeterKeyStore {
 		PrivateKey _key = null;
 		X509Certificate[] _certChain = null;
 
-		Enumeration aliases = store.aliases();
-		while (aliases.hasMoreElements()) {
-			this.alias = (String) aliases.nextElement();
-			if (store.isKeyEntry(alias)) {
-				_key = (PrivateKey) store.getKey(alias, pword.toCharArray());
-				Certificate[] chain = store.getCertificateChain(alias);
-				_certChain = new X509Certificate[chain.length];
-
-				for (int i = 0; i < chain.length; i++) {
-					_certChain[i] = (X509Certificate) chain[i];
+		if (null != is){ // No point checking an empty keystore
+			
+			Enumeration aliases = store.aliases();
+			while (aliases.hasMoreElements()) {
+				this.alias = (String) aliases.nextElement();
+				if (store.isKeyEntry(alias)) {
+					_key = (PrivateKey) store.getKey(alias, pword.toCharArray());
+					Certificate[] chain = store.getCertificateChain(alias);
+					_certChain = new X509Certificate[chain.length];
+	
+					for (int i = 0; i < chain.length; i++) {
+						_certChain[i] = (X509Certificate) chain[i];
+					}
+	
+					break;
 				}
+			}
 
-				break;
+			if (null == _key) {
+				throw new Exception("No key found");
+			}
+			if (null == _certChain) {
+				throw new Exception("No certificate chain found");
 			}
 		}
-
-		if (null == _key) {
-			throw new Exception("No key found");
-		}
-		if (null == _certChain) {
-			throw new Exception("No certificate chain found");
-		}
-
+		
 		this.key = _key;
 		this.certChain = _certChain;
 	}
