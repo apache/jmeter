@@ -140,9 +140,9 @@ public class HTTPSampler extends HTTPSamplerBase {
         SSLManager sslmgr = null;
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
-                sslmgr=SSLManager.getInstance();
+                sslmgr=SSLManager.getInstance(); // N.B. this needs to be done before opening the connection
             } catch (Exception e) {
-                log.warn("You may have forgotten to set the ssl.provider property " + "in jmeter.properties", e);
+                log.warn("Problem creating the SSLManager: ", e);
             }
         }
 		
@@ -152,9 +152,11 @@ public class HTTPSampler extends HTTPSamplerBase {
 
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
 			try {
-				sslmgr.setContext(conn);
+				if (null != sslmgr){
+				    sslmgr.setContext(conn); // N.B. must be done after opening connection
+				}
 			} catch (Exception e) {
-				log.warn("You may have forgotten to set the ssl.provider property " + "in jmeter.properties", e);
+				log.warn("Problem setting the SSLManager for the connection: ", e);
 			}
 		}
 
