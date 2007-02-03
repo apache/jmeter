@@ -42,8 +42,9 @@ import org.apache.log.Logger;
  * but if it can't make a decision, it will pop open a dialog asking you for
  * more information.
  * 
+ * TODO? - N.B. does not currently allow the selection of a client certificate.
+ * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public abstract class SSLManager {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -102,6 +103,7 @@ public abstract class SSLManager {
 			    + File.separator
 				+ ".keystore"; // $NON-NLS-1$
 			String fileName = System.getProperty(JAVAX_NET_SSL_KEY_STORE, defaultName);
+			log.info("JmeterKeyStore Location: " + fileName);
 			try {
 				if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) { // $NON-NLS-1$ // $NON-NLS-2$
 					this.keyStore = JmeterKeyStore.getInstance(PKCS12);
@@ -112,10 +114,8 @@ public abstract class SSLManager {
 					log.info("KeyStore Type: JKS");
 				}
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), e, JMeterUtils
-						.getResString("ssl_error_title"), JOptionPane.ERROR_MESSAGE); // $NON-NLS-1$
 				this.keyStore = null;
-				throw new RuntimeException("KeyStore Problem");
+				throw new RuntimeException("Could not create keystore: "+e.getMessage());
 			}
 
 			FileInputStream fileInputStream = null;
@@ -131,18 +131,24 @@ public abstract class SSLManager {
 					this.keyStore.load(null, "");
 				}
 			} catch (Exception e) {
-				log.warn("Problem loading keystore: " +e.getMessage()); // Does not seem to matter much
+				log.error("Problem loading keystore: " +e.getMessage());
 			} finally {
                 JOrphanUtils.closeQuietly(fileInputStream);
             }
 
-			log.info("JmeterKeyStore Location: " + fileName);
-			log.info("JmeterKeyStore type: " + this.keyStore.getClass().toString());
+			log.debug("JmeterKeyStore type: " + this.keyStore.getClass().toString());
 		}
 
 		return this.keyStore;
 	}
 
+	/*
+	 * The password can be defined as a property; this dialogue is provided to allow it
+	 * to be entered at run-time.
+	 * 
+	 * However, this does not gain much, as the dialogue does not (yet) support hidden input ...
+	 * 
+	*/
 	private String getPassword() {
 		String password = this.defaultpw;
 		if (null == password) {
@@ -151,7 +157,8 @@ public abstract class SSLManager {
 
 				if (null == defaultpw) {
 					synchronized (this) {
-						this.defaultpw = JOptionPane.showInputDialog(GuiPackage.getInstance().getMainFrame(),
+						this.defaultpw = JOptionPane.showInputDialog(
+								GuiPackage.getInstance().getMainFrame(),
 								JMeterUtils.getResString("ssl_pass_prompt"),  // $NON-NLS-1$
 								JMeterUtils.getResString("ssl_pass_title"),  // $NON-NLS-1$
 								JOptionPane.QUESTION_MESSAGE);
@@ -171,18 +178,15 @@ public abstract class SSLManager {
 	 */
 	protected KeyStore getTrustStore() {
 		if (null == this.trustStore) {
-			String fileName = JMeterUtils.getPropDefault(SSL_TRUST_STORE, "");
-			System.setProperty(SSL_TRUST_STORE, fileName);
+			String fileName = System.getProperty(SSL_TRUST_STORE, "");
+			log.info("TrustStore Location: " + fileName);
 
 			try {
 				this.trustStore = KeyStore.getInstance("JKS");
 				log.info("TrustStore Type: JKS");
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(), e, JMeterUtils
-						.getResString("ssl_error_title"),  // $NON-NLS-1$
-						JOptionPane.ERROR_MESSAGE);
 				this.trustStore = null;
-				throw new RuntimeException("TrustStore Problem");
+				throw new RuntimeException("Problem creating truststore: "+e.getMessage());
 			}
 
             FileInputStream fileInputStream = null;
@@ -193,6 +197,7 @@ public abstract class SSLManager {
 					fileInputStream = new FileInputStream(initStore);
                     this.trustStore.load(fileInputStream, null);
 				} else {
+					log.info("Truststore not found, creating empty truststore");
 					this.trustStore.load(null, null);
 				}
 			} catch (Exception e) {
@@ -200,9 +205,6 @@ public abstract class SSLManager {
             } finally {
                 JOrphanUtils.closeQuietly(fileInputStream);
 			}
-
-			log.info("TrustStore Location: " + fileName);
-			log.info("TrustStore type: " + this.keyStore.getClass().toString());
 		}
 
 		return this.trustStore;
@@ -223,6 +225,7 @@ public abstract class SSLManager {
 		if (null == SSLManager.manager) {
 			if (SSLManager.isSSLSupported) {
 				String classname = null;
+				// TODO - there used to be a choice of managers. Perhaps tidy code now there is only one?
 				classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
 
 				try {
@@ -230,7 +233,7 @@ public abstract class SSLManager {
 					Constructor con = clazz.getConstructor(new Class[] { Provider.class });
 					SSLManager.manager = (SSLManager) con.newInstance(new Object[] { SSLManager.sslProvider });
 				} catch (Exception e) {
-					log.error("", e); // $NON-NLS-1$
+					log.error("Could not create SSLManager instance", e); // $NON-NLS-1$
 					SSLManager.isSSLSupported = false;
 					return null;
 				}
