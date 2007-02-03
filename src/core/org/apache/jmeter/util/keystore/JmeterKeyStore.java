@@ -26,7 +26,6 @@ import java.security.cert.X509Certificate;
  * Use this Keystore for JMeter specific KeyStores.
  * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public abstract class JmeterKeyStore {
 
