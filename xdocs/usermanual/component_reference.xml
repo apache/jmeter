@@ -129,19 +129,23 @@ JMeter assumes the FTP server is listening on the default port.</property>
 <note>The HTTP methods HEAD, TRACE, OPTIONS, PUT, DELETE are new in 2.1.2, and may have some teething problems.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server.</property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
         <property name="Protocol" required="No">HTTP or HTTPS. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
-		<property name="Redirect Automatically" required="No">
+		<property name="Redirect Automatically" required="Yes">
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.
         </property>
-		<property name="Follow Redirects" required="No">
+		<property name="Follow Redirects" required="Yes">
+		This only has any effect if "Redirect Automatically" is not enabled.
 		If set, the JMeter sampler will check if the response is a redirect and follow it if so.
 		The redirect response will appear as an additional sample.
+		Note that the HttpClient sampler may log the following message:<br/>
+		"Redirect requested but followRedirects is disabled"<br/>
+		This can be ignored.
 		</property>
-		<property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
+		<property name="Use KeepAlive" required="Yes">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
                   It does work with the Jakarta httpClient implementation.</property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
@@ -167,7 +171,7 @@ resource requires query string parameters, add them below in the
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
+        <property name="Use as monitor" required="Yes">For use with the <complink name="Monitor Results"/> listener.</property>
 </properties>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
@@ -1382,6 +1386,12 @@ the contents are used to prefix the pathname.
 			It then adds a "sample" entry to the test output with the total elapsed time.
 			The name of the element is used to name the "sample".
 		</p>
+		<p>
+		The generated sample time includes all the times for the nested samplers, and any timers etc.
+		Depending on the clock resolution, it may be slightly longer than the sum of the individual samplers plus timers.
+		The clock might tick after the controller recorded the start time but before the first sample starts.
+		Similarly at the end.
+		</p>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
@@ -1648,7 +1658,8 @@ See the <complink name="Summary Report"/> for a similar Listener that does not n
 <li># Samples - The number of samples for the URL</li>
 <li>Average - The average time of a set of results</li>
 <li>Median - The median is the time in the middle of a set of results.</li>
-<li>90% Line - 90% of the results finished faster than the line.</li>
+<li>90% Line - the maximum time taken for the fastest 90% of the samples. #
+The remaining samples took longer than this.</li>
 <li>Min - The lowest time for the samples of the given URL</li>
 <li>Max - The longest time for the samples of the given URL</li>
 <li>Error % - Percent of requests with errors</li>
@@ -1691,6 +1702,10 @@ aggressive and have a potential of impacting the server. With a buffer of
 1000 data points at 5 second intervals, the monitor would check the server
 status 12 times a minute or 720 times a hour. This means the buffer shows
 the performance history of each machine for the last hour.</p>
+<note>
+The monitor requires Tomcat 5 or above. 
+Use a browser to check that you can access the Tomcat status servlet OK.
+</note>
 </description>
 </component>
 
