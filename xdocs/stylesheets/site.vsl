@@ -328,6 +328,28 @@
 	 </table>
 #end
 
+#macro (pagelinks)
+  #if (($next != "") || ($prev != ""))
+		<table>
+		<tr>
+		<td bgcolor="$bannerbg">
+        <div align="right"><a href="index.html"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Index</font></a></div>
+        </td>
+		#if ($next != "")
+		<td bgcolor="$bannerbg">
+        <div align="right"><a href="$next"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Next</font></a></div>
+        </td>
+        #end
+		#if ($prev != "")
+		<td bgcolor="$bannerbg">
+        <div align="right"><a href="$prev"><font size=-1 color="$bannerfg" face="arial,helvetica,sanserif">Prev</font></a></div>
+        </td>
+        #end
+        </tr>
+         </table>
+      #end
+#end
+
 #macro ( section $section)
 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="$bannerbg">
@@ -407,6 +429,9 @@
 		  <head>
 				<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 
+				#set ($next = $root.getAttributeValue("next"))
+				#set ($prev = $root.getAttributeValue("prev"))
+
 				#set ($authors = $root.getChild("properties").getChildren("author"))
 				#foreach ( $au in $authors )
 					 #metaauthor ( $au.getText() $au.getAttributeValue("email") )
@@ -433,6 +458,8 @@
 						  #makeProject()
 						  </td>
 						  <td width="80%" align="left" valign="top">
+						  #pagelinks()
+						  <br>
 						  #if ($root.getAttributeValue("index") == "yes")
 							#makeIndex($root.getChild("body").getChildren("section"))
 						  #end
@@ -440,6 +467,8 @@
 						  #foreach ( $section in $allSections )
 								#section ($section)
 						  #end
+						  #pagelinks()
+						  <br>
 						  </td>
 					 </tr>
 
