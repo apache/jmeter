@@ -263,8 +263,8 @@ public class JMeter implements JMeterPlugin {
 			log.info("Default Locale=" + Locale.getDefault().getDisplayName());// $NON-NLS-1$
             log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());// $NON-NLS-1$
 			log.info("JMeterHome="     + JMeterUtils.getJMeterHome());// $NON-NLS-1$
-			logProperty("user.dir"); //$NON-NLS-1$
-			log.info(   "PWD     ="+new File(".").getCanonicalPath());//$NON-NLS-1$
+			logProperty("user.dir","  ="); //$NON-NLS-1$
+			log.info("PWD       ="+new File(".").getCanonicalPath());//$NON-NLS-1$
             setProxy(parser);
             
             updateClassLoader();
@@ -814,5 +814,8 @@ public class JMeter implements JMeterPlugin {
 	
 	private void logProperty(String prop){
 		log.info(prop+"="+System.getProperty(prop));//$NON-NLS-1$
+	}
+	private void logProperty(String prop,String separator){
+		log.info(prop+separator+System.getProperty(prop));//$NON-NLS-1$
 	}
 }
