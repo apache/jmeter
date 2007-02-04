@@ -107,11 +107,11 @@ public abstract class SSLManager {
 			try {
 				if (fileName.endsWith(".p12") || fileName.endsWith(".P12")) { // $NON-NLS-1$ // $NON-NLS-2$
 					this.keyStore = JmeterKeyStore.getInstance(PKCS12);
-					log.info("KeyStore Type: PKCS 12");
+					log.info("KeyStore created OK, Type: PKCS 12");
 					System.setProperty("javax.net.ssl.keyStoreType", PKCS12); // $NON-NLS-1$
 				} else {
 					this.keyStore = JmeterKeyStore.getInstance("JKS"); // $NON-NLS-1$
-					log.info("KeyStore Type: JKS");
+					log.info("KeyStore created OK, Type: JKS");
 				}
 			} catch (Exception e) {
 				this.keyStore = null;
@@ -125,8 +125,9 @@ public abstract class SSLManager {
 				if (initStore.exists()) {
 					fileInputStream = new FileInputStream(initStore);
                     this.keyStore.load(fileInputStream, getPassword());
+                    log.info("Keystore loaded OK from file");
 				} else {
-					log.warn("Keystore not found, creating empty keystore");
+					log.warn("Keystore file not found, loading empty keystore");
 					this.defaultpw = ""; // Ensure not null
 					this.keyStore.load(null, "");
 				}
@@ -183,7 +184,7 @@ public abstract class SSLManager {
 
 			try {
 				this.trustStore = KeyStore.getInstance("JKS");
-				log.info("TrustStore Type: JKS");
+				log.info("TrustStore created OK, Type: JKS");
 			} catch (Exception e) {
 				this.trustStore = null;
 				throw new RuntimeException("Problem creating truststore: "+e.getMessage());
@@ -196,8 +197,9 @@ public abstract class SSLManager {
 				if (initStore.exists()) {
 					fileInputStream = new FileInputStream(initStore);
                     this.trustStore.load(fileInputStream, null);
+                    log.info("Truststore loaded OK from file");
 				} else {
-					log.info("Truststore not found, creating empty truststore");
+					log.info("Truststore file not found, loading empty truststore");
 					this.trustStore.load(null, null);
 				}
 			} catch (Exception e) {
