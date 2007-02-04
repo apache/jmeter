@@ -20,12 +20,10 @@ package org.apache.jmeter.util;
 
 import java.net.HttpURLConnection;
 import java.net.Socket;
-import java.security.KeyStore;
 import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -41,6 +39,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -52,11 +51,15 @@ import javax.net.ssl.X509TrustManager;
  * but if it can't make a decision, it will pop open a dialog asking you for
  * more information.
  * 
+ * TODO: does not actually prompt
+ * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a> Created March 21,
  *         2002
  */
 public class JsseSSLManager extends SSLManager {
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final String HTTPS = "https"; // $NON-NLS-1$
 
 	/**
 	 * Cache the SecureRandom instance because it takes a long time to create
@@ -146,14 +149,29 @@ public class JsseSSLManager extends SSLManager {
 				managerFactory.init(null, this.defaultpw.toCharArray());
 				KeyManager[] managers = managerFactory.getKeyManagers();
 				log.debug(keys.getClass().toString());
+				
+				// Now wrap the default managers with our key manager
 				for (int i = 0; i < managers.length; i++) {
 					if (managers[i] instanceof X509KeyManager) {
 						X509KeyManager manager = (X509KeyManager) managers[i];
 						managers[i] = new WrappedX509KeyManager(manager, keys);
 					}
 				}
-				TrustManager[] trusts = new TrustManager[] { new AlwaysTrustManager(this.getTrustStore()) };
-				context.init(managers, trusts, this.rand);
+				
+				// Get the default trust managers
+		        TrustManagerFactory tmfactory = TrustManagerFactory.getInstance(
+		                TrustManagerFactory.getDefaultAlgorithm());
+		        tmfactory.init(this.getTrustStore());
+		        
+		        // Wrap the defaults in our custom trust manager
+		        TrustManager[] trustmanagers = tmfactory.getTrustManagers();
+		        for (int i = 0; i < trustmanagers.length; i++) {
+		            if (trustmanagers[i] instanceof X509TrustManager) {
+		                trustmanagers[i] = new CustomX509TrustManager(
+		                    (X509TrustManager)trustmanagers[i]); 
+		            }
+		        }
+		     	context.init(managers, trustmanagers, this.rand);
 				
 				/*
 				 * The following will need to be removed if the SSL properties are to be
@@ -169,11 +187,11 @@ public class JsseSSLManager extends SSLManager {
 				 * Also set up HttpClient defaults
 				 */
 				Protocol protocol = new Protocol(
-						"https",
+						JsseSSLManager.HTTPS,
 						(ProtocolSocketFactory) new HttpClientSSLProtocolSocketFactory(context),
 						443
 						);
-				Protocol.registerProtocol("https", protocol);
+				Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
 				log.debug("SSL stuff all set");
 			} catch (Exception e) {
 				log.error("Could not set up SSLContext", e);
@@ -194,77 +212,6 @@ public class JsseSSLManager extends SSLManager {
             }
 		}
 		return this.context;
-	}
-
-	/**
-	 * @author MStover Created March 21, 2002
-	 */
-	protected static class AlwaysTrustManager implements X509TrustManager {
-		/**
-		 * Description of the Field
-		 */
-		protected X509Certificate[] certs;
-
-		/**
-		 * Constructor for the AlwaysTrustManager object
-		 * 
-		 * @param store
-		 *            Description of Parameter
-		 */
-		public AlwaysTrustManager(KeyStore store) {
-			try {
-				java.util.Enumeration enumer = store.aliases();
-				java.util.ArrayList list = new java.util.ArrayList(store.size());
-				while (enumer.hasMoreElements()) {
-					String alias = (String) enumer.nextElement();
-					log.debug("AlwaysTrustManager alias: " + alias);
-					if (store.isCertificateEntry(alias)) {
-						list.add(store.getCertificate(alias));
-						log.debug(" INSTALLED");
-					} else {
-						log.debug(" SKIPPED");
-					}
-				}
-				this.certs = (X509Certificate[]) list.toArray(new X509Certificate[] {});
-			} catch (Exception e) {
-				this.certs = null;
-			}
-		}
-
-		/**
-		 * Gets the AcceptedIssuers attribute of the AlwaysTrustManager object
-		 * 
-		 * @return The AcceptedIssuers value
-		 */
-		public X509Certificate[] getAcceptedIssuers() {
-			log.debug("Get accepted Issuers");
-			return certs;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see X509TrustManager#checkClientTrusted(X509Certificate[], String)
-		 */
-		public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see X509TrustManager#checkServerTrusted(X509Certificate[], String)
-		 */
-		public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-		}
-
-		public boolean isClientTrusted(X509Certificate[] arg0) {
-			return true;
-		}
-
-		public boolean isServerTrusted(X509Certificate[] arg0) {
-			return true;
-		}
-
 	}
 
 	/**
@@ -363,12 +310,18 @@ public class JsseSSLManager extends SSLManager {
 		 * simply provide a text box, which may or may not work. The alias does
 		 * have to match one in the keystore.
 		 * 
+		 * TODO? - does not actually allow the user to choose an alias at present
+		 * 
 		 * @see javax.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String,
 		 *      java.security.Principal, java.net.Socket)
 		 */
-		public String chooseClientAlias(String[] arg0, Principal[] arg1, Socket arg2) {
-			log.debug("Alias: " + this.store.getAlias());
-			return this.store.getAlias();
+		public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
+			String alias = this.store.getAlias();
+			log.debug("ClientAlias: " + alias);
+			if (alias == null || alias.length() == 0) {
+				log.debug("ClientAlias not found.");
+			}
+			return alias;
 		}
 
 		/**
@@ -380,10 +333,6 @@ public class JsseSSLManager extends SSLManager {
 		 */
 		public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
 			return this.manager.chooseServerAlias(arg0, arg1, arg2);
-		}
-
-		public String chooseClientAlias(String arg0, Principal[] arg1) {
-			return store.getAlias();
 		}
 	}
 }
