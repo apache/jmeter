@@ -67,8 +67,10 @@ public abstract class SSLManager {
 	/** Cache the KeyStore instance */
 	private JmeterKeyStore keyStore;
 
-	/** Cache the TrustStore instance */
-	private KeyStore trustStore;
+	/** Cache the TrustStore instance - null if no truststore name was provided */
+	private KeyStore trustStore = null;
+	// Have we yet tried to load the truststore?
+	private volatile boolean truststore_loaded=false;
 
 	/** Have the password available */
 	protected String defaultpw = System.getProperty(KEY_STORE_PASSWORD);
@@ -125,7 +127,7 @@ public abstract class SSLManager {
 				if (initStore.exists()) {
 					fileInputStream = new FileInputStream(initStore);
                     this.keyStore.load(fileInputStream, getPassword());
-                    log.info("Keystore loaded OK from file");
+                    log.info("Keystore loaded OK from file, found alias: "+keyStore.getAlias());
 				} else {
 					log.warn("Keystore file not found, loading empty keystore");
 					this.defaultpw = ""; // Ensure not null
@@ -176,10 +178,30 @@ public abstract class SSLManager {
 
 	/**
 	 * Opens and initializes the TrustStore.
+	 * 
+	 * There are 3 possibilities:
+	 * - no truststore name provided, in which case the default Java truststore should be used
+	 * - truststore name is provided, and loads OK
+	 * - truststore name is provided, but is not found or does not load OK, in which case an empty
+	 * truststore is created
+	 * 
+	 * If the KeyStore object cannot be created, then this is currently treated the same
+	 * as if no truststore name was provided.
+	 * 
+	 * @return truststore
+	 * - null: use Java truststore
+	 * - otherwise, the truststore, which may be empty if the file could not be loaded.
+	 * 
 	 */
 	protected KeyStore getTrustStore() {
-		if (null == this.trustStore) {
-			String fileName = System.getProperty(SSL_TRUST_STORE, "");
+		if (!truststore_loaded) {
+			
+			truststore_loaded=true;// we've tried ...
+			
+			String fileName = System.getProperty(SSL_TRUST_STORE);
+			if (fileName == null) {
+				return null;
+			}
 			log.info("TrustStore Location: " + fileName);
 
 			try {
