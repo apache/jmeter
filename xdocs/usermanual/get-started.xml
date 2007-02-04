@@ -107,6 +107,10 @@ implementation of SSL be provided, as is the case with Sun Java 1.4 and above.
 If your version of Java does not include SSL support, then it is possible to add an external implementation.
 Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="#configuring_jmeter">jmeter.properties</a>
 to register the SSL Provider.</p>
+<p><b>JMeter is configured to accept all certificates,
+whether trusted or not, regardless of validity periods etc.</b>
+This is to allow the maximum flexibility in testing servers.</p>
+<p>If the server requires a client certificate, this can be provided.</p>
 <p>There is also the <complink name="SSL Manager"/>, for greater control of certificates.</p>
 <note>The JMeter proxy server (see below) does not support recording SSL (https).</note>
 </subsection>
@@ -148,18 +152,18 @@ and the JAVA_HOME environment variable set, there is nothing more for you to do.
 </p>
 
 <subsection name="2.4.1 JMeter's Classpath" anchor="classpath">
-<p>JMeter automatically finds classes from jars in its /lib and /lib/ext directories.  
+<p>JMeter automatically finds classes from jars in its JMETER_HOME/lib and JMETER_HOME/lib/ext directories.  
 If you have developed new JMeter components,
-then you should jar them and copy the jar into JMeter's /lib/ext directory.  JMeter will
+then you should jar them and copy the jar into JMeter's JMETER_HOME/lib/ext directory.  JMeter will
 automatically find JMeter components in any jars found here.
-Support jars should be placed in the lib directory.
-If you don't want to put the extension jars in the lib/ext directory,
+Support jars should be placed in the JMETER_HOME/lib directory.
+If you don't want to put the extension jars in the JMETER_HOME/lib/ext directory,
 then define the property <b>search_paths</b> in jmeter.properties.
 Do not use lib/ext for utility jars; it is only intended for JMeter components.
 </p>
 <p>
-Other jars (such as JDBC, and any support libaries needed by the JMeter code)
- should be placed in the lib directory.</p>
+Other jars (such as JDBC, JavaMail, Beanshell and any other support libaries needed by the JMeter code)
+ should be placed in the JMETER_HOME/lib directory - not the lib/ext directory</p>
 <p>Note: JMeter will only find .jar files, not .zip.</p>
 <p>You can also install utility Jar files in $JAVA_HOME/jre/lib/ext, or (since 2.1.1) you can set the property user.classpath in jmeter.properties</p>
 <p>Note that setting the CLASSPATH environment variable will have no effect.
@@ -245,8 +249,7 @@ jmeter -LDEBUG</pre>
 10/17/2003 12:19:20 PM INFO  - jmeter.JMeter: Version 1.9.20031002 
 10/17/2003 12:19:45 PM INFO  - jmeter.gui.action.Load: Loading file: c:\mytestfiles\BSH.jmx 
 10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: 
-Starting 1 threads for group BSH. Ramp up = 1. 
+10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Starting 1 threads for group BSH. Ramp up = 1. 
 10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Continue on error 
 10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 started 
 10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 is done 
@@ -315,12 +318,11 @@ These are shown below.</p>
   </note>
   <properties>
 	<property name="ssl.provider">You can specify the class for your SSL
-	implementation.  If you are using the JSSE from sun, then it is:<br/>
-	com.sun.net.ssl.internal.ssl.Provider.  JMeter, by default, should provide https support is you are
-	using JDK1.4.</property>
+	implementation if you don't want to use the built-in Java implementation.
+	</property>
 	<property name="xml.parser">You can specify an implementation as your XML
 	parser.  The default value is: org.apache.xerces.parsers.SAXParser</property>
-  <property name="remote_hosts">Comma-delimited list of remote JMeter hosts.
+  <property name="remote_hosts">Comma-delimited list of remote JMeter hosts (or host:port if required).
 	If you are running JMeter in a distributed environment, list the machines where
   you have JMeter remote servers running.  This will allow you to control those
 	servers from this machine's GUI</property>

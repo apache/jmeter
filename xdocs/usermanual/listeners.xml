@@ -15,6 +15,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document
+[
+<!ENTITY sect-num '14'>
+]>
+
 <document prev="build-monitor-test-plan.html" next="remote-test.html" date="$Date$">
 
 <properties>
@@ -23,7 +29,7 @@
 
 <body>
 
-<section name="14. Introduction to listeners" anchor="intro">
+<section name="&sect-num;. Introduction to listeners" anchor="intro">
 <p>A listener is a component that shows the results of the
 samples. The results can be shown in a tree, tables, graphs or simply written to a log
 file. To view the contents of a response from any given sampler, add either of the Listeners "View
@@ -51,7 +57,7 @@ The same filename can be used by multiple samplers - but make sure they all use 
 </p>
 </section>
 
-<section name="14.1 Screen captures" anchor="screencap">
+<section name="&sect-num;.1 Screen captures" anchor="screencap">
 <p>JMeter is capable of saving any listener as a PNG file. To do so, select the
 listener in the left panel. Click edit -> Save As Image. A file dialog will
 appear. Enter the desired name and save the listener.
@@ -59,7 +65,7 @@ appear. Enter the desired name and save the listener.
 <figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
 
 </section>
-<section name="14.2 non-GUI (batch) test runs" anchor="batch">
+<section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
 <p>
 When running in non-GUI mode, the -l flag can be used to create a top-level listener for the test run.
 This is in addition to any Listeners defined in the test plan.
@@ -84,7 +90,7 @@ and define the logical before starting JMeter.
 </p>
 </section>
 
-<section name="14.3 Resource usage" anchor="resources">
+<section name="&sect-num;.3 Resource usage" anchor="resources">
 <p>
 Listeners can be quite resource intensive so use as few as possible. 
 For minimum resource usage, remove all listeners, and run the test in non-GUI mode with the -l flag to define a single listener.
@@ -92,7 +98,7 @@ The result log file can be read back into a Listener after a test has completed.
 </p>
 </section>
 
-<section name="14.4 CSV Log format" anchor="csvlogformat">
+<section name="&sect-num;.4 CSV Log format" anchor="csvlogformat">
 <p>
 The CSV log format depends on which data items are selected in the configuration.
 Only the specified data items are recorded in the file.
@@ -118,15 +124,17 @@ The format of the XML files is as follows:
 </p>
 </section>
 
-<section name="14.5 XML Log format 2.0" anchor="xmlformat2.0">
+<section name="&sect-num;.5 XML Log format 2.0" anchor="xmlformat2.0">
 <p>
 The format of the original XML (2.0) is as follows (line breaks will be different):
 </p>
 <pre>
 &amp;lt;?xml version="1.0" encoding="UTF-8"?>
 &amp;lt;testResults version="1.2">
-&amp;lt;sampleResult timeStamp="1144365463297" dataType="text" threadName="Listen 1-1" label="HTTP Request" time="1502" responseMessage="OK" responseCode="200" success="true">
- &amp;lt;sampleResult timeStamp="1144365464238" dataType="text" threadName="Listen 1-1" label="http://www.apache.org/style/style.css" time="171" responseMessage="OK" responseCode="200" success="true">
+&amp;lt;sampleResult timeStamp="1144365463297" dataType="text" threadName="Listen 1-1" 
+   label="HTTP Request" time="1502" responseMessage="OK" responseCode="200" success="true">
+ &amp;lt;sampleResult timeStamp="1144365464238" dataType="text" threadName="Listen 1-1" 
+    label="http://www.apache.org/style/style.css" time="171" responseMessage="OK" responseCode="200" success="true">
  &amp;lt;property xml:space="preserve" name="samplerData">
  GET http://www.apache.org/style/style.css
  &amp;lt;/property>
@@ -146,7 +154,7 @@ The format of the original XML (2.0) is as follows (line breaks will be differen
 </pre>
 </section>
 
-<section name="14.6 XML Log format 2.1" anchor="xmlformat2.1">
+<section name="&sect-num;.6 XML Log format 2.1" anchor="xmlformat2.1">
 <p>
 The format of the updated XML (2.1) is as follows (line breaks will be different):
 </p>
@@ -156,8 +164,10 @@ The format of the updated XML (2.1) is as follows (line breaks will be different
 
 -- HTTP Sample, with nested samples 
 
-&amp;lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" lb="HTTP Request" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407">
-  &amp;lt;httpSample t="170" lt="170" ts="1144371015471" s="true" lb="http://www.apache.org/style/style.css" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002">
+&amp;lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" lb="HTTP Request" rc="200" rm="OK" 
+     tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407">
+  &amp;lt;httpSample t="170" lt="170" ts="1144371015471" s="true" 
+        lb="http://www.apache.org/style/style.css" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002">
     &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
 ...
@@ -177,7 +187,8 @@ Content-Type: text/css
     &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
     &amp;lt;url>http://www.apache.org/style/style.css&amp;lt;/url>
   &amp;lt;/httpSample>
-  &amp;lt;httpSample t="200" lt="180" ts="1144371015641" s="true" lb="http://www.apache.org/images/asf_logo_wide.gif" rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866">
+  &amp;lt;httpSample t="200" lt="180" ts="1144371015641" s="true" lb="http://www.apache.org/images/asf_logo_wide.gif" 
+     rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866">
     &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
 ...
@@ -217,7 +228,8 @@ Content-Type: text/html; charset=ISO-8859-1
 
 -- nonHTTPP Sample
 
-&amp;lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10">
+&amp;lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler" rc="200" rm="OK" 
+    tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10">
   &amp;lt;responseHeader class="java.lang.String">&amp;lt;/responseHeader>
   &amp;lt;requestHeader class="java.lang.String">&amp;lt;/requestHeader>
   &amp;lt;responseData class="java.lang.String">Listen 1-1&amp;lt;/responseData>
@@ -259,7 +271,7 @@ This has been corrected so that it is always saved as "rc"; either "rc" or "rs" 
 </p>
 </section>
 
-<section name="14.7 Saving response data" anchor="saving">
+<section name="&sect-num;.7 Saving response data" anchor="saving">
 <p>
 As shown above, the response data can be saved in the XML log file if required.
 However, this can make the file rather large, and the text has to be encoded so
@@ -271,6 +283,10 @@ The file name can then be included in the sample log output.
 The data will be retrieved from the file if necessary when the sample log file is reloaded.
 </p>
 </section>
-
+<section name="&sect-num;.8 Loading (reading) response data" anchor="loading">
+<p>To view an existing results file, you can use the File "Browse..." button to select a file.
+If necessary, just create a dummy testplan with the appropriate Listener in it.
+</p>
+</section>
 </body>
 </document>
