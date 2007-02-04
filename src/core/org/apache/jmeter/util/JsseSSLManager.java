@@ -217,12 +217,12 @@ public class JsseSSLManager extends SSLManager {
 				java.util.ArrayList list = new java.util.ArrayList(store.size());
 				while (enumer.hasMoreElements()) {
 					String alias = (String) enumer.nextElement();
-					log.info("AlwaysTrustManager alias: " + alias);
+					log.debug("AlwaysTrustManager alias: " + alias);
 					if (store.isCertificateEntry(alias)) {
 						list.add(store.getCertificate(alias));
-						log.info(" INSTALLED");
+						log.debug(" INSTALLED");
 					} else {
-						log.info(" SKIPPED");
+						log.debug(" SKIPPED");
 					}
 				}
 				this.certs = (X509Certificate[]) list.toArray(new X509Certificate[] {});
@@ -237,7 +237,7 @@ public class JsseSSLManager extends SSLManager {
 		 * @return The AcceptedIssuers value
 		 */
 		public X509Certificate[] getAcceptedIssuers() {
-			log.info("Get accepted Issuers");
+			log.debug("Get accepted Issuers");
 			return certs;
 		}
 
@@ -309,8 +309,8 @@ public class JsseSSLManager extends SSLManager {
 		 * @return the ClientAliases value
 		 */
 		public String[] getClientAliases(String keyType, Principal[] issuers) {
-			log.info("WrappedX509Manager: getClientAliases: ");
-			log.info(this.store.getAlias());
+			log.debug("WrappedX509Manager: getClientAliases: ");
+			log.debug(this.store.getAlias());
 			return new String[] { this.store.getAlias() };
 		}
 
@@ -326,7 +326,7 @@ public class JsseSSLManager extends SSLManager {
 		 * @return the ServerAliases value
 		 */
 		public String[] getServerAliases(String keyType, Principal[] issuers) {
-			log.info("WrappedX509Manager: getServerAliases: ");
+			log.debug("WrappedX509Manager: getServerAliases: ");
 			return this.manager.getServerAliases(keyType, issuers);
 		}
 
@@ -338,7 +338,7 @@ public class JsseSSLManager extends SSLManager {
 		 * @return The CertificateChain value
 		 */
 		public X509Certificate[] getCertificateChain(String alias) {
-			log.info("WrappedX509Manager: getCertificateChain(" + alias + ")");
+			log.debug("WrappedX509Manager: getCertificateChain(" + alias + ")");
 			return this.store.getCertificateChain();
 		}
 
@@ -350,7 +350,7 @@ public class JsseSSLManager extends SSLManager {
 		 * @return The PrivateKey value
 		 */
 		public PrivateKey getPrivateKey(String alias) {
-			log.info("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
+			log.debug("WrappedX509Manager: getPrivateKey: " + this.store.getPrivateKey());
 			return this.store.getPrivateKey();
 		}
 
@@ -367,7 +367,7 @@ public class JsseSSLManager extends SSLManager {
 		 *      java.security.Principal, java.net.Socket)
 		 */
 		public String chooseClientAlias(String[] arg0, Principal[] arg1, Socket arg2) {
-			log.info("Alias: " + this.store.getAlias());
+			log.debug("Alias: " + this.store.getAlias());
 			return this.store.getAlias();
 		}
 
