@@ -51,6 +51,7 @@ jmeterthread.reversePostProcessors=true
 <li>Use property jmeter.home (if present) to override user.dir when starting JMeter</li>
 <li>Bug 41457 - Add TCP Sampler option to not re-use connections</li>
 <li>Bug 41522 - Use JUnit sampler name in sample results</li>
+<li>HttpClient now behaves the same as the JDK http sampler for invalid certificates etc</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -74,6 +75,7 @@ jmeterthread.reversePostProcessors=true
 <li>Bug 34261 - NPE in HtmlParser (allow for missing attributes)</li>
 <li>Bug 40100 - check FileServer type before calling close</li>
 <li>Replace com.sun.net classes with javax.net</li>
+<li>Bug 39887 - jmeter.util.SSLManager: Couldn't load keystore error message</li>
 </ul>
 
 <h3>Version 2.2</h3>
