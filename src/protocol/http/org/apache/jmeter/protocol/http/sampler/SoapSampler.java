@@ -187,7 +187,7 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public long getContentLength() {
-                    return -1;
+                    return getXmlData().length();// so we don't generate chunked encoding
                 }
 
                 public String getContentType() {
