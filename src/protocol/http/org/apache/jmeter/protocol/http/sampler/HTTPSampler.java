@@ -41,6 +41,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -57,6 +58,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 	private static final int MAX_CONN_RETRIES = 10; // Maximum connection retries
 
+	private static final byte[] NULL_BA = new byte[0];// can share these
+	
 	/**
 	 * Constructor for the HTTPSampler object.
      * 
@@ -205,6 +208,13 @@ public class HTTPSampler extends HTTPSamplerBase {
 	protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
 		byte[] readBuffer = getThreadContext().getReadBuffer();
 		BufferedInputStream in;
+
+        if ((conn.getContentLength() == 0) && JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false)) {
+            log.info("Content-Length: 0, not reading http-body");
+			res.setResponseHeaders(getResponseHeaders(conn));
+			return NULL_BA;
+		}
+
 		try {
             // works OK even if ContentEncoding is null
 			if (ENCODING_GZIP.equals(conn.getContentEncoding())) {
@@ -222,7 +232,16 @@ public class HTTPSampler extends HTTPSamplerBase {
 				}
 			}
 			// Normal InputStream is not available
-			in = new BufferedInputStream(conn.getErrorStream());
+			InputStream errorStream = conn.getErrorStream();
+			if (errorStream == null) {
+				log.info("Error Response Code: "+conn.getResponseCode()+", Server sent no Errorpage");
+				res.setResponseHeaders(getResponseHeaders(conn));
+				return NULL_BA;
+			}
+			else {
+				log.info("Error Response Code: "+conn.getResponseCode());
+			}
+			in = new BufferedInputStream(errorStream);
 		} catch (Exception e) {
 			log.error("readResponse: "+e.toString());
 			Throwable cause = e.getCause();
