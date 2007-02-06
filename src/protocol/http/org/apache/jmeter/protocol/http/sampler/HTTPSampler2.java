@@ -435,12 +435,17 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     = (org.apache.jmeter.protocol.http.control.Header) 
                        i.next().getObjectValue();
 					String n = header.getName();
-					String v = header.getValue();
-					method.addRequestHeader(n, v);
-					hdrs.append(n);
-					hdrs.append(": "); // $NON-NLS-1$
-					hdrs.append(v);
-					hdrs.append("\n"); // $NON-NLS-1$
+					// Don't allow override of Content-Length
+					// This helps with SoapSampler hack too
+					// TODO - what other headers are not allowed?
+					if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
+						String v = header.getValue();
+						method.addRequestHeader(n, v);
+						hdrs.append(n);
+						hdrs.append(": "); // $NON-NLS-1$
+						hdrs.append(v);
+						hdrs.append("\n"); // $NON-NLS-1$
+					}
 				}
 			}
 		}
