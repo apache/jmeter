@@ -78,6 +78,7 @@ jmeterthread.reversePostProcessors=true
 <li>Bug 39887 - jmeter.util.SSLManager: Couldn't load keystore error message</li>
 <li>Bug 41543 - exception when webserver returns "500 Internal Server Error" and content-length is 0</li>
 <li>Bug 41416 - don't use chunked input for text-box input in SOAP-RPC sampler</li>
+<li>Bug 39827 - SOAP Sampler content length for files</li>
 </ul>
 
 <h3>Version 2.2</h3>

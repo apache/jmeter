@@ -278,6 +278,13 @@ If a SOAP action is specified, that will override any SOAPaction in the HeaderMa
 The primary difference between the soap sampler and
 webservice sampler, is the soap sampler uses raw post and does not require conformance to
 XML.</p>
+<note>For versions of JMeter later than 2.2, the sampler no longer uses chunked encoding by default.<br/>
+For screen input, it now always uses the size of the data.<br/>
+File input uses the file length as determined by Java.<br/>
+On some OSes this may not work for all files, in which case add a child Header Manager
+with Content-Length set to the actual length of the file.<br/>
+Or set Content-Length to -1 to force chunked encoding.
+</note>
 </description>
 
 <properties>
