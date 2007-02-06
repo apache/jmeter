@@ -28,6 +28,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,16 +118,19 @@ public class SoapSampler extends HTTPSampler2 {
 		setProperty(SEND_SOAP_ACTION, String.valueOf(action));
 	}
 
-    protected void setPostHeaders(PostMethod post) {
+    protected int setPostHeaders(PostMethod post) {
+    	int length=0;// Take length from file
         if (getHeaderManager() != null) {
             // headerManager was set, so let's set the connection
             // to use it.
             HeaderManager mngr = getHeaderManager();
             int headerSize = mngr.size();
-            // we set all the header properties
             for (int idx = 0; idx < headerSize; idx++) {
                 Header hd = mngr.getHeader(idx);
-                post.addParameter(hd.getName(), hd.getValue());
+                if (HEADER_CONTENT_LENGTH.equalsIgnoreCase(hd.getName())) {// Use this to override file length
+                	length = Integer.parseInt(hd.getValue());
+                }
+                // All the other headers are set up by HTTPSampler2.setupConnection()
             }
         } else {
             // otherwise we use "text/xml" as the default
@@ -135,6 +139,7 @@ public class SoapSampler extends HTTPSampler2 {
         if (getSendSOAPAction()) {
             post.setRequestHeader(SOAPACTION, getSOAPActionQuoted());
         }
+        return length;
     }
 
     /**
@@ -143,7 +148,7 @@ public class SoapSampler extends HTTPSampler2 {
      * @param post
      * @throws IOException if an I/O exception occurs
      */
-    protected void sendPostData(PostMethod post) {
+    protected void sendPostData(PostMethod post, final int length) {
         final String xmlFile = getXmlFile();
         if (xmlFile != null && getXmlFile().length() > 0) {
             post.setRequestEntity(new RequestEntity() {
@@ -167,7 +172,14 @@ public class SoapSampler extends HTTPSampler2 {
                 }
 
                 public long getContentLength() {
-                    return -1;
+                	switch(length){
+	                	case -1:
+	                		return -1;
+	                	case 0: // No header provided
+	                		return (new File(xmlFile)).length();
+	                	default:
+	                		return length;
+	                	}
                 }
 
                 public String getContentType() {
@@ -216,11 +228,11 @@ public class SoapSampler extends HTTPSampler2 {
         HttpClient client = null;
         InputStream instream = null;
         try {
-            setPostHeaders(httpMethod);
+            int content_len = setPostHeaders(httpMethod);
             client = setupConnection(url, httpMethod, res);
 
             res.setQueryString(getQueryString());
-            sendPostData(httpMethod);
+            sendPostData(httpMethod,content_len);
 
             int statusCode = client.executeMethod(httpMethod);
 
