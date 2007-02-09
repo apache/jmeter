@@ -468,32 +468,16 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
-                    /*
-                     * TODO: better method...
-                     * HACK: if user contains \ and or @
-                     * then assume it is of the form:
-                     * domain \ user @ realm (without spaces)
-                     */
-                    String user = auth.getUser();
-                    String realm=null;
-                    String domain="";// $NON-NLS-1$
-                    String username="";// $NON-NLS-1$
-                    int bs=user.indexOf('\\'); // $NON-NLS-1$
-                    int at=user.indexOf('@'); // $NON-NLS-1$
-                    if (bs > 0) {
-                        domain=user.substring(0,bs);
-                    }
-                    if (at > 0 && at > bs+1) {
-                        realm=user.substring(at+1);
-                    } else {
-                        at = user.length();
-                    }
-                    username=user.substring(bs+1,at);
+                    String username = auth.getUser();
+                    String realm = auth.getRealm();
+                    String domain = auth.getDomain();
                     if (log.isDebugEnabled()){
-                        log.debug(user + " >  D="+ username + " D="+domain+" R="+realm);
+                        log.debug(username + " >  D="+ username + " D="+domain+" R="+realm);
                     }
 					client.getState().setCredentials(
-                            new AuthScope(u.getHost(),u.getPort(),realm,AuthScope.ANY_SCHEME),
+                            new AuthScope(u.getHost(),u.getPort(),
+                            		realm.length()==0 ? null : realm //"" is not the same as no realm
+                            		,AuthScope.ANY_SCHEME),
                             // NT Includes other types of Credentials
                             new NTCredentials(
 									username, 

@@ -40,7 +40,11 @@ The original behaviour can be restored by setting the following JMeter property:
 <br/>
 jmeterthread.reversePostProcessors=true
 </p>
-
+<p>
+The HTTP Authorisation Manager now has extra columns for domain and realm, 
+so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
+has been removed.
+</p>
 <h4>New functionality:</h4>
 <ul>
 <li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
@@ -52,6 +56,7 @@ jmeterthread.reversePostProcessors=true
 <li>Bug 41457 - Add TCP Sampler option to not re-use connections</li>
 <li>Bug 41522 - Use JUnit sampler name in sample results</li>
 <li>HttpClient now behaves the same as the JDK http sampler for invalid certificates etc</li>
+<li>Add Domain and Realm support to HTTP Authorisation Manager</li>
 </ul>
 
 <h4>Bug fixes:</h4>
