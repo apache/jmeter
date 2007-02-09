@@ -31,6 +31,7 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
+import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.jmeter.config.Argument;
@@ -504,15 +505,17 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		int count = 0;
 		while (iter.hasNext()) {
 			LDAPArgument item = (LDAPArgument) iter.next().getObjectValue();
-			if ((item.getValue()).equals("")) {
+			if ((item.getValue()).length()==0) {
 				attr = new BasicAttribute(item.getName());
 			} else {
 				attr = getBasicAttribute(item.getName(), item.getValue());
 			}
+			
 			if ("add".equals(item.getOpcode())) { // $NON-NLS-1$
 				mods[count] = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
 			} else {
-				if ("delete".equals(item.getOpcode())) { // $NON-NLS-1$
+				if ("delete".equals(item.getOpcode()) // $NON-NLS-1$
+				||  "remove".equals(item.getOpcode())) { // $NON-NLS-1$
 					mods[count] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
 				} else {
 					mods[count] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
@@ -721,8 +724,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "<binddn>" + getSuserDN() + "</binddn></operation>";
 				singleBindOp(res);
 			} else if (getPropertyAsString(TEST).equals(COMPARE)) {
-				res
-						.setSamplerData("Compare " + getPropertyAsString(COMPAREFILT) + " "
+				res.setSamplerData("Compare " + getPropertyAsString(COMPAREFILT) + " "
 								+ getPropertyAsString(COMPAREDN));
 				responseData = responseData + "<operation><opertype>compare</opertype>";
 				responseData = responseData + "<comparedn>" + getPropertyAsString(COMPAREDN) + "</comparedn>";
@@ -762,7 +764,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "<newdn>" + getPropertyAsString(NEWDN) + "</newdn></operation>";
 				renameTest(temp_client, dirContext, res);
 			} else if (getPropertyAsString(TEST).equals(SEARCHBASE)) {
-				res.setSamplerData("Search with filter " + getPropertyAsString(SEARCHFILTER));
+                final String            scopeStr = getPropertyAsString(SCOPE);
+                final int               scope;
+
+                res.setSamplerData("Search with filter " + getPropertyAsString(SEARCHFILTER));
 				responseData = responseData + "<operation><opertype>search</opertype>";
 				responseData = responseData + "<searchfilter>" + getPropertyAsString(SEARCHFILTER) + "</searchfilter>";
 				responseData = responseData + "<searchbase>" + getPropertyAsString(SEARCHBASE) + ","
@@ -772,8 +777,20 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				responseData = responseData + "<timelimit>" + getPropertyAsString(TIMELIM) + "</timelimit>";
 				responseData = responseData + "</operation><searchresult>";
                 res.sampleStart();
+
+                if ("object".equals(scopeStr)) { // $NON-NLS-1$
+                    scope = SearchControls.OBJECT_SCOPE;
+                } else if ("onelevel".equals(scopeStr)) { // $NON-NLS-1$
+                    scope = SearchControls.ONELEVEL_SCOPE;
+                } else if ("subtree".equals(scopeStr)) { // $NON-NLS-1$
+                    scope = SearchControls.SUBTREE_SCOPE;
+                } else {
+                        // for backwards compatibility
+                    scope = getPropertyAsInt(SCOPE);
+                }
+
                 NamingEnumeration srch = temp_client.searchTest(dirContext, getPropertyAsString(SEARCHBASE), getPropertyAsString(SEARCHFILTER),
-                        getPropertyAsInt(SCOPE), getPropertyAsLong(COUNTLIM), getPropertyAsInt(TIMELIM),
+                        scope, getPropertyAsLong(COUNTLIM), getPropertyAsInt(TIMELIM),
                         getRequestAttributes(getPropertyAsString(ATTRIBS)), getPropertyAsBoolean(RETOBJ),
                         getPropertyAsBoolean(DEREF));
                 res.sampleEnd();
@@ -805,7 +822,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 						.indexOf("LDAP: error code") + 19));
 			} else {
 				res.setResponseMessage(returnData);
-				res.setResponseCode("800");
+				res.setResponseCode("800"); // $NON-NLS-1$
 			}
 			isSuccessful = false;
 		} finally {
@@ -820,11 +837,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	}
 
 	public void testStarted() {
-		testStarted("");
+		testStarted(""); // $NON-NLS-1$
 	}
 
 	public void testEnded() {
-		testEnded("");
+		testEnded(""); // $NON-NLS-1$
 	}
 
 	public void testStarted(String host) {
