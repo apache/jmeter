@@ -57,6 +57,7 @@ has been removed.
 <li>Bug 41522 - Use JUnit sampler name in sample results</li>
 <li>HttpClient now behaves the same as the JDK http sampler for invalid certificates etc</li>
 <li>Add Domain and Realm support to HTTP Authorisation Manager</li>
+<li>Bug 33964 - send file as entire post body if name/type are omitted</li>
 </ul>
 
 <h4>Bug fixes:</h4>
