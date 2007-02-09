@@ -54,8 +54,6 @@ import org.apache.log.Logger;
  * Handles input for determining if authentication services are required for a
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
- * 
- * @version $Revision$ Last updated: $Date$
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -209,7 +207,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {
+			} catch (NullPointerException err) {// TODO WHY?
 			}
 		} else if (action.equals(SAVE_COMMAND)) {
 			try {
@@ -219,7 +217,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {
+			} catch (NullPointerException err) {// TODO WHY?
 			}
 		}
 	}
@@ -230,13 +228,13 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		TableColumn passwordColumn = authTable.getColumnModel().getColumn(2);
+		TableColumn passwordColumn = authTable.getColumnModel().getColumn(AuthManager.COL_PASSWORD);
 		passwordColumn.setCellEditor(new DefaultCellEditor(new JPasswordField()));
 		passwordColumn.setCellRenderer(new PasswordCellRenderer());
 
 		JPanel panel = new JPanel(new BorderLayout(0, 5));
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("auths_stored")));
+		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				JMeterUtils.getResString("auths_stored")));
 		panel.add(new JScrollPane(authTable));
 		panel.add(createButtonPanel(), BorderLayout.SOUTH);
 		return panel;
@@ -326,26 +324,44 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		public Object getValueAt(int row, int column) {
 			Authorization auth = manager.getAuthObjectAt(row);
 
-			if (column == 0) {
-				return auth.getURL();
-			} else if (column == 1) {
-				return auth.getUser();
-			} else if (column == 2) {
-				return auth.getPass();
+			switch (column){
+				case AuthManager.COL_URL:
+					return auth.getURL();					
+				case AuthManager.COL_USERNAME:
+					return auth.getUser();					
+				case AuthManager.COL_PASSWORD:
+					return auth.getPass();					
+				case AuthManager.COL_DOMAIN:
+					return auth.getDomain();
+				case AuthManager.COL_REALM:
+					return auth.getRealm();					
+				default:
+					return null;
 			}
-			return null;
 		}
 
 		public void setValueAt(Object value, int row, int column) {
 			Authorization auth = manager.getAuthObjectAt(row);
 			log.debug("Setting auth value: " + value);
-			if (column == 0) {
-				auth.setURL((String) value);
-			} else if (column == 1) {
-				auth.setUser((String) value);
-			} else if (column == 2) {
-				auth.setPass((String) value);
-			}
+			switch (column){
+				case AuthManager.COL_URL:
+					auth.setURL((String) value);
+					break;
+				case AuthManager.COL_USERNAME:
+					auth.setUser((String) value);
+					break;
+				case AuthManager.COL_PASSWORD:
+					auth.setPass((String) value);
+					break;
+				case AuthManager.COL_DOMAIN:
+					auth.setDomain((String) value);
+					break;
+				case AuthManager.COL_REALM:
+					auth.setRealm((String) value);
+					break;
+				default:
+					break;
+		    }
 		}
 	}
 

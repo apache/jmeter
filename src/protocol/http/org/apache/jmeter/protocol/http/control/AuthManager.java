@@ -48,18 +48,29 @@ import org.apache.log.Logger;
  * format of the authorization file is: URL user pass where URL is an HTTP URL,
  * user a username to use and pass the appropriate password.
  * 
- * @author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
- * @version $Revision$
+ * author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
  */
 public class AuthManager extends ConfigTestElement implements ConfigElement, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private final static String AUTH_LIST = "AuthManager.auth_list";
 
-	private final static int columnCount = 3;
+	private final static String[] columnNames = {
+		JMeterUtils.getResString("auth_base_url"),
+		JMeterUtils.getResString("username"), 
+		JMeterUtils.getResString("password"), 
+		JMeterUtils.getResString("domain"), 
+		JMeterUtils.getResString("realm"), 
+		};
 
-	private final static String[] columnNames = { JMeterUtils.getResString("auth_base_url"),
-			JMeterUtils.getResString("username"), JMeterUtils.getResString("password") };
+	// Column numbers - must agree with order above
+	public final static int COL_URL = 0;
+	public final static int COL_USERNAME = 1;
+	public final static int COL_PASSWORD = 2;
+	public final static int COL_DOMAIN = 3;
+	public final static int COL_REALM = 4;
+
+	private final static int columnCount = columnNames.length;
 
 	/**
 	 * Default Constructor.
@@ -76,8 +87,8 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	/**
 	 * Update an authentication record.
 	 */
-	public void set(int index, String url, String user, String pass) {
-		Authorization auth = new Authorization(url, user, pass);
+	public void set(int index, String url, String user, String pass, String domain, String realm) {
+		Authorization auth = new Authorization(url, user, pass, domain, realm);
 		if (index >= 0) {
 			getAuthObjects().set(index, new TestElementProperty(auth.getName(), auth));
 		} else {
@@ -202,7 +213,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		return false;
 	}
 
-	public void uncompile() {
+	public void uncompile() {// TODO is this used?
 	}
 
 	/**
@@ -248,7 +259,13 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 				String url = st.nextToken();
 				String user = st.nextToken();
 				String pass = st.nextToken();
-				Authorization auth = new Authorization(url, user, pass);
+				String domain = "";
+				String realm = "";
+				if (st.hasMoreTokens()){// Allow for old format file without the extra columnns
+				    domain = st.nextToken();
+				    realm = st.nextToken();
+				}
+				Authorization auth = new Authorization(url, user, pass,domain,realm);
 				getAuthObjects().addItem(auth);
 			} catch (Exception e) {
 				reader.close();
@@ -274,6 +291,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 
     // Needs to be package protected for Unit test
 	static boolean isSupportedProtocol(URL url) {
-		return url.getProtocol().toUpperCase().equals("HTTP") || url.getProtocol().toUpperCase().equals("HTTPS");
+		String protocol = url.getProtocol().toUpperCase();
+		return protocol.equals("HTTP") || protocol.equals("HTTPS");
 	}
 }
