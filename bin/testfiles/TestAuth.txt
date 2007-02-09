@@ -7,3 +7,4 @@ http://a.b.c/2	login2	password2
 http://a.b.c/1/1	login11	password11
 http://a.b.c/22	login22	password22
 http://a.b.c/	login	password
+http://d.e.f/	user	pass	domain	realm

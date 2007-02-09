@@ -1890,12 +1890,15 @@ a password of "jmeter".  If you send an HTTP request to the URL
 "http://jakarta.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
 information for the user named, "jmeter".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
-  <property name="Password" required="Yes">The password to authorize.</property>
+  <property name="Password" required="Yes">The password for the user.</property>
+  <property name="Domain" required="No">The domain to use for NTLM.</property>
+  <property name="Realm" required="No">The realm to use for NTLM.</property>
 </properties>
 <note>
-For NTLM authentication, enter the user name in the form domain\user[@realm]. This is an experimental feature and may be changed at a later date.
-This should work with the Http Client sampler on all platforms, but with the default Http sampler only on Windows. 
-The realm portion is optional, and only applies to the HttpClient sampler.
+The Realm only applies to the HttpClient sampler.
+In JMeter 2.2, the domain and realm did not have separate columns, and were encoded as part of
+the user name in the form: [domain\]username[@realm].
+This was an experimental feature and has been removed.
 </note>
 <b>Controls:</b>
 <ul>
