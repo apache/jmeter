@@ -193,6 +193,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 
+	protected static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
+
     // Derive the mapping of content types to parsers
     private static Map parsersForType = new HashMap();
     // Not synch, but it is not modified after creation
@@ -237,20 +239,43 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		setArguments(new Arguments());
 	}
 
+    /**
+     * The name parameter to be applied to the file
+     */
 	public void setFileField(String value) {
 		setProperty(FILE_FIELD, value);
 	}
 
+    /**
+     * The name parameter to be applied to the file
+     */
 	public String getFileField() {
 		return getPropertyAsString(FILE_FIELD);
 	}
 
+    /**
+     * The actual name of the file to POST
+     */
 	public void setFilename(String value) {
 		setProperty(FILE_NAME, value);
 	}
 
+    /**
+     * The actual name of the file to POST
+     */
 	public String getFilename() {
 		return getPropertyAsString(FILE_NAME);
+	}
+
+	/**
+	 * Determine if the file should be sent as the entire Post body,
+	 * i.e. without any additional wrapping
+	 * 
+	 * @return true if specified file is to be sent as the body,
+	 * i.e. both FileField and MimeType are blank
+	 */
+	public boolean getSendFileAsPostBody(){
+		return getFileField().length()== 0 && getMimetype().length() == 0;
 	}
 
 	public void setProtocol(String value) {
