@@ -22,28 +22,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.lang.reflect.Method;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
-
 /**
  * This class contains frequently-used static utility methods.
  * 
- * @author <a href="mailto://jsalvata@atg.com">Jordi Salvat i Alabart</a>
+ * author <a href="mailto://jsalvata@atg.com">Jordi Salvat i Alabart</a>
  *         Created 27th December 2002
- * @version $Revision$ Last updated: $Date$
  */
 public final class JOrphanUtils {
-	private static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -251,80 +244,6 @@ public final class JOrphanUtils {
 		return value ? Boolean.TRUE : Boolean.FALSE;
 	}
 
-	private static Method decodeMethod = null;
-
-	private static Method encodeMethod = null;
-
-	static {
-		Class URLEncoder = URLEncoder.class;
-		Class URLDecoder = URLDecoder.class;
-		Class[] argTypes = { String.class, String.class };
-		try {
-			decodeMethod = URLDecoder.getMethod("decode", argTypes);
-			encodeMethod = URLEncoder.getMethod("encode", argTypes);
-			// System.out.println("Using JDK1.4 xxcode() calls");
-        } catch (NoSuchMethodException e) {
-        }
-		// System.out.println("java.version="+System.getProperty("java.version"));
-	}
-
-	/**
-	 * Version of URLEncoder().encode(string,encoding) for JDK1.3 Also supports
-	 * JDK1.4 (but will be a bit slower)
-	 * 
-	 * @param string
-	 *            to be encoded
-	 * @param encoding
-	 *            (ignored for JDK1.3)
-	 * @return the encoded string
-	 * 
-	 * @deprecated Use URLEncoder.encode(string, encoding)
-	 * 
-	 */
-	public static String encode(String string, String encoding) throws UnsupportedEncodingException {
-		if (encodeMethod != null) {
-			// JDK1.4: return URLEncoder.encode(string, encoding);
-			Object args[] = { string, encoding };
-			try {
-				return (String) encodeMethod.invoke(null, args);
-			} catch (Exception e) {
-				log.warn("Error trying to encode", e);
-				return string;
-			}
-		} else {
-			return URLEncoder.encode(string);// JDK1.3
-		}
-
-	}
-
-	/**
-	 * Version of URLDecoder().decode(string,encoding) for JDK1.3 Also supports
-	 * JDK1.4 (but will be a bit slower)
-	 * 
-	 * @param string
-	 *            to be decoded
-	 * @param encoding
-	 *            (ignored for JDK1.3)
-	 * @return the encoded string
-	 * 
-	 * @deprecated Use URLDencoder.decode(string, encoding)
-	 * 
-	 */
-	public static String decode(String string, String encoding) throws UnsupportedEncodingException {
-		if (decodeMethod != null) {
-			// JDK1.4: return URLDecoder.decode(string, encoding);
-			Object args[] = { string, encoding };
-			try {
-				return (String) decodeMethod.invoke(null, args);
-			} catch (Exception e) {
-				log.warn("Error trying to decode", e);
-				return string;
-			}
-		} else {
-			return URLDecoder.decode(string); // JDK1.3
-		}
-	}
-
 	/**
 	 * Simple-minded String.replace() for JDK1.3 Should probably be recoded...
 	 * 
@@ -472,6 +391,28 @@ public final class JOrphanUtils {
     public static void closeQuietly(Reader rd){
         try {
             if (rd != null) rd.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * close a Socket with no error thrown
+     * @param sock - Socket (may be null)
+     */
+    public static void closeQuietly(Socket sock){
+        try {
+            if (sock!= null) sock.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * close a Socket with no error thrown
+     * @param sock - ServerSocket (may be null)
+     */
+    public static void closeQuietly(ServerSocket sock){
+        try {
+            if (sock!= null) sock.close();
         } catch (IOException e) {
         }
     }
