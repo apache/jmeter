@@ -234,18 +234,22 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		// If filename was specified then send the post using multipart syntax
 		String filename = getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
-            int argc = getArguments().getArgumentCount();
-            Part[] parts = new Part[argc+1]; 
-            PropertyIterator args = getArguments().iterator();
-            int i = 0;
-            while (args.hasNext()) {
-                Argument arg = (Argument) args.next().getObjectValue();
-                parts[i++] = new StringPart(arg.getName(), arg.getValue());
-            }
-            File input = new File(filename);
-                    //TODO should allow charset to be defined ...
-            parts[i]= new FilePart(getFileField(), input, getMimetype(), "UTF-8" );//$NON-NLS-1$
-            post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
+			if (getSendFileAsPostBody()) {
+				post.setRequestEntity(new FileRequestEntity(new File(filename),null));
+			} else {
+	            int argc = getArguments().getArgumentCount();
+	            Part[] parts = new Part[argc+1]; 
+	            PropertyIterator args = getArguments().iterator();
+	            int i = 0;
+	            while (args.hasNext()) {
+	                Argument arg = (Argument) args.next().getObjectValue();
+	                parts[i++] = new StringPart(arg.getName(), arg.getValue());
+	            }
+	            File input = new File(filename);
+	                    //TODO should allow charset to be defined ...
+	            parts[i]= new FilePart(getFileField(), input, getMimetype(), "UTF-8" );//$NON-NLS-1$
+	            post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
+			}
 		} else {
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
@@ -558,7 +562,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			if (method.equals(POST)) {
                 res.setQueryString(getQueryString());
 				sendPostData((PostMethod)httpMethod);
-			}else if (method.equals(PUT)) {
+			} else if (method.equals(PUT)) {
                 setPutHeaders((PutMethod) httpMethod);
             }
 
@@ -669,7 +673,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
          }
      }
 
-	// Implement locally, as current implementation (3.1Beta) does not close file...
+	// Implement locally, as current httpclient InputStreamRI implementation does not close file...
 	private class FileRequestEntity implements RequestEntity {
 
 	    final File file;
