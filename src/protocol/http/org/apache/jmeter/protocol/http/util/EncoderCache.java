@@ -19,8 +19,8 @@
 package org.apache.jmeter.protocol.http.util;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.util.Cache;
 import org.apache.oro.util.CacheLRU;
 
@@ -42,7 +42,7 @@ public class EncoderCache {
 			return (String) encodedValue;
 		}
 		try {
-			encodedValue = JOrphanUtils.encode(k, "utf8");
+			encodedValue = URLEncoder.encode(k, "utf8");
 		} catch (UnsupportedEncodingException e) {
 			// This can't happen (how should utf8 not be supported!?!),
 			// so just throw an Error:
