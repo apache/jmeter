@@ -126,7 +126,6 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
-<note>The HTTP methods HEAD, TRACE, OPTIONS, PUT, DELETE are new in 2.1.2, and may have some teething problems.</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="No">Domain name or IP address of the web server.</property>
@@ -164,9 +163,12 @@ resource requires query string parameters, add them below in the
         question marks, then encoding is usually required.</p></property>
         <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
-        a multipart form request.</property>
-        <property name="Value for 'name' attribute" required="No (Yes if Filename filled in)">Value of the "name" web request parameter.</property>
-        <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
+        a multipart form request.
+        <b>In versions of JMeter after 2.2: if both the 'name' atribute and MIME type (below) are omitted, then the file is sent as the body
+        of the POST request. This allows arbitraty POST bodies to be sent.</b>
+        </property>
+        <property name="Value for 'name' attribute" required="No">Value of the "name" web request parameter.</property>
+        <property name="MIME Type" required="No">MIME type (for example, text/plain).</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.

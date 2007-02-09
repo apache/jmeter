@@ -42,9 +42,12 @@ public class PostWriter {
 
 	private final static byte[] CRLF = { 0x0d, 0x0A };
 
-	// protected static int fudge = -20;
 	protected static final String encoding = "iso-8859-1"; // $NON-NLS-1$
 
+	// Not instantiable
+	private PostWriter(){
+		
+	}
 	/**
 	 * Send POST data from Entry to the open connection.
 	 */
@@ -53,8 +56,20 @@ public class PostWriter {
 		String filename = sampler.getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
 			OutputStream out = connection.getOutputStream();
-			// new FileOutputStream("c:\\data\\experiment.txt");
-			// new ByteArrayOutputStream();
+			// Check if not using multi-part:
+            if (sampler.getSendFileAsPostBody())
+            {
+                InputStream in = getFileStream(filename);
+                byte[] buf = new byte[1024];
+                int read;
+                while ((read = in.read(buf)) > 0)
+                {
+                    out.write(buf, 0, read);
+                }
+                out.flush();
+                in.close();
+                return;
+            }
 			writeln(out, DASH_DASH + BOUNDARY);
 			PropertyIterator args = sampler.getArguments().iterator();
 			while (args.hasNext()) {
@@ -85,8 +100,10 @@ public class PostWriter {
 		// If filename was specified then send the post using multipart syntax
 		String filename = sampler.getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
-			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, 
+			if (!sampler.getSendFileAsPostBody()) { // unless the file is the body...
+			    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, 
                     "multipart/form-data; boundary=" + BOUNDARY); // $NON-NLS-1$
+			}
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 		}
@@ -95,7 +112,7 @@ public class PostWriter {
 		else {
 			String postData = sampler.getQueryString();
 			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(postData.length()));
-			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, "application/x-www-form-urlencoded"); // $NON-NLS-1$
+			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
 			connection.setDoOutput(true);
 		}
 	}
