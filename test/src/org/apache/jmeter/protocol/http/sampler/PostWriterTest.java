@@ -39,13 +39,11 @@ public class PostWriterTest extends TestCase {
     
     private final static byte[] CRLF = { 0x0d, 0x0A };
     
-    private PostWriter postWriter;
     private URLConnection connection;
     private HTTPSampler sampler;
     private File temporaryFile;
     
     protected void setUp() throws Exception {
-        postWriter = new PostWriter();
         connection = new StubURLConnection("http://fake_url/test");
         sampler = new HTTPSampler();// This must be the original (Java) HTTP sampler
         
@@ -70,7 +68,7 @@ public class PostWriterTest extends TestCase {
         setupFilename(sampler);
         setupCommons(sampler);
         
-        postWriter.sendPostData(connection, sampler);
+        PostWriter.sendPostData(connection, sampler);
         
         assertEquals(createExpectedOutputStream().toString(), connection.getOutputStream().toString());
     }
@@ -82,7 +80,7 @@ public class PostWriterTest extends TestCase {
         setupNoFilename(sampler);
         setupCommons(sampler);
 
-        postWriter.sendPostData(connection, sampler);
+        PostWriter.sendPostData(connection, sampler);
         
         assertEquals("title=mytitle&description=mydescription", connection.getOutputStream().toString());
     }
@@ -94,7 +92,7 @@ public class PostWriterTest extends TestCase {
         setupFilename(sampler);
         setupCommons(sampler);
         
-        postWriter.setHeaders(connection, sampler);
+        PostWriter.setHeaders(connection, sampler);
         
         assertEquals("multipart/form-data; boundary=" + PostWriter.BOUNDARY, connection.getRequestProperty("Content-Type"));
     }
@@ -106,9 +104,9 @@ public class PostWriterTest extends TestCase {
         setupNoFilename(sampler);
         setupCommons(sampler);
         
-        postWriter.setHeaders(connection, sampler);
+        PostWriter.setHeaders(connection, sampler);
         
-        assertEquals("application/x-www-form-urlencoded", connection.getRequestProperty("Content-Type"));
+        assertEquals(HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, connection.getRequestProperty("Content-Type"));
         assertEquals("39", connection.getRequestProperty("Content-Length"));
     }
 
