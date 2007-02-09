@@ -3121,24 +3121,30 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 </component>
 
 <component name="WorkBench" index="&sect-num;.9.3"  width="232" height="68" screenshot="workbench.png">
-<description><p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire.  When you save your test plan, WorkBench items are not saved with it.  Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p></description>
+<description>
+<p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
+When you save your test plan, WorkBench items are not saved with it. 
+Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p>
+<p>Certain test elements are only available on the WorkBench:</p>
+<ul>
+<li>HTTP Proxy Server</li>
+<li>HTTP Mirror Server</li>
+</ul>
+</description>
 </component>
 
 <component name="SSL Manager" index="&sect-num;.9.4" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
-  applications that use Public Key Infrastructure (PKI).  In order to use it,
-  you must have JSSE 1.0.2 installed.  Unfortunately, there is no standard method
-  for controling who a client is--and that won't be introduced until JDK 1.4 is
-  officially available.  The SSL Manager should still work with JDK 1.4, so this
-  is the best solution we could come up with.
+  applications that use Public Key Infrastructure (PKI).
+  It is only needed if you have not set up the appropriate System properties.
 </p>
 
 <b>Choosing a Client Certificate</b>
 <p>
   You may either use a Java Key Store (JKS) format key store, or a Public Key
   Certificate Standard #12 (PKCS12) file for your client certificates.  There
-  is a bug in the JSSE libraries that require you to have at least a six character
+  is a feature of the JSSE libraries that require you to have at least a six character
   password on your key (at least for the keytool utility that comes with your
   JDK).
 </p>
@@ -3153,6 +3159,7 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
   for the keystore is also the password for the private key of the client you want
   to authenticate as.
 </p>
+<p>Or you can set the appropriate System properties - see the system.properties file.</p>
 <p>
   The next time you run your test, the SSL Manager will examine your key store to
   see if it has more than one key available to it.  If there is only one key, SSL
@@ -3176,6 +3183,15 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
   the "cacerts" file, then you can authenticate against all of the CA certificates
   installed.
 </p>
+</component>
+
+<component name="HTTP Mirror Server" index="&sect-num;.9.5"  width="303" height="139" screenshot="mirrorserver.png">
+<description>
+<p>
+The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
+This is useful for checking the content of HTTP requests.
+</p>
+</description>
 </component>
 
 <a href="#">^</a>
