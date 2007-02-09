@@ -270,7 +270,7 @@
 	#set ($height = $component.getAttributeValue('height') )
 	#set ($dim= "")
 	#if  ($width != "")
-	    #set ($dim = "width=\"$width\" height=\"$height\"")
+	    #set ($dim = "width='$width' height='$height'")
 	#end
 	#set ($screenshot = "")
 	#set ($screenshot = $component.getAttributeValue('screenshot') )
