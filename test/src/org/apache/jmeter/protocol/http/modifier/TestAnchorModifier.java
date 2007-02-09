@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.modifier;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
@@ -302,7 +303,7 @@ public class TestAnchorModifier extends JMeterTestCase {
 
         public void testSpecialCharParse() throws Exception {
         String specialChars = "-_.!~*'()%25";// These are some of the special characters
-        String htmlEncodedFixture = JOrphanUtils.encode(specialChars, "UTF-8");
+        String htmlEncodedFixture = URLEncoder.encode(specialChars, "UTF-8");
         
         HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("test", ".*");
