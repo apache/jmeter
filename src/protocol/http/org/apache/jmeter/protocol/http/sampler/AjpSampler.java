@@ -50,9 +50,7 @@ public class AjpSampler extends HTTPSamplerBase {
 
     private static final char NEWLINE = '\n';
     private static final String COLON_SPACE = ": ";//$NON-NLS-1$
-    private static final String APPLICATION_X_WWW_FORM_URLENCODED =
-        "application/x-www-form-urlencoded";//$NON-NLS-1$
-
+ 
     /**
      *  Translates integer codes to request header names    
      */
