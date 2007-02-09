@@ -27,8 +27,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 /**
  * This class is an Authorization encapsulator.
  * 
- * @author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
- * @version $Revision$
+ * author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
  */
 public class Authorization extends AbstractTestElement implements Serializable {
 	private static String URL = "Authorization.url";
@@ -37,13 +36,19 @@ public class Authorization extends AbstractTestElement implements Serializable {
 
 	private static String PASSWORD = "Authorization.password";
 
+	private static String DOMAIN = "Authorization.domain";
+
+	private static String REALM = "Authorization.realm";
+
 	/**
 	 * create the authorization
 	 */
-	Authorization(String url, String user, String pass) {
+	Authorization(String url, String user, String pass, String domain, String realm) {
 		setURL(url);
 		setUser(user);
 		setPass(pass);
+		setDomain(domain);
+		setRealm(realm);
 	}
 
 	public boolean expectsModification() {
@@ -54,9 +59,11 @@ public class Authorization extends AbstractTestElement implements Serializable {
 		setURL("");
 		setUser("");
 		setPass("");
+		setDomain("");
+		setRealm("");
 	}
 
-	public String getClassLabel() {
+	public String getClassLabel() {// TODO Is this used?
 		return "Authorization";
 	}
 
@@ -87,8 +94,25 @@ public class Authorization extends AbstractTestElement implements Serializable {
 		setProperty(PASSWORD, pass);
 	}
 
+	public synchronized String getDomain() {
+		return getPropertyAsString(DOMAIN);
+	}
+
+	public synchronized void setDomain(String domain) {
+		setProperty(DOMAIN, domain);
+	}
+
+	public synchronized String getRealm() {
+		return getPropertyAsString(REALM);
+	}
+
+	public synchronized void setRealm(String realm) {
+		setProperty(REALM, realm);
+	}
+
+	// Used for saving entries to a file
 	public String toString() {
-		return getURL() + "\t" + getUser() + "\t" + getPass();
+		return getURL() + "\t" + getUser() + "\t" + getPass() + "\t" + getDomain() + "\t" + getRealm();
 	}
     
     public String toBasicHeader(){

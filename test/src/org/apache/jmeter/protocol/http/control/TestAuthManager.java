@@ -23,14 +23,6 @@ import java.net.URL;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 
-/**
- * This class provides a way to provide Authorization in jmeter requests. The
- * format of the authorization file is: URL user pass where URL is an HTTP URL,
- * user a username to use and pass the appropriate password.
- * 
- * @author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
- * @version $Revision$
- */
 public class TestAuthManager extends JMeterTestCase {
 		public TestAuthManager(String name) {
 			super(name);
@@ -49,7 +41,7 @@ public class TestAuthManager extends JMeterTestCase {
 			CollectionProperty ao = am.getAuthObjects();
 			assertEquals(0, ao.size());
 			am.addFile("testfiles/TestAuth.txt");
-			assertEquals(5, ao.size());
+			assertEquals(6, ao.size());
 			Authorization at;
 			at = am.getAuthForURL(new URL("http://a.b.c/"));
 			assertEquals("login", at.getUser());
@@ -57,5 +49,12 @@ public class TestAuthManager extends JMeterTestCase {
 			at = am.getAuthForURL(new URL("http://a.b.c/1"));
 			assertEquals("login1", at.getUser());
 			assertEquals("password1", at.getPass());
+			assertEquals("", at.getDomain());
+			assertEquals("", at.getRealm());
+			at = am.getAuthForURL(new URL("http://d.e.f/"));
+			assertEquals("user", at.getUser());
+			assertEquals("pass", at.getPass());
+			assertEquals("domain", at.getDomain());
+			assertEquals("realm", at.getRealm());
 		}
 }
