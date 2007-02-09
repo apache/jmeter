@@ -277,7 +277,7 @@
 	#set ($height = $component.getAttributeValue('height') )
 	#set ($dim= "")
 	#if  ($width != "")
-	    #set ($dim = "width=\"$width\" height=\"$height\"")
+	    #set ($dim = "width='$width' height='$height'")
 	#end
 	<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
