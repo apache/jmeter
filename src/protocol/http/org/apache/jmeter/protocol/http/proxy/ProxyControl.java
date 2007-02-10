@@ -368,7 +368,7 @@ public class ProxyControl extends GenericController implements Serializable {
 		ResponseAssertion ra = new ResponseAssertion();
 		ra.setProperty(TestElement.GUI_CLASS, ASSERTION_GUI);
 		ra.setName("Check response");
-		ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+		ra.setTestFieldResponseData();
 		model.addComponent(ra, node);
 	}
 
