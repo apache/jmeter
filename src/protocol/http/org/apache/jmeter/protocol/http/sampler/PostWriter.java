@@ -112,7 +112,10 @@ public class PostWriter {
 		else {
 			String postData = sampler.getQueryString();
 			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(postData.length()));
-			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+			String hct= connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
+			if (hct == null || hct.length() == 0) {
+			    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+			}
 			connection.setDoOutput(true);
 		}
 	}
