@@ -54,7 +54,7 @@ public class AssertionGui extends AbstractAssertionGui {
 	private JRadioButton responseStringButton;
 
 	/** Radio button indicating that the URL should be tested. */
-	private JRadioButton labelButton;
+	private JRadioButton urlButton;
 
 	/** Radio button indicating that the responseMessage should be tested. */
 	private JRadioButton responseMessageButton;
@@ -81,6 +81,11 @@ public class AssertionGui extends AbstractAssertionGui {
 	private JRadioButton matchesBox;
 
 	/**
+	 * Radio button indicating if the field equals the first pattern.
+	 */
+	private JRadioButton equalsBox;
+
+    /**
 	 * Checkbox indicating to test that the field does NOT contain/match the
 	 * patterns.
 	 */
@@ -128,20 +133,22 @@ public class AssertionGui extends AbstractAssertionGui {
 				ra.addTestString(testStrings[i]);
 			}
 
-			if (labelButton.isSelected()) {
-				ra.setTestField(ResponseAssertion.SAMPLE_LABEL);
+			if (urlButton.isSelected()) {
+				ra.setTestFieldURL();
 			} else if (responseCodeButton.isSelected()) {
-				ra.setTestField(ResponseAssertion.RESPONSE_CODE);
+				ra.setTestFieldResponseCode();
 			} else if (responseMessageButton.isSelected()) {
-				ra.setTestField(ResponseAssertion.RESPONSE_MESSAGE);
+				ra.setTestFieldResponseMessage();
 			} else {
-				ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+				ra.setTestFieldResponseData();
 			}
 
 			ra.setAssumeSuccess(assumeSuccess.isSelected());
 
 			if (containsBox.isSelected()) {
 				ra.setToContainsType();
+			} else if (equalsBox.isSelected()) {
+                ra.setToEqualsType();
 			} else {
 				ra.setToMatchType();
 			}
@@ -170,9 +177,15 @@ public class AssertionGui extends AbstractAssertionGui {
 		if (model.isContainsType()) {
 			containsBox.setSelected(true);
 			matchesBox.setSelected(false);
+            equalsBox.setSelected(false);
+        } else if (model.isEqualsType()) {
+			containsBox.setSelected(false);
+			matchesBox.setSelected(false);
+            equalsBox.setSelected(true);
 		} else {
 			containsBox.setSelected(false);
 			matchesBox.setSelected(true);
+            equalsBox.setSelected(false);
 		}
 
 		if (model.isNotType()) {
@@ -181,15 +194,15 @@ public class AssertionGui extends AbstractAssertionGui {
 			notBox.setSelected(false);
 		}
 
-		if (ResponseAssertion.RESPONSE_DATA.equals(model.getTestField())) {
+		if (model.isTestFieldResponseData()) {
 			responseStringButton.setSelected(true);
-		} else if (ResponseAssertion.RESPONSE_CODE.equals(model.getTestField())) {
+		} else if (model.isTestFieldResponseCode()) {
 			responseCodeButton.setSelected(true);
-		} else if (ResponseAssertion.RESPONSE_MESSAGE.equals(model.getTestField())) {
+		} else if (model.isTestFieldResponseMessage()) {
 			responseMessageButton.setSelected(true);
 		} else // Assume it is the URL
 		{
-			labelButton.setSelected(true);
+			urlButton.setSelected(true);
 		}
 
 		assumeSuccess.setSelected(model.getAssumeSuccess());
@@ -235,18 +248,18 @@ public class AssertionGui extends AbstractAssertionGui {
 		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field")));
 
 		responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
-		labelButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
+		urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
 		responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp"));
 		responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp"));
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(responseStringButton);
-		group.add(labelButton);
+		group.add(urlButton);
 		group.add(responseCodeButton);
 		group.add(responseMessageButton);
 
 		panel.add(responseStringButton);
-		panel.add(labelButton);
+		panel.add(urlButton);
 		panel.add(responseCodeButton);
 		panel.add(responseMessageButton);
 
@@ -278,6 +291,10 @@ public class AssertionGui extends AbstractAssertionGui {
 		matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches"));
 		group.add(matchesBox);
 		panel.add(matchesBox);
+
+		equalsBox = new JRadioButton(JMeterUtils.getResString("assertion_equals"));
+		group.add(equalsBox);
+		panel.add(equalsBox);
 
 		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
 		panel.add(notBox);
