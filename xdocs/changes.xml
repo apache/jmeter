@@ -31,7 +31,8 @@
 <h4>Known problems:</h4>
 <p>Thread active counts are always zero in CSV and XML files when running remote tests.
 </p>
-
+<p>The property file_format.testlog=2.1 is treated the same as 2.2.
+However JMeter does honour the 3 testplan versions.</p>
 <h4>Incompatible changes:</h4>
 <p>
 Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
