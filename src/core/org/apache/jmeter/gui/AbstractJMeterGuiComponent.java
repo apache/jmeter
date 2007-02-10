@@ -31,6 +31,7 @@ import javax.swing.border.Border;
 import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
@@ -57,7 +58,7 @@ import org.apache.log.Logger;
  * 
  * @version $Revision$ on $Date$
  */
-public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable {
+public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable, Clearable {
 	/** Logging */
 	private static Logger log = LoggingManager.getLoggerForClass();
 
