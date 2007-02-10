@@ -18,15 +18,14 @@
 
 package org.apache.jmeter.assertions;
 
+import junit.framework.TestCase;
+
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-
-import junit.framework.TestCase;
-import junit.textui.TestRunner;
 public class PackageTest extends TestCase {
 
 	public PackageTest() {
@@ -76,8 +75,10 @@ public class PackageTest extends TestCase {
 		static final String TEST_PATTERN = ".*A.*\\.";
 
 		public void run() {
-			ResponseAssertion assertion = new ResponseAssertion(
-					ResponseAssertion.RESPONSE_DATA, ResponseAssertion.CONTAINS, TEST_PATTERN);
+			ResponseAssertion assertion = new ResponseAssertion();
+			assertion.setTestFieldResponseData();
+			assertion.setToContainsType();
+			assertion.addTestString(TEST_PATTERN);
 			SampleResult response = new SampleResult();
 			response.setResponseData(TEST_STRING.getBytes());
 			for (int i = 0; i < 100; i++) {
@@ -93,6 +94,7 @@ public class PackageTest extends TestCase {
 			}
 		}
 	}
+	
 	public static class XPathAssertionTest extends TestCase {
 		private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -251,9 +253,110 @@ public class PackageTest extends TestCase {
 			assertFalse(res.isFailure());
 		}
 
-		public static void main(String[] args) {
-			TestRunner.run(XPathAssertionTest.class);
-		}
 	}
 
+	public static class ResponseAssertionTest extends TestCase{
+
+		private JMeterContext jmctx;
+		private ResponseAssertion assertion;
+		private SampleResult sample;
+		private JMeterVariables vars;
+		private AssertionResult result;
+		
+		public void setUp() {
+			jmctx = JMeterContextService.getContext();
+			assertion = new ResponseAssertion();
+			assertion.setThreadContext(jmctx);
+			sample = new SampleResult();
+			vars = new JMeterVariables();
+			jmctx.setVariables(vars);
+			jmctx.setPreviousResult(sample);
+			sample.setResponseData(
+					(
+					"response Data\n" +
+					"line 2\n\nEOF"
+					).getBytes());
+			sample.setSamplerData("Sampler Label");// This is where RA checks the URL!
+			sample.setResponseCode("401");
+		}
+
+		public void testResponseAssertionEquals() throws Exception{
+			assertion.unsetNotType();
+			assertion.setToEqualsType();
+			assertion.setTestFieldURL();
+			assertion.addTestString("Sampler Label");
+			assertion.addTestString("Sampler labelx");		
+			result = assertion.evaluateResponse(sample);
+			assertFailed();
+
+			assertion.setToNotType();
+			assertion.clearTestStrings();
+			assertion.addTestString("Sampler LabeL");
+			assertion.addTestString("Sampler Labelx");		
+			result = assertion.evaluateResponse(sample);
+			assertPassed();
+		}
+		
+		public void testResponseAssertionContains() throws Exception{
+			assertion.unsetNotType();
+			assertion.setToContainsType();
+			assertion.setTestFieldURL();
+			assertion.addTestString("Sampler");
+			assertion.addTestString("Label");
+			assertion.addTestString(" x");
+			
+			result = assertion.evaluateResponse(sample);
+			assertFailed();
+			
+			assertion.setToNotType();
+			
+			result = assertion.evaluateResponse(sample);
+			assertFailed();
+
+			assertion.clearTestStrings();
+			assertion.addTestString("r l");
+			result = assertion.evaluateResponse(sample);
+			assertPassed();
+
+			assertion.unsetNotType();
+			assertion.setTestFieldResponseData();
+			
+			assertion.clearTestStrings();
+			assertion.addTestString("line 2");
+			result = assertion.evaluateResponse(sample);
+			assertPassed();
+
+			assertion.clearTestStrings();
+			assertion.addTestString("(?s)line \\d+.*EOF");
+			result = assertion.evaluateResponse(sample);
+			assertPassed();
+
+			assertion.setTestFieldResponseCode();
+			
+			assertion.clearTestStrings();
+			assertion.addTestString("401");
+			result = assertion.evaluateResponse(sample);
+			assertPassed();
+
+        }
+// TODO - need a lot more tests
+		
+		private void assertPassed() throws Exception{
+			if (null != result.getFailureMessage()){
+				//System.out.println(result.getFailureMessage());// debug
+			}
+			assertNull(result.getFailureMessage());
+			assertFalse(result.isError());
+			assertFalse(result.isFailure());		
+		}
+		
+		private void assertFailed() throws Exception{
+			assertNotNull(result.getFailureMessage());
+			//System.out.println(result.getFailureMessage());
+			assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
+			assertFalse(result.isError());
+			assertTrue(result.isFailure());		
+			
+		}
+}
 }
