@@ -88,6 +88,7 @@ has been removed.
 <li>Bug 39827 - SOAP Sampler content length for files</li>
 <li>Bug 40381 - LDAP: more descriptive strings</li>
 <li>Bug 40369 (partial) Equals Response Assertion</li>
+<li>Fix Class cast exception in Clear.java</li>
 </ul>
 
 <h3>Version 2.2</h3>
