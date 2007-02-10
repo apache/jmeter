@@ -101,8 +101,11 @@ public class PostWriter {
 		String filename = sampler.getFilename();
 		if ((filename != null) && (filename.trim().length() > 0)) {
 			if (!sampler.getSendFileAsPostBody()) { // unless the file is the body...
-			    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, 
-                    "multipart/form-data; boundary=" + BOUNDARY); // $NON-NLS-1$
+				String hct= connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
+				if (hct == null || hct.length() == 0) {
+			        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, 
+                        "multipart/form-data; boundary=" + BOUNDARY); // $NON-NLS-1$
+				}
 			}
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
