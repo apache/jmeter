@@ -25,15 +25,12 @@ import java.util.Map;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
+// TODO - not used at present - could perhaps be removed
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class Entry {
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Map configSet;
 
@@ -92,14 +89,5 @@ public class Entry {
 			return config;
 		}
 		return (ConfigElement) config.clone();
-	}
-
-	public Object clone() {
-		try {
-			return super.clone();
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-		return null;
 	}
 }
