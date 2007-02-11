@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
@@ -140,15 +141,20 @@ public class SaveService {
 
     public static Properties loadProperties() throws IOException{
         Properties nameMap = new Properties();
-            nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome()
-                    + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE)));
-            return nameMap;
+        FileInputStream fis = null;
+        try {
+			fis = new FileInputStream(JMeterUtils.getJMeterHome()
+			             + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES, SAVESERVICE_PROPERTIES_FILE));
+			nameMap.load(fis);
+		} finally {
+			JOrphanUtils.closeQuietly(fis);
+		}
+        return nameMap;
     }
 	private static void initProps() {
 		// Load the alias properties
-		Properties nameMap = new Properties();
 		try {
-            nameMap = loadProperties();
+			Properties nameMap = loadProperties();
             // now create the aliases
 			Iterator it = nameMap.entrySet().iterator();
 			while (it.hasNext()) {
