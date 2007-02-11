@@ -113,7 +113,7 @@ class FunctionParser {
 						if (reader.read(current) == 0 || current[0] != '}') {
                             reader.reset();// set to start of string
                             char []cb = new char[100];
-                            reader.read(cb);
+                            reader.read(cb);// return deliberately ignored
 							throw new InvalidVariableException
                             ("Expected } after "+funcName+" function call in "+new String(cb));
 						}
