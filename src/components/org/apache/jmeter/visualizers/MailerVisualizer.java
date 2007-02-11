@@ -42,6 +42,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.reporters.MailerModel;
 import org.apache.jmeter.reporters.MailerResultCollector;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
@@ -256,8 +257,10 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == testerButton) {
+			ResultCollector testElement = getModel();
+			modifyTestElement(testElement);
 			try {
-				MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
+				MailerModel model = ((MailerResultCollector) testElement).getMailerModel();
 				model.sendTestMail();
 				displayMessage(JMeterUtils.getResString("mail_sent"), false); //$NON-NLS-1$
 			} catch (UnknownHostException e1) {
