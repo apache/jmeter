@@ -28,12 +28,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -58,18 +56,6 @@ public class TestHTMLParser16 extends JMeterTestCase {
             super(name);
             testNumber = test;
             parserName = parser;
-        }
-
-        private static class StaticTestClass // Can't instantiate
-        {
-            private StaticTestClass() {
-            };
-        }
-
-        private class TestClass // Can't instantiate
-        {
-            private TestClass() {
-            };
         }
 
         private static class TestData {
