@@ -91,6 +91,7 @@ has been removed.
 <li>Bug 40369 (partial) Equals Response Assertion</li>
 <li>Fix Class cast exception in Clear.java</li>
 <li>Bug 40383 - don't set content-type if already set</li>
+<li>Mailer Visualiser test button now works if test plan has not yet been saved</li>
 </ul>
 
 <h3>Version 2.2</h3>
