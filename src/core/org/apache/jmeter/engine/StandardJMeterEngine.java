@@ -324,9 +324,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		 */
 		testListeners = new SearchByClass(TestListener.class);
 		getTestTree().traverse(testListeners);
-		Collection col = testListeners.getSearchResults();
-		col.addAll(testList);
-		testList = null;
+		
+		//	Merge in any additional test listeners
+		// currently only used by the function parser
+		testListeners.getSearchResults().addAll(testList);
+		testList = null; // no longer needed
+		
 		if (!startListenersLater )notifyTestListenersOfStart();
 		getTestTree().traverse(new TurnElementsOn());
         if (startListenersLater)notifyTestListenersOfStart();
