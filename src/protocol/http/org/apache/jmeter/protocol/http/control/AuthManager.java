@@ -182,14 +182,18 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		if (url2 != null)
 			s2 = url2.toString();
 
+		    log.debug("Target URL strings to match against: "+s1+" and "+s2);
 		// TODO should really return most specific (i.e. longest) match.
 		for (PropertyIterator iter = getAuthObjects().iterator(); iter.hasNext();) {
 			Authorization auth = (Authorization) iter.next().getObjectValue();
 
 			String uRL = auth.getURL();
+			log.debug("Checking match against auth'n entry: "+uRL);
 			if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL)) {
+				log.debug("Matched");
 				return auth;
 			}
+			log.debug("Did not match");
 		}
 		return null;
 	}
