@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -38,11 +39,15 @@ public final class NameUpdater {
 
 	static {
 		nameMap = new Properties();
+		FileInputStream fis = null;
 		try {
-			nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome()
-					+ JMeterUtils.getPropDefault("upgrade_properties", "/bin/upgrade.properties")));
+			fis = new FileInputStream(JMeterUtils.getJMeterHome()
+								+ JMeterUtils.getPropDefault("upgrade_properties", "/bin/upgrade.properties"));
+			nameMap.load(fis);
 		} catch (Exception e) {
 			log.error("Bad upgrade file", e);
+		} finally {
+			JOrphanUtils.closeQuietly(fis);
 		}
 	}
 

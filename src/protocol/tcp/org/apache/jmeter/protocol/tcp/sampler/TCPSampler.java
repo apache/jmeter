@@ -37,6 +37,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -89,14 +90,18 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 		log.debug("Status properties=" + STATUS_PROPERTIES);
 		if (STATUS_PROPERTIES.length() > 0) {
 			File f = new File(STATUS_PROPERTIES);
+			FileInputStream fis = null;
 			try {
-				statusProps.load(new FileInputStream(f));
+				fis = new FileInputStream(f);
+				statusProps.load(fis);
 				log.debug("Successfully loaded properties");
 				haveStatusProps = true;
 			} catch (FileNotFoundException e) {
 				log.debug("Property file not found");
 			} catch (IOException e) {
 				log.debug("Property file error " + e.toString());
+			} finally {
+				JOrphanUtils.closeQuietly(fis);
 			}
 		}
 	}
