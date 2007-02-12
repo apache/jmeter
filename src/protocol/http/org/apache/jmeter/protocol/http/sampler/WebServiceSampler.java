@@ -526,7 +526,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			} else {
 				result.sampleEnd();
 				result.setSuccessful(false);
-				result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
+				if (st != null){
+				    result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
+				}
 				result.setResponseHeaders("error");
 			}
 			// 1-22-04 updated the sampler so that when read
