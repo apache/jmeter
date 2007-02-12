@@ -64,8 +64,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	 */
 	public void iterationStart(LoopIterationEvent iterEvent) {
 		FileServer server = FileServer.getFileServer();
+		String _fileName = getFilename();
 		if (vars == null) {
-			server.reserveFile(getFilename());
+			server.reserveFile(_fileName);
 			vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
 		}
 		try {
@@ -73,7 +74,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			if (delim.equals("\\t")) // $NON-NLS-1$
 				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
             JMeterVariables threadVars = this.getThreadContext().getVariables();
-			String line = server.readLine(getFilename(),getRecycle());
+			String line = server.readLine(_fileName,getRecycle());
             if (line!=null) {// i.e. not EOF
                 String[] lineValues = JOrphanUtils.split(line, delim,false);
     			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
