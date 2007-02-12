@@ -31,6 +31,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -139,13 +140,14 @@ public class TextFile extends File {
 		String lineEnd = System.getProperty("line.separator"); //$NON-NLS-1$
 		StringBuffer sb = new StringBuffer();
 		Reader reader = null;
+		BufferedReader br = null;
 		try {
 			if (encoding == null) {
 				reader = new FileReader(this);
 			} else {
 				reader = new InputStreamReader(new FileInputStream(this), encoding);
 			}
-			BufferedReader br = new BufferedReader(reader);
+			br = new BufferedReader(reader);
 			String line = "NOTNULL"; //$NON-NLS-1$
 			while (line != null) {
 				line = br.readLine();
@@ -156,11 +158,7 @@ public class TextFile extends File {
 		} catch (IOException ioe) {
 			log.error("", ioe); //$NON-NLS-1$
 		} finally {
-			if (reader != null)
-				try {
-					reader.close();
-				} catch (IOException e) {
-				}
+			JOrphanUtils.closeQuietly(br); // closes reader as well
 		}
 
 		return sb.toString();
