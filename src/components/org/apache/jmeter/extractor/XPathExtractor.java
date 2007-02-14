@@ -36,6 +36,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
+import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -183,27 +184,35 @@ public class XPathExtractor extends AbstractTestElement implements
     private void getValuesForXPath(Document d,String query, JMeterVariables vars, String refName)
      throws TransformerException
     {
-     	String val = null;
-		NodeList matches = XPathAPI.selectNodeList(d,query);
-		int length = matches.getLength();
-        vars.put(concat(refName,MATCH_NR), String.valueOf(length));
-        for (int i = 0 ; i < length; i++) {
-            Node match = matches.item(i);
-			if ( match instanceof Element){
-			   // elements have empty nodeValue, but we are usually
-			   // interested in their content
-			   val = match.getFirstChild().getNodeValue();
-			} else {				
-			   val = match.getNodeValue();
+        String val = null;
+     	XObject xObject = XPathAPI.eval(d, query);
+        if (xObject.getType() == XObject.CLASS_NODESET) {
+	        NodeList matches = xObject.nodelist();
+			int length = matches.getLength();
+	        vars.put(concat(refName,MATCH_NR), String.valueOf(length));
+	        for (int i = 0 ; i < length; i++) {
+	            Node match = matches.item(i);
+				if ( match instanceof Element){
+				   // elements have empty nodeValue, but we are usually
+				   // interested in their content
+				   val = match.getFirstChild().getNodeValue();
+				} else {				
+				   val = match.getNodeValue();
+				}
+	            if ( val!=null){
+	                if (i==0) {// Treat 1st match specially
+	                    vars.put(refName,val);                    
+	                }
+	                vars.put(concat(refName,String.valueOf(i+1)),val);
+	            }
 			}
-            if ( val!=null){
-                if (i==0) {// Treat 1st match specially
-                    vars.put(refName,val);                    
-                }
-                vars.put(concat(refName,String.valueOf(i+1)),val);
-            }
-		}
-        vars.remove(concat(refName,String.valueOf(length+1)));
+	        vars.remove(concat(refName,String.valueOf(length+1)));
+     	} else {
+	        val = xObject.toString();
+	        vars.put(concat(refName, MATCH_NR), "1");
+	        vars.put(refName, val);
+	        vars.put(concat(refName, "1"), val);
+	        vars.remove(concat(refName, "2"));
+	    }
     }
-    
 }
