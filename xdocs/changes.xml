@@ -60,6 +60,7 @@ has been removed.
 <li>Add Domain and Realm support to HTTP Authorisation Manager</li>
 <li>Bug 33964 - send file as entire post body if name/type are omitted</li>
 <li>HTTP Mirror Server Workbench element</li>
+<li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
 </ul>
 
 <h4>Bug fixes:</h4>
