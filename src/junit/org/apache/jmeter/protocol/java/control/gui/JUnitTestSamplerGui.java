@@ -113,11 +113,11 @@ implements ChangeListener, ActionListener
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
     private JComboBox methodName;
-    private TestCase TESTCLASS = null;
+    private transient TestCase TESTCLASS = null;
     private List METHODLIST = null;
     
     // TODO: make private?
-    protected ClassFilter FILTER = new ClassFilter();
+    protected transient ClassFilter FILTER = new ClassFilter();
     protected List CLASSLIST = null;
     
     /**
