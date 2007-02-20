@@ -68,16 +68,16 @@ public class JUnitSampler extends AbstractSampler {
     public static final String TEARDOWN = "tearDown";
     public static final String RUNTEST = "run";
     /// the Method objects for setUp and tearDown methods
-    protected Method SETUP_METHOD = null;
-    protected Method TDOWN_METHOD = null;
+    protected transient Method SETUP_METHOD = null;
+    protected transient Method TDOWN_METHOD = null;
     protected boolean checkStartUpTearDown = false;
     
-    protected TestCase TEST_INSTANCE = null;
+    protected transient TestCase TEST_INSTANCE = null;
     
     /**
      * Logging
      */
-    private static transient Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public JUnitSampler(){
     }
