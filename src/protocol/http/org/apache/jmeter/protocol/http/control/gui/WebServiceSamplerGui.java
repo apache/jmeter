@@ -74,7 +74,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     private JLabeledChoice wsdlMethods = null;
 
-    private WSDLHelper HELPER = null;
+    private transient WSDLHelper HELPER = null;
 
     private FilePanel soapXmlFile = new FilePanel(JMeterUtils.getResString("get_xml_from_file"), ".xml"); // $NON-NLS-1$
 
