@@ -43,7 +43,7 @@ import java.util.TreeMap;
  */
 public class SortedHashTree extends HashTree implements Serializable {
 	// NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
-	protected Comparator comparator;
+	protected transient Comparator comparator;
 
 	public SortedHashTree() {
 		data = new TreeMap();
