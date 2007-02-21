@@ -41,7 +41,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
     private static final Logger log = LoggingManager.getLoggerForClass();
 	// private static final int LIMIT_STR_SIZE = 100;
 	// private boolean isRoot;
-	private Node xmlNode;
+	private transient Node xmlNode;
 
     public XMLDefaultMutableTreeNode(){
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
