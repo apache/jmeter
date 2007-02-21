@@ -27,7 +27,7 @@ import org.apache.jmeter.threads.JMeterContextService;
  * @version $Revision$
  */
 public class FunctionProperty extends AbstractProperty {
-	CompoundVariable function;
+	transient CompoundVariable function;
 
 	int testIteration = -1;
 
