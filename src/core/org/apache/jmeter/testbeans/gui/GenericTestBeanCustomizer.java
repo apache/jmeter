@@ -126,18 +126,18 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	/**
 	 * BeanInfo object for the class of the objects being edited.
 	 */
-	private BeanInfo beanInfo;
+	private transient BeanInfo beanInfo;
 
 	/**
 	 * Property descriptors from the beanInfo.
 	 */
-	private PropertyDescriptor[] descriptors;
+	private transient PropertyDescriptor[] descriptors;
 
 	/**
 	 * Property editors -- or null if the property can't be edited. Unused if
 	 * customizerClass==null.
 	 */
-	private PropertyEditor[] editors;
+	private transient PropertyEditor[] editors;
 
 	/**
 	 * Message format for property field labels:
