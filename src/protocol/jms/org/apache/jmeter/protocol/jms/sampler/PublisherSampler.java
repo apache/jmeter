@@ -49,7 +49,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
 	public static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
 
-	private Publisher PUB = null;
+	private transient Publisher PUB = null;
 
 	private StringBuffer BUFFER = new StringBuffer();
 
