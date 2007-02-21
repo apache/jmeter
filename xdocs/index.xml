@@ -72,10 +72,10 @@ behavior under heavy concurrent load.
 </ul>
 <h2>Tutorials (PDF)</h2>
 <ul>
-<li><a href="/usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li>
-<li><a href="/usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li>
-<li><a href="/usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li>
-<li><a href="/usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li>
+<li><a href="usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li>
+<li><a href="usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li>
+<li><a href="usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li>
+<li><a href="usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li>
 </ul>
 <h2>Further Information About JMeter</h2>
 <ul>
