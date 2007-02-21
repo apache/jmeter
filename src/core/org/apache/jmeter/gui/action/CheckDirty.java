@@ -40,7 +40,7 @@ import org.apache.log.Logger;
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Map previousGuiItems;
+	private Map previousGuiItems;
 
 	private boolean checkMode = false;
 
