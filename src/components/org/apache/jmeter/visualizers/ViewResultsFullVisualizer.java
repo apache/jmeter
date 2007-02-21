@@ -371,7 +371,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		xmlButton.setEnabled(true);
 	}
 
-	SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
+	transient SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
 
 	private void showRenderXMLResponse(String response) {
 		String parsable="";
