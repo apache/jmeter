@@ -86,26 +86,26 @@ public class JMSSampler extends AbstractSampler {
 	/** Factory for the connections to the queueing system. */
 	// NOTUSED private QueueConnectionFactory factory;
 	/** Queue for receiving messages (if applicable). */
-	private Queue receiveQueue;
+	private transient Queue receiveQueue;
 
 	/** The session with the queueing system. */
-	private QueueSession session;
+	private transient QueueSession session;
 
 	/** Connection to the queueing system. */
-	private QueueConnection connection;
+	private transient QueueConnection connection;
 
 	/** Queue for sending messages. */
-	private Queue sendQueue;
+	private transient Queue sendQueue;
 
 	/** Is the communication oneway? */
 	// NOTUSED private boolean oneway;
 	/** The executor for (pseudo) synchronous communication. */
-	private QueueExecutor executor;
+	private transient QueueExecutor executor;
 
 	/** Producer of the messages. */
-	private QueueSender producer;
+	private transient QueueSender producer;
 
-	private Receiver receiverThread = null;
+	private transient Receiver receiverThread = null;
 
 	/*
 	 * (non-Javadoc)
