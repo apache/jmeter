@@ -79,7 +79,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private JScrollPane tableScrollPanel = null;
 
-	private Calculator calc = new Calculator();
+	private transient Calculator calc = new Calculator();
 
 	private long currentData = 0;
 
