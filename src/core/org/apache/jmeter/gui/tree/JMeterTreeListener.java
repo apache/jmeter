@@ -41,6 +41,7 @@ import org.apache.jmeter.control.gui.WorkBenchGui;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -279,6 +280,18 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 	}
 
 	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_C && e.isControlDown()) {
+			ActionRouter actionRouter = ActionRouter.getInstance();
+			actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.COPY));
+		}
+		if (e.getKeyCode() == KeyEvent.VK_V && e.isControlDown()) {
+			ActionRouter actionRouter = ActionRouter.getInstance();
+			actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.PASTE));
+		}
+		if (e.getKeyCode() == KeyEvent.VK_X && e.isControlDown()) {
+			ActionRouter actionRouter = ActionRouter.getInstance();
+			actionRouter.doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CUT));
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
