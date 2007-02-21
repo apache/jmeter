@@ -92,7 +92,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
 	private Class testBeanClass;
 
-	private BeanInfo beanInfo;
+	private transient BeanInfo beanInfo;
 
 	private Class customizerClass;
 
