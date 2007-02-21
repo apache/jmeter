@@ -64,7 +64,7 @@ public final class ClassFinder {
         private final Class[] parents; // parent classes to check
         private final boolean inner; // are inner classes OK?
 
-        private final ClassLoader contextClassLoader 
+        private final transient ClassLoader contextClassLoader 
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
         
         FilterTreeSet(Class []parents, boolean inner){
