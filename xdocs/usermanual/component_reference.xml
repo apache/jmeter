@@ -3162,13 +3162,9 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 <p>Or you can set the appropriate System properties - see the system.properties file.</p>
 <p>
   The next time you run your test, the SSL Manager will examine your key store to
-  see if it has more than one key available to it.  If there is only one key, SSL
-  Manager will select it for you.  If there is more than one key, you will be prompted
-  to select the alias you wish to authenticate as.  If SSL Manager cannot detect
-  any keys in your keystore, it will give you a text box for the off chance you know
-  something it doesn't.  Keep in mind that for the first run, you will be prompted
-  once per thread.  Try to use only one thread for the first run to ensure everything
-  is working properly.
+  see if it has at least one key available to it.  If there is only one key, SSL
+  Manager will select it for you.  If there is more than one key, it currently selects the first key.
+  There is currently no way to select other entries in the keystore, so the desired key must be the first.
 </p>
 <b>Things to Look Out For</b>
 <p>
