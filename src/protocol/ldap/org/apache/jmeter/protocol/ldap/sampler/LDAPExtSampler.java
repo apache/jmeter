@@ -810,7 +810,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 										iets.length() + 2) + "</attributevalue></attribute>";
 					}
 				}
-				responseData = responseData + "</searchresult></operation>";
+				responseData = responseData + "</searchresult>";
 			}
 
 		} catch (NamingException ex) {
