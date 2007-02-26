@@ -140,12 +140,6 @@
       <sourcePath path="${src.jms}" />
       <sourcePath path="${src.report}" />
 
-	<!--
-      Uncomment the following 2 lines to include htmlparser in the analysis
-      <class location="${lib.dir}/htmlparser.jar" />
-      <sourcePath path="${src.htmlparser}" />
-      -->
-
       <auxClasspath>
        	<fileset dir="${lib.dir}">
        		<include name="*.jar"/>
@@ -194,8 +188,6 @@
   <property name="src.functions" value="src/functions"/>
   <property name="src.jorphan" value="src/jorphan"/>
   <property name="src.ldap" value="src/protocol/ldap"/>
-  <property name="src.htmlparser" value="src/htmlparser"/>
-  <property name="src.htmlparser16" value="src/htmlparser16"/>
   <property name="src.tcp" value="src/protocol/tcp"/>
   <property name="src.examples" value="src/examples"/>
   <property name="src.mail" value="src/protocol/mail"/>
@@ -221,8 +213,6 @@
     <pathelement location="${src.junit}"/>
     <pathelement location="${src.jorphan}"/>
     <pathelement location="${src.ldap}"/>
-    <pathelement location="${src.htmlparser}"/>
-    <pathelement location="${src.htmlparser16}"/>
     <pathelement location="${src.tcp}"/>
     <pathelement location="${src.examples}"/>
     <pathelement location="${src.mail}"/>
@@ -245,8 +235,6 @@
   <property name="build.jorphan" value="build/jorphan"/>
   <property name="build.ldap" location="build/protocol/ldap"/>
   <property name="build.mail" location="build/protocol/mail"/>
-  <property name="build.htmlparser" location="build/htmlparser"/>
-  <property name="build.htmlparser16" location="build/htmlparser16"/>
   <property name="build.tcp" location="build/protocol/tcp"/>
   <property name="build.examples" location="build/examples"/>
   <property name="build.monitor.components" location="build/monitor/components"/>
@@ -399,10 +387,9 @@
   -->
   
   <!-- Build classpath (includes the optional jar directory) -->
-  <!-- Exclude the htmlparser jars to prevent clashes between versions -->
   <path id="classpath">
-    <fileset dir="${lib.dir}" includes="*.jar" excludes="htmlparser*.jar"/>
-    <fileset dir="${lib.opt}" includes="*.jar" excludes="htmlparser*.jar"/>
+    <fileset dir="${lib.dir}" includes="*.jar"/>
+    <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
   <!-- Anakia classpath -->
@@ -454,11 +441,6 @@
     <available classname="bsh.Interpreter" property="beanshell.present">
       <classpath refid="classpath"/>
     </available>
-    <available classname="org.htmlparser.Tag" property="htmlparser16.present">
-      <classpath>
-    	<fileset dir="${lib.opt}" includes="htmlparser1_6.jar"/>
-      </classpath>
-    </available>
     <available classname="javax.jms.Message" property="jms.present">
       <classpath refid="classpath"/>
     </available>
@@ -479,16 +461,12 @@
     <echo message="Classes for BeanShell support not found in classpath"/>
   </target>
 
-  <target name="htmlparser16-message" depends="check-libs" unless="htmlparser16.present">
-    <echo message="Classes for HTMLParser 1.6 support not found in classpath"/>
-  </target>
-
   <target name="jms-message" depends="check-libs" unless="jms.present">
     <echo message="Classes for JMS support not found in classpath"/>
   </target>
 
   <target name="report-missing-libs" 
-      depends="ssl-message,mail-message,beanshell-message,htmlparser16-message,jms-message"
+      depends="ssl-message,mail-message,beanshell-message,jms-message"
   />
 
   <!--
@@ -551,10 +529,9 @@
     </javac>
   </target>
 
-  <target name="compile-http" depends="compile-jorphan,compile-core,compile-components,compile-htmlparser" description="Compile components specific to HTTP sampling.">
+  <target name="compile-http" depends="compile-jorphan,compile-core,compile-components" description="Compile components specific to HTTP sampling.">
     <mkdir dir="${build.http}"/>
     <!-- Directory needs to exist, or jar will fail -->
-    <mkdir dir="${build.htmlparser16}"/>
     <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <exclude name="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java" unless="javamail.complete"/>
@@ -563,27 +540,11 @@
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
-        <pathelement location="${build.htmlparser}"/>
         <path refid="classpath"/>
       </classpath>
     </javac>
   </target>
-
-  <target name="compile-htmlparser16" depends="compile-http,compile-htmlparser" description="Compile htmlparser 1.6 support" if="htmlparser16.present">
-    <mkdir dir="${build.htmlparser16}"/>
-    <javac srcdir="${src.htmlparser16}" destdir="${build.htmlparser16}" optimize="${optimize}" debug="on" source="${src.java.version}" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
-      <include name="**/*.java"/>
-      <classpath>
-        <pathelement location="${build.jorphan}"/>
-        <pathelement location="${build.core}"/>
-        <pathelement location="${build.http}"/>
-      	<fileset dir="${lib.opt}" includes="htmlparser1_6.jar"/>
-        <pathelement location="${}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </javac>
-  </target>
-  
+ 
   <target name="compile-tests" description="Compile test components only">
     <mkdir dir="${build.test}"/>
     <javac srcdir="${src.test}" destdir="${build.test}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
@@ -711,7 +672,7 @@
     </javac>
   </target>
 
-  <target name="compile-protocols" depends="compile-http,compile-htmlparser16,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
+  <target name="compile-protocols" depends="compile-http,compile-ftp,compile-jdbc,compile-java,compile-ldap,compile-mail,compile-tcp" description="Compile all protocol-specific components."/>
 
   <target name="compile-examples" depends="compile-jorphan,compile-core" description="Compile example components.">
     <mkdir dir="${build.examples}"/>
@@ -781,18 +742,6 @@
     </rmic>
   </target>
 
-  <target name="compile-htmlparser" depends="" description="Compile htmlparser.">
-    <mkdir dir="${build.htmlparser}"/>
-    <javac srcdir="${src.htmlparser}" destdir="${build.htmlparser}" optimize="${optimize}" debug="on" source="${src.java.version}" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
-      <include name="**/*.java"/>
-      <classpath>
-        <pathelement location="${build.jorphan}"/>
-        <pathelement location="${build.core}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </javac>
-  </target>
-
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components" 
       	description="Compile components specific to JMS sampling."
   	    if="jms.present">
@@ -808,7 +757,7 @@
   </target>
 
   <target name="compile" 
-  depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-htmlparser,compile-monitor,compile-junit,compile-jms,compile-report"
+  depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-report"
   description="Compile everything."/>
 
   <target name="package" depends="compile, package-only"
@@ -899,35 +848,10 @@ some of its classes - at present JMeter can only run from jar files.
     	</manifest>
     </jar>
 
-    <!-- http without HtmlParserHTMLParser -->
+    <!-- http -->
     <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="MANIFEST">
-      <fileset dir="${build.http}" includes="**/*.class" 
-      	excludes="**/HtmlParserHTMLParser.class"/>
+      <fileset dir="${build.http}" includes="**/*.class"/>
       <fileset dir="${src.http}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
-    </jar>
-    
-    <!-- HtmlParserHTMLParser -->
-    <jar jarfile="${lib.dir}/htmlparserparser.jar" manifest="MANIFEST">
-      <fileset dir="${build.http}" includes="**/HtmlParserHTMLParser.class"/>
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
-    </jar>
-  	    
-    <!-- HtmlParserHTMLParser16 -->
-    <jar jarfile="${lib.dir}/htmlparserparser16.jar" manifest="MANIFEST">
-      <fileset dir="${build.htmlparser16}" includes="**/*.class"/>
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
@@ -1081,19 +1005,7 @@ some of its classes - at present JMeter can only run from jar files.
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
     </jar>
-    
-    <jar jarfile="${lib.dir}/htmlparser.jar" manifest="MANIFEST">
-        <fileset dir="${build.htmlparser}" includes="**/*.class" excludes="org/htmlparser/tests/**/*.class"/>
-        <fileset dir="${src.htmlparser}" includes="**/*.properties" />
-        <metainf dir="." includes="LICENSE,NOTICE"/>
-    	<manifest>
-           <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
-           <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-           <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
-    	</manifest>
-    </jar>
-  	
+ 	
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="MANIFEST">
         <fileset dir="${build.jorphan}" includes="**/*.class"/>
         <fileset dir="${src.jorphan}" includes="**/*.properties"/>
@@ -1143,7 +1055,6 @@ some of its classes - at present JMeter can only run from jar files.
     <property name="javamail.complete" value="assume"/>
     <property name="beanshell.present" value="assume"/>
     <property name="jms.present" value="assume"/>
-    <!--property name="htmlparser16.present" value="assume"/-->
   </target>
 
   <!-- list of files needed for a binary distribution (excluding library files) -->
@@ -1172,9 +1083,8 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${extras.dir}/**"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
-    <include name="${lib.dir}/htmlparser.jar"/>
-    <include name="${lib.dir}/htmlparserparser.jar"/>
-    <include name="${lib.dir}/htmlparserparser16.jar"/>
+    <include name="${lib.dir}/htmllexer-2.0-20060923.jar"/>
+    <include name="${lib.dir}/htmlparser-2.0-20060923.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
   </patternset>
 
@@ -1501,9 +1411,6 @@ some of its classes - at present JMeter can only run from jar files.
   <target name="clean" description="Clean up to force a build from source.">
     <delete file="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <delete quiet="true" file="${lib.dir}/jorphan.jar"/>
-    <delete quiet="true" file="${lib.dir}/htmlparser.jar"/>
-    <delete quiet="true" file="${lib.dir}/htmlparserparser.jar"/>
-    <delete quiet="true" file="${lib.dir}/htmlparserparser16.jar"/>
     <delete quiet="true">
         <fileset dir="${dest.jar}"/>
     </delete>
@@ -1650,8 +1557,6 @@ some of its classes - at present JMeter can only run from jar files.
       <classpath>
     	<fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
-    	<fileset dir="${lib.dir}" includes="htmlparser.jar"/>
-    	<fileset dir="${lib.dir}" includes="htmlparserparser.jar"/>
     	<path refid="classpath"/>
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
@@ -1660,22 +1565,6 @@ some of its classes - at present JMeter can only run from jar files.
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
-  </target>
-
-  <target name="_test_htmlparser16" depends="check-libs" if="htmlparser16.present">
-    <junit printsummary="on" fork="yes" dir="${basedir}/bin">
-       <sysproperty key="htmlParser.className" value="org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser16"/>
-       <classpath>
-     	<fileset dir="${dest.jar}" includes="*.jar"/>
-         <pathelement location="${build.test}"/>
-     	<path refid="classpath"/>
-     	<fileset dir="${lib.opt}" includes="htmlparser1_6.jar"/>
-     	<fileset dir="${lib.dir}" includes="htmlparserparser16.jar"/>
-       </classpath>
-       <formatter type="plain" usefile="no"/>
-       <test name="org.apache.jmeter.protocol.http.parser.TestHTMLParser16"/>
-     </junit>
-  	<echo>Done!</echo>
   </target>
 
 <!--
@@ -1711,31 +1600,6 @@ some of its classes - at present JMeter can only run from jar files.
       </fileset>
       <report format="frames" todir="reports"/>
     </junitreport>
-  </target>
-
-  <!-- Run the HTML Parser unit tests -->
-  <target name="testparser" description="run the JUnit tests">
-    <echo message="**********************************"/>
-    <echo message="*  Running HtmlParser unit tests *"/>
-    <echo message="**********************************"/>
-<!--
-    <javac srcdir="${src}" includes="org/htmlparser/tests/**" debug="on">
-      <classpath>
-        <pathelement location="src"/>
-        <pathelement location="${junit.jar}"/>
-        <pathelement location="${commons-logging.jar}"/>
-      </classpath>
-    </javac>
--->
-    <java classname="org.htmlparser.tests.AllTests" fork="yes" failonerror="yes">
-      <classpath>
-	<pathelement location="${build.htmlparser}"/>
-        <pathelement location="${lib.dir}/htmlparser.jar"/>
-        <pathelement location="${junit.jar}"/>
-        <pathelement location="${log-kit.jar}"/>
-      </classpath>
-      <arg value="-text"/>
-    </java>
   </target>
   
 </project>
