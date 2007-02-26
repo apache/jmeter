@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
-import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -27,44 +26,33 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import org.htmlparser.Node;
-import org.htmlparser.NodeReader;
 import org.htmlparser.Parser;
-import org.htmlparser.scanners.AppletScanner;
-import org.htmlparser.scanners.BaseHrefScanner;
-import org.htmlparser.scanners.BgSoundScanner;
-import org.htmlparser.scanners.BodyScanner;
-import org.htmlparser.scanners.FrameScanner;
-import org.htmlparser.scanners.InputTagScanner;
-import org.htmlparser.scanners.LinkScanner;
-import org.htmlparser.scanners.LinkTagScanner;
-import org.htmlparser.scanners.ScriptScanner;
+import org.htmlparser.Tag;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.BaseHrefTag;
-import org.htmlparser.tags.BgSoundTag;
 import org.htmlparser.tags.BodyTag;
+import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.FrameTag;
 import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.InputTag;
 import org.htmlparser.tags.LinkTag;
-import org.htmlparser.tags.LinkTagTag;
 import org.htmlparser.tags.ScriptTag;
-import org.htmlparser.tags.Tag;
-import org.htmlparser.util.DefaultParserFeedback;
 import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.ParserException;
 
 /**
  * HtmlParser implementation using SourceForge's HtmlParser.
  * 
- * @version $Revision$ updated on $Date$
  */
-class HtmlParserHTMLParser extends HTMLParser {
-    /** Used to store the Logger (used for debug and error messages). */
-	private static final Logger log = LoggingManager.getLoggerForClass();
+public class HtmlParserHTMLParser extends HTMLParser {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-    protected HtmlParserHTMLParser() {
+    static{
+    	org.htmlparser.scanners.ScriptScanner.STRICT = false; // Try to ensure that more javascript code is processed OK ...
+    }
+	protected HtmlParserHTMLParser() {
 		super();
-        log.info("Using htmlparser implementation provided with JMeter");
+        log.info("Using htmlparser version 2.0");
 	}
 
 	protected boolean isReusable() {
@@ -84,108 +72,16 @@ class HtmlParserHTMLParser extends HTMLParser {
         Parser htmlParser = null;
 		try {
 			String contents = new String(html);
-			StringReader reader = new StringReader(contents);
-			NodeReader nreader = new NodeReader(reader, contents.length());
-			htmlParser = new Parser(nreader, new DefaultParserFeedback());
-			addTagListeners(htmlParser);
+			htmlParser = new Parser();
+            htmlParser.setInputHTML(contents);
 		} catch (Exception e) {
 			throw new HTMLParseException(e);
 		}
 
 		// Now parse the DOM tree
-
-		// look for applets
-
-		// This will only work with an Applet .class file.
-		// Ideally, this should be upgraded to work with Objects (IE)
-		// and archives (.jar and .zip) files as well.
-
 		try {
 			// we start to iterate through the elements
-			for (NodeIterator e = htmlParser.elements(); e.hasMoreNodes();) {
-				Node node = e.nextNode();
-				String binUrlStr = null;
-
-				// first we check to see if body tag has a
-				// background set and we set the NodeIterator
-				// to the child elements inside the body
-				if (node instanceof BodyTag) {
-					BodyTag body = (BodyTag) node;
-					binUrlStr = body.getAttribute(ATT_BACKGROUND);
-					// if the body tag exists, we get the elements
-					// within the body tag. if we don't we won't
-					// see the body of the page. The only catch
-					// with this is if there are images after the
-					// closing body tag, it won't get parsed. If
-					// someone puts it outside the body tag, it
-					// is probably a mistake. Plus it's bad to
-					// have important content after the closing
-					// body tag. Peter Lin 10-9-03
-					e = body.elements();
-				} else if (node instanceof BaseHrefTag) {
-					BaseHrefTag baseHref = (BaseHrefTag) node;
-					String baseref = baseHref.getBaseUrl();
-					try {
-						if (!baseref.equals(""))// Bugzilla 30713 // $NON-NLS-1$
-						{
-							baseUrl = new URL(baseUrl, baseref);
-						}
-					} catch (MalformedURLException e1) {
-						throw new HTMLParseException(e1);
-					}
-				} else if (node instanceof ImageTag) {
-					ImageTag image = (ImageTag) node;
-					binUrlStr = image.getImageURL();
-				} else if (node instanceof AppletTag) {
-					AppletTag applet = (AppletTag) node;
-					binUrlStr = applet.getAppletClass();
-				} else if (node instanceof InputTag) {
-					InputTag input = (InputTag) node;
-					// we check the input tag type for image
-					String strType = input.getAttribute(ATT_TYPE);
-					if (ATT_IS_IMAGE.equalsIgnoreCase(strType)) {
-						// then we need to download the binary
-						binUrlStr = input.getAttribute(ATT_SRC);
-					}
-				} else if (node instanceof LinkTag) {
-					LinkTag link = (LinkTag) node;
-					if (link.getChild(0) instanceof ImageTag) {
-						ImageTag img = (ImageTag) link.getChild(0);
-						binUrlStr = img.getImageURL();
-					}
-				} else if (node instanceof ScriptTag) {
-					ScriptTag script = (ScriptTag) node;
-					binUrlStr = script.getAttribute(ATT_SRC);
-				} else if (node instanceof FrameTag) {
-					FrameTag tag = (FrameTag) node;
-					binUrlStr = tag.getAttribute(ATT_SRC);
-				} else if (node instanceof LinkTagTag) {
-					LinkTagTag script = (LinkTagTag) node;
-					if (STYLESHEET.equalsIgnoreCase(script.getAttribute(ATT_REL))) {
-						binUrlStr = script.getAttribute(ATT_HREF);
-					}
-				} else if (node instanceof FrameTag) {
-					FrameTag script = (FrameTag) node;
-					binUrlStr = script.getAttribute(ATT_SRC);
-				} else if (node instanceof BgSoundTag) {
-					BgSoundTag script = (BgSoundTag) node;
-					binUrlStr = script.getAttribute(ATT_SRC);
-                } else if (node instanceof Tag) {
-                    Tag tag = (Tag) node;
-                    String tagname=tag.getTagName();
-                    if (tagname.equalsIgnoreCase(TAG_EMBED)){
-                        binUrlStr = tag.getAttribute(ATT_SRC);  
-                    } else {
-                        binUrlStr = tag.getAttribute(ATT_BACKGROUND);
-                    }
-                }
-
-				if (binUrlStr == null) {
-					continue;
-				}
-
-				urls.addURL(binUrlStr, baseUrl);
-			}
+			parseNodes(htmlParser.elements(), new URLPointer(baseUrl), urls);
 			log.debug("End   : parseNodes");
 		} catch (ParserException e) {
 			throw new HTMLParseException(e);
@@ -193,36 +89,99 @@ class HtmlParserHTMLParser extends HTMLParser {
 
 		return urls.iterator();
 	}
-
-	/**
-	 * Returns a node representing a whole xml given an xml document.
-	 * 
-	 * @param text
-	 *            an xml document
-	 * @return a node representing a whole xml
-	 * 
-	 * @throws SAXException
-	 *             indicates an error parsing the xml document
+	
+    /*
+	 * A dummy class to pass the pointer of URL.
 	 */
-	private static void addTagListeners(Parser parser) {
-		log.debug("Start : addTagListeners");
-		// add body tag scanner
-		parser.addScanner(new BodyScanner());
-		// add BaseHRefTag scanner
-		parser.addScanner(new BaseHrefScanner());
-		// add ImageTag and BaseHrefTag scanners
-		LinkScanner linkScanner = new LinkScanner(LinkTag.LINK_TAG_FILTER);
-		// parser.addScanner(linkScanner);
-		parser.addScanner(linkScanner.createImageScanner(ImageTag.IMAGE_TAG_FILTER));
-		parser.addScanner(linkScanner.createBaseHREFScanner("-b")); // $NON-NLS-1$
-		// Taken from org.htmlparser.Parser
-		// add input tag scanner
-		parser.addScanner(new InputTagScanner());
-		// add applet tag scanner
-		parser.addScanner(new AppletScanner());
-		parser.addScanner(new ScriptScanner());
-		parser.addScanner(new LinkTagScanner());
-		parser.addScanner(new FrameScanner());
-		parser.addScanner(new BgSoundScanner());
-	}
+    private static class URLPointer {
+    	private URLPointer(URL newUrl) {
+    		url = newUrl;
+    	}
+    	private URL url;
+    }
+    
+    /**
+     * Recursively parse all nodes to pick up all URL s.
+     * @see e the nodes to be parsed
+     * @see baseUrl Base URL from which the HTML code was obtained
+     * @see urls URLCollection
+     */
+    private void parseNodes(final NodeIterator e,
+    		final URLPointer baseUrl, final URLCollection urls) 
+        throws HTMLParseException, ParserException {
+        while(e.hasMoreNodes()) {
+            Node node = e.nextNode();
+            // a url is always in a Tag.
+            if (!(node instanceof Tag)) {
+                continue;
+            }
+            Tag tag = (Tag) node;
+            String tagname=tag.getTagName();
+            String binUrlStr = null;
+
+            // first we check to see if body tag has a
+            // background set
+            if (tag instanceof BodyTag) {
+                binUrlStr = tag.getAttribute(ATT_BACKGROUND);
+            } else if (tag instanceof BaseHrefTag) {
+                BaseHrefTag baseHref = (BaseHrefTag) tag;
+                String baseref = baseHref.getBaseUrl().toString();
+                try {
+                    if (!baseref.equals(""))// Bugzilla 30713
+                    {
+                        baseUrl.url = new URL(baseUrl.url, baseHref.getBaseUrl());
+                    }
+                } catch (MalformedURLException e1) {
+                    throw new HTMLParseException(e1);
+                }
+            } else if (tag instanceof ImageTag) {
+                ImageTag image = (ImageTag) tag;
+                binUrlStr = image.getImageURL();
+            } else if (tag instanceof AppletTag) {
+        		// look for applets
+
+        		// This will only work with an Applet .class file.
+        		// Ideally, this should be upgraded to work with Objects (IE)
+        		// and archives (.jar and .zip) files as well.
+                AppletTag applet = (AppletTag) tag;
+                binUrlStr = applet.getAppletClass();
+            } else if (tag instanceof InputTag) {
+                // we check the input tag type for image
+                if (ATT_IS_IMAGE.equalsIgnoreCase(tag.getAttribute(ATT_TYPE))) {
+                    // then we need to download the binary
+                    binUrlStr = tag.getAttribute(ATT_SRC);
+                }
+            } else if (tag instanceof LinkTag) {
+                LinkTag link = (LinkTag) tag;
+                if (link.getChild(0) instanceof ImageTag) {
+                    ImageTag img = (ImageTag) link.getChild(0);
+                    binUrlStr = img.getImageURL();
+                }
+            } else if (tag instanceof ScriptTag) {
+                binUrlStr = tag.getAttribute(ATT_SRC);
+            } else if (tag instanceof FrameTag) {
+                binUrlStr = tag.getAttribute(ATT_SRC);
+            } else if (tagname.equalsIgnoreCase(TAG_EMBED)
+                || tagname.equalsIgnoreCase(TAG_BGSOUND)){
+                binUrlStr = tag.getAttribute(ATT_SRC);  
+            } else if (tagname.equalsIgnoreCase(TAG_LINK)) {
+                // Putting the string first means it works even if the attribute is null
+                if (STYLESHEET.equalsIgnoreCase(tag.getAttribute(ATT_REL))) {
+                    binUrlStr = tag.getAttribute(ATT_HREF);
+                }
+            } else {
+                binUrlStr = tag.getAttribute(ATT_BACKGROUND);
+            }
+
+            if (binUrlStr != null) {
+                urls.addURL(binUrlStr, baseUrl.url);
+            }
+            // second, if the tag was a composite tag,
+            // recursively parse its children.
+            if (tag instanceof CompositeTag) {
+                CompositeTag composite = (CompositeTag) tag;
+                parseNodes(composite.elements(), baseUrl, urls);
+            }
+        }
+    }
 }
