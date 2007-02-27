@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry output="build/jorphan" kind="src" path="src/jorphan"/>
-	<classpathentry output="build/examples" kind="src" path="src/examples"/>
-	<classpathentry output="build/junit" kind="src" path="src/junit"/>
-	<classpathentry output="build/reports" kind="src" path="src/reports"/>
-	<classpathentry output="build/test" kind="src" path="test/src"/>
-	<classpathentry excluding="org/apache/jmeter/protocol/jms/" output="build/protocol/jms" kind="src" path="src/protocol/jms"/>
-	<classpathentry excluding="org/apache/jmeter/protocol/mail/" output="build/protocol/mail" kind="src" path="src/protocol/mail"/>
-	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties" output="build/core" kind="src" path="src/core"/>
-	<classpathentry output="build/components" excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java" kind="src" path="src/components"/>
-	<classpathentry output="build/functions" kind="src" path="src/functions"/>
-	<classpathentry excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" output="build/protocol/http" kind="src" path="src/protocol/http"/>
-	<classpathentry output="build/protocol/ftp" kind="src" path="src/protocol/ftp"/>
-	<classpathentry output="build/protocol/jdbc" kind="src" path="src/protocol/jdbc"/>
-	<classpathentry output="build/protocol/java" kind="src" path="src/protocol/java"/>
-	<classpathentry output="build/protocol/ldap" kind="src" path="src/protocol/ldap"/>
-	<classpathentry output="build/protocol/tcp" kind="src" path="src/protocol/tcp"/>
-	<classpathentry output="build/monitor/model" kind="src" path="src/monitor/model"/>
-	<classpathentry output="build/monitor/components" kind="src" path="src/monitor/components"/>
-	<classpathentry output="build/htmlparser" kind="src" path="src/htmlparser"/>
-	<classpathentry output="build/htmlparser16" kind="src" path="src/htmlparser16"/>
+	<classpathentry kind="src" output="build/jorphan" path="src/jorphan"/>
+	<classpathentry kind="src" output="build/examples" path="src/examples"/>
+	<classpathentry kind="src" output="build/junit" path="src/junit"/>
+	<classpathentry kind="src" output="build/reports" path="src/reports"/>
+	<classpathentry kind="src" output="build/test" path="test/src"/>
+	<classpathentry kind="src" output="build/protocol/jms" path="src/protocol/jms"/>
+	<classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
+	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties" kind="src" output="build/core" path="src/core"/>
+	<classpathentry kind="src" output="build/components" excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java" path="src/components"/>
+	<classpathentry kind="src" output="build/functions" path="src/functions"/>
+	<classpathentry kind="src" excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" output="build/protocol/http" kind="src" path="src/protocol/http"/>
+	<classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
+	<classpathentry kind="src" output="build/protocol/jdbc" path="src/protocol/jdbc"/>
+	<classpathentry kind="src" output="build/protocol/java" path="src/protocol/java"/>
+	<classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
+	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
+	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
+	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/js_rhino1_6R5.jar"/>
-	<classpathentry kind="lib" path="lib/junit.jar"/>
-	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/Tidy.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
+	<classpathentry kind="lib" path="lib/bsf-2.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/soap.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/xalan.jar"/>
-	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-jexl-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-datasource-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.I.jar"/>
-	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
+	<classpathentry kind="lib" path="lib/htmllexer-2.0-20060923.jar"/>
+	<classpathentry kind="lib" path="lib/htmlparser-2.0-20060923.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/jCharts-0.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/bsf-2.3.0.jar"/>
-    <classpathentry kind="lib" path="lib/commons-jexl-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/js_rhino1_6R5.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/soap.jar"/>
+	<classpathentry kind="lib" path="lib/Tidy.jar"/>
+	<classpathentry kind="lib" path="lib/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.O.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.2.1.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
