@@ -41,7 +41,10 @@ public class TestSampleResult extends TestCase {
             res.sampleStart();
             Thread.sleep(100);
             res.sampleEnd();
-            assertTrue(res.getTime() >= 100);
+        	long time = res.getTime();
+            if(time < 100){
+				fail("Sample time should be >=100, actual "+time);
+            }
         }
 
         public void testPause() throws Exception {
