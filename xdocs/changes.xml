@@ -65,6 +65,7 @@ has been removed.
 <li>HTTP Mirror Server Workbench element</li>
 <li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
 <li>Change to htmlparser 2.0</li>
+<li>Updated to xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
 </ul>
 
 <h4>Bug fixes:</h4>
