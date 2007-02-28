@@ -158,6 +158,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 	private JTree jTree;
 
+	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
+	        JMeterUtils.getPropDefault("viewResultsTree.success", "icon_success_sml.gif"));
+
+	private static final ImageIcon imageFailure = JMeterUtils.getImage(
+			JMeterUtils.getPropDefault("viewResultsTree.failure", "icon_warning_sml.gif"));
+	
 	public ViewResultsFullVisualizer() {
 		super();
 		log.debug("Start : ViewResultsFullVisualizer1");
@@ -676,6 +682,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
 			if (!((SampleResult) ((DefaultMutableTreeNode) value).getUserObject()).isSuccessful()) {
 				this.setForeground(Color.red);
+				this.setIcon(imageFailure);
+			} else {
+				this.setIcon(imageSuccess);
 			}
 			return this;
 		}
