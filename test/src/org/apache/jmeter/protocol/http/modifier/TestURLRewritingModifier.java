@@ -133,6 +133,23 @@ public class TestURLRewritingModifier extends JMeterTestCase {
 			assertEquals("index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT", sampler.getPath());
 		}
 
+        public void testGrabSessionId5() throws Exception {
+			String html = "location: http://server.com/index.html" + "?session[33]=jfdkjdkf%20jddkfdfjkdjfdf%22;";
+			response = new SampleResult();
+			response.setResponseData(html.getBytes());
+			mod.setArgumentName("session[33]");
+			HTTPSamplerBase sampler = createSampler();
+			sampler.addArgument("session[33]", "adfasdfdsafasdfasd");
+			context.setCurrentSampler(sampler);
+			context.setPreviousResult(response);
+			mod.process();
+			Arguments args = sampler.getArguments();
+			assertEquals("jfdkjdkf jddkfdfjkdjfdf\"", ((Argument) args.getArguments().get(0).getObjectValue())
+					.getValue());
+			assertEquals("http://server.com/index.html?session%5B33%5D=jfdkjdkf+jddkfdfjkdjfdf%22", sampler.toString());
+		}
+
+
 		public void testGrabSessionIdFromForm() throws Exception {
 			String[] html = new String[] { 
                     "<input name=\"sid\" value=\"myId\">", 
