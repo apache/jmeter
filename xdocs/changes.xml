@@ -67,6 +67,7 @@ has been removed.
 <li>Change to htmlparser 2.0</li>
 <li>Updated to xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
 <li>Bug 39717 - use icons in the results tree instead of colors</li>
+<li>Added __V variable function to resolve nested variable names</li>
 </ul>
 
 <h4>Bug fixes:</h4>
