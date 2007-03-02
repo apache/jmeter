@@ -24,7 +24,7 @@
 <document prev="component_reference.html" next="regular_expressions.html" date="2004/06/12">
 
 <properties>
-  <title>User's Manual: Functions</title>
+  <title>User's Manual: Functions and Variables</title>
 </properties>
 
 <body>
@@ -75,6 +75,7 @@ Functions that require no parameters can leave off the parentheses, for example 
         <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
         <li><a href="#__time">time - return current time in various formats</a></li>
         <li><a href="#__jexl">jexl - evaluate a Commons Jexl expression</a></li>
+        <li><a href="#__V">V evaluate a variable expression</a></li>
 </ul>
 
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -83,6 +84,11 @@ User-defined static values allow the user to define variables to be replaced wit
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
 run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
 matter to change a test to target a different server with the same test.
+</p>
+<p>
+Note that variables cannot currently be nested; i.e ${Var${N}} does not work.
+The __V (variable) function (since 2.2.1) can be used to do this: ${__V(Var${N})}.
+In earlier JMeter versions one can use ${__BeanShell(vars.get("Var${N}")}.
 </p>
 <p>This type of replacement is possible without functions, but was less convenient and less intuitive.
 It required users to create default config elements that would fill in blank values of Samplers.  User-defined
@@ -690,6 +696,19 @@ time.YMD=yyMMdd
 <properties>
         <property name="Expression" required="Yes">
         The expression to be evaluated. 
+        </property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.19" name="__V">
+<description>
+	<p>The V (variable) function returns the result of evaluating a variable name expression.
+	</p>
+	</description>
+
+<properties>
+        <property name="Variable name" required="Yes">
+        The variable to be evaluated. 
         </property>
 </properties>
 </component>
