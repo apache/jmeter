@@ -110,7 +110,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
     
 	public static boolean testFunctors(){
 		SummaryReport instance = new SummaryReport();
-		return instance.model.checkFunctors(null);
+		return instance.model.checkFunctors(null,instance.getClass());
 	}
 	
 	public String getLabelResource() {

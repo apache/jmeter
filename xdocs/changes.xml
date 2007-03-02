@@ -36,7 +36,7 @@ However JMeter does honour the 3 testplan versions.</p>
 <p>
 Bug 22510 - JMeter always uses the first entry in the keystore.
 </p>
-<h4>Incompatible changes:</h4>
+<h4>Incompatible changes (usage):</h4>
 <p>
 Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
 (as they appear in the test plan) rather than reverse order as previously.
@@ -48,6 +48,11 @@ jmeterthread.reversePostProcessors=true
 The HTTP Authorisation Manager now has extra columns for domain and realm, 
 so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
 has been removed.
+</p>
+<h4>Incompatible changes (development):</h4>
+<p>
+Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
+Formatting should now be done using the jorphan.gui Renderer classes.
 </p>
 <h4>New functionality:</h4>
 <ul>
@@ -64,10 +69,15 @@ has been removed.
 <li>Bug 33964 - send file as entire post body if name/type are omitted</li>
 <li>HTTP Mirror Server Workbench element</li>
 <li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
-<li>Change to htmlparser 2.0</li>
-<li>Updated to xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
 <li>Bug 39717 - use icons in the results tree instead of colors</li>
 <li>Added __V variable function to resolve nested variable names</li>
+</ul>
+
+<h4>Non-functional improvements:</h4>
+<ul>
+<li>Change to htmlparser 2.0</li>
+<li>Updated to xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
+<li>Functor calls can now be unit tested</li>
 </ul>
 
 <h4>Bug fixes:</h4>

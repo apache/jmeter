@@ -42,13 +42,28 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals");
 
 	protected void initializeTableModel() {
-		tableModel = new ObjectTableModel(new String[] { ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1,
-				ENCODE_OR_NOT, INCLUDE_EQUALS }, new Functor[] { new Functor("getName"), new Functor("getValue"),
-				new Functor("isAlwaysEncoded"), new Functor("isUseEquals") }, new Functor[] { new Functor("setName"),
-				new Functor("setValue"), new Functor("setAlwaysEncoded"), new Functor("setUseEquals") }, new Class[] {
-				String.class, String.class, Boolean.class, Boolean.class });
+		tableModel = new ObjectTableModel(new String[] {
+				ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
+				HTTPArgument.class,
+				new Functor[] {
+				new Functor("getName"),
+				new Functor("getValue"),
+				new Functor("isAlwaysEncoded"),
+				new Functor("isUseEquals") },
+				new Functor[] { 
+				new Functor("setName"),
+				new Functor("setValue"),
+				new Functor("setAlwaysEncoded"),
+				new Functor("setUseEquals") },
+				new Class[] {String.class, String.class, Boolean.class, Boolean.class });
 	}
 
+	public static boolean testFunctors(){
+		HTTPArgumentsPanel instance = new HTTPArgumentsPanel();
+		instance.initializeTableModel();
+		return instance.tableModel.checkFunctors(null,instance.getClass());
+	}
+	
 	protected void sizeColumns(JTable table) {
 		int resizeMode = table.getAutoResizeMode();
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

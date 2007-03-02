@@ -19,7 +19,6 @@
 package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,16 +35,9 @@ import org.apache.log.Logger;
  * the stats out with whatever methods you prefer.
  * 
  * @author James Boutcher
- * @version $Revision$
  */
 public class SamplingStatCalculator implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
-
-	private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
-
-	private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
-
-	private static DecimalFormat kbFormatter = new DecimalFormat("#0.00");
 
 	private final StatCalculator calculator = new StatCalculator();
 
@@ -143,41 +135,6 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	/**
-	 * Returns a String that represents the throughput associated for this
-	 * sampler, in units appropriate to its dimension:
-	 * <p>
-	 * The number is represented in requests/second or requests/minute or
-	 * requests/hour.
-	 * <p>
-	 * Examples: "34.2/sec" "0.1/sec" "43.0/hour" "15.9/min"
-	 * 
-	 * @return a String representation of the rate the samples are being taken
-	 *         at.
-	 */
-	public String getRateString() {
-		double rate = getRate();
-
-		if (rate == Double.MAX_VALUE) {
-			return "N/A";
-		}
-
-		String unit = "sec";
-
-		if (rate < 1.0) {
-			rate *= 60.0;
-			unit = "min";
-		}
-		if (rate < 1.0) {
-			rate *= 60.0;
-			unit = "hour";
-		}
-
-		String rval = rateFormatter.format(rate) + "/" + unit;
-
-		return (rval);
-	}
-
-	/**
 	 * Should calculate the average page size, which means divide the bytes by number
 	 * of samples - actually calculates the throughput in bytes / second
 	 * 
@@ -194,16 +151,6 @@ public class SamplingStatCalculator implements Serializable {
 			rate = 0;
 		}
 		return rate;
-	}
-
-	/**
-	 * formats the Page Size
-	 * 
-	 * @return
-	 */
-	public String getPageSizeString() {
-		double rate = getPageSize() / 1024;
-		return kbFormatter.format(rate);
 	}
 
 	public String getLabel() {
@@ -301,8 +248,7 @@ public class SamplingStatCalculator implements Serializable {
 
 	/**
 	 * Returns the raw double value of the percentage of samples with errors
-	 * that were recorded. (Between 0.0 and 1.0) If you want a nicer return
-	 * format, see {@link #getErrorPercentageString()}.
+	 * that were recorded. (Between 0.0 and 1.0)
 	 * 
 	 * @return the raw double value of the percentage of samples with errors
 	 *         that were recorded.
@@ -318,23 +264,7 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	/**
-	 * Returns a String which represents the percentage of sample errors that
-	 * have occurred. ("0.00%" through "100.00%")
-	 * 
-	 * @return a String which represents the percentage of sample errors that
-	 *         have occurred.
-	 */
-	public String getErrorPercentageString() {
-		double myErrorPercentage = this.getErrorPercentage();
-		if (myErrorPercentage < 0) {
-			myErrorPercentage = 0.0;
-		}
-
-		return (errorFormatter.format(myErrorPercentage));
-	}
-
-	/**
-	 * For debugging purposes, mainly.
+	 * For debugging purposes, only.
 	 */
 	public String toString() {
 		StringBuffer mySB = new StringBuffer();
@@ -343,8 +273,8 @@ public class SamplingStatCalculator implements Serializable {
 		mySB.append("Avg: " + this.getMean() + "  ");
 		mySB.append("Min: " + this.getMin() + "  ");
 		mySB.append("Max: " + this.getMax() + "  ");
-		mySB.append("Error Rate: " + this.getErrorPercentageString() + "  ");
-		mySB.append("Sample Rate: " + this.getRateString());
+		mySB.append("Error Rate: " + this.getErrorPercentage() + "  ");
+		mySB.append("Sample Rate: " + this.getRate());
 		return (mySB.toString());
 	}
 
