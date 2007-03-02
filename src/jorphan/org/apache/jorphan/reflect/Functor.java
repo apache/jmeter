@@ -172,6 +172,35 @@ public class Functor {
 		return methodToInvoke;
 	}
 
+	/*
+	 * Check if a Functor method is valid.
+	 * 
+	 * @deprecated ** for use by Unit test code only **
+	 * 
+	 * @return true if method exists
+	 */
+	public boolean checkMethod(Object _invokee){
+		Method m = null;
+		this.invokee=_invokee;
+		try {
+		    m = createMethod(getTypes());
+		} catch (Exception e){
+			// ignored
+		}
+		return null != m;
+	}
+
+	public String toString(){
+		StringBuffer sb = new StringBuffer(100);
+		sb.append("method: ");
+		sb.append(methodName);
+		if (invokee != null){
+		    sb.append(" invokee: ");
+		    sb.append(invokee.getClass().getName());
+		}
+		return sb.toString();
+	}
+
 	protected Class getPrimitive(Class t) {
 		if (t.equals(Integer.class)) {
 			return int.class;
