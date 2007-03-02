@@ -1814,7 +1814,7 @@ the Report.
 <li>Error % - Percent of requests with errors</li>
 <li>Throughput - Throughput measured in requests per second/minute/hour</li>
 <li>Kb/sec - The throughput measured in Kilobytes per second</li>
-<li>Avg. Bytes - average size of the sample response in bytes.</li>
+<li>Avg. Bytes - average size of the sample response in bytes. (in JMeter 2.2 it wrongly showed the value in kB)</li>
 </ul>
 </description>
 </component>
