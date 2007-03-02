@@ -90,7 +90,9 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	 */
 	public TableVisualizer() {
 		super();
-		model = new ObjectTableModel(COLUMNS, new Functor[] {
+		model = new ObjectTableModel(COLUMNS,
+				Sample.class,         // The object used for each row
+				new Functor[] {
                 new Functor("getCount"), // $NON-NLS-1$
                 new Functor("getStartTimeFormatted",  // $NON-NLS-1$
                         new Object[]{format}),
@@ -104,6 +106,12 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 				Long.class, String.class, String.class, String.class, Long.class, Boolean.class, Integer.class });
 		init();
 	}
+
+	public static boolean testFunctors(){
+		TableVisualizer instance = new TableVisualizer();
+		return instance.model.checkFunctors(null);
+	}
+	
 
 	public String getLabelResource() {
 		return "view_results_in_table"; // $NON-NLS-1$
