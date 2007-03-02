@@ -341,14 +341,23 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * Initialize the table model used for the arguments table.
 	 */
 	protected void initializeTableModel() {
-		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 }, new Functor[] {
+		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
+				Argument.class,
+				new Functor[] {
 				new Functor("getName"), // $NON-NLS-1$
 				new Functor("getValue") },  // $NON-NLS-1$
-				new Functor[] { new Functor("setName"), // $NON-NLS-1$
+				new Functor[] {
+			    new Functor("setName"), // $NON-NLS-1$
 				new Functor("setValue") }, // $NON-NLS-1$
 				new Class[] { String.class, String.class });
 	}
 
+	public static boolean testFunctors(){
+		ArgumentsPanel instance = new ArgumentsPanel();
+		instance.initializeTableModel();
+		return instance.tableModel.checkFunctors(null,instance.getClass());
+	}
+	
 	/**
 	 * Resize the table columns to appropriate widths.
 	 * 

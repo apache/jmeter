@@ -218,15 +218,20 @@ public class ObjectTableModel extends DefaultTableModel {
 		return (Class) classes.get(arg0);
 	}
 	
-	/*
-	 * Check all registered functors
+	/**
+	 * Check all registered functors.
+	 * <p>
+	 * <b>** only for use in unit test code **</b>
+	 * </p>
 	 * 
-	 * @param value - an instance of the table model row data item (default the class provided to the ctr)
+	 * @param value - an instance of the table model row data item 
+	 * (if null, use the class passed to the constructor).
 	 * 
-	 * ** only for use in unit test code
-	 * @return false if at least one Functor cannot be found
+	 * @param caller - class of caller.
+	 * 
+	 * @return false if at least one Functor cannot be found.
 	 */
-	public boolean checkFunctors(Object _value){
+	public boolean checkFunctors(Object _value, Class caller){
 		Object value;
 		if (_value == null && objectClass != null) {
 			try {
@@ -245,16 +250,16 @@ public class ObjectTableModel extends DefaultTableModel {
 		for(int i=0;i<getColumnCount();i++){
 			Functor setMethod = (Functor) writeFunctors.get(i);
 			if (setMethod != null) {
-				if (!setMethod.checkMethod(value)){
+				if (!setMethod.checkMethod(value,getColumnClass(i))){
 					status=false;
-					log.warn("Cannot find setMethod "+setMethod.toString());
+					log.warn(caller.getName()+" is attempting to use nonexistent "+setMethod.toString());
 				}
 			}
 			Functor getMethod = (Functor) readFunctors.get(i);
 			if (getMethod != null) {
 				if (!getMethod.checkMethod(value)){
 					status=false;
-					log.warn("Cannot find getMethod "+getMethod.toString());
+					log.warn(caller.getName()+" is attempting to use nonexistent "+getMethod.toString());
 				}
 			}
 			

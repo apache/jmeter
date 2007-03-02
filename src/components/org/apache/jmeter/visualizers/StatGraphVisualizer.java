@@ -42,6 +42,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -57,7 +58,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.RateRenderer;
+import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
@@ -147,7 +151,9 @@ ActionListener {
 
 	public StatGraphVisualizer() {
 		super();
-		model = new ObjectTableModel(COLUMNS, new Functor[] {
+		model = new ObjectTableModel(COLUMNS,
+				SamplingStatCalculator.class,
+				new Functor[] {
 				new Functor("getLabel"),					//$NON-NLS-1$
 				new Functor("getCount"),					//$NON-NLS-1$
 				new Functor("getMeanAsNumber"),				//$NON-NLS-1$
@@ -156,9 +162,9 @@ ActionListener {
 				new Object[] { new Float(.900) }),
 				new Functor("getMin"),						//$NON-NLS-1$
 				new Functor("getMax"), 						//$NON-NLS-1$
-				new Functor("getErrorPercentageString"),	//$NON-NLS-1$
-				new Functor("getRateString"),				//$NON-NLS-1$
-				new Functor("getPageSizeString") },			//$NON-NLS-1$
+				new Functor("getErrorPercentage"),	//$NON-NLS-1$
+				new Functor("getRate"),				//$NON-NLS-1$
+				new Functor("getPageSize") },			//$NON-NLS-1$
 				new Functor[] { null, null, null, null, null, null, null, null,	null, null }, 
 				new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, Long.class,
 				Long.class, String.class, String.class, String.class });
@@ -166,6 +172,26 @@ ActionListener {
 		init();
 	}
 
+	// Column renderers
+	private static final TableCellRenderer[] RENDERERS = 
+		new TableCellRenderer[]{
+		    null, // Label
+		    null, // count
+		    null, // Mean
+		    null, // median
+		    null, // 90%
+		    null, // Min
+		    null, // Max
+		    new NumberRenderer("#0.00%"), // Error %age
+		    new RateRenderer("#.0"),      // Throughpur
+		    new NumberRenderer("#.0"),    // pageSize
+		};
+
+	public static boolean testFunctors(){
+		StatGraphVisualizer instance = new StatGraphVisualizer();
+		return instance.model.checkFunctors(null,instance.getClass());
+	}
+	
 	public String getLabelResource() {
 		return "aggregate_graph_title";						//$NON-NLS-1$
 	}
@@ -221,6 +247,7 @@ ActionListener {
 
 		myJTable = new JTable(model);
 		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 80));
+		RendererUtils.applyRenderers(myJTable, RENDERERS);
 		myScrollPane = new JScrollPane(myJTable);
         
         graph = new VerticalPanel();
