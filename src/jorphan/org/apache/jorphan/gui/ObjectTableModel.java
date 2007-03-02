@@ -45,7 +45,33 @@ public class ObjectTableModel extends DefaultTableModel {
 	private transient ArrayList readFunctors = new ArrayList();
 
 	private transient ArrayList writeFunctors = new ArrayList();
+	
+	private transient Class objectClass = null; // if provided
 
+	/**
+	 * The ObjectTableModel is a TableModel whose rows are objects;
+	 * columns are defined as Functors on the object.
+	 * 
+	 * @param headers - Column names
+	 * @param _objClass - Object class that will be used
+	 * @param readFunctors - used to get the values
+	 * @param writeFunctors - used to set the values
+	 * @param editorClasses - class for each column
+	 */
+	public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
+		this(headers, readFunctors, writeFunctors, editorClasses);
+		this.objectClass=_objClass;
+	}
+
+	/**
+	 * The ObjectTableModel is a TableModel whose rows are objects;
+	 * columns are defined as Functors on the object.
+	 * 
+	 * @param headers - Column names
+	 * @param readFunctors - used to get the values
+	 * @param writeFunctors - used to set the values
+	 * @param editorClasses - class for each column
+	 */
 	public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
 		this.headers.addAll(Arrays.asList(headers));
 		this.classes.addAll(Arrays.asList(editorClasses));
@@ -83,6 +109,13 @@ public class ObjectTableModel extends DefaultTableModel {
 
 	public void addRow(Object value) {
 		log.debug("Adding row value: " + value);
+		if (objectClass != null) {
+			final Class valueClass = value.getClass();
+			if (!objectClass.isAssignableFrom(valueClass)){
+				throw new IllegalArgumentException("Trying to add class: "+valueClass.getName()
+						+"; expecting class: "+objectClass.getName());
+			}
+		}
 		objects.add(value);
 		super.fireTableRowsInserted(objects.size() - 1, objects.size());
 	}
@@ -184,5 +217,48 @@ public class ObjectTableModel extends DefaultTableModel {
 	public Class getColumnClass(int arg0) {
 		return (Class) classes.get(arg0);
 	}
-
+	
+	/*
+	 * Check all registered functors
+	 * 
+	 * @param value - an instance of the table model row data item (default the class provided to the ctr)
+	 * 
+	 * ** only for use in unit test code
+	 * @return false if at least one Functor cannot be found
+	 */
+	public boolean checkFunctors(Object _value){
+		Object value;
+		if (_value == null && objectClass != null) {
+			try {
+				value = objectClass.newInstance();
+			} catch (InstantiationException e) {
+				log.error("Cannot create instance of class "+objectClass.getName(),e);
+				return false;
+			} catch (IllegalAccessException e) {
+				log.error("Cannot create instance of class "+objectClass.getName(),e);
+				return false;
+			}			
+		} else {
+			value = _value;			
+		}
+		boolean status = true;
+		for(int i=0;i<getColumnCount();i++){
+			Functor setMethod = (Functor) writeFunctors.get(i);
+			if (setMethod != null) {
+				if (!setMethod.checkMethod(value)){
+					status=false;
+					log.warn("Cannot find setMethod "+setMethod.toString());
+				}
+			}
+			Functor getMethod = (Functor) readFunctors.get(i);
+			if (getMethod != null) {
+				if (!getMethod.checkMethod(value)){
+					status=false;
+					log.warn("Cannot find getMethod "+getMethod.toString());
+				}
+			}
+			
+		}
+		return status;
+	}
 }
