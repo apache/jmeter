@@ -31,14 +31,16 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Function to get a JMeter property, and optionally store it
  * 
- * Parameters: - property name - variable name (optional) - default value
- * (optional)
+ * Parameters:
+ *  - property name 
+ *  - variable name (optional)
+ *  - default value (optional)
  * 
+ * Returns:
+ * - the property value, but if not found:
+ * - the default value, but if not defined:
+ * - the property name itself
  * 
- * Returns: - the property value, but if not found - the default value, but if
- * not define - the property name itself
- * 
- * @version $Revision$ Updated: $Date$
  */
 public class Property extends AbstractFunction implements Serializable {
 
@@ -48,8 +50,8 @@ public class Property extends AbstractFunction implements Serializable {
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;
-
 	private static final int MAX_PARAMETER_COUNT = 3;
+
 	static {
 		desc.add(JMeterUtils.getResString("property_name_param"));
 		desc.add(JMeterUtils.getResString("function_name_param"));
