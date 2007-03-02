@@ -183,6 +183,9 @@ public class PackageTest extends JMeterTestCase {
         par3.addTest(new PackageTest("XPathThread2"));
         allsuites.addTest(par3);
 
+        TestSuite variable = new TestSuite("Variable");
+        random.addTest(new PackageTest("VariableTest1"));
+        allsuites.addTest(variable);
         return allsuites;
 	}
 
@@ -809,4 +812,50 @@ public class PackageTest extends JMeterTestCase {
         //String s = 
         	r.execute(null,null);
     }
+
+    public void VariableTest1() throws Exception {
+        Variable r = new Variable();
+        vars.put("A_1","a1");
+        vars.put("A_2","a2");
+        vars.put("one","1");
+        vars.put("two","2");
+        vars.put("V","A");
+        Collection parms;
+        String s;
+        
+        parms = MakeParams("V",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("A",s);
+        
+        parms = MakeParams("X",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("X",s);
+        
+        parms = MakeParams("A${X}",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("A${X}",s);
+        
+        parms = MakeParams("A_1",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("a1",s);
+        
+        parms = MakeParams("A_2",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("a2",s);
+        
+        parms = MakeParams("A_${two}",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("a2",s);
+        
+        parms = MakeParams("${V}_${one}",null,null);
+        r.setParameters(parms);
+        s = r.execute(null,null);
+        assertEquals("a1",s);
+    }        
 }
