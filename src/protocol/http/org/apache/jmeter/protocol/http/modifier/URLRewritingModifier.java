@@ -39,7 +39,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
 /**
  * @author mstover
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 
 public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor {
@@ -151,28 +150,29 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 	}
 
 	private void initRegex(String argName) {
+		String quotedArg = Perl5Compiler.quotemeta(argName);// Don't get tripped up by RE chars in the arg name
 		pathExtensionEqualsQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				SEMI_COLON + argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?", // $NON-NLS-1$
+				SEMI_COLON + quotedArg + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		pathExtensionEqualsNoQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				SEMI_COLON + argName + "=([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?", // $NON-NLS-1$
+				SEMI_COLON + quotedArg + "=([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		pathExtensionNoEqualsQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				SEMI_COLON + argName + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?", // $NON-NLS-1$
+				SEMI_COLON + quotedArg + "([^\"'>&\\s;]*)[&\\s\"'>;]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		pathExtensionNoEqualsNoQuestionmarkRegexp = JMeterUtils.getPatternCache().getPattern(
-				SEMI_COLON + argName + "([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?", // $NON-NLS-1$
+				SEMI_COLON + quotedArg + "([^\"'>&\\s;?]*)[&\\s\"'>;?]?$?", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 
 		parameterRegexp = JMeterUtils.getPatternCache().getPattern(
                 // ;sessionid=value
-				"[;\\?&]" + argName + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?" +  // $NON-NLS-1$
+				"[;\\?&]" + quotedArg + "=([^\"'>&\\s;]*)[&\\s\"'>;]?$?" +  // $NON-NLS-1$
                 
                 // name="sessionid" value="value"
-                "|\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']" + argName
+                "|\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']" + quotedArg
 				+ "[\"']" + "[^>]*"  // $NON-NLS-1$ 
                 + "\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']" // $NON-NLS-1$
                 + "([^\"']*)" + "[\"']" // $NON-NLS-1$
@@ -181,7 +181,7 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
                 + "|\\s[vV][Aa][Ll][Uu][Ee]\\s*=\\s*[\"']" // $NON-NLS-1$
                 + "([^\"']*)" + "[\"']" + "[^>]*" // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
 				+ "\\s[Nn][Aa][Mm][Ee]\\s*=\\s*[\"']"  // $NON-NLS-1$
-                + argName + "[\"']", // $NON-NLS-1$
+                + quotedArg + "[\"']", // $NON-NLS-1$
 				Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 		// NOTE: the handling of simple- vs. double-quotes could be formally
 		// more accurate, but I can't imagine a session id containing
