@@ -95,11 +95,13 @@ public class XPathExtractor extends AbstractTestElement implements
 			Document d = parseResponse(context.getPreviousResult());		
 			getValuesForXPath(d,getXPathQuery(),vars, refName);
 		}catch(IOException e){// Should not happen
-			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
-			throw new JMeterError(e);
+			final String errorMessage = "error on "+XPATH_QUERY+"("+getXPathQuery()+")";
+			log.error(errorMessage,e);
+			throw new JMeterError(errorMessage,e);
 		} catch (ParserConfigurationException e) {// Should not happen
-			log.error("error on "+XPATH_QUERY+"("+getXPathQuery()+")",e);
-			throw new JMeterError(e);
+			final String errrorMessage = "error on "+XPATH_QUERY+"("+getXPathQuery()+")";
+			log.error(errrorMessage,e);
+			throw new JMeterError(errrorMessage,e);
 		} catch (SAXException e) {// Can happen for bad input document
 			log.warn("error on "+XPATH_QUERY+"("+getXPathQuery()+")"+e.getLocalizedMessage());
 		} catch (TransformerException e) {// Can happen for incorrect XPath expression
