@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableCellRenderer;
 //import javax.swing.table.AbstractTableModel;
 //import javax.swing.table.TableModel;
 
@@ -41,7 +42,10 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.RateRenderer;
+import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
 
 /**
@@ -79,6 +83,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
 	public StatVisualizer() {
 		super();
 		model = new ObjectTableModel(COLUMNS, 
+				SamplingStatCalculator.class,
                 new Functor[] { 
                     new Functor("getLabel"),   //$NON-NLS-1$
                     new Functor("getCount"),  //$NON-NLS-1$
@@ -88,9 +93,9 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
                             new Object[] { new Float(.900) }), 
                     new Functor("getMin"),  //$NON-NLS-1$
                     new Functor("getMax"),   //$NON-NLS-1$
-                    new Functor("getErrorPercentageString"),   //$NON-NLS-1$
-                    new Functor("getRateString"),  //$NON-NLS-1$
-    				new Functor("getPageSizeString")   //$NON-NLS-1$
+                    new Functor("getErrorPercentage"),   //$NON-NLS-1$
+                    new Functor("getRate"),  //$NON-NLS-1$
+    				new Functor("getPageSize")   //$NON-NLS-1$
                 },
                 new Functor[] { null, null, null, null, null, null, null, null, null, null }, 
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
@@ -99,6 +104,26 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
 		init();
 	}
 
+	// Column renderers
+	private static final TableCellRenderer[] RENDERERS = 
+		new TableCellRenderer[]{
+		    null, // Label
+		    null, // count
+		    null, // Mean
+		    null, // median
+		    null, // 90%
+		    null, // Min
+		    null, // Max
+		    new NumberRenderer("#0.00%"), // Error %age
+		    new RateRenderer("#.0"),      // Throughpur
+		    new NumberRenderer("#.0"),    // pageSize
+		};
+
+	public static boolean testFunctors(){
+		StatVisualizer instance = new StatVisualizer();
+		return instance.model.checkFunctors(null,instance.getClass());
+	}
+	
 	public String getLabelResource() {
 		return "aggregate_report";  //$NON-NLS-1$
 	}
@@ -156,6 +181,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
 		// new SortFilterModel(myStatTableModel);
 		myJTable = new JTable(model);
 		myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		RendererUtils.applyRenderers(myJTable, RENDERERS);
 		myScrollPane = new JScrollPane(myJTable);
 		this.add(mainPanel, BorderLayout.NORTH);
 		this.add(myScrollPane, BorderLayout.CENTER);
@@ -167,7 +193,6 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
  * haven't implemented this yet, it needs some non-trivial work done to it to
  * support our dynamically-sizing TableModel for this visualizer.
  * 
- * @version $Revision$
  */
 
 //class SortFilterModel extends AbstractTableModel {

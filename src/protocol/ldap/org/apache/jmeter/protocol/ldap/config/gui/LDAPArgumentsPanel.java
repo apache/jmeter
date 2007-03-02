@@ -36,6 +36,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -321,11 +322,18 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	 */
 	protected void initializeTableModel() {
 		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES[0], COLUMN_NAMES[1], COLUMN_NAMES[2] },
+				LDAPArgument.class,
 				new Functor[] { new Functor("getName"), new Functor("getValue"), new Functor("getOpcode") },
 				new Functor[] { new Functor("setName"), new Functor("setValue"), new Functor("setOpcode") },
 				new Class[] { String.class, String.class, String.class });
 	}
 
+	public static boolean testFunctors(){
+		LDAPArgumentsPanel instance = new LDAPArgumentsPanel();
+		instance.initializeTableModel();
+		return instance.tableModel.checkFunctors(null,instance.getClass());
+	}
+	
 	/*
 	 * protected void initializeTableModel() { tableModel = new
 	 * ObjectTableModel( new String[] { ArgumentsPanel.COLUMN_NAMES_0,

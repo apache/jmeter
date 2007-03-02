@@ -173,7 +173,7 @@ public class Functor {
 	}
 
 	/*
-	 * Check if a Functor method is valid.
+	 * Check if a read Functor method is valid.
 	 * 
 	 * @deprecated ** for use by Unit test code only **
 	 * 
@@ -184,6 +184,24 @@ public class Functor {
 		this.invokee=_invokee;
 		try {
 		    m = createMethod(getTypes());
+		} catch (Exception e){
+			// ignored
+		}
+		return null != m;
+	}
+
+	/*
+	 * Check if a write Functor method is valid.
+	 * 
+	 * @deprecated ** for use by Unit test code only **
+	 * 
+	 * @return true if method exists
+	 */
+	public boolean checkMethod(Object _invokee, Class c){
+		Method m = null;
+		this.invokee=_invokee;
+		try {
+		    m = createMethod(new Class[]{c});
 		} catch (Exception e){
 			// ignored
 		}

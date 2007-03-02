@@ -109,7 +109,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	public static boolean testFunctors(){
 		TableVisualizer instance = new TableVisualizer();
-		return instance.model.checkFunctors(null);
+		return instance.model.checkFunctors(null,instance.getClass());
 	}
 	
 
