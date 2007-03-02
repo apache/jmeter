@@ -703,7 +703,14 @@ time.YMD=yyMMdd
 <component index="&sect-num;.5.19" name="__V">
 <description>
 	<p>The V (variable) function returns the result of evaluating a variable name expression.
+	This can be used to evaluate nested variable references (which are not currently supported).
 	</p>
+	<p>For example, if one has variables A1,A2 and N=1:</p>
+	<ul>
+	<li>${A1} - works OK</li>
+	<li>${A${N}} - does not work (nested variable reference)</li>
+	<li>${__V(A${N})} - works OK. A${N} becomes A1, and the __V function returns the value of A1</li>
+	</ul>
 	</description>
 
 <properties>
