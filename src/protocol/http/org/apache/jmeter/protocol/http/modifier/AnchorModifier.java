@@ -46,16 +46,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 // For Unit tests, @see TestAnchorModifier
 
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class AnchorModifier extends AbstractTestElement implements PreProcessor, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Random rand = new Random();
 
