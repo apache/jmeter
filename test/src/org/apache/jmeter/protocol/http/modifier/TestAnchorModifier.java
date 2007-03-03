@@ -31,12 +31,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.io.TextFile;
-import org.apache.jorphan.util.JOrphanUtils;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class TestAnchorModifier extends JMeterTestCase {
         private AnchorModifier parser = new AnchorModifier();
 		public TestAnchorModifier(String name) {
