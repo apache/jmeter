@@ -108,21 +108,4 @@ public class TestBeanHelper {
 			throw new Error(e.toString()); // Programming error: bail out.
 		}
 	}
-
-	/**
-	 * Utility method to obtain the value of a property in the given type.
-	 * <p>
-	 * I plan to get rid of this sooner than later, so please don't use it much.
-	 * 
-	 * @param property
-	 *            Property to get the value of.
-	 * @param type
-	 *            Type of the result.
-	 * @return an object of the given type if it is one of the known supported
-	 *         types, or the value returned by property.getObjectValue
-	 * @deprecated
-	 */
-	private static Object unwrapProperty(JMeterProperty property, Class type) {
-		return Converter.convert(property.getObjectValue(), type);
-	}
 }
