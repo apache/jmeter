@@ -35,13 +35,11 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
 public class RegexFunction extends AbstractFunction implements Serializable {
@@ -59,15 +57,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
-
 	private transient Pattern templatePattern;// initialised to the regex \$(\d+)\$
-
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
@@ -83,13 +73,17 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	}
 
 	public RegexFunction() {
-		templatePattern = patternCache.getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
+		initPattern();
+	}
+
+	private void initPattern() {
+		templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
 				Perl5Compiler.READ_ONLY_MASK);
 	}
 
     // For serialised objects, do the same work as the constructor:
     private Object readResolve() throws ObjectStreamException {
-        templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
+        initPattern();
         return this;
     }
 
@@ -101,7 +95,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		Pattern searchPattern;
 		Object[] tmplt;
 		try {
-			searchPattern = patternCache.getPattern(((CompoundVariable) values[0]).execute(),
+			searchPattern = JMeterUtils.getPatternCache().getPattern(((CompoundVariable) values[0]).execute(),
 					Perl5Compiler.READ_ONLY_MASK);
 			tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
 
@@ -139,7 +133,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 		List collectAllMatches = new ArrayList();
 		try {
-			PatternMatcher matcher = (PatternMatcher) localMatcher.get();
+			PatternMatcher matcher = JMeterUtils.getMatcher();
 			String responseText = new String(previousResult.getResponseData(),
                     previousResult.getDataEncoding()); // Bug 37140
 			PatternMatcherInput input = new PatternMatcherInput(responseText);
@@ -238,8 +232,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	private Object[] generateTemplate(String rawTemplate) {
 		List pieces = new ArrayList();
 		List combined = new LinkedList();
-		PatternMatcher matcher = new Perl5Matcher();
-		Util.split(pieces, new Perl5Matcher(), templatePattern, rawTemplate);
+		PatternMatcher matcher = JMeterUtils.getMatcher();
+		Util.split(pieces, matcher, templatePattern, rawTemplate);
 		PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
 		Iterator iter = pieces.iterator();
 		boolean startsWith = isFirstElementGroup(rawTemplate);
@@ -264,9 +258,9 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	}
 
 	private boolean isFirstElementGroup(String rawData) {
-		Pattern pattern = patternCache.getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
+		Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
 				Perl5Compiler.READ_ONLY_MASK);
-		return new Perl5Matcher().contains(rawData, pattern);
+		return JMeterUtils.getMatcher().contains(rawData, pattern);
 	}
 
 }

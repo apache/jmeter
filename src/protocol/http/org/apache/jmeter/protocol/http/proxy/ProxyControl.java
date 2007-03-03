@@ -62,10 +62,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 
 //For unit tests, @see TestProxyControl
 
@@ -95,10 +93,6 @@ public class ProxyControl extends GenericController implements Serializable {
     // and as a string
 	public static final String DEFAULT_PORT_S =
         Integer.toString(DEFAULT_PORT);// Used by GUI
-
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
-
-	transient Perl5Matcher matcher;
 
 	public static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
 
@@ -148,7 +142,6 @@ public class ProxyControl extends GenericController implements Serializable {
 	private JMeterTreeNode target;
 
 	public ProxyControl() {
-		matcher = new Perl5Matcher();
 		setPort(DEFAULT_PORT);
 		setExcludeList(new HashSet());
 		setIncludeList(new HashSet());
@@ -688,8 +681,8 @@ public class ProxyControl extends GenericController implements Serializable {
 			String item = iter.next().getStringValue();
 			Pattern pattern = null;
 			try {
-				pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-				if (matcher.matches(url, pattern)) {
+				pattern = JMeterUtils.getPatternCache().getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+				if (JMeterUtils.getMatcher().matches(url, pattern)) {
 					return true;
 				}
 			} catch (MalformedCachePatternException e) {
