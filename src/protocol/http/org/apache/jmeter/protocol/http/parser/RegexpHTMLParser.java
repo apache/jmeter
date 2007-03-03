@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -72,9 +73,9 @@ import org.apache.oro.text.regex.MalformedPatternException;
  * </ul>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class RegexpHTMLParser extends HTMLParser {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Regexp fragment matching a tag attribute's value (including the equals
@@ -96,11 +97,17 @@ class RegexpHTMLParser extends HTMLParser {
 	 * Regular expression used against the HTML code to find the URIs of images,
 	 * etc.:
 	 */
-	private static final String REGEXP = "<(?:" + "!--.*?-->" + "|BASE" + SEP + "HREF" + VALUE
-			+ "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE + "|APPLET" + SEP + "CODE(?:BASE)?"
-			+ VALUE + "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE + "|(?:BODY|TABLE|TR|TD)" + SEP
-			+ "BACKGROUND" + VALUE + "|INPUT(?:" + SEP + "(?:SRC" + VALUE
-			+ "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}" + "|LINK(?:" + SEP + "(?:HREF" + VALUE
+	private static final String REGEXP = 
+		      "<(?:" + "!--.*?-->"
+		    + "|BASE" + SEP + "HREF" + VALUE
+			+ "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE
+			+ "|APPLET" + SEP + "CODE(?:BASE)?"	+ VALUE
+			+ "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE
+			+ "|(?:BODY|TABLE|TR|TD)" + SEP + "BACKGROUND" + VALUE
+			+ "|[^<]+?STYLE\\s*=['\"].*?URL\\(\\s*['\"](.+?)['\"]\\s*\\)"
+			+ "|INPUT(?:" + SEP + "(?:SRC" + VALUE
+			+ "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
+			+ "|LINK(?:" + SEP + "(?:HREF" + VALUE
 			+ "|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}" + ")";
 
 	// Number of capturing groups possibly containing Base HREFs:
@@ -112,15 +119,6 @@ class RegexpHTMLParser extends HTMLParser {
 	static Pattern pattern;
 
 	/**
-	 * Thread-local matcher:
-	 */
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
-
-	/**
 	 * Thread-local input:
 	 */
 	private static ThreadLocal localInput = new ThreadLocal() {
@@ -128,9 +126,6 @@ class RegexpHTMLParser extends HTMLParser {
 			return new PatternMatcherInput(new char[0]);
 		}
 	};
-
-	/** Used to store the Logger (used for debug and error messages). */
-	transient private static Logger log;
 
 	protected boolean isReusable() {
 		return true;
@@ -141,10 +136,6 @@ class RegexpHTMLParser extends HTMLParser {
 	 */
 	protected RegexpHTMLParser() {
 		super();
-
-		// Define this here to ensure it's ready to report any trouble
-		// with the regexp:
-		log = LoggingManager.getLoggerForClass();
 
 		// Compile the regular expression:
 		try {
@@ -166,7 +157,7 @@ class RegexpHTMLParser extends HTMLParser {
 	 */
 	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
 
-		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
 		PatternMatcherInput input = (PatternMatcherInput) localInput.get();
 		// TODO: find a way to avoid the cost of creating a String here --
 		// probably a new PatternMatcherInput working on a byte[] would do
@@ -176,7 +167,7 @@ class RegexpHTMLParser extends HTMLParser {
 			MatchResult match = matcher.getMatch();
 			String s;
 			if (log.isDebugEnabled())
-				log.debug("match groups " + match.groups());
+				log.debug("match groups " + match.groups() + " " + match.toString());
 			// Check for a BASE HREF:
 			for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
 				s = match.group(g);
@@ -197,10 +188,10 @@ class RegexpHTMLParser extends HTMLParser {
 			}
 			for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
 				s = match.group(g);
-				if (log.isDebugEnabled()) {
-					log.debug("group " + g + " - " + match.group(g));
-				}
 				if (s != null) {
+					if (log.isDebugEnabled()) {
+						log.debug("group " + g + " - " + match.group(g));
+					}
 					urls.addURL(s, baseUrl);
 				}
 			}
