@@ -78,10 +78,23 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 
 <h4>Non-functional improvements:</h4>
 <ul>
-<li>Change to htmlparser 2.0</li>
-<li>Updated to xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
 <li>Functor calls can now be unit tested</li>
 <li>Replace com.sun.net classes with javax.net</li>
+<li>Extract external jar definitions into build.properties file</li>
+<li>Use specific jar names in build classpaths so errors are detected sooner</li>
+<li>Updated to: batik 1</li>
+</ul>
+
+<h4>External jar updates:</h4>
+<ul>
+<li>Htmlparser 2.0-20060923</li>
+<li>xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
+<li>Batik 1.6</li>
+<li>BSF 2.4.0</li>
+<li>commons-collections 3.2</li>
+<li>commons-jexl 1.1</li>
+<li>velocity 1.4</li>
+<li></li>
 </ul>
 
 <h4>Bug fixes:</h4>

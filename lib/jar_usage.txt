@@ -5,21 +5,24 @@ avalon-framework-4.1.4 (org.apache.avalon.framework)
 - LogKit (used by HttpClient ?)
 - Configuration (ResultCollector, SaveService, SampleResult, TestElementSaver)
 
-batik-awt-util (org.apache.batik.ext)
+batik-awt-util-1.6 (org.apache.batik.ext)
 - SaveGraphicsService
 
 commons-codec-1.3
 - used by commons-httpclient-3.0
 - also HtmlParserTester for Base64
 
-commons-collections
+commons-collections-3.2
 - ListenerNotifier
 - Anakia
 
-commons-httpclient-3.0
+commons-httpclient-3.0.1
 - httpclient
 
-commons-logging
+commons-jexl-1.1
+- Jexl function
+
+commons-logging-1.1
 - httpclient
 
 excalibur-datasource-1.1.1 (org.apache.avalon.excalibur.datasource)
@@ -36,10 +39,11 @@ excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
 - used by excalibur-datasource
 
-htmlparser
+htmlparser-2.0-20060923
+htmllexer-2.0-20060923
 - http: parsing html
 
-jakarta-oro
+jakarta-oro-2.0.8
 - regular expressions: various
 
 jCharts-0.7.5 (org.jCharts)
@@ -88,11 +92,8 @@ xml-apis
 
 The x* jars above are used for XML handling (probably not needed for JDK1.4)
 
-xml-batik
-- org.apache.batik.ext.awt.image.codec|org.apache.batik.ext.awt.image.codec.tiff
-
-xpp3_min-1.1.3.4.I
+xpp3_min-1.1.3.4.O
 - xstream
 
-xstream-1.1.2
+xstream-1.2.1
 - SaveService
