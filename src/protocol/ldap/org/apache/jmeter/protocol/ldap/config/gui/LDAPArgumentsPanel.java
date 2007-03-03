@@ -36,14 +36,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
-//import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
-//import org.apache.log.Logger;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
