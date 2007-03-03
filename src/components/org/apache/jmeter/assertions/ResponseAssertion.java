@@ -34,7 +34,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -78,14 +77,6 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	private final static int NOT = 1 << 2;
 
 	private final static int EQUALS = 1 << 3;
-
-	private static ThreadLocal matcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
-
-	private static final PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
 
     private static final int  EQUALS_SECTION_DIFF_LEN
             = JMeterUtils.getPropDefault("assertion.equals_section_diff_len", 100);
@@ -302,11 +293,11 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		
 		try {
 			// Get the Matcher for this thread
-			Perl5Matcher localMatcher = (Perl5Matcher) matcher.get();
+			Perl5Matcher localMatcher = JMeterUtils.getMatcher();
 			PropertyIterator iter = getTestStrings().iterator();
 			while (iter.hasNext()) {
 				String stringPattern = iter.next().getStringValue();
-				Pattern pattern = patternCache.getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
+				Pattern pattern = JMeterUtils.getPatternCache().getPattern(stringPattern, Perl5Compiler.READ_ONLY_MASK);
 				boolean found;
 				if (contains) {
 					found = localMatcher.contains(toCheck, pattern);

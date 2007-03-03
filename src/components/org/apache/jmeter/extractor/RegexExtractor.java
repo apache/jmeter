@@ -34,7 +34,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcher;
@@ -86,14 +85,6 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
     private Object[] template = null;
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
-
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
-
 	/**
 	 * Parses the response data using regular expressions and saving the results
 	 * into variables for use later in the test.
@@ -119,7 +110,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
             vars.put(refName, defaultValue);
         }
 
-		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
 		String inputString = 
 			useUrl() ? previousResult.getUrlAsString() // Bug 39707 
 			:
@@ -135,7 +126,7 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 			log.debug("Regex = " + regex);
    		}
 		try {
-			Pattern pattern = patternCache.getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
+			Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
 			List matches = new ArrayList();
 			int x = 0;
 			boolean done = false;
@@ -238,8 +229,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		List pieces = new ArrayList();
 		List combined = new LinkedList();
 		String rawTemplate = getTemplate();
-		PatternMatcher matcher = (Perl5Matcher) localMatcher.get();
-		Pattern templatePattern = patternCache.getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
+		PatternMatcher matcher = JMeterUtils.getMatcher();
+		Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
                 , Perl5Compiler.READ_ONLY_MASK
 				& Perl5Compiler.SINGLELINE_MASK);
 		log.debug("Pattern = " + templatePattern);
@@ -275,10 +266,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
 	private boolean isFirstElementGroup(String rawData) {
 		try {
-			Pattern pattern = patternCache.getPattern("^\\$\\d+\\$" // $NON-NLS-1$
+			Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$" // $NON-NLS-1$
                     , Perl5Compiler.READ_ONLY_MASK
 					& Perl5Compiler.SINGLELINE_MASK);
-			return ((Perl5Matcher) localMatcher.get()).contains(rawData, pattern);
+			return (JMeterUtils.getMatcher()).contains(rawData, pattern);
 		} catch (RuntimeException e) {
 			log.error("", e);
 			return false;
@@ -383,7 +374,5 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
     }
 	public void setUseField(String actionCommand) {
 		setProperty(MATCH_AGAINST,actionCommand);
-		// TODO Auto-generated method stub
-		
 	}
 }

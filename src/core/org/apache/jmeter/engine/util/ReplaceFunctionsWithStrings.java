@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.StringUtilities;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -35,7 +36,6 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 
@@ -67,7 +67,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 	 * @see ValueTransformer#transformValue(JMeterProperty)
 	 */
 	public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-		PatternMatcher pm = new Perl5Matcher();
+		PatternMatcher pm = JMeterUtils.getMatcher();
 		Pattern pattern = null;
 		PatternCompiler compiler = new Perl5Compiler();
 		Iterator iter = getVariables().keySet().iterator();
