@@ -1502,7 +1502,7 @@ some of its classes - at present JMeter can only run from jar files.
   <target name="docs-all" depends="docs-site,docs-printable,docs-api" 
   	description="Generate documentation. (site, printable, api)"/>
 
-  <target name="test" depends="compile-tests,_test" description="Run tests"/>
+  <target name="test" depends="compile-tests,_test,batchtest" description="Run tests"/>
   
   <target name="test-both" depends="test-headless,test-headed"/>
 
@@ -1518,6 +1518,76 @@ some of its classes - at present JMeter can only run from jar files.
     </antcall>
   </target>
   
+	<taskdef
+	    name="jmeter"
+	    classpath="extras/ant-jmeter.jar"
+	    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
+	
+  <target name="batchtest" description="Run the batch test and compare output files">
+
+  	<property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
+  	<property name="batchtest.out" location="${basedir}/bin"/>
+    <property name="batchtest.name" value="BatchTestLocal"/>
+
+  	<echo level="info" message="Starting ${batchtest.name}"/>
+  	
+  	<macrodef name="deleteworkfiles">
+   	    <sequential>
+   	   	<delete>
+   	 	    <fileset dir="${batchtest.out}">
+   	             <include name="${batchtest.name}.csv"/>
+   	             <include name="${batchtest.name}.xml"/>
+   	 	    </fileset>
+   	     </delete>
+   	   	</sequential>
+  	</macrodef>
+  	
+  	<macrodef name="checkfile">
+  	   <attribute name="type" default=""/>
+   	   <attribute name="file"/>
+  	   <sequential>
+  	      <!--echo>Looking for @{file}</echo-->
+  		 <available property="found" file="@{file}"/>
+  	  	 <fail message="Cannot find @{type} file @{file}" unless="found"/>
+  	   </sequential>
+  	</macrodef>
+    
+  	<checkfile type="input" file="${batchtest.inp}/${batchtest.name}.csv"/>
+    <checkfile type="input" file="${batchtest.inp}/${batchtest.name}.xml"/>
+  	
+  	<deleteworkfiles/>
+
+    <java classname="org.apache.jmeter.NewDriver" fork="yes" dir="${basedir}/bin">
+       <classpath>
+     	<fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
+     	<fileset dir="${dest.jar}" includes="*.jar"/>
+     	<path refid="classpath"/>
+       </classpath>
+       <sysproperty key="java.awt.headless" value="${test.headless}"/>
+       <arg value="-n"/>
+       <arg value="-ttestfiles/${batchtest.name}.jmx"/>
+     </java>
+
+  	<checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
+    <checkfile type="output" file="${batchtest.out}/${batchtest.name}.xml"/>
+  	
+  	 <condition property="BatchTestLocal.OK">
+  	 	<and>
+  	 	    <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
+  	 	    <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
+  	 	</and>
+     </condition>
+  	<fail unless="BatchTestLocal.OK">
+  		BatchTest failed. Files are not identical.
+  	</fail>
+  	
+  	<echo level="info">${batchtest.name} output files compared OK</echo>
+  	
+  	<deleteworkfiles/>
+  	
+  </target>
+
+
    <!-- Generic test target, not intended to be called directly -->
    <target name="_test">
    <!-- 
