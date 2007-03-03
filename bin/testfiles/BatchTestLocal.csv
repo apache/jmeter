@@ -1,0 +1,4 @@
+label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,grpThreads,allThreads,URL,Filename,Encoding
+Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,ISO-8859-1
+Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,ISO-8859-1
+Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,ISO-8859-1
