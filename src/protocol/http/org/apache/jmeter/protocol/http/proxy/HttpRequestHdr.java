@@ -246,8 +246,10 @@ public class HttpRequestHdr {
 			sampler.setFileField(urlConfig.getFileFieldName());
 			sampler.setFilename(urlConfig.getFilename());
 			sampler.setMimetype(urlConfig.getMimeType());
+        } else if (postData != null && postData.trim().startsWith("<?")) {
+            sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
 		} else {
-			sampler.parseArguments(postData);
+			sampler.parseArguments(postData); //standard name=value postData
 		}
         if (log.isDebugEnabled())
     		log.debug("sampler path = " + sampler.getPath());
