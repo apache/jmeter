@@ -299,39 +299,7 @@
   <property name="encoding" value="UTF-8"/>
 
   <!-- 3rd party libraries to be included in the binary distribution -->
-  <property name="avalon-framework.jar" value="${lib.dir}/avalon-framework-4.1.4.jar"/>
-  <property name="apache-bsf.jar" value="${lib.dir}/bsf-2.3.0.jar"/>
-  <property name="jakarta-oro.jar" value="${lib.dir}/jakarta-oro-2.0.8.jar"/>
-  <property name="commons-codec.jar" value="${lib.dir}/commons-codec-1.3.jar"/>
-  <property name="commons-collections.jar" value="${lib.dir}/commons-collections.jar"/>
-  <property name="commons-httpclient.jar" value="${lib.dir}/commons-httpclient-3.0.1.jar"/>
-  <property name="commons-jexl.jar" value="${lib.dir}/commons-jexl-1.0.jar"/>
-  <property name="commons-logging.jar" value="${lib.dir}/commons-logging-1.1.jar"/>
-  <property name="excalibur-logger.jar" value="${lib.dir}/excalibur-logger-1.1.jar"/>
-  <property name="excalibur-i18n.jar" value="${lib.dir}/excalibur-i18n-1.1.jar"/>
-  <property name="excalibur-compatibility.jar" value="${lib.dir}/excalibur-compatibility-1.1.jar"/>
-  <property name="batik-awt-util.jar" value="${lib.dir}/batik-awt-util.jar"/>
-  <property name="jcharts.jar" value="${lib.dir}/jCharts-0.7.5.jar"/>
-  <property name="junit.jar" value="${lib.dir}/junit.jar"/>
-  <property name="logkit.jar" value="${lib.dir}/logkit-1.2.jar"/>
-  <property name="excalibur-datasource.jar" value="${lib.dir}/excalibur-datasource-1.1.1.jar"/>
-  <property name="excalibur-pool.jar" value="${lib.dir}/excalibur-pool-1.2.jar"/>
-  <property name="excalibur-instrument.jar" value="${lib.dir}/excalibur-instrument-1.0.jar"/>
-  <property name="xstream.jar" value="${lib.dir}/xstream-1.2.1.jar"/>
-  <property name="xpp3.jar" value="${lib.dir}/xpp3_min-1.1.3.4.O.jar"/>
-	  
-  <!-- The following 3 jars are probably optional for JDK1.4 -->
-  <property name="xalan.jar" value="${lib.dir}/xalan.jar"/>
-  <property name="xerces.jar" value="${lib.dir}/xercesImpl.jar"/>
-  <property name="xml-apis.jar" value="${lib.dir}/xml-apis.jar"/>
-  
-  <property name="jdom.jar" value="${lib.dir}/jdom-1.0.jar"/>
-  <property name="js.jar" value="${lib.dir}/js_rhino1_6R5.jar"/>
-  <property name="soap.jar" value="${lib.dir}/soap.jar"/>
-  <property name="tidy.jar" value="${lib.dir}/Tidy.jar"/>
-
-  <!-- The following jars are only needed for source distributions -->
-  <property name="velocity.jar" value="${lib.dir}/velocity-1.4-dev.jar"/>
+  <property file="build.properties"/>
 
   <!-- Jars for binary release -->
   <patternset id="external.jars">
@@ -359,7 +327,7 @@
     <include name="${xerces.jar}"/>
     <include name="${xml-apis.jar}"/>
     <include name="${jdom.jar}"/>
-    <include name="${js.jar}"/>
+    <include name="${js_rhino.jar}"/>
     <include name="${soap.jar}"/>
     <include name="${tidy.jar}"/>
     <include name="${excalibur-datasource.jar}"/>
@@ -388,20 +356,48 @@
   
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
-    <fileset dir="${lib.dir}" includes="*.jar"/>
+  	<!-- Externally produced jars -->
+    <pathelement location="${apache-bsf.jar}"/>
+    <pathelement location="${avalon-framework.jar}"/>
+    <pathelement location="${batik-awt-util.jar}"/>
+    <pathelement location="${commons-codec.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-httpclient.jar}"/>
+    <pathelement location="${commons-jexl.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${excalibur-compatibility.jar}"/>
+    <pathelement location="${excalibur-datasource.jar}"/>
+    <pathelement location="${excalibur-i18n.jar}"/>
+    <pathelement location="${excalibur-instrument.jar}"/>
+    <pathelement location="${excalibur-logger.jar}"/>
+    <pathelement location="${excalibur-pool.jar}"/>
+    <pathelement location="${htmlparser.jar}"/>
+    <pathelement location="${htmllexer.jar}"/>
+    <pathelement location="${jakarta-oro.jar}"/>
+    <pathelement location="${jcharts.jar}"/>
+    <pathelement location="${jdom.jar}"/>
+    <pathelement location="${js_rhino.jar}"/>
+    <pathelement location="${junit.jar}"/>
+    <pathelement location="${logkit.jar}"/>
+    <pathelement location="${soap.jar}"/>
+    <pathelement location="${tidy.jar}"/>
+    <pathelement location="${xstream.jar}"/>
+    <pathelement location="${xpp3.jar}"/>
+    <pathelement location="${xalan.jar}"/>
+    <pathelement location="${xerces.jar}"/>
+    <pathelement location="${xml-apis.jar}"/>
+  	<!-- Generated jars -->
+    <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+  	<!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
   <!-- Anakia classpath -->
-  <!--
-  N.B. On some OSes - e.g. VMS - multiple "." are converted to other characters
-  So replace the version part with "*" to match any version.
-  -->
   <path id="anakia.classpath">
-    <fileset dir="${lib.dir}" includes="velocity*.jar"/>
+    <pathelement location="${velocity.jar}"/>
     <fileset dir="${legacy.dir}" includes="jdom-b9.jar"/>
-    <fileset dir="${lib.dir}" includes="commons-collections*.jar"/>
-    <fileset dir="${lib.dir}" includes="logkit-*.jar"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${logkit.jar}"/>
   </path>
   
 
