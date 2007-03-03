@@ -71,6 +71,9 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 <li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
 <li>Bug 39717 - use icons in the results tree instead of colors</li>
 <li>Added __V variable function to resolve nested variable names</li>
+<li>Bug 41707 - HTTP Proxy XML-RPC support</li>
+<li>Bug 40381 - LDAP: more descriptive strings</li>
+<li>Bug 40369 (partial) Equals Response Assertion</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
@@ -78,6 +81,7 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 <li>Change to htmlparser 2.0</li>
 <li>Updated to xstream 1.2.1/xpp3_min-1.1.3.4.O</li>
 <li>Functor calls can now be unit tested</li>
+<li>Replace com.sun.net classes with javax.net</li>
 </ul>
 
 <h4>Bug fixes:</h4>
@@ -100,13 +104,10 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 <li>Fix NPE when saving thread counts in remote testing</li>
 <li>Bug 34261 - NPE in HtmlParser (allow for missing attributes)</li>
 <li>Bug 40100 - check FileServer type before calling close</li>
-<li>Replace com.sun.net classes with javax.net</li>
 <li>Bug 39887 - jmeter.util.SSLManager: Couldn't load keystore error message</li>
 <li>Bug 41543 - exception when webserver returns "500 Internal Server Error" and content-length is 0</li>
 <li>Bug 41416 - don't use chunked input for text-box input in SOAP-RPC sampler</li>
 <li>Bug 39827 - SOAP Sampler content length for files</li>
-<li>Bug 40381 - LDAP: more descriptive strings</li>
-<li>Bug 40369 (partial) Equals Response Assertion</li>
 <li>Fix Class cast exception in Clear.java</li>
 <li>Bug 40383 - don't set content-type if already set</li>
 <li>Mailer Visualiser test button now works if test plan has not yet been saved</li>

@@ -395,7 +395,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		}
 		this.getArguments().addArgument(arg);
 	}
-
+    
+    public void addNonEncodedArgument(String name, String value, String metadata) {
+        HTTPArgument arg = new HTTPArgument(name, value, metadata, false);
+        arg.setAlwaysEncoded(false);
+        this.getArguments().addArgument(arg);
+    }
+    
 	public void addArgument(String name, String value) {
 		this.getArguments().addArgument(new HTTPArgument(name, value));
 	}
