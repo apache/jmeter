@@ -24,7 +24,6 @@ import java.util.Iterator;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.Tag;
@@ -44,15 +43,16 @@ import org.htmlparser.util.ParserException;
  * HtmlParser implementation using SourceForge's HtmlParser.
  * 
  */
-public class HtmlParserHTMLParser extends HTMLParser {
+class HtmlParserHTMLParser extends HTMLParser {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static{
     	org.htmlparser.scanners.ScriptScanner.STRICT = false; // Try to ensure that more javascript code is processed OK ...
     }
-	protected HtmlParserHTMLParser() {
+	
+    protected HtmlParserHTMLParser() {
 		super();
-        log.info("Using htmlparser version 2.0");
+        log.info("Using htmlparser version: "+Parser.getVersion());
 	}
 
 	protected boolean isReusable() {
@@ -176,6 +176,13 @@ public class HtmlParserHTMLParser extends HTMLParser {
             if (binUrlStr != null) {
                 urls.addURL(binUrlStr, baseUrl.url);
             }
+
+            // Now look for URLs in the STYLE attribute
+            String styleTagStr = tag.getAttribute(ATT_STYLE);
+            if(styleTagStr != null) {
+            	HtmlParsingUtils.extractStyleURLs(baseUrl.url, urls, styleTagStr);
+            }
+
             // second, if the tag was a composite tag,
             // recursively parse its children.
             if (tag instanceof CompositeTag) {
@@ -184,4 +191,5 @@ public class HtmlParserHTMLParser extends HTMLParser {
             }
         }
     }
+
 }

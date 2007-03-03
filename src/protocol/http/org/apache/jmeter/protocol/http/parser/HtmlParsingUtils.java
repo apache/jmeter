@@ -30,9 +30,12 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.w3c.dom.Document;
@@ -54,14 +57,6 @@ public final class HtmlParsingUtils {
 	 * Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK;
 	 */
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
-
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
-
 	/**
 	 * Private constructor to prevent instantiation.
 	 */
@@ -71,7 +66,7 @@ public final class HtmlParsingUtils {
 	public static synchronized boolean isAnchorMatched(HTTPSamplerBase newLink, HTTPSamplerBase config)
 	{
 		boolean ok = true;
-		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
 		PropertyIterator iter = config.getArguments().iterator();
 
 		String query = null;
@@ -91,7 +86,7 @@ public final class HtmlParsingUtils {
 			Argument item = (Argument) iter.next().getObjectValue();
 			if (query.indexOf(item.getName() + "=") == -1) {
 				if (!(ok = ok
-						&& matcher.contains(query, patternCache
+						&& matcher.contains(query, JMeterUtils.getPatternCache()
 								.getPattern(item.getName(), Perl5Compiler.READ_ONLY_MASK)))) {
 					return false;
 				}
@@ -101,20 +96,20 @@ public final class HtmlParsingUtils {
 		if (config.getDomain() != null && config.getDomain().length() > 0
 				&& !newLink.getDomain().equals(config.getDomain())) {
 			if (!(ok = ok
-					&& matcher.matches(newLink.getDomain(), patternCache.getPattern(config.getDomain(),
+					&& matcher.matches(newLink.getDomain(), JMeterUtils.getPatternCache().getPattern(config.getDomain(),
 							Perl5Compiler.READ_ONLY_MASK)))) {
 				return false;
 			}
 		}
 
 		if (!newLink.getPath().equals(config.getPath())
-				&& !matcher.matches(newLink.getPath(), patternCache.getPattern("[/]*" + config.getPath(),
+				&& !matcher.matches(newLink.getPath(), JMeterUtils.getPatternCache().getPattern("[/]*" + config.getPath(),
 						Perl5Compiler.READ_ONLY_MASK))) {
 			return false;
 		}
 
 		if (!(ok = ok
-				&& matcher.matches(newLink.getProtocol(), patternCache.getPattern(config.getProtocol(),
+				&& matcher.matches(newLink.getProtocol(), JMeterUtils.getPatternCache().getPattern(config.getProtocol(),
 						Perl5Compiler.READ_ONLY_MASK)))) {
 			return false;
 		}
@@ -123,10 +118,10 @@ public final class HtmlParsingUtils {
 	}
 
 	public static synchronized boolean isArgumentMatched(Argument arg, Argument patternArg) {
-		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-		return (arg.getName().equals(patternArg.getName()) || matcher.matches(arg.getName(), patternCache.getPattern(
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
+		return (arg.getName().equals(patternArg.getName()) || matcher.matches(arg.getName(), JMeterUtils.getPatternCache().getPattern(
 				patternArg.getName(), Perl5Compiler.READ_ONLY_MASK)))
-				&& (arg.getValue().equals(patternArg.getValue()) || matcher.matches(arg.getValue(), patternCache
+				&& (arg.getValue().equals(patternArg.getValue()) || matcher.matches(arg.getValue(), JMeterUtils.getPatternCache()
 						.getPattern(patternArg.getValue(), Perl5Compiler.READ_ONLY_MASK)));
 	}
 
@@ -311,5 +306,20 @@ public final class HtmlParsingUtils {
 		String action = atts.getNamedItem("action").getNodeValue();
 		HTTPSamplerBase url = createUrlFromAnchor(action, context);
 		return url;
+	}
+	
+	public static void extractStyleURLs(final URL baseUrl, final URLCollection urls, String styleTagStr) {
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
+		Pattern pattern = JMeterUtils.getPatternCache().getPattern(
+				"URL\\(\\s*('|\")(.*)('|\")\\s*\\)",
+				Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK | Perl5Compiler.READ_ONLY_MASK);
+		PatternMatcherInput input = null;
+		input = new PatternMatcherInput(styleTagStr);
+		while (matcher.contains(input, pattern)) {
+		    MatchResult match = matcher.getMatch();
+		    // The value is in the second group
+		    String styleUrl = match.group(2);
+		    urls.addURL(styleUrl, baseUrl);
+		}
 	}
 }

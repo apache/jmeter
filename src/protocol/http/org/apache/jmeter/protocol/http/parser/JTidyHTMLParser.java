@@ -147,6 +147,11 @@ class JTidyHTMLParser extends HTMLParser {
 				break;
 			}
 
+			String style = getValue(attrs, ATT_STYLE);
+			if (style != null) {
+            	HtmlParsingUtils.extractStyleURLs(baseUrl, urls, style);
+			}
+
 			NodeList children = node.getChildNodes();
 			if (children != null) {
 				int len = children.getLength();
@@ -154,6 +159,7 @@ class JTidyHTMLParser extends HTMLParser {
 					baseUrl = scanNodes(children.item(i), urls, baseUrl);
 				}
 			}
+
 			break;
 
 		// case Node.TEXT_NODE:
