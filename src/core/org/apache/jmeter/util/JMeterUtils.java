@@ -810,52 +810,6 @@ public class JMeterUtils implements UnitTestManager {
 		return button;
 	}
 
-	/**
-	 * Takes a String and a tokenizer character, and returns a new array of
-	 * strings of the string split by the tokenizer character.
-	 * 
-	 * @param splittee
-	 *            String to be split
-	 * @param splitChar
-	 *            Character to split the string on
-	 * @param def
-	 *            Default value to place between two split chars that have
-	 *            nothing between them
-	 * @return Array of all the tokens.
-     * @deprecated 
-     * Use rewritten version in JOrphanUtils (handles leading/trailing delimiters better)
-     * TODO: remove in version 2.2
-     * 
-	 */
-	public static String[] split(String splittee, String splitChar, String def) {
-		if (splittee == null || splitChar == null) {
-			return new String[0];
-		}
-		int spot;
-        // Replace ## with #def# (where #=splitChar)
-        if (def.length() > 0 ) {// Prevent infinite loop
-    		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
-    			splittee = splittee.substring(0, spot + splitChar.length()) + def
-    					+ splittee.substring(spot + 1 * splitChar.length(), splittee.length());
-    		}
-        }
-		Vector returns = new Vector();
-		int start = 0;
-		int length = splittee.length();
-		spot = 0;
-		while (start < length && (spot = splittee.indexOf(splitChar, start)) > -1) {
-			if (spot > 0) {
-				returns.addElement(splittee.substring(start, spot));
-			}
-			start = spot + splitChar.length();
-		}
-		if (start < length) {
-			returns.add(splittee.substring(start));
-		}
-		String[] values = new String[returns.size()];
-		returns.copyInto(values);
-		return values;
-	}
 
 	/**
 	 * Report an error through a dialog box.
