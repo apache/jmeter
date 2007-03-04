@@ -22,7 +22,7 @@
     To rebuild and install:
       ant install
 
-    To update documentation (requires Anakia to be present)
+    To update documentation
       ant docs-site
       ant docs-printable
     To build API documentation (Javadoc)
@@ -33,6 +33,9 @@
     To build all and package up the files for distribution
       ant distribution [ -Djmeter.version=vvvv ]
 
+  	To create a nightly build (separate bin/src/lib jars):
+      ant nightly [ -Djmeter.version=vvvv ]
+  	
     To create tar and tgz of the web-site documentation (docs and api)
       ant site [ -Djmeter.version=vvvv ]
       
@@ -68,33 +71,7 @@
   
   <!-- The version of this file -->
   <property name="version.build" value="$Revision$"/>
-  
-  <!-- Renamed targets -->
-  <target name="all-docs">
-    <echo message="Target has been renamed to docs-all"/>
-    <antcall target="docs-all"/>
-   </target>
-
-  <target name="api-docs">
-    <echo message="Target has been renamed to docs-api"/>
-    <antcall target="docs-api"/>
-   </target>
-   
-   <target name="printable-docs">
-    <echo message="Target has been renamed to docs-printable"/>
-    <antcall target="docs-printable"/>
-   </target>
-   
-   <target name="docs">
-    <echo message="Target has been renamed to docs-site"/>
-    <antcall target="docs-site"/>
-   </target>
-   
-   <target name="src-dist">
-    <echo message="Target has been renamed to dist-src"/>
-    <antcall target="dist-src"/>
-   </target>
-   
+     
    <!-- Findbugs task and target -->
    <!--
    Findbugs is licensed under the Lesser GNU Public License
@@ -403,8 +380,12 @@
 
   <target name="init-version">
   	<tstamp/>
-  	<!-- JMeter version -->
-  <property name="jmeter.version" value="2.1.2.${DSTAMP}"/>
+  	<!--
+  	    JMeter version
+  	    This is overridden for formal releases.
+  	    Should be the SVN branch otherwise.
+  	-->
+  <property name="jmeter.version" value="2.2.${DSTAMP}"/>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
@@ -1142,6 +1123,11 @@ some of its classes - at present JMeter can only run from jar files.
 		depends="assume-libs-present,clean,install,docs-all,test,_distribution,pack-site"
 		description="Build JMeter for end-user distribution (includes site)"/>
 
+	<target
+		name="nightly"
+		depends="package,docs-printable,pack-dist"
+		description="Build JMeter for nightly dir (package docs-printable pack-dist)"/>
+		
 	<!-- Internal target -->
 	<target name="_distribution">
   	<property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
