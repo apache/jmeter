@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 
@@ -406,7 +407,7 @@ public class LogFilter implements Filter, Serializable {
 		try {
 			return JMeterUtils.getPatternCache().getPattern(pattern,
 					Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-		} catch (Exception exception) {
+		} catch (MalformedCachePatternException exception) {
 			exception.printStackTrace();
 			return null;
 		}
