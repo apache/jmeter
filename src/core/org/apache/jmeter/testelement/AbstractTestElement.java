@@ -90,6 +90,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		}
 	}
 
+	// TODO temporary hack to avoid unnecessary bug reports for subclasses
+	
+	public int hashCode(){
+		return System.identityHashCode(this);
+	}
 	/*
 	 * URGENT: TODO - sort out equals and hashCode() - at present equal
 	 * instances can/will have different hashcodes - problem is, when a proper
