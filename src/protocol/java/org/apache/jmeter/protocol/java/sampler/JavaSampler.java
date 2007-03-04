@@ -39,9 +39,11 @@ import org.apache.log.Logger;
  * information on writing Java code to be executed by this sampler.
  * 
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Revision$
  */
 public class JavaSampler extends AbstractSampler implements TestListener {
+
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	/**
 	 * Property key representing the classname of the JavaSamplerClient to user.
 	 */

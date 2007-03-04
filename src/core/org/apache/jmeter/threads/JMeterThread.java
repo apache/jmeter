@@ -57,6 +57,8 @@ import org.apache.log.Logger;
 public class JMeterThread implements Runnable, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	// NOT USED private static Map samplers = new HashMap();
 	private int initialDelay = 0;
 

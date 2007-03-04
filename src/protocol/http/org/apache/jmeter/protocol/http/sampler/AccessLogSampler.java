@@ -64,11 +64,12 @@ import org.apache.log.Logger;
  * Created on: Jun 26, 2003
  * 
  * @author Peter Lin
- * @version $Revision$ last updated $Date$
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
 
 	/** private members used by class * */

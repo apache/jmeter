@@ -22,11 +22,11 @@ import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$
- */
 public class MapProperty extends MultiProperty {
-	private Map value;
+
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
+    private Map value;
 
 	private transient Map savedValue = null;
 
