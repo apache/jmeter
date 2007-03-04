@@ -54,6 +54,10 @@ has been removed.
 Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
 Formatting should now be done using the jorphan.gui Renderer classes.
 </p>
+<p>
+Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead.
+</p>
+
 <h4>New functionality:</h4>
 <ul>
 <li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
