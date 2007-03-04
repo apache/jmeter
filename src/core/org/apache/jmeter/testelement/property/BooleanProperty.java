@@ -57,7 +57,7 @@ public class BooleanProperty extends AbstractProperty {
 	 * @see JMeterProperty#getObjectValue()
 	 */
 	public Object getObjectValue() {
-		return JOrphanUtils.valueOf(value);
+		return Boolean.valueOf(value);
 	}
 
 	/**
