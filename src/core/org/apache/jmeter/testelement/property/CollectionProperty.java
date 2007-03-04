@@ -24,10 +24,10 @@ import java.util.List;
 
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$
- */
 public class CollectionProperty extends MultiProperty {
+
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	private Collection value;
 
 	transient private Collection savedValue;

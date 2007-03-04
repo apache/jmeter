@@ -46,6 +46,8 @@ import org.apache.log.Logger;
  */
 public class JUnitSampler extends AbstractSampler {
 
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
     /**
      * Property key representing the classname of the JavaSamplerClient to
      * user.
