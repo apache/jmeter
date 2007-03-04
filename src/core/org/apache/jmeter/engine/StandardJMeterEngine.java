@@ -52,6 +52,8 @@ import org.apache.log.Logger;
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	private transient Thread runningThread;
 
 	private static long WAIT_TO_DIE = 5 * 1000; // 5 seconds
