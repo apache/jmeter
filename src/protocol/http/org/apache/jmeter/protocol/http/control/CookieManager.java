@@ -189,7 +189,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     private String cookieToString(Cookie c){
         StringBuffer sb=new StringBuffer(80);
         sb.append(c.getDomain());
-        sb.append(TAB).append("TRUE"); //TODO - what does this represent?
+        //flag - if all machines within a given domain can access the variable.
+        //(from http://www.cookiecentral.com/faq/ 3.5)
+        sb.append(TAB).append("TRUE");  
         sb.append(TAB).append(c.getPath());
         sb.append(TAB).append(JOrphanUtils.booleanToSTRING(c.getSecure())); 
         sb.append(TAB).append(c.getExpires());
