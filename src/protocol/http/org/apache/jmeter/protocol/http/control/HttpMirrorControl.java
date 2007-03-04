@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import java.io.Serializable;
-
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.testelement.property.IntegerProperty;
@@ -27,7 +25,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 //For unit tests, @see TestHttpMirrorControl
 
-public class HttpMirrorControl extends GenericController implements Serializable {
+public class HttpMirrorControl extends GenericController {
     
 	private transient HttpMirrorServer server;
 
