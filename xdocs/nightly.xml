@@ -17,17 +17,29 @@
 -->
 <document>   
 <properties>     
-	<title>Downloading nightly builds</title>   
+	<title>Nightly builds for developers</title>   
 </properties> 
 <body> 
-<section name="Downloading nightly builds">
+<section name="Nightly builds for developers">
 	<p></p>
+	<h2>What are the nightly builds?</h2>
+	<p>
+	The nightly builds are interim builds that are <b>untested and unsupported</b>.
+	<i>Use at your own risk!</i>
+	<br/>
+	These unreleased builds may not even load, may have undocumented features, 
+	known defects, and any number of other issues.
+	<br/>
+	They are intended for use by developers and others wishing to help with resolving JMeter bugs.
+	</p>
+	<p>
+	<span style="font-size : x-large"><b>These builds should not be used in production.</b></span>
+	</p>
 	<h2>Where are the nightly builds?</h2>
 	<p>There are currently no regular nightly builds - sorry.</p>
-    <p>However, occasional builds are made available via the 
-<a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Binary Downloads</a> 
-page - follow <b>Nightly builds</b> link.
-</p>
+    <p>However, occasional builds are made available from 
+    <a href="http://people.apache.org/builds/jakarta-jmeter/nightly/">Nightly builds (use at your own risk)</a> 
+    </p>
 	<h2>What do they consist of?</h2>
 <p>
 JMeter is distributed as a set of zip (or tar-gz) archive files.
@@ -35,9 +47,9 @@ JMeter is distributed as a set of zip (or tar-gz) archive files.
 The files are called:
 <ul>
 <li>jakarta-jmeter-{version}_bin.zip - JMeter binaries</li>
-<li>jakarta-jmeter-{version}_lib.zip - 3rd party jar files</li>
+<li>jakarta-jmeter-{version}_lib.zip - 3rd party jar files (rarely changes)</li>
 <li>jakarta-jmeter-{version}_src.zip - JMeter source</li>
-<li>jakarta-jmeter-{version}_api.zip - JMeter Javadoc</li>
+<li>jakarta-jmeter-{version}_api.zip - JMeter Javadoc (if available)</li>
 </ul>
 <h2>Installing JMeter runtime</h2>
 Download the _bin and _lib files
@@ -46,10 +58,22 @@ Unpack the archives into the same directory structure
 <br/>
 
 The other archives are not needed to run JMeter.
+<h2>Building JMeter</h2>
+Download the _src, _bin and _lib files
+<br/>
+Unpack all the archives into the same directory structure
+<br/>
+<h2>Other jars you may need</h2>
+You may also need to download JAF/JavaMail, BeanShell, JMS and JDBC jars
+ - see <a href="usermanual/get-started.html">Getting Started</a>
 </p>
 <h2>Warning - please note!</h2>
 <p>
-	The nightly builds may or may not work properly - or at all.<br/>
+	<span style="font-size : large">
+	<b>The nightly builds may or may not work properly - or at all.</b>
+	</span>
+</p>
+<p>
 	If there is a problem with a particular version, 
     it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
 </p>
