@@ -30,7 +30,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.Converter;
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -389,7 +389,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	/**
 	 * @param arg0
 	 */
-	public SampleResultConverter(ClassMapper arg0) {
+	public SampleResultConverter(Mapper arg0) {
 		super(arg0);
 	}
 }

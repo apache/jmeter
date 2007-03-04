@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import org.apache.jorphan.collections.HashTree;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -101,7 +101,7 @@ public class HashTreeConverter extends AbstractCollectionConverter {
 	/**
 	 * @param arg0
 	 */
-	public HashTreeConverter(ClassMapper arg0) {
+	public HashTreeConverter(Mapper arg0) {
 		super(arg0);
 	}
 }

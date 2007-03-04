@@ -27,7 +27,7 @@ import java.util.Collection;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.TestResultWrapper;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -51,7 +51,7 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 	/**
 	 * @param arg0
 	 */
-	public TestResultWrapperConverter(ClassMapper arg0) {
+	public TestResultWrapperConverter(Mapper arg0) {
 		super(arg0);
 	}
 

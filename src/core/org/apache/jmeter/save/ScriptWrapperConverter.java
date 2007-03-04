@@ -21,7 +21,7 @@ package org.apache.jmeter.save;
 import org.apache.jmeter.save.converters.ConversionHelp;
 import org.apache.jorphan.collections.HashTree;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -45,9 +45,9 @@ public class ScriptWrapperConverter implements Converter {
 		return "$Revision$"; // $NON-NLS-1$
 	}
 
-	ClassMapper classMapper;
+	Mapper classMapper;
 
-	public ScriptWrapperConverter(ClassMapper classMapper) {
+	public ScriptWrapperConverter(Mapper classMapper) {
 		this.classMapper = classMapper;
 	}
 
