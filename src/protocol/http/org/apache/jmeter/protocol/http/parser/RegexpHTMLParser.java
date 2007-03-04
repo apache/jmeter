@@ -35,7 +35,6 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.MalformedPatternException;
 
 /**
  * HtmlParser implementation using regular expressions.
@@ -114,11 +113,6 @@ class RegexpHTMLParser extends HTMLParser {
 	private static final int NUM_BASE_GROUPS = 3;
 
 	/**
-	 * Compiled regular expression.
-	 */
-	static Pattern pattern;
-
-	/**
 	 * Thread-local input:
 	 */
 	private static ThreadLocal localInput = new ThreadLocal() {
@@ -136,17 +130,6 @@ class RegexpHTMLParser extends HTMLParser {
 	 */
 	protected RegexpHTMLParser() {
 		super();
-
-		// Compile the regular expression:
-		try {
-			Perl5Compiler c = new Perl5Compiler();
-			pattern = c.compile(REGEXP, Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK
-					| Perl5Compiler.READ_ONLY_MASK);
-		} catch (MalformedPatternException mpe) {
-			log.error("Internal error compiling regular expression in ParseRegexp.");
-			log.error("MalformedPatternException - " + mpe);
-			throw new Error(mpe);
-		}
 	}
 
 	/*
@@ -163,6 +146,12 @@ class RegexpHTMLParser extends HTMLParser {
 		// probably a new PatternMatcherInput working on a byte[] would do
 		// better.
 		input.setInput(new String(html));
+		Pattern pattern=JMeterUtils.getPatternCache().getPattern(
+				REGEXP, 
+				Perl5Compiler.CASE_INSENSITIVE_MASK 
+				| Perl5Compiler.SINGLELINE_MASK
+				| Perl5Compiler.READ_ONLY_MASK);
+		
 		while (matcher.contains(input, pattern)) {
 			MatchResult match = matcher.getMatch();
 			String s;
