@@ -42,7 +42,7 @@ public class TestLoad extends JMeterTestCase {
 	public void setUp() {
 //		testFile1 = // Old-style format; no longer used
 //		new File(System.getProperty("user.dir") + "/testfiles", "Test Plan.jmx");
-		testFile2 = // TODO: not used - why?
+		testFile2 =
 		new File(System.getProperty("user.dir") + "/testfiles", "Modification Manager.jmx");
 		testFile3 = new File(System.getProperty("user.dir") + "/testfiles", "proxy.jmx");
 		testFile4 = new File(System.getProperty("user.dir") + "/testfiles", "AssertionTestPlan.jmx");
