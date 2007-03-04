@@ -46,7 +46,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -105,7 +104,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * List of cookie policies.
      * 
      * These are used both for the display, and for setting the policy
-     * TODO: use the getCookiePolicySpecs() method when it is implemented
+     * TODO: use the getRegisteredCookieSpecs() method when it is implemented
     */
     private final String[] policies = {
             CookiePolicy.BROWSER_COMPATIBILITY,
@@ -227,7 +226,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
 	private void addCookieToTable(Cookie cookie) {
 		tableModel.addRow(new Object[] { cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-				JOrphanUtils.valueOf(cookie.getSecure()) });
+				Boolean.valueOf(cookie.getSecure()) });
 	}
 
 	/**
