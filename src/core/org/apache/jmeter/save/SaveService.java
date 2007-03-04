@@ -290,27 +290,27 @@ public class SaveService {
     static boolean checkVersions() {
 		versionsOK = true;
 		checkVersion(BooleanPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(HashTreeConverter.class, "493779"); // $NON-NLS-1$
+		checkVersion(HashTreeConverter.class, "514283"); // $NON-NLS-1$
 		checkVersion(IntegerPropertyConverter.class, "493779"); // $NON-NLS-1$
 		checkVersion(LongPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(MultiPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(SampleResultConverter.class, "501270"); // $NON-NLS-1$
+		checkVersion(MultiPropertyConverter.class, "514283"); // $NON-NLS-1$
+		checkVersion(SampleResultConverter.class, "514283"); // $NON-NLS-1$
 
         // Not built until later, so need to use this method:
         try {
             checkVersion(
                     Class.forName("org.apache.jmeter.protocol.http.util.HTTPResultConverter"), // $NON-NLS-1$
-                    "493789"); // $NON-NLS-1$
+                    "514283"); // $NON-NLS-1$
         } catch (ClassNotFoundException e) {
             versionsOK = false;
             log.warn(e.getLocalizedMessage());
         }
 		checkVersion(StringPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(TestElementConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(TestElementPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(ScriptWrapperConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(TestResultWrapperConverter.class, "493779"); // $NON-NLS-1$
-        checkVersion(SampleSaveConfigurationConverter.class,"493779"); // $NON-NLS-1$
+		checkVersion(TestElementConverter.class, "514283"); // $NON-NLS-1$
+		checkVersion(TestElementPropertyConverter.class, "514283"); // $NON-NLS-1$
+		checkVersion(ScriptWrapperConverter.class, "514283"); // $NON-NLS-1$
+		checkVersion(TestResultWrapperConverter.class, "514283"); // $NON-NLS-1$
+        checkVersion(SampleSaveConfigurationConverter.class,"514283"); // $NON-NLS-1$
 
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
