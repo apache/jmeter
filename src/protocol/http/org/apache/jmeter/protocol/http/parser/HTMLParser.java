@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -62,8 +63,6 @@ public abstract class HTMLParser {
 
 	public final static String DEFAULT_PARSER = 
         "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser"; // $NON-NLS-1$
-
-    private static final String JAVA_UTIL_LINKED_HASH_SET = "java.util.LinkedHashSet"; // $NON-NLS-1$
 
 	/**
 	 * Protected constructor to prevent instantiation except from within
@@ -131,19 +130,7 @@ public abstract class HTMLParser {
 		// them roughly in order, which should be a better model of browser
 		// behaviour.
 
-		Collection col;
-
-		// N.B. LinkedHashSet is Java 1.4
-		if (hasLinkedHashSet) {
-			try {
-				col = (Collection) Class.forName(JAVA_UTIL_LINKED_HASH_SET).newInstance();
-			} catch (Exception e) {
-				throw new Error("Should not happen:" + e.toString());
-			}
-		} else {
-			col = new java.util.HashSet(); // TODO: improve JDK1.3 solution
-		}
-
+		Collection col = new LinkedHashSet();
 		return getEmbeddedResourceURLs(html, baseUrl, new URLCollection(col));
 
 		// An additional note on using HashSets to store URLs: I just
@@ -158,20 +145,6 @@ public abstract class HTMLParser {
 		// The above problem has now been addressed with the URLString and
 		// URLCollection classes.
 
-	}
-
-	// See whether we can use LinkedHashSet or not:
-	private static final boolean hasLinkedHashSet;
-
-	static {
-		boolean b;
-		try {
-			Class.forName(JAVA_UTIL_LINKED_HASH_SET);
-			b = true;
-		} catch (ClassNotFoundException e) {
-			b = false;
-		}
-		hasLinkedHashSet = b;
 	}
 
 	/**
