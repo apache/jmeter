@@ -33,13 +33,15 @@
 	 <menu name="Download">
 	 	<item name="Download Binary"    href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries"/>
         <item name="Download Source"    href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources"/>
+		<item name="Developer (Nightly) Builds"  	href="/nightly.html"/>
 	 </menu>
 	 <menu name="Documentation">
 		<item name="User Manual"         href="/usermanual/index.html"/>
 		<item name="Javadocs"		     href="/api/index.html"/>
         <item name="Localisation (Translator's Guide)" href="/localising/index.html"></item>
+		<item name="Building JMeter and Add-Ons"     href="/building.html"/>
 		<item name="JMeter Wiki"		 href="http://wiki.apache.org/jakarta-jmeter"/>
- 	    <item name="FAQ (Wiki)"			href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
+ 	    <item name="FAQ (Wiki)"			 href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
 	 </menu>
 	 <menu name="Tutorials (PDF format)">
 		<item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.pdf"/>
