@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -70,7 +69,7 @@ import org.apache.oro.text.regex.Perl5Compiler;
 /**
  * Class handles storing of generated samples, etc
  */
-public class ProxyControl extends GenericController implements Serializable {
+public class ProxyControl extends GenericController {
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 
