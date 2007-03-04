@@ -35,6 +35,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcher;
@@ -120,7 +121,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			if (values.length > 5) {
 				name = ((CompoundVariable) values[values.length - 1]).execute();
 			}
-		} catch (Exception e) {
+		} catch (MalformedCachePatternException e) {
 			throw new InvalidVariableException(e.toString());
 		}
 
