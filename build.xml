@@ -383,9 +383,15 @@
   	<!--
   	    JMeter version
   	    This is overridden for formal releases.
-  	    Should be the SVN branch otherwise.
   	-->
-  <property name="jmeter.version" value="2.2.${DSTAMP}"/>
+    <property name="jmeter.version" value="2.2.${DSTAMP}"/>
+   	<echo>jmeter.version = ${jmeter.version}</echo>
+  </target>
+
+  <!-- Get version from SVN status -->
+  <target name="init-svnVersion" depends="svnCheck">
+   	<property name="jmeter.version" value="r${svnCheck.revision}"/>
+   	<echo>jmeter.version = ${jmeter.version}</echo>
   </target>
 
   <target name="init" depends="check-libs,report-missing-libs,init-version">
@@ -1648,5 +1654,20 @@ some of its classes - at present JMeter can only run from jar files.
       <report format="frames" todir="reports"/>
     </junitreport>
   </target>
-  
+
+  <path id="svn.classpath">
+  	<pathelement location="${lib.opt}/svnant.jar"/>
+  	<pathelement location="${lib.opt}/svnClientAdapter.jar"/>
+  	<pathelement location="${lib.opt}/svnjavahl.jar"/>
+  </path>
+  <taskdef resource="svntask.properties" classpathref="svn.classpath"/>
+    <target name="svnCheck" description="--> description">
+    	<svn javahl="true">
+          <status path="build.xml" 
+          	textStatusProperty="testStatus.textStatus"
+    		propStatusProperty="testStatus.propStatus"
+    		lastChangedRevisionProperty="testStatus.lastCommitRevision"
+    		revisionProperty="svnCheck.revision"/>
+    	</svn>
+    </target>
 </project>
