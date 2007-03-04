@@ -33,5 +33,8 @@ public class TestJMeterUtils extends TestCase {
     public TestJMeterUtils(String arg0) {
         super(arg0);
     }
-    //TODO add some tests now that split() has been removed
+    //TODO add some real tests now that split() has been removed
+    public void test1() throws Exception{
+    	
+    }
 }
