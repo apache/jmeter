@@ -1514,11 +1514,6 @@ some of its classes - at present JMeter can only run from jar files.
     </antcall>
   </target>
   
-	<taskdef
-	    name="jmeter"
-	    classpath="extras/ant-jmeter.jar"
-	    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
-	
   <target name="batchtest" description="Run the batch test and compare output files">
 
   	<property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
