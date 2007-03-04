@@ -20,7 +20,7 @@ package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
@@ -49,7 +49,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
 	static class MyWrapper extends MapperWrapper{
 
-        public MyWrapper(ClassMapper wrapped) {
+        public MyWrapper(Mapper wrapped) {
             super(wrapped);
         }
         
@@ -62,7 +62,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             return true;
         }
     }
-	public SampleSaveConfigurationConverter(ClassMapper arg0) {
+	public SampleSaveConfigurationConverter(Mapper arg0) {
         super(new MyWrapper(arg0),rp);
     }
 

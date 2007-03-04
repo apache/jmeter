@@ -28,7 +28,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.converters.SampleResultConverter;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -51,7 +51,7 @@ public class HTTPResultConverter extends SampleResultConverter {
 	/**
 	 * @param arg0
 	 */
-	public HTTPResultConverter(ClassMapper arg0) {
+	public HTTPResultConverter(Mapper arg0) {
 		super(arg0);
 	}
 

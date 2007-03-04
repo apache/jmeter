@@ -50,8 +50,8 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.alias.CannotResolveClassException;
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 
@@ -176,12 +176,12 @@ public class SaveService {
 						try {
 							if (val.trim().equals("collection")) { // $NON-NLS-1$
 								saver.registerConverter((Converter) Class.forName(key).getConstructor(
-										new Class[] { ClassMapper.class }).newInstance(
-										new Object[] { saver.getClassMapper() }));
+										new Class[] { Mapper.class }).newInstance(
+										new Object[] { saver.getMapper() }));
 							} else if (val.trim().equals("mapping")) { // $NON-NLS-1$
 								saver.registerConverter((Converter) Class.forName(key).getConstructor(
-										new Class[] { ClassMapper.class }).newInstance(
-										new Object[] { saver.getClassMapper() }));
+										new Class[] { Mapper.class }).newInstance(
+										new Object[] { saver.getMapper() }));
 							} else {
 								saver.registerConverter((Converter) Class.forName(key).newInstance());
 							}
