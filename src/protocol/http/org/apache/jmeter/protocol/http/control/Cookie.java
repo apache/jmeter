@@ -193,7 +193,9 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	public String toString() {
         StringBuffer sb=new StringBuffer(80);
         sb.append(getDomain());
-        sb.append(TAB).append("TRUE"); //TODO - what does this represent?
+        // flag - if all machines within a given domain can access the variable.
+        //(from http://www.cookiecentral.com/faq/ 3.5)
+        sb.append(TAB).append("TRUE");
         sb.append(TAB).append(getPath());
         sb.append(TAB).append(JOrphanUtils.booleanToSTRING(getSecure())); 
         sb.append(TAB).append(getExpires());
