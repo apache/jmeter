@@ -24,7 +24,7 @@ import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -96,7 +96,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
 	/**
 	 * @param arg0
 	 */
-	public MultiPropertyConverter(ClassMapper arg0) {
+	public MultiPropertyConverter(Mapper arg0) {
 		super(arg0);
 	}
 }

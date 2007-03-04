@@ -25,7 +25,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -115,7 +115,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
 	/**
 	 * @param arg0
 	 */
-	public TestElementConverter(ClassMapper arg0) {
+	public TestElementConverter(Mapper arg0) {
 		super(arg0);
 	}
 }
