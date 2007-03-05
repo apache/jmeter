@@ -136,6 +136,8 @@ public class SaveService {
 			log.warn("Could not set up alias " + alias + " " + e.toString());
 		} catch (NoClassDefFoundError e) {
 			log.warn("Could not set up alias " + alias + " " + e.toString());
+		} catch (Throwable e) {// (e.g. InternalError : may happen on headless boxes 
+			log.error("Could not set up alias " + alias,e);
 		}
 	}
 
