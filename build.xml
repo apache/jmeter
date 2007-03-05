@@ -1655,13 +1655,14 @@ some of its classes - at present JMeter can only run from jar files.
     </junitreport>
   </target>
 
-  <path id="svn.classpath">
-  	<pathelement location="${lib.opt}/svnant.jar"/>
-  	<pathelement location="${lib.opt}/svnClientAdapter.jar"/>
-  	<pathelement location="${lib.opt}/svnjavahl.jar"/>
-  </path>
-  <taskdef resource="svntask.properties" classpathref="svn.classpath"/>
-    <target name="svnCheck" description="--> description">
+    <target name="svnCheck" description="Use SVN to get the current revision">
+   	  <path id="svn.classpath">
+   	  	<pathelement location="${lib.opt}/svnant.jar"/>
+   	  	<pathelement location="${lib.opt}/svnClientAdapter.jar"/>
+   	  	<pathelement location="${lib.opt}/svnjavahl.jar"/>
+   	  </path>
+      <!-- The task def is nested here so that a missing jar only causes an error if the task is used -->
+   	  <taskdef resource="svntask.properties" classpathref="svn.classpath"/>
     	<svn javahl="true">
           <status path="build.xml" 
           	textStatusProperty="testStatus.textStatus"
