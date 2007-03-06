@@ -54,7 +54,7 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
-	static final long serialVersionUID = 4;
+	private static final long serialVersionUID = 5;
 
 	// ---------------------------------------------------------------------
 	// PROPERTY FILE CONSTANTS
@@ -214,10 +214,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
 	// Don't save this, as not settable via GUI
-	private transient String delimiter = _delimiter;
+	private String delimiter = _delimiter;
 
 	// Don't save this, as it is derived from the time format
-	private transient boolean printMilliseconds = _printMilliseconds;
+	private boolean printMilliseconds = _printMilliseconds;
 
 	/** A formatter for the time stamp. */
 	private transient SimpleDateFormat formatter = _formatter;
@@ -352,6 +352,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	}
 
 	public SampleSaveConfiguration() {
+		// Set fields which cannot currently be set in GUI (and are probably not in the JMX file)
+		delimiter=_delimiter;
+		printMilliseconds=_printMilliseconds;
+		formatter=_formatter;
 	}
 
 // TODO: may need to implement this to allow for adding new attributes to the config,
