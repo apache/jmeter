@@ -78,7 +78,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 	{
 		super(owner, title, modal);
 		saveConfig = s;
-		log.info("SampleSaveConfiguration = " + saveConfig);// $NON-NLS-1$
+		log.debug("SampleSaveConfiguration = " + saveConfig);// $NON-NLS-1$
 		dialogInit();
 	}
 
