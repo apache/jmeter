@@ -20,14 +20,12 @@ package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 
-import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.core.JVM;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /*
@@ -40,14 +38,20 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
 	private static final ReflectionProvider rp = new JVM().bestReflectionProvider();
 
-    // N.B. These must agree with the names in SampleSaveConfiguration
     private static final String TRUE = "true"; // $NON-NLS-1$
+
+    // N.B. These must agree with the new member names in SampleSaveConfiguration
 	private static final String NODE_FILENAME = "fileName"; // $NON-NLS-1$
 	private static final String NODE_URL = "url"; // $NON-NLS-1$
 	private static final String NODE_BYTES = "bytes"; // $NON-NLS-1$
     private static final String NODE_THREAD_COUNT = "threadCounts"; // $NON-NLS-1$
 
-	static class MyWrapper extends MapperWrapper{
+    // Additional member names which are currently not written out
+    private static final String NODE_DELIMITER = "delimiter"; // $NON-NLS-1$
+    private static final String NODE_PRINTMS = "printMilliseconds"; // $NON-NLS-1$
+
+
+    static class MyWrapper extends MapperWrapper{
 
         public MyWrapper(Mapper wrapped) {
             super(wrapped);
@@ -59,6 +63,9 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             if (fieldName.equals(NODE_URL)) return false; 
             if (fieldName.equals(NODE_FILENAME)) return false; 
             if (fieldName.equals(NODE_THREAD_COUNT)) return false; 
+
+            if (fieldName.equals(NODE_DELIMITER)) return false; 
+            if (fieldName.equals(NODE_PRINTMS)) return false; 
             return true;
         }
     }
@@ -116,12 +123,25 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
-	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-		Object obj = super.unmarshal(reader, arg1);
-        SampleSaveConfiguration prop = (SampleSaveConfiguration) obj;
-        // Fix the variables that can't (yet) be set via the configuration GUI
-        prop.setDefaultDelimiter();
-        prop.setDefaultTimeStampFormat();
-		return prop;
-	}
+//	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+//		final Class thisClass = SampleSaveConfiguration.class;
+//		final Class requiredType = context.getRequiredType();
+//		if (requiredType != thisClass) {
+//			throw new IllegalArgumentException("Unexpected class: "+requiredType.getName());
+//		}
+//		SampleSaveConfiguration result = new SampleSaveConfiguration();
+//		while (reader.hasMoreChildren()) {
+//			reader.moveDown();
+//			String nn = reader.getNodeName();
+//			if (!"delimiter".equals(nn) && !"printMilliseconds".equals(nn)){
+//				String fieldName = mapper.realMember(thisClass, nn);
+//                Field field = reflectionProvider.getField(thisClass,fieldName);
+//                Class type = field.getType();
+//                Object value = unmarshallField(context, result, type, field);
+//				reflectionProvider.writeField(result, nn, value, thisClass);
+//			}
+//			reader.moveUp();
+//		}
+//		return result;
+//	}
 }
