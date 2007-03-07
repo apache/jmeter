@@ -54,13 +54,14 @@ import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 /**
  * author Mike Stover
  * author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell </a>
  */
 public class SaveService {
-    private static final XStream saver = new XStream();
+    private static final XStream saver = new XStream(new PureJavaReflectionProvider());
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
