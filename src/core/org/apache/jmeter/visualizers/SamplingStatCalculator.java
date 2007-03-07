@@ -224,7 +224,7 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	private long getEndTime(SampleResult res) {
-		long endTime = res.getTimeStamp();
+		long endTime = res.getEndTime();
 		long lastTime = getCurrentSample().getEndTime();
 		if (res.isStampedAtStart()) {
 			endTime += res.getTime();
@@ -364,4 +364,4 @@ public class SamplingStatCalculator implements Serializable {
 	public double getStandardDeviation() {
 		return calculator.getStandardDeviation();
 	}
-} // class RunningSample
+}
