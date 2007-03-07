@@ -31,8 +31,6 @@ import org.apache.jmeter.report.DataSet;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * @author Peter Lin
@@ -43,8 +41,6 @@ import org.apache.log.Logger;
  */
 public class JTLData implements Serializable, DataSet {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
-    
     protected HashMap data = new HashMap();
     protected String jtl_file = null;
     protected long startTimestamp = 0;
@@ -191,9 +187,9 @@ public class JTLData implements Serializable, DataSet {
      */
     public void add(SampleResult sample) {
         if (data.size() == 0) {
-            this.startTimestamp = sample.getTimeStamp();
+            this.startTimestamp = sample.getStartTime();
         } else {
-            this.endTimestamp = sample.getTimeStamp() + sample.getTime();
+            this.endTimestamp = sample.getEndTime();
         }
         // now add the samples to the HashMap
         String url = sample.getSampleLabel();
