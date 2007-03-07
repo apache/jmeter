@@ -613,7 +613,8 @@ public class JMeter implements JMeterPlugin {
 			if (!remoteStart) {
 				engine = new StandardJMeterEngine();
 				engine.configure(tree);
-				println("Starting the test");
+				long now=System.currentTimeMillis();
+				println("Starting the test @ "+new Date(now)+" ("+now+")");
 				engine.runTest();
 			} else {
 				String remote_hosts_string = JMeterUtils.getPropDefault(
@@ -724,7 +725,8 @@ public class JMeter implements JMeterPlugin {
 		}
 
 		public void testStarted() {
-			log.info(JMeterUtils.getResString("running_test"));//$NON-NLS-1$
+			long now=System.currentTimeMillis();
+			log.info(JMeterUtils.getResString("running_test")+" ("+now+")");//$NON-NLS-1$
 		}
 
 		/**
@@ -735,7 +737,8 @@ public class JMeter implements JMeterPlugin {
 		 * testing.
 		 */
 		public void run() {
-			println("Tidying up ...");
+			long now = System.currentTimeMillis();
+			println("Tidying up ... @ "+new Date(now)+" ("+now+")");
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
