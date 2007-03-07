@@ -21,9 +21,11 @@ package org.apache.jmeter.save.converters;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.core.JVM;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
@@ -119,10 +121,22 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
 	/*
 	 * (non-Javadoc)
+	 * This is basically a copy of the super unmarshall code, however the result is created using
+	 * the constructor instead of reflection (the Sun14 version does not call the constructor).
+	 * 
+	 * We need to do this so that any optional values from the JMX file are applied after the
+	 * default object has been created.
 	 * 
 	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        Object result = new SampleSaveConfiguration();
+        result = doUnmarshal(result, reader, context);
+        return serializationMethodInvoker.callReadResolve(result);
+    }
+
+
 //	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 //		final Class thisClass = SampleSaveConfiguration.class;
 //		final Class requiredType = context.getRequiredType();
