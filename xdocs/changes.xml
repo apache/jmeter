@@ -131,6 +131,13 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 36959 - Shortcuts "ctrl c" and "ctrl v" don't work on the tree elements</li>
 <li>Bug 40696 - retrieve embedded resources from STYLE URL() attributes</li>
 <li>Bug 41568 - Problem when running tests remotely when using a 'Counter'</li>
+<li>Fixed various classes that assumed timestamps were always end time stamps:
+<ul>
+<li>SamplingStatCalculator</li>
+<li>JTLData</li>
+<li>RunningSample</li>
+</ul>
+</li>
 </ul>
 
 <h3>Version 2.2</h3>
