@@ -65,10 +65,11 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	private static Hashtable accumulators = new Hashtable();
 
 	/*
-	 * Constructor is initially called once for each occurrence in the test plan
-	 * For GUI, several more instances are created Then clear is called at start
-	 * of test Called several times during test startup The name will not
-	 * necessarily have been set at this point.
+	 * Constructor is initially called once for each occurrence in the test plan.
+	 * For GUI, several more instances are created.
+	 * Then clear is called at start of test.
+	 * Called several times during test startup.
+	 * The name will not necessarily have been set at this point.
 	 */
 	public Summariser() {
 		super();
@@ -77,9 +78,10 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		// "+Thread.currentThread().getName());
 	}
 
-	/*
-	 * Constructor for use during startup (intended for non-GUI use) @param name
-	 * of summariser
+	/**
+	 * Constructor for use during startup (intended for non-GUI use) 
+	 * 
+	 * @param name of summariser
 	 */
 	public Summariser(String name) {
 		this();
@@ -97,8 +99,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 
 		myName = this.getName();
 
-		// Hashtable is synchronised, but there could be more than one
-		// Summariser
+		// Hashtable is synchronised, but there could be more than one Summariser
 		// with the same name, so we need to synch.
 		synchronized (accumulators) {
 			Totals tots = (Totals) accumulators.get(myName);
@@ -114,10 +115,9 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		super.clear();
 	}
 
-	/**
+	/*
 	 * Contains the items needed to collect stats for a summariser
 	 * 
-	 * @version $revision$ Last updated: $date$
 	 */
 	private static class Totals {
 
@@ -161,7 +161,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 
 	/**
 	 * Accumulates the sample in two SampleResult objects - one for running
-	 * totals, and the other for deltas
+	 * totals, and the other for deltas.
 	 * 
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
 	 */
@@ -189,24 +189,19 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		boolean reportNow = false;
 
 		/*
-		 * Have we reached the reporting boundary? Need to allow for a margin of
-		 * error, otherwise can miss the slot Also need to check we've not hit
-		 * the window already
+		 * Have we reached the reporting boundary? 
+		 * Need to allow for a margin of error, otherwise can miss the slot.
+		 * Also need to check we've not hit the window already
 		 */
 		synchronized (myTotals) {
 			if ((now > myTotals.last + INTERVAL_WINDOW) && (now % INTERVAL <= INTERVAL_WINDOW)) {
 				reportNow = true;
-				myDelta = new RunningSample(myTotals.delta);// copy
-																		// the
-																		// data
-																		// to
-																		// minimise
-																		// ...
+				
+				// copy the data to minimise the synch time
+				myDelta = new RunningSample(myTotals.delta);
 				myTotals.moveDelta();
-				myTotal = new RunningSample(myTotals.total);// ...
-																		// the
-																		// synch
-																		// time
+				myTotal = new RunningSample(myTotals.total);
+				
 				myTotals.last = now;
 			}
 		}
