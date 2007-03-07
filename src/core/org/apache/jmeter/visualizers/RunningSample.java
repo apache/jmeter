@@ -200,13 +200,17 @@ public class RunningSample {
 		boolean aSuccessFlag = res.isSuccessful();
 
 		counter++;
-		long startTime = res.getTimeStamp() - aTimeInMillis;
+		long startTime = res.getStartTime();
+		long endTime = res.getEndTime();
+		
 		if (firstTime > startTime) {
 			// this is our first sample, set the start time to current timestamp
 			firstTime = startTime;
 		}
-		if (lastTime < res.getTimeStamp()) {
-			lastTime = res.getTimeStamp();
+		
+		// Always update the end time
+		if (lastTime < endTime) {
+			lastTime = endTime;
 		}
 		runningSum += aTimeInMillis;
 
@@ -345,4 +349,4 @@ public class RunningSample {
 		return errorCount;
 	}
 
-} // class RunningSample
+}
