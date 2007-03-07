@@ -213,8 +213,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // Does not appear to be used (yet)
 	private int assertionsResultsToSave = _assertionsResultsToSave;
 
-	// Don't save this, as not settable via GUI
-	private String delimiter = _delimiter;
 
 	// Don't save this, as it is derived from the time format
 	private boolean printMilliseconds = _printMilliseconds;
@@ -344,6 +342,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _threadCounts=TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_COUNTS, FALSE));
 	}
 
+	// Don't save this, as not settable via GUI
+	private String delimiter = _delimiter;
 	private static final SampleSaveConfiguration _static = new SampleSaveConfiguration();
 
 	// Give access to initial configuration
@@ -352,10 +352,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	}
 
 	public SampleSaveConfiguration() {
-		// Set fields which cannot currently be set in GUI (and are probably not in the JMX file)
-		delimiter=_delimiter;
-		printMilliseconds=_printMilliseconds;
-		formatter=_formatter;
 	}
 
 // TODO: may need to implement this to allow for adding new attributes to the config,
