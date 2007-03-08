@@ -43,6 +43,14 @@ import org.apache.log.Logger;
  * 
  * This is mainly intended for batch (non-GUI) runs
  * 
+ * Note that the RunningSample start and end times relate to the samples,
+ * not the reporting interval.
+ * 
+ * Since the first sample in a delta is likely to have started in the previous reporting interval,
+ * this means that the delta interval is likely to be longer than the reporting interval.
+ * 
+ * Also, the sum of the delta intervals will be larger than the overall elapsed time.
+ * 
  */
 public class Summariser extends AbstractTestElement implements Serializable, SampleListener, TestListener, Clearable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -144,16 +152,16 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		}
 	}
 
-	/**
+	/*
 	 * Cached copy of Totals for this instance.
-     * These do not need to be synchronised,
+     * The variables do not need to be synchronised,
      * as they are not shared between threads
 	 */
 	transient private Totals myTotals = null;
 
 	transient private String myName;
 
-	/**
+	/*
 	 * Ensure that a report is not skipped if we are slightly late in checking
 	 * the time.
 	 */
@@ -208,18 +216,22 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		if (reportNow) {
 			String str;
 			str = format(myDelta, "+");
-			if (TOLOG)
+			if (TOLOG) {
 				log.info(str);
-			if (TOOUT)
+			}
+			if (TOOUT) {
 				System.out.println(str);
+			}
 
 			// Only if we have updated them
 			if (myTotal.getNumSamples() != myDelta.getNumSamples()) {
 				str = format(myTotal, "=");
-				if (TOLOG)
+				if (TOLOG) {
 					log.info(str);
-				if (TOOUT)
+				}
+				if (TOOUT) {
 					System.out.println(str);
+				}
 			}
 		}
 	}
