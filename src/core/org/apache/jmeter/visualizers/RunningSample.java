@@ -35,7 +35,9 @@ public class RunningSample {
 
 	private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
 
-	private long counter;
+	// The counts all need to be volatile - or else the get() methods need to be synchronised.
+	
+	private volatile long counter;
 
 	private volatile long runningSum;
 
@@ -55,7 +57,7 @@ public class RunningSample {
 	}
 
 	/**
-	 * Use this constructor.
+	 * Use this constructor to create the initial instance
 	 */
 	public RunningSample(String label, int index) {
 		this.label = label;
@@ -64,11 +66,10 @@ public class RunningSample {
 	}
 
 	/**
-	 * Copy constructor to a duplicate of existing instance (without the
-	 * disadvantages of clone()0
+	 * Copy constructor to create a duplicate of existing instance (without the
+	 * disadvantages of clone()
 	 * 
-	 * @param src
-	 *            RunningSample
+	 * @param src existing RunningSample to be copied
 	 */
 	public RunningSample(RunningSample src) {
 		this.counter = src.counter;
