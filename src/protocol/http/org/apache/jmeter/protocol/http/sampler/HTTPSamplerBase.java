@@ -536,8 +536,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		ByteArrayOutputStream text = new ByteArrayOutputStream(200);
 		e.printStackTrace(new PrintStream(text));
 		res.setResponseData(text.toByteArray());
-		res.setResponseCode(NON_HTTP_RESPONSE_CODE);
-		res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE);
+		res.setResponseCode(NON_HTTP_RESPONSE_CODE+": "+e.getClass().getName());
+		res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE+": "+e.getMessage());
 		res.setSuccessful(false);
 		res.setMonitor(this.isMonitor());
 		return res;
