@@ -25,7 +25,9 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
  */
 public interface TestListener {
 	/**
-	 * Called just before the start of the test Note that not all the test
+	 * Called just before the start of the test from the main engine thread.
+	 * 
+	 * Note that not all the test
 	 * variables will have been set up at this point.
 	 * 
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
@@ -34,20 +36,36 @@ public interface TestListener {
 	public void testStarted();
 
 	/**
-	 * Called once for all threads after the end of a test
+	 * Called just before the start of the test from the main engine thread.
+	 * 
+	 * Note that not all the test
+	 * variables will have been set up at this point.
+	 * 
+	 * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
+	 * 
+	 */
+	public void testStarted(String host);
+
+	/**
+	 * Called once for all threads after the end of a test.
 	 * 
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
 	 * 
 	 */
 	public void testEnded();
 
-	public void testStarted(String host);
+	/**
+	 * Called once for all threads after the end of a test.
+	 * 
+	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
+	 * 
+	 */
 
 	public void testEnded(String host);
 
 	/**
 	 * Each time through a Thread Group's test script, an iteration event is
-	 * fired.
+	 * fired for each thread.
 	 * 
 	 * @param event
 	 */
