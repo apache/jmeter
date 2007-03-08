@@ -250,13 +250,13 @@
   <property name="dest.docs" value="docs"/>
   <property name="dest.printable_docs" value="printable_docs"/>
 
-  <!-- Directory where these 3rd party libraries will live -->
+  <!-- Directory where jars needed for creating documentation live -->
+  <property name="lib.doc" value="lib/doc"/>
+
+  <!-- Directory where these 3rd party libraries live -->
   <property name="lib.dir" value="lib"/>
 
-  <!-- Currently just for old version of jdom needed for Anakia -->
-  <property name="legacy.dir" value="legacy"/>
-  
-  <!-- Directory where Optional 3rd party libraries will live -->
+  <!-- Directory where Optional 3rd party libraries live -->
   <property name="lib.opt" value="lib/opt"/>
 
   <!-- Other stuff -->
@@ -372,7 +372,7 @@
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
     <pathelement location="${velocity.jar}"/>
-    <fileset dir="${legacy.dir}" includes="jdom-b9.jar"/>
+    <pathelement location="${jdom-b9.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${logkit.jar}"/>
   </path>
@@ -1111,7 +1111,7 @@ some of its classes - at present JMeter can only run from jar files.
   		<patternset refid="dist.sources"/>
   		<include name="${dest.docs}/api/**"/>
 		<include name="${velocity.jar}"/>
-		<include name="${legacy.dir}/"/>
+		<include name="${jdom-b9.jar}/"/>
   	</patternset>
 
 	<!-- Invoke with -Djmeter.version=m.n 
