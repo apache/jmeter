@@ -28,6 +28,9 @@
 <body>
 
 <section name="&sect-num;. Building a JMS Topic Test Plan" anchor="building">
+<note>
+JMS requires some optional jars to be downloaded. Please refer to <a href="get-started.html">Getting Started</a> for full details.
+</note>
 <p>In this section, you will learn how to create a 
 <a href="build-test-plan.html">Test Plan</a> to test JMS Providers. You will
 create five subscribers and one publisher. You will create 2 thread groups and set
@@ -39,20 +42,22 @@ following elements:
 <complink name="JMS Subscriber"/>, and
 <complink name="Graph Results"/>.</p>
 
-<p>General notes on JMS. There are currently two JMS samplers. One uses JMS topics
-and the other uses queues. Topic messages are commonly know as pub/sub messaging.
-It is generally used in cases where a message is publish by a producer and
-consumed by multiple subscribers. Queue messaging is generally used for transactions
-where the sender expects a response. Messaging systems are quite different from
+<p>General notes on JMS: There are currently two JMS samplers. One uses JMS topics
+and the other uses queues. Topic messages are commonly known as pub/sub messaging.
+Topic messaging is generally used in cases where a message is published by a producer and
+consumed by multiple subscribers.  Queue messaging is generally used for transactions
+where the sender expects a response.  Messaging systems are quite different from
 normal HTTP requests. In HTTP, a single user sends a request and gets a response.
-Messaging system can work in sychronous and asynchronous mode.</p>
+Messaging system can work in sychronous and asynchronous mode.  A JMS sampler needs 
+the JMS implementation jar files; for example, from Apache ActiveMQ.  
+See <a href="#libraries_activemq">here</a> for the list of jars provided by ActiveMQ 3.0.</p>
 
 </section>
 
 <section name="&sect-num;.1 Adding Users" anchor="adding_users">
 <p>The first step is add a <a href="test_plan.html#thread_group">Thread Group</a>
  element.  The Thread Group tells JMeter the number of users you want to simulate,
- how often the users should send requests, and the how many requests they should 
+ how often the users should send requests, and how many requests they should 
 send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
@@ -76,7 +81,7 @@ field, enter Subscribers.</p>
 
 <p>Next, increase the number of users (called threads) to 5.</p>
 
-<p>In the next field, the Ramp-Up Period, leave the the default value of 0
+<p>In the next field, the Ramp-Up Period, set the value to 0
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
 finish starting all of your users by the end of the 5 seconds.  So, if we have
@@ -91,7 +96,9 @@ once. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
 
 <p>Repeat the process and add another thread group. For the second thread
-group, leave the number of threads 1 and change the iteration to 10.</p>
+group, enter "Publisher" in the name field, set the number of threads to 1,
+and set the iteration to 10.
+</p>
 
 <note>In most applications, you have to manually accept
 changes you make in a Control Panel.  However, in JMeter, the Control Panel
@@ -107,14 +114,14 @@ leave the Control Panel (for example, when selecting another tree element).</not
 <p>Make sure the required jar files are in JMeter's lib directory. If they are
 not, shutdown JMeter, copy the jar files over and restart JMeter.</p>
 
-<p>Start by adding the sampler <complink name="jms subscriber"/>
-to the Jakarta Users element (Add --&gt; Sampler --&gt; JMS Subscriber).
-Then, select the JMS Subscriber element in the tree and edit the following properties
-:
+<p>Start by adding the sampler <complink name="JMS Subscriber"/>
+to the Subscribers element (Add --&gt; Sampler --&gt; JMS Subscriber).
+Then, select the JMS Subscriber element in the tree and edit the following properties:
+
 <ol>
-<li>Change the Name field to "sample subscriber".</li>
+<li>Change the Name field to "sample subscriber"</li>
 <li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class.</li>
+<li>Enter the name of the InitialContextFactory class</li>
 <li>Enter the provider URL. This is the URL for the JNDI server, if there is one</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
 of the JMS provider for the information</li>
@@ -133,6 +140,11 @@ exhibits zombie threads with one client, try the other.</li>
 
 <figure image="jms/jms_sub.png">
 Figure &sect-num;.2. JMS Subscriber</figure>
+
+<p>Next add the sampler <complink name="JMS Publisher"/>
+to the Publisher element (Add --&gt; Sampler --&gt; JMS Subscriber).
+Then, select the JMS Publisher element in the tree and edit the following properties:
+</p>
 
 <ol>
 <li>Change the Name field to "sample publisher".</li>
@@ -167,7 +179,7 @@ Figure &sect-num;.3. JMS Publisher</figure>
 responsible for storing all of the results of your HTTP requests in a file and presenting
 a visual model of the data.</p>
 
-<p>Select the Jakarta Users element and add a <complink name="Graph Results"/> listener (Add --&gt; Listener
+<p>Select the Test Plan element and add a <complink name="Graph Results"/> listener (Add --&gt; Listener
 --&gt; Graph Results).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
@@ -180,8 +192,7 @@ Figure &sect-num;.4. Graph Results Listener</figure>
 <section name="&sect-num;.4 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu (with the latest release, it is no longer necessary to select the
-Test Plan element first).</p>
+File menu.</p>
 
 <note>JMeter allows you to save the entire Test Plan tree or
 only a portion of it.  To save only the elements located in a particular "branch"
