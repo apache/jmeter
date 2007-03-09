@@ -1099,6 +1099,7 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="eclipse.classpath"/>
     <include name="eclipse.readme"/>
     <include name="${lib.dir}/jar_usage.txt"/>
+    <include name="${lib.api}/*.jar"/>
     <include name="fb-*.x*"/>
     <include name="KEYS.txt"/>
   </patternset>
