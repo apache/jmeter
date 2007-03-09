@@ -19,16 +19,23 @@
 package org.apache.jmeter.config.gui;
 
 import java.awt.BorderLayout;
+import java.util.Collection;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.tree.TreeNode;
 
+import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Default config gui for Configuration Element.
  */
-public class ObsoleteGui extends AbstractConfigGui {
+public class ObsoleteGui extends AbstractJMeterGuiComponent {
 
 	private JLabel obsoleteMessage = 
 		new JLabel(JMeterUtils.getResString("obsolete_test_element")); // $NON-NLS-1$
@@ -40,18 +47,27 @@ public class ObsoleteGui extends AbstractConfigGui {
 	private void init() {
 		setLayout(new BorderLayout(0, 10));
 		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
+		//add(makeTitlePanel(), BorderLayout.NORTH);
 		add(obsoleteMessage,BorderLayout.WEST);
-	}
-
-	public TestElement createTestElement() {
-		return null;
-	}
-
-	public void modifyTestElement(TestElement element) {	
 	}
 
 	public String getLabelResource() {
 		return "obsolete_test_element"; // $NON-NLS-1$
 	}
+
+	public TestElement createTestElement() {
+		return new ConfigTestElement();
+	}
+
+	public void modifyTestElement(TestElement element) {	
+	}
+
+	public JPopupMenu createPopupMenu() {
+		return null;
+	}
+
+	public Collection getMenuCategories() {
+		return null;
+	}
+
 }
