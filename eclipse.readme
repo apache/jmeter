@@ -10,58 +10,21 @@ for building JMeter using Eclipse version 3.
 It has exclusion filters for all the source files that depend on optional jars.
 
 The optional jars are:
-javamail (available from java.sun.com)
-Two jars are required for javamail:
-mail.jar - http://java.sun.com/products/javamail/downloads/index.html
-activation.jar - http://java.sun.com/products/javabeans/glasgow/jaf.html
-
-beanshell - see http://www.beansehll.org/
-
-jms* - needed for the JMS samplers
-one implementation is http://activemq.apache.org/
+* beanshell - see http://www.beansehll.org/
 
 The usage of the jars is as follows:
-
-core
-----
-org/apache/jmeter/util/keystore/PKCS12KeyStore.java - requires iaik
-
-components
-------------
-
-org/apache/jmeter/visualizers/MailerVisualizer.java - requires javamail
-org/apache/jmeter/reporters/MailerModel.java - requires javamail
-org/apache/jmeter/reporters/MailerResultCollector.java - requires javamail
-org/apache/jmeter/assertions/**/BeanShell*.java - requires beanshell
-
-http
-----
-org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java - requires javamail
-org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java - requires javamail
 
 java
 ----
 org/apache/jmeter/protocol/java/**/BeanShell*.java - requires beanshell
-org/apache/jmeter/protocol/java/**/BSF*.java - requires bsf
 
-jms
----
-org/apache/jmeter/protocol/jms/** - requires jms
-
-jndi
-----
-org/apache/jmeter/protocol/jndi/** - requires jndi
-
-mail
-----
-org/apache/jmeter/protocol/mail/** - requires javamail
 
 Before use, delete or disable the exclusion filters that are not required.
 
 Unlike Ant, Eclipse does not support conditional excludes.
 
-Note that Eclipse does not handle RMI compilations, nor is it easy to use for creating
-jar files.
+Note that Eclipse does not handle RMI compilations, 
+nor is it easy to use for creating jar files.
 
 However, it is easy to use Eclipse to run Ant.
 
@@ -71,20 +34,26 @@ The following targets may prove useful:
   package-only - creates the jars
   package - compiles everything and then packages it
 
+Finishing the build using Ant
+-----------------------------
+
+Find the build.xml file in the project, 
+right click on it, and click "Run As --> Ant Build".
+
+Make sure you select the "package" target.
+
+This will compile any remaining classes (e.g. the RMI ones),
+and then create all the jars.
+
+Now refresh the project (you should add this to the Ant build properties)
+
 Launching from Eclipse
 ----------------------
 
-This launch setup does not read the class files built by Eclipse, but
-instead needs the jar file built by Ant.  These instructions assume
-you checked out the JMeter code as an Eclipse project named "jmeter".
+These instructions assume you checked out the JMeter code as an Eclipse project named "jmeter".
 If you used something else, adjust accordingly.
 
-1. Build the JMeter jar file using ant.  Find the build.xml file in
-the project, right click on it, and click "Run As --> Ant Build".
-When that is done, right click on the bin folder and pick "Refresh".
-You should now see the file "ApacheJMeter.jar".
-
-2. Create a new Java Application launch configuration.  
+Create a new Java Application launch configuration.
 
 On the Main tab, enter the following as the main class:
 
@@ -93,21 +62,8 @@ On the Main tab, enter the following as the main class:
 On the Arguments tab, in the Working Directory area, pick the radio
 button next to "Other" and enter the following in the text box:
 
-  ${workspace_loc:jmeter}\bin
+  ${workspace_loc:jmeter/bin}
 
-Note: a back slash is appropriate for Windows; Linux needs a forward slash.
-
-On the Classpath tab, under User Entries, remove the only entry
-"jmeter (default classpath)".  Click on User Entries, click on the Add
-Jars button, then navigate to the file bin/ApacheJMeter.jar you built
-in step 1.  Pick it, click Ok.
-
-On the Source tab, click the Add button.  In the dialog "Add Source"
-that appears, pick the item in the list "Java Project", click OK.  In
-the dialog "Project Selection" that appears next, put a check next to
-the JMeter project, click OK.
-
-Even though this configuration doesn't allow the instant change-run-test 
-cycles that are possible in Eclipse, at least this configuration allows
-you to set breakpoints on code in the Eclipse java editor etc.
-
+On the Classpath tab,click on User Entries, click on the Add
+Jars button, then navigate to the file lib/ext/ApacheJMeter_core.jar
+Pick it, click Ok.
