@@ -300,6 +300,8 @@
     <include name="${excalibur-logger.jar}"/>
     <include name="${excalibur-i18n.jar}"/>
     <include name="${excalibur-compatibility.jar}"/>
+    <include name="${htmllexer.jar}"/>
+    <include name="${htmlparser.jar}"/>
     <include name="${jcharts.jar}"/>
     <include name="${junit.jar}"/>
     <include name="${logkit.jar}"/>
@@ -1064,6 +1066,7 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${dest.jar.jmeter}/users.dtd"/>
     <include name="${dest.jar.jmeter}/users.xml"/>
     <!-- Sample override properties files -->
+    <include name="${dest.jar.jmeter}/httpclient.parameters"/>
     <include name="${dest.jar.jmeter}/system.properties"/>
     <include name="${dest.jar.jmeter}/user.properties"/>
     <!-- Exclude any files that might be present from testing the release -->
@@ -1073,8 +1076,6 @@ some of its classes - at present JMeter can only run from jar files.
     <include name="${extras.dir}/**"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
-    <include name="${lib.dir}/htmllexer-2.0-20060923.jar"/>
-    <include name="${lib.dir}/htmlparser-2.0-20060923.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
   </patternset>
 
@@ -1086,13 +1087,17 @@ some of its classes - at present JMeter can only run from jar files.
 
   <patternset id="dist.sources">
     <include name="LICENSE"/>
+    <include name="LICENSE*.txt"/>
+    <include name="LICENSE*.html"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="MANIFEST"/>
+    <include name="STATUS"/>
     <include name="${src.dir}/**"/>
     <include name="${src.docs}/**"/>
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
+    <include name="build.properties"/>
     <include name="${dest.jar.jmeter}/jmetertest.properties"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
