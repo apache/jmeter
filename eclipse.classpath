@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="build/jorphan" path="src/jorphan"/>
-	<classpathentry kind="src" output="build/examples" path="src/examples"/>
-	<classpathentry kind="src" output="build/junit" path="src/junit"/>
-	<classpathentry kind="src" output="build/reports" path="src/reports"/>
-	<classpathentry kind="src" output="build/test" path="test/src"/>
-	<classpathentry kind="src" output="build/protocol/jms" path="src/protocol/jms"/>
-	<classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
 	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties" kind="src" output="build/core" path="src/core"/>
-	<classpathentry kind="src" output="build/components" excluding="org/apache/jmeter/reporters/MailerModel.java|org/apache/jmeter/reporters/MailerResultCollector.java|org/apache/jmeter/visualizers/MailerVisualizer.java" path="src/components"/>
+	<classpathentry kind="src" output="build/components" path="src/components"/>
 	<classpathentry kind="src" output="build/functions" path="src/functions"/>
-	<classpathentry kind="src" excluding="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java|org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" output="build/protocol/http" kind="src" path="src/protocol/http"/>
+	<classpathentry kind="src" output="build/protocol/http" path="src/protocol/http"/>
 	<classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
 	<classpathentry kind="src" output="build/protocol/jdbc" path="src/protocol/jdbc"/>
 	<classpathentry kind="src" output="build/protocol/java" path="src/protocol/java"/>
 	<classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
+	<classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
 	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
+	<classpathentry kind="src" output="build/junit" path="src/junit"/>
+	<classpathentry kind="src" output="build/protocol/jms" path="src/protocol/jms"/>
+	<classpathentry kind="src" output="build/reports" path="src/reports"/>
+	<classpathentry kind="src" output="build/test" path="test/src"/>
+	<classpathentry kind="src" output="build/examples" path="src/examples"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util-1.6.jar"/>
@@ -46,5 +46,8 @@
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.O.jar"/>
 	<classpathentry kind="lib" path="lib/xstream-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/api/geronimo-activation_1.0.2_spec-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/api/geronimo-javamail_1.3.1_spec-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/api/geronimo-jms_1.1_spec-1.0.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
