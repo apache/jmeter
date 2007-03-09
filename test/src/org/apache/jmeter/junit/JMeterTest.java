@@ -40,6 +40,7 @@ import javax.swing.JComponent;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.apache.jmeter.config.gui.ObsoleteGui;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.GuiPackage;
@@ -273,6 +274,9 @@ public class JMeterTest extends JMeterTestCase {
 			JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
 			if (item instanceof JMeterTreeNode) {
 				System.out.println("INFO: JMeterGUIComponent: skipping all tests  " + item.getClass().getName());
+				continue;
+			}
+			if (item instanceof ObsoleteGui){
 				continue;
 			}
 			TestSuite ts = new TestSuite(item.getClass().getName());
