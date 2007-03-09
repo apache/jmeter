@@ -256,6 +256,9 @@
   <!-- Directory where these 3rd party libraries live -->
   <property name="lib.dir" value="lib"/>
 
+  <!-- Directory where API spec libraries live -->
+  <property name="lib.api" value="lib/api"/>
+
   <!-- Directory where Optional 3rd party libraries live -->
   <property name="lib.opt" value="lib/opt"/>
 
@@ -365,6 +368,10 @@
     <pathelement location="${xml-apis.jar}"/>
   	<!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+  	<!-- API-only jars-->
+    <pathelement location="${activation.jar}"/>
+    <pathelement location="${javamail.jar}"/>
+    <pathelement location="${jms.jar}"/>
   	<!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
