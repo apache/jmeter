@@ -50,6 +50,7 @@ import org.apache.jorphan.test.UnitTestManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.xml.sax.XMLReader;
@@ -174,6 +175,35 @@ public class JMeterUtils implements UnitTestManager {
 		return patternCache;
 	}
 
+	/**
+	 * Get a compiled expression from the pattern cache (READ_ONLY).
+	 * 
+	 * @param expression
+	 * @return compiled pattern
+	 * 
+	 * @throws MalformedPatternException (Runtime)
+	 * This should be caught for expressions that may vary (e.g. user input)
+	 * 
+	 */
+	public static Pattern getPattern(String expression){
+		return getPattern(expression, Perl5Compiler.READ_ONLY_MASK);
+	}
+	
+	/**
+	 * Get a compiled expression from the pattern cache.
+	 * 
+	 * @param expression RE
+	 * @param options e.g. READ_ONLY_MASK
+	 * @return compiled pattern
+	 * 
+	 * @throws MalformedPatternException (Runtime)
+	 * This should be caught for expressions that may vary (e.g. user input)
+	 * 
+	 */
+	public static Pattern getPattern(String expression, int options){
+		return patternCache.getPattern(expression, options);
+	}
+	
 	public void initializeProperties(String file) {
 		System.out.println("Initializing Properties: " + file);
 		getProperties(file);

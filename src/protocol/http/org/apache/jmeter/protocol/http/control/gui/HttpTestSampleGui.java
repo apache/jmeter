@@ -23,9 +23,12 @@ import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
@@ -33,6 +36,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
 
 //For unit tests, @see TestHttpTestSampleGui
 
@@ -47,6 +51,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	private JCheckBox isMon;
 
+	private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
+	
 	public HttpTestSampleGui() {
 		init();
 	}
@@ -54,8 +60,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	public void configure(TestElement element) {
 		super.configure(element);
 		urlConfigGui.configure(element);
-		getImages.setSelected(((HTTPSamplerBase) element).isImageParser());
-		isMon.setSelected(((HTTPSamplerBase) element).isMonitor());
+		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
+		getImages.setSelected(samplerBase.isImageParser());
+		isMon.setSelected(samplerBase.isMonitor());
+		embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
 	}
 
 	public TestElement createTestElement() {
@@ -73,12 +81,15 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		TestElement el = urlConfigGui.createTestElement();
 		sampler.clear();
 		sampler.addTestElement(el);
+		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
 		if (getImages.isSelected()) {
-			((HTTPSamplerBase) sampler).setImageParser(true);
+			samplerBase.setImageParser(true);
 		} else {
-			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);// TODO - why?
+			// The default is false, so we can remove the property to simplify JMX files
+			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
-        ((HTTPSamplerBase) sampler).setMonitor(isMon.isSelected());
+		samplerBase.setMonitor(isMon.isSelected());
+		samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
 		this.configureTestElement(sampler);
 	}
 
@@ -102,19 +113,21 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	private JPanel createOptionalTasksPanel() {
 		// OPTIONAL TASKS
-		HorizontalPanel optionalTasksPanel = new HorizontalPanel();
+	    JPanel optionalTasksPanel = new VerticalPanel();
 		optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
 				.getResString("optional_tasks"))); // $NON-NLS-1$
 
+		JPanel checkBoxPanel = new HorizontalPanel();
 		// RETRIEVE IMAGES
-		JPanel retrieveImagesPanel = new JPanel();
 		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
-		retrieveImagesPanel.add(getImages);
-		JPanel isMonitorPanel = new JPanel();
+		// Is monitor
 		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
-		isMonitorPanel.add(isMon);
-		optionalTasksPanel.add(retrieveImagesPanel);
-		optionalTasksPanel.add(isMonitorPanel);
+		checkBoxPanel.add(getImages);
+		checkBoxPanel.add(isMon);
+		optionalTasksPanel.add(checkBoxPanel);
+		// Embedded URL match regex
+		embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
+		optionalTasksPanel.add(embeddedRE);
 		return optionalTasksPanel;
 	}
 

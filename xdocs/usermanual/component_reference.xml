@@ -42,7 +42,7 @@
 <description>
 	<br>Samplers perform the actual work of JMeter.</br>
 </description>
-<component name="FTP Request" index="&sect-num;.1.1" width="407" height="238" screenshot="gen-controller/ftp-request.gif">
+<component name="FTP Request" index="&sect-num;.1.1" width="407" height="238" screenshot="ftptest/ftp-request.gif">
 <description>This controller lets you send an FTP "retrieve file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a <complink name="FTP Request Defaults"/> Configuration
@@ -64,7 +64,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="608" height="574" screenshot="gen-controller/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="558" height="600" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -174,6 +174,11 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         See below for more details.
         </property>
         <property name="Use as monitor" required="Yes">For use with the <complink name="Monitor Results"/> listener.</property>
+        <property name="Embedded URLs must match:" required="No">
+        If present, this must be a regular expression that is used to match against any embedded URLs found.
+        So if you only want to download embedded resources from http://server.com/, use the expression:
+        http://server\.com/.*
+        </property>
 </properties>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
@@ -201,7 +206,7 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 
 </component>
 
-<component name="JDBC Request" index="&sect-num;.1.3"  width="492" height="264" screenshot="gen-controller/jdbc-request.png">
+<component name="JDBC Request" index="&sect-num;.1.3"  width="492" height="264" screenshot="jdbctest/jdbc-request.png">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
