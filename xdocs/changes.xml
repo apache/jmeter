@@ -78,6 +78,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41707 - HTTP Proxy XML-RPC support</li>
 <li>Bug 40381 - LDAP: more descriptive strings</li>
 <li>Bug 40369 (partial) Equals Response Assertion</li>
+<li>Bug 41705 - add content-encoding option to HTTP samplers</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
