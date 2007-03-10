@@ -52,6 +52,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.apache.oro.text.MalformedCachePatternException;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * Common constants and methods for HTTP samplers
@@ -147,7 +151,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public final static String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
 
 	// public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
+	
+	// IMAGE_PARSER now really means EMBEDDED_PARSER
 	public final static String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
+	
+	// Embedded URLs must match this RE (if provided)
+	public final static String EMBEDDED_URL_RE = "HTTPSampler.embedded_url_re"; // $NON-NLS-1$
 
 	public final static String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
@@ -531,6 +540,19 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	}
 
 	/**
+	 * Get the regular expression URLs must match.
+	 * 
+	 * @return regular expression (or empty) string
+	 */
+	public String getEmbeddedUrlRE() {
+		return getPropertyAsString(EMBEDDED_URL_RE,"");
+	}
+
+	public void setEmbeddedUrlRE(String regex) {
+		setProperty(new StringProperty(EMBEDDED_URL_RE, regex));
+	}
+
+	/**
 	 * Obtain a result that will help inform the user that an error has occured
 	 * during sampling, and how long it took to detect the error.
 	 * 
@@ -776,6 +798,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				res = container;
 			}
 
+			// Get the URL matcher
+			String re=getEmbeddedUrlRE();
+			Perl5Matcher localMatcher = null;
+			Pattern pattern = null;
+			if (re.length()>0){
+				try {
+				    pattern = JMeterUtils.getPattern(re);
+					localMatcher = JMeterUtils.getMatcher();// don't fetch unless pattern compiles
+				} catch (MalformedCachePatternException e) {
+					log.warn("Ignoring embedded URL match string: "+e.getMessage());
+				}
+			}
 			while (urls.hasNext()) {
 				Object binURL = urls.next();
 				try {
@@ -790,6 +824,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
                             res.setSuccessful(false);
                             continue;
                         }
+                    }
+                    if (pattern != null && !localMatcher.matches(urlStrEnc, pattern)) {
+                    	continue; // we have a pattern and the URL does not match, so skip it
                     }
                     HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
 					res.addSubResult(binRes);
