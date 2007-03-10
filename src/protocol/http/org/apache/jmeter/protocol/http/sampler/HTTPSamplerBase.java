@@ -82,6 +82,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
+	public final static String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
+
     public final static String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
 
     public final static String PATH = "HTTPSampler.path"; // $NON-NLS-1$
@@ -341,6 +343,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public String getMethod() {
 		return getPropertyAsString(METHOD);
+	}
+
+	public void setContentEncoding(String value) {
+		setProperty(CONTENT_ENCODING, value);
+	}
+
+	public String getContentEncoding() {
+		return getPropertyAsString(CONTENT_ENCODING);
 	}
 
 	public void setUseKeepAlive(boolean value) {

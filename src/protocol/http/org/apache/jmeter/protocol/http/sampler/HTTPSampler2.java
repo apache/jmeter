@@ -222,7 +222,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	public HTTPSampler2() {
 	}
 
-	/**
+	/*
 	 * Send POST data from <code>Entry</code> to the open connection.
 	 * 
 	 * @param connection
@@ -233,6 +233,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	private void sendPostData(PostMethod post) throws IOException {
 		// If filename was specified then send the post using multipart syntax
 		String filename = getFilename();
+		final String contentEncoding = getContentEncoding();
 		if ((filename != null) && (filename.trim().length() > 0)) {
 			if (getSendFileAsPostBody()) {
 				post.setRequestEntity(new FileRequestEntity(new File(filename),null));
@@ -251,6 +252,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	            post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
 			}
 		} else {
+            // If a content encoding is specified, we set it as http parameter, so that
+            // the post body will be encoded in the specified content encoding
+            if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+    			post.getParams().setContentCharset(contentEncoding);
+            }
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
                 Argument arg = (Argument) args.next().getObjectValue();
