@@ -171,6 +171,9 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 		choiceList.setSelectedItem(pText);
 	}
 
+	public void setSelectedIndex(int index){
+		choiceList.setSelectedIndex(index);
+	}
 	/**
 	 * Returns the text in the Text Field.
 	 * 
@@ -183,6 +186,10 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         } else {
     		return (String) item;
         }
+	}
+	
+	public int getSelectedIndex(){
+		return choiceList.getSelectedIndex();
 	}
 
 	public Object[] getSelectedItems() {
