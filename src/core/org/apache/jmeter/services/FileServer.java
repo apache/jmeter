@@ -24,9 +24,11 @@ package org.apache.jmeter.services;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
@@ -104,10 +106,21 @@ public class FileServer {
      * @param filename - relative (to base) or absolute file name
      */
 	public synchronized void reserveFile(String filename) {
+		reserveFile(filename,null);
+	}
+
+    /**
+     * Creates an association between a filename and a File inputOutputObject,
+     * and stores it for later use - unless it is already stored.
+     * 
+     * @param filename - relative (to base) or absolute file name
+     * @param charsetName - the character set encoding to use for the file
+     */
+	public synchronized void reserveFile(String filename, String charsetName) {
 		if (!files.containsKey(filename)) {
             File f = new File(filename); 
             FileEntry file = 
-                new FileEntry(f.isAbsolute() ? f : new File(base, filename),null);
+                new FileEntry(f.isAbsolute() ? f : new File(base, filename),null,charsetName);
             log.info("Stored: "+filename);
 			files.put(filename, file);
 		}
@@ -136,8 +149,7 @@ public class FileServer {
 		FileEntry fileEntry = (FileEntry) files.get(filename);
 		if (fileEntry != null) {
 			if (fileEntry.inputOutputObject == null) {
-				BufferedReader r = new BufferedReader(new FileReader(fileEntry.file));
-				fileEntry.inputOutputObject = r;
+				fileEntry.inputOutputObject = createBufferedReader(fileEntry, filename);
             } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
                 throw new IOException("File " + filename + " already in use");
             }
@@ -145,7 +157,7 @@ public class FileServer {
 			String line = reader.readLine();
 			if (line == null && recycle) {
 				reader.close();
-				reader = new BufferedReader(new FileReader(fileEntry.file));
+				reader = createBufferedReader(fileEntry, filename);
 				fileEntry.inputOutputObject = reader;
 				line = reader.readLine();
 			}
@@ -154,12 +166,25 @@ public class FileServer {
 		}
 		throw new IOException("File never reserved: "+filename);
 	}
+	
+	private BufferedReader createBufferedReader(FileEntry fileEntry, String filename) throws IOException { 
+		FileInputStream fis = new FileInputStream(fileEntry.file);				
+		InputStreamReader isr = null;
+        // If file encoding is specified, read using that encoding, otherwise use default platform encoding
+		String charsetName = fileEntry.charSetEncoding;
+		if(charsetName != null && charsetName.trim().length() > 0) {
+			isr = new InputStreamReader(fis, charsetName); 
+		} else {
+			isr = new InputStreamReader(fis); 
+		}
+		return new BufferedReader(isr);
+	}
 
 	public synchronized void write(String filename, String value) throws IOException {
 		FileEntry fileEntry = (FileEntry) files.get(filename);
 		if (fileEntry != null) {
 			if (fileEntry.inputOutputObject == null) {
-				fileEntry.inputOutputObject = new BufferedWriter(new FileWriter(fileEntry.file));
+				fileEntry.inputOutputObject = createBufferedWriter(fileEntry, filename);
 			} else if (!(fileEntry.inputOutputObject instanceof Writer)) {
 				throw new IOException("File " + filename + " already in use");
 			}
@@ -169,6 +194,19 @@ public class FileServer {
 		} else {
             throw new IOException("File never reserved: "+filename);      
         }
+	}
+
+	private BufferedWriter createBufferedWriter(FileEntry fileEntry, String filename) throws IOException { 
+		FileOutputStream fos = new FileOutputStream(fileEntry.file);				
+		OutputStreamWriter osw = null;
+        // If file encoding is specified, write using that encoding, otherwise use default platform encoding
+		String charsetName = fileEntry.charSetEncoding;
+		if(charsetName != null && charsetName.trim().length() > 0) {
+			osw = new OutputStreamWriter(fos, charsetName); 
+		} else {
+			osw = new OutputStreamWriter(fos); 
+		}
+		return new BufferedWriter(osw);
 	}
 
 	public void closeFiles() throws IOException {
@@ -238,9 +276,11 @@ public class FileServer {
     private static class FileEntry{
         private File file;
         private Object inputOutputObject; // Reader/Writer
-        FileEntry(File f, Object o){
+        private String charSetEncoding;
+        FileEntry(File f, Object o, String e){
             file=f;
             inputOutputObject=o;
+            charSetEncoding=e;
         }
     }
 }
