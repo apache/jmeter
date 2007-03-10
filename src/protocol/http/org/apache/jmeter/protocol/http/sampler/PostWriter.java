@@ -23,7 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
@@ -87,8 +87,14 @@ public class PostWriter {
 		// No filename specified, so send the post using normal syntax
 		else {
 			String postData = sampler.getQueryString();
-			PrintWriter out = new PrintWriter(connection.getOutputStream());
-			out.print(postData);
+			final String contentEncoding = sampler.getContentEncoding();
+			OutputStreamWriter out;
+			if (contentEncoding.length() > 0) {
+			out = new OutputStreamWriter(connection.getOutputStream(), contentEncoding);
+			} else {
+				out = new OutputStreamWriter(connection.getOutputStream());				
+			}
+			out.write(postData);
 			out.flush();
             out.close();
 		}

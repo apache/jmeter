@@ -54,6 +54,8 @@ public class UrlConfigGui extends JPanel {
 
 	private static String PROTOCOL = "protocol"; // $NON-NLS-1$
 
+	private static String CONTENT_ENCODING = "content_encoding"; // $NON-NLS-1$
+
 	private static String PATH = "path"; // $NON-NLS-1$
 
 	private static String FOLLOW_REDIRECTS = "follow_redirects"; // $NON-NLS-1$
@@ -67,6 +69,8 @@ public class UrlConfigGui extends JPanel {
 	private JTextField port;
 
 	private JTextField protocol;
+
+	private JTextField contentEncoding;
 
 	private JTextField path;
 
@@ -96,9 +100,9 @@ public class UrlConfigGui extends JPanel {
 		path.setText(""); // $NON-NLS-1$
 		port.setText(""); // $NON-NLS-1$
 		protocol.setText(""); // $NON-NLS-1$
+		contentEncoding.setText(""); // $NON-NLS-1$
 		useKeepAlive.setSelected(true);
 		argsPanel.clear();
-
 	}
 
 	public TestElement createTestElement() {
@@ -113,6 +117,7 @@ public class UrlConfigGui extends JPanel {
 		element.setProperty(HTTPSamplerBase.PORT, port.getText());
 		element.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
 		element.setProperty(HTTPSamplerBase.METHOD, method.getText());
+		element.setProperty(HTTPSamplerBase.CONTENT_ENCODING, contentEncoding.getText());
 		element.setProperty(HTTPSamplerBase.PATH, path.getText());
 		element.setProperty(new BooleanProperty(HTTPSamplerBase.FOLLOW_REDIRECTS, followRedirects.isSelected()));
 		element.setProperty(new BooleanProperty(HTTPSamplerBase.AUTO_REDIRECTS, autoRedirects.isSelected()));
@@ -141,6 +146,7 @@ public class UrlConfigGui extends JPanel {
 		}
 		protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
         method.setText(el.getPropertyAsString(HTTPSamplerBase.METHOD));
+        contentEncoding.setText(el.getPropertyAsString(HTTPSamplerBase.CONTENT_ENCODING));
 		path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
 		followRedirects.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.FOLLOW_REDIRECTS));
 
@@ -251,9 +257,14 @@ public class UrlConfigGui extends JPanel {
 		// PROTOCOL
 		protocol = new JTextField(20);
 		protocol.setName(PROTOCOL);
+		// CONTENT_ENCODING
+		contentEncoding = new JTextField(10);
+		contentEncoding.setName(CONTENT_ENCODING);
 
 		JLabel protocolLabel = new JLabel(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
 		protocolLabel.setLabelFor(protocol);
+		JLabel contentEncodingLabel = new JLabel(JMeterUtils.getResString("content_encoding")); // $NON-NLS-1$
+		protocolLabel.setLabelFor(contentEncoding);
         method = new JLabeledChoice(JMeterUtils.getResString("method"), // $NON-NLS-1$
                 HTTPSamplerBase.getValidMethodsAsArray());
 
@@ -265,6 +276,10 @@ public class UrlConfigGui extends JPanel {
 
         panel.add(method);
 		panel.setMinimumSize(panel.getPreferredSize());
+        panel.add(Box.createHorizontalStrut(5));
+		
+		panel.add(contentEncodingLabel);
+		panel.add(contentEncoding);
 		return panel;
 	}
 
