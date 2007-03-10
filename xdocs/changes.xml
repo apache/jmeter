@@ -30,7 +30,7 @@
 <h3>Version 2.2.1</h3>
 <h4>Summary of changes (for more details, see below)</h4>
 <p>
-The main enhancements are:
+Some of the main enhancements are:
 </p>
 <ul>
 <li>Htmlparser 2.0 now used for parsing</li>
@@ -109,6 +109,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40369 (partial) Equals Response Assertion</li>
 <li>Bug 41705 - add content-encoding option to HTTP samplers for POST requests</li>
 <li>Bug 40933, 40945 - optional matching of embedded resource URLs</li>
+<li>Bug 41704 - Allow charset encoding to be specified for CSV DataSet</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>

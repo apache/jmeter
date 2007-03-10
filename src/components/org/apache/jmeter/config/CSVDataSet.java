@@ -45,6 +45,8 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     private transient String filename;
 
+    private transient String fileEncoding;
+
     private transient String variableNames;
 
     private transient String delimiter;
@@ -66,7 +68,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 		FileServer server = FileServer.getFileServer();
 		String _fileName = getFilename();
 		if (vars == null) {
-			server.reserveFile(_fileName);
+			server.reserveFile(_fileName, getFileEncoding());
 			vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
 		}
 		try {
@@ -104,6 +106,21 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	 */
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	/**
+	 * @return Returns the file encoding.
+	 */
+	public String getFileEncoding() {
+		return fileEncoding;
+	}
+
+	/**
+	 * @param fileEncoding
+	 *            The fileEncoding to set.
+	 */
+	public void setFileEncoding(String fileEncoding) {
+		this.fileEncoding = fileEncoding;
 	}
 
 	/**

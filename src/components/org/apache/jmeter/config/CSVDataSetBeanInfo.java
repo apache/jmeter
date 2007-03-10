@@ -25,13 +25,12 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 /**
  * @author mstover
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
     // These names must agree case-wise with the variable and property names
     private static final String FILENAME = "filename";               //$NON-NLS-1$
+    private static final String FILE_ENCODING = "fileEncoding";      //$NON-NLS-1$
     private static final String VARIABLE_NAMES = "variableNames";    //$NON-NLS-1$
     private static final String DELIMITER = "delimiter";             //$NON-NLS-1$
     private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
@@ -42,13 +41,18 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
 	public CSVDataSetBeanInfo() {
 		super(CSVDataSet.class);
 		createPropertyGroup("csv_data",             //$NON-NLS-1$
-                new String[] { FILENAME, VARIABLE_NAMES, DELIMITER, RECYCLE });
+                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, RECYCLE });
         
 		PropertyDescriptor p = property(FILENAME);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         
+		p = property(FILE_ENCODING);
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");        //$NON-NLS-1$
+		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+		
 		p = property(VARIABLE_NAMES);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");        //$NON-NLS-1$
