@@ -22,12 +22,34 @@
 </properties> 
 <body> 
 <section name="History of Changes"> 
-<p><b>Changes are chronologically ordered from top (most recent) to bottom 
+<p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>  
 
 <!--  ===================  -->
 
 <h3>Version 2.2.1</h3>
+<h4>Summary of changes (for more details, see below)</h4>
+<p>
+The main enhancements are:
+</p>
+<ul>
+<li>Htmlparser 2.0 now used for parsing</li>
+<li>HTTP Authorisation now supports domain and realm</li>
+<li>HttpClient options can be specified via httpclient.parameters file</li>
+<li>HttpClient now behaves the same as Java Http for SSL certificates</li>
+<li>HTTP Mirror Server to allow local testing of HTTP samplers</li>
+<li>HTTP Proxy supports XML-RPC recording</li>
+<li>__V() function allows support of nested variable references</li>
+</ul>
+<p>
+The main bug fixes are:
+</p>
+<ul>
+<li>HTTPS (SSL) handling now much improved</li>
+<li>Various Remote mode bugs fixed</li>
+<li>Control+C and Control+V now work in the test tree</li>
+<li>Latency and Encoding now available in CSV log output</li>
+</ul>
 <h4>Known problems:</h4>
 <p>Thread active counts are always zero in CSV and XML files when running remote tests.
 </p>
@@ -35,6 +57,13 @@
 However JMeter does honour the 3 testplan versions.</p>
 <p>
 Bug 22510 - JMeter always uses the first entry in the keystore.
+</p>
+<p>
+Remote mode does not work if JMeter is installed in a directory where the path name contains spaces.
+</p>
+<p>
+BeanShell test elements leak memory.
+This can be reduced by using a file instead of including the script in the test element.
 </p>
 <h4>Incompatible changes (usage):</h4>
 <p>
@@ -73,12 +102,12 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 33964 - send file as entire post body if name/type are omitted</li>
 <li>HTTP Mirror Server Workbench element</li>
 <li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
-<li>Bug 39717 - use icons in the results tree instead of colors</li>
+<li>Bug 39717 - use icons in the results tree</li>
 <li>Added __V variable function to resolve nested variable names</li>
 <li>Bug 41707 - HTTP Proxy XML-RPC support</li>
 <li>Bug 40381 - LDAP: more descriptive strings</li>
 <li>Bug 40369 (partial) Equals Response Assertion</li>
-<li>Bug 41705 - add content-encoding option to HTTP samplers</li>
+<li>Bug 41705 - add content-encoding option to HTTP samplers for POST requests</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
@@ -87,7 +116,6 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Replace com.sun.net classes with javax.net</li>
 <li>Extract external jar definitions into build.properties file</li>
 <li>Use specific jar names in build classpaths so errors are detected sooner</li>
-<li>Updated to: batik 1</li>
 </ul>
 
 <h4>External jar updates:</h4>
@@ -112,8 +140,8 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40451 - set label if not set by sampler</li>
 <li>Fix NPE in CounterConfig.java in Remote mode</li>
 <li>Bug 40791 - Calculator used by Summary Report</li>
-<li>Bug 40772 - correctly parse missing fields</li>
-<li>Bug 40773 - XML JTL not parsed correctly</li>
+<li>Bug 40772 - correctly parse missing fields in CSV log files</li>
+<li>Bug 40773 - XML log file timestamp not parsed correctly</li>
 <li>Bug 41029 - JMeter -t fails to close input JMX file</li>
 <li>Bug 40954 - Statistical mode in distributed testing shows wrong results</li>
 <li>Fix ClassCast Exception when using sampler that returns null, e..g TestAction</li>
