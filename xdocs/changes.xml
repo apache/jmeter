@@ -40,6 +40,7 @@ Some of the main enhancements are:
 <li>HTTP Mirror Server to allow local testing of HTTP samplers</li>
 <li>HTTP Proxy supports XML-RPC recording</li>
 <li>__V() function allows support of nested variable references</li>
+<li>LDAP Ext sampler optionally parses result sets and supports secure mode</li>
 </ul>
 <p>
 The main bug fixes are:
@@ -66,6 +67,10 @@ BeanShell test elements leak memory.
 This can be reduced by using a file instead of including the script in the test element.
 </p>
 <h4>Incompatible changes (usage):</h4>
+<p>
+The LDAP Extended Sampler now uses the same panel for both Thread Bind and Single-Bind tests.
+This means that any tests using the Single-bind test will need to be updated to set the username and password.
+</p>
 <p>
 Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
 (as they appear in the test plan) rather than reverse order as previously.
