@@ -130,11 +130,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
 	public final static String NEWDN = "newdn"; // $NON-NLS-1$
 
-	// For In build test case using this counter
-	// create the new entry in the server
-	// private static int counter=0;
-
-    // TODO replace these with ThreadLocal
 	private static Hashtable ldapConnections = new Hashtable();
 
 	private static Hashtable ldapContexts = new Hashtable();
@@ -781,21 +776,30 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 res.sampleEnd();
 
                 if (isParseFlag()) {
-					xmlBuffer.openTag("searchresult");
-					while (srch.hasMore()) {
-						SearchResult sr = (SearchResult) srch.next();
-						xmlBuffer.tag("dn",sr.getName() + "," +searchBase + "," + getRootdn());
-						xmlBuffer.tag("returnedattr",String.valueOf(sr.getAttributes().size()));
-						NamingEnumeration attrlist = sr.getAttributes().getIDs();
-						while (attrlist.hasMore()) {
-							String iets = (String) attrlist.next();
-							xmlBuffer.openTag("attribute");
-            				xmlBuffer.tag("attributename", iets);
-							xmlBuffer.tag("attributevalue",
-								sr.getAttributes().get(iets).toString().substring(iets.length() + 2));
-							xmlBuffer.closeTag("attribute");
+					try {
+						xmlBuffer.openTag("searchresults");
+						while (srch.hasMore()) {
+							try {
+								xmlBuffer.openTag("searchresult");
+								SearchResult sr = (SearchResult) srch.next();
+								xmlBuffer.tag("dn",sr.getName() + "," +searchBase + "," + getRootdn());
+								xmlBuffer.tag("returnedattr",String.valueOf(sr.getAttributes().size()));
+								NamingEnumeration attrlist = sr.getAttributes().getIDs();
+								while (attrlist.hasMore()) {
+									String iets = (String) attrlist.next();
+									xmlBuffer.openTag("attribute");
+									xmlBuffer.tag("attributename", iets);
+									xmlBuffer.tag("attributevalue",
+											sr.getAttributes().get(iets).toString().substring(iets.length() + 2));
+									xmlBuffer.closeTag("attribute");
+								}
+							} finally {
+								xmlBuffer.closeTag("searchresult");
+							}							
 						}
-					}
+					} finally {
+						xmlBuffer.closeTag("searchresults");
+					}					
                 }
 			}
 
@@ -813,6 +817,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			}
 			isSuccessful = false;
 		} finally {
+			xmlBuffer.closeTag("operation");
 			xmlBuffer.tag("responsecode",res.getResponseCode());
 			xmlBuffer.tag("responsemessage",res.getResponseMessage());
 			res.setResponseData(xmlBuffer.toString().getBytes());
