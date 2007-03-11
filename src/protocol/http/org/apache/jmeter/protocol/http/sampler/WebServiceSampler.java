@@ -39,6 +39,7 @@ import org.xml.sax.SAXException;
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -87,6 +88,13 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
 
     public static final String TIMEOUT = "WebserviceSampler.timeout";
+
+    private static final String PROXY_USER = 
+        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
+    
+    private static final String PROXY_PASS = 
+        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
+    
 
 	/*
 	 * Random class for generating random numbers.
@@ -484,6 +492,10 @@ public class WebServiceSampler extends HTTPSamplerBase {
 				if (phost.length() > 0 && pport > 0) {
 					spconn.setProxyHost(phost);
 					spconn.setProxyPort(pport);
+					if (PROXY_USER.length()>0 && PROXY_PASS.length()>0){
+						spconn.setProxyUserName(PROXY_USER);
+						spconn.setProxyPassword(PROXY_PASS);
+					}
 				}
 			}
 			// by default we maintain the session.

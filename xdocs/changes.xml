@@ -176,6 +176,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>RunningSample</li>
 </ul>
 </li>
+<li>Bug 40325 - allow specification of proxyuser and proxypassword for WebServiceSampler</li>
 </ul>
 
 <h3>Version 2.2</h3>
