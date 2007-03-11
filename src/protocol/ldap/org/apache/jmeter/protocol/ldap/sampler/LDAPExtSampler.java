@@ -196,9 +196,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	}
 
 	/***************************************************************************
-	 * Gets the password attribute of the LDAP object
+	 * Sets the password attribute of the LDAP object
 	 * 
-	 * @return The password
 	 **************************************************************************/
 
 	public void setUserPw(String newUserPw) {
@@ -286,7 +285,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Gets the size limit attribute of the LDAPSampler object
 	 * 
-	 * @return The scope value
+	 * @return The size limit
 	 **************************************************************************/
 	public String getCountlim() {
 		return getPropertyAsString(COUNTLIM);
@@ -305,7 +304,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Gets the time limit attribute of the LDAPSampler object
 	 * 
-	 * @return The scope value
+	 * @return The time limit
 	 **************************************************************************/
 	public String getTimelim() {
 		return getPropertyAsString(TIMELIM);
@@ -324,28 +323,26 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Gets the return objects attribute of the LDAPSampler object
 	 * 
-	 * @return The scope value
+	 * @return if the object(s) are to be returned
 	 **************************************************************************/
-	public boolean getRetobj() {
+	public boolean isRetobj() {
 		return getPropertyAsBoolean(RETOBJ);
 	}
 
 	/***************************************************************************
 	 * Sets the return objects attribute of the LDAPSampler object
 	 * 
-	 * @param rootdn
-	 *            The new scope value
 	 **************************************************************************/
 	public void setRetobj(String newRobj) {
 		this.setProperty(RETOBJ, newRobj);
 	}
 
 	/***************************************************************************
-	 * Gets the search scope attribute of the LDAPSampler object
+	 * Gets the deref attribute of the LDAPSampler object
 	 * 
-	 * @return The scope value
+	 * @return if dereferencing is required
 	 **************************************************************************/
-	public boolean getDeref() {
+	public boolean isDeref() {
 		return getPropertyAsBoolean(DEREF);
 	}
 
@@ -389,9 +386,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	}
 
 	/***************************************************************************
-	 * Gets the test attribute of the LDAPSampler object
+	 * Gets the attributes of the LDAPSampler object
 	 * 
-	 * @return The test value (Add,Modify,Delete and search)
+	 * @return The attributes
 	 **************************************************************************/
 	public String getAttrs() {
 		return getPropertyAsString(ATTRIBS);
@@ -578,42 +575,46 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * This will do the add test for the User defined TestCase
 	 * 
-	 * @return executed time for the give test case
 	 **************************************************************************/
 	private void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-		res.sampleStart();
-		ldap.createTest(dirContext, getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
-        // Returned DirContext is not currently used
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			ldap.createTest(dirContext, getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+		} finally {
+			res.sampleEnd();
+		}		
 	}
 
 	/***************************************************************************
 	 * This will do the delete test for the User defined TestCase
 	 * 
-	 * @return executed time for the give test case
 	 **************************************************************************/
 	private void deleteTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-		res.sampleStart();
-		ldap.deleteTest(dirContext, getPropertyAsString(DELETE));
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			ldap.deleteTest(dirContext, getPropertyAsString(DELETE));
+		} finally {
+			res.sampleEnd();
+		}		
 	}
 
 	/***************************************************************************
 	 * This will do the modify test for the User defined TestCase
 	 * 
-	 * @return executed time for the give test case
 	 **************************************************************************/
 	private void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-		res.sampleStart();
-		ldap.modifyTest(dirContext, getUserModAttributes(), getPropertyAsString(BASE_ENTRY_DN));
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			ldap.modifyTest(dirContext, getUserModAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+		} finally {
+			res.sampleEnd();
+		}		
 	}
 
 	/***************************************************************************
 	 * This will do the bind for the User defined Thread, this bind is used for
 	 * the whole context
 	 * 
-	 * @return executed time for the bind op
 	 **************************************************************************/
 	private void bindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
 		DirContext ctx = (DirContext) ldapContexts.remove(getThreadName());
@@ -621,47 +622,56 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			log.warn("Closing previous context for thread: " + getThreadName());
 			ctx.close();
 		}
-		res.sampleStart();
-		ctx = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			ctx = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
+		} finally {
+			res.sampleEnd();
+		}		
 		ldapContexts.put(getThreadName(), ctx);
 	}
 
 	/***************************************************************************
 	 * This will do the bind and unbind for the User defined TestCase
 	 * 
-	 * @return executed time for the bind op
 	 **************************************************************************/
 	private void singleBindOp(SampleResult res) throws NamingException {
 		LdapExtClient ldap_temp;
 		ldap_temp = new LdapExtClient();
-		res.sampleStart();
-		DirContext ctx = ldap_temp.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
-		ldap_temp.disconnect(ctx);
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			DirContext ctx = ldap_temp.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
+			ldap_temp.disconnect(ctx);
+		} finally {
+			res.sampleEnd();
+		}		
 	}
 
 	/***************************************************************************
 	 * This will do a moddn Opp for the User new DN defined
 	 * 
-	 * @return executed time for the moddn op
 	 **************************************************************************/
 	private void renameTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
-		res.sampleStart();
-		ldap.moddnOp(dirContext, getPropertyAsString(MODDDN), getPropertyAsString(NEWDN));
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			ldap.moddnOp(dirContext, getPropertyAsString(MODDDN), getPropertyAsString(NEWDN));
+		} finally {
+			res.sampleEnd();
+		}		
 	}
 
 	/***************************************************************************
 	 * This will do the unbind for the User defined TestCase as well as inbuilt
 	 * test case
 	 * 
-	 * @return executed time for the bind op
 	 **************************************************************************/
 	private void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) {
-		res.sampleStart();
-		ldap.disconnect(dirContext);
-		res.sampleEnd();
+		try {
+			res.sampleStart();
+			ldap.disconnect(dirContext);
+		} finally {
+			res.sampleEnd();
+		}		
 		ldapConnections.remove(getThreadName());
 		ldapContexts.remove(getThreadName());
 		log.info("context and LdapExtClients removed");
@@ -722,9 +732,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 								+ getPropertyAsString(COMPAREDN));
 				xmlBuffer.tag("comparedn",getPropertyAsString(COMPAREDN));
 				xmlBuffer.tag("comparefilter",getPropertyAsString(COMPAREFILT));
-                res.sampleStart();
-                NamingEnumeration cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT), getPropertyAsString(COMPAREDN));
-                res.sampleEnd();
+                NamingEnumeration cmp;
+				try {
+					res.sampleStart();
+					cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT),
+							getPropertyAsString(COMPAREDN));
+				} finally {
+					res.sampleEnd();
+				}				
 				if (cmp.hasMore()) {
 				} else {
 					res.setResponseCode("5");
@@ -765,15 +780,19 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				xmlBuffer.tag("countlimit",countLimit);
 				xmlBuffer.tag("timelimit",timeLimit);
 
-                res.sampleStart();
-                NamingEnumeration srch = temp_client.searchTest(
-                		dirContext, searchBase, searchFilter,
-                        scope, getPropertyAsLong(COUNTLIM),
-                        getPropertyAsInt(TIMELIM),
-                        getRequestAttributes(getPropertyAsString(ATTRIBS)),
-                        getPropertyAsBoolean(RETOBJ),
-                        getPropertyAsBoolean(DEREF));
-                res.sampleEnd();
+                NamingEnumeration srch;
+				try {
+					res.sampleStart();
+					srch = temp_client.searchTest(
+							dirContext, searchBase, searchFilter,
+							scope, getPropertyAsLong(COUNTLIM),
+							getPropertyAsInt(TIMELIM),
+							getRequestAttributes(getPropertyAsString(ATTRIBS)),
+							isRetobj(),
+							isDeref());
+				} finally {
+					res.sampleEnd();
+				}				
 
                 if (isParseFlag()) {
 					try {
