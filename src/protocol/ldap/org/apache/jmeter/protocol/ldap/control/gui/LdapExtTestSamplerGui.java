@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -80,12 +79,7 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
 	}
 
 	public String getLabelResource() {
-		return "ldapext_testing_title";
-	}
-
-	// Remove this when status changes (and update component_reference)
-	public String getStaticLabel() {
-		return super.getStaticLabel() + " (ALPHA)";
+		return "ldapext_testing_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
