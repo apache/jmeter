@@ -452,11 +452,11 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 
 </component>
 
-<component name="LDAP Extended Request (ALPHA)" index="&sect-num;.1.8"  width="595" height="542" screenshot="ldapext_request.png">
+<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="595" height="542" screenshot="ldapext_request.png">
   <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
-      using an <complink name="LDAP Extended Request Defaults (ALPHA)"/>
+      using an <complink name="LDAP Extended Request Defaults"/>
       Configuration Element so you do not have to enter the same information for each
       LDAP Request.</p> </description>
 
@@ -575,7 +575,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
        
     <links>
       <link href="build-ldapext-test-plan.html">Building an LDAP Test Plan</link>
-      <complink name="LDAP Extended Request Defaults (ALPHA)"/>
+      <complink name="LDAP Extended Request Defaults"/>
     </links>
 
 </component>
@@ -2249,8 +2249,8 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 
 </component>
 
-<component name="LDAP Extended Request Defaults (ALPHA)" index="&sect-num;.4.13"  width="597" height="545" screenshot="ldapext_defaults.png">
-<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request (ALPHA)"/>.</p>
+<component name="LDAP Extended Request Defaults" index="&sect-num;.4.13"  width="597" height="545" screenshot="ldapext_defaults.png">
+<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
 </description>
 
 </component>
