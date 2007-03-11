@@ -33,7 +33,6 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Created Apr 29 2003 11:52 AM
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class LdapTestSamplerGui extends AbstractSamplerGui {
 	private LoginConfigGui loginPanel;
