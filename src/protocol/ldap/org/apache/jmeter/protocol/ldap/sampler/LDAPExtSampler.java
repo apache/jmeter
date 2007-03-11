@@ -31,7 +31,6 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
-import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.jmeter.config.Argument;
@@ -47,6 +46,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.XMLBuffer;
 import org.apache.log.Logger;
 
 /*******************************************************************************
@@ -58,14 +58,21 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+	/*
+	 * The following strings are used in the test plan, and the values must not be changed
+	 * if test plans are to be upwardly compatible. 
+	 */
 	public final static String SERVERNAME = "servername"; // $NON-NLS-1$
 
 	public final static String PORT = "port"; // $NON-NLS-1$
+	
+	public final static String SECURE = "secure"; // $NON-NLS-1$
 
 	public final static String ROOTDN = "rootdn"; // $NON-NLS-1$
 
 	public final static String TEST = "test"; // $NON-NLS-1$
 
+	// These are values for the TEST attribute above
 	public final static String ADD = "add"; // $NON-NLS-1$
 
 	public final static String MODIFY = "modify"; // $NON-NLS-1$
@@ -76,6 +83,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
 	public final static String DELETE = "delete"; // $NON-NLS-1$
 
+	public final static String SEARCH = "search"; // $NON-NLS-1$
+    // end of TEST values
+	
 	public final static String SEARCHBASE = "search"; // $NON-NLS-1$
 
 	public final static String SEARCHFILTER = "searchfilter"; // $NON-NLS-1$
@@ -105,14 +115,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	public final static String SBIND = "sbind"; // $NON-NLS-1$
 
 	public final static String COMPARE = "compare"; // $NON-NLS-1$
-
-	public final static String SUSERDN = "suser_dn"; // $NON-NLS-1$
-
-	public final static String SUSERPW = "suser_pw"; // $NON-NLS-1$
+	
+	public final static String CONNTO = "connection_timeout"; // $NON-NLS-1$
 
 	public final static String COMPAREDN = "comparedn"; // $NON-NLS-1$
 
 	public final static String COMPAREFILT = "comparefilt"; // $NON-NLS-1$
+
+	public final static String PARSEFLAG = "parseflag"; // $NON-NLS-1$
 
 	public final static String RENAME = "rename"; // $NON-NLS-1$
 
@@ -134,6 +144,31 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 **************************************************************************/
 	public LDAPExtSampler() {
 	}
+
+    public void setConnTimeOut(String connto) {
+        setProperty(new StringProperty(CONNTO, connto));
+    }
+
+    public String getConnTimeOut() {
+        return getPropertyAsString(CONNTO);
+    }
+    
+    public void setSecure(String sec) {
+        setProperty(new StringProperty(SECURE, sec));
+    }
+
+    public boolean isSecure() {
+        return getPropertyAsBoolean(SECURE);
+    }
+
+
+    public boolean isParseFlag() {
+        return getPropertyAsBoolean(PARSEFLAG);
+    }
+
+    public void setParseFlag(String parseFlag) {
+        setProperty(new StringProperty(PARSEFLAG, parseFlag));
+    }
 
 	/***************************************************************************
 	 * Gets the username attribute of the LDAP object
@@ -173,46 +208,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
 	public void setUserPw(String newUserPw) {
 		setProperty(new StringProperty(USERPW, newUserPw));
-	}
-
-	/***************************************************************************
-	 * Gets the username attribute of the LDAP object
-	 * 
-	 * @return The username
-	 **************************************************************************/
-
-	public String getSuserDN() {
-		return getPropertyAsString(SUSERDN);
-	}
-
-	/***************************************************************************
-	 * Sets the username attribute of the LDAP object
-	 * 
-	 * @return The username
-	 **************************************************************************/
-
-	public void setSuserDN(String newUserDN) {
-		setProperty(new StringProperty(SUSERDN, newUserDN));
-	}
-
-	/***************************************************************************
-	 * Gets the password attribute of the LDAP object
-	 * 
-	 * @return The password
-	 **************************************************************************/
-
-	public String getSuserPw() {
-		return getPropertyAsString(SUSERPW);
-	}
-
-	/***************************************************************************
-	 * Gets the password attribute of the LDAP object
-	 * 
-	 * @return The password
-	 **************************************************************************/
-
-	public void setSuserPw(String newUserPw) {
-		setProperty(new StringProperty(SUSERPW, newUserPw));
 	}
 
 	/***************************************************************************
@@ -632,7 +627,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			ctx.close();
 		}
 		res.sampleStart();
-		ctx = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw());
+		ctx = ldap.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
 		res.sampleEnd();
 		ldapContexts.put(getThreadName(), ctx);
 	}
@@ -646,7 +641,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		LdapExtClient ldap_temp;
 		ldap_temp = new LdapExtClient();
 		res.sampleStart();
-		DirContext ctx = ldap_temp.connect(getServername(), getPort(), getRootdn(), getSuserDN(), getSuserPw());
+		DirContext ctx = ldap_temp.connect(getServername(), getPort(), getRootdn(), getUserDN(), getUserPw(),getConnTimeOut(),isSecure());
 		ldap_temp.disconnect(ctx);
 		res.sampleEnd();
 	}
@@ -668,7 +663,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * 
 	 * @return executed time for the bind op
 	 **************************************************************************/
-	private void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
+	private void unbindOp(LdapExtClient ldap, DirContext dirContext, SampleResult res) {
 		res.sampleStart();
 		ldap.disconnect(dirContext);
 		res.sampleEnd();
@@ -685,7 +680,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * @return !ToDo (Return description)
 	 **************************************************************************/
 	public SampleResult sample(Entry e) {
-		String responseData = "<ldapanswer>";
+		XMLBuffer xmlBuffer = new XMLBuffer();
+		xmlBuffer.openTag("ldapanswer");
 		SampleResult res = new SampleResult();
 		res.setResponseData("successfull".getBytes());
 		res.setResponseMessage("Success");
@@ -705,131 +701,121 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		}
 
 		try {
-			log.debug("performing test: " + getPropertyAsString(TEST));
-			if (getPropertyAsString(TEST).equals("unbind")) {
+			xmlBuffer.openTag("operation");
+			final String testType = getPropertyAsString(TEST);
+			xmlBuffer.tag("opertype", testType);
+			log.debug("performing test: " + testType);
+			if (testType.equals("unbind")) {
 				res.setSamplerData("Unbind");
-				responseData = responseData + "<operation><opertype>unbind</opertype>";
-				responseData = responseData + "<baseobj>" + getRootdn() + "</baseobj>";
-				responseData = responseData + "<binddn>" + getUserDN() + "</binddn></operation>";
+				xmlBuffer.tag("baseobj",getRootdn());
+				xmlBuffer.tag("binddn",getUserDN());
 				unbindOp(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals(BIND)) {
-				res.setSamplerData("Bind as " + getUserDN());
-				responseData = responseData + "<operation><opertype>bind</opertype>";
-				responseData = responseData + "<baseobj>" + getRootdn() + "</baseobj>";
-				responseData = responseData + "<binddn>" + getUserDN() + "</binddn></operation>";
+			} else if (testType.equals(BIND)) {
+				res.setSamplerData("Bind as "+getUserDN());
+				xmlBuffer.tag("baseobj",getRootdn());
+				xmlBuffer.tag("binddn",getUserDN());
+				xmlBuffer.tag("connectionTO",getConnTimeOut());
 				bindOp(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals(SBIND)) {
-				res.setSamplerData("SingleBind as " + getSuserDN());
-				responseData = responseData + "<operation><opertype>bind</opertype>";
-				responseData = responseData + "<binddn>" + getSuserDN() + "</binddn></operation>";
+			} else if (testType.equals(SBIND)) {
+				res.setSamplerData("SingleBind as "+getUserDN());
+				xmlBuffer.tag("baseobj",getRootdn());
+				xmlBuffer.tag("binddn",getUserDN());
+				xmlBuffer.tag("connectionTO",getConnTimeOut());
 				singleBindOp(res);
-			} else if (getPropertyAsString(TEST).equals(COMPARE)) {
-				res.setSamplerData("Compare " + getPropertyAsString(COMPAREFILT) + " "
+			} else if (testType.equals(COMPARE)) {
+				res.setSamplerData("Compare "+getPropertyAsString(COMPAREFILT) + " "
 								+ getPropertyAsString(COMPAREDN));
-				responseData = responseData + "<operation><opertype>compare</opertype>";
-				responseData = responseData + "<comparedn>" + getPropertyAsString(COMPAREDN) + "</comparedn>";
-				responseData = responseData + "<comparefilter>" + getPropertyAsString(COMPAREFILT)
-						+ "</comparefilter></operation>";
+				xmlBuffer.tag("comparedn",getPropertyAsString(COMPAREDN));
+				xmlBuffer.tag("comparefilter",getPropertyAsString(COMPAREFILT));
                 res.sampleStart();
                 NamingEnumeration cmp = temp_client.compare(dirContext, getPropertyAsString(COMPAREFILT), getPropertyAsString(COMPAREDN));
                 res.sampleEnd();
 				if (cmp.hasMore()) {
 				} else {
-					res.setResponseCode("49");
+					res.setResponseCode("5");
 					res.setResponseMessage("compareFalse");
 					isSuccessful = false;
 				}
-			} else if (getPropertyAsString(TEST).equals(ADD)) {
+			} else if (testType.equals(ADD)) {
 				res.setSamplerData("Add object " + getPropertyAsString(BASE_ENTRY_DN));
-				responseData = responseData + "<operation><opertype>add</opertype>";
-				responseData = responseData + "<attributes>" + getArguments().toString() + "</attributes>";
-				responseData = responseData + "<dn>" + getPropertyAsString(BASE_ENTRY_DN) + "</dn></operation>";
+				xmlBuffer.tag("attributes",getArguments().toString());
+				xmlBuffer.tag("dn",getPropertyAsString(BASE_ENTRY_DN));
 				addTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals(DELETE)) {
+			} else if (testType.equals(DELETE)) {
 				res.setSamplerData("Delete object " + getPropertyAsString(DELETE));
-				responseData = responseData + "<operation><opertype>delete</opertype>";
-				responseData = responseData + "<dn>" + getPropertyAsString(DELETE) + "</dn></operation>";
+				xmlBuffer.tag("dn",getPropertyAsString(DELETE));
 				deleteTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals(MODIFY)) {
+			} else if (testType.equals(MODIFY)) {
 				res.setSamplerData("Modify object " + getPropertyAsString(BASE_ENTRY_DN));
-				responseData = responseData + "<operation><opertype>modify</opertype>";
-				responseData = responseData + "<dn>" + getPropertyAsString(BASE_ENTRY_DN) + "</dn>";
-				responseData = responseData + "<attributes>" + getLDAPArguments().toString()
-						+ "</attributes></operation>";
+				xmlBuffer.tag("dn",getPropertyAsString(BASE_ENTRY_DN));
+				xmlBuffer.tag("attributes",getLDAPArguments().toString());
 				modifyTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals(RENAME)) {
+			} else if (testType.equals(RENAME)) {
 				res.setSamplerData("ModDN object " + getPropertyAsString(MODDDN) + " to " + getPropertyAsString(NEWDN));
-				responseData = responseData + "<operation><opertype>moddn</opertype>";
-				responseData = responseData + "<dn>" + getPropertyAsString(MODDDN) + "</dn>";
-				responseData = responseData + "<newdn>" + getPropertyAsString(NEWDN) + "</newdn></operation>";
+				xmlBuffer.tag("dn",getPropertyAsString(MODDDN));
+				xmlBuffer.tag("newdn",getPropertyAsString(NEWDN));
 				renameTest(temp_client, dirContext, res);
-			} else if (getPropertyAsString(TEST).equals(SEARCHBASE)) {
+			} else if (testType.equals(SEARCH)) {
                 final String            scopeStr = getPropertyAsString(SCOPE);
-                final int               scope;
+                final int               scope = getPropertyAsInt(SCOPE);
+                final String searchFilter = getPropertyAsString(SEARCHFILTER);
+				final String searchBase = getPropertyAsString(SEARCHBASE);
+				final String timeLimit = getPropertyAsString(TIMELIM);
+				final String countLimit = getPropertyAsString(COUNTLIM);
 
-                res.setSamplerData("Search with filter " + getPropertyAsString(SEARCHFILTER));
-				responseData = responseData + "<operation><opertype>search</opertype>";
-				responseData = responseData + "<searchfilter>" + getPropertyAsString(SEARCHFILTER) + "</searchfilter>";
-				responseData = responseData + "<searchbase>" + getPropertyAsString(SEARCHBASE) + ","
-						+ getPropertyAsString(ROOTDN) + "</searchbase>";
-				responseData = responseData + "<scope>" + getPropertyAsString(SCOPE) + "</scope>";
-				responseData = responseData + "<countlimit>" + getPropertyAsString(COUNTLIM) + "</countlimit>";
-				responseData = responseData + "<timelimit>" + getPropertyAsString(TIMELIM) + "</timelimit>";
-				responseData = responseData + "</operation><searchresult>";
+				res.setSamplerData("Search with filter " + searchFilter);
+				xmlBuffer.tag("searchfilter",searchFilter);
+				xmlBuffer.tag("searchbase",searchBase + "," + getPropertyAsString(ROOTDN));
+				xmlBuffer.tag("scope" , scopeStr);
+				xmlBuffer.tag("countlimit",countLimit);
+				xmlBuffer.tag("timelimit",timeLimit);
+
                 res.sampleStart();
-
-                if ("object".equals(scopeStr)) { // $NON-NLS-1$
-                    scope = SearchControls.OBJECT_SCOPE;
-                } else if ("onelevel".equals(scopeStr)) { // $NON-NLS-1$
-                    scope = SearchControls.ONELEVEL_SCOPE;
-                } else if ("subtree".equals(scopeStr)) { // $NON-NLS-1$
-                    scope = SearchControls.SUBTREE_SCOPE;
-                } else {
-                        // for backwards compatibility
-                    scope = getPropertyAsInt(SCOPE);
-                }
-
-                NamingEnumeration srch = temp_client.searchTest(dirContext, getPropertyAsString(SEARCHBASE), getPropertyAsString(SEARCHFILTER),
-                        scope, getPropertyAsLong(COUNTLIM), getPropertyAsInt(TIMELIM),
-                        getRequestAttributes(getPropertyAsString(ATTRIBS)), getPropertyAsBoolean(RETOBJ),
+                NamingEnumeration srch = temp_client.searchTest(
+                		dirContext, searchBase, searchFilter,
+                        scope, getPropertyAsLong(COUNTLIM),
+                        getPropertyAsInt(TIMELIM),
+                        getRequestAttributes(getPropertyAsString(ATTRIBS)),
+                        getPropertyAsBoolean(RETOBJ),
                         getPropertyAsBoolean(DEREF));
                 res.sampleEnd();
-				while (srch.hasMore()) {
-                    SearchResult sr = (SearchResult) srch.next();
-					responseData = responseData + "<dn>" + sr.getName() + "," + getPropertyAsString(SEARCHBASE) + ","
-							+ getRootdn() + "</dn>";
-					responseData = responseData + "<returnedattr>" + sr.getAttributes().size() + "</returnedattr>";
-                    NamingEnumeration attrlist = sr.getAttributes().getIDs();
-					while (attrlist.hasMore()) {
-						String iets = (String) attrlist.next();
-						responseData = responseData + "<attribute><attributename>" + iets
-								+ "</attributename>";
-						responseData = responseData
-								+ "<attributevalue>"
-								+ sr.getAttributes().get(iets).toString().substring(
-										iets.length() + 2) + "</attributevalue></attribute>";
+
+                if (isParseFlag()) {
+					xmlBuffer.openTag("searchresult");
+					while (srch.hasMore()) {
+						SearchResult sr = (SearchResult) srch.next();
+						xmlBuffer.tag("dn",sr.getName() + "," +searchBase + "," + getRootdn());
+						xmlBuffer.tag("returnedattr",String.valueOf(sr.getAttributes().size()));
+						NamingEnumeration attrlist = sr.getAttributes().getIDs();
+						while (attrlist.hasMore()) {
+							String iets = (String) attrlist.next();
+							xmlBuffer.openTag("attribute");
+            				xmlBuffer.tag("attributename", iets);
+							xmlBuffer.tag("attributevalue",
+								sr.getAttributes().get(iets).toString().substring(iets.length() + 2));
+							xmlBuffer.closeTag("attribute");
+						}
 					}
-				}
-				responseData = responseData + "</searchresult>";
+                }
 			}
 
 		} catch (NamingException ex) {
+			// TODO: tidy this up
 			String returnData = ex.toString();
-			if (returnData.indexOf("LDAP: error code") >= 0) {
-				res.setResponseMessage(returnData.substring(returnData.indexOf("LDAP: error code") + 22, returnData
+			final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
+			if (indexOfLDAPErrCode >= 0) {
+				res.setResponseMessage(returnData.substring(indexOfLDAPErrCode + 21, returnData
 						.indexOf("]")));
-				res.setResponseCode(returnData.substring(returnData.indexOf("LDAP: error code") + 17, returnData
-						.indexOf("LDAP: error code") + 19));
+				res.setResponseCode(returnData.substring(indexOfLDAPErrCode + 17, indexOfLDAPErrCode + 19));
 			} else {
 				res.setResponseMessage(returnData);
 				res.setResponseCode("800"); // $NON-NLS-1$
 			}
 			isSuccessful = false;
 		} finally {
-			responseData = responseData + "<responsecode>" + res.getResponseCode() + "</responsecode>";
-			responseData = responseData + "<responsemessage>" + res.getResponseMessage() + "</responsemessage>";
-			responseData = responseData + "</ldapanswer>";
-			res.setResponseData(responseData.getBytes());
+			xmlBuffer.tag("responsecode",res.getResponseCode());
+			xmlBuffer.tag("responsemessage",res.getResponseMessage());
+			res.setResponseData(xmlBuffer.toString().getBytes());
 			res.setDataType(SampleResult.TEXT);
 			res.setSuccessful(isSuccessful);
 		}

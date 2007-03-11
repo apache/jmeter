@@ -110,6 +110,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41705 - add content-encoding option to HTTP samplers for POST requests</li>
 <li>Bug 40933, 40945 - optional matching of embedded resource URLs</li>
 <li>Bug 41704 - Allow charset encoding to be specified for CSV DataSet</li>
+<li>Bug 40103 - various LDAP enhancements</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
