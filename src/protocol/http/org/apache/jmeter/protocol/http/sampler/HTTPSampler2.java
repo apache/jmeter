@@ -105,6 +105,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     static final String PROXY_PASS = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
     
+    private static final String PROXY_DOMAIN = 
+        JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
+    
     static InetAddress localAddress = null;
     
     private static final String localHost;
@@ -339,7 +342,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 if (PROXY_USER.length() > 0){
                     httpClient.getState().setProxyCredentials(
                         new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
-                        new UsernamePasswordCredentials(PROXY_USER,PROXY_PASS)
+                        new NTCredentials(PROXY_USER,PROXY_PASS,localHost,PROXY_DOMAIN)
                     );
                 }
             }
