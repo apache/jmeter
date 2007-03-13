@@ -177,6 +177,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 </ul>
 </li>
 <li>Bug 40325 - allow specification of proxyuser and proxypassword for WebServiceSampler</li>
+<li>Change HttpClient proxy definition to use NTCredentials; added http.proxyDomain property for this</li>
 </ul>
 
 <h3>Version 2.2</h3>
