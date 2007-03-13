@@ -738,7 +738,7 @@ public class JMeter implements JMeterPlugin {
 		 */
 		public void run() {
 			long now = System.currentTimeMillis();
-			println("Tidying up ... @ "+new Date(now)+" ("+now+")");
+			println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
