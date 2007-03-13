@@ -135,7 +135,8 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>BSF 2.4.0</li>
 <li>commons-collections 3.2</li>
 <li>commons-jexl 1.1</li>
-<li>velocity 1.4</li>
+<li>commons-lang-2.3 (added)</li>
+<li>velocity 1.5</li>
 <li></li>
 </ul>
 

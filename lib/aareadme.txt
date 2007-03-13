@@ -22,6 +22,9 @@ commons-httpclient-3.0.1
 commons-jexl-1.1
 - Jexl function
 
+commons-lang-2.3
+- velocity (Anakia)
+
 commons-logging-1.1
 - httpclient
 
@@ -75,7 +78,7 @@ Tidy
 - org.xml.sax - various
 - XPathUtil (XPath assertion)
 
-velocity-1.4
+velocity-1.5
 - Anakia (create documentation) Not used by JMeter runtime
 
 xalan

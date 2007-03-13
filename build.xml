@@ -296,6 +296,7 @@
     <include name="${commons-collections.jar}"/>
     <include name="${commons-httpclient.jar}"/>
     <include name="${commons-jexl.jar}"/>
+    <include name="${commons-lang.jar}"/>
     <include name="${commons-logging.jar}"/>
     <include name="${excalibur-logger.jar}"/>
     <include name="${excalibur-i18n.jar}"/>
@@ -381,8 +382,9 @@
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
     <pathelement location="${velocity.jar}"/>
-    <pathelement location="${jdom-b9.jar}"/>
+    <pathelement location="${jdom.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${logkit.jar}"/>
   </path>
   
@@ -1124,7 +1126,6 @@ some of its classes - at present JMeter can only run from jar files.
   		<patternset refid="dist.sources"/>
   		<include name="${dest.docs}/api/**"/>
 		<include name="${velocity.jar}"/>
-		<include name="${jdom-b9.jar}/"/>
   	</patternset>
 
 	<!-- Invoke with -Djmeter.version=m.n 
