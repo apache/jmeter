@@ -301,6 +301,8 @@ These are shown below.</p>
                 additional property file(s)
         -t, --testfile {argument}
                 the jmeter test(.jmx) file to run
+        -j, --jmeterlogfile {argument}
+                the jmeter log file
         -l, --logfile {argument}
                 the file to log samples to
         -n, --nongui
