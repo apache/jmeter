@@ -48,6 +48,6 @@ rem Change to script directory
 cd /D %~dp1
 
 rem use same directory to find jmeter script
-"%~dp0"jmeter -n -t "%~nx1" -l "%~n1.jtl" -r
+"%~dp0"jmeter -n -t "%~nx1" -j "%~n1.jtl" -l "%~n1.jtl" -r
 
 :END

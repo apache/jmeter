@@ -414,18 +414,21 @@ public class JMeter implements JMeterPlugin {
 	}
 
 	private void initializeProperties(CLArgsParser parser) {
-		String jmlogfile=""; // TODO finish off
-		if (parser.getArgumentById(JMLOGFILE_OPT) != null){
-			jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
-		}
 		if (parser.getArgumentById(PROPFILE_OPT) != null) {
-			JMeterUtils.getProperties(parser.getArgumentById(PROPFILE_OPT).getArgument());
+			JMeterUtils.loadJMeterProperties(parser.getArgumentById(PROPFILE_OPT).getArgument());
 		} else {
-			JMeterUtils.getProperties(NewDriver.getJMeterDir() + File.separator
+			JMeterUtils.loadJMeterProperties(NewDriver.getJMeterDir() + File.separator
                     + "bin" + File.separator // $NON-NLS-1$
 					+ "jmeter.properties");// $NON-NLS-1$
 		}
 
+		if (parser.getArgumentById(JMLOGFILE_OPT) != null){
+			String jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
+			JMeterUtils.setProperty(LoggingManager.LOG_FILE,jmlogfile);
+		}
+		
+		JMeterUtils.initLogging();
+		JMeterUtils.initLocale();
 		// Bug 33845 - allow direct override of Home dir
 		if (parser.getArgumentById(JMETER_HOME_OPT) == null) {
 			JMeterUtils.setJMeterHome(NewDriver.getJMeterDir());
