@@ -97,6 +97,9 @@ public class JMeter implements JMeterPlugin {
     private static final int PROXY_PASSWORD     = 'a';// $NON-NLS-1$
     private static final int JMETER_HOME_OPT    = 'd';// $NON-NLS-1$
     private static final int HELP_OPT           = 'h';// $NON-NLS-1$
+    // jmeter.log
+    private static final int JMLOGFILE_OPT      = 'j';// $NON-NLS-1$
+    // sample result log file
     private static final int LOGFILE_OPT        = 'l';// $NON-NLS-1$
     private static final int NONGUI_OPT         = 'n';// $NON-NLS-1$
     private static final int PROPFILE_OPT       = 'p';// $NON-NLS-1$
@@ -146,6 +149,8 @@ public class JMeter implements JMeterPlugin {
 					"the jmeter test(.jmx) file to run"),
 			new CLOptionDescriptor("logfile", CLOptionDescriptor.ARGUMENT_REQUIRED, LOGFILE_OPT,
 					"the file to log samples to"),
+			new CLOptionDescriptor("jmeterlogfile", CLOptionDescriptor.ARGUMENT_REQUIRED, JMLOGFILE_OPT,
+					"jmeter run log file (jmeter.log)"),
 			new CLOptionDescriptor("nongui", CLOptionDescriptor.ARGUMENT_DISALLOWED, NONGUI_OPT,
 					"run JMeter in nongui mode"),
 			new CLOptionDescriptor("server", CLOptionDescriptor.ARGUMENT_DISALLOWED, SERVER_OPT,
@@ -409,6 +414,10 @@ public class JMeter implements JMeterPlugin {
 	}
 
 	private void initializeProperties(CLArgsParser parser) {
+		String jmlogfile=""; // TODO finish off
+		if (parser.getArgumentById(JMLOGFILE_OPT) != null){
+			jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
+		}
 		if (parser.getArgumentById(PROPFILE_OPT) != null) {
 			JMeterUtils.getProperties(parser.getArgumentById(PROPFILE_OPT).getArgument());
 		} else {
