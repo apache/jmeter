@@ -95,11 +95,57 @@ public class JMeterUtils implements UnitTestManager {
 	 * even reside in the user space, or in the classpath under
 	 * org.apache.jmeter.jmeter.properties.
 	 * 
+	 * The method also initialises logging and sets up the default Locale
+	 * 
+	 * TODO - perhaps remove?
+	 * [still used 
+	 * 
 	 * @param file
 	 *            the file to load
 	 * @return the Properties from the file
 	 */
 	public static Properties getProperties(String file) {
+		loadJMeterProperties(file);
+		initLogging();
+		initLocale();
+		return appProperties;
+	}
+
+	/**
+	 * Initialise JMeter logging 
+	 */
+	public static void initLogging() {
+		LoggingManager.initializeLogging(appProperties);
+		log = LoggingManager.getLoggerForClass();
+	}
+
+	/**
+	 * Initialise the JMeter Locale
+	 */
+	public static void initLocale() {
+		String loc = appProperties.getProperty("language"); // $NON-NLS-1$
+		if (loc != null) {
+            String []parts = JOrphanUtils.split(loc,"_");// $NON-NLS-1$
+            if (parts.length==2) {
+                setLocale(new Locale(parts[0], parts[1]));              
+            } else {
+    			setLocale(new Locale(loc, "")); // $NON-NLS-1$
+            }
+            
+		} else {
+			setLocale(Locale.getDefault());
+		}
+	}
+
+
+	/**
+	 * Load the JMeter properties file; if not found, then
+	 * default to "org/apache/jmeter/jmeter.properties" from the classpath
+	 * 
+	 * c.f. loadProperties
+	 * 
+	 */
+	public static void loadJMeterProperties(String file) {
 		Properties p = new Properties(System.getProperties());
         InputStream is = null;
 		try {
@@ -121,21 +167,6 @@ public class JMeterUtils implements UnitTestManager {
             JOrphanUtils.closeQuietly(is);            
         }
 		appProperties = p;
-		LoggingManager.initializeLogging(appProperties);
-		log = LoggingManager.getLoggerForClass();
-		String loc = appProperties.getProperty("language"); // $NON-NLS-1$
-		if (loc != null) {
-            String []parts = JOrphanUtils.split(loc,"_");// $NON-NLS-1$
-            if (parts.length==2) {
-                setLocale(new Locale(parts[0], parts[1]));              
-            } else {
-    			setLocale(new Locale(loc, "")); // $NON-NLS-1$
-            }
-            
-		} else {
-			setLocale(Locale.getDefault());
-		}
-		return p;
 	}
 
 	/**
