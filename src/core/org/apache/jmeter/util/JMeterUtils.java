@@ -958,30 +958,6 @@ public class JMeterUtils implements UnitTestManager {
 
 	private static String jmDir;
 
-	// TODO remove
-//	public static final String JMETER = "jmeter"; // $NON-NLS-1$
-//
-//	public static final String ENGINE = "jmeter.engine"; // $NON-NLS-1$
-//
-//	public static final String ELEMENTS = "jmeter.elements"; // $NON-NLS-1$
-//
-//	public static final String GUI = "jmeter.gui"; // $NON-NLS-1$
-//
-//	public static final String UTIL = "jmeter.util"; // $NON-NLS-1$
-//
-//	public static final String CLASSFINDER = "jmeter.util.classfinder"; // $NON-NLS-1$
-//
-//	public static final String TEST = "jmeter.test"; // $NON-NLS-1$
-//
-//	public static final String HTTP = "jmeter.protocol.http"; // $NON-NLS-1$
-//
-//	public static final String JDBC = "jmeter.protocol.jdbc"; // $NON-NLS-1$
-//
-//	public static final String FTP = "jmeter.protocol.ftp"; // $NON-NLS-1$
-//
-//	public static final String JAVA = "jmeter.protocol.java"; // $NON-NLS-1$
-//
-//	public static final String PROPERTIES = "jmeter.elements.properties"; // $NON-NLS-1$
 
 	/**
 	 * Gets the JMeter Version.
@@ -1031,5 +1007,19 @@ public class JMeterUtils implements UnitTestManager {
 	 */
 	public static boolean isExpertMode() {
 		return JMeterUtils.getPropDefault(EXPERT_MODE_PROPERTY, false);
+	}
+	
+	/**
+	 * Find a file in the current directory or in the JMeter bin directory.
+	 * 
+	 * @param fileName
+	 * @return File object
+	 */
+	public static File findFile(String fileName){
+		File f =new File(fileName);
+		if (!f.exists()){
+			f=new File(getJMeterHome()+File.separator+"bin"+fileName); // $NON-NLS-1$
+		}
+		return f;
 	}
 }
