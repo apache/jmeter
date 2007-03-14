@@ -37,7 +37,6 @@ import org.apache.log.Logger;
  * 
  * If the beanshell jar is not present at run-time, an error will be logged
  * 
- * @version $Revision$ Updated on: $Date$
  */
 
 public class BeanShellInterpreter {
@@ -106,7 +105,7 @@ public class BeanShellInterpreter {
 		}
 	}
 
-	public void init(String initFile, Object logger) throws IOException, JMeterException {
+	public void init(final String initFile, final Object logger) throws IOException, JMeterException {
 		if (logger != null) {// Do this before starting the script
 			try {
 				set("log", logger);//$NON-NLS-1$
@@ -116,15 +115,22 @@ public class BeanShellInterpreter {
 			}
 		}
 		if (initFile != null && initFile.length() > 0) {
+			String fileToUse=initFile;
 			// Check file so we can distinguish file error from script error
-			File in = new File(initFile);
-			if (!in.exists()) {
-				throw new FileNotFoundException(initFile);
+			File in = new File(fileToUse);
+			if (!in.exists()){// Cannot find the file locally, so try the bin directory
+				fileToUse=JMeterUtils.getJMeterHome()
+				        +File.separator+"bin" // $NON-NLS-1$
+				        +File.separator+initFile;
+				in = new File(fileToUse);
+				if (!in.exists()) {
+					throw new FileNotFoundException(initFile); // use the original name here
+				}
 			}
 			if (!in.canRead()) {
-				throw new IOException("Cannot read" + initFile);
+				throw new IOException("Cannot read" + fileToUse);
 			}
-			source(initFile);
+			source(fileToUse);
 		}
 	}
 
