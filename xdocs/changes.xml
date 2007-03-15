@@ -126,7 +126,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Replace com.sun.net classes with javax.net</li>
 <li>Extract external jar definitions into build.properties file</li>
 <li>Use specific jar names in build classpaths so errors are detected sooner</li>
-<li>Tidied up ORO calls; now only one cache</li>
+<li>Tidied up ORO calls; now only one cache, size given by oro.patterncache.size, default 1000</li>
 </ul>
 
 <h4>External jar updates:</h4>
