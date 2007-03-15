@@ -265,8 +265,18 @@ jmeter -LDEBUG</pre>
 </subsection>
 <subsection name="2.4.6 Logging and error messages" anchor="logging">
 	<p>If JMeter detects an error, a message will be written to the log file. 
-		The log file name is defined in the jmeter.properties file.
-		It is normally defined as <b>jmeter.log</b>, and will be found in the JMeter startup directory, i.e. bin.
+		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
+		It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
+		[in JMeter 2.2 and earlier, this was forced to be the JMeter bin directory.]
+		</p>
+		<p>
+		JMeter 2.2.1 added a new command-line option, -j jmeterlogfile. 
+		This is processed after the initial properties file is read,
+		and before any further properties are processed. 
+		It therefore allows the default of jmeter.log to be overridden.
+		The jmeter scripts that take a test plan name as a parameter (e.g. jmeter-n.cmd) have been updated
+		to define the log file using the test plan name,
+		e.g. for the test plan Test27.jmx the log file is set to Test27.log.
 		</p>
 		<p>When running on Windows, the file may appear as just <b>jmeter</b> unless you have set Windows to show file extensions.
 		[Which you should do anyway, to make it easier to detect viruses and other nasties that pretend to be text files...]
