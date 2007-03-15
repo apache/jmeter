@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashSet;
@@ -47,9 +48,11 @@ import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.action.ActionNames;
@@ -58,7 +61,9 @@ import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -432,7 +437,26 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @return the initialized test tree GUI
 	 */
 	private JTree makeTree(TreeModel treeModel, JMeterTreeListener treeListener) {
-		JTree treevar = new JTree(treeModel);
+		JTree treevar = new JTree(treeModel) {
+			public String getToolTipText(MouseEvent event) {
+				TreePath path = this.getPathForLocation(event.getX(), event.getY());
+				if (path != null) {
+					Object treeNode = path.getLastPathComponent();
+					if (treeNode instanceof DefaultMutableTreeNode) {
+						Object testElement = ((DefaultMutableTreeNode) treeNode).getUserObject();
+						if (testElement instanceof TestElement) {
+							String comment =
+								((TestElement) testElement).getPropertyAsString(TestPlan.COMMENTS);
+							if (comment != null && comment.length() > 0) {
+								return comment;
+								}
+							}
+						}
+					}
+				return null;
+				}
+			};
+       	treevar.setToolTipText("");
 		treevar.setCellRenderer(getCellRenderer());
 		treevar.setRootVisible(false);
 		treevar.setShowsRootHandles(true);
