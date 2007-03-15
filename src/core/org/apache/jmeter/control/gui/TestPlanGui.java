@@ -23,7 +23,6 @@ import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -59,9 +58,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 
 	/** A panel allowing the user to define variables. */
 	private ArgumentsPanel argsPanel;
-
-	/** A panel to contain comments on the test plan. */
-	private JTextArea commentPanel;
 
     FileListPanel browseJar = null;
 
@@ -115,7 +111,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 			tp.setFunctionalMode(functionalMode.isSelected());
 			tp.setSerialized(serializedMode.isSelected());
 			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
-			tp.setProperty(TestPlan.COMMENTS, commentPanel.getText());
             tp.setTestPlanClasspathArray(browseJar.getFiles());
 		}
 	}
@@ -154,7 +149,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null) {
 			argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue());
 		}
-		commentPanel.setText(el.getPropertyAsString(TestPlan.COMMENTS));
         browseJar.setFiles( ((TestPlan)el).getTestPlanClasspathArray() );
 	}
 
@@ -169,16 +163,6 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		return argsPanel;
 	}
 
-	private Container createCommentPanel() {
-		Container panel = makeTitlePanel();
-		commentPanel = new JTextArea();
-		JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
-		label.setLabelFor(commentPanel);
-		panel.add(label);
-		panel.add(commentPanel);
-		return panel;
-	}
-    
     protected Container createClassPathPanel() {
         browseJar = new FileListPanel(JMeterUtils.getResString("test_plan_classpath_browse"), ".jar");
         return browseJar;
@@ -191,7 +175,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		setLayout(new BorderLayout(10, 10));
 		setBorder(makeBorder());
 
-		add(createCommentPanel(), BorderLayout.NORTH);
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
 		add(createVariablePanel(), BorderLayout.CENTER);
 

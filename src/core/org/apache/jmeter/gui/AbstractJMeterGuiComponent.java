@@ -33,6 +33,7 @@ import javax.swing.tree.TreeNode;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -71,6 +72,8 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	/** A GUI panel containing the name of this component. */
 	protected NamePanel namePanel;
 
+	private CommentPanel commentPanel;
+
 	/**
 	 * When constructing a new component, this takes care of basic tasks like
 	 * setting up the Name Panel and assigning the class's static label as the
@@ -78,6 +81,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	 */
 	public AbstractJMeterGuiComponent() {
 		namePanel = new NamePanel();
+		commentPanel=new CommentPanel();
 		setName(getStaticLabel());
 	}
 
@@ -129,6 +133,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		return namePanel;
 	}
 
+	private CommentPanel getCommentPanel(){
+		return commentPanel;
+	}
 	/**
 	 * Provides a label containing the title for the component. Subclasses
 	 * typically place this label at the top of their GUI. The title is set to
@@ -167,6 +174,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		} else {
 			enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
 		}
+		getCommentPanel().setText(element.getPropertyAsString(TestPlan.COMMENTS));
 	}
 
 	/**
@@ -201,6 +209,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		// This stores the state of the TestElement
 		log.debug("setting element to enabled: " + enabled);
 		mc.setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+		mc.setProperty(TestPlan.COMMENTS, getCommentPanel().getText());
 	}
 
 	/**
@@ -231,7 +240,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	protected Container makeTitlePanel() {
 		VerticalPanel titlePanel = new VerticalPanel();
 		titlePanel.add(createTitleLabel());
-		titlePanel.add(getNamePanel());
+		VerticalPanel contentPanel = new VerticalPanel();
+		contentPanel.setBorder(BorderFactory.createEtchedBorder());
+		contentPanel.add(getNamePanel());
+		contentPanel.add(getCommentPanel());
+		titlePanel.add(contentPanel);
 		return titlePanel;
 	}
 
