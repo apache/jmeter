@@ -161,7 +161,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 
 		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
 		// NAME
 		mainPanel.add(makeTitlePanel());
