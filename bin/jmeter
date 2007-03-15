@@ -64,7 +64,7 @@ NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
 TENURING="-XX:MaxTenuringThreshold=2"
 
 # This evacuation ratio is OK (see the comments for SURVIVOR) during test
-# runs -- no so sure about operations that bring a lot of long-lived information into
+# runs -- not so sure about operations that bring a lot of long-lived information into
 # memory in a short period of time, such as loading tests or listener data files.
 # Increase it if you experience OutOfMemory problems during those operations
 # without having gone through a lot of Full GC-ing just before the OOM:
@@ -78,7 +78,7 @@ RMIGC="-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=60
 PERM="-XX:PermSize=64m -XX:MaxPermSize=64m"
 
 # Finally, some tracing to help in case things go astray:
-DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
+#DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
 
 SERVER="-server"
 
