@@ -1797,7 +1797,7 @@ The BeanShell Listener allows the use of BeanShell for processing samples for sa
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.15"  width="762" height="217" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.15"  width="643" height="255" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -1813,9 +1813,10 @@ the Report.
 <ul>
 <li>Label - The label of the sample.</li>
 <li># Samples - The number of samples for the URL</li>
-<li>Average - The average time of a set of results</li>
-<li>Min - The lowest time for the samples of the given URL</li>
-<li>Max - The longest time for the samples of the given URL</li>
+<li>Average - The average elapsed time of a set of results</li>
+<li>Min - The lowest elapsed time for the samples of the given URL</li>
+<li>Max - The longest elapsed time for the samples of the given URL</li>
+<li>Std. Dev. - the standard deviation of the sample elapsed time</li>
 <li>Error % - Percent of requests with errors</li>
 <li>Throughput - Throughput measured in requests per second/minute/hour</li>
 <li>Kb/sec - The throughput measured in Kilobytes per second</li>

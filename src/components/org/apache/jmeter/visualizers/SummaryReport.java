@@ -55,6 +55,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
             JMeterUtils.getResString("average"),                     //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_min"),        //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_max"),        //$NON-NLS-1$
+            JMeterUtils.getResString("aggregate_report_stddev"),     //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_error%"),     //$NON-NLS-1$
             JMeterUtils.getResString("aggregate_report_rate"),       //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_bandwidth"),  //$NON-NLS-1$
@@ -80,6 +81,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
 		    null, // Mean
 		    null, // Min
 		    null, // Max
+		    new NumberRenderer("#0.00"), // Std Dev.
 		    new NumberRenderer("#0.00%"), // Error %age
 		    new RateRenderer("#.0"),      // Throughpur
 		    new NumberRenderer("#0.00"),  // kB/sec
@@ -96,14 +98,15 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
     				new Functor("getMeanAsNumber"),       //$NON-NLS-1$
                     new Functor("getMin"),                //$NON-NLS-1$
                     new Functor("getMax"),                //$NON-NLS-1$
+                    new Functor("getStandardDeviation"),                //$NON-NLS-1$
                     new Functor("getErrorPercentage"),    //$NON-NLS-1$
                     new Functor("getRate"),               //$NON-NLS-1$
     				new Functor("getKBPerSecond"),        //$NON-NLS-1$
                     new Functor("getPageSize"),           //$NON-NLS-1$
                 },
-                new Functor[] { null, null, null, null, null, null, null, null , null }, 
-                new Class[] { String.class, Long.class, Long.class, Long.class,
-                              Long.class, String.class, String.class, String.class, String.class });
+                new Functor[] { null, null, null, null, null, null, null, null , null, null }, 
+                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
+                              String.class, String.class, String.class, String.class, String.class });
 		clear();
 		init();
 	}
