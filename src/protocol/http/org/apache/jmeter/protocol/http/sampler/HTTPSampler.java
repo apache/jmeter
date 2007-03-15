@@ -56,7 +56,8 @@ import org.apache.log.Logger;
 public class HTTPSampler extends HTTPSamplerBase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final int MAX_CONN_RETRIES = 10; // Maximum connection retries
+	private static final int MAX_CONN_RETRIES = 
+		JMeterUtils.getPropDefault("http.java.sampler.retries",10); // Maximum connection retries
 
 	private static final byte[] NULL_BA = new byte[0];// can share these
 	
