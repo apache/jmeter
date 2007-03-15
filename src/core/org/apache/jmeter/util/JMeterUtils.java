@@ -62,7 +62,9 @@ import org.xml.sax.XMLReader;
 public class JMeterUtils implements UnitTestManager {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+	private static PatternCacheLRU patternCache = new PatternCacheLRU(
+			getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
+			new Perl5Compiler());
 
 	private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
 
