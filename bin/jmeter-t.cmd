@@ -33,10 +33,12 @@ goto END
 :WinNT
 
 rem Start in directory with JMX file
-cd /d %~dp1
+pushd %~dp1
 
 rem Prepend the directory in which this script resides in case not on path
 
-"%~dp0"jmeter -t "%~nx1"
+call "%~dp0"jmeter -j "%~n1.log" -t "%~nx1"
+
+popd
 
 :END

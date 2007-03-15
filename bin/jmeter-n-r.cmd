@@ -45,9 +45,11 @@ goto :EOF
 :winNT3
 
 rem Change to script directory
-cd /D %~dp1
+pushd %~dp1
 
 rem use same directory to find jmeter script
-"%~dp0"jmeter -n -t "%~nx1" -j "%~n1.jtl" -l "%~n1.jtl" -r
+call "%~dp0"jmeter -n -t "%~nx1" -j "%~n1.log" -l "%~n1.jtl" -r
+
+popd
 
 :END
