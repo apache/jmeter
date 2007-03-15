@@ -125,9 +125,21 @@ variable in a test element is done by bracketing the variable name with '${' and
 <p>Built-in functions are written in the same manner, but by convention, the names of built-in
 functions begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
 configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
-be left out.  A further complication for argument values that themselves contain commas is that the value
-should be escaped as necessary.  Thus, if you need to include a comma in your parameter value, escape it like so: '\,'.  JMeter provides a tool to help you construct
-function calls for various built-in functions, which you can then copy-paste.  It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
+be left out.</p>
+
+<p>Argument values that themselves contain commas should be escaped as necessary.
+If you need to include a comma in your parameter value, escape it like so: '\,'.
+This applies for example to the scripting functions - Javascript, Beanshell, Jexl - where it is necessary to escape any commas
+that may be needed in script method calls - e.g.
+</p>
+<pre>
+    ${__BeanShell(vars.put("name"\,"value"))}
+</pre>
+<p>
+JMeter provides a tool to help you construct
+function calls for various built-in functions, which you can then copy-paste. 
+It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
+
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
 variable will override the built-in function.</note>
 </subsection>
