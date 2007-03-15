@@ -119,6 +119,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 39864 - BeanShell init files now found from currrent or bin directory</li>
 <li>New -j option to easily change jmeter log file</li>
 <li>Bug 41259 - Comment field added to all test elements</li>
+<li>Add standard deviation to Summary Report</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
