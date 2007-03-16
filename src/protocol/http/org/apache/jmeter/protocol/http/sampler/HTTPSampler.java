@@ -59,6 +59,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 	private static final int MAX_CONN_RETRIES = 
 		JMeterUtils.getPropDefault("http.java.sampler.retries",10); // Maximum connection retries
 
+	static {
+		log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
+	}
+	
 	private static final byte[] NULL_BA = new byte[0];// can share these
 	
 	/**
