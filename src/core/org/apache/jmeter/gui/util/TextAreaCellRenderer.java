@@ -26,21 +26,24 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * @author mstover
- * @version $Revision$
  */
 public class TextAreaCellRenderer implements TableCellRenderer {
 
 	private JTextArea rend = new JTextArea("");
 
-	public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4,
-			int arg5) {
-		rend = new JTextArea(arg1.toString());
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		rend = new JTextArea(value.toString());
+		// Use two rows, so that we have room for horisontal scrollbar, if the text is one long line. Fix for 40371
+		// This is not an optimal solution, but makes it possible to see the line if it is long
+		rend.setRows(2);
 		rend.revalidate();
-		if (!arg3 && !arg2) {
+		if (!hasFocus && !isSelected) {
 			rend.setBackground(JMeterColor.LAVENDER);
 		}
-		if (arg0.getRowHeight(arg4) < getPreferredHeight()) {
-			arg0.setRowHeight(arg4, getPreferredHeight());
+		if (table.getRowHeight(row) < getPreferredHeight()) {
+			table.setRowHeight(row, getPreferredHeight());
 		}
 		return rend;
 	}
