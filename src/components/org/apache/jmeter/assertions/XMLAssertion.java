@@ -53,7 +53,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 	 */
 	public AssertionResult getResult(SampleResult response) {
 		// no error as default
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		byte[] responseData = response.getResponseData();
 		if (responseData.length == 0) {
 			return result.setResultForNull();

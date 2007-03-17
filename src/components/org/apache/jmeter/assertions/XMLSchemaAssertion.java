@@ -63,7 +63,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 	 * 
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		// Note: initialised with error = failure = false
 
 		byte data[] = response.getResponseData();

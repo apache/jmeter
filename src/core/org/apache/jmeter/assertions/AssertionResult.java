@@ -22,11 +22,13 @@ import java.io.Serializable;
 
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class AssertionResult implements Serializable {
-	public static final String RESPONSE_WAS_NULL = "Response was null";
+	public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$
 
+	/** Name of the assertion. */
+	private String name;
+	
 	/** True if the assertion failed. */
 	private boolean failure;
 
@@ -39,10 +41,39 @@ public class AssertionResult implements Serializable {
 	/**
 	 * Create a new Assertion Result. The result will indicate no failure or
 	 * error.
+	 * @deprecated - use the named constructor
 	 */
-	public AssertionResult() {
+	AssertionResult() {
+	}
+	
+	/**
+	 * Create a new Assertion Result. The result will indicate no failure or
+	 * error.
+	 * 
+	 * @param name the name of the assertion
+	 */
+	public AssertionResult(String name) {
+		setName(name);
+	}
+	
+	/**
+	 * Get the name of the assertion
+	 * 
+	 * @return the name of the assertion
+	 */
+	public String getName() {
+		return name;
 	}
 
+	/**
+	 * Set the name of the assertion
+	 * 
+	 * @param name the name of the assertion
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	/**
 	 * Check if the assertion failed. If it failed, the failure message may give
 	 * more details about the failure.
@@ -132,4 +163,7 @@ public class AssertionResult implements Serializable {
 		return this;
 	}
 
+	public String toString() {
+		return getName() != null ? getName() : super.toString();
+	}
 }

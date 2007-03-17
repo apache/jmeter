@@ -43,7 +43,7 @@ public class DurationAssertion extends AbstractTestElement implements Serializab
 	 * AssertionResult will reflect the success of the Sample.
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
 		long duration=getAllowedDuration();
 		if (duration > 0) {

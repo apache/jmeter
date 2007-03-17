@@ -120,6 +120,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>New -j option to easily change jmeter log file</li>
 <li>Bug 41259 - Comment field added to all test elements</li>
 <li>Add standard deviation to Summary Report</li>
+<li>Bug 41873 - Add name to AssertionResult and display AssertionResult in ViewResultsFullVisualizer</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>

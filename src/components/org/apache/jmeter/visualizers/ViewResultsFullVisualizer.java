@@ -70,6 +70,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
@@ -144,9 +145,13 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 	private JScrollPane resultsScrollPane;
 
+	private JPanel resultsPane;
+
 	private JLabel imageLabel;
 
 	private JTextArea sampleDataField;
+	
+	private JPanel requestPane;
 
 	private JRadioButton textButton;
 
@@ -158,6 +163,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 	private JTree jTree;
 
+	private JTabbedPane rightSide;
+	
 	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
 	        JMeterUtils.getPropDefault("viewResultsTree.success", "icon_success_sml.gif"));
 
@@ -187,9 +194,21 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		if (log.isDebugEnabled()) {
 			log.debug("updateGui1 : sample result - " + res);
 		}
+		// Add sample
 		DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
 		treeModel.insertNodeInto(currNode, root, root.getChildCount());
 		addSubResults(currNode, res);
+		// Add any assertion that failed as children of the sample node
+		AssertionResult assertionResults[] = res.getAssertionResults();
+		int assertionIndex = 0;
+		for (int j = 0; j < assertionResults.length; j++) {
+			AssertionResult item = assertionResults[j];
+			
+			if (item.isFailure() || item.isError()) {
+				DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(item);
+				treeModel.insertNodeInto(assertionNode, currNode, assertionIndex++);
+			}
+		}			
 
 		if (root.getChildCount() == 1) {
 			jTree.expandPath(new TreePath(root));
@@ -266,88 +285,114 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 			sampleDataField.setText(""); // $NON-NLS-1$
 			results.setText(""); // $NON-NLS-1$
 			if (node != null) {
-				SampleResult res = (SampleResult) node.getUserObject();
+				Object userObject = node.getUserObject();
+				if(userObject instanceof SampleResult) {					
+					SampleResult res = (SampleResult) userObject;
+					
+					// We are displaying a SampleResult
+					setupTabPaneForSampleResult();
 
-				if (log.isDebugEnabled()) {
-					log.debug("valueChanged1 : sample result - " + res);
+					if (log.isDebugEnabled()) {
+						log.debug("valueChanged1 : sample result - " + res);
+					}
+
+					if (res != null) {
+						// load time label
+
+						log.debug("valueChanged1 : load time - " + res.getTime());
+						String sd = res.getSamplerData();
+						if (sd != null) {
+							String rh = res.getRequestHeaders();
+							if (rh != null) {
+								StringBuffer sb = new StringBuffer(sd.length() + rh.length()+20);
+								sb.append(sd);
+								sb.append("\nRequest Headers:\n");
+								sb.append(rh);
+								sd = sb.toString();
+							}
+							sampleDataField.setText(sd);
+						}
+
+						statsDoc.insertString(statsDoc.getLength(), "Thread Name: " + res.getThreadName() + "\n", null);
+						String startTime = new Date(res.getStartTime()).toString();
+						statsDoc.insertString(statsDoc.getLength(), "Sample Start: " + startTime + "\n", null);
+						statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null);
+
+						String responseCode = res.getResponseCode();
+						log.debug("valueChanged1 : response code - " + responseCode);
+
+						int responseLevel = 0;
+						if (responseCode != null) {
+							try {
+								responseLevel = Integer.parseInt(responseCode) / 100;
+							} catch (NumberFormatException numberFormatException) {
+								// no need to change the foreground color
+							}
+						}
+
+						Style style = null;
+						switch (responseLevel) {
+						case 3:
+							style = statsDoc.getStyle(STYLE_REDIRECT);
+							break;
+						case 4:
+							style = statsDoc.getStyle(STYLE_CLIENT_ERROR);
+							break;
+						case 5:
+							style = statsDoc.getStyle(STYLE_SERVER_ERROR);
+							break;
+						}
+						statsDoc.insertString(statsDoc.getLength(), "HTTP response code: " + responseCode + "\n", style);
+
+						// response message label
+						String responseMsgStr = res.getResponseMessage();
+
+						log.debug("valueChanged1 : response message - " + responseMsgStr);
+						statsDoc.insertString(statsDoc.getLength(), "HTTP response message: " + responseMsgStr + "\n", null);
+
+						statsDoc.insertString(statsDoc.getLength(), "\nHTTP response headers:\n" + res.getResponseHeaders() + "\n", null);
+
+						// get the text response and image icon
+						// to determine which is NOT null
+						if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null)
+																			// is OK
+						{
+							String response = getResponseAsString(res);
+							if (command.equals(TEXT_COMMAND)) {
+								showTextResponse(response);
+							} else if (command.equals(HTML_COMMAND)) {
+								showRenderedResponse(response, res);
+							} else if (command.equals(XML_COMMAND)) {
+								showRenderXMLResponse(response);
+							}
+						} else {
+							byte[] responseBytes = res.getResponseData();
+							if (responseBytes != null) {
+								showImage(new ImageIcon(responseBytes));
+							}
+						}
+					}
 				}
-
-				if (res != null) {
-					// load time label
-
-					log.debug("valueChanged1 : load time - " + res.getTime());
-                    String sd=res.getSamplerData();
-					if (sd != null) {
-						String rh = res.getRequestHeaders();
-						if (rh != null) {
-                            StringBuffer sb = new StringBuffer(sd.length()+rh.length()+20);
-                            sb.append(sd);
-                            sb.append("\nRequest Headers:\n");
-                            sb.append(rh);
-							sd = sb.toString();
-                        }
-						sampleDataField.setText(sd);
-                    }
-
-					statsDoc.insertString(statsDoc.getLength(), "Thread Name: "+res.getThreadName()+"\n", null);
-                    String startTime = new Date(res.getStartTime()).toString();
-                    statsDoc.insertString(statsDoc.getLength(), "Sample Start: "+startTime+"\n", null);
-					statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null);
-
-					String responseCode = res.getResponseCode();
-					log.debug("valueChanged1 : response code - " + responseCode);
-
-					int responseLevel = 0;
-					if (responseCode != null) {
-						try {
-							responseLevel = Integer.parseInt(responseCode) / 100;
-						} catch (NumberFormatException numberFormatException) {
-							// no need to change the foreground color
-						}
+				else if(userObject instanceof AssertionResult) {
+					AssertionResult res = (AssertionResult) userObject;
+					
+					// We are displaying an AssertionResult
+					setupTabPaneForAssertionResult();
+					
+					if (log.isDebugEnabled()) {
+						log.debug("valueChanged1 : sample result - " + res);
 					}
 
-					Style style = null;
-					switch (responseLevel) {
-					case 3:
-						style = statsDoc.getStyle(STYLE_REDIRECT);
-						break;
-					case 4:
-						style = statsDoc.getStyle(STYLE_CLIENT_ERROR);
-						break;
-					case 5:
-						style = statsDoc.getStyle(STYLE_SERVER_ERROR);
-						break;
-					}
-					statsDoc.insertString(statsDoc.getLength(), "HTTP response code: " + responseCode + "\n", style);
-
-					// response message label
-					String responseMsgStr = res.getResponseMessage();
-
-					log.debug("valueChanged1 : response message - " + responseMsgStr);
-					statsDoc
-							.insertString(statsDoc.getLength(), "HTTP response message: " + responseMsgStr + "\n", null);
-
-					statsDoc.insertString(statsDoc.getLength(), "\nHTTP response headers:\n" + res.getResponseHeaders()
-							+ "\n", null);
-
-					// get the text response and image icon
-					// to determine which is NOT null
-					if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null)
-																		// is OK
-					{
-						String response = getResponseAsString(res);
-						if (command.equals(TEXT_COMMAND)) {
-							showTextResponse(response);
-						} else if (command.equals(HTML_COMMAND)) {
-							showRenderedResponse(response, res);
-						} else if (command.equals(XML_COMMAND)) {
-							showRenderXMLResponse(response);
-						}
-					} else {
-						byte[] responseBytes = res.getResponseData();
-						if (responseBytes != null) {
-							showImage(new ImageIcon(responseBytes));
-						}
+					if (res != null) {
+						statsDoc.insertString(statsDoc.getLength(),
+								"Assertion error: " + res.isError() + "\n",
+								null);
+						statsDoc.insertString(statsDoc.getLength(),
+								"Assertion failure: " + res.isFailure() + "\n",
+								null);
+						statsDoc.insertString(statsDoc.getLength(),
+								"Assertion failure message : " + res.getFailureMessage() + "\n",
+								null);
 					}
 				}
 			}
@@ -600,14 +645,41 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		add(makeTitlePanel(), BorderLayout.NORTH);
 
 		Component leftSide = createLeftPanel();
-		JTabbedPane rightSide = new JTabbedPane();
-
+		rightSide = new JTabbedPane();
+		// Add the common tab
 		rightSide.addTab(JMeterUtils.getResString("view_results_tab_sampler"), createResponseMetadataPanel()); // $NON-NLS-1$
-		rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), createRequestPanel()); // $NON-NLS-1$
-		rightSide.addTab(JMeterUtils.getResString("view_results_tab_response"), createResponseDataPanel()); // $NON-NLS-1$
+		// Create the panels for the other tabs
+		requestPane = createRequestPanel();
+		resultsPane = createResponseDataPanel();
 
 		JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
 		add(mainSplit, BorderLayout.CENTER);
+	}
+	
+	private void setupTabPaneForSampleResult() {
+		// Set the title for the first tab
+		rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_sampler"));
+		// Add the other tabs if not present
+		if(rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_request")) < 0) { // $NON-NLS-1$
+			rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), requestPane); // $NON-NLS-1$
+		}
+		if(rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_response")) < 0) { // $NON-NLS-1$
+			rightSide.addTab(JMeterUtils.getResString("view_results_tab_response"), resultsPane); // $NON-NLS-1$
+		}
+	}
+	
+	private void setupTabPaneForAssertionResult() {
+		// Set the title for the first tab
+		rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_assertion"));
+		// Remove the other tabs if present
+		int requestTabIndex = rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_request")); // $NON-NLS-1$
+		if(requestTabIndex >= 0) {
+			rightSide.removeTabAt(requestTabIndex);
+		}
+		int responseTabIndex = rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_response")); // $NON-NLS-1$
+		if(responseTabIndex >= 0) {
+			rightSide.removeTabAt(responseTabIndex);
+		}
 	}
 
 	private Component createLeftPanel() {
@@ -651,7 +723,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		return pane;
 	}
 
-	private Component createRequestPanel() {
+	private JPanel createRequestPanel() {
 		sampleDataField = new JTextArea();
 		sampleDataField.setEditable(false);
 		sampleDataField.setLineWrap(true);
@@ -662,7 +734,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		return pane;
 	}
 
-	private Component createResponseDataPanel() {
+	private JPanel createResponseDataPanel() {
 		results = new JEditorPane();
 		results.setEditable(false);
 
@@ -680,7 +752,18 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
 				boolean leaf, int row, boolean focus) {
 			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focus);
-			if (!((SampleResult) ((DefaultMutableTreeNode) value).getUserObject()).isSuccessful()) {
+			boolean failure = true;
+			Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
+			if(userObject instanceof SampleResult) {
+				failure = !(((SampleResult) userObject).isSuccessful());
+			}
+			else if(userObject instanceof AssertionResult) {
+				AssertionResult assertion = (AssertionResult) userObject;
+				failure =  assertion.isError() || assertion.isFailure();
+			}
+			
+			// Set the status for the node
+			if (failure) {
 				this.setForeground(Color.red);
 				this.setIcon(imageFailure);
 			} else {
