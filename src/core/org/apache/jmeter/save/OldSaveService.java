@@ -602,7 +602,7 @@ public final class OldSaveService {
 	}
 
 	public static AssertionResult getAssertionResult(Configuration config) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(""); //TODO provide proper name?
 		result.setError(config.getAttributeAsBoolean(ERROR, false));
 		result.setFailure(config.getAttributeAsBoolean(FAILURE, false));
 		result.setFailureMessage(config.getAttribute(FAILURE_MESSAGE, ""));
