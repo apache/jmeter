@@ -1534,6 +1534,7 @@ some of its classes - at present JMeter can only run from jar files.
    	 	    <fileset dir="${batchtest.out}">
    	             <include name="${batchtest.name}.csv"/>
    	             <include name="${batchtest.name}.xml"/>
+  	             <include name="${batchtest.name}.log"/>
    	 	    </fileset>
    	     </delete>
    	   	</sequential>
@@ -1563,6 +1564,8 @@ some of its classes - at present JMeter can only run from jar files.
        <sysproperty key="java.awt.headless" value="${test.headless}"/>
        <arg value="-n"/>
        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
+        <arg value="-j"/>
+        <arg value="${batchtest.name}.log"/>
      </java>
 
   	<checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
