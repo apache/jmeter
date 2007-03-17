@@ -98,15 +98,27 @@ public class Proxy extends Thread {
 	 * Main processing method for the Proxy object
 	 */
 	public void run() {
-		HttpRequestHdr request = new HttpRequestHdr();
+		// Check which HTTPSampler class we should use
+		String httpSamplerName = HTTPSamplerFactory.DEFAULT_CLASSNAME;
+		if(target.getSamplerTypeName() == ProxyControl.SAMPLER_TYPE_HTTP_SAMPLER) {
+			httpSamplerName = HTTPSamplerFactory.HTTP_SAMPLER_JAVA;
+		}
+		else if(target.getSamplerTypeName() == ProxyControl.SAMPLER_TYPE_HTTP_SAMPLER2) {
+			httpSamplerName = HTTPSamplerFactory.HTTP_SAMPLER_APACHE;
+		}
+		// Instantiate the sampler
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(httpSamplerName);
+		
+		HttpRequestHdr request = new HttpRequestHdr(sampler);
 		SampleResult result = null;
 		HeaderManager headers = null;
 
-		HTTPSamplerBase sampler = null;
 		try {
 			request.parse(new BufferedInputStream(clientSocket.getInputStream()));
 
-			sampler = request.getSampler();
+			// Populate the sampler. It is the same sampler as we sent into
+			// the constructor of the HttpRequestHdr instance above 
+			request.getSampler();
 
 			/*
 			 * Create a Header Manager to ensure that the browsers headers are
@@ -146,9 +158,9 @@ public class Proxy extends Thread {
 			log.error("", e);
 			writeErrorToClient(HttpReplyHdr.formTimeout());
 		} finally {
-            if (sampler == null){
-                sampler = HTTPSamplerFactory.newInstance();
-            }
+			if (log.isDebugEnabled()) {
+				log.debug("Will deliver sample " + sampler.getName());
+			}
 			target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
 			try {
 				clientSocket.close();
