@@ -254,7 +254,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	AssertionResult evaluateResponse(SampleResult response) {
 		boolean pass = true;
 		boolean not = (NOT & getTestType()) > 0;
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		String toCheck = ""; // The string to check (Url or data)
 
 		if (getAssumeSuccess()) {

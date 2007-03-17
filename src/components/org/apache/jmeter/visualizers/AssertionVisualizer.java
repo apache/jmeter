@@ -74,6 +74,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 
 				if (item.isFailure() || item.isError()) {
 					display.append("\n\t"); // $NON-NLS-1$
+					display.append(item.getName() != null ? item.getName() + " : " : "");
 					display.append(item.getFailureMessage());
 				}
 			}
