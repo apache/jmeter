@@ -581,7 +581,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             
             if (instream != null) {// will be null for HEAD
             
-                Header responseHeader = httpMethod.getResponseHeader(TRANSFER_ENCODING);
+                Header responseHeader = httpMethod.getResponseHeader(HEADER_CONTENT_ENCODING);
                 if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
                     instream = new GZIPInputStream(instream);
                 }
