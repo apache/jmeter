@@ -27,4 +27,4 @@ export CLASSPATH
 rmiregistry $SERVER_PORT &
 set CLASSPATH=$OLDCLASSPATH
 export CLASSPATH
-`dirname $0`/jmeter -Dserver_port=${SERVER_PORT:-1099} -s "$@"
+`dirname $0`/jmeter -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"
