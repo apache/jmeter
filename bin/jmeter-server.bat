@@ -85,12 +85,12 @@ rem and for NT handling to skip to.
 
 if not "%SERVER_PORT%" == "" goto port
 
-call jmeter -s %JMETER_CMD_LINE_ARGS%
+call jmeter -s -j jmeter-server.log %JMETER_CMD_LINE_ARGS%
 goto end
 
 
 :port
-call jmeter -Dserver_port=%SERVER_PORT% -s %JMETER_CMD_LINE_ARGS%
+call jmeter -Dserver_port=%SERVER_PORT% -s -j jmeter-server.log %JMETER_CMD_LINE_ARGS%
 
 :end
 
