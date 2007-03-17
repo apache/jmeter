@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.control.gui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * HTTP Sampler GUI for Apache HTTPClient HTTP implementation
@@ -38,9 +39,10 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
 	}
 
 	public String getStaticLabel() {
-		return super.getStaticLabel() + " HTTPClient"; // $NON-NLS-1$
+		return JMeterUtils.getResString("web_testing2_title");
 	}
 
+    // Documentation is shared with our parent
     public String getDocAnchor() {
         return super.getStaticLabel().replace(' ', '_'); // $NON-NLS-1$  // $NON-NLS-2$
     }
