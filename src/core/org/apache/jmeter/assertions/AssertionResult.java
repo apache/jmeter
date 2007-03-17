@@ -43,7 +43,7 @@ public class AssertionResult implements Serializable {
 	 * error.
 	 * @deprecated - use the named constructor
 	 */
-	AssertionResult() {
+	public AssertionResult() { // Needs to be public for tests
 	}
 	
 	/**
