@@ -61,6 +61,10 @@ public class JsseSSLManager extends SSLManager {
 
 	private static final String HTTPS = "https"; // $NON-NLS-1$
 
+	// Temporary fix to allow default protocol to be changed
+	private static final String DEFAULT_SSL_PROTOCOL = 
+		JMeterUtils.getPropDefault("https.default.protocol","TLS"); // $NON-NLS-1$ // $NON-NLS-2$
+
 	/**
 	 * Cache the SecureRandom instance because it takes a long time to create
 	 */
@@ -134,9 +138,9 @@ public class JsseSSLManager extends SSLManager {
 		if (null == this.context) {
 			try {
 				if (pro != null) {
-					this.context = SSLContext.getInstance("TLS", pro); // $NON-NLS-1$
+					this.context = SSLContext.getInstance(DEFAULT_SSL_PROTOCOL, pro); // $NON-NLS-1$
 				} else {
-					this.context = SSLContext.getInstance("TLS"); // $NON-NLS-1$
+					this.context = SSLContext.getInstance(DEFAULT_SSL_PROTOCOL); // $NON-NLS-1$
 				}
 				log.debug("SSL context = " + context);
 			} catch (Exception ee) {
