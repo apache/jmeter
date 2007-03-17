@@ -96,7 +96,7 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 	 * @see org.apache.jmeter.assertions.Assertion#getResult(org.apache.jmeter.samplers.SampleResult)
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 
 		if (bshInterpreter == null) {
 			result.setFailure(true);

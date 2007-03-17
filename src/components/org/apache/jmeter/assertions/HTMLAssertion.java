@@ -75,7 +75,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 		log.debug("HTMLAssertions.getResult() called");
 
 		// no error as default
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 
 		if (inResponse.getResponseData().length == 0) {
 			return result.setResultForNull();

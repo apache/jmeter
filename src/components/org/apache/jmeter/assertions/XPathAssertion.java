@@ -69,7 +69,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 	 */
 	public AssertionResult getResult(SampleResult response) {
 		// no error as default
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		byte[] responseData = response.getResponseData();
 		if (responseData.length == 0) {
 			return result.setResultForNull();

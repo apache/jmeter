@@ -64,7 +64,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	 * AssertionResult will reflect the success of the Sample.
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
 		resultData = response.getResponseData();
 		long resultSize = resultData.length;
