@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 /**
  * Renders items in a JTable right-aligned
  */
-class RightAlignRenderer extends DefaultTableCellRenderer {
+public class RightAlignRenderer extends DefaultTableCellRenderer {
     public RightAlignRenderer() {
     	super();
     	setHorizontalAlignment(JLabel.RIGHT);
