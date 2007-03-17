@@ -54,7 +54,6 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
@@ -189,6 +188,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     protected static final String KEEP_ALIVE = "keep-alive"; // $NON-NLS-1$
 
     protected static final String TRANSFER_ENCODING = "transfer-encoding";
+
+    protected static final String HEADER_CONTENT_ENCODING = "content-encoding";
 
     protected static final String HTTP_1_1 = "HTTP/1.1"; // $NON-NLS-1$
 
