@@ -40,10 +40,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
-import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
-import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
-import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -75,12 +72,6 @@ public class ProxyControl extends GenericController {
     
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /*
-     * Use class names so the compiler can detect if a class is renamed/deleted
-     */
-	private static final String HTTP_TEST_SAMPLE_GUI = HttpTestSampleGui.class.getName();
-	private static final String HTTP_TEST_SAMPLE_GUI2 = HttpTestSampleGui2.class.getName();
-
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
 
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName(); 
@@ -107,7 +98,15 @@ public class ProxyControl extends GenericController {
 
 	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
 
+	public static final String SAMPLER_TYPE_NAME = "ProxyControlGui.sampler_type_name"; // $NON-NLS-1$
+
+	public static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
+
+	public static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
+
 	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
+
+	public static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
 
 	public static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
@@ -120,6 +119,11 @@ public class ProxyControl extends GenericController {
 	public static final int GROUPING_IN_CONTROLLERS = 2;
 
 	public static final int GROUPING_STORE_FIRST_ONLY = 3;
+	
+	// Must agree with the order of entries in the drop-down 
+	// created in ProxyControlGui.createHTTPSamplerPanel()
+	public static final int SAMPLER_TYPE_HTTP_SAMPLER = 0;
+	public static final int SAMPLER_TYPE_HTTP_SAMPLER2 = 1;
 
 	private long lastTime = 0;// When was the last sample seen?
 
@@ -130,8 +134,14 @@ public class ProxyControl extends GenericController {
 	private boolean addAssertions;
 
 	private int groupingMode;
+	
+	private boolean samplerRedirectAutomatically;
 
+	private boolean samplerFollowRedirects;
+	
 	private boolean useKeepAlive;
+
+	private boolean samplerDownloadImages;
 
 	private boolean regexMatch = false;// Should we match using regexes?
 	
@@ -171,12 +181,31 @@ public class ProxyControl extends GenericController {
 		setProperty(new BooleanProperty(ADD_ASSERTIONS, b));
 	}
 
+	public void setSamplerTypeName(int samplerTypeName) {
+		setProperty(new IntegerProperty(SAMPLER_TYPE_NAME, samplerTypeName));
+	}
+
+	public void setSamplerRedirectAutomatically(boolean b) {
+		samplerRedirectAutomatically = b;
+		setProperty(new BooleanProperty(SAMPLER_REDIRECT_AUTOMATICALLY, b));
+	}
+
+	public void setSamplerFollowRedirects(boolean b) {
+		samplerFollowRedirects = b;
+		setProperty(new BooleanProperty(SAMPLER_FOLLOW_REDIRECTS, b));
+	}
+
 	/**
 	 * @param b
 	 */
 	public void setUseKeepAlive(boolean b) {
 		useKeepAlive = b;
 		setProperty(new BooleanProperty(USE_KEEPALIVE, b));
+	}
+
+	public void setSamplerDownloadImages(boolean b) {
+		samplerDownloadImages = b;
+		setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
 	}
 
 	public void setIncludeList(Collection list) {
@@ -230,8 +259,24 @@ public class ProxyControl extends GenericController {
 		return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
 	}
 
+	public int getSamplerTypeName() {
+		return getPropertyAsInt(SAMPLER_TYPE_NAME);
+	}
+	
+	public boolean getSamplerRedirectAutomatically() {
+		return getPropertyAsBoolean(SAMPLER_REDIRECT_AUTOMATICALLY, false);
+	}
+
+	public boolean getSamplerFollowRedirects() {
+		return getPropertyAsBoolean(SAMPLER_FOLLOW_REDIRECTS, true);
+	}
+	
 	public boolean getUseKeepalive() {
 		return getPropertyAsBoolean(USE_KEEPALIVE, true);
+	}
+	
+	public boolean getSamplerDownloadImages() {
+		return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
 	}
 
 	public boolean getRegexMatch() {
@@ -309,12 +354,10 @@ public class ProxyControl extends GenericController {
 
 			removeValuesFromSampler(sampler, defaultConfigurations);
 			replaceValues(sampler, subConfigs, userDefinedVariables);
+			sampler.setAutoRedirects(samplerRedirectAutomatically);
+			sampler.setFollowRedirects(samplerFollowRedirects);
 			sampler.setUseKeepAlive(useKeepAlive);
-			
-			sampler.setProperty(TestElement.GUI_CLASS, 
-					(sampler instanceof HTTPSampler2) ?
-					HTTP_TEST_SAMPLE_GUI2 : HTTP_TEST_SAMPLE_GUI
-					);
+			sampler.setImageParser(samplerDownloadImages);
 
 			placeSampler(sampler, subConfigs, myTarget);
 

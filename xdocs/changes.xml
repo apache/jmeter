@@ -121,6 +121,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41259 - Comment field added to all test elements</li>
 <li>Add standard deviation to Summary Report</li>
 <li>Bug 41873 - Add name to AssertionResult and display AssertionResult in ViewResultsFullVisualizer</li>
+<li>Bug 41876 - Add more options to control what the HTTP Proxy generates</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
