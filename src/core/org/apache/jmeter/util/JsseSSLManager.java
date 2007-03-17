@@ -65,6 +65,10 @@ public class JsseSSLManager extends SSLManager {
 	private static final String DEFAULT_SSL_PROTOCOL = 
 		JMeterUtils.getPropDefault("https.default.protocol","TLS"); // $NON-NLS-1$ // $NON-NLS-2$
 
+	static {
+		log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
+	}
+
 	/**
 	 * Cache the SecureRandom instance because it takes a long time to create
 	 */
