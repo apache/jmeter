@@ -121,6 +121,7 @@ public class Proxy extends Thread {
 			if (httpsSpoof) {
 				sampler.setProtocol("https");
 			}
+			sampler.threadStarted(); // Needed for HTTPSampler2
 			result = sampler.sample();
 			
 			/*
@@ -154,6 +155,7 @@ public class Proxy extends Thread {
 			} catch (Exception e) {
 				log.error("", e);
 			}
+			sampler.threadFinished(); // Needed for HTTPSampler2
 		}
 	}
 

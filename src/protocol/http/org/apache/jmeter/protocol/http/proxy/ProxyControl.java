@@ -41,7 +41,9 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
+import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
@@ -74,10 +76,10 @@ public class ProxyControl extends GenericController {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /*
-     * Use class names so the complier can detect if a class is renamed/deleted
+     * Use class names so the compiler can detect if a class is renamed/deleted
      */
-    //  TODO - allow for HttpClient sampler ...
 	private static final String HTTP_TEST_SAMPLE_GUI = HttpTestSampleGui.class.getName();
+	private static final String HTTP_TEST_SAMPLE_GUI2 = HttpTestSampleGui2.class.getName();
 
     private static final String ASSERTION_GUI = AssertionGui.class.getName();
 
@@ -201,7 +203,7 @@ public class ProxyControl extends GenericController {
 	}
 	
 	public String getClassLabel() {
-		return JMeterUtils.getResString("proxy_title");
+		return JMeterUtils.getResString("proxy_title"); // $NON-NLS-1$
 	}
 
 	public boolean getAssertions() {
@@ -308,7 +310,11 @@ public class ProxyControl extends GenericController {
 			removeValuesFromSampler(sampler, defaultConfigurations);
 			replaceValues(sampler, subConfigs, userDefinedVariables);
 			sampler.setUseKeepAlive(useKeepAlive);
-			sampler.setProperty(TestElement.GUI_CLASS, HTTP_TEST_SAMPLE_GUI);
+			
+			sampler.setProperty(TestElement.GUI_CLASS, 
+					(sampler instanceof HTTPSampler2) ?
+					HTTP_TEST_SAMPLE_GUI2 : HTTP_TEST_SAMPLE_GUI
+					);
 
 			placeSampler(sampler, subConfigs, myTarget);
 
@@ -406,7 +412,7 @@ public class ProxyControl extends GenericController {
 	 */
 	private void addTimers(JMeterTreeModel model, JMeterTreeNode node, long deltaT) {
 		TestPlan variables = new TestPlan();
-		variables.addParameter("T", Long.toString(deltaT));
+		variables.addParameter("T", Long.toString(deltaT)); // $NON-NLS-1$
 		ValueReplacer replacer = new ValueReplacer(variables);
 		JMeterTreeNode mySelf = model.getNodeOf(this);
 		Enumeration children = mySelf.children();
@@ -664,11 +670,11 @@ public class ProxyControl extends GenericController {
 
 	private String generateMatchUrl(HTTPSamplerBase sampler) {
 		StringBuffer buf = new StringBuffer(sampler.getDomain());
-		buf.append(':');
+		buf.append(':'); // $NON-NLS-1$
 		buf.append(sampler.getPort());
 		buf.append(sampler.getPath());
 		if (sampler.getQueryString().length() > 0) {
-			buf.append('?');
+			buf.append('?'); // $NON-NLS-1$
 			buf.append(sampler.getQueryString());
 		}
 		return buf.toString();
