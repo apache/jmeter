@@ -32,7 +32,10 @@ import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
+import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2;
 import org.apache.jmeter.protocol.http.gui.HeaderPanel;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -75,6 +78,8 @@ public class HttpRequestHdr {
 
 	private Map headers = new HashMap();
 
+	private HTTPSamplerBase sampler;
+
 	/*
 	 * Optionally number the requests
 	 */
@@ -83,6 +88,17 @@ public class HttpRequestHdr {
 
 	private static int requestNumber = 0;// running number
 
+	public HttpRequestHdr() {
+		this.sampler = HTTPSamplerFactory.newInstance();
+	}
+	
+	/**
+	 * @param samplerTypeName the name of the http sampler to instantiate, as defined in HTTPSamplerFactory
+	 */
+	public HttpRequestHdr(HTTPSamplerBase sampler) {
+		this.sampler = sampler;
+	}
+	
 	/**
 	 * Parses a http header from a stream.
 	 * 
@@ -179,15 +195,26 @@ public class HttpRequestHdr {
 	public HTTPSamplerBase getSampler() throws MalformedURLException, IOException, ProtocolException {
 		// Damn! A whole new GUI just to instantiate a test element?
 		// Isn't there a beter way?
-		HttpTestSampleGui tempGui = new HttpTestSampleGui();
-		HTTPSamplerBase result = createSampler();
-		tempGui.configure(result);
-		tempGui.modifyTestElement(result);
-		result.setFollowRedirects(false);
-		result.setUseKeepAlive(true);
+		HttpTestSampleGui tempGui = null;
+		// Create the corresponding gui for the sampler class
+		if(sampler instanceof HTTPSampler2) {
+			tempGui = new HttpTestSampleGui2();
+		}
+		else {
+			tempGui = new HttpTestSampleGui();
+		}
+		sampler.setProperty(TestElement.GUI_CLASS, tempGui.getClass().getName());
+		populateSampler();
+		
+		tempGui.configure(sampler);
+		tempGui.modifyTestElement(sampler);
+		// Defaults
+		sampler.setFollowRedirects(false);
+		sampler.setUseKeepAlive(true);
+		
         if (log.isDebugEnabled())
-    		log.debug("getSampler: sampler path = " + result.getPath());
-		return result;
+    		log.debug("getSampler: sampler path = " + sampler.getPath());
+		return sampler;
 	}
 
 	private String getContentType() {
@@ -206,9 +233,9 @@ public class HttpRequestHdr {
 		}
 	}
 
-	private HTTPSamplerBase createSampler() {
+	private void populateSampler() {
 		MultipartUrlConfig urlConfig = null;
-		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance();
+		
 		sampler.setDomain(serverName());
         if (log.isDebugEnabled())
     		log.debug("Proxy: setting server: " + sampler.getDomain());
@@ -253,7 +280,6 @@ public class HttpRequestHdr {
 		}
         if (log.isDebugEnabled())
     		log.debug("sampler path = " + sampler.getPath());
-		return sampler;
 	}
 
 	//
