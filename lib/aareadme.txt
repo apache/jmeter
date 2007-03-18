@@ -24,6 +24,7 @@ commons-jexl-1.1
 
 commons-lang-2.3
 - velocity (Anakia)
+- URLCollection (unescapeXml)
 
 commons-logging-1.1
 - httpclient
