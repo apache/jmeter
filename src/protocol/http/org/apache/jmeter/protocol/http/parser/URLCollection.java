@@ -23,6 +23,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Collection class designed for handling URLs
  * 
@@ -85,6 +87,8 @@ public class URLCollection {
 	public boolean addURL(String url, URL baseUrl) {
 		if (url == null || url.length() == 0)
 			return false;
+		//url.replace('+',' ');
+		url=StringEscapeUtils.unescapeXml(url);
 		boolean b = false;
 		try {
 			b = this.add(new URL(baseUrl, url));
