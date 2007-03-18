@@ -54,6 +54,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
@@ -112,6 +113,10 @@ public class ProxyControl extends GenericController {
 
 	public static final String HTTPS_SPOOF = "ProxyControlGui.https_spoof";
 
+	public static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
+
+	public static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
+	
 	public static final int GROUPING_NO_GROUPS = 0;
 
 	public static final int GROUPING_ADD_SEPARATORS = 1;
@@ -231,6 +236,14 @@ public class ProxyControl extends GenericController {
 		setProperty(new BooleanProperty(HTTPS_SPOOF, b));
 	}
 	
+	public void setContentTypeExclude(String contentTypeExclude) {
+		setProperty(new StringProperty(CONTENT_TYPE_EXCLUDE, contentTypeExclude));
+	}
+
+	public void setContentTypeInclude(String contentTypeInclude) {
+		setProperty(new StringProperty(CONTENT_TYPE_INCLUDE, contentTypeInclude));
+	}
+
 	public String getClassLabel() {
 		return JMeterUtils.getResString("proxy_title"); // $NON-NLS-1$
 	}
@@ -287,7 +300,14 @@ public class ProxyControl extends GenericController {
 		return getPropertyAsBoolean(HTTPS_SPOOF, false);
 	}
 	
-	
+	public String getContentTypeExclude() {
+		return getPropertyAsString(CONTENT_TYPE_EXCLUDE);
+	}
+
+	public String getContentTypeInclude() {
+		return getPropertyAsString(CONTENT_TYPE_INCLUDE);
+	}
+
 
 	public Class getGuiClass() {
 		return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
@@ -347,7 +367,7 @@ public class ProxyControl extends GenericController {
 	 * server's response while recording. A future consideration.
 	 */
 	public void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
-		if (filterUrl(sampler)) {
+		if (filterContentType(result) && filterUrl(sampler)) {
 			JMeterTreeNode myTarget = findTargetControllerNode();
 			Collection defaultConfigurations = findApplicableElements(myTarget, ConfigTestElement.class, false);
 			Collection userDefinedVariables = findApplicableElements(myTarget, Arguments.class, true);
@@ -362,6 +382,11 @@ public class ProxyControl extends GenericController {
 			placeSampler(sampler, subConfigs, myTarget);
 
 			notifySampleListeners(new SampleEvent(result, sampler.getName()));
+		}
+		else {
+			if(log.isDebugEnabled()) {
+				log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+			}
 		}
 	}
 
@@ -400,6 +425,74 @@ public class ProxyControl extends GenericController {
 		}
 
 		return true;
+	}
+
+    // Package protected to allow test case access
+    /**
+     * Filter the response based on the content type.
+     * If no include nor exclude filter is specified, the result will be included
+     * 
+     * @param result the sample result to check
+     */
+    boolean filterContentType(SampleResult result) {
+    	String includeExp = getContentTypeInclude(); 
+    	String excludeExp = getContentTypeExclude();
+    	// If no expressions are specified, we let the sample pass
+    	if((includeExp == null || includeExp.length() == 0) &&
+    			(excludeExp == null || excludeExp.length() == 0)
+    			)
+    	{
+    		return true;
+    	}
+    	
+    	// Check that we have a content type
+    	String sampleContentType = result.getContentType();    	
+    	if(sampleContentType == null || sampleContentType.length() == 0) {
+        	if(log.isDebugEnabled()) {
+        		log.debug("No Content-type found for : " + result.getUrlAsString());
+        	}
+    		
+    		return true;
+    	}
+
+    	if(log.isDebugEnabled()) {
+    		log.debug("Content-type to filter : " + sampleContentType);
+    	}
+    	// Check if the include pattern is mathed
+    	if(includeExp != null && includeExp.length() > 0) {
+        	if(log.isDebugEnabled()) {
+        		log.debug("Include expression : " + includeExp);
+        	}    		
+    		
+    		Pattern pattern = null;
+    		try {
+    			pattern = JMeterUtils.getPatternCache().getPattern(includeExp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+    			if(!JMeterUtils.getMatcher().contains(sampleContentType, pattern)) {
+    				return false;
+    			}
+    		} catch (MalformedCachePatternException e) {
+    			log.warn("Skipped invalid content include pattern: " + includeExp, e);
+    		}
+    	}
+
+    	// Check if the exclude pattern is mathed
+    	if(excludeExp != null && excludeExp.length() > 0) {
+        	if(log.isDebugEnabled()) {
+        		log.debug("Exclude expression : " + excludeExp);
+        	}
+
+    		Pattern pattern = null;
+    		try {
+    			pattern = JMeterUtils.getPatternCache().getPattern(excludeExp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+    			if(JMeterUtils.getMatcher().contains(sampleContentType, pattern)) {
+    				return false;
+    			}
+    		} catch (MalformedCachePatternException e) {
+    			log.warn("Skipped invalid content exclude pattern: " + includeExp, e);
+    		}
+    	}
+
+    	return true;
 	}
 
 	/*
