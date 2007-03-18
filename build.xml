@@ -347,6 +347,7 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-httpclient.jar}"/>
     <pathelement location="${commons-jexl.jar}"/>
+    <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${excalibur-compatibility.jar}"/>
     <pathelement location="${excalibur-datasource.jar}"/>
