@@ -185,7 +185,7 @@ public class JsseSSLManager extends SSLManager {
 				 * The following will need to be removed if the SSL properties are to be
 				 * applied on a per-connection basis
 				 */
-				HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+				HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(context));
 				HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
 					public boolean verify(String hostname, SSLSession session) {
 						return true;
@@ -196,7 +196,7 @@ public class JsseSSLManager extends SSLManager {
 				 */
 				Protocol protocol = new Protocol(
 						JsseSSLManager.HTTPS,
-						(ProtocolSocketFactory) new HttpClientSSLProtocolSocketFactory(context),
+						(ProtocolSocketFactory) new HttpSSLProtocolSocketFactory(context),
 						443
 						);
 				Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
