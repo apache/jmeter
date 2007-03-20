@@ -438,6 +438,26 @@ public class JMeterUtils implements UnitTestManager {
 			return null;
 		}
 	}
+    
+    /**
+     * This looks for the requested image in the classpath under
+     * org.apache.jmeter.images. <name>, and also sets the description
+     * of the image, which is useful if the icon is going to be placed 
+     * on the clipboard.
+     * 
+     * @param name
+     *            the name of the image
+     * @param description
+     *            the description of the image
+     * @return The Image value
+     */
+    public static ImageIcon getImage(String name, String description) {
+        ImageIcon icon = getImage(name);
+        if(icon != null) {
+            icon.setDescription(description);
+        }
+        return icon;
+    }
 
 	public static String getResourceFileAsText(String name) {
 		BufferedReader fileReader = null;

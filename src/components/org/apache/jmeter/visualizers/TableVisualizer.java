@@ -63,10 +63,12 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 	
 	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
-	        JMeterUtils.getPropDefault("viewResultsTree.success", "icon_success_sml.gif"));
+            JMeterUtils.getPropDefault("viewResultsTree.success", "icon_success_sml.gif"),
+            JMeterUtils.getResString("table_visualizer_success"));
 
 	private static final ImageIcon imageFailure = JMeterUtils.getImage(
-			JMeterUtils.getPropDefault("viewResultsTree.failure", "icon_warning_sml.gif"));
+            JMeterUtils.getPropDefault("viewResultsTree.failure", "icon_warning_sml.gif"),
+            JMeterUtils.getResString("table_visualizer_warning"));
 
 	private final String[] COLUMNS = new String[] {
             JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
