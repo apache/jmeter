@@ -468,9 +468,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 	                    log.warn("ResponseCode==-1; could not parse "+respMsg);
 	                  }
             	} else {
-            		respMsg="(null)";
             		String hdr=conn.getHeaderField(0);
             		if (hdr == null) hdr="(null)";
+            		respMsg=hdr; // for result
                     log.warn("ResponseCode==-1 & null ResponseMessage. Header(0)= "+hdr);
             	}
             }
