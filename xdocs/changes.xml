@@ -188,7 +188,8 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40325 - allow specification of proxyuser and proxypassword for WebServiceSampler</li>
 <li>Change HttpClient proxy definition to use NTCredentials; added http.proxyDomain property for this</li>
 <li>Bug 40371 - response assertion "pattern to test" scrollbar problem</li>
-<li>Bug 40589- Unescape XML entities in embedded URLs</li>
+<li>Bug 40589 - Unescape XML entities in embedded URLs</li>
+<li>Bug 41902 - NPE in HTTPSampler when responseCode = -1</li>
 </ul>
 
 <h3>Version 2.2</h3>
