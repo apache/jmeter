@@ -460,12 +460,19 @@ public class HTTPSampler extends HTTPSamplerBase {
 			int errorLevel = conn.getResponseCode();
             String respMsg = conn.getResponseMessage();
             if (errorLevel == -1){// Bug 38902 - sometimes -1 seems to be returned unnecessarily
-                try {
-                    errorLevel = Integer.parseInt(respMsg.substring(0, 3));
-                    log.warn("ResponseCode==-1; parsed "+respMsg+ " as "+errorLevel);
-                  } catch (NumberFormatException e) {
-                    log.warn("ResponseCode==-1; could not parse "+respMsg);
-                  }                
+            	if (respMsg != null) {// Bug 41902 - NPE
+	                try {
+	                    errorLevel = Integer.parseInt(respMsg.substring(0, 3));
+	                    log.warn("ResponseCode==-1; parsed "+respMsg+ " as "+errorLevel);
+	                  } catch (NumberFormatException e) {
+	                    log.warn("ResponseCode==-1; could not parse "+respMsg);
+	                  }
+            	} else {
+            		respMsg="(null)";
+            		String hdr=conn.getHeaderField(0);
+            		if (hdr == null) hdr="(null)";
+                    log.warn("ResponseCode==-1 & null ResponseMessage. Header(0)= "+hdr);
+            	}
             }
 			res.setResponseCode(Integer.toString(errorLevel));
 			res.setSuccessful(isSuccessCode(errorLevel));
