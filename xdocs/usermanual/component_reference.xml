@@ -1984,7 +1984,7 @@ cookie table entries.</property>
 
 <component name="HTTP Proxy Server" index="&sect-num;.4.5"  width="689" height="464" screenshot="proxy_control.png">
 <note>The Proxy Server can only record HTTP traffic. 
-There is currently no support for recording HTTPS (SSL) sessions.</note>
+It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
@@ -2094,7 +2094,7 @@ If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
 If you want to match /images at the start of a string only, use the value "^/images".
 Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
 but retain the trailing / in the output by using "^/images(?=/)".
-Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&lt;=...)".
+Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&amp;lt;=...) or (?&amp;lt;!...)".
 <br></br>
 If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
 so be sure to check this if UDVs are not working as expected.
