@@ -124,7 +124,7 @@ public class MultipartUrlConfig implements Serializable {
 				String name = parts[i].substring(index, parts[i].indexOf("\"", index));
 				index = parts[i].indexOf("\n", index) + 2;
 				String value = parts[i].substring(index).trim();
-				this.addEncodedArgument(name, value);
+				this.addArgument(name, value);
 			}
 		}
 	}
