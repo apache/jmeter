@@ -80,6 +80,8 @@ public class HttpRequestHdr {
 
 	private HTTPSamplerBase sampler;
 
+	private HeaderManager headerManager;
+	
 	/*
 	 * Optionally number the requests
 	 */
@@ -177,7 +179,7 @@ public class HttpRequestHdr {
 		return 0;
 	}
 
-	public HeaderManager getHeaderManager() {
+	private HeaderManager createHeaderManager() {
 		HeaderManager manager = new HeaderManager();
 		Iterator keys = headers.keySet().iterator();
 		while (keys.hasNext()) {
@@ -190,6 +192,13 @@ public class HttpRequestHdr {
 		manager.setProperty(TestElement.TEST_CLASS, HeaderManager.class.getName());
 		manager.setProperty(TestElement.GUI_CLASS, HeaderPanel.class.getName());
 		return manager;
+	}
+
+	public HeaderManager getHeaderManager() {
+		if(headerManager == null) {
+			headerManager = createHeaderManager();
+		}
+		return headerManager;
 	}
 
 	public HTTPSamplerBase getSampler() throws MalformedURLException, IOException, ProtocolException {
@@ -269,6 +278,16 @@ public class HttpRequestHdr {
 		}
 		if ((urlConfig = isMultipart(getContentType())) != null) {
 			urlConfig.parseArguments(postData);
+			// If no file is uploaded, then it was really a multipart/form-data
+			// post request. But currently, that is not supported, so we must
+			// change the "Content-Type" header from multipart/form-data to
+			// application/x-www-form-urlencoded, which is the one the HTTP Request
+			// sampler will send
+			if(urlConfig.getFilename() == null) {
+				System.out.println("jada");
+				getHeaderManager().removeHeaderNamed("Content-Type");
+				getHeaderManager().add(new Header("Content-Type", "application/x-www-form-urlencoded"));
+			}
 			sampler.setArguments(urlConfig.getArguments());
 			sampler.setFileField(urlConfig.getFileFieldName());
 			sampler.setFilename(urlConfig.getFilename());

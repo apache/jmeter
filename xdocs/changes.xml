@@ -191,6 +191,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40589 - Unescape XML entities in embedded URLs</li>
 <li>Bug 41902 - NPE in HTTPSampler when responseCode = -1</li>
 <li>Bug 41903 - ViewResultsFullVisualizer : status column looks bad when you do copy and paste</li>
+<li>Bug 41837 - Parameter value corruption in proxy</li>
 </ul>
 
 <h3>Version 2.2</h3>
