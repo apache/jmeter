@@ -66,12 +66,12 @@ public class HttpSSLProtocolSocketFactory
     private static final String[] protocols = protocolList.split(" ");
 
     private void setSocket(Socket sock){
-    	if (protocols.length <= 0) return;
+    	if (protocolList.length() <= 0) return;
     	if (sock instanceof SSLSocket){
     		try {
 				((SSLSocket) sock).setEnabledProtocols(protocols);
 			} catch (IllegalArgumentException e) {
-				log.warn("Could not set protocol list: "+protocolList);
+				log.warn("Could not set protocol list: "+protocolList+".");
 				log.warn("Valid protocols are: "+join(((SSLSocket) sock).getSupportedProtocols()));
 			}
     	} else {
