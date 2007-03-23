@@ -54,7 +54,6 @@ import org.apache.log.Logger;
  * Allows the user to specify if she needs cookie services, and give parameters
  * for this service.
  * 
- * @version $Revision$
  */
 public class CookiePanel extends AbstractConfigGui implements ActionListener {
     
@@ -135,8 +134,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 				// If a table cell is being edited, we must cancel the editing
 				// before deleting the row.
 				if (cookieTable.isEditing()) {
-					TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(), cookieTable
-							.getEditingColumn());
+					TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(),
+							cookieTable.getEditingColumn());
 					cellEditor.cancelCellEditing();
 				}
 
@@ -170,8 +169,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 			// If a table cell is being edited, we should accept the current
 			// value and stop the editing before adding a new row.
 			if (cookieTable.isEditing()) {
-				TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(), cookieTable
-						.getEditingColumn());
+				TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(),
+						cookieTable.getEditingColumn());
 				cellEditor.stopCellEditing();
 			}
 
