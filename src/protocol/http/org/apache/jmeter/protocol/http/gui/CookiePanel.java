@@ -298,7 +298,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());
 		JPanel northPanel = new JPanel();
-		northPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 		northPanel.add(makeTitlePanel());
 		northPanel.add(clearEachIteration);
         northPanel.add(policy);
