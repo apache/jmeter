@@ -361,16 +361,15 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			httpMethod.setRequestHeader(HEADER_CONNECTION, CONNECTION_CLOSE);
 		}
 
-		String hdrs = setConnectionHeaders(httpMethod, u, getHeaderManager());
+		setConnectionHeaders(httpMethod, u, getHeaderManager());
 		String cookies = setConnectionCookie(httpMethod, u, getCookieManager());
 
-		if (res != null) {
+        setConnectionAuthorization(httpClient, u, getAuthManager());
+
+        if (res != null) {
             res.setURL(u);
-            res.setRequestHeaders(hdrs);
             res.setCookies(cookies);
 		}
-
-		setConnectionAuthorization(httpClient, u, getAuthManager());
 
 		return httpClient;
 	}
@@ -434,10 +433,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @param headerManager
 	 *            the <code>HeaderManager</code> containing all the cookies
 	 *            for this <code>UrlConfig</code>
-	 * @return the headers as a string
 	 */
-	String setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager) {
-		StringBuffer hdrs = new StringBuffer(100);
+	private void setConnectionHeaders(HttpMethod method, URL u, HeaderManager headerManager) {
+        // Set all the headers from the HeaderManager
 		if (headerManager != null) {
 			CollectionProperty headers = headerManager.getHeaders();
 			if (headers != null) {
@@ -453,16 +451,36 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 					if (! HEADER_CONTENT_LENGTH.equalsIgnoreCase(n)){
 						String v = header.getValue();
 						method.addRequestHeader(n, v);
-						hdrs.append(n);
-						hdrs.append(": "); // $NON-NLS-1$
-						hdrs.append(v);
-						hdrs.append("\n"); // $NON-NLS-1$
 					}
 				}
 			}
 		}
-		return hdrs.toString();
 	}
+    
+    /**
+     * Get all the request headers for the <code>HttpMethod</code>
+     * 
+     * @param method
+     *            <code>HttpMethod</code> which represents the request
+     * @return the headers as a string
+     */
+    private String getConnectionHeaders(HttpMethod method) {
+        // Get all the request headers
+        StringBuffer hdrs = new StringBuffer(100);        
+        Header[] requestHeaders = method.getRequestHeaders();
+        for(int i = 0; i < requestHeaders.length; i++) {
+            // Exclude the COOKIE header, since cookie is reported separately in the sample
+            if(!HEADER_COOKIE.equalsIgnoreCase(requestHeaders[i].getName())) {
+                hdrs.append(requestHeaders[i].getName());
+                hdrs.append(": "); // $NON-NLS-1$
+                hdrs.append(requestHeaders[i].getValue());
+                hdrs.append("\n"); // $NON-NLS-1$
+            }
+        }
+        
+        return hdrs.toString();
+    }
+    
 
 	/**
 	 * Extracts all the required authorization for that particular URL request
@@ -573,6 +591,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			} else if (method.equals(PUT)) {
                 setPutHeaders((PutMethod) httpMethod);
             }
+
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
 
 			int statusCode = client.executeMethod(httpMethod);
 
