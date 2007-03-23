@@ -1624,6 +1624,8 @@ are part of the test plan.</p></description>
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
+Note that the Request panel only shows the headers added by JMeter.
+It does not show any headers (such as Host) that may be added by the HTTP protocol implementation.
 <p>
 There are three ways to view the response, selectable by a radio
 button.</p>
