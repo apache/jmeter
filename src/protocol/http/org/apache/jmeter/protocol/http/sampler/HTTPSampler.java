@@ -60,7 +60,8 @@ public class HTTPSampler extends HTTPSamplerBase {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final int MAX_CONN_RETRIES = 
-		JMeterUtils.getPropDefault("http.java.sampler.retries",10); // Maximum connection retries
+		JMeterUtils.getPropDefault("http.java.sampler.retries" // $NON-NLS-1$
+				,10); // Maximum connection retries
 
 	static {
 		log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
@@ -219,7 +220,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 		byte[] readBuffer = getThreadContext().getReadBuffer();
 		BufferedInputStream in;
 
-        if ((conn.getContentLength() == 0) && JMeterUtils.getPropDefault("httpsampler.obey_contentlength", false)) {
+        if ((conn.getContentLength() == 0) 
+        	&& JMeterUtils.getPropDefault("httpsampler.obey_contentlength", // $NON-NLS-1$
+        	false)) {
             log.info("Content-Length: 0, not reading http-body");
 			res.setResponseHeaders(getResponseHeaders(conn));
 			return NULL_BA;
@@ -488,7 +491,7 @@ public class HTTPSampler extends HTTPSamplerBase {
             String respMsg = conn.getResponseMessage();
             if (errorLevel == -1){// Bug 38902 - sometimes -1 seems to be returned unnecessarily
         		String hdr=conn.getHeaderField(0);
-        		if (hdr == null) hdr="(null)";
+        		if (hdr == null) hdr="(null)";  // $NON-NLS-1$
             	if (respMsg != null) {// Bug 41902 - NPE
 	                try {
 	                    errorLevel = Integer.parseInt(respMsg.substring(0, 3));
@@ -501,7 +504,11 @@ public class HTTPSampler extends HTTPSamplerBase {
                     log.warn("ResponseCode==-1 & null ResponseMessage. Header(0)= "+hdr);
             	}
             }
-			res.setResponseCode(Integer.toString(errorLevel));
+            if (errorLevel == -1) {
+            	res.setResponseCode("(null)"); // $NON-NLS-1$
+            } else {
+			    res.setResponseCode(Integer.toString(errorLevel));
+            }
 			res.setSuccessful(isSuccessCode(errorLevel));
 
 			res.setResponseMessage(respMsg);
