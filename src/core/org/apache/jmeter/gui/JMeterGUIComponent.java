@@ -71,8 +71,13 @@ public interface JMeterGUIComponent {
 	 * It must be unique to the class.
 	 * 
 	 * It is also used by Help to find the appropriate location in the
-	 * documentation
+	 * documentation.
 	 * 
+	 * Normally getLabelResource() should be overridden instead of
+	 * this method; the definition of this method in AbstractJMeterGuiComponent
+	 * is intended for general use.
+	 * 
+	 * @see getLabelResource()
 	 * @return GUI label for the component.
 	 */
 	String getStaticLabel();
@@ -81,6 +86,10 @@ public interface JMeterGUIComponent {
 	 * Get the component's resource name, which getStaticLabel uses to derive
 	 * the component's label in the local language. The resource name is fixed,
 	 * and does not vary with the selected language.
+	 * 
+	 * Normally this method should be overriden in preference to overriding
+	 * getStaticLabel(). However where the resource name is not available or required,
+	 * getStaticLabel() may be overridden instead.
 	 * 
 	 * @return the resource name
 	 */
