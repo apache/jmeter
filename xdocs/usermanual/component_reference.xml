@@ -462,7 +462,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 
    <p>There are nine test operations defined. These operations are given below:</p>
     <ol>
-      <li>Thread bind</li>
+      <li><b>Thread bind</b></li>
       <p>Any LDAP request is part of an LDAP session, so the first thing that should be done is starting a session to the LDAP server.
        For starting this session a thread bind is used, which is equal to the LDAP "bind" operation.
        The user is requested to give a username (Distinghuised name) and password, 
@@ -480,15 +480,16 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
      <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
      If is is incorrect, the sampler will return an error and revert to an anonymous bind.</property>
     </properties>
-         
-      <li>Thread unbind</li>
+ <br />       
+      <li><b>Thread unbind</b></li>
       <p>This is simply the operation to end a session. 
       It is equal to the LDAP "unbind" operation.</p>
      <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     </properties>
      
-      <li>Single bind/unbind</li>
+ <br />       
+      <li><b>Single bind/unbind</b></li>
 		<p> This is a combination of the LDAP "bind" and "unbind" operations.
 		It can be used for an authentication request/password check for any user. It will open an new session, just to
 		check the validity of the user/password combination, and end the session again.</p>
@@ -499,7 +500,8 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
      If is is incorrect, the sampler will return an error.</property>
      </properties>
 		
-      <li>Rename entry</li>
+ <br />       
+      <li><b>Rename entry</b></li>
        <p>This is the LDAP "moddn" operation. It can be used to rename an entry, but 
        also for moving an entry or a complete subtree to a different place in 
        the LDAP tree.  </p>
@@ -511,7 +513,8 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       relative to the given DN in the thread bind operation.</property>
      </properties>
        
-        <li>Add test</li>
+ <br />       
+        <li><b>Add test</b></li>
        <p>This is the ldap "add" operation. It can be used to add any kind of 
        object to the LDAP server.  </p>
     <properties>
@@ -522,7 +525,8 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
      values several times to the list.</property>
      </properties>
        
-      <li>Delete test</li>
+ <br />       
+      <li><b>Delete test</b></li>
        <p> This is the LDAP "delete" operation, it can be used to delete an 
        object from the LDAP tree </p>
     <properties>
@@ -530,7 +534,8 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <property name="Delete" required="Yes">Distinghuished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
       </properties>
        
-      <li>Search test</li>
+ <br />       
+      <li><b>Search test</b></li>
        <p>This is the LDAP "search" operation, and will be used for defining searches.  </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
@@ -544,8 +549,9 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=false</property>
       <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
      </properties>
-       .
-      <li>Modification test</li>
+
+ <br />       
+      <li><b>Modification test</b></li>
        <p>This is the LDAP "modify" operation. It can be used to modify an object. It
        can be used to add, delete or replace values of an attribute. </p>
     <properties>
@@ -553,12 +559,13 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <property name="Entry name" required="Yes">Distinghuished name of the object you want to modify, relative 
       to the given DN in the thread bind operation</property>
      <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any 
-     valid LDAP operationCode (add, delete or replace). If you don't specify a value with a delete operation,
+     valid LDAP operationCode (add, delete/remove or replace). If you don't specify a value with a delete operation,
      all values of the given attribute will be deleted. If you do specify a value in a delete operation, only 
      the given value will be deleted. If this value is non-existent, the sampler will fail the test.</property>
      </properties>
        
-      <li>compare</li>
+ <br />       
+      <li><b>Compare</b></li>
        <p>This is the LDAP "compare" operation. It can be used to compare the value 
        of a given attribute with some already known value. In reality this is mostly 
        used to check whether a given person is a member of some group. In such a case
