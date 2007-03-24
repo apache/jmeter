@@ -56,7 +56,7 @@ import org.apache.log.Logger;
 
 public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/*
 	 * The following strings are used in the test plan, and the values must not be changed
@@ -130,7 +130,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
 	public final static String NEWDN = "newdn"; // $NON-NLS-1$
 
-	private static Hashtable ldapConnections = new Hashtable();
+    private static final String SEMI_COLON = ";"; // $NON-NLS-1$
+
+
+    private static Hashtable ldapConnections = new Hashtable();
 
 	private static Hashtable ldapContexts = new Hashtable();
 
@@ -272,6 +275,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		return getPropertyAsString(SCOPE);
 	}
 
+	public int getScopeAsInt() {
+		return getPropertyAsInt(SCOPE);
+	}
+
 	/***************************************************************************
 	 * Sets the search scope attribute of the LDAPSampler object
 	 * 
@@ -291,6 +298,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		return getPropertyAsString(COUNTLIM);
 	}
 
+	public long getCountlimAsLong() {
+		return getPropertyAsLong(COUNTLIM);
+	}
+
 	/***************************************************************************
 	 * Sets the size limit attribute of the LDAPSampler object
 	 * 
@@ -308,6 +319,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 **************************************************************************/
 	public String getTimelim() {
 		return getPropertyAsString(TIMELIM);
+	}
+
+	public int getTimelimAsInt() {
+		return getPropertyAsInt(TIMELIM);
 	}
 
 	/***************************************************************************
@@ -460,7 +475,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * 
 	 * @return The Attributes
 	 **************************************************************************/
-	public Attributes getUserAttributes() {
+	private Attributes getUserAttributes() {
         Attributes attrs = new BasicAttributes(true);
 		Attribute attr;
 		PropertyIterator iter = getArguments().iterator();
@@ -485,7 +500,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * 
 	 * @return The BasicAttributes
 	 **************************************************************************/
-	public ModificationItem[] getUserModAttributes() {
+	private ModificationItem[] getUserModAttributes() {
 		ModificationItem[] mods = new ModificationItem[getLDAPArguments().getArguments().size()];
 		BasicAttribute attr;
 		PropertyIterator iter = getLDAPArguments().iterator();
@@ -498,17 +513,17 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				attr = getBasicAttribute(item.getName(), item.getValue());
 			}
 			
-			if ("add".equals(item.getOpcode())) { // $NON-NLS-1$
-				mods[count] = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
+			final String opcode = item.getOpcode();
+			if ("add".equals(opcode)) { // $NON-NLS-1$
+				mods[count++] = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
+			} else if ("delete".equals(opcode) // $NON-NLS-1$
+				   ||  "remove".equals(opcode)) { // $NON-NLS-1$
+					mods[count++] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
+			} else if("replace".equals(opcode)) { // $NON-NLS-1$
+					mods[count++] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
 			} else {
-				if ("delete".equals(item.getOpcode()) // $NON-NLS-1$
-				||  "remove".equals(item.getOpcode())) { // $NON-NLS-1$
-					mods[count] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
-				} else {
-					mods[count] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attr);
-				}
+					log.warn("Invalid opCode: "+opcode);
 			}
-			count += 1;
 		}
 		return mods;
 	}
@@ -520,20 +535,20 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * 
 	 * @return The BasicAttributes
 	 **************************************************************************/
-	public String[] getRequestAttributes(String reqAttr) {
+	private String[] getRequestAttributes(String reqAttr) {
 		int index;
 		String[] mods;
 		int count = 0;
 		if (reqAttr.length() == 0) {
 			return null;
 		}
-		if (!reqAttr.endsWith(";")) {
-			reqAttr = reqAttr + ";";
+		if (!reqAttr.endsWith(SEMI_COLON)) {
+			reqAttr = reqAttr + SEMI_COLON; 
 		}
 		String attr = reqAttr;
 
 		while (attr.length() > 0) {
-			index = attr.indexOf(";");
+			index = attr.indexOf(SEMI_COLON);
 			count += 1;
 			attr = attr.substring(index + 1);
 		}
@@ -542,7 +557,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			attr = reqAttr;
 			count = 0;
 			while (attr.length() > 0) {
-				index = attr.indexOf(";");
+				index = attr.indexOf(SEMI_COLON);
 				mods[count] = attr.substring(0, index);
 				count += 1;
 				attr = attr.substring(index + 1);
@@ -558,7 +573,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * 
 	 * @return The BasicAttribute
 	 **************************************************************************/
-	public BasicAttribute getBasicAttribute(String name, String value) {
+	private BasicAttribute getBasicAttribute(String name, String value) {
 		BasicAttribute attr = new BasicAttribute(name, value);
 		return attr;
 	}
@@ -579,7 +594,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	private void addTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
 		try {
 			res.sampleStart();
-			ldap.createTest(dirContext, getUserAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+			ldap.createTest(dirContext, getUserAttributes(), getBaseEntryDN());
 		} finally {
 			res.sampleEnd();
 		}		
@@ -605,7 +620,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	private void modifyTest(LdapExtClient ldap, DirContext dirContext, SampleResult res) throws NamingException {
 		try {
 			res.sampleStart();
-			ldap.modifyTest(dirContext, getUserModAttributes(), getPropertyAsString(BASE_ENTRY_DN));
+			ldap.modifyTest(dirContext, getUserModAttributes(), getBaseEntryDN());
 		} finally {
 			res.sampleEnd();
 		}		
@@ -686,11 +701,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 **************************************************************************/
 	public SampleResult sample(Entry e) {
 		XMLBuffer xmlBuffer = new XMLBuffer();
-		xmlBuffer.openTag("ldapanswer");
+		xmlBuffer.openTag("ldapanswer"); // $NON-NLS-1$
 		SampleResult res = new SampleResult();
 		res.setResponseData("successfull".getBytes());
-		res.setResponseMessage("Success");
-		res.setResponseCode("0");
+		res.setResponseMessage("Success"); // $NON-NLS-1$
+		res.setResponseCode("0"); // $NON-NLS-1$
 		boolean isSuccessful = true;
 		res.setSampleLabel(getName());
 		LdapExtClient temp_client = (LdapExtClient) ldapConnections.get(getThreadName());
@@ -706,32 +721,32 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		}
 
 		try {
-			xmlBuffer.openTag("operation");
-			final String testType = getPropertyAsString(TEST);
-			xmlBuffer.tag("opertype", testType);
+			xmlBuffer.openTag("operation"); // $NON-NLS-1$
+			final String testType = getTest();
+			xmlBuffer.tag("opertype", testType); // $NON-NLS-1$
 			log.debug("performing test: " + testType);
-			if (testType.equals("unbind")) {
+			if (testType.equals(UNBIND)) {
 				res.setSamplerData("Unbind");
-				xmlBuffer.tag("baseobj",getRootdn());
-				xmlBuffer.tag("binddn",getUserDN());
+				xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
+				xmlBuffer.tag("binddn",getUserDN()); // $NON-NLS-1$
 				unbindOp(temp_client, dirContext, res);
 			} else if (testType.equals(BIND)) {
 				res.setSamplerData("Bind as "+getUserDN());
-				xmlBuffer.tag("baseobj",getRootdn());
-				xmlBuffer.tag("binddn",getUserDN());
-				xmlBuffer.tag("connectionTO",getConnTimeOut());
+				xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
+				xmlBuffer.tag("binddn",getUserDN()); // $NON-NLS-1$
+				xmlBuffer.tag("connectionTO",getConnTimeOut()); // $NON-NLS-1$
 				bindOp(temp_client, dirContext, res);
 			} else if (testType.equals(SBIND)) {
 				res.setSamplerData("SingleBind as "+getUserDN());
-				xmlBuffer.tag("baseobj",getRootdn());
-				xmlBuffer.tag("binddn",getUserDN());
-				xmlBuffer.tag("connectionTO",getConnTimeOut());
+				xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
+				xmlBuffer.tag("binddn",getUserDN()); // $NON-NLS-1$
+				xmlBuffer.tag("connectionTO",getConnTimeOut()); // $NON-NLS-1$
 				singleBindOp(res);
 			} else if (testType.equals(COMPARE)) {
 				res.setSamplerData("Compare "+getPropertyAsString(COMPAREFILT) + " "
 								+ getPropertyAsString(COMPAREDN));
-				xmlBuffer.tag("comparedn",getPropertyAsString(COMPAREDN));
-				xmlBuffer.tag("comparefilter",getPropertyAsString(COMPAREFILT));
+				xmlBuffer.tag("comparedn",getPropertyAsString(COMPAREDN)); // $NON-NLS-1$
+				xmlBuffer.tag("comparefilter",getPropertyAsString(COMPAREFILT)); // $NON-NLS-1$
                 NamingEnumeration cmp;
 				try {
 					res.sampleStart();
@@ -742,52 +757,53 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				}				
 				if (cmp.hasMore()) {
 				} else {
-					res.setResponseCode("5");
+					res.setResponseCode("5"); // $NON-NLS-1$
 					res.setResponseMessage("compareFalse");
 					isSuccessful = false;
 				}
 			} else if (testType.equals(ADD)) {
-				res.setSamplerData("Add object " + getPropertyAsString(BASE_ENTRY_DN));
-				xmlBuffer.tag("attributes",getArguments().toString());
-				xmlBuffer.tag("dn",getPropertyAsString(BASE_ENTRY_DN));
+				res.setSamplerData("Add object " + getBaseEntryDN());
+				xmlBuffer.tag("attributes",getArguments().toString()); // $NON-NLS-1$
+				xmlBuffer.tag("dn",getBaseEntryDN()); // $NON-NLS-1$
 				addTest(temp_client, dirContext, res);
 			} else if (testType.equals(DELETE)) {
-				res.setSamplerData("Delete object " + getPropertyAsString(DELETE));
-				xmlBuffer.tag("dn",getPropertyAsString(DELETE));
+				res.setSamplerData("Delete object " + getBaseEntryDN());
+				xmlBuffer.tag("dn",getBaseEntryDN()); // $NON-NLS-1$
 				deleteTest(temp_client, dirContext, res);
 			} else if (testType.equals(MODIFY)) {
-				res.setSamplerData("Modify object " + getPropertyAsString(BASE_ENTRY_DN));
-				xmlBuffer.tag("dn",getPropertyAsString(BASE_ENTRY_DN));
-				xmlBuffer.tag("attributes",getLDAPArguments().toString());
+				res.setSamplerData("Modify object " + getBaseEntryDN());
+				xmlBuffer.tag("dn",getBaseEntryDN()); // $NON-NLS-1$
+				xmlBuffer.tag("attributes",getLDAPArguments().toString()); // $NON-NLS-1$
 				modifyTest(temp_client, dirContext, res);
 			} else if (testType.equals(RENAME)) {
 				res.setSamplerData("ModDN object " + getPropertyAsString(MODDDN) + " to " + getPropertyAsString(NEWDN));
-				xmlBuffer.tag("dn",getPropertyAsString(MODDDN));
-				xmlBuffer.tag("newdn",getPropertyAsString(NEWDN));
+				xmlBuffer.tag("dn",getPropertyAsString(MODDDN)); // $NON-NLS-1$
+				xmlBuffer.tag("newdn",getPropertyAsString(NEWDN)); // $NON-NLS-1$
 				renameTest(temp_client, dirContext, res);
 			} else if (testType.equals(SEARCH)) {
-                final String            scopeStr = getPropertyAsString(SCOPE);
-                final int               scope = getPropertyAsInt(SCOPE);
+                final String            scopeStr = getScope();
+                final int               scope = getScopeAsInt();
                 final String searchFilter = getPropertyAsString(SEARCHFILTER);
 				final String searchBase = getPropertyAsString(SEARCHBASE);
-				final String timeLimit = getPropertyAsString(TIMELIM);
-				final String countLimit = getPropertyAsString(COUNTLIM);
+				final String timeLimit = getTimelim();
+				final String countLimit = getCountlim();
 
 				res.setSamplerData("Search with filter " + searchFilter);
-				xmlBuffer.tag("searchfilter",searchFilter);
-				xmlBuffer.tag("searchbase",searchBase + "," + getPropertyAsString(ROOTDN));
-				xmlBuffer.tag("scope" , scopeStr);
-				xmlBuffer.tag("countlimit",countLimit);
-				xmlBuffer.tag("timelimit",timeLimit);
+				xmlBuffer.tag("searchfilter",searchFilter); // $NON-NLS-1$
+				xmlBuffer.tag("baseobj",getRootdn()); // $NON-NLS-1$
+				xmlBuffer.tag("searchbase",searchBase);// $NON-NLS-1$
+				xmlBuffer.tag("scope" , scopeStr); // $NON-NLS-1$
+				xmlBuffer.tag("countlimit",countLimit); // $NON-NLS-1$
+				xmlBuffer.tag("timelimit",timeLimit); // $NON-NLS-1$
 
                 NamingEnumeration srch;
 				try {
 					res.sampleStart();
 					srch = temp_client.searchTest(
 							dirContext, searchBase, searchFilter,
-							scope, getPropertyAsLong(COUNTLIM),
-							getPropertyAsInt(TIMELIM),
-							getRequestAttributes(getPropertyAsString(ATTRIBS)),
+							scope, getCountlimAsLong(),
+							getTimelimAsInt(),
+							getRequestAttributes(getAttrs()),
 							isRetobj(),
 							isDeref());
 				} finally {
@@ -796,28 +812,28 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
                 if (isParseFlag()) {
 					try {
-						xmlBuffer.openTag("searchresults");
+						xmlBuffer.openTag("searchresults"); // $NON-NLS-1$
 						while (srch.hasMore()) {
 							try {
-								xmlBuffer.openTag("searchresult");
+								xmlBuffer.openTag("searchresult"); // $NON-NLS-1$
 								SearchResult sr = (SearchResult) srch.next();
-								xmlBuffer.tag("dn",sr.getName() + "," +searchBase + "," + getRootdn());
-								xmlBuffer.tag("returnedattr",String.valueOf(sr.getAttributes().size()));
+								xmlBuffer.tag("dn",sr.getName());// $NON-NLS-1$
+								xmlBuffer.tag("returnedattr",String.valueOf(sr.getAttributes().size())); // $NON-NLS-1$
 								NamingEnumeration attrlist = sr.getAttributes().getIDs();
 								while (attrlist.hasMore()) {
 									String iets = (String) attrlist.next();
-									xmlBuffer.openTag("attribute");
-									xmlBuffer.tag("attributename", iets);
-									xmlBuffer.tag("attributevalue",
+									xmlBuffer.openTag("attribute"); // $NON-NLS-1$
+									xmlBuffer.tag("attributename", iets); // $NON-NLS-1$
+									xmlBuffer.tag("attributevalue", // $NON-NLS-1$
 											sr.getAttributes().get(iets).toString().substring(iets.length() + 2));
-									xmlBuffer.closeTag("attribute");
+									xmlBuffer.closeTag("attribute"); // $NON-NLS-1$
 								}
 							} finally {
-								xmlBuffer.closeTag("searchresult");
+								xmlBuffer.closeTag("searchresult"); // $NON-NLS-1$
 							}							
 						}
 					} finally {
-						xmlBuffer.closeTag("searchresults");
+						xmlBuffer.closeTag("searchresults"); // $NON-NLS-1$
 					}					
                 }
 			}
@@ -828,7 +844,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
 			if (indexOfLDAPErrCode >= 0) {
 				res.setResponseMessage(returnData.substring(indexOfLDAPErrCode + 21, returnData
-						.indexOf("]")));
+						.indexOf("]"))); // $NON-NLS-1$
 				res.setResponseCode(returnData.substring(indexOfLDAPErrCode + 17, indexOfLDAPErrCode + 19));
 			} else {
 				res.setResponseMessage(returnData);
@@ -836,9 +852,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			}
 			isSuccessful = false;
 		} finally {
-			xmlBuffer.closeTag("operation");
-			xmlBuffer.tag("responsecode",res.getResponseCode());
-			xmlBuffer.tag("responsemessage",res.getResponseMessage());
+			xmlBuffer.closeTag("operation"); // $NON-NLS-1$
+			xmlBuffer.tag("responsecode",res.getResponseCode()); // $NON-NLS-1$
+			xmlBuffer.tag("responsemessage",res.getResponseMessage()); // $NON-NLS-1$
 			res.setResponseData(xmlBuffer.toString().getBytes());
 			res.setDataType(SampleResult.TEXT);
 			res.setSuccessful(isSuccessful);
