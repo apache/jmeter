@@ -22,13 +22,10 @@ import java.awt.BorderLayout;
 import java.util.Collection;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
