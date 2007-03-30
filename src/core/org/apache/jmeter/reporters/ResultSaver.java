@@ -93,11 +93,19 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
 	 */
 	public void sampleOccurred(SampleEvent e) {
-		SampleResult s = e.getResult();
+      processSample(e.getResult());
+   }
+
+   /**
+    * Recurse the whole (sub)result hierarchy.
+    *
+    * @param s Sample result
+    */
+   private void processSample(SampleResult s) {
 		saveSample(s);
 		SampleResult[] sr = s.getSubResults();
 		for (int i = 0; i < sr.length; i++) {
-			saveSample(sr[i]);
+			processSample(sr[i]);
 		}
 	}
 
