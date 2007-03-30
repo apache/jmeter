@@ -194,6 +194,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41837 - Parameter value corruption in proxy</li>
 <li>Bug 41905 - Can't cut/paste/select Header Manager fields in Java 1.6</li>
 <li>Bug 41928 - Make all request headers sent by HTTP Request sampler appear in sample result</li>
+<li>Bug 41944 - Subresults not handled recursively by ResultSaver</li>
 </ul>
 
 <h3>Version 2.2</h3>
