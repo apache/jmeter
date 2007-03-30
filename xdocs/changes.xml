@@ -142,6 +142,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Batik 1.6</li>
 <li>BSF 2.4.0</li>
 <li>commons-collections 3.2</li>
+<li>commons-httpclient-3.1-rc1</li>
 <li>commons-jexl 1.1</li>
 <li>commons-lang-2.3 (added)</li>
 <li>velocity 1.5</li>
