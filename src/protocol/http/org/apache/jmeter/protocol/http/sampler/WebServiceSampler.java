@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -30,7 +29,6 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Hashtable;
 
-import javax.mail.MessagingException;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.xml.sax.InputSource;
@@ -341,7 +339,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * 
 	 * @return Element
 	 */
-	private org.w3c.dom.Element createDocument() {
+	private org.w3c.dom.Element createDocument() throws SAXException, IOException {
         Document doc = null;
         String next = this.getRandomFileName();//get filename or ""
         
@@ -373,41 +371,30 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * 
      * @param file - input filename or empty if using data from tesplan
 	 * @return Document
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
-	protected Document openDocument(String file) {
+	private Document openDocument(String file) throws SAXException, IOException {
 		/*
 		 * Consider using Apache commons pool to create a pool of document
 		 * builders or make sure XMLParserUtils creates builders efficiently.
 		 */
 		DocumentBuilder XDB = XMLParserUtils.getXMLDocBuilder();
+		XDB.setErrorHandler(null);//Suppress messages to stdout
 
 		Document doc = null;
 		// if either a file or path location is given,
 		// get the file object.
 		if (file.length() > 0) {// we have a file
-			try {
-                if (this.getReadResponse()) {
-                    TextFile tfile = new TextFile(file);
-                    fileContents = tfile.getText();
-                }
-				doc = XDB.parse(new FileInputStream(file));
-			} catch (SAXException e) {
-				log.warn("Error processing file data: "+e.getMessage());
-			} catch (FileNotFoundException e) {
-                log.warn(e.getMessage());
-            } catch (IOException e) {
-                log.warn(e.getMessage());
+            if (this.getReadResponse()) {
+                TextFile tfile = new TextFile(file);
+                fileContents = tfile.getText();
             }
+			doc = XDB.parse(new FileInputStream(file));
 		} else {// must be a "here" document
 			fileContents = getXmlData();
 			if (fileContents != null && fileContents.length() > 0) {
-				try {
-					doc = XDB.parse(new InputSource(new StringReader(fileContents)));
-				} catch (SAXException ex) {
-					log.warn("Error processing data: "+ex.getMessage());
-				} catch (IOException ex) {
-                    log.warn(ex.getMessage()); // shouldn't really happen
-                }
+				doc = XDB.parse(new InputSource(new StringReader(fileContents)));
 			} else {
 			    log.warn("No post data provided!");
             }
@@ -566,10 +553,12 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			String message = exception.getMessage();
 			log.warn(message);
 			result.setResponseMessage(message);
+		} catch (SAXException exception) {
+			log.warn(exception.toString());
+			result.setResponseMessage(exception.getMessage());
 		} catch (SOAPException exception) {
-			String message = exception.getMessage();
-			log.warn(message);
-			result.setResponseMessage(message);
+			log.warn(exception.toString());
+			result.setResponseMessage(exception.getMessage());
 		} catch (MalformedURLException exception) {
 			String message = exception.getMessage();
 			log.warn(message);
@@ -578,10 +567,16 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			String message = exception.getMessage();
 			log.warn(message);
 			result.setResponseMessage(message);
-		} catch (MessagingException exception) {
-			String message = exception.getMessage();
-			log.warn(message);
-			result.setResponseMessage(message);
+		} catch (NoClassDefFoundError error){
+			log.error("Missing class: ",error);
+			result.setResponseMessage(error.toString());			
+		} catch (Exception exception) {
+			if ("javax.mail.MessagingException".equals(exception.getClass().getName())){
+				log.warn(exception.toString());
+				result.setResponseMessage(exception.getMessage());
+			} else {
+				throw new RuntimeException(exception);
+			}
 		}
 		return result;
 	}
