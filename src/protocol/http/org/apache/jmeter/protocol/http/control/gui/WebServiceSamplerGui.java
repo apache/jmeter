@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -194,7 +195,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 	 * SOAPSampler, since it is common.
 	 */
 	private void init() {
-		this.setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new BorderLayout(0, 5));
+		setBorder(makeBorder());
+		add(makeTitlePanel(), BorderLayout.NORTH);
+
 		wsdlMessage.setFont(plainText);
 		wsdlMessage2.setFont(plainText);
 		wsdlMessage3.setFont(plainText);
@@ -208,17 +212,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		JPanel mainPanel = new JPanel();
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-
-		// TITLE
-		JLabel panelTitleLabel = new JLabel(getStaticLabel());
-		Font curFont = panelTitleLabel.getFont();
-		int curFontSize = curFont.getSize();
-		curFontSize += 4;
-		panelTitleLabel.setFont(new Font(curFont.getFontName(), curFont.getStyle(), curFontSize));
-		mainPanel.add(panelTitleLabel);
-		// NAME
-		mainPanel.add(getNamePanel());
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
 		// Button for browsing webservice wsdl
 		JPanel wsdlEntry = new JPanel();
@@ -354,7 +348,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 			JOptionPane.showConfirmDialog(this,
                     JMeterUtils.getResString("wsdl_helper_error"), // $NON-NLS-1$
                     "Warning",
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 	}
@@ -366,9 +360,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 	 *            that occurred
 	 */
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == selectButton) {
+		final Object eventSource = event.getSource();
+		if (eventSource == selectButton) {
 			this.configureFromWSDL();
-		} else if (event.getSource() == useProxy) {
+		} else if (eventSource == useProxy) {
 			// if use proxy is checked, we enable
 			// the text fields for the host and port
 			boolean use = useProxy.isSelected();
@@ -379,9 +374,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 				proxyHost.setEnabled(false);
 				proxyPort.setEnabled(false);
 			}
-		} else {
-			if (this.domain.getText() != null) {
-				String[] wsdlData = browseWSDL(wsdlField.getText());
+		} else if (eventSource == wsdlButton){
+			final String wsdlText = wsdlField.getText();
+			if (wsdlText != null && wsdlText.length() > 0) {
+				String[] wsdlData = browseWSDL(wsdlText);
 				if (wsdlData != null) {
 					wsdlMethods.setValues(wsdlData);
 					wsdlMethods.repaint();
@@ -390,7 +386,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 				JOptionPane.showConfirmDialog(this,
                         JMeterUtils.getResString("wsdl_url_error"), // $NON-NLS-1$
                         "Warning",
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+						JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
