@@ -60,7 +60,6 @@ import org.w3c.dom.Document;
  * <p>
  * Created on: Jun 26, 2003
  * 
- * @version $Revision$
  */
 public class WebServiceSampler extends HTTPSamplerBase {
 	private static Logger log = LoggingManager.getLoggerForClass();
