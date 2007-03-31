@@ -26,3 +26,5 @@
 #http.socket.timeout$Integer=10000
 
 #http.protocol.reject-relative-redirect$Boolean=true
+
+#http.authentication.preemptive$Boolean=true
