@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -63,12 +64,12 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.jmeter.JMeter;
-import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -229,42 +230,136 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * 
 	 * @param connection
 	 *            <code>URLConnection</code> where POST data should be sent
+     * @return a String show what was posted. Will not contain actual file upload content
 	 * @exception IOException
 	 *                if an I/O exception occurs
 	 */
-	private void sendPostData(PostMethod post) throws IOException {
-		// If filename was specified then send the post using multipart syntax
-		String filename = getFilename();
-		final String contentEncoding = getContentEncoding();
-		if ((filename != null) && (filename.trim().length() > 0)) {
-			if (getSendFileAsPostBody()) {
-				post.setRequestEntity(new FileRequestEntity(new File(filename),null));
-			} else {
-	            int argc = getArguments().getArgumentCount();
-	            Part[] parts = new Part[argc+1]; 
-	            PropertyIterator args = getArguments().iterator();
-	            int i = 0;
-	            while (args.hasNext()) {
-	                Argument arg = (Argument) args.next().getObjectValue();
-	                parts[i++] = new StringPart(arg.getName(), arg.getValue());
-	            }
-	            File input = new File(filename);
-	                    //TODO should allow charset to be defined ...
-	            parts[i]= new FilePart(getFileField(), input, getMimetype(), "UTF-8" );//$NON-NLS-1$
-	            post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
-			}
-		} else {
-            // If a content encoding is specified, we set it as http parameter, so that
-            // the post body will be encoded in the specified content encoding
-            if(contentEncoding != null && contentEncoding.trim().length() > 0) {
-    			post.getParams().setContentCharset(contentEncoding);
+	private String sendPostData(PostMethod post) throws IOException {
+        // Buffer to hold the post body, expect file content
+        StringBuffer postedBody = new StringBuffer(1000);
+        
+        // Check if we should do a multipart/form-data or an
+        // application/x-www-form-urlencoded post request
+        if(getUseMultipartForPost()) {
+            // If a content encoding is specified, we use that es the
+            // encoding of any parameter values
+            String contentEncoding = getContentEncoding();
+            if(contentEncoding != null && contentEncoding.length() == 0) {
+                contentEncoding = null;
             }
+            
+            // Check how many parts we need, one for each parameter and file
+            int noParts = getArguments().getArgumentCount();
+            if(hasUploadableFiles())
+            {
+                noParts++;
+            }
+
+            // Create the parts
+            Part[] parts = new Part[noParts];
+            int partNo = 0;
+            // Add any parameters
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
-                Argument arg = (Argument) args.next().getObjectValue();
-                post.addParameter(arg.getName(), arg.getValue());
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                parts[partNo++] = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
+            }
+            
+            // Add any files
+            if(hasUploadableFiles()) {
+                File inputFile = new File(getFilename());
+                // We do not know the char set of the file to be uploaded, so we set it to null
+                ViewableFilePart filePart = new ViewableFilePart(getFileField(), inputFile, getMimetype(), null);
+                filePart.setCharSet(null); // We do not know what the char set of the file is
+                parts[partNo++] = filePart;
+            }
+            
+            // Set the multipart for the post
+            MultipartRequestEntity multiPart = new MultipartRequestEntity(parts, post.getParams());
+            post.setRequestEntity(multiPart);
+
+            // Set the content type
+            String multiPartContentType = multiPart.getContentType();
+            post.setRequestHeader(HEADER_CONTENT_TYPE, multiPartContentType);
+
+            // If the Multipart is repeatable, we can send it first to
+            // our own stream, without the actual file content, so we can return it
+            if(multiPart.isRepeatable()) {
+            	// For all the file multiparts, we must tell it to not include
+            	// the actual file content
+                for(int i = 0; i < partNo; i++) {
+                	if(parts[i] instanceof ViewableFilePart) {
+                		((ViewableFilePart) parts[i]).setHideFileData(true); // .sendMultipartWithoutFileContent(bos);
+                    }
+                }
+                // Write the request to our own stream
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                multiPart.writeRequest(bos);
+                bos.flush();
+                // We get the posted bytes as UTF-8, since java is using UTF-8
+                postedBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
+                bos.close();
+
+            	// For all the file multiparts, we must revert the hiding of
+            	// the actual file content
+                for(int i = 0; i < partNo; i++) {
+                	if(parts[i] instanceof ViewableFilePart) {
+                		((ViewableFilePart) parts[i]).setHideFileData(false);
+                    }
+                }
+            }
+            else {
+                postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
             }
         }
+        else {
+            // Set the content type
+            post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+
+            // If there are no arguments, we can send a file as the body of the request
+            if(getArguments().getArgumentCount() == 0 && getSendFileAsPostBody()) {
+                FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(getFilename()),null); 
+                post.setRequestEntity(fileRequestEntity);
+                
+                // We just add placeholder text for file content
+                postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
+            }
+            else {            
+                // In an application/x-www-form-urlencoded request, we only support
+                // parameters, no file upload is allowed
+            
+                // If a content encoding is specified, we set it as http parameter, so that
+                // the post body will be encoded in the specified content encoding
+                final String contentEncoding = getContentEncoding();
+                if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+                    post.getParams().setContentCharset(contentEncoding);
+                }
+            
+                PropertyIterator args = getArguments().iterator();
+                while (args.hasNext()) {
+                    HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                    post.addParameter(arg.getName(), arg.getValue());
+                }
+                
+                // If the Multipart is repeatable, we can send it first to
+                // our own stream, so we can return it
+                if(post.getRequestEntity().isRepeatable()) {
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    post.getRequestEntity().writeRequest(bos);
+                    bos.flush();
+                    // We get the posted bytes as UTF-8, since java is using UTF-8
+                    postedBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
+                    bos.close();
+                }
+                else {
+                    postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
+                }
+            }
+        }
+        // Set the content length
+        post.setRequestHeader(HEADER_CONTENT_LENGTH, Long.toString(post.getRequestEntity().getContentLength()));
+        
+        return postedBody.toString();
 	}
      
     /**
@@ -586,8 +681,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			client = setupConnection(url, httpMethod, res);
 
 			if (method.equals(POST)) {
-                res.setQueryString(getQueryString());
-				sendPostData((PostMethod)httpMethod);
+				String postBody = sendPostData((PostMethod)httpMethod);
+				res.setQueryString(postBody);
 			} else if (method.equals(PUT)) {
                 setPutHeaders((PutMethod) httpMethod);
             }
@@ -740,6 +835,34 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	        }
 	    }
 	}
+    
+    /**
+     * Class extending FilePart, so that we can send placeholder text
+     * instead of the actual file content
+     */
+    private class ViewableFilePart extends FilePart {
+    	private boolean hideFileData;
+    	
+        public ViewableFilePart(String name, File file, String contentType, String charset) throws FileNotFoundException {
+            super(name, file, contentType, charset);
+            this.hideFileData = false;
+        }
+        
+        public void setHideFileData(boolean hideFileData) {
+        	this.hideFileData = hideFileData;
+        }
+        
+        protected void sendData(OutputStream out) throws IOException {
+        	// Check if we should send only placeholder text for the
+        	// file content, or the real file content
+        	if(hideFileData) {
+        		out.write("<actual file content, not shown here>".getBytes("UTF-8"));
+        	}
+        	else {
+        		super.sendData(out);
+        	}
+        }
+    }    
 
     /**
 	 * From the <code>HttpMethod</code>, store all the "set-cookie" key-pair
