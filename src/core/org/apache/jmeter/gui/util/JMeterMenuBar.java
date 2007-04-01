@@ -489,15 +489,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 			JMenuItem stop = (JMenuItem) iter2.next();
 			JMenuItem exit = (JMenuItem) iter3.next();
 			if (start.getText().equals(host)) {
-				log.info("Found start host: " + start.getText());
+				log.debug("Found start host: " + start.getText());
 				start.setEnabled(!running);
 			}
 			if (stop.getText().equals(host)) {
-				log.info("Found stop  host: " + stop.getText());
+				log.debug("Found stop  host: " + stop.getText());
 				stop.setEnabled(running);
 			}
 			if (exit.getText().equals(host)) {
-				log.info("Found exit  host: " + exit.getText());
+				log.debug("Found exit  host: " + exit.getText());
 				exit.setEnabled(true);
 			}
 		}
