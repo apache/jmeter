@@ -135,6 +135,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
 	public final static String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
+    
+    public final static String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
     /* Shown as Parameter Name on the GUI */
 	public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
@@ -205,8 +207,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 
-	protected static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-
+	protected static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
+    
+    protected static final String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
+    
     // Derive the mapping of content types to parsers
     private static Map parsersForType = new HashMap();
     // Not synch, but it is not modified after creation
@@ -290,6 +294,23 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		return getFileField().length()== 0 && getMimetype().length() == 0;
 	}
 
+    /**
+     * Determine if we should use multipart/form-data or 
+     * application/x-www-form-urlencoded for the post
+     * 
+     * @return true if multipart/form-data should be used
+     */
+    public boolean getUseMultipartForPost(){
+        // We use multipart if we have been told so, or files are present
+        // and the files should not be send as the post body
+        if(getDoMultipartPost() || (hasUploadableFiles() && !getSendFileAsPostBody())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 	public void setProtocol(String value) {
 		setProperty(PROTOCOL, value.toLowerCase());
 	}
@@ -370,6 +391,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public boolean getUseKeepAlive() {
 		return getPropertyAsBoolean(USE_KEEPALIVE);
 	}
+
+    public void setDoMultipartPost(boolean value) {
+        setProperty(new BooleanProperty(DO_MULTIPART_POST, value));
+    }
+
+    public boolean getDoMultipartPost() {
+    	// TODO - Maybe provide a setting in the properties file
+    	// to control the default value for this property
+        return getPropertyAsBoolean(DO_MULTIPART_POST, false);
+    }
 
 	public void setMonitor(String value) {
 		this.setProperty(MONITOR, value);
@@ -1050,6 +1081,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     		}
     	}
     	return newValue.toString();
+    }
+
+    /**
+     * Method to tell if the request has any files to be uploaded
+     */
+    protected boolean hasUploadableFiles() {
+        return getFilename() != null && getFilename().length() > 0;        
     }
 
     public static String[] getValidMethodsAsArray(){
