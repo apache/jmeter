@@ -21,6 +21,7 @@ package org.apache.jmeter.control;
 import java.io.Serializable;
 
 import org.apache.jmeter.samplers.SampleEvent;
+import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
@@ -35,7 +36,7 @@ import org.apache.log.Logger;
  * Transaction Controller to measure transaction times
  * 
  */
-public class TransactionController extends GenericController implements Controller, Serializable {
+public class TransactionController extends GenericController implements SampleListener, Controller, Serializable {
 	protected static final Logger log = LoggingManager.getLoggerForClass();
 
 	transient private String threadName;
@@ -43,6 +44,10 @@ public class TransactionController extends GenericController implements Controll
 	transient private ListenerNotifier lnf;
 
 	transient private SampleResult res;
+    
+    transient private int calls;
+
+    transient private int noFailingSamples;
 
 	/**
 	 * Creates a Transaction Controller
@@ -62,26 +67,25 @@ public class TransactionController extends GenericController implements Controll
 		String n = this.getName();
 		log.debug(threadName + " " + n + " " + s);
 	}
-
-	private int calls;
-
+    
 	/**
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
 	public Sampler next() {
-		Sampler returnValue = null;
 		if (isFirst()) // must be the start of the subtree
 		{
 			log_debug("+++++++++++++++++++++++++++++");
 			calls = 0;
+            noFailingSamples = 0;
 			res = new SampleResult();
+            res.setSampleLabel(getName());
+            // Assume success
+            res.setSuccessful(true);
 			res.sampleStart();
 		}
 
-		calls++;
-
-		returnValue = super.next();
-
+        Sampler returnValue = super.next();
+        
 		if (returnValue == null) // Must be the end of the controller
 		{
 			log_debug("-----------------------------" + calls);
@@ -89,11 +93,10 @@ public class TransactionController extends GenericController implements Controll
 				log_debug("already called");
 			} else {
 				res.sampleEnd();
-				res.setSuccessful(true);
-				res.setSampleLabel(getName());
-				res.setResponseCodeOK();
-				res.setResponseMessage("Called: " + calls);
-				res.setThreadName(threadName);
+                res.setResponseMessage("Number of samples in transaction : " + calls + ", number of failing samples : " + noFailingSamples);
+                if(res.isSuccessful()) {
+                    res.setResponseCodeOK();
+                }
 
 				// TODO could these be done earlier (or just once?)
                 JMeterContext threadContext = getThreadContext();
@@ -103,12 +106,38 @@ public class TransactionController extends GenericController implements Controll
 				if (pack == null) {
 					log.warn("Could not fetch SamplePackage");
 				} else {
-					lnf.notifyListeners(new SampleEvent(res, getName()), pack.getSampleListeners());
+                    SampleEvent event = new SampleEvent(res, getName());
+                    // We must set res to null now, before sending the event for the transaction,
+                    // so that we can ignore that event in our sampleOccured method 
+                    res = null;
+					lnf.notifyListeners(event, pack.getSampleListeners());
 				}
-				res = null;
 			}
 		}
+        else {
+            // We have sampled one of our children
+            calls++;            
+        }
 
 		return returnValue;
 	}
+    
+    public void sampleOccurred(SampleEvent se) {
+        // Check if we have are still sampling our children
+        if(res != null) {
+            SampleResult sampleResult = se.getResult(); 
+            res.setThreadName(sampleResult.getThreadName());
+            res.setBytes(res.getBytes() + sampleResult.getBytes());
+            if(!sampleResult.isSuccessful()) {
+                res.setSuccessful(false);
+                noFailingSamples++;
+            }
+       }
+    }
+
+    public void sampleStarted(SampleEvent e) {
+    }
+
+    public void sampleStopped(SampleEvent e) {
+    }
 }
