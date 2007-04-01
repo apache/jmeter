@@ -68,7 +68,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 	}
 	
 	private static final byte[] NULL_BA = new byte[0];// can share these
-	
+
+	/** Handles writing of a post request */
+    private PostWriter postWriter;
+
 	/**
 	 * Constructor for the HTTPSampler object.
      * 
@@ -86,7 +89,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	protected void setPostHeaders(URLConnection conn) throws IOException {
-		PostWriter.setHeaders(conn, this);
+		postWriter = new PostWriter();
+		postWriter.setHeaders(conn, this);
 	}
 
     private void setPutHeaders(URLConnection conn)
@@ -105,11 +109,12 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 * 
 	 * @param connection
 	 *            <code>URLConnection</code> where POST data should be sent
+     * @return a String show what was posted. Will not contain actual file upload content
 	 * @exception IOException
 	 *                if an I/O exception occurs
 	 */
-	protected void sendPostData(URLConnection connection) throws IOException {
-		PostWriter.sendPostData(connection, this);
+	protected String sendPostData(URLConnection connection) throws IOException {
+		return postWriter.sendPostData(connection, this);
 	}
 
     private void sendPutData(URLConnection conn) throws IOException {
@@ -147,8 +152,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O Exception occurs
 	 */
 	protected HttpURLConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
-		HttpURLConnection conn;
-
         SSLManager sslmgr = null;
         if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
             try {
@@ -158,7 +161,7 @@ public class HTTPSampler extends HTTPSamplerBase {
             }
         }
 		
-        conn = (HttpURLConnection) u.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         // Update follow redirects setting just for this connection
         conn.setInstanceFollowRedirects(getAutoRedirects());
 
@@ -189,9 +192,6 @@ public class HTTPSampler extends HTTPSamplerBase {
         setConnectionAuthorization(conn, u, getAuthManager());
 
 		if (method.equals(POST)) {
-            if(res != null) {
-                res.setQueryString(getQueryString());
-            }
 			setPostHeaders(conn);
 		} else if (method.equals(PUT)) {
             setPutHeaders(conn);
@@ -473,7 +473,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 			}
 			// Nice, we've got a connection. Finish sending the request:
 			if (method.equals(POST)) {
-				sendPostData(conn);
+				String postBody = sendPostData(conn);
+				res.setQueryString(postBody);
 			} else if (method.equals(PUT)) {
                 sendPutData(conn);
             }

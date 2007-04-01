@@ -19,180 +19,386 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
-import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
+ * Class for setting the necessary headers for a POST request, and sending the
+ * body of the POST.
  */
-
 public class PostWriter {
     
 	private static final String DASH_DASH = "--";  // $NON-NLS-1$
 
+    /** The bounday string between multiparts */
     protected final static String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
 
 	private final static byte[] CRLF = { 0x0d, 0x0A };
 
-	protected static final String encoding = "iso-8859-1"; // $NON-NLS-1$
+	public static final String ENCODING = "iso-8859-1"; // $NON-NLS-1$
 
-	// Not instantiable
-	private PostWriter(){
-		
-	}
+    /** The form data that is going to be sent as url encoded */
+    private byte[] formDataUrlEncoded;    
+    /** The form data that is going to be sent in post body */
+    private byte[] formDataPostBody;
+    /** The start of the file multipart to be sent */
+    private byte[] formDataFileStartMultipart;
+    /** The boundary string for multipart */
+    private String boundary;
+    
+    /**
+     * Constructor for PostWriter.
+     * Uses the PostWriter.BOUNDARY as the boundary string
+     * 
+     */
+    public PostWriter() {
+        this(BOUNDARY);
+    }
+
+    /**
+     * Constructor for PostWriter
+     * 
+     * @param boundary the boundary string to use as marker between multipart parts
+     */
+    public PostWriter(String boundary) {
+        this.boundary = boundary;
+    }
+
 	/**
 	 * Send POST data from Entry to the open connection.
+     * 
+     * @return the post body sent. Actual file content is not returned, it
+     * is just shown as a placeholder text "actual file content"
 	 */
-	public static void sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
-		// If filename was specified then send the post using multipart syntax
-		String filename = sampler.getFilename();
-		if ((filename != null) && (filename.trim().length() > 0)) {
-			OutputStream out = connection.getOutputStream();
-			// Check if not using multi-part:
-            if (sampler.getSendFileAsPostBody())
-            {
-                InputStream in = getFileStream(filename);
-                byte[] buf = new byte[1024];
-                int read;
-                while ((read = in.read(buf)) > 0)
-                {
-                    out.write(buf, 0, read);
-                }
-                out.flush();
-                in.close();
-                return;
+	public String sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
+        // Buffer to hold the post body, except file content
+        StringBuffer postedBody = new StringBuffer(1000);
+        
+        // Check if we should do a multipart/form-data or an
+        // application/x-www-form-urlencoded post request
+        if(sampler.getUseMultipartForPost()) {
+            OutputStream out = connection.getOutputStream();
+            
+            // Write the form data post body, which we have constructed
+            // in the setHeaders. This contains the multipart start divider
+            // and any form data, i.e. arguments
+            out.write(formDataPostBody);
+            // We get the posted bytes as UTF-8, since java is using UTF-8
+            postedBody.append(new String(formDataPostBody, "UTF-8")); // $NON-NLS-1$
+            
+            // Add any files
+            if(sampler.hasUploadableFiles()) {
+                // First write the start multipart file
+                out.write(formDataFileStartMultipart);
+                // We get the posted bytes as UTF-8, since java is using UTF-8
+                postedBody.append(new String(formDataFileStartMultipart, "UTF-8")); // $NON-NLS-1$
+                
+                // Write the actual file content
+                writeFileToStream(sampler.getFilename(), out);
+                // We just add placeholder text for file content
+                postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
+
+                // Write the end of multipart file
+                byte[] fileMultipartEndDivider = getFileMultipartEndDivider(); 
+                out.write(fileMultipartEndDivider);
+                // We get the posted bytes as UTF-8, since java is using UTF-8
+                postedBody.append(new String(fileMultipartEndDivider, "UTF-8")); // $NON-NLS-1$
             }
-			writeln(out, DASH_DASH + BOUNDARY);
-			PropertyIterator args = sampler.getArguments().iterator();
-			while (args.hasNext()) {
-				Argument arg = (Argument) args.next().getObjectValue();
-				writeFormMultipartStyle(out, arg.getName(), arg.getValue());
-				writeln(out, DASH_DASH + BOUNDARY);
-			}
-			writeFileToURL(out, filename, sampler.getFileField(), getFileStream(filename), sampler.getMimetype());
 
-			writeln(out, DASH_DASH + BOUNDARY + DASH_DASH);
-			out.flush();
-			out.close();
-		}
+            // Write end of multipart
+            byte[] multipartEndDivider = getMultipartEndDivider(); 
+            out.write(multipartEndDivider);
+            // We get the posted bytes as UTF-8, since java is using UTF-8
+            postedBody.append(new String(multipartEndDivider, "UTF-8")); // $NON-NLS-1$
 
-		// No filename specified, so send the post using normal syntax
-		else {
-			String postData = sampler.getQueryString();
-			final String contentEncoding = sampler.getContentEncoding();
-			OutputStreamWriter out;
-			if (contentEncoding.length() > 0) {
-			out = new OutputStreamWriter(connection.getOutputStream(), contentEncoding);
-			} else {
-				out = new OutputStreamWriter(connection.getOutputStream());				
-			}
-			out.write(postData);
-			out.flush();
+            out.flush();
             out.close();
-		}
+        }
+        else {
+            // If there are no arguments, we can send a file as the body of the request
+            if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+                OutputStream out = connection.getOutputStream();
+                writeFileToStream(sampler.getFilename(), out);
+                out.flush();
+                out.close();
+
+                // We just add placeholder text for file content
+                postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
+            }
+            else {            
+                // In an application/x-www-form-urlencoded request, we only support
+                // parameters, no file upload is allowed
+                OutputStream out = connection.getOutputStream();
+                out.write(formDataUrlEncoded);
+                out.flush();
+                out.close();
+
+                // We get the posted bytes as UTF-8, since java is using UTF-8
+                postedBody.append(new String(formDataUrlEncoded, "UTF-8")); // $NON-NLS-1$
+            }            
+        }
+        return postedBody.toString();
 	}
+    
+    public void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
+    	// Get the encoding to use for the request
+        String contentEncoding = sampler.getContentEncoding();
+        if(contentEncoding == null || contentEncoding.length() == 0) {
+            contentEncoding = ENCODING;
+        }
+        long contentLength = 0L;
+    	
+        // Check if we should do a multipart/form-data or an
+        // application/x-www-form-urlencoded post request
+        if(sampler.getUseMultipartForPost()) {
+            // Set the content type
+            connection.setRequestProperty(
+                HTTPSamplerBase.HEADER_CONTENT_TYPE,
+                HTTPSamplerBase.MULTIPART_FORM_DATA + "; boundary=" + getBoundary()); // $NON-NLS-1$
+            
+            // Write the form section
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-	public static void setHeaders(URLConnection connection, HTTPSampler sampler) throws IOException {
-		((HttpURLConnection) connection).setRequestMethod(HTTPSamplerBase.POST);
+            // First the multipart start divider
+            bos.write(getMultipartDivider());
+            // Add any parameters
+            PropertyIterator args = sampler.getArguments().iterator();
+            while (args.hasNext()) {
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                // End the previous multipart
+                bos.write(CRLF);
+                // Write multipart for parameter
+                writeFormMultipart(bos, arg.getName(), arg.getValue(), contentEncoding);
+            }
+            // If there are any files, we need to end the previous multipart
+            if(sampler.hasUploadableFiles()) {
+                // End the previous multipart
+                bos.write(CRLF);
+            }
+            bos.flush();
+            // Keep the content, will be sent later
+            formDataPostBody = bos.toByteArray();
+            bos.close();
+            contentLength = formDataPostBody.length;
 
-		// If filename was specified then send the post using multipart syntax
-		String filename = sampler.getFilename();
-		if ((filename != null) && (filename.trim().length() > 0)) {
-			if (!sampler.getSendFileAsPostBody()) { // unless the file is the body...
-				String hct= connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
-				if (hct == null || hct.length() == 0) {
-			        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, 
-                        "multipart/form-data; boundary=" + BOUNDARY); // $NON-NLS-1$
-				}
-			}
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-		}
+            // Now we just construct any multipart for the files
+            // We only construct the file multipart start, we do not write
+            // the actual file content
+            if(sampler.hasUploadableFiles()) {
+                bos = new ByteArrayOutputStream();
+                // Write multipart for file
+                writeStartFileMultipart(bos, sampler.getFilename(), sampler.getFileField(), sampler.getMimetype());
+                bos.flush();
+                formDataFileStartMultipart = bos.toByteArray();
+                bos.close();
+                contentLength += formDataFileStartMultipart.length;
+                // Add also the length of the file content
+                File uploadFile = new File(sampler.getFilename());
+                contentLength += uploadFile.length();
+                // And the end of the file multipart
+                contentLength += getFileMultipartEndDivider().length;
+            }
 
-		// No filename specified, so send the post using normal syntax
-		else {
-			String postData = sampler.getQueryString();
-			connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(postData.length()));
-			String hct= connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
-			if (hct == null || hct.length() == 0) {
-			    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
-			}
-			connection.setDoOutput(true);
-		}
-	}
+            // Add the end of multipart
+            contentLength += getMultipartEndDivider().length;
 
-	private static InputStream getFileStream(String filename) throws IOException {
-		return new BufferedInputStream(new FileInputStream(filename));
-	}
+            // Set the content length
+            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
 
-	/*
-	 * NOTUSED private String getContentLength(MultipartUrlConfig config) { long
-	 * size = 0; size += BOUNDARY.length() + 2; PropertyIterator iter =
-	 * config.getArguments().iterator(); while (iter.hasNext()) { Argument item =
-	 * (Argument) iter.next().getObjectValue(); size += item.getName().length() +
-	 * item.getValue().toString().length(); size += CRLF.length * 4; size +=
-	 * BOUNDARY.length() + 2; size += 39; } size += new
-	 * File(config.getFilename()).length(); size += CRLF.length * 5; size +=
-	 * BOUNDARY.length() + 2; size +=
-	 * encode(config.getFileFieldName()).length(); size +=
-	 * encode(config.getFilename()).length(); size +=
-	 * config.getMimeType().length(); size += 66; size += 2 + (CRLF.length * 1);
-	 * return Long.toString(size); }
-	 */
+            // Make the connection ready for sending post data
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+        }
+        else {
+            // Set the content type
+            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+            
+            // If there are no arguments, we can send a file as the body of the request
+            if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+                // Create the content length we are going to write
+                File inputFile = new File(sampler.getFilename());
+                contentLength = inputFile.length();
+            }
+            else {
+                // We create the post body content now, so we know the size
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                
+                String postBody = getQueryStringForPostBody(sampler, contentEncoding);
+                // Query string should be encoded in UTF-8
+                bos.write(postBody.getBytes("UTF-8")); // $NON-NLS-1$
+                bos.flush();
+                bos.close();
 
+                // Keep the content, will be sent later
+                formDataUrlEncoded = bos.toByteArray();
+                contentLength = bos.toByteArray().length;
+            }
+            
+            // Set the content length
+            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
+
+            // Make the connection ready for sending post data
+            connection.setDoOutput(true);
+        }
+    }
+    
 	/**
-	 * Writes out the contents of a file in correct multipart format.
+	 * Gets the query string for the sampler encoded for http post body.
+	 * This method works differently from the getQueryString in HttpSamplerBase,
+	 * becuase this method does not force the parameter value to be url encoded
+	 * in utf8. Rather, it uses the specified encoding for the parameter value
+	 * 
+	 * @return the querystring encoded as usable for a http post body request
 	 */
-	private static void writeFileToURL(OutputStream out, String filename,
-            String fieldname, InputStream in, String mimetype)
+	private String getQueryStringForPostBody(HTTPSampler sampler, String contentEncoding) throws IOException {
+		StringBuffer buf = new StringBuffer();
+		PropertyIterator iter = sampler.getArguments().iterator();
+		boolean first = true;
+		while (iter.hasNext()) {
+            HTTPArgument arg = (HTTPArgument) iter.next().getObjectValue();
+			
+			if (!first) {
+				buf.append("&");
+			} else {
+				first = false;
+			}
+			buf.append(arg.getEncodedName());
+			if (arg.getMetaData() == null) {
+				buf.append("=");
+			} else {
+				buf.append(arg.getMetaData());
+			}
+			buf.append(URLEncoder.encode(arg.getValue(), contentEncoding));
+		}
+		return buf.toString();
+	}
+    
+    /**
+     * Get the boundary string, used to separate multiparts
+     * 
+     * @return the boundary string
+     */
+    protected String getBoundary() {
+        return boundary;
+    }
+
+    /**
+     * Get the bytes used to separate multiparts
+     * 
+     * @return the bytes used to separate multiparts
+     * @throws IOException
+     */
+    private byte[] getMultipartDivider() throws IOException {
+        return new String(DASH_DASH + getBoundary()).getBytes(ENCODING);
+    }
+
+    /**
+     * Get the bytes used to end a file multipat
+     * 
+     * @return the bytes used to end a file multipart
+     * @throws IOException
+     */
+    private byte[] getFileMultipartEndDivider() throws IOException{
+        byte[] ending = new String(DASH_DASH + getBoundary()).getBytes(ENCODING);
+        byte[] completeEnding = new byte[ending.length + CRLF.length];
+        System.arraycopy(CRLF, 0, completeEnding, 0, CRLF.length);
+        System.arraycopy(ending, 0, completeEnding, CRLF.length, ending.length);
+        return completeEnding;
+    }
+
+    /**
+     * Get the bytes used to end the multipart request
+     * 
+     * @return the bytes used to end the multipart request
+     * @throws IOException
+     */
+    private byte[] getMultipartEndDivider() throws IOException{
+        byte[] ending = DASH_DASH.getBytes(ENCODING);
+        byte[] completeEnding = new byte[ending.length + CRLF.length];
+        System.arraycopy(ending, 0, completeEnding, 0, ending.length);
+        System.arraycopy(CRLF, 0, completeEnding, ending.length, CRLF.length);
+        return completeEnding;
+    }
+
+    /**
+     * Write the start of a file multipart, up to the point where the
+     * actual file content should be written
+     */
+	private void writeStartFileMultipart(OutputStream out, String filename,
+            String nameField, String mimetype)
             throws IOException {
         write(out, "Content-Disposition: form-data; name=\""); // $NON-NLS-1$
-        write(out, HTTPSamplerBase.encodeBackSlashes(fieldname));
+        write(out, nameField);
         write(out, "\"; filename=\"");// $NON-NLS-1$
-        write(out, HTTPSamplerBase.encodeBackSlashes(filename));
+        write(out, (new File(filename).getName()));
         writeln(out, "\""); // $NON-NLS-1$
         writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
+        writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
         out.write(CRLF);
+    }
 
+    /**
+     * Write the content of a file to the output stream
+     * 
+     * @param filename the filename of the file to write to the stream
+     * @param out the stream to write to
+     * @throws IOException
+     */
+    private void writeFileToStream(String filename, OutputStream out) throws IOException {
         byte[] buf = new byte[1024];
         // 1k - the previous 100k made no sense (there's tons of buffers
         // elsewhere in the chain) and it caused OOM when many concurrent
         // uploads were being done. Could be fixed by increasing the evacuation
         // ratio in bin/jmeter[.bat], but this is better.
+        InputStream in = new BufferedInputStream(new FileInputStream(filename));
         int read;
-        while ((read = in.read(buf)) > 0) {
-            out.write(buf, 0, read);
+        try {
+            while ((read = in.read(buf)) > 0) {
+                out.write(buf, 0, read);
+            }
         }
-        out.write(CRLF);
-        in.close();
+        finally {
+            in.close();
+        }
     }
 
 	/**
 	 * Writes form data in multipart format.
 	 */
-	private static void writeFormMultipartStyle(OutputStream out, String name, String value) throws IOException {
+	private void writeFormMultipart(OutputStream out, String name, String value, String charSet)
+		throws IOException {
 		writeln(out, "Content-Disposition: form-data; name=\"" + name + "\""); // $NON-NLS-1$ // $NON-NLS-2$
+        writeln(out, "Content-Type: text/plain; charset=" + charSet); // $NON-NLS-1$
+        writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
+        
 		out.write(CRLF);
-		writeln(out, value);
+		out.write(value.getBytes(charSet));
+		out.write(CRLF);
+        // Write boundary end marker
+        out.write(getMultipartDivider());
 	}
 
-    private static void write(OutputStream out, String value) 
+    private void write(OutputStream out, String value) 
     throws UnsupportedEncodingException, IOException 
     {
-    	out.write(value.getBytes(encoding)); 
+    	out.write(value.getBytes(ENCODING)); 
     }
 	
 
-	private static void writeln(OutputStream out, String value) throws UnsupportedEncodingException, IOException {
-		out.write(value.getBytes(encoding));
+	private void writeln(OutputStream out, String value)
+	throws UnsupportedEncodingException, IOException
+	{
+		out.write(value.getBytes(ENCODING));
 		out.write(CRLF);
 	}
 }
