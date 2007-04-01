@@ -200,7 +200,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		addSubResults(currNode, res);
 		// Add any assertion that failed as children of the sample node
 		AssertionResult assertionResults[] = res.getAssertionResults();
-		int assertionIndex = 0;
+		int assertionIndex = currNode.getChildCount();
 		for (int j = 0; j < assertionResults.length; j++) {
 			AssertionResult item = assertionResults[j];
 			
@@ -231,6 +231,17 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 			treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
 			addSubResults(leafNode, child);
+            // Add any assertion that failed as children of the sample node
+            AssertionResult assertionResults[] = child.getAssertionResults();
+            int assertionIndex = leafNode.getChildCount();
+            for (int j = 0; j < assertionResults.length; j++) {
+                AssertionResult item = assertionResults[j];
+                
+                if (item.isFailure() || item.isError()) {
+                    DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(item);
+                    treeModel.insertNodeInto(assertionNode, leafNode, assertionIndex++);
+                }
+            }
 		}
 	}
 
@@ -602,9 +613,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		xmlButton.setEnabled(true);
 	}
 
-	// TODO this method changed because Render XML button added
-	// Could probably be private anyway, because it's only used locally
-	protected Component createHtmlOrTextPane() {
+	private Component createHtmlOrTextPane() {
 		ButtonGroup group = new ButtonGroup();
 
 		textButton = new JRadioButton(TEXT_BUTTON_LABEL);
@@ -741,11 +750,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 		resultsScrollPane = makeScrollPane(results);
 		imageLabel = new JLabel();
 
-		JPanel resultsPane = new JPanel(new BorderLayout());
-		resultsPane.add(resultsScrollPane, BorderLayout.CENTER);
-		resultsPane.add(createHtmlOrTextPane(), BorderLayout.SOUTH);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(resultsScrollPane, BorderLayout.CENTER);
+		panel.add(createHtmlOrTextPane(), BorderLayout.SOUTH);
 
-		return resultsPane;
+		return panel;
 	}
 
 	private static class ResultsNodeRenderer extends DefaultTreeCellRenderer {
