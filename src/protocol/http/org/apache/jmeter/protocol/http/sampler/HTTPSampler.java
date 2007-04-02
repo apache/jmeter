@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
@@ -348,7 +349,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *            for this <code>UrlConfig</code>
 	 */
 	private void setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager) {
-        // Set all the headers from the HeaderManager
+        // Add all the headers from the HeaderManager
 		if (headerManager != null) {
 			CollectionProperty headers = headerManager.getHeaders();
 			if (headers != null) {
@@ -357,7 +358,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 					Header header = (Header) i.next().getObjectValue();
 					String n = header.getName();
 					String v = header.getValue();
-					conn.setRequestProperty(n, v);
+					conn.addRequestProperty(n, v);
 				}
 			}
 		}
@@ -375,19 +376,21 @@ public class HTTPSampler extends HTTPSamplerBase {
         // Get all the request properties, which are the headers set on the connection
         StringBuffer hdrs = new StringBuffer(100);
         Map requestHeaders = conn.getRequestProperties();
-        Set headerFields = requestHeaders.keySet();
+        Set headerFields = requestHeaders.entrySet();
         for(Iterator i = headerFields.iterator(); i.hasNext();) {
-            String headerKey = (String)i.next();
+        	Map.Entry entry = (Map.Entry)i.next();
+        	String headerKey=(String) entry.getKey();
             // Exclude the COOKIE header, since cookie is reported separately in the sample
             if(!HEADER_COOKIE.equalsIgnoreCase(headerKey)) {            
-                String headerValue = conn.getRequestProperty(headerKey);
-                hdrs.append(headerKey);
-                hdrs.append(": "); // $NON-NLS-1$
-                hdrs.append(headerValue);
-                hdrs.append("\n"); // $NON-NLS-1$
+            	List values = (List) entry.getValue();// value is a List of Strings
+            	for (int j=0;j<values.size();j++){            		
+                    hdrs.append(headerKey);
+                    hdrs.append(": "); // $NON-NLS-1$                
+                    hdrs.append((String) values.get(j));
+                    hdrs.append("\n"); // $NON-NLS-1$
+            	}
             }
         }
-
         return hdrs.toString();
     }
 
