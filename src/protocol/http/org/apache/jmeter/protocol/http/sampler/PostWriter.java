@@ -45,7 +45,7 @@ public class PostWriter {
 
 	private final static byte[] CRLF = { 0x0d, 0x0A };
 
-	public static final String ENCODING = "iso-8859-1"; // $NON-NLS-1$
+	public static final String ENCODING = "ISO-8859-1"; // $NON-NLS-1$
 
     /** The form data that is going to be sent as url encoded */
     private byte[] formDataUrlEncoded;    
@@ -343,7 +343,7 @@ public class PostWriter {
         write(out, (new File(filename).getName()));
         writeln(out, "\""); // $NON-NLS-1$
         writeln(out, "Content-Type: " + mimetype); // $NON-NLS-1$
-        writeln(out, "Content-Transfer-Encoding: 8bit"); // $NON-NLS-1$
+        writeln(out, "Content-Transfer-Encoding: binary"); // $NON-NLS-1$
         out.write(CRLF);
     }
 
