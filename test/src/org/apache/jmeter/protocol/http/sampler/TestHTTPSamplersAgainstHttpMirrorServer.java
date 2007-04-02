@@ -19,7 +19,11 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 
@@ -47,47 +51,73 @@ import junit.framework.TestCase;
 public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     private final static int HTTP_SAMPLER = 0;
     private final static int HTTP_SAMPLER2 = 1;
+    /** The encoding used for http headers and control information */
+    private final static String HTTP_ENCODING = "ISO-8859-1";
+    private final byte[] CRLF = { 0x0d, 0x0A };
+    private static byte[] TEST_FILE_CONTENT;
     private HttpMirrorControl webServerControl;
     private int webServerPort = 8080;
+    private File temporaryFile;
 
     public TestHTTPSamplersAgainstHttpMirrorServer(String arg0) {
         super(arg0);
     }
     protected void setUp() throws Exception {
+        // Start the HTTPMirrorServer
         webServerControl = new HttpMirrorControl();
         webServerControl.setPort(webServerPort);
         webServerControl.startHttpMirror();
+
+        // Create the test file content
+        TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
+
+        // create a temporary file to make sure we always have a file to give to the PostWriter 
+        // Whereever we are or Whatever the current path is.
+        temporaryFile = File.createTempFile("foo", "txt");
+        OutputStream output = new FileOutputStream(temporaryFile);
+        output.write(TEST_FILE_CONTENT);
+        output.flush();
+        output.close();
     }
 
     protected void tearDown() throws Exception {
         // Shutdown web server
         webServerControl.stopHttpMirror();
         webServerControl = null;
+
+        // delete temporay file
+        temporaryFile.delete();
     }
         
     public void testPostRequest_UrlEncoded() throws Exception {
         // Test HTTPSampler
-        String samplerDefaultEncoding = "ISO-8859-1".toLowerCase();
+        String samplerDefaultEncoding = "ISO-8859-1";
         testPostRequest_UrlEncoded(HTTP_SAMPLER, samplerDefaultEncoding);
         
         // Test HTTPSampler2
         samplerDefaultEncoding = "US-ASCII";
-//        testPostRequest_UrlEncoded(HTTP_SAMPLER2, samplerDefaultEncoding);
+        testPostRequest_UrlEncoded(HTTP_SAMPLER2, samplerDefaultEncoding);
     }
-    
-/*    	
-//  The whole method is commented out, because sending post request as
-//  multipart/form-data is not supported by current svn version of PostWriter
+    	
     public void testPostRequest_FormMultipart() throws Exception {
         // Test HTTPSampler
-        String samplerDefaultEncoding = "ISO-8859-1".toLowerCase();
+        String samplerDefaultEncoding = "ISO-8859-1";
         testPostRequest_FormMultipart(HTTP_SAMPLER, samplerDefaultEncoding);
         
         // Test HTTPSampler2
         samplerDefaultEncoding = "US-ASCII";
         testPostRequest_FormMultipart(HTTP_SAMPLER2, samplerDefaultEncoding);
     }
-*/    
+
+    public void testPostRequest_FileUpload() throws Exception {
+        // Test HTTPSampler
+        String samplerDefaultEncoding = "ISO-8859-1".toLowerCase();
+        testPostRequest_FileUpload(HTTP_SAMPLER, samplerDefaultEncoding);
+        
+        // Test HTTPSampler2
+        samplerDefaultEncoding = "US-ASCII";
+        testPostRequest_FileUpload(HTTP_SAMPLER2, samplerDefaultEncoding);
+    }   
 
     private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding) throws Exception {
         String titleField = "title";
@@ -158,7 +188,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         String contentEncoding = "";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-//        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipartPost(true);
         HTTPSampleResult res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue);
         
@@ -167,7 +197,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         contentEncoding = "ISO-8859-1";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-//        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipartPost(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue);
 
@@ -178,7 +208,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-//        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipartPost(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue);
         
@@ -190,7 +220,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-//        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipartPost(true);
         res = executeSampler(sampler);
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue);
 
@@ -212,13 +242,48 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
-//        sampler.setDoMultipartPost(true);
+        sampler.setDoMultipartPost(true);
         // Replace the variables in the sampler
         replacer.replaceValues(sampler);
         res = executeSampler(sampler);
         String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
         String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
         checkPostRequestFormMultipart(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue);
+    }
+
+    private void testPostRequest_FileUpload(int samplerType, String samplerDefaultEncoding) throws Exception {
+        String titleField = "title";
+        String titleValue = "mytitle";
+        String descriptionField = "description";
+        String descriptionValue = "mydescription";
+        String fileField = "file1";
+        String fileMimeType = "text/plain";
+
+        // Test sending data with default encoding
+        HTTPSamplerBase sampler = createHttpSampler(samplerType);
+        String contentEncoding = "";
+        setupUrl(sampler, contentEncoding);
+        setupFileUploadData(sampler, false, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType);
+        HTTPSampleResult res = executeSampler(sampler);
+        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType, TEST_FILE_CONTENT);
+        
+        // Test sending data as ISO-8859-1
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "ISO-8859-1";
+        setupUrl(sampler, contentEncoding);
+        setupFileUploadData(sampler, false, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType);
+        res = executeSampler(sampler);
+        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType, TEST_FILE_CONTENT);
+
+        // Test sending data as UTF-8
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
+        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
+        setupUrl(sampler, contentEncoding);
+        setupFileUploadData(sampler, false, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType);
+        res = executeSampler(sampler);
+        checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType, TEST_FILE_CONTENT);
     }
     
     private HTTPSampleResult executeSampler(HTTPSamplerBase sampler) {
@@ -332,6 +397,66 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
+    }
+    
+    private void checkPostRequestFileUpload(
+            HTTPSamplerBase sampler,
+            HTTPSampleResult res,
+            String samplerDefaultEncoding,
+            String contentEncoding,
+            String titleField,
+            String titleValue,
+            String descriptionField,
+            String descriptionValue,
+            String fileField,
+            File fileValue,
+            String fileMimeType,
+            byte[] fileContent) throws IOException {
+        if(contentEncoding == null || contentEncoding.length() == 0) {
+            contentEncoding = samplerDefaultEncoding;
+        }
+        // Check URL
+        assertEquals(sampler.getUrl(), res.getURL());
+        String boundaryString = getBoundaryStringFromContentType(res.getRequestHeaders());
+        assertNotNull(boundaryString);
+        byte[] expectedPostBody = createExpectedFormAndUploadOutput(boundaryString, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, fileField, fileValue, fileMimeType, fileContent);
+        // Check request headers
+        assertTrue(isInRequestHeaders(res.getRequestHeaders(), HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
+        assertTrue(
+                isInRequestHeaders(
+                        res.getRequestHeaders(),
+                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
+                        Integer.toString(expectedPostBody.length)
+                )
+        );
+        // We cannot check post body from the result query string, since that will not contain
+        // the actual file content, but placeholder text for file content
+        //checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
+
+        // Find the data sent to the mirror server, which the mirror server is sending back to us
+        String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
+        int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
+        String headersSent = null;
+        String bodySent = null;
+        if(posDividerHeadersAndBody >= 0) {
+            headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
+            // Skip the blank line with crlf dividing headers and body
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
+        }
+        // Check response headers
+        assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
+        assertTrue(
+                isInRequestHeaders(
+                        headersSent,
+                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
+                        Integer.toString(expectedPostBody.length)
+                )
+        );
+        // Check post body which was sent to the mirror server, and
+        // sent back by the mirror server
+        // We cannot check this merely by getting the body in the contentEncoding,
+        // since the actual file content is sent binary, without being encoded
+        //checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
     }    
 
     private boolean isInRequestHeaders(String requestHeaders, String headerName, String headerValue) {
@@ -401,19 +526,51 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     }
 
     /**
+     * Setup the form data with specified values, and file to upload
+     * 
+     * @param httpSampler
+     */
+    private void setupFileUploadData(
+    		HTTPSamplerBase httpSampler,
+    		boolean isEncoded,
+    		String titleField,
+    		String titleValue,
+    		String descriptionField,
+    		String descriptionValue,
+    		String fileField,
+    		File fileValue,
+    		String fileMimeType) {
+    	// Set the form data
+    	setupFormData(httpSampler, isEncoded, titleField, titleValue, descriptionField, descriptionValue);
+    	// Set the file upload data
+    	httpSampler.setFileField(fileField);
+    	httpSampler.setFilename(fileValue.getAbsolutePath());
+    	httpSampler.setMimetype(fileMimeType);    	
+    }
+
+    /**
      * Check that the the two byte arrays have identical content
      * 
      * @param expected
      * @param actual
+     * @throws UnsupportedEncodingException 
      */
-    private void checkArraysHaveSameContent(byte[] expected, byte[] actual) {
+    private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
+            	System.out.println(new String(expected,"UTF-8"));
+            	System.out.println("--------------------");
+            	System.out.println(new String(actual,"UTF-8"));
+            	System.out.println("====================");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
             else {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
+                       	System.out.println(new String(expected,0,i+1));
+                    	System.out.println("--------------------");
+                    	System.out.println(new String(actual,0,i+1));
+                    	System.out.println("====================");
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
                 }
@@ -441,27 +598,25 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             boolean firstMultipart,
             boolean lastMultipart) throws IOException {
         // The encoding used for http headers and control information
-        final String httpEncoding = "ISO-8859-1";
-        final byte[] CRLF = { 0x0d, 0x0A };
-        final byte[] DASH_DASH = new String("--").getBytes(httpEncoding);
-        
+        final byte[] DASH_DASH = new String("--").getBytes(HTTP_ENCODING);
+
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         if(firstMultipart) {
             output.write(DASH_DASH);
-            output.write(boundaryString.getBytes(httpEncoding));
+            output.write(boundaryString.getBytes(HTTP_ENCODING));
             output.write(CRLF);
         }
-        output.write("Content-Disposition: form-data; name=\"".getBytes(httpEncoding));
-        output.write(titleField.getBytes(httpEncoding));
-        output.write("\"".getBytes(httpEncoding));
+        output.write("Content-Disposition: form-data; name=\"".getBytes(HTTP_ENCODING));
+        output.write(titleField.getBytes(HTTP_ENCODING));
+        output.write("\"".getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Type: text/plain".getBytes(httpEncoding));
+        output.write("Content-Type: text/plain".getBytes(HTTP_ENCODING));
         if(contentEncoding != null) {
-            output.write("; charset=".getBytes(httpEncoding));
-            output.write(contentEncoding.getBytes(httpEncoding));
+            output.write("; charset=".getBytes(HTTP_ENCODING));
+            output.write(contentEncoding.getBytes(HTTP_ENCODING));
         }
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(httpEncoding));
+        output.write("Content-Transfer-Encoding: 8bit".getBytes(HTTP_ENCODING));
         output.write(CRLF);
         output.write(CRLF);
         if(contentEncoding != null) {
@@ -472,19 +627,19 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         }
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(httpEncoding));
+        output.write(boundaryString.getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Disposition: form-data; name=\"".getBytes(httpEncoding));
-        output.write(descriptionField.getBytes(httpEncoding));
-        output.write("\"".getBytes(httpEncoding));
+        output.write("Content-Disposition: form-data; name=\"".getBytes(HTTP_ENCODING));
+        output.write(descriptionField.getBytes(HTTP_ENCODING));
+        output.write("\"".getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Type: text/plain".getBytes(httpEncoding));
+        output.write("Content-Type: text/plain".getBytes(HTTP_ENCODING));
         if(contentEncoding != null) {
-            output.write("; charset=".getBytes(httpEncoding));
-            output.write(contentEncoding.getBytes(httpEncoding));
+            output.write("; charset=".getBytes(HTTP_ENCODING));
+            output.write(contentEncoding.getBytes(HTTP_ENCODING));
         }
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(httpEncoding));
+        output.write("Content-Transfer-Encoding: 8bit".getBytes(HTTP_ENCODING));
         output.write(CRLF);
         output.write(CRLF);
         if(contentEncoding != null) {
@@ -495,7 +650,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         }
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(httpEncoding));
+        output.write(boundaryString.getBytes(HTTP_ENCODING));
         if(lastMultipart) {
             output.write(DASH_DASH);
         }
@@ -504,6 +659,84 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         output.flush();
         output.close();
 
+        return output.toByteArray();
+    }
+
+    /**
+     * Create the expected file multipart
+     * 
+     * @param lastMultipart true if this is the last multipart in the request
+     */
+    private byte[] createExpectedFilepartOutput(
+            String boundaryString,
+            String fileField,
+            File file,
+            String mimeType,
+            byte[] fileContent,
+            boolean firstMultipart,
+            boolean lastMultipart) throws IOException {
+        final byte[] DASH_DASH = new String("--").getBytes(HTTP_ENCODING);
+        
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        if(firstMultipart) {
+            output.write(DASH_DASH);
+            output.write(boundaryString.getBytes(HTTP_ENCODING));
+            output.write(CRLF);
+        }
+        // replace all backslash with double backslash
+        String filename = file.getName();
+        output.write("Content-Disposition: form-data; name=\"".getBytes(HTTP_ENCODING));
+        output.write(fileField.getBytes(HTTP_ENCODING));
+        output.write(("\"; filename=\"" + filename + "\"").getBytes(HTTP_ENCODING));
+        output.write(CRLF);
+        output.write("Content-Type: ".getBytes(HTTP_ENCODING));
+        output.write(mimeType.getBytes(HTTP_ENCODING));
+        output.write(CRLF);
+        output.write("Content-Transfer-Encoding: binary".getBytes(HTTP_ENCODING));
+        output.write(CRLF);
+        output.write(CRLF);
+        output.write(fileContent);
+        output.write(CRLF);
+        output.write(DASH_DASH);
+        output.write(boundaryString.getBytes(HTTP_ENCODING));
+        if(lastMultipart) {
+            output.write(DASH_DASH);
+        }
+        output.write(CRLF);
+        
+        output.flush();
+        output.close();
+
+        return output.toByteArray();
+    }
+    
+    /**
+     * Create the expected output post body for form data and file multiparts
+     * with specified values
+     */
+    private byte[] createExpectedFormAndUploadOutput(
+            String boundaryString,
+            String contentEncoding,
+            String titleField,
+            String titleValue,
+            String descriptionField,
+            String descriptionValue,
+            String fileField,
+            File fileValue,
+            String fileMimeType,
+            byte[] fileContent) throws IOException {
+        // Create the multiparts
+        byte[] formdataMultipart = createExpectedFormdataOutput(boundaryString, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true, false);
+        byte[] fileMultipart = createExpectedFilepartOutput(boundaryString, fileField, fileValue, fileMimeType, fileContent, false, true);
+        
+        // Join the two multiparts
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        output.write(formdataMultipart);
+        output.write(fileMultipart);
+        
+        output.flush();
+        output.close();
+        
         return output.toByteArray();
     }
     

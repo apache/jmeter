@@ -38,7 +38,8 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
 public class PostWriterTest extends TestCase {
-    
+    /** The encoding used for http headers and control information */
+    private final static String HTTP_ENCODING = "ISO-8859-1";
     private final static byte[] CRLF = { 0x0d, 0x0A };
     private static byte[] TEST_FILE_CONTENT;
     
@@ -668,27 +669,26 @@ public class PostWriterTest extends TestCase {
             String descriptionValue,
             boolean firstMultipart,
             boolean lastMultipart) throws IOException {
-        // The encoding used for http headers and control information
-        final String httpEncoding = "ISO-8859-1";//TODO which case should it be? Make it a constant
-        final byte[] DASH_DASH = new String("--").getBytes(httpEncoding);
+        final byte[] DASH_DASH = new String("--").getBytes(HTTP_ENCODING);
+        // All form parameter always have text/plain as mime type
         final String mimeType="text/plain";//TODO make this a parameter?
         
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         if(firstMultipart) {
             output.write(DASH_DASH);
-            output.write(boundaryString.getBytes(httpEncoding));
+            output.write(boundaryString.getBytes(HTTP_ENCODING));
             output.write(CRLF);
         }
-        output.write("Content-Disposition: form-data; name=\"".getBytes(httpEncoding));
-        output.write(titleField.getBytes(httpEncoding));
-        output.write("\"".getBytes(httpEncoding));
+        output.write("Content-Disposition: form-data; name=\"".getBytes(HTTP_ENCODING));
+        output.write(titleField.getBytes(HTTP_ENCODING));
+        output.write("\"".getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Type: ".getBytes(httpEncoding));
-        output.write(mimeType.getBytes(httpEncoding));
-        output.write("; charset=".getBytes(httpEncoding));
-        output.write((contentEncoding==null ? PostWriter.ENCODING : contentEncoding).getBytes(httpEncoding));
+        output.write("Content-Type: ".getBytes(HTTP_ENCODING));
+        output.write(mimeType.getBytes(HTTP_ENCODING));
+        output.write("; charset=".getBytes(HTTP_ENCODING));
+        output.write((contentEncoding==null ? PostWriter.ENCODING : contentEncoding).getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(httpEncoding));
+        output.write("Content-Transfer-Encoding: 8bit".getBytes(HTTP_ENCODING));
         output.write(CRLF);
         output.write(CRLF);
         if(contentEncoding != null) {
@@ -699,18 +699,18 @@ public class PostWriterTest extends TestCase {
         }
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(httpEncoding));
+        output.write(boundaryString.getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Disposition: form-data; name=\"".getBytes(httpEncoding));
-        output.write(descriptionField.getBytes(httpEncoding));
-        output.write("\"".getBytes(httpEncoding));
+        output.write("Content-Disposition: form-data; name=\"".getBytes(HTTP_ENCODING));
+        output.write(descriptionField.getBytes(HTTP_ENCODING));
+        output.write("\"".getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Type: ".getBytes(httpEncoding));
-        output.write(mimeType.getBytes(httpEncoding));
-        output.write("; charset=".getBytes(httpEncoding));
-        output.write((contentEncoding==null ? PostWriter.ENCODING : contentEncoding).getBytes(httpEncoding));
+        output.write("Content-Type: ".getBytes(HTTP_ENCODING));
+        output.write(mimeType.getBytes(HTTP_ENCODING));
+        output.write("; charset=".getBytes(HTTP_ENCODING));
+        output.write((contentEncoding==null ? PostWriter.ENCODING : contentEncoding).getBytes(HTTP_ENCODING));
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(httpEncoding));
+        output.write("Content-Transfer-Encoding: 8bit".getBytes(HTTP_ENCODING));
         output.write(CRLF);
         output.write(CRLF);
         if(contentEncoding != null) {
@@ -721,7 +721,7 @@ public class PostWriterTest extends TestCase {
         }
         output.write(CRLF);
         output.write(DASH_DASH);
-        output.write(boundaryString.getBytes(httpEncoding));
+        output.write(boundaryString.getBytes(HTTP_ENCODING));
         if(lastMultipart) {
             output.write(DASH_DASH);
         }
@@ -765,7 +765,7 @@ public class PostWriterTest extends TestCase {
         output.write("Content-Type: ".getBytes(httpEncoding));
         output.write(mimeType.getBytes(httpEncoding));
         output.write(CRLF);
-        output.write("Content-Transfer-Encoding: 8bit".getBytes(httpEncoding));
+        output.write("Content-Transfer-Encoding: binary".getBytes(httpEncoding));
         output.write(CRLF);
         output.write(CRLF);
         output.write(fileContent);
