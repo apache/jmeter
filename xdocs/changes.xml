@@ -66,6 +66,10 @@ Remote mode does not work if JMeter is installed in a directory where the path n
 BeanShell test elements leak memory.
 This can be reduced by using a file instead of including the script in the test element.
 </p>
+<p>
+Variables and functions do not work in Listeners in client-server (remote) mode so cannot be used
+to name log files.
+</p>
 <h4>Incompatible changes (usage):</h4>
 <p>
 The LDAP Extended Sampler now uses the same panel for both Thread Bind and Single-Bind tests.
