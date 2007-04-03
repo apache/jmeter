@@ -197,6 +197,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41928 - Make all request headers sent by HTTP Request sampler appear in sample result</li>
 <li>Bug 41944 - Subresults not handled recursively by ResultSaver</li>
 <li>Bug 42022 - HTTPSampler does not allow multiple headers of same name</li>
+<li>Bug 42019 - Content type not stored in redirected HTTP request with subresults</li>
 </ul>
 
 <h3>Version 2.2</h3>
