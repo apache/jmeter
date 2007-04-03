@@ -58,7 +58,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
-import org.apache.jmeter.protocol.http.control.HttpMirrorControl;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
@@ -77,6 +76,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -371,12 +371,17 @@ public class JMeter implements JMeterPlugin {
             }
         }
         
-        int mirrorPort=JMeterUtils.getPropDefault("mirror.server.port", 0);// $NON-NLS-1$;
+        int mirrorPort=JMeterUtils.getPropDefault("mirror.server.port", 0);// $NON-NLS-1$
         if (mirrorPort > 0){
 			log.info("Starting Mirror server (" + mirrorPort + ")");
-        	HttpMirrorControl webServerControl = new HttpMirrorControl(mirrorPort);
-            webServerControl.startHttpMirror();
-
+			try {
+				Object instance = ClassTools.construct(
+						"org.apache.jmeter.protocol.http.control.HttpMirrorControl",// $NON-NLS-1$
+						mirrorPort);
+	            ClassTools.invoke(instance,"startHttpMirror");
+			} catch (JMeterException e) {
+				log.warn("Could not start Mirror server",e);
+			}
         }
 	}
 
