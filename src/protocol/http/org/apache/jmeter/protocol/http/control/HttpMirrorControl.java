@@ -38,11 +38,19 @@ public class HttpMirrorControl extends GenericController {
 	public static final String PORT = "HttpMirrorControlGui.port"; // $NON-NLS-1$
 
 	public HttpMirrorControl() {
-		setPort(DEFAULT_PORT);
+		initPort(DEFAULT_PORT);
+	}
+
+	public HttpMirrorControl(int port) {
+		initPort(port);
+	}
+
+	private void initPort(int port){
+		setProperty(new IntegerProperty(PORT, port));	
 	}
 
 	public void setPort(int port) {
-		this.setProperty(new IntegerProperty(PORT, port));
+		initPort(port);
 	}
 
 	public void setPort(String port) {
