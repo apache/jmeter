@@ -58,6 +58,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
+import org.apache.jmeter.protocol.http.control.HttpMirrorControl;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.reporters.Summariser;
 import org.apache.jmeter.samplers.Remoteable;
@@ -294,14 +295,14 @@ public class JMeter implements JMeterPlugin {
 				System.out.println(JMeterUtils.getResourceFileAsText("org/apache/jmeter/help.txt"));// $NON-NLS-1$
 			} else if (parser.getArgumentById(SERVER_OPT) != null) {
 				startServer(JMeterUtils.getPropDefault("server_port", 0));// $NON-NLS-1$
-				startBSH();
+				startOptionalServers();
 			} else if (parser.getArgumentById(NONGUI_OPT) == null) {
 				startGui(parser.getArgumentById(TESTFILE_OPT));
-				startBSH();
+				startOptionalServers();
 			} else {
 				startNonGui(parser.getArgumentById(TESTFILE_OPT), parser.getArgumentById(LOGFILE_OPT), parser
 						.getArgumentById(REMOTE_OPT));
-				startBSH();
+				startOptionalServers();
 			}
 		} catch (IllegalUserActionException e) {
 			System.out.println(e.getMessage());
@@ -347,7 +348,7 @@ public class JMeter implements JMeterPlugin {
     /**
 	 * 
 	 */
-	private void startBSH() {
+	private void startOptionalServers() {
 		int bshport = JMeterUtils.getPropDefault("beanshell.server.port", 0);// $NON-NLS-1$
 		String bshfile = JMeterUtils.getPropDefault("beanshell.server.file", "");// $NON-NLS-1$ $NON-NLS-2$
 		if (bshport > 0) {
@@ -368,6 +369,14 @@ public class JMeter implements JMeterPlugin {
             } catch (JMeterException e) {
                 log.warn("Could not process Beanshell file: "+e.getLocalizedMessage());
             }
+        }
+        
+        int mirrorPort=JMeterUtils.getPropDefault("mirror.server.port", 0);// $NON-NLS-1$;
+        if (mirrorPort > 0){
+			log.info("Starting Mirror server (" + mirrorPort + ")");
+        	HttpMirrorControl webServerControl = new HttpMirrorControl(mirrorPort);
+            webServerControl.startHttpMirror();
+
         }
 	}
 
