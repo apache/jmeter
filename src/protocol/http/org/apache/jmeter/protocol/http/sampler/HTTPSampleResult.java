@@ -21,17 +21,21 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.net.URL;
 
 import org.apache.jmeter.samplers.SampleResult;
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
+ * author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
 public class HTTPSampleResult extends SampleResult {
-	//private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private String cookies = ""; // never null
+
+	private String method;
+
+	private String redirectLocation;
+
+	private String queryString = ""; // never null
 
 	public HTTPSampleResult() {
 		super();
@@ -51,13 +55,10 @@ public class HTTPSampleResult extends SampleResult {
 	public HTTPSampleResult(HTTPSampleResult res) {
 		super(res);
 		method=res.method;
-		setURL(res.getURL());
 		cookies=res.cookies;
         queryString=res.queryString;
         redirectLocation=res.redirectLocation;
 	}
-
-	private String method;
 
 	public void setHTTPMethod(String method) {
 		this.method = method;
@@ -66,8 +67,6 @@ public class HTTPSampleResult extends SampleResult {
 	public String getHTTPMethod() {
 		return method;
 	}
-
-	private String redirectLocation;
 
 	public void setRedirectLocation(String redirectLocation) {
 		this.redirectLocation = redirectLocation;
@@ -122,8 +121,6 @@ public class HTTPSampleResult extends SampleResult {
 		return sb.toString();
 	}
 
-	private String cookies = ""; // never null
-
 	/**
 	 * @return cookies as a string
 	 */
@@ -142,8 +139,6 @@ public class HTTPSampleResult extends SampleResult {
     		cookies = string;
         }
 	}
-
-	private String queryString = ""; // never null
 
 	/**
 	 * Fetch the query string
