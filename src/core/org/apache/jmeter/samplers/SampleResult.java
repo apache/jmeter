@@ -189,6 +189,9 @@ public class SampleResult implements Serializable {
 		setResponseMessage(res.getResponseMessage());
 		setDataType(res.getDataType());
 		setResponseHeaders(res.getResponseHeaders());
+        setContentType(res.getContentType());
+        setDataEncoding(res.getDataEncoding());
+		setURL(res.getURL());
 
 		addSubResult(res); // this will add res.getTime() to getTime().
 	}
