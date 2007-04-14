@@ -25,11 +25,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.net.URL;
 import java.util.Locale;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.protocol.http.control.HttpMirrorControl;
+import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -88,7 +90,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // delete temporay file
         temporaryFile.delete();
     }
-        
+
     public void testPostRequest_UrlEncoded() throws Exception {
         // Test HTTPSampler
         String samplerDefaultEncoding = "ISO-8859-1";
@@ -98,7 +100,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         samplerDefaultEncoding = "US-ASCII";
         testPostRequest_UrlEncoded(HTTP_SAMPLER2, samplerDefaultEncoding);
     }
-    	
+
     public void testPostRequest_FormMultipart() throws Exception {
         // Test HTTPSampler
         String samplerDefaultEncoding = "ISO-8859-1";
@@ -117,6 +119,22 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // Test HTTPSampler2
         samplerDefaultEncoding = "US-ASCII";
         testPostRequest_FileUpload(HTTP_SAMPLER2, samplerDefaultEncoding);
+    }
+
+    public void testGetRequest() throws Exception {
+        // Test HTTPSampler
+        testGetRequest(HTTP_SAMPLER);
+        
+        // Test HTTPSampler2
+        testGetRequest(HTTP_SAMPLER2);
+    }
+    
+    public void testGetRequest_Parameters() throws Exception {
+        // Test HTTPSampler
+        testGetRequest_Parameters(HTTP_SAMPLER);
+        
+        // Test HTTPSampler2
+        testGetRequest_Parameters(HTTP_SAMPLER2);
     }   
 
     private void testPostRequest_UrlEncoded(int samplerType, String samplerDefaultEncoding) throws Exception {
@@ -286,6 +304,124 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         checkPostRequestFileUpload(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, fileField, temporaryFile, fileMimeType, TEST_FILE_CONTENT);
     }
     
+    private void testGetRequest(int samplerType) throws Exception {
+        // Test sending simple HTTP get
+        // Test sending data with default encoding
+        HTTPSamplerBase sampler = createHttpSampler(samplerType);
+        String contentEncoding = "";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        HTTPSampleResult res = executeSampler(sampler);
+        checkGetRequest(sampler, res);
+        
+        // Test sending data with ISO-8859-1 encoding
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "ISO-8859-1";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        res = executeSampler(sampler);
+        checkGetRequest(sampler, res);
+
+        // Test sending data with UTF-8 encoding
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        res = executeSampler(sampler);
+        checkGetRequest(sampler, res);
+    }
+
+    private void testGetRequest_Parameters(int samplerType) throws Exception {
+        String titleField = "title";
+        String titleValue = "mytitle";
+        String descriptionField = "description";
+        String descriptionValue = "mydescription";
+        
+        // Test sending simple HTTP get
+        // Test sending data with default encoding
+        HTTPSamplerBase sampler = createHttpSampler(samplerType);
+        String contentEncoding = "";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        HTTPSampleResult res = executeSampler(sampler);
+        sampler.setRunningVersion(true);
+        URL executedUrl = sampler.getUrl();
+        sampler.setRunningVersion(false);
+        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue);
+        
+        // Test sending data with ISO-8859-1 encoding
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "ISO-8859-1";
+        titleValue = "mytitle\uc385";
+        descriptionValue = "mydescription\uc385";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        res = executeSampler(sampler);
+        sampler.setRunningVersion(true);
+        executedUrl = sampler.getUrl();
+        sampler.setRunningVersion(false);
+        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue);
+
+        // Test sending data with UTF-8 encoding
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
+        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        res = executeSampler(sampler);
+        sampler.setRunningVersion(true);
+        executedUrl = sampler.getUrl();
+        sampler.setRunningVersion(false);
+        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue);
+        
+        // Test sending data as UTF-8, with values that changes when urlencoded
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "mytitle\u0153+\u20a1 \u0115&yes\u00c5";
+        descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        res = executeSampler(sampler);
+        sampler.setRunningVersion(true);
+        executedUrl = sampler.getUrl();
+        sampler.setRunningVersion(false);
+        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, titleValue, descriptionField, descriptionValue);
+
+        // Test sending data as UTF-8, where user defined variables are used
+        // to set the value for form data
+        JMeterUtils.setLocale(Locale.ENGLISH);
+        TestPlan testPlan = new TestPlan();
+        JMeterVariables vars = new JMeterVariables();
+        vars.put("title_prefix", "a test\u00c5");
+        vars.put("description_suffix", "the_end");
+        JMeterContextService.getContext().setVariables(vars);
+        JMeterContextService.getContext().setSamplingStarted(true);
+        ValueReplacer replacer = new ValueReplacer();
+        replacer.setUserDefinedVariables(testPlan.getUserDefinedVariables());
+        
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "${title_prefix}mytitle\u0153\u20a1\u0115\u00c5";
+        descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
+        setupUrl(sampler, contentEncoding);
+        sampler.setMethod(HTTPSamplerBase.GET);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        // Replace the variables in the sampler
+        replacer.replaceValues(sampler);
+        res = executeSampler(sampler);
+        String expectedTitleValue = "a test\u00c5mytitle\u0153\u20a1\u0115\u00c5";
+        String expectedDescriptionValue = "mydescription\u0153\u20a1\u0115\u00c5the_end";
+        sampler.setRunningVersion(true);
+        executedUrl = sampler.getUrl();
+        sampler.setRunningVersion(false);
+        checkGetRequest_Parameters(sampler, res, contentEncoding, executedUrl, titleField, expectedTitleValue, descriptionField, expectedDescriptionValue);
+    }
+    
     private HTTPSampleResult executeSampler(HTTPSamplerBase sampler) {
         sampler.setRunningVersion(true);
         sampler.threadStarted();
@@ -332,6 +468,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             // Skip the blank line with crlf dividing headers and body
             bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
         }
+        else {
+            fail("No header and body section found");
+        }
         // Check response headers
         assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED));
         assertTrue(
@@ -344,6 +483,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding));
+        // Check method, path and query sent
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
 
     private void checkPostRequestFormMultipart(
@@ -385,6 +526,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             // Skip the blank line with crlf dividing headers and body
             bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
         }
+        else {
+            fail("No header and body section found");
+        }
         // Check response headers
         assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
         assertTrue(
@@ -397,6 +541,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
+        // Check method, path and query sent
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
     
     private void checkPostRequestFileUpload(
@@ -443,6 +589,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             // Skip the blank line with crlf dividing headers and body
             bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
         }
+        else {
+            fail("No header and body section found");
+        }
         // Check response headers
         assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
         assertTrue(
@@ -457,7 +606,123 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // We cannot check this merely by getting the body in the contentEncoding,
         // since the actual file content is sent binary, without being encoded
         //checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
-    }    
+        // Check method, path and query sent
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
+    }
+
+    private void checkGetRequest(
+            HTTPSamplerBase sampler,
+            HTTPSampleResult res
+            ) throws IOException {
+        // Check URL
+        assertEquals(sampler.getUrl(), res.getURL());
+        // Check method
+        assertEquals(sampler.getMethod(), res.getHTTPMethod());
+        // Check that the query string is empty
+        assertEquals(0, res.getQueryString().length());
+
+        // Find the data sent to the mirror server, which the mirror server is sending back to us
+        String dataSentToMirrorServer = new String(res.getResponseData(), EncoderCache.URL_ARGUMENT_ENCODING);
+        int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
+        String headersSent = null;
+        String bodySent = null;
+        if(posDividerHeadersAndBody >= 0) {
+            headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
+            // Skip the blank line with crlf dividing headers and body
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
+        }
+        else {
+            fail("No header and body section found");
+        }
+        // No body should have been sent
+        assertEquals(bodySent.length(), 0);
+        // Check method, path and query sent
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
+    }
+    
+    private void checkGetRequest_Parameters(
+            HTTPSamplerBase sampler,
+            HTTPSampleResult res,
+            String contentEncoding,
+            URL executedUrl,
+            String titleField,
+            String titleValue,
+            String descriptionField,
+            String descriptionValue) throws IOException {
+        if(contentEncoding == null || contentEncoding.length() == 0) {
+            contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
+        }
+        // Check URL
+        assertEquals(executedUrl, res.getURL());
+        // Check method
+        assertEquals(sampler.getMethod(), res.getHTTPMethod());
+        // Cannot check the query string of the result, because the mirror server
+        // replies without including query string in URL
+        String expectedQueryString = titleField + "=" + URLEncoder.encode(titleValue, contentEncoding) + "&" + descriptionField + "=" + URLEncoder.encode(descriptionValue, contentEncoding);
+
+        // Find the data sent to the mirror server, which the mirror server is sending back to us
+        String dataSentToMirrorServer = new String(res.getResponseData(), EncoderCache.URL_ARGUMENT_ENCODING);
+        int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
+        String headersSent = null;
+        String bodySent = null;
+        if(posDividerHeadersAndBody >= 0) {
+            headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
+            // Skip the blank line with crlf dividing headers and body
+            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
+        }
+        else {
+            fail("No header and body section found");
+        }
+        // No body should have been sent
+        assertEquals(bodySent.length(), 0);
+        // Check method, path and query sent
+        checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), expectedQueryString);
+    }
+    
+    private void checkMethodPathQuery(
+            String headersSent,
+            String expectedMethod,
+            String expectedPath,
+            String expectedQueryString)
+            throws IOException {
+        // Check the Request URI sent to the mirror server, and
+        // sent back by the mirror server
+        int indexFirstSpace = headersSent.indexOf(" ");
+        int indexSecondSpace = headersSent.indexOf(" ", headersSent.length() > indexFirstSpace ? indexFirstSpace + 1 : indexFirstSpace);
+        if(indexFirstSpace <= 0 && indexSecondSpace <= 0 || indexFirstSpace == indexSecondSpace) {
+            fail("Could not find method and URI sent");
+        }
+        String methodSent = headersSent.substring(0, indexFirstSpace);
+        assertEquals(expectedMethod, methodSent);
+        String uriSent = headersSent.substring(indexFirstSpace + 1, indexSecondSpace);
+        int indexQueryStart = uriSent.indexOf("?");
+        if(expectedQueryString != null && expectedQueryString.length() > 0) {
+            // We should have a query string part
+            if(indexQueryStart <= 0 || (indexQueryStart == uriSent.length() - 1)) {
+                fail("Could not find query string in URI");
+            }
+        }
+        else {
+            if(indexQueryStart > 0) {
+                // We should not have a query string part
+                fail("Query string present in URI");
+            }
+            else {
+                indexQueryStart = uriSent.length();
+            }
+        }
+        // Check path
+        String pathSent = uriSent.substring(0, indexQueryStart);
+        assertEquals(expectedPath, pathSent);
+        // Check query
+        if(expectedQueryString != null && expectedQueryString.length() > 0) {
+            String queryStringSent = uriSent.substring(indexQueryStart + 1);
+            // Is it only the parameter values which are encoded in the specified
+            // content encoding, the rest of the query is encoded in UTF-8
+            // Therefore we compare the whole query using UTF-8
+            checkArraysHaveSameContent(expectedQueryString.getBytes(EncoderCache.URL_ARGUMENT_ENCODING), queryStringSent.getBytes(EncoderCache.URL_ARGUMENT_ENCODING));
+        }
+    }
 
     private boolean isInRequestHeaders(String requestHeaders, String headerName, String headerValue) {
         return checkRegularExpression(requestHeaders, headerName + ": " + headerValue);
