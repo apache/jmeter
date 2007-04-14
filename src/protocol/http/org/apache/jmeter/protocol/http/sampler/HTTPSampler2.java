@@ -650,25 +650,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
         HttpMethodBase httpMethod = null;
 
-        if (method.equals(POST)) {
-            httpMethod = new PostMethod(urlStr);
-        } else if (method.equals(PUT)){
-            httpMethod = new PutMethod(urlStr);
-        } else if (method.equals(HEAD)){
-            httpMethod = new HeadMethod(urlStr);
-        } else if (method.equals(TRACE)){
-            httpMethod = new TraceMethod(urlStr);
-        } else if (method.equals(OPTIONS)){
-            httpMethod = new OptionsMethod(urlStr);
-        } else if (method.equals(DELETE)){
-            httpMethod = new DeleteMethod(urlStr);
-        } else if (method.equals(GET)){
-            httpMethod = new GetMethod(urlStr);
-        } else {
-        	log.error("Unexpected method (converted to GET): "+method);
-            httpMethod = new GetMethod(urlStr);
-        }
-
 		HTTPSampleResult res = new HTTPSampleResult();
 		res.setMonitor(isMonitor());
         
@@ -678,6 +659,26 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         HttpClient client = null;
         InputStream instream = null;
 		try {
+			// May generate IllegalArgumentException
+			if (method.equals(POST)) {
+			    httpMethod = new PostMethod(urlStr);
+			} else if (method.equals(PUT)){
+			    httpMethod = new PutMethod(urlStr);
+			} else if (method.equals(HEAD)){
+			    httpMethod = new HeadMethod(urlStr);
+			} else if (method.equals(TRACE)){
+			    httpMethod = new TraceMethod(urlStr);
+			} else if (method.equals(OPTIONS)){
+			    httpMethod = new OptionsMethod(urlStr);
+			} else if (method.equals(DELETE)){
+			    httpMethod = new DeleteMethod(urlStr);
+			} else if (method.equals(GET)){
+			    httpMethod = new GetMethod(urlStr);
+			} else {
+				log.error("Unexpected method (converted to GET): "+method);
+			    httpMethod = new GetMethod(urlStr);
+			}
+
 			client = setupConnection(url, httpMethod, res);
 
 			if (method.equals(POST)) {
