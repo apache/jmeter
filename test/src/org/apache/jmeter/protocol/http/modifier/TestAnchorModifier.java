@@ -90,14 +90,10 @@ public class TestAnchorModifier extends JMeterTestCase {
 			testProcessingHTMLFile("/testfiles/jmeter_home_page_with_relative_links.html");
 		}
 
-		// * Feature not yet implemented. TODO: implement it.
 		public void testModifySamplerWithBaseHRef() throws Exception {
 			testProcessingHTMLFile("/testfiles/jmeter_home_page_with_base_href.html");
 		}
-		// */
-        /**
-         * A unit test for JUnit.
-         */
+
         public void testSimpleParse() throws Exception {
             HTTPSamplerBase config = makeUrlConfig(".*/index\\.html");
             HTTPSamplerBase context = makeContext("http://www.apache.org/subdir/previous.html");
@@ -118,7 +114,8 @@ public class TestAnchorModifier extends JMeterTestCase {
         // Test https works too
         public void testSimpleParse1() throws Exception {
             HTTPSamplerBase config = makeUrlConfig(".*/index\\.html");
-            config.setProtocol("https");
+            config.setProtocol(HTTPSamplerBase.PROTOCOL_HTTPS);
+            config.setPort(HTTPSamplerBase.DEFAULT_HTTPS_PORT);
             HTTPSamplerBase context = makeContext("https://www.apache.org/subdir/previous.html");
             String responseText = "<html><head><title>Test page</title></head><body>"
                     + "<a href=\"index.html\">Goto index page</a></body></html>";
@@ -337,8 +334,8 @@ public class TestAnchorModifier extends JMeterTestCase {
             config.setDomain("www.apache.org");
             config.setMethod(HTTPSamplerBase.GET);
             config.setPath(path);
-            config.setPort(80);
-            config.setProtocol("http");
+            config.setPort(HTTPSamplerBase.DEFAULT_HTTP_PORT);
+            config.setProtocol(HTTPSamplerBase.PROTOCOL_HTTP);
             return config;
         }
 }
