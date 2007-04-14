@@ -233,17 +233,28 @@ public class HttpRequestHdr {
 		return ""; // $NON-NLS-1$
 	}
 
-	private MultipartUrlConfig isMultipart(String contentType) {
-		if (contentType != null && contentType.startsWith(MultipartUrlConfig.MULTIPART_FORM)) {
-			return new MultipartUrlConfig(contentType.substring(contentType.indexOf("oundary=") + 8));
-		} else {
-			return null;
-		}
-	}
+    private boolean isMultipart(String contentType) {
+        if (contentType != null && contentType.startsWith(MultipartUrlConfig.MULTIPART_FORM)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private MultipartUrlConfig getMultipartConfig(String contentType) {
+        if(isMultipart(contentType)) {
+            // Get the boundary string for the multiparts from the
+            // content type
+            //int startOfBoundaryValuePos = contentType.toLowerCase().substring(beginIndex)
+            String boundaryString = contentType.substring(contentType.toLowerCase().indexOf("boundary=") + "boundary=".length());
+            return new MultipartUrlConfig(boundaryString);
+        }
+        else {
+            return null;
+        }
+    }
 
 	private void populateSampler() {
-		MultipartUrlConfig urlConfig = null;
-		
 		sampler.setDomain(serverName());
         if (log.isDebugEnabled())
     		log.debug("Proxy: setting server: " + sampler.getDomain());
@@ -275,19 +286,23 @@ public class HttpRequestHdr {
     			log.debug("Proxy setting default protocol to: http");
 			sampler.setProtocol(HTTP);
 		}
-		if ((urlConfig = isMultipart(getContentType())) != null) {
-			urlConfig.parseArguments(postData);
-			// If no file is uploaded, then it was really a multipart/form-data
-			// post request. But currently, that is not supported, so we must
-			// change the "Content-Type" header from multipart/form-data to
-			// application/x-www-form-urlencoded, which is the one the HTTP Request
-			// sampler will send
-			if(urlConfig.getFilename() == null) {
-				System.out.println("jada");
-				getHeaderManager().removeHeaderNamed("Content-Type");
-				getHeaderManager().add(new Header("Content-Type", "application/x-www-form-urlencoded"));
-			}
-			sampler.setArguments(urlConfig.getArguments());
+
+        // Check if it was a multipart http post request
+        MultipartUrlConfig urlConfig = getMultipartConfig(getContentType());
+        if (urlConfig != null) {
+            urlConfig.parseArguments(postData);
+            // Tell the sampler to do a multipart post
+            sampler.setDoMultipartPost(true);
+            // Remove the header for content-type and content-length, since
+            // those values will most likely be incorrect when the sampler
+            // performs the multipart request, because the boundary string
+            // will change
+            getHeaderManager().removeHeaderNamed(CONTENT_TYPE);
+            getHeaderManager().removeHeaderNamed(CONTENT_LENGTH);
+            
+            // Set the form data
+            sampler.setArguments(urlConfig.getArguments());
+            // Set the file uploads
 			sampler.setFileField(urlConfig.getFileFieldName());
 			sampler.setFilename(urlConfig.getFilename());
 			sampler.setMimetype(urlConfig.getMimeType());
