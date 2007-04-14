@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
+import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -486,6 +488,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         }
         return port;
     }
+
+    /**
+     * Tell whether the default port for the specified protocol is used
+     * 
+     * @return true if the default port number for the protocol is used, false otherwise
+     */
+    public boolean isProtocolDefaultPort() {
+    	final int port = getPropertyAsInt(PORT);
+        final String protocol = getProtocol();
+		if (port == UNSPECIFIED_PORT || 
+                (PROTOCOL_HTTP.equalsIgnoreCase(protocol) && port == DEFAULT_HTTP_PORT) ||
+                (PROTOCOL_HTTPS.equalsIgnoreCase(protocol) && port == DEFAULT_HTTPS_PORT)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     
 	public int getPort() {
 		int port = getPropertyAsInt(PORT);
@@ -620,26 +640,55 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
             pathAndQuery.append("/"); // $NON-NLS-1$
         }
         pathAndQuery.append(path);
-        if (this.getMethod().equals(GET) && getQueryString().length() > 0) {
-			if (path.indexOf(QRY_PFX) > -1) {
-				pathAndQuery.append(QRY_SEP);
-			} else {
-				pathAndQuery.append(QRY_PFX);
-			}
-            pathAndQuery.append(getQueryString());
+
+        // Add the query string if it is a HTTP GET request
+        if(GET.equals(getMethod())) {
+            // Get the query string encoded in specified encoding
+            // If no encoding is specified by user, we will get it
+            // encoded in UTF-8, which is what the HTTP spec says
+            String queryString = getQueryString(getContentEncoding());
+            if(queryString.length() > 0) {
+                if (path.indexOf(QRY_PFX) > -1) {
+                    pathAndQuery.append(QRY_SEP);
+                } else {
+                    pathAndQuery.append(QRY_PFX);
+                }
+                pathAndQuery.append(queryString);
+            }
 		}
-		if (getPort() == UNSPECIFIED_PORT || getPort() == DEFAULT_HTTP_PORT) {
+        // If default port for protocol is used, we do not include port in URL
+        if(isProtocolDefaultPort()) {
 			return new URL(getProtocol(), getDomain(), pathAndQuery.toString());
 		}
-		return new URL(getProtocol(), getPropertyAsString(DOMAIN), getPort(), pathAndQuery.toString());
+        else {
+            return new URL(getProtocol(), getDomain(), getPort(), pathAndQuery.toString());
+        }
 	}
 
+    /**
+     * Gets the QueryString attribute of the UrlConfig object, using
+     * UTF-8 to encode the URL
+     * 
+     * @return the QueryString value
+     */
+    public String getQueryString() {
+        // We use the encoding which should be used according to the HTTP spec, which is UTF-8
+        return getQueryString(EncoderCache.URL_ARGUMENT_ENCODING);
+    }
+    
 	/**
-	 * Gets the QueryString attribute of the UrlConfig object.
+	 * Gets the QueryString attribute of the UrlConfig object, using the
+	 * specified encoding to encode the parameter values put into the URL
 	 * 
+	 * @param contentEncoding the encoding to use for encoding parameter values
 	 * @return the QueryString value
 	 */
-	public String getQueryString() {
+	public String getQueryString(String contentEncoding) {
+ 		// Check if the sampler has a specified content encoding        
+ 		if(contentEncoding == null || contentEncoding.trim().length() == 0) {
+ 			// We use the encoding which should be used according to the HTTP spec, which is UTF-8
+ 			contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
+ 		}
 		StringBuffer buf = new StringBuffer();
 		PropertyIterator iter = getArguments().iterator();
 		boolean first = true;
@@ -669,7 +718,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 			} else {
 				buf.append(item.getMetaData());
 			}
-			buf.append(item.getEncodedValue());
+            
+			// Encode the parameter value in the specified content encoding
+			try {
+			    buf.append(item.getEncodedValue(contentEncoding));
+			}
+			catch(UnsupportedEncodingException e) {
+			    log.warn("Unable to encode parameter in encoding " + contentEncoding + ", parameter value not included in query string");
+			}
 		}
 		return buf.toString();
 	}
