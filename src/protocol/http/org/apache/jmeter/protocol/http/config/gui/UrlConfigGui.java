@@ -64,6 +64,8 @@ public class UrlConfigGui extends JPanel {
 
 	private static String USE_KEEPALIVE = "use_keepalive"; // $NON-NLS-1$
 
+    private static String USE_MULTIPART_FOR_POST = "use_multipart_for_post"; // $NON-NLS-1$
+
 	private JTextField domain;
 
 	private JTextField port;
@@ -79,6 +81,8 @@ public class UrlConfigGui extends JPanel {
 	private JCheckBox autoRedirects;
 
 	private JCheckBox useKeepAlive;
+
+    private JCheckBox useMultipartForPost;
 
     private JLabeledChoice method;
     
@@ -102,6 +106,7 @@ public class UrlConfigGui extends JPanel {
 		protocol.setText(""); // $NON-NLS-1$
 		contentEncoding.setText(""); // $NON-NLS-1$
 		useKeepAlive.setSelected(true);
+        useMultipartForPost.setSelected(false);
 		argsPanel.clear();
 	}
 
@@ -122,6 +127,7 @@ public class UrlConfigGui extends JPanel {
 		element.setProperty(new BooleanProperty(HTTPSamplerBase.FOLLOW_REDIRECTS, followRedirects.isSelected()));
 		element.setProperty(new BooleanProperty(HTTPSamplerBase.AUTO_REDIRECTS, autoRedirects.isSelected()));
 		element.setProperty(new BooleanProperty(HTTPSamplerBase.USE_KEEPALIVE, useKeepAlive.isSelected()));
+        element.setProperty(new BooleanProperty(HTTPSamplerBase.DO_MULTIPART_POST, useMultipartForPost.isSelected()));
 		return element;
 	}
 
@@ -152,6 +158,7 @@ public class UrlConfigGui extends JPanel {
 
 		autoRedirects.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.AUTO_REDIRECTS));
 		useKeepAlive.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.USE_KEEPALIVE));
+        useMultipartForPost.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.DO_MULTIPART_POST));
 	}
 
 	protected void init() {
@@ -209,8 +216,8 @@ public class UrlConfigGui extends JPanel {
 	}
 
 	/**
-	 * This method defines the Panel for the HTTP path, 'Follow Redirects' and
-	 * 'Use KeepAlive' elements.
+	 * This method defines the Panel for the HTTP path, 'Follow Redirects'
+	 * 'Use KeepAlive', and 'Use multipart for HTTP POST' elements.
 	 * 
 	 * @return JPanel The Panel for the path, 'Follow Redirects' and 'Use
 	 *         KeepAlive' elements.
@@ -235,6 +242,10 @@ public class UrlConfigGui extends JPanel {
 		useKeepAlive.setName(USE_KEEPALIVE);
 		useKeepAlive.setSelected(true);
 
+        useMultipartForPost = new JCheckBox(JMeterUtils.getResString("use_multipart_for_http_post")); // $NON-NLS-1$
+        useMultipartForPost.setName(USE_MULTIPART_FOR_POST);
+        useMultipartForPost.setSelected(false);
+
 		JPanel pathPanel = new JPanel(new BorderLayout(5, 0));
 		pathPanel.add(label, BorderLayout.WEST);
 		pathPanel.add(path, BorderLayout.CENTER);
@@ -244,6 +255,7 @@ public class UrlConfigGui extends JPanel {
 		optionPanel.add(autoRedirects);
 		optionPanel.add(followRedirects);
 		optionPanel.add(useKeepAlive);
+ 		optionPanel.add(useMultipartForPost);
 		optionPanel.setMinimumSize(optionPanel.getPreferredSize());
 
 		JPanel panel = new JPanel();
