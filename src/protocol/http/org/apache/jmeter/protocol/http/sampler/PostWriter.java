@@ -233,7 +233,7 @@ public class PostWriter {
                 // We create the post body content now, so we know the size
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 
-                String postBody = getQueryStringForPostBody(sampler, contentEncoding);
+                String postBody = sampler.getQueryString(contentEncoding);
                 // Query string should be encoded in UTF-8
                 bos.write(postBody.getBytes("UTF-8")); // $NON-NLS-1$
                 bos.flush();
@@ -251,37 +251,6 @@ public class PostWriter {
             connection.setDoOutput(true);
         }
     }
-    
-	/**
-	 * Gets the query string for the sampler encoded for http post body.
-	 * This method works differently from the getQueryString in HttpSamplerBase,
-	 * becuase this method does not force the parameter value to be url encoded
-	 * in utf8. Rather, it uses the specified encoding for the parameter value
-	 * 
-	 * @return the querystring encoded as usable for a http post body request
-	 */
-	private String getQueryStringForPostBody(HTTPSampler sampler, String contentEncoding) throws IOException {
-		StringBuffer buf = new StringBuffer();
-		PropertyIterator iter = sampler.getArguments().iterator();
-		boolean first = true;
-		while (iter.hasNext()) {
-            HTTPArgument arg = (HTTPArgument) iter.next().getObjectValue();
-			
-			if (!first) {
-				buf.append("&");
-			} else {
-				first = false;
-			}
-			buf.append(arg.getEncodedName());
-			if (arg.getMetaData() == null) {
-				buf.append("=");
-			} else {
-				buf.append(arg.getMetaData());
-			}
-			buf.append(URLEncoder.encode(arg.getValue(), contentEncoding));
-		}
-		return buf.toString();
-	}
     
     /**
      * Get the boundary string, used to separate multiparts

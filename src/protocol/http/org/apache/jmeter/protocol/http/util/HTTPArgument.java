@@ -92,8 +92,8 @@ public class HTTPArgument extends Argument implements Serializable {
 		setAlwaysEncoded(true);
 		if (alreadyEncoded) {
 			try {
-				name = URLDecoder.decode(name, "UTF-8"); // $NON-NLS-1$
-				value = URLDecoder.decode(value, "UTF-8");  // $NON-NLS-1$
+				name = URLDecoder.decode(name, EncoderCache.URL_ARGUMENT_ENCODING);
+				value = URLDecoder.decode(value, EncoderCache.URL_ARGUMENT_ENCODING);
 			} catch (UnsupportedEncodingException e) {
 				// UTF-8 unsupported? You must be joking!
 				log.error("UTF-8 encoding not supported!");
@@ -132,13 +132,36 @@ public class HTTPArgument extends Argument implements Serializable {
 		}
 	}
 
-	public String getEncodedValue() {
-		if (isAlwaysEncoded()) {
-			return cache.getEncoded(getValue());
-		} else {
-			return getValue();
-		}
-	}
+    /**
+     * Get the argument value encoded using UTF-8
+     * 
+     * @return the argument value encoded in UTF-8
+     */
+    public String getEncodedValue() {
+        // Encode according to the HTTP spec, i.e. UTF-8
+        try {
+            return getEncodedValue(EncoderCache.URL_ARGUMENT_ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            // This can't happen (how should utf8 not be supported!?!),
+            // so just throw an Error:
+            throw new Error("Should not happen: " + e.toString());
+        }
+    }
+
+    /**
+     * Get the argument value encoded in the specified encoding
+     * 
+     * @param contentEncoding the encoding to use when encoding the argument value
+     * @return the argument value encoded in the specified encoding
+     * @throws UnsupportedEncodingException
+     */
+    public String getEncodedValue(String contentEncoding) throws UnsupportedEncodingException {
+        if (isAlwaysEncoded()) {
+            return cache.getEncoded(getValue(), contentEncoding);
+        } else {
+            return getValue();
+        }
+    }
 
 	public String getEncodedName() {
 		if (isAlwaysEncoded()) {

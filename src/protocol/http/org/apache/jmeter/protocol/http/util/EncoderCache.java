@@ -24,31 +24,53 @@ import java.net.URLEncoder;
 import org.apache.oro.util.Cache;
 import org.apache.oro.util.CacheLRU;
 
-/**
- * @author Administrator
- * 
- * @version $Revision$ last updated $Date$
- */
 public class EncoderCache {
-	Cache cache;
+	
+    /** The encoding which should be usd for URLs, according to HTTP specification */
+    public static final String URL_ARGUMENT_ENCODING = "UTF-8";
+
+    private Cache cache;
 
 	public EncoderCache(int cacheSize) {
 		cache = new CacheLRU(cacheSize);
 	}
 
-	public String getEncoded(String k) {
-		Object encodedValue = cache.getElement(k);
-		if (encodedValue != null) {
-			return (String) encodedValue;
-		}
-		try {
-			encodedValue = URLEncoder.encode(k, "utf8");
-		} catch (UnsupportedEncodingException e) {
-			// This can't happen (how should utf8 not be supported!?!),
-			// so just throw an Error:
-			throw new Error("Should not happen: " + e.toString());
-		}
-		cache.addElement(k, encodedValue);
-		return (String) encodedValue;
-	}
+
+    /**
+     * Get the specified value URL encoded using UTF-8 encoding
+     * 
+     * @param k the value to encode
+     * @return the value URL encoded using UTF-8
+     */
+    public String getEncoded(String k) {
+        try {
+            return getEncoded(k, URL_ARGUMENT_ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            // This can't happen (how should utf8 not be supported!?!),
+            // so just throw an Error:
+            throw new Error("Should not happen: " + e.toString());
+        }
+    }
+    
+    /**
+     * Get the specified value URL encoded using the specified encoding
+     * 
+     * @param k the value to encode
+     * @param contentEncoding the encoding to use when URL encoding
+     * @return the value URL encoded using the specified encoding
+     * @throws UnsupportedEncodingException if the specified encoding is not supported
+     */
+    public String getEncoded(String k, String contentEncoding) throws UnsupportedEncodingException {
+        String cacheKey = k + contentEncoding;
+        // Check if we have it in the cache
+        Object encodedValue = cache.getElement(cacheKey);
+        if (encodedValue != null) {
+            return (String) encodedValue;
+        }
+        // Perform the encoding
+        encodedValue = URLEncoder.encode(k, contentEncoding);
+        // Add to cache
+        cache.addElement(cacheKey, encodedValue);
+        return (String) encodedValue;
+    }
 }
