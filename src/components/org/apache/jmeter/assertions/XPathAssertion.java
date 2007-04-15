@@ -33,6 +33,7 @@ import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
+import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -114,18 +115,39 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
 		NodeList nodeList = null;
 
+		final String pathString = getXPathString();
 		try {
-			nodeList = XPathAPI.selectNodeList(doc, getXPathString());
+			XObject xObject = XPathAPI.eval(doc, pathString);
+			switch (xObject.getType()) {
+				case XObject.CLASS_NODESET:
+					nodeList = xObject.nodelist();
+					break;
+				case XObject.CLASS_BOOLEAN:
+					if (!xObject.bool()){
+						result.setFailure(!isNegated());
+						result.setFailureMessage("No Nodes Matched " + pathString);
+					}
+					return result;
+				default:
+					result.setFailure(true);
+				    result.setFailureMessage("Cannot understand: " + pathString);
+				    return result;
+			}
 		} catch (TransformerException e) {
 			result.setError(true);
-			result.setFailureMessage(new StringBuffer("TransformerException: ").append(e.getMessage()).toString());
+			result.setFailureMessage(
+					new StringBuffer("TransformerException: ")
+					.append(e.getMessage())
+					.append(" for:")
+					.append(pathString)
+					.toString());
 			return result;
 		}
 
 		if (nodeList == null || nodeList.getLength() == 0) {
-			log.debug(new StringBuffer("nodeList null no match  ").append(getXPathString()).toString());
+			log.debug(new StringBuffer("nodeList null no match  ").append(pathString).toString());
 			result.setFailure(!isNegated());
-			result.setFailureMessage("No Nodes Matched " + getXPathString());
+			result.setFailureMessage("No Nodes Matched " + pathString);
 			return result;
 		}
 		log.debug("nodeList length " + nodeList.getLength());
