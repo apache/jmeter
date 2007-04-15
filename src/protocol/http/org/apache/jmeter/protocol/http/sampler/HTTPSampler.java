@@ -541,7 +541,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 		} catch (IOException e) {
 			res.sampleEnd();
 			// We don't want to continue using this connection, even if KeepAlive is set
-            conn.disconnect();
+            if (conn != null) { // May not exist
+            	conn.disconnect();
+            }
             conn=null; // Don't process again
 			return errorResult(e, res);
 		} finally {
