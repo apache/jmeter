@@ -37,6 +37,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -50,7 +51,10 @@ import org.apache.log.Logger;
 public class JDBCSampler extends AbstractSampler implements TestBean {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final int MAX_ENTRIES = 200;
+	// This value is used for both the connection (perConnCache) and statement (preparedStatementMap) caches.
+	// TODO - do they have to be the same size?
+	private static final int MAX_ENTRIES = 
+		JMeterUtils.getPropDefault("jdbcsampler.cachesize",200); // $NON-NLS-1$
 
 	private static final Map mapJdbcNameToInt;
 
