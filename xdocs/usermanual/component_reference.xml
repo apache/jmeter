@@ -2530,7 +2530,8 @@ These are strings unless otherwise noted:
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
-document, and is the default XPath Expression.
+document, and is the default XPath Expression. 
+The assertion also supports boolean expressions, such as "count(//*error)=2".
 See <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a> for more information
 on XPath.
 </p></description>
