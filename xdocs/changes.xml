@@ -128,6 +128,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41876 - Add more options to control what the HTTP Proxy generates</li>
 <li>Bug 39693 - View Result Table use icon instead of check box</li>
 <li>Bug 41880 - Add content-type filtering to HTTP Proxy Server</li>
+<li>Bug 40825 - Add JDBC prepared statement support</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
