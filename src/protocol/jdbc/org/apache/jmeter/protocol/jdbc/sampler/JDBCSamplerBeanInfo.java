@@ -39,21 +39,37 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport {
 	public JDBCSamplerBeanInfo() {
 		super(JDBCSampler.class);
 
-		createPropertyGroup("varName", new String[] { "dataSource" });
+		createPropertyGroup("varName", // $NON-NLS-1$
+				new String[]{"dataSource" }); // $NON-NLS-1$
 
-		createPropertyGroup("sql", new String[] { "queryType", "query" });
+		createPropertyGroup("sql", // $NON-NLS-1$
+				new String[] { 
+				"queryType", // $NON-NLS-1$
+				"query", // $NON-NLS-1$
+				"queryArguments", // $NON-NLS-1$
+				"queryArgumentsTypes" // $NON-NLS-1$
+				});
 
-		PropertyDescriptor p = property("dataSource");
+		PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");
 
-		p = property("queryType");
+		p = property("queryArguments"); // $NON-NLS-1$
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+		
+		p = property("queryArgumentsTypes"); // $NON-NLS-1$
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+		
+
+		p = property("queryType"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, JDBCSampler.SELECT);
 		p.setValue(NOT_OTHER,Boolean.TRUE);
-		p.setValue(TAGS,new String[]{JDBCSampler.SELECT,JDBCSampler.UPDATE,JDBCSampler.CALLABLE});
+		p.setValue(TAGS,new String[]{JDBCSampler.SELECT,JDBCSampler.UPDATE,JDBCSampler.CALLABLE, JDBCSampler.PREPARED_SELECT, JDBCSampler.PREPARED_UPDATE});
 
-		p = property("query");
+		p = property("query"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");
 		p.setPropertyEditorClass(TextAreaEditor.class);
