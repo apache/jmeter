@@ -129,6 +129,8 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 39693 - View Result Table use icon instead of check box</li>
 <li>Bug 41880 - Add content-type filtering to HTTP Proxy Server</li>
 <li>Bug 40825 - Add JDBC prepared statement support</li>
+<li>Bug 27780 - (patch 19936) create multipart/form-data HTTP request without uploading file</li>
+<li>Bug 42098 - Use specified encoding for parameter values in HTTP GET</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
@@ -203,8 +205,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41944 - Subresults not handled recursively by ResultSaver</li>
 <li>Bug 42022 - HTTPSampler does not allow multiple headers of same name</li>
 <li>Bug 42019 - Content type not stored in redirected HTTP request with subresults</li>
-<li>Bug 27780 - (patch 19936) create multipart/form-data HTTP request without uploading file</li>
-<li>Bug 42098 - Use specified encoding for parameter values in HTTP GET</li>
+<li>Bug 42057 - connection can be null if method is null</li>
 </ul>
 
 <h3>Version 2.2</h3>
