@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.methods.TraceMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
@@ -68,6 +70,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -313,11 +316,23 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
         }
         else {
-            // Set the content type
-            post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+            // Check if the header manager had a content type header
+            // This allows the user to specify his own content-type for a POST request
+            Header contentTypeHeader = post.getRequestHeader(HEADER_CONTENT_TYPE);
+            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
 
             // If there are no arguments, we can send a file as the body of the request
             if(getArguments().getArgumentCount() == 0 && getSendFileAsPostBody()) {
+                if(!hasContentTypeHeader) {
+                    // Allow the mimetype of the file to control the content type
+                    if(getMimetype() != null && getMimetype().length() > 0) {
+                        post.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                    }
+                    else {
+                        post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                    }
+                }
+                
                 FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(getFilename()),null); 
                 post.setRequestEntity(fileRequestEntity);
                 
@@ -327,21 +342,41 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             else {            
                 // In an application/x-www-form-urlencoded request, we only support
                 // parameters, no file upload is allowed
-            
+                if(!hasContentTypeHeader) {
+                    // Set the content type
+                    post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                }
+
                 // If a content encoding is specified, we set it as http parameter, so that
                 // the post body will be encoded in the specified content encoding
                 final String contentEncoding = getContentEncoding();
                 if(contentEncoding != null && contentEncoding.trim().length() > 0) {
                     post.getParams().setContentCharset(contentEncoding);
                 }
-            
-                PropertyIterator args = getArguments().iterator();
-                while (args.hasNext()) {
-                    HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                    post.addParameter(arg.getName(), arg.getValue());
+                
+                // If none of the arguments have a name specified, we
+                // just send all the values as the post body
+                if(!getSendParameterValuesAsPostBody()) {
+                    // It is a normal post request, with parameter names and values
+                    PropertyIterator args = getArguments().iterator();
+                    while (args.hasNext()) {
+                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                        post.addParameter(arg.getName(), arg.getValue());
+                    }
+                }
+                else {
+                    // Just append all the parameter values, and use that as the post body
+                    StringBuffer postBody = new StringBuffer();
+                    PropertyIterator args = getArguments().iterator();
+                    while (args.hasNext()) {
+                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                        postBody.append(arg.getValue());
+                    }
+                    StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), post.getRequestCharSet());
+                    post.setRequestEntity(requestEntity);
                 }
                 
-                // If the Multipart is repeatable, we can send it first to
+                // If the request entity is repeatable, we can send it first to
                 // our own stream, so we can return it
                 if(post.getRequestEntity().isRepeatable()) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
