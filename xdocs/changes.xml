@@ -207,6 +207,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42022 - HTTPSampler does not allow multiple headers of same name</li>
 <li>Bug 42019 - Content type not stored in redirected HTTP request with subresults</li>
 <li>Bug 42057 - connection can be null if method is null</li>
+<li>Bug 41518 - JMeter changes the HTTP header Content Type for POST request</li>
 </ul>
 
 <h3>Version 2.2</h3>

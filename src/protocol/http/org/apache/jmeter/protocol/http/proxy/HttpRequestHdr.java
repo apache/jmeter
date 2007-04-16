@@ -136,7 +136,7 @@ public class HttpRequestHdr {
 				readLength++;
 			}
 		}
-		postData = line.toString().trim();
+		postData = line.toString();
         if (log.isDebugEnabled()){
     		log.debug("postData: " + postData);
     		log.debug("Request: " + clientRequest.toString());
@@ -230,11 +230,11 @@ public class HttpRequestHdr {
 		if (contentTypeHeader != null) {
 			return contentTypeHeader.getValue();
 		}
-		return ""; // $NON-NLS-1$
+        return null;
 	}
 
     private boolean isMultipart(String contentType) {
-        if (contentType != null && contentType.startsWith(MultipartUrlConfig.MULTIPART_FORM)) {
+        if (contentType != null && contentType.startsWith(HTTPSamplerBase.MULTIPART_FORM_DATA)) {
             return true;
         } else {
             return false;
@@ -243,9 +243,7 @@ public class HttpRequestHdr {
 
     private MultipartUrlConfig getMultipartConfig(String contentType) {
         if(isMultipart(contentType)) {
-            // Get the boundary string for the multiparts from the
-            // content type
-            //int startOfBoundaryValuePos = contentType.toLowerCase().substring(beginIndex)
+            // Get the boundary string for the multiparts from the content type
             String boundaryString = contentType.substring(contentType.toLowerCase().indexOf("boundary=") + "boundary=".length());
             return new MultipartUrlConfig(boundaryString);
         }
@@ -286,31 +284,46 @@ public class HttpRequestHdr {
     			log.debug("Proxy setting default protocol to: http");
 			sampler.setProtocol(HTTP);
 		}
-
-        // Check if it was a multipart http post request
-        MultipartUrlConfig urlConfig = getMultipartConfig(getContentType());
-        if (urlConfig != null) {
-            urlConfig.parseArguments(postData);
-            // Tell the sampler to do a multipart post
-            sampler.setDoMultipartPost(true);
-            // Remove the header for content-type and content-length, since
-            // those values will most likely be incorrect when the sampler
-            // performs the multipart request, because the boundary string
-            // will change
-            getHeaderManager().removeHeaderNamed(CONTENT_TYPE);
-            getHeaderManager().removeHeaderNamed(CONTENT_LENGTH);
+        
+        // If it was a HTTP GET request, then all parameters in the URL
+        // has been handled by the sampler.setPath above, so we just need
+        // to do parse the rest of the request if it is not a GET request
+        if(!HTTPSamplerBase.GET.equals(method)) {
+            // Check if it was a multipart http post request
+            final String contentType = getContentType();
+            MultipartUrlConfig urlConfig = getMultipartConfig(contentType);
+            if (urlConfig != null) {
+                urlConfig.parseArguments(postData);
+                // Tell the sampler to do a multipart post
+                sampler.setDoMultipartPost(true);
+                // Remove the header for content-type and content-length, since
+                // those values will most likely be incorrect when the sampler
+                // performs the multipart request, because the boundary string
+                // will change
+                getHeaderManager().removeHeaderNamed(CONTENT_TYPE);
+                getHeaderManager().removeHeaderNamed(CONTENT_LENGTH);
             
-            // Set the form data
-            sampler.setArguments(urlConfig.getArguments());
-            // Set the file uploads
-			sampler.setFileField(urlConfig.getFileFieldName());
-			sampler.setFilename(urlConfig.getFilename());
-			sampler.setMimetype(urlConfig.getMimeType());
-        } else if (postData != null && postData.trim().startsWith("<?")) {
-            sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
-		} else {
-			sampler.parseArguments(postData); //standard name=value postData
-		}
+                // Set the form data
+                sampler.setArguments(urlConfig.getArguments());
+                // Set the file uploads
+                sampler.setFileField(urlConfig.getFileFieldName());
+                sampler.setFilename(urlConfig.getFilename());
+                sampler.setMimetype(urlConfig.getMimeType());
+            } else if (postData != null && postData.trim().startsWith("<?")) {
+                // Not sure if this is needed anymore. I assume these requests
+                // do not have HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED as content type,
+                // and they would therefore be catched by the last else if of these if else if tests
+                sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
+            } else if (contentType == null || contentType.startsWith(HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED) ){
+                // It is the most common post request, with parameter name and values
+                // We also assume this if no content type is present, to be most backwards compatible,
+                // but maybe we should only parse arguments if the content type is as expected
+                sampler.parseArguments(postData); //standard name=value postData
+            } else if (postData != null && postData.length() > 0) {
+                // Just put the whole postbody as the value of a parameter
+                sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
+            }
+        }
         if (log.isDebugEnabled())
     		log.debug("sampler path = " + sampler.getPath());
 	}
