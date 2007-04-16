@@ -18,48 +18,140 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
-		public TestHttpRequestHdr(String name) {
-			super(name);
-		}
+    public TestHttpRequestHdr(String name) {
+        super(name);
+    }
 
-		public void setUp() {
-		}
+    public void testRepeatedArguments() throws Exception {
+        // A HTTP GET request
+        String TEST_GET_REQ = 
+            "GET http://localhost/matrix.html" 
+            + "?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= "
+            + "HTTP/1.0\n\n";
+        HTTPSamplerBase s = getSamplerForRequest(TEST_GET_REQ, "UTF-8");
+        assertEquals(HTTPSamplerBase.GET, s.getMethod());
 
-		public void testRepeatedArguments() throws Exception {
-			String TEST_REQ = 
-                "GET http://localhost/matrix.html" 
-                + "?update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= "
-                + "HTTP/1.0\n\n";
-			HttpRequestHdr req = new HttpRequestHdr();
-			req.parse(new java.io.ByteArrayInputStream(TEST_REQ.getBytes()));
-			HTTPSamplerBase s = req.getSampler();
-			assertEquals(13,s.getArguments().getArguments().size());
-		}
+        // Check arguments
+        Arguments arguments = s.getArguments();
+        assertEquals(13, arguments.getArgumentCount());
+        checkArgument((HTTPArgument)arguments.getArgument(0), "update", "yes", false);
+        checkArgument((HTTPArgument)arguments.getArgument(1), "d", "1", false);
+        checkArgument((HTTPArgument)arguments.getArgument(2), "d", "2", false);
+        checkArgument((HTTPArgument)arguments.getArgument(3), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(4), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(5), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(6), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(7), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(8), "d", "1", false);
+        checkArgument((HTTPArgument)arguments.getArgument(9), "d", "2", false);
+        checkArgument((HTTPArgument)arguments.getArgument(10), "d", "1", false);
+        checkArgument((HTTPArgument)arguments.getArgument(11), "d", "", false);
+        // I see that the value gets trimmed, not sure if that is correct
+        checkArgument((HTTPArgument)arguments.getArgument(12), "d", "", false);
+
+        // A HTTP POST request
+        String postBody = "update=yes&d=1&d=2&d=&d=&d=&d=&d=&d=1&d=2&d=1&d=&d= ";
+        String TEST_POST_REQ = "POST http://localhost/matrix.html HTTP/1.0\n"
+                + "Content-type: "
+                + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED
+                + "; charset=UTF-8\n"
+                + postBody;
+        s = getSamplerForRequest(TEST_POST_REQ, "UTF-8");
+        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+
+        // Check arguments
+        arguments = s.getArguments();
+        assertEquals(13, arguments.getArgumentCount());
+        checkArgument((HTTPArgument)arguments.getArgument(0), "update", "yes", false);
+        checkArgument((HTTPArgument)arguments.getArgument(1), "d", "1", false);
+        checkArgument((HTTPArgument)arguments.getArgument(2), "d", "2", false);
+        checkArgument((HTTPArgument)arguments.getArgument(3), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(4), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(5), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(6), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(7), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(8), "d", "1", false);
+        checkArgument((HTTPArgument)arguments.getArgument(9), "d", "2", false);
+        checkArgument((HTTPArgument)arguments.getArgument(10), "d", "1", false);
+        checkArgument((HTTPArgument)arguments.getArgument(11), "d", "", false);
+        checkArgument((HTTPArgument)arguments.getArgument(12), "d", " ", false);
+
+        // A HTTP POST request, with content-type text/plain
+        TEST_POST_REQ = "POST http://localhost/matrix.html HTTP/1.0\n"
+                + "Content-type: text/plain; charset=UTF-8\n"
+                + postBody;
+        s = getSamplerForRequest(TEST_POST_REQ, "UTF-8");
+        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+
+        // Check arguments
+        // We should have one argument, with the value equal to the post body
+        arguments = s.getArguments();
+        assertEquals(1, arguments.getArgumentCount());
+        checkArgument((HTTPArgument)arguments.getArgument(0), "", postBody, false);
+    }
         
-        // TODO: will need changing if arguments can be saved in decoded form 
-        public void testEncodedArguments() throws Exception {
-            String TEST_REQ = 
-                "GET http://localhost:80/matrix.html"
-                + "?abc"
-                + "?SPACE=a+b"
-                +"&space=a%20b"
-                +"&query=What?"
-                + " HTTP/1.1\n\n";
-            HttpRequestHdr req = new HttpRequestHdr();
-            req.parse(new java.io.ByteArrayInputStream(TEST_REQ.getBytes()));
-            Arguments arguments = req.getSampler().getArguments();
-            assertEquals(3,arguments.getArguments().size());
-            PropertyIterator pi= arguments.iterator();
-            JMeterProperty next;
-            next = pi.next(); assertEquals("abc?SPACE=a+b",next.getStringValue());
-            next = pi.next(); assertEquals("space=a%20b",next.getStringValue());
-            next = pi.next(); assertEquals("query=What?",next.getStringValue());
-        }
+    // TODO: will need changing if arguments can be saved in decoded form 
+    public void testEncodedArguments() throws Exception {
+            // A HTTP GET request
+        String TEST_GET_REQ = "GET http://localhost:80/matrix.html"
+            + "?abc"
+            + "?SPACE=a+b"
+            + "&space=a%20b"
+            + "&query=What?"
+            + " HTTP/1.1\n\n";
+        HTTPSamplerBase s = getSamplerForRequest(TEST_GET_REQ, "UTF-8");
+        assertEquals(HTTPSamplerBase.GET, s.getMethod());
+
+        // Check arguments
+        Arguments arguments = s.getArguments();
+        assertEquals(3, arguments.getArgumentCount());
+        checkArgument((HTTPArgument)arguments.getArgument(0), "abc?SPACE", "a+b", false);
+        checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a%20b", false);
+        checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", false);
+
+        // A HTTP POST request
+        String postBody = "abc?SPACE=a+b&space=a%20b&query=What?";
+        String TEST_POST_REQ = "POST http://localhost:80/matrix.html HTTP/1.1\n"
+            + "Content-type: "
+            + HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED
+            + "; charset=UTF-8\n"
+            + postBody;
+        s = getSamplerForRequest(TEST_POST_REQ, "UTF-8");
+        assertEquals(HTTPSamplerBase.POST, s.getMethod());
+        
+        // Check arguments
+        arguments = s.getArguments();
+        assertEquals(3, arguments.getArgumentCount());
+        checkArgument((HTTPArgument)arguments.getArgument(0), "abc?SPACE", "a+b", false);
+        checkArgument((HTTPArgument)arguments.getArgument(1), "space", "a%20b", false);
+        checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", false);
+    }
+
+    private HTTPSamplerBase getSamplerForRequest(String request, String contentEncoding)
+            throws IOException {
+        HttpRequestHdr req = new HttpRequestHdr();
+        ByteArrayInputStream bis = new ByteArrayInputStream(request.getBytes(contentEncoding));
+        req.parse(bis);
+        bis.close();
+        return req.getSampler();
+    }
+    
+    private void checkArgument(
+            HTTPArgument arg,
+            String expectedName,
+            String expectedValue,
+            boolean expectedEncoded) {
+        assertEquals(expectedName, arg.getName());
+        assertEquals(expectedValue, arg.getValue());
+        assertEquals(expectedEncoded, arg.isAlwaysEncoded());
+    }
 }

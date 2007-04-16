@@ -209,9 +209,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 
-	protected static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
+	public static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
     
-    protected static final String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
+    public static final String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
     
     // Derive the mapping of content types to parsers
     private static Map parsersForType = new HashMap();
@@ -290,11 +290,32 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * i.e. without any additional wrapping
 	 * 
 	 * @return true if specified file is to be sent as the body,
-	 * i.e. both FileField and MimeType are blank
+	 * i.e. FileField is blank
 	 */
-	public boolean getSendFileAsPostBody(){
-		return getFileField().length()== 0 && getMimetype().length() == 0;
+	public boolean getSendFileAsPostBody() {
+        // If no file field is specified, the file is sent as post body
+		return getFileField().length()== 0 && getFilename().length() > 0;
 	}
+    
+    /**
+     * Determine if none of the parameters have a name, and if that
+     * is the case, it means that the parameter values should be sent
+     * as the post body
+     * 
+     * @return true if none of the parameters have a name specified
+     */
+    public boolean getSendParameterValuesAsPostBody() {
+        boolean noArgumentsHasName = true;
+        PropertyIterator args = getArguments().iterator();
+        while (args.hasNext()) {
+            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            if(arg.getName() != null && arg.getName().length() > 0) {
+                noArgumentsHasName = false;
+                break;
+            }
+        }
+        return noArgumentsHasName;
+    }
 
     /**
      * Determine if we should use multipart/form-data or 

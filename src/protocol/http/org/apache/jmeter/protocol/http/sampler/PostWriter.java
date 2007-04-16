@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -220,20 +219,54 @@ public class PostWriter {
             connection.setDoInput(true);
         }
         else {
-            // Set the content type
-            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+            // Check if the header manager had a content type header
+            // This allows the user to specify his own content-type for a POST request
+            String contentTypeHeader = connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
+            boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0; 
             
             // If there are no arguments, we can send a file as the body of the request
             if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+                if(!hasContentTypeHeader) {
+                    // Allow the mimetype of the file to control the content type
+                    if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
+                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                    }
+                    else {
+                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                    }
+                }
+                
                 // Create the content length we are going to write
                 File inputFile = new File(sampler.getFilename());
                 contentLength = inputFile.length();
             }
             else {
+                // Set the content type
+                if(!hasContentTypeHeader) {
+                    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                }
+                
                 // We create the post body content now, so we know the size
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 
-                String postBody = sampler.getQueryString(contentEncoding);
+                // If none of the arguments have a name specified, we
+                // just send all the values as the post body
+                String postBody = null;
+                if(!sampler.getSendParameterValuesAsPostBody()) {
+                    // It is a normal post request, with parameter names and values
+                    postBody = sampler.getQueryString(contentEncoding);
+                }
+                else {
+                    // Just append all the parameter values, and use that as the post body
+                    StringBuffer postBodyBuffer = new StringBuffer();
+                    PropertyIterator args = sampler.getArguments().iterator();
+                    while (args.hasNext()) {
+                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                        postBodyBuffer.append(arg.getValue());
+                    }
+                    postBody = postBodyBuffer.toString();
+                }
+
                 // Query string should be encoded in UTF-8
                 bos.write(postBody.getBytes("UTF-8")); // $NON-NLS-1$
                 bos.flush();
