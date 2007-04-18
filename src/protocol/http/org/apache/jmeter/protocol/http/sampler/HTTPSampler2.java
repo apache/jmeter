@@ -361,8 +361,41 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                        post.addParameter(arg.getName(), arg.getValue());
+                        // The HTTPClient always urlencodes both name and value,
+                        // so if the argument is already encoded, we have to decode
+                        // it before adding it to the post request
+                        String parameterName = arg.getName();
+                        String parameterValue = arg.getValue();
+                        if(!arg.isAlwaysEncoded()) {
+                            // The value is already encoded by the user
+                            // Must decode the value now, so that when the
+                            // httpclient encodes it, we end up with the same value
+                            // as the user had entered.
+                            String urlContentEncoding = contentEncoding;
+                            if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
+                                // Use the default encoding for urls 
+                                urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
+                            }
+                            parameterName = URLDecoder.decode(parameterName, urlContentEncoding);
+                            parameterValue = URLDecoder.decode(parameterValue, urlContentEncoding);
+                        }
+                        // Add the parameter, httpclient will urlencode it
+                        post.addParameter(parameterName, parameterValue);
                     }
+                    
+/*
+//                    // Alternative implementation, to make sure that HTTPSampler and HTTPSampler2
+//                    // sends the same post body.
+//                     
+//                    // Only include the content char set in the content-type header if it is not
+//                    // an APPLICATION_X_WWW_FORM_URLENCODED content type
+//                    String contentCharSet = null;
+//                    if(!post.getRequestHeader(HEADER_CONTENT_TYPE).getValue().equals(APPLICATION_X_WWW_FORM_URLENCODED)) {
+//                        contentCharSet = post.getRequestCharSet();
+//                    }
+//                    StringRequestEntity requestEntity = new StringRequestEntity(getQueryString(contentEncoding), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), contentCharSet);
+//                    post.setRequestEntity(requestEntity);
+*/                    
                 }
                 else {
                     // Just append all the parameter values, and use that as the post body
