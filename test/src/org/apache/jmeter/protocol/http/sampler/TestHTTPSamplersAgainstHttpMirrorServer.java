@@ -208,6 +208,22 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
         res = executeSampler(sampler);
         checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, false);
+        
+        // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses,
+        // with values urlencoded, but the always encode set to false for the arguments
+        // This is how the HTTP Proxy server adds arguments to the sampler
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "%2FwEPDwULLTE2MzM2OTA0NTYPZBYCAgMPZ%2FrA%2B8DZ2dnZ2dnZ2d%2FGNDar6OshPwdJc%3D";
+        descriptionValue = "mydescription";
+        setupUrl(sampler, contentEncoding);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
+        res = executeSampler(sampler);
+        assertFalse(((HTTPArgument)sampler.getArguments().getArgument(0)).isAlwaysEncoded());
+        assertFalse(((HTTPArgument)sampler.getArguments().getArgument(1)).isAlwaysEncoded());
+        checkPostRequestUrlEncoded(sampler, res, samplerDefaultEncoding, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true);
 
         // Test sending data as UTF-8, where user defined variables are used
         // to set the value for form data

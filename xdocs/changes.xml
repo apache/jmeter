@@ -132,6 +132,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 27780 - (patch 19936) create multipart/form-data HTTP request without uploading file</li>
 <li>Bug 42098 - Use specified encoding for parameter values in HTTP GET</li>
 <li>Bug 42088 - Add XPath Assertion for booleans</li>
+<li>Bug 42158 - Improve support for multipart/form-data requests in HTTP Proxy server</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
