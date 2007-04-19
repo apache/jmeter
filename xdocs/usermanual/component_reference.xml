@@ -2816,15 +2816,14 @@ user_4, etc.</p></description>
 </component>
 
 <component name="HTTP User Parameter Modifier" index="&sect-num;.7.4" useinstead="User Parameters"  width="514" height="251" screenshot="user_param_modifier.gif">
-<description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
+<description>
+<p>See also the <complink name="CSV Data Set Config"/> element, which is more suitable for large numbers of parameters</p>
+<p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
 xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate
 through these values in a round-robin style, thus each request will get a different set of values
 until the last set of values is reached, at which point it will begin again at the first set.</p>
-<note>If the number of value sets is equal to the number of threads in your test, then it will work
-out that each thread will get the same set of values each time, which will be a different set from
-any other thread</note>
 </description>
 
 <properties>
@@ -2845,6 +2844,7 @@ user id to be used by each thread. User variables can be referenced in any field
 To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
 
 <p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
+<p>See also the <complink name="CSV Data Set Config"/> element, which is more suitable for large numbers of parameters</p>
 </description>
 
 <properties>
