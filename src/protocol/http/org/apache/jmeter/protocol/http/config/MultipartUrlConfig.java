@@ -22,11 +22,14 @@ import java.io.Serializable;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class MultipartUrlConfig implements Serializable {
 
@@ -92,6 +95,10 @@ public class MultipartUrlConfig implements Serializable {
 		myArgs.addArgument(new HTTPArgument(name, value, metadata));
 	}
 
+    /**
+     * @deprecated values in a multipart/form-data are not urlencoded,
+     * so it does not make sense to add a value as a encoded value
+     */
 	public void addEncodedArgument(String name, String value) {
 		Arguments myArgs = getArguments();
 		HTTPArgument arg = new HTTPArgument(name, value, true);
@@ -100,6 +107,23 @@ public class MultipartUrlConfig implements Serializable {
 		}
 		myArgs.addArgument(arg);
 	}
+    
+    /**
+     * Add a value that is not URL encoded, and make sure it
+     * appears in the GUI that it will not be encoded when
+     * the request is sent.
+     * 
+     * @param name
+     * @param value
+     */
+    private void addNonEncodedArgument(String name, String value) {
+        Arguments myArgs = getArguments();
+        // The value is not encoded
+        HTTPArgument arg = new HTTPArgument(name, value, false);
+        // Let the GUI show that it will not be encoded
+        arg.setAlwaysEncoded(false);
+        myArgs.addArgument(arg);
+    }
 
 	/**
 	 * This method allows a proxy server to send over the raw text from a
@@ -109,24 +133,52 @@ public class MultipartUrlConfig implements Serializable {
 	public void parseArguments(String queryString) {
 		String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary());
 		for (int i = 0; i < parts.length; i++) {
-			if (parts[i].indexOf("filename=") > -1) {
-				int index = parts[i].indexOf("name=\"") + 6;
-				String name = parts[i].substring(index, parts[i].indexOf("\"", index));
-				index = parts[i].indexOf("filename=\"") + 10;
-				String fn = parts[i].substring(index, parts[i].indexOf("\"", index));
-				index = parts[i].indexOf("\n", index);
-				index = parts[i].indexOf(":", index) + 1;
-				String mt = parts[i].substring(index, parts[i].indexOf("\n", index)).trim();
-				this.setFileFieldName(name);
-				this.setFilename(fn);
-				this.setMimeType(mt);
-			} else if (parts[i].indexOf("name=") > -1) {
-				int index = parts[i].indexOf("name=\"") + 6;
-				String name = parts[i].substring(index, parts[i].indexOf("\"", index));
-				index = parts[i].indexOf("\n", index) + 2;
-				String value = parts[i].substring(index).trim();
-				this.addArgument(name, value);
-			}
+            String contentDisposition = getHeaderValue("Content-disposition", parts[i]);
+            String contentType = getHeaderValue("Content-type", parts[i]);
+            // Check if it is form data
+            if (contentDisposition != null && contentDisposition.indexOf("form-data") > -1) {
+                // Get the form field name
+                int index = contentDisposition.indexOf("name=\"") + 6;
+                String name = contentDisposition.substring(index, contentDisposition.indexOf("\"", index));
+
+                // Check if it is a file being uploaded
+                if (contentDisposition.indexOf("filename=") > -1) {
+                    // Get the filename
+                    index = contentDisposition.indexOf("filename=\"") + 10;
+                    String fn = contentDisposition.substring(index, contentDisposition.indexOf("\"", index));
+                    if(fn != null && fn.length() > 0) {
+                        // Set the values retrieves for the file upload
+                        this.setFileFieldName(name);
+                        this.setFilename(fn);
+                        this.setMimeType(contentType);
+                    }
+                }
+                else {
+                    // Find the first empty line of the multipart, it signals end of headers for multipart
+                    int indexEmptyLfCrLfLinePos = parts[i].indexOf("\n\r\n");
+                    int indexEmptyLfLfLinePos = parts[i].indexOf("\n\n");
+                    String value = null;
+                    if(indexEmptyLfCrLfLinePos > -1) {
+                        value = parts[i].substring(indexEmptyLfCrLfLinePos).trim();
+                    }
+                    else if(indexEmptyLfLfLinePos > -1) {
+                        value = parts[i].substring(indexEmptyLfLfLinePos).trim();
+                    }
+                    this.addNonEncodedArgument(name, value);
+                }
+            }
 		}
 	}
+    
+    private String getHeaderValue(String headerName, String multiPart) {
+        String regularExpression = headerName + "\\s*:\\s*(.*)$";
+        Perl5Matcher localMatcher = JMeterUtils.getMatcher();
+        Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
+        if(localMatcher.contains(multiPart, pattern)) {
+            return localMatcher.getMatch().group(1).trim();
+        }
+        else {
+            return null;
+        }
+    }
 }
