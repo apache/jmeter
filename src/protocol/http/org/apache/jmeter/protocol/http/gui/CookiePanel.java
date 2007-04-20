@@ -103,15 +103,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * List of cookie policies.
      * 
      * These are used both for the display, and for setting the policy
-     * TODO: use the getRegisteredCookieSpecs() method when it is implemented
     */
-    private final String[] policies = {
-            CookiePolicy.BROWSER_COMPATIBILITY,
-            CookiePolicy.NETSCAPE,
-            CookiePolicy.RFC_2109,
-            CookiePolicy.DEFAULT,
-            CookiePolicy.IGNORE_COOKIES,
-    };
+    private final String[] policies = CookiePolicy.getRegisteredCookieSpecs();
 
     private JLabeledChoice policy;
     
