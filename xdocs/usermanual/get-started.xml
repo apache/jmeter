@@ -48,8 +48,19 @@ of the User Guide to familiarize yourself with JMeter basics (for example, addin
 <p>Finally, go through the appropriate section on how to build a specific type of Test Plan.
 For example, if you are interested in testing a Web application, then see the section
 <a href="build-web-test-plan.html">Building a Web Test Plan</a>.
-The other specific Test Plan sections are for <a href="build-db-test-plan.html">JDBC</a>,
-<a href="build-ftp-test-plan.html">FTP</a>, and <a href="build-jndi-test-plan.html">JNDI</a>.</p>
+The other specific Test Plan sections are:
+<ul>
+<li><a href="build-adv-web-test-plan.html">Advanced Web Test Plan</a></li>
+<li><a href="build-db-test-plan.html">JDBC</a></li>
+<li><a href="build-ftp-test-plan.html">FTP</a></li>
+<li><a href="build-jms-point-to-point-test-plan.html">JMS Point-to-Point</a></li>
+<li><a href="build-jms-topic-test-plan.html">JMS Topic</a></li>
+<li><a href="build-ldap-test-plan.html">LDAP</a></li>
+<li><a href="build-ldapext-test-plan.html">LDAP Extended</a></li>
+<li><a href="build-ws-test-plan.html">WebServices (SOAP)</a></li>
+<li></li>
+</ul>
+</p>
 <p>Once you are comfortable with building and running JMeter Test Plans, you can look into the
 various configuration elements (timers, listeners, assertions, and others) which give you more control
 over your Test Plans.</p>
@@ -59,8 +70,10 @@ over your Test Plans.</p>
 <p>JMeter requires your computing environment meets some minimum requirements.</p>
 
 <subsection name="2.1.1 Java Version" anchor="java_versions">
-<p>JMeter requires a fully compliant JVM 1.4 or higher.  Since 2.2 it no longer supports Java 1.3.
-</p>
+<note>JMeter requires a fully compliant JVM 1.4 or higher.  
+<br/>
+Version 2.2 and later no longer support Java 1.3.
+</note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
 <note>
