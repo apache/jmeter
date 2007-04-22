@@ -211,6 +211,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41518 - JMeter changes the HTTP header Content Type for POST request</li>
 <li>Bug 42156 - HTTPRequest HTTPClient incorrectly urlencodes parameter value in POST</li>
 <li>Bug 42184 - Number of bytes for subsamples not added to sample when sub samples are added</li>
+<li>Bug 42185 - If a HTTP Sampler follows a redirect, and is set up to download images, then images are downloaded multiple times</li>
 </ul>
 
 <h3>Version 2.2</h3>
