@@ -22,6 +22,7 @@ import java.io.StringWriter;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.util.Calculator;
 import org.apache.log.LogTarget;
 import org.apache.log.format.Formatter;
 import org.apache.log.format.RawFormatter;
@@ -85,6 +86,88 @@ public class TestSampleResult extends TestCase {
             res.samplePause();
             assertFalse(wr.toString().length() == 0);
         }
+        
+        public void testByteCount() throws Exception {
+            SampleResult res = new SampleResult();
+            
+            res.sampleStart();
+            res.setBytes(100);
+            res.setSampleLabel("sample of size 100 bytes");
+            res.sampleEnd();
+            assertEquals(100, res.getBytes());
+            assertEquals("sample of size 100 bytes", res.getSampleLabel());
+        }
+
+        public void testSubResults() throws Exception {
+        	// This test tries to emulate a http sample, with two
+        	// subsamples, representing images that are downloaded for the
+        	// page representing the first sample.
+        	
+            // Sample that will get two sub results, simulates a web page load 
+            SampleResult resWithSubResults = new SampleResult();            
+            resWithSubResults.sampleStart();
+            Thread.sleep(100);
+            resWithSubResults.setBytes(300);
+            resWithSubResults.setSampleLabel("sample with two subresults");
+            resWithSubResults.setSuccessful(true);
+            resWithSubResults.sampleEnd();
+            long sampleWithSubResultsTime = resWithSubResults.getTime();
+        	
+            // Sample with no sub results, simulates an image download
+            SampleResult resNoSubResults1 = new SampleResult();            
+            resNoSubResults1.sampleStart();
+            Thread.sleep(100);
+            resNoSubResults1.setBytes(100);
+            resNoSubResults1.setSampleLabel("sample with no subresults");
+            resNoSubResults1.setSuccessful(true);
+            resNoSubResults1.sampleEnd();
+            long sample1Time = resNoSubResults1.getTime();
+
+            assertTrue(resNoSubResults1.isSuccessful());
+            assertEquals(100, resNoSubResults1.getBytes());
+            assertEquals("sample with no subresults", resNoSubResults1.getSampleLabel());
+            assertEquals(1, resNoSubResults1.getSampleCount());
+            assertEquals(0, resNoSubResults1.getSubResults().length);
+            
+            // Sample with no sub results, simulates an image download 
+            SampleResult resNoSubResults2 = new SampleResult();            
+            resNoSubResults2.sampleStart();
+            Thread.sleep(100);
+            resNoSubResults2.setBytes(200);
+            resNoSubResults2.setSampleLabel("sample with no subresults");
+            resNoSubResults2.setSuccessful(true);
+            resNoSubResults2.sampleEnd();
+            long sample2Time = resNoSubResults2.getTime();
+
+            assertTrue(resNoSubResults2.isSuccessful());
+            assertEquals(200, resNoSubResults2.getBytes());
+            assertEquals("sample with no subresults", resNoSubResults2.getSampleLabel());
+            assertEquals(1, resNoSubResults2.getSampleCount());
+            assertEquals(0, resNoSubResults2.getSubResults().length);
+            
+            // Now add the subsamples to the sample
+            resWithSubResults.addSubResult(resNoSubResults1);
+            resWithSubResults.addSubResult(resNoSubResults2);
+            assertTrue(resWithSubResults.isSuccessful());
+            assertEquals(600, resWithSubResults.getBytes());
+            assertEquals("sample with two subresults", resWithSubResults.getSampleLabel());
+            assertEquals(1, resWithSubResults.getSampleCount());
+            assertEquals(2, resWithSubResults.getSubResults().length);
+            long totalTime = resWithSubResults.getTime();
+            
+            // Check the sample times
+            assertEquals(sampleWithSubResultsTime + sample1Time + sample2Time, totalTime);
+            
+            // Check that calculator gets the correct statistics from the sample
+            Calculator calculator = new Calculator();
+            calculator.addSample(resWithSubResults);
+            assertEquals(600, calculator.getTotalBytes());
+            assertEquals(1, calculator.getCount());
+            assertEquals(1d / (totalTime / 1000d), calculator.getRate(),0d);
+            // Check that the throughput uses the time elapsed for the sub results
+            assertFalse(1d / (sampleWithSubResultsTime / 1000d) <= calculator.getRate());
+        }
+
         // TODO some more invalid sequence tests needed
 }
 
