@@ -92,6 +92,20 @@ public class XMLBuffer{
 	}
 
 	/**
+	 * Add a complete tag with content.
+	 * 
+	 * @param tagname
+	 * @param content
+	 * @return
+	 */
+	public XMLBuffer tag(String tagname,StringBuffer content){
+		startTag(tagname);
+		sb.append(content);
+		endTag(tagname);
+		return this;
+	}
+
+	/**
 	 * Convert the buffer to a string, closing any open tags
 	 */
 	public String toString(){
