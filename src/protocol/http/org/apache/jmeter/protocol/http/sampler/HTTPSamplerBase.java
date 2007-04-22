@@ -1114,6 +1114,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * @return
 	 */
 	protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect, int frameDepth, HTTPSampleResult res) {
+		boolean wasRedirected = false;
 		if (!areFollowingRedirect) {
 			if (res.isRedirect()) {
 				log.debug("Location set to - " + res.getRedirectLocation());
@@ -1121,6 +1122,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				if (getFollowRedirects()) {
 					res = followRedirects(res, frameDepth);
 					areFollowingRedirect = true;
+					wasRedirected = true;
 				}
 			}
 		}
@@ -1131,7 +1133,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				// If we followed redirects, we already have a container:
 				HTTPSampleResult container = (HTTPSampleResult) (areFollowingRedirect ? res.getParent() : res);
 
-				res = downloadPageResources(res, container, frameDepth);
+				// Only download page resources if we were not redirected.
+				// If we were redirected, the page resources have already been
+				// downloaded for the sample made for the redirected url
+				if(!wasRedirected) {
+					res = downloadPageResources(res, container, frameDepth);
+				}
 			}
 		}
 		return res;
