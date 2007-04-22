@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.protocol.ldap.sampler;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,6 +37,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchResult;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -45,6 +50,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.XMLBuffer;
 import org.apache.log.Logger;
@@ -137,6 +143,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
 	private static Hashtable ldapContexts = new Hashtable();
 
+	private static final int MAX_SORTED_RESULTS = 
+		JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$
+	
 	/***************************************************************************
 	 * !ToDo (Constructor description)
 	 **************************************************************************/
@@ -813,25 +822,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
                 if (isParseFlag()) {
 					try {
 						xmlBuffer.openTag("searchresults"); // $NON-NLS-1$
-						while (srch.hasMore()) {
-							try {
-								xmlBuffer.openTag("searchresult"); // $NON-NLS-1$
-								SearchResult sr = (SearchResult) srch.next();
-								xmlBuffer.tag("dn",sr.getName());// $NON-NLS-1$
-								xmlBuffer.tag("returnedattr",String.valueOf(sr.getAttributes().size())); // $NON-NLS-1$
-								NamingEnumeration attrlist = sr.getAttributes().getIDs();
-								while (attrlist.hasMore()) {
-									String iets = (String) attrlist.next();
-									xmlBuffer.openTag("attribute"); // $NON-NLS-1$
-									xmlBuffer.tag("attributename", iets); // $NON-NLS-1$
-									xmlBuffer.tag("attributevalue", // $NON-NLS-1$
-											sr.getAttributes().get(iets).toString().substring(iets.length() + 2));
-									xmlBuffer.closeTag("attribute"); // $NON-NLS-1$
-								}
-							} finally {
-								xmlBuffer.closeTag("searchresult"); // $NON-NLS-1$
-							}							
-						}
+						writeSearchResults(xmlBuffer, srch);
 					} finally {
 						xmlBuffer.closeTag("searchresults"); // $NON-NLS-1$
 					}					
@@ -839,6 +830,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			}
 
 		} catch (NamingException ex) {
+			//log.warn("DEBUG",ex);
+// e.g. javax.naming.SizeLimitExceededException: [LDAP: error code 4 - Sizelimit Exceeded]; remaining name ''
+//                                                123456789012345678901
 			// TODO: tidy this up
 			String returnData = ex.toString();
 			final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
@@ -861,6 +855,192 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		}
 		return res;
 	}
+
+    /*
+     *   Write out search results in a stable order (including order of all subelements which might
+     * be reordered like attributes and their values) so that simple textual comparison can be done,
+     * unless the number of results exceeds {@link #MAX_SORTED_RESULTS} in which case just stream
+     * the results out without sorting.
+     */
+    private void writeSearchResults(final XMLBuffer xmlb, final NamingEnumeration srch)
+            throws NamingException
+    {
+   	
+        final ArrayList     sortedResults = new ArrayList(MAX_SORTED_RESULTS);
+        final String        searchBase = getPropertyAsString(SEARCHBASE);
+        final String        rootDn = getRootdn();
+
+        // read all sortedResults into memory so we can guarantee ordering
+        try {
+			while (srch.hasMore() && (sortedResults.size() < MAX_SORTED_RESULTS)) {
+			    final SearchResult    sr = (SearchResult) srch.next();
+
+			        // must be done prior to sorting
+			    normaliseSearchDN(sr, searchBase, rootDn);
+			    sortedResults.add(sr);
+			}
+		} finally { // show what we did manage to retrieve
+		
+	        sortResults(sortedResults);
+	        
+	        for (Iterator it = sortedResults.iterator(); it.hasNext();)
+	        {
+	            final SearchResult  sr = (SearchResult) it.next();
+	            writeSearchResult(sr, xmlb);
+	        }
+		}
+
+		while (srch.hasMore()) { // If there's anything left ...
+            final SearchResult    sr = (SearchResult) srch.next();
+
+            normaliseSearchDN(sr, searchBase, rootDn);
+            writeSearchResult(sr, xmlb);
+        }
+    }
+
+    private void writeSearchResult(final SearchResult sr, final XMLBuffer xmlb)
+            throws NamingException
+    {
+        final Attributes    attrs = sr.getAttributes();
+        final int           size = attrs.size();
+        final ArrayList     sortedAttrs = new ArrayList(size);
+
+        xmlb.openTag("searchresult"); // $NON-NLS-1$
+        xmlb.tag("dn", sr.getName()); // $NON-NLS-1$
+ 		xmlb.tag("returnedattr",Integer.toString(size)); // $NON-NLS-1$
+ 		xmlb.openTag("attributes"); // $NON-NLS-1$
+
+ 		try {
+			for (NamingEnumeration en = attrs.getAll(); en.hasMore(); )
+			{
+			    final Attribute     attr = (Attribute) en.next();
+
+			    sortedAttrs.add(attr);
+			}
+			sortAttributes(sortedAttrs);
+			for (Iterator ait = sortedAttrs.iterator(); ait.hasNext();)
+			{
+			    final Attribute     attr = (Attribute) ait.next();
+
+			    StringBuffer sb = new StringBuffer();
+			    if (attr.size() == 1)
+			        sb.append(getWriteValue(attr.get()));
+			    else
+			    {
+			        final ArrayList     sortedVals = new ArrayList(attr.size());
+			        boolean             first = true;
+
+			        for (NamingEnumeration ven = attr.getAll(); ven.hasMore(); )
+			        {
+			            final Object    value = getWriteValue(ven.next());
+			            sortedVals.add(value.toString());
+			        }
+
+			        Collections.sort(sortedVals);
+			        
+			        for (Iterator vit = sortedVals.iterator(); vit.hasNext();)
+			        {
+			            final String    value = (String) vit.next();
+			            if (first) {
+			                first = false;
+			            } else {
+			                sb.append(", "); // $NON-NLS-1$
+			            }
+			            sb.append(value);
+			        }
+			    }
+			    xmlb.tag(attr.getID(),sb);
+			}
+		} finally {
+	 		xmlb.closeTag("attributes"); // $NON-NLS-1$
+	        xmlb.closeTag("searchresult"); // $NON-NLS-1$
+		}
+    }
+
+	private void sortAttributes(final ArrayList sortedAttrs) {
+		Collections.sort(sortedAttrs, new Comparator()
+        {
+            public int compare(Object o1, Object o2)
+            {
+                String      nm1 = ((Attribute) o1).getID();
+                String      nm2 = ((Attribute) o2).getID();
+
+                return nm1.compareTo(nm2);
+            }
+        });
+	}
+
+	private void sortResults(final ArrayList sortedResults) {
+		Collections.sort(sortedResults, new Comparator()
+		{
+		    private int compareToReverse(final String s1, final String s2)
+		    {
+		        int     len1 = s1.length();
+		        int     len2 = s2.length();
+		        int     s1i = len1 - 1;
+		        int     s2i = len2 - 1;
+
+		        for ( ; (s1i >= 0) && (s2i >= 0); s1i--, s2i--)
+		        {
+		            char    c1 = s1.charAt(s1i);
+		            char    c2 = s2.charAt(s2i);
+
+		            if (c1 != c2)
+		                return c1 - c2;
+		        }
+		        return len1 - len2;
+		    }
+
+		    public int compare(Object o1, Object o2)
+		    {
+		        String      nm1 = ((SearchResult) o1).getName();
+		        String      nm2 = ((SearchResult) o2).getName();
+
+		        if (nm1 == null)
+		            nm1 = "";
+		        if (nm2 == null)
+		            nm2 = "";
+		        return compareToReverse(nm1, nm2);
+		    }
+		});
+	}
+
+    private String normaliseSearchDN(final SearchResult sr, final String searchBase, final String rootDn)
+    {
+        String      srName = sr.getName();
+
+        if (!srName.endsWith(searchBase))
+        {
+            if (srName.length() > 0)
+                srName = srName + ',';
+            srName = srName + searchBase;
+        }
+        if ((rootDn.length() > 0) && !srName.endsWith(rootDn))
+        {
+            if (srName.length() > 0)
+                srName = srName + ',';
+            srName = srName + rootDn;
+        }
+        sr.setName(srName);
+        return srName;
+    }
+
+    private String getWriteValue(final Object value)
+    {
+        if (value instanceof String)
+            // assume it's senstive data
+            return StringEscapeUtils.escapeXml((String)value);
+        else if (value instanceof byte[])
+            try
+            {
+                return StringEscapeUtils.escapeXml(new String((byte[])value, "UTF-8"));
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                log.error("this can't happen: UTF-8 character encoding not supported", e);
+            }
+        return StringEscapeUtils.escapeXml(value.toString());
+    }
 
 	public void testStarted() {
 		testStarted(""); // $NON-NLS-1$
@@ -887,8 +1067,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			} catch (NamingException ignored) {
 				// ignored
 			}
-			it.remove();// Make sure the entry is not left around for the next
-						// run
+			it.remove();// Make sure the entry is not left around for the next run
 		}
 
 	}
