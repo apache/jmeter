@@ -210,6 +210,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42057 - connection can be null if method is null</li>
 <li>Bug 41518 - JMeter changes the HTTP header Content Type for POST request</li>
 <li>Bug 42156 - HTTPRequest HTTPClient incorrectly urlencodes parameter value in POST</li>
+<li>Bug 42184 - Number of bytes for subsamples not added to sample when sub samples are added</li>
 </ul>
 
 <h3>Version 2.2</h3>

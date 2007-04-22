@@ -412,7 +412,10 @@ public class SampleResult implements Serializable {
 			subResults = new ArrayList();
 		}
 		subResults.add(subResult);
-		setEndTime(subResult.getEndTime());// Extend the time to the end of the added sample
+		// Extend the time to the end of the added sample
+		setEndTime(subResult.getEndTime());
+		// Include the byte count for the added sample
+		setBytes(getBytes() + subResult.getBytes());
 		subResult.setParent(this);
 	}
 

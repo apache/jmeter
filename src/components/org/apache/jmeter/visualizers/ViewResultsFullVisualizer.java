@@ -324,10 +324,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 							sampleDataField.setText(sd);
 						}
 
-						statsDoc.insertString(statsDoc.getLength(), "Thread Name: " + res.getThreadName() + "\n", null);
+						statsDoc.insertString(statsDoc.getLength(), "Thread Name: " + res.getThreadName() + "\n", null); // $NON-NLS-2$
 						String startTime = new Date(res.getStartTime()).toString();
-						statsDoc.insertString(statsDoc.getLength(), "Sample Start: " + startTime + "\n", null);
-						statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null);
+						statsDoc.insertString(statsDoc.getLength(), "Sample Start: " + startTime + "\n", null); // $NON-NLS-2$
+						statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null); // $NON-NLS-2$
+						statsDoc.insertString(statsDoc.getLength(), "Size in bytes: " + res.getBytes() + "\n", null); // $NON-NLS-2$
 
 						String responseCode = res.getResponseCode();
 						log.debug("valueChanged1 : response code - " + responseCode);
