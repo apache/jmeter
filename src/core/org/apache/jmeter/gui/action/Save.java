@@ -20,9 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -103,22 +101,19 @@ public class Save implements Command {
 			convertSubTree(subTree);
 		} catch (Exception err) {
 		}
-		Writer writer = null;
 		FileOutputStream ostream = null;
 		try {
+			ostream = new FileOutputStream(updateFile);
 			if (SaveService.isSaveTestPlanFormat20()) {
-				ostream = new FileOutputStream(updateFile);
 				OldSaveService.saveSubTree(subTree, ostream);
 			} else {
-				writer = new FileWriter(updateFile);
-				SaveService.saveTree(subTree, writer);
+				SaveService.saveTree(subTree, ostream);
 			}
 		} catch (Throwable ex) {
 			GuiPackage.getInstance().setTestPlanFile(null);
 			log.error("", ex);
 			throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
 		} finally {
-			closeWriter(writer);
 			closeStream(ostream);
 		}
 	}
@@ -131,16 +126,6 @@ public class Save implements Command {
 			convertSubTree(tree.getTree(item));
 			TestElement testElement = item.getTestElement();
 			tree.replace(item, testElement);
-		}
-	}
-
-	private void closeWriter(Writer writer) {
-		if (writer != null) {
-			try {
-				writer.close();
-			} catch (IOException ex) {
-				log.error("", ex);
-			}
 		}
 	}
 

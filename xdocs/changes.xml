@@ -134,6 +134,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42088 - Add XPath Assertion for booleans</li>
 <li>Bug 42158 - Improve support for multipart/form-data requests in HTTP Proxy server</li>
 <li>Bug 40369 - LDAP: Stable search results in sampler</li>
+<li>Bug 36755 - Save XML test files with UTF-8 encoding</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
