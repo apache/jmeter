@@ -20,12 +20,14 @@ package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -36,7 +38,7 @@ import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 public class BeanShellListener extends AbstractTestElement 
-    implements SampleListener, Visualizer, Serializable, TestBean, UnsharedComponent  {
+    implements SampleListener, Visualizer, Serializable, TestBean, TestListener, UnsharedComponent  {
 	
     private static final Logger log = LoggingManager.getLoggerForClass();
     
@@ -107,6 +109,34 @@ public class BeanShellListener extends AbstractTestElement
 
 	public boolean isStats() {// Required by Visualiser
 		return false;
+	}
+
+
+	public void testEnded() {
+		testEnded("");
+	}
+
+
+	public void testEnded(String host) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void testIterationStart(LoopIterationEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void testStarted() {
+		testStarted("");
+	}
+
+
+	public void testStarted(String host) {
+		// TODO Auto-generated method stub
+		
 	}
 
 //	public Object clone() {

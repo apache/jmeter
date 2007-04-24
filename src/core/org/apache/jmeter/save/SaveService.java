@@ -23,13 +23,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import java.nio.charset.Charset;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.converters.BooleanPropertyConverter;
 import org.apache.jmeter.save.converters.HashTreeConverter;
@@ -64,6 +68,8 @@ public class SaveService {
     private static final XStream saver = new XStream(new PureJavaReflectionProvider());
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
+	// The XML header, with placeholder for encoding, since that is controlled by property
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
     // Default file name
     private static final String SAVESERVICE_PROPERTIES_FILE = "/bin/saveservice.properties"; // $NON-NLS-1$
@@ -117,6 +123,7 @@ public class SaveService {
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
 	private static final String FILEVERSION = "505365";// Expected value $NON-NLS-1$
+	private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
         log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
@@ -174,7 +181,10 @@ public class SaveService {
                     } else if (key.equalsIgnoreCase("_file_version")) { // $NON-NLS-1$
                             fileVersion = extractVersion(val);
                             log.info("Using SaveService properties file version " + fileVersion);
-					} else {
+                    } else if (key.equalsIgnoreCase("_file_encoding")) { // $NON-NLS-1$
+                        fileEncoding = val;
+                        log.info("Using SaveService properties file encoding " + fileEncoding);
+                    } else {
 						key = key.substring(1);// Remove the leading "_"
 						try {
 							if (val.trim().equals("collection")) { // $NON-NLS-1$
@@ -223,6 +233,19 @@ public class SaveService {
         return r == null ? s : r;
     }
     
+	public static void saveTree(HashTree tree, OutputStream out) throws Exception {
+		// Get the OutputWriter to use
+		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
+		writeXmlHeader(outputStreamWriter);
+		// Use deprecated method, to avoid duplicating code
+		saveTree(tree, outputStreamWriter);
+		outputStreamWriter.close();
+	}
+
+    /**
+     * @deprecated Use saveTree(HashTree tree, OutputStream out) instead, which
+     * takes the fileEncoding property of SaveService into consideration
+     */
 	public static void saveTree(HashTree tree, Writer writer) throws Exception {
 		ScriptWrapper wrapper = new ScriptWrapper();
 		wrapper.testPlan = tree;
@@ -230,23 +253,70 @@ public class SaveService {
 		writer.write('\n');// Ensure terminated properly
 	}
 
+	public static void saveElement(Object el, OutputStream out) throws Exception {
+		// Get the OutputWriter to use
+		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
+		writeXmlHeader(outputStreamWriter);
+		// Use deprecated method, to avoid duplicating code
+		saveElement(el, outputStreamWriter);
+		outputStreamWriter.close();
+	}
+
+	/**
+     * @deprecated Use saveElement(Object el, OutputStream out) instead, which
+     * takes the fileEncoding property of SaveService into consideration
+     */
 	public static void saveElement(Object el, Writer writer) throws Exception {
 		saver.toXML(el, writer);
 	}
 
 	public static Object loadElement(InputStream in) throws Exception {
-		return saver.fromXML(new InputStreamReader(in));
+		// Get the InputReader to use
+		InputStreamReader inputStreamReader = getInputStreamReader(in);
+		// Use deprecated method, to avoid duplicating code
+		Object element = loadElement(inputStreamReader);
+		inputStreamReader.close();
+		return element;
 	}
 
+	/**
+	 * @deprecated Use loadElement(InputStream in) instead, since that takes
+	 * the fileEncoding property of SaveService into consideration
+	 */
 	public static Object loadElement(Reader in) throws Exception {
 		return saver.fromXML(in);
 	}
 
+	public synchronized static void saveSampleResult(SampleResult res, OutputStream out) throws Exception {
+		// Get the OutputWriter to use
+		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
+		writeXmlHeader(outputStreamWriter);
+		// Use deprecated method, to avoid duplicating code
+		saveSampleResult(res, outputStreamWriter);
+		outputStreamWriter.close();
+	}
+
+    /**
+     * @deprecated Use saveSampleResult(SampleResult res, OutputStream out) instead, which
+     * takes the fileEncoding property of SaveService into consideration
+     */
 	public synchronized static void saveSampleResult(SampleResult res, Writer writer) throws Exception {
 		saver.toXML(res, writer);
 		writer.write('\n');
 	}
 
+	public synchronized static void saveTestElement(TestElement elem, OutputStream out) throws Exception {
+		// Get the OutputWriter to use
+		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
+		// Use deprecated method, to avoid duplicating code
+		saveTestElement(elem, outputStreamWriter);
+		outputStreamWriter.close();
+	}
+
+    /**
+     * @deprecated Use saveTestElement(TestElement elem, OutputStream out) instead, which
+     * takes the fileEncoding property of SaveService into consideration
+     */
 	public synchronized static void saveTestElement(TestElement elem, Writer writer) throws Exception {
 		saver.toXML(elem, writer);
 		writer.write('\n');
@@ -328,7 +398,10 @@ public class SaveService {
 	}
 
 	public static TestResultWrapper loadTestResults(InputStream reader) throws Exception {
-		TestResultWrapper wrapper = (TestResultWrapper) saver.fromXML(new InputStreamReader(reader));
+		// Get the InputReader to use
+		InputStreamReader inputStreamReader = getInputStreamReader(reader);
+		TestResultWrapper wrapper = (TestResultWrapper) saver.fromXML(inputStreamReader);
+		inputStreamReader.close();
 		return wrapper;
 	}
 
@@ -339,7 +412,10 @@ public class SaveService {
 		reader.mark(Integer.MAX_VALUE);
 		ScriptWrapper wrapper = null;
 		try {
-			wrapper = (ScriptWrapper) saver.fromXML(new InputStreamReader(reader));
+			// Get the InputReader to use
+			InputStreamReader inputStreamReader = getInputStreamReader(reader);
+			wrapper = (ScriptWrapper) saver.fromXML(inputStreamReader);
+			inputStreamReader.close();
 			return wrapper.testPlan;
 		} catch (CannotResolveClassException e) {
 			log.warn("Problem loading new style: " + e.getLocalizedMessage());
@@ -348,6 +424,53 @@ public class SaveService {
 		} catch (NoClassDefFoundError e) {
 			log.warn("Missing class ", e);
 			return null;
+		}
+	}
+	
+	private static InputStreamReader getInputStreamReader(InputStream inStream) throws UnsupportedEncodingException {
+		// Check if we have a encoding to use from properties
+		Charset charset = getFileEncodingCharset();
+		if(charset != null) {
+			return new InputStreamReader(inStream, charset);
+		}
+		else {
+			// We use the default character set encoding of the JRE
+			return new InputStreamReader(inStream);
+		}
+	}
+
+	private static OutputStreamWriter getOutputStreamWriter(OutputStream outStream) throws UnsupportedEncodingException {
+		// Check if we have a encoding to use from properties
+		Charset charset = getFileEncodingCharset();
+		if(charset != null) {
+			return new OutputStreamWriter(outStream, charset);
+		}
+		else {
+			// We use the default character set encoding of the JRE
+			return new OutputStreamWriter(outStream);
+		}
+	}
+	
+	private static Charset getFileEncodingCharset() throws UnsupportedEncodingException {
+		// Check if we have a encoding to use from properties
+		if(fileEncoding != null && fileEncoding.length() > 0) {
+			return Charset.forName(fileEncoding);
+		}
+		else {
+			// We use the default character set encoding of the JRE
+			return null;
+		}
+	}
+	
+	private static void writeXmlHeader(OutputStreamWriter writer) throws IOException {
+		// Write XML header if we have the charset to use for encoding
+		Charset charset = getFileEncodingCharset();
+		if(charset != null) {
+			// We do not use getEncoding method of Writer, since that returns
+			// the historical name
+			String header = XML_HEADER.replaceAll("<ph>", charset.name());
+			writer.write(header);
+			writer.write('\n');
 		}
 	}
 

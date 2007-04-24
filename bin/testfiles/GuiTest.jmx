@@ -1,6 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="1.8">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <collectionProp name="TestPlan.thread_groups"/>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="server" elementType="Argument">
@@ -15,7 +17,6 @@
           </elementProp>
         </collectionProp>
       </elementProp>
-      <collectionProp name="TestPlan.thread_groups"/>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
@@ -50,8 +51,8 @@
               <stringProp name="0"></stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <intProp name="Assertion.test_type">2</intProp>
             <stringProp name="Assertion.assume_success">false</stringProp>
+            <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
           <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Duration Assertion" enabled="true">
@@ -110,8 +111,8 @@
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.regex"></stringProp>
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-            <stringProp name="RegexExtractor.template"></stringProp>
             <stringProp name="RegexExtractor.match_number"></stringProp>
+            <stringProp name="RegexExtractor.template"></stringProp>
             <stringProp name="RegexExtractor.refname"></stringProp>
           </RegexExtractor>
           <hashTree/>
@@ -169,13 +170,13 @@
           </ConstantTimer>
           <hashTree/>
           <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Gaussian Random Timer" enabled="true">
-            <stringProp name="RandomTimer.range">100.0</stringProp>
             <stringProp name="ConstantTimer.delay">300</stringProp>
+            <stringProp name="RandomTimer.range">100.0</stringProp>
           </GaussianRandomTimer>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
-            <stringProp name="RandomTimer.range">100.0</stringProp>
             <stringProp name="ConstantTimer.delay">300</stringProp>
+            <stringProp name="RandomTimer.range">100.0</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
@@ -527,10 +528,10 @@
             <stringProp name="HTTPSampler.path"></stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
           </ConfigTestElement>
           <hashTree/>
         </hashTree>
@@ -573,8 +574,8 @@
           <URLRewritingModifier guiclass="URLRewritingModifierGui" testclass="URLRewritingModifier" testname="URL Rewriting Modifier" enabled="true">
             <boolProp name="path_extension">false</boolProp>
             <boolProp name="path_extension_no_questionmark">false</boolProp>
-            <boolProp name="path_extension_no_equals">false</boolProp>
             <stringProp name="argument_name"></stringProp>
+            <boolProp name="path_extension_no_equals">false</boolProp>
           </URLRewritingModifier>
           <hashTree/>
           <UserParameterModifier guiclass="UserParameterModifierGui" testclass="UserParameterModifier" testname="User Parameter Modifier" enabled="true">
@@ -597,8 +598,8 @@
             <stringProp name="HTTPSampler.port"></stringProp>
             <stringProp name="HTTPSampler.mimetype"></stringProp>
             <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           </HTTPSampler>
@@ -631,9 +632,9 @@
             <stringProp name="WebServiceSampler.use_proxy">false</stringProp>
             <stringProp name="Soap.Action"></stringProp>
             <stringProp name="WebServiceSampler.xml_data_file"></stringProp>
-            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
-            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
             <stringProp name="WebServiceSampler.read_response">false</stringProp>
+            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
+            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
             <stringProp name="WebServiceSampler.memory_cache">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSamper.xml_data"></stringProp>
@@ -652,8 +653,8 @@
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="domain"></stringProp>
             <stringProp name="AccessLogSampler.generator_class_name">org.apache.jmeter.protocol.http.util.accesslog.StandardGenerator</stringProp>
-            <stringProp name="AccessLogSampler.log_file"></stringProp>
             <boolProp name="imageParsing">false</boolProp>
+            <stringProp name="AccessLogSampler.log_file"></stringProp>
           </AccessLogSampler>
           <hashTree/>
         </hashTree>
@@ -803,8 +804,8 @@ return &quot;This will go into the Response Data field&quot;;</stringProp>
             <stringProp name="driver"></stringProp>
             <stringProp name="connectionAge">5000</stringProp>
             <stringProp name="dataSource"></stringProp>
-            <boolProp name="keepAlive">true</boolProp>
             <stringProp name="username"></stringProp>
+            <boolProp name="keepAlive">true</boolProp>
             <stringProp name="dbUrl"></stringProp>
           </JDBCDataSource>
           <hashTree/>
@@ -857,8 +858,8 @@ return &quot;This will go into the Response Data field&quot;;</stringProp>
             <stringProp name="servername"></stringProp>
             <stringProp name="ConfigTestElement.username"></stringProp>
             <stringProp name="port"></stringProp>
-            <boolProp name="user_defined">false</boolProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
+            <boolProp name="user_defined">false</boolProp>
           </LDAPSampler>
           <hashTree/>
         </hashTree>
