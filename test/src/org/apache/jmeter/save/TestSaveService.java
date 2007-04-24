@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
@@ -72,10 +71,8 @@ public class TestSaveService extends JMeterTestCase {
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
 
-			OutputStreamWriter outs = new OutputStreamWriter(out);
-			SaveService.saveTree(tree, outs);
-			outs.close();// Make sure all the data is flushed out
-			out.close();
+			SaveService.saveTree(tree, out);
+			out.close(); // Make sure all the data is flushed out
 
 			// We only check the length of the result. Comparing the
 			// actual result (out.toByteArray==original) will usually

@@ -23,8 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -448,9 +446,12 @@ public class JMeterTest extends JMeterTestCase {
 			assertEquals("SHARED: Failed on " + name, "", el2.getPropertyAsString("NOT"));
 		}
 		log.debug("Saving element: " + el.getClass());
-		StringWriter writer = new StringWriter();
-		SaveService.saveElement(el, writer);
-		el = (TestElement) SaveService.loadElement(new StringReader(writer.toString()));
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		SaveService.saveElement(el, bos);
+		ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+		bos.close();
+		el = (TestElement) SaveService.loadElement(bis);
+		bis.close();
         assertNotNull("Load element failed on: "+name,el);
 		guiItem.configure(el);
 		assertEquals("CONFIGURE-TEST: Failed on " + name, el.getPropertyAsString(TestElement.NAME), guiItem.getName());
