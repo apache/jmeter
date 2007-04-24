@@ -122,7 +122,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	private static final String FILEVERSION = "505365";// Expected value $NON-NLS-1$
+	private static final String FILEVERSION = "532077";// Expected value $NON-NLS-1$
 	private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
