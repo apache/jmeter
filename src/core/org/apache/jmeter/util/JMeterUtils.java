@@ -657,7 +657,7 @@ public class JMeterUtils implements UnitTestManager {
 	public static boolean getPropDefault(String propName, boolean defaultVal) {
 		boolean ans;
 		try {
-			String strVal = appProperties.getProperty(propName, JOrphanUtils.booleanToString(defaultVal)).trim();
+			String strVal = appProperties.getProperty(propName, Boolean.toString(defaultVal)).trim();
 			if (strVal.equalsIgnoreCase("true") || strVal.equalsIgnoreCase("t")) { // $NON-NLS-1$  // $NON-NLS-2$
 				ans = true;
 			} else if (strVal.equalsIgnoreCase("false") || strVal.equalsIgnoreCase("f")) { // $NON-NLS-1$  // $NON-NLS-2$
