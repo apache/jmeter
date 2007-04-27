@@ -431,7 +431,7 @@ public class JMeterThread implements Runnable, Serializable {
 			result.setSuccessful(result.isSuccessful() && !(assertionResult.isError() || assertionResult.isFailure()));
 			result.addAssertionResult(assertionResult);
 		}
-		threadContext.getVariables().put(LAST_SAMPLE_OK, JOrphanUtils.booleanToString(result.isSuccessful()));
+		threadContext.getVariables().put(LAST_SAMPLE_OK, Boolean.toString(result.isSuccessful()));
 	}
 
 	private void runPostProcessors(List extractors) {
