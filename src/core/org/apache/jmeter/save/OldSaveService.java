@@ -658,7 +658,7 @@ public final class OldSaveService {
 		}
 
 		if (saveConfig.saveSuccess()) {
-			config.setAttribute(SUCCESSFUL, JOrphanUtils.booleanToString(result.isSuccessful()));
+			config.setAttribute(SUCCESSFUL, Boolean.toString(result.isSuccessful()));
 		}
 
 		SampleResult[] subResults = result.getSubResults();
