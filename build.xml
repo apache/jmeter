@@ -298,6 +298,7 @@
     <include name="${commons-jexl.jar}"/>
     <include name="${commons-lang.jar}"/>
     <include name="${commons-logging.jar}"/>
+    <include name="${commons-net.jar}"/>
     <include name="${excalibur-logger.jar}"/>
     <include name="${excalibur-i18n.jar}"/>
     <include name="${excalibur-compatibility.jar}"/>
@@ -349,6 +350,7 @@
     <pathelement location="${commons-jexl.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${commons-net.jar}"/>
     <pathelement location="${excalibur-compatibility.jar}"/>
     <pathelement location="${excalibur-datasource.jar}"/>
     <pathelement location="${excalibur-i18n.jar}"/>
