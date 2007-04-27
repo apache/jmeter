@@ -31,7 +31,6 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Create a ResultSaver test element, which saves the sample information in set
@@ -83,7 +82,7 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 	public void modifyTestElement(TestElement te) {
 		super.configureTestElement(te);
 		te.setProperty(ResultSaver.FILENAME, filename.getText());
-		te.setProperty(ResultSaver.ERRORS_ONLY, JOrphanUtils.booleanToString(errorsOnly.isSelected()));
+		te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
 	}
 
 	private void init() {

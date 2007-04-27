@@ -32,7 +32,6 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  */
@@ -105,10 +104,10 @@ public class TCPConfigGui extends AbstractConfigGui {
 	public void modifyTestElement(TestElement element) {
 		configureTestElement(element);
 		element.setProperty(TCPSampler.SERVER, server.getText());
-		element.setProperty(TCPSampler.RE_USE_CONNECTION, JOrphanUtils.booleanToString(reUseConnection.isSelected()));
+		element.setProperty(TCPSampler.RE_USE_CONNECTION, reUseConnection.isSelected());
 		element.setProperty(TCPSampler.PORT, port.getText());
 		// element.setProperty(TCPSampler.FILENAME, filename.getText());
-		element.setProperty(TCPSampler.NODELAY, JOrphanUtils.booleanToString(setNoDelay.isSelected()));
+		element.setProperty(TCPSampler.NODELAY, setNoDelay.isSelected());
 		element.setProperty(TCPSampler.TIMEOUT, timeout.getText());
 		element.setProperty(TCPSampler.REQUEST, requestData.getText());
 	}
