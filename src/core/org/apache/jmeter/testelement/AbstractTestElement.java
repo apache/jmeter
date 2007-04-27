@@ -260,6 +260,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		setProperty(new StringProperty(name, value));
 	}
 
+	public void setProperty(String name, boolean value) {
+		setProperty(new StringProperty(name, Boolean.toString(value)));
+	}
+
 	public PropertyIterator propertyIterator() {
 		return new PropertyIteratorImpl(propMap.values());
 	}
