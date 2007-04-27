@@ -430,7 +430,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	}
 
     public void setMonitor(boolean truth) {
-        this.setProperty(MONITOR, JOrphanUtils.booleanToString(truth));
+        this.setProperty(MONITOR, truth);
     }
 
 	public String getMonitor() {
