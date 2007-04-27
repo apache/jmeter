@@ -31,7 +31,6 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
@@ -241,7 +240,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	}
 
 	public void setAssumeSuccess(boolean b) {
-		setProperty(ASSUME_SUCCESS, JOrphanUtils.booleanToString(b));
+		setProperty(ASSUME_SUCCESS, b);
 	}
 
 	/**

@@ -172,7 +172,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	}
 
     public void setPathSpecified(boolean b) {
-        setProperty(PATH_SPECIFIED, JOrphanUtils.booleanToString(b));
+        setProperty(PATH_SPECIFIED, b);
     }
 
     public boolean isPathSpecified(){
@@ -180,7 +180,7 @@ public class Cookie extends AbstractTestElement implements Serializable {
     }
     
     public void setDomainSpecified(boolean b) {
-        setProperty(DOMAIN_SPECIFIED, JOrphanUtils.booleanToString(b));
+        setProperty(DOMAIN_SPECIFIED, b);
     }
 
     public boolean isDomainSpecified(){
