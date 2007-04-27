@@ -40,6 +40,8 @@ public interface TestElement extends Cloneable {
 
 	public void setProperty(String key, String value);
 
+	public void setProperty(String key, boolean value);
+
 	/**
 	 * Check if ENABLED property is present and true ; defaults to true
 	 * 
