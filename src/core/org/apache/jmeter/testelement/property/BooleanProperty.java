@@ -50,7 +50,7 @@ public class BooleanProperty extends AbstractProperty {
 	 * @see JMeterProperty#getStringValue()
 	 */
 	public String getStringValue() {
-		return JOrphanUtils.booleanToString(value);
+		return Boolean.toString(value);
 	}
 
 	/**
