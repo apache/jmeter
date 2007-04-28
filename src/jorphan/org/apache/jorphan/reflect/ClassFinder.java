@@ -41,7 +41,6 @@ import org.apache.log.Logger;
  * 
  * @author Burt Beckwith
  * @author Michael Stover (mstover1 at apache.org)
- * @version $Revision$
  */
 public final class ClassFinder {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -102,7 +101,7 @@ public final class ClassFinder {
 	 * @return List containing discovered classes.
 	 */
 	public static List findClassesThatExtend(String[] paths, Class[] superClasses) 
-        throws IOException,	ClassNotFoundException {
+        throws IOException {
 		return findClassesThatExtend(paths, superClasses, false);
 	}
 
@@ -140,7 +139,7 @@ public final class ClassFinder {
      */
 	public static List findClassesThatExtend(String[] strPathsOrJars, 
             final Class[] superClasses, final boolean innerClasses)
-			throws IOException, ClassNotFoundException {
+			throws IOException  {
         
         // Find all jars in the search path
 		strPathsOrJars = addJarsInPath(strPathsOrJars);

@@ -255,7 +255,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	 *            the smtp-server used to send the mail.
 	 */
 	public synchronized void sendMail(String from, Vector vEmails, String subject, String attText, String smtpHost)
-			throws UnknownHostException, AddressException, MessagingException {
+			throws AddressException, MessagingException {
 		String host = smtpHost;
 		boolean debug = Boolean.valueOf(host).booleanValue();
 		// InetAddress remote = InetAddress.getByName(host);
@@ -291,7 +291,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 		Transport.send(msg);
 	}
 
-	public synchronized void sendTestMail() throws UnknownHostException, AddressException, MessagingException {
+	public synchronized void sendTestMail() throws AddressException, MessagingException {
 		String to = getToAddress();
 		String from = getFromAddress();
 		String subject = "Testing mail-addresses";

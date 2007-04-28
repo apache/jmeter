@@ -391,8 +391,6 @@ public final class MenuFactory {
 			}
 		} catch (IOException e) {
             log.error("", e);
-        } catch (ClassNotFoundException e) {
-            log.error("", e);
         }
 	}
 

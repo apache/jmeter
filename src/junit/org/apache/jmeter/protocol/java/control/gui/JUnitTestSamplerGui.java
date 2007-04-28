@@ -168,9 +168,6 @@ implements ChangeListener, ActionListener
         {
             log.error("Exception getting interfaces.", e);
         } 
-        catch (ClassNotFoundException e) {
-            log.error("Exception getting interfaces.", e);
-        }
 
         JLabel label =
             new JLabel(JMeterUtils.getResString("protocol_java_classname"));
