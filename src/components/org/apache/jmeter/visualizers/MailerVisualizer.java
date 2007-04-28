@@ -24,8 +24,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.UnknownHostException;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.BorderFactory;
@@ -263,9 +261,6 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 				MailerModel model = ((MailerResultCollector) testElement).getMailerModel();
 				model.sendTestMail();
 				displayMessage(JMeterUtils.getResString("mail_sent"), false); //$NON-NLS-1$
-			} catch (UnknownHostException e1) {
-				log.error("Invalid Mail Server ", e1);
-				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true); //$NON-NLS-1$
 			} catch (AddressException ex) {
 				log.error("Invalid mail address ", ex);
 				displayMessage(JMeterUtils.getResString("invalid_mail_address") //$NON-NLS-1$
