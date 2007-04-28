@@ -348,6 +348,7 @@
     <pathelement location="${commons-codec.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-httpclient.jar}"/>
+    <pathelement location="${commons-io.jar}"/>
     <pathelement location="${commons-jexl.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
