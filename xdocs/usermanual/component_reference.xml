@@ -2879,7 +2879,7 @@ with the start, continuing on like that until the test is ended.  </p>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
         <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the Start value.
-        Since version 2.2.1, the default is Long.MAX_VALUE (previously it was 0).
+        For versions after 2.2 the default is Long.MAX_VALUE (previously it was 0).
         </property>
         <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
         This is passed to DecimalFormat, so any valid formats can be used.
@@ -2899,7 +2899,7 @@ with the start, continuing on like that until the test is ended.  </p>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 </p>
-<p>Since version 2.2.1, the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
+<p>For versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 		<br></br>
