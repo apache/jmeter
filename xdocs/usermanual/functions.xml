@@ -87,7 +87,7 @@ matter to change a test to target a different server with the same test.
 </p>
 <p>
 Note that variables cannot currently be nested; i.e ${Var${N}} does not work.
-The __V (variable) function (since 2.2.1) can be used to do this: ${__V(Var${N})}.
+The __V (variable) function (versions after 2.2) can be used to do this: ${__V(Var${N})}.
 In earlier JMeter versions one can use ${__BeanShell(vars.get("Var${N}")}.
 </p>
 <p>This type of replacement is possible without functions, but was less convenient and less intuitive.

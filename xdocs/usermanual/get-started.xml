@@ -284,7 +284,7 @@ jmeter -LDEBUG</pre>
 		[in JMeter 2.2 and earlier, this was forced to be the JMeter bin directory.]
 		</p>
 		<p>
-		JMeter 2.2.1 added a new command-line option, -j jmeterlogfile. 
+		JMeter versions after 2.2 added a new command-line option, -j jmeterlogfile. 
 		This is processed after the initial properties file is read,
 		and before any further properties are processed. 
 		It therefore allows the default of jmeter.log to be overridden.
