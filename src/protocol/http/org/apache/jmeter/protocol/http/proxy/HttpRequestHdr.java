@@ -21,8 +21,6 @@ package org.apache.jmeter.protocol.http.proxy;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -200,7 +198,7 @@ public class HttpRequestHdr {
 		return headerManager;
 	}
 
-	public HTTPSamplerBase getSampler() throws MalformedURLException, IOException, ProtocolException {
+	public HTTPSamplerBase getSampler() {
 		// Damn! A whole new GUI just to instantiate a test element?
 		// Isn't there a beter way?
 		HttpTestSampleGui tempGui = null;

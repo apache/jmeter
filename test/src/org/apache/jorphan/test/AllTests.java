@@ -345,8 +345,6 @@ public final class AllTests {
 			}
 		} catch (IOException e) {
 			log.error("", e);
-		} catch (ClassNotFoundException e) {
-			log.error("", e);
 		}
 		System.out.println("Created: "+tests+" tests including "+suites+" suites");
 		return suite;

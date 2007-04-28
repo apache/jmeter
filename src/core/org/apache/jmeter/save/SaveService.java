@@ -26,7 +26,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
@@ -427,7 +426,7 @@ public class SaveService {
 		}
 	}
 	
-	private static InputStreamReader getInputStreamReader(InputStream inStream) throws UnsupportedEncodingException {
+	private static InputStreamReader getInputStreamReader(InputStream inStream) {
 		// Check if we have a encoding to use from properties
 		Charset charset = getFileEncodingCharset();
 		if(charset != null) {
@@ -439,7 +438,7 @@ public class SaveService {
 		}
 	}
 
-	private static OutputStreamWriter getOutputStreamWriter(OutputStream outStream) throws UnsupportedEncodingException {
+	private static OutputStreamWriter getOutputStreamWriter(OutputStream outStream) {
 		// Check if we have a encoding to use from properties
 		Charset charset = getFileEncodingCharset();
 		if(charset != null) {
@@ -451,7 +450,7 @@ public class SaveService {
 		}
 	}
 	
-	private static Charset getFileEncodingCharset() throws UnsupportedEncodingException {
+	private static Charset getFileEncodingCharset() {
 		// Check if we have a encoding to use from properties
 		if(fileEncoding != null && fileEncoding.length() > 0) {
 			return Charset.forName(fileEncoding);

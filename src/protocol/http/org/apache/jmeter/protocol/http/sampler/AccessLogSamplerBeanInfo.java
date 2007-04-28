@@ -95,9 +95,6 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
 		} catch (IOException e) {
 			log.warn("couldn't find classes and set up properties", e);
 			throw new RuntimeException("Could not find classes with class finder");
-        } catch (ClassNotFoundException e) {
-            log.warn("couldn't find classes and set up properties", e);
-            throw new RuntimeException("Could not find classes with class finder");
         }
 		log.info("Got to end of access log samper bean info init");
 	}

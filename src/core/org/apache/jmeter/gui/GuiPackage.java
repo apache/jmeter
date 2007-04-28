@@ -354,7 +354,7 @@ public final class GuiPackage implements LocaleChangeListener {
 	 *             if the specified GUI class cannot be found
 	 */
 	private JMeterGUIComponent getGuiFromCache(Class guiClass, Class testClass) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+			IllegalAccessException {
 		JMeterGUIComponent comp;
 		if (guiClass == TestBeanGUI.class) {
 			comp = (TestBeanGUI) testBeanGUIs.get(testClass);
