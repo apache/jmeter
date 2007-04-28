@@ -263,7 +263,7 @@ The sample attributes have the following meaning:
 </table>
 <note>
 The active thread counts are always zero for remote tests.
-This is a restriction of the current implementation (2.2.1)
+This is a restriction of the current implementation.
 </note>
 <p>
 Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
