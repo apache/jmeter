@@ -42,19 +42,26 @@
 <description>
 	<br>Samplers perform the actual work of JMeter.</br>
 </description>
-<component name="FTP Request" index="&sect-num;.1.1" width="407" height="238" screenshot="ftptest/ftp-request.gif">
-<description>This controller lets you send an FTP "retrieve file" request to an FTP server.
+<component name="FTP Request" index="&sect-num;.1.1" width="502" height="299" screenshot="ftptest/ftp-request.png">
+<description>This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a <complink name="FTP Request Defaults"/> Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
-Controller. </description>
+Controller. When downloading a file, it can be stored on disk (Local File) or in the Response Data, or both.</description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.
 JMeter assumes the FTP server is listening on the default port.</property>
-        <property name="File to Retrieve From Server" required="Yes">Path and name of the file to retrieve.</property>
+        <property name="Remote File:" required="Yes">File to retrieve or upload.</property>
+        <property name="Local File:" required="Yes, if uploading">File to upload, or destination for downloads.</property>
+        <property name="get(RETR) / put(STOR)" required="Yes">Whether to retrieve or upload a file.</property>
+        <property name="Use Binary mode ?" required="Yes">Check this to use Binary mode (default Ascii)</property>
+        <property name="Save File in Response ?" required="Yes, if downloading">
+        Whether to store contents of retrieved file in response data.
+        If the mode is Ascii, then the contents will be visible in the Tree View Listener.
+        </property>
         <property name="Username" required="Usually">FTP account username.</property>
-        <property name="Password" required="Usually">FTP account password.</property>
+        <property name="Password" required="Usually">FTP account password. N.B. This will be visible in the test plan.</property>
 </properties>
 <links>
         <link href="test_plan.html#assertions">Assertions</link>
