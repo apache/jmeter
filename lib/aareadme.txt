@@ -1,5 +1,6 @@
 Which jars are used by which modules?
 ====================================
+[not exhaustive]
 
 avalon-framework-4.1.4 (org.apache.avalon.framework)
 - LogKit (used by HttpClient ?)
@@ -16,8 +17,11 @@ commons-collections-3.2
 - ListenerNotifier
 - Anakia
 
-commons-httpclient-3.0.1
+commons-httpclient-3.1-rc1
 - httpclient
+
+commons-io-1.3.1
+- FTPSampler
 
 commons-jexl-1.1
 - Jexl function
@@ -28,6 +32,9 @@ commons-lang-2.3
 
 commons-logging-1.1
 - httpclient
+
+commons-net-1.4.1
+- FTPSampler
 
 excalibur-datasource-1.1.1 (org.apache.avalon.excalibur.datasource)
 - jdbc - DataSourceElement
