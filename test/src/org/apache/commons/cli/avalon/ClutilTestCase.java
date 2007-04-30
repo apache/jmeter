@@ -163,6 +163,30 @@ public final class ClutilTestCase extends TestCase {
 		assertEquals(option2.getArgument(0), null);
 	}
 
+	public void testOptionalArgLongEquals() {
+		final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
+
+		// Check that optional args work woth long options
+		final String[] args = new String[] { "--taint=param", "-a" };
+
+		final CLArgsParser parser = new CLArgsParser(args, options);
+
+		assertNull(parser.getErrorString(), parser.getErrorString());
+
+		final List clOptions = parser.getArguments();
+		final int size = clOptions.size();
+
+		assertEquals("Option count", 3, size);
+
+		final CLOption option0 = (CLOption) clOptions.get(0);
+		assertEquals("Option Code: " + option0.getDescriptor().getId(), TAINT_OPT, option0.getDescriptor().getId());
+		assertEquals("Option Arg: " + option0.getArgument(0), "param", option0.getArgument(0));
+
+		final CLOption option2 = (CLOption) clOptions.get(1);
+		assertEquals(option2.getDescriptor().getId(), ALL_OPT);
+		assertEquals(option2.getArgument(0), null);
+	}
+
 	public void testShortOptArgUnenteredBeforeOtherOpt() {
 		final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
@@ -191,6 +215,33 @@ public final class ClutilTestCase extends TestCase {
 		final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
 		final String[] args = new String[] { "-T3", "-a" };
+
+		// System.out.println("[before parsing]");
+
+		final CLArgsParser parser = new CLArgsParser(args, options);
+
+		// System.out.println("[after parsing]");
+
+		assertNull(parser.getErrorString(), parser.getErrorString());
+
+		final List clOptions = parser.getArguments();
+		final int size = clOptions.size();
+
+		assertEquals(size, 2);
+		final CLOption option0 = (CLOption) clOptions.get(0);
+		assertEquals(option0.getDescriptor().getId(), TAINT_OPT);
+		assertEquals(option0.getArgument(0), "3");
+
+		final CLOption option1 = (CLOption) clOptions.get(1);
+		assertEquals(ALL_OPT, option1.getDescriptor().getId());
+		assertEquals(null, option1.getArgument(0));
+	}
+
+	public void testOptionalArgsWithArgShortEqualsBeforeOtherOpt() {
+		// "-T3","-a"
+		final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
+
+		final String[] args = new String[] { "-T=3", "-a" };
 
 		// System.out.println("[before parsing]");
 
