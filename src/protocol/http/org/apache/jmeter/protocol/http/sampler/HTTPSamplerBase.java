@@ -1051,22 +1051,30 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 		int redirect;
 		for (redirect = 0; redirect < MAX_REDIRECTS; redirect++) {
-			String location = encodeSpaces(lastRes.getRedirectLocation());
+			boolean invalidRedirectUrl = false;
 			// Browsers seem to tolerate Location headers with spaces,
 			// replacing them automatically with %20. We want to emulate
 			// this behaviour.
+			String location = encodeSpaces(lastRes.getRedirectLocation());
 			try {
 				lastRes = sample(new URL(lastRes.getURL(), location), GET, true, frameDepth);
 			} catch (MalformedURLException e) {
 				lastRes = errorResult(e, lastRes);
+				// The redirect URL we got was not a valid URL
+				invalidRedirectUrl = true;
 			}
 			if (lastRes.getSubResults() != null && lastRes.getSubResults().length > 0) {
 				SampleResult[] subs = lastRes.getSubResults();
 				for (int i = 0; i < subs.length; i++) {
 					totalRes.addSubResult(subs[i]);
 				}
-			} else
-				totalRes.addSubResult(lastRes);
+			} else {
+				// Only add sample if it is a sample of valid url redirect, i.e. that
+				// we have actually sampled the URL
+				if(!invalidRedirectUrl) {
+					totalRes.addSubResult(lastRes);
+				}
+			}
 
 			if (!lastRes.isRedirect()) {
 				break;
