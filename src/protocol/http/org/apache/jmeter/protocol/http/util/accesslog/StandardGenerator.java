@@ -27,6 +27,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Description:<br>
@@ -117,15 +118,8 @@ public class StandardGenerator implements Generator, Serializable {
 	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#close()
 	 */
 	public void close() {
-		try {
-			if (OUTPUT != null) {
-				OUTPUT.close();
-			}
-			if (WRITER != null) {
-				WRITER.close();
-			}
-		} catch (IOException exception) {
-		}
+        JOrphanUtils.closeQuietly(OUTPUT);
+        JOrphanUtils.closeQuietly(WRITER);
 	}
 
 	/*

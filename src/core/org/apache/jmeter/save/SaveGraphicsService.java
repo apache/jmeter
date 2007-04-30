@@ -35,6 +35,7 @@ import org.apache.batik.ext.awt.image.codec.PNGEncodeParam;
 import org.apache.batik.ext.awt.image.codec.PNGImageEncoder;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Class is responsible for taking a component and saving it as a JPEG, PNG or
@@ -90,14 +91,10 @@ public class SaveGraphicsService {
 
 		try {
 			encoder.encode(image);
-			fos.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				fos.close();
-			} catch (Exception e) {
-			}
+            JOrphanUtils.closeQuietly(fos);
 		}
 	}
 

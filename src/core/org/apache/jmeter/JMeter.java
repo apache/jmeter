@@ -675,7 +675,9 @@ public class JMeter implements JMeterPlugin {
 		} catch (Exception e) {
 			System.out.println("Error in NonGUIDriver " + e.toString());
 			log.error("", e);
-		}
+        } finally {
+            JOrphanUtils.closeQuietly(reader);
+        }
 	}
 
 	/**

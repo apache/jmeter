@@ -39,6 +39,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -125,7 +126,7 @@ public class ReportSave implements Command {
 			log.error("", ex);
 			throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
 		} finally {
-			closeStream(ostream);
+            JOrphanUtils.closeQuietly(ostream);
 		}
 	}
 
@@ -138,15 +139,4 @@ public class ReportSave implements Command {
 			tree.replace(item, testElement);
 		}
 	}
-
-	private void closeStream(FileOutputStream fos) {
-		if (fos != null) {
-			try {
-				fos.close();
-			} catch (Exception ex) {
-				log.error("", ex);
-			}
-		}
-	}
-
 }

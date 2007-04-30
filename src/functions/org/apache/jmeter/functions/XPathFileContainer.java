@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.NodeList;
@@ -100,8 +101,7 @@ public class XPathFileContainer {
 			log.warn(e.toString());
 			throw e;
 		} finally {
-			if (fis != null)
-				fis.close();
+            JOrphanUtils.closeQuietly(fis);
 		}
 	}
 
