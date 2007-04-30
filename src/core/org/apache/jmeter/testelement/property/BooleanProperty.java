@@ -19,7 +19,6 @@
 package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @version $Revision$

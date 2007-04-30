@@ -19,8 +19,6 @@
 package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
-// import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
