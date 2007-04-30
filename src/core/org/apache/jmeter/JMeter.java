@@ -178,7 +178,7 @@ public class JMeter implements JMeterPlugin {
 			new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
 					"[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
-			new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
+			new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_OPTIONAL, REMOTE_OPT,
 					"Start remote servers from non-gui mode"),
 			new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
 					"the jmeter home directory to use"), };
@@ -475,7 +475,7 @@ public class JMeter implements JMeterPlugin {
 
 		// Add local system properties, if the file is found
 		String sysProp = JMeterUtils.getPropDefault("system.properties",""); //$NON-NLS-1$
-		if (sysProp.length() > 0){ //$NON-NLS-1$
+		if (sysProp.length() > 0){
 			FileInputStream fis=null;
 			try {
                 File file = new File(sysProp);
@@ -504,7 +504,12 @@ public class JMeter implements JMeterPlugin {
             FileInputStream fis = null;            
 
 			switch (option.getDescriptor().getId()) {
-			case PROPFILE2_OPT: // Bug 33920 - allow multiple props
+			
+			// Should not have any text arguments
+            case CLOption.TEXT_ARGUMENT:
+                throw new IllegalArgumentException("Unknown arg: "+option.getArgument());
+			
+            case PROPFILE2_OPT: // Bug 33920 - allow multiple props
 				try {
                     fis = new FileInputStream(new File(name));
 					Properties tmp = new Properties();
@@ -587,6 +592,15 @@ public class JMeter implements JMeterPlugin {
 		driver.parent = this;
 		PluginManager.install(this, false);
 
+		String remote_hosts_string = null;
+		if (remoteStart != null) {
+			remote_hosts_string = remoteStart.getArgument();
+			if (remote_hosts_string == null) {
+				remote_hosts_string = JMeterUtils.getPropDefault(
+	                    "remote_hosts", //$NON-NLS-1$ 
+	                    "127.0.0.1");//$NON-NLS-1$				
+			}
+		}
 		if (testFile == null) {
 			throw new IllegalUserActionException();
 		}
@@ -595,14 +609,14 @@ public class JMeter implements JMeterPlugin {
             throw new IllegalUserActionException();
         }
         if (logFile == null) {
-			driver.run(argument, null, remoteStart != null);
+			driver.run(argument, null, remoteStart != null,remote_hosts_string);
 		} else {
-			driver.run(argument, logFile.getArgument(), remoteStart != null);
+			driver.run(argument, logFile.getArgument(), remoteStart != null,remote_hosts_string);
 		}
 	}
 
     // run test in batch mode
-	private void run(String testFile, String logFile, boolean remoteStart) {
+	private void run(String testFile, String logFile, boolean remoteStart, String remote_hosts_string) {
 		FileInputStream reader = null;
 		try {
 			File f = new File(testFile);
@@ -643,9 +657,6 @@ public class JMeter implements JMeterPlugin {
 				println("Starting the test @ "+new Date(now)+" ("+now+")");
 				engine.runTest();
 			} else {
-				String remote_hosts_string = JMeterUtils.getPropDefault(
-                        "remote_hosts", //$NON-NLS-1$ 
-                        "127.0.0.1");//$NON-NLS-1$
 				java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");//$NON-NLS-1$
 				List engines = new LinkedList();
 				while (st.hasMoreElements()) {
