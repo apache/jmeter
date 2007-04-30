@@ -21,7 +21,6 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +39,7 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -113,13 +113,7 @@ public class Load implements Command {
 			}
 			JMeterUtils.reportErrorToUser(msg);
 		} finally {
-			try {
-				if (reader!=null) {
-                    reader.close();
-                }
-			} catch (IOException e1) {
-				// ignored
-			}
+            JOrphanUtils.closeQuietly(reader);
 			GuiPackage.getInstance().updateCurrentGui();
 			GuiPackage.getInstance().getMainFrame().repaint();
 		}

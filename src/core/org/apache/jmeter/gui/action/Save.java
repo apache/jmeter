@@ -20,7 +20,6 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,6 +36,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -114,7 +114,7 @@ public class Save implements Command {
 			log.error("", ex);
 			throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
 		} finally {
-			closeStream(ostream);
+            JOrphanUtils.closeQuietly(ostream);
 		}
 	}
 
@@ -128,15 +128,4 @@ public class Save implements Command {
 			tree.replace(item, testElement);
 		}
 	}
-
-	private void closeStream(FileOutputStream fos) {
-		if (fos != null) {
-			try {
-				fos.close();
-			} catch (IOException ex) {
-				log.error("", ex);
-			}
-		}
-	}
-
 }

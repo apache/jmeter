@@ -223,10 +223,11 @@ public class JMeterReport implements JMeterPlugin {
 
         ReportActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ReportCheckDirty.ADD_ALL));
         if (testFile != null) {
+            FileInputStream reader = null;
             try {
                 File f = new File(testFile.getArgument());
                 log.info("Loading file: " + f);
-                FileInputStream reader = new FileInputStream(f);
+                reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
 
                 ReportGuiPackage.getInstance().setReportPlanFile(f.getAbsolutePath());
@@ -235,6 +236,9 @@ public class JMeterReport implements JMeterPlugin {
             } catch (Exception e) {
                 log.error("Failure loading test file", e);
                 JMeterUtils.reportErrorToUser(e.toString());
+            }
+            finally{
+                JOrphanUtils.closeQuietly(reader);
             }
         }
     }
@@ -304,6 +308,9 @@ public class JMeterReport implements JMeterPlugin {
 			System.out.println("Error in NonGUIDriver " + e.toString());
 			log.error("", e);
 		}
+        finally{
+            JOrphanUtils.closeQuietly(reader);
+        }
 	}
 
     
