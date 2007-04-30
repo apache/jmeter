@@ -152,8 +152,13 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		poolController.setAttribute("blocking", "true");
 		poolController.setAttribute("timeout", getTimeout());
 		poolController.setAttribute("trim-interval", getTrimInterval());
-		poolController.setAttribute("auto-commit", String.valueOf(isAutocommit()));
 		config.addChild(poolController);
+
+		DefaultConfiguration autoCommit = new DefaultConfiguration("auto-commit");
+		autoCommit.setValue(String.valueOf(isAutocommit()));
+		config.addChild(autoCommit);
+		
+//		config.setAttribute("auto-commit", String.valueOf(isAutocommit()));
 
 		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer(40);
