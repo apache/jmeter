@@ -30,6 +30,7 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -132,11 +133,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		} catch (IOException e1) {
 			log.error("Error saving sample " + s.getSampleLabel(), e1);
 		} finally {
-			try {
-				if (pw != null)
-					pw.close();
-			} catch (IOException e) {
-			}
+            JOrphanUtils.closeQuietly(pw);
 		}
 	}
 

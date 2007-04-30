@@ -119,16 +119,11 @@ public class TextFile extends File {
 			}
 			writer.write(body);
 			writer.flush();
-			writer.close();
 		} catch (IOException ioe) {
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (IOException e) {
-			}
 			log.error("", ioe);
-		}
+		} finally {
+            JOrphanUtils.closeQuietly(writer);
+        }
 	}
 
 	/**

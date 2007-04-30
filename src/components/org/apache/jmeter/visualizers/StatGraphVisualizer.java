@@ -64,6 +64,7 @@ import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -389,11 +390,12 @@ ActionListener {
                 writer = new FileWriter(output);
                 Vector data = this.getAllTableData();
                 OldSaveService.saveCSVStats(data,writer);
-                writer.close();
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {
                 log.warn(e.getMessage());
+            } finally {
+                JOrphanUtils.closeQuietly(writer);
             }
         }
     }
