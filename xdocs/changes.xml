@@ -137,6 +137,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40369 - LDAP: Stable search results in sampler</li>
 <li>Bug 36755 - Save XML test files with UTF-8 encoding</li>
 <li>Bug 42223 - Add ability to upload files via FTP</li>
+<li>Extend JDBC Sampler: Commit, Rollback, AutoCommit</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
