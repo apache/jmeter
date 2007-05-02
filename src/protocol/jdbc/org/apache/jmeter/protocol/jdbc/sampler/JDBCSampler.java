@@ -82,6 +82,10 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	static final String CALLABLE = "Callable Statement"; // $NON-NLS-1$
 	static final String PREPARED_SELECT = "Prepared Select Statement"; // $NON-NLS-1$
 	static final String PREPARED_UPDATE = "Prepared Update Statement"; // $NON-NLS-1$
+	static final String COMMIT   = "Commit"; // $NON-NLS-1$
+	static final String ROLLBACK = "Rollback"; // $NON-NLS-1$
+	static final String AUTOCOMMIT_FALSE = "AutoCommit(false)"; // $NON-NLS-1$
+	static final String AUTOCOMMIT_TRUE  = "AutoCommit(true)"; // $NON-NLS-1$
 
 	private String query = ""; // $NON-NLS-1$
 
@@ -183,6 +187,18 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             	pstmt.executeUpdate();
 				String sb = resultSetsToString(pstmt,false);
             	res.setResponseData(sb.toString().getBytes());
+            } else if (ROLLBACK.equals(_queryType)){
+            	conn.rollback();
+            	res.setResponseData(ROLLBACK.getBytes());
+            } else if (COMMIT.equals(_queryType)){
+            	conn.commit();
+            	res.setResponseData(COMMIT.getBytes());
+            } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
+            	conn.setAutoCommit(false);
+            	res.setResponseData(AUTOCOMMIT_FALSE.getBytes());
+            } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
+            	conn.setAutoCommit(true);
+            	res.setResponseData(AUTOCOMMIT_TRUE.getBytes());
             } else { // User provided incorrect query type
                 String results="Unexpected query type: "+_queryType;
                 res.setResponseMessage(results);
