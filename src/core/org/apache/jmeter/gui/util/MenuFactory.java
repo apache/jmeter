@@ -155,7 +155,9 @@ public final class MenuFactory {
                 "Merge", ActionNames.MERGE));// $NON-NLS-1$
         menu.add(makeMenuItem(JMeterUtils.getResString("save_as"),// $NON-NLS-1$
                 "Save As", ActionNames.SAVE_AS));// $NON-NLS-1$
-		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),// $NON-NLS-1$
+
+		addSeparator(menu);
+        JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),// $NON-NLS-1$
                 "Save Image", ActionNames.SAVE_GRAPHICS,// $NON-NLS-1$
 				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
 		menu.add(savePicture);
@@ -167,6 +169,8 @@ public final class MenuFactory {
                 "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,// $NON-NLS-1$
                 KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
         menu.add(savePictureAll);
+
+        addSeparator(menu);
         
 		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),// $NON-NLS-1$
                 "Disable", ActionNames.DISABLE);// $NON-NLS-1$
