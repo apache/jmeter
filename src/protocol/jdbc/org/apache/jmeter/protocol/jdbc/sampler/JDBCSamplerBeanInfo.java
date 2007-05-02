@@ -67,7 +67,17 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport {
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, JDBCSampler.SELECT);
 		p.setValue(NOT_OTHER,Boolean.TRUE);
-		p.setValue(TAGS,new String[]{JDBCSampler.SELECT,JDBCSampler.UPDATE,JDBCSampler.CALLABLE, JDBCSampler.PREPARED_SELECT, JDBCSampler.PREPARED_UPDATE});
+		p.setValue(TAGS,new String[]{
+				JDBCSampler.SELECT,
+				JDBCSampler.UPDATE,
+				JDBCSampler.CALLABLE, 
+				JDBCSampler.PREPARED_SELECT, 
+				JDBCSampler.PREPARED_UPDATE,
+				JDBCSampler.COMMIT,
+				JDBCSampler.ROLLBACK,
+				JDBCSampler.AUTOCOMMIT_FALSE,
+				JDBCSampler.AUTOCOMMIT_TRUE,
+				});
 
 		p = property("query"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
