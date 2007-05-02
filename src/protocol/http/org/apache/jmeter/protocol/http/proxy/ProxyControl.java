@@ -366,7 +366,7 @@ public class ProxyControl extends GenericController {
 	 * test tree. param serverResponse to be added to allow saving of the
 	 * server's response while recording. A future consideration.
 	 */
-	public void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
+	public synchronized void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
 		if (filterContentType(result) && filterUrl(sampler)) {
 			JMeterTreeNode myTarget = findTargetControllerNode();
 			Collection defaultConfigurations = findApplicableElements(myTarget, ConfigTestElement.class, false);
