@@ -77,15 +77,22 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			result = (HTTPSampleResult) res;
 		}
 		List potentialLinks = new ArrayList();
-		String responseText = "";
+		String responseText = ""; // $NON-NLS-1$
 		try {
 			responseText = new String(result.getResponseData(), result.getDataEncoding());
 		} catch (UnsupportedEncodingException e) {
 		}
 		Document html;
-		int index = responseText.indexOf("<");
+		int index = responseText.indexOf("<"); // $NON-NLS-1$
 		if (index == -1) {
 			index = 0;
+		}
+		try {
+			if (log.isDebugEnabled()) {
+			    log.debug("Check for matches against: "+sampler.getUrl().toExternalForm());
+			}
+		} catch (MalformedURLException e) {
+			log.debug("BAD URL"+e.getMessage());
 		}
 		html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
 		addAnchorUrls(html, result, sampler, potentialLinks);
@@ -93,6 +100,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		addFramesetUrls(html, result, sampler, potentialLinks);
 		if (potentialLinks.size() > 0) {
 			HTTPSamplerBase url = (HTTPSamplerBase) potentialLinks.get(rand.nextInt(potentialLinks.size()));
+			if (log.isDebugEnabled()) {
+			    log.debug("Selected: "+url.toString());
+			}
 			sampler.setDomain(url.getDomain());
 			sampler.setPath(url.getPath());
 			if (url.getMethod().equals(HTTPSamplerBase.POST)) {
@@ -107,12 +117,16 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			}
 			sampler.setProtocol(url.getProtocol());
 			return;
+		} else {
+			log.debug("No matches found");
 		}
 		return;
 	}
 
 	private void modifyArgument(Argument arg, Arguments args) {
-		log.debug("Modifying argument: " + arg);
+		if (log.isDebugEnabled()) {
+		    log.debug("Modifying argument: " + arg);
+		}
 		List possibleReplacements = new ArrayList();
 		PropertyIterator iter = args.iterator();
 		Argument replacementArg;
@@ -123,7 +137,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 					possibleReplacements.add(replacementArg);
 				}
 			} catch (Exception ex) {
-				log.error("", ex);
+				log.error("Problem adding Argument", ex);
 			}
 		}
 
@@ -131,7 +145,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			replacementArg = (Argument) possibleReplacements.get(rand.nextInt(possibleReplacements.size()));
 			arg.setName(replacementArg.getName());
 			arg.setValue(replacementArg.getValue());
-			log.debug("Just set argument to values: " + arg.getName() + " = " + arg.getValue());
+			if (log.isDebugEnabled()) {
+			    log.debug("Just set argument to values: " + arg.getName() + " = " + arg.getValue());
+			}
 			args.removeArgument(replacementArg);
 		}
 	}
@@ -149,7 +165,11 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		while (iter.hasNext()) {
 			HTTPSamplerBase newUrl = (HTTPSamplerBase) iter.next();
 			newUrl.setMethod(HTTPSamplerBase.POST);
+			if (log.isDebugEnabled()) {
+			    log.debug("Potential Form match: " + newUrl.toString());
+			}
 			if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
+				log.debug("Matched!");
 				potentialLinks.add(newUrl);
 			}
 		}
@@ -157,15 +177,15 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 
 	private void addAnchorUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config, List potentialLinks) {
 		String base = "";
-		NodeList baseList = html.getElementsByTagName("base");
+		NodeList baseList = html.getElementsByTagName("base"); // $NON-NLS-1$
 		if (baseList.getLength() > 0) {
-			base = baseList.item(0).getAttributes().getNamedItem("href").getNodeValue();
+			base = baseList.item(0).getAttributes().getNamedItem("href").getNodeValue(); // $NON-NLS-1$
 		}
-		NodeList nodeList = html.getElementsByTagName("a");
+		NodeList nodeList = html.getElementsByTagName("a"); // $NON-NLS-1$
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node tempNode = nodeList.item(i);
 			NamedNodeMap nnm = tempNode.getAttributes();
-			Node namedItem = nnm.getNamedItem("href");
+			Node namedItem = nnm.getNamedItem("href"); // $NON-NLS-1$
 			if (namedItem == null) {
 				continue;
 			}
@@ -173,9 +193,11 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			try {
 				HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, new URL(result.getURL(), base));
 				newUrl.setMethod(HTTPSamplerBase.GET);
-				log.debug("possible match: " + newUrl);
+				if (log.isDebugEnabled()) {
+				    log.debug("Potential <a href> match: " + newUrl);
+				}
 				if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
-					log.debug("Is a match! " + newUrl);
+					log.debug("Matched!");
 					potentialLinks.add(newUrl);
 				}
 			} catch (MalformedURLException e) {
@@ -186,16 +208,16 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
     private void addFramesetUrls(Document html, HTTPSampleResult result,
        HTTPSamplerBase config, List potentialLinks) {
        String base = "";
-       NodeList baseList = html.getElementsByTagName("base");
+       NodeList baseList = html.getElementsByTagName("base"); // $NON-NLS-1$
        if (baseList.getLength() > 0) {
-           base = baseList.item(0).getAttributes().getNamedItem("href")
+           base = baseList.item(0).getAttributes().getNamedItem("href") // $NON-NLS-1$
                    .getNodeValue();
        }
-       NodeList nodeList = html.getElementsByTagName("frame");
+       NodeList nodeList = html.getElementsByTagName("frame"); // $NON-NLS-1$
        for (int i = 0; i < nodeList.getLength(); i++) {
            Node tempNode = nodeList.item(i);
            NamedNodeMap nnm = tempNode.getAttributes();
-           Node namedItem = nnm.getNamedItem("src");
+           Node namedItem = nnm.getNamedItem("src"); // $NON-NLS-1$
            if (namedItem == null) {
                continue;
            }
@@ -204,9 +226,11 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
                HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(
                        hrefStr, new URL(result.getURL(), base));
                newUrl.setMethod(HTTPSamplerBase.GET);
-               log.debug("possible match: " + newUrl);
+               if (log.isDebugEnabled()) {
+                   log.debug("Potential <frame src> match: " + newUrl);
+               }
                if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
-                   log.debug("Is a match! " + newUrl);
+                   log.debug("Matched!");
                    potentialLinks.add(newUrl);
                }
            } catch (MalformedURLException e) {
