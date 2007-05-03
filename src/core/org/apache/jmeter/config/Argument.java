@@ -22,12 +22,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
-// Mark Walsh, 2002-08-03, add metadata attribute
-// add constructor Argument(String name, Object value, Object metadata)
-// add MetaData get and set methods
 
 /**
  * Class representing an argument. Each argument consists of a name/value pair,
@@ -35,11 +29,9 @@ import org.apache.log.Logger;
  * 
  * @author Michael Stover
  * @author Mark Walsh
- * @version $Revision$
  */
 public class Argument extends AbstractTestElement implements Serializable {
-    private static Logger log = LoggingManager.getLoggerForClass();
-	/** Name used to store the argument's name. */
+ 	/** Name used to store the argument's name. */
 	public static final String ARG_NAME = "Argument.name";
 
 	/** Name used to store the argument's value. */
