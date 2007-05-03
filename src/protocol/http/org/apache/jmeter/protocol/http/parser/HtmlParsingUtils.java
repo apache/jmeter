@@ -27,12 +27,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jmeter.config.Argument;
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
@@ -50,12 +52,7 @@ import org.w3c.tidy.Tidy;
  * @author Michael Stover Created June 14, 2001
  */
 public final class HtmlParsingUtils {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	/*
-	 * NOTUSED private int compilerOptions = Perl5Compiler.CASE_INSENSITIVE_MASK |
-	 * Perl5Compiler.MULTILINE_MASK | Perl5Compiler.READ_ONLY_MASK;
-	 */
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -63,66 +60,145 @@ public final class HtmlParsingUtils {
 	private HtmlParsingUtils() {
 	}
 
-	public static synchronized boolean isAnchorMatched(HTTPSamplerBase newLink, HTTPSamplerBase config)
+	/**
+	 * Check if anchor matches by checking:
+	 * - domain
+	 * - path
+	 * - protocol
+	 * 
+	 * @param newLink target to match
+	 * @param config pattern to match against
+	 * 
+	 * @return true if target URL matches pattern URL
+	 */
+	public static boolean isAnchorMatched(HTTPSamplerBase newLink, HTTPSamplerBase config)
 	{
-		boolean ok = true;
-		Perl5Matcher matcher = JMeterUtils.getMatcher();
-		PropertyIterator iter = config.getArguments().iterator();
-
 		String query = null;
 		try {
-			query = URLDecoder.decode(newLink.getQueryString(), "UTF-8");
+			query = URLDecoder.decode(newLink.getQueryString(), "UTF-8"); // $NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
 			// UTF-8 unsupported? You must be joking!
 			log.error("UTF-8 encoding not supported!");
 			throw new Error("Should not happen: " + e.toString());
 		}
 
-		if (query == null && config.getArguments().getArgumentCount() > 0) {
+		final Arguments arguments = config.getArguments();
+		if (query == null && arguments.getArgumentCount() > 0) {
+			return false;// failed to convert query, so assume no match
+		}
+
+		final Perl5Matcher matcher = JMeterUtils.getMatcher();
+		final PatternCacheLRU patternCache = JMeterUtils.getPatternCache();
+
+		if (!isEqualOrMatches(newLink.getProtocol(), config.getProtocol(), matcher, patternCache)){
 			return false;
 		}
 
+		final String domain = config.getDomain();
+		if (domain != null && domain.length() > 0) {
+			if (!isEqualOrMatches(newLink.getDomain(), domain, matcher, patternCache)){
+				return false;
+			}
+		}
+
+		final String path = config.getPath();
+		if (!newLink.getPath().equals(path)
+				&& !matcher.matches(newLink.getPath(), patternCache.getPattern("[/]*" + path, // $NON-NLS-1$
+						Perl5Compiler.READ_ONLY_MASK))) {
+			return false;
+		}
+
+		PropertyIterator iter = arguments.iterator();
 		while (iter.hasNext()) {
 			Argument item = (Argument) iter.next().getObjectValue();
-			if (query.indexOf(item.getName() + "=") == -1) {
-				if (!(ok = ok
-						&& matcher.contains(query, JMeterUtils.getPatternCache()
-								.getPattern(item.getName(), Perl5Compiler.READ_ONLY_MASK)))) {
+			final String name = item.getName();
+			if (query.indexOf(name + "=") == -1) { // $NON-NLS-1$
+				if (!(matcher.contains(query, patternCache.getPattern(name, Perl5Compiler.READ_ONLY_MASK)))) {
 					return false;
 				}
 			}
 		}
 
-		if (config.getDomain() != null && config.getDomain().length() > 0
-				&& !newLink.getDomain().equals(config.getDomain())) {
-			if (!(ok = ok
-					&& matcher.matches(newLink.getDomain(), JMeterUtils.getPatternCache().getPattern(config.getDomain(),
-							Perl5Compiler.READ_ONLY_MASK)))) {
-				return false;
-			}
-		}
-
-		if (!newLink.getPath().equals(config.getPath())
-				&& !matcher.matches(newLink.getPath(), JMeterUtils.getPatternCache().getPattern("[/]*" + config.getPath(),
-						Perl5Compiler.READ_ONLY_MASK))) {
-			return false;
-		}
-
-		if (!(ok = ok
-				&& matcher.matches(newLink.getProtocol(), JMeterUtils.getPatternCache().getPattern(config.getProtocol(),
-						Perl5Compiler.READ_ONLY_MASK)))) {
-			return false;
-		}
-
-		return ok;
+		return true;
 	}
 
-	public static synchronized boolean isArgumentMatched(Argument arg, Argument patternArg) {
-		Perl5Matcher matcher = JMeterUtils.getMatcher();
-		return (arg.getName().equals(patternArg.getName()) || matcher.matches(arg.getName(), JMeterUtils.getPatternCache().getPattern(
-				patternArg.getName(), Perl5Compiler.READ_ONLY_MASK)))
-				&& (arg.getValue().equals(patternArg.getValue()) || matcher.matches(arg.getValue(), JMeterUtils.getPatternCache()
-						.getPattern(patternArg.getValue(), Perl5Compiler.READ_ONLY_MASK)));
+	/**
+	 * Arguments match if the input name matches the corresponding pattern name
+	 * and the input value matches the pattern value, where the matching is done
+	 * first using String equals, and then Regular Expression matching if the equals test fails.
+	 * 
+	 * @param arg - input Argument
+	 * @param patternArg - pattern to match against
+	 * @return true if both name and value match
+	 */
+	public static boolean isArgumentMatched(Argument arg, Argument patternArg) {
+		final Perl5Matcher matcher = JMeterUtils.getMatcher();
+		final PatternCacheLRU patternCache = JMeterUtils.getPatternCache();
+		return 
+		    isEqualOrMatches(arg.getName(), patternArg.getName(), matcher, patternCache)
+		&& 
+		    isEqualOrMatches(arg.getValue(), patternArg.getValue(), matcher, patternCache);
+	}
+
+	/**
+	 * Match the input argument against the pattern using String.equals() or pattern matching if that fails. 
+	 * 
+	 * @param arg input string
+	 * @param pat pattern string
+	 * @param matcher Perl5Matcher
+	 * @param cache PatternCache
+	 * 
+	 * @return true if input matches the pattern
+	 */
+	public static boolean isEqualOrMatches(String arg, String pat, Perl5Matcher matcher, PatternCacheLRU cache){
+		return 
+		    arg.equals(pat) 
+		    || 
+		    matcher.matches(arg,cache.getPattern(pat,Perl5Compiler.READ_ONLY_MASK));
+	}
+
+	/**
+	 * Match the input argument against the pattern using String.equals() or pattern matching if that fails
+	 * using case-insenssitive matching.
+	 * 
+	 * @param arg input string
+	 * @param pat pattern string
+	 * @param matcher Perl5Matcher
+	 * @param cache PatternCache
+	 * 
+	 * @return true if input matches the pattern
+	 */
+	public static boolean isEqualOrMatchesCaseBlind(String arg, String pat, Perl5Matcher matcher, PatternCacheLRU cache){
+		return 
+		    arg.equalsIgnoreCase(pat) 
+		    || 
+		    matcher.matches(arg,cache.getPattern(pat,Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK));
+	}
+
+	/**
+	 * Match the input argument against the pattern using String.equals() or pattern matching if that fails
+	 * using case-insensitive matching.
+	 * 
+	 * @param arg input string
+	 * @param pat pattern string
+	 * 
+	 * @return true if input matches the pattern
+	 */
+	public static boolean isEqualOrMatches(String arg, String pat){
+		return isEqualOrMatches(arg, pat, JMeterUtils.getMatcher(), JMeterUtils.getPatternCache());
+	}
+
+	/**
+	 * Match the input argument against the pattern using String.equals() or pattern matching if that fails
+	 * using case-insensitive matching.
+	 * 
+	 * @param arg input string
+	 * @param pat pattern string
+	 * 
+	 * @return true if input matches the pattern
+	 */
+	public static boolean isEqualOrMatchesCaseBlind(String arg, String pat){
+		return isEqualOrMatchesCaseBlind(arg, pat, JMeterUtils.getMatcher(), JMeterUtils.getPatternCache());
 	}
 
 	/**
@@ -220,47 +296,42 @@ public final class HtmlParsingUtils {
 		try {
 			if (inForm) {
 				HTTPSamplerBase url = (HTTPSamplerBase) urlConfigs.getLast();
-				if (tag.equalsIgnoreCase("form")) {
+				if (tag.equalsIgnoreCase("form")) { // $NON-NLS-1$
 					try {
 						urlConfigs.add(createFormUrlConfig(tempNode, context));
 					} catch (MalformedURLException e) {
 						inForm = false;
 					}
-				} else if (tag.equalsIgnoreCase("input")) {
-					url.addEncodedArgument(getAttributeValue(nodeAtts, "name"), getAttributeValue(nodeAtts, "value"));
-				} else if (tag.equalsIgnoreCase("textarea")) {
+				} else if (tag.equalsIgnoreCase("input")) { // $NON-NLS-1$
+					url.addEncodedArgument(getAttributeValue(nodeAtts, "name"),  // $NON-NLS-1$
+							getAttributeValue(nodeAtts, "value")); // $NON-NLS-1$
+				} else if (tag.equalsIgnoreCase("textarea")) { // $NON-NLS-1$
 					try {
-						url.addEncodedArgument(getAttributeValue(nodeAtts, "name"), tempNode.getFirstChild().getNodeValue());
+						url.addEncodedArgument(getAttributeValue(nodeAtts, "name"),  // $NON-NLS-1$
+								tempNode.getFirstChild().getNodeValue());
 					} catch (NullPointerException e) {
-						url.addArgument(getAttributeValue(nodeAtts, "name"), "");
+						url.addArgument(getAttributeValue(nodeAtts, "name"), ""); // $NON-NLS-1$
 					}
-				} else if (tag.equalsIgnoreCase("select")) {
-					selectName = getAttributeValue(nodeAtts, "name");
-				} else if (tag.equalsIgnoreCase("option")) {
-					String value = getAttributeValue(nodeAtts, "value");
+				} else if (tag.equalsIgnoreCase("select")) { // $NON-NLS-1$
+					selectName = getAttributeValue(nodeAtts, "name"); // $NON-NLS-1$
+				} else if (tag.equalsIgnoreCase("option")) { // $NON-NLS-1$
+					String value = getAttributeValue(nodeAtts, "value"); // $NON-NLS-1$
 					if (value == null) {
 						try {
 							value = tempNode.getFirstChild().getNodeValue();
 						} catch (NullPointerException e) {
-							value = "";
+							value = ""; // $NON-NLS-1$
 						}
 					}
 					url.addEncodedArgument(selectName, value);
 				}
-			} else if (tag.equalsIgnoreCase("form")) {
+			} else if (tag.equalsIgnoreCase("form")) { // $NON-NLS-1$
 				try {
 					urlConfigs.add(createFormUrlConfig(tempNode, context));
 					inForm = true;
 				} catch (MalformedURLException e) {
 					inForm = false;
 				}
-				// I can't see the point for this code being here. Looks like
-				// a really obscure performance optimization feature :-)
-				// Seriously: I'll comment it out... I just don't dare to
-				// remove it completely, in case there *is* a reason.
-				/*
-				 * try { Thread.sleep(5000); } catch (Exception e) { }
-				 */
 			}
 		} catch (Exception ex) {
 			log.warn("Some bad HTML " + printNode(tempNode), ex);
@@ -276,34 +347,34 @@ public final class HtmlParsingUtils {
 		try {
 			return att.getNamedItem(attName).getNodeValue();
 		} catch (Exception ex) {
-			return "";
+			return ""; // $NON-NLS-1$
 		}
 	}
 
 	private static String printNode(Node node) {
 		StringBuffer buf = new StringBuffer();
-		buf.append("<");
+		buf.append("<"); // $NON-NLS-1$
 		buf.append(node.getNodeName());
 		NamedNodeMap atts = node.getAttributes();
 		for (int x = 0; x < atts.getLength(); x++) {
-			buf.append(" ");
+			buf.append(" "); // $NON-NLS-1$
 			buf.append(atts.item(x).getNodeName());
-			buf.append("=\"");
+			buf.append("=\""); // $NON-NLS-1$
 			buf.append(atts.item(x).getNodeValue());
-			buf.append("\"");
+			buf.append("\""); // $NON-NLS-1$
 		}
 
-		buf.append(">");
+		buf.append(">"); // $NON-NLS-1$
 
 		return buf.toString();
 	}
 
 	private static HTTPSamplerBase createFormUrlConfig(Node tempNode, URL context) throws MalformedURLException {
 		NamedNodeMap atts = tempNode.getAttributes();
-		if (atts.getNamedItem("action") == null) {
+		if (atts.getNamedItem("action") == null) { // $NON-NLS-1$
 			throw new MalformedURLException();
 		}
-		String action = atts.getNamedItem("action").getNodeValue();
+		String action = atts.getNamedItem("action").getNodeValue(); // $NON-NLS-1$
 		HTTPSamplerBase url = createUrlFromAnchor(action, context);
 		return url;
 	}
@@ -311,7 +382,7 @@ public final class HtmlParsingUtils {
 	public static void extractStyleURLs(final URL baseUrl, final URLCollection urls, String styleTagStr) {
 		Perl5Matcher matcher = JMeterUtils.getMatcher();
 		Pattern pattern = JMeterUtils.getPatternCache().getPattern(
-				"URL\\(\\s*('|\")(.*)('|\")\\s*\\)",
+				"URL\\(\\s*('|\")(.*)('|\")\\s*\\)", // $NON-NLS-1$
 				Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK | Perl5Compiler.READ_ONLY_MASK);
 		PatternMatcherInput input = null;
 		input = new PatternMatcherInput(styleTagStr);
