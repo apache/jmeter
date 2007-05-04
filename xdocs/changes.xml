@@ -139,6 +139,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42223 - Add ability to upload files via FTP</li>
 <li>Extend JDBC Sampler: Commit, Rollback, AutoCommit</li>
 <li>Bug 42247 - improve HCI</li>
+<li>Support "file" protocol in HTTP Samplers</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
