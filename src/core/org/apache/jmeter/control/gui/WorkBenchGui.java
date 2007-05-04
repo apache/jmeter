@@ -25,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
@@ -95,8 +96,14 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	 */
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[] { MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-				MenuFactory.CONFIG_ELEMENTS, MenuFactory.NON_TEST_ELEMENTS }, JMeterUtils.getResString("Add"), "Add");
+		JMenu addMenu = MenuFactory.makeMenus(new String[] { 
+				MenuFactory.CONTROLLERS, 
+				MenuFactory.SAMPLERS,
+				MenuFactory.CONFIG_ELEMENTS, 
+				MenuFactory.NON_TEST_ELEMENTS 
+				}, 
+				JMeterUtils.getResString("add"), // $NON-NLS-1$
+				ActionNames.ADD);
 		menu.add(addMenu);
 		MenuFactory.addEditMenu(menu, false);
 		MenuFactory.addFileMenu(menu);
