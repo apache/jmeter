@@ -23,7 +23,6 @@ package org.apache.commons.cli.avalon;
 /**
  * ParserControl is used to control particular behaviour of the parser.
  * 
- * @version $Revision$ $Date$
  * @see AbstractParserControl
  */
 public interface ParserControl {
