@@ -51,7 +51,15 @@ public class XMLConfPanel extends JPanel {
 		add(getNamespace());
 		add(getValidate());
 		add(getWhitespace());
+		setDefaultValues();
 	}
+
+    public void setDefaultValues() {
+        setWhitespace(false);
+        setValidate(false);
+        setTolerant(false);
+        setNamespace(false);
+    }
 
 	/**
 	 * @return Returns the namespace.

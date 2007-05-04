@@ -99,6 +99,17 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 		configureTestElement(el);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        tableModel.clearData();
+        deleteButton.setEnabled(false);
+        saveButton.setEnabled(false);
+    }    
+
 	public void configure(TestElement el) {
 		headerManager.clear();
 		super.configure(el);
@@ -258,6 +269,11 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 		public InnerTableModel(HeaderManager man) {
 			manager = man;
 		}
+
+        public void clearData() {
+            manager.clear();
+            fireTableDataChanged();
+        }
 
 		public void removeRow(int row) {
 			manager.remove(row);

@@ -82,6 +82,19 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        urlField.setText(""); //$NON-NLS-1$
+        soapAction.setText(""); //$NON-NLS-1$
+        soapXml.setText(""); //$NON-NLS-1$
+        sendSoapAction.setSelected(true);
+        soapXmlFile.setFilename(""); //$NON-NLS-1$
+    }    
+
 	private void init() {
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());

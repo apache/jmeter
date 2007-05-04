@@ -78,6 +78,18 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 		te.setProperty(BSFSampler.PARAMETERS, parameters.getText());
 		te.setProperty(BSFSampler.SCRIPT, scriptField.getText());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        scriptField.setText(""); //$NON-NLS-1$
+        langField.setText(""); //$NON-NLS-1$
+        filename.setText(""); //$NON-NLS-1$
+        parameters.setText(""); //$NON-NLS-1$
+    }    
 
 	public String getLabelResource() {
 		return "bsf_sampler_title";

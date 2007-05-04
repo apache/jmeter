@@ -85,6 +85,16 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 		te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        filename.setText(""); //$NON-NLS-1$
+        errorsOnly.setSelected(false);
+    }
+
 	private void init() {
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());

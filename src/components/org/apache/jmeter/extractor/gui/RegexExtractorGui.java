@@ -108,6 +108,23 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 			regex.setMatchNumber(matchNumberField.getText());
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        useBody.setSelected(true);
+        useHeaders.setSelected(false);
+        useURL.setSelected(false);
+        
+        regexField.setText(""); //$NON-NLS-1$
+        templateField.setText(""); //$NON-NLS-1$
+        defaultField.setText(""); //$NON-NLS-1$
+        refNameField.setText(""); //$NON-NLS-1$
+        matchNumberField.setText(""); //$NON-NLS-1$
+    }    
 
 	private void init() {
 		setLayout(new BorderLayout());

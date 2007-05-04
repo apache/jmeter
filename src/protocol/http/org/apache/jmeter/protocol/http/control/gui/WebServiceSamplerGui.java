@@ -190,6 +190,29 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 		sampler.setProxyPort(proxyPort.getText());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        domain.setText(""); //$NON-NLS-1$
+        protocol.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
+        path.setText(""); //$NON-NLS-1$
+        soapAction.setText(""); //$NON-NLS-1$
+        soapXml.setText(""); //$NON-NLS-1$
+        wsdlField.setText(""); //$NON-NLS-1$
+        randomXmlFile.setText(""); //$NON-NLS-1$
+        connectTimeout.setText(""); //$NON-NLS-1$
+        proxyHost.setText(""); //$NON-NLS-1$
+        proxyPort.setText(""); //$NON-NLS-1$
+        memCache.setSelected(true);
+        readResponse.setSelected(false);
+        useProxy.setSelected(false);
+        soapXmlFile.setFilename(""); //$NON-NLS-1$
+    }    
+
 	/**
 	 * init() adds soapAction to the mainPanel. The class reuses logic from
 	 * SOAPSampler, since it is common.

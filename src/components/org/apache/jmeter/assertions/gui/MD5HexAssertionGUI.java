@@ -102,4 +102,13 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 		}
 		((MD5HexAssertion) element).setAllowedMD5Hex(md5HexString);
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        md5HexInput.setText(""); //$NON-NLS-1$
+    }    
 }

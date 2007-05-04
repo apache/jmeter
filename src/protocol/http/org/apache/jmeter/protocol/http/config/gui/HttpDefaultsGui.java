@@ -89,6 +89,20 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        protocol.setText(""); //$NON-NLS-1$
+        domain.setText(""); //$NON-NLS-1$
+        path.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
+        argPanel.clear();
+        imageParser.setSelected(false);
+    }    
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));

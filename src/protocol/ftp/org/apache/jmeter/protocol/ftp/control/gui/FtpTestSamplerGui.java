@@ -67,6 +67,16 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
 		this.configureTestElement(sampler);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        ftpDefaultPanel.clear();
+        loginPanel.clear();
+    }    
+    
 	public String getLabelResource() {
 		return "ftp_testing_title";
 	}

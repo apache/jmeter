@@ -88,6 +88,18 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         }
     }
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        xpathQueryField.setText(""); // $NON-NLS-1$
+        defaultField.setText(""); // $NON-NLS-1$
+        refNameField.setText(""); // $NON-NLS-1$
+        tolerant.setSelected(false);
+    }
+
 	private void init() {
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());

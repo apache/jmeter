@@ -68,6 +68,15 @@ public class DurationAssertionGui extends AbstractAssertionGui {
 		el.setProperty(DurationAssertion.DURATION_KEY,duration.getText());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        duration.setText(""); //$NON-NLS-1$
+    }    
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		duration.setText(el.getPropertyAsString(DurationAssertion.DURATION_KEY));

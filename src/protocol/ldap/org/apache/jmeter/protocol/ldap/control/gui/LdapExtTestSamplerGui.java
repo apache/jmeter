@@ -78,6 +78,15 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
 		this.configureTestElement(sampler);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        ldapDefaultPanel.clear();
+    }    
+
 	public String getLabelResource() {
 		return "ldapext_testing_title"; // $NON-NLS-1$
 	}

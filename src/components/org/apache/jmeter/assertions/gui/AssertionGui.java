@@ -160,6 +160,26 @@ public class AssertionGui extends AbstractAssertionGui {
 			}
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        tableModel.clearData();
+
+        responseStringButton.setSelected(true);
+        urlButton.setSelected(false);
+        responseCodeButton.setSelected(false);
+        responseMessageButton.setSelected(false);
+        assumeSuccess.setSelected(false);
+        
+        containsBox.setSelected(true);
+        matchesBox.setSelected(false);
+        equalsBox.setSelected(false);
+        notBox.setSelected(false);
+    }    
 
 	/**
 	 * A newly created component can be initialized with the contents of a Test

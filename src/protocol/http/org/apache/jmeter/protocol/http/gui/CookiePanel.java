@@ -243,6 +243,19 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        tableModel.clearData();
+        clearEachIteration.setSelected(false);
+        policy.setSelectedIndex(policies.length - 1);
+        deleteButton.setEnabled(false);
+        saveButton.setEnabled(false);
+    }    
+    
 	private Cookie createCookie(Object[] rowData) {
 		Cookie cookie = new Cookie(
                 (String) rowData[0],

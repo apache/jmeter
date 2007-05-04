@@ -66,6 +66,16 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 		this.configureTestElement(sampler);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        TcpDefaultPanel.clear();
+        loginPanel.clear();
+    }    
+    
 	public String getLabelResource() {
 		return "tcp_sample_title";
 	}
