@@ -26,9 +26,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class RandomControlGui extends AbstractControllerGui {
 	private JCheckBox style;
 
@@ -56,6 +53,14 @@ public class RandomControlGui extends AbstractControllerGui {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear(); 
+        style.setSelected(false);
+    }
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		if (((RandomController) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
@@ -66,7 +71,7 @@ public class RandomControlGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "random_control_title";
+		return "random_control_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -74,7 +79,7 @@ public class RandomControlGui extends AbstractControllerGui {
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
-		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
 		add(style);
 	}
 }

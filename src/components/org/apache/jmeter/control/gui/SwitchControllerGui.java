@@ -28,11 +28,8 @@ import org.apache.jmeter.control.SwitchController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class SwitchControllerGui extends AbstractControllerGui {
-	private static final String SWITCH_LABEL = "switch_controller_label";
+	private static final String SWITCH_LABEL = "switch_controller_label"; // $NON-NLS-1$
 
 	private JTextField switchValue;
 
@@ -56,13 +53,21 @@ public class SwitchControllerGui extends AbstractControllerGui {
 		((SwitchController) ic).setSelection(switchValue.getText());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        switchValue.setText(""); // $NON-NLS-1$
+    }
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		switchValue.setText(((SwitchController) el).getSelection());
 	}
 
 	public String getLabelResource() {
-		return "switch_controller_title";
+		return "switch_controller_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -78,11 +83,10 @@ public class SwitchControllerGui extends AbstractControllerGui {
 	private JPanel createSwitchPanel() {
 		JPanel switchPanel = new JPanel(new BorderLayout(5, 0));
 		JLabel selectionLabel = new JLabel(JMeterUtils.getResString(SWITCH_LABEL));
-		switchValue = new JTextField("");
+		switchValue = new JTextField(""); // $NON-NLS-1$
 		selectionLabel.setLabelFor(switchValue);
 		switchPanel.add(selectionLabel, BorderLayout.WEST);
 		switchPanel.add(switchValue, BorderLayout.CENTER);
 		return switchPanel;
 	}
-
 }
