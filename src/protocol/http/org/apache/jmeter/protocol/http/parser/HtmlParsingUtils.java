@@ -61,10 +61,11 @@ public final class HtmlParsingUtils {
 	}
 
 	/**
-	 * Check if anchor matches by checking:
+	 * Check if anchor matches by checking against:
+	 * - protocol
 	 * - domain
 	 * - path
-	 * - protocol
+	 * - parameter names
 	 * 
 	 * @param newLink target to match
 	 * @param config pattern to match against
