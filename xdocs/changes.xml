@@ -220,6 +220,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42185 - If a HTTP Sampler follows a redirect, and is set up to download images, then images are downloaded multiple times</li>
 <li>Bug 39808 - Invalid redirect causes incorrect sample time</li>
 <li>Bug 42267 - Concurrent GUI update failure in Proxy Recording</li>
+<li>Bug 30120 - Name of simple controller is resetted if a new simple controller is added as child</li>
 </ul>
 
 <h3>Version 2.2</h3>
