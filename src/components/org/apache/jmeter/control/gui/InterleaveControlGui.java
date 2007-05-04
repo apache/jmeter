@@ -25,9 +25,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class InterleaveControlGui extends AbstractControllerGui {
 	private JCheckBox style;
 
@@ -64,8 +61,16 @@ public class InterleaveControlGui extends AbstractControllerGui {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();    
+        style.setSelected(false);
+    }
+    
 	public String getLabelResource() {
-		return "interleave_control_title";
+		return "interleave_control_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -74,7 +79,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
 
 		add(makeTitlePanel());
 
-		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers"));
+		style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
 		add(style);
 	}
 }
