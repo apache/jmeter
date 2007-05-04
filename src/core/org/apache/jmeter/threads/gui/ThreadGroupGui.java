@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.JDateField;
@@ -179,9 +180,17 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(new String[] { MenuFactory.CONTROLLERS, MenuFactory.LISTENERS,
-				MenuFactory.SAMPLERS, MenuFactory.ASSERTIONS,MenuFactory.TIMERS, MenuFactory.CONFIG_ELEMENTS, MenuFactory.PRE_PROCESSORS,
-				MenuFactory.POST_PROCESSORS }, JMeterUtils.getResString("Add"), "Add"));
+		pop.add(MenuFactory.makeMenus(new String[] { 
+				MenuFactory.CONTROLLERS, 
+				MenuFactory.LISTENERS,
+				MenuFactory.SAMPLERS, 
+				MenuFactory.ASSERTIONS,
+				MenuFactory.TIMERS, 
+				MenuFactory.CONFIG_ELEMENTS, 
+				MenuFactory.PRE_PROCESSORS,
+				MenuFactory.POST_PROCESSORS }, 
+				JMeterUtils.getResString("add"), // $NON-NLS-1$
+				ActionNames.ADD));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
