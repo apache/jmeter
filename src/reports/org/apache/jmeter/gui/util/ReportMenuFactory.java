@@ -37,6 +37,7 @@ import javax.swing.MenuElement;
 
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.ReportGuiPackage;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
@@ -179,10 +180,12 @@ public final class ReportMenuFactory {
 
 	public static JPopupMenu getDefaultControllerMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
-		pop.add(makeMenus(MENU_PARENT_CONTROLLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
+		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
+				JMeterUtils.getResString("add"),// $NON-NLS-1$
+				ActionNames.ADD));
+		pop.add(makeMenus(MENU_PARENT_CONTROLLER, 
+				JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+				ActionNames.ADD_PARENT));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
