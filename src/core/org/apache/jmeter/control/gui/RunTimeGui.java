@@ -113,6 +113,15 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        seconds.setText("1"); // $NON-NLS-1$
+    }
+
 	/**
 	 * Invoked when an action occurs. This implementation assumes that the
 	 * target component is the infinite seconds checkbox.
@@ -125,7 +134,7 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 	}
 
 	public String getLabelResource() {
-		return "runtime_controller_title";
+		return "runtime_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -164,13 +173,13 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 		JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
 
 		// SECONDS LABEL
-		JLabel secondsLabel = new JLabel(JMeterUtils.getResString("runtime_seconds"));
+		JLabel secondsLabel = new JLabel(JMeterUtils.getResString("runtime_seconds")); // $NON-NLS-1$
 		loopPanel.add(secondsLabel, BorderLayout.WEST);
 
 		JPanel loopSubPanel = new JPanel(new BorderLayout(5, 0));
 
 		// TEXT FIELD
-		seconds = new JTextField("60", 5);
+		seconds = new JTextField("1", 5); // $NON-NLS-1$
 		secondsLabel.setLabelFor(seconds);
 		loopSubPanel.add(seconds, BorderLayout.CENTER);
 
@@ -207,6 +216,6 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 	 */
 	private void setState(long secsCount) {
 		seconds.setEnabled(true);
-		seconds.setText("" + secsCount);
+		seconds.setText("" + secsCount); // $NON-NLS-1$
 	}
 }
