@@ -27,7 +27,6 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * A Transaction controller component.
  * 
- * @version $Revision$ on $Date$
  */
 public class TransactionControllerGui extends AbstractControllerGui {
 	/**
@@ -50,7 +49,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "transaction_controller_title";
+		return "transaction_controller_title"; // $NON-NLS-1$
 	}
 
 	/**

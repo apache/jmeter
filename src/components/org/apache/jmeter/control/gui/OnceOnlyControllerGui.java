@@ -22,9 +22,6 @@ import org.apache.jmeter.control.OnceOnlyController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class OnceOnlyControllerGui extends AbstractControllerGui {
 	public OnceOnlyControllerGui() {
 		init();
@@ -46,7 +43,7 @@ public class OnceOnlyControllerGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "once_only_controller_title";
+		return "once_only_controller_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
