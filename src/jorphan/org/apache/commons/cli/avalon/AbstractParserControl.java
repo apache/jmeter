@@ -24,7 +24,6 @@ package org.apache.commons.cli.avalon;
  * Class to inherit from so when in future when new controls are added clients
  * will no have to implement them.
  * 
- * @version $Revision$
  * @see ParserControl
  */
 public abstract class AbstractParserControl implements ParserControl {
