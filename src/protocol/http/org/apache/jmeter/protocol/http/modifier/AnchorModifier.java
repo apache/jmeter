@@ -87,12 +87,8 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		if (index == -1) {
 			index = 0;
 		}
-		try {
-			if (log.isDebugEnabled()) {
-			    log.debug("Check for matches against: "+sampler.getUrl().toExternalForm());
-			}
-		} catch (MalformedURLException e) {
-			log.debug("BAD URL"+e.getMessage());
+		if (log.isDebugEnabled()) {
+		    log.debug("Check for matches against: "+sampler.toString());
 		}
 		html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
 		addAnchorUrls(html, result, sampler, potentialLinks);
@@ -190,6 +186,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 				continue;
 			}
 			String hrefStr = namedItem.getNodeValue();
+			if (hrefStr.startsWith("javascript:")) { // $NON-NLS-1$
+				continue; // No point trying these
+			}
 			try {
 				HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, new URL(result.getURL(), base));
 				newUrl.setMethod(HTTPSamplerBase.GET);
