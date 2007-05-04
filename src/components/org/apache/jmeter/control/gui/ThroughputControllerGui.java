@@ -35,9 +35,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class ThroughputControllerGui extends AbstractControllerGui {
 	private JComboBox styleBox;
 
@@ -49,15 +46,15 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 
 	private boolean isPerThread = true;
 
-	private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label");
+	private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label"); // $NON-NLS-1$
 
-	private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label");
+	private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label"); // $NON-NLS-1$
 
-	private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel");
+	private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel"); // $NON-NLS-1$
 
-	private String THROUGHPUT = "Througput Field";
+	private String THROUGHPUT = "Througput Field"; // $NON-NLS-1$
 
-	private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label");
+	private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label"); // $NON-NLS-1$
 
 	public ThroughputControllerGui() {
 		init();
@@ -92,6 +89,16 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 			}
 		}
 	}
+
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        styleBox.setSelectedIndex(0);
+        throughput.setText("1"); // $NON-NLS-1$
+        perthread.setSelected(true);
+    }
 
 	public void configure(TestElement el) {
 		super.configure(el);
@@ -138,7 +145,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 		throughput = new JTextField(5);
 		tpPanel.add(throughput);
 		throughput.setName(THROUGHPUT);
-		throughput.setText("1");
+		throughput.setText("1"); // $NON-NLS-1$
 		// throughput.addActionListener(this);
 		tpPanel.add(throughput);
 		add(tpPanel);
