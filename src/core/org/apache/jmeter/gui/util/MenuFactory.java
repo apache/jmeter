@@ -201,7 +201,7 @@ public final class MenuFactory {
 
 	public static JPopupMenu getDefaultControllerMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
+		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, JMeterUtils.getResString("add"),// $NON-NLS-1$
 				ActionNames.ADD));
 		pop.add(makeMenus(MENU_PARENT_CONTROLLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
 				ActionNames.ADD_PARENT));
@@ -212,7 +212,7 @@ public final class MenuFactory {
 
 	public static JPopupMenu getDefaultSamplerMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
+		pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER, JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
 		pop.add(makeMenus(MENU_PARENT_SAMPLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
                 ActionNames.ADD_PARENT));
