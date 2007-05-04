@@ -138,6 +138,22 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		((HTMLAssertion) inElement).setFilename(filePanel.getFilename());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        docTypeBox.setSelectedIndex(0);
+        htmlRadioButton.setSelected(true);
+        xhtmlRadioButton.setSelected(false);
+        xmlRadioButton.setSelected(false);
+        errorThresholdField.setText("0"); //$NON-NLS-1$
+        warningThresholdField.setText("0"); //$NON-NLS-1$
+        filePanel.setFilename(""); //$NON-NLS-1$
+        errorsOnly.setSelected(false);
+    }    
+
 	/**
 	 * Configures the associated test element.
 	 * 
@@ -160,6 +176,10 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		if (lAssertion.isErrorsOnly()) {
 			warningThresholdField.setEnabled(false);
 			warningThresholdField.setEditable(false);
+		}
+		else {
+			warningThresholdField.setEnabled(true);
+			warningThresholdField.setEditable(true);
 		}
 		filePanel.setFilename(lAssertion.getFilename());
 	}

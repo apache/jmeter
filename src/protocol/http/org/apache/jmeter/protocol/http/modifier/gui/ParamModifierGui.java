@@ -106,6 +106,20 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 			mask.setSuffix(_suffix.getText());
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        _fieldName.setText(""); //$NON-NLS-1$
+        _prefix.setText(""); //$NON-NLS-1$
+        _lowerBound.setText("0"); //$NON-NLS-1$
+        _upperBound.setText("10"); //$NON-NLS-1$
+        _increment.setText("1"); //$NON-NLS-1$
+        _suffix.setText(""); //$NON-NLS-1$        
+    }    
 
 	public void focusGained(FocusEvent evt) {
 	}

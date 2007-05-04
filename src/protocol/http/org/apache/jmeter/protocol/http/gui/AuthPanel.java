@@ -109,6 +109,17 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		configureTestElement(el);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        tableModel.clearData();
+        deleteButton.setEnabled(false);
+        saveButton.setEnabled(false);
+    }    
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		tableModel.manager.clear();
@@ -279,6 +290,11 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		public InnerTableModel() {
 			manager = new AuthManager();
 		}
+        
+        public void clearData() {
+            manager.clear();
+            fireTableDataChanged();
+        }
 
 		public void removeRow(int row) {
 			manager.remove(row);

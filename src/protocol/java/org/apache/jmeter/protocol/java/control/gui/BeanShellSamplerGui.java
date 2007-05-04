@@ -73,6 +73,17 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		te.setProperty(BeanShellSampler.FILENAME, filename.getText());
 		te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        filename.setText(""); //$NON-NLS-1$
+        parameters.setText(""); //$NON-NLS-1$
+        scriptField.setText(""); //$NON-NLS-1$
+    }    
 
 	public String getLabelResource() {
 		return "bsh_sampler_title";

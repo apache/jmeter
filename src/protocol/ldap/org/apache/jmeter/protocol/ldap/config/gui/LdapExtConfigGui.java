@@ -308,6 +308,50 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 			element.setProperty(new StringProperty(LDAPExtSampler.TEST, LDAPExtSampler.UNBIND));
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        rootdn.setText(""); //$NON-NLS-1$
+        searchbase.setText(""); //$NON-NLS-1$
+        searchfilter.setText(""); //$NON-NLS-1$
+        delete.setText(""); //$NON-NLS-1$
+        add.setText(""); //$NON-NLS-1$
+        modify.setText(""); //$NON-NLS-1$
+        servername.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
+        add.setText(""); //$NON-NLS-1$
+        scope.setSelectedIndex(SCOPE_STRINGS.length - 1);
+        countlim.setText(""); //$NON-NLS-1$
+        timelim.setText(""); //$NON-NLS-1$
+        attribs.setText(""); //$NON-NLS-1$
+        userdn.setText(""); //$NON-NLS-1$
+        userpw.setText(""); //$NON-NLS-1$
+        comparedn.setText(""); //$NON-NLS-1$
+        comparefilt.setText(""); //$NON-NLS-1$
+        modddn.setText(""); //$NON-NLS-1$
+        newdn.setText(""); //$NON-NLS-1$
+        connto.setText(""); //$NON-NLS-1$
+        retobj.setSelected(false);
+        deref.setSelected(false);
+        parseflag.setSelected(false);
+        secure.setSelected(false);
+        addTest.setSelected(false);
+        modifyTest.setSelected(false);
+        deleteTest.setSelected(false);
+        searchTest.setSelected(false);
+        bind.setSelected(false);
+        rename.setSelected(false);
+        unbind.setSelected(false);
+        sbind.setSelected(false);
+        compare.setSelected(false);
+
+        tableAddPanel.clear();
+        tableModifyPanel.clear();
+    }    
 
 	/***************************************************************************
 	 * This itemStateChanged listener for changing the card layout for based on

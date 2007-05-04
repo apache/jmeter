@@ -116,4 +116,16 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 			assertion.setXPathString(xpath.getXPath());
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        xpath.setXPath("/"); //$NON-NLS-1$
+        xpath.setNegated(false);
+        
+        xml.setDefaultValues();
+    }    
 }

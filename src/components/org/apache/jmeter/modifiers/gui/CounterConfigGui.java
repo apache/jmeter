@@ -73,6 +73,20 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 		}
 		super.configureTestElement(c);
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        startField.setText(""); //$NON-NLS-1$
+        incrField.setText(""); //$NON-NLS-1$
+        endField.setText(""); //$NON-NLS-1$
+        varNameField.setText(""); //$NON-NLS-1$
+        formatField.setText(""); //$NON-NLS-1$
+        perUserField.setSelected(false);
+    }
 
 	public void configure(TestElement element) {
 		super.configure(element);

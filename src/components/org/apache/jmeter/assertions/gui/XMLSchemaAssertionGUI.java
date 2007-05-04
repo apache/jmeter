@@ -81,6 +81,15 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 		((XMLSchemaAssertion) inElement).setXsdFileName(xmlSchema.getText());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        xmlSchema.setText(""); //$NON-NLS-1$
+    }    
+
 	/**
 	 * Configures the GUI from the associated test element.
 	 * 

@@ -99,6 +99,21 @@ public class FtpConfigGui extends AbstractConfigGui {
 		element.setProperty(FTPSampler.UPLOAD_FILE,putBox.isSelected());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        server.setText(""); //$NON-NLS-1$
+        remoteFile.setText(""); //$NON-NLS-1$
+        localFile.setText(""); //$NON-NLS-1$
+        binaryMode.setSelected(false);
+        saveResponseData.setSelected(false);
+        getBox.setSelected(true);
+        putBox.setSelected(false);
+    }    
+
 	private JPanel createServerPanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("server"));
 

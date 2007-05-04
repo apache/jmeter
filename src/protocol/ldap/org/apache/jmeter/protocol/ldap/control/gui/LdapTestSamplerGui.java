@@ -75,6 +75,16 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
 		((LDAPSampler) sampler).addTestElement(loginPanel.createTestElement());
 		this.configureTestElement(sampler);
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        ldapDefaultPanel.clear();
+        loginPanel.clear();
+    }    
 
 	public String getLabelResource() {
 		return "ldap_testing_title";

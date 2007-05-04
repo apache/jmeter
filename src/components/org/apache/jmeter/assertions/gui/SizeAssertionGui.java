@@ -84,6 +84,22 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		((SizeAssertion) el).setAllowedSize(assertionSize);
 		((SizeAssertion) el).setCompOper(getState());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        size.setText(""); //$NON-NLS-1$
+        equalButton.setSelected(true);
+        notequalButton.setSelected(false);
+        greaterthanButton.setSelected(false);
+        lessthanButton.setSelected(false);
+        greaterthanequalButton.setSelected(false);
+        lessthanequalButton.setSelected(false);
+        execState = SizeAssertion.EQUAL;
+    }    
 
 	public void configure(TestElement el) {
 		super.configure(el);
