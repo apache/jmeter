@@ -68,6 +68,7 @@ public class XPathPanel extends JPanel {
 	 */
 	public XPathPanel(boolean isDoubleBuffered) {
 		super(isDoubleBuffered);
+		init();
 	}
 
 	/**
@@ -75,6 +76,7 @@ public class XPathPanel extends JPanel {
 	 */
 	public XPathPanel(LayoutManager layout) {
 		super(layout);
+		init();
 	}
 
 	/**
@@ -83,7 +85,7 @@ public class XPathPanel extends JPanel {
 	 */
 	public XPathPanel(LayoutManager layout, boolean isDoubleBuffered) {
 		super(layout, isDoubleBuffered);
-
+		init();
 	}
 
 	private void init() {
@@ -99,7 +101,14 @@ public class XPathPanel extends JPanel {
 		vbox.add(getNegatedCheckBox());
 
 		add(vbox);
+
+		setDefaultValues();
 	}
+
+    public void setDefaultValues() {
+        setXPath("/"); //$NON-NLS-1$
+        setNegated(false);
+    }
 
 	/**
 	 * Get the XPath String
@@ -170,7 +179,6 @@ public class XPathPanel extends JPanel {
 	public JTextField getXPathTextField() {
 		if (xpath == null) {
 			xpath = new JTextField(50);
-			xpath.setText("/"); //$NON-NLS-1$
 		}
 		return xpath;
 	}

@@ -187,6 +187,27 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        rootdn.setText(""); //$NON-NLS-1$
+        searchbase.setText(""); //$NON-NLS-1$
+        searchfilter.setText(""); //$NON-NLS-1$
+        delete.setText(""); //$NON-NLS-1$
+        add.setText(""); //$NON-NLS-1$
+        modify.setText(""); //$NON-NLS-1$
+        servername.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
+        user_Defined.setSelected(false);
+        addTest.setSelected(false);
+        modifyTest.setSelected(false);
+        deleteTest.setSelected(false);
+        searchTest.setSelected(false);
+    }    
+
 	/**
 	 * This itemStateChanged listener for changing the card layout for based on\
 	 * the test selected in the User defined test case.
@@ -197,30 +218,38 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 			if (addTest.isSelected()) {
 				cl.show(cards, "Add");
 				tableModifyPanel.clear();
+				modify.setText("");
 				searchbase.setText("");
 				searchfilter.setText("");
 				delete.setText("");
 			} else if (deleteTest.isSelected()) {
 				cl.show(cards, "Delete");
 				tableModifyPanel.clear();
+				modify.setText("");
 				tableAddPanel.clear();
+				add.setText("");
 				searchbase.setText("");
 				searchfilter.setText("");
 			} else if (searchTest.isSelected()) {
 				cl.show(cards, "Search");
 				delete.setText("");
 				tableModifyPanel.clear();
+				modify.setText("");
 				tableAddPanel.clear();
+				add.setText("");
 			} else if (modifyTest.isSelected()) {
 				cl.show(cards, "Modify");
 				tableAddPanel.clear();
+				add.setText("");
 				searchbase.setText("");
 				searchfilter.setText("");
 				delete.setText("");
 			} else {
 				cl.show(cards, "");
 				tableAddPanel.clear();
+				add.setText("");
 				tableModifyPanel.clear();
+				modify.setText("");
 				searchbase.setText("");
 				searchfilter.setText("");
 				delete.setText("");
@@ -228,7 +257,9 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 		} else {
 			cl.show(cards, "");
 			tableAddPanel.clear();
+			add.setText("");
 			tableModifyPanel.clear();
+			modify.setText("");
 			searchbase.setText("");
 			searchfilter.setText("");
 			delete.setText("");

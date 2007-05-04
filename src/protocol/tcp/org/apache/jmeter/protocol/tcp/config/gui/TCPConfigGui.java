@@ -112,6 +112,20 @@ public class TCPConfigGui extends AbstractConfigGui {
 		element.setProperty(TCPSampler.REQUEST, requestData.getText());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        server.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
+        timeout.setText(""); //$NON-NLS-1$
+        requestData.setText(""); //$NON-NLS-1$
+        reUseConnection.setSelected(true);
+        setNoDelay.setSelected(false);
+    }    
+
 	private JPanel createTimeoutPanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("tcp_timeout"));
 

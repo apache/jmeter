@@ -129,6 +129,17 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 		super.configureTestElement(params);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        initTableModel();
+        paramTable.setModel(tableModel);
+        perIterationCheck.setSelected(false);
+    }    
+
 	private void init() {
 		setBorder(makeBorder());
 		setLayout(new BorderLayout());

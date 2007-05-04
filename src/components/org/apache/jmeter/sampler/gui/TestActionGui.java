@@ -128,6 +128,22 @@ public class TestActionGui extends AbstractSamplerGui {
 		ta.setDuration(duration);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        targetBox.setSelectedIndex(0);
+        durationField.setText(""); //$NON-NLS-1$
+        pauseButton.setSelected(true);
+        stopButton.setSelected(false);
+        action = TestAction.PAUSE;
+        target = TestAction.THREAD;
+        duration = 0;
+        
+    }    
+
 	private void init() {
 		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
 		setBorder(makeBorder());

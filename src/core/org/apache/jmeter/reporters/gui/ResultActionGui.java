@@ -76,6 +76,15 @@ public class ResultActionGui extends AbstractPostProcessorGui {
 		((OnErrorTestElement) te).setErrorAction(errorPanel.getOnErrorSetting());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        errorPanel.configure(OnErrorTestElement.ON_ERROR_CONTINUE);
+    }
+    
 	private void init() {
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());

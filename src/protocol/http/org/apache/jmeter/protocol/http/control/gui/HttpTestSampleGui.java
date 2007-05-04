@@ -140,6 +140,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	public void clear() {
 		super.clear();
 		getImages.setSelected(false);
+		isMon.setSelected(false);
 		urlConfigGui.clear();
+		embeddedRE.setText(""); // $NON-NLS-1$
 	}
 }

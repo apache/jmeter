@@ -107,6 +107,15 @@ public class LoginConfigGui extends AbstractConfigGui {
 		String passwordString = new String(password.getPassword());
 		element.setProperty(new StringProperty(ConfigTestElement.PASSWORD, passwordString));
 	}
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        
+        username.setText(""); //$NON-NLS-1$
+        password.setText(""); //$NON-NLS-1$
+    }    
 
 	/**
 	 * Initialize the components and layout of this component.
