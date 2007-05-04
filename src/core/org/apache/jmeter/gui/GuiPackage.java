@@ -401,9 +401,8 @@ public final class GuiPackage implements LocaleChangeListener {
 				TestElement el = currentNode.getTestElement();
 				comp.modifyTestElement(el);
 			}
-			if (currentNode != treeListener.getCurrentNode()) {
-				currentNodeUpdated = true;
-			}
+			// The current node is now updated
+			currentNodeUpdated = true;
 			currentNode = treeListener.getCurrentNode();
 		} catch (Exception e) {
 			log.error("Problem retrieving gui", e);

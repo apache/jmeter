@@ -83,6 +83,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		namePanel = new NamePanel();
 		commentPanel=new CommentPanel();
 		setName(getStaticLabel());
+        setComment(""); // $NON-NLS-1$
 	}
 
 	/**
@@ -92,6 +93,14 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	public void setName(String name) {
 		namePanel.setName(name);
 	}
+
+    /**
+     * Provides a default implementation for the name property. It's unlikely
+     * developers will need to override.
+     */
+    public void setComment(String comment) {
+        commentPanel.setText(comment);
+    }
 
 	/**
 	 * Provides a default implementation for the enabled property. It's unlikely
@@ -118,8 +127,21 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		if (getNamePanel() != null) {
 			return getNamePanel().getName();
 		} else
-			return "";
+			return ""; // $NON-NLS-1$
 	}
+    
+    /**
+     * Provides a default implementation for the comment property. It's unlikely
+     * developers will need to override.
+     */
+    public String getComment() {
+        if (getCommentPanel() != null) {
+            return getCommentPanel().getText();
+        }
+        else {
+            return ""; // $NON-NLS-1$
+        }
+    }
 
 	/**
 	 * Provides the Name Panel for extending classes. Extending classes are free
@@ -179,12 +201,13 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
 	/**
 	 * Provides a default implementat that resets the name field to the value of
-	 * getStaticLabel(), and sets enabled to true. Your GUI may need more things
+	 * getStaticLabel(), reset comment and sets enabled to true. Your GUI may need more things
 	 * cleared, in which case you should override, clear the extra fields, and
 	 * still call super.clear().
 	 */
 	public void clear() {
 		setName(getStaticLabel());
+        setComment(""); // $NON-NLS-1$
 		enabled = true;
 	}
 
@@ -209,7 +232,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		// This stores the state of the TestElement
 		log.debug("setting element to enabled: " + enabled);
 		mc.setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
-		mc.setProperty(TestPlan.COMMENTS, getCommentPanel().getText());
+		mc.setProperty(TestPlan.COMMENTS, getComment());
 	}
 
 	/**
@@ -319,22 +342,4 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	public JComponent getPrintableComponent() {
 		return this;
 	}
-
-	// /*
-	// * Dummy implementation so existing code still compiles.
-	// * Throws an error because it should not be invoked - and cannot provide a
-	// useful value.
-	// *
-	// * The target class should either implement getStaticLabel(), as before,
-	// or it
-	// * should implement getLabelResource()
-	// *
-	// * DONE: remove eventually
-	// */
-	// public String getLabelResource()
-	// {
-	// throw new UnsupportedOperationException("Needs to be implemented by the
-	// class: "
-	// +this.getClass().getName());
-	// }
 }
