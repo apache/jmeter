@@ -32,6 +32,7 @@ import javax.swing.JPopupMenu;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.control.ModuleController;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
@@ -44,7 +45,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * ModuleController Gui.
  * 
- * @version $Revision$ on $Date$
  */
 public class ModuleControllerGui extends AbstractControllerGui /*
 																 * implements
@@ -60,11 +60,6 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 
 	private JLabel warningLabel;
 
-	public static final String CONTROLLER = "Module To Run";
-
-	// TODO should be a resource, and probably ought to be resolved at run-time
-	// (to allow language change)
-
 	/**
 	 * Initializes the gui panel for the ModuleController instance.
 	 */
@@ -73,7 +68,7 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 	}
 
 	public String getLabelResource() {
-		return "module_controller_title";
+		return "module_controller_title"; // $NON-NLS-1$
 	}
 
 	/*
@@ -85,11 +80,12 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 		super.configure(el);
 		ModuleController controller = (ModuleController) el;
 		this.selected = controller.getSelectedNode();
-		if (selected == null && controller.getNodePath() != null)
-			warningLabel.setText(JMeterUtils.getResString("module_controller_warning")
+		if (selected == null && controller.getNodePath() != null) {
+			warningLabel.setText(JMeterUtils.getResString("module_controller_warning") // $NON-NLS-1$
 					+ renderPath(controller.getNodePath()));
-		else
-			warningLabel.setText("");
+		} else {
+			warningLabel.setText(""); // $NON-NLS-1$
+		}
 		reinitialize();
 	}
 
@@ -104,8 +100,9 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 				continue;
 			}
 			buf.append(iter.next());
-			if (iter.hasNext())
-				buf.append(" > ");
+			if (iter.hasNext()) {
+				buf.append(" > "); // $NON-NLS-1$
+			}
 		}
 		return buf.toString();
 	}
@@ -142,8 +139,15 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[] { MenuFactory.CONFIG_ELEMENTS, MenuFactory.ASSERTIONS,
-				MenuFactory.TIMERS, MenuFactory.LISTENERS, }, JMeterUtils.getResString("Add"), "Add");
+		JMenu addMenu = MenuFactory.makeMenus(
+				new String[] {
+						MenuFactory.CONFIG_ELEMENTS, 
+						MenuFactory.ASSERTIONS,
+						MenuFactory.TIMERS, 
+						MenuFactory.LISTENERS, 
+				}, 
+				JMeterUtils.getResString("add"),  // $NON-NLS-1$
+				ActionNames.ADD);
 		menu.add(addMenu);
 		MenuFactory.addEditMenu(menu, true);
 		MenuFactory.addFileMenu(menu);
@@ -157,12 +161,14 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 
 		// DROP-DOWN MENU
 		JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-		modulesPanel.add(new JLabel(CONTROLLER));
+		JLabel nodesLabel = new JLabel(JMeterUtils.getResString("module_controller_module_to_run")); // $NON-NLS-1$
+		modulesPanel.add(nodesLabel);
 		nodesModel = new DefaultComboBoxModel();
 		nodes = new JComboBox(nodesModel);
+        nodesLabel.setLabelFor(nodes);
 		reinitialize();
 		modulesPanel.add(nodes);
-		warningLabel = new JLabel("");
+		warningLabel = new JLabel(""); // $NON-NLS-1$
 		modulesPanel.add(warningLabel);
 		add(modulesPanel);
 	}
@@ -174,7 +180,7 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 		JMeterTreeNode root;
 		if (gp != null) {
 			root = (JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot();
-			buildNodesModel(root, "", 0);
+			buildNodesModel(root, "", 0); // $NON-NLS-1$
 		}
 		if (selected != null) {
 			for (int i = 0; i < nodesModel.getSize(); i++) {
@@ -190,9 +196,9 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 
 	private void buildNodesModel(JMeterTreeNode node, String parent_name, int level) {
 		if (level == 0 && (parent_name == null || parent_name.length() == 0)) {
-			nodesModel.addElement(new TreeNodeWrapper(null, ""));
+			nodesModel.addElement(new TreeNodeWrapper(null, "")); // $NON-NLS-1$
 		}
-		String seperator = " > ";
+		String seperator = " > "; // $NON-NLS-1$
 		if (node != null) {
 			for (int i = 0; i < node.getChildCount(); i++) {
 				StringBuffer name = new StringBuffer();
@@ -226,7 +232,7 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 		int multi = 4;
 		StringBuffer spaces = new StringBuffer(level * multi);
 		for (int i = 0; i < level * multi; i++) {
-			spaces.append(" ");
+			spaces.append(" "); // $NON-NLS-1$
 		}
 		return spaces.toString();
 	}
