@@ -26,15 +26,14 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.tree.TreePath;
 
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @version $Revision$ Last updated: $Date$
- */
 public class AddToTree implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -63,19 +62,21 @@ public class AddToTree implements Command {
 	 * Adds the specified class to the current node of the tree.
 	 */
 	public void doAction(ActionEvent e) {
+        GuiPackage guiPackage = GuiPackage.getInstance();
 		try {
-			TestElement node = GuiPackage.getInstance().createTestElement(((JComponent) e.getSource()).getName());
-			addObjectToTree(node);
-		} catch (Exception err) {
-			log.error("", err);
+			guiPackage.updateCurrentNode();
+			TestElement testElement = guiPackage.createTestElement(((JComponent) e.getSource()).getName());
+            JMeterTreeNode parentNode = guiPackage.getCurrentNode();
+            JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
+            guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
+        }
+		catch (IllegalUserActionException iuae) {
+            log.error("", iuae); // $NON-NLS-1$
+		    JMeterUtils.reportErrorToUser(iuae.getMessage());
 		}
-	}
-
-	protected void addObjectToTree(TestElement el) {
-		GuiPackage guiPackage = GuiPackage.getInstance();
-		JMeterTreeNode node = new JMeterTreeNode(el, guiPackage.getTreeModel());
-		guiPackage.getTreeModel().insertNodeInto(node, guiPackage.getTreeListener().getCurrentNode(),
-				guiPackage.getTreeListener().getCurrentNode().getChildCount());
-		guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
+        catch (Exception err) {
+			log.error("", err); // $NON-NLS-1$
+		    JMeterUtils.reportErrorToUser(err.getMessage());
+		}
 	}
 }
