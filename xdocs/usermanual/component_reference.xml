@@ -2728,7 +2728,10 @@ from the immediately previous response.  It would then replace the values in the
 test sample with appropriate values from the matching link or form.  Perl-type regular
 expressions are used to find matches.</p>
 </description>
-
+<note>
+Matches are performed using protocol, host, path and parameter names.
+The target sampler cannot contain parameters that are not in the response links.
+</note>
 <example title="Spidering Example" anchor="spider_example">
 <p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
 hitting link after link parsed from the HTML returned from your server (this is not
