@@ -23,8 +23,6 @@ package org.apache.commons.cli.avalon;
 /**
  * Token handles tokenizing the CLI arguments
  * 
- * @version $Revision$ $Date$
- * @since 4.0
  */
 class Token {
 	/** Type for a separator token */
