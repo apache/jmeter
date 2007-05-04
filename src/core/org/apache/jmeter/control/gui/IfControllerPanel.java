@@ -38,12 +38,11 @@ import org.apache.jmeter.util.JMeterUtils;
  * standalone or embedded into some other component.
  * 
  * @author Cyrus Montakab
- * @version $Revision$ $Date$
  */
 
 public class IfControllerPanel extends AbstractControllerGui implements ActionListener {
 
-	private static final String CONDITION_LABEL = "if_controller_label";
+	private static final String CONDITION_LABEL = "if_controller_label"; // $NON-NLS-1$
 
 	/**
 	 * A field allowing the user to specify the number of times the controller
@@ -59,7 +58,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	private boolean displayName = true;
 
 	/** The name of the loops field component. */
-	private static final String CONDITION = "JS_Condition";
+	private static final String CONDITION = "JS_Condition"; // $NON-NLS-1$
 
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
@@ -118,10 +117,18 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 			if (theCondition.getText().length() > 0) {
 				((IfController) controller).setCondition(theCondition.getText());
 			} else {
-				((IfController) controller).setCondition("");
+				((IfController) controller).setCondition(""); // $NON-NLS-1$
 			}
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        theCondition.setText(""); // $NON-NLS-1$
+    }
 
 	/**
 	 * Invoked when an action occurs. This implementation assumes that the
@@ -135,7 +142,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	}
 
 	public String getLabelResource() {
-		return "if_controller_title";
+		return "if_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -172,7 +179,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 		conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
 		// TEXT FIELD
-		theCondition = new JTextField("");
+		theCondition = new JTextField(""); // $NON-NLS-1$
 		theCondition.setName(CONDITION);
 		conditionLabel.setLabelFor(theCondition);
 		conditionPanel.add(theCondition, BorderLayout.CENTER);
