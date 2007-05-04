@@ -113,7 +113,8 @@ JMeter assumes the FTP server is listening on the default port.</property>
          See Java bugs 6226610 and 6208335.
          </li>
          </ul>
-         
+         <p>Note: the FILE protocol is intended for testing puposes only. 
+         It is handled by the same code regardless of which HTTP Sampler is used.</p>
         <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
          you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
          For normal logins (i.e. where the user enters login information in a form), you will need to work out what the form submit button does,
@@ -137,8 +138,9 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="No">Domain name or IP address of the web server.</property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
-        <property name="Protocol" required="No">HTTP or HTTPS. Default: HTTP</property>
+        <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
+        <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
 		<property name="Redirect Automatically" required="Yes">
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.

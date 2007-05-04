@@ -17,10 +17,13 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -102,6 +106,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     public static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
 
     public static final String PROTOCOL_HTTPS = "https"; // $NON-NLS-1$
+
+    private static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
 
     public final static String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
 
@@ -828,12 +834,61 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	public SampleResult sample() {
 		SampleResult res = null;
 		try {
-			res = sample(getUrl(), getMethod(), false, 0);
+			if (PROTOCOL_FILE.equalsIgnoreCase(getProtocol())){
+				res = fileSample(new URI(PROTOCOL_FILE,getPath(),null));
+			} else {
+			    res = sample(getUrl(), getMethod(), false, 0);
+			}
 			res.setSampleLabel(getName());
 			return res;
 		} catch (MalformedURLException e) {
 			return errorResult(e, new HTTPSampleResult());
+		} catch (IOException e) {
+			return errorResult(e, new HTTPSampleResult());
+		} catch (URISyntaxException e) {
+			return errorResult(e, new HTTPSampleResult());
 		}
+	}
+
+	private HTTPSampleResult fileSample(URI uri) throws IOException {
+
+		String urlStr = uri.toString();
+
+		
+		HTTPSampleResult res = new HTTPSampleResult();
+		res.setMonitor(isMonitor());
+		res.setHTTPMethod(GET); // Dummy
+		res.setURL(new URL(urlStr));
+		res.setSampleLabel(urlStr);
+		FileReader reader = null;
+		res.sampleStart();
+		try {
+			byte[] responseData;
+			StringBuffer ctb=new StringBuffer("text/html"); // $NON-NLS-1$
+			reader = new FileReader(getPath());
+			String contentEncoding = getContentEncoding();
+			if (contentEncoding.length() == 0) {
+				responseData = IOUtils.toByteArray(reader);
+			} else {
+				ctb.append("; charset="); // $NON-NLS-1$
+				ctb.append(contentEncoding);
+				responseData = IOUtils.toByteArray(reader,contentEncoding);				
+			}
+			res.sampleEnd();			
+			res.setResponseData(responseData);
+		    res.setResponseCodeOK();
+			res.setResponseMessage(""); // TODO - what should this be?
+			res.setSuccessful(true);
+			String ct = ctb.toString();
+			res.setContentType(ct);
+            res.setEncodingAndType(ct);
+		} finally {
+			IOUtils.closeQuietly(reader);
+		}
+
+		//res.setResponseHeaders("");
+
+		return res;
 	}
 
     /**
