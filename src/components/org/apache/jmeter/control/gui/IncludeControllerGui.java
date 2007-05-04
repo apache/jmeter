@@ -114,6 +114,14 @@ public class IncludeControllerGui extends AbstractControllerGui
         IncludeController controller = (IncludeController)element;
         controller.setIncludePath(this.includePanel.getFilename());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+        includePanel.setFilename(""); // $NON-NLS-1$
+    }
 
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();

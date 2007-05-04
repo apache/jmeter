@@ -136,6 +136,17 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 			}
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clear() {
+        super.clear();
+
+        nodes.setSelectedIndex(-1);
+        selected = null;
+    }
+    
 
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
