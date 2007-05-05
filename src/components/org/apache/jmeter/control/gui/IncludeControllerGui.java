@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.control.gui;
 
-//import java.util.Collection;
-//import java.util.Iterator;
-
-//import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
@@ -33,11 +29,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * 
- * 
- * @version $Revision$ on $Date$
- */
 public class IncludeControllerGui extends AbstractControllerGui
                                                                 /*
 																 * implements
@@ -45,13 +36,8 @@ public class IncludeControllerGui extends AbstractControllerGui
 																 */
 {
 
-	//NOTUSED private JLabel warningLabel;
-
     private FilePanel includePanel = 
-        new FilePanel(JMeterUtils.getResString("include_path"), ".jmx");
-
-    public static final String CONTROLLER = "Module To Run";
-
+        new FilePanel(JMeterUtils.getResString("include_path"), ".jmx"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * Initializes the gui panel for the ModuleController instance.
@@ -61,7 +47,7 @@ public class IncludeControllerGui extends AbstractControllerGui
 	}
 
 	public String getLabelResource() {
-		return "include_controller";
+		return "include_controller";//$NON-NLS-1$
 	}
 
 	/*
@@ -74,24 +60,6 @@ public class IncludeControllerGui extends AbstractControllerGui
 		IncludeController controller = (IncludeController) el;
         this.includePanel.setFilename(controller.getIncludePath());
 	}
-
-//NOTUSED
-//	private String renderPath(Collection path) {
-//		Iterator iter = path.iterator();
-//		StringBuffer buf = new StringBuffer();
-//		boolean first = true;
-//		while (iter.hasNext()) {
-//			if (first) {
-//				first = false;
-//				iter.next();
-//				continue;
-//			}
-//			buf.append(iter.next());
-//			if (iter.hasNext())
-//				buf.append(" > ");
-//		}
-//		return buf.toString();
-//	}
 
 	/*
 	 * (non-Javadoc)
@@ -139,21 +107,10 @@ public class IncludeControllerGui extends AbstractControllerGui
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
         add(includePanel);
-	}
-
-//NOTUSED	
-//	private String spaces(int level) {
-//		int multi = 4;
-//		StringBuffer spaces = new StringBuffer(level * multi);
-//		for (int i = 0; i < level * multi; i++) {
-//			spaces.append(" ");
-//		}
-//		return spaces.toString();
-//	}
-    
+	}    
 }

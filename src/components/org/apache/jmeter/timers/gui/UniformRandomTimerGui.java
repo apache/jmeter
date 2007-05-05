@@ -72,7 +72,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 	}
 
 	public String getLabelResource() {
-		return "uniform_timer_title";
+		return "uniform_timer_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 	 * Initialize this component.
 	 */
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 		setBorder(makeBorder());
 
 		add(makeTitlePanel());
@@ -121,11 +121,11 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 		JPanel threadDelayPropsPanel = new JPanel();
 		threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 		threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
-				.getResString("thread_delay_properties")));
+				.getResString("thread_delay_properties"))); //$NON-NLS-1$
 
 		// DELAY DEVIATION
 		Box delayDevPanel = Box.createHorizontalBox();
-		delayDevPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_range")));
+		delayDevPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_range"))); //$NON-NLS-1$
 		delayDevPanel.add(Box.createHorizontalStrut(5));
 
 		rangeField = new JTextField(6);
@@ -137,7 +137,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 
 		// AVG DELAY
 		Box avgDelayPanel = Box.createHorizontalBox();
-		avgDelayPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_delay")));
+		avgDelayPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_delay"))); //$NON-NLS-1$
 		avgDelayPanel.add(Box.createHorizontalStrut(5));
 
 		delayField = new JTextField(6);

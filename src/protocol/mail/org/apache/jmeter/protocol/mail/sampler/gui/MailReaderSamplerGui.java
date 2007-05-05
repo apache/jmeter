@@ -170,11 +170,13 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		mrs.setDeleteMessages(delete);
 	}
 
+	// TODO - fix GUI layout problems
+	
 	/*
 	 * Helper method to set up the GUI screen
 	 */
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
