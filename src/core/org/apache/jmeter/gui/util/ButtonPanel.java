@@ -28,10 +28,8 @@ import javax.swing.JPanel;
 
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
+// TODO - does not appear to be used
+
 public class ButtonPanel extends JPanel {
 	public final static int ADD_BUTTON = 1;
 
@@ -73,15 +71,15 @@ public class ButtonPanel extends JPanel {
 	 * NOTUSED private void initButtonMap() { }
 	 */
 	private void init() {
-		add = new JButton(JMeterUtils.getResString("add"));
+		add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
 		add.setActionCommand("Add");
-		edit = new JButton(JMeterUtils.getResString("edit"));
+		edit = new JButton(JMeterUtils.getResString("edit")); // $NON-NLS-1$
 		edit.setActionCommand("Edit");
-		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 		delete.setActionCommand("Delete");
-		load = new JButton(JMeterUtils.getResString("load"));
+		load = new JButton(JMeterUtils.getResString("load")); // $NON-NLS-1$
 		load.setActionCommand("Load");
-		save = new JButton(JMeterUtils.getResString("save"));
+		save = new JButton(JMeterUtils.getResString("save")); // $NON-NLS-1$
 		save.setActionCommand("Save");
 		Dimension d = delete.getPreferredSize();
 		add.setPreferredSize(d);
