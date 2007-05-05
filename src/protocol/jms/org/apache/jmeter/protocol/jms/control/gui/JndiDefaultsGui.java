@@ -32,11 +32,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
- * Default JNDI screen. <br>
+ * Default JNDI / JMS screen. <br>
  * Created on: October 28, 2004
  * 
  * @author Martijn Blankestijn
- * @version $Id$
  */
 public class JndiDefaultsGui extends AbstractConfigGui {
 	private JLabeledTextField providerUrl;
@@ -49,7 +48,7 @@ public class JndiDefaultsGui extends AbstractConfigGui {
 	}
 
 	public String getLabelResource() {
-		return "jms_jndi_defaults_title";
+		return "jms_jndi_defaults_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -95,10 +94,10 @@ public class JndiDefaultsGui extends AbstractConfigGui {
 		Box mainPanel = Box.createVerticalBox();
 
 		VerticalPanel urlPanel = new VerticalPanel();
-		providerUrl = new JLabeledTextField(JMeterUtils.getResString("initial_context_factory"));
+		providerUrl = new JLabeledTextField(JMeterUtils.getResString("initial_context_factory")); //$NON-NLS-1$
 		urlPanel.add(providerUrl);
 
-		initialContextFactory = new JLabeledTextField(JMeterUtils.getResString("provider_url"));
+		initialContextFactory = new JLabeledTextField(JMeterUtils.getResString("provider_url")); //$NON-NLS-1$
 		urlPanel.add(initialContextFactory);
 
 		mainPanel.add(urlPanel);
