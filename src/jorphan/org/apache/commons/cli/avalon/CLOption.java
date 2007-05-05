@@ -68,19 +68,6 @@ public final class CLOption {
 		}
 	}
 
-	/**
-	 * Retrieve id of option.
-	 * 
-	 * The id is eqivalent to character code if it can be a single letter
-	 * option.
-	 * 
-	 * @return the id
-	 * @deprecated use <code>getDescriptor().getId()</code> instead
-	 */
-	public final int getId() {
-		return m_descriptor == null ? TEXT_ARGUMENT : m_descriptor.getId();
-	}
-
 	public final CLOptionDescriptor getDescriptor() {
 		return m_descriptor;
 	}
@@ -147,7 +134,12 @@ public final class CLOption {
 	public final String toString() {
 		final StringBuffer sb = new StringBuffer();
 		sb.append("[Option ");
-		sb.append((char) m_descriptor.getId());
+		final char id = (char) m_descriptor.getId();
+		if (id == 0) {
+			sb.append("-");
+		} else {
+			sb.append(id);			
+		}
 
 		if (null != m_arguments) {
 			sb.append(", ");
@@ -156,6 +148,28 @@ public final class CLOption {
 
 		sb.append(" ]");
 
+		return sb.toString();
+	}
+
+	/*
+	 * Convert to a shorter String for test purposes
+	 * 
+	 * @return the string value
+	 */
+	final String toShortString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("-");
+		final char id = (char) m_descriptor.getId();
+		if (id == 0) {
+			sb.append("-");
+		} else {
+			sb.append(id);			
+		}
+
+		if (null != m_arguments) {
+			sb.append("=");
+			sb.append(Arrays.asList(m_arguments));
+		}
 		return sb.toString();
 	}
 }
