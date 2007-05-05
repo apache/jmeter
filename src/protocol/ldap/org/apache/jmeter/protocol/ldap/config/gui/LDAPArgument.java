@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -44,16 +43,16 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
 	// TODO should these be public?
 
 	/** Name used to store the argument's name. */
-	public static final String ARG_NAME = "Argument.name";
+	public static final String ARG_NAME = "Argument.name"; //$NON-NLS$
 
 	/** Name used to store the argument's value. */
-	public static final String VALUE = "Argument.value";
+	public static final String VALUE = "Argument.value"; //$NON-NLS$
 
 	/** Name used to store the argument's value. */
-	public static final String OPCODE = "Argument.opcode";
+	public static final String OPCODE = "Argument.opcode"; //$NON-NLS$
 
 	/** Name used to store the argument's metadata. */
-	public static final String METADATA = "Argument.metadata";
+	public static final String METADATA = "Argument.metadata"; //$NON-NLS$
 
 	/**
 	 * Create a new Argument without a name, value, or metadata.
