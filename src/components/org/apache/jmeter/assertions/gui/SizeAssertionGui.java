@@ -141,7 +141,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 
 		add(makeTitlePanel());

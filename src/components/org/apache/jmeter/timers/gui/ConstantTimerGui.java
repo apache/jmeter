@@ -32,7 +32,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * The GUI for ConstantTimer.
  * 
- * @version $Revision$ on $Date$
  */
 public class ConstantTimerGui extends AbstractTimerGui {
 	/**
@@ -102,13 +101,13 @@ public class ConstantTimerGui extends AbstractTimerGui {
 	 * Initialize this component.
 	 */
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
 		Box delayPanel = Box.createHorizontalBox();
-		JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));
+		JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));//$NON-NLS-1$
 		delayPanel.add(delayLabel);
 
 		delayField = new JTextField(6);
