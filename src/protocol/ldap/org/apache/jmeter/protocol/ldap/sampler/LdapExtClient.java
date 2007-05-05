@@ -49,6 +49,8 @@ import org.apache.log.Logger;
 public class LdapExtClient {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final String CONTEXT_IS_NULL = "Context is null"; //TODO should perhaps be a resource
+
 	/**
 	 * Constructor for the LdapClient object
 	 */
@@ -125,7 +127,7 @@ public class LdapExtClient {
 	public NamingEnumeration searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
 			int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
 		if (dirContext == null) {
-			throw new NamingException("Context is null");
+			throw new NamingException(CONTEXT_IS_NULL);
 		}
 		SearchControls searchcontrols = null;
 		searchcontrols = new SearchControls(scope, countlim, timelim, attrs, retobj, deref);
@@ -144,7 +146,7 @@ public class LdapExtClient {
 	 **************************************************************************/
 	public NamingEnumeration compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
 		if (dirContext == null) {
-			throw new NamingException("Context is null");
+			throw new NamingException(CONTEXT_IS_NULL);
 		}
 		SearchControls searchcontrols = new SearchControls(0, 1, 0, new String[0], false, false);
 		return dirContext.search(entrydn, filter, searchcontrols);
@@ -161,7 +163,7 @@ public class LdapExtClient {
 	public void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
 		log.debug("ddn and newDn= " + ddn + "@@@@" + newdn);
 		if (dirContext == null) {
-			throw new NamingException("Context is null");
+			throw new NamingException(CONTEXT_IS_NULL);
 		}
 		dirContext.rename(ddn, newdn);
 	}
@@ -176,7 +178,7 @@ public class LdapExtClient {
 	 **************************************************************************/
 	public void modifyTest(DirContext dirContext, ModificationItem[] mods, String string) throws NamingException {
 		if (dirContext == null) {
-			throw new NamingException("Context is null");
+			throw new NamingException(CONTEXT_IS_NULL);
 		}
 		dirContext.modifyAttributes(string, mods);
 
@@ -193,7 +195,7 @@ public class LdapExtClient {
     public DirContext createTest(DirContext dirContext, Attributes attributes, String string)
 			throws NamingException {
 		if (dirContext == null) {
-			throw new NamingException("Context is null");
+			throw new NamingException(CONTEXT_IS_NULL);
 		}
 		return dirContext.createSubcontext(string, attributes);
 	}
@@ -206,7 +208,7 @@ public class LdapExtClient {
 	 **************************************************************************/
 	public void deleteTest(DirContext dirContext, String string) throws NamingException {
 		if (dirContext == null) {
-			throw new NamingException("Context is null");
+			throw new NamingException(CONTEXT_IS_NULL);
 		}
 		dirContext.destroySubcontext(string);
 	}

@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -46,7 +45,7 @@ import org.apache.jmeter.config.ConfigTestElement;
 
 public class LDAPArguments extends ConfigTestElement implements Serializable {
 	/** The name of the property used to store the arguments. */
-	public static final String ARGUMENTS = "Arguments.arguments";
+	public static final String ARGUMENTS = "Arguments.arguments"; //$NON-NLS$
 
 	/**
 	 * Create a new Arguments object with no arguments.
@@ -157,13 +156,16 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
 		PropertyIterator iter = getArguments().iterator();
 		while (iter.hasNext()) {
 			LDAPArgument arg = (LDAPArgument) iter.next().getObjectValue();
-			if (arg.getMetaData() == null) {
-				str.append(arg.getName() + "=" + arg.getValue());
+			final String metaData = arg.getMetaData();
+			str.append(arg.getName());
+			if (metaData == null) {
+				str.append("=");  //$NON-NLS$
 			} else {
-				str.append(arg.getName() + arg.getMetaData() + arg.getValue());
+				str.append(metaData);
 			}
+			str.append(arg.getValue());
 			if (iter.hasNext()) {
-				str.append("&");
+				str.append("&"); //$NON-NLS$
 			}
 		}
 		return str.toString();

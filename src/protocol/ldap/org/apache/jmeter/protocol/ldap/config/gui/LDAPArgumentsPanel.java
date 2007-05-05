@@ -75,19 +75,22 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	private JButton delete;
 
 	/** Command for adding a row to the table. */
-	private static final String ADD = "add";
+	private static final String ADD = "add"; //$NON-NLS-1$
 
 	/** Command for removing a row from the table. */
-	private static final String DELETE = "delete";
+	private static final String DELETE = "delete"; //$NON-NLS-1$
 
-	private static final String[] COLUMN_NAMES = { JMeterUtils.getResString("attribute"),
-			JMeterUtils.getResString("value"), JMeterUtils.getResString("opcode"), JMeterUtils.getResString("metadata") };
+	private static final String[] COLUMN_NAMES = {
+		    JMeterUtils.getResString("attribute"), //$NON-NLS-1$
+			JMeterUtils.getResString("value"),  //$NON-NLS-1$
+			JMeterUtils.getResString("opcode"),  //$NON-NLS-1$
+			JMeterUtils.getResString("metadata") }; //$NON-NLS-1$
 
 	/**
 	 * Create a new LDAPArgumentsPanel, using the default title.
 	 */
 	public LDAPArgumentsPanel() {
-		this(JMeterUtils.getResString("paramtable"));
+		this(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
 	}
 
 	/**
@@ -379,11 +382,11 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	 * @return a GUI panel containing the buttons
 	 */
 	private JPanel makeButtonPanel() {
-		add = new JButton(JMeterUtils.getResString("add"));
+		add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
 		add.setActionCommand(ADD);
 		add.setEnabled(true);
 
-		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete = new JButton(JMeterUtils.getResString("delete")); //$NON-NLS-1$
 		delete.setActionCommand(DELETE);
 
 		checkDeleteStatus();

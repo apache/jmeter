@@ -48,7 +48,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * Created Apr 29 2003 11:45 AM
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
@@ -68,23 +67,23 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
 	private JTextField port = new JTextField(20);
 
-	private JCheckBox user_Defined = new JCheckBox(JMeterUtils.getResString("user_defined_test"));
+	private JCheckBox user_Defined = new JCheckBox(JMeterUtils.getResString("user_defined_test")); // $NON-NLS-1$
 
-	private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("add_test"));
+	private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
 
-	private JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modify_test"));
+	private JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modify_test")); // $NON-NLS-1$
 
-	private JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("delete_test"));
+	private JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("delete_test")); // $NON-NLS-1$
 
-	private JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("search_test"));
+	private JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("search_test")); // $NON-NLS-1$
 
 	private ButtonGroup bGroup = new ButtonGroup();
 
 	private boolean displayName = true;
 
-	ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("add_test"));
+	ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
 
-	ArgumentsPanel tableModifyPanel = new ArgumentsPanel(JMeterUtils.getResString("modify_test"));
+	ArgumentsPanel tableModifyPanel = new ArgumentsPanel(JMeterUtils.getResString("modify_test")); // $NON-NLS-1$
 
 	private JPanel cards;
 
@@ -96,7 +95,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	}
 
 	public String getLabelResource() {
-		return "ldap_sample_title";
+		return "ldap_sample_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -114,21 +113,22 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 		port.setText(element.getPropertyAsString(LDAPSampler.PORT));
 		rootdn.setText(element.getPropertyAsString(LDAPSampler.ROOTDN));
 		CardLayout cl = (CardLayout) (cards.getLayout());
-		if (element.getPropertyAsString(LDAPSampler.TEST).equals("add")) {
+		final String testType = element.getPropertyAsString(LDAPSampler.TEST);
+		if (testType.equals(LDAPSampler.ADD)) {
 			addTest.setSelected(true);
 			add.setText(element.getPropertyAsString(LDAPSampler.BASE_ENTRY_DN));
 			tableAddPanel.configure((TestElement) element.getProperty(LDAPSampler.ARGUMENTS).getObjectValue());
 			cl.show(cards, "Add");
-		} else if (element.getPropertyAsString(LDAPSampler.TEST).equals("modify")) {
+		} else if (testType.equals(LDAPSampler.MODIFY)) {
 			modifyTest.setSelected(true);
 			modify.setText(element.getPropertyAsString(LDAPSampler.BASE_ENTRY_DN));
 			tableModifyPanel.configure((TestElement) element.getProperty(LDAPSampler.ARGUMENTS).getObjectValue());
 			cl.show(cards, "Modify");
-		} else if (element.getPropertyAsString(LDAPSampler.TEST).equals("delete")) {
+		} else if (testType.equals(LDAPSampler.DELETE)) {
 			deleteTest.setSelected(true);
 			delete.setText(element.getPropertyAsString(LDAPSampler.DELETE));
 			cl.show(cards, "Delete");
-		} else if (element.getPropertyAsString(LDAPSampler.TEST).equals("search")) {
+		} else if (testType.equals(LDAPSampler.SEARCHBASE)) {
 			searchTest.setSelected(true);
 			searchbase.setText(element.getPropertyAsString(LDAPSampler.SEARCHBASE));
 			searchfilter.setText(element.getPropertyAsString(LDAPSampler.SEARCHFILTER));
@@ -139,7 +139,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 			user_Defined.setSelected(true);
 		} else {
 			user_Defined.setSelected(false);
-			cl.show(cards, "");
+			cl.show(cards, ""); // $NON-NLS-1$
 		}
 	}
 
@@ -218,51 +218,51 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 			if (addTest.isSelected()) {
 				cl.show(cards, "Add");
 				tableModifyPanel.clear();
-				modify.setText("");
-				searchbase.setText("");
-				searchfilter.setText("");
+				modify.setText(""); // $NON-NLS-1$
+				searchbase.setText(""); // $NON-NLS-1$
+				searchfilter.setText(""); // $NON-NLS-1$
 				delete.setText("");
 			} else if (deleteTest.isSelected()) {
 				cl.show(cards, "Delete");
 				tableModifyPanel.clear();
-				modify.setText("");
+				modify.setText(""); // $NON-NLS-1$
 				tableAddPanel.clear();
-				add.setText("");
-				searchbase.setText("");
-				searchfilter.setText("");
+				add.setText(""); // $NON-NLS-1$
+				searchbase.setText(""); // $NON-NLS-1$
+				searchfilter.setText(""); // $NON-NLS-1$
 			} else if (searchTest.isSelected()) {
 				cl.show(cards, "Search");
-				delete.setText("");
+				delete.setText(""); // $NON-NLS-1$
 				tableModifyPanel.clear();
-				modify.setText("");
+				modify.setText(""); // $NON-NLS-1$
 				tableAddPanel.clear();
-				add.setText("");
+				add.setText(""); // $NON-NLS-1$
 			} else if (modifyTest.isSelected()) {
 				cl.show(cards, "Modify");
 				tableAddPanel.clear();
-				add.setText("");
-				searchbase.setText("");
-				searchfilter.setText("");
+				add.setText(""); // $NON-NLS-1$
+				searchbase.setText(""); // $NON-NLS-1$
+				searchfilter.setText(""); // $NON-NLS-1$
 				delete.setText("");
 			} else {
-				cl.show(cards, "");
+				cl.show(cards, ""); // $NON-NLS-1$
 				tableAddPanel.clear();
-				add.setText("");
+				add.setText(""); // $NON-NLS-1$
 				tableModifyPanel.clear();
-				modify.setText("");
-				searchbase.setText("");
-				searchfilter.setText("");
-				delete.setText("");
+				modify.setText(""); // $NON-NLS-1$
+				searchbase.setText(""); // $NON-NLS-1$
+				searchfilter.setText(""); // $NON-NLS-1$
+				delete.setText(""); // $NON-NLS-1$
 			}
 		} else {
-			cl.show(cards, "");
+			cl.show(cards, ""); // $NON-NLS-1$
 			tableAddPanel.clear();
-			add.setText("");
+			add.setText(""); // $NON-NLS-1$
 			tableModifyPanel.clear();
-			modify.setText("");
-			searchbase.setText("");
-			searchfilter.setText("");
-			delete.setText("");
+			modify.setText(""); // $NON-NLS-1$
+			searchbase.setText(""); // $NON-NLS-1$
+			searchfilter.setText(""); // $NON-NLS-1$
+			delete.setText(""); // $NON-NLS-1$
 		}
 	}
 
@@ -276,7 +276,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	 */
 	private JPanel createServernamePanel() {
 		JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("servername"));
+		JLabel label = new JLabel(JMeterUtils.getResString("servername")); // $NON-NLS-1$
 		label.setLabelFor(servername);
 		serverPanel.add(label, BorderLayout.WEST);
 		serverPanel.add(servername, BorderLayout.CENTER);
@@ -288,7 +288,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	 */
 	private JPanel createPortPanel() {
 		JPanel portPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("port"));
+		JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
 		label.setLabelFor(port);
 		portPanel.add(label, BorderLayout.WEST);
 		portPanel.add(port, BorderLayout.CENTER);
@@ -300,7 +300,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	 */
 	private JPanel createRootdnPanel() {
 		JPanel rootdnPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("dn"));
+		JLabel label = new JLabel(JMeterUtils.getResString("dn")); // $NON-NLS-1$
 		label.setLabelFor(rootdn);
 		rootdnPanel.add(label, BorderLayout.WEST);
 		rootdnPanel.add(rootdn, BorderLayout.CENTER);
@@ -313,12 +313,12 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	private JPanel createSearchPanel() {
 		VerticalPanel searchPanel = new VerticalPanel();
 		JPanel searchBPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("search_base"));
+		JLabel label = new JLabel(JMeterUtils.getResString("search_base")); // $NON-NLS-1$
 		label.setLabelFor(searchbase);
 		searchBPanel.add(label, BorderLayout.WEST);
 		searchBPanel.add(searchbase, BorderLayout.CENTER);
 		JPanel searchFPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label2 = new JLabel(JMeterUtils.getResString("search_filter"));
+		JLabel label2 = new JLabel(JMeterUtils.getResString("search_filter")); // $NON-NLS-1$
 		label2.setLabelFor(searchfilter);
 		searchFPanel.add(label2, BorderLayout.WEST);
 		searchFPanel.add(searchfilter, BorderLayout.CENTER);
@@ -333,7 +333,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	private JPanel createDeletePanel() {
 		VerticalPanel panel = new VerticalPanel();
 		JPanel deletePanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("delete"));
+		JLabel label = new JLabel(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 		label.setLabelFor(delete);
 		deletePanel.add(label, BorderLayout.WEST);
 		deletePanel.add(delete, BorderLayout.CENTER);
@@ -347,7 +347,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	private JPanel createAddPanel() {
 		JPanel addPanel = new JPanel(new BorderLayout(5, 0));
 		JPanel addInnerPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("entry_dn"));
+		JLabel label = new JLabel(JMeterUtils.getResString("entry_dn")); // $NON-NLS-1$
 		label.setLabelFor(add);
 		addInnerPanel.add(label, BorderLayout.WEST);
 		addInnerPanel.add(add, BorderLayout.CENTER);
@@ -362,7 +362,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	private JPanel createModifyPanel() {
 		JPanel modifyPanel = new JPanel(new BorderLayout(5, 0));
 		JPanel modifyInnerPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("entry_dn"));
+		JLabel label = new JLabel(JMeterUtils.getResString("entry_dn")); // $NON-NLS-1$
 		label.setLabelFor(modify);
 		modifyInnerPanel.add(label, BorderLayout.WEST);
 		modifyInnerPanel.add(modify, BorderLayout.CENTER);
@@ -391,9 +391,9 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	 */
 	private JPanel createTestPanel() {
 		JPanel testPanel = new JPanel(new BorderLayout());
-		testPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("test_configuration")));
+		testPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("test_configuration"))); // $NON-NLS-1$
 
-		testPanel.add(new JLabel(JMeterUtils.getResString("test")));
+		testPanel.add(new JLabel(JMeterUtils.getResString("test"))); // $NON-NLS-1$
 		JPanel rowPanel = new JPanel();
 
 		rowPanel.add(addTest);

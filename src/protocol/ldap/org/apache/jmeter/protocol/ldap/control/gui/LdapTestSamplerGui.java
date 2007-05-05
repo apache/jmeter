@@ -87,7 +87,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
     }    
 
 	public String getLabelResource() {
-		return "ldap_testing_title";
+		return "ldap_testing_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -97,7 +97,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
 		VerticalPanel mainPanel = new VerticalPanel();
 		loginPanel = new LoginConfigGui(false);
 		ldapDefaultPanel = new LdapConfigGui(false);
-		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config"))); // $NON-NLS-1$
 		add(makeTitlePanel(), BorderLayout.NORTH);
 		mainPanel.add(loginPanel);
 		mainPanel.add(ldapDefaultPanel);

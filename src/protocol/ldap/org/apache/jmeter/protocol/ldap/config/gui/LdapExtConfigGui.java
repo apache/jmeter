@@ -88,7 +88,17 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 		JMeterUtils.getResString("ldap_search_onelevel"),// $NON-NLS-1$
 		JMeterUtils.getResString("ldap_search_subtree"),// $NON-NLS-1$
 		};
-	
+
+	// Names for the cards
+	private static final String CARDS_DEFAULT = ""; // $NON-NLS-1$
+	private static final String CARDS_ADD = "Add"; // $NON-NLS-1$
+	private static final String CARDS_DELETE = "Delete"; // $NON-NLS-1$
+	private static final String CARDS_BIND = "Bind"; // $NON-NLS-1$
+	private static final String CARDS_RENAME = "Rename"; // $NON-NLS-1$
+	private static final String CARDS_COMPARE = "Compare"; // $NON-NLS-1$
+	private static final String CARDS_SEARCH = "Search"; // $NON-NLS-1$
+	private static final String CARDS_MODIFY = "Modify"; // $NON-NLS-1$
+
 	private JLabeledChoice scope = 
 		new JLabeledChoice(JMeterUtils.getResString("scope"), // $NON-NLS-1$
         SCOPE_STRINGS);
@@ -121,13 +131,13 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 	
 	private JCheckBox secure = new JCheckBox(JMeterUtils.getResString("ldap_secure")); // $NON-NLS-1$
 	
-	private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("addTest")); // $NON-NLS-1$
+	private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
 
-	private JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modTest")); // $NON-NLS-1$
+	private JRadioButton modifyTest = new JRadioButton(JMeterUtils.getResString("modtest")); // $NON-NLS-1$
 
-	private JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("delTest")); // $NON-NLS-1$
+	private JRadioButton deleteTest = new JRadioButton(JMeterUtils.getResString("deltest")); // $NON-NLS-1$
 
-	private JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("searchTest")); // $NON-NLS-1$
+	private JRadioButton searchTest = new JRadioButton(JMeterUtils.getResString("searchtest")); // $NON-NLS-1$
 
 	private JRadioButton bind = new JRadioButton(JMeterUtils.getResString("bind")); // $NON-NLS-1$
 
@@ -143,9 +153,9 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 
 	private boolean displayName = true;
 
-	ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("addTest")); // $NON-NLS-1$
+	ArgumentsPanel tableAddPanel = new ArgumentsPanel(JMeterUtils.getResString("addtest")); // $NON-NLS-1$
 
-	LDAPArgumentsPanel tableModifyPanel = new LDAPArgumentsPanel(JMeterUtils.getResString("modTest")); // $NON-NLS-1$
+	LDAPArgumentsPanel tableModifyPanel = new LDAPArgumentsPanel(JMeterUtils.getResString("modtest")); // $NON-NLS-1$
 
 	private JPanel cards;
 
@@ -201,41 +211,42 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 		modddn.setText(element.getPropertyAsString(LDAPExtSampler.MODDDN));
 		newdn.setText(element.getPropertyAsString(LDAPExtSampler.NEWDN));
 		CardLayout cl = (CardLayout) (cards.getLayout());
-		if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("unbind")) { // $NON-NLS-1$
+		final String testType = element.getPropertyAsString(LDAPExtSampler.TEST);
+		if (testType.equals(LDAPExtSampler.UNBIND)) {
 			unbind.setSelected(true);
-			cl.show(cards, "unbind");
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("bind")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_DEFAULT);
+		} else if (testType.equals(LDAPExtSampler.BIND)) {
 			bind.setSelected(true);
-			cl.show(cards, "bind");
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("sbind")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_BIND);
+		} else if (testType.equals(LDAPExtSampler.SBIND)) {
 			sbind.setSelected(true);
-			cl.show(cards, "sbind");
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("compare")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_DEFAULT);
+		} else if (testType.equals(LDAPExtSampler.COMPARE)) {
 			compare.setSelected(true);
-			cl.show(cards, "compare");
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("add")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_COMPARE);
+		} else if (testType.equals(LDAPExtSampler.ADD)) {
 			addTest.setSelected(true);
 			add.setText(element.getPropertyAsString(LDAPExtSampler.BASE_ENTRY_DN));
 			tableAddPanel.configure((TestElement) element.getProperty(LDAPExtSampler.ARGUMENTS).getObjectValue());
-			cl.show(cards, "Add"); // $NON-NLS-1$
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("modify")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_ADD);
+		} else if (testType.equals(LDAPExtSampler.MODIFY)) {
 			modifyTest.setSelected(true);
 			modify.setText(element.getPropertyAsString(LDAPExtSampler.BASE_ENTRY_DN));
 			tableModifyPanel
 					.configure((TestElement) element.getProperty(LDAPExtSampler.LDAPARGUMENTS).getObjectValue());
-			cl.show(cards, "Modify"); // $NON-NLS-1$
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("delete")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_MODIFY);
+		} else if (testType.equals(LDAPExtSampler.DELETE)) {
 			deleteTest.setSelected(true);
 			delete.setText(element.getPropertyAsString(LDAPExtSampler.DELETE));
-			cl.show(cards, "Delete"); // $NON-NLS-1$
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("rename")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_DELETE);
+		} else if (testType.equals(LDAPExtSampler.RENAME)) {
 			rename.setSelected(true);
-			cl.show(cards, "rename"); // $NON-NLS-1$
-		} else if (element.getPropertyAsString(LDAPExtSampler.TEST).equals("search")) { // $NON-NLS-1$
+			cl.show(cards, CARDS_RENAME);
+		} else if (testType.equals(LDAPExtSampler.SEARCH)) {
 			searchTest.setSelected(true);
 			searchbase.setText(element.getPropertyAsString(LDAPExtSampler.SEARCHBASE));
 			searchfilter.setText(element.getPropertyAsString(LDAPExtSampler.SEARCHFILTER));
-			cl.show(cards, "Search"); // $NON-NLS-1$
+			cl.show(cards, CARDS_SEARCH);
 		}
 	}
 
@@ -360,23 +371,23 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 	public void itemStateChanged(ItemEvent ie) {
 		CardLayout cl = (CardLayout) (cards.getLayout());
 		if (addTest.isSelected()) {
-			cl.show(cards, "Add"); // $NON-NLS-1$
+			cl.show(cards, CARDS_ADD);
 		} else if (deleteTest.isSelected()) {
-			cl.show(cards, "Delete"); // $NON-NLS-1$
+			cl.show(cards, CARDS_DELETE);
 		} else if (bind.isSelected()) {
-			cl.show(cards, "Bind"); // $NON-NLS-1$
+			cl.show(cards, CARDS_BIND);
 		} else if (sbind.isSelected()) {
-			cl.show(cards, "Bind"); // $NON-NLS-1$
+			cl.show(cards, CARDS_BIND);
 		} else if (rename.isSelected()) {
-			cl.show(cards, "Rename"); // $NON-NLS-1$
+			cl.show(cards, CARDS_RENAME);
 		} else if (compare.isSelected()) {
-			cl.show(cards, "Compare"); // $NON-NLS-1$
+			cl.show(cards, CARDS_COMPARE);
 		} else if (searchTest.isSelected()) {
-			cl.show(cards, "Search"); // $NON-NLS-1$
+			cl.show(cards, CARDS_SEARCH);
 		} else if (modifyTest.isSelected()) {
-			cl.show(cards, "Modify"); // $NON-NLS-1$
+			cl.show(cards, CARDS_MODIFY);
 		} else { // e.g unbind
-			cl.show(cards, ""); // $NON-NLS-1$
+			cl.show(cards, CARDS_DEFAULT);
 		}
 	}
 
@@ -614,14 +625,14 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
 	 **************************************************************************/
 	private JPanel testPanel() {
 		cards = new JPanel(new CardLayout());
-		cards.add(new JPanel(), ""); // $NON-NLS-1$
-		cards.add(createAddPanel(), "Add"); // $NON-NLS-1$
-		cards.add(createModifyPanel(), "Modify"); // $NON-NLS-1$
-		cards.add(createModdnPanel(), "Rename"); // $NON-NLS-1$
-		cards.add(createDeletePanel(), "Delete"); // $NON-NLS-1$
-		cards.add(createSearchPanel(), "Search"); // $NON-NLS-1$
-		cards.add(createBindPanel(), "Bind"); // $NON-NLS-1$
-		cards.add(createComparePanel(), "Compare"); // $NON-NLS-1$
+		cards.add(new JPanel(),         CARDS_DEFAULT);
+		cards.add(createAddPanel(),     CARDS_ADD);
+		cards.add(createModifyPanel(),  CARDS_MODIFY);
+		cards.add(createModdnPanel(),   CARDS_RENAME);
+		cards.add(createDeletePanel(),  CARDS_DELETE);
+		cards.add(createSearchPanel(),  CARDS_SEARCH);
+		cards.add(createBindPanel(),    CARDS_BIND);
+		cards.add(createComparePanel(), CARDS_COMPARE);
 		return cards;
 	}
 
