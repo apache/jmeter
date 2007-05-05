@@ -35,14 +35,13 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__machineName";
+	private static final String KEY = "__machineName"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int PARAMETER_COUNT = 1;
 	static {
-		// desc.add("Use fully qualified host name: TRUE/FALSE (Default
-		// FALSE)");
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		// desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;

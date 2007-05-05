@@ -33,28 +33,25 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
 public class HTTPArgumentsPanel extends ArgumentsPanel {
-	/*
-	 * NOTUSED private static final String ENCODED_VALUE =
-	 * JMeterUtils.getResString("encoded_value");
-	 */
-	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?");
 
-	private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals");
+	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?"); //$NON-NLS-1$
+
+	private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals"); //$NON-NLS-1$
 
 	protected void initializeTableModel() {
 		tableModel = new ObjectTableModel(new String[] {
 				ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
 				HTTPArgument.class,
 				new Functor[] {
-				new Functor("getName"),
-				new Functor("getValue"),
-				new Functor("isAlwaysEncoded"),
-				new Functor("isUseEquals") },
+				new Functor("getName"), //$NON-NLS-1$
+				new Functor("getValue"), //$NON-NLS-1$
+				new Functor("isAlwaysEncoded"), //$NON-NLS-1$
+				new Functor("isUseEquals") }, //$NON-NLS-1$
 				new Functor[] { 
-				new Functor("setName"),
-				new Functor("setValue"),
-				new Functor("setAlwaysEncoded"),
-				new Functor("setUseEquals") },
+				new Functor("setName"), //$NON-NLS-1$
+				new Functor("setValue"), //$NON-NLS-1$
+				new Functor("setAlwaysEncoded"), //$NON-NLS-1$
+				new Functor("setUseEquals") }, //$NON-NLS-1$
 				new Class[] {String.class, String.class, Boolean.class, Boolean.class });
 	}
 
@@ -88,7 +85,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	}
 
 	public HTTPArgumentsPanel() {
-		super(JMeterUtils.getResString("paramtable"));
+		super(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
 	}
 
 	public TestElement createTestElement() {

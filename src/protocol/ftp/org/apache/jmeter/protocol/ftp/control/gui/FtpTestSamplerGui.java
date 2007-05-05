@@ -30,10 +30,6 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * 
- * @version $Revision$ last updated $Date$
- */
 public class FtpTestSamplerGui extends AbstractSamplerGui {
 	private LoginConfigGui loginPanel;
 
@@ -78,7 +74,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
     }    
     
 	public String getLabelResource() {
-		return "ftp_testing_title";
+		return "ftp_testing_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -93,7 +89,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
 		mainPanel.add(ftpDefaultPanel);
 
 		loginPanel = new LoginConfigGui(false);
-		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config"))); // $NON-NLS-1$
 		mainPanel.add(loginPanel);
 
 		add(mainPanel, BorderLayout.CENTER);

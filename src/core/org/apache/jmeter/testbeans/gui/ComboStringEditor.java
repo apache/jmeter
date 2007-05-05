@@ -27,8 +27,6 @@ import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class implements a property editor for possibly null String properties
@@ -45,10 +43,8 @@ import org.apache.log.Logger;
  * </ul>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
-	protected static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The list of options to be offered by this editor.
@@ -84,9 +80,9 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	 */
 
 	// Needs to be visible to test cases
-	static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined"));
+	static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined")); //$NON-NLS-1$
 
-	private static final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit"));
+	private static final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit")); //$NON-NLS-1$
 
 	ComboStringEditor() {
 		// Create the combo box we will use to edit this property:

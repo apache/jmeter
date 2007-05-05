@@ -49,7 +49,7 @@ public class CommentPanel extends JPanel {
 		setLayout(new BorderLayout(5, 0));
 
 		commentField = new JTextArea();
-		JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments"));
+		JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
 		commentLabel.setLabelFor(commentField);
 
 		VerticalPanel commentPanel = new VerticalPanel();

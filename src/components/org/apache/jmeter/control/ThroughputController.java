@@ -38,7 +38,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * (BYPERCENT)
  * 
  * @author Thad Smith
- * @version $Revision$
  */
 public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
 		TestListener {
@@ -47,13 +46,13 @@ public class ThroughputController extends GenericController implements Serializa
 
 	public static final int BYPERCENT = 1;
 
-	private static final String STYLE = "ThroughputController.style";
+	private static final String STYLE = "ThroughputController.style";// $NON-NLS-1$
 
-	private static final String PERTHREAD = "ThroughputController.perThread";
+	private static final String PERTHREAD = "ThroughputController.perThread";// $NON-NLS-1$
 
-	private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";
+	private static final String MAXTHROUGHPUT = "ThroughputController.maxThroughput";// $NON-NLS-1$
 
-	private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";
+	private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
 
 	private int globalNumExecutions;
 

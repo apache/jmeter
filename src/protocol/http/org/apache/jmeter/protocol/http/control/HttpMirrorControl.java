@@ -58,7 +58,7 @@ public class HttpMirrorControl extends GenericController {
 	}
 	
 	public String getClassLabel() {
-		return JMeterUtils.getResString("httpmirror_title");
+		return JMeterUtils.getResString("httpmirror_title"); //$NON-NLS-1$
 	}
 
 

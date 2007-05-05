@@ -46,16 +46,16 @@ public class Property extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__property";
+	private static final String KEY = "__property"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;
 	private static final int MAX_PARAMETER_COUNT = 3;
 
 	static {
-		desc.add(JMeterUtils.getResString("property_name_param"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
-		desc.add(JMeterUtils.getResString("property_default_param"));
+		desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;

@@ -208,7 +208,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	 * @return the description of this timer class.
 	 */
 	public String toString() {
-		return JMeterUtils.getResString("constant_throughput_timer_memo");
+		return JMeterUtils.getResString("constant_throughput_timer_memo"); //$NON-NLS-1$
 	}
 
 	/**

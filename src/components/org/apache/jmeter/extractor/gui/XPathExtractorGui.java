@@ -51,7 +51,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 	private JCheckBox tolerant;
     
     public String getLabelResource() {
-        return "xpath_extractor_title";
+        return "xpath_extractor_title"; //$NON-NLS-1$
     }
 
     public XPathExtractorGui(){
@@ -106,7 +106,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
-		tolerant = new JCheckBox(JMeterUtils.getResString("xpath_extractor_tolerant"));
+		tolerant = new JCheckBox(JMeterUtils.getResString("xpath_extractor_tolerant"));//$NON-NLS-1$
 		box.add(tolerant);
 		add(box, BorderLayout.NORTH);
 		add(makeParameterPanel(), BorderLayout.CENTER);
@@ -114,9 +114,9 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
 
 	private JPanel makeParameterPanel() {
-		xpathQueryField = new JLabeledTextField(JMeterUtils.getResString("xpath_extractor_query"));
-		defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));
-		refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
+		xpathQueryField = new JLabeledTextField(JMeterUtils.getResString("xpath_extractor_query"));//$NON-NLS-1$
+		defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));//$NON-NLS-1$
+		refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));//$NON-NLS-1$
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();

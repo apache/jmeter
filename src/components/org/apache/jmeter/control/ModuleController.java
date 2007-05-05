@@ -32,8 +32,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * The goal of ModuleController is to add modularity to JMeter. The general idea
@@ -48,12 +46,10 @@ import org.apache.log.Logger;
  * (which user logs in, which account is created, etc.) of the module.
  * 
  * @author Thad Smith
- * @version $Revision$
  */
 public class ModuleController extends GenericController implements ReplaceableController {
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String NODE_PATH = "ModuleController.node_path";
+	private static final String NODE_PATH = "ModuleController.node_path";// $NON-NLS-1$
 
 	private JMeterTreeNode selectedNode = null;
 

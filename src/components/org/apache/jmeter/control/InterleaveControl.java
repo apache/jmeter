@@ -24,12 +24,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
-/**
- * @author Michael Stover Created March 13, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class InterleaveControl extends GenericController implements Serializable {
-	private static final String STYLE = "InterleaveControl.style";
+	private static final String STYLE = "InterleaveControl.style";// $NON-NLS-1$
 
 	public static final int IGNORE_SUB_CONTROLLERS = 0;
 

@@ -40,7 +40,7 @@ public class SummariserGui extends AbstractPostProcessorGui implements Clearable
 	}
 
 	public String getLabelResource() {
-		return "summariser_title";
+		return "summariser_title"; //$NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {

@@ -36,17 +36,17 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * Implementation of a uniform random timer.
  * 
- * @version $Id$
  */
 public class UniformRandomTimerGui extends AbstractTimerGui {
 
+	// TODO - are these gui item names needed?
 	private static final String DELAY_FIELD = "Delay Field";
 
 	private static final String RANGE_FIELD = "Range Field";
 
-	public static final String DEFAULT_DELAY = "0"; // TODO: make private?
+	private static final String DEFAULT_DELAY = "0"; // $NON-NLS-1$
 
-	public static final String DEFAULT_RANGE = "100.0";// TODO: make private?
+	private static final String DEFAULT_RANGE = "100.0";// $NON-NLS-1$
 
 	private JTextField delayField;
 

@@ -28,6 +28,7 @@ import org.apache.commons.jexl.JexlHelper;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -43,13 +44,13 @@ public class JexlFunction extends AbstractFunction implements Serializable
 
     private static Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String KEY = "__jexl";
+    private static final String KEY = "__jexl"; //$NON-NLS-1$
 
     private static final List desc = new LinkedList();
 
     static
     {
-        desc.add("expression");
+        desc.add(JMeterUtils.getResString("jexl_expression")); //$NON-NLS-1$
     }
 
     private Object[] values;
@@ -57,7 +58,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
     public String execute(SampleResult result, Sampler sampler)
             throws InvalidVariableException
     {
-        String str = "";
+        String str = ""; //$NON-NLS-1$
 
         CompoundVariable var = (CompoundVariable) values[0];
         String exp = var.getRawParameters();
@@ -66,11 +67,11 @@ public class JexlFunction extends AbstractFunction implements Serializable
         {
             Expression e = ExpressionFactory.createExpression(exp);
             JexlContext jc = JexlHelper.createContext();
-            jc.getVars().put("ctx", sampler.getThreadContext());
-            jc.getVars().put("vars", getVariables());
-            jc.getVars().put("theadName", sampler.getThreadName());
-            jc.getVars().put("sampler", sampler);
-            jc.getVars().put("sampleResult", result);
+            jc.getVars().put("ctx", sampler.getThreadContext()); //$NON-NLS-1$
+            jc.getVars().put("vars", getVariables()); //$NON-NLS-1$
+            jc.getVars().put("theadName", sampler.getThreadName()); //$NON-NLS-1$
+            jc.getVars().put("sampler", sampler); //$NON-NLS-1$
+            jc.getVars().put("sampleResult", result); //$NON-NLS-1$
 
             // Now evaluate the expression, getting the result
             Object o = e.evaluate(jc);

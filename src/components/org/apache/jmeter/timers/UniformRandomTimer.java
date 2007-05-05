@@ -28,7 +28,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * distributed variation.
  * 
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
- * @version $Revision$ $Date$
  */
 public class UniformRandomTimer extends RandomTimer implements Serializable {
 	public long delay() {
@@ -36,7 +35,7 @@ public class UniformRandomTimer extends RandomTimer implements Serializable {
 	}
 
 	public String toString() {
-		return JMeterUtils.getResString("uniform_timer_memo");
+		return JMeterUtils.getResString("uniform_timer_memo"); //$NON-NLS-1$
 	}
 
 }

@@ -22,12 +22,11 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * GUI for RandomOrderController.
  * 
- * @version $Revision$ updated on $Date$
  */
 public class RandomOrderControllerGui extends LogicControllerGui {
 
 	public String getLabelResource() {
-		return "random_order_control_title";
+		return "random_order_control_title"; // $NON-NLS-1$
 	}
 
 	/*

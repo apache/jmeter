@@ -27,24 +27,18 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Dolf Smits
- * @author Michael Stover
- * @author Thad Smith
- * @version $Revision$
- */
 public class ForeachController extends GenericController implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String INPUTVAL = "ForeachController.inputVal";
+	private final static String INPUTVAL = "ForeachController.inputVal";// $NON-NLS-1$
 
-	private final static String RETURNVAL = "ForeachController.returnVal";
+	private final static String RETURNVAL = "ForeachController.returnVal";// $NON-NLS-1$
 
-	private final static String USE_SEPARATOR = "ForeachController.useSeparator";
+	private final static String USE_SEPARATOR = "ForeachController.useSeparator";// $NON-NLS-1$
 
 	private int loopCount = 0;
 
-	private static final String DEFAULT_SEPARATOR = "_";
+	private static final String DEFAULT_SEPARATOR = "_";// $NON-NLS-1$
 
 	public ForeachController() {
 	}
@@ -130,7 +124,7 @@ public class ForeachController extends GenericController implements Serializable
 	 */
 	private boolean emptyList() {
 		JMeterContext context = getThreadContext();
-		String inputVariable = getInputVal() + getSeparator() + "1";
+		String inputVariable = getInputVal() + getSeparator() + "1";// $NON-NLS-1$
 		if (context.getVariables().get(inputVariable) != null) {
 			return false;
 		}

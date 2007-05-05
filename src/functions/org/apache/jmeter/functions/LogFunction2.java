@@ -38,14 +38,13 @@ import org.apache.log.Logger;
  * Returns: - Empty String (so can be used where return value would be a
  * nuisance)
  * 
- * @version $Revision$ Updated: $Date$
  */
 public class LogFunction2 extends AbstractFunction implements Serializable {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__logn";
+	private static final String KEY = "__logn"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;

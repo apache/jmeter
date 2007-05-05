@@ -22,9 +22,6 @@ import org.apache.jmeter.assertions.XMLAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$, $Date$
- */
 public class XMLAssertionGui extends AbstractAssertionGui {
 	/**
 	 * The constructor.
@@ -37,7 +34,7 @@ public class XMLAssertionGui extends AbstractAssertionGui {
 	 * Returns the label to be shown within the JTree-Component.
 	 */
 	public String getLabelResource() {
-		return "xml_assertion_title";
+		return "xml_assertion_title"; // $NON-NLS-1$
 	}
 
 	public TestElement createTestElement() {

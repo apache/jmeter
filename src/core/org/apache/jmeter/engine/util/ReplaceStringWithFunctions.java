@@ -27,11 +27,6 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.FunctionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 
-/**
- * @author ano ano
- * 
- * @version $Revision$
- */
 public class ReplaceStringWithFunctions extends AbstractTransformer {
 	public ReplaceStringWithFunctions(CompoundVariable masterFunction, Map variables) {
 		super();

@@ -88,7 +88,7 @@ public class SSLManagerCommand implements Command {
 	private void sslManager() {
 		SSLManager.reset();
 
-		keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir"));
+		keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir")); //$NON-NLS-1$
 		keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
 		keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
@@ -116,7 +116,7 @@ public class SSLManagerCommand implements Command {
 		 * @return description
 		 */
 		public String getDescription() {
-			return JMeterUtils.getResString("pkcs12_desc");
+			return JMeterUtils.getResString("pkcs12_desc"); //$NON-NLS-1$
 		}
 
 		/**
@@ -127,7 +127,9 @@ public class SSLManagerCommand implements Command {
 		 * @return true if file is accepted, false otherwise
 		 */
 		public boolean accept(File testFile) {
-			return testFile.isDirectory() || testFile.getName().endsWith(".p12") || testFile.getName().endsWith(".P12");
+			return testFile.isDirectory() 
+			|| testFile.getName().endsWith(".p12")  //$NON-NLS-1$
+			|| testFile.getName().endsWith(".P12"); //$NON-NLS-1$
 		}
 	}
 }

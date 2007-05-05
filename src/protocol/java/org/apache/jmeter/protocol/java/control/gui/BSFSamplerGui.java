@@ -32,20 +32,14 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * 
- * @version $Revision$ $Date$
- */
 public class BSFSamplerGui extends AbstractSamplerGui {
 	private JTextArea scriptField;
 
-	private JTextField langField;// Language TODO should this be a drop-down
-									// list?
+	private JTextField langField;// Language TODO should this be a drop-down list?
 
 	private JTextField filename;// script file name (if present)
 
-	private JTextField parameters;// parameters to pass to script file (or
-									// script)
+	private JTextField parameters;// parameters to pass to script file (or script)
 
 	public BSFSamplerGui() {
 		init();
@@ -92,7 +86,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
     }    
 
 	public String getLabelResource() {
-		return "bsf_sampler_title";
+		return "bsf_sampler_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -113,7 +107,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 	}
 
 	private JPanel createParameterPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_parameters"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_parameters")); // $NON-NLS-1$
 
 		parameters = new JTextField(10);
 		parameters.setName(BSFSampler.PARAMETERS);
@@ -127,7 +121,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 
 	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
 	{
-		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_file"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_file")); // $NON-NLS-1$
 
 		filename = new JTextField(10);
 		filename.setName(BSFSampler.FILENAME);
@@ -140,7 +134,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 	}
 
 	private JPanel createLanguagePanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_language"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_language")); // $NON-NLS-1$
 
 		langField = new JTextField(10);
 		langField.setName(BSFSampler.LANGUAGE);
@@ -158,7 +152,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 		scriptField.setLineWrap(true);
 		scriptField.setWrapStyleWord(true);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script")); // $NON-NLS-1$
 		label.setLabelFor(scriptField);
 
 		JPanel panel = new JPanel(new BorderLayout());

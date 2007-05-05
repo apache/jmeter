@@ -35,7 +35,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * A GUI component allowing the user to enter a username and password for a
  * login.
  * 
- * @version $Revision$ on $Date$
  */
 public class LoginConfigGui extends AbstractConfigGui {
 	/** Field allowing the user to enter a username. */
@@ -74,7 +73,7 @@ public class LoginConfigGui extends AbstractConfigGui {
 	}
 
 	public String getLabelResource() {
-		return "login_config_element";
+		return "login_config_element"; // $NON-NLS-1$
 	}
 
 	/**
@@ -141,7 +140,7 @@ public class LoginConfigGui extends AbstractConfigGui {
 	 */
 	private JPanel createUsernamePanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("username"));
+		JLabel label = new JLabel(JMeterUtils.getResString("username")); // $NON-NLS-1$
 		label.setLabelFor(username);
 		panel.add(label, BorderLayout.WEST);
 		panel.add(username, BorderLayout.CENTER);
@@ -155,7 +154,7 @@ public class LoginConfigGui extends AbstractConfigGui {
 	 */
 	private JPanel createPasswordPanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("password"));
+		JLabel label = new JLabel(JMeterUtils.getResString("password")); // $NON-NLS-1$
 		label.setLabelFor(password);
 		panel.add(label, BorderLayout.WEST);
 		panel.add(password, BorderLayout.CENTER);

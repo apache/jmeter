@@ -56,15 +56,15 @@ import org.apache.log.Logger;
  * user selects.
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String ADD_COMMAND = "Add";
+	private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
 
-	private static final String DELETE_COMMAND = "Delete";
+	private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
 
-	private static final String LOAD_COMMAND = "Load";
+	private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
 
-	private static final String SAVE_COMMAND = "Save";
+	private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
 
 	private InnerTableModel tableModel;
 
@@ -127,7 +127,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	}
 
 	public String getLabelResource() {
-		return "auth_manager_title";
+		return "auth_manager_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 
 		JPanel panel = new JPanel(new BorderLayout(0, 5));
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				JMeterUtils.getResString("auths_stored")));
+				JMeterUtils.getResString("auths_stored"))); //$NON-NLS-1$
 		panel.add(new JScrollPane(authTable));
 		panel.add(createButtonPanel(), BorderLayout.SOUTH);
 		return panel;
@@ -263,10 +263,10 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	private JPanel createButtonPanel() {
 		boolean tableEmpty = (tableModel.getRowCount() == 0);
 
-		addButton = createButton("add", 'A', ADD_COMMAND, true);
-		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
-		loadButton = createButton("load", 'L', LOAD_COMMAND, true);
-		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
+		addButton = createButton("add", 'A', ADD_COMMAND, true); //$NON-NLS-1$
+		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); //$NON-NLS-1$
+		loadButton = createButton("load", 'L', LOAD_COMMAND, true); //$NON-NLS-1$
+		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty); //$NON-NLS-1$
 
 		// Button Panel
 		JPanel buttonPanel = new JPanel();
@@ -277,9 +277,6 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		return buttonPanel;
 	}
 
-	/**
-	 * @version $Revision$
-	 */
 	private static class InnerTableModel extends AbstractTableModel {
 		AuthManager manager;
 
@@ -381,9 +378,6 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		}
 	}
 
-	/**
-	 * @version $Revision$
-	 */
 	private static class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
 		private Border myBorder;
 
