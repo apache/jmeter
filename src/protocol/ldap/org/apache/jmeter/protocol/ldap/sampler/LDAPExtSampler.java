@@ -593,7 +593,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * @return a formatted string label describing this sampler
 	 */
 	public String getLabel() {
-		return ("ldap://" + this.getServername() + ":" + getPort() + "/" + this.getRootdn());
+		return ("ldap://" + this.getServername()  //$NON-NLS-1$
+				+ ":" + getPort()                 //$NON-NLS-1$
+				+ "/" + this.getRootdn());        //$NON-NLS-1$
 	}
 
 	/***************************************************************************
