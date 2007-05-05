@@ -53,14 +53,14 @@ import org.apache.log.Logger;
 public class AuthManager extends ConfigTestElement implements ConfigElement, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String AUTH_LIST = "AuthManager.auth_list";
+	private final static String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
 
 	private final static String[] columnNames = {
-		JMeterUtils.getResString("auth_base_url"),
-		JMeterUtils.getResString("username"), 
-		JMeterUtils.getResString("password"), 
-		JMeterUtils.getResString("domain"), 
-		JMeterUtils.getResString("realm"), 
+		JMeterUtils.getResString("auth_base_url"), //$NON-NLS-1$
+		JMeterUtils.getResString("username"),  //$NON-NLS-1$
+		JMeterUtils.getResString("password"),  //$NON-NLS-1$
+		JMeterUtils.getResString("domain"),  //$NON-NLS-1$
+		JMeterUtils.getResString("realm"),  //$NON-NLS-1$
 		};
 
 	// Column numbers - must agree with order above
@@ -125,7 +125,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	}
 
 	public String getClassLabel() {
-		return JMeterUtils.getResString("auth_manager_title");
+		return JMeterUtils.getResString("auth_manager_title"); //$NON-NLS-1$
 	}
 
 	public Class getGuiClass() {
@@ -256,10 +256,10 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		String line;
 		while ((line = reader.readLine()) != null) {
 			try {
-				if (line.startsWith("#") || line.trim().length() == 0) {
+				if (line.startsWith("#") || line.trim().length() == 0) { //$NON-NLS-1$
 					continue;
 				}
-				StringTokenizer st = new StringTokenizer(line, "\t");
+				StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
 				String url = st.nextToken();
 				String user = st.nextToken();
 				String pass = st.nextToken();
@@ -296,6 +296,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
     // Needs to be package protected for Unit test
 	static boolean isSupportedProtocol(URL url) {
 		String protocol = url.getProtocol().toUpperCase();
-		return protocol.equals("HTTP") || protocol.equals("HTTPS");
+		return protocol.equals("HTTP") || protocol.equals("HTTPS"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

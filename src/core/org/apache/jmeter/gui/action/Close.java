@@ -33,7 +33,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @author <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a> Created
  *         June 6, 2002
- * @version $Revision$ Last updated: $Date$
  */
 public class Close implements Command {
 
@@ -68,7 +67,9 @@ public class Close implements Command {
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		if (guiPackage.isDirty()) {
 			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("cancel_new_to_save"), JMeterUtils.getResString("Save?"), JOptionPane.YES_NO_OPTION,
+					.getResString("cancel_new_to_save"), // $NON-NLS-1$
+					JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
 			}

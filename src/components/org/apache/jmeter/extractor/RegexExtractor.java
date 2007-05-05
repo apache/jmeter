@@ -44,10 +44,6 @@ import org.apache.oro.text.regex.Util;
 
 // @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
 
-/**
- * 
- * @version $Revision$
- */
 public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable {
 
 

@@ -30,7 +30,7 @@ import org.mozilla.javascript.Scriptable;
 /*******************************************************************************
  * 
  * @author Cyrus Montakab created 2003/06/30
- * @version $Date$ $Revision$ 
+ * 
  * This is a Conditional Controller; it will execute the set of statements
  * (samplers/controllers, etc) while the 'condition' is true. 
  * In a programming world - this is equivalant of : 
@@ -51,7 +51,7 @@ public class IfController extends GenericController implements Serializable {
 
 	private static final Logger logger = LoggingManager.getLoggerForClass();
 
-	private final static String CONDITION = "IfController.condition";
+	private final static String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
 	/**
 	 * constructor
@@ -100,9 +100,9 @@ public class IfController extends GenericController implements Serializable {
 			, "<cmd>", 1, null);
 			resultStr = Context.toString(cxResultObject);
 
-			if (resultStr.equals("false")) {
+			if (resultStr.equals("false")) { //$NON-NLS-1$
 				result = false;
-			} else if (resultStr.equals("true")) {
+			} else if (resultStr.equals("true")) { //$NON-NLS-1$
 				result = true;
 			} else {
 				throw new Exception(" BAD CONDITION :: " + cond);

@@ -66,7 +66,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getNamespace() {
 		if (namespace == null) {
-			namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button"));
+			namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
 		}
 		return namespace;
 	}
@@ -76,7 +76,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getTolerant() {
 		if (tolerant == null) {
-			tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button"));
+			tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
 			tolerant.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -92,7 +92,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getValidate() {
 		if (validate == null) {
-			validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button"));
+			validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
 		}
 		return validate;
 	}
@@ -102,7 +102,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getWhitespace() {
 		if (whitespace == null) {
-			whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button"));
+			whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
 		}
 		return whitespace;
 	}

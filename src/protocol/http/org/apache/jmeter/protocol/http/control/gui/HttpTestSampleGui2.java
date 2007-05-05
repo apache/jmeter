@@ -39,7 +39,7 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
 	}
 
 	public String getStaticLabel() {
-		return JMeterUtils.getResString("web_testing2_title");
+		return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
 	}
 
     // Documentation is shared with our parent

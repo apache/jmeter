@@ -22,12 +22,9 @@ import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$
- */
 public class RecordController extends LogicControllerGui {
 	public String getLabelResource() {
-		return "record_controller_title";
+		return "record_controller_title"; // $NON-NLS-1$
 	}
 
 	public TestElement createTestElement() {

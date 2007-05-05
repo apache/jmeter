@@ -166,10 +166,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	private JTabbedPane rightSide;
 	
 	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
-	        JMeterUtils.getPropDefault("viewResultsTree.success", "icon_success_sml.gif"));
+	        JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
+	        		"icon_success_sml.gif")); //$NON-NLS-1$
 
 	private static final ImageIcon imageFailure = JMeterUtils.getImage(
-			JMeterUtils.getPropDefault("viewResultsTree.failure", "icon_warning_sml.gif"));
+			JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
+					"icon_warning_sml.gif")); //$NON-NLS-1$
 	
 	public ViewResultsFullVisualizer() {
 		super();
@@ -366,8 +368,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 
 						// get the text response and image icon
 						// to determine which is NOT null
-						if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null)
-																			// is OK
+						if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null) is OK
 						{
 							String response = getResponseAsString(res);
 							if (command.equals(TEXT_COMMAND)) {
@@ -668,7 +669,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	
 	private void setupTabPaneForSampleResult() {
 		// Set the title for the first tab
-		rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_sampler"));
+		rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_sampler")); //$NON-NLS-1$
 		// Add the other tabs if not present
 		if(rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_request")) < 0) { // $NON-NLS-1$
 			rightSide.addTab(JMeterUtils.getResString("view_results_tab_request"), requestPane); // $NON-NLS-1$
@@ -680,7 +681,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 	
 	private void setupTabPaneForAssertionResult() {
 		// Set the title for the first tab
-		rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_assertion"));
+		rightSide.setTitleAt(0, JMeterUtils.getResString("view_results_tab_assertion")); //$NON-NLS-1$
 		// Remove the other tabs if present
 		int requestTabIndex = rightSide.indexOfTab(JMeterUtils.getResString("view_results_tab_request")); // $NON-NLS-1$
 		if(requestTabIndex >= 0) {

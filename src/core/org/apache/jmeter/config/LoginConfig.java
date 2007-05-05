@@ -22,10 +22,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class LoginConfig extends ConfigTestElement implements Serializable
 // TODO: move this to components -- the only reason why it's in core is because
 // it's used as a guinea pig by a couple of tests.
@@ -75,6 +71,6 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 	}
 
 	public String toString() {
-		return getUsername() + "=" + getPassword();
+		return getUsername() + "=" + getPassword(); //$NON-NLS-1$
 	}
 }

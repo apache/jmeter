@@ -73,7 +73,6 @@ import org.apache.jorphan.gui.ComponentUtil;
  * JMeter component GUIs.
  * 
  * @author Michael Stover
- * @version $Revision$
  */
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
@@ -253,8 +252,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            the host where JMeter threads are stopping
 	 */
 	public void showStoppingMessage(String host) {
-		stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true);
-		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host);
+		stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
+		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host); //$NON-NLS-1$
 		stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		stoppingMessage.getContentPane().add(stopLabel);
 		stoppingMessage.pack();

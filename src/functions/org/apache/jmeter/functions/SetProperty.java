@@ -36,26 +36,25 @@ import org.apache.jmeter.util.JMeterUtils;
  * Usage:
  * 
  * Set the property value in the appropriate GUI by using the string:
- * ${__setProperty(propname,propvalue)}
+ * ${__setProperty(propname,propvalue[,returnvalue?])}
  * 
- * Returns: nothing
+ * Returns: nothing or original value if the 3rd parameter is true
  * 
- * @version $Revision$ Updated: $Date$
  */
 public class SetProperty extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__setProperty";
+	private static final String KEY = "__setProperty"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
 
 	private static final int MAX_PARAMETER_COUNT = 3;
 	static {
-		desc.add(JMeterUtils.getResString("property_name_param"));
-		desc.add(JMeterUtils.getResString("property_value_param"));
-		desc.add(JMeterUtils.getResString("property_returnvalue_param"));
+		desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("property_value_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("property_returnvalue_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -75,7 +74,7 @@ public class SetProperty extends AbstractFunction implements Serializable {
 		
 		boolean returnValue = false;// should we return original value?
 		if (values.length > 2) {
-			returnValue = ((CompoundVariable) values[2]).execute().equalsIgnoreCase("true");
+			returnValue = ((CompoundVariable) values[2]).execute().equalsIgnoreCase("true"); //$NON-NLS-1$
 		}
 
 		if (returnValue) { // Only obtain and cast the return if needed 

@@ -47,21 +47,20 @@ import org.apache.jmeter.util.JMeterUtils;
  * Returns: - the property value, but if not found - the default value, but if
  * not present - "1" (suitable for use in ThreadGroup GUI)
  * 
- * @version $Revision$ Updated: $Date$
  */
 public class Property2 extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__P";
+	private static final String KEY = "__P"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;
 
 	private static final int MAX_PARAMETER_COUNT = 2;
 	static {
-		desc.add(JMeterUtils.getResString("property_name_param"));
-		desc.add(JMeterUtils.getResString("property_default_param"));
+		desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;

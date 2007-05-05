@@ -38,14 +38,13 @@ import org.apache.log.Priority;
  * 
  * Returns: - the input string
  * 
- * @version $Revision$ Updated: $Date$
  */
 public class LogFunction extends AbstractFunction implements Serializable {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__log";
+	private static final String KEY = "__log"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;

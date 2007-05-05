@@ -34,10 +34,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
-/**
- * 
- * @version $Revision$ on $Date$
- */
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
 
 	private JTextArea textArea;
@@ -74,7 +70,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 
 				if (item.isFailure() || item.isError()) {
 					display.append("\n\t"); // $NON-NLS-1$
-					display.append(item.getName() != null ? item.getName() + " : " : "");
+					display.append(item.getName() != null ? item.getName() + " : " : "");// $NON-NLS-1$
 					display.append(item.getFailureMessage());
 				}
 			}

@@ -46,6 +46,7 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * @author Thad Smith
  */
 public class MailReaderSamplerGui extends AbstractSamplerGui {
+
 	// Gui Components
 	private JComboBox serverTypeBox;
 
@@ -68,27 +69,29 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 	private JCheckBox deleteBox;
 
 	// Labels
-	private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");
+	private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");// $NON-NLS-1$
 
-	private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");
+	private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");// $NON-NLS-1$
 
-	private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");
+	private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
-	private final static String ServerLabel = JMeterUtils.getResString("mail_reader_server");
+	private final static String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
 
-	private final static String AccountLabel = JMeterUtils.getResString("mail_reader_account");
+	private final static String AccountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
 
-	private final static String PasswordLabel = JMeterUtils.getResString("mail_reader_password");
+	private final static String PasswordLabel = JMeterUtils.getResString("mail_reader_password");// $NON-NLS-1$
 
-	private final static String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");
+	private final static String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");// $NON-NLS-1$
 
-	private final static String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");
+	private final static String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");// $NON-NLS-1$
 
-	private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");
+	private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
 
-	private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");
+	private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
 
-	// NOTREAD private String type;
+	private static final String INBOX = "INBOX"; // $NON-NLS-1$
+
+// NOTREAD private String type;
 	private boolean delete;
 
 	private int num_messages;
@@ -100,7 +103,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 	}
 
 	public String getLabelResource() {
-		return "mail_reader_title";
+		return "mail_reader_title"; // $NON-NLS-1$
 	}
 
 	/*
@@ -112,7 +115,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		MailReaderSampler mrs = (MailReaderSampler) element;
 		if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3)) {
 			serverTypeBox.setSelectedItem(POP3Label);
-			folderBox.setText("INBOX");
+			folderBox.setText(INBOX);
 		} else {
 			serverTypeBox.setSelectedItem(IMAPLabel);
 			folderBox.setText(mrs.getFolder());
@@ -191,7 +194,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 				if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label)) {
 					// NOTREAD type = MailReaderSampler.TYPE_POP3;
 					folderLabel.setEnabled(false);
-					folderBox.setText("INBOX");
+					folderBox.setText(INBOX);
 					folderBox.setEnabled(false);
 				} else {
 					// NOTREAD type = MailReaderSampler.TYPE_IMAP;
@@ -223,7 +226,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 		JPanel folderPanel = new JPanel();
 		folderLabel = new JLabel(FolderLabel);
-		folderBox = new JTextField("INBOX", 10);
+		folderBox = new JTextField(INBOX, 10);
 		folderPanel.add(folderLabel);
 		folderPanel.add(folderBox);
 		add(folderPanel);

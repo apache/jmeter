@@ -30,7 +30,6 @@ import org.apache.jmeter.testelement.TestElement;
  * The <code>JavaTestSamplerGui</code> class provides the user interface for
  * the {@link JavaSampler}.
  * 
- * @version $Revision$ on $Date$
  */
 public class JavaTestSamplerGui extends AbstractSamplerGui {
 	/** Panel containing the configuration options. */
@@ -45,7 +44,7 @@ public class JavaTestSamplerGui extends AbstractSamplerGui {
 	}
 
 	public String getLabelResource() {
-		return "java_request";
+		return "java_request"; // $NON-NLS-1$
 	}
 
 	/**

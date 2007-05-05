@@ -33,10 +33,11 @@ import org.jdom.input.SAXBuilder;
  * Checks if the result is a well-formed XML content using jdom
  * 
  * @author <a href="mailto:gottfried@szing.at">Gottfried Szing</a>
- * @version $Revision$, $Date$
  */
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final char NEW_LINE = '\n'; // $NON-NLS-1$
 
 	// one builder for all requests in a thread
     private static ThreadLocal myBuilder = new ThreadLocal() {
@@ -85,7 +86,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 	 */
 	private byte[] getResultBody(byte[] resultData) {
 		for (int i = 0; i < (resultData.length - 1); i++) {
-			if (resultData[i] == '\n' && resultData[i + 1] == '\n') {
+			if (resultData[i] == NEW_LINE && resultData[i + 1] == NEW_LINE) {
 				return getByteArraySlice(resultData, (i + 2), resultData.length - 1);
 			}
 		}

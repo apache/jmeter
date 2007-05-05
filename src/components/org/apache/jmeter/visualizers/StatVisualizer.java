@@ -54,7 +54,6 @@ import org.apache.jorphan.reflect.Functor;
  * borrowed code from to start me off (and much code may still exist). Thank
  * you!
  * 
- * @version $Revision$ on $Date$
  */
 public class StatVisualizer extends AbstractVisualizer implements Clearable {
 	private final String[] COLUMNS = { 
@@ -114,9 +113,9 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
 		    null, // 90%
 		    null, // Min
 		    null, // Max
-		    new NumberRenderer("#0.00%"), // Error %age
-		    new RateRenderer("#.0"),      // Throughpur
-		    new NumberRenderer("#.0"),    // pageSize
+		    new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
+		    new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
+		    new NumberRenderer("#.0"),    // pageSize   //$NON-NLS-1$
 		};
 
 	public static boolean testFunctors(){

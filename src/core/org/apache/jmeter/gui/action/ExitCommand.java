@@ -27,11 +27,6 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Brendan Burns
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Revision$ updated on $Date$
- */
 public class ExitCommand implements Command {
 
 	private static Set commands = new HashSet();
@@ -64,7 +59,8 @@ public class ExitCommand implements Command {
 		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		if (GuiPackage.getInstance().isDirty()) {
 			int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("cancel_exit_to_save"), JMeterUtils.getResString("Save?"),
+					.getResString("cancel_exit_to_save"), // $NON-NLS-1$
+					JMeterUtils.getResString("save?"), // $NON-NLS-1$
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (chosenOption == JOptionPane.NO_OPTION) {
 				System.exit(0);

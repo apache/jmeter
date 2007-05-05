@@ -50,7 +50,6 @@ import org.apache.log.Logger;
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
  * for the {@link JUnitTestSampler}.
  * 
- * @version $Revision$ on $Date$
  */
 public class JUnitTestSamplerGui extends AbstractSamplerGui 
 implements ChangeListener, ActionListener
@@ -135,7 +134,7 @@ implements ChangeListener, ActionListener
     }
 
     public String getDocAnchor() {
-        return "JUnit_Sampler";
+        return "JUnit_Sampler"; // TODO - use default ?
     }
 
     /**
@@ -170,7 +169,7 @@ implements ChangeListener, ActionListener
         } 
 
         JLabel label =
-            new JLabel(JMeterUtils.getResString("protocol_java_classname"));
+            new JLabel(JMeterUtils.getResString("protocol_java_classname")); //$NON-NLS-1$
 
         classnameCombo = new JComboBox(CLASSLIST.toArray());
         classnameCombo.addActionListener(this);

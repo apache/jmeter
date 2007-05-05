@@ -49,9 +49,9 @@ public class HttpMirrorControlGui extends LogicControllerGui
 
 	private JButton stop, start;
 
-	private static final String STOP = "stop";
+	private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
 
-	private static final String START = "start";
+	private static final String ACTION_START = "start"; // $NON-NLS-1$
 
 	private HttpMirrorControl mirrorController;
 
@@ -82,7 +82,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
 	}
 
 	public String getLabelResource() {
-		return "httpmirror_title";
+		return "httpmirror_title"; // $NON-NLS-1$
 	}
 
 	public Collection getMenuCategories() {
@@ -101,11 +101,11 @@ public class HttpMirrorControlGui extends LogicControllerGui
 	public void actionPerformed(ActionEvent action) {
 		String command = action.getActionCommand();
 
-		if (command.equals(STOP)) {
+		if (command.equals(ACTION_STOP)) {
 			mirrorController.stopHttpMirror();
 			stop.setEnabled(false);
 			start.setEnabled(true);
-		} else if (command.equals(START)) {
+		} else if (command.equals(ACTION_START)) {
 			modifyTestElement(mirrorController);
 			mirrorController.startHttpMirror();
 			start.setEnabled(false);
@@ -131,14 +131,14 @@ public class HttpMirrorControlGui extends LogicControllerGui
 	}
 
 	private JPanel createControls() {
-		start = new JButton(JMeterUtils.getResString("start"));
+		start = new JButton(JMeterUtils.getResString("start")); // $NON-NLS-1$
 		start.addActionListener(this);
-		start.setActionCommand(START);
+		start.setActionCommand(ACTION_START);
 		start.setEnabled(true);
 
-		stop = new JButton(JMeterUtils.getResString("stop"));
+		stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
 		stop.addActionListener(this);
-		stop.setActionCommand(STOP);
+		stop.setActionCommand(ACTION_STOP);
 		stop.setEnabled(false);
 
 		JPanel panel = new JPanel();
@@ -151,7 +151,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
 		portField = new JTextField(HttpMirrorControl.DEFAULT_PORT_S, 8);
 		portField.setName(HttpMirrorControl.PORT);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("port"));
+		JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
 		label.setLabelFor(portField);
 
 		

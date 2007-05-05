@@ -49,14 +49,14 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Revision$ updated on $Date$
- */
 public final class MenuFactory {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	/*
+	 *  Predefined strings for makeMenu().
+	 *  These are used as menu categories in the menuMap Hashmap, 
+	 *  and also for resource lookup in messages.properties
+	*/
 	public final static String TIMERS = "menu_timer"; //$NON-NLS-1$
 
 	public final static String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
@@ -82,9 +82,13 @@ public final class MenuFactory {
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
 	private static final String[] MENU_ADD_CONTROLLER = new String[] {
-        MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-		MenuFactory.ASSERTIONS, MenuFactory.CONFIG_ELEMENTS, 
-        MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
+        MenuFactory.CONTROLLERS, 
+        MenuFactory.SAMPLERS,
+		MenuFactory.ASSERTIONS, 
+		MenuFactory.CONFIG_ELEMENTS, 
+        MenuFactory.TIMERS, 
+        MenuFactory.LISTENERS, 
+        MenuFactory.PRE_PROCESSORS,
 		MenuFactory.POST_PROCESSORS };
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { 
@@ -92,7 +96,9 @@ public final class MenuFactory {
 
 	private static final String[] MENU_ADD_SAMPLER = new String[] { 
         MenuFactory.CONFIG_ELEMENTS,
-		MenuFactory.ASSERTIONS, MenuFactory.TIMERS, MenuFactory.LISTENERS, 
+		MenuFactory.ASSERTIONS, 
+		MenuFactory.TIMERS, 
+		MenuFactory.LISTENERS, 
         MenuFactory.PRE_PROCESSORS,
 		MenuFactory.POST_PROCESSORS };
 
@@ -260,10 +266,25 @@ public final class MenuFactory {
 		return pop;
 	}
 
+	/**
+	 * 
+	 * @param category - predefined string (used as key for menuMap HashMap and messages.properties lookup)
+	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
+	 *     @see org.apache.jmeter.gui.action.ActionNames
+	 * @return
+	 */
 	public static JMenu makeMenu(String category, String actionCommand) {
 		return makeMenu((Collection) menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
 	}
 
+	/**
+	 * 
+	 * @param menuInfo - collection of MenuInfo items
+	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
+	 *     @see org.apache.jmeter.gui.action.ActionNames
+	 * @param menuName
+	 * @return
+	 */
 	public static JMenu makeMenu(Collection menuInfo, String actionCommand, String menuName) {
 		Iterator iter = menuInfo.iterator();
 		JMenu menu = new JMenu(menuName);
@@ -280,6 +301,14 @@ public final class MenuFactory {
 		}
 	}
 
+	/**
+	 * 
+	 * @param label for the MenuItem
+	 * @param name for the MenuItem
+	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
+	 *     @see org.apache.jmeter.gui.action.ActionNames
+	 * @return
+	 */
 	public static JMenuItem makeMenuItem(String label, String name, String actionCommand) {
 		JMenuItem newMenuChoice = new JMenuItem(label);
 		newMenuChoice.setName(name);

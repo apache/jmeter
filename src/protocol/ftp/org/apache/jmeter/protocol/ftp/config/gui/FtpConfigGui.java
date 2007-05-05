@@ -115,7 +115,7 @@ public class FtpConfigGui extends AbstractConfigGui {
     }    
 
 	private JPanel createServerPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("server"));
+		JLabel label = new JLabel(JMeterUtils.getResString("server")); //$NON-NLS-1$
 
 		server = new JTextField(10);
 		label.setLabelFor(server);
@@ -127,7 +127,7 @@ public class FtpConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createLocalFilenamePanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("ftp_local_file"));
+		JLabel label = new JLabel(JMeterUtils.getResString("ftp_local_file")); //$NON-NLS-1$
 
 		localFile = new JTextField(10);
 		label.setLabelFor(localFile);
@@ -139,7 +139,7 @@ public class FtpConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createRemoteFilenamePanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("ftp_remote_file"));
+		JLabel label = new JLabel(JMeterUtils.getResString("ftp_remote_file")); //$NON-NLS-1$
 
 		remoteFile = new JTextField(10);
 		label.setLabelFor(remoteFile);
@@ -154,15 +154,15 @@ public class FtpConfigGui extends AbstractConfigGui {
 
 		ButtonGroup group = new ButtonGroup();
 
-		getBox = new JRadioButton(JMeterUtils.getResString("ftp_get"));
+		getBox = new JRadioButton(JMeterUtils.getResString("ftp_get")); //$NON-NLS-1$
 		group.add(getBox);
 		getBox.setSelected(true);
 
-		putBox = new JRadioButton(JMeterUtils.getResString("ftp_put"));
+		putBox = new JRadioButton(JMeterUtils.getResString("ftp_put")); //$NON-NLS-1$
 		group.add(putBox);
 
-		binaryMode = new JCheckBox(JMeterUtils.getResString("ftp_binary_mode"));
-		saveResponseData = new JCheckBox(JMeterUtils.getResString("ftp_save_response_data"));
+		binaryMode = new JCheckBox(JMeterUtils.getResString("ftp_binary_mode")); //$NON-NLS-1$
+		saveResponseData = new JCheckBox(JMeterUtils.getResString("ftp_save_response_data")); //$NON-NLS-1$
 		
 		
 		JPanel optionsPanel = new HorizontalPanel();

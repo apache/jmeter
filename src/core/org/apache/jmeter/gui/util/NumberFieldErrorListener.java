@@ -28,10 +28,6 @@ import javax.swing.text.JTextComponent;
 
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author mstover
- * @version $Revision$
- */
 public class NumberFieldErrorListener extends FocusAdapter {
 
 	private static NumberFieldErrorListener listener = new NumberFieldErrorListener();
@@ -51,8 +47,10 @@ public class NumberFieldErrorListener extends FocusAdapter {
 		try {
 			Integer.parseInt(text);
 		} catch (NumberFormatException nfe) {
-			JOptionPane.showMessageDialog(source, JMeterUtils.getResString("You must enter a valid number"),
-					JMeterUtils.getResString("Invalid data"), JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(source, 
+					JMeterUtils.getResString("you_must_enter_a_valid_number"), //$NON-NLS-1$
+					JMeterUtils.getResString("invalid_data"),  //$NON-NLS-1$
+					JOptionPane.WARNING_MESSAGE);
 			new FocusRequester(source);
 		}
 	}

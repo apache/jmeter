@@ -113,7 +113,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "throughput_control_title";
+		return "throughput_control_title"; // $NON-NLS-1$
 	}
 
 	private void init() {

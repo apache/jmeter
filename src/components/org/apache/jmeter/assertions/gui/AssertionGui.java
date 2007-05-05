@@ -44,11 +44,10 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * GUI interface for a {@link ResponseAssertion}.
  * 
- * @version $Revision$ on $Date$
  */
 public class AssertionGui extends AbstractAssertionGui {
 	/** The name of the table column in the list of patterns. */
-	private static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test");
+	private static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test"); //$NON-NLS-1$
 
 	/** Radio button indicating that the text response should be tested. */
 	private JRadioButton responseStringButton;
@@ -111,7 +110,7 @@ public class AssertionGui extends AbstractAssertionGui {
 	}
 
 	public String getLabelResource() {
-		return "assertion_title";
+		return "assertion_title"; // $NON-NLS-1$
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */
@@ -265,12 +264,12 @@ public class AssertionGui extends AbstractAssertionGui {
 	 */
 	private JPanel createFieldPanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field"))); //$NON-NLS-1$
 
-		responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
-		urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
-		responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp"));
-		responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp"));
+		responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp")); //$NON-NLS-1$
+		urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp")); //$NON-NLS-1$
+		responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
+		responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(responseStringButton);
@@ -285,7 +284,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
 		responseStringButton.setSelected(true);
 
-		assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success"));
+		assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success")); //$NON-NLS-1$
 		panel.add(assumeSuccess);
 
 		return panel;
@@ -299,24 +298,24 @@ public class AssertionGui extends AbstractAssertionGui {
 	 */
 	private JPanel createTypePanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_pattern_match_rules")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_pattern_match_rules"))); //$NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 
-		containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains"));
+		containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains")); //$NON-NLS-1$
 		group.add(containsBox);
 		containsBox.setSelected(true);
 		panel.add(containsBox);
 
-		matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches"));
+		matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches")); //$NON-NLS-1$
 		group.add(matchesBox);
 		panel.add(matchesBox);
 
-		equalsBox = new JRadioButton(JMeterUtils.getResString("assertion_equals"));
+		equalsBox = new JRadioButton(JMeterUtils.getResString("assertion_equals")); //$NON-NLS-1$
 		group.add(equalsBox);
 		panel.add(equalsBox);
 
-		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
+		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not")); //$NON-NLS-1$
 		panel.add(notBox);
 
 		return panel;
@@ -340,7 +339,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test"))); //$NON-NLS-1$
 
 		panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
 		panel.add(createButtonPanel(), BorderLayout.SOUTH);
@@ -354,10 +353,10 @@ public class AssertionGui extends AbstractAssertionGui {
 	 * @return the new panel with add and delete buttons
 	 */
 	private JPanel createButtonPanel() {
-		addPattern = new JButton(JMeterUtils.getResString("add"));
+		addPattern = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
 		addPattern.addActionListener(new AddPatternListener());
 
-		deletePattern = new JButton(JMeterUtils.getResString("delete"));
+		deletePattern = new JButton(JMeterUtils.getResString("delete")); //$NON-NLS-1$
 		deletePattern.addActionListener(new ClearPatternsListener());
 		deletePattern.setEnabled(false);
 
@@ -370,8 +369,6 @@ public class AssertionGui extends AbstractAssertionGui {
 	/**
 	 * An ActionListener for deleting a pattern.
 	 * 
-	 * @author
-	 * @version $Revision$ Last updated: $Date$
 	 */
 	private class ClearPatternsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -390,7 +387,6 @@ public class AssertionGui extends AbstractAssertionGui {
 	/**
 	 * An ActionListener for adding a pattern.
 	 * 
-	 * @version $Revision$ Last updated: $Date$
 	 */
 	private class AddPatternListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {

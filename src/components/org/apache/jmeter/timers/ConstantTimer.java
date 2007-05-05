@@ -31,11 +31,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Revision$ $Date$
  */
 public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
 
-	public final static String DELAY = "ConstantTimer.delay";
+	public final static String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
 
 	private long delay = 0;
 
@@ -93,7 +92,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
 	 * @return the description of this timer class.
 	 */
 	public String toString() {
-		return JMeterUtils.getResString("constant_timer_memo");
+		return JMeterUtils.getResString("constant_timer_memo"); //$NON-NLS-1$
 	}
 
 	/**
@@ -105,16 +104,4 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
 		delay = getPropertyAsLong(DELAY);
 
 	}
-
-	/*
-	 * This method doesn't appear to be used anymore. jeremy_a@bigfoot.com 02
-	 * May 2003
-	 * 
-	 * Make changes to variables available elsewhere.
-	 * 
-	 * @see ThreadListener#setJMeterVariables(JMeterVariables) public void
-	 *      setJMeterVariables(JMeterVariables jmVars) {
-	 *      //vars.addJMeterVariables(jmVars); }
-	 */
-
 }

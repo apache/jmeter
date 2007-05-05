@@ -36,11 +36,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 
-/**
- * 
- * @version $Revision$ Last updated: $Date$
- */
-
 public class NamePanel extends JPanel implements JMeterGUIComponent {
 	/** A text field containing the name. */
 	private JTextField nameField = new JTextField(15);
@@ -65,7 +60,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	private void init() {
 		setLayout(new BorderLayout(5, 0));
 
-		nameLabel = new JLabel(JMeterUtils.getResString("name"));
+		nameLabel = new JLabel(JMeterUtils.getResString("name")); // $NON-NLS-1$
 		nameLabel.setName("name");
 		nameLabel.setLabelFor(nameField);
 
@@ -100,7 +95,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 		if (nameField != null)
 			return nameField.getText();
 		else
-			return "";
+			return ""; // $NON-NLS-1$
 	}
 
 	/**
@@ -154,7 +149,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
 	 */
 	public String getLabelResource() {
-		return "root";
+		return "root"; // $NON-NLS-1$
 	}
 
 	/* Implements JMeterGUIComponent.getMenuCategories() */
@@ -206,7 +201,6 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getDocAnchor()
 	 */
 	public String getDocAnchor() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

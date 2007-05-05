@@ -31,15 +31,11 @@ import org.apache.jmeter.assertions.BeanShellAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @version $Revision$ $Date$
- */
 public class BeanShellAssertionGui extends AbstractAssertionGui {
 
 	private JTextField filename;// script file name (if present)
 
-	private JTextField parameters;// parameters to pass to script file (or
-									// script)
+	private JTextField parameters;// parameters to pass to script file (or script)
 
 	private JTextArea scriptField;// script area
 
@@ -74,12 +70,12 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 	}
 
 	public String getLabelResource() {
-		return "bsh_assertion_title";
+		return "bsh_assertion_title"; // $NON-NLS-1$
 	}
 
 	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
 	{
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file")); //$NON-NLS-1$
 
 		filename = new JTextField(10);
 		filename.setName(BeanShellAssertion.FILENAME);
@@ -92,7 +88,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 	}
 
 	private JPanel createParameterPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters")); //$NON-NLS-1$
 
 		parameters = new JTextField(10);
 		parameters.setName(BeanShellAssertion.PARAMETERS);
@@ -126,14 +122,14 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 		scriptField.setLineWrap(true);
 		scriptField.setWrapStyleWord(true);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_assertion_script"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_assertion_script")); //$NON-NLS-1$
 		label.setLabelFor(scriptField);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(label, BorderLayout.NORTH);
 		panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
 
-		JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_assertion_script_variables"));
+		JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_assertion_script_variables")); //$NON-NLS-1$
 		explain.setLineWrap(true);
 		explain.setEditable(false);
 		explain.setBackground(this.getBackground());

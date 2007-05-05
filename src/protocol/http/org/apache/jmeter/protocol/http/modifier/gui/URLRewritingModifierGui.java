@@ -29,9 +29,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- * @version $Revision$ last updated $Date$
- */
 public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 	private JLabeledTextField argumentName;
 
@@ -44,7 +41,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     private JCheckBox shouldCache;
 
 	public String getLabelResource() {
-		return "http_url_rewriting_modifier_title";
+		return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
 	}
 
 	public URLRewritingModifierGui() {

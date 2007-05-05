@@ -22,9 +22,6 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-/**
- * @version $Revision$
- */
 public class SimpleVariable {
 
 	private String name;
@@ -34,7 +31,7 @@ public class SimpleVariable {
 	}
 
 	public SimpleVariable() {
-		this.name = "";
+		this.name = ""; //$NON-NLS-1$
 	}
 
 	public String getName() {

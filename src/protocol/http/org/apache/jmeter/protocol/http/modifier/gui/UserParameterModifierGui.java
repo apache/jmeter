@@ -36,7 +36,6 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * A swing panel to allow UI with the UserParameterModifier class.
  * 
- * @version $Revision$ on $Date$
  */
 public class UserParameterModifierGui extends AbstractPreProcessorGui {
 	// -------------------------------------------
@@ -81,7 +80,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 	}
 
 	public String getLabelResource() {
-		return "http_user_parameter_modifier";
+		return "http_user_parameter_modifier"; // $NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {
@@ -101,7 +100,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 		mainPanel.add(getFileLocator(), BorderLayout.NORTH);
 
 		// We want the help text to look like a label, but wrap like a text area
-		JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
+		JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note")); // $NON-NLS-1$
 		helpText.setLineWrap(true);
 		helpText.setWrapStyleWord(true);
 		helpText.setBackground(getBackground());
@@ -118,7 +117,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 
 	private JPanel getFileLocator() {
 		fileNameField = new JTextField("users.xml", 15);
-		JLabel label = new JLabel(JMeterUtils.getResString("filename"));
+		JLabel label = new JLabel(JMeterUtils.getResString("filename")); // $NON-NLS-1$
 		label.setLabelFor(fileNameField);
 
 		JPanel fileLocator = new JPanel(new BorderLayout());
