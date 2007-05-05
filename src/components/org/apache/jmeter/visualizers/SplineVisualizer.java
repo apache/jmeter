@@ -43,9 +43,10 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * Spline interpolated curve. Currently, it tries to look mostly like the
  * GraphVisualizer.
  * 
- * @version $Revision$ on $Date$
  */
 public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener, Clearable {
+
+	private static final String SUFFIX_MS = " ms";  //$NON-NLS-1$
 
 	protected final Color BACKGROUND_COLOR = getBackground();
 
@@ -94,7 +95,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 	}
 
 	public String getLabelResource() {
-		return "spline_visualizer_title";
+		return "spline_visualizer_title"; //$NON-NLS-1$
 	}
 
 	public void updateGui(Sample s) {
@@ -117,43 +118,43 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 
 		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
 		// NAME
 		mainPanel.add(makeTitlePanel());
 
-		maximumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_maximum"));
+		maximumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_maximum")); //$NON-NLS-1$
 		maximumLabel.setForeground(MAXIMUM_COLOR);
 		maximumLabel.setBackground(backColor);
 
-		averageLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_average"));
+		averageLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_average")); //$NON-NLS-1$
 		averageLabel.setForeground(AVERAGE_COLOR);
 		averageLabel.setBackground(backColor);
 
-		incomingLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_incoming"));
+		incomingLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_incoming")); //$NON-NLS-1$
 		incomingLabel.setForeground(INCOMING_COLOR);
 		incomingLabel.setBackground(backColor);
 
-		minimumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_minimum"));
+		minimumLabel = new JLabel(JMeterUtils.getResString("spline_visualizer_minimum")); //$NON-NLS-1$
 		minimumLabel.setForeground(MINIMUM_COLOR);
 		minimumLabel.setBackground(backColor);
 
-		maximumNumberLabel = new JLabel("0 ms");
+		maximumNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
 		maximumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
 		maximumNumberLabel.setForeground(MAXIMUM_COLOR);
 		maximumNumberLabel.setBackground(backColor);
 
-		averageNumberLabel = new JLabel("0 ms");
+		averageNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
 		averageNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
 		averageNumberLabel.setForeground(AVERAGE_COLOR);
 		averageNumberLabel.setBackground(backColor);
 
-		incomingNumberLabel = new JLabel("0 ms");
+		incomingNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
 		incomingNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
 		incomingNumberLabel.setForeground(INCOMING_COLOR);
 		incomingNumberLabel.setBackground(backColor);
 
-		minimumNumberLabel = new JLabel("0 ms");
+		minimumNumberLabel = new JLabel("0 ms"); //$NON-NLS-1$
 		minimumNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
 		minimumNumberLabel.setForeground(MINIMUM_COLOR);
 		minimumNumberLabel.setBackground(backColor);
@@ -215,32 +216,32 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 
 		if (FILL_UP_WITH_ZEROS) {
 			for (int i = numberString.length(); i < NUMBERS_TO_DISPLAY; i++) {
-				numberString = "0" + numberString;
+				numberString = "0" + numberString; //$NON-NLS-1$
 			}
 		}
 		return numberString;
 	}
 
 	public void setMinimum(long n) {
-		String text = this.formatMeasureToDisplay(n) + " ms";
+		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS;
 
 		this.minimumNumberLabel.setText(text);
 	}
 
 	public void setMaximum(long n) {
-		String text = this.formatMeasureToDisplay(n) + " ms";
+		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS;
 
 		this.maximumNumberLabel.setText(text);
 	}
 
 	public void setAverage(long n) {
-		String text = this.formatMeasureToDisplay(n) + " ms";
+		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS; 
 
 		this.averageNumberLabel.setText(text);
 	}
 
 	public void setIncoming(long n) {
-		String text = this.formatMeasureToDisplay(n) + " ms";
+		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS;
 
 		this.incomingNumberLabel.setText(text);
 	}
@@ -260,7 +261,6 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 	/**
 	 * Component showing a Spline curve.
 	 * 
-	 * @version $Revision$
 	 */
 	public class SplineGraph extends JComponent {
 		public boolean reinterpolated = false;
@@ -297,8 +297,8 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 				g.setColor(this.getBackground());
 				g.fillRect(0, 0, width, height);
 				g.setColor(WAITING_COLOR);
-				g.drawString(JMeterUtils.getResString("spline_visualizer_waitingmessage"), (width - 120) / 2, height
-						- (height - 12) / 2);
+				g.drawString(JMeterUtils.getResString("spline_visualizer_waitingmessage"),  //$NON-NLS-1$
+						(width - 120) / 2, height - (height - 12) / 2);
 				return;
 			}
 
