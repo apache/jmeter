@@ -27,9 +27,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class CounterConfigGui extends AbstractPreProcessorGui {
 	private JLabeledTextField startField, incrField, endField, varNameField, formatField;
 
@@ -41,7 +38,7 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 	}
 
 	public String getLabelResource() {
-		return "counter_config_title";
+		return "counter_config_title";//$NON-NLS-1$
 	}
 
 	/**
@@ -101,16 +98,14 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 
 	private void init() {
 		setBorder(makeBorder());
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
-		startField = new JLabeledTextField(JMeterUtils.getResString("start") + "          ");// TODO
-																								// proper
-																								// alignment
-		incrField = new JLabeledTextField(JMeterUtils.getResString("increment"));
-		endField = new JLabeledTextField(JMeterUtils.getResString("max"));
-		varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));
-        formatField = new JLabeledTextField(JMeterUtils.getResString("format"));
-		perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));
+		startField = new JLabeledTextField(JMeterUtils.getResString("start"));//$NON-NLS-1$
+		incrField = new JLabeledTextField(JMeterUtils.getResString("increment"));//$NON-NLS-1$
+		endField = new JLabeledTextField(JMeterUtils.getResString("max"));//$NON-NLS-1$
+		varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));//$NON-NLS-1$
+        formatField = new JLabeledTextField(JMeterUtils.getResString("format"));//$NON-NLS-1$
+		perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));//$NON-NLS-1$
 
 		add(makeTitlePanel());
 		add(startField);
