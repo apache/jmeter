@@ -25,7 +25,6 @@ import java.util.Arrays;
 /**
  * Basic class describing an instance of option.
  * 
- * @version $Revision$ $Date$
  */
 public final class CLOption {
 	/**
