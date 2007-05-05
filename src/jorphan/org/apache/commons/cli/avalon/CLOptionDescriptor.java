@@ -25,7 +25,6 @@ package org.apache.commons.cli.avalon;
  * array of <code>CLOptionDescriptor</code>s, and passes it to
  * {@link CLArgsParser#CLArgsParser(String[], CLOptionDescriptor[])}.
  * 
- * @version $Revision$ $Date$
  * @see CLArgsParser
  * @see CLUtil
  */
@@ -68,9 +67,16 @@ public final class CLOptionDescriptor {
 	 *            description of option usage
 	 */
 	public CLOptionDescriptor(final String name, final int flags, final int id, final String description) {
-		this(name, flags, id, description, ((flags & CLOptionDescriptor.DUPLICATES_ALLOWED) > 0) ? new int[0]
-				: new int[] { id });
+
+		checkFlags(flags);
+
+		m_id = id;
+		m_name = name;
+		m_flags = flags;
+		m_description = description;
+		m_incompatible = ((flags & DUPLICATES_ALLOWED) > 0) ? new int[0] : new int[] { id };
 	}
+
 
 	/**
 	 * Constructor.
@@ -84,17 +90,25 @@ public final class CLOptionDescriptor {
 	 * @param description
 	 *            description of option usage
 	 * @param incompatible
-	 *            an array listing the ids of all incompatible options
-	 * @deprecated use the version with the array of CLOptionDescriptor's
+	 *            descriptors for incompatible options
 	 */
 	public CLOptionDescriptor(final String name, final int flags, final int id, final String description,
-			final int[] incompatible) {
+			final CLOptionDescriptor[] incompatible) {
+
+		checkFlags(flags);
+		
 		m_id = id;
 		m_name = name;
 		m_flags = flags;
 		m_description = description;
-		m_incompatible = incompatible;
 
+		m_incompatible = new int[incompatible.length];
+		for (int i = 0; i < incompatible.length; i++) {
+			m_incompatible[i] = incompatible[i].getId();
+		}
+	}
+
+	private void checkFlags(final int flags) {
 		int modeCount = 0;
 		if ((ARGUMENT_REQUIRED & flags) == ARGUMENT_REQUIRED) {
 			modeCount++;
@@ -116,39 +130,6 @@ public final class CLOptionDescriptor {
 			final String message = "Multiple modes specified for option " + this;
 			throw new IllegalStateException(message);
 		}
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param name
-	 *            the name/long option
-	 * @param flags
-	 *            the flags
-	 * @param id
-	 *            the id/character option
-	 * @param description
-	 *            description of option usage
-	 */
-	public CLOptionDescriptor(final String name, final int flags, final int id, final String description,
-			final CLOptionDescriptor[] incompatible) {
-		m_id = id;
-		m_name = name;
-		m_flags = flags;
-		m_description = description;
-
-		m_incompatible = new int[incompatible.length];
-		for (int i = 0; i < incompatible.length; i++) {
-			m_incompatible[i] = incompatible[i].getId();
-		}
-	}
-
-	/**
-	 * @deprecated Use the correctly spelled {@link #getIncompatible} instead.
-	 * @return the array of incompatible option ids
-	 */
-	protected final int[] getIncompatble() {
-		return getIncompatible();
 	}
 
 	/**
@@ -205,8 +186,6 @@ public final class CLOptionDescriptor {
 	 */
 	public final String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("[OptionDescriptor ");
-		sb.append(m_name);
 		sb.append("[OptionDescriptor ");
 		sb.append(m_name);
 		sb.append(", ");
