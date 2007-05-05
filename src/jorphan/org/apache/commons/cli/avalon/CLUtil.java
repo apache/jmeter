@@ -24,11 +24,17 @@ package org.apache.commons.cli.avalon;
  * CLUtil offers basic utility operations for use both internal and external to
  * package.
  * 
- * @version $Revision$ $Date$
  * @see CLOptionDescriptor
  */
 public final class CLUtil {
 	private static final int MAX_DESCRIPTION_COLUMN_LENGTH = 60;
+
+	/**
+	 * Private Constructor so that no instance can ever be created.
+	 * 
+	 */
+	private CLUtil() {
+	}
 
 	/**
 	 * Format options into StringBuffer and return. This is typically used to
@@ -47,6 +53,7 @@ public final class CLUtil {
 			final String name = options[i].getName();
 			String description = options[i].getDescription();
 			int flags = options[i].getFlags();
+			boolean argumentOptional = ((flags & CLOptionDescriptor.ARGUMENT_OPTIONAL) == CLOptionDescriptor.ARGUMENT_OPTIONAL);
 			boolean argumentRequired = ((flags & CLOptionDescriptor.ARGUMENT_REQUIRED) == CLOptionDescriptor.ARGUMENT_REQUIRED);
 			boolean twoArgumentsRequired = ((flags & CLOptionDescriptor.ARGUMENTS_REQUIRED_2) == CLOptionDescriptor.ARGUMENTS_REQUIRED_2);
 			boolean needComma = false;
@@ -71,6 +78,9 @@ public final class CLUtil {
 				sb.append(name);
 			}
 
+			if (argumentOptional) {
+				sb.append(" [<argument>]");
+			}
 			if (argumentRequired) {
 				sb.append(" <argument>");
 			}
@@ -94,12 +104,5 @@ public final class CLUtil {
 			}
 		}
 		return sb;
-	}
-
-	/**
-	 * Private Constructor so that no instance can ever be created.
-	 * 
-	 */
-	private CLUtil() {
 	}
 }
