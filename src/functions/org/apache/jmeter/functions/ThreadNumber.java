@@ -31,7 +31,7 @@ import org.apache.jmeter.samplers.Sampler;
  */
 public class ThreadNumber implements Function, Serializable {
 
-	private static final String KEY = "__threadNum";
+	private static final String KEY = "__threadNum"; //$NON-NLS-1$
 
 	private static final List desc = new LinkedList();
 
@@ -41,7 +41,7 @@ public class ThreadNumber implements Function, Serializable {
 	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
 	 */
 	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-		return Thread.currentThread().getName().substring(Thread.currentThread().getName().lastIndexOf("-") + 1);
+		return Thread.currentThread().getName().substring(Thread.currentThread().getName().lastIndexOf("-") + 1); //$NON-NLS-1$
 	}
 
 	/*

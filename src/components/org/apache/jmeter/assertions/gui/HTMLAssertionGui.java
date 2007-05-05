@@ -80,7 +80,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 	 * Returns the label to be shown within the JTree-Component.
 	 */
 	public String getLabelResource() {
-		return "html_assertion_title";
+		return "html_assertion_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		docTypeBox = new JComboBox(new Object[] { "omit", "auto", "strict", "loose" });
 		docTypeBox.addFocusListener(this);
 		// docTypePanel.add(new
-		// JLabel(JMeterUtils.getResString("duration_assertion_label")));
+		// JLabel(JMeterUtils.getResString("duration_assertion_label"))); //$NON-NLS-1$
 		docTypePanel.add(new JLabel("Doctype:"));
 		docTypePanel.add(docTypeBox);
 		assertionPanel.add(docTypePanel);
@@ -234,17 +234,17 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		// thresholds
 		HorizontalPanel thresholdPanel = new HorizontalPanel();
 		thresholdPanel.add(new JLabel("Error threshold:"));
-		errorThresholdField = new JTextField("0", 5);
+		errorThresholdField = new JTextField("0", 5); // $NON-NLS-1$
 		errorThresholdField.addFocusListener(this);
 		thresholdPanel.add(errorThresholdField);
 		thresholdPanel.add(new JLabel("Warning threshold:"));
-		warningThresholdField = new JTextField("0", 5);
+		warningThresholdField = new JTextField("0", 5); // $NON-NLS-1$
 		warningThresholdField.addFocusListener(this);
 		thresholdPanel.add(warningThresholdField);
 		assertionPanel.add(thresholdPanel);
 
 		// file panel
-		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".txt");
+		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
 		filePanel.addChangeListener(this);
 		assertionPanel.add(filePanel);
 

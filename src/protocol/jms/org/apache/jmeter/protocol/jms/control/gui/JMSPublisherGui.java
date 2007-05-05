@@ -46,62 +46,60 @@ import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
  * This is the GUI for JMS Publisher <br>
  * Created on: October 13, 2003
  * 
- * @author Peter Lin
- * @version $Id$
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
-	public static final String use_file = JMeterUtils.getResString("jms_use_file");
+	public static final String use_file = JMeterUtils.getResString("jms_use_file"); //$NON-NLS-1$
 
-	public static final String use_random = JMeterUtils.getResString("jms_use_random_file");
+	public static final String use_random = JMeterUtils.getResString("jms_use_random_file"); //$NON-NLS-1$
 
-	public static final String use_text = JMeterUtils.getResString("jms_use_text");
+	public static final String use_text = JMeterUtils.getResString("jms_use_text"); //$NON-NLS-1$
 
 	private String[] items = { use_file, use_random, use_text };
 
-	private String text_msg = JMeterUtils.getResString("jms_text_message");
+	private String text_msg = JMeterUtils.getResString("jms_text_message"); //$NON-NLS-1$
 
-	private String object_msg = JMeterUtils.getResString("jms_object_message");
+	private String object_msg = JMeterUtils.getResString("jms_object_message"); //$NON-NLS-1$
 
 	private String[] msgTypes = { text_msg, object_msg };
 
-	private String required = JMeterUtils.getResString("jms_auth_required");
+	private String required = JMeterUtils.getResString("jms_auth_required"); //$NON-NLS-1$
 
-	private String not_req = JMeterUtils.getResString("jms_auth_not_required");
+	private String not_req = JMeterUtils.getResString("jms_auth_not_required"); //$NON-NLS-1$
 
 	private String[] auth_items = { required, not_req };
 
-	JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false);
+	JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); //$NON-NLS-1$
 
-	JLabeledRadio configChoice = new JLabeledRadio(JMeterUtils.getResString("jms_config"), items, use_text);
+	JLabeledRadio configChoice = new JLabeledRadio(JMeterUtils.getResString("jms_config"), items, use_text); //$NON-NLS-1$
 
-	JLabeledTextField jndiICF = new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory"));
+	JLabeledTextField jndiICF = new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
 
-	JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url"));
+	JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-	JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory"));
+	JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); //$NON-NLS-1$
 
-	JLabeledTextField jmsTopic = new JLabeledTextField(JMeterUtils.getResString("jms_topic"));
+	JLabeledTextField jmsTopic = new JLabeledTextField(JMeterUtils.getResString("jms_topic")); //$NON-NLS-1$
 
-	JLabeledRadio reqAuth = new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req);
+	JLabeledRadio reqAuth = new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req); //$NON-NLS-1$
 
-	JLabeledTextField jmsUser = new JLabeledTextField(JMeterUtils.getResString("jms_user"));
+	JLabeledTextField jmsUser = new JLabeledTextField(JMeterUtils.getResString("jms_user")); //$NON-NLS-1$
 
-	JLabeledTextField jmsPwd = new JLabeledTextField(JMeterUtils.getResString("jms_pwd"));
+	JLabeledTextField jmsPwd = new JLabeledTextField(JMeterUtils.getResString("jms_pwd")); //$NON-NLS-1$
 
-	JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions"));
+	JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); //$NON-NLS-1$
 
-	FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), "*.*");
+	FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), "*.*"); //$NON-NLS-1$
 
-	FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), "*.*");
+	FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), "*.*"); //$NON-NLS-1$
 
 	JLabeledTextArea textMessage = new JLabeledTextArea(text_msg, null);
 
-	JLabeledRadio msgChoice = new JLabeledRadio(JMeterUtils.getResString("jms_message_type"), msgTypes, text_msg);
+	JLabeledRadio msgChoice = new JLabeledRadio(JMeterUtils.getResString("jms_message_type"), msgTypes, text_msg); //$NON-NLS-1$
 
 	/**
 	 * This is the font for the note.
 	 */
-	Font plainText = new Font("plain", Font.PLAIN, 10);
+	Font plainText = new Font("plain", Font.PLAIN, 10); //$NON-NLS-1$
 
 	private JPanel lookup = null;
 
@@ -115,7 +113,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 	 * the name of the property for the JMSPublisherGui is jms_publisher.
 	 */
 	public String getLabelResource() {
-		return "jms_publisher";
+		return "jms_publisher"; //$NON-NLS-1$
 	}
 
 	/**
@@ -308,7 +306,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 	public void updateMessageType(String msgType) {
 		if (msgType.equals(object_msg)) {
 			if (configChoice.getText().equals(use_text)) {
-				JOptionPane.showConfirmDialog(this, JMeterUtils.getResString("jms_error_msg"), "Warning",
+				JOptionPane.showConfirmDialog(this, 
+						JMeterUtils.getResString("jms_error_msg"),  //$NON-NLS-1$
+						"Warning",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 		}

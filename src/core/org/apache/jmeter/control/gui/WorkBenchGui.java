@@ -35,7 +35,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing a work bench where users can make
  * preparations for the test plan.
  * 
- * @version $Revision$ on $Date$
  */
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	/**
@@ -111,7 +110,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	}
 
 	public String getLabelResource() {
-		return "workbench_title";
+		return "workbench_title"; // $NON-NLS-1$
 	}
 
 	/**

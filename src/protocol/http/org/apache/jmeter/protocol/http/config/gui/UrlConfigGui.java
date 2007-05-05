@@ -167,16 +167,16 @@ public class UrlConfigGui extends JPanel {
 		JPanel webServerPanel = new JPanel();
 
 		webServerPanel.setLayout(new BorderLayout());
-		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("web_server"))); // $NON-NLS-1$
+		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("web_server"))); // $NON-NLS-1$
 		webServerPanel.add(getDomainPanel(), BorderLayout.NORTH);
 		webServerPanel.add(getPortPanel(), BorderLayout.WEST);
 
 		JPanel webRequestPanel = new JPanel();
 
 		webRequestPanel.setLayout(new BorderLayout());
-		webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("web_request"))); // $NON-NLS-1$
+		webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
 		JPanel northPanel = new JPanel(new BorderLayout());
 
 		northPanel.add(getProtocolAndMethodPanel(), BorderLayout.NORTH);
@@ -226,10 +226,10 @@ public class UrlConfigGui extends JPanel {
 		path = new JTextField(15);
 		path.setName(PATH);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("path"));
+		JLabel label = new JLabel(JMeterUtils.getResString("path")); //$NON-NLS-1$
 		label.setLabelFor(path);
 
-		autoRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto"));
+		autoRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); //$NON-NLS-1$
 		autoRedirects.setName(AUTO_REDIRECTS);
 		autoRedirects.setSelected(false);// will be reset by
 											// configure(TestElement)

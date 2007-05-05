@@ -43,11 +43,6 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Revision$ updated on $Date$
- */
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -282,7 +277,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		optionsMenu.add(functionHelper);
 		optionsMenu.add(lafMenu);
 		if (SSLManager.isSSLSupported()) {
-			sslManager = new JMenuItem(JMeterUtils.getResString("sslManager")); //$NON-NLS-1$
+			sslManager = new JMenuItem(JMeterUtils.getResString("sslmanager")); //$NON-NLS-1$
 			sslManager.addActionListener(ActionRouter.getInstance());
 			sslManager.setActionCommand(ActionNames.SSL_MANAGER);
 			sslManager.setMnemonic('S');
@@ -342,7 +337,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		chineseSimple.setName(Locale.SIMPLIFIED_CHINESE.toString());
 		languageMenu.add(chineseSimple);
 		// add chinese (traditional)
-		JMenuItem chineseTrad = new JMenuItem(JMeterUtils.getResString("zh_TW")); //$NON-NLS-1$
+		JMenuItem chineseTrad = new JMenuItem(JMeterUtils.getResString("zh_tw")); //$NON-NLS-1$
 		chineseTrad.addActionListener(ActionRouter.getInstance());
 		chineseTrad.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		chineseTrad.setName(Locale.TRADITIONAL_CHINESE.toString());

@@ -73,13 +73,12 @@ import org.apache.log.Logger;
  * borrowed code from to start me off (and much code may still exist). Thank
  * you!
  * 
- * @version $Revision$ on $Date$
  */
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable,
 ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-	private final String[] COLUMNS = { JMeterUtils.getResString("URL"), //$NON-NLS-1$
+	private final String[] COLUMNS = { JMeterUtils.getResString("url"), //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_count"),			//$NON-NLS-1$
 			JMeterUtils.getResString("average"),						//$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_median"),		//$NON-NLS-1$

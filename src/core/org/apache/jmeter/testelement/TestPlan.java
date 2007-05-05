@@ -40,26 +40,22 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover Created March 13, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class TestPlan extends AbstractTestElement implements Serializable, TestListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
     // Does not appear to be needed
-	public final static String THREAD_GROUPS = "TestPlan.thread_groups";
+	public final static String THREAD_GROUPS = "TestPlan.thread_groups"; //$NON-NLS-1$
 
-	public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode";
+	public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
 
-	public final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables";
+	public final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
 
-	public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups";
+	public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
 
-    public final static String CLASSPATHS = "TestPlan.user_define_classpath";
-    private static final String CLASSPATH_SEPARATOR = ",";
+    public final static String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
+    private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
     
-	public final static String COMMENTS = "TestPlan.comments";
+	public final static String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
 
     // Does not appear to be needed
 	public final static String BASEDIR = "basedir";
@@ -86,7 +82,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		// element to a Test Plan.
 
         // Does not appear to be needed
-		itemsCanAdd.add(JMeterUtils.getResString("threadgroup"));
+		itemsCanAdd.add(JMeterUtils.getResString("threadgroup")); //$NON-NLS-1$
 	}
 
 	public TestPlan() {
@@ -216,7 +212,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 			} else {
 				plan = new TestPlan(name);
 			}
-			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.TestPlanGui"));
+			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, 
+					"org.apache.jmeter.control.gui.TestPlanGui")); //$NON-NLS-1$
 		}
 		return plan;
 	}

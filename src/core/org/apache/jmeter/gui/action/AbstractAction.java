@@ -34,10 +34,6 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author mstover
- * @version $Revision$
- */
 public abstract class AbstractAction implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -90,8 +86,10 @@ public abstract class AbstractAction implements Command {
 	protected void popupShouldSave(ActionEvent e) {
 		log.debug("popupShouldSave");
 		if (GuiPackage.getInstance().getTestPlanFile() == null) {
-			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("should_save"), JMeterUtils.getResString("warning"), JOptionPane.YES_NO_OPTION,
+			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+					JMeterUtils.getResString("should_save"),  //$NON-NLS-1$
+					JMeterUtils.getResString("warning"),  //$NON-NLS-1$
+					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(),ActionNames.SAVE));
 			}

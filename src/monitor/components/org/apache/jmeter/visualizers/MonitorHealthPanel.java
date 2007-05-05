@@ -45,15 +45,15 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
 	private JScrollPane SCROLL = null;
 
 	// NOTUSED Font plainText = new Font("plain", Font.PLAIN, 9);
-	public static final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy");
+	public static final String INFO_H = JMeterUtils.getResString("monitor_equation_healthy"); //$NON-NLS-1$
 
-	public static final String INFO_A = JMeterUtils.getResString("monitor_equation_active");
+	public static final String INFO_A = JMeterUtils.getResString("monitor_equation_active"); //$NON-NLS-1$
 
-	public static final String INFO_W = JMeterUtils.getResString("monitor_equation_warning");
+	public static final String INFO_W = JMeterUtils.getResString("monitor_equation_warning"); //$NON-NLS-1$
 
-	public static final String INFO_D = JMeterUtils.getResString("monitor_equation_dead");
+	public static final String INFO_D = JMeterUtils.getResString("monitor_equation_dead"); //$NON-NLS-1$
 
-	public static final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load");
+	public static final String INFO_LOAD = JMeterUtils.getResString("monitor_equation_load"); //$NON-NLS-1$
 
 	/**
 	 * 
@@ -78,7 +78,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
 	 */
 	protected void init() {
 		this.setLayout(new BorderLayout());
-		ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif");
+		ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif"); //$NON-NLS-1$
 		JLabel label = new JLabel(legend);
 		label.setPreferredSize(new Dimension(550, 25));
 		this.add(label, BorderLayout.NORTH);

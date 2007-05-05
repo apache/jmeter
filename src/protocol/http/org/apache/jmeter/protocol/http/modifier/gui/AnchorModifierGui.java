@@ -24,16 +24,13 @@ import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class AnchorModifierGui extends AbstractPreProcessorGui {
 	public AnchorModifierGui() {
 		init();
 	}
 
 	public String getLabelResource() {
-		return "anchor_modifier_title";
+		return "anchor_modifier_title"; //$NON-NLS-1$
 	}
 
 	public TestElement createTestElement() {

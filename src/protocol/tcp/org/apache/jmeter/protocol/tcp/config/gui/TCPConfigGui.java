@@ -33,8 +33,6 @@ import org.apache.jmeter.protocol.tcp.sampler.TCPSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- */
 public class TCPConfigGui extends AbstractConfigGui {
 	private final static String SERVER = "server"; //$NON-NLS-1$
 
@@ -75,7 +73,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
 	public String getLabelResource() {
-		return "tcp_config_title";
+		return "tcp_config_title"; // $NON-NLS-1$
 	}
 
 	public void configure(TestElement element) {
@@ -127,7 +125,7 @@ public class TCPConfigGui extends AbstractConfigGui {
     }    
 
 	private JPanel createTimeoutPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("tcp_timeout"));
+		JLabel label = new JLabel(JMeterUtils.getResString("tcp_timeout")); // $NON-NLS-1$
 
 		timeout = new JTextField(10);
 		timeout.setName(TIMEOUT);
@@ -140,7 +138,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createNoDelayPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("tcp_nodelay"));
+		JLabel label = new JLabel(JMeterUtils.getResString("tcp_nodelay")); // $NON-NLS-1$
 
 		setNoDelay = new JCheckBox();
 		setNoDelay.setName(NODELAY);
@@ -153,7 +151,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createServerPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("server"));
+		JLabel label = new JLabel(JMeterUtils.getResString("server")); // $NON-NLS-1$
 
 		server = new JTextField(10);
 		server.setName(SERVER);
@@ -166,7 +164,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createClosePortPanel() {
-        JLabel label = new JLabel(JMeterUtils.getResString("reUseConnection"));
+        JLabel label = new JLabel(JMeterUtils.getResString("reuseconnection")); //$NON-NLS-1$
 
         reUseConnection = new JCheckBox("", true);
 		reUseConnection.setName(RE_USE_CONNECTION);
@@ -179,7 +177,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createPortPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("tcp_port"));
+		JLabel label = new JLabel(JMeterUtils.getResString("tcp_port")); //$NON-NLS-1$
 
 		port = new JTextField(10);
 		port.setName(PORT);
@@ -192,7 +190,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
 	private JPanel createRequestPanel() {
-		JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data"));
+		JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data")); // $NON-NLS-1$
 		requestData = new JTextArea(3, 0);
 		requestData.setLineWrap(true);
 		requestData.setName(REQUEST);
@@ -208,7 +206,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 	// private JPanel createFilenamePanel()//Not used yet
 	// {
 	//		
-	// JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve"));
+	// JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve")); // $NON-NLS-1$
 	//
 	// filename = new JTextField(10);
 	// filename.setName(FILENAME);

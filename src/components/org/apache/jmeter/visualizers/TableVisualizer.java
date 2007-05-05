@@ -55,18 +55,19 @@ import org.apache.log.Logger;
  * 
  * created March 10, 2002
  * 
- * @version $Revision$ Updated on $Date$
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 	
 	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
-            JMeterUtils.getPropDefault("viewResultsTree.success", "icon_success_sml.gif"),
-            JMeterUtils.getResString("table_visualizer_success"));
+            JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
+            		"icon_success_sml.gif"), //$NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_success")); //$NON-NLS-1$
 
 	private static final ImageIcon imageFailure = JMeterUtils.getImage(
-            JMeterUtils.getPropDefault("viewResultsTree.failure", "icon_warning_sml.gif"),
-            JMeterUtils.getResString("table_visualizer_warning"));
+            JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
+            		"icon_warning_sml.gif"), //$NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_warning")); //$NON-NLS-1$
 
 	private final String[] COLUMNS = new String[] {
             JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
@@ -95,7 +96,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private long currentData = 0;
 
-    private Format format = new SimpleDateFormat("HH:mm:ss.SSS");
+    private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
     
 	// Column renderers
 	private static final TableCellRenderer[] RENDERERS = 

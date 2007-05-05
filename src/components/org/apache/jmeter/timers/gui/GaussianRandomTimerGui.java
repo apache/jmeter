@@ -38,7 +38,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * Implementation of a gaussian random timer.
  * 
- * @version $Revision$ last updated $Date$
  */
 public class GaussianRandomTimerGui extends AbstractTimerGui {
 
@@ -46,9 +45,9 @@ public class GaussianRandomTimerGui extends AbstractTimerGui {
 
 	private static final String RANGE_FIELD = "Range Field";
 
-	public static final String DEFAULT_DELAY = "300";
+	private static final String DEFAULT_DELAY = "300"; // $NON-NLS-1$
 
-	public static final String DEFAULT_RANGE = "100.0";
+	private static final String DEFAULT_RANGE = "100.0"; // $NON-NLS-1$
 
 	private JTextField delayField;
 
@@ -121,8 +120,8 @@ public class GaussianRandomTimerGui extends AbstractTimerGui {
 
 		JPanel threadDelayPropsPanel = new JPanel();
 		threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
-		threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
-				.getResString("thread_delay_properties")));//$NON-NLS-1$
+		threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(
+				JMeterUtils.getResString("thread_delay_properties")));//$NON-NLS-1$
 
 		// DELAY DEVIATION
 		Box delayDevPanel = Box.createHorizontalBox();

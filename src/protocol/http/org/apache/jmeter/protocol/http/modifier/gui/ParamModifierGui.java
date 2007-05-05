@@ -41,9 +41,14 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * Created Jan 18, 2002
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class ParamModifierGui extends AbstractPreProcessorGui implements FocusListener {
+	
+	/*
+	 * These are used as GUI item names;
+	 * LOWERBOUND, UPPERBOUND and INCREMENT are used in the focusLost() method 
+	 */
+	
 	private static final String NAME = "name";
 
 	private static final String PREFIX = "prefix";
@@ -55,6 +60,8 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 	private static final String INCREMENT = "increment";
 
 	private static final String SUFFIX = "suffix";
+
+	private static final String ZERO = "0"; //$NON-NLS-1$
 
 	private JTextField _fieldName;
 
@@ -73,7 +80,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 	}
 
 	public String getLabelResource() {
-		return "html_parameter_mask";
+		return "html_parameter_mask"; //$NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {
@@ -115,7 +122,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
         
         _fieldName.setText(""); //$NON-NLS-1$
         _prefix.setText(""); //$NON-NLS-1$
-        _lowerBound.setText("0"); //$NON-NLS-1$
+        _lowerBound.setText(ZERO);
         _upperBound.setText("10"); //$NON-NLS-1$
         _increment.setText("1"); //$NON-NLS-1$
         _suffix.setText(""); //$NON-NLS-1$        
@@ -129,11 +136,11 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 		if (evt.isTemporary()) {
 			return;
 		} else if (name.equals(LOWERBOUND)) {
-			checkTextField(evt, "0");
+			checkTextField(evt, ZERO);
 		} else if (name.equals(UPPERBOUND)) {
-			checkTextField(evt, "0");
+			checkTextField(evt, ZERO);
 		} else if (name.equals(INCREMENT)) {
-			checkTextField(evt, "0");
+			checkTextField(evt, ZERO);
 		}
 	}
 
@@ -167,35 +174,35 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 
 	private JPanel getParameterMaskPanel() {
 		HorizontalPanel panel = new HorizontalPanel(10, HorizontalPanel.TOP_ALIGNMENT);
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("HTML Parameter Mask")));
+		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("html_parameter_mask"))); //$NON-NLS-1$
 
 		_fieldName = new JTextField(10);
 		_fieldName.setName(NAME);
-		panel.add(createLabeledField("Name", _fieldName));
+		panel.add(createLabeledField("name", _fieldName)); //$NON-NLS-1$ resource name
 
 		_prefix = new JTextField(5);
 		_prefix.setName(PREFIX);
-		panel.add(createLabeledField("ID Prefix", _prefix));
+		panel.add(createLabeledField("id_prefix", _prefix)); //$NON-NLS-1$ resource name
 
-		_lowerBound = new JTextField("0", 5);
+		_lowerBound = new JTextField(ZERO, 5);
 		_lowerBound.addFocusListener(this);
 		_lowerBound.setName(LOWERBOUND);
-		panel.add(createLabeledField("Lower Bound", _lowerBound));
+		panel.add(createLabeledField("lower_bound", _lowerBound)); //$NON-NLS-1$ resource name
 
 		_upperBound = new JTextField("10", 5);
 		_upperBound.addFocusListener(this);
 		_upperBound.setName(UPPERBOUND);
-		panel.add(createLabeledField("Upper Bound", _upperBound));
+		panel.add(createLabeledField("upper_bound", _upperBound)); //$NON-NLS-1$ resource name
 
 		_increment = new JTextField("1", 3);
 		_increment.addFocusListener(this);
 		_increment.setName(INCREMENT);
-		panel.add(createLabeledField("Increment", _increment));
+		panel.add(createLabeledField("increment", _increment)); //$NON-NLS-1$ resource name
 
 		_suffix = new JTextField(5);
 		_suffix.setName(SUFFIX);
-		panel.add(createLabeledField("ID Suffix", _suffix));
+		panel.add(createLabeledField("id_suffix", _suffix)); //$NON-NLS-1$ resource name
 
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.add(panel, BorderLayout.NORTH);

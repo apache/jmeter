@@ -31,7 +31,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * Checks if the results of a Sample matches a particular size.
  * 
  * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version $Revision$, $Date$
  */
 public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
 
@@ -75,7 +74,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 		if ((!(compareSize(resultSize)) && (getAllowedSize() > 0))) {
 			result.setFailure(true);
 			Object[] arguments = { new Long(resultSize), comparatorErrorMessage, new Long(getAllowedSize()) };
-			String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments);
+			String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
 			result.setFailureMessage(message);
 		}
 		return result;
@@ -119,7 +118,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	 */
 	public void setAllowedSize(long size) throws IllegalArgumentException {
 		if (size < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
 		}
 		if (size == Long.MAX_VALUE) {
 			setProperty(new LongProperty(SIZE_KEY, 0));
@@ -142,27 +141,27 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 		switch (comp) {
 		case EQUAL:
 			result = (resultSize == getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal"); //$NON-NLS-1$
 			break;
 		case NOTEQUAL:
 			result = (resultSize != getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal"); //$NON-NLS-1$
 			break;
 		case GREATERTHAN:
 			result = (resultSize > getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater"); //$NON-NLS-1$
 			break;
 		case LESSTHAN:
 			result = (resultSize < getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less"); //$NON-NLS-1$
 			break;
 		case GREATERTHANEQUAL:
 			result = (resultSize >= getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal"); //$NON-NLS-1$
 			break;
 		case LESSTHANEQUAL:
 			result = (resultSize <= getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
 			break;
 		}
 		return result;

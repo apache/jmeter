@@ -23,7 +23,6 @@
  * one calculated from the response OR when the expected hex is left empty.
  * 
  * @author	<a href="mailto:jh@domek.be">Jorg Heymans</a>
- * @version $Revision$ last updated $Date$
  */
 package org.apache.jmeter.assertions;
 
@@ -78,7 +77,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 			result.setFailure(true);
 
 			Object[] arguments = { md5Result, getAllowedMD5Hex() };
-			String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments);
+			String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments); // $NON-NLS-1$
 			result.setFailureMessage(message);
 
 		}

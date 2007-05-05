@@ -38,20 +38,19 @@ import org.apache.jmeter.util.JMeterUtils;
  * - the variable value, but if not found 
  * - the variable name itself
  * 
- * @version $Revision: 493781 $ Updated: $Date: 2007-01-07 17:52:05 +0000 (Sun, 07 Jan 2007) $
  */
 public class Variable extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__V";
+	private static final String KEY = "__V"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;
 	private static final int MAX_PARAMETER_COUNT = 1;
 	
 	static {
-		desc.add(JMeterUtils.getResString("variable_name_param"));
+		desc.add(JMeterUtils.getResString("variable_name_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;

@@ -42,7 +42,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * The GUI class is not invoked in non-GUI mode, so it should not perform any
  * additional setup that a test would need at run-time
  * 
- * @version $Revision$ $Date$
  */
 public class ExampleSamplerGui extends AbstractSamplerGui {
 
@@ -58,7 +57,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
 	 */
 	public String getLabelResource() {
-		return "example_title";
+		return "example_title"; // $NON-NLS-1$
 	}
 
 	/*
@@ -113,7 +112,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 	 * @return the panel for entering the data
 	 */
 	private Component createDataPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("example_data"));
+		JLabel label = new JLabel(JMeterUtils.getResString("example_data")); //$NON-NLS-1$
 
 		data = new JTextArea();
 		data.setName(ExampleSampler.DATA);

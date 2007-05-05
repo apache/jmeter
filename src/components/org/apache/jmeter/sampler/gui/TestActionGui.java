@@ -39,9 +39,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$
- */
 public class TestActionGui extends AbstractSamplerGui {
 	// Gui components
 	private JComboBox targetBox;
@@ -61,19 +58,19 @@ public class TestActionGui extends AbstractSamplerGui {
 	private int duration;
 
 	// String in the panel
-	private static final String targetLabel = JMeterUtils.getResString("test_action_target");
+	private static final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
 
-	private static final String threadTarget = JMeterUtils.getResString("test_action_target_thread");
+	private static final String threadTarget = JMeterUtils.getResString("test_action_target_thread"); // $NON-NLS-1$
 
-	private static final String testTarget = JMeterUtils.getResString("test_action_target_test");
+	private static final String testTarget = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
 
-	private static final String actionLabel = JMeterUtils.getResString("test_action_action");
+	private static final String actionLabel = JMeterUtils.getResString("test_action_action"); // $NON-NLS-1$
 
-	private static final String pauseAction = JMeterUtils.getResString("test_action_pause");
+	private static final String pauseAction = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
 
-	private static final String stopAction = JMeterUtils.getResString("test_action_stop");
+	private static final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
 
-	private static final String durationLabel = JMeterUtils.getResString("test_action_duration");
+	private static final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
 
 	public TestActionGui() {
 		super();
@@ -83,7 +80,7 @@ public class TestActionGui extends AbstractSamplerGui {
 	}
 
 	public String getLabelResource() {
-		return "test_action_title";
+		return "test_action_title"; // $NON-NLS-1$
 	}
 
 	public void configure(TestElement element) {

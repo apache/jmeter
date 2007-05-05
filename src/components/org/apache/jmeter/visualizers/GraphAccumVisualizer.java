@@ -45,8 +45,6 @@ import org.apache.log.Logger;
  * 
  * 
  * Created 2001/08/11
- * 
- * @version $Revision$ $Date$
  */
 public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphAccumListener, Clearable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -70,7 +68,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 	}
 
 	public String getLabelResource() {
-		return "graph_full_results_title";
+		return "graph_full_results_title"; // $NON-NLS-1$
 	}
 
 	public void add(SampleResult res) {
@@ -161,7 +159,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
 		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title"));
+		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title")); // $NON-NLS-1$
 		Font curFont = panelTitleLabel.getFont();
 		int curFontSize = curFont.getSize();
 

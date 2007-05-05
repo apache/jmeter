@@ -30,15 +30,18 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  * author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
  */
 public class Authorization extends AbstractTestElement implements Serializable {
-	private static String URL = "Authorization.url";
 
-	private static String USERNAME = "Authorization.username";
+	private static String URL = "Authorization.url"; // $NON-NLS-1$
 
-	private static String PASSWORD = "Authorization.password";
+	private static String USERNAME = "Authorization.username"; // $NON-NLS-1$
 
-	private static String DOMAIN = "Authorization.domain";
+	private static String PASSWORD = "Authorization.password"; // $NON-NLS-1$
 
-	private static String REALM = "Authorization.realm";
+	private static String DOMAIN = "Authorization.domain"; // $NON-NLS-1$
+
+	private static String REALM = "Authorization.realm"; // $NON-NLS-1$
+
+	private static final String TAB = "\t"; // $NON-NLS-1$
 
 	/**
 	 * create the authorization
@@ -56,15 +59,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
 	}
 
 	public Authorization() {
-		setURL("");
-		setUser("");
-		setPass("");
-		setDomain("");
-		setRealm("");
-	}
-
-	public String getClassLabel() {// TODO Is this used?
-		return "Authorization";
+		this("","","","","");
 	}
 
 	public void addConfigElement(ConfigElement config) {
@@ -112,7 +107,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
 
 	// Used for saving entries to a file
 	public String toString() {
-		return getURL() + "\t" + getUser() + "\t" + getPass() + "\t" + getDomain() + "\t" + getRealm();
+		return getURL() + TAB + getUser() + TAB + getPass() + TAB + getDomain() + TAB + getRealm();
 	}
     
     public String toBasicHeader(){

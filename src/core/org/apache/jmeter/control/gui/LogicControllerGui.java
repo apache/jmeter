@@ -26,7 +26,6 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * A generic controller component.
  * 
- * @version $Revision$ on $Date$
  */
 public class LogicControllerGui extends AbstractControllerGui {
 	/**
@@ -49,7 +48,7 @@ public class LogicControllerGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "logic_controller_title";
+		return "logic_controller_title"; // $NON-NLS-1$
 	}
 
 	/**

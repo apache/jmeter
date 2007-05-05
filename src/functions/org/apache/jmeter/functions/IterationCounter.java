@@ -33,7 +33,7 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__counter";
+	private static final String KEY = "__counter"; //$NON-NLS-1$
 
     private transient ThreadLocal perThreadInt;
     

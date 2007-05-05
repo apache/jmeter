@@ -64,27 +64,27 @@ import org.w3c.dom.Document;
 public class WebServiceSampler extends HTTPSamplerBase {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String XML_DATA = "HTTPSamper.xml_data";
+	public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
-	public static final String SOAP_ACTION = "Soap.Action";
+	public static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
 
-	public static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file";
+	public static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file"; //$NON-NLS-1$
 
-	public static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc";
+	public static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc"; //$NON-NLS-1$
 
-	public static final String MEMORY_CACHE = "WebServiceSampler.memory_cache";
+	public static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
 
-	public static final String READ_RESPONSE = "WebServiceSampler.read_response";
+	public static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
 
-	public static final String USE_PROXY = "WebServiceSampler.use_proxy";
+	public static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
 
-	public static final String PROXY_HOST = "WebServiceSampler.proxy_host";
+	public static final String PROXY_HOST = "WebServiceSampler.proxy_host"; //$NON-NLS-1$
 
-	public static final String PROXY_PORT = "WebServiceSampler.proxy_port";
+	public static final String PROXY_PORT = "WebServiceSampler.proxy_port"; //$NON-NLS-1$
 
-	public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
+	public static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
 
-    public static final String TIMEOUT = "WebserviceSampler.timeout";
+    public static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
 
     private static final String PROXY_USER = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
@@ -516,7 +516,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 					// performance on slow clients
 					br.read();
 					result.sampleEnd();
-					result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes());
+					result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes()); //$NON-NLS-1$
 				}
 				result.setSuccessful(true);
 				result.setResponseCodeOK();
@@ -593,7 +593,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		StringBuffer buf = new StringBuffer();
 		while (en.hasMoreElements()) {
 			Object key = en.nextElement();
-			buf.append((String) key + "=" + (String) ht.get(key) + "\n");
+			buf.append((String) key).append("=").append((String) ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return buf.toString();
 	}

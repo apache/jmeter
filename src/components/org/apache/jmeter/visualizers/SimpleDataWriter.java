@@ -28,7 +28,6 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * This listener can record results to a file but not to the UI. It is meant to
  * provide an efficient means of recording data by eliminating GUI overhead.
  * 
- * @version $Revision$ $Date$
  ******************************************************************************/
 
 public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
@@ -42,7 +41,7 @@ public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
 	}
 
 	public String getLabelResource() {
-		return "simple_data_writer_title";
+		return "simple_data_writer_title"; // $NON-NLS-1$
 	}
 
 	/**

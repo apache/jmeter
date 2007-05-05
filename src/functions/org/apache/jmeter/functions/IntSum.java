@@ -33,18 +33,17 @@ import org.apache.jmeter.util.JMeterUtils;
  * Provides an intSum function that adds two or more integer values.
  * 
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
  */
 public class IntSum extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__intSum";
+	private static final String KEY = "__intSum"; //$NON-NLS-1$
 
 	static {
-		desc.add(JMeterUtils.getResString("intsum_param_1"));
-		desc.add(JMeterUtils.getResString("intsum_param_2"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("intsum_param_1")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("intsum_param_2")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;

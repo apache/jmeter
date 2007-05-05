@@ -31,7 +31,6 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * Create a Result Action Test Element
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class ResultActionGui extends AbstractPostProcessorGui {
 
@@ -46,7 +45,7 @@ public class ResultActionGui extends AbstractPostProcessorGui {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
 	 */
 	public String getLabelResource() {
-		return "resultaction_title";
+		return "resultaction_title"; //$NON-NLS-1$
 	}
 
 	/**

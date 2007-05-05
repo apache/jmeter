@@ -29,7 +29,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
  */
 public class GaussianRandomTimer extends RandomTimer implements Serializable {
 	public long delay() {
@@ -37,6 +36,6 @@ public class GaussianRandomTimer extends RandomTimer implements Serializable {
 	}
 
 	public String toString() {
-		return JMeterUtils.getResString("gaussian_timer_memo");
+		return JMeterUtils.getResString("gaussian_timer_memo"); //$NON-NLS-1$
 	}
 }

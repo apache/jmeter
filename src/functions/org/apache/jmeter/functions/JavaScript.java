@@ -40,13 +40,13 @@ public class JavaScript extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__javaScript";
+	private static final String KEY = "__javaScript"; //$NON-NLS-1$
 
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	static {
-		desc.add("JavaScript expression to evaluate");
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("javascript_expression"));//$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -78,7 +78,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 		try {
 
 			Scriptable scope = cx.initStandardObjects(null);
-			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
+			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null); //$NON-NLS-1$
 
 			resultStr = Context.toString(result);
 			if (varName != null && vars != null) {// vars can be null if run from TestPlan

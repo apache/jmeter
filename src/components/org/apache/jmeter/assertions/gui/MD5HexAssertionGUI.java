@@ -19,8 +19,6 @@
 /**
  * GUI class supporting the MD5Hex assertion functionality.
  * 
- * @version $Revision$ updated on $Date$
- * 
  */
 package org.apache.jmeter.assertions.gui;
 
@@ -55,10 +53,10 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
 		// USER_INPUT
 		HorizontalPanel md5HexPanel = new HorizontalPanel();
-		md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("md5hex_assertion_md5hex_test")));
+		md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("md5hex_assertion_md5hex_test"))); // $NON-NLS-1$
 
-		md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label")));
+		md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label"))); //$NON-NLS-1$
 
 		md5HexInput = new JTextField(25);
 		// md5HexInput.addFocusListener(this);
@@ -76,7 +74,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 	}
 
 	public String getLabelResource() {
-		return "md5hex_assertion_title";
+		return "md5hex_assertion_title"; // $NON-NLS-1$
 	}
 
 	/*

@@ -24,12 +24,9 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/**
- * @version $Revision$
- */
 public class RunTime extends GenericController implements Serializable {
 
-	private final static String SECONDS = "RunTime.seconds";
+	private final static String SECONDS = "RunTime.seconds"; //$NON-NLS-1$
 
 	private volatile long startTime = 0;
 

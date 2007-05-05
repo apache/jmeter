@@ -94,26 +94,25 @@ import org.apache.log.Logger;
  * </dl>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer, PropertyChangeListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String GROUP = "group";
+	public static final String GROUP = "group"; //$NON-NLS-1$
 
-	public static final String ORDER = "order";
+	public static final String ORDER = "order"; //$NON-NLS-1$
 
-	public static final String TAGS = "tags";
+	public static final String TAGS = "tags"; //$NON-NLS-1$
 
-	public static final String NOT_UNDEFINED = "notUndefined";
+	public static final String NOT_UNDEFINED = "notUndefined"; //$NON-NLS-1$
 
-	public static final String NOT_EXPRESSION = "notExpression";
+	public static final String NOT_EXPRESSION = "notExpression"; //$NON-NLS-1$
 
-	public static final String NOT_OTHER = "notOther";
+	public static final String NOT_OTHER = "notOther"; //$NON-NLS-1$
 
-	public static final String DEFAULT = "default";
+	public static final String DEFAULT = "default"; //$NON-NLS-1$
 
-	public static final String RESOURCE_BUNDLE = "resourceBundle";
+	public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
 	public static final String ORDER(String group) {
 		return "group." + group + ".order";
@@ -240,8 +239,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		}
 
 		// Obtain message formats:
-		propertyFieldLabelMessage = new MessageFormat(JMeterUtils.getResString("property_as_field_label"));
-		propertyToolTipMessage = new MessageFormat(JMeterUtils.getResString("property_tool_tip"));
+		propertyFieldLabelMessage = new MessageFormat(JMeterUtils.getResString("property_as_field_label")); //$NON-NLS-1$
+		propertyToolTipMessage = new MessageFormat(JMeterUtils.getResString("property_tool_tip")); //$NON-NLS-1$
 
 		// Initialize the GUI:
 		init();
