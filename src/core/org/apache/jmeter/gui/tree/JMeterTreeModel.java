@@ -49,7 +49,8 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
 	public JMeterTreeModel() {
 		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
-		initTree();
+		TestElement tp = new TestPlanGui().createTestElement();
+		initTree(tp);
 	}
 
 	/**
@@ -174,19 +175,46 @@ public class JMeterTreeModel extends DefaultTreeModel {
 		return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
 	}
 
+    /**
+     * Clear the test plan, and use default node for test plan and workbench
+     */
 	public void clearTestPlan() {
-		super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 0));
-		initTree();
-	}
-
-	private void initTree() {
 		TestElement tp = new TestPlanGui().createTestElement();
-		TestElement wb = new WorkBenchGui().createTestElement();
-		this.insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
-		try {
-			super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 1));
-		} catch (RuntimeException e) {
-		}
-		this.insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
+		clearTestPlan(tp);
+	}
+    
+    /**
+     * Clear the test plan, and use specified node for test plan and default node for workbench
+     * 
+     * @param testPlan the node to use as the testplan top node
+     */
+    public void clearTestPlan(TestElement testPlan) {
+        // Remove the workbench and testplan nodes
+        int children = getChildCount(getRoot());
+        while (children > 0) {
+            JMeterTreeNode child = (JMeterTreeNode)getChild(getRoot(), 0);
+            super.removeNodeFromParent(child);
+            children = getChildCount(getRoot());
+        }
+        // Init the tree
+        initTree(testPlan);
+    }
+    
+    /**
+     * Initialize the model with nodes for testplan and workbench. Use the specified
+     * node for testplan, and default node for workbench.
+     * 
+     * @param tp the element to use as testplan
+     */
+	private void initTree(TestElement tp) {
+        // Insert the test plan node
+        insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
+        // Insert the workbench node
+        TestElement wb = new WorkBenchGui().createTestElement();
+		insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
+        // Let others know that the tree content has changed.
+        // This should not be necessary, but without it, nodes are not shown when the user
+        // uses the Close menu item
+        nodeStructureChanged((JMeterTreeNode)getRoot());
 	}
 }
