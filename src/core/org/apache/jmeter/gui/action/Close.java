@@ -66,12 +66,16 @@ public class Close implements Command {
 		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		if (guiPackage.isDirty()) {
-			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("cancel_new_to_save"), // $NON-NLS-1$
+			int response;
+			if ((response=JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+					JMeterUtils.getResString("cancel_new_to_save"), // $NON-NLS-1$
 					JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
 				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
+			}
+			if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
+				return; // Don't clear the plan
 			}
 		}
 		guiPackage.getTreeModel().clearTestPlan();
