@@ -933,7 +933,7 @@ TBC
 <component name="JUnit Sampler" index="&sect-num;.1.16"  width="522" height="405" screenshot="junit_sampler.png">
 <description>
 The current implementation supports standard Junit convention and extensions. It also
-includes extensions like oneTimeSetUp and oneTimeTea Down. The sampler works like the
+includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
 JavaSampler with some differences.
 <br></br>1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
 <br></br>2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
