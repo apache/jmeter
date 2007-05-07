@@ -34,8 +34,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author mstover
- * @version $Revision$
+ * Check if the TestPlan has been changed since it was last saved
+ *
  */
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -52,6 +52,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 	static {
 		commands.add(ActionNames.CHECK_DIRTY);
 		commands.add(ActionNames.SUB_TREE_SAVED);
+		commands.add(ActionNames.SUB_TREE_MERGED);
 		commands.add(ActionNames.SUB_TREE_LOADED);
 		commands.add(ActionNames.ADD_ALL);
 		commands.add(ActionNames.CHECK_REMOVE);
@@ -91,12 +92,18 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 			}
 			removeMode = false;
 		}
-		checkMode = true;
-		dirty = false;
-		HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
-		wholeTree.traverse(this);
+		// If we are merging in another test plan, we know the test plan is dirty now
+		if(action.equals(ActionNames.SUB_TREE_MERGED)) {
+			dirty = true;
+		}
+		else {
+			dirty = false;
+			checkMode = true;
+			HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+			wholeTree.traverse(this);
+			checkMode = false;
+		}
 		GuiPackage.getInstance().setDirty(dirty);
-		checkMode = false;
 	}
 
 	/**
@@ -107,12 +114,15 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 		log.debug("Node is class:" + node.getClass());
 		JMeterTreeNode treeNode = (JMeterTreeNode) node;
 		if (checkMode) {
-			if (previousGuiItems.containsKey(treeNode)) {
-				if (!previousGuiItems.get(treeNode).equals(treeNode.getTestElement())) {
+			// Only check if we have not found any differences so far
+			if(!dirty) {
+				if (previousGuiItems.containsKey(treeNode)) {
+					if (!previousGuiItems.get(treeNode).equals(treeNode.getTestElement())) {
+						dirty = true;
+					}
+				} else {
 					dirty = true;
 				}
-			} else {
-				dirty = true;
 			}
 		} else if (removeMode) {
 			previousGuiItems.remove(treeNode);

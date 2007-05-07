@@ -35,6 +35,7 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -45,13 +46,13 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Load a new file, replacing whatever was present.
+ *
  */
 public class Load implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", true);
+	private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", true); //$NON-NLS-1$
 	
 	private static Set commands = new HashSet();
 	static {
@@ -68,31 +69,34 @@ public class Load implements Command {
 	}
 
 	public void doAction(ActionEvent e) {
-		boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
-
-		if (!merging) {
-			ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), "close"));
-		}
-
-		JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" });
+		JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" }); //$NON-NLS-1$
 		if (chooser == null) {
 			return;
 		}
-		boolean isTestPlan = false;
 		InputStream reader = null;
-		File f = null;
 		try {
-			f = chooser.getSelectedFile();
+            File f = chooser.getSelectedFile();
 			if (f != null) {
+                boolean isTestPlan = false;
+                boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
+
 				if (merging) {
 					log.info("Merging file: " + f);
 				} else {
 					log.info("Loading file: " + f);
+                    // Close the test plan currently open
+					ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CLOSE));
+
 					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
 				}
 				reader = new FileInputStream(f);
 				HashTree tree = SaveService.loadTree(reader);
-				isTestPlan = insertLoadedTree(e.getID(), tree);
+				isTestPlan = insertLoadedTree(e.getID(), tree, merging);
+                
+                // don't change name if merging
+                if (!merging && isTestPlan) {
+                    GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+                }
 			}
 		} catch (NoClassDefFoundError ex) // Allow for missing optional jars
 		{
@@ -117,28 +121,39 @@ public class Load implements Command {
 			GuiPackage.getInstance().updateCurrentGui();
 			GuiPackage.getInstance().getMainFrame().repaint();
 		}
-		// don't change name if merging
-		if (!merging && isTestPlan && f != null) {
-			GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
-		}
 	}
 
 	/**
 	 * Returns a boolean indicating whether the loaded tree was a full test plan
 	 */
-	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
+	public boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws Exception, IllegalUserActionException {
 		// convertTree(tree);
 		if (tree == null) {
 			throw new Exception("Error in TestPlan - see log file");
 		}
 		boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
+
+		// If we are loading a new test plan, initialize the tree with the testplan node we are loading
+		if(isTestPlan && !merging) {
+			GuiPackage.getInstance().getTreeModel().clearTestPlan((TestElement)tree.getArray()[0]);
+		}
+
 		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
 		GuiPackage.getInstance().updateCurrentGui();
 		GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
 				new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
 		tree = GuiPackage.getInstance().getCurrentSubTree();
-		ActionRouter.getInstance().actionPerformed(
-				new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_LOADED));
+		// Send different event wether we are merging a test plan into another test plan,
+		// or loading a testplan from scratch
+		ActionEvent actionEvent = null;
+		if(!merging) {
+			actionEvent = new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_LOADED);
+		}
+		else {
+			actionEvent = new ActionEvent(tree.get(tree.getArray()[tree.size() - 1]), id, ActionNames.SUB_TREE_MERGED);
+		}
+
+		ActionRouter.getInstance().actionPerformed(actionEvent);
 	    if (expandTree) {
 			JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
 			   for(int i = 0; i < jTree.getRowCount(); i++) {
@@ -147,5 +162,9 @@ public class Load implements Command {
 	    }
 
 		return isTestPlan;
+	}
+    
+	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
+		return insertLoadedTree(id, tree, false);
 	}
 }
