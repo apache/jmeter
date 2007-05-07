@@ -46,7 +46,7 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
- * Load a new file, replacing whatever was present.
+ * Handles the Open (load a new file) and Merge commands.
  *
  */
 public class Load implements Command {
