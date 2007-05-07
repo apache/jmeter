@@ -227,6 +227,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40077 - Creating new Elements copies values from Existing elements</li>
 <li>Bug 42325 - Implement the "clear" method for the LogicControllers</li>
 <li>Bug 25441 - TestPlan changes sometimes detected incorrectly (isDirty)</li>
+<li>Bug 39734 - Listeners shared after copy/paste operation</li>
 </ul>
 
 <h3>Version 2.2</h3>
