@@ -40,18 +40,19 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Revision$ updated on $Date$
+ * Save the current test plan; implements:
+ * Save
+ * Save TestPlan As
+ * Save (Selection) As
  */
 public class Save implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(ActionNames.SAVE_AS);
-		commands.add(ActionNames.SAVE_ALL_AS);
-		commands.add(ActionNames.SAVE);
+		commands.add(ActionNames.SAVE_AS); // Save (Selection) As
+		commands.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As
+		commands.add(ActionNames.SAVE); // Save
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class Save implements Command {
 		if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
 			JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
 					.getCurrentNode().getName()
-					+ ".jmx");
+					+ ".jmx"); // $NON-NLS-1$
 			if (chooser == null) {
 				return;
 			}
