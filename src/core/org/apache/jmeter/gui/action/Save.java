@@ -117,6 +117,7 @@ public class Save implements Command {
 		} finally {
             JOrphanUtils.closeQuietly(ostream);
 		}
+        GuiPackage.getInstance().updateCurrentGui();
 	}
 
 	// package protected to all for separate test code
