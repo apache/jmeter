@@ -195,7 +195,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final String SAVE_THREAD_COUNTS = "jmeter.save.saveservice.thread_counts"; // $NON_NLS-1$
 
-    // N.B. Remember to update the clone method when adding new variables.
+    // N.B. Remember to update the equals and hashCode methods when adding new variables.
     
 	// Initialise values from properties
 	private boolean time = _time, latency = _latency, timestamp = _timestamp, success = _success, label = _label,
@@ -362,37 +362,100 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 //    }
 
     public Object clone() {
-		SampleSaveConfiguration s = new SampleSaveConfiguration();
-		s.time = time;
-		s.latency = latency;
-		s.timestamp = timestamp;
-		s.success = success;
-		s.label = label;
-		s.code = code;
-		s.message = message;
-		s.threadName = threadName;
-		s.dataType = dataType;
-		s.encoding = encoding;
-		s.assertions = assertions;
-		s.subresults = subresults;
-		s.responseData = responseData;
-		s.samplerData = samplerData;
-		s.xml = xml;
-		s.fieldNames = fieldNames;
-		s.responseHeaders = responseHeaders;
-		s.requestHeaders = requestHeaders;
-		s.formatter = formatter;
-		s.assertionsResultsToSave = assertionsResultsToSave;
-		s.saveAssertionResultsFailureMessage = saveAssertionResultsFailureMessage;
-		s.delimiter = delimiter;
-		s.printMilliseconds = printMilliseconds;
-		s.responseDataOnError = responseDataOnError;
-        s.url = url;
-        s.bytes = bytes;
-        s.fileName = fileName;
-        s.threadCounts = threadCounts;
-		return s;
+        try {
+            SampleSaveConfiguration clone = (SampleSaveConfiguration)super.clone();
+            if(this.formatter != null) {
+                clone.formatter = (SimpleDateFormat)this.formatter.clone();
+            }
+            return clone;
+        }
+        catch(CloneNotSupportedException e) {
+            // this should not happen
+            return null;
+        }
 	}
+    
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+        if((obj == null) || (obj.getClass() != this.getClass())) {
+            return false;
+        }
+        // We know we are comparing to another SampleSaveConfiguration
+        SampleSaveConfiguration s = (SampleSaveConfiguration)obj;
+        boolean primitiveValues = s.time == time &&
+            s.latency == latency && 
+            s.timestamp == timestamp &&
+            s.success == success &&
+            s.label == label &&
+            s.code == code &&
+            s.message == message &&
+            s.threadName == threadName &&
+            s.dataType == dataType &&
+            s.encoding == encoding &&
+            s.assertions == assertions &&
+            s.subresults == subresults &&
+            s.responseData == responseData &&
+            s.samplerData == samplerData &&
+            s.xml == xml &&
+            s.fieldNames == fieldNames &&
+            s.responseHeaders == responseHeaders &&
+            s.requestHeaders == requestHeaders &&
+            s.assertionsResultsToSave == assertionsResultsToSave &&
+            s.saveAssertionResultsFailureMessage == saveAssertionResultsFailureMessage &&
+            s.printMilliseconds == printMilliseconds &&
+            s.responseDataOnError == responseDataOnError &&
+            s.url == url &&
+            s.bytes == bytes &&
+            s.fileName == fileName &&
+            s.threadCounts == threadCounts;
+        
+        boolean stringValues = false;
+        if(primitiveValues) {
+            stringValues = s.delimiter == delimiter || (delimiter != null && delimiter.equals(s.delimiter));
+        }
+        boolean complexValues = false;
+        if(primitiveValues && stringValues) {
+            complexValues = s.formatter == formatter || (formatter != null && formatter.equals(s.formatter));
+        }
+        
+        return primitiveValues && stringValues && complexValues;
+    }
+    
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + (time ? 1 : 0);
+        hash = 31 * hash + (latency ? 1 : 0);
+        hash = 31 * hash + (timestamp ? 1 : 0);
+        hash = 31 * hash + (success ? 1 : 0);
+        hash = 31 * hash + (label ? 1 : 0);
+        hash = 31 * hash + (code ? 1 : 0);
+        hash = 31 * hash + (message ? 1 : 0);
+        hash = 31 * hash + (threadName ? 1 : 0);
+        hash = 31 * hash + (dataType ? 1 : 0);
+        hash = 31 * hash + (encoding ? 1 : 0);
+        hash = 31 * hash + (assertions ? 1 : 0);
+        hash = 31 * hash + (subresults ? 1 : 0);
+        hash = 31 * hash + (responseData ? 1 : 0);
+        hash = 31 * hash + (samplerData ? 1 : 0);
+        hash = 31 * hash + (xml ? 1 : 0);
+        hash = 31 * hash + (fieldNames ? 1 : 0);
+        hash = 31 * hash + (responseHeaders ? 1 : 0);
+        hash = 31 * hash + (requestHeaders ? 1 : 0);
+        hash = 31 * hash + assertionsResultsToSave;
+        hash = 31 * hash + (saveAssertionResultsFailureMessage ? 1 : 0);
+        hash = 31 * hash + (printMilliseconds ? 1 : 0);
+        hash = 31 * hash + (responseDataOnError ? 1 : 0);
+        hash = 31 * hash + (url ? 1 : 0);
+        hash = 31 * hash + (bytes ? 1 : 0);
+        hash = 31 * hash + (fileName ? 1 : 0);
+        hash = 31 * hash + (threadCounts ? 1 : 0);
+        hash = 31 * hash + (delimiter != null  ? delimiter.hashCode() : 0);
+        hash = 31 * hash + (formatter != null  ? formatter.hashCode() : 0);
+        
+        return hash;
+    }
 
     ///////////////////// Start of standard save/set access methods /////////////////////
     
