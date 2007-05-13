@@ -78,17 +78,19 @@ public class LoopController extends GenericController implements Serializable {
 		return getPropertyAsBoolean(CONTINUE_FOREVER);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.Controller#isDone()
-	 */
-	public boolean isDone() {
-		if (getLoops() != 0) {
-			return super.isDone();
-		}
-		return true;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.control.Controller#next()
+     */
+    public Sampler next() {
+        if(endOfLoop()) {
+            return null;
+        }
+        else {
+            return super.next();
+        }
+    }
 
 	private boolean endOfLoop() {
 		return (getLoops() > -1) && loopCount >= getLoops();
