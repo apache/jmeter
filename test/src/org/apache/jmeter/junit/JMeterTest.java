@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -76,6 +77,8 @@ public class JMeterTest extends JMeterTestCase {
 	private static Map funcTitles;
 
     private static Properties nameMap;
+    
+    private static final Locale TEST_LOCALE = Locale.ENGLISH; 
     
 	public JMeterTest(String name) {
 		super(name);
@@ -144,6 +147,9 @@ public class JMeterTest extends JMeterTestCase {
 			System.out.println("Cannot create MainFrame: " + e);
 		}
 
+        // The Locale used to instantiate the GUI objects
+        JMeterUtils.setLocale(TEST_LOCALE);
+        
 		TestSuite suite = new TestSuite("JMeterTest");
         suite.addTest(new JMeterTest("readAliases"));
 		suite.addTest(new JMeterTest("createTitleSet"));
@@ -403,6 +409,9 @@ public class JMeterTest extends JMeterTestCase {
 	 * Test GUI elements - run for all components
 	 */
 	public void GUIComponents1() throws Exception {
+        // We must set the Locale to the same value that was used when the
+        // GUI objects was instantiated in this class
+        JMeterUtils.setLocale(TEST_LOCALE);
 		String name = guiItem.getClass().getName();
 
 		assertEquals("Name should be same as static label for " + name, guiItem.getStaticLabel(), guiItem.getName());
