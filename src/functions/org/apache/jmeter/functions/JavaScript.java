@@ -54,9 +54,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	public JavaScript() {
 	}
 
-	public Object clone() {
-		JavaScript newJavaScript = new JavaScript();
-		return newJavaScript;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/*

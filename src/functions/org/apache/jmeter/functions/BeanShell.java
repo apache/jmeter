@@ -39,13 +39,14 @@ import org.apache.log.Logger;
 /**
  * A function which understands BeanShell
  * 
- * @version $Revision$ Updated on: $Date$
  */
 
 public class BeanShell extends AbstractFunction implements Serializable {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__BeanShell"; //$NON-NLS-1$
@@ -64,8 +65,8 @@ public class BeanShell extends AbstractFunction implements Serializable {
 	public BeanShell() {
 	}
 
-	public Object clone() {
-		return new BeanShell();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/*

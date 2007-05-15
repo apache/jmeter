@@ -66,9 +66,8 @@ public class XPath extends AbstractFunction implements Serializable {
 	public XPath() {
 	}
 
-	public Object clone() {
-		XPath newReader = new XPath();
-		return newReader;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**

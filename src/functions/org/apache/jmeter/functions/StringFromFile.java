@@ -63,6 +63,8 @@ import org.apache.log.Logger;
 public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__StringFromFile";//$NON-NLS-1$
@@ -88,9 +90,9 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
 	private static final int MAX_PARAM_COUNT = 4;
 
-	transient private String myValue = ERR_IND;
+	transient private String myValue;
 
-	transient private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
+	transient private String myName;
 
 	transient private Object[] values;
 
@@ -104,13 +106,24 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	transient private String fileName; // needed for error messages
 
 	public StringFromFile() {
+		init();
 		if (log.isDebugEnabled()) {
 			log.debug("++++++++ Construct " + this);
 		}
 	}
 
-	public Object clone() {
-		StringFromFile newReader = new StringFromFile();
+	private void init(){
+		myValue = ERR_IND;
+		myName = "StringFromFile_";//$NON-NLS-1$		
+	}
+	
+	private Object readResolve(){
+		init();
+		return this;
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		StringFromFile newReader = (StringFromFile) super.clone();
 		if (log.isDebugEnabled()) { // Skip expensive parameter creation ..
 			log.debug(this + "::StringFromFile.clone()", new Throwable("debug"));//$NON-NLS-1$
 		}

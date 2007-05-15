@@ -40,6 +40,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class TimeFunction extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     private static final String KEY = "__time"; // $NON-NLS-1$
 
     private static final List desc = new LinkedList();
