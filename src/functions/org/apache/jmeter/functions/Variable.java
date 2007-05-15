@@ -58,8 +58,8 @@ public class Variable extends AbstractFunction implements Serializable {
 	public Variable() {
 	}
 
-	public Object clone() {
-		return new Variable();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)

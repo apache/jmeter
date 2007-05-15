@@ -70,9 +70,8 @@ public class CSVRead extends AbstractFunction implements Serializable {
 	public CSVRead() {
 	}
 
-	public Object clone() {
-		CSVRead newReader = new CSVRead();
-		return newReader;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**

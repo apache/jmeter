@@ -63,8 +63,8 @@ public class LogFunction2 extends AbstractFunction implements Serializable {
 	public LogFunction2() {
 	}
 
-	public Object clone() {
-		return new LogFunction2();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)

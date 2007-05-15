@@ -58,10 +58,10 @@ public class IntSum extends AbstractFunction implements Serializable {
 	 * Clone this Add object.
 	 * 
 	 * @return A new Add object.
+	 * @throws CloneNotSupportedException 
 	 */
-	public Object clone() {
-		IntSum newIntSum = new IntSum();
-		return newIntSum;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
