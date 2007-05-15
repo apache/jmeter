@@ -37,6 +37,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Random extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__Random"; //$NON-NLS-1$
@@ -55,14 +57,8 @@ public class Random extends AbstractFunction implements Serializable {
 	public Random() {
 	}
 
-	/**
-	 * Clone this Add object.
-	 * 
-	 * @return A new Add object.
-	 */
-	public Object clone() {
-		Random newRandom = new Random();
-		return newRandom;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**

@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__counter"; //$NON-NLS-1$
@@ -65,10 +67,8 @@ public class IterationCounter extends AbstractFunction implements Serializable {
         return this;
     }
     
-	public Object clone() {
-		IterationCounter newCounter = new IterationCounter();
-		newCounter.globalCounter = globalCounter;
-		return newCounter;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/*

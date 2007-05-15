@@ -46,6 +46,8 @@ import org.apache.oro.text.regex.Util;
 public class RegexFunction extends AbstractFunction implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 1L;
+	
 	public static final String ALL = "ALL"; //$NON-NLS-1$
 
 	public static final String RAND = "RAND"; //$NON-NLS-1$

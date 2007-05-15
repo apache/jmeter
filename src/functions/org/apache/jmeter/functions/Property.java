@@ -63,8 +63,8 @@ public class Property extends AbstractFunction implements Serializable {
 	public Property() {
 	}
 
-	public Object clone() {
-		return new Property();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)

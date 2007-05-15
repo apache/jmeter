@@ -62,8 +62,8 @@ public class SetProperty extends AbstractFunction implements Serializable {
 	public SetProperty() {
 	}
 
-	public Object clone() {
-		return new SetProperty();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
