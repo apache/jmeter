@@ -350,8 +350,10 @@ These are shown below.</p>
         -L, --loglevel {argument}={value}
                 Define loglevel: [category=]level 
                 e.g. jorphan=INFO or jmeter.util=DEBUG
-        -r[[=]server1,...], --runremote[=server1,...]
-                Start remote servers from non-gui mode
+        -r, --runremote
+                Start remote servers
+        -R, --remotestart  server1,...
+                Start these remote servers
         -d, --homedir {argument}
                 the jmeter home directory to use
 </pre>
