@@ -117,6 +117,7 @@ public class JMeter implements JMeterPlugin {
     private static final int LOGLEVEL           = 'L';// $NON-NLS-1$
     private static final int NONPROXY_HOSTS     = 'N';// $NON-NLS-1$
 	private static final int PROXY_PORT         = 'P';// $NON-NLS-1$
+    private static final int REMOTE_OPT_PARAM   = 'R';// $NON-NLS-1$
     private static final int SYSTEM_PROPFILE    = 'S';// $NON-NLS-1$
 
 
@@ -178,8 +179,10 @@ public class JMeter implements JMeterPlugin {
 			new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
 					"[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
-			new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_OPTIONAL, REMOTE_OPT,
-					"Start remote servers from non-gui mode"),
+			new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
+					"Start remote servers"),
+			new CLOptionDescriptor("remotestart", CLOptionDescriptor.ARGUMENT_REQUIRED, REMOTE_OPT_PARAM,
+					"Start these remote servers"),
 			new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
 					"the jmeter home directory to use"), };
 
@@ -194,7 +197,7 @@ public class JMeter implements JMeterPlugin {
 	/**
 	 * Starts up JMeter in GUI mode
 	 */
-	public void startGui(CLOption testFile) {
+	private void startGui(CLOption testFile) {
 
 		PluginManager.install(this, true);
 		JMeterTreeModel treeModel = new JMeterTreeModel();
@@ -297,14 +300,12 @@ public class JMeter implements JMeterPlugin {
                 // We need to check if the JMeter home contains spaces in the path,
                 // because then we will not be able to bind to RMI registry, see
                 // Java bug id 4496398
-                File jmeterHome = new File(JMeterUtils.getJMeterHome());
-                if(!jmeterHome.toURL().equals(jmeterHome.toURI().toURL())) {
+                final String jmHome = JMeterUtils.getJMeterHome();
+                if(jmHome.indexOf(" ") > -1) {// $NON-NLS-1$
                     // Just warn user, and exit, no reason to continue, since we will
                     // not be able to bind to RMI registry, until Java bug 4496398 is fixed
-                    System.out.println("JMeter path cannot contain spaces when run in server mode."); // $NON-NLS-1$
-                    System.out.println("JMeterHome is "  + jmeterHome.getAbsolutePath()); // $NON-NLS-1$
-                    log.error("JMeter path cannot contain spaces when run in server mode : " + jmeterHome.getAbsolutePath()); // $NON-NLS-1$
-                    System.exit(-1);
+                    log.error("JMeter path cannot contain spaces when run in server mode : " + jmHome);
+                    throw new RuntimeException("JMeter path cannot contain spaces when run in server mode: "+jmHome);
                 }
                 // Start the server
 				startServer(JMeterUtils.getPropDefault("server_port", 0));// $NON-NLS-1$
@@ -313,8 +314,11 @@ public class JMeter implements JMeterPlugin {
 				startGui(parser.getArgumentById(TESTFILE_OPT));
 				startOptionalServers();
 			} else {
-				startNonGui(parser.getArgumentById(TESTFILE_OPT), parser.getArgumentById(LOGFILE_OPT), parser
-						.getArgumentById(REMOTE_OPT));
+				CLOption rem=parser.getArgumentById(REMOTE_OPT_PARAM);
+				if (rem==null) rem=parser.getArgumentById(REMOTE_OPT);
+				startNonGui(parser.getArgumentById(TESTFILE_OPT), 
+						parser.getArgumentById(LOGFILE_OPT), 
+						rem);
 				startOptionalServers();
 			}
 		} catch (IllegalUserActionException e) {
@@ -580,10 +584,12 @@ public class JMeter implements JMeterPlugin {
 	
 	}
 
+	//TODO - is this needed?
 	public void startServer() {
 		startServer(0);
 	}
 
+	//TODO - should this be public?
 	public void startServer(int port) {
 		try {
 			new RemoteJMeterEngineImpl(port);
@@ -596,6 +602,7 @@ public class JMeter implements JMeterPlugin {
 		}
 	}
 
+    // TODO - should this be public?
 	public void startNonGui(CLOption testFile, CLOption logFile, CLOption remoteStart)
 			throws IllegalUserActionException {
 		// add a system property so samplers can check to see if JMeter
