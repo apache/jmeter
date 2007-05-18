@@ -132,11 +132,12 @@ public final class CLOption {
 	 */
 	public final String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("[Option ");
+		sb.append("[");
 		final char id = (char) m_descriptor.getId();
-		if (id == 0) {
-			sb.append("-");
+		if (id == TEXT_ARGUMENT) {
+			sb.append("TEXT ");
 		} else {
+			sb.append("Option ");
 			sb.append(id);			
 		}
 
@@ -157,16 +158,16 @@ public final class CLOption {
 	 */
 	final String toShortString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("-");
 		final char id = (char) m_descriptor.getId();
-		if (id == 0) {
+		if (id != TEXT_ARGUMENT) {
 			sb.append("-");
-		} else {
 			sb.append(id);			
 		}
 
 		if (null != m_arguments) {
-			sb.append("=");
+			if (id != TEXT_ARGUMENT) {
+				sb.append("=");
+			}
 			sb.append(Arrays.asList(m_arguments));
 		}
 		return sb.toString();
