@@ -233,6 +233,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 40851 - Loop controller with 0 iterations, stops evaluating the iterations field</li>
 <li>Bug 24684 - remote startup problems if spaces in the path of the jmeter</li>
 <li>Use Listener configuration when loading CSV data files</li>
+<li>Function methods setParameters() need to be synchronized</li>
 </ul>
 
 <h3>Version 2.2</h3>
