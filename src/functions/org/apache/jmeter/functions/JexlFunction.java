@@ -55,7 +55,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
 
     private Object[] values;
 
-    public String execute(SampleResult result, Sampler sampler)
+    public synchronized String execute(SampleResult result, Sampler sampler)
             throws InvalidVariableException
     {
         String str = ""; //$NON-NLS-1$
@@ -97,7 +97,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
         return KEY;
     }
 
-    public void setParameters(Collection parameters)
+    public synchronized void setParameters(Collection parameters)
             throws InvalidVariableException
     {
         values = parameters.toArray();

@@ -112,7 +112,7 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 	 * 
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		variables = parameters.toArray();
 

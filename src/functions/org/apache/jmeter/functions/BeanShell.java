@@ -142,7 +142,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 	 * 
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		values = parameters.toArray();
 
