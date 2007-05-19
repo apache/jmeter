@@ -157,13 +157,15 @@ public final class OldSaveService {
 		int i=0;
 
 		try {
-			if (saveConfig.printMilliseconds()) {
-				text = parts[i++];
-				timeStamp = Long.parseLong(text);
-			} else if (saveConfig.formatter() != null) {
-				text = parts[i++];
-				Date stamp = saveConfig.formatter().parse(text);
-				timeStamp = stamp.getTime();
+			if (saveConfig.saveTimestamp()){
+				if (saveConfig.printMilliseconds()) {
+					text = parts[i++];
+					timeStamp = Long.parseLong(text);
+				} else if (saveConfig.formatter() != null) {
+					text = parts[i++];
+					Date stamp = saveConfig.formatter().parse(text);
+					timeStamp = stamp.getTime();
+				}
 			}
 
 			if (saveConfig.saveTime()) {
