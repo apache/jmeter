@@ -23,9 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +54,7 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
@@ -104,6 +108,11 @@ public final class OldSaveService {
     // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
 
+	// Date format to try if the time format does not parse as milliseconds
+	// (this is the suggested value in jmeter.properties)
+	private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
+	private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
+
 	private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 
 	/**
@@ -116,34 +125,23 @@ public final class OldSaveService {
     //                  Start of CSV methods
     
     // TODO - move to separate file? If so, remember that some of the
-    
-	/**
-	 * Make a SampleResult given a delimited string.
-     * Note that this assumes that the fields are present as per jmeter.properties.
-	 * 
-	 * @param inputLine
-	 * @return SampleResult
-	 */
-	public static SampleResult makeResultFromDelimitedString(String inputLine) {
-        return makeResultFromDelimitedString(inputLine, _saveConfig);
-    }
-    
+      
     /**
      * Make a SampleResult given a delimited string.
      * 
      * @param inputLine - line from CSV file
-     * @param config - configuration
+     * @param saveConfig - configuration
+     * @param lineNumber - line number for error reporting
      * @return SampleResult or null if header line detected
      * 
-     * @throws NumberFormatException
      * @throws JMeterError
      */
-    public static SampleResult makeResultFromDelimitedString(String inputLine, SampleSaveConfiguration saveConfig) {
-        // Check for a header line
-        if (inputLine.startsWith(TIME_STAMP) || inputLine.startsWith(CSV_ELAPSED)){
-            return null;
-        }
-		SampleResult result = null;
+    public static SampleResult makeResultFromDelimitedString(
+    		final String inputLine, 
+    		final SampleSaveConfiguration saveConfig, // may be updated
+    		final long lineNumber) {
+ 
+    	SampleResult result = null;
 		long timeStamp = 0;
 		long elapsed = 0;
 		/*
@@ -153,18 +151,30 @@ public final class OldSaveService {
 		// The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
 		String parts[]=inputLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
 		String text = null;
-		String field = TIME_STAMP; // Save the name for error reporting
+		String field = null; // Save the name for error reporting
 		int i=0;
 
 		try {
 			if (saveConfig.saveTimestamp()){
+				field = TIME_STAMP;
+				text = parts[i++];
 				if (saveConfig.printMilliseconds()) {
-					text = parts[i++];
-					timeStamp = Long.parseLong(text);
+					try {
+						timeStamp = Long.parseLong(text);
+					} catch (NumberFormatException e) {// see if this works
+						log.warn(e.toString());
+						Date stamp = DEFAULT_DATE_FORMAT.parse(text);
+						timeStamp = stamp.getTime();
+						log.warn("Setting date format to: "+DEFAULT_DATE_FORMAT_STRING);
+						saveConfig.setFormatter(DEFAULT_DATE_FORMAT);
+					}
 				} else if (saveConfig.formatter() != null) {
-					text = parts[i++];
 					Date stamp = saveConfig.formatter().parse(text);
 					timeStamp = stamp.getTime();
+				} else { // can this happen?
+					final String msg = "Unknown timestamp format";
+					log.warn(msg);
+					throw new JMeterError(msg);
 				}
 			}
 
@@ -251,13 +261,13 @@ public final class OldSaveService {
 
             
 		} catch (NumberFormatException e) {
-			log.warn("Error parsing " + field + " " + e);
-			throw e;
+			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
+			throw new JMeterError(e);
 		} catch (ParseException e) {
-			log.warn("Error parsing " + field + " " + e);
+			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
 			throw new JMeterError(e);
 		} catch (ArrayIndexOutOfBoundsException e){
-			log.warn("Insufficient columns to parse " + field);
+			log.warn("Insufficient columns to parse field '" + field + "' at line " + lineNumber);
 			throw new JMeterError(e);
 		}
 		return result;
@@ -369,6 +379,53 @@ public final class OldSaveService {
 			resultString = text.toString();
 		}
 		return resultString;
+	}
+	
+	// Map header names to set() methods
+	private static final Map headerLabelMethods = new HashMap();
+	
+	static {
+		    headerLabelMethods.put(TIME_STAMP, new Functor("setTimestamp"));
+			headerLabelMethods.put(CSV_ELAPSED, new Functor("setTime"));
+			headerLabelMethods.put(LABEL, new Functor("setLabel"));
+			headerLabelMethods.put(RESPONSE_CODE, new Functor("setCode"));
+			headerLabelMethods.put(RESPONSE_MESSAGE, new Functor("setMessage"));
+			headerLabelMethods.put(THREAD_NAME, new Functor("setThreadName"));
+			headerLabelMethods.put(DATA_TYPE, new Functor("setDataType"));
+			headerLabelMethods.put(SUCCESSFUL, new Functor("setSuccess"));
+			headerLabelMethods.put(FAILURE_MESSAGE, new Functor("setAssertionResultsFailureMessage"));
+            headerLabelMethods.put(CSV_BYTES, new Functor("setBytes"));
+            headerLabelMethods.put(CSV_URL, new Functor("setUrl"));
+            headerLabelMethods.put(CSV_FILENAME, new Functor("setFileName"));
+            headerLabelMethods.put(CSV_LATENCY, new Functor("setLatency"));
+            headerLabelMethods.put(CSV_ENCODING, new Functor("setEncoding"));
+            headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
+            headerLabelMethods.put(CSV_THREAD_COUNT2, new Functor("setThreadCounts"));
+	}
+
+	/**
+	 * Parse a CSV header line
+	 * @param headerLine from CSV file
+	 * @return config corresponding to the header items found or null if not a header line
+	 */
+	public static SampleSaveConfiguration getSampleSaveConfiguration(String headerLine){
+		String parts[]=headerLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
+
+		// Check if the line is a header
+		for(int i=0;i<parts.length;i++){
+			if (!headerLabelMethods.containsKey(parts[i])){
+				return null; // unknown column name
+			}
+		}
+
+		// We know the column names all exist, so create the config 
+		SampleSaveConfiguration saveConfig=new SampleSaveConfiguration(false);
+		
+		for(int i=0;i<parts.length;i++){
+			Functor set = (Functor) headerLabelMethods.get(parts[i]);
+			set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
+		}
+		return saveConfig;
 	}
 
 	/**

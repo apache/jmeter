@@ -141,6 +141,8 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42247 - improve HCI</li>
 <li>Support "file" protocol in HTTP Samplers</li>
 <li>Allow user to cancel out of Close dialogue</li>
+<li>Use ISO date-time format for Tree View Listener (previously the year was not shown)</li>
+<li>Improve loading of CSV files: if possible, use header to determine format; guess timestamp format if not milliseconds</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
@@ -230,6 +232,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 39734 - Listeners shared after copy/paste operation</li>
 <li>Bug 40851 - Loop controller with 0 iterations, stops evaluating the iterations field</li>
 <li>Bug 24684 - remote startup problems if spaces in the path of the jmeter</li>
+<li>Use Listener configuration when loading CSV data files</li>
 </ul>
 
 <h3>Version 2.2</h3>
