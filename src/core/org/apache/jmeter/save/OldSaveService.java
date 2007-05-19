@@ -51,6 +51,7 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
@@ -91,7 +92,7 @@ public final class OldSaveService {
     // ADDITIONAL CSV RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
     // ---------------------------------------------------------------------
 
-    private static final String CSV_TIME = "elapsed"; // $NON-NLS-1$
+    private static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
     private static final String CSV_BYTES= "bytes"; // $NON-NLS-1$
     private static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
     private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
@@ -134,11 +135,12 @@ public final class OldSaveService {
      * @param config - configuration
      * @return SampleResult or null if header line detected
      * 
-     * @throws NumberFormatException, ParseException
+     * @throws NumberFormatException
+     * @throws JMeterError
      */
     public static SampleResult makeResultFromDelimitedString(String inputLine, SampleSaveConfiguration saveConfig) {
         // Check for a header line
-        if (inputLine.startsWith(TIME_STAMP) || inputLine.startsWith(CSV_TIME)){
+        if (inputLine.startsWith(TIME_STAMP) || inputLine.startsWith(CSV_ELAPSED)){
             return null;
         }
 		SampleResult result = null;
@@ -151,6 +153,7 @@ public final class OldSaveService {
 		// The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
 		String parts[]=inputLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
 		String text = null;
+		String field = TIME_STAMP; // Save the name for error reporting
 		int i=0;
 
 		try {
@@ -164,6 +167,7 @@ public final class OldSaveService {
 			}
 
 			if (saveConfig.saveTime()) {
+				field = CSV_ELAPSED;
 				text = parts[i++];
 				elapsed = Long.parseLong(text);
 			}
@@ -171,30 +175,36 @@ public final class OldSaveService {
 			result = new SampleResult(timeStamp, elapsed);
 
 			if (saveConfig.saveLabel()) {
+				field = LABEL;
 				text = parts[i++];
 				result.setSampleLabel(text);
 			}
 			if (saveConfig.saveCode()) {
+				field = RESPONSE_CODE;
 				text = parts[i++];
 				result.setResponseCode(text);
 			}
 
 			if (saveConfig.saveMessage()) {
+				field = RESPONSE_MESSAGE;
 				text = parts[i++];
 				result.setResponseMessage(text);
 			}
 
 			if (saveConfig.saveThreadName()) {
+				field = THREAD_NAME;
 				text = parts[i++];
 				result.setThreadName(text);
 			}
 
 			if (saveConfig.saveDataType()) {
+				field = DATA_TYPE;
 				text = parts[i++];
 				result.setDataType(text);
 			}
 
 			if (saveConfig.saveSuccess()) {
+				field = SUCCESSFUL;
 				text = parts[i++];
 				result.setSuccessful(Boolean.valueOf(text).booleanValue());
 			}
@@ -205,6 +215,7 @@ public final class OldSaveService {
 			}
             
             if (saveConfig.saveBytes()) {
+            	field = CSV_BYTES;
                 text = parts[i++];
                 result.setBytes(Integer.parseInt(text));
             }
@@ -220,26 +231,32 @@ public final class OldSaveService {
             }
         
             if (saveConfig.saveFileName()) {
+            	field = CSV_FILENAME;
                 text = parts[i++];
                 result.setResultFileName(text);
             }            
             if (saveConfig.saveLatency()) {
+            	field = CSV_LATENCY;
                 text = parts[i++];
                 result.setLatency(Long.parseLong(text));
             }
 
             if (saveConfig.saveEncoding()) {
+            	field = CSV_ENCODING;
                 text = parts[i++];
                 result.setEncodingAndType(text);
             }
 
             
 		} catch (NumberFormatException e) {
-			log.warn("Error parsing number " + e);
+			log.warn("Error parsing " + field + " " + e);
 			throw e;
 		} catch (ParseException e) {
-			log.warn("Error parsing line " + e);
-			throw new RuntimeException(e.toString());
+			log.warn("Error parsing " + field + " " + e);
+			throw new JMeterError(e);
+		} catch (ArrayIndexOutOfBoundsException e){
+			log.warn("Insufficient columns to parse " + field);
+			throw new JMeterError(e);
 		}
 		return result;
 	}
@@ -268,7 +285,7 @@ public final class OldSaveService {
 		}
 
 		if (saveConfig.saveTime()) {
-			text.append(CSV_TIME);
+			text.append(CSV_ELAPSED);
 			text.append(delim);
 		}
 
