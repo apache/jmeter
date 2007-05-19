@@ -93,7 +93,7 @@ public class IntSum extends AbstractFunction implements Serializable {
 	 * 
 	 * @see Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 		values = parameters.toArray();
 
 		if (values.length < 3) {
