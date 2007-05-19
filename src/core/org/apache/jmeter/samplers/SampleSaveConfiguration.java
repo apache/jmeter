@@ -372,7 +372,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		label = value;
 		latency = value;
 		message = value;
-		//printMilliseconds is derived from properties only
+		printMilliseconds = _printMilliseconds;//is derived from properties only
 		requestHeaders = value;
 		responseData = value;
 		responseDataOnError = value;
@@ -690,10 +690,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	///////////////// End of standard field accessors /////////////////////
 	
     /**
-     * Only intended for use by OldSaveService
+     * Only intended for use by OldSaveService (and test cases)
      */
     public void setFormatter(DateFormat fmt){
-    	printMilliseconds = false;
+    	printMilliseconds = "ms".equals(fmt);// $NON-NLS-1$ maintain relationship
     	formatter = fmt;
     }
     
