@@ -279,7 +279,7 @@ public final class OldSaveService {
 		StringBuffer text = new StringBuffer();
 		String delim = saveConfig.getDelimiter();
 
-		if (saveConfig.saveTimestamp() || (saveConfig.formatter() != null)) {
+		if (saveConfig.saveTimestamp()) {
 			text.append(TIME_STAMP);
 			text.append(delim);
 		}
