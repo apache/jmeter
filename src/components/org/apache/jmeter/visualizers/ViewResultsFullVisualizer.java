@@ -28,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -91,9 +93,15 @@ import org.xml.sax.SAXParseException;
  * 
  * Created 2001/07/25
  */
-public class ViewResultsFullVisualizer extends AbstractVisualizer implements ActionListener, TreeSelectionListener,
-		Clearable {
+public class ViewResultsFullVisualizer extends AbstractVisualizer 
+        implements ActionListener, TreeSelectionListener, Clearable 
+    {
+
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
+	
+	private static final String NL = "\n"; // $NON-NLS-1$
 
 	private static final String XML_PFX = "<?xml "; // $NON-NLS-1$
 
@@ -326,12 +334,15 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 							sampleDataField.setText(sd);
 						}
 
-						statsDoc.insertString(statsDoc.getLength(), "Thread Name: " + res.getThreadName() + "\n", null); // $NON-NLS-2$
-						String startTime = new Date(res.getStartTime()).toString();
-						statsDoc.insertString(statsDoc.getLength(), "Sample Start: " + startTime + "\n", null); // $NON-NLS-2$
-						statsDoc.insertString(statsDoc.getLength(), "Load time: " + res.getTime() + "\n", null); // $NON-NLS-2$
-						statsDoc.insertString(statsDoc.getLength(), "Size in bytes: " + res.getBytes() + "\n", null); // $NON-NLS-2$
-
+						StringBuffer statsBuff = new StringBuffer(200);
+						statsBuff.append("Thread Name: ").append(res.getThreadName()).append(NL);
+						String startTime = dateFormat.format(new Date(res.getStartTime()));
+						statsBuff.append("Sample Start: ").append(startTime).append(NL);
+						statsBuff.append("Load time: ").append(res.getTime()).append(NL);
+						statsBuff.append("Size in bytes: ").append(res.getBytes()).append(NL);
+						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+						statsBuff = new StringBuffer(); //reset for reuse
+						
 						String responseCode = res.getResponseCode();
 						log.debug("valueChanged1 : response code - " + responseCode);
 
@@ -356,15 +367,21 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 							style = statsDoc.getStyle(STYLE_SERVER_ERROR);
 							break;
 						}
-						statsDoc.insertString(statsDoc.getLength(), "HTTP response code: " + responseCode + "\n", style);
+
+						statsBuff.append("Response code: ").append(responseCode).append(NL);
+						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
+						statsBuff = new StringBuffer(100); //reset for reuse
 
 						// response message label
 						String responseMsgStr = res.getResponseMessage();
 
 						log.debug("valueChanged1 : response message - " + responseMsgStr);
-						statsDoc.insertString(statsDoc.getLength(), "HTTP response message: " + responseMsgStr + "\n", null);
+						statsBuff.append("Response message: ").append(responseMsgStr).append(NL);
 
-						statsDoc.insertString(statsDoc.getLength(), "\nHTTP response headers:\n" + res.getResponseHeaders() + "\n", null);
+						statsBuff.append(NL).append("Response headers:").append(NL);
+						statsBuff.append(res.getResponseHeaders()).append(NL);
+						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+						statsBuff = null; // Done
 
 						// get the text response and image icon
 						// to determine which is NOT null
@@ -381,7 +398,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 						} else {
 							byte[] responseBytes = res.getResponseData();
 							if (responseBytes != null) {
-								showImage(new ImageIcon(responseBytes));
+								showImage(new ImageIcon(responseBytes)); //TODO implement other non-text types
 							}
 						}
 					}
@@ -397,15 +414,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer implements Act
 					}
 
 					if (res != null) {
-						statsDoc.insertString(statsDoc.getLength(),
-								"Assertion error: " + res.isError() + "\n",
-								null);
-						statsDoc.insertString(statsDoc.getLength(),
-								"Assertion failure: " + res.isFailure() + "\n",
-								null);
-						statsDoc.insertString(statsDoc.getLength(),
-								"Assertion failure message : " + res.getFailureMessage() + "\n",
-								null);
+						StringBuffer statsBuff = new StringBuffer(100);
+						statsBuff.append("Assertion error: ").append(res.isError()).append(NL);
+						statsBuff.append("Assertion failure: ").append(res.isFailure()).append(NL);
+						statsBuff.append("Assertion failure message : ").append(res.getFailureMessage()).append(NL);
+						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+						statsBuff = null;
 					}
 				}
 			}
