@@ -18,9 +18,12 @@
 
 package org.apache.jmeter.samplers;
 
-import junit.framework.TestCase;
+import java.text.SimpleDateFormat;
 
-public class TestSampleSaveConfiguration extends TestCase {    
+import org.apache.jmeter.junit.JMeterTestCase;
+
+// Extends JMeterTest case because it needs access to JMeter properties
+public class TestSampleSaveConfiguration extends JMeterTestCase {    
     public TestSampleSaveConfiguration(String name) {
         super(name);
     }
@@ -90,5 +93,47 @@ public class TestSampleSaveConfiguration extends TestCase {
         assertFalse(a.hashCode() == b.hashCode());
         assertFalse(a.saveAssertions() == b.saveAssertions());
     }
-}
+
+    public void testFalse() throws Exception {
+        SampleSaveConfiguration a = new SampleSaveConfiguration(false);
+        SampleSaveConfiguration b = new SampleSaveConfiguration(false);
+        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertTrue("Objects should be equal",a.equals(b));
+        assertTrue("Objects should be equal",b.equals(a));
+    }
+
+    public void testTrue() throws Exception {
+        SampleSaveConfiguration a = new SampleSaveConfiguration(true);
+        SampleSaveConfiguration b = new SampleSaveConfiguration(true);
+        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertTrue("Objects should be equal",a.equals(b));
+        assertTrue("Objects should be equal",b.equals(a));
+    }
+    public void testFalseTrue() throws Exception {
+        SampleSaveConfiguration a = new SampleSaveConfiguration(false);
+        SampleSaveConfiguration b = new SampleSaveConfiguration(true);
+        assertFalse("Hash codes should not be equal",a.hashCode() == b.hashCode());
+        assertFalse("Objects should not be equal",a.equals(b));
+        assertFalse("Objects should not be equal",b.equals(a));
+    }
+
+    public void testFormatter() throws Exception {
+        SampleSaveConfiguration a = new SampleSaveConfiguration(false);
+        SampleSaveConfiguration b = new SampleSaveConfiguration(false);
+        a.setFormatter(null);
+        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertTrue("Objects should be equal",a.equals(b));
+        assertTrue("Objects should be equal",b.equals(a));
+        b.setFormatter(null);
+        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertTrue("Objects should be equal",a.equals(b));
+        assertTrue("Objects should be equal",b.equals(a));
+        a.setFormatter(new SimpleDateFormat());
+        b.setFormatter(new SimpleDateFormat());
+        assertTrue("Hash codes should be equal",a.hashCode() == b.hashCode());
+        assertTrue("Objects should be equal",a.equals(b));
+        assertTrue("Objects should be equal",b.equals(a));
+    }
+
+ }
 
