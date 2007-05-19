@@ -60,6 +60,7 @@ import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
@@ -202,7 +203,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             try {
                                 SampleResult result = OldSaveService.makeResultFromDelimitedString(line);
                                 if (result != null) sendToVisualizer(result);
-                            } catch (NumberFormatException ignored){
+                            } catch (NumberFormatException ignored){//TODO - why ignore these?
                                 errorDetected = true;
                             }
                             line = dataReader.readLine();
@@ -230,14 +231,16 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     }
                 }
 			} catch (IOException e) {
-                log.warn("Problem reading JTL file "+e.getLocalizedMessage());
+                log.warn("Problem reading JTL file: "+file);
+			} catch (JMeterError e){
+                log.warn("Problem reading JTL file: "+file);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
 				if (!parsedOK || errorDetected) {
                     GuiPackage.showErrorMessage(
                                 "Error loading results file - see log file",
-                                "CSV Result file loader");
+                                "Result file loader");
 				}
 			}
 		}
