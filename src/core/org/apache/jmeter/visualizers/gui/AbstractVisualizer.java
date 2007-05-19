@@ -119,8 +119,6 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 
 	private JButton saveConfigButton;
 
-	SampleSaveConfiguration saveConfig;
-
 	protected ResultCollector collector = new ResultCollector();
 
 	protected boolean isStats = false;
