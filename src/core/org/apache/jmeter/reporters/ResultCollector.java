@@ -198,15 +198,19 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     log.warn(filename+" is empty");
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
-                        while (line != null) { // Already read 1st line
-                            // TODO parse the header line if there is one
-                            try {
-                                SampleResult result = OldSaveService.makeResultFromDelimitedString(line,getSaveConfig());
-                                if (result != null) sendToVisualizer(result);
-                            } catch (NumberFormatException ignored){//TODO - why ignore these?
-                                errorDetected = true;
-                            }
+                    	long lineNumber=1;
+                    	SampleSaveConfiguration saveConfig = OldSaveService.getSampleSaveConfiguration(line);
+                    	if (saveConfig == null) {// not a valid header
+                    		saveConfig = (SampleSaveConfiguration) getSaveConfig().clone(); // OldSaveService may change the format
+                    	} else { // header line has been processed, so read the next
                             line = dataReader.readLine();
+                            lineNumber++;
+                    	}
+                        while (line != null) { // Already read 1st line
+                            SampleResult result = OldSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
+                            if (result != null) sendToVisualizer(result);
+                            line = dataReader.readLine();
+                            lineNumber++;
                         }
                         parsedOK = true;                                
                     } else { // We are processing XML
