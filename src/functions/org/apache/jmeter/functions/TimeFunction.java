@@ -89,7 +89,7 @@ public class TimeFunction extends AbstractFunction implements Serializable {
      * 
      * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
      */
-    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String datetime;
         if (format.length() == 0){// Default to milliseconds
             datetime = Long.toString(System.currentTimeMillis());
@@ -115,7 +115,7 @@ public class TimeFunction extends AbstractFunction implements Serializable {
      * 
      * @see org.apache.jmeter.functions.Function#setParameters(Collection)
      */
-    public void setParameters(Collection parameters) throws InvalidVariableException {
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
         checkParameterCount(parameters, 0, 2);
         

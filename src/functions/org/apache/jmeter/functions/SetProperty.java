@@ -85,7 +85,7 @@ public class SetProperty extends AbstractFunction implements Serializable {
 		}
 	}
 
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		values = parameters.toArray();
 
