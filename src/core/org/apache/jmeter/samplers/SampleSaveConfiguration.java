@@ -23,6 +23,7 @@ package org.apache.jmeter.samplers;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
@@ -219,7 +220,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	private boolean printMilliseconds = _printMilliseconds;
 
 	/** A formatter for the time stamp. */
-	private transient SimpleDateFormat formatter = _formatter;
+	private transient DateFormat formatter = _formatter;
     /* Make transient as we don't want to save the SimpleDataFormat class
      * Also, there's currently no way to change the value via the GUI, so changing it
      * later means editting the JMX, or recreating the Listener.
@@ -255,7 +256,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final boolean _threadCounts;
     
-	private static final SimpleDateFormat _formatter;
+	private static final DateFormat _formatter;
 
 	/**
 	 * The string used to separate fields when stored to disk, for example, the
@@ -388,9 +389,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		xml = value;
 	}
 
-// TODO: may need to implement this to allow for adding new attributes to the config,
-// otherwise XStream will not populate the missing attributes
- 
     private Object readResolve() throws ObjectStreamException{
 	   formatter = _formatter;
        return this;
@@ -691,11 +689,19 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	///////////////// End of standard field accessors /////////////////////
 	
+    /**
+     * Only intended for use by OldSaveService
+     */
+    public void setFormatter(DateFormat fmt){
+    	printMilliseconds = false;
+    	formatter = fmt;
+    }
+    
 	public boolean printMilliseconds() {
 		return printMilliseconds;
 	}
 
-	public SimpleDateFormat formatter() {
+	public DateFormat formatter() {
 		return formatter;
 	}
 
