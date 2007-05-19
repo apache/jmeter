@@ -21,6 +21,7 @@
  */
 package org.apache.jmeter.samplers;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
@@ -354,12 +355,46 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	public SampleSaveConfiguration() {
 	}
 
+	/**
+	 * Alternate constructor for use by OldSaveService
+	 * 
+	 * @param value initial setting for boolean fields used in Config dialogue
+	 */
+	public SampleSaveConfiguration(boolean value) {
+		assertions = value;
+		bytes = value;
+		code = value;
+		dataType = value;
+		encoding = value;
+		fieldNames = value;
+		fileName = value;
+		label = value;
+		latency = value;
+		message = value;
+		//printMilliseconds is derived from properties only
+		requestHeaders = value;
+		responseData = value;
+		responseDataOnError = value;
+		responseHeaders = value;
+		samplerData = value;
+		saveAssertionResultsFailureMessage = value;
+		subresults = value;
+		success = value;
+		threadCounts = value;
+		threadName = value;
+		time = value;
+		timestamp = value;
+		url = value;
+		xml = value;
+	}
+
 // TODO: may need to implement this to allow for adding new attributes to the config,
 // otherwise XStream will not populate the missing attributes
  
-//    private Object readResolve() throws ObjectStreamException{
-//       return this;
-//    }
+    private Object readResolve() throws ObjectStreamException{
+	   formatter = _formatter;
+       return this;
+    }
 
     public Object clone() {
         try {
