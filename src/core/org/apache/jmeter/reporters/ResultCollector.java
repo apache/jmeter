@@ -201,7 +201,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         while (line != null) { // Already read 1st line
                             // TODO parse the header line if there is one
                             try {
-                                SampleResult result = OldSaveService.makeResultFromDelimitedString(line);
+                                SampleResult result = OldSaveService.makeResultFromDelimitedString(line,getSaveConfig());
                                 if (result != null) sendToVisualizer(result);
                             } catch (NumberFormatException ignored){//TODO - why ignore these?
                                 errorDetected = true;
