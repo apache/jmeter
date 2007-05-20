@@ -23,6 +23,7 @@ package org.apache.commons.cli.avalon;
 import java.util.List;
 
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * 
@@ -91,14 +92,36 @@ public final class ClutilTestCase extends TestCase {
 	private static final CLOptionDescriptor BLEE = new CLOptionDescriptor("blee",
 			CLOptionDescriptor.ARGUMENT_DISALLOWED, BLEE_OPT, "blee");
 
-	private static final CLOptionDescriptor ALL = new CLOptionDescriptor("all", CLOptionDescriptor.ARGUMENT_DISALLOWED,
+	private static final CLOptionDescriptor ALL = new CLOptionDescriptor("all",
+			CLOptionDescriptor.ARGUMENT_DISALLOWED,
 			ALL_OPT, "all", new CLOptionDescriptor[] { BLEE });
 
-	private static final CLOptionDescriptor FILE = new CLOptionDescriptor("file", CLOptionDescriptor.ARGUMENT_REQUIRED,
-			FILE_OPT, "the build file.");
+	private static final CLOptionDescriptor FILE = new CLOptionDescriptor("file", 
+			CLOptionDescriptor.ARGUMENT_REQUIRED, FILE_OPT, "the build file.");
 
 	private static final CLOptionDescriptor TAINT = new CLOptionDescriptor("taint",
 			CLOptionDescriptor.ARGUMENT_OPTIONAL, TAINT_OPT, "turn on tainting checks (optional level).");
+
+	private static final CLOptionDescriptor [] OPTIONS = new CLOptionDescriptor [] {
+	        new CLOptionDescriptor("none", 
+	        		CLOptionDescriptor.ARGUMENT_DISALLOWED | CLOptionDescriptor.DUPLICATES_ALLOWED,
+	        		'0', "no parameter"),
+
+	        new CLOptionDescriptor("optional", 
+	        		CLOptionDescriptor.ARGUMENT_OPTIONAL | CLOptionDescriptor.DUPLICATES_ALLOWED, 
+	        		'?', "optional parameter"),
+			
+			new CLOptionDescriptor("one", 
+					CLOptionDescriptor.ARGUMENT_REQUIRED | CLOptionDescriptor.DUPLICATES_ALLOWED, 
+					'1', "one parameter"),
+			
+			new CLOptionDescriptor("two", 
+					CLOptionDescriptor.ARGUMENTS_REQUIRED_2 | CLOptionDescriptor.DUPLICATES_ALLOWED, 
+					'2', "two parameters")
+	};
+
+
+	
 
 	public ClutilTestCase() {
 		this("Command Line Interpreter Test Case");
@@ -176,7 +199,7 @@ public final class ClutilTestCase extends TestCase {
 		final List clOptions = parser.getArguments();
 		final int size = clOptions.size();
 
-		assertEquals("Option count", 3, size);
+		assertEquals("Option count", 2, size);
 
 		final CLOption option0 = (CLOption) clOptions.get(0);
 		assertEquals("Option Code: " + option0.getDescriptor().getId(), TAINT_OPT, option0.getDescriptor().getId());
@@ -216,11 +239,7 @@ public final class ClutilTestCase extends TestCase {
 
 		final String[] args = new String[] { "-T3", "-a" };
 
-		// System.out.println("[before parsing]");
-
 		final CLArgsParser parser = new CLArgsParser(args, options);
-
-		// System.out.println("[after parsing]");
 
 		assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -243,11 +262,7 @@ public final class ClutilTestCase extends TestCase {
 
 		final String[] args = new String[] { "-T=3", "-a" };
 
-		// System.out.println("[before parsing]");
-
 		final CLArgsParser parser = new CLArgsParser(args, options);
-
-		// System.out.println("[after parsing]");
 
 		assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -270,10 +285,7 @@ public final class ClutilTestCase extends TestCase {
 
 		final String[] args = new String[] { "-T", "-a" };
 
-		// System.out.println("[before parsing]");
 		final CLArgsParser parser = new CLArgsParser(args, options);
-
-		// System.out.println("[after parsing]");
 
 		assertNull(parser.getErrorString(), parser.getErrorString());
 
@@ -837,13 +849,17 @@ public final class ClutilTestCase extends TestCase {
 		final CLOptionDescriptor[] options = { FILE };
 		final CLArgsParser parser = new CLArgsParser(args, options);
 
+		assertNull(parser.getErrorString(), parser.getErrorString());
+
 		CLOption optionById = parser.getArgumentById(FILE_OPT);
 		assertNotNull(optionById);
 		assertEquals(FILE_OPT, optionById.getDescriptor().getId());
+		assertEquals("testarg", optionById.getArgument());
 
 		CLOption optionByName = parser.getArgumentByName(FILE.getName());
 		assertNotNull(optionByName);
 		assertEquals(FILE_OPT, optionByName.getDescriptor().getId());
+		assertEquals("testarg", optionByName.getArgument());
 	}
 
 	/**
@@ -856,6 +872,8 @@ public final class ClutilTestCase extends TestCase {
 		final String[] args = { "-n", "testarg" };
 		final CLOptionDescriptor[] options = { test };
 		final CLArgsParser parser = new CLArgsParser(args, options);
+
+		assertNull(parser.getErrorString(), parser.getErrorString());
 
 		final CLOption optionByID = parser.getArgumentById('n');
 		assertNotNull(optionByID);
@@ -876,6 +894,8 @@ public final class ClutilTestCase extends TestCase {
 		final CLOptionDescriptor[] options = { test };
 		final CLArgsParser parser = new CLArgsParser(args, options);
 
+		assertNull(parser.getErrorString(), parser.getErrorString());
+
 		final CLOption optionByID = parser.getArgumentById('n');
 		assertNotNull(optionByID);
 		assertEquals('n', optionByID.getDescriptor().getId());
@@ -883,6 +903,57 @@ public final class ClutilTestCase extends TestCase {
 		final StringBuffer sb = CLUtil.describeOptions(options);
 		final String lineSeparator = System.getProperty("line.separator");
 		assertEquals("Testing display of null description", "\t-n, --nulltest" + lineSeparator, sb.toString());
+	}
+	
+	public void testCombinations() throws Exception {
+		check(new String [] {},"");	
+		check(new String [] {"--none",
+				             "-0"
+				             },
+				             "-0 -0"); // Canonical form
+		check(new String [] {"--one=a",
+				             "--one","A",
+				             "-1b",
+				             "-1=c",
+				             "-1","d"
+				             },
+		                     "-1=[a] -1=[A] -1=[b] -1=[c] -1=[d]");	
+		check(new String [] {"-2n=v",
+				             "-2","N=V"
+				             },
+				             "-2=[n, v] -2=[N, V]");	
+		check(new String [] {"--two=n=v",
+				             "--two","N=V"
+				             },
+				             "-2=[n, v] -2=[N, V]");
+		// Test optional arguments
+		check(new String [] {"-?",
+				             "A", // Separate argument
+				             "-?=B",
+				             "-?C",
+				             "-?"
+				            },
+	                         "-? [A] -?=[B] -?=[C] -?");	
+		check(new String [] {"--optional=A", // OK
+	                         "--optional","B", // should treat B as separate
+	                         "--optional" // Should have no arg
+	                         },
+	                         "-?=[A] -? [B] -?");	
+	}
+	
+	private void check(String args[], String canon){
+		final CLArgsParser parser = new CLArgsParser(args, OPTIONS);
+
+		assertNull(parser.getErrorString(),parser.getErrorString());
+
+		final List clOptions = parser.getArguments();
+		final int size = clOptions.size();
+		StringBuffer sb = new StringBuffer();
+		for (int i=0; i< size; i++){
+			if (i>0) sb.append(" ");
+			sb.append(((CLOption)clOptions.get(i)).toShortString());	
+		}
+		assertEquals("Canonical form ("+size+")",canon,sb.toString());
 	}
 	/*
 	 * TODO add tests to check for: - name clash - long option abbreviations

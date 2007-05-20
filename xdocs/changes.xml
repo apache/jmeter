@@ -234,6 +234,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 24684 - remote startup problems if spaces in the path of the jmeter</li>
 <li>Use Listener configuration when loading CSV data files</li>
 <li>Function methods setParameters() need to be synchronized</li>
+<li>Fix CLI long optional argument to require "=" (as for short options)</li>
 </ul>
 
 <h3>Version 2.2</h3>
