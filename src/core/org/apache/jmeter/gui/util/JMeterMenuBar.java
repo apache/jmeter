@@ -237,7 +237,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         JMenuItem setDebug = new JMenuItem(JMeterUtils.getResString("debug_on"));//$NON-NLS-1$
         setDebug.setActionCommand(ActionNames.DEBUG_ON);
-        setDebug.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
+        setDebug.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_DOWN_MASK));
         setDebug.addActionListener(ActionRouter.getInstance());
 
         JMenuItem resetDebug = new JMenuItem(JMeterUtils.getResString("debug_off"));//$NON-NLS-1$
@@ -374,10 +374,13 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		run_clear = new JMenuItem(JMeterUtils.getResString("clear"), 'C'); //$NON-NLS-1$
 		run_clear.addActionListener(ActionRouter.getInstance());
 		run_clear.setActionCommand(ActionNames.CLEAR);
+		run_clear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK|KeyEvent.SHIFT_DOWN_MASK));
+		
 		run_clearAll = new JMenuItem(JMeterUtils.getResString("clear_all"), 'a'); //$NON-NLS-1$
 		run_clearAll.addActionListener(ActionRouter.getInstance());
 		run_clearAll.setActionCommand(ActionNames.CLEAR_ALL);
 		run_clearAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_MASK));
+		
 		runMenu.add(run_start);
 		if (remote_start != null) {
 			runMenu.add(remote_start);
