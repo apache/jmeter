@@ -168,9 +168,10 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		model.clearData();
 		currentData = 0;
 		calc.clear();
-		dataField.setText("0000"); // $NON-NLS-1$
-		averageField.setText("0000"); // $NON-NLS-1$
-		deviationField.setText("0000"); // $NON-NLS-1$
+		noSamplesField.setText("0"); // $NON-NLS-1$
+		dataField.setText("0"); // $NON-NLS-1$
+		averageField.setText("0"); // $NON-NLS-1$
+		deviationField.setText("0"); // $NON-NLS-1$
 		repaint();
 	}
 
