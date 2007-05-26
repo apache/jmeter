@@ -42,6 +42,7 @@ Some of the main enhancements are:
 <li>__V() function allows support of nested variable references</li>
 <li>LDAP Ext sampler optionally parses result sets and supports secure mode</li>
 <li>FTP Sampler supports Ascii/Binary mode and upload</li>
+<li>Transaction Controller now generates Sample with subresults</li>
 </ul>
 <p>
 The main bug fixes are:
@@ -88,6 +89,7 @@ The HTTP Authorisation Manager now has extra columns for domain and realm,
 so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
 has been removed.
 </p>
+<p>The Transaction Controller no longer appears as a separate sample; it now includes its nested samples as subsamples</p>
 <h4>Incompatible changes (development):</h4>
 <p>
 Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
@@ -143,6 +145,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Allow user to cancel out of Close dialogue</li>
 <li>Use ISO date-time format for Tree View Listener (previously the year was not shown)</li>
 <li>Improve loading of CSV files: if possible, use header to determine format; guess timestamp format if not milliseconds</li>
+<li>Bug 41913 - TransactionController now creates samples as sub-samples of the transaction</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
