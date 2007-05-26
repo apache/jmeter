@@ -1426,6 +1426,12 @@ the contents are used to prefix the pathname.
 		The clock might tick after the controller recorded the start time but before the first sample starts.
 		Similarly at the end.
 		</p>
+		<p>For JMeter versions after 2.2, the controlled samples no longer appear as separate samples, but as subsamples.
+		Also the Transaction Sample is only regarded as successful if all its sub-samples are successful.
+		This is similar to the way the HTTP Samplers work when retrieving embedded objects (images etc).
+		The individual samples can still be seen in the Tree View Listener,
+		but no longer appear as separate entries in other Listeners.
+		</p>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
