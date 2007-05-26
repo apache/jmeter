@@ -23,8 +23,8 @@
 
    o  Java Interpreter:
 
-      A fully compliant Java 1.3 Runtime Environment is required (a Java 1.4
-      Runtime Environment is recomended) for Apache JMeter to execute. 
+      A fully compliant Java 1.4 (or later) Runtime Environment is required 
+      for Apache JMeter to execute.
 
    o  Optional jars:
    
