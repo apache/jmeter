@@ -21,7 +21,6 @@ package org.apache.jmeter.control.gui;
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.control.TransactionController;
-import org.apache.jmeter.control.gui.AbstractControllerGui;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
