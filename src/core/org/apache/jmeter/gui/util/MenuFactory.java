@@ -135,11 +135,6 @@ public final class MenuFactory {
 
 	public static void addEditMenu(JPopupMenu menu, boolean removable) {
 		addSeparator(menu);
-		if (removable) {
-			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
-                    "Remove", ActionNames.REMOVE, //$NON-NLS-1$
-                    KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0)));
-		}
 		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
                 "Cut", ActionNames.CUT, //$NON-NLS-1$
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK)));
@@ -151,6 +146,11 @@ public final class MenuFactory {
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
 		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
                 "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
+		if (removable) {
+			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
+                    "Remove", ActionNames.REMOVE, //$NON-NLS-1$
+                    KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0)));
+		}
 	}
 
 	public static void addFileMenu(JPopupMenu menu) {
