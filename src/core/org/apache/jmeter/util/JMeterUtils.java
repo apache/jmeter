@@ -254,7 +254,7 @@ public class JMeterUtils implements UnitTestManager {
 	}
 
 	public static String[] getSearchPaths() {
-		String p = JMeterUtils.getPropDefault("search_paths", null);
+		String p = JMeterUtils.getPropDefault("search_paths", null); // $NON-NLS-1$
 		String[] result = new String[1];
 
 		if (p != null) {
@@ -281,8 +281,6 @@ public class JMeterUtils implements UnitTestManager {
 	/**
 	 * Changes the current locale: re-reads resource strings and notifies
 	 * listeners.
-	 * 
-	 * author Oliver Rossmueller
 	 * 
 	 * @param loc -
 	 *            new locale
@@ -319,24 +317,16 @@ public class JMeterUtils implements UnitTestManager {
 	/**
 	 * Gets the current locale.
 	 * 
-	 * author Oliver Rossmueller
-	 * 
 	 * @return current locale
 	 */
 	public static Locale getLocale() {
 		return locale;
 	}
 
-	/**
-	 * author Oliver Rossmueller
-	 */
 	public static void addLocaleChangeListener(LocaleChangeListener listener) {
 		localeChangeListeners.add(listener);
 	}
 
-	/**
-	 * author Oliver Rossmueller
-	 */
 	public static void removeLocaleChangeListener(LocaleChangeListener listener) {
 		localeChangeListeners.remove(listener);
 	}
@@ -344,7 +334,6 @@ public class JMeterUtils implements UnitTestManager {
 	/**
 	 * Notify all listeners interested in locale changes.
 	 * 
-	 * author Oliver Rossmueller
 	 */
 	private static void notifyLocaleChangeListeners() {
 		LocaleChangeEvent event = new LocaleChangeEvent(JMeterUtils.class, locale);
@@ -900,7 +889,7 @@ public class JMeterUtils implements UnitTestManager {
 	 * @param errorMsg - the error message.
 	 */
 	public static void reportErrorToUser(String errorMsg) {
-		reportErrorToUser(errorMsg, JMeterUtils.getResString("error_title"));
+		reportErrorToUser(errorMsg, JMeterUtils.getResString("error_title")); // $NON-NLS-1$
 	}
 
 	/**
@@ -1011,16 +1000,31 @@ public class JMeterUtils implements UnitTestManager {
 		return retVal.toString();
 	}
 
-	// End Method
+	/**
+	 * Get the JMeter home directory - does not include the trailing separator.
+	 * 
+	 * @return the home directory
+	 */
 	public static String getJMeterHome() {
 		return jmDir;
 	}
 
-	public static void setJMeterHome(String home) {
-		jmDir = home;
+	/**
+	 * Get the JMeter bin directory - does not include the trailing separator.
+	 * 
+	 * @return the bin directory
+	 */
+	public static String getJMeterBinDir() {
+		return jmBin;
 	}
 
-	private static String jmDir;
+	public static void setJMeterHome(String home) {
+		jmDir = home;
+		jmBin = jmDir + File.separator + "bin"; // $NON-NLS-1$
+	}
+
+	private static String jmDir; // JMeter Home directory (excludes trailing separator)
+	private static String jmBin; // JMeter bin directory (excludes trailing separator)
 
 
 	/**
@@ -1082,7 +1086,7 @@ public class JMeterUtils implements UnitTestManager {
 	public static File findFile(String fileName){
 		File f =new File(fileName);
 		if (!f.exists()){
-			f=new File(getJMeterHome()+File.separator+"bin"+fileName); // $NON-NLS-1$
+			f=new File(getJMeterBinDir(),fileName);
 		}
 		return f;
 	}
