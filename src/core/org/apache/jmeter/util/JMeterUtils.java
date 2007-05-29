@@ -896,11 +896,20 @@ public class JMeterUtils implements UnitTestManager {
 
 	/**
 	 * Report an error through a dialog box.
-	 * 
-	 * @param errorMsg
-	 *            the error message.
+	 * Title defaults to "Error"
+	 * @param errorMsg - the error message.
 	 */
 	public static void reportErrorToUser(String errorMsg) {
+		reportErrorToUser(errorMsg, "Error");
+	}
+
+	/**
+	 * Report an error through a dialog box.
+	 * 
+	 * @param errorMsg - the error message.
+	 * @param titleMsg - title string
+	 */
+	public static void reportErrorToUser(String errorMsg, String titleMsg) {
 		if (errorMsg == null) {
 			errorMsg = "Unknown error - see log file";
 			log.warn("Unknown error", new Throwable("errorMsg == null"));
@@ -911,7 +920,9 @@ public class JMeterUtils implements UnitTestManager {
 			return; // Done
 		}
 		try {
-			JOptionPane.showMessageDialog(instance.getMainFrame(), errorMsg, "Error",
+			JOptionPane.showMessageDialog(instance.getMainFrame(),
+					errorMsg, 
+					titleMsg,
 					JOptionPane.ERROR_MESSAGE);
 		} catch (HeadlessException e) {
 				log.warn("reportErrorToUser(\"" + errorMsg + "\") caused", e);
