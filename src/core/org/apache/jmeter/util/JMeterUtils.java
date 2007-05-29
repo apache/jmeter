@@ -896,11 +896,11 @@ public class JMeterUtils implements UnitTestManager {
 
 	/**
 	 * Report an error through a dialog box.
-	 * Title defaults to "Error"
+	 * Title defaults to "error_title" resource string
 	 * @param errorMsg - the error message.
 	 */
 	public static void reportErrorToUser(String errorMsg) {
-		reportErrorToUser(errorMsg, "Error");
+		reportErrorToUser(errorMsg, JMeterUtils.getResString("error_title"));
 	}
 
 	/**
