@@ -25,8 +25,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.JMeterEngineException;
@@ -36,18 +34,15 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @author Drew Gulino
- * @version $Revision$ Last updated $Date$
- */
 public class RemoteStart extends AbstractAction {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final String LOCAL_HOST = "127.0.0.1"; // $NON-NLS-1$
 
     private static final String REMOTE_HOSTS = "remote_hosts"; // $NON-NLS-1$ jmeter.properties
+
+    private static final String REMOTE_HOSTS_SEPARATOR = ","; // $NON-NLS-1$
 
     private static Set commands = new HashSet();
 	static {
@@ -79,19 +74,19 @@ public class RemoteStart extends AbstractAction {
 		} else if (action.equals(ActionNames.REMOTE_START_ALL)) {
 			popupShouldSave(e);
 			String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
+			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();
 				doRemoteInit(el.trim());
 			}
-			st = new java.util.StringTokenizer(remote_hosts_string, ",");
+			st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();
 				doRemoteStart(el.trim());
 			}
 		} else if (action.equals(ActionNames.REMOTE_STOP_ALL)) {
 			String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
+			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();
 				doRemoteStop(el.trim());
@@ -100,7 +95,7 @@ public class RemoteStart extends AbstractAction {
 			doRemoteExit(name);
 		} else if (action.equals(ActionNames.REMOTE_EXIT_ALL)) {
 			String remote_hosts_string = JMeterUtils.getPropDefault(REMOTE_HOSTS, LOCAL_HOST);
-			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, ",");
+			java.util.StringTokenizer st = new java.util.StringTokenizer(remote_hosts_string, REMOTE_HOSTS_SEPARATOR);
 			while (st.hasMoreElements()) {
 				String el = (String) st.nextElement();
 				doRemoteExit(el.trim());
@@ -145,19 +140,13 @@ public class RemoteStart extends AbstractAction {
 	 */
 	private void doRemoteStart(String name) {
 		JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
-		if (engine == null) {
+		if (engine != null) {
 			try {
-				engine = new ClientJMeterEngine(name);
-				remoteEngines.put(name, engine);
-			} catch (Exception ex) {
-				log.error("", ex);
-				JMeterUtils.reportErrorToUser("Bad call to remote host");
-				return;
+				engine.runTest();
+			} catch (JMeterEngineException e) {
+				JMeterUtils.reportErrorToUser(e.getMessage(),JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
 			}
-		} else {
-			engine.reset();
 		}
-		startEngine(engine, name);
 	}
 
 	/**
@@ -170,8 +159,8 @@ public class RemoteStart extends AbstractAction {
 				engine = new ClientJMeterEngine(name);
 				remoteEngines.put(name, engine);
 			} catch (Exception ex) {
-				log.error("", ex);
-				JMeterUtils.reportErrorToUser("Bad call to remote host");
+				log.error("Failed to initialise remote engine", ex);
+				JMeterUtils.reportErrorToUser(ex.getMessage(),JMeterUtils.getResString("remote_error_init")); // $NON-NLS-1$
 				return;
 			}
 		} else {
@@ -198,18 +187,5 @@ public class RemoteStart extends AbstractAction {
 		convertSubTree(testTree);
 		testTree.add(testTree.getArray()[0], gui.getMainFrame());
 		engine.configure(testTree);
-	}
-
-	/**
-	 * Starts the test on the remote engine.
-	 */
-	private void startEngine(JMeterEngine engine, String host) {
-		GuiPackage gui = GuiPackage.getInstance();
-		try {
-			engine.runTest();
-		} catch (JMeterEngineException e) {
-			JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), JMeterUtils
-					.getResString("Error Occurred"), JOptionPane.ERROR_MESSAGE);
-		}
 	}
 }
