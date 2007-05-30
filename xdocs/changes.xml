@@ -90,6 +90,9 @@ so the temporary work-round of using '\' and '@' in the username to delimit the 
 has been removed.
 </p>
 <p>The Transaction Controller no longer appears as a separate sample; it now includes its nested samples as subsamples</p>
+<p>
+Control-Z no longer used for Remote Start All; replaced by Control+Shift+R
+</p>
 <h4>Incompatible changes (development):</h4>
 <p>
 Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
