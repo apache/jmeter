@@ -68,6 +68,10 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
 	 */
 	public long delay() {
         String ret="0";
+        if (bshInterpreter == null) {
+        	log.error("BeanShell not found");
+        	return 0;
+        }
         JMeterContext jmctx = JMeterContextService.getContext();
         JMeterVariables vars = jmctx.getVariables();
         try {
