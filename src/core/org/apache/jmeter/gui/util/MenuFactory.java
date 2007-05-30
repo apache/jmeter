@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.gui.util;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,6 +39,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
@@ -137,19 +137,20 @@ public final class MenuFactory {
 		addSeparator(menu);
 		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
                 "Cut", ActionNames.CUT, //$NON-NLS-1$
-                KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK)));
+                KeyStrokes.CUT));
 		menu.add(makeMenuItem(JMeterUtils.getResString("copy"),  //$NON-NLS-1$
                 "Copy", ActionNames.COPY, //$NON-NLS-1$
-                KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK)));
+                KeyStrokes.COPY));
 		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
                 "Paste", ActionNames.PASTE, //$NON-NLS-1$
-                KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
-                "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
+                KeyStrokes.PASTE));
+// Does not appear to be any different to Paste
+//		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
+//                "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
 		if (removable) {
 			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
                     "Remove", ActionNames.REMOVE, //$NON-NLS-1$
-                    KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0)));
+                    KeyStrokes.REMOVE));
 		}
 	}
 
@@ -165,7 +166,7 @@ public final class MenuFactory {
 		addSeparator(menu);
         JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),// $NON-NLS-1$
                 "Save Image", ActionNames.SAVE_GRAPHICS,// $NON-NLS-1$
-				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
+				KeyStrokes.SAVE_GRAPHICS);
 		menu.add(savePicture);
 		if (!(GuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
 			savePicture.setEnabled(false);
@@ -173,7 +174,7 @@ public final class MenuFactory {
         
         JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),// $NON-NLS-1$
                 "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,// $NON-NLS-1$
-                KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
+                KeyStrokes.SAVE_GRAPHICS_ALL);
         menu.add(savePictureAll);
 
         addSeparator(menu);
