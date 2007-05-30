@@ -20,8 +20,8 @@ package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +47,7 @@ import org.apache.log.Logger;
 public abstract class AbstractTestElement implements TestElement, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Map propMap = Collections.synchronizedMap(new HashMap());
+	private Map propMap = Collections.synchronizedMap(new LinkedHashMap());
 
 	private transient Set temporaryProperties;
 
@@ -130,9 +130,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	public JMeterProperty getProperty(String key) {
 		JMeterProperty prop = (JMeterProperty) propMap.get(key);
 		if (prop == null) {
-			// TODO URGENT - does it make sense to create "different"
-			// NullProperty items for each key?
-			// Or would it be better to create them all with a key of "" ?
 			prop = new NullProperty(key);
 		}
 		return prop;
@@ -214,10 +211,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 			clearTemporary(property);
 		}
 		JMeterProperty prop = getProperty(property.getName());
+        removeProperty(property.getName());
 
 		if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
 			propMap.put(property.getName(), property);
 		} else {
+            propMap.put(property.getName(), prop);
 			prop.mergeIn(property);
 		}
 	}
@@ -342,7 +341,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	 */
 	public void setTemporary(JMeterProperty property) {
 		if (temporaryProperties == null) {
-			temporaryProperties = new HashSet();
+			temporaryProperties = new LinkedHashSet();
 		}
 		temporaryProperties.add(property);
 		if (property instanceof MultiProperty) {
@@ -422,7 +421,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	 */
 	public AbstractTestElement() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	// Default implementation
