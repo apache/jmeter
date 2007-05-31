@@ -211,12 +211,12 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 			clearTemporary(property);
 		}
 		JMeterProperty prop = getProperty(property.getName());
-        removeProperty(property.getName());
+        //removeProperty(property.getName());
 
 		if (prop instanceof NullProperty || (prop instanceof StringProperty && prop.getStringValue().equals(""))) {
 			propMap.put(property.getName(), property);
 		} else {
-            propMap.put(property.getName(), prop);
+            //propMap.put(property.getName(), prop);
 			prop.mergeIn(property);
 		}
 	}
