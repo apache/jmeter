@@ -1959,7 +1959,7 @@ to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, name
 "/index.html".</p>
 
 <figure image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
-<figure image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
+<figure image="http-config/auth-manager-example1b.gif">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
@@ -2410,7 +2410,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
 <figure image="assertion/example1a.png">Figure 14 - Test Plan</figure>
-<figure image="assertion/example1b.gif">Figure 15 - Assertion Control Panel with Pattern</figure>
+<figure image="assertion/example1b.png">Figure 15 - Assertion Control Panel with Pattern</figure>
 <figure image="assertion/example1c-pass.gif">Figure 16 - Assertion Listener Results (Pass)</figure>
 <figure image="assertion/example1c-fail.gif">Figure 17 - Assertion Listener Results (Fail)</figure>
 </example>
@@ -2577,16 +2577,19 @@ on XPath.
 <section name="&sect-num;.6 Timers" anchor="timers">
 <description>
 	<br></br>
-	Note that timers are processed before <b>each sampler</b> in the scope in which they are found;
-	if there are several timers in the same scope, <b>all</b> the timers will be processed before
-	<b>each</b> sampler.
-	To apply a timer to a single sampler, add the timer as a child element to the sampler.
+	<p>
+	Note that timers are processed <b>before</b> each sampler in the scope in which they are found;
+	if there are several timers in the same scope, <b>all</b> the timers will be processed <b>before
+	each</b> sampler.
+	<br></br>
+	Timers are only processed in conjunction with a sampler.
+	A timer which is not in the same scope as a sampler will not be processed at all.
+	<br></br>
+	To apply a timer to a single sampler, add the timer as a child element of the sampler.
 	The timer will be applied before the sampler is executed.
 	To apply a timer after a sampler, either add it to the next sampler, or add it as the
-	child of a simple logic controller immediately after the sampler. 
-	The Simple Controller must contain a sampler or the timer will not be applied.
-	<br></br>
-	<p>An alternative is to use the <complink name="Test Action"/> Sampler</p>
+	child of a <complink name="Test Action"/> Sampler.
+	</p>
 </description>
 <component name="Constant Timer" index="&sect-num;.6.1" anchor="constant"  width="390" height="100" screenshot="timers/constant_timer.gif">
 <description>
@@ -3232,6 +3235,7 @@ This is useful for checking the content of HTTP requests.
 
 </section>
 
+<!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
 		<br></br>
@@ -3265,5 +3269,6 @@ This is useful for checking the content of HTTP requests.
 <a href="#">^</a>
 
 </section>
+ -->
 </body>
 </document>
