@@ -23,8 +23,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -46,37 +48,53 @@ public class HttpSSLProtocolSocketFactory
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 	
-	private SSLSocketFactory sslfac;
+	private JsseSSLManager sslManager;
 
     private HttpSSLProtocolSocketFactory(){
     }
     
-    public HttpSSLProtocolSocketFactory(SSLContext context) {
+    public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
         super();
-		sslfac=context.getSocketFactory();
+        this.sslManager = sslManager;
     }
     
-    private static final String protocolList = JMeterUtils.getPropDefault("https.socket.protocols", "");
+    private static final String protocolList = 
+    	JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
     
     static {
     	if (protocolList.length()>0){
     		log.info("Using protocol list: "+protocolList);
     	}
     }
-    private static final String[] protocols = protocolList.split(" ");
 
-    private void setSocket(Socket sock){
-    	if (protocolList.length() <= 0) return;
-    	if (sock instanceof SSLSocket){
-    		try {
-				((SSLSocket) sock).setEnabledProtocols(protocols);
-			} catch (IllegalArgumentException e) {
-				log.warn("Could not set protocol list: "+protocolList+".");
-				log.warn("Valid protocols are: "+join(((SSLSocket) sock).getSupportedProtocols()));
-			}
-    	} else {
-    		throw new IllegalArgumentException("Expecting only SSL socket; found "+sock.getClass().getName());
+    private static final String[] protocols = protocolList.split(" "); // $NON-NLS-1$
+
+    private void setSocket(Socket socket){
+    	if (!(socket instanceof SSLSocket)) {
+    		throw new IllegalArgumentException("Expected SSLSocket");
     	}
+    	SSLSocket sock = (SSLSocket) socket;
+        if (log.isDebugEnabled()) {
+            SSLSession sslSession = sock.getSession();
+            byte[] bytes = sslSession.getId();
+
+            StringBuffer buffer = new StringBuffer("SSL session id: ");
+            for (int i = 0; i < bytes.length; i++) {
+                int b = bytes[i] & 0xff;
+                buffer.append(Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16)));
+                buffer.append(Character.toUpperCase(Character.forDigit(b & 0xF, 16)));
+            }
+            buffer.append(" for ").append(Thread.currentThread().getName());
+            log.debug(buffer.toString());
+        }
+        if (protocolList.length() > 0) {
+            try {
+                sock.setEnabledProtocols(protocols);
+            } catch (IllegalArgumentException e) {
+                log.warn("Could not set protocol list: " + protocolList + ".");
+                log.warn("Valid protocols are: " + join(sock.getSupportedProtocols()));
+            }
+        }
     }
 
     private String join(String[] strings) {
@@ -87,6 +105,15 @@ public class HttpSSLProtocolSocketFactory
     	}
     	return sb.toString();
 	}
+    
+    private SSLSocketFactory getSSLSocketFactory() throws IOException {
+        try {
+            SSLContext sslContext = this.sslManager.getContext();
+            return sslContext.getSocketFactory();
+        } catch (GeneralSecurityException ex) {
+            throw new IOException(ex.getMessage());
+        }
+    }
 
 	/**
      * Attempts to get a new socket connection to the given host within the given time limit.
@@ -114,6 +141,8 @@ public class HttpSSLProtocolSocketFactory
             throw new IllegalArgumentException("Parameters may not be null");
         }
         int timeout = params.getConnectionTimeout();
+        
+        SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket socket;
         if (timeout == 0) {
         	socket = sslfac.createSocket(host, port, localAddress, localPort);
@@ -133,6 +162,7 @@ public class HttpSSLProtocolSocketFactory
      */
     public Socket createSocket(String host, int port)
         throws IOException, UnknownHostException {
+        SSLSocketFactory sslfac = getSSLSocketFactory();
     	Socket sock = sslfac.createSocket(
             host,
             port
@@ -150,6 +180,7 @@ public class HttpSSLProtocolSocketFactory
         int port,
         boolean autoClose)
         throws IOException, UnknownHostException {
+        SSLSocketFactory sslfac = getSSLSocketFactory();
     	Socket sock = sslfac.createSocket(
             socket,
             host,
@@ -170,6 +201,7 @@ public class HttpSSLProtocolSocketFactory
         int clientPort)
         throws IOException, UnknownHostException {
 
+        SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock = sslfac.createSocket(
             host,
             port,
@@ -181,22 +213,34 @@ public class HttpSSLProtocolSocketFactory
     }
 
 	public Socket createSocket(InetAddress host, int port) throws IOException {
+        SSLSocketFactory sslfac = getSSLSocketFactory();
 		Socket sock=sslfac.createSocket(host,port);
         setSocket(sock);
 		return sock;
 	}
 
 	public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+        SSLSocketFactory sslfac = getSSLSocketFactory();
 		Socket sock=sslfac.createSocket(address, port, localAddress, localPort);
         setSocket(sock);
 		return sock;
 	}
 
 	public String[] getDefaultCipherSuites() {
-		return sslfac.getDefaultCipherSuites();
+        try {
+            SSLSocketFactory sslfac = getSSLSocketFactory();
+            return sslfac.getDefaultCipherSuites();
+        } catch (IOException ex) {
+            return new String[] {};
+        }
 	}
 
 	public String[] getSupportedCipherSuites() {
-		return sslfac.getSupportedCipherSuites();
+        try {
+            SSLSocketFactory sslfac = getSSLSocketFactory();
+            return sslfac.getSupportedCipherSuites();
+        } catch (IOException ex) {
+            return new String[] {};
+		}
 	}
 }

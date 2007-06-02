@@ -20,17 +20,12 @@ package org.apache.jmeter.util;
 
 import java.net.HttpURLConnection;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
-import org.apache.jmeter.util.keystore.JmeterKeyStore;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -43,6 +38,12 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.jmeter.util.keystore.JmeterKeyStore;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 /**
  * The SSLManager handles the KeyStore information for JMeter. Basically, it
  * handles all the logic for loading and initializing all the JSSE parameters
@@ -53,8 +54,6 @@ import javax.net.ssl.X509TrustManager;
  * 
  * TODO: does not actually prompt
  * 
- * @author <a href="bloritsch@apache.org">Berin Loritsch</a> Created March 21,
- *         2002
  */
 public class JsseSSLManager extends SSLManager {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -65,8 +64,13 @@ public class JsseSSLManager extends SSLManager {
 	private static final String DEFAULT_SSL_PROTOCOL = 
 		JMeterUtils.getPropDefault("https.default.protocol","TLS"); // $NON-NLS-1$ // $NON-NLS-2$
 
+	// Allow reversion to original shared session context
+	private static final boolean SHARED_SESSION_CONTEXT = 
+		JMeterUtils.getPropDefault("https.sessioncontext.shared",false); // $NON-NLS-1$
+
 	static {
 		log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
+		log.info("SSL session context: "+(SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
 	}
 
 	/**
@@ -74,13 +78,11 @@ public class JsseSSLManager extends SSLManager {
 	 */
 	private SecureRandom rand;
 
-	/**
-	 * Cache the Context so we can retrieve it from other places
-	 */
-	private SSLContext context = null;
-
 	private Provider pro = null;
 
+    private SSLContext defaultContext; // If we are using a single session
+    private ThreadLocal threadlocal; // Otherwise
+       
 	/**
 	 * Create the SSLContext, and wrap all the X509KeyManagers with
 	 * our X509KeyManager so that we can choose our alias.
@@ -91,11 +93,37 @@ public class JsseSSLManager extends SSLManager {
 	public JsseSSLManager(Provider provider) {
 		log.debug("ssl Provider =  " + provider);
 		setProvider(provider);
-		if (null == this.rand) {
+		if (null == this.rand) { // Surely this is always null in the constructor?
 			this.rand = new SecureRandom();
 		}
-
-		this.getContext();
+		try {
+			if (SHARED_SESSION_CONTEXT) {
+				log.debug("Creating shared context");
+                this.defaultContext = createContext();
+			} else {
+		        this.threadlocal = new ThreadLocal();
+			}
+            
+            HttpSSLProtocolSocketFactory sockFactory = new HttpSSLProtocolSocketFactory(this);
+            
+            HttpsURLConnection.setDefaultSSLSocketFactory(sockFactory);
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            /*
+             * Also set up HttpClient defaults
+             */
+            Protocol protocol = new Protocol(
+                    JsseSSLManager.HTTPS, 
+                    (ProtocolSocketFactory) sockFactory,
+                    443);
+            Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
+            log.debug("SSL stuff all set");
+        } catch (GeneralSecurityException ex) {
+            log.error("Could not set up SSLContext", ex);
+        }
 		log.debug("JsseSSLManager installed");
 	}
 
@@ -133,94 +161,101 @@ public class JsseSSLManager extends SSLManager {
 	}
 
 	/**
-	 * Returns the SSLContext we are using. It is useful for obtaining the
-	 * SSLSocketFactory so that your created sockets are authenticated.
+	 * Returns the SSLContext we are using.
+	 * This is either a context per thread,
+	 * or, for backwards compatibility, a single shared context.
 	 * 
 	 * @return The Context value
 	 */
-	private SSLContext getContext() {
-		if (null == this.context) {
-			try {
-				if (pro != null) {
-					this.context = SSLContext.getInstance(DEFAULT_SSL_PROTOCOL, pro); // $NON-NLS-1$
-				} else {
-					this.context = SSLContext.getInstance(DEFAULT_SSL_PROTOCOL); // $NON-NLS-1$
-				}
-				log.debug("SSL context = " + context);
-			} catch (Exception ee) {
-				log.error("Could not create SSLContext", ee);
-			}
-			try {
-				KeyManagerFactory managerFactory = 
-					KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());				
-				JmeterKeyStore keys = this.getKeyStore();
-				managerFactory.init(null, this.defaultpw.toCharArray());
-				KeyManager[] managers = managerFactory.getKeyManagers();
-				log.debug(keys.getClass().toString());
-				
-				// Now wrap the default managers with our key manager
-				for (int i = 0; i < managers.length; i++) {
-					if (managers[i] instanceof X509KeyManager) {
-						X509KeyManager manager = (X509KeyManager) managers[i];
-						managers[i] = new WrappedX509KeyManager(manager, keys);
-					}
-				}
-				
-				// Get the default trust managers
-		        TrustManagerFactory tmfactory = TrustManagerFactory.getInstance(
-		                TrustManagerFactory.getDefaultAlgorithm());
-		        tmfactory.init(this.getTrustStore());
-		        
-		        // Wrap the defaults in our custom trust manager
-		        TrustManager[] trustmanagers = tmfactory.getTrustManagers();
-		        for (int i = 0; i < trustmanagers.length; i++) {
-		            if (trustmanagers[i] instanceof X509TrustManager) {
-		                trustmanagers[i] = new CustomX509TrustManager(
-		                    (X509TrustManager)trustmanagers[i]); 
-		            }
-		        }
-		     	context.init(managers, trustmanagers, this.rand);
-				
-				/*
-				 * The following will need to be removed if the SSL properties are to be
-				 * applied on a per-connection basis
-				 */
-				HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(context));
-				HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-					public boolean verify(String hostname, SSLSession session) {
-						return true;
-					}
-				});
-				/*
-				 * Also set up HttpClient defaults
-				 */
-				Protocol protocol = new Protocol(
-						JsseSSLManager.HTTPS,
-						(ProtocolSocketFactory) new HttpSSLProtocolSocketFactory(context),
-						443
-						);
-				Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
-				log.debug("SSL stuff all set");
-			} catch (Exception e) {
-				log.error("Could not set up SSLContext", e);
-			}
-
-            if (log.isDebugEnabled()){
-    			String[] dCiphers = this.context.getSocketFactory().getDefaultCipherSuites();
-    			String[] sCiphers = this.context.getSocketFactory().getSupportedCipherSuites();
-    			int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
-    			for (int i = 0; i < len; i++) {
-    				if (i < dCiphers.length) {
-    					log.debug("Default Cipher: " + dCiphers[i]);
-    				}
-    				if (i < sCiphers.length) {
-    					log.debug("Supported Cipher: " + sCiphers[i]);
-    				}
-    			}
+    public SSLContext getContext() throws GeneralSecurityException {
+    	if (SHARED_SESSION_CONTEXT) {
+        	if (log.isDebugEnabled()){
+			    log.debug("Using shared SSL context for: "+Thread.currentThread().getName());
+        	}
+            return this.defaultContext;
+    	}
+    	
+        SSLContext sslContext = (SSLContext) this.threadlocal.get();
+        if (sslContext == null) {
+        	if (log.isDebugEnabled()){
+			    log.debug("Creating threadLocal SSL context for: "+Thread.currentThread().getName());
+        	}
+            sslContext = createContext();
+            this.threadlocal.set(sslContext);
+        }
+    	if (log.isDebugEnabled()){
+		    log.debug("Using threadLocal SSL context for: "+Thread.currentThread().getName());
+    	}
+        return sslContext;
+    }
+    
+    /**
+     * Resets the SSLContext if using per-thread contexts.
+     *
+     */
+    public void resetContext() {
+    	if (!SHARED_SESSION_CONTEXT) {
+    		log.debug("Clearing session context for current thread");
+            this.threadlocal.set(null);
+    	}
+    }
+    /*
+     * 
+     * Creates new SSL context
+     * @return SSL context
+     * @throws GeneralSecurityException
+     */
+	private SSLContext createContext() throws GeneralSecurityException {
+		SSLContext context;
+        if (pro != null) {
+            context = SSLContext.getInstance(DEFAULT_SSL_PROTOCOL, pro); // $NON-NLS-1$
+        } else {
+            context = SSLContext.getInstance(DEFAULT_SSL_PROTOCOL); // $NON-NLS-1$
+        }
+        KeyManagerFactory managerFactory = 
+            KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());             
+        JmeterKeyStore keys = this.getKeyStore();
+        managerFactory.init(null, this.defaultpw.toCharArray());
+        KeyManager[] managers = managerFactory.getKeyManagers();
+        log.debug(keys.getClass().toString());
+        
+        // Now wrap the default managers with our key manager
+        for (int i = 0; i < managers.length; i++) {
+            if (managers[i] instanceof X509KeyManager) {
+                X509KeyManager manager = (X509KeyManager) managers[i];
+                managers[i] = new WrappedX509KeyManager(manager, keys);
             }
-		}
-		return this.context;
-	}
+        }
+        
+        // Get the default trust managers
+        TrustManagerFactory tmfactory = TrustManagerFactory.getInstance(
+                TrustManagerFactory.getDefaultAlgorithm());
+        tmfactory.init(this.getTrustStore());
+        
+        // Wrap the defaults in our custom trust manager
+        TrustManager[] trustmanagers = tmfactory.getTrustManagers();
+        for (int i = 0; i < trustmanagers.length; i++) {
+            if (trustmanagers[i] instanceof X509TrustManager) {
+                trustmanagers[i] = new CustomX509TrustManager(
+                    (X509TrustManager)trustmanagers[i]); 
+            }
+        }
+        context.init(managers, trustmanagers, this.rand);
+        if (log.isDebugEnabled()){
+            String[] dCiphers = context.getSocketFactory().getDefaultCipherSuites();
+            String[] sCiphers = context.getSocketFactory().getSupportedCipherSuites();
+            int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
+            for (int i = 0; i < len; i++) {
+                if (i < dCiphers.length) {
+                    log.debug("Default Cipher: " + dCiphers[i]);
+                }
+                if (i < sCiphers.length) {
+                    log.debug("Supported Cipher: " + sCiphers[i]);
+                }
+            }
+        }
+        return context;
+    }
 
 	/**
 	 * This is the X509KeyManager we have defined for the sole purpose of
