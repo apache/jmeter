@@ -75,6 +75,10 @@ public class HttpSSLProtocolSocketFactory
     	}
     	SSLSocket sock = (SSLSocket) socket;
         if (log.isDebugEnabled()) {
+        	/* Warning: the next line seems to cause the error
+        	* javax.net.ssl.SSLException: Received fatal alert: unexpected_message
+        	* with certain sites
+        	*/
             SSLSession sslSession = sock.getSession();
             byte[] bytes = sslSession.getId();
 
