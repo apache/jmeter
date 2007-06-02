@@ -43,6 +43,7 @@ Some of the main enhancements are:
 <li>LDAP Ext sampler optionally parses result sets and supports secure mode</li>
 <li>FTP Sampler supports Ascii/Binary mode and upload</li>
 <li>Transaction Controller now generates Sample with subresults</li>
+<li>HTTPS session contexts are now per-thread, rather than shared. This gives better emulation of multiple users</li>
 </ul>
 <p>
 The main bug fixes are:
@@ -92,6 +93,13 @@ has been removed.
 <p>The Transaction Controller no longer appears as a separate sample; it now includes its nested samples as subsamples</p>
 <p>
 Control-Z no longer used for Remote Start All; replaced by Control+Shift+R
+</p>
+<p>
+By default, SSL session contexts are now created per-thread, rather than being shared.
+The original behaviour can be enabled by setting the JMeter property:
+<pre>
+https.sessioncontext.shared=true
+</pre>
 </p>
 <h4>Incompatible changes (development):</h4>
 <p>
@@ -149,6 +157,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Use ISO date-time format for Tree View Listener (previously the year was not shown)</li>
 <li>Improve loading of CSV files: if possible, use header to determine format; guess timestamp format if not milliseconds</li>
 <li>Bug 41913 - TransactionController now creates samples as sub-samples of the transaction</li>
+<li>Bug 42506 - JMeter threads all use the same SSL session</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>

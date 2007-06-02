@@ -122,6 +122,15 @@ JMeter assumes the FTP server is listening on the default port.</property>
          and the appropriate parameters from the form definition. 
          If the page uses HTTP, you can use the JMeter Proxy to capture the login sequence.
         </p>
+        <p>
+        In versions of JMeter up to 2.2, only a single SSL context was used for all threads and samplers.
+        This did not generate the proper load for multiple users.
+        A separate SSL context is now used for each thread.
+        To revert to the original behaviour, set the JMeter property:
+<pre>
+https.sessioncontext.shared=true
+</pre>
+        </p>
         <p>If the request uses cookies, then you will also need an
         <complink name="HTTP Cookie Manager"/>.  You can
         add either of these elements to the Thread Group or the HTTP Request.  If you have
