@@ -106,9 +106,9 @@ public abstract class AbstractProperty implements JMeterProperty {
 			prop.runningVersion = runningVersion;
 			return prop;
 		} catch (InstantiationException e) {
-			return null;
+			throw new AssertionError(e); // clone should never return null
 		} catch (IllegalAccessException e) {
-			return null;
+			throw new AssertionError(e); // clone should never return null
 		}
 	}
 
