@@ -59,19 +59,20 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	private transient String threadName = null;
 
 	public Object clone() {
-		TestElement clonedElement = null;
 		try {
-			clonedElement = (TestElement) this.getClass().newInstance();
+			TestElement clonedElement = (TestElement) this.getClass().newInstance();
 
 			PropertyIterator iter = propertyIterator();
 			while (iter.hasNext()) {
 				clonedElement.setProperty((JMeterProperty) iter.next().clone());
 			}
 			clonedElement.setRunningVersion(runningVersion);
+			return clonedElement;
 		} catch (InstantiationException e) {
+			throw new AssertionError(e); // clone should never return null
         } catch (IllegalAccessException e) {
+        	throw new AssertionError(e); // clone should never return null
         }
-		return clonedElement;
 	}
 
 	public void clear() {
