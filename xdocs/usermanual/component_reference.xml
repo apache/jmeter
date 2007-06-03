@@ -3240,7 +3240,6 @@ This is useful for checking the content of HTTP requests.
 
 </section>
 
-<!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
 		<br></br>
@@ -3270,10 +3269,9 @@ This is useful for checking the content of HTTP requests.
 <description><p></p></description>
 </component>
 
-
 <a href="#">^</a>
 
 </section>
- -->
+
 </body>
 </document>
