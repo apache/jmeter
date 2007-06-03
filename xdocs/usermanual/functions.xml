@@ -39,9 +39,9 @@
 
  -->
 
-<section name="&sect-num;. Functions" anchor="functions">
+<section name="&sect-num;. Functions and Variables" anchor="functions">
 <p>
-JMeter functions are special values that can populate fields of any Sampler or other configuration
+JMeter functions are special values that can populate fields of any Sampler or other
 element in a test tree.  A function call looks like this:</p>
 
 <p><code>${__functionName(var1,var2,var3)}</code></p>
@@ -54,6 +54,18 @@ The actual parameters vary from function to function.
 Functions that require no parameters can leave off the parentheses, for example ${__threadNum}.
 </p>
 
+<p>
+If a function parameter contains a comma, then be sure to escape this with "\", otherwise JMeter will treat it as a parameter delimiter.
+For example:
+<pre>
+${__time(EEE\, d MMM yyyy)}
+</pre>
+</p>
+<p>Variables are referenced as follows:
+<pre>
+${VARIABLE}
+</pre>
+</p>
 <p>List of functions:</p>
 <ul>
         <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
@@ -91,8 +103,8 @@ The __V (variable) function (versions after 2.2) can be used to do this: ${__V(V
 In earlier JMeter versions one can use ${__BeanShell(vars.get("Var${N}")}.
 </p>
 <p>This type of replacement is possible without functions, but was less convenient and less intuitive.
-It required users to create default config elements that would fill in blank values of Samplers.  User-defined
-functions allow one to replace only part of any given value, not just filling in blank values.</p>
+It required users to create default config elements that would fill in blank values of Samplers.
+Variables allow one to replace only part of any given value, not just filling in blank values.</p>
 <p>
 With built-in functions users can compute new values at run-time based on previous response data, which
 thread the function is in, the time, and many other sources.  These values are generated fresh for every
@@ -102,11 +114,17 @@ Each occurrence of a function call in a test plan is handled by a separate funct
 </subsection>
 
 <subsection name="&sect-num;.2 Where can functions be used?" anchor="where">
-<p>A user-defined function can be written into any field of any test component.  Some fields do not allow random strings 
+<p>
+Functions and variables can be written into any field of any test component.  Some fields do not allow random strings 
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
-functions.</p>
-<p>Built-in functions can be written into any field of non-controller test components. This includes
-Samplers, Timers, Listeners, Modifiers, Assertions, Pre-Processors, Post-Processors and Config Elements.</p>
+functions.
+<br></br>
+The Cookie Manager does not support variables/functions.
+</p>
+<p>
+Configuration elements are processed by a separate thread.
+Therefore functions such as __threadNum do not work properly in elements such as User Defined Variables.
+</p>
 <note>When using variable/function references in SQL code (etc),
 remember to include any necessary quotes for text strings,
 i.e. use<br></br>
@@ -237,6 +255,9 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 
 <p>There are no arguments for this function.</p>
 </description>
+<note>
+This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+</note>
 </component>
 
 <component index="&sect-num;.5.4" name="__intSum">
