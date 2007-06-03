@@ -20,14 +20,8 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Color;
 
-/**
- * @author mstover
- * @version $Revision$
- */
 public class JMeterColor extends Color {
 	public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
-
-	public final static Color YELLOW = new JMeterColor(1F, 1F, 0);
 
 	public final static Color LAVENDER = new JMeterColor(206F / 255F, 207F / 255F, 1F);
 
