@@ -19,10 +19,6 @@ package org.apache.jmeter.protocol.mail.sampler.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -91,14 +87,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 	private static final String INBOX = "INBOX"; // $NON-NLS-1$
 
-// NOTREAD private String type;
-	private boolean delete;
-
-	private int num_messages;
-
 	public MailReaderSamplerGui() {
-		// NOTREAD type = MailReaderSampler.TYPE_POP3;
-		delete = false;
 		init();
 	}
 
@@ -123,12 +112,12 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		serverBox.setText(mrs.getServer());
 		usernameBox.setText(mrs.getUserName());
 		passwordBox.setText(mrs.getPassword());
-		if (mrs.getNumMessages() == -1) {
+		if (mrs.getNumMessages() == MailReaderSampler.ALL_MESSAGES) {
 			allMessagesButton.setSelected(true);
-			someMessagesField.setText(Integer.toString(0));
+			someMessagesField.setText("0"); // $NON-NLS-1$
 		} else {
 			someMessagesButton.setSelected(true);
-			someMessagesField.setText(Integer.toString(mrs.getNumMessages()));
+			someMessagesField.setText(mrs.getNumMessagesString());
 		}
 		deleteBox.setSelected(mrs.getDeleteMessages());
 		super.configure(element);
@@ -167,10 +156,10 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		mrs.setUserName(usernameBox.getText());
 		mrs.setPassword(passwordBox.getText());
 		if (allMessagesButton.isSelected())
-			mrs.setNumMessages(-1);
+			mrs.setNumMessages(MailReaderSampler.ALL_MESSAGES);
 		else
-			mrs.setNumMessages(num_messages);
-		mrs.setDeleteMessages(delete);
+			mrs.setNumMessages(someMessagesField.getText());
+		mrs.setDeleteMessages(deleteBox.isSelected());
 	}
 
 	// TODO - fix GUI layout problems
@@ -192,12 +181,10 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		serverTypeBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label)) {
-					// NOTREAD type = MailReaderSampler.TYPE_POP3;
 					folderLabel.setEnabled(false);
 					folderBox.setText(INBOX);
 					folderBox.setEnabled(false);
 				} else {
-					// NOTREAD type = MailReaderSampler.TYPE_IMAP;
 					folderLabel.setEnabled(true);
 					folderBox.setEnabled(true);
 				}
@@ -253,35 +240,14 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		nmbg.add(allMessagesButton);
 		nmbg.add(someMessagesButton);
 		someMessagesField = new JTextField(5);
-		someMessagesField.setText(Integer.toString(0));
-		someMessagesField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-			}
-
-			public void focusLost(FocusEvent e) {
-				try {
-					num_messages = Integer.parseInt(someMessagesField.getText());
-				} catch (NumberFormatException nfe) {
-					num_messages = 0;
-				}
-			}
-		});
+		someMessagesField.setText("0");
 		allMessagesButton.setSelected(true);
 		numMessagesPanel.add(allMessagesButton);
 		numMessagesPanel.add(someMessagesButton);
 		numMessagesPanel.add(someMessagesField);
 		add(numMessagesPanel);
 
-		deleteBox = new JCheckBox(DeleteLabel, delete);
-		deleteBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent event) {
-				if (event.getStateChange() == ItemEvent.SELECTED) {
-					delete = true;
-				} else {
-					delete = false;
-				}
-			}
-		});
+		deleteBox = new JCheckBox(DeleteLabel);
 		add(deleteBox);
 	}
 }
