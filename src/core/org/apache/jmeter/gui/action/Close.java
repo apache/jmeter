@@ -63,6 +63,16 @@ public class Close implements Command {
 	 *            the generic UI action event
 	 */
 	public void doAction(ActionEvent e) {
+		performAction(e);
+	}
+	
+	/**
+	 * Helper routine to allow action to be shared by LOAD.
+	 * 
+	 * @param e event
+	 * @return true if Close was not cancelled
+	 */
+	static boolean performAction(ActionEvent e){
 		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		if (guiPackage.isDirty()) {
@@ -75,7 +85,7 @@ public class Close implements Command {
 				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
 			}
 			if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
-				return; // Don't clear the plan
+				return false; // Don't clear the plan
 			}
 		}
 		guiPackage.getTreeModel().clearTestPlan();
@@ -85,5 +95,6 @@ public class Close implements Command {
 		GuiPackage.getInstance().setTestPlanFile(null);
 
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
+		return true;
 	}
 }
