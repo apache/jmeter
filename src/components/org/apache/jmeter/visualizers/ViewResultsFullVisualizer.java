@@ -99,7 +99,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
+	// N.B. these are not multi-threaded, so don't make it static
+	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 	
 	private static final String NL = "\n"; // $NON-NLS-1$
 
@@ -449,7 +450,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		xmlButton.setEnabled(true);
 	}
 
-	transient SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
+	private static final SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
 
 	private void showRenderXMLResponse(String response) {
 		String parsable="";
