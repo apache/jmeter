@@ -65,7 +65,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 
     private JLabeledTextField soapAction = new JLabeledTextField(JMeterUtils.getResString("webservice_soap_action")); // $NON-NLS-1$
 
-    private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null); // $NON-NLS-1$
+    private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); // $NON-NLS-1$
 
     private JLabeledTextField wsdlField = new JLabeledTextField(JMeterUtils.getResString("wsdl_url")); // $NON-NLS-1$
 

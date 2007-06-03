@@ -102,7 +102,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 		add(makeTitlePanel(), BorderLayout.NORTH);
 
 		urlField = new JLabeledTextField(JMeterUtils.getResString("url"), 10); //$NON-NLS-1$
-		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title"), null); //$NON-NLS-1$
+		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); //$NON-NLS-1$
 		soapAction = new JLabeledTextField("", 10); //$NON-NLS-1$
 		sendSoapAction = new JCheckBox(JMeterUtils.getResString("soap_send_action"), true); //$NON-NLS-1$
 

@@ -48,6 +48,9 @@ import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
  * 
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
+	
+	private static final String ALL_FILES = "*.*"; //$NON-NLS-1$
+
 	public static final String use_file = JMeterUtils.getResString("jms_use_file"); //$NON-NLS-1$
 
 	public static final String use_random = JMeterUtils.getResString("jms_use_random_file"); //$NON-NLS-1$
@@ -88,11 +91,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 
 	JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); //$NON-NLS-1$
 
-	FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), "*.*"); //$NON-NLS-1$
+	FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), ALL_FILES); //$NON-NLS-1$
 
-	FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), "*.*"); //$NON-NLS-1$
+	FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
 
-	JLabeledTextArea textMessage = new JLabeledTextArea(text_msg, null);
+	JLabeledTextArea textMessage = new JLabeledTextArea(text_msg);
 
 	JLabeledRadio msgChoice = new JLabeledRadio(JMeterUtils.getResString("jms_message_type"), msgTypes, text_msg); //$NON-NLS-1$
 
