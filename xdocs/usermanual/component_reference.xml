@@ -754,10 +754,6 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 <note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
 		
-		<br></br>
-		Please note that the BSF jar file is not included with JMeter; it needs to be separately downloaded.
-		For full details, please see the BSF web-site at http://bsf.jakarta.apache.org/.
-		
 		</p>
 	</description>
 <properties>
