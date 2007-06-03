@@ -266,7 +266,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		this.add(tablePanel, BorderLayout.CENTER);
 	}
 	
-	public class SampleSuccessFunctor extends Functor {
+	public static class SampleSuccessFunctor extends Functor {
 		public SampleSuccessFunctor(String methodName) {
 			super(methodName);
 		}
