@@ -85,7 +85,7 @@ public class Load implements Command {
 				} else {
 					log.info("Loading file: " + f);
                     // Close the test plan currently open
-					ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CLOSE));
+					if (!Close.performAction(e)) return;
 
 					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
 				}
