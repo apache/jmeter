@@ -64,7 +64,18 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
 	 * Constructs a new component with the label displaying the passed text.
 	 * 
 	 * @param pLabel
-	 *            The text to in the label.
+	 *            The text to display in the label.
+	 */
+	public JLabeledTextArea(String label) {
+		this(label, null);
+	}
+
+	/**
+	 * Constructs a new component with the label displaying the passed text.
+	 * 
+	 * @param pLabel
+	 *            The text to display in the label.
+	 * @param docModel the document for the text area
 	 */
 	public JLabeledTextArea(String pLabel, Document docModel) {
 		super();
