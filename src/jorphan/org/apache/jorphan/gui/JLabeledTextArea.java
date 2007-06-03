@@ -68,11 +68,11 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
 	 */
 	public JLabeledTextArea(String pLabel, Document docModel) {
 		super();
+		init();
 		mLabel = new JLabel(pLabel);
 		if (docModel != null) {
             mTextArea.setDocument(docModel);
 		}
-		init();
 	}
 
 	public List getComponentList() {
