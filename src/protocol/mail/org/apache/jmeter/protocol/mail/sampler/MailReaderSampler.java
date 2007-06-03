@@ -34,6 +34,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -55,12 +56,12 @@ public class MailReaderSampler extends AbstractSampler {
 	// Needed by GUI
 	public final static String TYPE_POP3 = "pop3"; // $NON-NLS-1$
 	public final static String TYPE_IMAP = "imap"; // $NON-NLS-1$
-
+	public static final int ALL_MESSAGES = -1;
 
 	public MailReaderSampler() {
 		setServerType(TYPE_POP3);
 		setFolder("INBOX");
-		setNumMessages(-1);
+		setNumMessages(ALL_MESSAGES);
 		setDeleteMessages(false);
 	}
 
@@ -107,7 +108,7 @@ public class MailReaderSampler extends AbstractSampler {
 			data.append(" messages found\n");
 
 			int n = getNumMessages();
-			if (n == -1 || n > messages.length)
+			if (n == ALL_MESSAGES || n > messages.length)
 				n = messages.length;
 
 			// TODO - create a sample result for each message?
@@ -299,11 +300,28 @@ public class MailReaderSampler extends AbstractSampler {
 	}
 
 	/**
-	 * @return The number of messages to retrive from the mail server. -1
-	 *         denotes get all messages.
+	 * @param num_messages -
+	 *            The number of messages to retrieve from the mail server. Set
+	 *            this value to -1 to retrieve all messages.
+	 */
+	public void setNumMessages(String num_messages) {
+		setProperty(new StringProperty(NUM_MESSAGES, num_messages));
+	}
+
+	/**
+	 * @return The number of messages to retrieve from the mail server.
+	 *         -1 denotes get all messages.
 	 */
 	public int getNumMessages() {
 		return getPropertyAsInt(NUM_MESSAGES);
+	}
+
+	/**
+	 * @return The number of messages to retrieve from the mail server.
+	 *         -1 denotes get all messages.
+	 */
+	public String getNumMessagesString() {
+		return getPropertyAsString(NUM_MESSAGES);
 	}
 
 	/**
