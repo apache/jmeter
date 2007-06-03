@@ -54,7 +54,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
 
 	private JLabeledTextField timeout = new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
-	private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content"), null); //$NON-NLS-1$
+	private JLabeledTextArea soapXml = new JLabeledTextArea(JMeterUtils.getResString("jms_msg_content")); //$NON-NLS-1$
 
 	private JLabeledTextField initialContextFactory = new JLabeledTextField(
 			JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
