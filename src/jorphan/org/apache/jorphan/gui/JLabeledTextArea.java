@@ -39,8 +39,6 @@ import javax.swing.text.Document;
  * the text changing in the Text Field. The registered change listeners are only
  * called when the text has changed.
  * 
- * @author S.Coleman
- * @version $Revision$
  */
 public class JLabeledTextArea extends JPanel implements JLabeledField, FocusListener {
 	private JLabel mLabel;
@@ -79,8 +77,8 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
 	 */
 	public JLabeledTextArea(String pLabel, Document docModel) {
 		super();
-		init();
 		mLabel = new JLabel(pLabel);
+		init();
 		if (docModel != null) {
             mTextArea.setDocument(docModel);
 		}
