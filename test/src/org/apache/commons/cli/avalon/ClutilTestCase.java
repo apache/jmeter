@@ -23,7 +23,6 @@ package org.apache.commons.cli.avalon;
 import java.util.List;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * 
