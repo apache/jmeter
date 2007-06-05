@@ -68,7 +68,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // Start the HTTPMirrorServer
         webServerControl = new HttpMirrorControl();
         webServerControl.setPort(webServerPort);
-        webServerControl.startHttpMirror();
+        webServerControl.startHttpMirror(); // TODO - check that the mirror server is running somehow
 
         // Create the test file content
         TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
@@ -787,6 +787,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
                         Integer.toString(expectedPostBody.length)
                 )
         );
+        assertNotNull("Sent body should not be null",bodySent);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         // We cannot check this merely by getting the body in the contentEncoding,
