@@ -130,10 +130,10 @@ public class ForeachControlPanel extends AbstractControllerGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         inputVal.setText(""); // $NON-NLS-1$
         returnVal.setText(""); // $NON-NLS-1$

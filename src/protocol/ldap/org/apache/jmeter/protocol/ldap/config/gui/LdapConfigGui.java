@@ -188,10 +188,10 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         rootdn.setText(""); //$NON-NLS-1$
         searchbase.setText(""); //$NON-NLS-1$

@@ -58,7 +58,6 @@ import org.apache.log.Logger;
 /**
  * This class implements a visualizer that mails a message when an error occurs.
  * 
- * @version $Revision$ $Date$
  */
 public class MailerVisualizer extends AbstractVisualizer implements ActionListener, Clearable, ChangeListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -101,7 +100,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	/**
 	 * Clears any stored sampling-informations.
 	 */
-	public synchronized void clear() {
+	public synchronized void clearData() {
 		if (getModel() != null) {
 			((MailerResultCollector) getModel()).getMailerModel().clear();
 		}

@@ -64,13 +64,13 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
-        ftpDefaultPanel.clear();
-        loginPanel.clear();
+        ftpDefaultPanel.clearGui();
+        loginPanel.clearGui();
     }    
     
 	public String getLabelResource() {

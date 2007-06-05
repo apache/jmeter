@@ -112,8 +112,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     /**
      * Implements JMeterGUIComponent.clear
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
         tableModel.clearData();
         deleteButton.setEnabled(false);

@@ -31,7 +31,6 @@ import javax.swing.border.Border;
 import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -57,9 +56,8 @@ import org.apache.log.Logger;
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  * 
- * @version $Revision$ on $Date$
  */
-public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable, Clearable {
+public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable {
 	/** Logging */
 	private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -71,7 +69,8 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
 	/** A GUI panel containing the name of this component. */
 	protected NamePanel namePanel;
-
+    // used by AbstractReportGui
+	
 	private CommentPanel commentPanel;
 
 	/**
@@ -82,12 +81,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	public AbstractJMeterGuiComponent() {
 		namePanel = new NamePanel();
 		commentPanel=new CommentPanel();
-		setName(getStaticLabel());
-        setComment(""); // $NON-NLS-1$
+		initGui();
 	}
 
 	/**
-	 * Provides a default implementation for the name property. It's unlikely
+	 * Provides a default implementation for setting the name property. It's unlikely
 	 * developers will need to override.
 	 */
 	public void setName(String name) {
@@ -95,7 +93,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	}
 
     /**
-     * Provides a default implementation for the name property. It's unlikely
+     * Provides a default implementation for setting the comment property. It's unlikely
      * developers will need to override.
      */
     public void setComment(String comment) {
@@ -200,15 +198,20 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	}
 
 	/**
-	 * Provides a default implementat that resets the name field to the value of
+	 * Provides a default implementation that resets the name field to the value of
 	 * getStaticLabel(), reset comment and sets enabled to true. Your GUI may need more things
 	 * cleared, in which case you should override, clear the extra fields, and
-	 * still call super.clear().
+	 * still call super.clearGui().
 	 */
-	public void clear() {
-		setName(getStaticLabel());
-        setComment(""); // $NON-NLS-1$
+	public void clearGui() {
+		initGui();
 		enabled = true;
+	}
+
+	// helper method - also used by constructor
+	private void initGui() {
+		setName(getStaticLabel());
+		commentPanel.clearGui();
 	}
 
 	/**

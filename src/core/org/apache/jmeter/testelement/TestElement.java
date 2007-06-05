@@ -22,11 +22,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
-
 public interface TestElement extends Cloneable {
 	public final static String NAME = "TestElement.name";
 
@@ -107,6 +102,8 @@ public interface TestElement extends Cloneable {
 	 * Clear the TestElement of all data.
 	 */
 	public void clear();
+	// TODO - yet another ambiguous name - does it need changing?
+	// See also: Clearable, JMeterGUIComponent
 
 	public String getPropertyAsString(String key);
 

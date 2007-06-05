@@ -51,7 +51,6 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
  * therefore the notes address those situations. <br>
  * Created on: Jun 26, 2003
  * 
- * author Peter Lin
  */
 public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt.event.ActionListener {
 
@@ -191,10 +190,10 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         domain.setText(""); //$NON-NLS-1$
         protocol.setText(""); //$NON-NLS-1$

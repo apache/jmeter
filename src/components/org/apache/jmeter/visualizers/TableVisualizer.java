@@ -162,9 +162,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		updateTextFields();
 	}
 
-	public synchronized void clear() {
+	public synchronized void clearData() {
 		log.debug("Clear called", new Exception("Debug"));
-		// this.graph.clear();
 		model.clearData();
 		currentData = 0;
 		calc.clear();

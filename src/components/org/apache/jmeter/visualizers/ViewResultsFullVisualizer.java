@@ -259,7 +259,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	/**
 	 * Clears the visualizer.
 	 */
-	public void clear() {
+	public void clearData() {
 		log.debug("Start : clear1");
 
 		if (log.isDebugEnabled()) {
@@ -664,7 +664,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	/**
 	 * Initialize this visualizer
 	 */
-	protected void init() {
+	private void init() {
 		setLayout(new BorderLayout(0, 5));
 		setBorder(makeBorder());
 

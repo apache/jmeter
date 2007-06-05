@@ -156,11 +156,11 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
+	public void clearGui() {
 		rangeField.setText(DEFAULT_RANGE);
 		delayField.setText(DEFAULT_DELAY);
-		super.clear();
+		super.clearGui();
 	}
 }

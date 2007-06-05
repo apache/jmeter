@@ -42,8 +42,6 @@ import org.apache.log.Logger;
 /**
  * The model for a MailerVisualizer.
  * 
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version $Revision$ $Date$
  */
 public class MailerModel extends AbstractTestElement implements Serializable {
 
@@ -216,7 +214,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	 * reset any mail-specific attributes (like sender, mail-subject...) since
 	 * they are independent of the sampling.
 	 */
-	public synchronized void clear() {
+	public synchronized void clear() {// TODO: should this be clearData()?
 		failureCount = 0;
 		successCount = 0;
 		siteDown = false;

@@ -36,7 +36,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * should be executed some number of seconds in a loop. This component can be
  * used standalone or embedded into some other component.
  * 
- * @version $Revision$ on $Date$
  */
 
 public class RunTimeGui extends AbstractControllerGui implements ActionListener {
@@ -114,10 +113,10 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         seconds.setText("1"); // $NON-NLS-1$
     }

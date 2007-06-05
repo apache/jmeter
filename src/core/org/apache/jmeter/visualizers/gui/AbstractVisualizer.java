@@ -40,10 +40,10 @@ import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.Printable;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
@@ -104,10 +104,11 @@ import org.apache.log.Logger;
  * {@link org.apache.jmeter.visualizers.MailerVisualizer MailerVisualizer}.
  * <p>
  * 
- * @version $Revision$
  */
-public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent implements Visualizer, ChangeListener,
-		UnsharedComponent, Printable {
+public abstract class AbstractVisualizer 
+    extends AbstractJMeterGuiComponent 
+    implements Visualizer, ChangeListener, UnsharedComponent, Clearable 
+    {
 	/** Logging. */
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -356,5 +357,10 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	 */
 	public JComponent getPrintableComponent() {
 		return this;
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		filePanel.clearGui();
 	}
 }

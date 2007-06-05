@@ -113,7 +113,7 @@ public class MonitorModel implements Clearable, Serializable, Cloneable {
 	/**
 	 * clear will create a new MonitorStats object.
 	 */
-	public void clear() {
+	public void clearData() {
 		current = new MonitorStats(0, 0, 0, 0, 0, "", "", "", System.currentTimeMillis());
 	}
 

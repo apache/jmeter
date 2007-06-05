@@ -37,9 +37,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ Last updated: $Date$
- */
 public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener {
 
 	private JTextField size;
@@ -86,10 +83,10 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         size.setText(""); //$NON-NLS-1$
         equalButton.setSelected(true);

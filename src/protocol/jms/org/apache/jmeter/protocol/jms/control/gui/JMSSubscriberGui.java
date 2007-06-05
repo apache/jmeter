@@ -41,8 +41,6 @@ import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
 /**
  * This is the GUI for JMS Subscriber <br>
  * 
- * @author Peter Lin
- * @version $Id$
  */
 public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
 
@@ -215,6 +213,21 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
 		reqAuth.setText(sampler.getUseAuth());
 		readResponse.setSelected(sampler.getReadResponseAsBoolean());
 		clientChoice.setText(sampler.getClientChoice());
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		useProperties.setSelected(false); // $NON-NLS-1$
+		jndiICF.setText(""); // $NON-NLS-1$
+		urlField.setText(""); // $NON-NLS-1$
+		jndiConnFac.setText(""); // $NON-NLS-1$
+		jmsTopic.setText(""); // $NON-NLS-1$
+		jmsUser.setText(""); // $NON-NLS-1$
+		jmsPwd.setText(""); // $NON-NLS-1$
+		iterations.setText(""); // $NON-NLS-1$
+		reqAuth.setText(""); // $NON-NLS-1$
+		readResponse.setSelected(true);
+		clientChoice.setText(""); // $NON-NLS-1$
 	}
 
 	/**

@@ -46,10 +46,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * ModuleController Gui.
  * 
  */
-public class ModuleControllerGui extends AbstractControllerGui /*
-																 * implements
-																 * UnsharedComponent
-																 */
+public class ModuleControllerGui extends AbstractControllerGui
+// implements UnsharedComponent
 {
 
 	private JMeterTreeNode selected = null;
@@ -138,10 +136,10 @@ public class ModuleControllerGui extends AbstractControllerGui /*
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
         nodes.setSelectedIndex(-1);
         selected = null;

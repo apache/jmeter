@@ -82,10 +82,10 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         xmlSchema.setText(""); //$NON-NLS-1$
     }    

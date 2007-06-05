@@ -41,8 +41,6 @@ import org.apache.jmeter.testelement.TestElement;
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  * 
- * @version $Revision$ on $Date$
- * 
  */
 
 public interface JMeterGUIComponent {
@@ -192,7 +190,9 @@ public interface JMeterGUIComponent {
 	 * Clear the gui and return it to initial default values. This is necessary
 	 * because most gui classes are instantiated just once and re-used for
 	 * multiple test element objects and thus they need to be cleared between
-	 * use. TODO: implement this in all gui classes.
+	 * use.
 	 */
-	public void clear();
+	public void clearGui();
+	// N.B. originally called clear()
+	// @see also Clearable
 }

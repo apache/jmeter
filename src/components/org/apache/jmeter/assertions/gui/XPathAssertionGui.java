@@ -28,12 +28,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * 
- * author <a href="mailto:jspears@astrology.com">Justin Spears </a>
- * 
- */
-
 public class XPathAssertionGui extends AbstractAssertionGui {
 
 	private XPathPanel xpath;
@@ -118,10 +112,10 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         xpath.setXPath("/"); //$NON-NLS-1$
         xpath.setNegated(false);

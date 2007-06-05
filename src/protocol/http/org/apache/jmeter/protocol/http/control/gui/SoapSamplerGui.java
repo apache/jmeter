@@ -36,8 +36,6 @@ import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- */
 public class SoapSamplerGui extends AbstractSamplerGui {
 	private JLabeledTextField urlField;
 	private JLabeledTextField soapAction;
@@ -83,10 +81,10 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         urlField.setText(""); //$NON-NLS-1$
         soapAction.setText(""); //$NON-NLS-1$

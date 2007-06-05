@@ -102,8 +102,8 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 		updateGui();
 	}
 
-	public void clear() {
-		model.clear();
+	public void clearData() {
+		model.clearData();
 	}
 
 	public void setGUI() {

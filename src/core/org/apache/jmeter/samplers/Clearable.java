@@ -19,12 +19,16 @@
 package org.apache.jmeter.samplers;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Identifies an object which supports the clearing of run-time data
+ * using the clearData() method.
+ * 
+ * Intended for implementation by Listeners.
  */
 public interface Clearable {
 	/**
 	 * Clears the current data of the object.
 	 */
-	public void clear();
+	public void clearData();
+	// N.B. originally called clear()
+	// @see also JMeterGUIComponent
 }

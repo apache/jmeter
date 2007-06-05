@@ -97,6 +97,10 @@ public class FilePanel extends HorizontalPanel implements ActionListener {
 
 	}
 
+	public void clearGui(){
+		filename.setText(""); // $NON-NLS-1$
+	}
+
 	/**
 	 * If the gui needs to enable/disable the FilePanel, call the method.
 	 * 

@@ -42,7 +42,6 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
-import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -55,9 +54,6 @@ import org.apache.log.Logger;
  * affect the GUI, they typically use GuiPackage to get access to different
  * parts of the GUI.
  * 
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 public final class GuiPackage implements LocaleChangeListener {
 	/** Logging. */
@@ -230,12 +226,7 @@ public final class GuiPackage implements LocaleChangeListener {
 			updateCurrentNode();
 			TestElement curNode = treeListener.getCurrentNode().getTestElement();
 			JMeterGUIComponent comp = getGui(curNode);
-			if (!(comp instanceof AbstractVisualizer)) // TODO: a hack that
-														// needs to be fixed for
-														// 2.0
-			{
-				comp.clear();
-			}
+			comp.clearGui();
 			log.debug("Updating gui to new node");
 			comp.configure(curNode);
 			currentNodeUpdated = false;
@@ -271,7 +262,7 @@ public final class GuiPackage implements LocaleChangeListener {
 	public TestElement createTestElement(Class guiClass, Class testClass) {
 		try {
 			JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -302,7 +293,7 @@ public final class GuiPackage implements LocaleChangeListener {
 			} else {
 				comp = getGuiFromCache(c, null);
 			}
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;

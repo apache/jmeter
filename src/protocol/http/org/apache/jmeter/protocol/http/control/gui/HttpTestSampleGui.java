@@ -135,10 +135,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
-		super.clear();
+	public void clearGui() {
+		super.clearGui();
 		getImages.setSelected(false);
 		isMon.setSelected(false);
 		urlConfigGui.clear();

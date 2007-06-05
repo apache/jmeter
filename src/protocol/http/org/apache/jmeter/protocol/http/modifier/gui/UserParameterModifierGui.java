@@ -68,10 +68,10 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 		((UserParameterModifier) mod).setXmlUri(fileNameField.getText());
 	}
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         fileNameField.setText("users.xml"); //$NON-NLS-1$
     }    

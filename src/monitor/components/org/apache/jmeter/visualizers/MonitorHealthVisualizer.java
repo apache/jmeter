@@ -162,12 +162,12 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	}
 
 	/**
-	 * Clear will clear the MonitorAccumModel and create a new instance.
+	 * Clears the MonitorAccumModel.
 	 */
-	public void clear() {
-		this.MODEL.clear();
-		this.HEALTHPANE.clear();
-		this.PERFPANE.clear();
+	public void clearData() {
+		this.MODEL.clearData();
+		this.HEALTHPANE.clearData();
+		this.PERFPANE.clearData();
 	}
 
 }
