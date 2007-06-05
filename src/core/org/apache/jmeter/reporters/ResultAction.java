@@ -20,7 +20,6 @@ package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -31,9 +30,8 @@ import org.apache.log.Logger;
 /**
  * ResultAction - take action based on the status of the last Result
  * 
- * @version $Revision$ Last updated: $Date$
  */
-public class ResultAction extends OnErrorTestElement implements Serializable, SampleListener, Clearable {
+public class ResultAction extends OnErrorTestElement implements Serializable, SampleListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/*
@@ -47,17 +45,6 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
 		// log.debug(Thread.currentThread().getName());
 		// System.out.println(">> "+me+" "+this.getName()+"
 		// "+Thread.currentThread().getName());
-	}
-
-	/*
-	 * This is called once for each occurrence in the test plan, before the
-	 * start of the test. The super.clear() method clears the name (and all
-	 * other properties), so it is called last.
-	 */
-	public void clear() {
-		// System.out.println("-- "+me+this.getName()+"
-		// "+Thread.currentThread().getName());
-		super.clear();
 	}
 
 	/**
@@ -95,4 +82,5 @@ public class ResultAction extends OnErrorTestElement implements Serializable, Sa
 	public void sampleStopped(SampleEvent e) {
 		// not used
 	}
+
 }
