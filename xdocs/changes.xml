@@ -103,6 +103,12 @@ https.sessioncontext.shared=true
 </p>
 <h4>Incompatible changes (development):</h4>
 <p>
+<b>N.B.</b>The clear() method was defined in the following interfaces: Clearable, JMeterGUIComponent and TestElement.
+The methods serve different purposes, so two of them were renamed: 
+the Clearable method is now clearData() and the JMeterGUIComponent method is now clearGui().
+3rd party add-ons may need to be rebuilt.
+</p>
+<p>
 Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
 Formatting should now be done using the jorphan.gui Renderer classes.
 </p>

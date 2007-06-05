@@ -105,10 +105,10 @@ public class SplineModel implements Clearable {
 	}
 
 	public void uncompile() {
-		clear();
+		clearData();
 	}
 
-	public synchronized void clear() {
+	public synchronized void clearData() {
 		// this.graph.clear();
 		samples.clear();
 

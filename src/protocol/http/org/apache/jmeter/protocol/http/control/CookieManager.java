@@ -53,8 +53,6 @@ import org.apache.log.Logger;
  * 
  * Now uses Commons HttpClient parsing and matching code (since 2.1.2)
  * 
- * author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
- * @version $Revision$ $Date$
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -238,7 +236,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	/**
 	 * Remove all the cookies.
 	 */
-	public void clear() {
+	public void clear() {// TODO: should this call super.clear()?
 		log.debug("Clear all cookies from store");
 		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
 	}

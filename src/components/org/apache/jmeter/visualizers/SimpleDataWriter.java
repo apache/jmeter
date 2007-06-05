@@ -20,7 +20,6 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -30,7 +29,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * 
  ******************************************************************************/
 
-public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
+public class SimpleDataWriter extends AbstractVisualizer {
 	/***************************************************************************
 	 * Create the SimpleDataWriter.
 	 **************************************************************************/
@@ -59,7 +58,7 @@ public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
 	 * Does nothing, but required by interface.
 	 */
 
-	public void clear() {
+	public void clearData() {
 	}
 
 	/**

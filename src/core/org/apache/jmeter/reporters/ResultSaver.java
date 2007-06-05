@@ -81,11 +81,16 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	 * start of the test. The super.clear() method clears the name (and all
 	 * other properties), so it is called last.
 	 */
+	// TODO: is this clearData, clearGui or TestElement.clear() ?
 	public void clear() {
 		// System.out.println("-- "+me+this.getName()+"
 		// "+Thread.currentThread().getName());
 		super.clear();
 		sequenceNumber = 0; // TODO is this the right thing to do?
+	}
+
+	// TODO - is this the same as the above?
+	public void clearData() {
 	}
 
 	/**
@@ -183,4 +188,5 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	private boolean getErrorsOnly() {
 		return getPropertyAsBoolean(ERRORS_ONLY);
 	}
+
 }

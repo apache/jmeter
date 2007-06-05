@@ -164,4 +164,8 @@ public class HttpMirrorControlGui extends LogicControllerGui
 		return panel;
 	}
 
+	public void clearGui(){
+		super.clearGui();
+		portField.setText(HttpMirrorControl.DEFAULT_PORT_S);
+	}
 }

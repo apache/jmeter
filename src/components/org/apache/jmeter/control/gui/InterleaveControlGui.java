@@ -62,10 +62,10 @@ public class InterleaveControlGui extends AbstractControllerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();    
+    public void clearGui() {
+        super.clearGui();    
         style.setSelected(false);
     }
     

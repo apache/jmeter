@@ -124,4 +124,10 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 
 		return dataPanel;
 	}
+
+	public void clearGui() {
+		super.clearGui();
+		data.setText(""); // $NON-NLS-1$
+		
+	}
 }

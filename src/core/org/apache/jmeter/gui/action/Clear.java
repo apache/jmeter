@@ -31,8 +31,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Handles the following actions:
+ * - Clear (Data)
+ * - Clear All (Data)
+ * - Reset (Clear GUI)
  */
 public class Clear implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -41,6 +43,7 @@ public class Clear implements Command {
 	static {
 		commands.add(ActionNames.CLEAR);
 		commands.add(ActionNames.CLEAR_ALL);
+		commands.add(ActionNames.RESET_GUI);
 	}
 
 	public Clear() {
@@ -52,13 +55,15 @@ public class Clear implements Command {
 
 	public void doAction(ActionEvent e) {
 		GuiPackage guiPackage = GuiPackage.getInstance();
-		if (e.getActionCommand().equals(ActionNames.CLEAR)) {
-			JMeterGUIComponent model = guiPackage.getCurrentGui();
-			try {
-				((Clearable) model).clear();
-			} catch (Throwable ex) {
-				log.error("", ex);
+		final String actionCommand = e.getActionCommand();
+		if (actionCommand.equals(ActionNames.CLEAR)) {
+			JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
+			if (guiComp instanceof Clearable){
+				((Clearable) guiComp).clearData();				
 			}
+		} else if (actionCommand.equals(ActionNames.RESET_GUI)) {
+			JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
+			guiComp.clearGui();
 		} else {
 			Iterator iter = guiPackage.getTreeModel().getNodesOfType(Clearable.class).iterator();
 			while (iter.hasNext()) {
@@ -69,7 +74,7 @@ public class Clear implements Command {
                     node = (JMeterTreeNode) next;
                     guiComp = guiPackage.getGui(node.getTestElement());
                     Clearable item = (Clearable) guiComp;
-					item.clear();
+					item.clearData();
 				} catch (Exception ex) {
 					log.error("Can't clear: "+node+" "+guiComp, ex);
 				}

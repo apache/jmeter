@@ -36,9 +36,6 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- * @version $Revision$
- */
 public class HttpDefaultsGui extends AbstractConfigGui {
 	JLabeledTextField protocol;
 
@@ -90,10 +87,10 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         protocol.setText(""); //$NON-NLS-1$
         domain.setText(""); //$NON-NLS-1$

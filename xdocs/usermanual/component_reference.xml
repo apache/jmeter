@@ -935,7 +935,7 @@ TBC
 
 
 
-<component name="JUnit Sampler" index="&sect-num;.1.16"  width="522" height="405" screenshot="junit_sampler.png">
+<component name="JUnit Request" index="&sect-num;.1.16"  width="522" height="405" screenshot="junit_sampler.png">
 <description>
 The current implementation supports standard Junit convention and extensions. It also
 includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
@@ -2247,20 +2247,6 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 </table>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>
-
-<component name="JNDI Default Configuration" index="&sect-num;.4.10"  width="318" height="127" screenshot="jndi_config.png">
-<description>
-	<p>
-		TBA.
-	</p>
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Initial Context Factory" required="No">TBA</property>
-  <property name="Provider URL" required="No">TBA</property>
-</properties>
-</component>
-
 
 
 <component name="Login Config Element" index="&sect-num;.4.11"  width="352" height="112" screenshot="login-config.png">

@@ -131,7 +131,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
 	 * clear will clear the hashmap, remove all ServerPanels from the servers
 	 * pane, and update the ui.
 	 */
-	public void clear() {
+	public void clearData() {
 		this.SERVERMAP.clear();
 		this.SERVERS.removeAll();
 		this.SERVERS.updateUI();

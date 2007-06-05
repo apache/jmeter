@@ -137,4 +137,11 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
 
 		return panel;
 	}
+
+	public void clearGui() {
+		super.clearGui();
+		filename.setText(""); // $NON-NLS-1$
+		parameters.setText(""); // $NON-NLS-1$
+		scriptField.setText(""); // $NON-NLS-1$
+	}
 }

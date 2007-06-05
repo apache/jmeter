@@ -64,13 +64,13 @@ public class TCPSamplerGui extends AbstractSamplerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
-        TcpDefaultPanel.clear();
-        loginPanel.clear();
+        TcpDefaultPanel.clearGui();
+        loginPanel.clearGui();
     }    
     
 	public String getLabelResource() {

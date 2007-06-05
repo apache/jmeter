@@ -120,10 +120,10 @@ public class ConstantTimerGui extends AbstractTimerGui {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
+	public void clearGui() {
 		delayField.setText(DEFAULT_DELAY);
-		super.clear();
+		super.clearGui();
 	}
 }

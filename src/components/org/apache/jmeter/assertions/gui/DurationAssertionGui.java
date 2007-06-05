@@ -29,14 +29,8 @@ import org.apache.jmeter.assertions.DurationAssertion;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-//import org.apache.jorphan.logging.LoggingManager;
-//import org.apache.log.Logger;
 
-/**
- * @version $Revision$ Last updated: $Date$
- */
 public class DurationAssertionGui extends AbstractAssertionGui {
-	//private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JTextField duration;
 
@@ -69,10 +63,10 @@ public class DurationAssertionGui extends AbstractAssertionGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         duration.setText(""); //$NON-NLS-1$
     }    

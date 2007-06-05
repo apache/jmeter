@@ -79,12 +79,12 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
-        ldapDefaultPanel.clear();
+        ldapDefaultPanel.clearGui();
     }    
 
 	public String getLabelResource() {

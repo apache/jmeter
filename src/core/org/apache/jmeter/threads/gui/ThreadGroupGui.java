@@ -52,7 +52,7 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener {
-	LoopControlPanel loopPanel;
+	private LoopControlPanel loopPanel;
 
 	private VerticalPanel mainPanel;
 
@@ -84,6 +84,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	public ThreadGroupGui() {
 		super();
 		init();
+		initGui();
 	}
 
 	public Collection getMenuCategories() {
@@ -206,8 +207,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
 		JLabel label = new JLabel(JMeterUtils.getResString("starttime")); //$NON-NLS-1$
 		panel.add(label, BorderLayout.WEST);
-		Date today = new Date();
-		start = new JDateField(today);
+		start = new JDateField();
 		panel.add(start, BorderLayout.CENTER);
 		return panel;
 	}
@@ -221,8 +221,8 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
 		JLabel label = new JLabel(JMeterUtils.getResString("endtime")); // $NON-NLS-1$
 		panel.add(label, BorderLayout.WEST);
-		Date today = new Date();
-		end = new JDateField(today);
+		
+		end = new JDateField();
 		panel.add(end, BorderLayout.CENTER);
 		return panel;
 	}
@@ -267,7 +267,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
 		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); // $NON-NLS-1$
 		group.add(continueBox);
-		continueBox.setSelected(true);
 		panel.add(continueBox);
 
 		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); // $NON-NLS-1$
@@ -279,6 +278,25 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		panel.add(stopTestBox);
 
 		return panel;
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		initGui();
+	}
+	
+	// Initialise the gui field values
+	private void initGui(){
+		threadInput.setText("1"); // $NON-NLS-1$
+		rampInput.setText("1"); // $NON-NLS-1$
+		continueBox.setSelected(true);
+		loopPanel.clearGui();
+		scheduler.setSelected(false);
+		Date today = new Date();
+		end.setDate(today);
+		start.setDate(today);
+		delay.setText(""); // $NON-NLS-1$
+		duration.setText(""); // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -303,7 +321,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads")); // $NON-NLS-1$
 		threadPanel.add(threadLabel, BorderLayout.WEST);
 
-		threadInput = new JTextField("1", 5); // $NON-NLS-1$
+		threadInput = new JTextField(5);
 		threadInput.setName(THREAD_NAME);
 		threadLabel.setLabelFor(threadInput);
 		threadPanel.add(threadInput, BorderLayout.CENTER);
@@ -316,7 +334,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up")); // $NON-NLS-1$
 		rampPanel.add(rampLabel, BorderLayout.WEST);
 
-		rampInput = new JTextField("1", 5); // $NON-NLS-1$
+		rampInput = new JTextField(5);
 		rampInput.setName(RAMP_NAME);
 		rampLabel.setLabelFor(rampInput);
 		rampPanel.add(rampInput, BorderLayout.CENTER);

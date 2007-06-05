@@ -110,8 +110,8 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
 		return "distribution_graph_title"; // $NON-NLS-1$
 	}
 
-	public synchronized void clear() {
-		this.graph.clear();
+	public synchronized void clearData() {
+		this.graph.clearData();
 		model.clear();
 		repaint();
 	}

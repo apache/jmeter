@@ -161,10 +161,10 @@ public class AssertionGui extends AbstractAssertionGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         tableModel.clearData();
 

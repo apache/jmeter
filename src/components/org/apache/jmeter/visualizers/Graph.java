@@ -37,8 +37,6 @@ import org.apache.log.Logger;
 /**
  * Implements a simple graph for displaying performance results.
  * 
- * @author Michael Stover Created March 21, 2002
- * @version $Revision$ Last updated: $Date$
  */
 public class Graph extends JComponent implements Scrollable, Clearable {
 	private static Logger log = LoggingManager.getLoggerForClass();
@@ -133,7 +131,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 	/**
 	 * Clears this graph.
 	 */
-	public void clear() {
+	public void clearData() {
 		graphMax = 1;
 		throughputMax = 1;
 	}

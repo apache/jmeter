@@ -111,10 +111,10 @@ public class TCPConfigGui extends AbstractConfigGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         server.setText(""); //$NON-NLS-1$
         port.setText(""); //$NON-NLS-1$

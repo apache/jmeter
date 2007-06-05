@@ -100,10 +100,10 @@ public class FtpConfigGui extends AbstractConfigGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         server.setText(""); //$NON-NLS-1$
         remoteFile.setText(""); //$NON-NLS-1$

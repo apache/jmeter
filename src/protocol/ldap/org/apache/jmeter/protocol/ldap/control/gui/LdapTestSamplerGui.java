@@ -30,10 +30,6 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * Created Apr 29 2003 11:52 AM
- * 
- */
 public class LdapTestSamplerGui extends AbstractSamplerGui {
 	private LoginConfigGui loginPanel;
 
@@ -77,13 +73,13 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
-        ldapDefaultPanel.clear();
-        loginPanel.clear();
+        ldapDefaultPanel.clearGui();
+        loginPanel.clearGui();
     }    
 
 	public String getLabelResource() {
