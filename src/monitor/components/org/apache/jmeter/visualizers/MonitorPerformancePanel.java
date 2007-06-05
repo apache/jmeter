@@ -286,10 +286,10 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 	 * clear will remove all child nodes from the ROOTNODE, clear the HashMap,
 	 * update the graph and jpanel for the server tree.
 	 */
-	public void clear() {
+	public void clearData() {
 		this.SERVERMAP.clear();
 		ROOTNODE.removeAllChildren();
 		SERVERTREE.updateUI();
-		GRAPH.clear();
+		GRAPH.clearData();
 	}
 }

@@ -71,10 +71,10 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         filename.setText(""); //$NON-NLS-1$
         parameters.setText(""); //$NON-NLS-1$

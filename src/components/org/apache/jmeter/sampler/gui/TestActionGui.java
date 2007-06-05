@@ -126,10 +126,10 @@ public class TestActionGui extends AbstractSamplerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         targetBox.setSelectedIndex(0);
         durationField.setText(""); //$NON-NLS-1$

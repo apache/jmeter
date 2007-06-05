@@ -51,8 +51,6 @@ import org.apache.log.Logger;
  * was safer to just make a new class, rather than braking existing
  * JMeter gui code.
  * 
- * @author Peter Lin
- * @version $Revision$ updated on $Date$
  */
 public final class ReportGuiPackage implements LocaleChangeListener {
 	/** Logging. */
@@ -228,12 +226,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 			updateCurrentNode();
 			TestElement curNode = treeListener.getCurrentNode().getTestElement();
 			JMeterGUIComponent comp = getGui(curNode);
-			if (!(comp instanceof AbstractVisualizer)) // TODO: a hack that
-														// needs to be fixed for
-														// 2.0
-			{
-				comp.clear();
-			}
+			comp.clearGui();
 			log.debug("Updating gui to new node");
 			comp.configure(curNode);
 			currentNodeUpdated = false;
@@ -269,7 +262,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	public TestElement createTestElement(Class guiClass, Class testClass) {
 		try {
 			JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -300,7 +293,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 			} else {
 				comp = getGuiFromCache(c, null);
 			}
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -347,7 +340,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 *             if the specified GUI class cannot be found
 	 */
 	private JMeterGUIComponent getGuiFromCache(Class guiClass, Class testClass) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+			IllegalAccessException {
 		JMeterGUIComponent comp;
 		if (guiClass == TestBeanGUI.class) {
 			comp = (TestBeanGUI) testBeanGUIs.get(testClass);

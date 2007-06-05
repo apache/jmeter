@@ -74,10 +74,10 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         scriptField.setText(""); //$NON-NLS-1$
         langField.setText(""); //$NON-NLS-1$

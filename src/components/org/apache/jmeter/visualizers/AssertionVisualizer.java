@@ -57,7 +57,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 		}
 	}
 
-	public void clear() {
+	public void clearData() {
 		textArea.setText(""); // $NON-NLS-1$
 	}
 

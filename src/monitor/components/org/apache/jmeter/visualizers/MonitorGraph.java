@@ -189,7 +189,7 @@ public class MonitorGraph extends JComponent implements MouseListener, MonitorGu
 	/**
 	 * clear will repaint the graph
 	 */
-	public void clear() {
+	public void clearData() {
 		paintComponent(getGraphics());
 		this.repaint();
 	}

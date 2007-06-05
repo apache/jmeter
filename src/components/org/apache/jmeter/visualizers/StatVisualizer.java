@@ -99,7 +99,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
                 new Functor[] { null, null, null, null, null, null, null, null, null, null }, 
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
                               Long.class, Long.class, String.class, String.class, String.class });
-		clear();
+		clearData();
 		init();
 	}
 
@@ -145,7 +145,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable {
 	/**
 	 * Clears this visualizer and its model, and forces a repaint of the table.
 	 */
-	public void clear() {
+	public void clearData() {
 		model.clearData();
 		tableRows.clear();
 		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));

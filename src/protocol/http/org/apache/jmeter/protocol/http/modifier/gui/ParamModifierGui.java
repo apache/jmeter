@@ -115,10 +115,10 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         _fieldName.setText(""); //$NON-NLS-1$
         _prefix.setText(""); //$NON-NLS-1$

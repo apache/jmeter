@@ -65,13 +65,12 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
-/**
- */
-public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
+public class ResultCollector extends AbstractListenerElement implements SampleListener, Serializable,
 		TestListener, Remoteable, NoThreadClone {
+
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 2;
+	private static final long serialVersionUID = 23;
 
 	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
@@ -375,7 +374,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	public void clearVisualizer() {
 		// current = -1;
 		if (getVisualizer() != null && getVisualizer() instanceof Clearable) {
-			((Clearable) getVisualizer()).clear();
+			((Clearable) getVisualizer()).clearData();
 		}
 		finalizeFileOutput();
 	}
@@ -537,4 +536,5 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	public void setSaveConfig(SampleSaveConfiguration saveConfig) {
 		getProperty(SAVE_CONFIG).setObjectValue(saveConfig);
 	}
+
 }

@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.reporters.ResultSaver;
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -36,9 +35,9 @@ import org.apache.jmeter.util.JMeterUtils;
  * Create a ResultSaver test element, which saves the sample information in set
  * of files
  * 
- * @version $Revision$ Last updated: $Date$
  */
-public class ResultSaverGui extends AbstractPostProcessorGui implements Clearable {
+public class ResultSaverGui extends AbstractPostProcessorGui {
+	// TODO should this implements Clearable ?
 
 	private JTextField filename;
 
@@ -86,10 +85,10 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);

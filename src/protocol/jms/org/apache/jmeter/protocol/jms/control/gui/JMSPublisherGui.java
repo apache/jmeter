@@ -228,6 +228,25 @@ public class JMSPublisherGui extends AbstractSamplerGui implements java.awt.even
 		this.add(mainPanel);
 	}
 
+	public void clearGui(){
+		super.clearGui();
+		useProperties.setSelected(false);
+		jndiICF.setText(""); // $NON-NLS-1$
+		urlField.setText(""); // $NON-NLS-1$
+		jndiConnFac.setText(""); // $NON-NLS-1$
+		jmsTopic.setText(""); // $NON-NLS-1$
+		jmsUser.setText(""); // $NON-NLS-1$
+		jmsPwd.setText(""); // $NON-NLS-1$
+		textMessage.setText(""); // $NON-NLS-1$
+		messageFile.setFilename(""); // $NON-NLS-1$
+		randomFile.setFilename(""); // $NON-NLS-1$
+		msgChoice.setText(""); // $NON-NLS-1$
+		configChoice.setText(use_text);
+		updateConfig(use_text);
+		iterations.setText(""); // $NON-NLS-1$
+		reqAuth.setText(""); // $NON-NLS-1$
+	}
+
 	/**
 	 * the implementation loads the URL and the soap action for the request.
 	 */

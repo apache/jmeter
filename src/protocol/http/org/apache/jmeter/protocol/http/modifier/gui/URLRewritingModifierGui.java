@@ -102,10 +102,10 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         argumentName.setText(""); //$NON-NLS-1$
         pathExt.setSelected(false);

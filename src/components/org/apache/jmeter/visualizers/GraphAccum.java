@@ -241,7 +241,7 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
 	/**
 	 * Clears this graph.
 	 */
-	public void clear() {
+	public void clearData() {
 		setNoLegendYet(true);
 		((JPanel) visualizer.getWhiteCanvas()).removeAll();
 		previousPts = null;

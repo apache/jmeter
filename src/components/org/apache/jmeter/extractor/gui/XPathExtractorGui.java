@@ -89,10 +89,10 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     }
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         xpathQueryField.setText(""); // $NON-NLS-1$
         defaultField.setText(""); // $NON-NLS-1$

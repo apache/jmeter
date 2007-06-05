@@ -32,8 +32,6 @@ import org.apache.log.Logger;
 /**
  * The model that collects the average of the set of pages to be sampled.
  * 
- * @author Khor Soon Hin Created 2001/08/11
- * @version $Revision$ Last updated: $Date$
  */
 
 public class GraphAccumModel implements Clearable, Serializable {
@@ -130,7 +128,7 @@ public class GraphAccumModel implements Clearable, Serializable {
 	/**
 	 * Clear the results.
 	 */
-	public void clear() {
+	public void clearData() {
 		log.debug("Start : clear1");
 		samples.clear();
 		max = 1;

@@ -85,7 +85,6 @@ import org.apache.log.Logger;
  * instance will be used for each element. For efficiency reasons, most
  * customizers should implement SharedCustomizer.
  * 
- * @version $Revision$ updated on $Date$
  */
 public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -302,7 +301,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	public void configure(TestElement element) {
 		if (!initialized)
 			init();
-		clear();
+		clearGui();
 
 		super.configure(element);
 
@@ -419,17 +418,17 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
 	 */
 	public String getLabelResource() {
-		// TODO Auto-generated method stub
+		// @see getStaticLabel
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
-		super.clear();
+	public void clearGui() {
+		super.clearGui();
 		propertyMap.clear();
 	}
 }

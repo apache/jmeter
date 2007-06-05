@@ -91,10 +91,10 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         styleBox.setSelectedIndex(0);
         throughput.setText("1"); // $NON-NLS-1$
         perthread.setSelected(true);

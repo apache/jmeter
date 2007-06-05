@@ -76,10 +76,10 @@ public class ResultActionGui extends AbstractPostProcessorGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         errorPanel.configure(OnErrorTestElement.ON_ERROR_CONTINUE);
     }

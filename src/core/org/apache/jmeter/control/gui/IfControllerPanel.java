@@ -37,7 +37,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * should be executed while a condition holds. This component can be used
  * standalone or embedded into some other component.
  * 
- * @author Cyrus Montakab
  */
 
 public class IfControllerPanel extends AbstractControllerGui implements ActionListener {
@@ -123,10 +122,10 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         theCondition.setText(""); // $NON-NLS-1$
     }
 

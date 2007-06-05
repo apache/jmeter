@@ -198,7 +198,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
 	 * clear listeners, subsequent "run" will not notify the gui of data
 	 * changes.
 	 */
-	public void clear() {
+	public void clearData() {
 		Iterator itr = this.MAP.keySet().iterator();
 		while (itr.hasNext()) {
 			List lt = (List) this.MAP.get(itr.next());

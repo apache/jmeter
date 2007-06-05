@@ -61,6 +61,7 @@ implements ChangeListener, ActionListener
     private static final String METHODCOMBO = "methodcombo"; //$NON-NLS-1$
     private static final String PREFIX = "test"; //$NON-NLS-1$
     
+    // Names of JUnit methods
     private static final String ONETIMESETUP = "oneTimeSetUp"; //$NON-NLS-1$
     private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
     private static final String SUITE = "suite"; //$NON-NLS-1$
@@ -115,9 +116,8 @@ implements ChangeListener, ActionListener
     private transient TestCase TESTCLASS = null;
     private List METHODLIST = null;
     
-    // TODO: make private?
-    protected transient ClassFilter FILTER = new ClassFilter();
-    protected List CLASSLIST = null;
+    private transient ClassFilter FILTER = new ClassFilter();
+    private List CLASSLIST = null;
     
     /**
      * Constructor for JUnitTestSamplerGui
@@ -131,10 +131,6 @@ implements ChangeListener, ActionListener
     public String getLabelResource()
     {
         return "junit_request"; //$NON-NLS-1$
-    }
-
-    public String getDocAnchor() {
-        return "JUnit_Sampler"; // TODO - use default ?
     }
 
     /**
@@ -212,6 +208,24 @@ implements ChangeListener, ActionListener
         return panel;
     }
 
+    private void initGui(){ // TODO - unfinished?
+    	appendError.setSelected(false);
+    	appendExc.setSelected(false);
+    	doSetup.setSelected(false);
+    	filterpkg.setText(""); //$NON-NLS-1$
+    	constructorLabel.setText(""); //$NON-NLS-1$
+        successCode.setText(JMeterUtils.getResString("junit_success_default_code")); //$NON-NLS-1$
+        successMsg.setText(JMeterUtils.getResString("junit_success_default_msg")); //$NON-NLS-1$
+        failureCode.setText(JMeterUtils.getResString("junit_failure_default_code")); //$NON-NLS-1$
+        failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg")); //$NON-NLS-1$
+        errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg")); //$NON-NLS-1$
+        errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
+    }
+
+    public void clearGui() {
+		super.clearGui();
+		initGui();
+	}
     
     /* Implements JMeterGuiComponent.createTestElement() */ 
     public TestElement createTestElement()

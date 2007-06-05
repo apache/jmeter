@@ -38,9 +38,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @author Thad Smith
- */
 public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 	// Gui Components
@@ -89,6 +86,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 	public MailReaderSamplerGui() {
 		init();
+		initGui();
 	}
 
 	public String getLabelResource() {
@@ -240,7 +238,6 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		nmbg.add(allMessagesButton);
 		nmbg.add(someMessagesButton);
 		someMessagesField = new JTextField(5);
-		someMessagesField.setText("0");
 		allMessagesButton.setSelected(true);
 		numMessagesPanel.add(allMessagesButton);
 		numMessagesPanel.add(someMessagesButton);
@@ -249,5 +246,21 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 		deleteBox = new JCheckBox(DeleteLabel);
 		add(deleteBox);
+	}
+
+	public void clearGui() {
+		super.clearGui();
+		initGui();	
+	}
+
+	private void initGui() {
+		allMessagesButton.setSelected(true);
+		//someMessagesButton.setSelected(false);
+		//someMessagesField.setText("0");
+		deleteBox.setSelected(false);
+		folderBox.setText(INBOX);
+		passwordBox.setText("");
+		serverBox.setText("");
+		usernameBox.setText("");
 	}
 }

@@ -110,10 +110,10 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         useBody.setSelected(true);
         useHeaders.setSelected(false);

@@ -30,10 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class IncludeControllerGui extends AbstractControllerGui
-                                                                /*
-																 * implements
-																 * UnsharedComponent
-																 */
+       // implements UnsharedComponent
 {
 
     private FilePanel includePanel = 
@@ -84,11 +81,11 @@ public class IncludeControllerGui extends AbstractControllerGui
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
-        includePanel.setFilename(""); // $NON-NLS-1$
+    public void clearGui() {
+        super.clearGui();
+        includePanel.clearGui();
     }
 
 	public JPopupMenu createPopupMenu() {

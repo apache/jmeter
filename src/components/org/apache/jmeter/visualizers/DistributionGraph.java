@@ -1,4 +1,3 @@
-// $Header: 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -33,8 +32,6 @@ import org.apache.jmeter.samplers.Clearable;
 // import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.math.NumberComparator;
 
-// import org.apache.log.Logger;
-
 /**
  * New graph for drawing distribution graph of the results. It is intended as a
  * way to view the data after the stress has been performed. Although it can be
@@ -47,7 +44,6 @@ import org.apache.jorphan.math.NumberComparator;
  * 
  */
 public class DistributionGraph extends JComponent implements Scrollable, Clearable {
-	// private static Logger log = LoggingManager.getLoggerForClass();
 
 	private SamplingStatCalculator model;
 
@@ -144,7 +140,8 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 	/**
 	 * Clears this graph.
 	 */
-	public void clear() {
+	public void clearData() {
+		model.clear();
 	}
 
 	/**

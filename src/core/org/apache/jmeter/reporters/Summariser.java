@@ -101,7 +101,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 * start of the test. The super.clear() method clears the name (and all
 	 * other properties), so it is called last.
 	 */
-	public void clear() {
+	public void clearData() {
 		// System.out.println("-- "+me+this.getName()+"
 		// "+Thread.currentThread().getName());
 

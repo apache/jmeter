@@ -21,7 +21,6 @@ package org.apache.jmeter.reporters.gui;
 import java.awt.BorderLayout;
 
 import org.apache.jmeter.reporters.Summariser;
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 
@@ -32,7 +31,7 @@ import org.apache.jmeter.testelement.TestElement;
  * the existing types.
  * 
  */
-public class SummariserGui extends AbstractPostProcessorGui implements Clearable {
+public class SummariserGui extends AbstractPostProcessorGui {
 
 	public SummariserGui() {
 		super();

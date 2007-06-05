@@ -127,10 +127,10 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         initTableModel();
         paramTable.setModel(tableModel);

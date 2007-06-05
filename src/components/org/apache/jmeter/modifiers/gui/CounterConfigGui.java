@@ -72,10 +72,10 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 	}
     
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         startField.setText(""); //$NON-NLS-1$
         incrField.setText(""); //$NON-NLS-1$

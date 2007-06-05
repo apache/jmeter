@@ -127,10 +127,10 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
         
         loops.setText("1"); // $NON-NLS-1$
         infinite.setSelected(false);

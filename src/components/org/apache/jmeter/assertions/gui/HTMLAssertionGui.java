@@ -139,10 +139,10 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 	}
 
     /**
-     * Implements JMeterGUIComponent.clear
+     * Implements JMeterGUIComponent.clearGui
      */
-    public void clear() {
-        super.clear();
+    public void clearGui() {
+        super.clearGui();
 
         docTypeBox.setSelectedIndex(0);
         htmlRadioButton.setSelected(true);

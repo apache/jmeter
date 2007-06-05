@@ -121,9 +121,9 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 	/**
 	 * Clear this visualizer data.
 	 */
-	public synchronized void clear() {
-		model.clear();
-		graph.clear();
+	public synchronized void clearData() {
+		model.clearData();
+		graph.clearData();
 		log.debug("Start : clear1");
 		repaint();
 		log.debug("End : clear1");

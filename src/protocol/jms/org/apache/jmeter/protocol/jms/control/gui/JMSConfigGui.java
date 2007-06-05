@@ -41,7 +41,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * Configuration screen for Java Messaging Point-to-Point requests. <br>
  * Created on: October 28, 2004
  * 
- * @author Martijn Blankestijn
  */
 public class JMSConfigGui extends AbstractSamplerGui {
 
@@ -77,7 +76,8 @@ public class JMSConfigGui extends AbstractSamplerGui {
 	/**
 	 * Clears all fields.
 	 */
-	public void clear() {
+	public void clearGui() {// renamed from clear
+		super.clearGui();
 		queueuConnectionFactory.setText("");
 		sendQueue.setText("");
 		receiveQueue.setText("");

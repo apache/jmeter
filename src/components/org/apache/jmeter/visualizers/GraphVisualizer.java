@@ -142,15 +142,15 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 		this.graph.repaint();
 	}
 
-	public synchronized void clear() {
-		// this.graph.clear();
+	public void clearData() {
+		graph.clearData();		
 		model.clear();
-		graph.clear();
 		dataField.setText("0000"); //$NON-NLS-1$
 		averageField.setText("0000"); //$NON-NLS-1$
 		deviationField.setText("0000"); //$NON-NLS-1$
 		throughputField.setText("0/" + minute); //$NON-NLS-1$
 		medianField.setText("0000"); //$NON-NLS-1$
+		noSamplesField.setText("0000"); //$NON-NLS-1$
 		updateYAxis();
 		repaint();
 	}
@@ -440,4 +440,5 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
 		return row;
 	}
+
 }
