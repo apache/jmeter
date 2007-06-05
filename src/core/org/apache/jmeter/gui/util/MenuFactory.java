@@ -147,6 +147,9 @@ public final class MenuFactory {
 // Does not appear to be any different to Paste
 //		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
 //                "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
+		menu.add(makeMenuItem(JMeterUtils.getResString("reset_gui"), //$NON-NLS-1$
+                "Reset", ActionNames.RESET_GUI //$NON-NLS-1$
+                ));
 		if (removable) {
 			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
                     "Remove", ActionNames.REMOVE, //$NON-NLS-1$

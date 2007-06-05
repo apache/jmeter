@@ -64,6 +64,7 @@ public class ActionNames {
     public static final String REMOTE_STOP      = "remote_stop"; // $NON-NLS-1$
     public static final String REMOTE_STOP_ALL  = "remote_stop_all"; // $NON-NLS-1$
     public static final String REMOVE           = "remove"; // $NON-NLS-1$
+	public static final String RESET_GUI        = "reset_gui"; // $NON-NLS-1$
     public final static String SAVE             = "save"; // $NON-NLS-1$
     public final static String SAVE_ALL_AS      = "save_all_as";  // $NON-NLS-1$
     public final static String SAVE_AS          = "save_as"; // $NON-NLS-1$
