@@ -280,6 +280,11 @@ public class JMeter implements JMeterPlugin {
             if (log.isDebugEnabled())
             {
                 String jcp=System.getProperty("java.class.path");// $NON-NLS-1$
+                String bits[] =jcp.split(File.pathSeparator);
+                log.debug("ClassPath");
+                for(int i = 0; i<bits.length ;i++){
+                	log.debug(bits[i]);
+                }
                 log.debug(jcp);
             }
 
