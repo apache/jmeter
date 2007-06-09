@@ -410,63 +410,12 @@
    	<echo>jmeter.version = ${jmeter.version}</echo>
   </target>
 
-  <target name="init" depends="check-libs,report-missing-libs,init-version">
-    <!-- Create the optional directory (fileset complains if it is missing) -->
-    <mkdir dir="${lib.opt}"/>
-  </target>
-
   	<!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
   <property name="docversion" value="${jmeter.version}"/>
   
   <target name="init-docs" depends="check-anakia,report-anakia-missing">
   	<echo>eclipse.anakia = ${eclipse.anakia}</echo>
   	</target>
-
-  <!--
-    - Check for optional libraries.
-    -->
-  <target name="check-libs" description="Check availability of optional libraries." unless="assuming.libs.present">
-    <!-- Create the optional directory (fileset complains if it is missing) -->
-    <mkdir dir="${lib.opt}"/>
-    <available classname="com.sun.net.ssl.internal.ssl.Provider" property="jsse.present">
-      <classpath refid="classpath"/>
-    </available>
-    <condition property="javamail.complete">
-      <and>
-        <available classname="javax.mail.Transport" classpathref="classpath"/>
-        <available classname="javax.activation.DataHandler" classpathref="classpath"/>
-      </and>
-    </condition>
-    <available classname="bsh.Interpreter" property="beanshell.present">
-      <classpath refid="classpath"/>
-    </available>
-    <available classname="javax.jms.Message" property="jms.present">
-      <classpath refid="classpath"/>
-    </available>
-  </target>
-  
-  <!--
-    - Messages for missing libraries
-    -->
-  <target name="ssl-message" depends="check-libs" unless="jsse.present">
-    <echo message="Classes for SSL not found in classpath"/>
-  </target>
-
-  <target name="mail-message" depends="check-libs" unless="javamail.complete">
-    <echo message="Classes for Mail support not found in classpath"/>
-  </target>
-
-  <target name="beanshell-message" depends="check-libs" unless="beanshell.present">
-    <echo message="Classes for BeanShell support not found in classpath"/>
-  </target>
-
-  <target name="jms-message" depends="check-libs" unless="jms.present">
-    <echo message="Classes for JMS support not found in classpath"/>
-  </target>
-
-  <target name="report-missing-libs" 
-      depends="ssl-message,mail-message,beanshell-message,jms-message"
-  />
 
   <!--
     - Check for anakia task
@@ -484,8 +433,6 @@
     <mkdir dir="${build.core}"/>
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
-      <exclude name="org/apache/jmeter/util/JsseSSLManager.java" unless="jsse.present"/>
-      <exclude name="org/apache/jmeter/util/keystore/DefaultKeyStore.java" unless="jsse.present"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <path refid="classpath"/>
@@ -507,7 +454,6 @@
       <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/reporters/MailerModel.java" unless="javamail.complete"/>
       <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
-      <exclude name="org/apache/jmeter/assertions/**/BeanShell*.java" unless="beanshell.present"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -624,7 +570,6 @@
     <mkdir dir="${build.java}"/>
     <javac srcdir="${src.java}" destdir="${build.java}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
-      <exclude name="org/apache/jmeter/protocol/java/**/BeanShell*.java" unless="beanshell.present"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -715,7 +660,7 @@
     </javac>
   </target>
 
-  <target name="compile-jorphan" depends="init" description="Compile JOrphan utility classes.">
+  <target name="compile-jorphan" depends="init-version" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
     <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
@@ -742,8 +687,7 @@
   </target>
 
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components" 
-      	description="Compile components specific to JMS sampling."
-  	    if="jms.present">
+      	description="Compile components specific to JMS sampling.">
     <mkdir dir="${build.jms}"/>
     <javac srcdir="${src.jms}" destdir="${build.jms}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
@@ -1039,23 +983,6 @@ some of its classes - at present JMeter can only run from jar files.
     </jar>
   </target>
 
-  <!--
-  N.B. This target is used by the "dist" target, which is set up as the Gump target. 
-  Any libraries in this list need also to be set up in the Gump file:
-    projects/jakarta-jmeter.xml
-  -->
-  <target name="assume-libs-present">
-  <!-- Show the build version in gump logs -->
-  <echo>Version $Revision$ Last updated: $Date$</echo>
-    <!-- try to avoid Gump classpath complaint -->
-    <mkdir dir="${lib.opt}"/>
-    <property name="assuming.libs.present" value="true"/>
-    <property name="jsse.present" value="assume"/>
-    <property name="javamail.complete" value="assume"/>
-    <property name="beanshell.present" value="assume"/>
-    <property name="jms.present" value="assume"/>
-  </target>
-
   <!-- list of files needed for a binary distribution (excluding library files) -->
   <patternset id="dist.binaries">
     <include name="LICENSE"/>
@@ -1145,7 +1072,7 @@ some of its classes - at present JMeter can only run from jar files.
 	Creates runtime and source distributions and site documentation
 	-->
 	<target name="distribution" 
-		depends="assume-libs-present,clean,install,docs-all,test,_distribution,pack-site"
+		depends="clean,install,docs-all,test,_distribution,pack-site"
 		description="Build JMeter for end-user distribution (includes site)"/>
 
 	<target
@@ -1217,7 +1144,7 @@ some of its classes - at present JMeter can only run from jar files.
   -->
   <!-- Used by project jakarta-jmeter-cvs -->
   <target name="gump-build" 
-      depends="_gump_properties,assume-libs-present,clean,install" 
+      depends="_gump_properties,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
     <antcall target="_pack-binaries"/>
@@ -1227,7 +1154,7 @@ some of its classes - at present JMeter can only run from jar files.
   
   <!-- Used by project jakarta-jmeter -->
   <target name="gump-compile" 
-      depends="_gump_properties,assume-libs-present,clean,compile" 
+      depends="_gump_properties,clean,compile" 
       description="Compile JMeter only">
   </target>
 
@@ -1417,15 +1344,11 @@ some of its classes - at present JMeter can only run from jar files.
 	
   <target name="clean" description="Clean up to force a build from source.">
     <delete file="${dest.jar.jmeter}/ApacheJMeter.jar"/>
-    <delete quiet="true" file="${lib.dir}/jorphan.jar"/>
-    <delete quiet="true">
-        <fileset dir="${dest.jar}"/>
-    </delete>
+    <delete file="${lib.dir}/jorphan.jar"/>
+    <delete dir="${dest.jar}" includes="*.jar"/>
     <delete dir="${build.dir}"/>
     <delete dir="${dest.docs.api}"/>
-    <delete quiet="true">
-        <fileset dir="${dest.docs}"/>
-    </delete>
+    <delete dir="${dest.docs}"/>
     <delete dir="${dest.printable_docs}"/>
     <delete dir="${dist.dir}"/>
     <delete dir="${site.dir}"/>
