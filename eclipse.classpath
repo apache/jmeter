@@ -7,7 +7,7 @@
 	<classpathentry kind="src" output="build/protocol/http" path="src/protocol/http"/>
 	<classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
 	<classpathentry kind="src" output="build/protocol/jdbc" path="src/protocol/jdbc"/>
-	<classpathentry kind="src" excluding="org/apache/jmeter/protocol/java/**/BeanShell*.java" output="build/protocol/java" path="src/protocol/java"/>
+	<classpathentry kind="src" output="build/protocol/java" path="src/protocol/java"/>
 	<classpathentry kind="src" output="build/protocol/ldap" path="src/protocol/ldap"/>
 	<classpathentry kind="src" output="build/protocol/mail" path="src/protocol/mail"/>
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
