@@ -65,7 +65,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
-public class ResultCollector extends AbstractListenerElement implements SampleListener, Serializable,
+public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
 		TestListener, Remoteable, NoThreadClone {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -535,6 +535,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	 */
 	public void setSaveConfig(SampleSaveConfiguration saveConfig) {
 		getProperty(SAVE_CONFIG).setObjectValue(saveConfig);
+	}
+
+	// This is required so that
+	// @see org.apache.jmeter.gui.tree.JMeterTreeModel.getNodesOfType()
+	// can find the Clearable nodes - the userObject has to implement the interface.
+	public void clearData() {
 	}
 
 }
