@@ -672,6 +672,11 @@ StandardGenerator and TCLogParser.
 		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
 	</description>
 <properties>
 	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
@@ -1808,11 +1813,16 @@ failed responses from the server.</p></description>
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
+</p>
 <p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
@@ -2466,6 +2476,11 @@ If the property "beanshell.assertion.init" is defined, it is passed to the Inter
 as the name of a sourced file. This can be used to define common methods and variables.
 There is a sample init file in the bin directory: BeanShellAssertion.bshrc
 </p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
 </description>
 
 <properties>
@@ -2692,6 +2707,11 @@ The BeanShell Timer can be used to generate a delay.
 		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -2910,6 +2930,11 @@ The BeanShell PreProcessor allows arbitrary code to be applied before taking a s
 		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -3095,6 +3120,11 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>

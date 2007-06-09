@@ -20,11 +20,14 @@ package org.apache.jmeter.modifiers;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -34,7 +37,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
-public class BeanShellPreProcessor extends AbstractTestElement implements PreProcessor, Serializable, TestBean {
+public class BeanShellPreProcessor extends AbstractTestElement
+    implements PreProcessor, Serializable, TestBean, ThreadListener, TestListener
+{
     private static final Logger log = LoggingManager.getLoggerForClass();
     
     private static final long serialVersionUID = 3;
@@ -98,4 +103,68 @@ public class BeanShellPreProcessor extends AbstractTestElement implements PrePro
     public void setScript(String s){
         script=s;
     }
+
+	public void threadStarted() {
+		if (bshInterpreter == null) return;
+		try {
+			bshInterpreter.eval("threadStarted()"); // $NON-NLS-1$
+		} catch (JMeterException ignored) {
+			log.debug(ignored.getLocalizedMessage());
+		}
+	}
+
+	public void threadFinished() {
+		if (bshInterpreter == null) return;
+		try {
+			bshInterpreter.eval("threadFinished()"); // $NON-NLS-1$
+		} catch (JMeterException ignored) {
+			log.debug(ignored.getLocalizedMessage());
+		}		
+	}
+
+	public void testEnded() {
+		if (bshInterpreter == null) return;
+		try {
+			bshInterpreter.eval("testEnded()"); // $NON-NLS-1$
+		} catch (JMeterException ignored) {
+			log.debug(ignored.getLocalizedMessage());
+		}		
+	}
+
+	public void testEnded(String host) {
+		if (bshInterpreter == null) return;
+		try {
+			bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
+					.append(host)
+					.append(")") // $NON-NLS-1$
+					.toString()); // $NON-NLS-1$
+		} catch (JMeterException ignored) {
+			log.debug(ignored.getLocalizedMessage());
+		}		
+	}
+
+	public void testIterationStart(LoopIterationEvent event) {
+		// Not implemented
+	}
+
+	public void testStarted() {
+		if (bshInterpreter == null) return;
+		try {
+			bshInterpreter.eval("testStarted()"); // $NON-NLS-1$
+		} catch (JMeterException ignored) {
+			log.debug(ignored.getLocalizedMessage());
+		}		
+	}
+
+	public void testStarted(String host) {
+		if (bshInterpreter == null) return;
+		try {
+			bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
+					.append(host)
+					.append(")") // $NON-NLS-1$
+					.toString()); // $NON-NLS-1$
+		} catch (JMeterException ignored) {
+			log.debug(ignored.getLocalizedMessage());
+		}		
+	}
 }
