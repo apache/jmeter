@@ -399,25 +399,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		this.threadName = inthreadName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestElement#threadFinished()
-	 */
-	public void threadFinished() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestElement#threadStarted()
-	 */
-	public void threadStarted() {
-	}
-
-	/**
-	 * 
-	 */
 	public AbstractTestElement() {
 		super();
 	}

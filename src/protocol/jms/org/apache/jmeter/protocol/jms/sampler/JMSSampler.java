@@ -42,6 +42,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
@@ -51,10 +52,8 @@ import org.apache.log.Logger;
  * Sampler for JMS Communication. <br>
  * Created on: October 28, 2004
  * 
- * @author Martijn Blankestijn
- * @version $Id$
  */
-public class JMSSampler extends AbstractSampler {
+public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
 
@@ -252,14 +251,8 @@ public class JMSSampler extends AbstractSampler {
 		// LOGGER.debug("testIterationStart");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestElement#threadStarted()
-	 */
 	public void threadStarted() {
 		logThreadStart();
-		super.threadStarted();
 
 		Context context = null;
 		try {
@@ -394,7 +387,6 @@ public class JMSSampler extends AbstractSampler {
 	 */
 	public void threadFinished() {
 		LOGGER.debug("Thread ended " + new Date());
-		super.threadFinished();
 
 		if (session != null)
 			try {
