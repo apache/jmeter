@@ -41,6 +41,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -433,7 +434,7 @@ public class JMeterThread implements Runnable, Serializable {
 	 * 
 	 */
 	private void threadStarted() {
-		Traverser startup = new Traverser(true);
+		ThreadListenerTraverser startup = new ThreadListenerTraverser(true);
 		testTree.traverse(startup);
 	}
 
@@ -441,7 +442,7 @@ public class JMeterThread implements Runnable, Serializable {
 	 * 
 	 */
 	private void threadFinished() {
-		Traverser shut = new Traverser(false);
+		ThreadListenerTraverser shut = new ThreadListenerTraverser(false);
 		testTree.traverse(shut);
 		JMeterContextService.decrNumberOfThreads();
         threadGroup.decrNumberOfThreads();
@@ -451,20 +452,20 @@ public class JMeterThread implements Runnable, Serializable {
         }
 	}
 
-	private static class Traverser implements HashTreeTraverser {
+	private static class ThreadListenerTraverser implements HashTreeTraverser {
 		private boolean isStart = false;
 
-		private Traverser(boolean start) {
+		private ThreadListenerTraverser(boolean start) {
 			isStart = start;
 		}
 
 		public void addNode(Object node, HashTree subTree) {
-			if (node instanceof TestElement) {
-				TestElement te = (TestElement) node;
+			if (node instanceof ThreadListener) {
+				ThreadListener tl = (ThreadListener) node;
 				if (isStart) {
-					te.threadStarted();
+					tl.threadStarted();
 				} else {
-					te.threadFinished();
+					tl.threadFinished();
 				}
 			}
 		}

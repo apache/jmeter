@@ -48,6 +48,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -66,7 +67,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * Common constants and methods for HTTP samplers
  * 
  */
-public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener {
+public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener, ThreadListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -1247,6 +1248,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     
     public static boolean isSecure(URL url){
         return isSecure(url.getProtocol());
+    }
+    
+    // Implement these here, to avoid re-implementing for sub-classes
+    // (previously these were implemented in all TestElements)
+    public void threadStarted(){    	
+    }
+    public void threadFinished(){    	
     }
 }
 
