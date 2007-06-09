@@ -195,9 +195,13 @@ public class XPathExtractor extends AbstractTestElement implements
 	        for (int i = 0 ; i < length; i++) {
 	            Node match = matches.item(i);
 				if ( match instanceof Element){
-				   // elements have empty nodeValue, but we are usually
-				   // interested in their content
-				   val = match.getFirstChild().getNodeValue();
+				// elements have empty nodeValue, but we are usually interested in their content
+				   final Node firstChild = match.getFirstChild();
+				   if (firstChild != null) {
+					   val = firstChild.getNodeValue();
+				   } else {
+					   val = match.getNodeValue(); // TODO is this correct?
+				   }
 				} else {				
 				   val = match.getNodeValue();
 				}
