@@ -451,9 +451,6 @@
     <mkdir dir="${build.components}"/>
     <javac srcdir="${src.components}" destdir="${build.components}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
-      <exclude name="org/apache/jmeter/visualizers/MailerVisualizer.java" unless="javamail.complete"/>
-      <exclude name="org/apache/jmeter/reporters/MailerModel.java" unless="javamail.complete"/>
-      <exclude name="org/apache/jmeter/reporters/MailerResultCollector.java" unless="javamail.complete"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -479,8 +476,6 @@
     <!-- Directory needs to exist, or jar will fail -->
     <javac srcdir="${src.http}" destdir="${build.http}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
-      <exclude name="org/apache/jmeter/protocol/http/sampler/WebServiceSampler.java" unless="javamail.complete"/>
-      <exclude name="org/apache/jmeter/protocol/http/control/gui/WebServiceSamplerGui.java" unless="javamail.complete"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${build.core}"/>
@@ -554,7 +549,7 @@
     <mkdir dir="${build.mail}"/>
   </target>
 
-  <target name="compile-mail" depends="compile-jorphan,compile-core,create-mail-dir" if="javamail.complete"
+  <target name="compile-mail" depends="compile-jorphan,compile-core,create-mail-dir"
     description="Compile components specific to IMAP and POP3 sampling.">
     <javac srcdir="${src.mail}" destdir="${build.mail}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
