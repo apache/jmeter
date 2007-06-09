@@ -44,6 +44,7 @@ Some of the main enhancements are:
 <li>FTP Sampler supports Ascii/Binary mode and upload</li>
 <li>Transaction Controller now generates Sample with subresults</li>
 <li>HTTPS session contexts are now per-thread, rather than shared. This gives better emulation of multiple users</li>
+<li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 </ul>
 <p>
 The main bug fixes are:
@@ -164,6 +165,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Improve loading of CSV files: if possible, use header to determine format; guess timestamp format if not milliseconds</li>
 <li>Bug 41913 - TransactionController now creates samples as sub-samples of the transaction</li>
 <li>Bug 42506 - JMeter threads all use the same SSL session</li>
+<li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
