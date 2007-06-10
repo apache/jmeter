@@ -26,9 +26,6 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-/**
- * @version $Revision$
- */
 public class TestXPathExtractor extends TestCase {
 		XPathExtractor extractor;
 
@@ -51,13 +48,42 @@ public class TestXPathExtractor extends TestCase {
 			extractor.setRefName(VAL_NAME);
             extractor.setDefaultValue("Default");
 			result = new SampleResult();
-			String data = "<book><preface>zero</preface><page>one</page><page>two</page></book>";
+			String data = "<book><preface title='Intro'>zero</preface><page>one</page><page>two</page><empty></empty><a><b></b></a></book>";
 			result.setResponseData(data.getBytes());
 			vars = new JMeterVariables();
 			jmctx.setVariables(vars);
 			jmctx.setPreviousResult(result);
 		}
 
+		public void testAttributeExtraction() throws Exception {
+			extractor.setXPathQuery("/book/preface/@title");
+			extractor.process();
+			assertEquals("Intro", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("Intro", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));
+
+            extractor.setXPathQuery("/book/preface[@title]");
+			extractor.process();
+			assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));
+
+            extractor.setXPathQuery("/book/preface[@title='Intro']");
+			extractor.process();
+			assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));
+
+            extractor.setXPathQuery("/book/preface[@title='xyz']");
+			extractor.process();
+			assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("0", vars.get(VAL_NAME_NR));
+            assertNull(vars.get(VAL_NAME+"_1"));
+		}
+		
         public void testVariableExtraction() throws Exception {
 			extractor.setXPathQuery("/book/preface");
 			extractor.process();
@@ -88,6 +114,19 @@ public class TestXPathExtractor extends TestCase {
             assertEquals("0", vars.get(VAL_NAME_NR));
             assertNull(vars.get(VAL_NAME+"_1"));
 
+            // Has child, but child is empty
+            extractor.setXPathQuery("/book/a");
+            extractor.process();
+            assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertNull(vars.get(VAL_NAME+"_1"));
+
+            // Has no child
+            extractor.setXPathQuery("/book/empty");
+            extractor.process();
+            assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertNull(vars.get(VAL_NAME+"_1"));
         }
 
         public void testInvalidXpath() throws Exception {
