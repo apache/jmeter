@@ -1,27 +1,16 @@
-Warning: The Eclipse.classpath file has been tested with Eclipse 3.2.
-It may not work with other versions.
+Eclipse settings
+----------------
+The following files should be excluded from build output:
+*.metaprops
+See Preferences/Java/Building/Output Folder/Filtered Resources
+
 
 Eclipse.classpath
 -----------------
+[This has been tested with Eclipse 3.2. It may not work with other versions.]
 
 The file eclipse.classpath is intended as a starter .classpath file 
 for building JMeter using Eclipse version 3.  
-
-It has exclusion filters for all the source files that depend on optional jars.
-
-The optional jars are:
-* beanshell - see http://www.beansehll.org/
-
-The usage of the jars is as follows:
-
-java
-----
-org/apache/jmeter/protocol/java/**/BeanShell*.java - requires beanshell
-
-
-Before use, delete or disable the exclusion filters that are not required.
-
-Unlike Ant, Eclipse does not support conditional excludes.
 
 Note that Eclipse does not handle RMI compilations, 
 nor is it easy to use for creating jar files.
@@ -63,7 +52,3 @@ On the Arguments tab, in the Working Directory area, pick the radio
 button next to "Other" and enter the following in the text box:
 
   ${workspace_loc:jmeter/bin}
-
-On the Classpath tab,click on User Entries, click on the Add
-Jars button, then navigate to the file lib/ext/ApacheJMeter_core.jar
-Pick it, click Ok.
