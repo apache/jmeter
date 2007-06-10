@@ -105,7 +105,7 @@ public class BeanShellPostProcessor extends AbstractTestElement
 	public void threadStarted() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("threadStarted()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}
@@ -114,7 +114,7 @@ public class BeanShellPostProcessor extends AbstractTestElement
 	public void threadFinished() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("threadFinished()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}		
@@ -123,7 +123,7 @@ public class BeanShellPostProcessor extends AbstractTestElement
 	public void testEnded() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("testEnded()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}		
@@ -148,7 +148,7 @@ public class BeanShellPostProcessor extends AbstractTestElement
 	public void testStarted() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("testStarted()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}		
