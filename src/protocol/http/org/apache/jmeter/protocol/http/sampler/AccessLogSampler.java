@@ -70,7 +70,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 
 	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
 	
-	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
+	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 
 	/** private members used by class * */
 	transient private LogParser PARSER = null;
