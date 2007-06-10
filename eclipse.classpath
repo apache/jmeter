@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="build/jorphan" path="src/jorphan"/>
-	<classpathentry excluding="org/apache/jmeter/images/|org/apache/jmeter/resources/*.properties" kind="src" output="build/core" path="src/core"/>
+	<classpathentry kind="src" output="build/core" path="src/core"/>
 	<classpathentry kind="src" output="build/components" path="src/components"/>
 	<classpathentry kind="src" output="build/functions" path="src/functions"/>
 	<classpathentry kind="src" output="build/protocol/http" path="src/protocol/http"/>
