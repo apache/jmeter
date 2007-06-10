@@ -166,6 +166,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41913 - TransactionController now creates samples as sub-samples of the transaction</li>
 <li>Bug 42506 - JMeter threads all use the same SSL session</li>
 <li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
+<li>Bug 42582 - JSON pretty printing in Tree View Listener</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
