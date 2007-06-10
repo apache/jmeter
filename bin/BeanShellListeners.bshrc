@@ -1,6 +1,6 @@
-# Example BeanShell Listener definitions
+// Example BeanShell Listener definitions
 
-# ThreadListener methods
+// ThreadListener methods
 
 threadStarted(){
     print("threadStarted");
@@ -10,7 +10,7 @@ threadFinished(){
     print("threadFinished");
 }
 
-# TestListener methods
+// TestListener methods
 
 testStarted(){
     print("testStarted");
