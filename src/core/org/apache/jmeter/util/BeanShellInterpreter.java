@@ -151,20 +151,32 @@ public class BeanShellInterpreter {
     }
 
 	private Object bshInvoke(Method m, String s) throws JMeterException {
+		return bshInvoke(m, s, true);
+	}
+
+	private Object bshInvoke(Method m, String s, boolean shouldLog) throws JMeterException {
 		Object r = null;
+		final String errorString = "Error invoking bsh method: ";
 		try {
 			r = m.invoke(bshInstance, new Object[] { s });
 		} catch (IllegalArgumentException e) { // Programming error
-			log.error("Error invoking bsh method " + m.getName() + "\n", e);
-			throw new JMeterError("Error invoking bsh method " + m.getName(), e);
+			log.error(errorString + m.getName());
+			throw new JMeterError(errorString + m.getName(), e);
 		} catch (IllegalAccessException e) { // Also programming error
-			log.error("Error invoking bsh method " + m.getName() + "\n", e);
-			throw new JMeterError("Error invoking bsh method " + m.getName(), e);
+		    log.error(errorString + m.getName());
+			throw new JMeterError(errorString + m.getName(), e);
 		} catch (InvocationTargetException e) { // Can occur at run-time
 			// could be caused by the bsh Exceptions:
 			// EvalError, ParseException or TargetError
-			log.error("Error invoking bsh method " + m.getName() + "\n", e);
-			throw new JMeterException("Error invoking bsh method " + m.getName(), e);
+			if (shouldLog) {
+				Throwable cause = e.getCause();
+				if (cause != null) {
+					log.error(errorString + m.getName() + "\t" + cause.getLocalizedMessage());
+				} else {
+					log.error(errorString + m.getName());
+				}
+			}
+			throw new JMeterException(errorString + m.getName(), e);
 		}
 		return r;
 	}
@@ -190,6 +202,10 @@ public class BeanShellInterpreter {
 
 	public Object eval(String s) throws JMeterException {
 		return bshInvoke(bshEval, s);
+	}
+
+	public Object evalNoLog(String s) throws JMeterException {
+		return bshInvoke(bshEval, s, false);
 	}
 
 	public Object set(String s, Object o) throws JMeterException {
