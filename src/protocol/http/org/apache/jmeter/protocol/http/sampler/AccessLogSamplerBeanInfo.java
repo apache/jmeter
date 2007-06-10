@@ -24,6 +24,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.jmeter.protocol.http.util.accesslog.Filter;
 import org.apache.jmeter.protocol.http.util.accesslog.LogParser;
@@ -34,61 +35,59 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
-/**
- * @author mstover
- * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
- */
 public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
-	Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * @param beanClass
 	 */
 	public AccessLogSamplerBeanInfo() {
 		super(AccessLogSampler.class);
-		log.info("Entered access log sampler bean info");
+		log.debug("Entered access log sampler bean info");
 		try {
-			createPropertyGroup("defaults", new String[] { "domain", "portString", "imageParsing" });
+			createPropertyGroup("defaults",  // $NON-NLS-1$
+					new String[] { "domain", "portString", "imageParsing" });// $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 
-			createPropertyGroup("plugins", new String[] { "parserClassName", "filterClassName" });
+			createPropertyGroup("plugins",  // $NON-NLS-1$
+					new String[] { "parserClassName", "filterClassName" }); // $NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 
-			createPropertyGroup("accesslogfile", new String[] { "logFile" });
+			createPropertyGroup("accesslogfile",  // $NON-NLS-1$
+					new String[] { "logFile" }); // $NON-NLS-1$
 
 			PropertyDescriptor p;
 
 			p = property("parserClassName");
 			p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-			p.setValue(DEFAULT, "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser");
+			p.setValue(DEFAULT, AccessLogSampler.DEFAULT_CLASS);
 			p.setValue(NOT_OTHER, Boolean.TRUE);
 			p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-			log.info("found parsers: "
-					+ ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class }));
-			p.setValue(TAGS, ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-					new Class[] { LogParser.class }).toArray(new String[0]));
+			final List logParserClasses = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { LogParser.class });
+			if (log.isDebugEnabled()) {
+				log.debug("found parsers: "	+ logParserClasses);
+			}
+			p.setValue(TAGS, logParserClasses.toArray(new String[0]));
 
-			p = property("filterClassName");
+			p = property("filterClassName"); // $NON-NLS-1$
 			p.setValue(NOT_UNDEFINED, Boolean.FALSE);
-			p.setValue(DEFAULT, "");
+			p.setValue(DEFAULT, ""); // $NON-NLS-1$
 			p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 			p.setValue(TAGS, ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
 					new Class[] { Filter.class }, false).toArray(new String[0]));
 
-			p = property("logFile");
+			p = property("logFile"); // $NON-NLS-1$
 			p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 			p.setValue(DEFAULT, "");
 			p.setPropertyEditorClass(FileEditor.class);
 
-			p = property("domain");
+			p = property("domain"); // $NON-NLS-1$
 			p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 			p.setValue(DEFAULT, "");
 
-			p = property("portString");
+			p = property("portString"); // $NON-NLS-1$
 			p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-			p.setValue(DEFAULT, "");
+			p.setValue(DEFAULT, ""); // $NON-NLS-1$
 
-			p = property("imageParsing");
+			p = property("imageParsing"); // $NON-NLS-1$
 			p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 			p.setValue(DEFAULT, Boolean.FALSE);
 			p.setValue(NOT_OTHER, Boolean.TRUE);
@@ -96,7 +95,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
 			log.warn("couldn't find classes and set up properties", e);
 			throw new RuntimeException("Could not find classes with class finder");
         }
-		log.info("Got to end of access log samper bean info init");
+		log.debug("Got to end of access log samper bean info init");
 	}
 
 }
