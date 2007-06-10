@@ -57,7 +57,7 @@ public class BeanShellSampler extends AbstractSampler
 
 	public BeanShellSampler() {
 		try {
-			bshInterpreter = new BeanShellInterpreter(INIT_FILE, log);
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);
 		} catch (ClassNotFoundException e) {
 			log.error("Cannot find BeanShell: "+e.toString());
 		}
