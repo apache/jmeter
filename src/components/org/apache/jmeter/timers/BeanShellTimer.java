@@ -55,7 +55,7 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
 		try {
 			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
 		} catch (ClassNotFoundException e) {
-			log.error(e.getLocalizedMessage());
+			log.error("Cannot find BeanShell: "+e.toString());
 		}
 	}
 

@@ -144,9 +144,9 @@ public class BeanShellInterpreter {
         try {
             this.init(init, _log);
         } catch (IOException e) {
-            _log.warn("Could not initialise interpreter", e);
+			_log.warn("Could not initialise interpreter: "+e.toString()); // no need for stack trace
         } catch (JMeterException e) {
-            _log.warn("Could not initialise interpreter", e);
+			_log.warn("Could not initialise interpreter: "+e.toString()); // no need for stack trace
         }
     }
 
