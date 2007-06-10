@@ -67,17 +67,9 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 
 	private void init(){
 		try {
-			bshInterpreter = new BeanShellInterpreter();
-			String init = JMeterUtils.getProperty(INIT_FILE);
-			try {
-				bshInterpreter.init(init, log);
-			} catch (IOException e) {
-				log.warn("Could not initialise interpreter", e);
-			} catch (JMeterException e) {
-				log.warn("Could not initialise interpreter", e);
-			}
+			bshInterpreter = new BeanShellInterpreter(INIT_FILE, log);
 		} catch (ClassNotFoundException e) {
-			log.error("Could not establish BeanShellInterpreter: " + e);
+			log.error("Cannot find BeanShell: "+e.toString());
 		}		
 	}
 	public String getScript() {

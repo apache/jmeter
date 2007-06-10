@@ -60,7 +60,7 @@ public class BeanShellPreProcessor extends AbstractTestElement
 		try {
 			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
 		} catch (ClassNotFoundException e) {
-			log.error("Cannot find BeanShell: "+e.getLocalizedMessage());
+			log.error("Cannot find BeanShell: "+e.toString());
 		}
 	}
 
