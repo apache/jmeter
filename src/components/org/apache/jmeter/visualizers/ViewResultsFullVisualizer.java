@@ -28,9 +28,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.Character;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -116,6 +119,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 	private static final String HTML_BUTTON_LABEL = "Render HTML";
 
+	private static final String JSON_BUTTON_LABEL = "Render JSON";
+
 	private static final String XML_BUTTON_LABEL = "Render XML";
 
 	private static final String TEXT_BUTTON_LABEL = "Show Text";
@@ -123,6 +128,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
 
 	private static final String HTML_COMMAND = "html"; // $NON-NLS-1$
+
+	private static final String JSON_COMMAND = "json"; // $NON-NLS-1$
 
 	private static final String XML_COMMAND = "xml"; // $NON-NLS-1$
 
@@ -135,6 +142,19 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	private static final String STYLE_REDIRECT = "Redirect"; // $NON-NLS-1$
 
 	private boolean textMode = true;
+
+	private static final String ESC_CHAR_REGEX = "\\\\[\"\\\\/bfnrt]|\\\\u[0-9A-Fa-f]{4}"; // $NON-NLS-1$
+
+	private static final String NORMAL_CHARACTER_REGEX = "[^\"\\\\]";  // $NON-NLS-1$
+
+	private static final String STRING_REGEX = "\"(" + ESC_CHAR_REGEX + "|" + NORMAL_CHARACTER_REGEX + ")*\""; // $NON-NLS-1$
+
+	// This 'other value' regex is deliberately weak, even accepting an empty string, to be useful when reporting malformed data.
+	private static final String OTHER_VALUE_REGEX = "[^\\{\\[\\]\\}\\,]*"; // $NON-NLS-1$
+
+	private static final String VALUE_OR_PAIR_REGEX = "((" + STRING_REGEX + "\\s*:)?\\s*(" + STRING_REGEX + "|" + OTHER_VALUE_REGEX + ")\\s*,?\\s*)"; // $NON-NLS-1$
+
+	private static final Pattern VALUE_OR_PAIR_PATTERN = Pattern.compile(VALUE_OR_PAIR_REGEX);
 
 	// set default command to Text
 	private String command = TEXT_COMMAND;
@@ -165,6 +185,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	private JRadioButton textButton;
 
 	private JRadioButton htmlButton;
+
+	private JRadioButton jsonButton;
 
 	private JRadioButton xmlButton;
 
@@ -393,6 +415,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 								showTextResponse(response);
 							} else if (command.equals(HTML_COMMAND)) {
 								showRenderedResponse(response, res);
+							} else if (command.equals(JSON_COMMAND)) {
+								showRenderJSONResponse(response);
 							} else if (command.equals(XML_COMMAND)) {
 								showRenderXMLResponse(response);
 							}
@@ -436,6 +460,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		resultsScrollPane.setViewportView(imageLabel);
 		textButton.setEnabled(false);
 		htmlButton.setEnabled(false);
+		jsonButton.setEnabled(false);
 		xmlButton.setEnabled(false);
 	}
 
@@ -447,6 +472,74 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 		textButton.setEnabled(true);
 		htmlButton.setEnabled(true);
+		jsonButton.setEnabled(true);
+		xmlButton.setEnabled(true);
+	}
+
+	// It might be useful also to make this available in the 'Request' tab, for
+	// when posting JSON.
+	private static String prettyJSON(String json) {
+		StringBuffer pretty = new StringBuffer(json.length() * 2); // Educated guess
+
+		final String tab = ":   "; // $NON-NLS-1$
+		StringBuffer index = new StringBuffer();
+		String nl = ""; // $NON-NLS-1$
+
+		Matcher valueOrPair = VALUE_OR_PAIR_PATTERN.matcher(json);
+
+		boolean misparse = false;
+
+		for (int i = 0; i < json.length(); ) {
+			final char currentChar = json.charAt(i);
+			if ((currentChar == '{') || (currentChar == '[')) {
+				pretty.append(nl).append(index).append(currentChar);
+				i++;
+				index.append(tab);
+				misparse = false;
+			}
+			else if ((currentChar == '}') || (currentChar == ']')) {
+				if (index.length() > 0) {
+					index.delete(0, tab.length());
+				}
+				pretty.append(nl).append(index).append(currentChar);
+				i++;
+				int j = i;
+				while ((j < json.length()) && Character.isWhitespace(json.charAt(j))) {
+					j++;
+				}
+				if ((j < json.length()) && (json.charAt(j) == ',')) {
+					pretty.append(","); // $NON-NLS-1$
+					i=j+1;
+				}
+				misparse = false;
+			}
+			else if (valueOrPair.find(i) && valueOrPair.group().length() > 0) {
+				pretty.append(nl).append(index).append(valueOrPair.group());
+				i=valueOrPair.end();
+				misparse = false;
+			}
+			else {
+				if (!misparse) {
+					pretty.append(nl).append("- Parse failed from:");
+				}
+				pretty.append(currentChar);
+				i++;
+				misparse = true;
+			}
+			nl = "\n"; // $NON-NLS-1$
+		}
+		return pretty.toString();
+	}
+	
+	private void showRenderJSONResponse(String response) {
+		results.setContentType("text/plain"); // $NON-NLS-1$
+		results.setText(response == null ? "" : prettyJSON(response));
+		results.setCaretPosition(0);
+		resultsScrollPane.setViewportView(results);
+
+		textButton.setEnabled(true);
+		htmlButton.setEnabled(true);
+		jsonButton.setEnabled(true);
 		xmlButton.setEnabled(true);
 	}
 
@@ -509,6 +602,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		resultsScrollPane.setViewportView(view);
 		textButton.setEnabled(true);
 		htmlButton.setEnabled(true);
+		jsonButton.setEnabled(true);
 		xmlButton.setEnabled(true);
 	}
 
@@ -552,7 +646,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		command = e.getActionCommand();
 
 		if (command != null
-				&& (command.equals(TEXT_COMMAND) || command.equals(HTML_COMMAND) || command.equals(XML_COMMAND))) {
+				&& (command.equals(TEXT_COMMAND) || command.equals(HTML_COMMAND)
+ 				|| command.equals(JSON_COMMAND) || command.equals(XML_COMMAND))) {
 
 			textMode = command.equals(TEXT_COMMAND);
 
@@ -570,6 +665,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 				showTextResponse(response);
 			} else if (command.equals(HTML_COMMAND)) {
 				showRenderedResponse(response, res);
+			} else if (command.equals(JSON_COMMAND)) {
+				showRenderJSONResponse(response);
 			} else if (command.equals(XML_COMMAND)) {
 				showRenderXMLResponse(response);
 			}
@@ -627,6 +724,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 		textButton.setEnabled(true);
 		htmlButton.setEnabled(true);
+		jsonButton.setEnabled(true);
 		xmlButton.setEnabled(true);
 	}
 
@@ -645,6 +743,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		htmlButton.setSelected(!textMode);
 		group.add(htmlButton);
 
+		jsonButton = new JRadioButton(JSON_BUTTON_LABEL);
+		jsonButton.setActionCommand(JSON_COMMAND);
+		jsonButton.addActionListener(this);
+		jsonButton.setSelected(!textMode);
+		group.add(jsonButton);
+
 		xmlButton = new JRadioButton(XML_BUTTON_LABEL);
 		xmlButton.setActionCommand(XML_COMMAND);
 		xmlButton.addActionListener(this);
@@ -657,6 +761,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		pane.add(textButton);
 		pane.add(htmlButton);
 		pane.add(xmlButton);
+		pane.add(jsonButton);
 		pane.add(downloadAll);
 		return pane;
 	}
