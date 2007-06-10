@@ -705,16 +705,17 @@
 N.B. Eclipse (and perhaps other Java IDEs) copies all files to the build directory, unless
 told otherwise. This means that there might be copies of property and image files in the
 build directory. To avoid including the files twice in the jar file, we include only .class
-files in the list of files to be processed.
+files in the list of files to be processed from the build tree.
 
-An alternative solution is to copy the extra resources to the build tree, and then
-include everything from the build tree.
-This has the disadvantage that there are then two copies of each
-properties file visible in Eclipse, and it is easy to pick the wrong one to edit,
-especially as the build directory appears first ...
-The advantage would be that JMeter could theoretically be run from the classes, without
-needing to create jar files first. However, this would mean changing the way JMeter loads
-some of its classes - at present JMeter can only run from jar files.
+Eclipse has been fixed so that it no longer shows files in the build tree in the Open Resource dialogue,
+so having duplicates in the build tree no longer causes confusion.
+
+Note: if built from Eclipse, the build directory will include resources and images,
+and Eclipse will thus be able to run JMeter from the default path.
+
+If built using Ant, the build tree will not contain any resources, and thus Eclipse will not be able to
+run JMeter unless all the JMeter jars are added.
+
 -->
   <target name="package-only" description="Package already-compiled classes (shortcut for IDE users)">
     <mkdir dir="${dest.jar}"/>
