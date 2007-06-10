@@ -49,7 +49,6 @@ import org.apache.jorphan.reflect.Functor;
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  * 
- * @version $Revision$ on $Date$
  */
 public class ArgumentsPanel extends AbstractConfigGui implements ActionListener {
 
@@ -238,6 +237,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 		} else {
 			delete.setEnabled(true);
 		}
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		clear();
 	}
 
 	/**
