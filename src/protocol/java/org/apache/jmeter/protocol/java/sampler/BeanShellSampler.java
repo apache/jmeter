@@ -64,7 +64,7 @@ public class BeanShellSampler extends AbstractSampler
 			} catch (IOException e) {
 				log.warn("Could not initialise interpreter", e);
 			} catch (JMeterException e) {
-				log.warn("Could not initialise interpreter", e);
+				log.warn("Could not initialise interpreter"); // no need for stack trace
 			}
 		} catch (ClassNotFoundException e) {
 			log.error("Could not establish BeanShellInterpreter: " + e);
@@ -185,7 +185,7 @@ public class BeanShellSampler extends AbstractSampler
 	public void threadStarted() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("threadStarted()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}
@@ -194,7 +194,7 @@ public class BeanShellSampler extends AbstractSampler
 	public void threadFinished() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("threadFinished()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}		
@@ -203,7 +203,7 @@ public class BeanShellSampler extends AbstractSampler
 	public void testEnded() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("testEnded()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}		
@@ -212,7 +212,7 @@ public class BeanShellSampler extends AbstractSampler
 	public void testEnded(String host) {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
+			bshInterpreter.evalNoLog((new StringBuffer("testEnded(")) // $NON-NLS-1$
 					.append(host)
 					.append(")") // $NON-NLS-1$
 					.toString()); // $NON-NLS-1$
@@ -228,7 +228,7 @@ public class BeanShellSampler extends AbstractSampler
 	public void testStarted() {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval("testStarted()"); // $NON-NLS-1$
+			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
 			log.debug(ignored.getLocalizedMessage());
 		}		
@@ -237,7 +237,7 @@ public class BeanShellSampler extends AbstractSampler
 	public void testStarted(String host) {
 		if (bshInterpreter == null) return;
 		try {
-			bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
+			bshInterpreter.evalNoLog((new StringBuffer("testStarted(")) // $NON-NLS-1$
 					.append(host)
 					.append(")") // $NON-NLS-1$
 					.toString()); // $NON-NLS-1$
