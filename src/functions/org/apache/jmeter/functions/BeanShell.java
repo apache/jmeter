@@ -151,7 +151,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 		}
 
 		try {
-			bshInterpreter = new BeanShellInterpreter(INIT_FILE, log);
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);
 		} catch (ClassNotFoundException e) {
 			throw new InvalidVariableException("BeanShell not found");
 		}
