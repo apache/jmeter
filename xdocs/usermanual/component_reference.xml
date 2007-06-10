@@ -1663,8 +1663,7 @@ this response, and some response codes.
 Note that the Request panel only shows the headers added by JMeter.
 It does not show any headers (such as Host) that may be added by the HTTP protocol implementation.
 <p>
-There are three ways to view the response, selectable by a radio
-button.</p>
+There are several ways to view the response, selectable by a radio button.</p>
 <p>The default view shows all of the text contained in the
 response.</p>
 <p>The HTML view attempts to render the response as
@@ -1678,6 +1677,7 @@ If the checkbox is not selected, the renderer will not download images etc.
 <p>The Render XML view will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 </p>
+<p>The Render JSON view will show the response in tree style (also handles JSON embedded in JavaScript).</p>
 </description>
 <p>
 	The Control Panel (above) shows an example of an HTML display.
