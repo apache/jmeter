@@ -118,8 +118,11 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 		VerticalPanel webServerPanel = new VerticalPanel();
 		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
 				JMeterUtils.getResString("web_server"))); // $NON-NLS-1$
-		webServerPanel.add(getDomainPanel());
-		webServerPanel.add(getPortPanel());
+		final JPanel domainPanel = getDomainPanel();
+		final JPanel portPanel = getPortPanel();
+		domainPanel.add(portPanel,BorderLayout.EAST);
+		webServerPanel.add(domainPanel);
+		//webServerPanel.add(getPortPanel());
 
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));

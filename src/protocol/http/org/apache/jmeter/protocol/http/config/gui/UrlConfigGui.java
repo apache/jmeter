@@ -231,14 +231,14 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 		JLabel label = new JLabel(JMeterUtils.getResString("path")); //$NON-NLS-1$
 		label.setLabelFor(path);
 
-		autoRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); //$NON-NLS-1$
-		autoRedirects.setName(AUTO_REDIRECTS);
-		autoRedirects.setSelected(true);// Default changed in 2.3
-		autoRedirects.addChangeListener(this);
-
 		followRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects")); // $NON-NLS-1$
 		followRedirects.setName(FOLLOW_REDIRECTS);
 		followRedirects.setSelected(false);
+
+		autoRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); //$NON-NLS-1$
+		autoRedirects.setName(AUTO_REDIRECTS);
+		autoRedirects.addChangeListener(this);
+		autoRedirects.setSelected(true);// Default changed in 2.3
 
 		useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
 		useKeepAlive.setName(USE_KEEPALIVE);
@@ -269,7 +269,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
 	protected JPanel getProtocolAndMethodPanel() {
 		// PROTOCOL
-		protocol = new JTextField(20);
+		protocol = new JTextField(10);
 		protocol.setName(PROTOCOL);
 		// CONTENT_ENCODING
 		contentEncoding = new JTextField(10);
