@@ -55,8 +55,14 @@ public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
         return new SlowSocket(CPS,host,port);
     }
 
-    public Socket createSocket(String arg0, int arg1, InetAddress arg2, int arg3, HttpConnectionParams arg4) throws IOException, UnknownHostException, ConnectTimeoutException {
-        // TODO Auto-generated method stub
-        return null;
+    public Socket createSocket(String host, int port, InetAddress localAddress, int localPort,
+    		HttpConnectionParams params) 
+    throws IOException, UnknownHostException, ConnectTimeoutException {
+        int timeout = params.getConnectionTimeout();
+        if (timeout == 0) {
+        	return new SlowSocket(CPS,host,port,localAddress,localPort);
+        } else {
+        	return new SlowSocket(CPS,host,port,localAddress,localPort, timeout);        	
+        }
     }
 }
