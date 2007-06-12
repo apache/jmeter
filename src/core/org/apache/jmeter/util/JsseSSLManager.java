@@ -68,9 +68,17 @@ public class JsseSSLManager extends SSLManager {
 	private static final boolean SHARED_SESSION_CONTEXT = 
 		JMeterUtils.getPropDefault("https.sessioncontext.shared",false); // $NON-NLS-1$
 
+	private static final int cps;
+	
 	static {
 		log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
 		log.info("SSL session context: "+(SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
+        cps = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$        
+
+        if (cps > 0) {
+	        log.info("Setting up HTTPS SlowProtocol, cps="+cps);
+        }
+
 	}
 
 	/**
@@ -103,8 +111,9 @@ public class JsseSSLManager extends SSLManager {
 			} else {
 		        this.threadlocal = new ThreadLocal();
 			}
-            
-            HttpSSLProtocolSocketFactory sockFactory = new HttpSSLProtocolSocketFactory(this);
+    
+			// TODO allow CPS to be passed from the sampler to allow per-sampler speed variations
+            HttpSSLProtocolSocketFactory sockFactory = new HttpSSLProtocolSocketFactory(this, cps);
             
             HttpsURLConnection.setDefaultSSLSocketFactory(sockFactory);
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
