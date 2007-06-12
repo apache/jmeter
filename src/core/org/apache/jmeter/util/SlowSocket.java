@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.util;
 
-import java.io.FilterInputStream;
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,7 +28,7 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 /**
- * "Slow" socket implementation to emulate dial-up modems etc
+ * "Slow"  (non-SSL) socket implementation to emulate dial-up modems etc
  */
 public class SlowSocket extends Socket {
 
@@ -89,60 +87,12 @@ public class SlowSocket extends Socket {
 
 	// Override so we can intercept the stream
     public OutputStream getOutputStream() throws IOException {
-        return new SlowOutputStream(super.getOutputStream());
+        return new SlowOutputStream(super.getOutputStream(), CPS);
     }
     
     // Override so we can intercept the stream
     public InputStream getInputStream() throws IOException {
-        return new SlowInputStream(super.getInputStream());
+        return new SlowInputStream(super.getInputStream(), CPS);
     }
 
-    // Conversions for milli and nano seconds
-    private static final int MS_PER_SEC = 1000;
-    private static final int NS_PER_SEC = 1000000000;
-    private static final int NS_PER_MS  = NS_PER_SEC/MS_PER_SEC;
-    
-    private void pause(int bytes){
-    	long sleepMS = (bytes*MS_PER_SEC)/CPS;
-    	int  sleepNS = ((bytes*MS_PER_SEC)/CPS) % NS_PER_MS;
-        try {
-            Thread.sleep(sleepMS,sleepNS);
-        } catch (InterruptedException ignored) {
-        }
-    }
-    
-    private class SlowInputStream extends FilterInputStream {
-
-        public SlowInputStream(InputStream in) {
-            super(in);
-        }
-
-        public int read() throws IOException {
-            pause(1);
-            return in.read();
-        }
-
-        public int read(byte[] b, int off, int len) throws IOException {
-            pause(len);
-            return in.read(b, off, len);
-        }
-
-    }
-    
-    private class SlowOutputStream extends FilterOutputStream {
-
-        public SlowOutputStream(OutputStream out) {
-            super(out);
-        }
-
-        public void write(byte[] b, int off, int len) throws IOException {
-            pause(len);
-            out.write(b, off, len);
-        }
-
-        public void write(int b) throws IOException {
-            pause(1);
-            out.write(b);
-        }
-    }
 }
