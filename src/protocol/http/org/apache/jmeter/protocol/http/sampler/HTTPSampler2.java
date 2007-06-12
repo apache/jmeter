@@ -159,14 +159,16 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             Protocol.registerProtocol(PROTOCOL_HTTP, 
                     new Protocol(PROTOCOL_HTTP,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTP_PORT));
         }
-        cps =
-            JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$        
-
-        if (cps > 0) {
-            log.info("Setting up HTTPS SlowProtocol, cps="+cps);
-            Protocol.registerProtocol(PROTOCOL_HTTPS, 
-                    new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
-        }
+  
+        // Now done in JsseSSLManager (which needs to register the protocol)
+//        cps =
+//            JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$        
+//
+//        if (cps > 0) {
+//            log.info("Setting up HTTPS SlowProtocol, cps="+cps);
+//            Protocol.registerProtocol(PROTOCOL_HTTPS, 
+//                    new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
+//        }
 
         String localHostOrIP = 
             JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
