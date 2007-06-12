@@ -20,7 +20,6 @@ package org.apache.jmeter.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.security.KeyStore;
 import java.security.Provider;
@@ -247,21 +246,21 @@ public abstract class SSLManager {
 	 */
 	public static final SSLManager getInstance() {
 		if (null == SSLManager.manager) {
-			if (SSLManager.isSSLSupported) {
-				String classname = null;
-				// TODO - there used to be a choice of managers. Perhaps tidy code now there is only one?
-				classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
-
-				try {
-					Class clazz = Class.forName(classname);
-					Constructor con = clazz.getConstructor(new Class[] { Provider.class });
-					SSLManager.manager = (SSLManager) con.newInstance(new Object[] { SSLManager.sslProvider });
-				} catch (Exception e) {
-					log.error("Could not create SSLManager instance", e); // $NON-NLS-1$
-					SSLManager.isSSLSupported = false;
-					return null;
-				}
-			}
+			return new JsseSSLManager(SSLManager.sslProvider);
+//			if (SSLManager.isSSLSupported) {
+//				String classname = null;
+//				classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
+//
+//				try {
+//					Class clazz = Class.forName(classname);
+//					Constructor con = clazz.getConstructor(new Class[] { Provider.class });
+//					SSLManager.manager = (SSLManager) con.newInstance(new Object[] { SSLManager.sslProvider });
+//				} catch (Exception e) {
+//					log.error("Could not create SSLManager instance", e); // $NON-NLS-1$
+//					SSLManager.isSSLSupported = false;
+//					return null;
+//				}
+//			}
 		}
 
 		return SSLManager.manager;
