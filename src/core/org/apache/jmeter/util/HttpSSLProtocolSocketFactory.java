@@ -50,12 +50,22 @@ public class HttpSSLProtocolSocketFactory
 	
 	private JsseSSLManager sslManager;
 
+    private final int CPS; // Characters per second to emulate
+
     private HttpSSLProtocolSocketFactory(){
+    	CPS=0;
     }
     
     public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager) {
         super();
         this.sslManager = sslManager;
+        CPS=0;
+    }
+    
+    public HttpSSLProtocolSocketFactory(JsseSSLManager sslManager, int cps) {
+        super();
+        this.sslManager = sslManager;
+        CPS=cps;
     }
     
     private static final String protocolList = 
@@ -119,6 +129,14 @@ public class HttpSSLProtocolSocketFactory
         }
     }
 
+    /*
+     * Wraps the socket in a slow SSL socket if necessary
+     */
+    private Socket wrapSocket(Socket sock){
+    	if (CPS>0) return new SlowSSLSocket((SSLSocket) sock, CPS);
+    	return sock;
+    }
+
 	/**
      * Attempts to get a new socket connection to the given host within the given time limit.
      *  
@@ -158,7 +176,7 @@ public class HttpSSLProtocolSocketFactory
             socket.connect(remoteaddr, timeout);
         }
         setSocket(socket);
-        return socket;
+        return wrapSocket(socket);
     }
 
     /**
@@ -172,7 +190,7 @@ public class HttpSSLProtocolSocketFactory
             port
         );
         setSocket(sock);
-    	return sock;
+    	return wrapSocket(sock);
     }
 
     /**
@@ -192,7 +210,7 @@ public class HttpSSLProtocolSocketFactory
             autoClose
         );
         setSocket(sock);
-    	return sock;
+    	return wrapSocket(sock);
     }
 
     /**
@@ -213,21 +231,21 @@ public class HttpSSLProtocolSocketFactory
             clientPort
         );
         setSocket(sock);
-        return sock;
+        return wrapSocket(sock);
     }
 
 	public Socket createSocket(InetAddress host, int port) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
 		Socket sock=sslfac.createSocket(host,port);
         setSocket(sock);
-		return sock;
+		return wrapSocket(sock);
 	}
 
 	public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
 		Socket sock=sslfac.createSocket(address, port, localAddress, localPort);
         setSocket(sock);
-		return sock;
+		return wrapSocket(sock);
 	}
 
 	public String[] getDefaultCipherSuites() {
