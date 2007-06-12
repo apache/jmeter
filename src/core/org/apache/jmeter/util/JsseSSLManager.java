@@ -112,21 +112,25 @@ public class JsseSSLManager extends SSLManager {
 		        this.threadlocal = new ThreadLocal();
 			}
     
-			// TODO allow CPS to be passed from the sampler to allow per-sampler speed variations
-            HttpSSLProtocolSocketFactory sockFactory = new HttpSSLProtocolSocketFactory(this, cps);
+            /*
+             * Set up Java defaults.
+             * N.B. does not allow SlowSocket - fails with:
+             * java.lang.RuntimeException: Export restriction: this JSSE implementation is non-pluggable.
+             */
             
-            HttpsURLConnection.setDefaultSSLSocketFactory(sockFactory);
+            HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this));
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
                 }
             });
+
             /*
              * Also set up HttpClient defaults
              */
             Protocol protocol = new Protocol(
                     JsseSSLManager.HTTPS, 
-                    (ProtocolSocketFactory) sockFactory,
+                    (ProtocolSocketFactory) new HttpSSLProtocolSocketFactory(this, cps),
                     443);
             Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
             log.debug("SSL stuff all set");
