@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -34,6 +36,20 @@ public class SlowSocket extends Socket {
 
     private final int CPS; // Characters per second to emulate
     
+    public SlowSocket(final int cps, String host, int port, InetAddress localAddress, int localPort, int timeout) throws IOException {
+    	super();
+        if (cps <=0) {
+            throw new IllegalArgumentException("Speed (cps) <= 0");
+        }
+        CPS=cps;
+        // This sequence is borrowed from:
+        // org.apache.commons.httpclient.protocol.ReflectionSocketFactory.createSocket
+        SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
+        SocketAddress remoteaddr = new InetSocketAddress(host, port);
+        bind(localaddr);
+        connect(remoteaddr, timeout);
+	}
+
     /**
      * 
      * @param cps characters per second
@@ -71,7 +87,7 @@ public class SlowSocket extends Socket {
         CPS=cps;
     }
 
-    // Override so we can intercept the stream
+	// Override so we can intercept the stream
     public OutputStream getOutputStream() throws IOException {
         return new SlowOutputStream(super.getOutputStream());
     }
