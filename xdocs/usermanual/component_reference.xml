@@ -153,6 +153,7 @@ https.sessioncontext.shared=true
 		<property name="Redirect Automatically" required="Yes">
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.
+		In versions after 2.2, this is now the default.
         </property>
 		<property name="Follow Redirects" required="Yes">
 		This only has any effect if "Redirect Automatically" is not enabled.

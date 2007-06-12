@@ -117,7 +117,7 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead.
 </p>
 
-<h4>New functionality:</h4>
+<h4>New functionality/improvements:</h4>
 <ul>
 <li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
 <li>Added beanshell.init.file property to run a BeanShell script at startup</li>
@@ -167,6 +167,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42506 - JMeter threads all use the same SSL session</li>
 <li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 <li>Bug 42582 - JSON pretty printing in Tree View Listener</li>
+<li>Http Autoredirects are now enabled by default when creating new samplers</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
