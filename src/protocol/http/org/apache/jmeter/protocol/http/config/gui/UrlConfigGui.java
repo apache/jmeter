@@ -29,6 +29,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -45,7 +47,7 @@ import org.apache.jorphan.gui.JLabeledChoice;
 /**
  * @author Michael Stover
  */
-public class UrlConfigGui extends JPanel {
+public class UrlConfigGui extends JPanel implements ChangeListener {
 	protected HTTPArgumentsPanel argsPanel;
 
 	private static String DOMAIN = "domain"; // $NON-NLS-1$
@@ -98,8 +100,8 @@ public class UrlConfigGui extends JPanel {
 
 	public void clear() {
 		domain.setText(""); // $NON-NLS-1$
-		followRedirects.setSelected(true);
-		autoRedirects.setSelected(false);
+		followRedirects.setSelected(false);
+		autoRedirects.setSelected(true);
         method.setText(HTTPSamplerBase.DEFAULT_METHOD);
 		path.setText(""); // $NON-NLS-1$
 		port.setText(""); // $NON-NLS-1$
@@ -231,12 +233,12 @@ public class UrlConfigGui extends JPanel {
 
 		autoRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); //$NON-NLS-1$
 		autoRedirects.setName(AUTO_REDIRECTS);
-		autoRedirects.setSelected(false);// will be reset by
-											// configure(TestElement)
+		autoRedirects.setSelected(true);// Default changed in 2.3
+		autoRedirects.addChangeListener(this);
 
 		followRedirects = new JCheckBox(JMeterUtils.getResString("follow_redirects")); // $NON-NLS-1$
 		followRedirects.setName(FOLLOW_REDIRECTS);
-		followRedirects.setSelected(true);
+		followRedirects.setSelected(false);
 
 		useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
 		useKeepAlive.setName(USE_KEEPALIVE);
@@ -299,5 +301,16 @@ public class UrlConfigGui extends JPanel {
 		argsPanel = new HTTPArgumentsPanel();
 
 		return argsPanel;
+	}
+
+	// Disable follow redirects if Autoredirect is selected
+	public void stateChanged(ChangeEvent e) {
+		if (e.getSource() == autoRedirects){
+			if (autoRedirects.isSelected()) {
+				followRedirects.setEnabled(false);
+			} else {
+				followRedirects.setEnabled(true);
+			}
+		}
 	}
 }
