@@ -24,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -52,10 +51,10 @@ public class CommentPanel extends JPanel {
 		JLabel commentLabel = new JLabel(JMeterUtils.getResString("testplan_comments")); //$NON-NLS-1$
 		commentLabel.setLabelFor(commentField);
 
-		VerticalPanel commentPanel = new VerticalPanel();
-
-		commentPanel.add(commentLabel);
-		commentPanel.add(commentField);
+		JPanel commentPanel = new JPanel();
+		commentPanel.setLayout(new BorderLayout(0, 5));
+		commentPanel.add(commentLabel,BorderLayout.WEST);
+		commentPanel.add(commentField,BorderLayout.CENTER);
 		add(commentPanel);
 	}
 
