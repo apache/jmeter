@@ -300,7 +300,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 		_threadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
 
-		_bytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, FALSE));
+		_bytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, TRUE));
 		
 		_url = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
 
