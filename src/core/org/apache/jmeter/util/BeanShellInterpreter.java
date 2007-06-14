@@ -150,77 +150,57 @@ public class BeanShellInterpreter {
         }
     }
 
-	private Object bshInvoke(Method m, String s) throws JMeterException {
-		return bshInvoke(m, s, true);
-	}
-
-	private Object bshInvoke(Method m, String s, boolean shouldLog) throws JMeterException {
-		Object r = null;
-		final String errorString = "Error invoking bsh method: ";
-		try {
-			r = m.invoke(bshInstance, new Object[] { s });
-		} catch (IllegalArgumentException e) { // Programming error
-			log.error(errorString + m.getName());
-			throw new JMeterError(errorString + m.getName(), e);
-		} catch (IllegalAccessException e) { // Also programming error
-		    log.error(errorString + m.getName());
-			throw new JMeterError(errorString + m.getName(), e);
-		} catch (InvocationTargetException e) { // Can occur at run-time
-			// could be caused by the bsh Exceptions:
-			// EvalError, ParseException or TargetError
-			if (shouldLog) {
-				Throwable cause = e.getCause();
-				if (cause != null) {
-					log.error(errorString + m.getName() + "\t" + cause.getLocalizedMessage());
-				} else {
-					log.error(errorString + m.getName());
-				}
-			}
-			throw new JMeterException(errorString + m.getName(), e);
-		}
-		return r;
-	}
-
-	private Object bshInvoke(Method m, String s, Object o) throws JMeterException {
-		Object r = null;
-		try {
-			r = m.invoke(bshInstance, new Object[] { s, o });
-		} catch (IllegalArgumentException e) { // Programming error
-			log.error("Error invoking bsh method " + m.getName() + "\n", e);
-			throw new JMeterError("Error invoking bsh method " + m.getName(), e);
-		} catch (IllegalAccessException e) { // Also programming error
-			log.error("Error invoking bsh method " + m.getName() + "\n", e);
-			throw new JMeterError("Error invoking bsh method " + m.getName(), e);
-		} catch (InvocationTargetException e) { // Can occur at run-time
-			// could be caused by the bsh Exceptions:
-			// EvalError, ParseException or TargetError
-			log.error("Error invoking bsh method " + m.getName() + "\n", e);
-			throw new JMeterException("Error invoking bsh method " + m.getName(), e);
-		}
-		return r;
-	}
+    private Object bshInvoke(Method m, Object[] o, boolean shouldLog) throws JMeterException {
+        Object r = null;
+        final String errorString = "Error invoking bsh method: ";
+        try {
+            r = m.invoke(bshInstance, o);
+        } catch (IllegalArgumentException e) { // Programming error
+            final String message = errorString + m.getName();
+            log.error(message);
+            throw new JMeterError(message, e);
+        } catch (IllegalAccessException e) { // Also programming error
+        	final String message = errorString + m.getName();
+            log.error(message);
+            throw new JMeterError(message, e);
+        } catch (InvocationTargetException e) { // Can occur at run-time
+            // could be caused by the bsh Exceptions:
+            // EvalError, ParseException or TargetError
+        	String message = errorString + m.getName();
+            Throwable cause = e.getCause();
+            if (cause != null) {
+                message += "\t" + cause.getLocalizedMessage();
+            }
+            
+            if (shouldLog) {
+                log.error(message);
+            }
+            throw new JMeterException(message, e);
+        }
+        return r;
+    }
 
 	public Object eval(String s) throws JMeterException {
-		return bshInvoke(bshEval, s);
+		return bshInvoke(bshEval, new Object[] { s }, true);
 	}
 
 	public Object evalNoLog(String s) throws JMeterException {
-		return bshInvoke(bshEval, s, false);
+		return bshInvoke(bshEval, new Object[] { s }, false);
 	}
 
 	public Object set(String s, Object o) throws JMeterException {
-		return bshInvoke(bshSet, s, o);
+		return bshInvoke(bshSet, new Object[] { s, o }, true);
 	}
 
 	public Object set(String s, boolean b) throws JMeterException {
-		return bshInvoke(bshSet, s, Boolean.valueOf(b));
+		return bshInvoke(bshSet, new Object[] { s, Boolean.valueOf(b) }, true);
 	}
 
 	public Object source(String s) throws JMeterException {
-		return bshInvoke(bshSource, s);
+		return bshInvoke(bshSource, new Object[] { s }, true);
 	}
 
 	public Object get(String s) throws JMeterException {
-		return bshInvoke(bshGet, s);
+		return bshInvoke(bshGet, new Object[] { s }, true);
 	}
 }
