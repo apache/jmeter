@@ -131,8 +131,9 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        Object result = new SampleSaveConfiguration();
-        result = doUnmarshal(result, reader, context);
+    	SampleSaveConfiguration defaultConfig = new SampleSaveConfiguration();
+        defaultConfig.setBytes(false); // Maintain backward compatibility (bytes was not in the JMX file)
+        Object result = doUnmarshal(defaultConfig, reader, context);
         return serializationMethodInvoker.callReadResolve(result);
     }
 
