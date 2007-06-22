@@ -119,44 +119,29 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         writer.endNode();
     }
 
-	/*
-	 * (non-Javadoc)
-	 * This is basically a copy of the super unmarshall code, however the result is created using
-	 * the constructor instead of reflection (the Sun14 version does not call the constructor).
-	 * 
-	 * We need to do this so that any optional values from the JMX file are applied after the
-	 * default object has been created.
-	 * 
-	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader,
-	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
-	 */
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    	SampleSaveConfiguration defaultConfig = new SampleSaveConfiguration();
-        defaultConfig.setBytes(false); // Maintain backward compatibility (bytes was not in the JMX file)
-        Object result = doUnmarshal(defaultConfig, reader, context);
-        return serializationMethodInvoker.callReadResolve(result);
-    }
-
-
-//	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-//		final Class thisClass = SampleSaveConfiguration.class;
-//		final Class requiredType = context.getRequiredType();
-//		if (requiredType != thisClass) {
-//			throw new IllegalArgumentException("Unexpected class: "+requiredType.getName());
-//		}
-//		SampleSaveConfiguration result = new SampleSaveConfiguration();
-//		while (reader.hasMoreChildren()) {
-//			reader.moveDown();
-//			String nn = reader.getNodeName();
-//			if (!"delimiter".equals(nn) && !"printMilliseconds".equals(nn)){
-//				String fieldName = mapper.realMember(thisClass, nn);
-//                Field field = reflectionProvider.getField(thisClass,fieldName);
-//                Class type = field.getType();
-//                Object value = unmarshallField(context, result, type, field);
-//				reflectionProvider.writeField(result, nn, value, thisClass);
-//			}
-//			reader.moveUp();
-//		}
-//		return result;
-//	}
+    /*
+     * 
+     */
+	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+		final Class thisClass = SampleSaveConfiguration.class;
+		final Class requiredType = context.getRequiredType();
+		if (requiredType != thisClass) {
+			throw new IllegalArgumentException("Unexpected class: "+requiredType.getName());
+		}
+		SampleSaveConfiguration result = new SampleSaveConfiguration();
+		result.setBytes(false); // Maintain backward compatibility (bytes was not in the JMX file)
+		while (reader.hasMoreChildren()) {
+			reader.moveDown();
+			String nn = reader.getNodeName();
+			if (!"formatter".equals(nn)){// Skip formatter (if present) bug 42674 $NON-NLS-1$
+				String fieldName = mapper.realMember(thisClass, nn);
+                java.lang.reflect.Field field = reflectionProvider.getField(thisClass,fieldName);
+                Class type = field.getType();
+                Object value = unmarshallField(context, result, type, field);
+				reflectionProvider.writeField(result, nn, value, thisClass);
+			}
+			reader.moveUp();
+		}
+		return result;
+	}
 }
