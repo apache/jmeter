@@ -395,6 +395,8 @@
   
 
   <target name="init-version">
+  	<!-- Needed for build to succeed. TODO: is the correct place for this? -->
+    <mkdir dir="${lib.opt}"/>
   	<tstamp/>
   	<!--
   	    JMeter version
@@ -430,6 +432,7 @@
   </target>
 
   <target name="compile-core" depends="compile-jorphan,update-version" description="Compile JMeter core classes.">
+    <mkdir dir="${build.core}"/>
     <mkdir dir="${build.core}"/>
     <javac srcdir="${src.core}" destdir="${build.core}" optimize="${optimize}" source="${src.java.version}" debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
