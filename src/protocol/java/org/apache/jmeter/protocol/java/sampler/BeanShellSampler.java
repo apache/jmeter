@@ -18,21 +18,15 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.io.IOException;
-
-import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -40,10 +34,11 @@ import org.apache.log.Logger;
  * A sampler which understands BeanShell
  * 
  */
-public class BeanShellSampler extends AbstractSampler
-    implements ThreadListener, TestListener
+public class BeanShellSampler extends BeanShellTestElement implements Sampler
 {
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 3;
 
 	public static final String FILENAME = "BeanShellSampler.filename"; //$NON-NLS-1$
 
@@ -52,16 +47,10 @@ public class BeanShellSampler extends AbstractSampler
 	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
 
 	public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
-
-	transient private BeanShellInterpreter bshInterpreter;
-
-	public BeanShellSampler() {
-		try {
-			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);
-		} catch (ClassNotFoundException e) {
-			log.error("Cannot find BeanShell: "+e.toString());
-		}
-	}
+    
+    protected String getInitFileProperty() {
+        return INIT_FILE;
+    }
 
 	/**
 	 * Returns a formatted string label describing this sampler
@@ -92,6 +81,7 @@ public class BeanShellSampler extends AbstractSampler
 		boolean isSuccessful = false;
 		res.setSampleLabel(getLabel());
 		res.sampleStart();
+		final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
 		if (bshInterpreter == null) {
 			res.sampleEnd();
 			res.setResponseCode("503");//$NON-NLS-1$
@@ -111,9 +101,11 @@ public class BeanShellSampler extends AbstractSampler
 			bshInterpreter.set("Label", getLabel()); //$NON-NLS-1$
 			bshInterpreter.set("FileName", getFilename()); //$NON-NLS-1$
 			bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
-			bshInterpreter.set("Parameters", getParameters());// as a single
-																// line//$NON-NLS-1$
-			bshInterpreter.set("bsh.args", JOrphanUtils.split(getParameters(), " "));
+			
+			// Save parameters as single line and as string array
+			bshInterpreter.set("Parameters", getParameters());//$NON-NLS-1$
+			bshInterpreter.set("bsh.args", //$NON-NLS-1$
+					JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
 
 			// Set default values
 			bshInterpreter.set("ResponseCode", "200"); //$NON-NLS-1$
@@ -172,69 +164,5 @@ public class BeanShellSampler extends AbstractSampler
 		res.setSuccessful(isSuccessful);
 
 		return res;
-	}
-
-	public void threadStarted() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}
-	}
-
-	public void threadFinished() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testEnded() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testEnded(String host) {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog((new StringBuffer("testEnded(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testIterationStart(LoopIterationEvent event) {
-		// Not implemented
-	}
-
-	public void testStarted() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testStarted(String host) {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog((new StringBuffer("testStarted(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
 	}
 }

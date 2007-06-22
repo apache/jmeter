@@ -18,21 +18,13 @@
 
 package org.apache.jmeter.assertions;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -40,8 +32,10 @@ import org.apache.log.Logger;
  * A sampler which understands BeanShell
  * 
  */
-public class BeanShellAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener, TestListener {
+public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 3;
 
 	public static final String FILENAME = "BeanShellAssertion.filename"; //$NON-NLS-1$
 
@@ -49,29 +43,13 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 
 	public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
 
-	// Not serialised - recreated as needed
-	transient private BeanShellInterpreter bshInterpreter = null;
-
 	// can be specified in jmeter.properties
 	public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
 
-	public BeanShellAssertion() {
-		init();
-	}
+    protected String getInitFileProperty() {
+        return INIT_FILE;
+    }
 
-	// Ensure deserialisation works in server
-	private Object readResolve(){
-		init();
-		return this;
-	}
-
-	private void init(){
-		try {
-			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);
-		} catch (ClassNotFoundException e) {
-			log.error("Cannot find BeanShell: "+e.toString());
-		}		
-	}
 	public String getScript() {
 		return getPropertyAsString(SCRIPT);
 	}
@@ -92,6 +70,7 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 	public AssertionResult getResult(SampleResult response) {
 		AssertionResult result = new AssertionResult(getName());
 
+		final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
 		if (bshInterpreter == null) {
 			result.setFailure(true);
 			result.setError(true);
@@ -166,69 +145,5 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 		}
 
 		return result;
-	}
-
-	public void threadStarted() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}
-	}
-
-	public void threadFinished() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testEnded() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testEnded(String host) {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testIterationStart(LoopIterationEvent event) {
-		// Not implemented
-	}
-
-	public void testStarted() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testStarted(String host) {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
 	}
 }
