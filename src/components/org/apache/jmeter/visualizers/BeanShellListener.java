@@ -18,69 +18,41 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.io.Serializable;
-
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
-public class BeanShellListener extends AbstractTestElement 
-    implements SampleListener, Visualizer, Serializable, TestBean, TestListener, UnsharedComponent  {
+public class BeanShellListener extends BeanShellTestElement 
+    implements Cloneable, SampleListener, Visualizer, TestBean, UnsharedComponent  {
 	
     private static final Logger log = LoggingManager.getLoggerForClass();
     
     private static final long serialVersionUID = 2;
 
-    transient private BeanShellInterpreter bshInterpreter = null;
-
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.listener.init"; //$NON-NLS-1$
 
-
-    private String script = "";
-    
-    public BeanShellListener() {
-    	init();
+    protected String getInitFileProperty() {
+        return INIT_FILE;
     }
-
-
-	private void init() {
-		try {
-			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
-		} catch (ClassNotFoundException e) {
-			log.error("Cannot find BeanShell: "+e.toString());
-		}
-	}
-
-    private Object readResolve() {
-    	init();
-    	return this;
-    }
-    
-	public String getScript() {
-		return script;
-	}
-
-
-	public void setScript(String script) {
-		this.script = script;
-	}
-
 
 	public void sampleOccurred(SampleEvent se) {
+        final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
+		if (bshInterpreter == null) {
+            log.error("BeanShell not found");
+            return;
+        }
+        
         JMeterContext jmctx = JMeterContextService.getContext();
         JMeterVariables vars = jmctx.getVariables();
         SampleResult samp=se.getResult();
@@ -90,13 +62,11 @@ public class BeanShellListener extends AbstractTestElement
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
             bshInterpreter.set("sampleEvent", se);//$NON-NLS-1$
             bshInterpreter.set("sampleResult", samp);//$NON-NLS-1$
-            bshInterpreter.eval(script);
+            bshInterpreter.eval(getScript());
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
-        }
-		
+        }		
 	}
-
 
 	public void sampleStarted(SampleEvent e) {
 	}
@@ -110,39 +80,4 @@ public class BeanShellListener extends AbstractTestElement
 	public boolean isStats() {// Required by Visualiser
 		return false;
 	}
-
-
-	public void testEnded() {
-		testEnded("");
-	}
-
-
-	public void testEnded(String host) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void testIterationStart(LoopIterationEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void testStarted() {
-		testStarted("");
-	}
-
-
-	public void testStarted(String host) {
-		// TODO Auto-generated method stub
-		
-	}
-
-//	public Object clone() {
-//        BeanShellListener o = (BeanShellListener) super.clone();
-//        o.script = script;
-//		return o;
-//	}
-    
 }

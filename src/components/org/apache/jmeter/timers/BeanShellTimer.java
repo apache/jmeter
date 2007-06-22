@@ -18,50 +18,26 @@
 
 package org.apache.jmeter.timers;
 
-import java.io.Serializable;
-
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
-public class BeanShellTimer extends AbstractTestElement implements Timer, Serializable, TestBean, ThreadListener, TestListener {
+public class BeanShellTimer extends BeanShellTestElement implements Cloneable, Timer, TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
     private static final long serialVersionUID = 2;
 
-    private String script;
-    
-    transient private BeanShellInterpreter bshInterpreter = null;
-
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.timer.init"; //$NON-NLS-1$
 
-    public BeanShellTimer() {
-        super();
-        init();
-    }
-
-	private void init() {
-		try {
-			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE),log);
-		} catch (ClassNotFoundException e) {
-			log.error("Cannot find BeanShell: "+e.toString());
-		}
-	}
-
-    private Object readResolve() {
-    	init();
-    	return this;
+    protected String getInitFileProperty() {
+        return INIT_FILE;
     }
     
     /*
@@ -71,7 +47,8 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
 	 */
 	public long delay() {
         String ret="0";
-        if (bshInterpreter == null) {
+        final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
+		if (bshInterpreter == null) {
         	log.error("BeanShell not found");
         	return 0;
         }
@@ -81,7 +58,7 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
             // Add variables for access to context and variables
             bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
-            Object o = bshInterpreter.eval(script);
+            Object o = bshInterpreter.eval(getScript());
             if (o != null) ret=o.toString();
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
@@ -92,83 +69,5 @@ public class BeanShellTimer extends AbstractTestElement implements Timer, Serial
         	log.warn(e.getLocalizedMessage());
         	return 0;
         }
-	}
-
-	public Object clone() {
-        BeanShellTimer o = (BeanShellTimer) super.clone();
-        o.script = script;
-		return o;
-	}
-    
-    public String getScript(){
-        return script;
-    }
-
-    public void setScript(String s){
-        script=s;
-    }
-
-	public void threadStarted() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}
-	}
-
-	public void threadFinished() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testEnded() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testEnded(String host) {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testIterationStart(LoopIterationEvent event) {
-		// Not implemented
-	}
-
-	public void testStarted() {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
-	}
-
-	public void testStarted(String host) {
-		if (bshInterpreter == null) return;
-		try {
-			bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
-					.append(host)
-					.append(")") // $NON-NLS-1$
-					.toString()); // $NON-NLS-1$
-		} catch (JMeterException ignored) {
-			log.debug(ignored.getLocalizedMessage());
-		}		
 	}
 }
