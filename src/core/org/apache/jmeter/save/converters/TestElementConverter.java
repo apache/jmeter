@@ -20,6 +20,7 @@ package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
@@ -76,7 +77,15 @@ public class TestElementConverter extends AbstractCollectionConverter {
             JMeterProperty jmp=iter.next();
             // Skip special properties if required
             if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) {
-                writeItem(jmp, context, writer);
+            	// Don't save empty comments - except for the TestPlan (to maintain compatibility)
+	       		if (!(
+		       			TestPlan.COMMENTS.equals(jmp.getName())
+		       			&& jmp.getStringValue().length()==0
+		       			&& !el.getClass().equals(TestPlan.class)
+	       			))
+	       		{
+		            writeItem(jmp, context, writer);
+	       		}
             }
 		}
 	}
