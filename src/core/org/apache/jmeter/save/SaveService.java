@@ -378,8 +378,8 @@ public class SaveService {
             log.warn(e.getLocalizedMessage());
         }
 		checkVersion(StringPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(TestElementConverter.class, "514283"); // $NON-NLS-1$
-		checkVersion(TestElementPropertyConverter.class, "514283"); // $NON-NLS-1$
+		checkVersion(TestElementConverter.class, "549987"); // $NON-NLS-1$
+		checkVersion(TestElementPropertyConverter.class, "549987"); // $NON-NLS-1$
 		checkVersion(ScriptWrapperConverter.class, "514283"); // $NON-NLS-1$
 		checkVersion(TestResultWrapperConverter.class, "514283"); // $NON-NLS-1$
         checkVersion(SampleSaveConfigurationConverter.class,"549936"); // $NON-NLS-1$
