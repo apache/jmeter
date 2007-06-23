@@ -21,6 +21,7 @@ package org.apache.jmeter.save.converters;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -88,7 +89,12 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
             // Skip special properties if required
             if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) 
             {
-                writeItem(jmp, context, writer);
+            	// Don't save empty comments
+	       		if (!(TestPlan.COMMENTS.equals(jmp.getName())
+		       			&& jmp.getStringValue().length()==0))
+		       	{
+		            writeItem(jmp, context, writer);
+		       	}
             }
 		}
         //TODO clazz is probably always the same as testclass
