@@ -2066,6 +2066,9 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
              <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
              <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
            </ul>
+           The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
+           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
+           If you are using grouping, pleas ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
