@@ -190,6 +190,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>commons-httpclient-3.1-rc1</li>
 <li>commons-jexl 1.1</li>
 <li>commons-lang-2.3 (added)</li>
+<li>JUnit 3.8.2</li>
 <li>velocity 1.5</li>
 <li></li>
 </ul>

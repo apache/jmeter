@@ -71,7 +71,7 @@ jdom-b9
 js_rhino1_6R5
 - javascript function
 
-junit
+junit3.8.2
 - unit tests
 
 logkit-1.2
