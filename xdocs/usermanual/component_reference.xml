@@ -1926,7 +1926,20 @@ there is currently no way to sepcify which one is to be used.</note>
 restricted using Basic HTTP Authentication.  You see this type of authentication when you use
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
+<p>
+Some servers don't send a WWW-Authenticate response if the request requires authentication; 
+the request is just rejected, e.g. with response code 401.
+In such cases pre-emptive authentication needs to be enabled.
+To enable pre-emptive authentication, change the files below to add:
+<pre>
+jmeter.properties:
+httpclient.parameters.file=httpclient.parameters
 
+httpclient.parameters:
+http.authentication.preemptive$Boolean=true
+</pre>
+Note: the above settings only apply to the HttpClient sampler (and the SOAP samplers, which use Httpclient).
+</p>
 <note>In the current release, all JMeter threads in a Thread Group use the same username/password
 for a given Base URL even if you create multiple users with the same Base URL in the authorization table.
 We plan to correct this in a future release.  As a workwaround, you can create multiple Thread Groups for your
