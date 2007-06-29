@@ -90,6 +90,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$ 
+
+	private static boolean canSetPreEmptive; // OK to set pre-emptive auth?
+	
     static final String PROXY_HOST = 
         System.getProperty("http.proxyHost",""); // $NON-NLS-1$ 
 
@@ -204,6 +208,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             HttpClientDefaultParameters.load(file,params);
         }
         
+        // If the pre-emptive parameter is undefined, then we cans set it as needed
+        // otherwise we should do what the user requested.
+        canSetPreEmptive =  params.getParameter(HTTP_AUTHENTICATION_PREEMPTIVE) == null;
+
         // Handle old-style JMeter properties
         // Default to HTTP version 1.1
         String ver=JMeterUtils.getPropDefault("httpclient.version","1.1"); // $NON-NLS-1$ $NON-NLS-2$
@@ -651,8 +659,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * Extracts all the required authorization for that particular URL request
 	 * and sets it in the <code>HttpMethod</code> passed in.
 	 * 
-	 * @param method
-	 *            <code>HttpMethod</code> which represents the request
+	 * @param client the HttpClient object
+	 * 
 	 * @param u
 	 *            <code>URL</code> of the URL request
 	 * @param authManager
@@ -660,6 +668,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            this <code>UrlConfig</code>
 	 */
 	void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
+		HttpParams params = client.getParams();
 		if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
@@ -680,10 +689,18 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                                     localHost,
 									domain
 							));
+					// We have credentials - should we set pre-emptive authentication?
+					if (canSetPreEmptive){
+						log.debug("Setting Pre-emptive authentication");
+						params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, true);
+					}
 			}
             else
             {
                 client.getState().clearCredentials();
+                if (canSetPreEmptive){
+                	params.setBooleanParameter(HTTP_AUTHENTICATION_PREEMPTIVE, false);
+                }
             }
 		}
         else
