@@ -263,6 +263,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Function methods setParameters() need to be synchronized</li>
 <li>Fix CLI long optional argument to require "=" (as for short options)</li>
 <li>Fix SlowSocket to work properly with Httpclient (both http and https)</li>
+<li>Bug 41612 - Loop nested in IF behaves erratically</li>
 </ul>
 
 <h3>Version 2.2</h3>
