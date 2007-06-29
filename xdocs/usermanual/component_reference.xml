@@ -3097,7 +3097,7 @@ generate the template string, and store the result into the given variable name.
    </properties>
 </component>
 
-<component name="Save Responses to a file" index="&sect-num;.8.4"  width="422" height="87" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.8.4"  width="401" height="130" screenshot="savetofile.png">
 	<description>This test element can be placed anywhere in the test plan.
 		For each sample in its scope, it will create a file of the response Data.
 		The primary use for this is in creating functional tests.
@@ -3107,8 +3107,9 @@ generate the template string, and store the result into the given variable name.
 		in the test log output file if required.
 	</description>
  <properties>
- <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
- <property name="Filename Prefix" required="">Prefix for the generate file name</property>
+ <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+ <property name="Filename Prefix" required="Yes">Prefix for the generated file names</property>
+ <property name="Save Failed Responses only" required="Yes">If selected, then only failed responses are saved</property>
  </properties>
 </component>
 
