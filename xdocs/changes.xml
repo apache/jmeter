@@ -102,6 +102,17 @@ The original behaviour can be enabled by setting the JMeter property:
 https.sessioncontext.shared=true
 </pre>
 </p>
+<p>
+HttpClient now uses pre-emptive authentication. 
+This can be changed by setting the following:
+<pre>
+jmeter.properties:
+httpclient.parameters.file=httpclient.parameters
+
+httpclient.parameters:
+http.authentication.preemptive$Boolean=false
+</pre>
+</p>
 <h4>Incompatible changes (development):</h4>
 <p>
 <b>N.B.</b>The clear() method was defined in the following interfaces: Clearable, JMeterGUIComponent and TestElement.
@@ -168,6 +179,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 <li>Bug 42582 - JSON pretty printing in Tree View Listener</li>
 <li>Http Autoredirects are now enabled by default when creating new samplers</li>
+<li>Bug 42674 - default to pre-emptive authorisation if not specified</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
