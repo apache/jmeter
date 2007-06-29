@@ -1927,16 +1927,15 @@ restricted using Basic HTTP Authentication.  You see this type of authentication
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
 <p>
-Some servers don't send a WWW-Authenticate response if the request requires authentication; 
-the request is just rejected, e.g. with response code 401.
-In such cases pre-emptive authentication needs to be enabled.
-To enable pre-emptive authentication, change the files below to add:
+In versions of JMeter after 2.2, the HttpClient sampler defaults to pre-emptive authentication
+if the setting has not been defined. To disable this, set the values as below, in which case
+authentication will only be performed in response to a challenge.
 <pre>
 jmeter.properties:
 httpclient.parameters.file=httpclient.parameters
 
 httpclient.parameters:
-http.authentication.preemptive$Boolean=true
+http.authentication.preemptive$Boolean=false
 </pre>
 Note: the above settings only apply to the HttpClient sampler (and the SOAP samplers, which use Httpclient).
 </p>
