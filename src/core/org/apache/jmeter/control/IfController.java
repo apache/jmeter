@@ -137,16 +137,18 @@ public class IfController extends GenericController implements Serializable {
 	}
 
 	/**
-	 * @see org.apache.jmeter.control.Controller#next() 'JMeterThread' iterates
-	 *      thru the Controller by calling this method. IF a valid 'Sampler' is
-	 *      returned, then it executes the sampler (calls sampler.sampler(xxx)
-	 *      method) . So here we make sure that the samplers belonging to this
-	 *      Controller do not get called - if isDone is true - if its the first
-	 *      time this is run. The first time is special cause it is called prior
-	 *      the iteration even starts !
+	 * @see org.apache.jmeter.control.Controller#next()
 	 */
 	public Sampler next() {
-		boolean result = evaluateCondition(getCondition());
+        // We should only evalute the condition if it is the first
+        // time ( first "iteration" ) we are called.
+        // For subsequent calls, we are inside the IfControllerGroup,
+        // so then we just pass the control to the next item inside the if control
+        boolean result = true;
+        if(isFirst()) {
+            result = evaluateCondition(getCondition());
+        }
+        
 		if (result) {
 			return super.next();
 		}
