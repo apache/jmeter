@@ -163,7 +163,6 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	}
 
 	public synchronized void clearData() {
-		log.debug("Clear called", new Exception("Debug"));
 		model.clearData();
 		currentData = 0;
 		calc.clear();
