@@ -221,6 +221,8 @@ public class JavaSampler extends AbstractSampler implements TestListener {
 		sb.append(Thread.currentThread().getName());
 		sb.append("@");
 		sb.append(Integer.toHexString(hashCode()));
+		sb.append("-");
+		sb.append(getName());
 		return sb.toString();
 	}
 
