@@ -39,7 +39,9 @@ public class TransactionController extends GenericController implements Controll
 	public Sampler next() {
         // Check if transaction is done
         if(transactionSampler != null && transactionSampler.isTransactionDone()) {
-            log.debug("End of transaction");
+        	if (log.isDebugEnabled()) {
+                log.debug("End of transaction " + getName());
+        	}
             // This transaction is done
             transactionSampler = null;
             return null;
@@ -48,7 +50,9 @@ public class TransactionController extends GenericController implements Controll
         // Check if it is the start of a new transaction
 		if (isFirst()) // must be the start of the subtree
 		{
-		    log.debug("Start of transaction");
+        	if (log.isDebugEnabled()) {
+		        log.debug("Start of transaction " + getName());
+        	}
 		    transactionSampler = new TransactionSampler(this, getName());
 		}
 
@@ -60,5 +64,20 @@ public class TransactionController extends GenericController implements Controll
             transactionSampler.setTransactionDone();
         }
         return transactionSampler;
+	}
+	
+	protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
+		Sampler returnValue;
+		Sampler sampler = controller.next();
+		if (sampler == null) {
+			currentReturnedNull(controller);
+			// We need to call the super.next, instead of this.next, which is done in GenericController,
+			// because if we call this.next(), it will return the TransactionSampler, and we do not want that.
+			// We need to get the next real sampler or controller
+			returnValue = super.next();
+		} else {
+			returnValue = sampler;
+		}
+		return returnValue;
 	}
 }
