@@ -180,6 +180,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 42582 - JSON pretty printing in Tree View Listener</li>
 <li>Http Autoredirects are now enabled by default when creating new samplers</li>
 <li>Bug 42674 - default to pre-emptive authorisation if not specified</li>
+<li>BSF Sampler passes additional variables to the script</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>

@@ -763,12 +763,55 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 		</p>
 	</description>
 <properties>
-	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
-	<property name="Script File" required="no">Name of a file to be used as a BeanShell script</property>
-	<property name="Script" required="no">Script to be passed to BeanShell</property>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.</property>
+	<property name="Script File" required="No">Name of a file to be used as a BSF script</property>
+	<property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
+	<property name="Script" required="Yes (unless script file is provided)">Script to be passed to BSF language</property>
 </properties>
-TBC
+<p>
+If a script file is supplied, that will be used, otherwise the script will be used.</p>
+<p>
+Before invoking the script, some variables are set up:
+</p>
+<p>
+The contents of the Parameters field is put into the variable "Parameters".
+The string is also split into separate tokens using a single space as the separator, and the resulting list
+is stored in the String array args.
+</p>
+<p>
+The full list of variables that is set up is as follows:</p>
+<ul>
+<li>log - the Logger</li>
+<li>Label - the Sampler label</li>
+<li>FileName - the file name, if any</li>
+<li>Parameters - text from the Parameters field</li>
+<li>args - the parameters, split as described above</li>
+<li>SampleResult - pointer to the current SampleResult</li>
+<li>ctx - JMeterContext</li>
+<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
+</ul>
+<p>
+The Sampler ResponseData is set from the return value of the script.
+If the script returns null, it can set the response directly, by using the method 
+SampleResponse.setResponseData(data), where data is either a String or a byte array.
+The data type defaults to "text", but can be set to binary by using the method
+SampleResponse.setDataType(SampleResponse.BINARY).
+</p>
+<p>
+The SampleResult variable gives the script full access to all the fields and
+methods in the SampleResult. For example, the script has access to the methods
+setStopThread(boolean) and setStopTest(boolean).
+</p>
+<p>
+Unlike the Beanshell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
+Currently the only way to changes these is via the SampleResponse methods:
+<ul>
+<li>SampleResponse.setSuccessful(true/false)</li>
+<li>SampleResponse.setResponseCode("code")</li>
+<li>SampleResponse.setResponseMessage("message")</li>
+</ul>
+</p>
 </component>
 
 <component name="TCP Sampler" index="&sect-num;.1.12"  width="631" height="305" screenshot="tcpsampler.png">
