@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
@@ -70,7 +71,7 @@ public class ForeachController extends GenericController implements Serializable
 	}
 
 	private String getSeparator() {
-		return getUseSeparator() ? DEFAULT_SEPARATOR : "";
+		return getUseSeparator() ? DEFAULT_SEPARATOR : "";// $NON-NLS-1$
 	}
 
 	public void setUseSeparator(boolean b) {
@@ -89,9 +90,13 @@ public class ForeachController extends GenericController implements Serializable
 	public boolean isDone() {
 		JMeterContext context = getThreadContext();
 		String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
-		if (context.getVariables().get(inputVariable) != null) {
-			context.getVariables().put(getReturnVal(), context.getVariables().get(inputVariable));
-			log.debug("ForEach resultstring isDone=" + context.getVariables().get(getReturnVal()));
+		final JMeterVariables variables = context.getVariables();
+		final Object currentVariable = variables.getObject(inputVariable);
+		if (currentVariable != null) {
+			variables.putObject(getReturnVal(), currentVariable);
+			if (log.isDebugEnabled()) {
+				log.debug("ForEach resultstring isDone=" + variables.get(getReturnVal()));
+			}
 			return false;
 		}
 		return super.isDone();
@@ -100,7 +105,7 @@ public class ForeachController extends GenericController implements Serializable
 	private boolean endOfArguments() {
 		JMeterContext context = getThreadContext();
 		String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
-		if (context.getVariables().get(inputVariable) != null) {
+		if (context.getVariables().getObject(inputVariable) != null) {
 			log.debug("ForEach resultstring eofArgs= false");
 			return false;
 		}
@@ -120,15 +125,17 @@ public class ForeachController extends GenericController implements Serializable
 	/**
 	 * Check if there are any matching entries
 	 * 
-	 * @return whethere any entries in the list
+	 * @return whether any entries in the list
 	 */
 	private boolean emptyList() {
 		JMeterContext context = getThreadContext();
 		String inputVariable = getInputVal() + getSeparator() + "1";// $NON-NLS-1$
-		if (context.getVariables().get(inputVariable) != null) {
+		if (context.getVariables().getObject(inputVariable) != null) {
 			return false;
 		}
-		log.debug("No entries found - null first entry: " + inputVariable);
+		if (log.isDebugEnabled()) {
+			log.debug("No entries found - null first entry: " + inputVariable);
+		}
 		return true;
 	}
 

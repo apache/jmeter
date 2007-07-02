@@ -181,6 +181,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Http Autoredirects are now enabled by default when creating new samplers</li>
 <li>Bug 42674 - default to pre-emptive authorisation if not specified</li>
 <li>BSF Sampler passes additional variables to the script</li>
+<li>Bug 40099 - Enable use of object variable in ForEachController</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
