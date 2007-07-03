@@ -57,11 +57,21 @@ behavior under heavy concurrent load.
 		<li>Several load statistics may be choosen with <b>pluggable timers</b>.</li>
 		<li>Data analysis and <b>visualization plugins</b> allow great extendibility
 		as well as personalization.</li>
-		<li>Functions (which include JavaScript) can be used to provide dynamic input to a test</li>
-		<li>Scriptable Samplers (BeanShell is supported in version 1.9.2 and above)</li>
+		<li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
+		<li>Scriptable Samplers (BeanShell is fully supported; and there is a sampler which supports BSF-compatible languages)</li>
 	  </ul>
 	</li>
 </ul>
+<h2>JMeter is not a browser</h2>
+<p>
+JMeter is not a browser.
+As far as web-services and remote services are concerned, JMeter looks like a browser (or rather, multiple browsers);
+however JMeter does not perform all the actions supported by browsers.
+In particular, JMeter does not execute the Javascript found in HTML pages.
+Nor does it render the HTML pages as a browser does 
+(it's possible to view the response as HTML etc, but the timings are not included in any samples, and only one sample in one thread is ever viewed at a time).
+</p>
+
 <h2>How do I do it?</h2>
 <ul>
 <li><a href="usermanual/index.html">Using JMeter</a></li>

@@ -72,21 +72,16 @@ This is in addition to any Listeners defined in the test plan.
 The configuration of this listener is controlled by entries in the file jmeter.properties.
 </p>
 <p>
-This feature can be used to specify a different data log file for each test run, for example:
-<code>
-jmeter -n -t testplan.jmx -l testplan_01.jtl
-jmeter -n -t testplan.jmx -l testplan_02.jtl
-</code>
+This feature can be used to specify different data and log files for each test run, for example:
+<pre>
+jmeter -n -t testplan.jmx -l testplan_01.jtl -j testplan_01.log
+jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
+</pre>
 </p>
 <p>
-However, note that jmeter logging messages are written to jmeter.log by default.
+Note that jmeter logging messages are written to the jmeter.log by default.
 This file is recreated each time, so if you want to keep the log files for each run, 
-you will need to rename it after the run has finished.
-Or you can use the environment variable JVM_ARGS to pass in the option -Dlog_file=filename.
-This will define the Java system property, 
-which will be used as the default JMeter property if not overridden in jmeter.properties
-If you are using an OS such as VMS just use a logical name for the log file in jmeter.properties
-and define the logical before starting JMeter.
+you will need to rename it using the -j option as above. The -j option was added in version 2.3.
 </p>
 </section>
 
