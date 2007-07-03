@@ -80,7 +80,7 @@ finish starting all of your users by the end of the 5 seconds.  So, if we have
 would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
 value to 0, then JMeter will immediately start all of your users.</p>
 
-<p>Finally, clear the checkbox labeled "Forever", and enter a value of 2 in
+<p>Finally enter a value of 2 in
 the Loop Count field.  This property tells JMeter how many times to repeat your
 test. If you enter a loop count value of 1, then JMeter will run your test only
 once. To have JMeter repeatedly run your Test Plan, select the Forever
@@ -100,12 +100,12 @@ Figure 5.2. Jakarta Users Thread Group</figure>
 </section>
 
 <section name="5.2 Adding Default HTTP Request Properties" anchor="adding_defaults">
-<p>Now that we have defined our users, it is time define the tasks that they
+<p>Now that we have defined our users, it is time to define the tasks that they
 will be performing.  In this section, you will specify the default settings
 for your HTTP requests.  And then, in section 5.3, you will add HTTP Request
 elements which use some of the default settings you specified here.</p>
 
-<p>Begin by selecting the Jakarta Users element. Click your right mouse button
+<p>Begin by selecting the Jakarta Users (Thread Group) element. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Request
 Defaults. Then, select this new element to view its Control Panel (see Figure 5.3).
 </p>
@@ -204,8 +204,7 @@ Figure 5.7. Graph Results Listener</figure>
 <section name="5.6 Saving the Test Plan" anchor="saving">
 <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu (with the latest release, it is no longer necessary to select the
-Test Plan element first).</p>
+File menu.</p>
 
 <note>JMeter allows you to save the entire Test Plan tree or
 only a portion of it.  To save only the elements located in a particular "branch"
@@ -225,13 +224,16 @@ the Edit menu.
 currently running.  The square is turned gray when all tests stop.  Even after you select "stop",
 the green light will stay on until all test threads have exited.</note>
 
-<p>Once JMeter has finished running your Test Plan, select Stop from the
+<p>The numbers to the left of the green square show the currently active and total number of threads.</p>
+
+<p>Once JMeter has finished running your Test Plan, the green box will turn to grey.
+If you wish to stop the test plan earlier, select Shutdown or Stop from the
 Run menu.</p>
 <p>If you selected a file to save the results to in your listener, then you will have a file that can be
-opened in any visualizer.  Each visualizer will display the results in it's own fashion.</p>
+opened in any visualizer.  Each visualizer will display the results in its own fashion.</p>
 
 <note>It is possible to have the same file open in more than one visualizer.  This is not a problem.  JMeter
-will ensure during the test run that no sample is recorded to the same file more than once.</note> 
+will ensure during the test run that no sample is recorded to the same file more than once (this only applies to XML format samples).</note> 
 
 </section>
 

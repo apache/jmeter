@@ -47,6 +47,7 @@ your elements are saved.  JMeter will load the elements into the tree.</p>
 JMeter will save the element selected, plus all child elements beneath it.  In this way,
 you can save test tree fragments, individual elements, or the entire test plan.</p>
 
+<note>The workbench is not automatically saved with the test plan, but it can be saved separately as above.</note>
 </subsection>
 
 <subsection name="3.3 Configuring Tree Elements" anchor="config_element">
@@ -59,11 +60,18 @@ configured for an element depends on what type of element it is.</p>
 
 <subsection name="3.4 Running a Test Plan" anchor="run">
 <p>To run your test plan, choose "start" from the "run" menu item.  To stop your test
-plan, choose "stop" from the same menu.  JMeter does not automatically give any
-indication of whether it is currently running.  Some listeners make it obvious if
-JMeter is running, but the only way to be sure is to check the "run" menu.  If "start"
-is disabled, and "stop" is enabled, JMeter is running your test plan (or, at least, it
-thinks it is).</p>
+plan, choose "stop" from the same menu.  
+When JMeter is running, it shows a small green box at the right hand end of the section just under the menu bar.
+You can also check the "run" menu.  
+If "start" is disabled, and "stop" is enabled,
+then JMeter is running your test plan (or, at least, it thinks it is).</p>
+<p>
+There are two types of stop command:
+<ul>
+<li>Stop (Control + '.') - stops the threads immediately</li>
+<li>Shutdown (Control + ',')- requests the threads to stop at the end of any current work</li>
+</ul>
+</p>
 </subsection>
 
 <subsection name="3.5 Scoping Rules" anchor="scoping_rules">
@@ -90,6 +98,18 @@ However, the settings from the Managers are not merged.
 If more than one Manager is in the scope of a Sampler, 
 only one Manager is used, but there is currently no way to specify <b>which</b> is used.
 </b>
+</subsection>
+<subsection name="3.6 Error reporting" anchor="error_reporting">
+<p>
+JMeter reports warnings and errors to the jmeter.log file, as well as some information on the test run itself.
+Just occaisionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
+If a test is not behaving as you expect, please check the log file in case any errors have been reported (e.g. perhaps a syntax error in a function call).
+</p>
+<p>
+Sampling errors (e.g. HTTP 404 - file not found) are not normally reported in the log file. 
+Instead these are stored as attributes of the sample result.
+The status of a sample result can be seen in the various different Listeners.
+</p>
 </subsection>
 
 </section>

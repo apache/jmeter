@@ -132,6 +132,7 @@ Or perhaps use the Access Log Sampler.
 <li>Don't use functional mode</li>
 <li>Use CSV output rather than XML</li>
 <li>Only save the data that you need</li>
+<li>Use as few Assertions as possible</li>
 </ul>
 </section>
 

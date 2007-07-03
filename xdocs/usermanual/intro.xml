@@ -39,7 +39,7 @@ test scripts with <a href="test_plan.html#assertions">assertions</a> to validate
 results you expect.  For maximum flexibility, JMeter lets you create these assertions using
 regular expressions.</p>
 
-
+<p>But please note that JMeter is not a browser.</p>
 <subsection name="1.1 History" anchor="history">
 <p>Stefano Mazzocchi of the Apache Software Foundation was the original developer of JMeter.
 He wrote it primarily to test the performance of Apache JServ (a project that has

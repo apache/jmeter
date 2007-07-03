@@ -208,35 +208,8 @@ Figure 11.2. Graph Results Listener</figure>
         <section name="11.4 Saving the Test Plan" anchor="saving">
             <p>Although it is not required, we recommend that you save the Test Plan to a
 file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu (with the latest release, it is no longer necessary to select the
-Test Plan element first).</p>
-
-            <note>JMeter allows you to save the entire Test Plan tree or
-only a portion of it.  To save only the elements located in a particular "branch"
-of the Test Plan tree, select the Test Plan element in the tree from which to start
-the "branch", and then click your right mouse button to access the Save As menu item.
-Alternatively, select the appropriate Test Plan element  and then select Save As from
-the Edit menu.
-            </note>
-
+File menu.</p>
         </section>
 
-        <section name="11.5 Running the Test Plan" anchor="running">
-
-            <p>From the Run menu, select Run.</p>
-
-            <note>JMeter lights up a green square in the upper-right-hand corner to indicate if a test is
-currently running.  The square is turned gray when all tests stop.  Even after you select "stop",
-the green light will stay on until all test threads have exited.</note>
-
-            <p>Once JMeter has finished running your Test Plan, select Stop from the
-Run menu.</p>
-            <p>If you selected a file to save the results to in your listener, then you will have a file that can be
-opened in any visualizer.  Each visualizer will display the results in it's own fashion.</p>
-
-            <note>It is possible to have the same file open in more than one visualizer.  This is not a problem.  JMeter
-will ensure during the test run that no sample is recorded to the same file more than once.</note>
-
-        </section>
     </body>
 </document>

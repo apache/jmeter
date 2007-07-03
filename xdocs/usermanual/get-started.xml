@@ -76,9 +76,6 @@ Version 2.2 and later no longer support Java 1.3.
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
-<note>
-Use the latest version of Java 1.4 or 1.5 for best results
-</note>
 </subsection>
 
 <subsection name="2.1.2 Operating Systems" anchor="os">
@@ -136,12 +133,12 @@ Make sure the file is a jar file, not a zip.
 </subsection>
 
 <subsection name="2.2.6 Apache SOAP" anchor="opt_soap">
-<p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your jmeter/lib directory. Once the files are in there, JMeter will automatically pick them up.</p>
+<p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your <b>jmeter/lib</b> directory. Once the files are in there, JMeter will automatically pick them up.</p>
 </subsection>
 
 <subsection name="2.2.7 BeanShell" anchor="opt_beanshell">
-<p>To run the BeanShell function or any of the BeanSell test elements (sampler, timer etc),
- you need to download the beanshell jar from <a href="http://www.beanshell.org/">http://www.beanshell.org/</a> and copy the jar file to the jmeter/lib directory, where JMeter will automatically pick it up.</p>
+<p>To run the BeanShell function or any of the BeanShell test elements (sampler, timer etc),
+ you need to download the beanshell jar from <a href="http://www.beanshell.org/">http://www.beanshell.org/</a> and copy the jar file to the <b>jmeter/lib directory</b>, where JMeter will automatically pick it up.</p>
 </subsection>
 
 <subsection name="2.2.7 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
@@ -406,7 +403,7 @@ These are shown below.</p>
   </property>
   </properties>
 <p><b>
-See also the comments in the jmeter.properties file for further information on other settings you can change.
+See also the comments in the jmeter.properties, user.properties and system.properties files for further information on other settings you can change.
 </b></p>
 </section>
 
