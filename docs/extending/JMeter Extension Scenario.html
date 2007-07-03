@@ -1,0 +1,785 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- Content Stylesheet for Site -->
+
+	 
+<!-- start the processing -->
+	 <!-- ====================================================================== -->
+	 <!-- Main Page Section -->
+	 <!-- ====================================================================== -->
+	 <html>
+		  <head>
+				<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+				
+													 				<meta name="author" value="Michael Stover">
+				<meta name="email" value="mstover1@apache.org">
+				
+				<title>JMeter - Extending JMeter</title>
+		  </head>
+
+		  <body bgcolor="#ffffff" text="#000000" link="#525D76">
+				<table border="0" cellspacing="0">
+					 <!-- TOP IMAGE -->
+					 <tr>
+						  <td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+</td>
+					 </tr>
+				</table>
+				<table border="0" width="100%" cellspacing="4">
+					 <tr><td colspan="2">
+						  <hr noshade size="1"/>
+					 </td></tr>
+
+					 <tr>
+						  <!-- LEFT SIDE NAVIGATION -->
+						  <td width="20%" valign="top" nowrap="true">
+						  	 		  <p><strong>About</strong></p>
+		  <ul>
+		  				<li>	 <a href="../index.html">Overview</a>
+</li>
+		  				<li>	 <a href="../changes.html">Changes</a>
+</li>
+		  				<li>	 <a href="../known_bugs.html">Known Bugs</a>
+</li>
+		  				<li>	 <a href="../license.html">License</a>
+</li>
+		  				<li>	 <a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Download</strong></p>
+		  <ul>
+		  				<li>	 <a href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries">Download Binary</a>
+</li>
+		  				<li>	 <a href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources">Download Source</a>
+</li>
+		  				<li>	 <a href="../nightly.html">Developer (Nightly) Builds</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Documentation</strong></p>
+		  <ul>
+		  				<li>	 <a href="../usermanual/index.html">User Manual</a>
+</li>
+		  				<li>	 <a href="../api/index.html">Javadocs</a>
+</li>
+		  				<li>	 <a href="../localising/index.html">Localisation (Translator's Guide)</a>
+</li>
+		  				<li>	 <a href="../building.html">Building JMeter and Add-Ons</a>
+</li>
+		  				<li>	 <a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+</li>
+		  				<li>	 <a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Tutorials (PDF format)</strong></p>
+		  <ul>
+		  				<li>	 <a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
+</li>
+		  				<li>	 <a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
+</li>
+		  				<li>	 <a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
+</li>
+		  				<li>	 <a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Community</strong></p>
+		  <ul>
+		  				<li>	 <a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+</li>
+		  				<li>	 <a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+</li>
+		  				<li>	 <a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+</li>
+		  		  </ul>
+	 						  </td>
+						  <td width="80%" align="left" valign="top">
+						    						  <br>
+						  						  									 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#525D76">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name=""><strong>JMeter Extension Scenario</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								The purpose of this tutorial is to
+describe the general steps involved in a JMeter extension scenerio. The
+
+												<a	 href="index.html">
+								JMeter documentation
+						</a>
+									 describes what must be done on a microscopic level but does
+not provide an overall idea of the process. That is the intent of this brief
+article. The JMeter extension documentation should be consulted for details.
+						</p>
+							  									 				<P	>
+								The high level procedure followed these steps.
+
+						</P>
+							  									 				<OL	>
+								
+  
+												<LI	>
+												<A	 href="#planning">
+								Planning
+						</A>
+							</LI>
+									
+  
+												<LI	>
+												<A	 href="#config">
+								Code the configuration
+  object
+						</A>
+									 
+						</LI>
+									
+  
+												<LI	>
+												<A	 href="#config-gui">
+								Code the configuration
+  GUI object
+						</A>
+									 
+						</LI>
+									
+  
+												<LI	>
+												<A	 href="#control">
+								Code the controller
+  object
+						</A>
+									 
+						</LI>
+									
+  
+												<LI	>
+												<A	 href="#control-gui">
+								Code the controller GUI
+  object
+						</A>
+									 
+						</LI>
+									
+  
+												<LI	>
+												<A	 href="#sampler">
+								Code the Sampler object
+						</A>
+									 
+						</LI>
+									
+
+  
+												<LI	>
+												<A	 href="#installation">
+								Install your
+  extension
+						</A>
+									 
+						</LI>
+									
+  
+												<LI	>
+												<A	 href="#tips">
+								Tips
+						</A>
+									 
+						</LI>
+							</OL>
+							  									 				<H2	>
+												<A	 name="planning">
+								Planning
+						</A>
+							</H2>
+							  									 				<OL	>
+								
+  
+												<LI	>
+								What you want the sampler to do 
+						</LI>
+									
+  
+												<LI	>
+								What information is needed for the sampler to work 
+						</LI>
+									
+  
+												<LI	>
+								How the information is to be acquired from the user 
+						</LI>
+							</OL>
+							  									 				<P	>
+								You'll notice that the coding steps are somewhat backwards from the planning
+steps (the sampler is coded last). The coding order was determined by which
+classes could be tested earliest. The config/gui can be tested in isolation. The
+controller can be tested with the config element. Neither of these requires a
+Sampler to be present initially. 
+						</P>
+							  									 				<H2	>
+												<A	 name="config">
+								Configuration Object
+						</A>
+							</H2>
+							  									 				<TT	>
+								UrlConfig
+						</TT>
+							  									 				<P	>
+								The configuration object usually inherits from
+
+												<TT	>
+								org.apache.jmeter.config.AbstractConfigElement
+						</TT>
+									. It implements many of
+the methods of 
+												<TT	>
+								org.apache.jmeter.gui.JMeterComponentModel
+						</TT>
+									 that are
+needed to effectively interact with JMeter.
+
+						</P>
+							  									 				<OL	>
+								
+  
+												<LI	>
+												<B	>
+								Constructor
+						</B>
+									 - In the constructor you should at least define the
+  name of your configuration element. This is best delegated to the base class's
+  
+												<TT	>
+								setName
+						</TT>
+									 method. 
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+								Property Name Strings
+						</B>
+									 - You should define a static final string for
+  each property you wish to define. These strings will serve as keys into a hash
+  table maintained by 
+												<TT	>
+								AbstractConfigElement
+						</TT>
+									. For example: 
+												<PRE	>
+								 public static final HOST_NAME = "hostname";
+						</PRE>
+									would define a property
+  in the hash table for storing a host name. 
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+								Getters/Setters
+						</B>
+									 - For each property name you define in the previous
+  step, define the appropriate accessor methods. The implementation of these
+  accessors should usually delegate to 
+												<TT	>
+								AbstractConfigElement
+						</TT>
+									. For
+  example: 
+												<PRE	>
+								   public void setHostname(String hostname)
+	{ setProperty(HOST_NAME, hostname); }
+
+	public String getHostname()
+	{ return (String)getProperty(HOST_NAME); }
+	
+						</PRE>
+									Some accessor implementations may be more complex. See the
+  
+												<TT	>
+								UrlConfig
+						</TT>
+									 object for a more involved example.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								String getClassLabel()
+						</TT>
+							</B>
+									 - This is the label that will
+  display in the drop-down menu for adding your configuration element.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								clone()
+						</TT>
+							</B>
+									 - Your configuration element is expected to be
+  cloneable.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								addConfigElement(ConfigElement)
+						</TT>
+							</B>
+									 - A typical implementation
+  of this method looks like 
+												<PRE	>
+								   public void addConfigElement(ConfigElement config) {
+		if (config instanceof MyConfig)
+			updatePropertyIfAbsent((MyConfig)config);
+	}
+						</PRE>
+									where 
+												<TT	>
+								updatePropertyIfAbsent
+						</TT>
+									 is handled by the super class.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								getGuiClass
+						</TT>
+							</B>
+									 - return the name of the this class's 
+												<A	 href="#config-gui">
+								corresponding GUI class
+						</A>
+									.
+  
+						</LI>
+							</OL>
+							  									 				<P	>
+								
+
+												<H2	>
+												<A	 name="config-gui">
+								Configuration GUI
+						</A>
+							</H2>
+									Each configuration element you
+define can have a companion GUI class. It helps to have a little knowledge of
+Swing for this. Extend Swing's 
+												<TT	>
+								JPanel
+						</TT>
+									 class and implement JMeter's
+
+												<TT	>
+								org.apache.jmeter.gui.ModelSupported
+						</TT>
+									 interface. Remember that you can
+review the 
+												<TT	>
+								UrlConfigGui
+						</TT>
+									 example for hints if you get stuck.
+
+						</P>
+							  									 				<OL	>
+								
+  
+												<LI	>
+												<B	>
+								Data Members
+						</B>
+									 - You should possess at least two data members: a
+  reference to your partner configuration element and a reference to a
+  
+												<TT	>
+								org.apache.jmeter.gui.NamePanel
+						</TT>
+									. You will likely have several others
+  depending on how sophisticated your GUI is.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+								Add Panels
+						</B>
+									 - The layout manager used for many of the panels used in
+  JMeter is 
+												<TT	>
+								org.apache.jmeter.gui.VerticalLayout
+						</TT>
+									. As the name implies,
+  it supports arranging other panels in a vertical fashion. You can define each
+  of your panels in a 
+												<TT	>
+								get
+						</TT>
+									 method and add them to the configuration GUI
+  in a method called 
+												<B	>
+												<TT	>
+								init
+						</TT>
+							</B>
+									. Once again, refer to
+  
+												<TT	>
+								UrlConfigGui
+						</TT>
+									 for an example.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+								Implement Listeners
+						</B>
+									 - Implement listeners for your GUI components.
+  The 
+												<TT	>
+								UrlConfigGui
+						</TT>
+									 serves as a satisfactory example.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								setModel
+						</TT>
+							</B>
+									 - Use this method to have the model data member
+  set on your GUI instance. Run 
+												<TT	>
+								init
+						</TT>
+									 from inside this method also.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								updateGui
+						</TT>
+							</B>
+									 - Use this method to set the GUI fields from the
+  model.
+						</LI>
+							</OL>
+							  									 				<H2	>
+												<A	 name="control">
+								Generative Controller
+						</A>
+							</H2>
+							  									 				<TT	>
+								Entry
+						</TT>
+							  									 				<OL	>
+								
+  
+												<LI	>
+												<B	>
+												<TT	>
+								createEntry
+						</TT>
+							</B>
+									 - This method is the raison d'etre of the
+  
+												<TT	>
+								org.apache.jmeter.control.SamplerController
+						</TT>
+									 interface. The general
+  idea is to construct an 
+												<TT	>
+								Entry
+						</TT>
+									 object and populate it with config
+  objects.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								clone
+						</TT>
+							</B>
+									 - After you perform you cloning duties, be sure to
+  pass the cloned instance to the 
+												<TT	>
+								standardCloneProc
+						</TT>
+									 method so that base
+  class cloning activities can complete.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								getClassLabel
+						</TT>
+							</B>
+									 - This is the label displayed by the
+  drop-down menu for the controller.
+						</LI>
+									
+  
+												<LI	>
+												<B	>
+												<TT	>
+								getGuiClass
+						</TT>
+							</B>
+									 - This should return a Class object for the 
+												<A	 href="#control-gui">
+								associated GUI class
+						</A>
+									. 
+						</LI>
+							</OL>
+							  									 				<H2	>
+												<A	 name="control-gui">
+								Generative Controller GUI
+						</A>
+							</H2>
+							  									 				<TT	>
+								JPanel
+						</TT>
+							  									 				<TT	>
+								ModelSupported
+						</TT>
+							  									 				<TT	>
+								setModel
+						</TT>
+							  									 				<H2	>
+												<A	 name="sampler">
+								Sampler
+						</A>
+							</H2>
+							  									 				<PRE	>
+								public SampleResult sample(Entry e)
+						</PRE>
+							  									 				<H2	>
+												<A	 name="installation">
+								Installation
+						</A>
+							</H2>
+							  									 				<OL	>
+								
+  
+												<LI	>
+								Package the class files into a JAR file. 
+						</LI>
+									
+  
+												<LI	>
+								Place the JAR file into the 
+												<TT	>
+								ext
+						</TT>
+									 subdirectory of the JMeter root
+  install directroy. 
+						</LI>
+									
+  
+												<LI	>
+								Edit the 
+												<TT	>
+								bin/jmeter.properties
+						</TT>
+									 file of the JMeter installation.
+  Find the 
+												<TT	>
+								search_paths
+						</TT>
+									 entry and add your JAR to the list. It should
+  look like 
+												<PRE	>
+								search_paths=ApacheJMeter.jar;classes;../ext/YourJar.jar
+						</PRE>
+							</LI>
+									
+  
+												<LI	>
+								Run JMeter and watch the magic. 
+						</LI>
+							</OL>
+							  									 				<H2	>
+												<A	 name="tips">
+								Tips
+						</A>
+							</H2>
+							  									 				<OL	>
+								
+  
+												<LI	>
+								You might consider using log4j as your logging utility since that's what
+  JMeter uses. It's helpful for figuring out what's going on. Not all JMeter
+  classes have been fully outfitted with logging statements. If things get
+  nasty, you might have to add your own to JMeter and recompile it to see what
+  is happening.
+  
+												<P	>
+								If you do decide to use log4j and you set the priority (or level, as it
+  will soon be called) to debug, you will probably see way more than you need to
+  know. You can filter the JMeter stuff by making the following modifications to
+  
+												<TT	>
+								log4j.conf
+						</TT>
+									 in the JMeter's 
+												<TT	>
+								bin
+						</TT>
+									 directory. The 
+												<B	>
+								bold
+						</B>
+									
+  text is added/modified 
+												<PRE	>
+									# Set the appenders for the categories
+	log4j.rootCategory=
+												<B	>
+								info
+						</B>
+									,Root_Appender
+	
+												<B	>
+								log4j.category.com.myfirm.jmeter=debug,
+						</B>
+									
+	log4j.category.org.apache.jmeter.control=debug
+	log4j.category.org.apache.jmeter.gui.tree.NonGuiTree=INFO,File_Appender
+	
+						</PRE>
+									Note that the root (default) debugging has been set to 
+												<B	>
+								info
+						</B>
+									.
+  This eliminates most log4j output from JMeter. The new line specifies the name
+  of the package containing JMeter extensions. (
+												<TT	>
+								com.yourfirm.jmeter
+						</TT>
+									) in
+  this example. Note that it is not necessary to specify a particular class
+  name. Also, note that 
+												<B	>
+								no
+						</B>
+									 appenders are specified - just the trailing
+  comma. If you specify Root_Appender here you'll see your message appear twice
+  (because you specified the same appender twice). All you really want to do is
+  override the priority.
+						</P>
+							</LI>
+									
+  
+												<LI	>
+								Implement 
+												<TT	>
+								clone
+						</TT>
+									 carefully. This is an often overlooked method for
+  a lot of folks. JMeter makes heavy use of cloning. Check out some of the
+  JMeter coniguration elements and controllers to see how they do it. Notice
+  that in most cases, a special method is usually invoked to perform base class
+  cloning activities. For configuration elements, this is
+  
+												<TT	>
+								configureClone
+						</TT>
+									. For controllers, it is 
+												<TT	>
+								standardCloneProc
+						</TT>
+									.
+  
+						</LI>
+							</OL>
+							  									 				<HR	>
+						</HR>
+							  		  </blockquote>
+		  </p>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+						  						    						  <br>
+						  </td>
+					 </tr>
+
+					 <tr><td colspan="2">
+						  <hr noshade size="1"/>
+					 </td></tr>
+					 <tr><td colspan="2">
+						  <div align="center"><font color="#525D76" size="-1"><em>
+						  Copyright &#169; 1999-2007, Apache Software Foundation
+						  </em></font></div>
+					 </td></tr>
+				</table>
+		  </body>
+	 </html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
