@@ -54,7 +54,7 @@ the several LDAP operations that can be used in building a complex testplan.
 <p>
 Take care when using LDAP special characters in the distinghuished name, in that case (eg, you want to use a + sign in a 
 distinghuished name) you need to escape the character by adding an "\" sign before that character.
-extra exeption: if you want to add a \ character in a distinghuised name (in an add or rename operation), you need to use 4 backslashes. 
+extra exeption: if you want to add a \ character in a distinguished name (in an add or rename operation), you need to use 4 backslashes. 
 examples:
 cn=dolf\+smits to add/search an entry with the name like cn=dolf+smits
 cn=dolf \\ smits to search an entry with the name cn=dolf \ smits
@@ -423,34 +423,6 @@ this is given in a (self defined) xml-style.
 </ol>
 </p>
 </subsection>
-
-<subsection name="9b.5 Saving the Test Plan" anchor="save_test">
-   <p>
-Although it is not required, we recommend that you save the Test Plan to a
-    file before running it.  To save the Test Plan, select Save Test Plan from the
-    File menu (with the latest release, it is no longer necessary to select the
-    Test Plan element first).
-</p>
-   <p>JMeter allows you to save the entire Test Plan tree or
-      only a portion of it.  To save only the elements located in a particular "branch"
-      of the Test Plan tree, select the Test Plan element in the tree from which to start
-      the "branch", and then click your right mouse button to access the Save As menu item.
-      Alternatively, select the appropriate Test Plan element  and then select Save As from
-      the Edit menu.
-</p>
-</subsection>
-
-<subsection name="9b.6 Running the Test Plan" anchor="run_test">
-<p>
-From the Run menu, select Run.
-</p>
-<p>
-   JMeter lights up a green square in the upper-right-hand corner to indicate if a
-    test is currently running.  The square is turned gray when all tests stop.  Even after
-    you select "stop", the green light will stay on until all test threads have exited.
-</p>
-</subsection>
-
 </section>
 </body>
 </document>

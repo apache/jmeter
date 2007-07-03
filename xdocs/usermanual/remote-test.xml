@@ -38,7 +38,9 @@ all the data from them.  This offers the following features:
 <li>Managment of multiple JMeterEngines from a single machine </li>
 </ul>
 </p>
-
+<p>
+However, remote mode does use more resources than running the same number of non-GUI tests independently.
+</p>
 <p>Note that while you can indeed execute the JMeterEngine on your application 
 server, you need to be mindful of the fact that this will be adding processing 
 overhead on the application server and thus your testing results will be 

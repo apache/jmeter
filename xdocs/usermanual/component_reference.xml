@@ -40,7 +40,11 @@
  -->
 <section name="&sect-num;.1 Samplers" anchor="samplers">
 <description>
-	<br>Samplers perform the actual work of JMeter.</br>
+	<p>
+	Samplers perform the actual work of JMeter.
+	Each sampler (except Test Action) generates one or more sample results.
+	The sample results have various attributes (success/fail, elapsed time, data size etc) and can be viewed in the various listeners.
+	</p>
 </description>
 <component name="FTP Request" index="&sect-num;.1.1" width="502" height="299" screenshot="ftptest/ftp-request.png">
 <description>This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
@@ -103,7 +107,8 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
         <p>There are two versions of the sampler
          - one uses the default Java HTTP implementation, the other uses Commons HttpClient.
-         The default (Java) implementation has some limitations:</p>
+         </p>
+         <p>The default (Java) implementation has some limitations:</p>
          <ul>
          <li>There is no control over how connections are re-used. 
          When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
@@ -475,7 +480,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 
 </component>
 
-<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="595" height="542" screenshot="ldapext_request.png">
+<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="594" height="309" screenshot="ldapext_request.png">
   <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
@@ -757,9 +762,10 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 
 
 <component name="BSF Sampler" index="&sect-num;.1.11"  width="396" height="217" screenshot="bsfsampler.png">
-<note>This is Alpha code</note>
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
-		
+		See the <a href="http://jakarta.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
+		website for details of the languages supported.
+		You may need to download the appropriate jars for the language; they should be put in the JMeter <b>lib</b> directory.
 		</p>
 	</description>
 <properties>

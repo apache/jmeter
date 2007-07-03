@@ -145,29 +145,8 @@ Users element and add a View Results in Table (Add --> Listener -->View Results 
 <section name="9.6 Saving the Test Plan" anchor="saving">
   <p>Although it is not required, we recommend that you save the Test Plan to a
     file before running it.  To save the Test Plan, select Save Test Plan from the
-    File menu (with the latest release, it is no longer necessary to select the
-    Test Plan element first).</p>
-
-    <note>JMeter allows you to save the entire Test Plan tree or
-      only a portion of it.  To save only the elements located in a particular "branch"
-      of the Test Plan tree, select the Test Plan element in the tree from which to start
-      the "branch", and then click your right mouse button to access the Save As menu item.
-      Alternatively, select the appropriate Test Plan element  and then select Save As from
-      the Edit menu.
-    </note>
-
+    File menu.</p>
 </section>
-
-<section name="9.7 Running the Test Plan" anchor="running">
-
-  <p>From the Run menu, select Run.</p>
-
-  <note>JMeter lights up a green square in the upper-right-hand corner to indicate if a
-    test is currently running.  The square is turned gray when all tests stop.  Even after
-    you select "stop", the green light will stay on until all test threads have exited.</note>
-
-</section>
-
 
 
 </body>

@@ -43,6 +43,7 @@ bearing in mind that this may very well crash one or more of our servers ?
 <p>Does our application have state ? If so, how does our application manage it
 (cookies, session-rewriting, or some other method) ?
 </p>
+<p>What is the testing intended to achieve?</p>
 </subsection>
 <subsection name="17.2 Resources">
 <p>The following resources will prove very helpful. Bear in mind that if you

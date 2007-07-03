@@ -25,7 +25,7 @@
 
 <section name="4. Elements of a Test Plan">
 
-<p>The Test Plan object has a new checkbox to select called "Functional Testing".  If selected, it
+<p>The Test Plan object has a checkbox called "Functional Testing".  If selected, it
 will cause JMeter to record the data returned from the server for each sample.  If you have 
 selected a file in your test listeners, this data will be written to file.  This can be useful if
 you are doing a small run to ensure that JMeter is configured correctly, and that your server
@@ -33,6 +33,7 @@ is returning the expected results.  The consequence is that the file will grow h
 JMeter's performance will suffer.  This option should be off if you are doing stress-testing (it
 is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
+<p>You can also use the Configuration button on a listener to decide what fields to save.</p>
 
 <subsection name="4.1 ThreadGroup" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.  All elements
@@ -218,8 +219,12 @@ The "View Results Tree" Listener shows details of sampler requests and responses
 Other listeners provide summary or aggregation information.
 </p>
 
-<p>Additionally, listeners can direct the data they collect to a file for later use.  Every 
-listener in JMeter provides a field to indicate the file to store data to.</p>
+<p>
+Additionally, listeners can direct the data to a file for later use.  
+Every listener in JMeter provides a field to indicate the file to store data to.
+There is also a Configuration button which can be used to choose which fields to save, and whether to use CSV or XML format.
+<b>Note that all Listeners save the same data; the only difference is in the way the data is presented on the screen.</b>
+</p>
 
 <p>Listeners can be added anywhere in the test.  They will collect data only from elements at or 
 below their level.  </p>
@@ -235,7 +240,7 @@ We recommend that you specify a delay by adding one of the available timers to
 your Thread Group. If you do not add a delay, JMeter could overwhelm your server by
 making too many requests in a very short amount of time.</p>
 
-<p>The timer will cause JMeter to delay a certain amount of time between each
+<p>The timer will cause JMeter to delay a certain amount of time before each
 request that a thread makes.</p>
 
 <p>
@@ -259,7 +264,10 @@ add an assertion to a HTTP Request that checks for the text, "&amp;lt;/HTML&amp;
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
 
-<p>To view the assertion results, add an Assertion Listener to the Thread Group.</p>
+<p>To view the assertion results, add an Assertion Listener to the Thread Group.
+Failed Assertions will also show up in the Tree View and Table Listeners, 
+and will count towards the error %age for example in the Aggregate and Summary reports.
+</p>
 </subsection>
 
 <subsection name="4.6 Configuration Elements" anchor="config_elements">
@@ -289,13 +297,54 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 
 <subsection name="4.9 Execution order" anchor="executionorder">
 <ol>
-<li>Timers - if any</li>
+<li>Pre-Processors</li>
+<li>Timers</li>
 <li>Sampler</li>
 <li>Post-Processors (unless SampleResult is null)</li>
 <li>Assertions (unless SampleResult is null)</li>
 <li>Listeners (unless SampleResult is null)</li>
 </ol>
 
+<note>
+Please note that Timers, Assertions, Pre- and Post-Processors are only processed if there is a sampler to which they apply.
+Logic Controllers and Samplers are processed in the order in which they appear in the tree. 
+Other test elements are processed according to the scope in which they are found, and the type of test element.
+[Within a type, elements are processed in the order in which they appear in the tree].
+</note>
+<p>
+For example, in the following test plan:
+<ul>
+<li>Controller</li>
+<ul>
+<li>Post-Processor 1</li>
+<li>Sampler 1</li>
+<li>Sampler 2</li>
+<li>Timer 1</li>
+<li>Assertion 1</li>
+<li>Pre-Processor 1</li>
+<li>Timer 2</li>
+<li>Post-Processor 2</li>
+</ul>
+</ul>
+The order of execution would be:
+<pre>
+Pre-Processor 1
+Timer 1
+Timer 2
+Sampler 1
+Post-Processor 1
+Post-Processor 2
+Assertion 1
+
+Pre-Processor 1
+Timer 1
+Timer 2
+Sampler 2
+Post-Processor 1
+Post-Processor 2
+Assertion 1
+</pre>
+</p>
 </subsection>
 
 </section>

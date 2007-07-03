@@ -67,7 +67,7 @@ Figure 8.1. Thread Group with Default Values</figure>
 <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter O'Reilly Users.</p>
 
-<p>Next, increase the number of users (called threads) to 4.</p>
+<p>Next, increase the number of users to 4.</p>
 
 <p>In the next field, the Ramp-Up Period, leave the the default value of 0
 seconds.  This property tells JMeter how long to delay between starting each
@@ -77,10 +77,9 @@ finish starting all of your users by the end of the 5 seconds.  So, if we have
 would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
 value to 0, then JMeter will immediately start all of your users.</p>
 
-<p>Finally, clear the checkbox labeled "Forever", and enter a value of 2 in
+<p>Finally, enter a value of 2 in
 the Loop Count field.  This property tells JMeter how many times to repeat your
-test. If you enter a loop count value of 0, then JMeter will run your test only
-once. To have JMeter repeatedly run your Test Plan, select the Forever
+test. To have JMeter repeatedly run your Test Plan, select the Forever
 checkbox.</p>
 
 <note>In most applications, you have to manually accept
