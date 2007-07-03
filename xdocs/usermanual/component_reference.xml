@@ -1486,6 +1486,12 @@ the contents are used to prefix the pathname.
 		The individual samples can still be seen in the Tree View Listener,
 		but no longer appear as separate entries in other Listeners.
 		</p>
+		<note>
+		Assertions (etc) can be added to the Transaction Controller.
+		However by default they will be applied to both the individual samples and the overall transaction sample.
+		To limit the scope of the Assertions, use a Simple Controller to contain the samples, and add the Assertions
+		to the Simple Controller.
+		</note>
 	</description>
 <properties>
 	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
