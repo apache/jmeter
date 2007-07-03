@@ -25,8 +25,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.net.URL;
+import java.util.Map;
 
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.samplers.SampleResult;
@@ -61,6 +64,11 @@ public class Proxy extends Thread {
 	/** Whether to try to spoof as https **/
 	private boolean httpsSpoof;
 
+    /** Reference to Deamon's Map of url string to page character encoding of that page */
+    private Map pageEncodings;
+    /** Reference to Deamon's Map of url string to character encoding for the form */
+    private Map formEncodings;
+
 	/**
 	 * Default constructor - used by newInstance call in Daemon
 	 */
@@ -88,11 +96,29 @@ public class Proxy extends Thread {
 	 *            the ProxyControl which will receive the generated sampler
 	 */
 	void configure(Socket _clientSocket, ProxyControl _target) {
-		this.target = _target;
-		this.clientSocket = _clientSocket;
-		this.captureHttpHeaders = _target.getCaptureHttpHeaders();
-		this.httpsSpoof = target.getHttpsSpoof();
-	}
+        configure(_clientSocket, _target, null, null);
+    }
+    
+    /**
+     * Configure the Proxy.
+     * 
+     * @param clientSocket
+     *            the socket connection to the client
+     * @param target
+     *            the ProxyControl which will receive the generated sampler
+     * @param pageEncodings
+     *            reference to the Map of Deamon, with mappings from page urls to encoding used
+     * @param formEncodingsEncodings
+     *            reference to the Map of Deamon, with mappings from form action urls to encoding used
+     */
+    void configure(Socket clientSocket, ProxyControl target, Map pageEncodings, Map formEncodings) {
+        this.target = target;
+        this.clientSocket = clientSocket;
+        this.captureHttpHeaders = target.getCaptureHttpHeaders();
+        this.httpsSpoof = target.getHttpsSpoof();
+        this.pageEncodings = pageEncodings;
+        this.formEncodings = formEncodings;
+    }
 
 	/**
 	 * Main processing method for the Proxy object
@@ -118,7 +144,7 @@ public class Proxy extends Thread {
 
 			// Populate the sampler. It is the same sampler as we sent into
 			// the constructor of the HttpRequestHdr instance above 
-			request.getSampler();
+            request.getSampler(pageEncodings, formEncodings);
 
 			/*
 			 * Create a Header Manager to ensure that the browsers headers are
@@ -145,7 +171,12 @@ public class Proxy extends Thread {
 				String noHttpsResult = new String(result.getResponseData());
 				result.setResponseData(noHttpsResult.replaceAll("https", "http").getBytes());
 			}
-				
+
+            // Find the page encoding and possibly encodings for forms in the page
+            // in the response from the web server
+            String pageEncoding = addPageEncoding(result);
+            addFormEncodings(result, pageEncoding);
+
 			writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
 			/*
 			 * We don't want to store any cookies in the generated test plan
@@ -241,4 +272,73 @@ public class Proxy extends Thread {
 			log.warn("Exception while writing error", e);
 		}
 	}
+
+    /**
+     * Add the page encoding of the sample result to the Map with page encodings
+     * 
+     * @param result the sample result to check
+     * @return the page encoding found for the sample result, or null
+     */
+    private String addPageEncoding(SampleResult result) {
+        String pageEncoding = getContentEncoding(result);
+        if(pageEncoding != null) {
+            String urlWithoutQuery = getUrlWithoutQuery(result.getURL());
+            synchronized(pageEncodings) {
+                pageEncodings.put(urlWithoutQuery, pageEncoding);
+            }
+        }
+        return pageEncoding;
+    }
+    
+    /**
+     * Add the form encodings for all forms in the sample result
+     * 
+     * @param result the sample result to check
+     * @param pageEncoding the encoding used for the sample result page
+     */
+    private void addFormEncodings(SampleResult result, String pageEncoding) {
+        FormCharSetFinder finder = new FormCharSetFinder();
+        try {
+            finder.addFormActionsAndCharSet(result.getResponseDataAsString(), formEncodings, pageEncoding);
+        }
+        catch (HTMLParseException parseException) {
+            log.debug("Unable to parse response, could not find any form character set encodings");
+        }
+    }
+
+    /**
+     * Get the value of the charset of the content-type header of the sample result
+     * 
+     * @param res the sample result to find the charset for
+     * @return the charset found, or null
+     */
+    private String getContentEncoding(SampleResult res) {
+        String contentTypeHeader = res.getContentType();
+        String charSet = null;
+        if (contentTypeHeader != null) {
+            int charSetStartPos = contentTypeHeader.toLowerCase().indexOf("charset=");
+            if (charSetStartPos > 0) {
+                charSet = contentTypeHeader.substring(charSetStartPos + "charset=".length());
+                if (charSet != null) {
+                    if (charSet.trim().length() > 0) {
+                        charSet = charSet.trim();
+                    } else {
+                        charSet = null;
+                    }
+                }
+            }
+        }
+        return charSet;
+    }
+
+    private String getUrlWithoutQuery(URL url) {
+        String fullUrl = url.toString();
+        String urlWithoutQuery = fullUrl;
+        String query = url.getQuery();
+        if(query != null) {
+            // Get rid of the query and the ?
+            urlWithoutQuery = urlWithoutQuery.substring(0, urlWithoutQuery.length() - query.length() - 1);
+        }
+        return urlWithoutQuery;
+    }
 }

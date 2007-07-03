@@ -361,18 +361,33 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 *            The new Path value
 	 */
 	public void setPath(String path) {
-		if (GET.equals(getMethod())) {
-			int index = path.indexOf(QRY_PFX);
-			if (index > -1) {
-				setProperty(PATH, path.substring(0, index));
-				parseArguments(path.substring(index + 1));
-			} else {
-				setProperty(PATH, path);
-			}
-		} else {
-			setProperty(PATH, path);
-		}
-	}
+        // We know that URL arguments should always be encoded in UTF-8 according to spec
+        setPath(path, EncoderCache.URL_ARGUMENT_ENCODING);
+    }
+    
+    /**
+     * Sets the Path attribute of the UrlConfig object Also calls parseArguments
+     * to extract and store any query arguments
+     * 
+     * @param path
+     *            The new Path value
+     * @param contentEncoding
+     *            The encoding used for the querystring parameter values
+     */
+    public void setPath(String path, String contentEncoding) {
+        if (GET.equals(getMethod())) {
+            int index = path.indexOf(QRY_PFX);
+            if (index > -1) {
+                setProperty(PATH, path.substring(0, index));
+                // Parse the arguments in querystring, assuming specified encoding for values
+                parseArguments(path.substring(index + 1), contentEncoding);
+            } else {
+                setProperty(PATH, path);
+            }
+        } else {
+            setProperty(PATH, path);
+        }
+    }
 
 	public String getPath() {
 		String p = getPropertyAsString(PATH);
@@ -463,20 +478,44 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         this.addEncodedArgument(name, value, ARG_VAL_SEP);
     }
 
-	public void addEncodedArgument(String name, String value, String metaData) {
+	public void addEncodedArgument(String name, String value, String metaData, String contentEncoding) {
         if (log.isDebugEnabled()){
-		    log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData);
+		    log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData + " contentEncoding: " + contentEncoding);
+        }
+        
+		HTTPArgument arg = null;
+        if(contentEncoding != null) {
+            arg = new HTTPArgument(name, value, metaData, true, contentEncoding);
+        }
+        else {
+            arg = new HTTPArgument(name, value, metaData, true);
         }
 
-        
-		HTTPArgument arg = new HTTPArgument(name, value, metaData, true);
-
-		if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue())) {
+        // Check if there are any difference between name and value and their encoded name and value
+        String valueEncoded = null;
+        if(contentEncoding != null) {
+            try {
+                valueEncoded = arg.getEncodedValue(contentEncoding);
+            }
+            catch (UnsupportedEncodingException e) {
+                log.warn("Unable to get encoded value using encoding " + contentEncoding);
+                valueEncoded = arg.getEncodedValue();
+            }
+        }
+        else {
+            valueEncoded = arg.getEncodedValue();
+        }
+        // If there is no difference, we mark it as not needing encoding
+		if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(valueEncoded)) {
 			arg.setAlwaysEncoded(false);
 		}
 		this.getArguments().addArgument(arg);
 	}
-    
+
+    public void addEncodedArgument(String name, String value, String metaData) {
+        this.addEncodedArgument(name, value, metaData, null);
+    }
+
     public void addNonEncodedArgument(String name, String value, String metadata) {
         HTTPArgument arg = new HTTPArgument(name, value, metadata, false);
         arg.setAlwaysEncoded(false);
@@ -758,22 +797,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 		return buf.toString();
 	}
 
-	// Mark Walsh 2002-08-03, modified to also parse a parameter name value
-	// string, where string contains only the parameter name and no equal sign.
-	/**
-	 * This method allows a proxy server to send over the raw text from a
-	 * browser's output stream to be parsed and stored correctly into the
-	 * UrlConfig object.
-	 * 
-	 * For each name found, addArgument() is called
-	 * 
-	 * @param queryString -
-	 *            the query string
-	 * 
-	 */
-	public void parseArguments(String queryString) {
-		String[] args = JOrphanUtils.split(queryString, QRY_SEP);
-		for (int i = 0; i < args.length; i++) {
+    // Mark Walsh 2002-08-03, modified to also parse a parameter name value
+    // string, where string contains only the parameter name and no equal sign.
+    /**
+     * This method allows a proxy server to send over the raw text from a
+     * browser's output stream to be parsed and stored correctly into the
+     * UrlConfig object.
+     * 
+     * For each name found, addArgument() is called
+     * 
+     * @param queryString -
+     *            the query string
+     * @param contentEncoding -
+     *            the content encoding of the query string. The query string might
+     *            actually be the post body of a http post request.
+     */
+    public void parseArguments(String queryString, String contentEncoding) {
+        String[] args = JOrphanUtils.split(queryString, QRY_SEP);
+        for (int i = 0; i < args.length; i++) {
 			// need to handle four cases: 
             // - string contains name=value
 			// - string contains name=
@@ -794,19 +835,26 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				metaData = "";
                 name=args[i];
                 value="";
-			}
-			if (name.length() > 0) {
-                // The browser has already done the encoding, so save the values as is 
-                HTTPArgument arg = new HTTPArgument(name, value, metaData, false);
-                // and make sure they stay that way:
-                arg.setAlwaysEncoded(false);
-                // Note that URL.encode()/decode() do not follow RFC3986 entirely
-				this.getArguments().addArgument(arg);
-				// TODO: this leaves the arguments in encoded form, which may be difficult to read
-                // if we can find proper coding methods, this could be tidied up 
             }
-		}
-	}
+            if (name.length() > 0) {
+                // If we know the encoding, we can decode the argument value,
+                // to make it easier to read for the user
+                if(contentEncoding != null) {
+                    addEncodedArgument(name, value, metaData, contentEncoding);
+                }
+                else {
+                    // If we do not know the encoding, we just use the encoded value
+                    // The browser has already done the encoding, so save the values as is
+                    addNonEncodedArgument(name, value, metaData);
+                }
+            }
+        }
+    }
+
+    public void parseArguments(String queryString) {
+        // We do not know the content encoding of the query string
+        parseArguments(queryString, null);
+    }
 
 	public String toString() {
 		try {
@@ -1195,6 +1243,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				res.addSubResult(errorResult(new Exception("Maximum frame/iframe nesting depth exceeded."), res));
 			} else {
 				// If we followed redirects, we already have a container:
+                if(!areFollowingRedirect) {
 				HTTPSampleResult container = (HTTPSampleResult) (areFollowingRedirect ? res.getParent() : res);
 
 				// Only download page resources if we were not redirected.
@@ -1203,6 +1252,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 				if(!wasRedirected) {
 					res = downloadPageResources(res, container, frameDepth);
 				}
+                }
 			}
 		}
 		return res;

@@ -38,7 +38,7 @@ Some of the main enhancements are:
 <li>HttpClient options can be specified via httpclient.parameters file</li>
 <li>HttpClient now behaves the same as Java Http for SSL certificates</li>
 <li>HTTP Mirror Server to allow local testing of HTTP samplers</li>
-<li>HTTP Proxy supports XML-RPC recording</li>
+<li>HTTP Proxy supports XML-RPC recording, and other proxy improvements</li>
 <li>__V() function allows support of nested variable references</li>
 <li>LDAP Ext sampler optionally parses result sets and supports secure mode</li>
 <li>FTP Sampler supports Ascii/Binary mode and upload</li>
@@ -145,6 +145,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Bug 41880 - Add content-type filtering to HTTP Proxy Server</li>
 <li>Bug 41876 - Add more options to control what the HTTP Proxy generates</li>
 <li>Bug 42158 - Improve support for multipart/form-data requests in HTTP Proxy server</li>
+<li>Bug 42173 - Let HTTP Proxy handle encoding of request, and undecode parameter values</li>
 <li>Bug 42674 - default to pre-emptive HTTP authorisation if not specified</li>
 <li>Support "file" protocol in HTTP Samplers</li>
 <li>Http Autoredirects are now enabled by default when creating new samplers</li>
