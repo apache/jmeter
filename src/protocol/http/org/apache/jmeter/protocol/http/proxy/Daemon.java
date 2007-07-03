@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -66,6 +69,11 @@ public class Daemon extends Thread {
 	 * class must be the {@link Proxy} class or a subclass.
 	 */
 	private Class proxyClass = Proxy.class;
+
+    /** A Map of url string to page character encoding of that page */
+    private Map pageEncodings;
+    /** A Map of url string to character encoding for the form */
+    private Map formEncodings;
 
 	/**
 	 * Default constructor.
@@ -161,6 +169,10 @@ public class Daemon extends Thread {
 		running = true;
 		ServerSocket mainSocket = null;
 
+        // Maps to contain page and form encodings
+        pageEncodings = Collections.synchronizedMap(new HashMap());
+        formEncodings = Collections.synchronizedMap(new HashMap());
+        
 		try {
 			log.info("Creating Daemon Socket... on port " + daemonPort);
 			mainSocket = new ServerSocket(daemonPort);
@@ -174,7 +186,7 @@ public class Daemon extends Thread {
 					if (running) {
 						// Pass request to new proxy thread
 						Proxy thd = (Proxy) proxyClass.newInstance();
-						thd.configure(clientSocket, target);
+                        thd.configure(clientSocket, target, pageEncodings, formEncodings);
 						thd.start();
 					} else {
 						// The socket was accepted after we were told to stop.
@@ -199,6 +211,10 @@ public class Daemon extends Thread {
 			} catch (Exception exc) {
 			}
 		}
+        
+        // Clear maps
+        pageEncodings = null;
+        formEncodings = null;
 	}
 
 	/**

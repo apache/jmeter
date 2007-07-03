@@ -88,37 +88,65 @@ public class HTTPArgument extends Argument implements Serializable {
 		this(name, value, false);
 	}
 
-	public HTTPArgument(String name, String value, boolean alreadyEncoded) {
-		setAlwaysEncoded(true);
-		if (alreadyEncoded) {
-			try {
-				name = URLDecoder.decode(name, EncoderCache.URL_ARGUMENT_ENCODING);
-				value = URLDecoder.decode(value, EncoderCache.URL_ARGUMENT_ENCODING);
-			} catch (UnsupportedEncodingException e) {
-				// UTF-8 unsupported? You must be joking!
-				log.error("UTF-8 encoding not supported!");
-				throw new Error(e.toString());
-			}
-		}
-		setName(name);
-		setValue(value);
-		setMetaData("=");
-	}
+    public HTTPArgument(String name, String value, boolean alreadyEncoded) {
+        // We assume the argument value is encoded according to the HTTP spec, i.e. UTF-8
+        this(name, value, alreadyEncoded, EncoderCache.URL_ARGUMENT_ENCODING);
+    }
 
-	public HTTPArgument(String name, String value, String metaData, boolean alreadyEncoded) {
-		this(name, value, alreadyEncoded);
-		setMetaData(metaData);
-	}
+    /**
+     * Construct a new HTTPArgument instance
+     * 
+     * @param name the name of the parameter
+     * @param value the value of the parameter
+     * @param alreadyEncoded true if the name and value is already encoded
+     * @param contentEncoding the encoding used for the parameter value
+     */
+    public HTTPArgument(String name, String value, boolean alreadyEncoded, String contentEncoding) {
+        setAlwaysEncoded(true);
+        if (alreadyEncoded) {
+            try {
+                // We assume the name is always encoded according to spec
+                name = URLDecoder.decode(name, EncoderCache.URL_ARGUMENT_ENCODING);
+                // The value is encoded in the specified encoding
+                value = URLDecoder.decode(value, contentEncoding);
+            } catch (UnsupportedEncodingException e) {
+                log.error(contentEncoding + " encoding not supported!");
+                throw new Error(e.toString());
+            }
+        }
+        setName(name);
+        setValue(value);
+        setMetaData("=");
+    }
 
-	public HTTPArgument(Argument arg) {
-		this(arg.getName(), arg.getValue(), arg.getMetaData());
-	}
+    public HTTPArgument(String name, String value, String metaData, boolean alreadyEncoded) {
+        // We assume the argument value is encoded according to the HTTP spec, i.e. UTF-8
+        this(name, value, metaData, alreadyEncoded, EncoderCache.URL_ARGUMENT_ENCODING);
+    }
 
-	/**
-	 * Constructor for the Argument object
-	 */
-	public HTTPArgument() {
-	}
+    /**
+     * Construct a new HTTPArgument instance
+     * 
+     * @param name the name of the parameter
+     * @param value the value of the parameter
+     * @param metaData the separator to use between name and value
+     * @param alreadyEncoded true if the name and value is already encoded
+     * @param contentEncoding the encoding used for the parameter value
+     */
+    public HTTPArgument(String name, String value, String metaData, boolean alreadyEncoded, String contentEncoding) {
+        this(name, value, alreadyEncoded, contentEncoding);
+        setMetaData(metaData);
+    }
+
+    public HTTPArgument(Argument arg) {
+        this(arg.getName(), arg.getValue(), arg.getMetaData());
+    }
+
+    /**
+     * Constructor for the Argument object
+     */
+    public HTTPArgument() {
+    }
 
 	/**
 	 * Sets the Name attribute of the Argument object.

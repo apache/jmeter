@@ -21,6 +21,10 @@ package org.apache.jmeter.protocol.http.proxy;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,6 +42,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 //For unit tests, @see TestHttpRequestHdr
@@ -71,7 +76,7 @@ public class HttpRequestHdr {
 	 */
 	private String version = ""; // NOTREAD // $NON-NLS-1$
 
-	private String postData = ""; // $NON-NLS-1$
+    private byte[] rawPostData;
 
 	private Map headers = new HashMap();
 
@@ -134,9 +139,11 @@ public class HttpRequestHdr {
 				readLength++;
 			}
 		}
-		postData = line.toString();
+        // Keep the raw post data
+        rawPostData = line.toByteArray();
+
         if (log.isDebugEnabled()){
-    		log.debug("postData: " + postData);
+            log.debug("rawPostData in default JRE encoding: " + new String(rawPostData));
     		log.debug("Request: " + clientRequest.toString());
         }
 		return clientRequest.toByteArray();
@@ -198,7 +205,8 @@ public class HttpRequestHdr {
 		return headerManager;
 	}
 
-	public HTTPSamplerBase getSampler() {
+    public HTTPSamplerBase getSampler(Map pageEncodings, Map formEncodings)
+            throws MalformedURLException, IOException, ProtocolException {
 		// Damn! A whole new GUI just to instantiate a test element?
 		// Isn't there a beter way?
 		HttpTestSampleGui tempGui = null;
@@ -210,7 +218,9 @@ public class HttpRequestHdr {
 			tempGui = new HttpTestSampleGui();
 		}
 		sampler.setProperty(TestElement.GUI_CLASS, tempGui.getClass().getName());
-		populateSampler();
+
+        // Populate the sampler
+        populateSampler(pageEncodings, formEncodings);
 		
 		tempGui.configure(sampler);
 		tempGui.modifyTestElement(sampler);
@@ -222,6 +232,19 @@ public class HttpRequestHdr {
     		log.debug("getSampler: sampler path = " + sampler.getPath());
 		return sampler;
 	}
+    
+    /**
+     * 
+     * @return
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws ProtocolException
+     * @deprecated use the getSampler(HashMap pageEncodings, HashMap formEncodings) instead, since
+     * that properly handles the encodings of the page
+     */
+    public HTTPSamplerBase getSampler() throws MalformedURLException, IOException, ProtocolException {
+        return getSampler(null, null);
+    }
 
 	private String getContentType() {
 		Header contentTypeHeader = (Header) headers.get(CONTENT_TYPE);
@@ -230,6 +253,24 @@ public class HttpRequestHdr {
 		}
         return null;
 	}
+
+    private String getContentEncoding() {
+        String contentType = getContentType();
+        if(contentType != null) {
+            int charSetStartPos = contentType.toLowerCase().indexOf("charset="); 
+            if(charSetStartPos >= 0) {
+                String charSet = contentType.substring(charSetStartPos + "charset=".length());
+                if(charSet != null && charSet.length() > 0) {
+                    // Remove quotes if present 
+                    charSet = JOrphanUtils.replaceAllChars(charSet, '"', "");
+                    if(charSet.length() > 0) {
+                        return charSet;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     private boolean isMultipart(String contentType) {
         if (contentType != null && contentType.startsWith(HTTPSamplerBase.MULTIPART_FORM_DATA)) {
@@ -250,22 +291,13 @@ public class HttpRequestHdr {
         }
     }
 
-	private void populateSampler() {
-		sampler.setDomain(serverName());
+    private void populateSampler(Map pageEncodings, Map formEncodings) 
+            throws MalformedURLException, UnsupportedEncodingException {        
+        sampler.setDomain(serverName());
         if (log.isDebugEnabled())
     		log.debug("Proxy: setting server: " + sampler.getDomain());
 		sampler.setMethod(method);
 		log.debug("Proxy: method server: " + sampler.getMethod());
-		sampler.setPath(serverUrl());
-        if (log.isDebugEnabled())
-    		log.debug("Proxy: setting path: " + sampler.getPath());
-		if (numberRequests) {
-			requestNumber++;
-			sampler.setName(requestNumber + " " + sampler.getPath());
-		} else {
-			sampler.setName(sampler.getPath());
-		}
-		sampler.setPort(serverPort());
         if (log.isDebugEnabled())
             log.debug("Proxy: setting port: " + sampler.getPort());
 		if (url.indexOf("//") > -1) {
@@ -273,7 +305,7 @@ public class HttpRequestHdr {
             if (log.isDebugEnabled())
     			log.debug("Proxy: setting protocol to : " + protocol);
 			sampler.setProtocol(protocol);
-		} else if (sampler.getPort() == 443) {
+		} else if (sampler.getPort() == HTTPSamplerBase.DEFAULT_HTTPS_PORT) {
 			sampler.setProtocol(HTTPS);
             if (log.isDebugEnabled())
     			log.debug("Proxy: setting protocol to https");
@@ -282,6 +314,82 @@ public class HttpRequestHdr {
     			log.debug("Proxy setting default protocol to: http");
 			sampler.setProtocol(HTTP);
 		}
+        
+        URL pageUrl = null;
+        if(sampler.isProtocolDefaultPort()) {            
+            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), serverUrl());
+        }
+        else {
+            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), sampler.getPort(), serverUrl());
+        }
+        String urlWithoutQuery = getUrlWithoutQuery(pageUrl);
+        
+
+        // Check if the request itself tells us what the encoding is
+        String contentEncoding = null;
+        String requestContentEncoding = getContentEncoding();
+        if(requestContentEncoding != null) {
+            contentEncoding = requestContentEncoding;
+        }
+        else {        
+            // Check if we know the encoding of the page
+            if (pageEncodings != null) {
+                synchronized (pageEncodings) {
+                    contentEncoding = (String) pageEncodings.get(urlWithoutQuery);
+                }
+            }
+            // Check if we know the encoding of the form
+            if (formEncodings != null) {
+                synchronized (formEncodings) {
+                    String formEncoding = (String) formEncodings.get(urlWithoutQuery);
+                    // Form encoding has priority over page encoding
+                    if (formEncoding != null) {
+                        contentEncoding = formEncoding;
+                    }
+                }
+            }
+        }
+
+        // Get the post data using the content encoding of the request
+        String postData = null;
+        if (log.isDebugEnabled()) {
+            if(contentEncoding != null) {
+                log.debug("Using encoding " + contentEncoding + " for request body");
+            }
+            else {
+                log.debug("No encoding found, using JRE default encoding for request body");
+            }
+        }
+        if (contentEncoding != null) {
+            postData = new String(rawPostData, contentEncoding);
+        } else {
+            // Use default encoding
+            postData = new String(rawPostData);
+        }
+
+        if(contentEncoding != null) {
+            sampler.setPath(serverUrl(), contentEncoding);
+        }
+        else {
+            // Although the spec says UTF-8 should be used for encoding URL parameters,
+            // most browser use ISO-8859-1 for default if encoding is not known.
+            // We use null for contentEncoding, then the url parameters will be added
+            // with the value in the URL, and the "encode?" flag set to false
+            sampler.setPath(serverUrl(), null);
+        }
+        if (log.isDebugEnabled())
+            log.debug("Proxy: setting path: " + sampler.getPath());
+        if (numberRequests) {
+            requestNumber++;
+            sampler.setName(requestNumber + " " + sampler.getPath());
+        } else {
+            sampler.setName(sampler.getPath());
+        }
+        
+        // Set the content encoding
+        if(contentEncoding != null) {
+            sampler.setContentEncoding(contentEncoding);
+        }
         
         // If it was a HTTP GET request, then all parameters in the URL
         // has been handled by the sampler.setPath above, so we just need
@@ -316,7 +424,7 @@ public class HttpRequestHdr {
                 // It is the most common post request, with parameter name and values
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
-                sampler.parseArguments(postData); //standard name=value postData
+                sampler.parseArguments(postData.trim(), contentEncoding); //standard name=value postData
             } else if (postData != null && postData.length() > 0) {
                 // Just put the whole postbody as the value of a parameter
                 sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
@@ -431,4 +539,14 @@ public class HttpRequestHdr {
 		return strBuff.toString();
 	}
 
+    private String getUrlWithoutQuery(URL url) {
+        String fullUrl = url.toString();
+        String urlWithoutQuery = fullUrl;
+        String query = url.getQuery();
+        if(query != null) {
+            // Get rid of the query and the ?
+            urlWithoutQuery = urlWithoutQuery.substring(0, urlWithoutQuery.length() - query.length() - 1);
+        }
+        return urlWithoutQuery;
+    }
 }
