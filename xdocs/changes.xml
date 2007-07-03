@@ -45,6 +45,7 @@ Some of the main enhancements are:
 <li>Transaction Controller now generates Sample with subresults</li>
 <li>HTTPS session contexts are now per-thread, rather than shared. This gives better emulation of multiple users</li>
 <li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
+<li>Coloured icons in Tree View Listener and elsewhere to better differentiate failed samples.</li>
 </ul>
 <p>
 The main bug fixes are:
@@ -54,6 +55,7 @@ The main bug fixes are:
 <li>Various Remote mode bugs fixed</li>
 <li>Control+C and Control+V now work in the test tree</li>
 <li>Latency and Encoding now available in CSV log output</li>
+<li>Test elements no longer default to previous contents; test elements no longer cleared when changing language.</li>
 </ul>
 <h4>Known problems:</h4>
 <p>Thread active counts are always zero in CSV and XML files when running remote tests.
@@ -71,8 +73,8 @@ BeanShell test elements leak memory.
 This can be reduced by using a file instead of including the script in the test element.
 </p>
 <p>
-Variables and functions do not work in Listeners in client-server (remote) mode so cannot be used
-to name log files.
+Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
+to name log files in client-server mode.
 </p>
 <h4>Incompatible changes (usage):</h4>
 <p>
@@ -93,10 +95,10 @@ has been removed.
 </p>
 <p>The Transaction Controller no longer appears as a separate sample; it now includes its nested samples as subsamples</p>
 <p>
-Control-Z no longer used for Remote Start All; replaced by Control+Shift+R
+Control-Z no longer used for Remote Start All - this now uses Control+Shift+R
 </p>
 <p>
-By default, SSL session contexts are now created per-thread, rather than being shared.
+By default, SSL session contexts are created per-thread, rather than being shared.
 The original behaviour can be enabled by setting the JMeter property:
 <pre>
 https.sessioncontext.shared=true
@@ -130,58 +132,72 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 
 <h4>New functionality/improvements:</h4>
 <ul>
-<li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
-<li>Added beanshell.init.file property to run a BeanShell script at startup</li>
-<li>Added timeout for WebService (SOAP) Sampler</li>
-<li>Bug 40804 - Change Counter default to max = Long.MAX_VALUE</li>
-<li>BeanShell Post-Processor no longer ignores samples with zero-length result data</li>
-<li>Use property jmeter.home (if present) to override user.dir when starting JMeter</li>
-<li>Bug 41457 - Add TCP Sampler option to not re-use connections</li>
-<li>Bug 41522 - Use JUnit sampler name in sample results</li>
-<li>HttpClient now behaves the same as the JDK http sampler for invalid certificates etc</li>
 <li>Add Domain and Realm support to HTTP Authorisation Manager</li>
-<li>Bug 33964 - send file as entire post body if name/type are omitted</li>
-<li>HTTP Mirror Server Workbench element</li>
-<li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
-<li>Bug 39717 - use icons in the results tree</li>
-<li>Added __V variable function to resolve nested variable names</li>
-<li>Bug 41707 - HTTP Proxy XML-RPC support</li>
-<li>Bug 40381 - LDAP: more descriptive strings</li>
-<li>Bug 40369 (partial) Equals Response Assertion</li>
+<li>HttpClient now behaves the same as the JDK http sampler for invalid certificates etc</li>
+<li>Added httpclient.parameters.file to allow HttpClient parameters to be defined</li>
+<li>Bug 33964 - Http Requests can send a file as the entire post body if name/type are omitted</li>
 <li>Bug 41705 - add content-encoding option to HTTP samplers for POST requests</li>
-<li>Bug 40933, 40945 - optional matching of embedded resource URLs</li>
-<li>Bug 41704 - Allow charset encoding to be specified for CSV DataSet</li>
+<li>Bug 40933, 40945 - optional RE matching when retrieving embedded resource URLs</li>
+<li>Bug 27780 - (patch 19936) create multipart/form-data HTTP request without uploading file</li>
+<li>Bug 42098 - Use specified encoding for parameter values in HTTP GET</li>
+<li>Bug 42506 - JMeter threads now use independent SSL sessions</li>
+<li>Bug 41707 - HTTP Proxy XML-RPC support</li>
+<li>Bug 41880 - Add content-type filtering to HTTP Proxy Server</li>
+<li>Bug 41876 - Add more options to control what the HTTP Proxy generates</li>
+<li>Bug 42158 - Improve support for multipart/form-data requests in HTTP Proxy server</li>
+<li>Bug 42674 - default to pre-emptive HTTP authorisation if not specified</li>
+<li>Support "file" protocol in HTTP Samplers</li>
+<li>Http Autoredirects are now enabled by default when creating new samplers</li>
+
 <li>Bug 40103 - various LDAP enhancements</li>
+<li>Bug 40369 - LDAP: Stable search results in sampler</li>
+<li>Bug 40381 - LDAP: more descriptive strings</li>
+
+<li>BeanShell Post-Processor no longer ignores samples with zero-length result data</li>
+<li>Added beanshell.init.file property to run a BeanShell script at startup</li>
 <li>Bug 39864 - BeanShell init files now found from currrent or bin directory</li>
+<li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
+<li>BSF Sampler passes additional variables to the script</li>
+
+<li>Added timeout for WebService (SOAP) Sampler</li>
+
+<li>Bug 40825 - Add JDBC prepared statement support</li>
+<li>Extend JDBC Sampler: Commit, Rollback, AutoCommit</li>
+
+<li>Bug 41457 - Add TCP Sampler option to not re-use connections</li>
+
+<li>Bug 41522 - Use JUnit sampler name in sample results</li>
+
+<li>Bug 42223 - FTP Sampler can now upload files</li>
+
+<li>Bug 40804 - Change Counter default to max = Long.MAX_VALUE</li>
+
+<li>Use property jmeter.home (if present) to override user.dir when starting JMeter</li>
 <li>New -j option to easily change jmeter log file</li>
+
+<li>HTTP Mirror Server Workbench element</li>
+
+<li>Bug 41253 - extend XPathExtractor to work with non-NodeList XPath expressions</li>
+<li>Bug 42088 - Add XPath Assertion for booleans</li>
+
+<li>Added __V variable function to resolve nested variable names</li>
+
+<li>Bug 40369 - Equals Response Assertion</li>
+<li>Bug 41704 - Allow charset encoding to be specified for CSV DataSet</li>
 <li>Bug 41259 - Comment field added to all test elements</li>
 <li>Add standard deviation to Summary Report</li>
 <li>Bug 41873 - Add name to AssertionResult and display AssertionResult in ViewResultsFullVisualizer</li>
-<li>Bug 41876 - Add more options to control what the HTTP Proxy generates</li>
-<li>Bug 39693 - View Result Table use icon instead of check box</li>
-<li>Bug 41880 - Add content-type filtering to HTTP Proxy Server</li>
-<li>Bug 40825 - Add JDBC prepared statement support</li>
-<li>Bug 27780 - (patch 19936) create multipart/form-data HTTP request without uploading file</li>
-<li>Bug 42098 - Use specified encoding for parameter values in HTTP GET</li>
-<li>Bug 42088 - Add XPath Assertion for booleans</li>
-<li>Bug 42158 - Improve support for multipart/form-data requests in HTTP Proxy server</li>
-<li>Bug 40369 - LDAP: Stable search results in sampler</li>
 <li>Bug 36755 - Save XML test files with UTF-8 encoding</li>
-<li>Bug 42223 - Add ability to upload files via FTP</li>
-<li>Extend JDBC Sampler: Commit, Rollback, AutoCommit</li>
-<li>Bug 42247 - improve HCI</li>
-<li>Support "file" protocol in HTTP Samplers</li>
-<li>Allow user to cancel out of Close dialogue</li>
 <li>Use ISO date-time format for Tree View Listener (previously the year was not shown)</li>
 <li>Improve loading of CSV files: if possible, use header to determine format; guess timestamp format if not milliseconds</li>
 <li>Bug 41913 - TransactionController now creates samples as sub-samples of the transaction</li>
-<li>Bug 42506 - JMeter threads all use the same SSL session</li>
-<li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 <li>Bug 42582 - JSON pretty printing in Tree View Listener</li>
-<li>Http Autoredirects are now enabled by default when creating new samplers</li>
-<li>Bug 42674 - default to pre-emptive authorisation if not specified</li>
-<li>BSF Sampler passes additional variables to the script</li>
 <li>Bug 40099 - Enable use of object variable in ForEachController</li>
+
+<li>Bug 39693 - View Result Table uses icon instead of check box</li>
+<li>Bug 39717 - use icons in the results tree</li>
+<li>Bug 42247 - improve HCI</li>
+<li>Allow user to cancel out of Close dialogue</li>
 </ul>
 
 <h4>Non-functional improvements:</h4>
