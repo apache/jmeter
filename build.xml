@@ -1058,20 +1058,13 @@ run JMeter unless all the JMeter jars are added.
 		<include name="${velocity.jar}"/>
   	</patternset>
 
-	<!-- Invoke with -Djmeter.version=m.n 
-	     N.B. Included in distribution target
-	-->
-	<target name="site" 
-		depends="init-version,docs-site,docs-api,pack-site"
-		description="Build site documentation separately (see: distribution)"/>
-
 	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org
 	Creates clean build and all documentation
 	Creates runtime and source distributions and site documentation
 	-->
 	<target name="distribution" 
-		depends="clean,install,docs-all,test,_distribution,pack-site"
-		description="Build JMeter for end-user distribution (includes site)"/>
+		depends="clean,install,docs-all,test,_distribution"
+		description="Build JMeter for end-user distribution"/>
 
 	<target
 		name="nightly"
@@ -1289,41 +1282,6 @@ run JMeter unless all the JMeter jars are added.
     </target>
 
 
-   <!-- When creating the tars for the web-site, no version prefix directory is added -->
-   <target name="pack-site"  depends="init-version">
-     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
-     <!-- Note: define pack.name here so it overrides any existing value -->
-     <antcall target="_pack_site_api">
-        <param name="pack.name" value="${dist.name}_api"/>
-     </antcall>
-     <antcall target="_pack_site_doc">
-        <param name="pack.name" value="${dist.name}_doc"/>
-     </antcall>
-   </target>
- 
-   <target name="_pack_site_doc">
-    <property name="pack.name" value="${dist.name}_doc"/>
-     <mkdir dir="${site.dir}"/>
-     <tar destfile="${site.dir}/${pack.name}.tar" longfile="gnu">
-      <tarfileset dir="${dest.docs}" includes="**" excludes="api/**" prefix="" defaultexcludes="yes"/>
-     </tar>
-    <gzip zipfile="${site.dir}/${pack.name}.tgz" src="${site.dir}/${pack.name}.tar" />
-	<!-- no longer needed -->
-	<delete file="${dist.dir}/${pack.name}.tar"/>
-     <!-- no point in creating Zip version as well -->
-    </target>
-
-   <target name="_pack_site_api">
-    <property name="pack.name" value="${dist.name}_api"/>
-     <mkdir dir="${site.dir}"/>
-     <tar destfile="${site.dir}/${pack.name}.tar" longfile="gnu">
-      <tarfileset dir="${dest.docs.api}" includes="**"  prefix="api" defaultexcludes="yes"/>
-     </tar>
-    <gzip zipfile="${site.dir}/${pack.name}.tgz" src="${site.dir}/${pack.name}.tar" />
-	<!-- no longer needed -->
-	<delete file="${dist.dir}/${pack.name}.tar"/>
-     <!-- no point in creating Zip version as well -->
-    </target>
     
 <!-- 
     Utility target to create MD5 checksums in standard format (with *filename) 
