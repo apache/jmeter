@@ -1063,7 +1063,7 @@ run JMeter unless all the JMeter jars are added.
 	Creates runtime and source distributions and site documentation
 	-->
 	<target name="distribution" 
-		depends="clean,install,docs-all,test,_distribution"
+		depends="clean,install,docs-printable,test,_distribution"
 		description="Build JMeter for end-user distribution"/>
 
 	<target
@@ -1303,8 +1303,6 @@ run JMeter unless all the JMeter jars are added.
     <delete file="${lib.dir}/jorphan.jar"/>
     <delete dir="${dest.jar}" includes="*.jar"/>
     <delete dir="${build.dir}"/>
-    <delete dir="${dest.docs.api}"/>
-    <delete dir="${dest.docs}"/>
     <delete dir="${dest.printable_docs}"/>
     <delete dir="${dist.dir}"/>
     <delete dir="${site.dir}"/>
@@ -1384,9 +1382,6 @@ run JMeter unless all the JMeter jars are added.
         <fileset file="${src.docs}/usermanual/*.pdf"/>
     </copy>
   </target>
-
-  <target name="docs-all" depends="docs-site,docs-printable,docs-api" 
-  	description="Generate documentation. (site, printable, api)"/>
 
   <target name="test" depends="compile-tests,_test,batchtest" description="Run tests"/>
   
