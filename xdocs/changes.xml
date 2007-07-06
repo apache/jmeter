@@ -296,6 +296,7 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 <li>Fix SlowSocket to work properly with Httpclient (both http and https)</li>
 <li>Bug 41612 - Loop nested in IF behaves erratically</li>
 <li>Bug 42232 - changing language clears UDV contents</li>
+<li>Jexl function did not allow variables</li>
 </ul>
 
 <h3>Version 2.2</h3>
