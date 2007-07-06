@@ -115,6 +115,10 @@ httpclient.parameters:
 http.authentication.preemptive$Boolean=false
 </pre>
 </p>
+<p>
+The javax.net.ssl properties have been moved from jmeter.properties to system.properties,
+and will no longer work if defined in jmeter.properties.
+</p>
 <h4>Incompatible changes (development):</h4>
 <p>
 <b>N.B.</b>The clear() method was defined in the following interfaces: Clearable, JMeterGUIComponent and TestElement.
