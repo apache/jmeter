@@ -61,7 +61,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
         String str = ""; //$NON-NLS-1$
 
         CompoundVariable var = (CompoundVariable) values[0];
-        String exp = var.getRawParameters();
+        String exp = var.execute();
 
         try
         {
