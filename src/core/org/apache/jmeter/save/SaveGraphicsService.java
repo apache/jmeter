@@ -27,15 +27,17 @@ import java.io.OutputStream;
 
 import javax.swing.JComponent;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+//import com.sun.image.codec.jpeg.JPEGCodec;
+//import com.sun.image.codec.jpeg.JPEGEncodeParam;
+//import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import org.apache.batik.ext.awt.image.codec.PNGEncodeParam;
 import org.apache.batik.ext.awt.image.codec.PNGImageEncoder;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFEncodeParam;
 import org.apache.batik.ext.awt.image.codec.tiff.TIFFImageEncoder;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /**
  * Class is responsible for taking a component and saving it as a JPEG, PNG or
@@ -47,15 +49,17 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SaveGraphicsService {
 
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
 	public static final int PNG = 0;
 
 	public static final int TIFF = 1;
 
-	public static final String PNG_EXTENSION = ".png";
+	public static final String PNG_EXTENSION = ".png"; //$NON-NLS-1$
 
-	public static final String TIFF_EXTENSION = ".tif";
+	public static final String TIFF_EXTENSION = ".tif"; //$NON-NLS-1$
 
-	public static final String JPEG_EXTENSION = ".jpg";
+	public static final String JPEG_EXTENSION = ".jpg"; //$NON-NLS-1$
 
 	/**
 	 * 
@@ -64,39 +68,43 @@ public class SaveGraphicsService {
 		super();
 	}
 
-	/**
-	 * If someone wants to save a JPEG, use this method. There is a limitation
-	 * though. It uses gray scale instead of color due to artifacts with color
-	 * encoding. For some reason, it does not translate pure red and orange
-	 * correctly. To make the text readable, gray scale is used.
-	 * 
-	 * @param filename
-	 * @param component
-	 */
-	public void saveUsingJPEGEncoder(String filename, JComponent component) {
-		Dimension size = component.getSize();
-		// We use Gray scale, since color produces poor quality
-		// this is an unfortunate result of the default codec
-		// implementation.
-		BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_USHORT_GRAY);
-		Graphics2D grp = image.createGraphics();
-		component.paint(grp);
-
-		File outfile = new File(filename + JPEG_EXTENSION);
-		FileOutputStream fos = createFile(outfile);
-		JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
-		Float q = new Float(1.0);
-		param.setQuality(q.floatValue(), true);
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos, param);
-
-		try {
-			encoder.encode(image);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-            JOrphanUtils.closeQuietly(fos);
-		}
-	}
+/*
+ * This is not currently used by JMeter code.
+ * As it uses Sun-specific code (the only such in JMeter), it has been commented out for now.
+ */
+//	/**
+//	 * If someone wants to save a JPEG, use this method. There is a limitation
+//	 * though. It uses gray scale instead of color due to artifacts with color
+//	 * encoding. For some reason, it does not translate pure red and orange
+//	 * correctly. To make the text readable, gray scale is used.
+//	 * 
+//	 * @param filename
+//	 * @param component
+//	 */
+//	public void saveUsingJPEGEncoder(String filename, JComponent component) {
+//		Dimension size = component.getSize();
+//		// We use Gray scale, since color produces poor quality
+//		// this is an unfortunate result of the default codec
+//		// implementation.
+//		BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_USHORT_GRAY);
+//		Graphics2D grp = image.createGraphics();
+//		component.paint(grp);
+//
+//		File outfile = new File(filename + JPEG_EXTENSION);
+//		FileOutputStream fos = createFile(outfile);
+//		JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
+//		Float q = new Float(1.0);
+//		param.setQuality(q.floatValue(), true);
+//		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos, param);
+//
+//		try {
+//			encoder.encode(image);
+//		} catch (Exception e) {
+//			log.warn(e.toString());
+//		} finally {
+//            JOrphanUtils.closeQuietly(fos);
+//		}
+//	}
 
 	/**
 	 * Method will save the JComponent as an image. The formats are PNG, and
@@ -137,11 +145,7 @@ public class SaveGraphicsService {
 		} catch (Exception e) {
 			// do nothing
 		} finally {
-			try {
-				fos.close();
-			} catch (Exception e) {
-				// do nothing
-			}
+			JOrphanUtils.closeQuietly(fos);
 		}
 	}
 
@@ -161,11 +165,7 @@ public class SaveGraphicsService {
 		} catch (Exception e) {
 			// do nothing
 		} finally {
-			try {
-				fos.close();
-			} catch (Exception e) {
-				// do nothing
-			}
+			JOrphanUtils.closeQuietly(fos);
 		}
 	}
 
@@ -180,7 +180,7 @@ public class SaveGraphicsService {
 		try {
 			return new FileOutputStream(filename);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.warn(e.toString());
 			return null;
 		}
 	}
