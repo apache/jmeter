@@ -869,7 +869,7 @@ test engine code.</li>
 		or FTP, RMI,   SMTP, etc..).  It is the code that actually makes the 
 		connection to whatever is   being tested.   A SamplerController 
 		represents code that understands how to organize and run a group   
-		of test samples.  It is what binds together a Sampler and it's test 
+		of test samples.  It is what binds together a Sampler and its test 
 		samples and runs them.   A TestSample represents code that understands 
 		how to gather information from the   user about a particular test.  
 		For a website, it would represent a URL and any   information to be sent 
