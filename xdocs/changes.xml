@@ -133,7 +133,10 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 <p>
 Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead.
 </p>
-
+<p>
+Removed method saveUsingJPEGEncoder() from SaveGraphicsService.
+It was unused so far, and used the only Sun-specific class in JMeter.
+</p>
 <h4>New functionality/improvements:</h4>
 <ul>
 <li>Add Domain and Realm support to HTTP Authorisation Manager</li>
