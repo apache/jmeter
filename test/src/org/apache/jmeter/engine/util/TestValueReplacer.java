@@ -21,9 +21,8 @@ package org.apache.jmeter.engine.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -37,7 +36,7 @@ import org.apache.jmeter.threads.JMeterVariables;
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  * @version $Revision: 325648 $ updated on $Date: 2005-08-18 21:38:49 +0100 (Thu, 18 Aug 2005) $
  */
-public class TestValueReplacer extends TestCase {
+public class TestValueReplacer extends JMeterTestCase {
 		TestPlan variables;
 
 		public TestValueReplacer(String name) {
@@ -48,7 +47,9 @@ public class TestValueReplacer extends TestCase {
 			variables = new TestPlan();
 			variables.addParameter("server", "jakarta.apache.org");
 			variables.addParameter("username", "jack");
-			variables.addParameter("password", "jacks_password");
+			// The following used to be jacks_password, but the Arguments class uses
+			// HashMap for which the order is not defined.
+			variables.addParameter("password", "his_password");
 			variables.addParameter("regex", ".*");
 			JMeterVariables vars = new JMeterVariables();
 			vars.put("server", "jakarta.apache.org");
@@ -64,11 +65,12 @@ public class TestValueReplacer extends TestCase {
 			element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
 			List args = new ArrayList();
 			args.add("username is jack");
-			args.add("jacks_password");
+			args.add("his_password");
 			element.setProperty(new CollectionProperty("args", args));
 			replacer.reverseReplace(element);
 			assertEquals("${server}", element.getPropertyAsString("domain"));
 			args = (List) element.getProperty("args").getObjectValue();
+			assertEquals("username is ${username}", ((JMeterProperty) args.get(0)).getStringValue());
 			assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
 		}
 
