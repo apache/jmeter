@@ -1444,7 +1444,7 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 <p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
 module effectively, one might have a number of Controllers under the <complink name="WorkBench" />, each with a different series of
 samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
-the appropriate controller in it's drop down box.  This provides convenience for running many alternate test plans quickly and easily.
+the appropriate controller in its drop down box.  This provides convenience for running many alternate test plans quickly and easily.
 </p>
 </description>
 <note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
@@ -2953,10 +2953,10 @@ To add a new value to the series, click the 'Add User' button and fill in the de
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Update Once Per Iteration" required="Yes">A flag to indicate whether the User Paramters element
-        should update it's variables only once per iteration.  if you embed functions into the UP, then you may need greater
+        should update its variables only once per iteration.  if you embed functions into the UP, then you may need greater
         control over how often the values of the variables are updated.  Keep this box checked to ensure the values are
         updated each time through the UP's parent controller.  Uncheck the box, and the UP will update the parameters for 
-        every sample request made within it's <a href="build-test-plan.html#scoping_rules">scope</a>.</property>
+        every sample request made within its <a href="build-test-plan.html#scoping_rules">scope</a>.</property>
         
 </properties>
 </component>
