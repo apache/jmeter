@@ -74,7 +74,7 @@ public class Random extends AbstractFunction implements Serializable {
 		long min = Long.parseLong(minimum.execute().trim());
 		long max = Long.parseLong(maximum.execute().trim());
 
-		long rand = min + (long) Math.random() * (max - min + 1);
+		long rand = min + (long) (Math.random() * (max - min + 1));
 
 		String randString = Long.toString(rand);
 		vars.put(varName.execute(), randString);
