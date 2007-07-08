@@ -100,4 +100,8 @@ public class HttpMirrorControl extends GenericController {
 	public boolean canRemove() {
 		return null == server;
 	}
+	
+	public boolean isServerAlive(){
+		return server != null && server.isAlive();
+	}
 }
