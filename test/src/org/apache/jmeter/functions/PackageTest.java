@@ -353,7 +353,7 @@ public class PackageTest extends JMeterTestCase {
 }
 
 	public void SFFTest1() throws Exception {
-		StringFromFile sff1 = SFFParams("testfiles/SFFTest#.txt", "", "1", "3");
+		StringFromFile sff1 = SFFParams("testfiles/SFFTest#'.'txt", "", "1", "3");
 		assertEquals("uno", sff1.execute());
 		assertEquals("dos", sff1.execute());
 		assertEquals("tres", sff1.execute());
