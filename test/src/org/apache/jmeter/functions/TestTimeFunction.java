@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -159,7 +160,10 @@ public class TestTimeFunction extends JMeterTestCase {
         public void testMixed() throws Exception {
             params.add(new CompoundVariable("G"));
             variable.setParameters(params);
+            Locale locale = Locale.getDefault();
+            Locale.setDefault(Locale.ENGLISH);
             value = variable.execute(result, null);
+            Locale.setDefault(locale);
             assertEquals("AD",value);
         }
 }
