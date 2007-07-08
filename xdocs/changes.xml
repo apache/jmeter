@@ -42,7 +42,7 @@ Some of the main enhancements are:
 <li>__V() function allows support of nested variable references</li>
 <li>LDAP Ext sampler optionally parses result sets and supports secure mode</li>
 <li>FTP Sampler supports Ascii/Binary mode and upload</li>
-<li>Transaction Controller now generates Sample with subresults</li>
+<li>Transaction Controller now optionally generates a Sample with subresults</li>
 <li>HTTPS session contexts are now per-thread, rather than shared. This gives better emulation of multiple users</li>
 <li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 <li>Coloured icons in Tree View Listener and elsewhere to better differentiate failed samples.</li>
@@ -58,6 +58,9 @@ The main bug fixes are:
 <li>Test elements no longer default to previous contents; test elements no longer cleared when changing language.</li>
 </ul>
 <h4>Known problems:</h4>
+<p>Transaction Controller parent mode does not support nested Transaction Controllers.
+Doing so may cause a Null Pointer Exception in TestCompiler.
+</p>
 <p>Thread active counts are always zero in CSV and XML files when running remote tests.
 </p>
 <p>The property file_format.testlog=2.1 is treated the same as 2.2.
@@ -93,7 +96,6 @@ The HTTP Authorisation Manager now has extra columns for domain and realm,
 so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
 has been removed.
 </p>
-<p>The Transaction Controller no longer appears as a separate sample; it now includes its nested samples as subsamples</p>
 <p>
 Control-Z no longer used for Remote Start All - this now uses Control+Shift+R
 </p>
