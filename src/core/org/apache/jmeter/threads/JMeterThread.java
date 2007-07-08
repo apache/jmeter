@@ -104,6 +104,8 @@ public class JMeterThread implements Runnable, Serializable {
 
 	private boolean onErrorStopThread;
 
+	public static final String PACKAGE_OBJECT = "JMeterThread.pack"; // $NON-NLS-1$
+
 	public static final String LAST_SAMPLE_OK = "JMeterThread.last_sample_ok"; // $NON-NLS-1$
 
 	public JMeterThread() {
@@ -281,6 +283,10 @@ public class JMeterThread implements Runnable, Serializable {
                         if(sam != null) {
                             // Get the sampler ready to sample
                             SamplePackage pack = compiler.configureSampler(sam);
+
+						    // Hack: save the package for any transaction
+						    // controllers
+						    threadContext.getVariables().putObject(PACKAGE_OBJECT, pack);
 
                             delay(pack.getTimers());
                             Sampler sampler = pack.getSampler();
