@@ -18,16 +18,21 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.awt.BorderLayout;
+import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.layout.VerticalLayout;
 
 /**
  * A Transaction controller component.
  * 
  */
 public class TransactionControllerGui extends AbstractControllerGui {
+
+	private JCheckBox parent; // If selected, then generate parent sample, otherwise as per original controller
+
 	/**
 	 * Create a new TransactionControllerGui instance.
 	 */
@@ -42,9 +47,15 @@ public class TransactionControllerGui extends AbstractControllerGui {
 		return lc;
 	}
 
+	public void configure(TestElement el) {
+		super.configure(el);
+		parent.setSelected(((TransactionController) el).isParent());
+	}
+
 	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
 	public void modifyTestElement(TestElement el) {
 		configureTestElement(el);
+		((TransactionController) el).setParent(parent.isSelected());
 	}
 
 	public String getLabelResource() {
@@ -55,8 +66,10 @@ public class TransactionControllerGui extends AbstractControllerGui {
 	 * Initialize the GUI components and layout for this component.
 	 */
 	private void init() {
-		setLayout(new BorderLayout());
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
-		add(makeTitlePanel(), BorderLayout.NORTH);
+		add(makeTitlePanel());
+		parent = new JCheckBox(JMeterUtils.getResString("transaction_controller_parent")); // $NON-NLS-1$
+		add(parent);
 	}
 }
