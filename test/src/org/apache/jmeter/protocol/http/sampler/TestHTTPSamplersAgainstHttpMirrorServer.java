@@ -80,6 +80,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         output.write(TEST_FILE_CONTENT);
         output.flush();
         output.close();
+        try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+		}// Allow thread chance to fail
+        if (!webServerControl.isServerAlive()){
+        	throw new Exception("Could not start mirror server");
+        }
+
     }
 
     protected void tearDown() throws Exception {
