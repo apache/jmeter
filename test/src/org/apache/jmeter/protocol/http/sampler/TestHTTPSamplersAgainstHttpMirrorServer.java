@@ -43,7 +43,10 @@ import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.extensions.TestSetup;
 
 /**
  * Class for performing actual samples for HTTPSampler and HTTPSampler2.
@@ -58,50 +61,55 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     private final static String ISO_8859_1 = "ISO-8859-1"; // $NON-NLS-1$
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
-    private final byte[] CRLF = { 0x0d, 0x0A };
+    private static final byte[] CRLF = { 0x0d, 0x0A };
     private static byte[] TEST_FILE_CONTENT;
-    private HttpMirrorControl webServerControl;
-    private int webServerPort = 8080;
-    private File temporaryFile;
+
+    private static File temporaryFile;
 
     public TestHTTPSamplersAgainstHttpMirrorServer(String arg0) {
         super(arg0);
     }
-    protected void setUp() throws Exception {
-        // Start the HTTPMirrorServer
-        webServerControl = new HttpMirrorControl();
-        webServerControl.setPort(webServerPort);
-        webServerControl.startHttpMirror();
+    
+    public static Test suite(){
+    	TestSetup setup = new TestSetup(new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class)){
+    	    private int webServerPort = 8080;
+    	    private HttpMirrorControl webServerControl;
+    		protected void setUp() throws Exception {
+    		        webServerControl = new HttpMirrorControl();
+    		        webServerControl.setPort(webServerPort);
+    		        webServerControl.startHttpMirror();
 
-        // Create the test file content
-        TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
+    		        // Create the test file content
+    		        TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
 
-        // create a temporary file to make sure we always have a file to give to the PostWriter 
-        // Whereever we are or Whatever the current path is.
-        temporaryFile = File.createTempFile("foo", "txt");
-        OutputStream output = new FileOutputStream(temporaryFile);
-        output.write(TEST_FILE_CONTENT);
-        output.flush();
-        output.close();
-        try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-		}// Allow thread chance to fail
-        if (!webServerControl.isServerAlive()){
-        	throw new Exception("Could not start mirror server");
-        }
+    		        // create a temporary file to make sure we always have a file to give to the PostWriter 
+    		        // Whereever we are or Whatever the current path is.
+    		        temporaryFile = File.createTempFile("TestHTTPSamplersAgainstHttpMirrorServer", "tmp");
+    		        OutputStream output = new FileOutputStream(temporaryFile);
+    		        output.write(TEST_FILE_CONTENT);
+    		        output.flush();
+    		        output.close();
+    		        try {
+    					Thread.sleep(100);
+    				} catch (InterruptedException e) {
+    				}// Allow thread chance to fail
+    		        if (!webServerControl.isServerAlive()){
+    		        	throw new Exception("Could not start mirror server");
+    		        }
+    		}
+    		
+    		protected void tearDown() throws Exception {
+    		        // Shutdown web server
+    		        webServerControl.stopHttpMirror();
+    		        //webServerControl = null;
 
-    }
-
-    protected void tearDown() throws Exception {
-        // Shutdown web server
-        webServerControl.stopHttpMirror();
-        //webServerControl = null;
-
-        // delete temporay file
-        temporaryFile.delete();
-    }
-
+    		        // delete temporay file
+    		        temporaryFile.delete();
+    		}
+    	};
+    	return setup;
+    };
+    
     public void testPostRequest_UrlEncoded() throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1);
     }
