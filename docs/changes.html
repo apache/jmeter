@@ -341,6 +341,12 @@ http.authentication.preemptive$Boolean=false
 									
 
 						</p>
+							  									 				<p	>
+								
+The javax.net.ssl properties have been moved from jmeter.properties to system.properties,
+and will no longer work if defined in jmeter.properties.
+
+						</p>
 							  									 				<h4	>
 								Incompatible changes (development):
 						</h4>
@@ -365,6 +371,12 @@ Formatting should now be done using the jorphan.gui Renderer classes.
 							  									 				<p	>
 								
 Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead.
+
+						</p>
+							  									 				<p	>
+								
+Removed method saveUsingJPEGEncoder() from SaveGraphicsService.
+It was unused so far, and used the only Sun-specific class in JMeter.
 
 						</p>
 							  									 				<h4	>
@@ -1087,6 +1099,11 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 
 												<li	>
 								Bug 42232 - changing language clears UDV contents
+						</li>
+									
+
+												<li	>
+								Jexl function did not allow variables
 						</li>
 									
 
@@ -3381,7 +3398,7 @@ test engine code.
 		or FTP, RMI,   SMTP, etc..).  It is the code that actually makes the 
 		connection to whatever is   being tested.   A SamplerController 
 		represents code that understands how to organize and run a group   
-		of test samples.  It is what binds together a Sampler and it's test 
+		of test samples.  It is what binds together a Sampler and its test 
 		samples and runs them.   A TestSample represents code that understands 
 		how to gather information from the   user about a particular test.  
 		For a website, it would represent a URL and any   information to be sent 
