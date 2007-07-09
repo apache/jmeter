@@ -505,6 +505,8 @@
         <pathelement location="${build.monitor.model}"/>
         <pathelement location="${build.report}"/>
         <pathelement location="${build.tcp}"/>
+      	<!-- Also include compiled jars to allow running tests without rebuilding source -->
+    	<fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
       </classpath>
     </javac>
@@ -1440,7 +1442,8 @@ run JMeter unless all the JMeter jars are added.
      	<fileset dir="${dest.jar}" includes="*.jar"/>
      	<path refid="classpath"/>
        </classpath>
-       <sysproperty key="java.awt.headless" value="${test.headless}"/>
+    	<!-- Always run this test headless -->
+       <sysproperty key="java.awt.headless" value="true"/>
        <arg value="-n"/>
        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
