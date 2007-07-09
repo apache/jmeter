@@ -251,7 +251,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static void writeFileStart(PrintWriter writer, SampleSaveConfiguration saveConfig) {
 		if (saveConfig.saveAsXml()) {
-			writer.println(XML_HEADER);
+			writer.print(XML_HEADER);
+			// Write the EOL separately so we generate LF line ends on Unix and Windows
+			writer.print("\n"); // $NON-NLS-1$
             String pi=saveConfig.getXmlPi();
             if (pi.length() > 0) {
                 writer.println(pi);
@@ -260,7 +262,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             // is being constructed when this is called
 			writer.print(TESTRESULTS_START_V1_1_PREVER);
             writer.print(SaveService.getVERSION());
-            writer.println(TESTRESULTS_START_V1_1_POSTVER);
+            writer.print(TESTRESULTS_START_V1_1_POSTVER);
+			// Write the EOL separately so we generate LF line ends on Unix and Windows
+            writer.print("\n"); // $NON-NLS-1$
 		} else if (saveConfig.saveFieldNames()) {
 			writer.println(OldSaveService.printableFieldNamesToString(saveConfig));
 		}
