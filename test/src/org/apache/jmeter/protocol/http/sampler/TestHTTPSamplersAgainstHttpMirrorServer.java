@@ -1082,19 +1082,21 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
+            	System.out.println(">>>>>>>>>>>>>>>>>>>>");
             	System.out.println(new String(expected,"UTF-8"));
-            	System.out.println("--------------------");
-            	System.out.println(new String(actual,"UTF-8"));
             	System.out.println("====================");
+            	System.out.println(new String(actual,"UTF-8"));
+            	System.out.println("<<<<<<<<<<<<<<<<<<<<");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
             else {
                 for(int i = 0; i < expected.length; i++) {
                     if(expected[i] != actual[i]) {
+                    	System.out.println(">>>>>>>>>>>>>>>>>>>>");
                        	System.out.println(new String(expected,0,i+1));
-                    	System.out.println("--------------------");
-                    	System.out.println(new String(actual,0,i+1));
                     	System.out.println("====================");
+                    	System.out.println(new String(actual,0,i+1));
+                    	System.out.println("<<<<<<<<<<<<<<<<<<<<");
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
                 }
