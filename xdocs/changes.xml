@@ -28,6 +28,7 @@
 <!--  ===================  -->
 
 <h3>Version 2.3</h3>
+
 <h4>Summary of changes (for more details, see below)</h4>
 <p>
 Some of the main enhancements are:
@@ -57,6 +58,73 @@ The main bug fixes are:
 <li>Latency and Encoding now available in CSV log output</li>
 <li>Test elements no longer default to previous contents; test elements no longer cleared when changing language.</li>
 </ul>
+
+<h4>Incompatible changes (usage):</h4>
+<p>
+<b>N.B. The javax.net.ssl properties have been moved from jmeter.properties to system.properties,
+and will no longer work if defined in jmeter.properties.</b>
+<br></br>
+The new arrangement is more flexible, as it allows arbitrary system properties to be defined.
+</p>
+<p>
+SSL session contexts are now created per-thread, rather than being shared.
+This generates a more realistic load for HTTPS tests.
+The change is likely to slow down tests with many SSL threads.
+The original behaviour can be enabled by setting the JMeter property:
+<pre>
+https.sessioncontext.shared=true
+</pre>
+</p>
+<p>
+The LDAP Extended Sampler now uses the same panel for both Thread Bind and Single-Bind tests.
+This means that any tests using the Single-bind test will need to be updated to set the username and password.
+</p>
+<p>
+Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
+(as they appear in the test plan) rather than reverse order as previously.
+The original behaviour can be restored by setting the following JMeter property:
+<br/>
+jmeterthread.reversePostProcessors=true
+</p>
+<p>
+The HTTP Authorisation Manager now has extra columns for domain and realm, 
+so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
+has been removed.
+</p>
+<p>
+Control-Z no longer used for Remote Start All - this now uses Control+Shift+R
+</p>
+<p>
+HttpClient now uses pre-emptive authentication. 
+This can be changed by setting the following:
+<pre>
+jmeter.properties:
+httpclient.parameters.file=httpclient.parameters
+
+httpclient.parameters:
+http.authentication.preemptive$Boolean=false
+</pre>
+</p>
+
+<h4>Incompatible changes (development):</h4>
+<p>
+<b>N.B.</b>The clear() method was defined in the following interfaces: Clearable, JMeterGUIComponent and TestElement.
+The methods serve different purposes, so two of them were renamed: 
+the Clearable method is now clearData() and the JMeterGUIComponent method is now clearGui().
+3rd party add-ons may need to be rebuilt.
+</p>
+<p>
+Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
+Formatting should now be done using the jorphan.gui Renderer classes.
+</p>
+<p>
+Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead.
+</p>
+<p>
+Removed method saveUsingJPEGEncoder() from SaveGraphicsService.
+It was unused so far, and used the only Sun-specific class in JMeter.
+</p>
+
 <h4>Known problems:</h4>
 <p>Transaction Controller parent mode does not support nested Transaction Controllers.
 Doing so may cause a Null Pointer Exception in TestCompiler.
@@ -79,66 +147,8 @@ This can be reduced by using a file instead of including the script in the test 
 Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
 to name log files in client-server mode.
 </p>
-<h4>Incompatible changes (usage):</h4>
-<p>
-The LDAP Extended Sampler now uses the same panel for both Thread Bind and Single-Bind tests.
-This means that any tests using the Single-bind test will need to be updated to set the username and password.
-</p>
-<p>
-Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
-(as they appear in the test plan) rather than reverse order as previously.
-The original behaviour can be restored by setting the following JMeter property:
-<br/>
-jmeterthread.reversePostProcessors=true
-</p>
-<p>
-The HTTP Authorisation Manager now has extra columns for domain and realm, 
-so the temporary work-round of using '\' and '@' in the username to delimit the domain and realm
-has been removed.
-</p>
-<p>
-Control-Z no longer used for Remote Start All - this now uses Control+Shift+R
-</p>
-<p>
-By default, SSL session contexts are created per-thread, rather than being shared.
-The original behaviour can be enabled by setting the JMeter property:
-<pre>
-https.sessioncontext.shared=true
-</pre>
-</p>
-<p>
-HttpClient now uses pre-emptive authentication. 
-This can be changed by setting the following:
-<pre>
-jmeter.properties:
-httpclient.parameters.file=httpclient.parameters
 
-httpclient.parameters:
-http.authentication.preemptive$Boolean=false
-</pre>
-</p>
-<p>
-The javax.net.ssl properties have been moved from jmeter.properties to system.properties,
-and will no longer work if defined in jmeter.properties.
-</p>
-<h4>Incompatible changes (development):</h4>
-<p>
-<b>N.B.</b>The clear() method was defined in the following interfaces: Clearable, JMeterGUIComponent and TestElement.
-The methods serve different purposes, so two of them were renamed: 
-the Clearable method is now clearData() and the JMeterGUIComponent method is now clearGui().
-3rd party add-ons may need to be rebuilt.
-</p>
-<p>
-Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
-Formatting should now be done using the jorphan.gui Renderer classes.
-</p>
-<p>
-Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead.
-</p>
-<p>
-Removed method saveUsingJPEGEncoder() from SaveGraphicsService.
-It was unused so far, and used the only Sun-specific class in JMeter.
-</p>
+
 <h4>New functionality/improvements:</h4>
 <ul>
 <li>Add Domain and Realm support to HTTP Authorisation Manager</li>
