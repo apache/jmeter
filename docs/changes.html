@@ -188,7 +188,7 @@ Some of the main enhancements are:
 									
 
 												<li	>
-								Transaction Controller now generates Sample with subresults
+								Transaction Controller now optionally generates a Sample with subresults
 						</li>
 									
 
@@ -243,41 +243,38 @@ The main bug fixes are:
 
 						</ul>
 							  									 				<h4	>
-								Known problems:
-						</h4>
-							  									 				<p	>
-								Thread active counts are always zero in CSV and XML files when running remote tests.
-
-						</p>
-							  									 				<p	>
-								The property file_format.testlog=2.1 is treated the same as 2.2.
-However JMeter does honour the 3 testplan versions.
-						</p>
-							  									 				<p	>
-								
-Bug 22510 - JMeter always uses the first entry in the keystore.
-
-						</p>
-							  									 				<p	>
-								
-Remote mode does not work if JMeter is installed in a directory where the path name contains spaces.
-
-						</p>
-							  									 				<p	>
-								
-BeanShell test elements leak memory.
-This can be reduced by using a file instead of including the script in the test element.
-
-						</p>
-							  									 				<p	>
-								
-Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
-to name log files in client-server mode.
-
-						</p>
-							  									 				<h4	>
 								Incompatible changes (usage):
 						</h4>
+							  									 				<p	>
+								
+
+												<b	>
+								N.B. The javax.net.ssl properties have been moved from jmeter.properties to system.properties,
+and will no longer work if defined in jmeter.properties.
+						</b>
+									
+
+												<br	>
+						</br>
+									
+The new arrangement is more flexible, as it allows arbitrary system properties to be defined.
+
+						</p>
+							  									 				<p	>
+								
+SSL session contexts are now created per-thread, rather than being shared.
+This generates a more realistic load for HTTPS tests.
+The change is likely to slow down tests with many SSL threads.
+The original behaviour can be enabled by setting the JMeter property:
+
+												<pre	>
+								
+https.sessioncontext.shared=true
+
+						</pre>
+									
+
+						</p>
 							  									 				<p	>
 								
 The LDAP Extended Sampler now uses the same panel for both Thread Bind and Single-Bind tests.
@@ -304,24 +301,8 @@ has been removed.
 
 						</p>
 							  									 				<p	>
-								The Transaction Controller no longer appears as a separate sample; it now includes its nested samples as subsamples
-						</p>
-							  									 				<p	>
 								
 Control-Z no longer used for Remote Start All - this now uses Control+Shift+R
-
-						</p>
-							  									 				<p	>
-								
-By default, SSL session contexts are created per-thread, rather than being shared.
-The original behaviour can be enabled by setting the JMeter property:
-
-												<pre	>
-								
-https.sessioncontext.shared=true
-
-						</pre>
-									
 
 						</p>
 							  									 				<p	>
@@ -339,12 +320,6 @@ http.authentication.preemptive$Boolean=false
 
 						</pre>
 									
-
-						</p>
-							  									 				<p	>
-								
-The javax.net.ssl properties have been moved from jmeter.properties to system.properties,
-and will no longer work if defined in jmeter.properties.
 
 						</p>
 							  									 				<h4	>
@@ -377,6 +352,44 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 								
 Removed method saveUsingJPEGEncoder() from SaveGraphicsService.
 It was unused so far, and used the only Sun-specific class in JMeter.
+
+						</p>
+							  									 				<h4	>
+								Known problems:
+						</h4>
+							  									 				<p	>
+								Transaction Controller parent mode does not support nested Transaction Controllers.
+Doing so may cause a Null Pointer Exception in TestCompiler.
+
+						</p>
+							  									 				<p	>
+								Thread active counts are always zero in CSV and XML files when running remote tests.
+
+						</p>
+							  									 				<p	>
+								The property file_format.testlog=2.1 is treated the same as 2.2.
+However JMeter does honour the 3 testplan versions.
+						</p>
+							  									 				<p	>
+								
+Bug 22510 - JMeter always uses the first entry in the keystore.
+
+						</p>
+							  									 				<p	>
+								
+Remote mode does not work if JMeter is installed in a directory where the path name contains spaces.
+
+						</p>
+							  									 				<p	>
+								
+BeanShell test elements leak memory.
+This can be reduced by using a file instead of including the script in the test element.
+
+						</p>
+							  									 				<p	>
+								
+Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
+to name log files in client-server mode.
 
 						</p>
 							  									 				<h4	>

@@ -4922,12 +4922,29 @@ the contents are used to prefix the pathname.
 		</td></tr>
 				<tr><td>
 		  															
-		
+	    
 												<p	>
-								The Transaction Controller times how long it takes for all its children to run.
-			It then adds a "sample" entry to the test output with the total elapsed time.
-			The name of the element is used to name the "sample".
-		
+								
+	    The Transaction Comntroller is used to group samplers by generating an additional
+	    sample which totals the nested samples.
+	    For JMeter versions after 2.3, there are two modes of operation
+	    
+												<ul	>
+								
+	    
+												<li	>
+								additional sample is added after the nested samples
+						</li>
+									
+	    
+												<li	>
+								additional sample is added as a parent of the nested samples
+						</li>
+									
+	    
+						</ul>
+									
+	    
 						</p>
 									
 		
@@ -4942,21 +4959,26 @@ the contents are used to prefix the pathname.
 									
 		
 												<p	>
-								For JMeter versions after 2.2, the controlled samples no longer appear as separate samples, but as subsamples.
-		Also the Transaction Sample is only regarded as successful if all its sub-samples are successful.
-		This is similar to the way the HTTP Samplers work when retrieving embedded objects (images etc).
-		The individual samples can still be seen in the Tree View Listener,
+								The generated sample is only regarded as successful if all its sub-samples are successful.
+						</p>
+									
+		
+												<p	>
+								
+		In parent mode, the individual samples can still be seen in the Tree View Listener,
 		but no longer appear as separate entries in other Listeners.
+		Also, the sub-samples do not appear in CSV log files, but they can be saved to XML files.
 		
 						</p>
 									
 		
 												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 		<tr><td>						
-		Assertions (etc) can be added to the Transaction Controller.
+		In parent mode, Assertions (etc) can be added to the Transaction Controller.
 		However by default they will be applied to both the individual samples and the overall transaction sample.
 		To limit the scope of the Assertions, use a Simple Controller to contain the samples, and add the Assertions
 		to the Simple Controller.
+		Parent mode controllers do not currently properly support nested transaction controllers of either type.
 		
 			</td></tr>
 	</table></p>
@@ -4971,6 +4993,17 @@ the contents are used to prefix the pathname.
 			<tr>
 			<td>Name</td>
 			<td>						Descriptive name for this controller that is shown in the tree, and used to name the transaction.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Generate Parent Sample</td>
+			<td>						
+	If checked, then the sample is generated as a parent of the other samples,
+	otherwise the sample is generated as an independent sample.
+	
 			</td>
 			<td>
 											Yes
