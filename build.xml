@@ -1385,7 +1385,8 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="compile-tests,_test,batchtest" description="Run tests"/>
+  <target name="test" depends="compile-tests,_test,batchtest" 
+  	description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
   
   <target name="test-both" depends="test-headless,test-headed"/>
 
