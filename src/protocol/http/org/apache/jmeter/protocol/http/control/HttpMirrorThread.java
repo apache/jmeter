@@ -35,7 +35,9 @@ import org.apache.log.Logger;
 public class HttpMirrorThread extends Thread {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/** Socket to client. */
+    private static final char[] CRLF = new char[] {(byte) 13, (byte) 10};
+
+    /** Socket to client. */
 	private final Socket clientSocket;
 
 	public HttpMirrorThread(Socket _clientSocket) {
@@ -57,13 +59,16 @@ public class HttpMirrorThread extends Thread {
 		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-			out.println("HTTP/1.0 200 OK");
-			out.println("Content-Type: text/plain");
-			out.println();
+			out.print("HTTP/1.0 200 OK"); //$NON-NLS-1$
+			out.write(CRLF);
+			out.print("Content-Type: text/plain"); //$NON-NLS-1$
+			out.write(CRLF);
+			out.write(CRLF);
 			out.flush();
 			String line;
 			while((line = in.readLine()) != null){
-				out.println(line);
+				out.print(line);
+				out.write(CRLF);
 				if (line.length()==0) break;
 			}
             int c;
