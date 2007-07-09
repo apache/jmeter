@@ -90,6 +90,7 @@ org.apache.jmeter.threads.gui
 org.apache.jmeter.timers
 org.apache.jmeter.timers.gui
 org.apache.jmeter.util
+org.apache.jmeter.util.keystore
 org.apache.jmeter.visualizers
 org.apache.jmeter.visualizers.gui
 org.apache.jorphan.collections
