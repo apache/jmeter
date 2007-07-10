@@ -49,6 +49,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
 	private JCheckBox imageParser;
 
+	private JLabeledTextField encoding;
+	
 	public HttpDefaultsGui() {
 		super();
 		init();
@@ -84,6 +86,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		else {
 			config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
+		config.setProperty(HTTPSamplerBase.CONTENT_ENCODING, encoding.getText());
 	}
 
     /**
@@ -96,6 +99,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         domain.setText(""); //$NON-NLS-1$
         path.setText(""); //$NON-NLS-1$
         port.setText(""); //$NON-NLS-1$
+        encoding.setText(""); //$NON-NLS-1$
         argPanel.clear();
         imageParser.setSelected(false);
     }    
@@ -106,6 +110,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
 		path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
 		port.setText(el.getPropertyAsString(HTTPSamplerBase.PORT));
+        encoding.setText(el.getPropertyAsString(HTTPSamplerBase.CONTENT_ENCODING));
 		argPanel.configure((TestElement) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue());
 		imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
 	}
@@ -123,12 +128,14 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
 		path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
 		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+		encoding = new JLabeledTextField(JMeterUtils.getResString("content_encoding")); // $NON-NLS-1$
 
         
         urlPanel.add(domain);
 		urlPanel.add(port);
         urlPanel.add(protocol);
         urlPanel.add(path);
+        urlPanel.add(encoding);
         
 		mainPanel.add(urlPanel);
 
