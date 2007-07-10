@@ -1412,13 +1412,13 @@ run JMeter unless all the JMeter jars are added.
   
   <target name="test-both" depends="test-headless,test-headed"/>
 
-  <target name="test-headless">
+  <target name="test-headless" depends="compile-tests">
     <antcall target="_test">
       <param name="test.headless" value="true"/>
     </antcall>
   </target>
 
-  <target name="test-headed">
+  <target name="test-headed" depends="compile-tests">
     <antcall target="_test">
       <param name="test.headless" value="false"/>
     </antcall>
