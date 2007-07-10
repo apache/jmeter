@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
@@ -320,10 +321,10 @@ public final class AllTests {
 					 */
 
 					Class clazz = Class.forName(name);
-					TestSuite t = null;
+					Test t = null;
 					try {
 						Method m = clazz.getMethod("suite", new Class[0]);
-						t = (TestSuite) m.invoke(clazz, null);
+						t = (Test) m.invoke(clazz, null);
 						suites++;
 					} catch (NoSuchMethodException e) {
 					} // this is not an error, the others are
