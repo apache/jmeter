@@ -40,7 +40,7 @@ public class TestSampleResult extends TestCase {
 
             // Check sample increments OK
             res.sampleStart();
-            Thread.sleep(100);
+            Thread.sleep(110); // Needs to be greater than the minimum to allow for boundary errors
             res.sampleEnd();
         	long time = res.getTime();
             if(time < 100){
@@ -105,6 +105,9 @@ public class TestSampleResult extends TestCase {
         	
             // Sample that will get two sub results, simulates a web page load 
             SampleResult resWithSubResults = new SampleResult();            
+
+            long beginTest = System.currentTimeMillis();
+            
             resWithSubResults.sampleStart();
             Thread.sleep(100);
             resWithSubResults.setBytes(300);
@@ -139,6 +142,8 @@ public class TestSampleResult extends TestCase {
             resNoSubResults2.sampleEnd();
             long sample2Time = resNoSubResults2.getTime();
 
+            long overallTime = System.currentTimeMillis() - beginTest;
+            
             assertTrue(resNoSubResults2.isSuccessful());
             assertEquals(200, resNoSubResults2.getBytes());
             assertEquals("sample with no subresults", resNoSubResults2.getSampleLabel());
@@ -156,7 +161,13 @@ public class TestSampleResult extends TestCase {
             long totalTime = resWithSubResults.getTime();
             
             // Check the sample times
-            assertEquals(sampleWithSubResultsTime + sample1Time + sample2Time, totalTime);
+            long allsamplesTime = sampleWithSubResultsTime + sample1Time + sample2Time;
+            if (totalTime < allsamplesTime) {
+            	fail("Total: "+totalTime+" < sum(samples): "+ allsamplesTime);
+            }
+            if (totalTime > overallTime) {
+            	fail("Total: "+totalTime+" > overall time: "+ overallTime);
+            }
             
             // Check that calculator gets the correct statistics from the sample
             Calculator calculator = new Calculator();
