@@ -269,6 +269,7 @@ public class JMeter implements JMeterPlugin {
 			logProperty("os.name"); //$NON-NLS-1$
 			logProperty("os.arch"); //$NON-NLS-1$
 			logProperty("os.version"); //$NON-NLS-1$
+			logProperty("file.encoding"); // $NON-NLS-1$
 			log.info("Default Locale=" + Locale.getDefault().getDisplayName());// $NON-NLS-1$
             log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());// $NON-NLS-1$
 			log.info("JMeterHome="     + JMeterUtils.getJMeterHome());// $NON-NLS-1$
