@@ -65,20 +65,25 @@
   Documentation
   -------------
   The documentation available as of the date of this release is
-  also included, in HTML format, in the docs/ directory, and it may
+  also included, in HTML format, in the printable_docs/ directory, and it may
   be browsed starting from the file called index.html.
 
   Build instructions
   ------------------
-  
+
+  Please note:
+  To avoid unnecessary duplication, the source archives do not contain 
+  the source files also needed to run JMeter (for example properties files and scripts).
+    
   - Release builds
-  Unpack both the binary and source archives into the same directory structure
+  Unpack both the binary and source archives into the same directory structure.
   
   - Nightly builds
-  Unpack the _src and _lib archives into the same directory structure
+  Unpack the _src, _bin and _lib archives into the same directory structure.
   
-  In both cases, any optional jars (see above) can be placed in either lib or lib/opt.
-  Jars in lib/opt will be used for building JMeter, but won't be used at run-time.
+  Any optional jars (see above) should be placed in lib/opt and/or lib.
+  
+  Jars in lib/opt will be used for building JMeter and running the unit test, but won't be used at run-time.
   [This is useful for testing what happens if the optional jars are not downloaded
   by other JMeter users].
 
@@ -91,6 +96,11 @@
   This will compile the application and enable you to run jmeter from the bin
   directory.
 
+  ant test [-Djava.awt.headless=true]
+  
+  This will compile and run the unit tests.
+  The optional property definition is required if the system does not have a suitable GUI display.
+  
   Licensing and legal issues
   --------------------------
 
