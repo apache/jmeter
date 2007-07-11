@@ -36,9 +36,14 @@ import junit.framework.TestCase;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public class PostWriterTest extends TestCase {
-    /** The encoding used for http headers and control information */
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String UTF_8 = "UTF-8";
     private final static String HTTP_ENCODING = "ISO-8859-1";
     private final static byte[] CRLF = { 0x0d, 0x0A };
     private static byte[] TEST_FILE_CONTENT;
@@ -54,7 +59,7 @@ public class PostWriterTest extends TestCase {
         postWriter=new PostWriter();
         
         // Create the test file content
-        TEST_FILE_CONTENT = new String("foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052").getBytes("UTF-8");
+        TEST_FILE_CONTENT = new String("foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052").getBytes(UTF_8);
 
         // create a temporary file to make sure we always have a file to give to the PostWriter 
         // Whereever we are or Whatever the current path is.
@@ -109,7 +114,7 @@ public class PostWriterTest extends TestCase {
         establishConnection();
         titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         setupFormData(sampler, titleValue, descriptionValue);
         postWriter.setHeaders(connection, sampler);
@@ -122,7 +127,7 @@ public class PostWriterTest extends TestCase {
 
         // Test sending UTF-8 data with ISO-8859-1 content encoding
         establishConnection();
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding("ISO-8859-1");
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
@@ -154,7 +159,7 @@ public class PostWriterTest extends TestCase {
         byte[] expectedUrl = "title=mytitle&description=mydescription".getBytes();
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
-        expectedUrl = "title=mytitle&description=mydescription".getBytes("UTF-8");
+        expectedUrl = "title=mytitle&description=mydescription".getBytes(UTF_8);
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         connection.disconnect();
@@ -170,7 +175,7 @@ public class PostWriterTest extends TestCase {
         expectedUrl = "title=mytitle&description=mydescription".getBytes(contentEncoding);
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
-        expectedUrl = "title=mytitle&description=mydescription".getBytes("UTF-8");
+        expectedUrl = "title=mytitle&description=mydescription".getBytes(UTF_8);
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         connection.disconnect();
@@ -191,16 +196,27 @@ public class PostWriterTest extends TestCase {
         checkArraysHaveSameContent(TEST_FILE_CONTENT, connection.getOutputStreamContent());
         connection.disconnect();
         
-        // Check using UTF-8 encoding
+        // Check using a different encoding
+        
+        String otherEncoding;
+        final String fileEncoding = System.getProperty( "file.encoding");// $NON-NLS-1$
+        log.info("file.encoding: "+fileEncoding);
+		if (UTF_8.equalsIgnoreCase(fileEncoding) || "UTF8".equalsIgnoreCase(fileEncoding)){// $NON-NLS-1$
+        	otherEncoding="ISO-8859-1"; // $NON-NLS-1$
+        } else {
+        	otherEncoding=UTF_8;
+        }
+        log.info("Using other encoding: "+otherEncoding);
         establishConnection();
-        sampler.setContentEncoding("UTF-8");
+        sampler.setContentEncoding(otherEncoding);
         // File content is sent as binary, so the content encoding should not change the file data
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
         
         checkContentLength(connection, TEST_FILE_CONTENT.length);        
         checkArraysHaveSameContent(TEST_FILE_CONTENT, connection.getOutputStreamContent());
-        checkArraysHaveDifferentContent(new String(TEST_FILE_CONTENT).getBytes("UTF-8"), connection.getOutputStreamContent());
+        // Check that other encoding is not the current encoding
+       	checkArraysHaveDifferentContent(new String(TEST_FILE_CONTENT).getBytes(otherEncoding), connection.getOutputStreamContent());
         
         // If we have both file as body, and form data, then only form data will be sent
         setupFormData(sampler);
@@ -255,7 +271,7 @@ public class PostWriterTest extends TestCase {
         establishConnection();
         fileField = "some_file_field";
         mimeType = "image/png";
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         setupFilepart(sampler, fileField, file, mimeType);
         postWriter.setHeaders(connection, sampler);
@@ -326,7 +342,7 @@ public class PostWriterTest extends TestCase {
         establishConnection();
         titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         setupFormData(sampler, titleValue, descriptionValue);
         postWriter.setHeaders(connection, sampler);
@@ -343,7 +359,7 @@ public class PostWriterTest extends TestCase {
         establishConnection();
         titleValue = "mytitle\u0153+\u20a1 \u0115&yes\u00c5";
         descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         setupFormData(sampler, titleValue, descriptionValue);
         postWriter.setHeaders(connection, sampler);
@@ -415,7 +431,7 @@ public class PostWriterTest extends TestCase {
                 URLDecoder.decode(new String(expectedUrl, "US-ASCII"), contentEncoding), 
                 URLDecoder.decode(new String(connection.getOutputStreamContent(), "US-ASCII"), contentEncoding)); 
         String unencodedString = "title=" + titleValue + "&description=" + descriptionValue;
-        byte[] unexpectedUrl = unencodedString.getBytes("UTF-8");
+        byte[] unexpectedUrl = unencodedString.getBytes(UTF_8);
         checkArraysHaveDifferentContent(unexpectedUrl, connection.getOutputStreamContent());
         connection.disconnect();
         
@@ -423,7 +439,7 @@ public class PostWriterTest extends TestCase {
         establishConnection();
         titleValue = "mytitle\u0153\u20a1\u0115\u00c5";
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         setupFormData(sampler, titleValue, descriptionValue);
         postWriter.setHeaders(connection, sampler);
@@ -443,14 +459,14 @@ public class PostWriterTest extends TestCase {
         establishConnection();
         titleValue = "mytitle\u0153+\u20a1 \u0115&yes\u00c5";
         descriptionValue = "mydescription \u0153 \u20a1 \u0115 \u00c5";
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         setupFormData(sampler, titleValue, descriptionValue);
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
 
         checkContentTypeUrlEncoded(connection);
-        expectedString = "title=" + URLEncoder.encode(titleValue, "UTF-8") + "&description=" + URLEncoder.encode(descriptionValue, "UTF-8");
+        expectedString = "title=" + URLEncoder.encode(titleValue, UTF_8) + "&description=" + URLEncoder.encode(descriptionValue, UTF_8);
         expectedUrl = expectedString.getBytes("US-ASCII");
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
@@ -504,7 +520,7 @@ public class PostWriterTest extends TestCase {
 
         // Test sending data as UTF-8
         establishConnection();
-        contentEncoding = "UTF-8";
+        contentEncoding = UTF_8;
         sampler.setContentEncoding(contentEncoding);        
         postWriter.setHeaders(connection, sampler);
         postWriter.sendPostData(connection, sampler);
@@ -793,9 +809,9 @@ public class PostWriterTest extends TestCase {
     private void checkArraysHaveSameContent(byte[] expected, byte[] actual) throws UnsupportedEncodingException {
         if(expected != null && actual != null) {
             if(expected.length != actual.length) {
-            	System.out.println(new String(expected,"UTF-8"));
+            	System.out.println(new String(expected,UTF_8));
             	System.out.println("--------------------");
-            	System.out.println(new String(actual,"UTF-8"));
+            	System.out.println(new String(actual,UTF_8));
             	System.out.println("====================");
                 fail("arrays have different length, expected is " + expected.length + ", actual is " + actual.length);
             }
