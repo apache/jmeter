@@ -298,6 +298,7 @@ public class HttpRequestHdr {
     		log.debug("Proxy: setting server: " + sampler.getDomain());
 		sampler.setMethod(method);
 		log.debug("Proxy: method server: " + sampler.getMethod());
+		sampler.setPort(serverPort());
         if (log.isDebugEnabled())
             log.debug("Proxy: setting port: " + sampler.getPort());
 		if (url.indexOf("//") > -1) {
