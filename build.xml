@@ -1160,7 +1160,7 @@ run JMeter unless all the JMeter jars are added.
     <concat>
       <filelist dir="bin" files="jmeter-test.log" />
     </concat>
-  	<antcall target="gump-check"/>
+  	<!--antcall target="gump-check"/-->
   </target>
 
 	<target name="gump-check">
