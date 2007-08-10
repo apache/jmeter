@@ -35,6 +35,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import javax.swing.JLabel;
+
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
@@ -614,6 +616,12 @@ public class JMeter implements JMeterPlugin {
 		// add a system property so samplers can check to see if JMeter
 		// is running in NonGui mode
 		System.setProperty("JMeter.NonGui", "true");// $NON-NLS-1$
+		// Force the X11 display to be checked
+		try {
+		    new JLabel();
+		} catch (InternalError e){
+			// ignored
+		}
 		JMeter driver = new JMeter();
 		driver.parent = this;
 		PluginManager.install(this, false);
