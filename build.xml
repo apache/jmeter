@@ -1467,6 +1467,7 @@ run JMeter unless all the JMeter jars are added.
        </classpath>
     	<!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
        <sysproperty key="java.awt.headless" value="false"/>
+        <arg value="-pjmeter-batch.properties"/>
        <arg value="-n"/>
        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
@@ -1483,11 +1484,23 @@ run JMeter unless all the JMeter jars are added.
   	 	</and>
      </condition>
   	<fail unless="BatchTestLocal.OK">
-  		BatchTest failed. Files are not identical.
+  		Files are not identical.
   	</fail>
   	
   	<echo level="info">${batchtest.name} output files compared OK</echo>
-  	
+ 
+    <!-- Show the log file -->
+    <concat>
+      <filelist dir="${batchtest.out}" files="${batchtest.name}.log" />
+    </concat>
+
+  	<condition property="BatchTestLocal.len">
+  		<length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+  	</condition>
+  	<fail unless="BatchTestLocal.len">
+  		Error detected in log file. See above.
+  	</fail>
+
   	<deleteworkfiles/>
   	
   </target>
