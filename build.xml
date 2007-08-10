@@ -1465,8 +1465,8 @@ run JMeter unless all the JMeter jars are added.
      	<fileset dir="${dest.jar}" includes="*.jar"/>
      	<path refid="classpath"/>
        </classpath>
-    	<!-- Always run this test headless -->
-       <sysproperty key="java.awt.headless" value="true"/>
+    	<!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
+       <sysproperty key="java.awt.headless" value="false"/>
        <arg value="-n"/>
        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
