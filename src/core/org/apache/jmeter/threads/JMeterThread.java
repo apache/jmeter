@@ -229,7 +229,7 @@ public class JMeterThread implements Runnable, Serializable {
 
 	static {
 		if (startEarlier) {
-			log.warn("jmeterthread.startearlier=true (see jmeter.properties)");
+			log.info("jmeterthread.startearlier=true (see jmeter.properties)");
 		} else {
 			log.info("jmeterthread.startearlier=false (see jmeter.properties)");
 		}
