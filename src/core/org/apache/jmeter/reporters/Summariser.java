@@ -96,33 +96,10 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		setName(name);
 	}
 
-	/*
-	 * This is called once for each occurrence in the test plan, before the
-	 * start of the test. The super.clear() method clears the name (and all
-	 * other properties), so it is called last.
-	 */
-	public void clearData() {
-		// System.out.println("-- "+me+this.getName()+"
-		// "+Thread.currentThread().getName());
-
-		myName = this.getName();
-
-		// Hashtable is synchronised, but there could be more than one Summariser
-		// with the same name, so we need to synch.
-		synchronized (accumulators) {
-			Totals tots = (Totals) accumulators.get(myName);
-			if (tots != null) {// This can be null (before first sample)
-				tots.clear();
-			} else {
-				// System.out.println("Creating totals for "+myName);
-				tots = new Totals();
-				accumulators.put(myName, tots);
-			}
-		}
-
-		super.clear();
+	public void clearData(){
+		// not used
 	}
-
+	
 	/*
 	 * Contains the items needed to collect stats for a summariser
 	 * 
@@ -312,7 +289,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
 	 */
 	public void testStarted() {
-		// not used
+		testStarted("local");
 	}
 
 	/*
@@ -331,7 +308,20 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
 	 */
 	public void testStarted(String host) {
-		// not used
+		myName = this.getName();
+
+		// Hashtable is synchronised, but there could be more than one Summariser
+		// with the same name, so we need to synchronise.
+		synchronized (accumulators) {
+			Totals tots = (Totals) accumulators.get(myName);
+			if (tots != null) {// This can be null (before first sample)
+				tots.clear();
+			} else {
+				// System.out.println("Creating totals for "+myName);
+				tots = new Totals();
+				accumulators.put(myName, tots);
+			}
+		}
 	}
 
 	/*
