@@ -425,6 +425,12 @@ public class JMeterUtils implements UnitTestManager {
 		} catch (NullPointerException e) {
 			log.warn("no icon for " + name);
 			return null;
+		} catch (NoClassDefFoundError e) {// Can be returned by headless hosts
+			log.info("no icon for " + name + " " + e.getMessage());
+			return null;
+		} catch (InternalError e) {// Can be returned by headless hosts
+			log.info("no icon for " + name + " " + e.getMessage());
+			return null;
 		}
 	}
     
