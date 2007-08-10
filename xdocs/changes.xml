@@ -29,6 +29,14 @@
 
 <h3>Version 2.3</h3>
 
+<h4>Fixes since 2.3RC3</h4>
+<ul>
+<li>Fixed NPE in Summariser (bug introduced in 2.3RC3)</li>
+<li>Fixed setup of proxy port (bug introduced in 2.3RC3)</li>
+</ul>
+
+<h3>Version 2.3RC3</h3>
+
 <h4>Summary of changes (for more details, see below)</h4>
 <p>
 Some of the main enhancements are:
