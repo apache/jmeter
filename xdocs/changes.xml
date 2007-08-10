@@ -34,6 +34,7 @@
 <li>Fixed NPE in Summariser (bug introduced in 2.3RC3)</li>
 <li>Fixed setup of proxy port (bug introduced in 2.3RC3)</li>
 <li>Fixed errors when running non-GUI on a headless host</li>
+<li>Bug 43054 - SSLManager causes stress tests to saturate and crash</li>
 </ul>
 
 <h3>Version 2.3RC3</h3>

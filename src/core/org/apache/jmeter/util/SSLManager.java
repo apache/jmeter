@@ -246,7 +246,7 @@ public abstract class SSLManager {
 	 */
 	public static final SSLManager getInstance() {
 		if (null == SSLManager.manager) {
-			return new JsseSSLManager(SSLManager.sslProvider);
+			SSLManager.manager = new JsseSSLManager(SSLManager.sslProvider);
 //			if (SSLManager.isSSLSupported) {
 //				String classname = null;
 //				classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
