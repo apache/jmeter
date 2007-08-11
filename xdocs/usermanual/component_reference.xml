@@ -2519,7 +2519,9 @@ user) is marked as a failed response.</p></description>
 
 <component name="Size Assertion" index="&sect-num;.5.3"  width="331" height="346" screenshot="size_assertion.png">
 <description><p>The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
-the size be equal to, greater than, less than, or not equal to a given number of bytes.</p></description>
+the size be equal to, greater than, less than, or not equal to a given number of bytes.</p>
+<note>Since JMeter 2.3RC3, an empty response is treated as being 0 bytes rather than reported as an error.</note>
+</description>
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
