@@ -60,6 +60,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
 	private transient Map allThreads;
 
+	private volatile boolean startingGroups; // flag to show that groups are still being created
+	
 	private boolean running = false;
 
 	private boolean serialized = false;
@@ -245,7 +247,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		try {
             allThreads.remove(thread);
             log.info("Ending thread " + thread.getThreadName());
-            if (!serialized && allThreads.size() == 0 && !schcdule_run) {
+            if (!serialized && !schcdule_run && !startingGroups && allThreads.size() == 0 ) {
             	log.info("Stopping test");
             	stopTest();
             }
@@ -358,6 +360,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		JMeterContextService.getContext().setSamplingStarted(true);
 		int groupCount = 0;
         JMeterContextService.clearTotalThreads();
+        startingGroups = true;
 		while (iter.hasNext()) {
 			groupCount++;
 			ThreadGroup group = (ThreadGroup) iter.next();
@@ -414,6 +417,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				}
 			}
 		}
+        startingGroups = false;
 	}
 
 	/**
