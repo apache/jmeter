@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -188,9 +189,14 @@ public class JMeterUtils implements UnitTestManager {
             p.load(is);
 		} catch (IOException e) {
 			try {
-				is = JMeterUtils.class.getClassLoader().getResource(file).openStream();
-				if (is == null) {
+				final URL resource = JMeterUtils.class.getClassLoader().getResource(file);
+				if (resource == null) {
 					log.warn("Cannot find " + file);
+					return null;
+				}
+				is = resource.openStream();
+				if (is == null) {
+					log.warn("Cannot open " + file);
 					return null;
 				}
 				p.load(is);
