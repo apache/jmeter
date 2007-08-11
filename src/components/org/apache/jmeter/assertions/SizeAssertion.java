@@ -27,10 +27,12 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
+//@see org.apache.jmeter.assertions.PackageTest for unit tests
+
 /**
  * Checks if the results of a Sample matches a particular size.
  * 
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
+ * author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
  */
 public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
 
@@ -50,28 +52,23 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public final static int LESSTHANEQUAL = 6;
 
 	/** Key for storing assertion-informations in the jmx-file. */
-	private static final String SIZE_KEY = "SizeAssertion.size";
+	private static final String SIZE_KEY = "SizeAssertion.size"; // $NON-NLS-1$
 
-	private static final String OPERATOR_KEY = "SizeAssertion.operator";
+	private static final String OPERATOR_KEY = "SizeAssertion.operator"; // $NON-NLS-1$
 
 	byte[] resultData;
 
 	/**
-	 * Returns the result of the Assertion. Here it checks wether the Sample
-	 * took to long to be considered successful. If so an AssertionResult
-	 * containing a FailureMessage will be returned. Otherwise the returned
-	 * AssertionResult will reflect the success of the Sample.
+	 * Returns the result of the Assertion. 
+	 * Here it checks the Sample responseData length.
 	 */
 	public AssertionResult getResult(SampleResult response) {
 		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
 		resultData = response.getResponseData();
 		long resultSize = resultData.length;
-		if (resultSize==0) {
-			return result.setResultForNull();
-		}
 		// is the Sample the correct size?
-		if ((!(compareSize(resultSize)) && (getAllowedSize() > 0))) {
+		if (!(compareSize(resultSize))) {
 			result.setFailure(true);
 			Object[] arguments = { new Long(resultSize), comparatorErrorMessage, new Long(getAllowedSize()) };
 			String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
@@ -81,8 +78,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	}
 
 	/**
-	 * Returns the size in bytes to be asserted. A duration of 0 indicates this
-	 * assertion is to be ignored.
+	 * Returns the size in bytes to be asserted.
 	 */
 	public long getAllowedSize() {
 		return getPropertyAsLong(SIZE_KEY);

@@ -20,6 +20,7 @@ package org.apache.jmeter.assertions;
 
 import junit.framework.TestCase;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -83,7 +84,7 @@ public class PackageTest extends TestCase {
 			response.setResponseData(TEST_STRING.getBytes());
 			for (int i = 0; i < 100; i++) {
 				AssertionResult result;
-				result = assertion.evaluateResponse(response);
+				result = assertion.getResult(response);
 				if (result.isFailure() || result.isError()) {
 					failed++;
 				}
@@ -286,14 +287,14 @@ public class PackageTest extends TestCase {
 			assertion.setTestFieldURL();
 			assertion.addTestString("Sampler Label");
 			assertion.addTestString("Sampler labelx");		
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertFailed();
 
 			assertion.setToNotType();
 			assertion.clearTestStrings();
 			assertion.addTestString("Sampler LabeL");
 			assertion.addTestString("Sampler Labelx");		
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertPassed();
 		}
 		
@@ -305,17 +306,17 @@ public class PackageTest extends TestCase {
 			assertion.addTestString("Label");
 			assertion.addTestString(" x");
 			
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertFailed();
 			
 			assertion.setToNotType();
 			
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertFailed();
 
 			assertion.clearTestStrings();
 			assertion.addTestString("r l");
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertPassed();
 
 			assertion.unsetNotType();
@@ -323,19 +324,19 @@ public class PackageTest extends TestCase {
 			
 			assertion.clearTestStrings();
 			assertion.addTestString("line 2");
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertPassed();
 
 			assertion.clearTestStrings();
 			assertion.addTestString("(?s)line \\d+.*EOF");
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertPassed();
 
 			assertion.setTestFieldResponseCode();
 			
 			assertion.clearTestStrings();
 			assertion.addTestString("401");
-			result = assertion.evaluateResponse(sample);
+			result = assertion.getResult(sample);
 			assertPassed();
 
         }
@@ -359,4 +360,147 @@ public class PackageTest extends TestCase {
 			
 		}
 }
+
+	public static class SizeAssertionTest extends JMeterTestCase{
+
+		private JMeterContext jmctx;
+		private SizeAssertion assertion;
+		private SampleResult sample1,sample0;
+		private JMeterVariables vars;
+		private AssertionResult result;
+		private String data1 = "response Data\n" +	"line 2\n\nEOF";
+		private int data1Len=data1.length();
+		public void setUp() {
+			jmctx = JMeterContextService.getContext();
+			assertion = new SizeAssertion();
+			assertion.setThreadContext(jmctx);
+			vars = new JMeterVariables();
+			jmctx.setVariables(vars);
+			sample0 = new SampleResult();
+			sample1 = new SampleResult();
+			sample1.setResponseData(data1.getBytes());
+		}
+
+		public void testSizeAssertionEquals() throws Exception{
+			assertion.setCompOper(SizeAssertion.EQUAL);
+			assertion.setAllowedSize(0);
+			result = assertion.getResult(sample1);
+			assertFailed();
+
+			result = assertion.getResult(sample0);
+			assertPassed();
+
+			assertion.setAllowedSize(data1Len);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertFailed();
+        }
+		
+		public void testSizeAssertionNotEquals() throws Exception{
+			assertion.setCompOper(SizeAssertion.NOTEQUAL);
+			assertion.setAllowedSize(0);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertFailed();
+
+			assertion.setAllowedSize(data1Len);
+			result = assertion.getResult(sample1);
+			assertFailed();
+
+			result = assertion.getResult(sample0);
+			assertPassed();
+        }
+
+		public void testSizeAssertionGreaterThan() throws Exception{
+			assertion.setCompOper(SizeAssertion.GREATERTHAN);
+			assertion.setAllowedSize(0);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertFailed();
+
+			assertion.setAllowedSize(data1Len);
+			result = assertion.getResult(sample1);
+			assertFailed();
+
+			result = assertion.getResult(sample0);
+			assertFailed();
+        }
+		
+		public void testSizeAssertionGreaterThanEqual() throws Exception{
+			assertion.setCompOper(SizeAssertion.GREATERTHANEQUAL);
+			assertion.setAllowedSize(0);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertPassed();
+
+			assertion.setAllowedSize(data1Len);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertFailed();
+        }
+		
+		public void testSizeAssertionLessThan() throws Exception{
+			assertion.setCompOper(SizeAssertion.LESSTHAN);
+			assertion.setAllowedSize(0);
+			result = assertion.getResult(sample1);
+			assertFailed();
+
+			result = assertion.getResult(sample0);
+			assertFailed();
+
+			assertion.setAllowedSize(data1Len+1);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertPassed();
+        }
+
+		public void testSizeAssertionLessThanEqual() throws Exception{
+			assertion.setCompOper(SizeAssertion.LESSTHANEQUAL);
+			assertion.setAllowedSize(0);
+			result = assertion.getResult(sample1);
+			assertFailed();
+
+			result = assertion.getResult(sample0);
+			assertPassed();
+
+			assertion.setAllowedSize(data1Len+1);
+			result = assertion.getResult(sample1);
+			assertPassed();
+
+			result = assertion.getResult(sample0);
+			assertPassed();
+        }
+// TODO - need a lot more tests
+		
+		private void assertPassed() throws Exception{
+			if (null != result.getFailureMessage()){
+				//System.out.println(result.getFailureMessage());// debug
+			}
+			assertNull("Failure message should be null",result.getFailureMessage());
+			assertFalse(result.isError());
+			assertFalse(result.isFailure());		
+		}
+		
+		private void assertFailed() throws Exception{
+			assertNotNull("Failure nessage should not be null",result.getFailureMessage());
+			//System.out.println(result.getFailureMessage());
+			assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
+			assertFalse(result.isError());
+			assertTrue(result.isFailure());		
+			
+		}
+}
+
 }
