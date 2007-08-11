@@ -2241,15 +2241,19 @@ creating a Test Plan with 25 HTTP Request controllers and all of the requests ar
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
 you add the 25 HTTP Request controllers, leave the "Server Name or IP" field empty.  The controllers will inherit
 this field value from the HTTP Request Defaults element.</p>
+<note>
+In JMeter 2.2 and earlier, port 80 was treated specially - it was ignored if the sampler used the https protocol.
+JMeter 2.3 and later treat all port values equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
+</note>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
-        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server.</property>
+        <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
-        <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
-        <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
+        <property name="Method" required="No">HTTP GET or HTTP POST.</property>
+        <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
         <property name="Send Parameters With the Request" required="No">The query string will

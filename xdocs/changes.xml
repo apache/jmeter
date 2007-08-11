@@ -35,6 +35,7 @@
 <li>Fixed setup of proxy port (bug introduced in 2.3RC3)</li>
 <li>Fixed errors when running non-GUI on a headless host</li>
 <li>Bug 43054 - SSLManager causes stress tests to saturate and crash</li>
+<li>Clarified HTTP Request Defaults usage of the port field</li>
 </ul>
 
 <h3>Version 2.3RC3</h3>
@@ -114,6 +115,10 @@ httpclient.parameters.file=httpclient.parameters
 httpclient.parameters:
 http.authentication.preemptive$Boolean=false
 </pre>
+</p>
+
+<p>
+The port field in HTTP Request Defaults is no longer ignored for https samplers if it is set to 80.
 </p>
 
 <h4>Incompatible changes (development):</h4>
