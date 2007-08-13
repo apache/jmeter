@@ -834,7 +834,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 			res.setResponseHeaders(getResponseHeaders(httpMethod));
 			if (res.isRedirect()) {
-				res.setRedirectLocation(httpMethod.getResponseHeader(HEADER_LOCATION).getValue());
+				final Header headerLocation = httpMethod.getResponseHeader(HEADER_LOCATION);
+				if (headerLocation == null) { // HTTP protocol violation, but avoids NPE
+					throw new IllegalArgumentException("Missing location header");
+				}
+				res.setRedirectLocation(headerLocation.getValue());
 			}
 
             // If we redirected automatically, the URL may have changed
