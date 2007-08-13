@@ -41,6 +41,7 @@
 <li>Bug 43007 - Test ends before all threadgroups started</li>
 <li>Fix possible NPE in HTTPSampler2 if 302 does not have Location header.</li>
 <li>Bug 42919 - Failure Message blank in CSV output [now records first non-blank message]</li>
+<li>Add link to Extending JMeter PDF</li>
 </ul>
 
 <h3>Version 2.3RC3</h3>

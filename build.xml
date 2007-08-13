@@ -1379,7 +1379,10 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="docs-site" depends="init-docs" if="AnakiaTask.present" description="Generate browsable HTML documentation in web-site format.">
     <taskdef name="anakia" classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask"/>
-    <anakia basedir="${src.docs}" destdir="${dest.docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+	<!-- The extending pages are rather out of date (and not linked from elsewhere) -->
+    <anakia basedir="${src.docs}" destdir="${dest.docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site.vsl" projectFile="./stylesheets/project.xml" 
+    	excludes="**/stylesheets/** extending.xml extending/*.xml" 
+    	includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <copy todir="${dest.docs}/images">
       <fileset dir="${src.images}"/>
     </copy>
@@ -1389,11 +1392,17 @@ run JMeter unless all the JMeter jars are added.
   	<copy todir="${dest.docs}/usermanual">
   	  <fileset file="${src.docs}/usermanual/*.pdf"/>
     </copy>
+  	<copy todir="${dest.docs}/extending">
+  	  <fileset file="${src.docs}/extending/jmeter_tutorial.pdf"/>
+    </copy>
   </target>
 
   <target name="docs-printable" depends="init-docs" if="AnakiaTask.present" description="Generate printable HTML documentation.">
     <taskdef name="anakia" classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask"/>
-    <anakia basedir="${src.docs}" destdir="${dest.printable_docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml" excludes="**/stylesheets/**" includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
+	<!-- The extending pages are rather out of date (and not linked from elsewhere) -->
+    <anakia basedir="${src.docs}" destdir="${dest.printable_docs}/" extension=".html" style="${eclipse.anakia}/xdocs/stylesheets/site_printable.vsl" projectFile="./stylesheets/printable_project.xml"
+    	excludes="**/stylesheets/** extending.xml extending/*.xml" 
+    	includes="**/*.xml" lastModifiedCheck="true" velocityPropertiesFile="${src.docs}/velocity.properties"/>
     <!--
     Share images with non-printable version
     Means printable version won't work on web-site
@@ -1406,6 +1415,9 @@ run JMeter unless all the JMeter jars are added.
     </copy>
     <copy todir="${dest.printable_docs}/usermanual">
         <fileset file="${src.docs}/usermanual/*.pdf"/>
+    </copy>
+  	<copy todir="${dest.printable_docs}/extending">
+  	  <fileset file="${src.docs}/extending/jmeter_tutorial.pdf"/>
     </copy>
   </target>
 
