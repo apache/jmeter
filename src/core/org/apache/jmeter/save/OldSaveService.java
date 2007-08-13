@@ -527,8 +527,12 @@ public final class OldSaveService {
     		String message = null;
     		AssertionResult[] results = sample.getAssertionResults();
     
-    		if ((results != null) && (results.length > 0)) {
-    			message = results[0].getFailureMessage();
+    		if (results != null) {
+    			// Find the first non-null message
+    			for (int i = 0; i < results.length; i++){
+        			message = results[i].getFailureMessage();
+    				if (message != null) break;
+    			}
     		}
     
     		if (message != null) {
