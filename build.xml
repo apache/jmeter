@@ -1141,9 +1141,11 @@ run JMeter unless all the JMeter jars are added.
       depends="_gump_properties,clean,install" 
       description="Build JMeter">
     <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+  	<!-- No need to create the archives for Gump
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-source"/>
+    -->
   </target>
   
   <!-- Used by project jakarta-jmeter -->
@@ -1531,7 +1533,7 @@ run JMeter unless all the JMeter jars are added.
     <condition property="build.test.gump" value="${build.test}">
       <not><isset property="build.test.gump"/></not>
     </condition>
-   <echo>
+   <echo level="info">
    gump.run = ${gump.run}
    java.awt.headless = ${java.awt.headless}
    test.headless = ${test.headless}
@@ -1552,7 +1554,7 @@ run JMeter unless all the JMeter jars are added.
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
-      <arg value="${build.test.gump},../lib/ext"/>
+      <arg value="${build.test},../lib/ext"/>
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
