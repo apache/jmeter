@@ -85,9 +85,10 @@ JMeter has been tested and works under:
 </p>
 <ul>
 <li>Unix (Solaris, Linux, etc)</li>
-<li>Windows (98, NT, 2000, XP)</li>
+<li>Windows (98, NT, XP, etc)</li>
 <li>OpenVMS Alpha 7.3+</li>
 </ul>
+Even if your OS is not listed above, JMeter should run on it provided that the JVM is compliant. 
 </subsection>
 </section>
 
