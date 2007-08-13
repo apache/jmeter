@@ -99,6 +99,8 @@
 </li>
 		  				<li>	 <a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
 </li>
+		  				<li>	 <a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
 		  		  </ul>
 	 		  <p><strong>Community</strong></p>
 		  <ul>
@@ -7022,6 +7024,15 @@ this field value from the HTTP Request Defaults element.
 						</p>
 									
 
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+In JMeter 2.2 and earlier, port 80 was treated specially - it was ignored if the sampler used the https protocol.
+JMeter 2.3 and later treat all port values equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
+
+			</td></tr>
+	</table></p>
+									
+
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='533' height='316' src="../images/screenshots/http-config/http-request-defaults.png"></div>
 											  									 			 <p>
@@ -7041,7 +7052,7 @@ this field value from the HTTP Request Defaults element.
 			<td>						Domain name or IP address of the web server.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 			<tr>
@@ -7049,7 +7060,7 @@ this field value from the HTTP Request Defaults element.
 			<td>						Port the web server is listening to.
 			</td>
 			<td>
-											No (defaults to 80)
+											No
 								</td>
 		</tr>
 			<tr>
@@ -7065,7 +7076,7 @@ this field value from the HTTP Request Defaults element.
 			<td>						HTTP GET or HTTP POST.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 			<tr>
@@ -7075,7 +7086,7 @@ resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 			<tr>
@@ -8021,7 +8032,15 @@ user) is marked as a failed response.
 								The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
 the size be equal to, greater than, less than, or not equal to a given number of bytes.
 						</p>
-															<p><b>Control Panel</b></p>
+									
+
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						Since JMeter 2.3RC3, an empty response is treated as being 0 bytes rather than reported as an error.
+			</td></tr>
+	</table></p>
+									
+
+														<p><b>Control Panel</b></p>
 						<div align="center"><img width='331' height='346' src="../images/screenshots/size_assertion.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>

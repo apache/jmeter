@@ -101,6 +101,8 @@
 </li>
 		  				<li>	 <a href="./usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
 </li>
+		  				<li>	 <a href="./extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
 		  		  </ul>
 	 		  <p><strong>Community</strong></p>
 		  <ul>
@@ -130,6 +132,66 @@
 							</p>
 							  									 				<h3	>
 								Version 2.3
+						</h3>
+							  									 				<h4	>
+								Fixes since 2.3RC3
+						</h4>
+							  									 				<ul	>
+								
+
+												<li	>
+								Fixed NPE in Summariser (bug introduced in 2.3RC3)
+						</li>
+									
+
+												<li	>
+								Fixed setup of proxy port (bug introduced in 2.3RC3)
+						</li>
+									
+
+												<li	>
+								Fixed errors when running non-GUI on a headless host
+						</li>
+									
+
+												<li	>
+								Bug 43054 - SSLManager causes stress tests to saturate and crash (bug introduced in 2.3RC3)
+						</li>
+									
+
+												<li	>
+								Clarified HTTP Request Defaults usage of the port field
+						</li>
+									
+
+												<li	>
+								Bug 43006 - NPE if icon.properties file not found
+						</li>
+									
+
+												<li	>
+								Bug 42918 - Size Assertion now treats an empty response as having zero length
+						</li>
+									
+
+												<li	>
+								Bug 43007 - Test ends before all threadgroups started
+						</li>
+									
+
+												<li	>
+								Fix possible NPE in HTTPSampler2 if 302 does not have Location header.
+						</li>
+									
+
+												<li	>
+								Bug 42919 - Failure Message blank in CSV output [now records first non-blank message]
+						</li>
+									
+
+						</ul>
+							  									 				<h3	>
+								Version 2.3RC3
 						</h3>
 							  									 				<h4	>
 								Summary of changes (for more details, see below)
@@ -320,6 +382,11 @@ http.authentication.preemptive$Boolean=false
 
 						</pre>
 									
+
+						</p>
+							  									 				<p	>
+								
+The port field in HTTP Request Defaults is no longer ignored for https samplers if it is set to 80.
 
 						</p>
 							  									 				<h4	>
