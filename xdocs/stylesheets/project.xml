@@ -48,6 +48,7 @@
 		<item name="Recording Tests"	 href="/usermanual/jmeter_proxy_step_by_step.pdf"/>
 		<item name="JUnit Sampler"		 href="/usermanual/junitsampler_tutorial.pdf"/>
 		<item name="Access Log Sampler"	 href="/usermanual/jmeter_accesslog_sampler_step_by_step.pdf"/>
+		<item name="Extending JMeter"	 href="/extending/jmeter_tutorial.pdf"/>
 	 </menu>
 	 <menu name="Community">
 		<item name="Get Involved"        href="/site/getinvolved.html"/>
