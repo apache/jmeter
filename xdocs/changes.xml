@@ -33,7 +33,7 @@
 <ul>
 <li>Fixed NPE in Summariser (bug introduced in 2.3RC3)</li>
 <li>Fixed setup of proxy port (bug introduced in 2.3RC3)</li>
-<li>Fixed errors when running non-GUI on a headless host</li>
+<li>Fixed errors when running non-GUI on a headless host (bug introduced in 2.3RC3)</li>
 <li>Bug 43054 - SSLManager causes stress tests to saturate and crash (bug introduced in 2.3RC3)</li>
 <li>Clarified HTTP Request Defaults usage of the port field</li>
 <li>Bug 43006 - NPE if icon.properties file not found</li>
@@ -43,6 +43,10 @@
 <li>Bug 42919 - Failure Message blank in CSV output [now records first non-blank message]</li>
 <li>Add link to Extending JMeter PDF</li>
 <li>Allow for quoted charset in Content-Type parsing</li>
+</ul>
+
+<h4>Improvements since 2.3RC3</h4>
+<ul>
 <li>Add stop thread option to CSV Dataset</li>
 </ul>
 
