@@ -1958,9 +1958,14 @@ the Report.
 	As a special case, the string "\t" (without quotes) is treated as a Tab.
 	</p>
 	<p>
-	When the end of file is reached, and the recycle option is true, reading starts again with the first line of the file.
-	If the recycle option is false, then all the variables are set to <b>&amp;lt;EOF&gt;</b> when the end of file is reached.
+	When the end of file (EOF) is reached, and the recycle option is true, reading starts again with the first line of the file.
+	</p>
+	<p>
+	If the recycle option is false, and stopThread is false, then all the variables are set to <b>&amp;lt;EOF&gt;</b> when the end of file is reached.
 	This value can be changed by setting the JMeter property <b>csvdataset.eofstring</b>.
+	</p>
+	<p>
+	If the Recycle option is false, and Stop Thread is true, then reaching EOF will cause the thread to be stopped.
 	</p>
 </description>
 <properties>
@@ -1975,6 +1980,7 @@ the Report.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).</property>
   <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching EOF? (default is true)</property>
+  <property name="Stop thread on EOF?" required="Yes">Should the thread be stopped on EOF, if Recycle is false? (default is false)</property>
 </properties>
 </component>
 

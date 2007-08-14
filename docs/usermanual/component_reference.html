@@ -6204,8 +6204,14 @@ the Report.
 	
 												<p	>
 								
-	When the end of file is reached, and the recycle option is true, reading starts again with the first line of the file.
-	If the recycle option is false, then all the variables are set to 
+	When the end of file (EOF) is reached, and the recycle option is true, reading starts again with the first line of the file.
+	
+						</p>
+									
+	
+												<p	>
+								
+	If the recycle option is false, and stopThread is false, then all the variables are set to 
 												<b	>
 								&lt;EOF>
 						</b>
@@ -6215,6 +6221,13 @@ the Report.
 								csvdataset.eofstring
 						</b>
 									.
+	
+						</p>
+									
+	
+												<p	>
+								
+	If the Recycle option is false, and Stop Thread is true, then reaching EOF will cause the thread to be stopped.
 	
 						</p>
 									
@@ -6266,6 +6279,14 @@ the Report.
 			<tr>
 			<td>Recycle on EOF?</td>
 			<td>						Should the file be re-read from the beginning on reaching EOF? (default is true)
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Stop thread on EOF?</td>
+			<td>						Should the thread be stopped on EOF, if Recycle is false? (default is false)
 			</td>
 			<td>
 											Yes
