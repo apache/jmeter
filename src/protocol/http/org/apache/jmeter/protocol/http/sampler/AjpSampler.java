@@ -422,16 +422,7 @@ public class AjpSampler extends HTTPSamplerBase {
             String value = getString();
             if(HEADER_CONTENT_TYPE.equalsIgnoreCase(name)) {
                 res.setContentType(value);
-                String de = value.toLowerCase();
-                int cset = de.indexOf("charset=");//$NON-NLS-1$
-                if(cset >= 0) {
-                    res.setDataEncoding(de.substring(cset+8));
-                }
-                if(de.startsWith("text/")) {//$NON-NLS-1$
-                    res.setDataType(HTTPSampleResult.TEXT);
-                } else {
-                    res.setDataType(HTTPSampleResult.BINARY);
-                }
+                res.setEncodingAndType(value);
             } else if(HEADER_SET_COOKIE.equalsIgnoreCase(name)) {
                 CookieManager cookies = getCookieManager();
                 if(cookies != null) {
