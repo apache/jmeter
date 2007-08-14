@@ -180,5 +180,28 @@ public class TestSampleResult extends TestCase {
         }
 
         // TODO some more invalid sequence tests needed
+        
+        public void testEncodingAndType() throws Exception {
+        	// check default
+        	SampleResult res = new SampleResult();
+        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
+        	assertEquals("DataType should be blank","",res.getDataType());
+        	
+        	// check null changes nothing
+        	res.setEncodingAndType(null);
+        	assertEquals(SampleResult.DEFAULT_ENCODING,res.getDataEncoding());
+        	assertEquals("DataType should be blank","",res.getDataType());
+
+        	// Check unquoted charset
+        	res.setEncodingAndType("text/html; charset=aBcd");
+        	assertEquals("aBcd",res.getDataEncoding());
+        	assertEquals("text",res.getDataType());
+
+        	// Check quoted charset
+        	res.setEncodingAndType("text/html; charset=\"aBcd\"");
+        	assertEquals("aBcd",res.getDataEncoding());
+        	assertEquals("text",res.getDataType());
+        	
+        }
 }
 
