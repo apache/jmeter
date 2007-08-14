@@ -1071,8 +1071,8 @@ run JMeter unless all the JMeter jars are added.
 
 	<target
 		name="nightly"
-		depends="package,docs-printable,pack-dist"
-		description="Build JMeter for nightly dir (package docs-printable pack-dist)"/>
+		depends="package,docs-printable,pack-nightly"
+		description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
 		
 	<!-- Internal target -->
 	<target name="_distribution">
@@ -1213,6 +1213,13 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="_pack-binaries"/>
     <antcall target="_pack-libraries"/>
     <antcall target="_pack-javadoc"/>
+    <antcall target="_pack-source"/>
+  </target>
+
+  <target name="pack-nightly" depends="init-version">
+    <property name="dist.name" value="jakarta-jmeter-${jmeter.version}"/>
+    <antcall target="_pack-binaries"/>
+    <antcall target="_pack-libraries"/>
     <antcall target="_pack-source"/>
   </target>
 
