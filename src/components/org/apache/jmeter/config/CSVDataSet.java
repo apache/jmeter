@@ -28,6 +28,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -53,7 +54,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     private transient boolean recycle = true;
     
-	transient private String[] vars;
+    private transient boolean stopThread = false;
+
+    transient private String[] vars;
 
     private Object readResolve(){
         recycle = true;
@@ -84,6 +87,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
     			}
     			// TODO - provide option to set unused variables ?
             } else {
+            	if (getStopThread()) {
+            		throw new JMeterStopThreadException("End of file detected");
+            	}
                 for (int a = 0; a < vars.length ; a++) {
                     threadVars.put(vars[a], EOFVALUE);
                 }
@@ -152,6 +158,14 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     public void setRecycle(boolean recycle) {
         this.recycle = recycle;
+    }
+
+    public boolean getStopThread() {
+        return stopThread;
+    }
+
+    public void setStopThread(boolean value) {
+        this.stopThread = value;
     }
 
 }
