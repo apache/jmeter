@@ -34,6 +34,8 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
+// For unit tests, @see TestSampleResult
+
 /**
  * This is a nice packaging for the various information returned from taking a
  * sample of an entry.
@@ -48,7 +50,8 @@ public class SampleResult implements Serializable {
 	// However the suggested System.getProperty("file.encoding") is Cp1252 on
 	// Windows
 	// So use a new property with the original value as default
-	private static final String DEFAULT_ENCODING 
+    // needs to be accessible from test code
+	static final String DEFAULT_ENCODING 
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
 			"ISO-8859-1"); // $NON-NLS-1$
 
@@ -548,11 +551,17 @@ public class SampleResult implements Serializable {
             // <META http-equiv="content-type" content="text/html;
             // charset=foobar">
             // or can we leave that to the renderer ?
-            String de = ct.toLowerCase();
-            final String cs = "charset="; // $NON-NLS-1$
-            int cset = de.indexOf(cs);
+            final String CS_PFX = "charset="; // $NON-NLS-1$
+            int cset = ct.toLowerCase().indexOf(CS_PFX);
             if (cset >= 0) {
-                setDataEncoding(de.substring(cset + cs.length()));
+            	// TODO - assumes charset is not followed by anything else
+                String charSet = ct.substring(cset + CS_PFX.length());
+                // Check for quoted string
+                if (charSet.startsWith("\"")){ // $NON-NLS-1$
+                	setDataEncoding(charSet.substring(1, charSet.length()-1)); // remove quotes
+                } else {
+				    setDataEncoding(charSet);
+                }
             }
             if (ct.startsWith("image/")) {// $NON-NLS-1$
                 setDataType(BINARY);
