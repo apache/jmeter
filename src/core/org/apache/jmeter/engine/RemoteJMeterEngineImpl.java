@@ -22,6 +22,7 @@ import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Date;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -82,6 +83,8 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 	public void runTest() throws RemoteException, JMeterEngineException {
 		log.info("running test");
 		log.debug("This = " + this);
+		long now=System.currentTimeMillis();
+		System.out.println("Starting the test @ "+new Date(now)+" ("+now+")");
 		backingEngine.runTest();
 	}
 
