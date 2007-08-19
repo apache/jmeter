@@ -244,8 +244,9 @@ the following command options</p>
 </subsection>
 
 <subsection name="2.4.4 Server Mode" anchor="server">
-<p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode, and then control each server from the GUI.
-<note>The jmeter-server/jmeter-server.bat script should start rmiregistry for you with the appropriate classpath.  if it fails to
+<p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
+You can also use non-GUI mode to run remote tests.
+<note>The jmeter-server/jmeter-server.bat script should start rmiregistry for you with the appropriate classpath. If it fails to
 do so, <a href="remote-test.html#detail_instructions">read the details</a> about starting the jmeter server.</note>
 
 Run jmeter-server/jmeter-server.bat, plus these optional commands:</p>
