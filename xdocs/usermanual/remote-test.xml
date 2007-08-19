@@ -60,12 +60,31 @@ add the value of your running JMeter server's IP address.  Multiple such servers
 <p>Note that you can also use the -J <a href="get-started.html#override">command line option</a> to specify the remote host(s) to use.
 	E.g. jmeter -Jremote_hosts=host1,127.0.0.1,host2</p>
 
-<p><b>Step 3: Start the JMeter Client</b></p>
+<p><b>Step 3a: Start the JMeter Client from a GUI client</b></p>
 <p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "bin/jmeter.bat".  For UNIX, 
 use the script "bin/jmeter".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
 normal JMeter start and stop menu items.</p>
 <figure image="remote/run-menu00.gif" width="232" height="156">Figure 1 - Run Menu</figure>
+
+<p><b>Step 3b: Start the JMeter from a non-GUI Client</b></p>
+<p>
+As an alternative, you can start the remote server(s) from a non-GUI (command-line) client.
+The command to do this is:
+<pre>
+jmeter -n -t script.jmx -r
+or
+jmeter -n -t script.jmx -R server1,server2...
+</pre>
+The first example will start whatever servers are defined in the JMeter property remote_hosts;
+the second example will define remote_hosts from the list of servers and then run the remote servers.
+<br/>
+The command-line client will exit when all the remote servers have stopped.
+<note>
+There is currently no way to stop the remote servers gracefully from the command-line.
+</note>
+</p>
+
 <subsection name="15.1 Doing it Manually" anchor="detail_instructions">
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).  Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
 <p><b>Step 1a: Start the RMI Registry</b></p>
