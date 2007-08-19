@@ -20,6 +20,7 @@ package org.apache.jmeter.samplers;
 
 import org.apache.log.Logger;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 
 import java.rmi.RemoteException;
 import java.io.Serializable;
@@ -46,8 +47,8 @@ public class StandardSampleSender implements SampleSender, Serializable {
 		log.info("Test ended()");
 		try {
 			listener.testEnded();
-		} catch (Throwable ex) {
-			log.warn("testEnded()", ex);
+		} catch (RemoteException ex) {
+			log.warn("testEnded()"+ex);
 		}
 
 	}
@@ -56,8 +57,8 @@ public class StandardSampleSender implements SampleSender, Serializable {
 		log.info("Test Ended on " + host); // should this be debug?
 		try {
 			listener.testEnded(host);
-		} catch (Throwable ex) {
-			log.error("testEnded(host)", ex);
+		} catch (RemoteException ex) {
+			log.warn("testEnded(host)"+ex);
 		}
 	}
 
@@ -66,6 +67,9 @@ public class StandardSampleSender implements SampleSender, Serializable {
 		try {
 			listener.sampleOccurred(e);
 		} catch (RemoteException err) {
+			if (err.getCause() instanceof java.net.ConnectException){
+				throw new JMeterError("Could not return sample",err);				
+			}
 			log.error("sampleOccurred", err);
 		}
 	}
