@@ -217,7 +217,7 @@ add the value of your running JMeter server's IP address.  Multiple such servers
 						</p>
 							  									 				<p	>
 												<b	>
-								Step 3: Start the JMeter Client
+								Step 3a: Start the JMeter Client from a GUI client
 						</b>
 							</p>
 							  									 				<p	>
@@ -229,6 +229,41 @@ normal JMeter start and stop menu items.
 							  									 				<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="../images/screenshots/remote/run-menu00.gif"><br>
 	<font size="-1">						Figure 1 - Run Menu
 			</font></td></tr></table></p>
+							  									 				<p	>
+												<b	>
+								Step 3b: Start the JMeter from a non-GUI Client
+						</b>
+							</p>
+							  									 				<p	>
+								
+As an alternative, you can start the remote server(s) from a non-GUI (command-line) client.
+The command to do this is:
+
+												<pre	>
+								
+jmeter -n -t script.jmx -r
+or
+jmeter -n -t script.jmx -R server1,server2...
+
+						</pre>
+									
+The first example will start whatever servers are defined in the JMeter property remote_hosts;
+the second example will define remote_hosts from the list of servers and then run the remote servers.
+
+												<br	>
+						</br>
+									
+The command-line client will exit when all the remote servers have stopped.
+
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+There is currently no way to stop the remote servers gracefully from the command-line.
+
+			</td></tr>
+	</table></p>
+									
+
+						</p>
 							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="#828DA6">
 		  <font color="#ffffff" face="arial,helvetica,sanserif">

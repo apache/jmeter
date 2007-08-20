@@ -199,6 +199,11 @@
 						</li>
 									
 
+												<li	>
+								Bug 39792 - ClientJMeter synchronisation needed
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements since 2.3RC3
@@ -215,6 +220,55 @@
 							  									 				<h3	>
 								Version 2.3RC3
 						</h3>
+							  									 				<h4	>
+								Known problems:
+						</h4>
+							  									 				<p	>
+								
+The default HTTP Request (not HTTPClient) sampler may not work for HTTPS connections via a proxy.
+This appears to be due to a Java bug, see 
+												<a	 href="http://issues.apache.org/bugzilla/show_bug.cgi?id=39337">
+								Bug 39337
+						</a>
+									.
+To avoid the problem, try a more recent version of Java, or switch to the HTTPClient version of the HTTP Request sampler.
+
+						</p>
+							  									 				<p	>
+								Transaction Controller parent mode does not support nested Transaction Controllers.
+Doing so may cause a Null Pointer Exception in TestCompiler.
+
+						</p>
+							  									 				<p	>
+								Thread active counts are always zero in CSV and XML files when running remote tests.
+
+						</p>
+							  									 				<p	>
+								The property file_format.testlog=2.1 is treated the same as 2.2.
+However JMeter does honour the 3 testplan versions.
+						</p>
+							  									 				<p	>
+								
+Bug 22510 - JMeter always uses the first entry in the keystore.
+
+						</p>
+							  									 				<p	>
+								
+Remote mode does not work if JMeter is installed in a directory where the path name contains spaces.
+
+						</p>
+							  									 				<p	>
+								
+BeanShell test elements leak memory.
+This can be reduced by using a file instead of including the script in the test element.
+
+						</p>
+							  									 				<p	>
+								
+Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
+to name log files in client-server mode.
+
+						</p>
 							  									 				<h4	>
 								Summary of changes (for more details, see below)
 						</h4>
@@ -441,44 +495,6 @@ Removed deprecated method JMeterUtils.split() - use JOrphanUtils version instead
 								
 Removed method saveUsingJPEGEncoder() from SaveGraphicsService.
 It was unused so far, and used the only Sun-specific class in JMeter.
-
-						</p>
-							  									 				<h4	>
-								Known problems:
-						</h4>
-							  									 				<p	>
-								Transaction Controller parent mode does not support nested Transaction Controllers.
-Doing so may cause a Null Pointer Exception in TestCompiler.
-
-						</p>
-							  									 				<p	>
-								Thread active counts are always zero in CSV and XML files when running remote tests.
-
-						</p>
-							  									 				<p	>
-								The property file_format.testlog=2.1 is treated the same as 2.2.
-However JMeter does honour the 3 testplan versions.
-						</p>
-							  									 				<p	>
-								
-Bug 22510 - JMeter always uses the first entry in the keystore.
-
-						</p>
-							  									 				<p	>
-								
-Remote mode does not work if JMeter is installed in a directory where the path name contains spaces.
-
-						</p>
-							  									 				<p	>
-								
-BeanShell test elements leak memory.
-This can be reduced by using a file instead of including the script in the test element.
-
-						</p>
-							  									 				<p	>
-								
-Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
-to name log files in client-server mode.
 
 						</p>
 							  									 				<h4	>
