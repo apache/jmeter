@@ -43,6 +43,7 @@
 <li>Bug 42919 - Failure Message blank in CSV output [now records first non-blank message]</li>
 <li>Add link to Extending JMeter PDF</li>
 <li>Allow for quoted charset in Content-Type parsing</li>
+<li>Bug 39792 - ClientJMeter synchronisation needed</li>
 </ul>
 
 <h4>Improvements since 2.3RC3</h4>
