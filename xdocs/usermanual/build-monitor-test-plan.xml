@@ -151,12 +151,5 @@ performance or a bug of some sort.</p>
 
 </section>
 
-<section name="&sect-num;.7 Saving the Test Plan" anchor="saving">
-<p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu.</p>
-
-</section>
-
 </body>
 </document>

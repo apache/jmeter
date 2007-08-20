@@ -15,6 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '2'>
+]>
+
 <document prev="intro.html" next="build-test-plan.html" date="$Date$">
 
 <properties>
@@ -22,7 +27,7 @@
 </properties>
 <body>
 
-<section name="2. Getting Started" anchor="get_started">
+<section name="&sect-num;. Getting Started" anchor="get_started">
 <p>The easiest way to begin using JMeter is to first
 <a href="http://jakarta.apache.org/site/downloads/index.html">download the latest production release</a> and install it.
 The release contains all of the files you need to build and run most types of tests,
@@ -66,10 +71,10 @@ various configuration elements (timers, listeners, assertions, and others) which
 over your Test Plans.</p>
 </section>
 
-<section name="2.1 Requirements" anchor="requirements">
+<section name="&sect-num;.1 Requirements" anchor="requirements">
 <p>JMeter requires your computing environment meets some minimum requirements.</p>
 
-<subsection name="2.1.1 Java Version" anchor="java_versions">
+<subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
 <note>JMeter requires a fully compliant JVM 1.4 or higher.  
 <br/>
 Version 2.2 and later no longer support Java 1.3.
@@ -78,7 +83,7 @@ Version 2.2 and later no longer support Java 1.3.
 JMeter because of JRE implementation issues.</p>
 </subsection>
 
-<subsection name="2.1.2 Operating Systems" anchor="os">
+<subsection name="&sect-num;.1.2 Operating Systems" anchor="os">
 <p>JMeter is a 100% Java application and should run correctly on any system
 that has a compliant Java implementation.<br/>
 JMeter has been tested and works under:
@@ -92,28 +97,28 @@ Even if your OS is not listed above, JMeter should run on it provided that the J
 </subsection>
 </section>
 
-<section name="2.2 Optional" anchor="optional">
+<section name="&sect-num;.2 Optional" anchor="optional">
 <p>If you plan on doing JMeter development or want to use Sun's Java Standard Extension packages, then you will need one or more optional packages listed below.</p>
 
 
-<subsection name="2.2.1 Java Compiler" anchor="opt_compiler">
+<subsection name="&sect-num;.2.1 Java Compiler" anchor="opt_compiler">
 <p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 1.4 or higher.</p>
 </subsection>
 
-<subsection name="2.2.2 SAX XML Parser" anchor="opt_sax">
+<subsection name="&sect-num;.2.2 SAX XML Parser" anchor="opt_sax">
 <p>JMeter comes with Apache's <a href="http://xml.apache.org/">Xerces XML parser</a>. You have the option of telling JMeter
 to use a different XML parser. To do so, include the classes for the third-party parser in JMeter's <a href="#classpath">classpath</a>,
 and update the <a href="#configuring_jmeter">jmeter.properties</a> file with the full classname of the parser
 implementation.</p>
 </subsection>
 
-<subsection name="2.2.3 Email Support" anchor="opt_email">
+<subsection name="&sect-num;.2.3 Email Support" anchor="opt_email">
 <p>JMeter has limited Email capabilities. It can send email based on test results, and has a POP/IMAP sampler.
 It does not currently support SMTP sampling.
 To enable Email support, add Sun's JavaMail packages and the activation packages to JMeter's <a href="#classpath">classpath</a>.</p>
 </subsection>
 
-<subsection name="2.2.4 SSL Encryption" anchor="opt_ssl">
+<subsection name="&sect-num;.2.4 SSL Encryption" anchor="opt_ssl">
 <p>To test a web server using SSL encryption (HTTPS), JMeter requires that an
 implementation of SSL be provided, as is the case with Sun Java 1.4 and above.
 If your version of Java does not include SSL support, then it is possible to add an external implementation.
@@ -127,22 +132,22 @@ This is to allow the maximum flexibility in testing servers.</p>
 <note>The JMeter proxy server (see below) does not support recording SSL (https).</note>
 </subsection>
 
-<subsection name="2.2.5 JDBC Driver" anchor="opt_jdbc">
+<subsection name="&sect-num;.2.5 JDBC Driver" anchor="opt_jdbc">
 <p>You will need to add your database vendor's JDBC driver to the <a href="#classpath">classpath</a> if you want to do JDBC testing.
 Make sure the file is a jar file, not a zip.
 </p>
 </subsection>
 
-<subsection name="2.2.6 Apache SOAP" anchor="opt_soap">
+<subsection name="&sect-num;.2.6 Apache SOAP" anchor="opt_soap">
 <p>Apache SOAP requires mail.jar and activation.jar. You need to download and copy these two jar files to your <b>jmeter/lib</b> directory. Once the files are in there, JMeter will automatically pick them up.</p>
 </subsection>
 
-<subsection name="2.2.7 BeanShell" anchor="opt_beanshell">
+<subsection name="&sect-num;.2.7 BeanShell" anchor="opt_beanshell">
 <p>To run the BeanShell function or any of the BeanShell test elements (sampler, timer etc),
  you need to download the beanshell jar from <a href="http://www.beanshell.org/">http://www.beanshell.org/</a> and copy the jar file to the <b>jmeter/lib directory</b>, where JMeter will automatically pick it up.</p>
 </subsection>
 
-<subsection name="2.2.7 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
+<subsection name="&sect-num;.2.7 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
 <note>This list is probably out of date</note>
      <p>The following libraries have to be supplied in the lib directory of JMeter:
          <ol>
@@ -167,7 +172,7 @@ See the <a href="#classpath">JMeter Classpath</a> section for more details on in
 </note>
 </section>
 
-<section name="2.3 Installation" anchor="install">
+<section name="&sect-num;.3 Installation" anchor="install">
 
 <note>
 Note: avoid installing JMeter in a path with spaces in the name.  
@@ -180,12 +185,12 @@ and the JAVA_HOME environment variable set, there is nothing more for you to do.
 
 </section>
 
-<section name="2.4 Running JMeter" anchor="running">
+<section name="&sect-num;.4 Running JMeter" anchor="running">
 <br/>
 <p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file. 
 </p>
 
-<subsection name="2.4.1 JMeter's Classpath" anchor="classpath">
+<subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <ul>
 <li>JMETER_HOME/lib - used for utility jars</li>
@@ -212,7 +217,7 @@ and the java command silently ignores the CLASSPATH variable, and the -classpath
 [This occurs with all Java programs, not just JMeter.]</p>
 </subsection>
 
-<subsection name="2.4.2 Using a Proxy Server" anchor="proxy_server">
+<subsection name="&sect-num;.4.2 Using a Proxy Server" anchor="proxy_server">
 <p>If you are testing from behind a firewall/proxy server, you may need to provide JMeter with
 the firewall/proxy server hostname and port number.  To do so, run the jmeter.bat/jmeter file
 from a command line with the following parameters:</p>
@@ -230,7 +235,7 @@ which can be used for recording HTTP (but not HTTPS) browser sessions.
 This is not to be confused with the proxy settings described above, which are used when JMeter makes HTTP or HTTPS requests itself.</note>
 </subsection>
 
-<subsection name="2.4.3 Non-GUI Mode (Command Line mode)" anchor="non_gui">
+<subsection name="&sect-num;.4.3 Non-GUI Mode (Command Line mode)" anchor="non_gui">
 <p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
 the following command options</p>
 <p>-n This specifies JMeter is to run in non-gui mode</p>
@@ -243,7 +248,7 @@ the following command options</p>
 <p><b>Example</b>: jmeter -n -t my_test.jmx -l log.jtl -H my.proxy.server -P 8000</p>
 </subsection>
 
-<subsection name="2.4.4 Server Mode" anchor="server">
+<subsection name="&sect-num;.4.4 Server Mode" anchor="server">
 <p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
 You can also use non-GUI mode to run remote tests.
 <note>The jmeter-server/jmeter-server.bat script should start rmiregistry for you with the appropriate classpath. If it fails to
@@ -256,7 +261,7 @@ Run jmeter-server/jmeter-server.bat, plus these optional commands:</p>
 <p><b>Example</b>: jmeter-server -H my.proxy.server -P 8000</p>
 </subsection>
 
-<subsection name="2.4.5 Overriding Properties Via The Command Line" anchor="override">
+<subsection name="&sect-num;.4.5 Overriding Properties Via The Command Line" anchor="override">
 <p>Java system properties, JMeter properties, and logging properties can be overriden directly on the command line (instead of modifying jmeter.properties).
 To do so, use the following options:</p>
 <p>-D[prop_name]=[value] - defines a java system property value.</p>
@@ -276,7 +281,7 @@ jmeter -LDEBUG</pre>
 	Attempts to use the -J flag to update log_level or log_file properties will have no effect.</b>
 	</p>
 </subsection>
-<subsection name="2.4.6 Logging and error messages" anchor="logging">
+<subsection name="&sect-num;.4.6 Logging and error messages" anchor="logging">
 	<p>If JMeter detects an error, a message will be written to the log file. 
 		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
 		It defaults to <b>jmeter.log</b>, and will be found in the directory from which JMeter was launched.
@@ -310,7 +315,7 @@ jmeter -LDEBUG</pre>
 <p>The log file can be helpful in determining the cause of an error,
 	as JMeter does not interrupt a test to display an error dialogue.</p>
 </subsection>
-<subsection name="2.4.7 Full list of command-line options" anchor="options">
+<subsection name="&sect-num;.4.7 Full list of command-line options" anchor="options">
 <p>Invoking JMeter as "jmeter -?" will print a list of all the command-line options. 
 These are shown below.</p>
 <pre>
@@ -360,7 +365,7 @@ These are shown below.</p>
 </section>
 
 
-<section name="2.5 Configuring JMeter" anchor="configuring_jmeter">
+<section name="&sect-num;.5 Configuring JMeter" anchor="configuring_jmeter">
 <p>If you wish to modify the properties with which JMeter runs you need to
   either modify the jmeter.properties in the /bin directory or create
   your own copy of the jmeter.properties and specify it in the command line.
