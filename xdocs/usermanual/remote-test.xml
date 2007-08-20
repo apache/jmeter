@@ -15,6 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '15'>
+]>
+
 <document prev="listeners.html" next="best-practices.html" date="$Date$">
 
 <properties>
@@ -23,7 +28,7 @@
 
 <body>
 
-<section name="15. Remote Testing">
+<section name="&sect-num;. Remote Testing">
 
 <p>In the event that your JMeter client machine is unable, performance-wise, to simulate 
 enough users to stress your server, an option exists to control multiple, remote JMeter
@@ -85,7 +90,7 @@ There is currently no way to stop the remote servers gracefully from the command
 </note>
 </p>
 
-<subsection name="15.1 Doing it Manually" anchor="detail_instructions">
+<subsection name="&sect-num;.1 Doing it Manually" anchor="detail_instructions">
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).  Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
 <p><b>Step 1a: Start the RMI Registry</b></p>
 <p>JMeter uses Remote Method Invocation (RMI) as the remote communication mechanism.  Therefore, you need
@@ -106,7 +111,7 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 
 <p>Steps 2 and 3 remain the same.</p>
 </subsection>
-<subsection name="15.2 Tips" anchor="tips">
+<subsection name="&sect-num;.2 Tips" anchor="tips">
 <p>If you're running Suse Linux, these tips may help. The default installation may enable the firewall. In that case, remote testing will not work properly. The following tips were contributed by Sergey Ten.</p>
 <p>If you see connections refused, turn on debugging by passing the following options.</p>
      rmiregistry -J-Dsun.rmi.log.debug=true
@@ -128,7 +133,7 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").</p>
 </ul>
 <p>Also create a policy file and add [computer_name][computer_domain] line to /etc/hosts.</p>
 </subsection>
-<subsection name="15.3 Using a different port" anchor="portchange">
+<subsection name="&sect-num;.3 Using a different port" anchor="portchange">
 <p>By default, JMeter uses the standard RMI port 1099. It is possible to change this. For this to work successfully, all the following need to agree:</p>
 <ul>
 <li>On the server, start rmiregistry using the new port number</li>

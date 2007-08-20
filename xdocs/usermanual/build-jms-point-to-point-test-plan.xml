@@ -15,6 +15,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[<!ENTITY sect-num '11'>]>
+
 <document prev="build-ws-test-plan.html" next="build-jms-topic-test-plan.html" date="$Date$">
 
     <properties>
@@ -24,7 +27,7 @@
     <body>
 
 
-        <section name="11. Building a JMS Point-to-Point Test Plan" anchor="building">
+        <section name="&sect-num;. Building a JMS Point-to-Point Test Plan" anchor="building">
 
         <note>
             Make sure the required jar files are in JMeter's lib directory. If they are not, shutdown JMeter,
@@ -52,7 +55,7 @@ of jars provided by ActiveMQ 3.0.</p>
 
         </section>
 
-        <section name="11.1 Adding a Thread Group" anchor="adding_threadgroup">
+        <section name="&sect-num;.1 Adding a Thread Group" anchor="adding_threadgroup">
             <p>The first step you want to do with every JMeter Test Plan is to add a
                 <a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
 JMeter the number of users you want to simulate, how often the users should send
@@ -69,11 +72,11 @@ Test Plan element.</p>
 
             <p>Next, you need to modify the default properties.  Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 11.1
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
             <figure image="webtest/threadgroup.png">
-Figure 11.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
             <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter Point-to-Point.</p>
@@ -103,7 +106,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
         </section>
 
-        <section name="11.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
+        <section name="&sect-num;.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
 
             <p>Start by adding the sampler <complink name="JMS Point-to-Point"/>
 to the Point-to-Point element (Add --&gt; Sampler --&gt; JMS Point-to-Point).
@@ -186,7 +189,7 @@ Then, select the JMS Point-to-Point sampler element in the tree.
 
         </section>
 
-        <section name="11.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+        <section name="&sect-num;.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
             <p>The final element you need to add to your Test Plan is a
                 <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your JMS requests in a file and presenting
@@ -201,14 +204,8 @@ Browse button and browse to a directory and then enter a filename.
             </p>
 
             <figure image="graph_results.png">
-Figure 11.2. Graph Results Listener</figure>
+Figure &sect-num;.2. Graph Results Listener</figure>
 
-        </section>
-
-        <section name="11.4 Saving the Test Plan" anchor="saving">
-            <p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu.</p>
         </section>
 
     </body>

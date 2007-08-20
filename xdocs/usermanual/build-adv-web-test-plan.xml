@@ -15,7 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-	
+
+<!DOCTYPE document[
+<!ENTITY sect-num '6'>
+]>
+
 <document prev="build-web-test-plan.html" next="build-db-test-plan.html" date="$Date$">
 
 <properties>
@@ -24,14 +28,14 @@
 
 <body>
 
-<section name="6. Building an Advanced Web Test Plan" anchor="building">
+<section name="&sect-num;. Building an Advanced Web Test Plan" anchor="building">
 <p>In this section, you will learn how to create advanced
 <a href="build-test-plan.html">Test Plans</a> to test a Web site.</p>
 
 <p>For an example of a basic Test Plan, see
 <a href="build-web-test-plan.html">Building a Web Test Plan</a>.</p></section>
 
-<section name="6.1 Handling User Sessions With URL Rewriting" anchor="session_url_rewriting">
+<section name="&sect-num;.1 Handling User Sessions With URL Rewriting" anchor="session_url_rewriting">
 <p>If your web application uses URL rewriting rather than cookies to save session information,
 then you'll need to do a bit of extra work to test your site.</p>
 <p>To respond correctly to URL rewriting, JMeter needs to parse the HTML
@@ -54,7 +58,7 @@ be part of the path (separated by a ";"), rather than a request parameter</p>
 </example>
 </section>
 
-<section name="6.2 Using a Header Manager" anchor="header_manager">
+<section name="&sect-num;.2 Using a Header Manager" anchor="header_manager">
 <p>The <complink name="HTTP Header Manager"/> lets you customize what information
 JMeter sends in the HTTP request header.  This header includes properties like "User-Agent",
 "Pragma", "Referer", etc.</p>

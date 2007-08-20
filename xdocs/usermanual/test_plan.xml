@@ -15,6 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '4'>
+]>
+
 <document prev="build-test-plan.html" next="build-web-test-plan.html" date="$Date$">
 
 <properties>
@@ -23,7 +28,7 @@
 
 <body>
 
-<section name="4. Elements of a Test Plan">
+<section name="&sect-num;. Elements of a Test Plan">
 
 <p>The Test Plan object has a checkbox called "Functional Testing".  If selected, it
 will cause JMeter to record the data returned from the server for each sample.  If you have 
@@ -35,7 +40,7 @@ is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
 <p>You can also use the Configuration button on a listener to decide what fields to save.</p>
 
-<subsection name="4.1 ThreadGroup" anchor="thread_group">
+<subsection name="&sect-num;.1 ThreadGroup" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.  All elements
 of a test plan must be under a thread group.  As the name implies, the thread group
 element controls the number of threads JMeter will use to execute your test.  The
@@ -75,7 +80,7 @@ Start with Ramp-up = number of threads and adjust as needed.
 	 Note that delay overrides start-time, and duration over-rides end-time.</p>
 </subsection>
 
-<subsection name="4.2 Controllers" anchor="controllers">
+<subsection name="&sect-num;.2 Controllers" anchor="controllers">
 
 <p> JMeter has two types of Controllers: Samplers and Logical Controllers.</p>
 
@@ -93,7 +98,7 @@ For more information, see <a href="#logic_controller">Logical Controllers</a>.</
 
 </subsection>
 
-<subsection name="4.2.1 Samplers" anchor="samplers">
+<subsection name="&sect-num;.2.1 Samplers" anchor="samplers">
 
 <p>Samplers tell JMeter to send requests to a server. 
 JMeter samplers include:
@@ -128,7 +133,7 @@ expressions.</p>
 <p><a href="component_reference.html#samplers">JMeter's built-in samplers</a></p>
 </subsection>
 
-<subsection name="4.2.2 Logic Controllers" anchor="logic_controller">
+<subsection name="&sect-num;.2.2 Logic Controllers" anchor="logic_controller">
 <p>Logic Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  Logic Controllers may have as child elements any
 of the following: Samplers (requests), Configuration Elements, and other Logic
@@ -211,7 +216,7 @@ will share the same cookies.</p>
 Logic Controllers</a>.</p>
 </subsection>
 
-<subsection name="4.3 Listeners" anchor="listeners">
+<subsection name="&sect-num;.3 Listeners" anchor="listeners">
 <p>Listeners provide access to the information JMeter gathers about the test cases while
 JMeter runs.  The  <complink name="Graph
 Results"/> listener plots the response times on a graph.  
@@ -233,7 +238,7 @@ below their level.  </p>
 that come with JMeter.</p>
 </subsection>
 
-<subsection name="4.4 Timers" anchor="timers">
+<subsection name="&sect-num;.4 Timers" anchor="timers">
 
 <p>By default, a JMeter thread sends requests without pausing between each request.
 We recommend that you specify a delay by adding one of the available timers to
@@ -248,7 +253,7 @@ If you choose to add more than one timer to a Thread Group, JMeter takes the sum
 the timers and pauses for that amount of time before executing the samplers to which they apply.</p>
 </subsection>
 
-<subsection name="4.5 Assertions" anchor="assertions">
+<subsection name="&sect-num;.5 Assertions" anchor="assertions">
 
 <p>Assertions allow you to assert facts about responses received from the
 server being tested. Using an assertion, you can essentially "test" that your
@@ -270,7 +275,7 @@ and will count towards the error %age for example in the Aggregate and Summary r
 </p>
 </subsection>
 
-<subsection name="4.6 Configuration Elements" anchor="config_elements">
+<subsection name="&sect-num;.6 Configuration Elements" anchor="config_elements">
 <p>A configuration element works closely with a Sampler.  Although it does not send requests
 (except for <complink name="HTTP Proxy Server"/>), it can add to or modify requests.</p>
 
@@ -287,15 +292,15 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 	Test Plan Showing Accessability of Configuration Elements</figure>
 </subsection>
 
-<subsection name="4.7 Pre-Processor Elements" anchor="preprocessors">
+<subsection name="&sect-num;.7 Pre-Processor Elements" anchor="preprocessors">
 <p>A Pre-Processor executes some action prior to a Sampler Request being made.  If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running.  A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
 </subsection>
 
-<subsection name="4.8 Post-Processor Elements" anchor="postprocessors">
+<subsection name="&sect-num;.8 Post-Processor Elements" anchor="postprocessors">
 <p>A Post-Processor executes some action after a Sampler Request has been made.  If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.  A Post-Processor is most often used to process the response data, often to extract values from it.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
 </subsection>
 
-<subsection name="4.9 Execution order" anchor="executionorder">
+<subsection name="&sect-num;.9 Execution order" anchor="executionorder">
 <ol>
 <li>Pre-Processors</li>
 <li>Timers</li>

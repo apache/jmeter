@@ -15,6 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '7'>
+]>
+
 <document prev="build-adv-web-test-plan.html" next="build-ftp-test-plan.html" date="$Date$">
 
 <properties>
@@ -24,7 +29,7 @@
 
 <body>
 
-<section name="7. Building a Database Test Plan" anchor="building">
+<section name="&sect-num;. Building a Database Test Plan" anchor="building">
 <p>In this section, you will learn how to create a basic
 <a href="build-test-plan.html">Test Plan</a> to test a database server.
 You will create ten users that send five SQL requests to the database server.
@@ -41,7 +46,7 @@ for more details).</note>
 
 </section>
 
-<section name="7.1 Adding Users" anchor="adding_users">
+<section name="&sect-num;.1 Adding Users" anchor="adding_users">
 <p>The first step you want to do with every JMeter Test Plan is to add a
 <a href="test_plan.html#thread_group">Thread Group</a> element. The Thread Group
 tells JMeter the number of users you want to simulate, how often the users should
@@ -57,11 +62,11 @@ Test Plan element.</p>
 
 <p>Next, you need to modify the default properties. Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 7.1
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
 <figure image="jdbctest/threadgroup1.png">
-Figure 7.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter JDBC Users.</p>
@@ -91,21 +96,21 @@ automatically accepts your changes as you make them.  If you change the
 name of an element, the tree will be updated with the new text after you
 leave the Control Panel (for example, when selecting another tree element).</note>
 
-<p>See Figure 7.2 for the completed JDBC Users Thread Group.</p>
+<p>See Figure &sect-num;.2 for the completed JDBC Users Thread Group.</p>
 
 <figure image="jdbctest/threadgroup2.png">
-Figure 7.2. JDBC Users Thread Group</figure>
+Figure &sect-num;.2. JDBC Users Thread Group</figure>
 
 </section>
 
-<section name="7.2 Adding JDBC Requests" anchor="adding_requests">
+<section name="&sect-num;.2 Adding JDBC Requests" anchor="adding_requests">
 <p>Now that we have defined our users, it is time to define the tasks that they
 will be performing.  In this section, you will specify the JDBC requests to
 perform.</p>
 
 <p>Begin by selecting the JDBC Users element. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Config Element --&gt; JDBC Connection Configuration.
-Then, select this new element to view its Control Panel (see Figure 7.3).</p>
+Then, select this new element to view its Control Panel (see Figure &sect-num;.3).</p>
 
 <p>Set up the following fields (these assume we will be using a local MySQL database called test):</p>
 <ul>
@@ -123,14 +128,14 @@ Every JDBC Request must refer to a JDBC Configuration pool.
 More than one JDBC Request can refer to the same pool.
 </p>
 <figure image="jdbctest/jdbc-config.png">
-Figure 7.3. JDBC Configuration</figure>
+Figure &sect-num;.3. JDBC Configuration</figure>
 
 <p>Selecting the JDBC Users element again. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Sampler --&gt; JDBC Request.
-Then, select this new element to view its Control Panel (see Figure 7.4).</p>
+Then, select this new element to view its Control Panel (see Figure &sect-num;.4).</p>
 
 <figure image="jdbctest/JDBCRequest.png">
-Figure 7.4. JDBC Request</figure>
+Figure &sect-num;.4. JDBC Request</figure>
 
 <p>In our Test Plan, we will make two JDBC requests. The first one is for
 Eastman Kodak stock, and the second is Pfizer stock (obviously you should
@@ -139,7 +144,7 @@ are illustrated below.</p>
 
 <note>JMeter sends requests in the order that you add them to the tree.</note>
 
-<p>Start by editing the following properties (see Figure 7.5):
+<p>Start by editing the following properties (see Figure &sect-num;.5):
 <ul>
 <li>Change the Name to "Kodak".</li>
 <li>Enter the Pool Name: MySQL (same as in the configuration element)</li>
@@ -148,10 +153,10 @@ are illustrated below.</p>
 </p>
 
 <figure image="jdbctest/JDBCRequest2.png">
-Figure 7.5. JDBC Request for Eastman Kodak stock</figure>
+Figure &sect-num;.5. JDBC Request for Eastman Kodak stock</figure>
 
 <p>Next, add the second JDBC Request and edit the following properties (see
-Figure 7.6):
+Figure &sect-num;.6):
 <ul>
 <li>Change the Name to "Pfizer".</li>
 <li>Enter the SQL Query String field.</li>
@@ -159,11 +164,11 @@ Figure 7.6):
 </p>
 
 <figure image="jdbctest/JDBCRequest3.png">
-Figure 7.6. JDBC Request for Pfizer stock</figure>
+Figure &sect-num;.6. JDBC Request for Pfizer stock</figure>
 
 </section>
 
-<section name="7.3 Adding a Listener to View/Store the Test Results" anchor="adding_listener">
+<section name="&sect-num;.3 Adding a Listener to View/Store the Test Results" anchor="adding_listener">
 <p>The final element you need to add to your Test Plan is a
 <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your JDBC requests in a file
@@ -173,37 +178,11 @@ and presenting a visual model of the data.</p>
 listener (Add --&gt; Listener --&gt; Graph Results).</p>
 
 <figure image="jdbctest/graph-results.png">
-Figure 7.7. Graph results Listener</figure>
+Figure &sect-num;.7. Graph results Listener</figure>
 
 </section>
 
-<section name="7.4 Saving the Test Plan" anchor="saving">
-<p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu (with the latest release, it is no longer necessary to select the
-Test Plan element first).</p>
-
-<note>JMeter allows you to save the entire Test Plan tree or
-only a portion of it.  To save only the elements located in a particular "branch"
-of the Test Plan tree, select the Test Plan element in the tree from which to start
-the "branch", and then click your right mouse button to access the Save As menu item.
-Alternatively, select the appropriate Test Plan element  and then select Save As from
-the Edit menu.
-</note>
-
-</section>
-
-<section name="7.5 Running the Test Plan" anchor="running">
-
-<p>From the Run menu, select Run.</p>
-
-<note>JMeter lights up a green square in the upper-right-hand corner to indicate if a
-test is currently running.  The square is turned gray when all tests stop.  Even after
-you select "stop", the green light will stay on until all test threads have exited.</note>
-
-</section>
-
-<section name="7.7 JDBC settings" anchor="running">
+<section name="&sect-num;.4 JDBC settings" anchor="jdbc_settings">
 <p>Different databases and JDBC drivers require different JDBC settings. 
 The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>
 <p>Some possible settings are shown below. Please check the exact details in the JDBC driver documentation.</p>
