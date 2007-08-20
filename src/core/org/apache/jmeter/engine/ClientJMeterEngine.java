@@ -108,13 +108,12 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 	public void run() {
 		log.info("running clientengine run method");
 		testListeners = new SearchByClass(TestListener.class);
+		sampleListeners = new ConvertListeners();
 		HashTree testTree = getTestTree();
 		 // TODO see bug 39792; should not do any harm to synch the code here
 		// @see http://issues.apache.org/bugzilla/show_bug.cgi?id=39792
 		synchronized(testTree) {
 			testTree.traverse(testListeners);
-			sampleListeners = new ConvertListeners();
-	
 			// TODO this is a temporary fix - see bug 23487
 			// @see http://issues.apache.org/bugzilla/show_bug.cgi?id=23487
 			try { // probably no longer needed, now that the code is synchronised
