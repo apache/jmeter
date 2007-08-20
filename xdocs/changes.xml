@@ -53,7 +53,12 @@
 
 <h3>Version 2.3RC3</h3>
 
-<h4>Known problems:</h4>
+<h4>Known problems/restrictions:</h4>
+<p>
+The JMeter remote server does not support multiple concurrent tests - each remote test should be run in a separate server.
+Otherwise tests may fail with random Exceptions, e.g. ConcurrentModification Exception in StandardJMeterEngine.
+See bug 43168.
+</p>
 <p>
 The default HTTP Request (not HTTPClient) sampler may not work for HTTPS connections via a proxy.
 This appears to be due to a Java bug, see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=39337">Bug 39337</a>.
