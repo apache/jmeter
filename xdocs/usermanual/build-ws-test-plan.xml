@@ -15,10 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<!DOCTYPE document
-[
+
+<!DOCTYPE document[
 <!ENTITY sect-num '10'>
 ]>
+
 <document prev="build-ldapext-test-plan.html" next="build-jms-point-to-point-test-plan.html" date="$Date$">
 
 <properties>
@@ -185,14 +186,6 @@ Browse button and browse to a directory and then enter a filename.</p>
 Figure &sect-num;.7. Graph Results Listener</figure>
 
 </section>
-
-<section name="&sect-num;.4 Saving the Test Plan" anchor="saving">
-<p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu.</p>
-
-</section>
-
 
 </body>
 </document>

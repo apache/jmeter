@@ -15,16 +15,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '9b'>
+]>
+
 <document prev="build-ldap-test-plan.html" next="build-ws-test-plan.html" date="$Date$">
 
 
 <properties>
-  <author email="dolf.smits@siemens.com">Dolf Smits</author>
   <title>User's Manual: Building an Extended LDAP Test Plan</title>
 </properties>
 
 <body>
-<section name="9b. Building an Extended LDAP Test Plan" anchor="ldapexttest">
+<section name="&sect-num;. Building an Extended LDAP Test Plan" anchor="ldapexttest">
 <p>
 In this section, you will learn how to create a basic Test Plan to test an LDAP 
 server.</p>
@@ -62,7 +66,7 @@ cn=c:\\\\log.txt to add an entry with a name like cn=c:\log.txt
 </p>
 
 
-	<subsection name="9b.1 Adding Users" anchor="ext_adding_users">
+	<subsection name="&sect-num;.1 Adding Users" anchor="ext_adding_users">
 <p>
 The first step you want to do with every JMeter Test Plan is to add a Thread Group element.
 The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
@@ -76,11 +80,11 @@ clicking on the Test Plan element.
 </p>
 <p>
 <figure image="ldaptest/extthreadgroup.png">
-Figure 9b.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 </p>
 </subsection>
-	<subsection name="9b.2 Adding LDAP Extended Request Defaults" anchor="add_ldapext_defaults">
+	<subsection name="&sect-num;.2 Adding LDAP Extended Request Defaults" anchor="add_ldapext_defaults">
 <p>
 Begin by selecting the Thread Group element. Click your right mouse button
 to get the Add menu, and then select Add --> Config Element -->LDAP Extended Request Defaults. Then,
@@ -91,7 +95,7 @@ Like most JMeter elements, the LDAP Extended Request Defaults Control Panel has 
 field that you can modify. In this example, leave this field with the default value.
 </p>
 <p><figure image="ldaptest/extrequestdefaults.png"><br/>						
-  Figure 9b.2 LDAP Defaults for our Test Plan</figure>
+  Figure &sect-num;.2 LDAP Defaults for our Test Plan</figure>
 </p>
 <p>
 			For each of the different operations, some default values can be filled in.
@@ -101,7 +105,7 @@ field that you can modify. In this example, leave this field with the default va
 			</p>
 			We will not enter any default values here, as we will build a very small testplan, so we will explain all the different fields when we add the LDAP Extended samplers.
 </subsection>
-<subsection name="9b.3 Adding LDAP Requests" anchor="add_extrequests">
+<subsection name="&sect-num;.3 Adding LDAP Requests" anchor="add_extrequests">
 <p>
 In our Test Plan, we want to use all 8 LDAP requests.
 </p>
@@ -144,7 +148,7 @@ Sampler --> LDAP Ext Request). Then, select the LDAP Ext Request element in the 
 and edit the following properties.</p>
 
 
-<subsection name="9b.3.1 Adding a Thread bind Request" anchor="add_threadbind">
+<subsection name="&sect-num;.3.1 Adding a Thread bind Request" anchor="add_threadbind">
 <p>
    <ol>
 <li>
@@ -173,11 +177,11 @@ When this field is kept empty, an anonymous bind will be established.
 </p>
 <p>
 <figure image="ldaptest/extthreadbind.png">
-Figure 9b.3.1. Thread Bind example</figure>
+Figure &sect-num;.3.1. Thread Bind example</figure>
 </p> 
 </subsection>
 
-<subsection name="9b.3.2 Adding a search Request" anchor="add_searchreq">
+<subsection name="&sect-num;.3.2 Adding a search Request" anchor="add_searchreq">
 <p>
    <ol>
 <li>
@@ -225,10 +229,10 @@ false will mean no java-object attributes will be returned.
 </p>
 <p>
 <figure image="ldaptest/extsearch.png">
-Figure 9b.3.2. search request example</figure>
+Figure &sect-num;.3.2. search request example</figure>
 </p></subsection>
 
-<subsection name="9b.3.3 Adding a Compare Request" anchor="add_comparereq">
+<subsection name="&sect-num;.3.3 Adding a Compare Request" anchor="add_comparereq">
 <p>
    <ol>
 <li>
@@ -244,11 +248,11 @@ Enter the compare filter, this must be in the form "attribute=value", eg "mail=J
 </p>
 <p>
 <figure image="ldaptest/extcompare.png">
-Figure 9b.3.3. Compare example</figure>
+Figure &sect-num;.3.3. Compare example</figure>
 </p>
 </subsection>
 
-<subsection name="9b.3.4 Adding a Single bind/unbind" anchor="add_sbind">
+<subsection name="&sect-num;.3.4 Adding a Single bind/unbind" anchor="add_sbind">
 <p>
    <ol>
 <li>
@@ -268,11 +272,11 @@ Take care: This single bind/unbind is in reality two seperate operations but can
 </ol>
 </p><p>
 <figure image="ldaptest/extsbind.png">
-Figure 9b.3.4. Single bind/unbind example</figure>
+Figure &sect-num;.3.4. Single bind/unbind example</figure>
 </p>
 </subsection>
 
-<subsection name="9b.3.5 Adding an Add Request" anchor="add_addreq">
+<subsection name="&sect-num;.3.5 Adding an Add Request" anchor="add_addreq">
 <p>
    <ol>
 <li>
@@ -291,11 +295,11 @@ All necessary attributes and values must be specified to pass the test, see pict
 </p>
 <p>
 <figure image="ldaptest/extadd.png">
-Figure 9b.3.5. Add request example</figure>
+Figure &sect-num;.3.5. Add request example</figure>
 </p>
 </subsection>
 
-<subsection name="9b.3.6 Adding a Modify Request" anchor="add_modreq">
+<subsection name="&sect-num;.3.6 Adding a Modify Request" anchor="add_modreq">
 <p>
    <ol>
 <li>
@@ -331,11 +335,11 @@ All modifications which are specified must succeed, to let the modification test
 </p>
 <p>
 <figure image="ldaptest/extmod.png">
-Figure 9b.3.6. Modify example</figure>
+Figure &sect-num;.3.6. Modify example</figure>
 </p>
 </subsection>
 
-<subsection name="9b.3.7 Adding a Delete Request" anchor="add_delreq">
+<subsection name="&sect-num;.3.7 Adding a Delete Request" anchor="add_delreq">
 <p>
    <ol>
 <li>
@@ -350,11 +354,11 @@ you need to enter "cn=john doe,ou=people" in the Delete-field.
 </p>
 <p>
 <figure image="ldaptest/extdel.png">
-Figure 9b.3.7. Delete example</figure>
+Figure &sect-num;.3.7. Delete example</figure>
 </p>
 </subsection>
 
-<subsection name="9b.3.8 Adding a Rename Request (moddn)" anchor="add_moddn">
+<subsection name="&sect-num;.3.8 Adding a Rename Request (moddn)" anchor="add_moddn">
 <p>
    <ol>
 <li>
@@ -375,10 +379,10 @@ You can also move a complete subtree (If your LDAP server supports this!!!!), eg
 </p>
 <p>
 <figure image="ldaptest/extmoddn.png">
-Figure 9b.3.8. Rename example</figure>
+Figure &sect-num;.3.8. Rename example</figure>
 </p>
 </subsection>
-<subsection name="9b.3.9 Adding an unbind Request" anchor="add_unbind">
+<subsection name="&sect-num;.3.9 Adding an unbind Request" anchor="add_unbind">
 <p>
    <ol>
 <li>
@@ -389,12 +393,12 @@ The information which is needed is already known by the system
 </p>
 <p>
 <figure image="ldaptest/extthreadunbind.png">
-Figure 9b.3.9. Unbind example</figure>
+Figure &sect-num;.3.9. Unbind example</figure>
 </p>
 </subsection>
 </subsection>
 
-<subsection name="9b.4 Adding a Listener to View/Store the Test Results" anchor="add_ldapext_listener">
+<subsection name="&sect-num;.4 Adding a Listener to View/Store the Test Results" anchor="add_ldapext_listener">
 <p>
 The final element you need to add to your Test Plan is a Listener.
  This element is responsible for storing all of the results of your LDAP
@@ -403,7 +407,7 @@ element and add a View Results Tree (Add --> Listener -->View Results Tree)
 </p>
 <p>
 <figure image="ldaptest/extviewtree.png">
-Figure 9b.4. View result Tree Listener</figure>
+Figure &sect-num;.4. View result Tree Listener</figure>
 </p>
 <p>
 In this listener you have three tabs to view, the sampler result, the request and the response data.

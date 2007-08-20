@@ -15,6 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '5'>
+]>
+
 <document prev="test_plan.html" next="build-adv-web-test-plan.html" date="$Date$">
 
 <properties>
@@ -23,7 +28,7 @@
 
 <body>
 
-<section name="5. Building a Web Test Plan" anchor="building">
+<section name="&sect-num;. Building a Web Test Plan" anchor="building">
 <p>In this section, you will learn how to create a basic
 <a href="build-test-plan.html">Test Plan</a> to test a Web site.  You will
 create five users that send requests to two pages on the Jakarta Web site.
@@ -45,7 +50,7 @@ all tree elements), Test Plan (you place all of your elements here), and
 WorkBench (a temporary place to store your elements while constructing a Test
 Plan).</p>-->
 
-<section name="5.1 Adding Users" anchor="adding_users">
+<section name="&sect-num;.1 Adding Users" anchor="adding_users">
 <p>The first step you want to do with every JMeter Test Plan is to add a
 <a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
 JMeter the number of users you want to simulate, how often the users should send
@@ -61,11 +66,11 @@ Test Plan element.</p>
 
 <p>Next, you need to modify the default properties.  Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 5.1
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
 <figure image="webtest/threadgroup.png">
-Figure 5.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter Jakarta Users.</p>
@@ -92,26 +97,26 @@ automatically accepts your changes as you make them.  If you change the
 name of an element, the tree will be updated with the new text after you
 leave the Control Panel (for example, when selecting another tree element).</note>
 
-<p>See Figure 5.2 for the completed Jakarta Users Thread Group.</p>
+<p>See Figure &sect-num;.2 for the completed Jakarta Users Thread Group.</p>
 
 <figure image="webtest/threadgroup2.png">
-Figure 5.2. Jakarta Users Thread Group</figure>
+Figure &sect-num;.2. Jakarta Users Thread Group</figure>
 
 </section>
 
-<section name="5.2 Adding Default HTTP Request Properties" anchor="adding_defaults">
+<section name="&sect-num;.2 Adding Default HTTP Request Properties" anchor="adding_defaults">
 <p>Now that we have defined our users, it is time to define the tasks that they
 will be performing.  In this section, you will specify the default settings
-for your HTTP requests.  And then, in section 5.3, you will add HTTP Request
+for your HTTP requests.  And then, in section &sect-num;.3, you will add HTTP Request
 elements which use some of the default settings you specified here.</p>
 
 <p>Begin by selecting the Jakarta Users (Thread Group) element. Click your right mouse button
 to get the Add menu, and then select Add --&gt; Config Element --&gt; HTTP Request
-Defaults. Then, select this new element to view its Control Panel (see Figure 5.3).
+Defaults. Then, select this new element to view its Control Panel (see Figure &sect-num;.3).
 </p>
 
 <figure image="webtest/http-defaults1.png">
-Figure 5.3. HTTP Request Defaults</figure>
+Figure &sect-num;.3. HTTP Request Defaults</figure>
 
 <p>
 Like most JMeter elements, the <complink name="HTTP Request Defaults"/> Control
@@ -128,14 +133,14 @@ fields with their default values.</p>
 to send an HTTP request.  It simply defines the default values that the
 HTTP Request elements use.</note>
 
-<p>See Figure 5.4 for the completed HTTP Request Defaults element</p>
+<p>See Figure &sect-num;.4 for the completed HTTP Request Defaults element</p>
 
 <figure image="webtest/http-defaults2.png">
-Figure 5.4. HTTP Defaults for our Test Plan</figure>
+Figure &sect-num;.4. HTTP Defaults for our Test Plan</figure>
 
 </section>
 
-<section name="5.3 Adding Cookie Support" anchor="adding_cookie_support">
+<section name="&sect-num;.3 Adding Cookie Support" anchor="adding_cookie_support">
 <p>Nearly all web testing should use cookie support, unless your application
 specifically doesn't use cookies.  To add cookie support, simply add an
 <complink name="HTTP Cookie Manager"/> to each <a href="test_plan.html#thread_group">Thread
@@ -149,7 +154,7 @@ Cookie Manager, either from the Edit Menu, or from the right-click pop-up menu.<
 </section>
 
 
-<section name="5.4 Adding HTTP Requests" anchor="adding_requests">
+<section name="&sect-num;.4 Adding HTTP Requests" anchor="adding_requests">
 
 <p>In our Test Plan, we need to make two HTTP requests. The first one is for the
 Jakarta home page (http://jakarta.apache.org/), and the second one is for the
@@ -160,7 +165,7 @@ Project Guidelines page (http://jakarta.apache.org/site/guidelines.html).</p>
 <p>Start by adding the first <complink name="HTTP Request"/>
 to the Jakarta Users element (Add --&gt; Sampler --&gt; HTTP Request).
 Then, select the HTTP Request element in the tree and edit the following properties
-(see Figure 5.5):
+(see Figure &sect-num;.5):
 <ol>
 <li>Change the Name field to "Home Page".</li>
 <li>Set the Path field to "/".  Remember that you do not have to set the Server
@@ -170,10 +175,10 @@ element.</li>
 </p>
 
 <figure image="webtest/http-request1.png">
-Figure 5.5. HTTP Request for Jakarta Home Page</figure>
+Figure &sect-num;.5. HTTP Request for Jakarta Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
-Figure 5.6:
+Figure &sect-num;.6:
 <ol>
 <li>Change the Name field to "Project Guidelines".</li>
 <li>Set the Path field to "/site/guidelines.html".</li>
@@ -181,11 +186,11 @@ Figure 5.6:
 </p>
 
 <figure image="webtest/http-request2.png">
-Figure 5.6. HTTP Request for Jakarta Project Guidelines Page</figure>
+Figure &sect-num;.6. HTTP Request for Jakarta Project Guidelines Page</figure>
 
 </section>
 
-<section name="5.5 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+<section name="&sect-num;.5 Adding a Listener to View Store the Test Results" anchor="adding_listener">
 <p>The final element you need to add to your Test Plan is a
  <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your HTTP requests in a file and presenting
@@ -197,43 +202,7 @@ output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
 <figure image="graph_results.png">
-Figure 5.7. Graph Results Listener</figure>
-
-</section>
-
-<section name="5.6 Saving the Test Plan" anchor="saving">
-<p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu.</p>
-
-<note>JMeter allows you to save the entire Test Plan tree or
-only a portion of it.  To save only the elements located in a particular "branch"
-of the Test Plan tree, select the Test Plan element in the tree from which to start
-the "branch", and then click your right mouse button to access the Save As menu item.
-Alternatively, select the appropriate Test Plan element  and then select Save As from
-the Edit menu.
-</note>
-
-</section>
-
-<section name="5.7 Running the Test Plan" anchor="running">
-
-<p>From the Run menu, select Run.</p>
-
-<note>JMeter lights up a green square in the upper-right-hand corner to indicate if a test is
-currently running.  The square is turned gray when all tests stop.  Even after you select "stop",
-the green light will stay on until all test threads have exited.</note>
-
-<p>The numbers to the left of the green square show the currently active and total number of threads.</p>
-
-<p>Once JMeter has finished running your Test Plan, the green box will turn to grey.
-If you wish to stop the test plan earlier, select Shutdown or Stop from the
-Run menu.</p>
-<p>If you selected a file to save the results to in your listener, then you will have a file that can be
-opened in any visualizer.  Each visualizer will display the results in its own fashion.</p>
-
-<note>It is possible to have the same file open in more than one visualizer.  This is not a problem.  JMeter
-will ensure during the test run that no sample is recorded to the same file more than once (this only applies to XML format samples).</note> 
+Figure &sect-num;.7. Graph Results Listener</figure>
 
 </section>
 

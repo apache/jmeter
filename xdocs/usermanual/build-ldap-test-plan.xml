@@ -15,16 +15,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document
+[
+<!ENTITY sect-num '9a'>
+]>
+
 <document prev="build-ftp-test-plan.html" next="build-ldapext-test-plan.html" date="$Date$">
 
 
 <properties>
-  <author email="chezhiyan@siptech.co.in">Elanjchezhiyan.T</author>
   <title>User's Manual: Building an LDAP Test Plan</title>
 </properties>
 
 <body>
-<section name="9. Building an LDAP Test Plan" anchor="building">
+<section name="&sect-num;. Building an LDAP Test Plan" anchor="building">
 		<p>In this section, you will learn how to create a basic Test Plan to test an LDAP server.
 You will create four users that send requests for four tests on the LDAP server.Also, you will tell
 the users to run their tests twice. So,  the total number of requests is (4 users) x (4 requests) x
@@ -36,7 +41,7 @@ repeat 2 times) = 32 LDAP requests. To construct the Test Plan, you will use the
 .</p>
 		<p>This example assumes that the LDAP Server is installed in your Local machine.</p>
 </section>
-	<section name="9.1 Adding Users" anchor="adding_users">
+	<section name="&sect-num;.1 Adding Users" anchor="adding_users">
 		<p>The first step you want to do with every JMeter Test Plan is to add a Thread Group element.
 The Thread Group tells JMeter the number of users you want to simulate, how often the users should send
 requests, and the how many requests  they should send.</p>
@@ -45,11 +50,11 @@ right mouse button to get the Add menu, and then select Add-->ThreadGroup. You s
 Thread Group element under Test Plan. If you do not see the element, then "expand" the Test Plan tree by
 clicking on the Test Plan element.
 <figure image="ldaptest/threadgroup.png">
-Figure 9.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 </p>
 </section>
-	<section name="9.2 Adding Login Config Element" anchor="add_login">
+	<section name="&sect-num;.2 Adding Login Config Element" anchor="add_login">
 		<p>Begin by selecting the Siptech Users element. Click your right mouse
 button to get the Add menu, and then select Add --> Config Element --> Login Config Element.
 Then,  select this new element to view its Control Panel.</p>
@@ -57,7 +62,7 @@ Then,  select this new element to view its Control Panel.</p>
 field that you can modify. In this example, leave this field with the default value.</p>
 
 <figure image="ldaptest/login-config-element.png">
-  Figure 9.2 Login Config Element for our Test Plan</figure>
+  Figure &sect-num;.2 Login Config Element for our Test Plan</figure>
 
 		<note><p>Enter Username field to "your Server Username",<br/>
 		The password field to "your Server Passowrd"</p>
@@ -65,7 +70,7 @@ field that you can modify. In this example, leave this field with the default va
 		<p>These values are default for the LDAP Requests.</p></note>
 </section>
 
-	<section name="9.3 Adding LDAP Request Defaults" anchor="add_defaults">
+	<section name="&sect-num;.3 Adding LDAP Request Defaults" anchor="add_defaults">
                 <p>Begin by selecting the Siptech Users element. Click your right mouse button
 to get the Add menu, and then select Add --> Config Element -->LDAP Request Defaults. Then,
 select this new element to view its Control Panel.</p>
@@ -74,7 +79,7 @@ field that you can modify. In this example, leave this field with the default va
 
 
 <figure image="ldaptest/requestdefaults.png">
-  Figure 9.3 LDAP Defaults for our Test Plan</figure>
+  Figure &sect-num;.3 LDAP Defaults for our Test Plan</figure>
 
 		<note>Enter DN field to "your Server Root Dn".<br/>
                 Enter LDAP Server's Servername field to "localhost".<br/>
@@ -83,7 +88,7 @@ field that you can modify. In this example, leave this field with the default va
 </section>
 
 
-	<section name="9.4 Adding LDAP Requests" anchor="add_requests">
+	<section name="&sect-num;.4 Adding LDAP Requests" anchor="add_requests">
                 <p>In our Test Plan, we need to make four LDAP requests.</p>
                 <ol>
 			<li>Inbuilt Add Test</li>
@@ -100,7 +105,7 @@ and edit the following properties</p>
 			<li>Select the Add test Radio button</li>
 		</ol>
                 <figure image="ldaptest/add.png">
-                  Figure 9.4.1 LDAP Request for Inbuilt Add test</figure>
+                  Figure &sect-num;.4.1 LDAP Request for Inbuilt Add test</figure>
 
 
                 <p>You do not have to set the Server Name field, port field, Username, Password
@@ -114,7 +119,7 @@ properties</p>
 		</ol>
 		Next, add the Third LDAP Request and edit the following properties
                 <figure image="ldaptest/modify.png">
-                  Figure 9.4.2 LDAP Request for Inbuilt Modify test</figure>
+                  Figure &sect-num;.4.2 LDAP Request for Inbuilt Modify test</figure>
 
 		<ol>
 			<li>Change the Name to "Inbuilt-Delete Test".</li>
@@ -123,31 +128,25 @@ properties</p>
 		Next, add the fourth LDAP Request and edit the following properties
                 
                 <figure image="ldaptest/delete.png">
-                  Figure 9.4.3 LDAP Request for Inbuilt Delete test</figure>
+                  Figure &sect-num;.4.3 LDAP Request for Inbuilt Delete test</figure>
 
                 <ol>
 			<li>Change the Name to "Inbuilt-Search Test".</li>
 			<li>Select the Search test Radio button</li>
 		</ol>
                 <figure image="ldaptest/search.png">
-                  Figure 9.4.4 LDAP Request for Inbuilt Search test</figure>
+                  Figure &sect-num;.4.4 LDAP Request for Inbuilt Search test</figure>
 
 </section>
-	<section name="9.5 Adding a Listener to View/Store the Test Results" anchor="add_listener">
+	<section name="&sect-num;.5 Adding a Listener to View/Store the Test Results" anchor="add_listener">
        		<p>The final element you need to add to your Test Plan is a Listener.
  This element is responsible for storing all of the results of your LDAP
 requests in a file  and presenting a visual model of the data.Select the Siptech
 Users element and add a View Results in Table (Add --> Listener -->View Results in Table)</p>
 <figure image="ldaptest/viewtable.png">
-  Figure 9.5 View result in Table Listener</figure>
+  Figure &sect-num;.5 View result in Table Listener</figure>
 
 </section>
-<section name="9.6 Saving the Test Plan" anchor="saving">
-  <p>Although it is not required, we recommend that you save the Test Plan to a
-    file before running it.  To save the Test Plan, select Save Test Plan from the
-    File menu.</p>
-</section>
-
 
 </body>
 </document>
