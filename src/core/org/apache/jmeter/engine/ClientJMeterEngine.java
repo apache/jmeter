@@ -31,8 +31,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author unattributed
- * @version $Revision$ Updated on: $Date$
+ * Class to run remote tests from the client JMeter and collect remote samples
  */
 public class ClientJMeterEngine implements JMeterEngine, Runnable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -110,17 +109,9 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 		testListeners = new SearchByClass(TestListener.class);
 		sampleListeners = new ConvertListeners();
 		HashTree testTree = getTestTree();
-		 // TODO see bug 39792; should not do any harm to synch the code here
-		// @see http://issues.apache.org/bugzilla/show_bug.cgi?id=39792
 		synchronized(testTree) {
 			testTree.traverse(testListeners);
-			// TODO this is a temporary fix - see bug 23487
-			// @see http://issues.apache.org/bugzilla/show_bug.cgi?id=23487
-			try { // probably no longer needed, now that the code is synchronised
-				testTree.traverse(sampleListeners);
-			} catch (IndexOutOfBoundsException e) {
-				log.warn("Error replacing sample listeners", e);
-			}
+			testTree.traverse(sampleListeners);
 		}
 		
 		try {
