@@ -1955,6 +1955,10 @@ the Report.
 	It is easier to use than the __CSVRead() and _StringFromFile() functions.
 	</p>
 	<p>
+	The file is only opened once, and each thread will use a different line from the file. 
+	Lines are read as the threads need them.
+	</p>
+	<p>
 	As a special case, the string "\t" (without quotes) is treated as a Tab.
 	</p>
 	<p>
