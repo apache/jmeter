@@ -225,6 +225,13 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
 	 */
 	public void modifyTestElement(TestElement element) {
+		// Fetch data from screen fields
+		if (customizer instanceof GenericTestBeanCustomizer) {
+			GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
+			gtbc.propertyChange(null); 
+			// TODO - is this the best way to do this?
+			// Is the original property change Listener still needed?
+		}
 		configureTestElement(element);
 
 		// Copy all property values from the map into the element:

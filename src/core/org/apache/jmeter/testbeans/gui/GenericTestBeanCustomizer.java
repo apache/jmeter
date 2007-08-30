@@ -571,8 +571,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
+		// evt will be null only when called from TestBeanGUI.modifyTestElement()
+		// TODO - is the propertyChange event needed, now that modifyTestElement calls this?
 		for (int i = 0; i < editors.length; i++) {
-			if (editors[i] == evt.getSource()) {
+			if (evt == null || editors[i] == evt.getSource()) {
 				Object value = editors[i].getValue();
 				String name = descriptors[i].getName();
 				if (value == null) {
@@ -582,7 +584,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 					propertyMap.put(name, value);
 					log.debug("Set " + name + "= " + value);
 				}
-				firePropertyChange(name, evt.getOldValue(), value);
+				if (evt != null ) {
+					firePropertyChange(name, evt.getOldValue(), value);
+				}
 				return;
 			}
 		}
