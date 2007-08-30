@@ -67,7 +67,7 @@ public final class ActionRouter implements ActionListener {
 
 	private void performAction(final ActionEvent e) {
 		try {
-			GuiPackage.getInstance().updateCurrentNode();
+			GuiPackage.getInstance().updateCurrentGui();
 			Set commandObjects = (Set) commands.get(e.getActionCommand());
 			Iterator iter = commandObjects.iterator();
 			while (iter.hasNext()) {
