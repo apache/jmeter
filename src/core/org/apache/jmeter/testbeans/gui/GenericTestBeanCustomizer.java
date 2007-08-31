@@ -21,8 +21,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.beans.BeanInfo;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
@@ -95,7 +93,7 @@ import org.apache.log.Logger;
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
-public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer, PropertyChangeListener {
+public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String GROUP = "group"; //$NON-NLS-1$
@@ -233,9 +231,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 			// Initialize the editor with the provided default value or null:
 			setEditorValue(i, descriptors[i].getValue(DEFAULT));
 
-			// Now subscribe as a listener (we didn't want to receive the event
-			// for the setEditorValue above!)
-			propertyEditor.addPropertyChangeListener(this);
 		}
 
 		// Obtain message formats:
@@ -358,14 +353,14 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		}
 	}
 
-	/**
-	 * Find the index of the property of the given name.
-	 * 
-	 * @param name
-	 *            the name of the property
-	 * @return the index of that property in the descriptors array, or -1 if
-	 *         there's no property of this name.
-	 */
+//	/**
+//	 * Find the index of the property of the given name.
+//	 * 
+//	 * @param name
+//	 *            the name of the property
+//	 * @return the index of that property in the descriptors array, or -1 if
+//	 *         there's no property of this name.
+//	 */
 //	private int descriptorIndex(String name) // NOTUSED
 //	{
 //		for (int i = 0; i < descriptors.length; i++) {
@@ -568,29 +563,26 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	 * @see TestBeanGUI.modifyTestElement()
 	 */
-	public void propertyChange(PropertyChangeEvent evt) {
-		// evt will be null only when called from TestBeanGUI.modifyTestElement()
-		// TODO - is the propertyChange event needed, now that modifyTestElement calls this?
+	void saveGuiFields() {
 		for (int i = 0; i < editors.length; i++) {
-			PropertyEditor propertyEditor=editors[i]; // might be null in testing
-			if (propertyEditor != null && (evt == null || propertyEditor == evt.getSource())) {
+			PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
+			if (propertyEditor != null) {
 				Object value = propertyEditor.getValue();
 				String name = descriptors[i].getName();
 				if (value == null) {
 					propertyMap.remove(name);
-					log.debug("Unset " + name);
+					if (log.isDebugEnabled()) {
+						log.debug("Unset " + name);
+					}
 				} else {
 					propertyMap.put(name, value);
-					log.debug("Set " + name + "= " + value);
+					if (log.isDebugEnabled()) {
+						log.debug("Set " + name + "= " + value);
+					}
 				}
-				if (evt != null ) {
-					firePropertyChange(name, evt.getOldValue(), value);
-				}
-				return;
 			}
 		}
-		throw new Error("Unexpected propertyChange event received: " + evt);
 	}
 }
