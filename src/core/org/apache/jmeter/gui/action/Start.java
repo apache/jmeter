@@ -24,6 +24,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
@@ -35,10 +36,6 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover Created March 1, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class Start extends AbstractAction {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -89,7 +86,7 @@ public class Start extends AbstractAction {
 		GuiPackage gui = GuiPackage.getInstance();
 		engine = new StandardJMeterEngine();
 		HashTree testTree = gui.getTreeModel().getTestPlan();
-		convertSubTree(testTree);
+		JMeter.convertSubTree(testTree);
 		DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
 		testTree.traverse(remover);
 		testTree.add(testTree.getArray()[0], gui.getMainFrame());
