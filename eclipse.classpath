@@ -44,6 +44,7 @@
 	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/soap.jar"/>
 	<classpathentry kind="lib" path="lib/Tidy.jar"/>
+	<classpathentry kind="lib" path="lib/serializer.jar"/>
 	<classpathentry kind="lib" path="lib/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
