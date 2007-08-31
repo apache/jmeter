@@ -308,6 +308,7 @@
     <include name="${jcharts.jar}"/>
     <include name="${junit.jar}"/>
     <include name="${logkit.jar}"/>
+    <include name="${serializer.jar}"/>
     <include name="${xalan.jar}"/>
     <include name="${xerces.jar}"/>
     <include name="${xml-apis.jar}"/>
