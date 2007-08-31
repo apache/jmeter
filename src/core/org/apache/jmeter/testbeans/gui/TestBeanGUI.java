@@ -228,9 +228,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 		// Fetch data from screen fields
 		if (customizer instanceof GenericTestBeanCustomizer) {
 			GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
-			gtbc.propertyChange(null); 
-			// TODO - is this the best way to do this?
-			// Is the original property change Listener still needed?
+			gtbc.saveGuiFields(); 
 		}
 		configureTestElement(element);
 
