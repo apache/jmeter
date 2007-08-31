@@ -63,7 +63,7 @@ public class IncludeController extends GenericController implements ReplaceableC
 	public Object clone() {
         // TODO - fix so that this is only called once per test, instead of at every clone
         // Perhaps save previous filename, and only load if it has changed?
-        this.SUBTREE = this.loadIncludedElements();
+        this.resolveReplacementSubTree(null);
 		IncludeController clone = (IncludeController) super.clone();
         clone.setIncludePath(this.getIncludePath());
         if (this.SUBTREE != null) {
@@ -102,6 +102,10 @@ public class IncludeController extends GenericController implements ReplaceableC
      */
     public HashTree getReplacementSubTree() {
         return SUBTREE;
+    }
+
+    public void resolveReplacementSubTree(Object context) {
+        this.SUBTREE = this.loadIncludedElements();
     }
 
     /**
