@@ -42,4 +42,11 @@ public interface ReplaceableController {
 	 * @see org.apache.jmeter.gui.action.AbstractAction#convertSubTree
 	 */
 	public HashTree getReplacementSubTree();
+
+	/**
+     * Compute the replacement tree.
+     * 
+     * @param context
+     */
+    public void resolveReplacementSubTree(Object context);
 }
