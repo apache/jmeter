@@ -44,6 +44,8 @@
 <li>Add link to Extending JMeter PDF</li>
 <li>Allow for quoted charset in Content-Type parsing</li>
 <li>Bug 39792 - ClientJMeter synchronisation needed</li>
+<li>Bug 43122 - GUI changes not always picked up when short-cut keys used (bug introduced in 2.3RC3)</li>
+<li>Bug 42947 - TestBeanGUI changes not picked up when short-cut keys used</li>
 </ul>
 
 <h4>Improvements since 2.3RC3</h4>
