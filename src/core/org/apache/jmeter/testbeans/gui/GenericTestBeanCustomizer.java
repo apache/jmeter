@@ -574,8 +574,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		// evt will be null only when called from TestBeanGUI.modifyTestElement()
 		// TODO - is the propertyChange event needed, now that modifyTestElement calls this?
 		for (int i = 0; i < editors.length; i++) {
-			if (evt == null || editors[i] == evt.getSource()) {
-				Object value = editors[i].getValue();
+			PropertyEditor propertyEditor=editors[i]; // might be null in testing
+			if (propertyEditor != null && (evt == null || propertyEditor == evt.getSource())) {
+				Object value = propertyEditor.getValue();
 				String name = descriptors[i].getName();
 				if (value == null) {
 					propertyMap.remove(name);
