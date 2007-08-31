@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.JMeterEngine;
 import org.apache.jmeter.engine.JMeterEngineException;
@@ -184,7 +185,7 @@ public class RemoteStart extends AbstractAction {
 	private void initEngine(JMeterEngine engine, String host) {
 		GuiPackage gui = GuiPackage.getInstance();
 		HashTree testTree = gui.getTreeModel().getTestPlan();
-		convertSubTree(testTree);
+		JMeter.convertSubTree(testTree);
 		testTree.add(testTree.getArray()[0], gui.getMainFrame());
 		engine.configure(testTree);
 	}
