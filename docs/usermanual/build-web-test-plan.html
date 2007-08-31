@@ -465,6 +465,47 @@ Figure 5.7. Graph Results Listener
 		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
+						  									 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#525D76">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="logging_in"><strong>5.6 Logging in to a web-site</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+It's not the case here, but some web-sites require you to login before permitting you to perform certain actions.
+In a web-browser, the login will be shown as a form for the user name and password,
+and a button to submit the form.
+The button generates a POST request, passing the values of the form items as parameters.
+
+						</p>
+							  									 				<p	>
+								
+To do this in JMeter, add an HTTP Request, and set the method to POST.
+You'll need to know the names of the fields used by the form, and the target page.
+These can be found out by inspecting the code of the login page.
+[If this is difficult to do, you can use the 
+												<a	 href="component_reference.html#HTTP_Proxy_Server">
+								JMeter Proxy Recorder
+						</a>
+									 to record the login sequence.]
+Set the path to the target of the submit button. 
+Click the Add button twice and enter the username and password details.
+Sometimes the login form contains additional hidden fields.
+These will need to be added as well.
+
+						</p>
+							  									 				<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="../images/screenshots/http_login.png"><br>
+	<font size="-1">						
+Figure 5.8. Sample HTTP login request
+			</font></td></tr></table></p>
+							  		  </blockquote>
+		  </p>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
 						  						    		<table>
 		<tr>
 		<td bgcolor="#525D76">
