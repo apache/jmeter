@@ -121,6 +121,7 @@
 		<li><a href="build-web-test-plan.html#adding_cookie_support">5.3 Adding Cookie Support</a></li>
 		<li><a href="build-web-test-plan.html#adding_requests">5.4 Adding HTTP Requests</a></li>
 		<li><a href="build-web-test-plan.html#adding_listener">5.5 Adding a Listener to View/Store the Test Results</a></li>
+		<li><a href="build-web-test-plan.html#logging_in">5.6 Logging in to a web-site</a></li>
 	 </ul>
  <li><a name="build-adv-web-test-plan"/><a href="build-adv-web-test-plan.html">6. Building an Advanced Web Test Plan</a></li>
 	 <ul>
