@@ -116,18 +116,27 @@ public class ModuleController extends GenericController implements ReplaceableCo
 		return null;
 	}
 
-	private void restoreSelected() {
-		if (selectedNode == null) {
-			List nodePath = getNodePath();
-			if (nodePath != null && nodePath.size() > 0) {
-				GuiPackage gp = GuiPackage.getInstance();
-				if (gp != null) {
-					JMeterTreeNode root = (JMeterTreeNode) gp.getTreeModel().getRoot();
-					traverse(root, nodePath, 1);
-				}
-			}
-		}
-	}
+    private void restoreSelected() {
+        GuiPackage gp = GuiPackage.getInstance();
+        if (gp != null) {
+            JMeterTreeNode root = (JMeterTreeNode) gp.getTreeModel().getRoot();
+            resolveReplacementSubTree(root);
+        }
+    }
+
+    /**
+     * Compute the replacement tree.
+     * @param context
+     */
+    public void resolveReplacementSubTree(Object context) {
+        JMeterTreeNode root = (JMeterTreeNode) context;
+        if (selectedNode == null) {
+            List nodePathList = getNodePath();
+            if (nodePathList != null && nodePathList.size() > 0) {
+                traverse(root, nodePathList, 1);
+            }
+        }
+    }
 
 	private void traverse(JMeterTreeNode node, List nodePath, int level) {
 		if (node != null && nodePath.size() > level) {

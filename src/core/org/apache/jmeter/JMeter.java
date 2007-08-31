@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +58,7 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Load;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
@@ -68,7 +70,6 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.timers.gui.AbstractTimerGui;
 import org.apache.jmeter.util.BeanShellInterpreter;
@@ -78,6 +79,7 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -665,6 +667,19 @@ public class JMeter implements JMeterPlugin {
 
 			HashTree tree = SaveService.loadTree(reader);
 
+            JMeterTreeModel treeModel = new JMeterTreeModel();
+            JMeterTreeNode root = (JMeterTreeNode) treeModel.getRoot();
+            treeModel.addSubTree(tree, root);
+
+            // Hack to resolve ModuleControllers in non GUI mode 
+            SearchByClass replaceableControllers = new SearchByClass(ReplaceableController.class);
+            tree.traverse(replaceableControllers);
+            Collection replaceableControllersRes = replaceableControllers.getSearchResults();
+            for (Iterator iter = replaceableControllersRes.iterator(); iter.hasNext();) {
+                ReplaceableController replaceableController = (ReplaceableController) iter.next();
+                replaceableController.resolveReplacementSubTree(root);
+            }
+
 			// Remove the disabled items
 			// For GUI runs this is done in Start.java
 			convertSubTree(tree);
@@ -714,45 +729,69 @@ public class JMeter implements JMeterPlugin {
         }
 	}
 
-	/**
-	 * Code copied from AbstractAction.java and modified to suit TestElements
-	 * 
-	 * @param tree
-	 */
-	private void convertSubTree(HashTree tree) {
-		Iterator iter = new LinkedList(tree.list()).iterator();
-		while (iter.hasNext()) {
-			TestElement item = (TestElement) iter.next();
-			if (item.isEnabled()) {
-				// This is done for GUI runs in JMeterTreeModel.addSubTree()
-				if (item instanceof TestPlan) {
-					TestPlan tp = (TestPlan) item;
-					tp.setFunctionalMode(tp.isFunctionalMode());
-					tp.setSerialized(tp.isSerialized());
-				}
-                // TODO: this is a bit of a hack, but seems to work for the Include Controller
-				if (item instanceof ReplaceableController) {
-                    // HACK: force the controller to load its tree
-                     ReplaceableController rc = (ReplaceableController) item.clone();
-                     HashTree subTree = tree.getTree(item);
-    				 if (subTree != null) {
-                         HashTree replacementTree = rc.getReplacementSubTree();
-                         if (replacementTree != null) {
-                             convertSubTree(replacementTree);
-                             tree.replace(item,rc);
-                             tree.set(rc,replacementTree);
-                         }
-                     } else {
-    					convertSubTree(tree.getTree(item));
-    				 }
-                } else {
-                    convertSubTree(tree.getTree(item));                    
-                } // ReplaceableController
-			} else {// disabled
-				tree.remove(item);
-			}
-		}
-	}
+    /**
+     * Refactored from AbstractAction.java
+     * 
+     * @param tree
+     */
+    public static void convertSubTree(HashTree tree) {
+        Iterator iter = new LinkedList(tree.list()).iterator();
+        while (iter.hasNext()) {
+            Object o = iter.next();
+            if (o instanceof TestElement) {
+                TestElement item = (TestElement) o;
+                if (item.isEnabled()) {
+                    if (item instanceof ReplaceableController) {
+                        // HACK: force the controller to load its tree
+                        ReplaceableController rc = (ReplaceableController) item
+                            .clone();
+                        HashTree subTree = tree.getTree(item);
+                        if (subTree != null) {
+                            HashTree replacementTree = rc
+                                .getReplacementSubTree();
+                            if (replacementTree != null) {
+                                convertSubTree(replacementTree);
+                                tree.replace(item, rc);
+                                tree.set(rc, replacementTree);
+                            }
+                        } else {
+                            convertSubTree(tree.getTree(item));
+                        }
+                    } else {
+                        convertSubTree(tree.getTree(item));
+                    }
+                } else
+                    tree.remove(item);
+            } else {
+                JMeterTreeNode item = (JMeterTreeNode) o;
+                if (item.isEnabled()) {
+                    // Replacement only needs to occur when starting the engine
+                    // @see StandardJMeterEngine.run()
+                    if (item.getUserObject() instanceof ReplaceableController) {
+                        ReplaceableController rc = (ReplaceableController) item
+                            .getTestElement();
+                        HashTree subTree = tree.getTree(item);
+
+                        if (subTree != null) {
+                            HashTree replacementTree = rc
+                                .getReplacementSubTree();
+                            if (replacementTree != null) {
+                                convertSubTree(replacementTree);
+                                tree.replace(item, rc);
+                                tree.set(rc, replacementTree);
+                            }
+                        }
+                    } else {
+                        convertSubTree(tree.getTree(item));
+                        TestElement testElement = item.getTestElement();
+                        tree.replace(item, testElement);
+                    }
+                 } else {
+                    tree.remove(item);
+                }
+            }
+        }
+    }
 
 	private JMeterEngine doRemoteInit(String hostName, HashTree testTree) {
 		JMeterEngine engine = null;
