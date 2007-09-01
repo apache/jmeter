@@ -55,29 +55,32 @@ import org.apache.log.Logger;
  */
 public class JMSSampler extends AbstractSampler implements ThreadListener {
 
-	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
-
-	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
-
-	public static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties"; // $NON-NLS-1$
+	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
 	private static final int DEFAULT_TIMEOUT = 2000;
 
-	public final static String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
+	//++ These are JMX names, and must not be changed
+	private static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
 
-	public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
+	private static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
 
-	public static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
+	private static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties"; // $NON-NLS-1$
 
-	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue"; // $NON-NLS-1$
+	private static final String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
 
-	public static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
+	private static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
 
-	public final static String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
+	private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
 
-	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
+	private static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue"; // $NON-NLS-1$
 
-	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+	private static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
+
+	private final static String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
+
+	private final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
+	
+	//--
 
 	//
 	// Member variables
@@ -182,8 +185,16 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		return getArguments(JMSSampler.JMS_PROPERTIES);
 	}
 
+	public void setJMSProperties(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+	}
+
 	public Arguments getJNDIProperties() {
 		return getArguments(JMSSampler.JNDI_PROPERTIES);
+	}
+
+	public void setJNDIProperties(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, args));
 	}
 
 	public String getQueueConnectionFactory() {
@@ -418,12 +429,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		return (Arguments) getProperty(name).getObjectValue();
 	}
 
-	/**
-	 * @param i
-	 */
-	public void setTimeout(int i) {
-		setProperty(JMSSampler.TIMEOUT, String.valueOf(i));
-
+	public void setTimeout(String s) {
+		setProperty(JMSSampler.TIMEOUT, s);
 	}
 
 	/**
