@@ -32,25 +32,27 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public abstract class BaseJMSSampler extends AbstractSampler implements TestListener {
 
-	public static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory"; // $NON-NLS-1$
+	//++ These are JMX file names and must not be changed
+	private static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory"; // $NON-NLS-1$
 
-	public static final String PROVIDER_URL = "jms.provider_url"; // $NON-NLS-1$
+	private static final String PROVIDER_URL = "jms.provider_url"; // $NON-NLS-1$
 
-	public static final String CONN_FACTORY = "jms.connection_factory"; // $NON-NLS-1$
+	private static final String CONN_FACTORY = "jms.connection_factory"; // $NON-NLS-1$
 
-	public static final String TOPIC = "jms.topic"; // $NON-NLS-1$
+	private static final String TOPIC = "jms.topic"; // $NON-NLS-1$
 
-	public static final String PRINCIPAL = "jms.security_principle"; // $NON-NLS-1$
+	private static final String PRINCIPAL = "jms.security_principle"; // $NON-NLS-1$
 
-	public static final String CREDENTIALS = "jms.security_credentials"; // $NON-NLS-1$
+	private static final String CREDENTIALS = "jms.security_credentials"; // $NON-NLS-1$
 
-	public static final String ITERATIONS = "jms.iterations"; // $NON-NLS-1$
+	private static final String ITERATIONS = "jms.iterations"; // $NON-NLS-1$
 
-	public static final String USE_AUTH = "jms.authenticate"; // $NON-NLS-1$
+	private static final String USE_AUTH = "jms.authenticate"; // $NON-NLS-1$
 
-	public static final String USE_PROPERTIES_FILE = "jms.jndi_properties"; // $NON-NLS-1$
+	private static final String USE_PROPERTIES_FILE = "jms.jndi_properties"; // $NON-NLS-1$
 
-	public static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
+	private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
+	//--
 
 	public static final String required = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
