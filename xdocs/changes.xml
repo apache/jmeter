@@ -48,13 +48,14 @@
 <li>Bug 42947 - TestBeanGUI changes not picked up when short-cut keys used</li>
 <li>Added serializer.jar (needed for update to xalan 2.7.0)</li>
 <li>Bug 38687 - Module controller does not work in non-GUI mode</li>
-<li>Bug 28715 - allow variable cookie values (set CookieManager.allow_variable_cookies=false to disable)</li>
 </ul>
 
 <h4>Improvements since 2.3RC3</h4>
 <ul>
 <li>Add stop thread option to CSV Dataset</li>
 <li>Updated commons-httpclient to 3.1</li>
+<li>Bug 28715 - allow variable cookie values (set CookieManager.allow_variable_cookies=false to disable)</li>
+<li>Bug 403873 - add JMS point-to-point non-persistent delivery option</li>
 </ul>
 
 <h3>Version 2.3RC3</h3>

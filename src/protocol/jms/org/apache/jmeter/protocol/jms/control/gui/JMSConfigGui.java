@@ -22,11 +22,13 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -66,6 +68,8 @@ public class JMSConfigGui extends AbstractSamplerGui {
 	private ArgumentsPanel jmsPropertiesPanel;
 
 	private ArgumentsPanel jndiPropertiesPanel;
+	
+	private JCheckBox useNonPersistentDelivery;
 
 	public JMSConfigGui() {
 		init();
@@ -105,6 +109,7 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
 		element.setIsOneway(isOneway);
 
+		element.setNonPersistent(useNonPersistentDelivery.isSelected());
 		element.setTimeout(timeout.getText());
 		element.setContent(soapXml.getText());
 
@@ -173,6 +178,8 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		}
 		box.setSelectedItem(selected);
 
+		useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
+		
 		timeout.setText(String.valueOf(sampler.getTimeout()));
 		soapXml.setText(sampler.getContent());
 		initialContextFactory.setText(sampler.getInitialContextFactory());
@@ -225,8 +232,11 @@ public class JMSConfigGui extends AbstractSamplerGui {
 		onewayPanel.add(oneWay);
 		messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 
-		JPanel timeoutPanel = new JPanel(new BorderLayout());
+		useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
+		
+		JPanel timeoutPanel = new HorizontalPanel();
 		timeoutPanel.add(timeout);
+		timeoutPanel.add(useNonPersistentDelivery);
 		messageNorthPanel.add(timeoutPanel, BorderLayout.SOUTH);
 
 		messagePanel.add(messageNorthPanel, BorderLayout.NORTH);
