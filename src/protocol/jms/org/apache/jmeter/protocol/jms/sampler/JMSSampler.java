@@ -24,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
@@ -80,6 +81,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	private final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
 	
+	private static final String IS_NON_PERSISTENT = "JMSSampler.isNonPersistent"; // $NON-NLS-1$
+
 	//--
 
 	//
@@ -233,6 +236,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		return getPropertyAsBoolean(IS_ONE_WAY);
 	}
 
+	public boolean isNonPersistent() {
+		return getPropertyAsBoolean(IS_NON_PERSISTENT);
+	}
+
 	public String getInitialContextFactory() {
 		return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
 	}
@@ -243,6 +250,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	public void setIsOneway(boolean isOneway) {
 		setProperty(new BooleanProperty(IS_ONE_WAY, isOneway));
+	}
+
+	public void setNonPersistent(boolean value) {
+		setProperty(new BooleanProperty(IS_NON_PERSISTENT, value));
 	}
 
 	public String toString() {
@@ -293,12 +304,18 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 			if (getPropertyAsBoolean(IS_ONE_WAY)) {
 				producer = session.createSender(sendQueue);
+				if (isNonPersistent()) {
+					producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+				}
 			} else {
 
 				if (useTemporyQueue()) {
 					executor = new TemporaryQueueExecutor(session, sendQueue);
 				} else {
 					producer = session.createSender(sendQueue);
+					if (isNonPersistent()) {
+						producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+					}
 					executor = new FixedQueueExecutor(producer, getTimeout());
 				}
 			}

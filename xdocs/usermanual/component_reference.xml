@@ -979,6 +979,9 @@ Currently the only way to changes these is via the SampleResponse methods:
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase failes and the specific reply message received after the timeout is discarded.
   </property>
+  <property name="Use non-persistent delivery mode?" required="Yes">
+      Whether to set DeliveryMode.NON_PERSISTENT.
+  </property>
   <property name="Content" required="No">
       The content of the message.
   </property>
