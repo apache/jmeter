@@ -26,6 +26,7 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -53,6 +54,10 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  */
 public class GraphVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener, Clearable {
     
+	private static final String ZERO = "0";  //$NON-NLS-1$
+	
+	private NumberFormat nf = NumberFormat.getInstance(); // OK, because used in synchronised method
+
 	private SamplingStatCalculator model;
 
 	private JTextField maxYField = null;
@@ -114,7 +119,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 		dataField.setText(Long.toString(s.getData()));
 		averageField.setText(Long.toString(s.getAverage()));
 		deviationField.setText(Long.toString(s.getDeviation()));
-		throughputField.setText(Double.toString(60 * s.getThroughput()) + "/" + minute); // $NON-NLS-1$
+		throughputField.setText(nf.format(60 * s.getThroughput()) + "/" + minute); // $NON-NLS-1$
 		medianField.setText(Long.toString(s.getMedian()));
 		updateYAxis();
 	}
@@ -145,12 +150,12 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 	public void clearData() {
 		graph.clearData();		
 		model.clear();
-		dataField.setText("0000"); //$NON-NLS-1$
-		averageField.setText("0000"); //$NON-NLS-1$
-		deviationField.setText("0000"); //$NON-NLS-1$
+		dataField.setText(ZERO);
+		averageField.setText(ZERO);
+		deviationField.setText(ZERO);
 		throughputField.setText("0/" + minute); //$NON-NLS-1$
-		medianField.setText("0000"); //$NON-NLS-1$
-		noSamplesField.setText("0000"); //$NON-NLS-1$
+		medianField.setText(ZERO);
+		noSamplesField.setText(ZERO);
 		updateYAxis();
 		repaint();
 	}
@@ -164,7 +169,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 	 */
 	private void updateYAxis() {
 		maxYField.setText(Long.toString(graph.getGraphMax()));
-		minYField.setText("0"); //$NON-NLS-1$
+		minYField.setText(ZERO);
 	}
 
 	/**
