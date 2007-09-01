@@ -98,12 +98,12 @@ Class SizeAssertion</H2>
 
 <P>
 Checks if the results of a Sample matches a particular size.
+ 
+ author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
 <P>
 
 <P>
 <DL>
-<DT><B>Author:</B></DT>
-  <DD><a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a></DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.assertions.SizeAssertion">Serialized Form</A></DL>
 <HR>
 
@@ -208,7 +208,7 @@ Checks if the results of a Sample matches a particular size.
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/SizeAssertion.html#getAllowedSize()">getAllowedSize</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the size in bytes to be asserted. </TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the size in bytes to be asserted.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -224,7 +224,8 @@ Checks if the results of a Sample matches a particular size.
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/SizeAssertion.html#getResult(org.apache.jmeter.samplers.SampleResult)">getResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;response)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the result of the Assertion. </TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the result of the Assertion. 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -365,10 +366,8 @@ getResult</H3>
 <PRE>
 public <A HREF="../../../../org/apache/jmeter/assertions/AssertionResult.html" title="class in org.apache.jmeter.assertions">AssertionResult</A> <B>getResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;response)</PRE>
 <DL>
-<DD>Returns the result of the Assertion. Here it checks wether the Sample
- took to long to be considered successful. If so an AssertionResult
- containing a FailureMessage will be returned. Otherwise the returned
- AssertionResult will reflect the success of the Sample.
+<DD>Returns the result of the Assertion. 
+ Here it checks the Sample responseData length.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/assertions/Assertion.html#getResult(org.apache.jmeter.samplers.SampleResult)">getResult</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/assertions/Assertion.html" title="interface in org.apache.jmeter.assertions">Assertion</A></CODE></DL>
@@ -387,8 +386,7 @@ getAllowedSize</H3>
 <PRE>
 public long <B>getAllowedSize</B>()</PRE>
 <DL>
-<DD>Returns the size in bytes to be asserted. A duration of 0 indicates this
- assertion is to be ignored.
+<DD>Returns the size in bytes to be asserted.
 <P>
 <DD><DL>
 </DL>

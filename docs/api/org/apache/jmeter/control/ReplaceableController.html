@@ -99,7 +99,7 @@ This interface represents a controller that gets replaced during the
 <P>
 <DL>
 <DT><B>Version:</B></DT>
-  <DD>$Revision: 493779 $</DD>
+  <DD>$Revision: 571520 $</DD>
 <DT><B>Author:</B></DT>
   <DD>Thad Smith</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/gui/action/AbstractAction.html" title="class in org.apache.jmeter.gui.action"><CODE>AbstractAction</CODE></A></DL>
@@ -133,6 +133,14 @@ This interface represents a controller that gets replaced during the
  subelements of the TestElement that is replacing the
  ReplaceableController.</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/ReplaceableController.html#resolveReplacementSubTree(java.lang.Object)">resolveReplacementSubTree</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;context)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compute the replacement tree.</TD>
+</TR>
 </TABLE>
 &nbsp;
 <P>
@@ -164,7 +172,20 @@ public <A HREF="../../../../org/apache/jorphan/collections/HashTree.html" title=
 <P>
 <DD><DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections"><CODE>HashTree</CODE></A>, 
-<A HREF="../../../../org/apache/jmeter/gui/action/AbstractAction.html#convertSubTree(org.apache.jorphan.collections.HashTree)"><CODE>AbstractAction.convertSubTree(org.apache.jorphan.collections.HashTree)</CODE></A></DL>
+<CODE>org.apache.jmeter.gui.action.AbstractAction#convertSubTree</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="resolveReplacementSubTree(java.lang.Object)"><!-- --></A><H3>
+resolveReplacementSubTree</H3>
+<PRE>
+public void <B>resolveReplacementSubTree</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;context)</PRE>
+<DL>
+<DD>Compute the replacement tree.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - </DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
