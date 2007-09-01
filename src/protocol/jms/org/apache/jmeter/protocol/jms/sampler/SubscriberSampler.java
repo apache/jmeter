@@ -44,7 +44,7 @@ import org.apache.log.Logger;
 public class SubscriberSampler extends BaseJMSSampler implements TestListener, MessageListener {
 
 	// private Subscriber SUBSCRIBER = null;
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private transient ReceiveSubscriber SUBSCRIBER = null;
 
@@ -56,7 +56,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 
 	private transient boolean RUN = true;
 
-	public static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
+	private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
 
 	public SubscriberSampler() {
 	}
