@@ -1958,6 +1958,8 @@ the Report.
 	The file is only opened once, and each thread will use a different line from the file. 
 	Lines are read as the threads need them.
 	</p>
+	<note>CSV Dataset variables are defined after configuration processing is completed,
+	so they cannot be used for other configuration items such as JDBC Config (see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">Bug 40394 </a>)</note>
 	<p>
 	As a special case, the string "\t" (without quotes) is treated as a Tab.
 	</p>
