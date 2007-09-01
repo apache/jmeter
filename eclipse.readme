@@ -52,4 +52,9 @@ On the Main tab, enter the following as the main class:
 On the Arguments tab, in the Working Directory area, pick the radio
 button next to "Other" and enter the following in the text box:
 
-  ${project_loc}/bin
+  ${workspace_loc}/jmeterproject/bin
+  
+ where "jmeterproject" is the name of the JMeter project.
+ 
+ [It would be nicer to use ${project_loc}/bin 
+ but unfortunately the Eclipse Debug view does not seem to preserve any of the project variables]
