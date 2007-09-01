@@ -48,6 +48,7 @@
 <li>Bug 42947 - TestBeanGUI changes not picked up when short-cut keys used</li>
 <li>Added serializer.jar (needed for update to xalan 2.7.0)</li>
 <li>Bug 38687 - Module controller does not work in non-GUI mode</li>
+<li>Bug 28715 - allow variable cookie values (set CookieManager.allow_variable_cookies=false to disable)</li>
 </ul>
 
 <h4>Improvements since 2.3RC3</h4>

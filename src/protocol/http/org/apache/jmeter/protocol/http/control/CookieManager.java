@@ -69,6 +69,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	private static final boolean DELETE_NULL_COOKIES 
         = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
 
+	// See bug 28715
+	private static final boolean ALLOW_VARIABLE_COOKIES 
+        = JMeterUtils.getPropDefault("CookieManager.allow_variable_cookies", true);// $NON-NLS-1$
+
     private transient CookieSpec cookieSpec;
 
     public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
@@ -288,7 +292,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         int i=0;
         for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();) {
             Cookie jmcookie = (Cookie) iter.next().getObjectValue();
+            // Set to running version, to allow function evaluation for the cookie values (bug 28715)
+            if (ALLOW_VARIABLE_COOKIES) jmcookie.setRunningVersion(true);
             cookies[i++] = makeCookie(jmcookie);
+            if (ALLOW_VARIABLE_COOKIES) jmcookie.setRunningVersion(false);
         }
         String host = url.getHost();
         String protocol = url.getProtocol();
