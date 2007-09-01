@@ -39,8 +39,9 @@ Now refresh the project (you should add this to the Ant build properties)
 Launching from Eclipse
 ----------------------
 
-These instructions assume you checked out the JMeter code as an Eclipse project named "jmeter".
-If you used something else, adjust accordingly.
+These instructions assume you have configured Eclipse to use the classpath
+as suggested in eclipse.classpath, and have run "ant package" to compile
+the RMI classes and build the jars.
 
 Create a new Java Application launch configuration.
 
@@ -51,4 +52,4 @@ On the Main tab, enter the following as the main class:
 On the Arguments tab, in the Working Directory area, pick the radio
 button next to "Other" and enter the following in the text box:
 
-  ${workspace_loc:jmeter/bin}
+  ${project_loc}/bin
