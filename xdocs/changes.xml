@@ -90,6 +90,11 @@ This can be reduced by using a file instead of including the script in the test 
 Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
 to name log files in client-server mode.
 </p>
+<p>
+CSV Dataset variables are defined after configuration processing is completed,
+so they cannot be used for other configuration items such as JDBC Config.
+(see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">Bug 40394 </a>)
+</p>
 
 <h4>Summary of changes (for more details, see below)</h4>
 <p>
