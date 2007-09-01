@@ -241,6 +241,16 @@
 						</li>
 									
 
+												<li	>
+								Bug 28715 - allow variable cookie values (set CookieManager.allow_variable_cookies=false to disable)
+						</li>
+									
+
+												<li	>
+								Bug 403873 - add JMS point-to-point non-persistent delivery option
+						</li>
+									
+
 						</ul>
 							  									 				<h3	>
 								Version 2.3RC3
@@ -299,6 +309,17 @@ This can be reduced by using a file instead of including the script in the test 
 								
 Variables and functions do not work in Listeners in client-server (remote) mode so they cannot be used
 to name log files in client-server mode.
+
+						</p>
+							  									 				<p	>
+								
+CSV Dataset variables are defined after configuration processing is completed,
+so they cannot be used for other configuration items such as JDBC Config.
+(see 
+												<a	 href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">
+								Bug 40394 
+						</a>
+									)
 
 						</p>
 							  									 				<h4	>
@@ -2321,6 +2342,7 @@ The XSL stylesheets also now accept either "rc" or "rs"
 								Bug 33920 - allow additional property files
 						</li>
 									
+
 
 												<li	>
 								Bug 33845 - allow direct override of Home dir

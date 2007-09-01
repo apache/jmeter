@@ -639,6 +639,11 @@ https.sessioncontext.shared=true
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.
 		In versions after 2.2, this is now the default.
+		
+												<b	>
+								Warning: see below for information on cookie handling.
+						</b>
+									
         
 			</td>
 			<td>
@@ -783,6 +788,22 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 		</tr>
 		</table>
 	</p>
+							  									 				<p	>
+								
+
+												<b	>
+								N.B.
+						</b>
+									 when using automatic redirection, cookies are only sent for the initial URL.
+This can cause unexpected behaviour for web-sites that redirect to a local server.
+E.g. if www.example.com redirects to www.example.co.uk.
+In this case the server will probably return cookies for both URLs, but JMeter will only see the cookies for the last
+host, i.e. www.example.co.uk. If the next request uses www.example.com, 
+rather than www.example.co.uk, it will not get the correct cookies.
+This is generally only a problem for manually created test plans,
+as a test plan created using a recorder would continue from the redirected URL.
+
+						</p>
 							  									 				<p	>
 								Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
@@ -1797,7 +1818,6 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 												<p	>
 								 This is a combination of the LDAP "bind" and "unbind" operations.
 		It can be used for an authentication request/password check for any user. It will open an new session, just to
-
 		check the validity of the user/password combination, and end the session again.
 						</p>
 									
@@ -3341,6 +3361,16 @@ Currently the only way to changes these is via the SampleResponse methods:
 			<td>						
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase failes and the specific reply message received after the timeout is discarded.
+  
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Use non-persistent delivery mode?</td>
+			<td>						
+      Whether to set DeliveryMode.NON_PERSISTENT.
   
 			</td>
 			<td>
@@ -6201,6 +6231,17 @@ the Report.
 	Lines are read as the threads need them.
 	
 						</p>
+									
+	
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						CSV Dataset variables are defined after configuration processing is completed,
+	so they cannot be used for other configuration items such as JDBC Config (see 
+												<a	 href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">
+								Bug 40394 
+						</a>
+									)
+			</td></tr>
+	</table></p>
 									
 	
 												<p	>
