@@ -31,24 +31,22 @@ import org.apache.jmeter.protocol.jms.client.Publisher;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author pete
- * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
 public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
-	public static final String INPUT_FILE = "jms.input_file"; //$NON-NLS-1$
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String RANDOM_PATH = "jms.random_path"; //$NON-NLS-1$
+	//++ These are JMX file names and must not be changed
+	private static final String INPUT_FILE = "jms.input_file"; //$NON-NLS-1$
 
-	public static final String TEXT_MSG = "jms.text_message"; //$NON-NLS-1$
+	private static final String RANDOM_PATH = "jms.random_path"; //$NON-NLS-1$
 
-	public static final String CONFIG_CHOICE = "jms.config_choice"; //$NON-NLS-1$
+	private static final String TEXT_MSG = "jms.text_message"; //$NON-NLS-1$
 
-	public static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
+	private static final String CONFIG_CHOICE = "jms.config_choice"; //$NON-NLS-1$
 
+	private static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
+    //--
+	
 	private transient Publisher PUB = null;
 
 	private StringBuffer BUFFER = new StringBuffer();
@@ -56,8 +54,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	private static FileServer FSERVER = FileServer.getFileServer();
 
 	private String file_contents = null;
-
-	static Logger log = LoggingManager.getLoggerForClass();
 
 	public PublisherSampler() {
 	}
