@@ -29,8 +29,6 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.protocol.jms.sampler.JMSSampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -100,23 +98,23 @@ public class JMSConfigGui extends AbstractSamplerGui {
 	}
 
 	private void transfer(JMSSampler element) {
-		element.setProperty(JMSSampler.QUEUE_CONNECTION_FACTORY_JNDI, queueuConnectionFactory.getText());
-		element.setProperty(JMSSampler.SEND_QUEUE, sendQueue.getText());
-		element.setProperty(JMSSampler.RECEIVE_QUEUE, receiveQueue.getText());
+		element.setQueueConnectionFactory(queueuConnectionFactory.getText());
+		element.setSendQueue(sendQueue.getText());
+		element.setReceiveQueue(receiveQueue.getText());
 
 		boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-		element.setProperty(new BooleanProperty(JMSSampler.IS_ONE_WAY, isOneway));
+		element.setIsOneway(isOneway);
 
-		element.setProperty(JMSSampler.TIMEOUT, timeout.getText());
-		element.setProperty(JMSSampler.XML_DATA, soapXml.getText());
+		element.setTimeout(timeout.getText());
+		element.setContent(soapXml.getText());
 
-		element.setProperty(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY, initialContextFactory.getText());
-		element.setProperty(JMSSampler.JNDI_CONTEXT_PROVIDER_URL, providerUrl.getText());
+		element.setInitialContextFactory(initialContextFactory.getText());
+		element.setContextProvider(providerUrl.getText());
 		Arguments jndiArgs = (Arguments) jndiPropertiesPanel.createTestElement();
-		element.setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, jndiArgs));
+		element.setJNDIProperties(jndiArgs);
 
 		Arguments args = (Arguments) jmsPropertiesPanel.createTestElement();
-		element.setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+		element.setJMSProperties(args);
 
 	}
 
