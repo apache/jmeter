@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,7 +27,9 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -34,6 +37,7 @@ import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -47,6 +51,8 @@ import org.apache.log.Logger;
  */
 public class Save implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	public final static String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
 
 	private static Set commands = new HashSet();
 	static {
@@ -85,11 +91,30 @@ public class Save implements Command {
 		if (!ActionNames.SAVE.equals(e.getActionCommand()) || updateFile == null) {
 			JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
 					.getCurrentNode().getName()
-					+ ".jmx"); // $NON-NLS-1$
+					+ JMX_FILE_EXTENSION);
 			if (chooser == null) {
 				return;
 			}
 			updateFile = chooser.getSelectedFile().getAbsolutePath();
+			// Make sure the file ends with proper extension
+			if(FilenameUtils.getExtension(updateFile).equals("")) {
+				updateFile = updateFile + JMX_FILE_EXTENSION;
+			}
+			// Check if the user is trying to save to an existing file
+			if(!e.getActionCommand().equals(ActionNames.SAVE)) {//so it must be a SAVE_AS action
+				File f = new File(updateFile);
+				if(f.exists()) {
+					int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+							JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+							JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
+					if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+						return ; // Do not save, user does not want to overwrite
+					}
+				}
+			}
+			
 			if (!e.getActionCommand().equals(ActionNames.SAVE_AS)) {
 				GuiPackage.getInstance().setTestPlanFile(updateFile);
 			}
