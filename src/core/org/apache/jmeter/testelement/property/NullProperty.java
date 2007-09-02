@@ -77,9 +77,6 @@ public class NullProperty extends AbstractProperty {
 		tempValue = prop;
 	}
 
-	/**
-	 * @see Object#clone()
-	 */
 	public Object clone() {
 		return this;
 	}

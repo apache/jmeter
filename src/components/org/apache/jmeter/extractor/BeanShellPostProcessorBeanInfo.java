@@ -25,9 +25,6 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 public class BeanShellPostProcessorBeanInfo extends BeanInfoSupport {
 
-	/**
-	 * @param beanClass
-	 */
 	public BeanShellPostProcessorBeanInfo() {
 		super(BeanShellPostProcessor.class);
 

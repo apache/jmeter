@@ -24,10 +24,6 @@ import org.apache.jorphan.collections.HashTree;
  * This interface represents a controller that gets replaced during the
  * compilation phase of test execution in an arbitrary way.
  * 
- * @see org.apache.jmeter.gui.action.AbstractAction
- * 
- * @author Thad Smith
- * @version $Revision$
  */
 public interface ReplaceableController {
 
@@ -36,10 +32,7 @@ public interface ReplaceableController {
 	 * subelements of the TestElement that is replacing the
 	 * ReplaceableController.
 	 * 
-	 * @param tree -
-	 *            The current HashTree to be executed.
 	 * @see org.apache.jorphan.collections.HashTree
-	 * @see org.apache.jmeter.gui.action.AbstractAction#convertSubTree
 	 */
 	public HashTree getReplacementSubTree();
 

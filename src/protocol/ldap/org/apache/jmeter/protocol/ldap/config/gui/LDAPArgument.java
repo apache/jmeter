@@ -132,7 +132,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
 	/**
 	 * Sets the opcode of the Argument.
 	 * 
-	 * @param newValue
+	 * @param newOpcode
 	 *            the new value
 	 */
 	public void setOpcode(String newOpcode) {

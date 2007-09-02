@@ -232,7 +232,7 @@ public class TextAreaTableCellEditor extends AbstractCellEditor implements Table
 		 * @param anEvent
 		 *            the event
 		 * @return true if cell is ready for editing, false otherwise
-		 * @see #setClickCountToStart
+		 * @see #setClickCountToStart(int)
 		 * @see #shouldSelectCell
 		 */
 		public boolean isCellEditable(EventObject anEvent) {

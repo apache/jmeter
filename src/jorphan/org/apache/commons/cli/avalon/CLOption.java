@@ -28,7 +28,7 @@ import java.util.Arrays;
  */
 public final class CLOption {
 	/**
-	 * Value of {@link #getId} when the option is a text argument.
+	 * Value of {@link CLOptionDescriptor#getId} when the option is a text argument.
 	 */
 	public static final int TEXT_ARGUMENT = 0;
 

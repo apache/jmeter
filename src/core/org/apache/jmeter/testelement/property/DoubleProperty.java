@@ -62,9 +62,6 @@ public class DoubleProperty extends NumberProperty {
 		return new Double(value);
 	}
 
-	/**
-	 * @see Object#clone()
-	 */
 	public Object clone() {
 		DoubleProperty prop = (DoubleProperty) super.clone();
 		prop.value = value;

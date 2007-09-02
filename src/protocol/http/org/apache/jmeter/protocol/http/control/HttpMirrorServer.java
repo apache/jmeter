@@ -54,9 +54,6 @@ public class HttpMirrorServer extends Thread {
 	 * 
 	 * @param port
 	 *            the port to listen on.
-	 * @param target
-	 *            the target which will receive the generated JMeter test
-	 *            components.
 	 */
 	public HttpMirrorServer(int port) {
 		super("HttpMirrorServer");

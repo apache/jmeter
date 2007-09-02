@@ -75,7 +75,7 @@ public interface JMeterGUIComponent {
 	 * this method; the definition of this method in AbstractJMeterGuiComponent
 	 * is intended for general use.
 	 * 
-	 * @see getLabelResource()
+	 * @see #getLabelResource()
 	 * @return GUI label for the component.
 	 */
 	String getStaticLabel();

@@ -86,7 +86,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
 	}
 
 	/**
-	 * @see Command#doAction(ActionEvent)
+	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
 	 */
 	public void doAction(ActionEvent e) {
 		String action = e.getActionCommand();
@@ -155,7 +155,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
 	}
 
 	/**
-	 * @see Command#getActionNames()
+	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
 	 */
 	public Set getActionNames() {
 		return commands;

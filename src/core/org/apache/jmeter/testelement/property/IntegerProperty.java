@@ -86,9 +86,6 @@ public class IntegerProperty extends NumberProperty {
 		return new Integer(value);
 	}
 
-	/**
-	 * @see Object#clone()
-	 */
 	public Object clone() {
 		IntegerProperty prop = (IntegerProperty) super.clone();
 		prop.value = value;

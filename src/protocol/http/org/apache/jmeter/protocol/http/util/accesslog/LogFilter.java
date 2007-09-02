@@ -206,7 +206,7 @@ public class LogFilter implements Filter, Serializable {
 	 * all entries are included unless it matches, which means it should be
 	 * excluded.
 	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(java.lang.String)
+	 * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(String, TestElement)
 	 * @param path
 	 * @return boolean
 	 */

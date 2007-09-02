@@ -91,9 +91,6 @@ public class MapProperty extends MultiProperty {
 		return value;
 	}
 
-	/**
-	 * @see java.lang.Object#clone()
-	 */
 	public Object clone() {
 		MapProperty prop = (MapProperty) super.clone();
 		prop.value = cloneMap();

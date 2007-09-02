@@ -122,7 +122,7 @@ public class SSLManagerCommand implements Command {
 		/**
 		 * Tests to see if the file ends with "*.p12" or "*.P12".
 		 * 
-		 * @param testfile
+		 * @param testFile
 		 *            file to test
 		 * @return true if file is accepted, false otherwise
 		 */

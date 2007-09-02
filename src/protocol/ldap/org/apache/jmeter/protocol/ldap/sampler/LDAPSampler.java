@@ -351,7 +351,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the add test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void addTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (getPropertyAsBoolean(USER_DEFINED)) {
@@ -370,7 +369,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the delete test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void deleteTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (!getPropertyAsBoolean(USER_DEFINED)) {
@@ -386,7 +384,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the search test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void searchTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (!getPropertyAsBoolean(USER_DEFINED)) {
@@ -406,7 +403,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the search test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void modifyTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (getPropertyAsBoolean(USER_DEFINED)) {

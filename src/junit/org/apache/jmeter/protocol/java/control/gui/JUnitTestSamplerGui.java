@@ -48,7 +48,7 @@ import org.apache.log.Logger;
 
 /**
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
- * for the {@link JUnitTestSampler}.
+ * for the {@link JUnitSampler}.
  * 
  */
 public class JUnitTestSamplerGui extends AbstractSamplerGui 

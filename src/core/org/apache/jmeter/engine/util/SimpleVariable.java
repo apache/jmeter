@@ -43,7 +43,7 @@ public class SimpleVariable {
 	}
 
 	/**
-	 * @see org.apache.jmeter.functions.Function#execute(SampleResult, Sampler)
+	 * @see org.apache.jmeter.functions.Function#execute
 	 */
 	public String toString() {
 		String ret = null;

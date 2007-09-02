@@ -281,7 +281,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
     /**
      * Get array of valid HttpClient cookies for the URL
      * 
-     * @param URL
+     * @param url the target URL
      * @return array of HttpClient cookies
      * 
      */

@@ -190,7 +190,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the username attribute of the LDAP object
 	 * 
-	 * @return The username
 	 **************************************************************************/
 
 	public void setUserDN(String newUserDN) {
@@ -259,7 +258,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the Rootdn attribute of the LDAPSampler object
 	 * 
-	 * @param rootdn
+	 * @param newRootdn 
 	 *            The new rootdn value
 	 **************************************************************************/
 	public void setRootdn(String newRootdn) {
@@ -291,7 +290,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the search scope attribute of the LDAPSampler object
 	 * 
-	 * @param rootdn
+	 * @param newScope
 	 *            The new scope value
 	 **************************************************************************/
 	public void setScope(String newScope) {
@@ -314,8 +313,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the size limit attribute of the LDAPSampler object
 	 * 
-	 * @param rootdn
-	 *            The new scope value
+	 * @param newClim
+	 *            The new size limit value
 	 **************************************************************************/
 	public void setCountlim(String newClim) {
 		this.setProperty(COUNTLIM, newClim);
@@ -337,8 +336,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the time limit attribute of the LDAPSampler object
 	 * 
-	 * @param rootdn
-	 *            The new scope value
+	 * @param newTlim
+	 *            The new time limit value
 	 **************************************************************************/
 	public void setTimelim(String newTlim) {
 		this.setProperty(TIMELIM, newTlim);
@@ -371,10 +370,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	}
 
 	/***************************************************************************
-	 * Sets the search scope attribute of the LDAPSampler object
+	 * Sets the deref attribute of the LDAPSampler object
 	 * 
-	 * @param rootdn
-	 *            The new scope value
+	 * @param newDref
+	 *            The new deref value
 	 **************************************************************************/
 	public void setDeref(String newDref) {
 		this.setProperty(DEREF, newDref);
@@ -383,7 +382,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the Test attribute of the LdapConfig object
 	 * 
-	 * @param Test
+	 * @param newTest
 	 *            The new test value(Add,Modify,Delete and search)
 	 **************************************************************************/
 	public void setTest(String newTest) {
@@ -400,10 +399,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	}
 
 	/***************************************************************************
-	 * Sets the Test attribute of the LdapConfig object
+	 * Sets the attributes of the LdapConfig object
 	 * 
-	 * @param Test
-	 *            The new test value(Add,Modify,Delete and search)
+	 * @param newAttrs
+	 *            The new attributes value
 	 **************************************************************************/
 	public void setAttrs(String newAttrs) {
 		this.setProperty(ATTRIBS, newAttrs);
@@ -421,7 +420,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	/***************************************************************************
 	 * Sets the Base Entry DN attribute of the LDAPSampler object
 	 * 
-	 * @param value
+	 * @param newbaseentry
 	 *            The new Base entry DN value
 	 **************************************************************************/
 	public void setBaseEntryDN(String newbaseentry) {

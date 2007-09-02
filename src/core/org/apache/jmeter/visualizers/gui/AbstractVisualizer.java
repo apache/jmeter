@@ -87,7 +87,7 @@ import org.apache.log.Logger;
  * visualizers don't calculate, or displaying the results visually in a new and
  * interesting way. Making a new visualizer for either of these purposes is easy -
  * just extend this class and implement the
- * {@link org.apache.jmeter.visualizers.Visualizer#add(SampleResult) add(SampleResult)}
+ * {@link org.apache.jmeter.visualizers.Visualizer#add add(SampleResult)}
  * method and display the results as you see fit. This AbstractVisualizer and
  * the default
  * {@link org.apache.jmeter.reporters.ResultCollector ResultCollector} handle

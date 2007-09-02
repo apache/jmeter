@@ -179,8 +179,6 @@ public class XPathExtractor extends AbstractTestElement implements
      * Extract value from Document d by XPath query.
      * @param d
      * @param query
-     * @return extracted value (even empty string) or null if queried
-     *  data were not found
      * @throws TransformerException
      */
     private void getValuesForXPath(Document d,String query, JMeterVariables vars, String refName)

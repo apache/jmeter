@@ -125,7 +125,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 			 * Callback method when the focus to the Text Field component is
 			 * lost.
 			 * 
-			 * @param pFocusEvent
+			 * @param e
 			 *            The focus event that occured.
 			 */
 			public void itemStateChanged(ItemEvent e) {

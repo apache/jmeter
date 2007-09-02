@@ -41,7 +41,7 @@ public class ListenerResultWrapper {
 	}
 
 	/**
-	 * @param sampleResults
+	 * @param results
 	 *            The sampleResults to set.
 	 */
 	public void setSampleResults(Collection results) {

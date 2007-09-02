@@ -81,9 +81,6 @@ public class FloatProperty extends NumberProperty {
 		return new Float(value);
 	}
 
-	/**
-	 * @see Object#clone()
-	 */
 	public Object clone() {
 		FloatProperty prop = (FloatProperty) super.clone();
 		prop.value = value;

@@ -34,9 +34,6 @@ import org.apache.log.Logger;
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
 	Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * @param beanClass
-	 */
 	public DataSourceElementBeanInfo() {
 		super(DataSourceElement.class);
 		createPropertyGroup("varName", new String[] { "dataSource" });
