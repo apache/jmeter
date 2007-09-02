@@ -40,9 +40,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 // @see org.apache.jmeter.assertions.PackageTest for unit tests
 
 /**
- * 
- * @author Michael Stover
- * @author <a href="mailto:jacarlco@katun.com">Jonathan Carlson</a>
+ * Test element to handle Response Assertions, @see AssertionGui
  */
 public class ResponseAssertion extends AbstractTestElement implements Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -58,6 +56,8 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	private final static String RESPONSE_CODE = "Assertion.response_code"; // $NON-NLS-1$
 
 	private final static String RESPONSE_MESSAGE = "Assertion.response_message"; // $NON-NLS-1$
+
+	private final static String RESPONSE_HEADERS = "Assertion.response_headers"; // $NON-NLS-1$
 
 	private final static String ASSUME_SUCCESS = "Assertion.assume_success"; // $NON-NLS-1$
 
@@ -119,6 +119,10 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		setTestField(RESPONSE_MESSAGE);
 	}
 
+	public void setTestFieldResponseHeaders(){
+		setTestField(RESPONSE_HEADERS);
+	}
+
 	public boolean isTestFieldURL(){
 		return SAMPLE_URL.equals(getTestField());
 	}
@@ -133,6 +137,10 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
 	public boolean isTestFieldResponseMessage(){
 		return RESPONSE_MESSAGE.equals(getTestField());
+	}
+
+	public boolean isTestFieldResponseHeaders(){
+		return RESPONSE_HEADERS.equals(getTestField());
 	}
 
 	private void setTestType(int testType) {
@@ -262,14 +270,13 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
 		// What are we testing against?
 		if (isTestFieldResponseData()) {
-			// TODO treat header separately from response? (would not apply to
-			// all samplers)
-			String data = response.getResponseDataAsString(); // (bug25052)
-			toCheck = new StringBuffer(response.getResponseHeaders()).append(data).toString();
+			toCheck = response.getResponseDataAsString(); // (bug25052)
 		} else if (isTestFieldResponseCode()) {
 			toCheck = response.getResponseCode();
 		} else if (isTestFieldResponseMessage()) {
 			toCheck = response.getResponseMessage();
+		} else if (isTestFieldResponseHeaders()) {
+			toCheck = response.getResponseHeaders();
 		} else { // Assume it is the URL
 			toCheck = response.getSamplerData(); // TODO - is this where the URL is stored?
 			if (toCheck == null)
@@ -334,12 +341,14 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		StringBuffer sb = new StringBuffer(200);
 		sb.append("Test failed, ");
 
-		if (ResponseAssertion.RESPONSE_DATA.equals(getTestField())) {
+		if (isTestFieldResponseData()) {
 			sb.append("text");
-		} else if (ResponseAssertion.RESPONSE_CODE.equals(getTestField())) {
+		} else if (isTestFieldResponseCode()) {
 			sb.append("code");
-		} else if (ResponseAssertion.RESPONSE_MESSAGE.equals(getTestField())) {
+		} else if (isTestFieldResponseMessage()) {
 			sb.append("message");
+		} else if (isTestFieldResponseHeaders()) {
+			sb.append("headers");
 		} else // Assume it is the URL
 		{
 			sb.append("URL");

@@ -61,6 +61,9 @@ public class AssertionGui extends AbstractAssertionGui {
 	/** Radio button indicating that the responseCode should be tested. */
 	private JRadioButton responseCodeButton;
 
+	/** Radio button indicating that the headers should be tested. */
+	private JRadioButton responseHeadersButton;
+
 	/**
 	 * Checkbox to indicate whether the response should be forced successful
 	 * before testing. This is intended for use when checking the status code or
@@ -132,14 +135,16 @@ public class AssertionGui extends AbstractAssertionGui {
 				ra.addTestString(testStrings[i]);
 			}
 
-			if (urlButton.isSelected()) {
-				ra.setTestFieldURL();
+			if (responseStringButton.isSelected()) {
+				ra.setTestFieldResponseData();
 			} else if (responseCodeButton.isSelected()) {
 				ra.setTestFieldResponseCode();
 			} else if (responseMessageButton.isSelected()) {
 				ra.setTestFieldResponseMessage();
-			} else {
-				ra.setTestFieldResponseData();
+			} else if (responseHeadersButton.isSelected()) {
+				ra.setTestFieldResponseHeaders();
+			} else { // Assume URL
+				ra.setTestFieldURL();
 			}
 
 			ra.setAssumeSuccess(assumeSuccess.isSelected());
@@ -172,6 +177,7 @@ public class AssertionGui extends AbstractAssertionGui {
         urlButton.setSelected(false);
         responseCodeButton.setSelected(false);
         responseMessageButton.setSelected(false);
+        responseHeadersButton.setSelected(false);
         assumeSuccess.setSelected(false);
         
         containsBox.setSelected(true);
@@ -219,6 +225,8 @@ public class AssertionGui extends AbstractAssertionGui {
 			responseCodeButton.setSelected(true);
 		} else if (model.isTestFieldResponseMessage()) {
 			responseMessageButton.setSelected(true);
+		} else if (model.isTestFieldResponseHeaders()) {
+			responseHeadersButton.setSelected(true);
 		} else // Assume it is the URL
 		{
 			urlButton.setSelected(true);
@@ -270,17 +278,20 @@ public class AssertionGui extends AbstractAssertionGui {
 		urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp")); //$NON-NLS-1$
 		responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
 		responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
+		responseHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_headers")); //$NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(responseStringButton);
 		group.add(urlButton);
 		group.add(responseCodeButton);
 		group.add(responseMessageButton);
+		group.add(responseHeadersButton);
 
 		panel.add(responseStringButton);
 		panel.add(urlButton);
 		panel.add(responseCodeButton);
 		panel.add(responseMessageButton);
+		panel.add(responseHeadersButton);
 
 		responseStringButton.setSelected(true);
 
