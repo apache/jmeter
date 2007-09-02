@@ -94,7 +94,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	 * method returns the initial context factory for jndi initial context
 	 * lookup.
 	 * 
-	 * @return
+	 * @return the initial context factory 
 	 */
 	public String getJNDIInitialContextFactory() {
 		return getPropertyAsString(JNDI_INITIAL_CONTEXT_FAC);
@@ -103,7 +103,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * set the provider user for jndi
 	 * 
-	 * @param factory
+	 * @param url the provider URL
 	 */
 	public void setProviderUrl(String url) {
 		setProperty(PROVIDER_URL, url);
@@ -112,7 +112,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * method returns the provider url for jndi to connect to
 	 * 
-	 * @return
+	 * @return the provider URL
 	 */
 	public String getProviderUrl() {
 		return getPropertyAsString(PROVIDER_URL);
@@ -131,7 +131,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	 * return the connection factory parameter used to lookup the connection
 	 * factory from the JMS server
 	 * 
-	 * @return
+	 * @return the connection factory
 	 */
 	public String getConnectionFactory() {
 		return getPropertyAsString(CONN_FACTORY);
@@ -149,7 +149,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the topic used for the benchmark
 	 * 
-	 * @return
+	 * @return the topic
 	 */
 	public String getTopic() {
 		return getPropertyAsString(TOPIC);
@@ -167,7 +167,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the username used to login to the jms server
 	 * 
-	 * @return
+	 * @return the username used to login to the jms server
 	 */
 	public String getUsername() {
 		return getPropertyAsString(PRINCIPAL);
@@ -185,7 +185,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the password used to login to the jms server
 	 * 
-	 * @return
+	 * @return the password used to login to the jms server
 	 */
 	public String getPassword() {
 		return getPropertyAsString(CREDENTIALS);
@@ -203,7 +203,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * get the iterations as string
 	 * 
-	 * @return
+	 * @return the number of iterations
 	 */
 	public String getIterations() {
 		return getPropertyAsString(ITERATIONS);
@@ -212,7 +212,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the number of iterations as int instead of string
 	 * 
-	 * @return
+	 * @return the number of iterations as int instead of string
 	 */
 	public int getIterationCount() {
 		return getPropertyAsInt(ITERATIONS);
@@ -230,7 +230,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return whether jndi requires authentication
 	 * 
-	 * @return
+	 * @return whether jndi requires authentication
 	 */
 	public String getUseAuth() {
 		return getPropertyAsString(USE_AUTH);
@@ -239,7 +239,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * set whether the sampler should read the response or not
 	 * 
-	 * @param read
+	 * @param read whether the sampler should read the response or not
 	 */
 	public void setReadResponse(String read) {
 		setProperty(READ_RESPONSE, read);
@@ -248,7 +248,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return whether the sampler should read the response
 	 * 
-	 * @return
+	 * @return whether the sampler should read the response
 	 */
 	public String getReadResponse() {
 		return getPropertyAsString(READ_RESPONSE);
@@ -257,7 +257,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return whether the sampler should read the response as a boolean value
 	 * 
-	 * @return
+	 * @return whether the sampler should read the response as a boolean value
 	 */
 	public boolean getReadResponseAsBoolean() {
 		return getPropertyAsBoolean(READ_RESPONSE);
@@ -276,7 +276,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	 * return whether the sampler should use properties file instead of UI
 	 * parameters.
 	 * 
-	 * @return
+	 * @return  whether the sampler should use properties file instead of UI parameters.
 	 */
 	public String getUseJNDIProperties() {
 		return getPropertyAsString(USE_PROPERTIES_FILE);
@@ -285,7 +285,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the properties as boolean true/false.
 	 * 
-	 * @return
+	 * @return whether the sampler should use properties file instead of UI parameters.
 	 */
 	public boolean getUseJNDIPropertiesAsBoolean() {
 		return getPropertyAsBoolean(USE_PROPERTIES_FILE);

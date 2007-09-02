@@ -118,7 +118,7 @@ public class Daemon extends Thread {
 	/**
 	 * Configure the Daemon to listen on the specified port.
 	 * 
-	 * @param daemonPort
+	 * @param _daemonPort
 	 *            the port to listen on
 	 */
 	public void configureProxy(int _daemonPort) {

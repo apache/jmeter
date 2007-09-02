@@ -138,8 +138,7 @@ public class Calculator {
 
     /**
      * Returns the raw double value of the percentage of samples with errors
-     * that were recorded. (Between 0.0 and 1.0) If you want a nicer return
-     * format, see {@link #getErrorPercentageString()}.
+     * that were recorded. (Between 0.0 and 1.0)
      * 
      * @return the raw double value of the percentage of samples with errors
      *         that were recorded.

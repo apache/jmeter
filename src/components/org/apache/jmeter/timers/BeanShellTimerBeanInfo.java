@@ -25,9 +25,6 @@ import org.apache.jmeter.testbeans.gui.TextAreaEditor;
 
 public class BeanShellTimerBeanInfo extends BeanInfoSupport {
 
-	/**
-	 * @param beanClass
-	 */
 	public BeanShellTimerBeanInfo() {
 		super(BeanShellTimer.class);
 

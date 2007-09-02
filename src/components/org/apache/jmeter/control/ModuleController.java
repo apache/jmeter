@@ -154,8 +154,6 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	/**
 	 * Copies the controller's subelements into the execution tree
 	 * 
-	 * @param tree -
-	 *            The current tree under which the nodes will be added
 	 */
 	public HashTree getReplacementSubTree() {
         HashTree tree = new ListedHashTree();

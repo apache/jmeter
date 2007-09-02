@@ -115,9 +115,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Create a new ArgumentsPanel with a border and color background
-     * @param label
-     * @param borderHeight
-     * @param borderWidth
+     * @param label text for label
+     * @param bkg background colour
      */
     public ArgumentsPanel(String label, Color bkg) {
         tableLabel = new JLabel(label);

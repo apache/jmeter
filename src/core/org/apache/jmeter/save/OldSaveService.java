@@ -703,8 +703,8 @@ public final class OldSaveService {
 	 * 
 	 * @param result
 	 *            the object containing all of the data that has been collected.
-	 * @param funcTest
-	 *            an indicator of whether the user wants all data recorded.
+	 * @param saveConfig
+	 *            the configuration giving the data items to be saved.
 	 */
 	public static Configuration getConfiguration(SampleResult result, SampleSaveConfiguration saveConfig) {
 		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service"); // $NON-NLS-1$

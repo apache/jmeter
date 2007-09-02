@@ -90,7 +90,7 @@ public class IncludeController extends GenericController implements ReplaceableC
     
     /**
      * return the JMX file path.
-     * @return
+     * @return the JMX file path
      */
     public String getIncludePath() {
         return this.getPropertyAsString(INCLUDE_PATH);

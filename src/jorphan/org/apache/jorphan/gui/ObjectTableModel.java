@@ -224,7 +224,7 @@ public class ObjectTableModel extends DefaultTableModel {
 	 * <b>** only for use in unit test code **</b>
 	 * </p>
 	 * 
-	 * @param value - an instance of the table model row data item 
+	 * @param _value - an instance of the table model row data item 
 	 * (if null, use the class passed to the constructor).
 	 * 
 	 * @param caller - class of caller.

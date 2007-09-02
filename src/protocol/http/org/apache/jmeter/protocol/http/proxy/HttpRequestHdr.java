@@ -97,7 +97,7 @@ public class HttpRequestHdr {
 	}
 	
 	/**
-	 * @param samplerTypeName the name of the http sampler to instantiate, as defined in HTTPSamplerFactory
+	 * @param sampler the http sampler
 	 */
 	public HttpRequestHdr(HTTPSamplerBase sampler) {
 		this.sampler = sampler;
@@ -235,7 +235,7 @@ public class HttpRequestHdr {
     
     /**
      * 
-     * @return
+     * @return the sampler
      * @throws MalformedURLException
      * @throws IOException
      * @throws ProtocolException
@@ -540,10 +540,10 @@ public class HttpRequestHdr {
 		return strBuff.toString();
 	}
 
-    private String getUrlWithoutQuery(URL url) {
-        String fullUrl = url.toString();
+    private String getUrlWithoutQuery(URL _url) {
+        String fullUrl = _url.toString();
         String urlWithoutQuery = fullUrl;
-        String query = url.getQuery();
+        String query = _url.getQuery();
         if(query != null) {
             // Get rid of the query and the ?
             urlWithoutQuery = urlWithoutQuery.substring(0, urlWithoutQuery.length() - query.length() - 1);

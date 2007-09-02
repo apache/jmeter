@@ -32,7 +32,8 @@ public final class StringUtilities {
     /**
      * Replace all patterns in a String
      * 
-     * @see String.replaceAll(regex,replacement) - JDK1.4 only
+     * @see String.replaceAll(String,String)
+     *  - JDK1.4 only
      * 
      * @param input - string to be transformed
      * @param pattern - pattern to replace

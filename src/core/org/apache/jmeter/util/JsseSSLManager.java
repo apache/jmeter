@@ -368,8 +368,7 @@ public class JsseSSLManager extends SSLManager {
 		 * 
 		 * TODO? - does not actually allow the user to choose an alias at present
 		 * 
-		 * @see javax.net.ssl.X509KeyManager#chooseClientAlias(java.lang.String,
-		 *      java.security.Principal, java.net.Socket)
+		 * @see javax.net.ssl.X509KeyManager#chooseClientAlias(String[], Principal[], Socket)
 		 */
 		public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
 			String alias = this.store.getAlias();
@@ -384,8 +383,7 @@ public class JsseSSLManager extends SSLManager {
 		 * Choose the server alias for the SSLServerSockets. This are not used
 		 * in JMeter.
 		 * 
-		 * @see javax.net.ssl.X509KeyManager#chooseServerAlias(java.lang.String,
-		 *      java.security.Principal, java.net.Socket)
+		 * @see javax.net.ssl.X509KeyManager#chooseServerAlias(String, Principal[], Socket)
 		 */
 		public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
 			return this.manager.chooseServerAlias(arg0, arg1, arg2);
