@@ -364,7 +364,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	/**
 	 * Resize the table columns to appropriate widths.
 	 * 
-	 * @param table
+	 * @param _table
 	 *            the table to resize columns for
 	 */
 	protected void sizeColumns(JTable _table) {
