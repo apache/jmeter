@@ -982,7 +982,8 @@ protected <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTT
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#sample(java.net.URL, java.lang.String, boolean, int)">sample</A></CODE> in class <CODE><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase</A></CODE></DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>s</CODE> - HTTP method: GET, POST,...<DD><CODE>b</CODE> - whether we're getting a redirect target
+<DT><B>Parameters:</B><DD><CODE>u</CODE> - URL to sample<DD><CODE>s</CODE> - HTTP method: GET, POST,...<DD><CODE>b</CODE> - whether we're getting a redirect target<DD><CODE>i</CODE> - Depth of this target in the frame structure. Used only to
+            prevent infinite recursion.
 <DT><B>Returns:</B><DD>results of the sampling</DL>
 </DD>
 </DL>

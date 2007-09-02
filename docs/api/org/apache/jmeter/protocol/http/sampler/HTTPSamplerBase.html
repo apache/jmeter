@@ -2969,7 +2969,7 @@ protected <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTT
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>e</CODE> - Exception representing the error.
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - Exception representing the error.<DD><CODE>res</CODE> - SampleResult
 <DT><B>Returns:</B><DD>a sampling result useful to inform the user about the exception.</DL>
 </DD>
 </DL>
@@ -3136,7 +3136,8 @@ protected abstract <A HREF="../../../../../../org/apache/jmeter/protocol/http/sa
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>method</CODE> - HTTP method: GET, POST,...<DD><CODE>areFollowingRedirect</CODE> - whether we're getting a redirect target
+<DT><B>Parameters:</B><DD><CODE>u</CODE> - URL to sample<DD><CODE>method</CODE> - HTTP method: GET, POST,...<DD><CODE>areFollowingRedirect</CODE> - whether we're getting a redirect target<DD><CODE>depth</CODE> - Depth of this target in the frame structure. Used only to
+            prevent infinite recursion.
 <DT><B>Returns:</B><DD>results of the sampling</DL>
 </DD>
 </DL>
