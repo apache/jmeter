@@ -347,7 +347,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	/**
 	 * Resize the table columns to appropriate widths.
 	 * 
-	 * @param table
+	 * @param _table
 	 *            the table to resize columns for
 	 */
 	protected void sizeColumns(JTable _table) {

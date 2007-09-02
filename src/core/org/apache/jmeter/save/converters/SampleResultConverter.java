@@ -264,7 +264,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 
 	/**
 	 * @param writer
-	 * @param hres
+	 * @param tag
+	 * @param value
 	 */
 	protected void writeString(HierarchicalStreamWriter writer, String tag, String value) {
 		if (value != null) {

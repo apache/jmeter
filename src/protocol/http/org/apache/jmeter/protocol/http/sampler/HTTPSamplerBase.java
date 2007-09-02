@@ -677,7 +677,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	 * 
 	 * @param e
 	 *            Exception representing the error.
-	 * @param current
+	 * @param res
 	 *            SampleResult
 	 * @return a sampling result useful to inform the user about the exception.
 	 */
@@ -948,13 +948,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      * When getting a redirect target, redirects are not followed and resources
      * are not downloaded. The caller will take care of this.
      * 
-     * @param url
+     * @param u
      *            URL to sample
      * @param method
      *            HTTP method: GET, POST,...
      * @param areFollowingRedirect
      *            whether we're getting a redirect target
-     * @param frameDepth
+     * @param depth
      *            Depth of this target in the frame structure. Used only to
      *            prevent infinite recursion.
      * @return results of the sampling

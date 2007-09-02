@@ -110,7 +110,6 @@ public class IncludeController extends GenericController implements ReplaceableC
 
     /**
      * load the included elements using SaveService
-     * @param node
      */
     protected HashTree loadIncludedElements() {
         // only try to load the JMX test plan if there is one
