@@ -32,12 +32,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * 
- * 
- * author Peter Lin
- * @version $Revision$
- */
 public class IncludeController extends GenericController implements ReplaceableController {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
