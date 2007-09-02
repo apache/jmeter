@@ -41,7 +41,7 @@ if a%~x1 == a.jmx goto winNT3
 :winNT2
 echo Please supply a script name with the extension .jmx
 pause
-goto :EOF
+goto END
 :winNT3
 
 rem Change to script directory
