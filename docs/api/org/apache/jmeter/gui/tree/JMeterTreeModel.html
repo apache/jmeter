@@ -97,13 +97,7 @@ Class JMeterTreeModel</H2>
 <DT>public class <B>JMeterTreeModel</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/tree/DefaultTreeModel.html" title="class or interface in javax.swing.tree">DefaultTreeModel</A></DL>
 
 <P>
-author Michael Stover
-<P>
-
-<P>
 <DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 571519 $</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../../serialized-form.html#org.apache.jmeter.gui.tree.JMeterTreeModel">Serialized Form</A></DL>
 <HR>
 
@@ -140,6 +134,19 @@ author Michael Stover
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeModel.html#JMeterTreeModel()">JMeterTreeModel</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeModel.html#JMeterTreeModel(java.lang.Object)">JMeterTreeModel</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;o)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>- only for use by JMeter class!</I></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeModel.html#JMeterTreeModel(org.apache.jmeter.testelement.TestElement, org.apache.jmeter.testelement.TestElement)">JMeterTreeModel</A></B>(<A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;tp,
+                <A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;wb)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -264,12 +271,33 @@ author Michael Stover
 </TR>
 </TABLE>
 
+<A NAME="JMeterTreeModel(org.apache.jmeter.testelement.TestElement, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+JMeterTreeModel</H3>
+<PRE>
+public <B>JMeterTreeModel</B>(<A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;tp,
+                       <A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;wb)</PRE>
+<DL>
+</DL>
+<HR>
+
 <A NAME="JMeterTreeModel()"><!-- --></A><H3>
 JMeterTreeModel</H3>
 <PRE>
 public <B>JMeterTreeModel</B>()</PRE>
 <DL>
 </DL>
+<HR>
+
+<A NAME="JMeterTreeModel(java.lang.Object)"><!-- --></A><H3>
+JMeterTreeModel</H3>
+<PRE>
+public <B>JMeterTreeModel</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;o)</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>- only for use by JMeter class!</I>
+<P>
+<DD>Hack to allow TreeModel to be used in non-GUI and headless mode.
+<P>
+<DT><B>Parameters:</B><DD><CODE>o</CODE> - - dummy</DL>
 
 <!-- ============ METHOD DETAIL ========== -->
 
