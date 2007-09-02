@@ -366,7 +366,7 @@ public class SaveService {
 		checkVersion(IntegerPropertyConverter.class, "493779"); // $NON-NLS-1$
 		checkVersion(LongPropertyConverter.class, "493779"); // $NON-NLS-1$
 		checkVersion(MultiPropertyConverter.class, "514283"); // $NON-NLS-1$
-		checkVersion(SampleResultConverter.class, "514283"); // $NON-NLS-1$
+		checkVersion(SampleResultConverter.class, "571992"); // $NON-NLS-1$
 
         // Not built until later, so need to use this method:
         try {
