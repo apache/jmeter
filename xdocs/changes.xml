@@ -58,6 +58,7 @@
 <li>Bug 403873 - add JMS point-to-point non-persistent delivery option</li>
 <li>Bug 43283 - Save action adds .jmx if not present; checks for existing file on Save As</li>
 <li>Control+A key does not work for Save All As; changed to Control+Shift+S</li>
+<li>Bug 40991 - Allow Assertions to check Headers</li>
 </ul>
 
 <h3>Version 2.3RC3</h3>

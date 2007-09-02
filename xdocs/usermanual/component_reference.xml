@@ -2457,7 +2457,7 @@ GUI that they can use while developing new JMeter components.</p>
 	"true" or "false" after all assertions for a sampler have been run.
 	 </note>
 </description>
-<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="624" height="363" screenshot="assertion/assertion.gif">
+<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="766" height="382" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
@@ -2492,6 +2492,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
                 This may be the Response Text from the server, the URL string that was sampled,
+                the Response Headers (JMeter version 2.3RC3 and earlier included the headers with the Text),
                 the Response Code (e.g. 404) or the Response Message (e.g. Not Found).
                 <p>
                 The overall success of the sample is determined by combining the result of the

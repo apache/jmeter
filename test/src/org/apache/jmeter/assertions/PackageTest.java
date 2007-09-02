@@ -279,6 +279,7 @@ public class PackageTest extends TestCase {
 					).getBytes());
 			sample.setSamplerData("Sampler Label");// This is where RA checks the URL!
 			sample.setResponseCode("401");
+			sample.setResponseHeaders("X-Header: abcd");
 		}
 
 		public void testResponseAssertionEquals() throws Exception{
@@ -294,6 +295,21 @@ public class PackageTest extends TestCase {
 			assertion.clearTestStrings();
 			assertion.addTestString("Sampler LabeL");
 			assertion.addTestString("Sampler Labelx");		
+			result = assertion.getResult(sample);
+			assertPassed();
+		}
+		
+		public void testResponseAssertionHeaders() throws Exception{
+			assertion.unsetNotType();
+			assertion.setToEqualsType();
+			assertion.setTestFieldResponseHeaders();
+			assertion.addTestString("X-Header: abcd");
+			assertion.addTestString("X-Header: abcdx");
+			result = assertion.getResult(sample);
+			assertFailed();
+
+			assertion.clearTestStrings();
+			assertion.addTestString("X-Header: abcd");
 			result = assertion.getResult(sample);
 			assertPassed();
 		}
@@ -346,7 +362,7 @@ public class PackageTest extends TestCase {
 			if (null != result.getFailureMessage()){
 				//System.out.println(result.getFailureMessage());// debug
 			}
-			assertNull(result.getFailureMessage());
+			assertNull(result.getFailureMessage(),result.getFailureMessage());
 			assertFalse(result.isError());
 			assertFalse(result.isFailure());		
 		}
