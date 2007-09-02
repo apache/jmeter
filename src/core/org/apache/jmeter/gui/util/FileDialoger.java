@@ -101,7 +101,7 @@ public final class FileDialoger {
 	 * 
 	 * @return the JFileChooser that interacted with the user, after they are
 	 *         finished using it (accept or otherwise).
-	 * @see #promptToOpenFile
+	 * @see #promptToOpenFile()
 	 */
 	public static JFileChooser promptToSaveFile(String filename) {
 		return promptToSaveFile(filename, null);
@@ -110,9 +110,9 @@ public final class FileDialoger {
 	/**
 	 * Get a JFileChooser with a new FileFilter.
 	 * 
-	 * @param filename
-	 * @param filters
-	 * @return
+	 * @param filename file name
+	 * @param extensions list of extensions
+	 * @return the FileChooser
 	 */
 	public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
 		if (lastJFCDirectory == null) {

@@ -24,9 +24,6 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 
 public class SyncTimerBeanInfo extends BeanInfoSupport {
 
-	/**
-	 * @param beanClass
-	 */
 	public SyncTimerBeanInfo() {
 		super(SyncTimer.class);
 

@@ -36,9 +36,6 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
     private static final String STOPTHREAD = "stopThread";           //$NON-NLS-1$
 
-    /**
-	 * @param beanClass
-	 */
 	public CSVDataSetBeanInfo() {
 		super(CSVDataSet.class);
 		createPropertyGroup("csv_data",             //$NON-NLS-1$

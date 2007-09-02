@@ -119,9 +119,9 @@ public class LdapExtClient {
 	/***************************************************************************
 	 * Filter the data in the ldap directory for the given search base
 	 * 
-	 * @param search
+	 * @param searchBase
 	 *            base where the search should start
-	 * @param search
+	 * @param searchFilter
 	 *            filter filter this value from the base
 	 **************************************************************************/
 	public NamingEnumeration searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
@@ -137,12 +137,10 @@ public class LdapExtClient {
 	}
 
 	/***************************************************************************
-	 * Filter the data in the ldap directory for the given search base
+	 * Filter the data in the ldap directory
 	 * 
-	 * @param search
-	 *            base where the search should start
-	 * @param search
-	 *            filter filter this value from the base
+	 * @param filter
+	 *            filter this value from the base
 	 **************************************************************************/
 	public NamingEnumeration compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
 		if (dirContext == null) {
@@ -155,10 +153,6 @@ public class LdapExtClient {
 	/***************************************************************************
 	 * ModDN the data in the ldap directory for the given search base
 	 * 
-	 * @param search
-	 *            base where the search should start
-	 * @param search
-	 *            filter filter this value from the base
 	 **************************************************************************/
 	public void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
 		log.debug("ddn and newDn= " + ddn + "@@@@" + newdn);
@@ -171,7 +165,7 @@ public class LdapExtClient {
 	/***************************************************************************
 	 * Modify the attribute in the ldap directory for the given string
 	 * 
-	 * @param ModificationItem
+	 * @param mods
 	 *            add all the entry in to the ModificationItem
 	 * @param string
 	 *            The string (dn) value
@@ -203,7 +197,7 @@ public class LdapExtClient {
 	/***************************************************************************
 	 * Delete the attribute from the ldap directory
 	 * 
-	 * @param value
+	 * @param string
 	 *            The string (dn) value
 	 **************************************************************************/
 	public void deleteTest(DirContext dirContext, String string) throws NamingException {

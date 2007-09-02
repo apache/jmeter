@@ -67,9 +67,6 @@ public class StringProperty extends AbstractProperty {
 		return value;
 	}
 
-	/**
-	 * @see Object#clone()
-	 */
 	public Object clone() {
 		StringProperty prop = (StringProperty) super.clone();
 		prop.value = value;

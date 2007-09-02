@@ -82,9 +82,6 @@ public class LongProperty extends NumberProperty {
 		return new Long(value);
 	}
 
-	/**
-	 * @see java.lang.Object#clone()
-	 */
 	public Object clone() {
 		LongProperty prop = (LongProperty) super.clone();
 		prop.value = value;

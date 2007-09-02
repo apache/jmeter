@@ -40,14 +40,14 @@ public class ReportCut extends AbstractAction {
 	}
 
 	/**
-	 * @see Command#getActionNames()
+	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
 	 */
 	public Set getActionNames() {
 		return commands;
 	}
 
 	/**
-	 * @see Command#doAction(ActionEvent)
+	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
 	 */
 	public void doAction(ActionEvent e) {
 		ReportGuiPackage guiPack = ReportGuiPackage.getInstance();

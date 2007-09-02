@@ -45,7 +45,7 @@ public class RandomOrderController extends GenericController implements Serializ
 	/**
 	 * @see GenericController#reInitialize()
 	 */
-	public void reInitialize() {
+	protected void reInitialize() {
 		super.reInitialize();
 		this.reorder();
 	}

@@ -38,9 +38,6 @@ import org.apache.log.Logger;
 public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	/**
-	 * @param beanClass
-	 */
 	public AccessLogSamplerBeanInfo() {
 		super(AccessLogSampler.class);
 		log.debug("Entered access log sampler bean info");

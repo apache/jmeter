@@ -376,7 +376,7 @@ public final class JOrphanUtils {
 
     /**
      * close a Writer with no error thrown
-     * @param os - Writer (may be null)
+     * @param wr - Writer (may be null)
      */
     public static void closeQuietly(Writer wr){
         try {
@@ -387,7 +387,7 @@ public final class JOrphanUtils {
 
     /**
      * close a Reader with no error thrown
-     * @param os - Reader (may be null)
+     * @param rd - Reader (may be null)
      */
     public static void closeQuietly(Reader rd){
         try {

@@ -102,7 +102,7 @@ public class StatCalculator implements Serializable {
 	 * are below, the remaining 10% are above.
 	 * 
 	 * @param percent
-	 * @return
+	 * @return number of values less than the percentage
 	 */
 	public Number getPercentPoint(float percent) {
 		if (count > 0) {
@@ -118,7 +118,7 @@ public class StatCalculator implements Serializable {
 	 * are below, the remaining 10% are above.
 	 * 
 	 * @param percent
-	 * @return
+	 * @return number of values less than the percentage
 	 */
 	public Number getPercentPoint(double percent) {
 		if (count > 0) {
@@ -131,8 +131,6 @@ public class StatCalculator implements Serializable {
 	 * The method has a limit of 1% as the finest granularity. We do this to
 	 * make sure we get a whole number for iterating.
 	 * 
-	 * @param percentRange
-	 * @return
 	 */
 	public synchronized HashMap getDistribution() {
 		HashMap items = new HashMap();

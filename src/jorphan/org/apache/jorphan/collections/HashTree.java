@@ -598,7 +598,6 @@ public class HashTree implements Serializable, Map {
 	 * Create a clone of this HashTree. This is not a deep clone (ie, the
 	 * contents of the tree are not cloned).
 	 * 
-	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
 		HashTree newTree = new HashTree();
