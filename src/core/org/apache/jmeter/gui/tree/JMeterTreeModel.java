@@ -39,18 +39,31 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
-/**
- * 
- * author Michael Stover
- * 
- * @version $Revision$
- */
 public class JMeterTreeModel extends DefaultTreeModel {
 
+	public JMeterTreeModel(TestElement tp, TestElement wb) {
+		super(new JMeterTreeNode(wb, null));
+		initTree(tp,wb);
+	}
+
 	public JMeterTreeModel() {
-		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
-		TestElement tp = new TestPlanGui().createTestElement();
-		initTree(tp);
+		this(new TestPlanGui().createTestElement(),new WorkBenchGui().createTestElement());
+//		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
+//		TestElement tp = new TestPlanGui().createTestElement();
+//		initTree(tp);
+	}
+
+	/**
+	 * Hack to allow TreeModel to be used in non-GUI and headless mode.
+	 * 
+	 * @deprecated - only for use by JMeter class!
+	 * @param o - dummy
+	 */
+	public JMeterTreeModel(Object o) {
+		this(new TestPlan(),new WorkBench());
+//		super(new JMeterTreeNode(new WorkBench(), null));
+//		TestElement tp = new TestPlan();
+//		initTree(tp, new WorkBench());
 	}
 
 	/**
@@ -202,20 +215,19 @@ public class JMeterTreeModel extends DefaultTreeModel {
             children = getChildCount(getRoot());
         }
         // Init the tree
-        initTree(testPlan);
+        initTree(testPlan,new WorkBenchGui().createTestElement()); // Assumes this is only called from GUI mode
     }
     
-    /**
-     * Initialize the model with nodes for testplan and workbench. Use the specified
-     * node for testplan, and default node for workbench.
+	/**
+     * Initialize the model with nodes for testplan and workbench.
      * 
      * @param tp the element to use as testplan
+     * @param wb the element to use as workbench
      */
-	private void initTree(TestElement tp) {
+	private void initTree(TestElement tp, TestElement wb) {
         // Insert the test plan node
         insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
         // Insert the workbench node
-        TestElement wb = new WorkBenchGui().createTestElement();
 		insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
         // Let others know that the tree content has changed.
         // This should not be necessary, but without it, nodes are not shown when the user

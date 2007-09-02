@@ -667,7 +667,7 @@ public class JMeter implements JMeterPlugin {
 
 			HashTree tree = SaveService.loadTree(reader);
 
-            JMeterTreeModel treeModel = new JMeterTreeModel();
+            JMeterTreeModel treeModel = new JMeterTreeModel(new Object());// Create non-GUI version to avoid headless problems
             JMeterTreeNode root = (JMeterTreeNode) treeModel.getRoot();
             treeModel.addSubTree(tree, root);
 
