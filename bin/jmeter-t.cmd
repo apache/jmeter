@@ -32,6 +32,16 @@ pause
 goto END
 :WinNT
 
+rem Check file is supplied
+if a == a%1 goto winNT2
+rem Check it has extension .jmx
+if a%~x1 == a.jmx goto winNT3
+:winNT2
+echo Please supply a script name with the extension .jmx
+pause
+goto END
+:winNT3
+
 rem Start in directory with JMX file
 pushd %~dp1
 
