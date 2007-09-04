@@ -258,7 +258,11 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			String argument = arguments[i];
 			String argumentType = argumentsTypes[i];
 		    int targetSqlType = getJdbcType(argumentType);
-		    pstmt.setObject(i+1, argument, targetSqlType);
+		    try {
+				pstmt.setObject(i+1, argument, targetSqlType);
+			} catch (NullPointerException e) { // thrown by Derby JDBC (at least) if there are no "?" markers in statement
+				throw new SQLException("Could not set argument no: "+(i+1)+" - missing parameter marker?");
+			}
 		}
 	}
     
