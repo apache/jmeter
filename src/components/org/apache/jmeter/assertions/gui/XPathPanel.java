@@ -234,10 +234,6 @@ public class XPathPanel extends JPanel {
 		} catch (TransformerException e) {
 			success = false;
 			ret = e.getLocalizedMessage();
-
-		} catch (SAXException e) {
-			success = false;
-			ret = e.getLocalizedMessage();
 		}
 
 		if (showDialog) {
