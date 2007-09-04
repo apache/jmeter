@@ -50,7 +50,12 @@ public class XPathUtil {
 	private static DocumentBuilderFactory documentBuilderFactory;
 
 	/**
-	 * Might
+	 * Returns a suitable document builder factory.
+	 * Caches the factory in case the next caller wants the same options.
+	 * 
+	 * @param validate should the parser validate documents?
+	 * @param whitespace should the parser eliminate whitespace in element content?
+	 * @param namespace should the parser be namespace aware?
 	 * 
 	 * @return javax.xml.parsers.DocumentBuilderFactory
 	 */
@@ -71,15 +76,14 @@ public class XPathUtil {
 	/**
 	 * Create a DocumentBuilder using the makeDocumentFactory func.
 	 * 
-	 * @param validate
-	 * @param whitespace
-	 * @param namespace
+	 * @param validate should the parser validate documents?
+	 * @param whitespace should the parser eliminate whitespace in element content?
+	 * @param namespace should the parser be namespace aware?
 	 * @return document builder
 	 * @throws ParserConfigurationException
-	 * @throws SAXException
 	 */
 	public static DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace)
-			throws ParserConfigurationException, SAXException {
+			throws ParserConfigurationException {
 		DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
 		builder.setErrorHandler(new MyErrorHandler(validate, false));
 		return builder;
@@ -97,7 +101,8 @@ public class XPathUtil {
 	 * @param namespace
 	 *            Is Namespace aware.
 	 * @param tolerant
-	 *            Is tolerant
+	 *            Is tolerant - i.e. use the Tidy parser
+	 *
 	 * @return document
 	 * @throws ParserConfigurationException
 	 * @throws IOException
