@@ -204,8 +204,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			}
 
 		} catch (SQLException ex) {
-			log.error("Error in JDBC sampling", ex);
+			final String errCode = Integer.toString(ex.getErrorCode());
+			log.error("SQLstate: "+ex.getSQLState()+
+					" SQLcode: "+errCode+
+					" Message: "+ex.getMessage(),
+					ex);
 			res.setResponseMessage(ex.toString());
+			res.setResponseCode(errCode);
 			res.setSuccessful(false);
 		} finally {
 			close(stmt);
