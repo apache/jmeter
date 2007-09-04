@@ -48,9 +48,14 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
 	private JLabeledTextField refNameField;
 	
-	private JCheckBox tolerant;
-    
-    public String getLabelResource() {
+	private JCheckBox tolerant; // Should Tidy be run?
+	
+	private JCheckBox nameSpace; // Should parser be namespace aware?
+
+	// We could perhaps add validate/whitespace options, but they're probably not necessary for
+	// the XPathExtractor
+
+	public String getLabelResource() {
         return "xpath_extractor_title"; //$NON-NLS-1$
     }
 
@@ -61,10 +66,12 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
     
     public void configure(TestElement el) {
 		super.configure(el);
-		xpathQueryField.setText(el.getPropertyAsString(XPathExtractor.XPATH_QUERY));
-		defaultField.setText(el.getPropertyAsString(XPathExtractor.DEFAULT));
-		refNameField.setText(el.getPropertyAsString(XPathExtractor.REFNAME));
-		tolerant.setSelected(el.getPropertyAsBoolean(XPathExtractor.TOLERANT));
+		XPathExtractor xpe = (XPathExtractor) el;
+		xpathQueryField.setText(xpe.getXPathQuery());
+		defaultField.setText(xpe.getDefaultValue());
+		refNameField.setText(xpe.getRefName());
+		tolerant.setSelected(xpe.isTolerant());
+		nameSpace.setSelected(xpe.useNameSpace());
 	}
 
     
@@ -85,6 +92,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
             xpath.setRefName(refNameField.getText());
             xpath.setXPathQuery(xpathQueryField.getText());
             xpath.setTolerant(tolerant.isSelected());
+            xpath.setNameSpace(nameSpace.isSelected());
         }
     }
 
@@ -98,6 +106,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         defaultField.setText(""); // $NON-NLS-1$
         refNameField.setText(""); // $NON-NLS-1$
         tolerant.setSelected(false);
+        nameSpace.setSelected(true);
     }
 
 	private void init() {
@@ -106,8 +115,12 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
+		Box options = Box.createHorizontalBox();
 		tolerant = new JCheckBox(JMeterUtils.getResString("xpath_extractor_tolerant"));//$NON-NLS-1$
-		box.add(tolerant);
+		nameSpace = new JCheckBox(JMeterUtils.getResString("xpath_extractor_namespace"),true);//$NON-NLS-1$
+		options.add(tolerant);
+		options.add(nameSpace);
+		box.add(options);
 		add(box, BorderLayout.NORTH);
 		add(makeParameterPanel(), BorderLayout.CENTER);
 	}

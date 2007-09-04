@@ -27,6 +27,12 @@
 
 <!--  ===================  -->
 
+<h3>Version 2.31</h3>
+
+<h4>Improvements</h4>
+<ul>
+<li>Add nameSpace option to XPath extractor</li>
+</ul>
 <h3>Version 2.3</h3>
 
 <h4>Fixes since 2.3RC3</h4>
