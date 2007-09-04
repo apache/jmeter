@@ -176,6 +176,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		cfgKeepAlive.setValue(getCheckQuery());
 		poolController.addChild(cfgKeepAlive);
 
+		String _username = getUsername();
 		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer(40);
 			sb.append("Driver: ");
@@ -183,7 +184,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 			sb.append(" DbUrl: ");
 			sb.append(getDbUrl());
 			sb.append(" User: ");
-			sb.append(getUsername());
+			sb.append(_username);
 			log.debug(sb.toString());
 		}
 		DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
@@ -192,12 +193,15 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl");
 		cfgDbUrl.setValue(getDbUrl());
 		config.addChild(cfgDbUrl);
-		DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
-		cfgUsername.setValue(getUsername());
-		config.addChild(cfgUsername);
-		DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
-		cfgPassword.setValue(getPassword());
-		config.addChild(cfgPassword);
+
+		if (_username.length() > 0){
+			DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
+			cfgUsername.setValue(_username);
+			config.addChild(cfgUsername);
+			DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
+			cfgPassword.setValue(getPassword());
+			config.addChild(cfgPassword);
+		}
 
 		// log is required to ensure errors are available
 		excaliburSource.enableLogging(new LogKitLogger(log));
