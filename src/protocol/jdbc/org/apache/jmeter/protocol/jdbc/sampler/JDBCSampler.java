@@ -45,8 +45,6 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands JDBC database requests.
  * 
- * @author Original author unknown
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
  */
 public class JDBCSampler extends AbstractSampler implements TestBean {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -71,7 +69,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
                 Integer value = (Integer)fields[i].get(null);
                 mapJdbcNameToInt.put(name.toLowerCase(),value);
             } catch (IllegalAccessException e) {
-            	throw new RuntimeException(e);
+            	throw new RuntimeException(e); // should not happen
             }
         }    		
     }
@@ -265,8 +263,12 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	}
     
     
-    private static int getJdbcType(String jdbcType) {
-    	return ((Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase())).intValue();
+    private static int getJdbcType(String jdbcType) throws SQLException {
+    	Integer entry = (Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase());
+    	if (entry == null) {
+    		throw new SQLException("Invalid data type: "+jdbcType);
+    	}
+		return (entry).intValue();
     }
 	
 
