@@ -68,10 +68,11 @@ public class XPathExtractor extends AbstractTestElement implements
     private static final Logger log = LoggingManager.getLoggerForClass();
 	private static final String MATCH_NR = "matchNr"; // $NON-NLS-1$
 	protected static final String KEY_PREFIX = "XPathExtractor."; // $NON-NLS-1$
-	public static final String XPATH_QUERY = KEY_PREFIX +"xpathQuery"; // $NON-NLS-1$
-	public static final String REFNAME = KEY_PREFIX +"refname"; // $NON-NLS-1$
-	public static final String DEFAULT = KEY_PREFIX +"default"; // $NON-NLS-1$
-	public static final String TOLERANT = KEY_PREFIX +"tolerant"; // $NON-NLS-1$
+	private static final String XPATH_QUERY = KEY_PREFIX +"xpathQuery"; // $NON-NLS-1$
+	private static final String REFNAME = KEY_PREFIX +"refname"; // $NON-NLS-1$
+	private static final String DEFAULT = KEY_PREFIX +"default"; // $NON-NLS-1$
+	private static final String TOLERANT = KEY_PREFIX +"tolerant"; // $NON-NLS-1$
+	private static final String NAMESPACE = KEY_PREFIX +"namespace"; // $NON-NLS-1$
 
 
     private String concat(String s1,String s2){
@@ -149,7 +150,15 @@ public class XPathExtractor extends AbstractTestElement implements
 	public boolean isTolerant() {
 		return getPropertyAsBoolean(TOLERANT);
 	}
-	
+
+	public void setNameSpace(boolean val) {
+		setProperty(new BooleanProperty(NAMESPACE, val));
+	}
+
+	public boolean useNameSpace() {
+		return getPropertyAsBoolean(NAMESPACE);
+	}
+
 	/*================= internal business =================*/
     /**
      * Converts (X)HTML response to DOM object Tree.
@@ -172,7 +181,7 @@ public class XPathExtractor extends AbstractTestElement implements
       byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
       // this method assumes UTF-8 input data
-      return XPathUtil.makeDocument(in,false,false,false,isTolerant());
+      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant());
     }
 
     /**
