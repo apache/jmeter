@@ -18,7 +18,6 @@ package org.apache.jmeter.protocol.jdbc.config;
 
 import java.io.ObjectStreamException;
 
-import org.apache.avalon.excalibur.datasource.DataSourceComponent;
 import org.apache.avalon.excalibur.datasource.ResourceLimitingJdbcDataSource;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.LogKitLogger;
@@ -132,7 +131,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		return el;
 	}
 
-	public DataSourceComponent initPool() throws Exception {
+	private void initPool() throws Exception {
 		excaliburSource = new ResourceLimitingJdbcDataSource();
 		DefaultConfiguration config = new DefaultConfiguration("rl-jdbc");
 
@@ -208,7 +207,6 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		excaliburSource.configure(config);
 		excaliburSource.setInstrumentableName(getDataSource());
 		started[0] = true;
-		return excaliburSource;
 	}
 
 	/*
