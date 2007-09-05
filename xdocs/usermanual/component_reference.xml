@@ -3135,19 +3135,35 @@ generate the template string, and store the result into the given variable name.
 </p>
 </component>
 
-<component name="XPath Extractor" index="&sect-num;.8.2"  width="345" height="279" screenshot="xpath_extractor.png">
+<component name="XPath Extractor" index="&sect-num;.8.2"  width="374" height="179" screenshot="xpath_extractor.png">
 	<description>This test element allows the user to extract value from 
 		structured response - XML or (X)HTML - using XPath
 		query language.
    </description>
    <properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
 	   <property name="Use Tidy" required="Yes">If checked use Tidy to parse HTML response into XHTML.
 	   <ul>
 		   <li>"Use Tidy" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
 		   <li>"Use Tidy" should be unchecked for both XHTML or XML response (for example RSS)</li>
 	   </ul>
 	   </property>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Use Namespace?" required="Yes">
+        If checked, then the XML parser will use namespace resolution.
+        Note that currently only namespaces declared on the root element will be recognised.
+        A later version of JMeter may support user-definition of additional workspace names.
+        Meanwhile, a work-round is to replace: 
+        <br></br>
+        //mynamespace:tagname
+        <br></br>
+        by
+        <br></br>
+        //*[local-name()='tagname' and namespace-uri()='uri-for-namespace']
+        <br></br>
+        where "uri-for-namespace" is the uri for the "mynamespace" namespace.
+        
+        (not applicable if Tidy is selected)
+        </property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
 	<property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match. </property>
 	<property name="Default Value" required="">Default value returned when no match found</property>

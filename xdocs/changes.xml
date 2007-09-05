@@ -33,6 +33,11 @@
 <ul>
 <li>Add nameSpace option to XPath extractor</li>
 </ul>
+
+<h4>Bug fixes</h4>
+
+<h4>Incompatibilities</h4>
+
 <h3>Version 2.3</h3>
 
 <h4>Fixes since 2.3RC3</h4>
