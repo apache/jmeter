@@ -241,7 +241,7 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 
 </component>
 
-<component name="JDBC Request" index="&sect-num;.1.3"  width="435" height="343" screenshot="jdbctest/jdbc-request.png">
+<component name="JDBC Request" index="&sect-num;.1.3"  width="449" height="335" screenshot="jdbctest/jdbc-request.png">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
@@ -265,8 +265,17 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 		    </ul>
 		</property>
         <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
-        <property name="Parameter values" required="No">Comma-separated list of parameter values</property>
-        <property name="Parameter types" required="No">Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR)</property>
+        <property name="Parameter values" required="Yes, if a prepared statement has parameters">
+        Comma-separated list of parameter values. Use ]NULL[ to indicate a NULL parameter.
+        (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
+        <br></br>
+        There must be as many values as there are placeholders in the statement.
+        </property>
+        <property name="Parameter types" required="Yes, if a prepared statement has parameters">
+        Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        <br></br>
+        There must be as many values as there are placeholders in the statement.
+        </property>
 </properties>
 
 <links>
@@ -2352,8 +2361,8 @@ instead. (see figures 9 and 10).</p>
 		<property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
 		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
 		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
-		<property name="Username" required="Yes">Name of user to connect as.</property>
-		<property name="Password" required="Yes">Password to connect with.</property>
+		<property name="Username" required="No">Name of user to connect as.</property>
+		<property name="Password" required="No">Password to connect with.</property>
 	</properties>
 <p>Different databases and JDBC drivers require different JDBC settings. 
 The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>
@@ -2365,6 +2374,8 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 <tr><td>PostgreSQL</td><td>org.postgresql.Driver</td><td>jdbc:postgresql:{dbname}</td></tr>
 <tr><td>Oracle</td><td>oracle.jdbc.driver.OracleDriver</td><td>jdbc:oracle:thin:user/pass@//host:port/service</td></tr>
 <tr><td>Ingres (2006)</td><td>ingres.jdbc.IngresDriver</td><td>jdbc:ingres://host:port/db[;attr=value]</td></tr>
+<tr><td>SQL Server (MS JDBC driver)</td><td>com.microsoft.sqlserver.jdbc.SQLServerDriver</td><td>jdbc:sqlserver://host:port;DatabaseName=dbname</td></tr>
+<tr><td>Apache Derby</td><td>org.apache.derby.jdbc.ClientDriver</td><td>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]</td></tr>
 </table>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>

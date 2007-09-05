@@ -32,6 +32,7 @@
 <h4>Improvements</h4>
 <ul>
 <li>Add nameSpace option to XPath extractor</li>
+<li>Add NULL parameter option to JDBC sampler</li>
 </ul>
 
 <h4>Bug fixes</h4>
