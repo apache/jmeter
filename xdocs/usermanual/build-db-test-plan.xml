@@ -182,22 +182,5 @@ Figure &sect-num;.7. Graph results Listener</figure>
 
 </section>
 
-<section name="&sect-num;.4 JDBC settings" anchor="jdbc_settings">
-<p>Different databases and JDBC drivers require different JDBC settings. 
-The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>
-<p>Some possible settings are shown below. Please check the exact details in the JDBC driver documentation.</p>
-
-<table>
-<tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
-<tr><td>MySQL</td><td>com.mysql.jdbc.Driver</td><td>jdbc:mysql://host[:port]/dbname</td></tr>
-<tr><td>PostgreSQL</td><td>org.postgresql.Driver</td><td>jdbc:postgresql:{dbname}</td></tr>
-<tr><td>Oracle</td><td>oracle.jdbc.driver.OracleDriver</td><td>jdbc:oracle:thin:user/pass@//host:port/service</td></tr>
-<tr><td>Ingres (2006)</td><td>ingres.jdbc.IngresDriver</td><td>jdbc:ingres://host:port/db[;attr=value]</td></tr>
-<tr><td>SQL Server (MS JDBC driver)</td><td>com.microsoft.sqlserver.jdbc.SQLServerDriver</td><td>jdbc:sqlserver://host:port;DatabaseName=dbname</td></tr>
-<tr><td>Apache Derby</td><td>org.apache.derby.jdbc.ClientDriver</td><td>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]</td></tr>
-</table>
-<note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
-</section>
-
 </body>
 </document>
