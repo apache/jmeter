@@ -36,7 +36,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * @author mstover
+ * Utility conversion routines for use with XStream
  * 
  */
 public class ConversionHelp {
@@ -72,13 +72,21 @@ public class ConversionHelp {
 		outVersion = v;
 	}
 
+	/**
+	 * Encode a string (if necessary) for output to a JTL file.
+	 * Strings are only encoded if the output version is 1.0,
+	 * but nulls are always converted to the empty string.
+	 * 
+	 * @param p string to encode
+	 * @return encoded string (will never be null)
+	 */
 	public static String encode(String p) {
+		if (p == null) {// Nulls cannot be written using PrettyPrintWriter - they cause an NPE
+			return ""; // $NON-NLS-1$
+		}
+		// Only encode strings if outVersion = 1.0
 		if (!"1.0".equals(outVersion))//$NON-NLS-1$
 			return p;
-		// Only encode strings if inVersion = 1.0
-		if (p == null) {
-			return "";
-		}
 		try {
 			String p1 = URLEncoder.encode(p, CHAR_SET);
 			return p1;

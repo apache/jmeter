@@ -27,19 +27,20 @@
 
 <!--  ===================  -->
 
-<h3>Version 2.31</h3>
+<h3>Version 2.3</h3>
+
+<h3>Fixes since 2.3RC4</h3>
+
+<h4>Bug fixes</h4>
+<ul>
+<li>Fix NPE in SampleResultConverter - XStream PrettyPrinteWriter cannot handle nulls</li>
+</ul>
 
 <h4>Improvements</h4>
 <ul>
 <li>Add nameSpace option to XPath extractor</li>
 <li>Add NULL parameter option to JDBC sampler</li>
 </ul>
-
-<h4>Bug fixes</h4>
-
-<h4>Incompatibilities</h4>
-
-<h3>Version 2.3</h3>
 
 <h4>Fixes since 2.3RC3</h4>
 <ul>
