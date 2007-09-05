@@ -54,6 +54,10 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	private static final int MAX_ENTRIES = 
 		JMeterUtils.getPropDefault("jdbcsampler.cachesize",200); // $NON-NLS-1$
 
+	// String used to indicate a null value
+	private static final String NULL_MARKER = 
+		JMeterUtils.getPropDefault("jdbcsampler.nullmarker","]NULL["); // $NON-NLS-1$
+
 	private static final Map mapJdbcNameToInt;
 
     static {
@@ -75,6 +79,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     }
 
     // Query types (used to communicate with GUI)
+    // N.B. These must not be changed, as they are used in the JMX files
 	static final String SELECT   = "Select Statement"; // $NON-NLS-1$
 	static final String UPDATE   = "Update Statement"; // $NON-NLS-1$
 	static final String CALLABLE = "Callable Statement"; // $NON-NLS-1$
@@ -264,7 +269,11 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			String argumentType = argumentsTypes[i];
 		    int targetSqlType = getJdbcType(argumentType);
 		    try {
-				pstmt.setObject(i+1, argument, targetSqlType);
+		    	if (argument.equals(NULL_MARKER)){
+		    		pstmt.setNull(i+1, targetSqlType);
+		    	} else {
+		    		pstmt.setObject(i+1, argument, targetSqlType);
+		    	}
 			} catch (NullPointerException e) { // thrown by Derby JDBC (at least) if there are no "?" markers in statement
 				throw new SQLException("Could not set argument no: "+(i+1)+" - missing parameter marker?");
 			}

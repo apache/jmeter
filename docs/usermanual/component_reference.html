@@ -885,7 +885,7 @@ JMeter 2.1.2 introduces the a new property
 
 						</p>
 															<p><b>Control Panel</b></p>
-						<div align="center"><img width='435' height='343' src="../images/screenshots/jdbctest/jdbc-request.png"></div>
+						<div align="center"><img width='449' height='335' src="../images/screenshots/jdbctest/jdbc-request.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -964,18 +964,33 @@ JMeter 2.1.2 introduces the a new property
 		</tr>
 			<tr>
 			<td>Parameter values</td>
-			<td>						Comma-separated list of parameter values
+			<td>						
+        Comma-separated list of parameter values. Use ]NULL[ to indicate a NULL parameter.
+        (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
+        
+												<br	>
+						</br>
+									
+        There must be as many values as there are placeholders in the statement.
+        
 			</td>
 			<td>
-											No
+											Yes, if a prepared statement has parameters
 								</td>
 		</tr>
 			<tr>
 			<td>Parameter types</td>
-			<td>						Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR)
+			<td>						
+        Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        
+												<br	>
+						</br>
+									
+        There must be as many values as there are placeholders in the statement.
+        
 			</td>
 			<td>
-											No
+											Yes, if a prepared statement has parameters
 								</td>
 		</tr>
 		</table>
@@ -7437,7 +7452,7 @@ instead. (see figures 9 and 10).
 			<td>						Name of user to connect as.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 			<tr>
@@ -7445,7 +7460,7 @@ instead. (see figures 9 and 10).
 			<td>						Password to connect with.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 		</table>
@@ -7540,6 +7555,40 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		  jdbc:ingres://host:port/db[;attr=value]
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  SQL Server (MS JDBC driver)
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  com.microsoft.sqlserver.jdbc.SQLServerDriver
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  jdbc:sqlserver://host:port;DatabaseName=dbname
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Apache Derby
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  org.apache.derby.jdbc.ClientDriver
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]
 		  	 </font>
 </td>
 		  	 </tr>
