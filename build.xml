@@ -1310,7 +1310,23 @@ run JMeter unless all the JMeter jars are added.
    	    <checksum file="${path}" property="md5"/>
    	    <echo message="${md5} *${_base}" file="${path}.md5"/>
     </target>
-	
+
+  <!--
+  Clean-docs and clean-apidocs can be used to empty the docs or docs/api directories.
+  This should be done before regenerating the documents for a release so that any obsolete files are detected.
+  -->
+  <target name="clean-docs">
+    <delete> 
+    	<fileset dir="${dest.docs}" excludes=".svn/** api/**"/>
+    </delete>
+  </target>
+
+  <target name="clean-apidocs">
+    <delete> 
+    	<fileset dir="${dest.docs}/api" excludes=".svn/**"/>
+    </delete>
+  </target>
+
   <target name="clean" description="Clean up to force a build from source.">
     <delete file="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <delete file="${lib.dir}/jorphan.jar"/>
