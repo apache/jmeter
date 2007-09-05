@@ -10070,11 +10070,19 @@ generate the template string, and store the result into the given variable name.
 		query language.
    
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='345' height='279' src="../images/screenshots/xpath_extractor.png"></div>
+						<div align="center"><img width='374' height='179' src="../images/screenshots/xpath_extractor.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
 	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
 			<tr>
 			<td>Use Tidy</td>
 			<td>						If checked use Tidy to parse HTML response into XHTML.
@@ -10101,11 +10109,38 @@ generate the template string, and store the result into the given variable name.
 								</td>
 		</tr>
 			<tr>
-			<td>Name</td>
-			<td>						Descriptive name for this element that is shown in the tree.
+			<td>Use Namespace?</td>
+			<td>						
+        If checked, then the XML parser will use namespace resolution.
+        Note that currently only namespaces declared on the root element will be recognised.
+        A later version of JMeter may support user-definition of additional workspace names.
+        Meanwhile, a work-round is to replace: 
+        
+												<br	>
+						</br>
+									
+        //mynamespace:tagname
+        
+												<br	>
+						</br>
+									
+        by
+        
+												<br	>
+						</br>
+									
+        //*[local-name()='tagname' and namespace-uri()='uri-for-namespace']
+        
+												<br	>
+						</br>
+									
+        where "uri-for-namespace" is the uri for the "mynamespace" namespace.
+        
+        (not applicable if Tidy is selected)
+        
 			</td>
 			<td>
-											No
+											Yes
 								</td>
 		</tr>
 			<tr>
