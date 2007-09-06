@@ -34,6 +34,7 @@
 <h4>Bug fixes</h4>
 <ul>
 <li>Fix NPE in SampleResultConverter - XStream PrettyPrintWriter cannot handle nulls</li>
+<li>If Java HTTP sampler sees null ResponseMessage, replace with HTTP header</li>
 </ul>
 
 <h4>Improvements</h4>
