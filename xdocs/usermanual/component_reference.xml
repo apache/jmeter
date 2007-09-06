@@ -1982,7 +1982,10 @@ the Report.
 	Lines are read as the threads need them.
 	</p>
 	<note>CSV Dataset variables are defined after configuration processing is completed,
-	so they cannot be used for other configuration items such as JDBC Config (see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">Bug 40394 </a>)</note>
+	so they cannot be used for some configuration items - such as JDBC Config - 
+	that process their contents at configuration time (see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">Bug 40394 </a>)
+	However the variables do work in the HTTP Auth Manager, as the username etc are processed at run-time.
+	</note>
 	<p>
 	As a special case, the string "\t" (without quotes) is treated as a Tab.
 	</p>
@@ -2023,7 +2026,7 @@ there is currently no way to sepcify which one is to be used.</note>
 
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
-restricted using Basic HTTP Authentication.  You see this type of authentication when you use
+restricted using server authentication.  You see this type of authentication when you use
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
 <p>
@@ -2039,10 +2042,12 @@ http.authentication.preemptive$Boolean=false
 </pre>
 Note: the above settings only apply to the HttpClient sampler (and the SOAP samplers, which use Httpclient).
 </p>
-<note>In the current release, all JMeter threads in a Thread Group use the same username/password
-for a given Base URL even if you create multiple users with the same Base URL in the authorization table.
-We plan to correct this in a future release.  As a workwaround, you can create multiple Thread Groups for your
-Test Plan, with each Thread Group having its own Authorization Manager.
+<note>
+When looking for a match against a URL, JMeter checks each entry in turn, and stops when it finds the first match.
+Thus the most specific URLs should appear first in the list, followed by less specific ones.
+Duplicate URLs will be ignored.
+If you want to use different usernames/passwords for different threads, you can use variables.
+These can be set up using a <complink name="CSV Data Set Config"/> Element (for example).
 </note>
 </description>
 
@@ -2074,7 +2079,7 @@ authorization table entries.</li>
 </ul>
 
 <note>When you save the Test Plan, JMeter automatically saves all of the authorization
-table entries.</note>
+table entries - including any passwords, which are not encrypted.</note>
 
 <example title="Authorization Example" anchor="authorization_example">
 
@@ -2126,7 +2131,10 @@ the cookie will be shared by all JMeter threads.</p>
   [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
     </property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
-  gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.</property>
+  gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
+  <br></br>
+  The "domain" is the hostname of the server (without http://); the port is currently ignored.
+  </property>
   <property name="Add Button" required="N/A">Add an entry to the cookie table.</property>
   <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
   <property name="Load Button" required="N/A">Load a previously saved cookie table and add the entries to the existing
