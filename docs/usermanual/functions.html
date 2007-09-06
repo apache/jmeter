@@ -181,6 +181,13 @@ ${VARIABLE}
 									
 
 						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+Properties are not the same as variables.
+Variables are local to a thread; properties are common to all threads.
+
+			</td></tr>
+	</table></p>
 							  									 				<p	>
 								List of functions:
 						</p>
@@ -231,7 +238,7 @@ ${VARIABLE}
         
 												<li	>
 												<a	 href="#__javaScript">
-								JavaScript (Apache Rhino)
+								JavaScript (Mozilla Rhino)
 						</a>
 							</li>
 									
@@ -1091,6 +1098,17 @@ Javascript is used as a scripting language, so you can do calculations etc.
 						</p>
 									
 
+												<p	>
+								
+For details of the language, please see 
+												<a	 href="http://www.mozilla.org/rhino/overview.html">
+								Mozilla Rhino Overview
+						</a>
+									
+
+						</p>
+									
+
 												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 		<tr><td>						
 JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
@@ -1633,7 +1651,12 @@ the second would return 1 and the last would return www.dummy.org
 												<br	>
 						</br>
 									
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.
+For full details on using BeanShell, please see the BeanShell web-site at 
+												<a	 href="http://www.beanshell.org/">
+								http://www.beanshell.org/
+						</a>
+									
+
 						</b>
 									
 
@@ -2233,6 +2256,11 @@ However some variables are defined internally by JMeter. These are listed below.
 						</li>
 									
 
+												<li	>
+								START variables (see next section)
+						</li>
+									
+
 						</ul>
 							  		  </blockquote>
 		</td></tr>
@@ -2248,9 +2276,14 @@ However some variables are defined internally by JMeter. These are listed below.
 		  <blockquote>
 		  									 				<p	>
 								
-Properties are defined in jmeter.properties, or on the command line.
-Some additional properties are defined by JMeter. These are listed below.
-The START properties are also copied to variables with the same names.
+The set of JMeter properties is initialised from the system properties defined when JMeter starts;
+additional JMeter properties are defined in jmeter.properties, user.properties or on the command line.
+
+						</p>
+							  									 				<p	>
+								
+Some built-in properties are defined by JMeter. These are listed below.
+For convenience, the START properties are also copied to variables with the same names.
 
 						</p>
 							  									 				<ul	>

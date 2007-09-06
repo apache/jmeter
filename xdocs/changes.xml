@@ -33,13 +33,14 @@
 
 <h4>Bug fixes</h4>
 <ul>
-<li>Fix NPE in SampleResultConverter - XStream PrettyPrinteWriter cannot handle nulls</li>
+<li>Fix NPE in SampleResultConverter - XStream PrettyPrintWriter cannot handle nulls</li>
 </ul>
 
 <h4>Improvements</h4>
 <ul>
 <li>Add nameSpace option to XPath extractor</li>
 <li>Add NULL parameter option to JDBC sampler</li>
+<li>Add documentation links for Rhino and BeanShell to functions; clarify variables and properties</li>
 </ul>
 
 <h4>Fixes since 2.3RC3</h4>
