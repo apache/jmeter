@@ -66,6 +66,10 @@ ${__time(EEE\, d MMM yyyy)}
 ${VARIABLE}
 </pre>
 </p>
+<note>
+Properties are not the same as variables.
+Variables are local to a thread; properties are common to all threads.
+</note>
 <p>List of functions:</p>
 <ul>
         <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
@@ -74,7 +78,7 @@ ${VARIABLE}
         <li><a href="#__intSum">intSum - add variables</a></li>
         <li><a href="#__StringFromFile">StringFromFile - read a line from a file</a></li>
         <li><a href="#__machineName">machineName - get the local machine name</a></li>
-        <li><a href="#__javaScript">JavaScript (Apache Rhino)</a></li>
+        <li><a href="#__javaScript">JavaScript (Mozilla Rhino)</a></li>
         <li><a href="#__Random">random number</a></li>
         <li><a href="#__CSVRead">CSVRead - read from CSV delimited file</a></li>
         <li><a href="#__property">read a property</a></li>
@@ -373,6 +377,9 @@ The javaScript function executes a piece of JavaScript (not Java!) code and retu
 <p>
 The JMeter Javascript function calls a standalone JavaScript interpreter.
 Javascript is used as a scripting language, so you can do calculations etc.</p>
+<p>
+For details of the language, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
+</p>
 <note>
 JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
 </note>
@@ -557,7 +564,8 @@ the second would return 1 and the last would return www.dummy.org
 <p>
 <b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 <br></br>
-For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
+</b>
 </p>
 <p>
 Note that a different Interpreter is used for each independent occurence of the function
@@ -764,13 +772,17 @@ However some variables are defined internally by JMeter. These are listed below.
 <ul>
 <li>cookiename - contains the cookie value</li>
 <li>JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false</li>
+<li>START variables (see next section)</li>
 </ul>
 </subsection>
 <subsection name="&sect-num;.6 Pre-defined Properties" anchor="predefinedprops">
 <p>
-Properties are defined in jmeter.properties, or on the command line.
-Some additional properties are defined by JMeter. These are listed below.
-The START properties are also copied to variables with the same names.
+The set of JMeter properties is initialised from the system properties defined when JMeter starts;
+additional JMeter properties are defined in jmeter.properties, user.properties or on the command line.
+</p>
+<p>
+Some built-in properties are defined by JMeter. These are listed below.
+For convenience, the START properties are also copied to variables with the same names.
 </p>
 <ul>
 <li>START.MS - start time in milliseconds</li>
