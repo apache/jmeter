@@ -493,9 +493,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 
 			int errorLevel = conn.getResponseCode();
             String respMsg = conn.getResponseMessage();
+    		String hdr=conn.getHeaderField(0);
+    		if (hdr == null) hdr="(null)";  // $NON-NLS-1$
             if (errorLevel == -1){// Bug 38902 - sometimes -1 seems to be returned unnecessarily
-        		String hdr=conn.getHeaderField(0);
-        		if (hdr == null) hdr="(null)";  // $NON-NLS-1$
             	if (respMsg != null) {// Bug 41902 - NPE
 	                try {
 	                    errorLevel = Integer.parseInt(respMsg.substring(0, 3));
@@ -515,6 +515,9 @@ public class HTTPSampler extends HTTPSamplerBase {
             }
 			res.setSuccessful(isSuccessCode(errorLevel));
 
+			if (respMsg == null) {// has been seen in a redirect
+				respMsg=hdr; // use header (if possible) if no message found
+			}
 			res.setResponseMessage(respMsg);
 
 			String ct = conn.getContentType();
