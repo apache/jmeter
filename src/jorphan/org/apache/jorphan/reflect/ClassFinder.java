@@ -141,6 +141,12 @@ public final class ClassFinder {
             final Class[] superClasses, final boolean innerClasses)
 			throws IOException  {
         
+		if (log.isDebugEnabled()) {
+			for (int i = 0; i < superClasses.length ; i++){
+				log.debug("superclass: "+superClasses[i].getName());  
+			}
+		}
+
         // Find all jars in the search path
 		strPathsOrJars = addJarsInPath(strPathsOrJars);
         for (int k = 0; k < strPathsOrJars.length; k++) {
