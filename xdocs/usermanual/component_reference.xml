@@ -190,7 +190,7 @@ resource requires query string parameters, add them below in the
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <b>In versions of JMeter after 2.2: if both the 'name' atribute and MIME type (below) are omitted, then the file is sent as the body
-        of the POST request. This allows arbitraty POST bodies to be sent.</b>
+        of the POST request. This allows arbitrary POST bodies to be sent.</b>
         </property>
         <property name="Value for 'name' attribute" required="No">Value of the "name" web request parameter.</property>
         <property name="MIME Type" required="No">MIME type (for example, text/plain).</property>
