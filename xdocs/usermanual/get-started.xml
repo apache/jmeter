@@ -355,9 +355,9 @@ These are shown below.</p>
                 Define loglevel: [category=]level 
                 e.g. jorphan=INFO or jmeter.util=DEBUG
         -r, --runremote
-                Start remote servers
+                Start remote servers (as defined by the jmeter property remote_hosts)
         -R, --remotestart  server1,...
-                Start these remote servers
+                Start these remote servers (overrides remote_hosts)
         -d, --homedir {argument}
                 the jmeter home directory to use
 </pre>
