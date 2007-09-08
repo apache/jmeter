@@ -211,7 +211,8 @@ public class JMeter implements JMeterPlugin {
 		GuiPackage.getInstance(treeLis, treeModel);
 		org.apache.jmeter.gui.MainFrame main = new org.apache.jmeter.gui.MainFrame(ActionRouter.getInstance(),
 				treeModel, treeLis);
-		main.setTitle("Apache JMeter");// $NON-NLS-1$
+		// TODO - set up these items in MainFrame?
+		main.setTitle("Apache JMeter ("+JMeterUtils.getJMeterVersion()+")");// $NON-NLS-1$
 		main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
 		ComponentUtil.centerComponentInWindow(main, 80);
 		main.show();
