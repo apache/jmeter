@@ -560,10 +560,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestBeanGUI.modifyTestElement()
+	/**
+	 * Save values from the GUI fields into the property map
 	 */
 	void saveGuiFields() {
 		for (int i = 0; i < editors.length; i++) {
@@ -585,4 +583,31 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 			}
 		}
 	}
+
+	void clearGuiFields() {
+		for (int i = 0; i < editors.length; i++) {
+			PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
+			if (propertyEditor != null) {
+				try {
+				if (propertyEditor instanceof WrapperEditor){
+					WrapperEditor we = (WrapperEditor) propertyEditor;
+					String tags[]=we.getTags();
+					if (tags != null) {
+						we.setAsText(tags[0]);
+					} else {
+						we.setValue("");
+					}
+				} else if (propertyEditor instanceof ComboStringEditor) {
+					ComboStringEditor cse = (ComboStringEditor) propertyEditor;
+					cse.setAsText(cse.getInitialEditValue());
+				} else {
+					propertyEditor.setAsText("");
+				}
+				} catch (IllegalArgumentException ex){
+					log.error("Failed to set field "+descriptors[i].getName(),ex);
+				}
+			}
+		}
+	}
+
 }
