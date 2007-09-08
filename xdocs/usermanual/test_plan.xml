@@ -23,7 +23,7 @@
 <document prev="build-test-plan.html" next="build-web-test-plan.html" date="$Date$">
 
 <properties>
-  <title>User's Manual: Elements of a Test Plan</title>
+<title>User's Manual: Elements of a Test Plan</title>
 </properties>
 
 <body>
@@ -349,6 +349,28 @@ Post-Processor 1
 Post-Processor 2
 Assertion 1
 </pre>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.10 Properties and Variables" anchor="properties">
+
+<p>
+JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Gettting Started - Configuring JMeter</a> for more details).
+<br></br>
+Properties are global to jmeter, and are used to define some of the defaults JMeter uses.
+For example the property remote_hosts defines the servers that JMeter will try to run remotely.
+Properties can be referenced in test plans 
+- see <a href="functions.html#__property">Functions - read a property</a> -
+but cannot be used for thread-specific values.
+</p>
+<p>
+JMeter <b>variables</b> are local to each thread. The values may be the same for each thread, or they may be different.
+<br></br>
+If a variable is updated by a thread, only the thread copy of the variable is changed.
+For example the <complink name="Regular Expression Extractor"/> Post-Processor 
+will set its variables according to the sample that its thread has read, and these can be used later
+by the same thread.
+For details of how to reference variables and functions, see <a href="functions.html">Functions and Variables</a>
 </p>
 </subsection>
 
