@@ -434,6 +434,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 */
 	public void clearGui() {
 		super.clearGui();
-		propertyMap.clear();
+		if (customizer instanceof GenericTestBeanCustomizer) {
+			GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
+			gtbc.clearGuiFields(); 
+		}
 	}
 }
