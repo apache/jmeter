@@ -184,9 +184,9 @@ public class JMeter implements JMeterPlugin {
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
 					"[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
 			new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
-					"Start remote servers"),
+					"Start remote servers (as defined in remote_hosts)"),
 			new CLOptionDescriptor("remotestart", CLOptionDescriptor.ARGUMENT_REQUIRED, REMOTE_OPT_PARAM,
-					"Start these remote servers"),
+					"Start these remote servers (overrides remote_hosts)"),
 			new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
 					"the jmeter home directory to use"), };
 
