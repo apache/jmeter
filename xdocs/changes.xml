@@ -35,6 +35,7 @@
 <ul>
 <li>Fix NPE in SampleResultConverter - XStream PrettyPrintWriter cannot handle nulls</li>
 <li>If Java HTTP sampler sees null ResponseMessage, replace with HTTP header</li>
+<li>Bug 43332 - 2.3RC4 does not clear Guis based on TestBean</li>
 </ul>
 
 <h4>Improvements</h4>
