@@ -261,17 +261,36 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 		    <li>Callable Statement</li>
 		    <li>Prepared Select Statement</li>
 		    <li>Prepared Update Statement - use this for Inserts as well</li>
+		    <li>Commit</li>
+		    <li>Rollback</li>
+		    <li>Autocommit(false)</li>
+		    <li>Autocommit(true)</li>
 		    <li>Edit - this should be a variable reference that evaluates to one of the above</li>
 		    </ul>
 		</property>
-        <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
-        <property name="Parameter values" required="Yes, if a prepared statement has parameters">
+        <property name="SQL Query" required="Yes">
+        SQL query.
+        Do not enter a trailing semi-colon.
+        There is no need to use { and } to enclose Callable statements.
+        For example:
+        <ul>
+        <li>select * from t_customers where id=23</li>
+        <li>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)
+        <ul>
+        <li>Parameter values: tablename,filename</li>
+        <li>Parameter types:  VARCHAR,VARCHAR</li>
+        </ul>
+        </li>
+        The second example assumes you are using Apache Derby.
+        </ul>
+        </property>
+        <property name="Parameter values" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of parameter values. Use ]NULL[ to indicate a NULL parameter.
         (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
         <br></br>
         There must be as many values as there are placeholders in the statement.
         </property>
-        <property name="Parameter types" required="Yes, if a prepared statement has parameters">
+        <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
         <br></br>
         There must be as many values as there are placeholders in the statement.
@@ -279,7 +298,6 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
 </properties>
 
 <links>
-        <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
 </links>
