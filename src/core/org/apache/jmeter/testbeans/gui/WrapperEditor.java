@@ -50,8 +50,6 @@ import org.apache.log.Logger;
  * provides optional support for JMeter 'expressions' (you can choose whether
  * they make valid property values).
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
 	protected static Logger log = LoggingManager.getLoggerForClass();
@@ -298,7 +296,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 		if (value == null) {
 			if (!acceptsNull)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Null is not allowed");
 			text = null;
 		} else if (acceptsExpressions && isExpression(value)) {
 			text = (String) value;
@@ -308,7 +306,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			text = typeEditor.getAsText();
 
 			if (!acceptsOther && !isATag(text))
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Value not allowed: "+text);
 		}
 
 		guiEditor.setValue(text);
@@ -349,7 +347,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 		if (text == null) {
 			if (!acceptsNull)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Null parameter not allowed");
 			value = null;
 		} else {
 			if (acceptsExpressions && isExpression(text)) {
@@ -357,12 +355,11 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			} else {
 				// Some editors do tiny transformations (e.g. "true" to
 				// "True",...):
-				typeEditor.setAsText(text); // may throw
-											// IllegalArgumentException
+				typeEditor.setAsText(text); // may throw IllegalArgumentException
 				value = typeEditor.getAsText();
 
 				if (!acceptsOther && !isATag(text))
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("Value not allowed: "+text);
 			}
 		}
 
