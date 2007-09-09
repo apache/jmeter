@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Modifier;
@@ -46,7 +47,7 @@ public final class ActionRouter implements ActionListener {
 
 	private static ActionRouter router;
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Map preActionListeners = new HashMap();
 
@@ -66,7 +67,7 @@ public final class ActionRouter implements ActionListener {
 
 	private void performAction(final ActionEvent e) {
 		try {
-			GuiPackage.getInstance().updateCurrentNode();
+			GuiPackage.getInstance().updateCurrentGui();
 			Set commandObjects = (Set) commands.get(e.getActionCommand());
 			Iterator iter = commandObjects.iterator();
 			while (iter.hasNext()) {
@@ -283,13 +284,10 @@ public final class ActionRouter implements ActionListener {
                     }
                 }
 			}
+		} catch (HeadlessException e){
+			log.warn(e.toString());
 		} catch (Exception e) {
-			if ("java.awt.HeadlessException".equals(e.getClass().getName())) // JDK1.4:
-			{
-				log.warn(e.toString());
-			} else {
-				log.error("exception finding action handlers", e);
-			}
+			log.error("exception finding action handlers", e);
 		}
 	}
 

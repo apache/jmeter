@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,14 +36,8 @@ import org.apache.jmeter.assertions.SizeAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
-/**
- * @version $Revision$ Last updated: $Date$
- */
 public class SizeAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
 	private JTextField size;
 
@@ -57,11 +51,11 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	}
 
 	public String getLabelResource() {
-		return "size_assertion_title";
+		return "size_assertion_title"; //$NON-NLS-1$
 	}
 
 	public String getSizeAttributesTitle() {
-		return JMeterUtils.getResString("size_assertion_size_test");
+		return JMeterUtils.getResString("size_assertion_size_test"); //$NON-NLS-1$
 	}
 
 	public TestElement createTestElement() {
@@ -87,6 +81,22 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		((SizeAssertion) el).setAllowedSize(assertionSize);
 		((SizeAssertion) el).setCompOper(getState());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        size.setText(""); //$NON-NLS-1$
+        equalButton.setSelected(true);
+        notequalButton.setSelected(false);
+        greaterthanButton.setSelected(false);
+        lessthanButton.setSelected(false);
+        greaterthanequalButton.setSelected(false);
+        lessthanequalButton.setSelected(false);
+        execState = SizeAssertion.EQUAL;
+    }    
 
 	public void configure(TestElement el) {
 		super.configure(el);
@@ -128,7 +138,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 
 		add(makeTitlePanel());
@@ -138,7 +148,7 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 		sizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				getSizeAttributesTitle()));
 
-		sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label")));
+		sizePanel.add(new JLabel(JMeterUtils.getResString("size_assertion_label"))); //$NON-NLS-1$
 		size = new JTextField(5);
 		size.addFocusListener(this);
 		sizePanel.add(size);
@@ -151,19 +161,19 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 	private Box createComparatorButtonPanel() {
 		ButtonGroup group = new ButtonGroup();
 
-		equalButton = createComparatorButton("=", SizeAssertion.EQUAL, group);
-		notequalButton = createComparatorButton("!=", SizeAssertion.NOTEQUAL, group);
-		greaterthanButton = createComparatorButton(">", SizeAssertion.GREATERTHAN, group);
-		lessthanButton = createComparatorButton("<", SizeAssertion.LESSTHAN, group);
-		greaterthanequalButton = createComparatorButton(">=", SizeAssertion.GREATERTHANEQUAL, group);
-		lessthanequalButton = createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group);
+		equalButton = createComparatorButton("=", SizeAssertion.EQUAL, group); //$NON-NLS-1$
+		notequalButton = createComparatorButton("!=", SizeAssertion.NOTEQUAL, group); //$NON-NLS-1$
+		greaterthanButton = createComparatorButton(">", SizeAssertion.GREATERTHAN, group); //$NON-NLS-1$
+		lessthanButton = createComparatorButton("<", SizeAssertion.LESSTHAN, group); //$NON-NLS-1$
+		greaterthanequalButton = createComparatorButton(">=", SizeAssertion.GREATERTHANEQUAL, group); //$NON-NLS-1$
+		lessthanequalButton = createComparatorButton("<=", SizeAssertion.LESSTHANEQUAL, group); //$NON-NLS-1$
 
 		equalButton.setSelected(true);
 		execState = Integer.parseInt(equalButton.getActionCommand());
 
 		// Put the check boxes in a column in a panel
 		Box checkPanel = Box.createVerticalBox();
-		JLabel compareLabel = new JLabel(JMeterUtils.getResString("size_assertion_comparator_label"));
+		JLabel compareLabel = new JLabel(JMeterUtils.getResString("size_assertion_comparator_label")); //$NON-NLS-1$
 		checkPanel.add(compareLabel);
 		checkPanel.add(equalButton);
 		checkPanel.add(notequalButton);
@@ -195,8 +205,9 @@ public class SizeAssertionGui extends AbstractAssertionGui implements FocusListe
 				isInvalid = true;
 			}
 			if (isInvalid) {
-				log.warn("SizeAssertionGui: Not a valid number!");
-				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("size_assertion_input_error"), "Error",
+				JOptionPane.showMessageDialog(null, 
+						JMeterUtils.getResString("size_assertion_input_error"), //$NON-NLS-1$
+						"Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,6 +26,7 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -50,10 +51,14 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * 
  * Created February 8, 2001
  * 
- * @version $Revision$ $Date$
  */
 public class GraphVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener, Clearable {
-	SamplingStatCalculator model;
+    
+	private static final String ZERO = "0";  //$NON-NLS-1$
+	
+	private NumberFormat nf = NumberFormat.getInstance(); // OK, because used in synchronised method
+
+	private SamplingStatCalculator model;
 
 	private JTextField maxYField = null;
 
@@ -61,7 +66,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
 	private JTextField noSamplesField = null;
 
-	String minute = JMeterUtils.getResString("minute");
+	private String minute = JMeterUtils.getResString("minute"); // $NON-NLS-1$
 
 	private Graph graph;
 
@@ -110,12 +115,12 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 	public synchronized void updateGui(Sample s) {
 		// We have received one more sample
 		graph.updateGui(s);
-		noSamplesField.setText(Long.toString(s.count));
-		dataField.setText(Long.toString(s.data));
-		averageField.setText(Long.toString(s.average));
-		deviationField.setText(Long.toString(s.deviation));
-		throughputField.setText(Double.toString(60 * s.throughput) + "/" + minute);
-		medianField.setText(Long.toString(s.median));
+		noSamplesField.setText(Long.toString(s.getCount()));
+		dataField.setText(Long.toString(s.getData()));
+		averageField.setText(Long.toString(s.getAverage()));
+		deviationField.setText(Long.toString(s.getDeviation()));
+		throughputField.setText(nf.format(60 * s.getThroughput()) + "/" + minute); // $NON-NLS-1$
+		medianField.setText(Long.toString(s.getMedian()));
 		updateYAxis();
 	}
 
@@ -124,7 +129,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 	}
 
 	public String getLabelResource() {
-		return "graph_results_title";
+		return "graph_results_title"; // $NON-NLS-1$
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -142,15 +147,15 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 		this.graph.repaint();
 	}
 
-	public synchronized void clear() {
-		// this.graph.clear();
+	public void clearData() {
+		graph.clearData();		
 		model.clear();
-		graph.clear();
-		dataField.setText("0000");
-		averageField.setText("0000");
-		deviationField.setText("0000");
-		throughputField.setText("0/" + minute);
-		medianField.setText("0000");
+		dataField.setText(ZERO);
+		averageField.setText(ZERO);
+		deviationField.setText(ZERO);
+		throughputField.setText("0/" + minute); //$NON-NLS-1$
+		medianField.setText(ZERO);
+		noSamplesField.setText(ZERO);
 		updateYAxis();
 		repaint();
 	}
@@ -164,7 +169,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 	 */
 	private void updateYAxis() {
 		maxYField.setText(Long.toString(graph.getGraphMax()));
-		minYField.setText("0");
+		minYField.setText(ZERO);
 	}
 
 	/**
@@ -205,8 +210,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 		maxYField = createYAxisField(5);
 		minYField = createYAxisField(3);
 
-		graphYAxisPanel.add(createYAxisPanel("graph_results_ms", maxYField), BorderLayout.NORTH);
-		graphYAxisPanel.add(createYAxisPanel("graph_results_ms", minYField), BorderLayout.SOUTH);
+		graphYAxisPanel.add(createYAxisPanel("graph_results_ms", maxYField), BorderLayout.NORTH); // $NON-NLS-1$
+		graphYAxisPanel.add(createYAxisPanel("graph_results_ms", minYField), BorderLayout.SOUTH); // $NON-NLS-1$
 
 		return graphYAxisPanel;
 	}
@@ -267,12 +272,12 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 		JPanel chooseGraphsPanel = new JPanel();
 
 		chooseGraphsPanel.setLayout(new FlowLayout());
-		JLabel selectGraphsLabel = new JLabel(JMeterUtils.getResString("graph_choose_graphs"));
-		data = createChooseCheckBox("graph_results_data", Color.black);
-		average = createChooseCheckBox("graph_results_average", Color.blue);
-		deviation = createChooseCheckBox("graph_results_deviation", Color.red);
-		throughput = createChooseCheckBox("graph_results_throughput", JMeterColor.dark_green);
-		median = createChooseCheckBox("graph_results_median", JMeterColor.purple);
+		JLabel selectGraphsLabel = new JLabel(JMeterUtils.getResString("graph_choose_graphs")); //$NON-NLS-1$
+		data = createChooseCheckBox("graph_results_data", Color.black); // $NON-NLS-1$
+		average = createChooseCheckBox("graph_results_average", Color.blue); // $NON-NLS-1$
+		deviation = createChooseCheckBox("graph_results_deviation", Color.red); // $NON-NLS-1$
+		throughput = createChooseCheckBox("graph_results_throughput", JMeterColor.dark_green); // $NON-NLS-1$
+		median = createChooseCheckBox("graph_results_median", JMeterColor.purple); // $NON-NLS-1$
 
 		chooseGraphsPanel.add(selectGraphsLabel);
 		chooseGraphsPanel.add(data);
@@ -336,16 +341,16 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 		throughputField = createInfoField(JMeterColor.dark_green, 15);
 		medianField = createInfoField(JMeterColor.purple, 5);
 
-		graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_no_samples", noSamplesField),
-				noSamplesField, createInfoLabel("graph_results_deviation", deviationField), deviationField));
+		graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_no_samples", noSamplesField), // $NON-NLS-1$
+				noSamplesField, createInfoLabel("graph_results_deviation", deviationField), deviationField)); // $NON-NLS-1$
 		graphInfoPanel.add(Box.createHorizontalGlue());
 
-		graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_latest_sample", dataField), dataField,
-				createInfoLabel("graph_results_throughput", throughputField), throughputField));
+		graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_latest_sample", dataField), dataField, // $NON-NLS-1$
+				createInfoLabel("graph_results_throughput", throughputField), throughputField)); // $NON-NLS-1$
 		graphInfoPanel.add(Box.createHorizontalGlue());
 
-		graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_average", averageField), averageField,
-				createInfoLabel("graph_results_median", medianField), medianField));
+		graphInfoPanel.add(createInfoColumn(createInfoLabel("graph_results_average", averageField), averageField, // $NON-NLS-1$
+				createInfoLabel("graph_results_median", medianField), medianField)); // $NON-NLS-1$
 		graphInfoPanel.add(Box.createHorizontalGlue());
 		return graphInfoPanel;
 	}
@@ -440,4 +445,5 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
 		return row;
 	}
+
 }

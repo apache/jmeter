@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,10 +22,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class LoginConfig extends ConfigTestElement implements Serializable
 // TODO: move this to components -- the only reason why it's in core is because
 // it's used as a guinea pig by a couple of tests.
@@ -75,6 +71,6 @@ public class LoginConfig extends ConfigTestElement implements Serializable
 	}
 
 	public String toString() {
-		return getUsername() + "=" + getPassword();
+		return getUsername() + "=" + getPassword(); //$NON-NLS-1$
 	}
 }

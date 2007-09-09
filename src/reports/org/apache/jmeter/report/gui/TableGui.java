@@ -1,10 +1,10 @@
-//$Header:
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,7 +21,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JCheckBox;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
@@ -100,14 +99,6 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
     
 	public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
-        JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new BarChartGui().getStaticLabel(),
-				BarChartGui.class.getName(),
-				"Add"));
-		addMenu.add(ReportMenuFactory.makeMenuItem(new LineGraphGui().getStaticLabel(),
-				LineGraphGui.class.getName(),
-				"Add"));
-        pop.add(addMenu);
         ReportMenuFactory.addFileMenu(pop);
         ReportMenuFactory.addEditMenu(pop,true);
         return pop;

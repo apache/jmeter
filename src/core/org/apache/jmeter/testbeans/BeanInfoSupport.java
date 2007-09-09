@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -62,7 +62,7 @@ import org.apache.log.Logger;
  */
 public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Some known attribute names, just for convenience:
 	public static final String TAGS = GenericTestBeanCustomizer.TAGS;
@@ -72,8 +72,6 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 	public static final String NOT_EXPRESSION = GenericTestBeanCustomizer.NOT_EXPRESSION;
 
 	public static final String NOT_OTHER = GenericTestBeanCustomizer.NOT_OTHER;
-	
-	public static final String MULTILINE = "multiline";
 
 	public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
 
@@ -101,14 +99,15 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 		}
 
 		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(beanClass.getName() + "Resources", JMeterUtils
-					.getLocale());
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(
+					beanClass.getName() + "Resources",  // $NON-NLS-1$ 
+					JMeterUtils.getLocale());
 
 			// Store the resource bundle as an attribute of the BeanDescriptor:
 			getBeanDescriptor().setValue(RESOURCE_BUNDLE, resourceBundle);
 			// Localize the bean name
 			try {
-				getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName"));
+				getBeanDescriptor().setDisplayName(resourceBundle.getString("displayName")); // $NON-NLS-1$ 
 			} catch (MissingResourceException e) {
 				log.debug("Localized display name not available for bean " + beanClass.getName());
 			}
@@ -117,7 +116,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 			for (int i = 0; i < properties.length; i++) {
 				String name = properties[i].getName();
 				try {
-					properties[i].setDisplayName(resourceBundle.getString(name + ".displayName"));
+					properties[i].setDisplayName(resourceBundle.getString(name + ".displayName")); // $NON-NLS-1$ 
 				} catch (MissingResourceException e) {
 					log.debug("Localized display name not available for property " + name);
 				}

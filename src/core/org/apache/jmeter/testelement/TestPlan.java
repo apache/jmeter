@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -36,33 +37,39 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover Created March 13, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class TestPlan extends AbstractTestElement implements Serializable, TestListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String THREAD_GROUPS = "TestPlan.thread_groups";
+    // Does not appear to be needed
+	public final static String THREAD_GROUPS = "TestPlan.thread_groups"; //$NON-NLS-1$
 
-	public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode";
+	public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
 
-	public final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables";
+	public final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
 
-	public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups";
+	public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
 
-	public final static String COMMENTS = "TestPlan.comments";
+    public final static String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
+    private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
+    
+	public final static String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
 
+    // Does not appear to be needed
 	public final static String BASEDIR = "basedir";
 
+    // Does not appear to be needed
 	private transient List threadGroups = new LinkedList();
 
+    // Does not appear to be needed
 	private transient List configs = new LinkedList();
 
+    // Does not appear to be needed
 	private static List itemsCanAdd = new LinkedList();
 
+    // Does not appear to be needed
 	private static TestPlan plan;
 
 	// There's only 1 test plan, so can cache the mode here
@@ -73,7 +80,9 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		// returned in org.apache.jmeter.threads.ThreadGroup.getClassLabel()
 		// method. If it's not you will not be able to add a Thread Group
 		// element to a Test Plan.
-		itemsCanAdd.add(JMeterUtils.getResString("threadgroup"));
+
+        // Does not appear to be needed
+		itemsCanAdd.add(JMeterUtils.getResString("threadgroup")); //$NON-NLS-1$
 	}
 
 	public TestPlan() {
@@ -86,7 +95,9 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		setName(name);
 		// setFunctionalMode(false);
 		// setSerialized(false);
-		setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
+
+        // Does not appear to be needed
+        setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
 	}
     
     public void prepareForPreCompile()
@@ -107,10 +118,12 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		setProperty(new TestElementProperty(USER_DEFINED_VARIABLES, vars));
 	}
 
+    // Does not appear to be needed
 	public String getBasedir() {
 		return getPropertyAsString(BASEDIR);
 	}
 
+    // Does not appear to be needed
 	public void setBasedir(String b) {
 		setProperty(BASEDIR, b);
 	}
@@ -146,6 +159,37 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	public void setSerialized(boolean serializeTGs) {
 		setProperty(new BooleanProperty(SERIALIZE_THREADGROUPS, serializeTGs));
 	}
+    
+    /**
+     * Set the classpath for the test plan
+     * @param text
+     */
+    public void setTestPlanClasspath(String text) {
+        setProperty(CLASSPATHS,text);
+    }
+    
+    public void setTestPlanClasspathArray(String[] text) {
+        StringBuffer cat = new StringBuffer();
+        for (int idx=0; idx < text.length; idx++) {
+            if (idx > 0) {
+                cat.append(CLASSPATH_SEPARATOR);
+            }
+            cat.append(text[idx]);
+        }
+        this.setTestPlanClasspath(cat.toString());
+    }
+    
+    public String[] getTestPlanClasspathArray() {
+        return JOrphanUtils.split(this.getTestPlanClasspath(),CLASSPATH_SEPARATOR);
+    }
+    
+    /**
+     * Returns a string in CSV format
+     * @return
+     */
+    public String getTestPlanClasspath() {
+        return getPropertyAsString(CLASSPATHS);
+    }
 
 	/**
 	 * Fetch the serialize threadgroups property
@@ -160,6 +204,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		getVariables().addArgument(name, value);
 	}
 
+    // Does not appear to be needed
 	public static TestPlan createTestPlan(String name) {
 		if (plan == null) {
 			if (name == null) {
@@ -167,7 +212,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 			} else {
 				plan = new TestPlan(name);
 			}
-			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.TestPlanGui"));
+			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, 
+					"org.apache.jmeter.control.gui.TestPlanGui")); //$NON-NLS-1$
 		}
 		return plan;
 	}
@@ -179,6 +225,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		}
 	}
 
+    // Does not appear to be needed
 	public void addJMeterComponent(TestElement child) {
 		if (child instanceof ThreadGroup) {
 			addThreadGroup((ThreadGroup) child);
@@ -190,6 +237,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	 * 
 	 * @return the ThreadGroups value
 	 */
+    // Does not appear to be needed
 	public Collection getThreadGroups() {
 		return threadGroups;
 	}
@@ -200,6 +248,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	 * @param c
 	 *            the feature to be added to the ConfigElement attribute
 	 */
+    // Does not appear to be needed
 	public void addConfigElement(ConfigElement c) {
 		configs.add(c);
 	}
@@ -210,6 +259,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	 * @param group
 	 *            the feature to be added to the ThreadGroup attribute
 	 */
+    // Does not appear to be needed
 	public void addThreadGroup(ThreadGroup group) {
 		threadGroups.add(group);
 	}
@@ -258,6 +308,12 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 				log.error("Failed to set file server base dir with " + getBasedir(), e);
 			}
 		}
+        // we set the classpath
+        String[] paths = this.getTestPlanClasspathArray();
+        for (int idx=0; idx < paths.length; idx++) {
+            NewDriver.addURL(paths[idx]);
+            log.info("add " + paths[idx] + " to classpath");
+        }
 	}
 
 	/*
@@ -268,4 +324,5 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	public void testStarted(String host) {
 		testStarted();
 	}
+    
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,6 +19,8 @@
 package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.util.Date;
 
 /**
  * @author Michael Stover
@@ -26,44 +28,39 @@ import java.io.Serializable;
  */
 
 public class Sample implements Serializable, Comparable {
-	public long data;
+	private final long data; // = elapsed
 
-	public long average;
+	private final long average;
 
-	public long median;
+	private final long median;
 
-	public long distributionLine;
+	private final long distributionLine; // TODO: what is this for?
 
-	public long deviation;
+	private final long deviation;
 
-	public double throughput;
+	private final double throughput;
 
-	public long errorCount;
+	private final long errorCount;
 
-	public boolean success = true;
+	private final boolean success;
 
-	public String label = null;
+	private final String label;
 
-	public long count;
+	private final String threadName;
 
-	public long endTime;
+	private final long count;
 
-	public int bytes = 0;
+	private final long endTime;
 
-	/**
-	 * Constructor for the Sample object
-	 * 
-	 * @param data
-	 *            Description of Parameter
-	 * @param average
-	 *            Description of Parameter
-	 * @param deviation
-	 *            Description of Parameter
-	 */
-	public Sample(long data, long average, long deviation, double throughput, long median, boolean success) {
+    private final int bytes;
+
+
+    // TODO - is this used?
+    public Sample(long data, long average, long deviation, double throughput, long median, boolean success) {
 		this(null, data, average, deviation, median, 0, throughput, 0, success, 0, 0);
 	}
 
+    // TODO - is this used?
 	public Sample(long data) {
 		this(null, data, 0, 0, 0, 0, 0, 0, false, 0, 0);
 	}
@@ -81,17 +78,51 @@ public class Sample implements Serializable, Comparable {
 		this.errorCount = errorCount;
 		this.count = num;
 		this.endTime = endTime;
+        this.bytes = 0;
+        this.threadName = "";
 	}
+
+    public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
+            double throughput, long errorCount, boolean success, long num, long endTime, int bytes) {
+        this.data = data;
+        this.average = average;
+        this.deviation = deviation;
+        this.throughput = throughput;
+        this.success = success;
+        this.median = median;
+        this.distributionLine = distributionLine;
+        this.label = name;
+        this.errorCount = errorCount;
+        this.count = num;
+        this.endTime = endTime;
+        this.bytes = bytes;
+        this.threadName = "";
+    }
+
+    public Sample(String name, long data, long average, long deviation, long median, long distributionLine,
+            double throughput, long errorCount, boolean success, long num, long endTime, int bytes, String threadName) {
+        this.data = data;
+        this.average = average;
+        this.deviation = deviation;
+        this.throughput = throughput;
+        this.success = success;
+        this.median = median;
+        this.distributionLine = distributionLine;
+        this.label = name;
+        this.errorCount = errorCount;
+        this.count = num;
+        this.endTime = endTime;
+        this.bytes = bytes;
+        this.threadName = threadName;
+    }
 
 	public Sample() {
+        this(null, 0, 0, 0, 0, 0, 0, 0, true, 0, 0);
 	}
 
+    // Appears not to be used - however it is invoked via the Functor class
 	public int getBytes() {
 		return bytes;
-	}
-
-	public void setBytes(int size) {
-		bytes = size;
 	}
 
 	/**
@@ -102,14 +133,6 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @param average
-	 *            The average to set.
-	 */
-	public void setAverage(long average) {
-		this.average = average;
-	}
-
-	/**
 	 * @return Returns the count.
 	 */
 	public long getCount() {
@@ -117,26 +140,10 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @param count
-	 *            The count to set.
-	 */
-	public void setCount(long count) {
-		this.count = count;
-	}
-
-	/**
-	 * @return Returns the data.
+	 * @return Returns the data (usually elapsed time)
 	 */
 	public long getData() {
 		return data;
-	}
-
-	/**
-	 * @param data
-	 *            The data to set.
-	 */
-	public void setData(long data) {
-		this.data = data;
 	}
 
 	/**
@@ -147,26 +154,10 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @param deviation
-	 *            The deviation to set.
-	 */
-	public void setDeviation(long deviation) {
-		this.deviation = deviation;
-	}
-
-	/**
 	 * @return Returns the distributionLine.
 	 */
 	public long getDistributionLine() {
 		return distributionLine;
-	}
-
-	/**
-	 * @param distributionLine
-	 *            The distributionLine to set.
-	 */
-	public void setDistributionLine(long distributionLine) {
-		this.distributionLine = distributionLine;
 	}
 
 	/**
@@ -177,26 +168,10 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @param error
-	 *            The error to set.
-	 */
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
-
-	/**
 	 * @return Returns the errorRate.
 	 */
 	public long getErrorCount() {
 		return errorCount;
-	}
-
-	/**
-	 * @param errorRate
-	 *            The errorRate to set.
-	 */
-	public void setErrorCount(long errorCount) {
-		this.errorCount = errorCount;
 	}
 
 	/**
@@ -207,11 +182,10 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @param label
-	 *            The label to set.
+	 * @return Returns the threadName.
 	 */
-	public void setLabel(String label) {
-		this.label = label;
+	public String getThreadName() {
+		return threadName;
 	}
 
 	/**
@@ -222,26 +196,10 @@ public class Sample implements Serializable, Comparable {
 	}
 
 	/**
-	 * @param median
-	 *            The median to set.
-	 */
-	public void setMedian(long median) {
-		this.median = median;
-	}
-
-	/**
 	 * @return Returns the throughput.
 	 */
 	public double getThroughput() {
 		return throughput;
-	}
-
-	/**
-	 * @param throughput
-	 *            The throughput to set.
-	 */
-	public void setThroughput(double throughput) {
-		this.throughput = throughput;
 	}
 
 	/*
@@ -261,11 +219,18 @@ public class Sample implements Serializable, Comparable {
 		return endTime;
 	}
 
-	/**
-	 * @param endTime
-	 *            The endTime to set.
-	 */
-	public void setEndTime(long endTime) {
-		this.endTime = endTime;
-	}
+    /**
+     * @return Returns the (calculated) startTime, assuming Data is the elapsed time.
+     */
+    public long getStartTime() {
+        return endTime-data;
+    }
+
+    /**
+     * @return the start time using the specified format
+     * Intended for use from Functors
+     */
+    public String getStartTimeFormatted(Format format) {
+        return format.format(new Date(getStartTime()));
+    }
 }

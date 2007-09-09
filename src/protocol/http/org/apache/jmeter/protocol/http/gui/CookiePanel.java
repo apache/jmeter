@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -42,27 +43,29 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
+ * This is the GUI for Cookie Manager
+ * 
  * Allows the user to specify if she needs cookie services, and give parameters
  * for this service.
  * 
- * @version $Revision$
  */
 public class CookiePanel extends AbstractConfigGui implements ActionListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String ADD_COMMAND = "Add";
+	private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
 
-	private static final String DELETE_COMMAND = "Delete";
+	private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
 
-	private static final String LOAD_COMMAND = "Load";
+	private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
 
-	private static final String SAVE_COMMAND = "Save";
+	private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
 
 	private JTable cookieTable;
 
@@ -70,23 +73,23 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
 	private JCheckBox clearEachIteration;
 
-	private static final String clearEachIterationLabel = "clear_cookies_per_iter";
+	private static final String clearEachIterationLabel = "clear_cookies_per_iter"; //$NON-NLS-1$
 
-	private static final String[] columnNames = { JMeterUtils.getResString("name"), JMeterUtils.getResString("value"),
-			JMeterUtils.getResString("domain"), JMeterUtils.getResString("path"), JMeterUtils.getResString("secure"),// removed
-																														// expiration
-																														// because
-																														// it's
-																														// just
-																														// an
-																														// annoyance
-																														// for
-																														// static
-																														// cookies
+	private static final String[] columnNames = {
+        JMeterUtils.getResString("name"),   //$NON-NLS-1$
+        JMeterUtils.getResString("value"),  //$NON-NLS-1$
+		JMeterUtils.getResString("domain"), //$NON-NLS-1$
+        JMeterUtils.getResString("path"),   //$NON-NLS-1$
+        JMeterUtils.getResString("secure"), //$NON-NLS-1$
+        // removed expiration because it's just an annoyance for static cookies
 	};
 
-	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class,
-			Boolean.class, };
+	private static final Class[] columnClasses = {
+        String.class,
+        String.class,
+        String.class,
+        String.class,
+		Boolean.class, };
 
 	private JButton addButton;
 
@@ -96,29 +99,36 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
 	private JButton saveButton;
 
+    /*
+     * List of cookie policies.
+     * 
+     * These are used both for the display, and for setting the policy
+    */
+    private final String[] policies = CookiePolicy.getRegisteredCookieSpecs();
+
+    private JLabeledChoice policy;
+    
 	/**
 	 * Default constructor.
 	 */
 	public CookiePanel() {
-		tableModel = new PowerTableModel(columnNames, columnClasses);
-		clearEachIteration = new JCheckBox(JMeterUtils.getResString(clearEachIterationLabel), false);
 		init();
 	}
 
 	public String getLabelResource() {
-		return "cookie_manager_title";
+		return "cookie_manager_title"; //$NON-NLS-1$
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 
-		if (action.equals("Delete")) {
+		if (action.equals(DELETE_COMMAND)) {
 			if (tableModel.getRowCount() > 0) {
 				// If a table cell is being edited, we must cancel the editing
 				// before deleting the row.
 				if (cookieTable.isEditing()) {
-					TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(), cookieTable
-							.getEditingColumn());
+					TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(),
+							cookieTable.getEditingColumn());
 					cellEditor.cancelCellEditing();
 				}
 
@@ -148,12 +158,12 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 					}
 				}
 			}
-		} else if (action.equals("Add")) {
+		} else if (action.equals(ADD_COMMAND)) {
 			// If a table cell is being edited, we should accept the current
 			// value and stop the editing before adding a new row.
 			if (cookieTable.isEditing()) {
-				TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(), cookieTable
-						.getEditingColumn());
+				TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(),
+						cookieTable.getEditingColumn());
 				cellEditor.stopCellEditing();
 			}
 
@@ -172,14 +182,16 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 			// Highlight (select) the appropriate row.
 			int rowToSelect = tableModel.getRowCount() - 1;
 			cookieTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-		} else if (action.equals("Load")) {
+		} else if (action.equals(LOAD_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
+                final String [] _txt={".txt"}; //$NON-NLS-1$
+				File tmp = FileDialoger.promptToOpenFile(_txt).getSelectedFile();
 				if (tmp != null) {
 					CookieManager manager = new CookieManager();
 					manager.addFile(tmp.getAbsolutePath());
-					Cookie cookie = manager.get(0);
-					addCookieToTable(cookie);
+                    for (int i = 0; i < manager.getCookieCount() ; i++){
+                        addCookieToTable(manager.get(i));
+                    }
 					tableModel.fireTableDataChanged();
 
 					if (tableModel.getRowCount() > 0) {
@@ -191,9 +203,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 				log.error("", ex);
 			} catch (NullPointerException err) {
 			}
-		} else if (action.equals("Save")) {
+		} else if (action.equals(SAVE_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToSaveFile("cookies.txt").getSelectedFile();
+				File tmp = FileDialoger.promptToSaveFile("cookies.txt").getSelectedFile(); //$NON-NLS-1$
 				if (tmp != null) {
 					((CookieManager) createTestElement()).save(tmp.getAbsolutePath());
 				}
@@ -206,7 +218,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
 	private void addCookieToTable(Cookie cookie) {
 		tableModel.addRow(new Object[] { cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-				JOrphanUtils.valueOf(cookie.getSecure()) });
+				Boolean.valueOf(cookie.getSecure()) });
 	}
 
 	/**
@@ -227,12 +239,31 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 				cookieManager.add(cookie);
 			}
 			cookieManager.setClearEachIteration(clearEachIteration.isSelected());
+            cookieManager.setCookiePolicy(policy.getText());
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        tableModel.clearData();
+        clearEachIteration.setSelected(false);
+        policy.setSelectedIndex(policies.length - 1);
+        deleteButton.setEnabled(false);
+        saveButton.setEnabled(false);
+    }    
+    
 	private Cookie createCookie(Object[] rowData) {
-		Cookie cookie = new Cookie((String) rowData[0], (String) rowData[1], (String) rowData[2], (String) rowData[3],
-				((Boolean) rowData[4]).booleanValue(), Long.MAX_VALUE);
+		Cookie cookie = new Cookie(
+                (String) rowData[0],
+                (String) rowData[1], 
+                (String) rowData[2],
+                (String) rowData[3],
+				((Boolean) rowData[4]).booleanValue(),
+                0); // Non-expiring
 		return cookie;
 	}
 
@@ -252,20 +283,30 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
 	public void configure(TestElement el) {
 		super.configure(el);
-		populateTable((CookieManager) el);
-		clearEachIteration.setSelected(((CookieManager) el).getClearEachIteration());
+        
+		CookieManager cookieManager = (CookieManager) el;
+        populateTable(cookieManager);
+		clearEachIteration.setSelected((cookieManager).getClearEachIteration());
+        policy.setText(cookieManager.getPolicy());
 	}
 
 	/**
 	 * Shows the main cookie configuration panel.
 	 */
-	public void init() {
+	private void init() {
+        tableModel = new PowerTableModel(columnNames, columnClasses);
+        clearEachIteration = new JCheckBox(JMeterUtils.getResString(clearEachIterationLabel), false);
+        policy = new JLabeledChoice(
+                JMeterUtils.getResString("cookie_manager_policy"), //$NON-NLS-1$
+                policies);
+        policy.setText(CookieManager.DEFAULT_POLICY);
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());
 		JPanel northPanel = new JPanel();
-		northPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		northPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 		northPanel.add(makeTitlePanel());
 		northPanel.add(clearEachIteration);
+        northPanel.add(policy);
 		add(northPanel, BorderLayout.NORTH);
 		add(createCookieTablePanel(), BorderLayout.CENTER);
 	}
@@ -280,7 +321,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
 		JPanel panel = new JPanel(new BorderLayout(0, 5));
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("cookies_stored")));
+				.getResString("cookies_stored"))); //$NON-NLS-1$
 
 		panel.add(new JScrollPane(cookieTable), BorderLayout.CENTER);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -299,10 +340,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 	private JPanel createButtonPanel() {
 		boolean tableEmpty = (tableModel.getRowCount() == 0);
 
-		addButton = createButton("add", 'A', ADD_COMMAND, true);
-		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
-		loadButton = createButton("load", 'L', LOAD_COMMAND, true);
-		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
+		addButton = createButton("add", 'A', ADD_COMMAND, true); //$NON-NLS-1$
+		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); //$NON-NLS-1$
+		loadButton = createButton("load", 'L', LOAD_COMMAND, true); //$NON-NLS-1$
+		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(addButton);

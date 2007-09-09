@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -53,20 +53,6 @@ public final class ComponentUtil {
 		double percent = percentOfScreen / 100.d;
 		Dimension dimension = component.getToolkit().getScreenSize();
 		component.setSize((int) (dimension.getWidth() * percent), (int) (dimension.getHeight() * percent));
-		centerComponentInWindow(component);
-	}
-	
-	/**
-	 * Use this static method if you want to center and set its size to a fixed Dimension.
-	 * 
-	 * @param component
-	 *            the component you want to center and set size on
-	 * @param percentOfScreen
-	 *            the percent of the current screensize you want the component
-	 *            to be
-	 */
-	public static void centerComponentInWindow(Component component, int width,int height) {
-		component.setSize(width, height);
 		centerComponentInWindow(component);
 	}
 

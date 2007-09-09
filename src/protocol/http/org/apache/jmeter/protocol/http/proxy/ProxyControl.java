@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,20 +18,20 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import junit.framework.TestCase;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
+import org.apache.jmeter.assertions.gui.AssertionGui;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.control.gui.LogicControllerGui;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.functions.InvalidVariableException;
@@ -40,8 +40,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
+import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
@@ -54,54 +54,69 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
-
 import org.apache.jorphan.logging.LoggingManager;
-
 import org.apache.log.Logger;
-
 import org.apache.oro.text.MalformedCachePatternException;
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
+
+//For unit tests, @see TestProxyControl
 
 /**
- * @version $Revision$ updated on $Date$
+ * Class handles storing of generated samples, etc
  */
-public class ProxyControl extends GenericController implements Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+public class ProxyControl extends GenericController {
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String ASSERTION_GUI = AssertionGui.class.getName();
+
+    private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName(); 
+
+    private static final String HEADER_PANEL = HeaderPanel.class.getName(); 
 
 	private transient Daemon server;
 
 	public static final int DEFAULT_PORT = 8080;
 
-	public static final String DEFAULT_PORT_S = Integer.toString(DEFAULT_PORT);// Used
-																				// by
-																				// GUI
+    // and as a string
+	public static final String DEFAULT_PORT_S =
+        Integer.toString(DEFAULT_PORT);// Used by GUI
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+	public static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
 
-	transient Perl5Matcher matcher;
+	public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list"; // $NON-NLS-1$
 
-	public static final String PORT = "ProxyControlGui.port";
+	public static final String INCLUDE_LIST = "ProxyControlGui.include_list"; // $NON-NLS-1$
 
-	public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list";
+	public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers"; // $NON-NLS-1$
 
-	public static final String INCLUDE_LIST = "ProxyControlGui.include_list";
+	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion"; // $NON-NLS-1$
 
-	public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers";
+	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
 
-	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion";
+	public static final String SAMPLER_TYPE_NAME = "ProxyControlGui.sampler_type_name"; // $NON-NLS-1$
 
-	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode";
+	public static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
 
-	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive";
+	public static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
 
-	public static final String REGEX_MATCH = "ProxyControlGui.regex_match";
+	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
 
+	public static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
+
+	public static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
+
+	public static final String HTTPS_SPOOF = "ProxyControlGui.https_spoof";
+
+	public static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
+
+	public static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
+	
 	public static final int GROUPING_NO_GROUPS = 0;
 
 	public static final int GROUPING_ADD_SEPARATORS = 1;
@@ -109,26 +124,32 @@ public class ProxyControl extends GenericController implements Serializable {
 	public static final int GROUPING_IN_CONTROLLERS = 2;
 
 	public static final int GROUPING_STORE_FIRST_ONLY = 3;
+	
+	// Must agree with the order of entries in the drop-down 
+	// created in ProxyControlGui.createHTTPSamplerPanel()
+	public static final int SAMPLER_TYPE_HTTP_SAMPLER = 0;
+	public static final int SAMPLER_TYPE_HTTP_SAMPLER2 = 1;
 
 	private long lastTime = 0;// When was the last sample seen?
 
-	private static final long sampleGap = JMeterUtils.getPropDefault("proxy.pause", 1000);// Detect
-																							// if
-																							// user
-																							// has
-																							// pressed
-																							// a
-																							// new
-																							// link
+	private static final long sampleGap =
+        JMeterUtils.getPropDefault("proxy.pause", 1000); // $NON-NLS-1$
+    // Detect if user has pressed a new link
 
 	private boolean addAssertions;
 
 	private int groupingMode;
+	
+	private boolean samplerRedirectAutomatically;
 
+	private boolean samplerFollowRedirects;
+	
 	private boolean useKeepAlive;
 
-	private boolean regexMatch = false;// Should we match using regexes?
+	private boolean samplerDownloadImages;
 
+	private boolean regexMatch = false;// Should we match using regexes?
+	
 	/**
 	 * Tree node where the samples should be stored.
 	 * <p>
@@ -137,7 +158,6 @@ public class ProxyControl extends GenericController implements Serializable {
 	private JMeterTreeNode target;
 
 	public ProxyControl() {
-		matcher = new Perl5Matcher();
 		setPort(DEFAULT_PORT);
 		setExcludeList(new HashSet());
 		setIncludeList(new HashSet());
@@ -166,12 +186,31 @@ public class ProxyControl extends GenericController implements Serializable {
 		setProperty(new BooleanProperty(ADD_ASSERTIONS, b));
 	}
 
+	public void setSamplerTypeName(int samplerTypeName) {
+		setProperty(new IntegerProperty(SAMPLER_TYPE_NAME, samplerTypeName));
+	}
+
+	public void setSamplerRedirectAutomatically(boolean b) {
+		samplerRedirectAutomatically = b;
+		setProperty(new BooleanProperty(SAMPLER_REDIRECT_AUTOMATICALLY, b));
+	}
+
+	public void setSamplerFollowRedirects(boolean b) {
+		samplerFollowRedirects = b;
+		setProperty(new BooleanProperty(SAMPLER_FOLLOW_REDIRECTS, b));
+	}
+
 	/**
 	 * @param b
 	 */
 	public void setUseKeepAlive(boolean b) {
 		useKeepAlive = b;
 		setProperty(new BooleanProperty(USE_KEEPALIVE, b));
+	}
+
+	public void setSamplerDownloadImages(boolean b) {
+		samplerDownloadImages = b;
+		setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
 	}
 
 	public void setIncludeList(Collection list) {
@@ -189,9 +228,24 @@ public class ProxyControl extends GenericController implements Serializable {
 		regexMatch = b;
 		setProperty(new BooleanProperty(REGEX_MATCH, b));
 	}
+	
+	/**
+	 * @param b
+	 */
+	public void setHttpsSpoof(boolean b) {
+		setProperty(new BooleanProperty(HTTPS_SPOOF, b));
+	}
+	
+	public void setContentTypeExclude(String contentTypeExclude) {
+		setProperty(new StringProperty(CONTENT_TYPE_EXCLUDE, contentTypeExclude));
+	}
+
+	public void setContentTypeInclude(String contentTypeInclude) {
+		setProperty(new StringProperty(CONTENT_TYPE_INCLUDE, contentTypeInclude));
+	}
 
 	public String getClassLabel() {
-		return JMeterUtils.getResString("proxy_title");
+		return JMeterUtils.getResString("proxy_title"); // $NON-NLS-1$
 	}
 
 	public boolean getAssertions() {
@@ -218,13 +272,42 @@ public class ProxyControl extends GenericController implements Serializable {
 		return getPropertyAsBoolean(CAPTURE_HTTP_HEADERS);
 	}
 
+	public int getSamplerTypeName() {
+		return getPropertyAsInt(SAMPLER_TYPE_NAME);
+	}
+	
+	public boolean getSamplerRedirectAutomatically() {
+		return getPropertyAsBoolean(SAMPLER_REDIRECT_AUTOMATICALLY, false);
+	}
+
+	public boolean getSamplerFollowRedirects() {
+		return getPropertyAsBoolean(SAMPLER_FOLLOW_REDIRECTS, true);
+	}
+	
 	public boolean getUseKeepalive() {
 		return getPropertyAsBoolean(USE_KEEPALIVE, true);
+	}
+	
+	public boolean getSamplerDownloadImages() {
+		return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
 	}
 
 	public boolean getRegexMatch() {
 		return getPropertyAsBoolean(REGEX_MATCH, false);
 	}
+	
+	public boolean getHttpsSpoof() {
+		return getPropertyAsBoolean(HTTPS_SPOOF, false);
+	}
+	
+	public String getContentTypeExclude() {
+		return getPropertyAsString(CONTENT_TYPE_EXCLUDE);
+	}
+
+	public String getContentTypeInclude() {
+		return getPropertyAsString(CONTENT_TYPE_INCLUDE);
+	}
+
 
 	public Class getGuiClass() {
 		return org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui.class;
@@ -283,23 +366,27 @@ public class ProxyControl extends GenericController implements Serializable {
 	 * test tree. param serverResponse to be added to allow saving of the
 	 * server's response while recording. A future consideration.
 	 */
-	public void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
-		if (filterUrl(sampler)) {
+	public synchronized void deliverSampler(HTTPSamplerBase sampler, TestElement[] subConfigs, SampleResult result) {
+		if (filterContentType(result) && filterUrl(sampler)) {
 			JMeterTreeNode myTarget = findTargetControllerNode();
 			Collection defaultConfigurations = findApplicableElements(myTarget, ConfigTestElement.class, false);
 			Collection userDefinedVariables = findApplicableElements(myTarget, Arguments.class, true);
 
 			removeValuesFromSampler(sampler, defaultConfigurations);
 			replaceValues(sampler, subConfigs, userDefinedVariables);
+			sampler.setAutoRedirects(samplerRedirectAutomatically);
+			sampler.setFollowRedirects(samplerFollowRedirects);
 			sampler.setUseKeepAlive(useKeepAlive);
-			sampler.setProperty(TestElement.GUI_CLASS, // TODO - allow for
-														// HttpClient sampler
-														// ...
-					"org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui");
+			sampler.setImageParser(samplerDownloadImages);
 
 			placeSampler(sampler, subConfigs, myTarget);
 
 			notifySampleListeners(new SampleEvent(result, sampler.getName()));
+		}
+		else {
+			if(log.isDebugEnabled()) {
+				log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
+			}
 		}
 	}
 
@@ -315,7 +402,8 @@ public class ProxyControl extends GenericController implements Serializable {
 		}
 	}
 
-	private boolean filterUrl(HTTPSamplerBase sampler) {
+    // Package protected to allow test case access
+    boolean filterUrl(HTTPSamplerBase sampler) {
 		String domain = sampler.getDomain();
 		if (domain == null || domain.length() == 0) {
 			return false;
@@ -339,14 +427,82 @@ public class ProxyControl extends GenericController implements Serializable {
 		return true;
 	}
 
+    // Package protected to allow test case access
+    /**
+     * Filter the response based on the content type.
+     * If no include nor exclude filter is specified, the result will be included
+     * 
+     * @param result the sample result to check
+     */
+    boolean filterContentType(SampleResult result) {
+    	String includeExp = getContentTypeInclude(); 
+    	String excludeExp = getContentTypeExclude();
+    	// If no expressions are specified, we let the sample pass
+    	if((includeExp == null || includeExp.length() == 0) &&
+    			(excludeExp == null || excludeExp.length() == 0)
+    			)
+    	{
+    		return true;
+    	}
+    	
+    	// Check that we have a content type
+    	String sampleContentType = result.getContentType();    	
+    	if(sampleContentType == null || sampleContentType.length() == 0) {
+        	if(log.isDebugEnabled()) {
+        		log.debug("No Content-type found for : " + result.getUrlAsString());
+        	}
+    		
+    		return true;
+    	}
+
+    	if(log.isDebugEnabled()) {
+    		log.debug("Content-type to filter : " + sampleContentType);
+    	}
+    	// Check if the include pattern is mathed
+    	if(includeExp != null && includeExp.length() > 0) {
+        	if(log.isDebugEnabled()) {
+        		log.debug("Include expression : " + includeExp);
+        	}    		
+    		
+    		Pattern pattern = null;
+    		try {
+    			pattern = JMeterUtils.getPatternCache().getPattern(includeExp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+    			if(!JMeterUtils.getMatcher().contains(sampleContentType, pattern)) {
+    				return false;
+    			}
+    		} catch (MalformedCachePatternException e) {
+    			log.warn("Skipped invalid content include pattern: " + includeExp, e);
+    		}
+    	}
+
+    	// Check if the exclude pattern is mathed
+    	if(excludeExp != null && excludeExp.length() > 0) {
+        	if(log.isDebugEnabled()) {
+        		log.debug("Exclude expression : " + excludeExp);
+        	}
+
+    		Pattern pattern = null;
+    		try {
+    			pattern = JMeterUtils.getPatternCache().getPattern(excludeExp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+    			if(JMeterUtils.getMatcher().contains(sampleContentType, pattern)) {
+    				return false;
+    			}
+    		} catch (MalformedCachePatternException e) {
+    			log.warn("Skipped invalid content exclude pattern: " + includeExp, e);
+    		}
+    	}
+
+    	return true;
+	}
+
 	/*
 	 * Helper method to add a Response Assertion
 	 */
 	private void addAssertion(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
 		ResponseAssertion ra = new ResponseAssertion();
-		ra.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.assertions.gui.AssertionGui");
+		ra.setProperty(TestElement.GUI_CLASS, ASSERTION_GUI);
 		ra.setName("Check response");
-		ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+		ra.setTestFieldResponseData();
 		model.addComponent(ra, node);
 	}
 
@@ -355,8 +511,8 @@ public class ProxyControl extends GenericController implements Serializable {
 	 */
 	private void addDivider(JMeterTreeModel model, JMeterTreeNode node) throws IllegalUserActionException {
 		GenericController sc = new GenericController();
-		sc.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
-		sc.setName("-------------------");
+		sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
+		sc.setName("-------------------"); // $NON-NLS-1$
 		model.addComponent(sc, node);
 	}
 
@@ -373,7 +529,7 @@ public class ProxyControl extends GenericController implements Serializable {
 	private void addSimpleController(JMeterTreeModel model, JMeterTreeNode node, String name)
 			throws IllegalUserActionException {
 		GenericController sc = new GenericController();
-		sc.setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.control.gui.LogicControllerGui");
+		sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
 		sc.setName(name);
 		model.addComponent(sc, node);
 	}
@@ -392,7 +548,7 @@ public class ProxyControl extends GenericController implements Serializable {
 	 */
 	private void addTimers(JMeterTreeModel model, JMeterTreeNode node, long deltaT) {
 		TestPlan variables = new TestPlan();
-		variables.addParameter("T", Long.toString(deltaT));
+		variables.addParameter("T", Long.toString(deltaT)); // $NON-NLS-1$
 		ValueReplacer replacer = new ValueReplacer(variables);
 		JMeterTreeNode mySelf = model.getNodeOf(this);
 		Enumeration children = mySelf.children();
@@ -409,14 +565,12 @@ public class ProxyControl extends GenericController implements Serializable {
 						// Not 100% sure, but I believe this can't happen, so
 						// I'll log and throw an error:
 						log.error("Program error", e);
-						throw new Error(e.toString());// JDK1.4: remove
-														// .toString()
+						throw new Error(e);
 					} catch (IllegalUserActionException e) {
 						// Not 100% sure, but I believe this can't happen, so
 						// I'll log and throw an error:
 						log.error("Program error", e);
-						throw new Error(e.toString());// JDK1.4: remove
-														// .toString()
+						throw new Error(e);
 					}
 				}
 			}
@@ -602,7 +756,7 @@ public class ProxyControl extends GenericController implements Serializable {
 
 			for (int i = 0; subConfigs != null && i < subConfigs.length; i++) {
 				if (subConfigs[i] instanceof HeaderManager) {
-					subConfigs[i].setProperty(TestElement.GUI_CLASS, "org.apache.jmeter.protocol.http.gui.HeaderPanel");
+					subConfigs[i].setProperty(TestElement.GUI_CLASS, HEADER_PANEL);
 					treeModel.addComponent(subConfigs[i], newNode);
 				}
 			}
@@ -640,7 +794,7 @@ public class ProxyControl extends GenericController implements Serializable {
 
 				if (configValue != null && configValue.length() > 0) {
 					if (configValue.equals(value))
-						sampler.setProperty(name, "");
+						sampler.setProperty(name, ""); // $NON-NLS-1$
 					// Property was found in a config element. Whether or not
 					// it matched the value in the sampler, we're done with
 					// this property -- don't look at lower-priority configs:
@@ -652,11 +806,11 @@ public class ProxyControl extends GenericController implements Serializable {
 
 	private String generateMatchUrl(HTTPSamplerBase sampler) {
 		StringBuffer buf = new StringBuffer(sampler.getDomain());
-		buf.append(':');
+		buf.append(':'); // $NON-NLS-1$
 		buf.append(sampler.getPort());
 		buf.append(sampler.getPath());
 		if (sampler.getQueryString().length() > 0) {
-			buf.append('?');
+			buf.append('?'); // $NON-NLS-1$
 			buf.append(sampler.getQueryString());
 		}
 		return buf.toString();
@@ -668,8 +822,8 @@ public class ProxyControl extends GenericController implements Serializable {
 			String item = iter.next().getStringValue();
 			Pattern pattern = null;
 			try {
-				pattern = patternCache.getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-				if (matcher.matches(url, pattern)) {
+				pattern = JMeterUtils.getPatternCache().getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+				if (JMeterUtils.getMatcher().matches(url, pattern)) {
 					return true;
 				}
 			} catch (MalformedCachePatternException e) {
@@ -774,40 +928,5 @@ public class ProxyControl extends GenericController implements Serializable {
 
 	public boolean canRemove() {
 		return null == server;
-	}
-
-	public static class Test extends TestCase {
-		HTTPSamplerBase sampler;
-
-		ProxyControl control;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			control = new ProxyControl();
-			control.addIncludedPattern(".*\\.jsp");
-			control.addExcludedPattern(".*apache.org.*");
-			sampler = new HTTPNullSampler();
-		}
-
-		public void testFilter1() throws Exception {
-			sampler.setDomain("jakarta.org");
-			sampler.setPath("index.jsp");
-			assertTrue("Should find jakarta.org/index.jsp", control.filterUrl(sampler));
-		}
-
-		public void testFilter2() throws Exception {
-			sampler.setPath("index.jsp");
-			sampler.setDomain("www.apache.org");
-			assertFalse("Should not match www.apache.org", control.filterUrl(sampler));
-		}
-
-		public void testFilter3() throws Exception {
-			sampler.setPath("header.gif");
-			sampler.setDomain("jakarta.org");
-			assertFalse("Should not match header.gif", control.filterUrl(sampler));
-		}
 	}
 }

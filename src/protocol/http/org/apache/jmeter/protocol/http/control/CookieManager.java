@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,6 +16,8 @@
  * 
  */
 
+// For unit tests @see TestCookieManager
+
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;
@@ -26,72 +28,77 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.StringTokenizer;
-import java.util.TimeZone;
-import java.util.Vector;
 
-import junit.framework.TestCase;
-
+import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.cookie.CookieSpec;
+import org.apache.commons.httpclient.cookie.MalformedCookieException;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
  * This class provides an interface to the netscape cookies file to pass cookies
  * along with a request.
  * 
- * @author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
- * @version $Revision$ $Date$
+ * Now uses Commons HttpClient parsing and matching code (since 2.1.2)
+ * 
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String CLEAR = "CookieManager.clearEachIteration";
+	public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
 
-	public static final String COOKIES = "CookieManager.cookies";
+	public static final String COOKIES = "CookieManager.cookies";// $NON-NLS-1$
 
-	// SimpleDateFormat isn't thread-safe
-	// TestElements are cloned for each thread, so
-	// we use an instance variable.
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US);
+    public static final String POLICY = "CookieManager.policy"; //$NON-NLS-1$
+
+	private static final String TAB = "\t"; //$NON-NLS-1$
 
 	// See bug 33796
-	private static final boolean DELETE_NULL_COOKIES = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies",
-			true);// $NON-NLS-1$
+	private static final boolean DELETE_NULL_COOKIES 
+        = JMeterUtils.getPropDefault("CookieManager.delete_null_cookies", true);// $NON-NLS-1$
+
+	// See bug 28715
+	private static final boolean ALLOW_VARIABLE_COOKIES 
+        = JMeterUtils.getPropDefault("CookieManager.allow_variable_cookies", true);// $NON-NLS-1$
+
+    private transient CookieSpec cookieSpec;
+
+    public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
 
 	public CookieManager() {
-		// The cookie specification requires that the timezone be GMT.
-		// See
-		// http://developer.netscape.com/docs/manuals/communicator/jsguide4/cookies.htm
-		// See http://www.cookiecentral.com/faq/
-		// See http://wp.netscape.com/newsref/std/cookie_spec.html
-		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
-		setProperty(new BooleanProperty(CLEAR, false));
+        setProperty(new CollectionProperty(COOKIES, new ArrayList()));
+        setProperty(new BooleanProperty(CLEAR, false));
+        setCookiePolicy(DEFAULT_POLICY);
 	}
 
+    public String getPolicy() {
+        return getPropertyAsString(POLICY,DEFAULT_POLICY);
+    }
+
+    public void setCookiePolicy(String policy){
+        cookieSpec = CookiePolicy.getCookieSpec(policy);
+        if (!DEFAULT_POLICY.equals(policy)){// Don't clutter the JMX file
+            setProperty(POLICY,policy);
+        }
+    }
+    
 	public CollectionProperty getCookies() {
 		return (CollectionProperty) getProperty(COOKIES);
 	}
 
-	public int getCookieCount() {
+	public int getCookieCount() {// Used by GUI
 		return getCookies().size();
 	}
 
@@ -103,33 +110,24 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		setProperty(new BooleanProperty(CLEAR, clear));
 	}
 
-	// Incorrect method. Always returns String. I changed CookiePanel code to
-	// perform this lookup.
-	// public Class getColumnClass(int column)
-	// {
-	// return columnNames[column].getClass();
-	// }
-
-	public Cookie getCookie(int row) {
-		return (Cookie) getCookies().get(row);
-	}
-
 	/**
-	 * Save the cookie data to a file.
+	 * Save the static cookie data to a file.
+     * Cookies are only taken from the GUI - runtime cookies are not included. 
 	 */
 	public void save(String authFile) throws IOException {
 		File file = new File(authFile);
 		if (!file.isAbsolute())
-			file = new File(System.getProperty("user.dir") + File.separator + authFile);
+			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
+                    + File.separator + authFile);
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
-		writer.println("# JMeter generated Cookie file");
+		writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
 		PropertyIterator cookies = getCookies().iterator();
-		long now = System.currentTimeMillis() / 1000;
+		long now = System.currentTimeMillis();
 		while (cookies.hasNext()) {
 			Cookie cook = (Cookie) cookies.next().getObjectValue();
-			// Note: now is always > 0, so no need to check for that separately
-			if (cook.getExpires() > now) { // only save unexpired cookies
-				writer.println(cook.toString());
+			final long expiresMillis = cook.getExpiresMillis();
+			if (expiresMillis == 0 || expiresMillis > now) { // only save unexpired cookies
+				writer.println(cookieToString(cook));
 			}
 		}
 		writer.flush();
@@ -142,7 +140,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void addFile(String cookieFile) throws IOException {
 		File file = new File(cookieFile);
 		if (!file.isAbsolute())
-			file = new File(System.getProperty("user.dir") + File.separator + cookieFile);
+			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
+                    + File.separator + cookieFile);
 		BufferedReader reader = null;
 		if (file.canRead()) {
 			reader = new BufferedReader(new FileReader(file));
@@ -150,30 +149,59 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 			throw new IOException("The file you specified cannot be read.");
 		}
 
+        // N.B. this must agree with the save() and cookieToString() methods
 		String line;
-		while ((line = reader.readLine()) != null) {
-			try {
-				if (line.startsWith("#") || line.trim().length() == 0)
-					continue;
-				String[] st = split(line, "\t", " ");
-				int domain = 0;
-				int path = 2;
-				if (st[path].equals(" "))
-					st[path] = "/";
-				boolean secure = Boolean.valueOf(st[3]).booleanValue();
-				long expires = new Long(st[4]).longValue();
-				int name = 5;
-				int value = 6;
-				Cookie cookie = new Cookie(st[name], st[value], st[domain], st[path], secure, expires);
-				getCookies().addItem(cookie);
-			} catch (Exception e) {
-				reader.close();
-				throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
-			}
-		}
-		reader.close();
+        try {
+            final CollectionProperty cookies = getCookies();
+    		while ((line = reader.readLine()) != null) {
+    			try {
+    				if (line.startsWith("#") || line.trim().length() == 0)//$NON-NLS-1$
+    					continue;
+                    String[] st = JOrphanUtils.split(line, TAB, false);
+    				
+                    final int _domain = 0;
+                    //final int _ignored = 1;
+                    final int _path = 2;
+                    final int _secure = 3;
+                    final int _expires = 4;
+                    final int _name = 5;
+                    final int _value = 6;
+                    final int _fields = 7;
+                    if (st.length!=_fields) {
+                        throw new IOException("Expected "+_fields+" fields, found "+st.length+" in "+line);
+                    }
+    
+                    if (st[_path].length()==0)
+    					st[_path] = "/"; //$NON-NLS-1$
+                    boolean secure = Boolean.valueOf(st[_secure]).booleanValue();
+                    long expires = new Long(st[_expires]).longValue();
+                    if (expires==Long.MAX_VALUE) expires=0;
+                    //long max was used to represent a non-expiring cookie, but that caused problems
+    				Cookie cookie = new Cookie(st[_name], st[_value], st[_domain], st[_path], secure, expires);
+                    cookies.addItem(cookie);
+    			} catch (NumberFormatException e) {
+    				throw new IOException("Error parsing cookie line\n\t'" + line + "'\n\t" + e);
+                }
+            }
+        } finally { 
+            reader.close();
+         }
 	}
 
+    private String cookieToString(Cookie c){
+        StringBuffer sb=new StringBuffer(80);
+        sb.append(c.getDomain());
+        //flag - if all machines within a given domain can access the variable.
+        //(from http://www.cookiecentral.com/faq/ 3.5)
+        sb.append(TAB).append("TRUE");  
+        sb.append(TAB).append(c.getPath());
+        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(c.getSecure())); 
+        sb.append(TAB).append(c.getExpires());
+        sb.append(TAB).append(c.getName());
+        sb.append(TAB).append(c.getValue());
+        return sb.toString();
+    }
+    
 	public void recoverRunningVersion() {
 		// do nothing, the cookie manager has to accept changes.
 	}
@@ -186,283 +214,199 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 * Add a cookie.
 	 */
 	public void add(Cookie c) {
-		if (log.isDebugEnabled())
-			log.debug("Add cookie " + c.toString());
 		String cv = c.getValue();
-		if (DELETE_NULL_COOKIES && (null == cv || "".equals(cv))) {
-			removeCookieNamed(c.getName());
+        String cn = c.getName();
+        removeMatchingCookies(c); // Can't have two matching cookies
+        
+		if (DELETE_NULL_COOKIES && (null == cv || cv.length()==0)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Dropping cookie with null value " + c.toString());
+            }
 		} else {
-			JMeterContext context = getThreadContext();
+            if (log.isDebugEnabled()) {
+                log.debug("Add cookie to store " + c.toString());
+            }
 			getCookies().addItem(c);
+            // Store cookie as a thread variable. 
+            // TODO - should we add a prefix to these variables?
+            // TODO - should storing cookie values be optional?
+            JMeterContext context = getThreadContext();
 			if (context.isSamplingStarted()) {
-				context.getVariables().put(c.getName(), c.getValue());
+				context.getVariables().put(cn, cv);
 			}
 		}
 	}
 
-	// NOT USED - did it make sense to create an empty cookie, anyway?
-	// /**
-	// * Add an empty cookie.
-	// */
-	// public void add()
-	// {
-	// getCookies().addItem(new Cookie());
-	// }
-
 	/**
 	 * Remove all the cookies.
 	 */
-	public void clear() {
-		/*
-		 * boolean clear = getClearEachIteration(); super.clear();
-		 * setClearEachIteration(clear);
-		 */
-		log.debug("Clear all cookies");
+	public void clear() {// TODO: should this call super.clear()?
+		log.debug("Clear all cookies from store");
 		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
 	}
 
 	/**
 	 * Remove a cookie.
 	 */
-	public void remove(int index) {
+	public void remove(int index) {// TODO not used by GUI
 		getCookies().remove(index);
-	}
-
-	/**
-	 * Return the number of cookies.
-	 */
-	public int size() {
-		return getCookies().size();
 	}
 
 	/**
 	 * Return the cookie at index i.
 	 */
-	public Cookie get(int i) {
-		return (Cookie) getCookies().get(i);
+	public Cookie get(int i) {// Only used by GUI
+		return (Cookie) getCookies().get(i).getObjectValue();
 	}
 
-	public String convertLongToDateFormatStr(long dateLong) {
-		return dateFormat.format(new Date(dateLong));
-	}
+    /*
+     * Create an HttpClient cookie from a JMeter cookie
+     */
+    private org.apache.commons.httpclient.Cookie makeCookie(Cookie jmc){
+        long exp = jmc.getExpiresMillis();
+        org.apache.commons.httpclient.Cookie ret=
+            new org.apache.commons.httpclient.Cookie(
+                jmc.getDomain(),
+                jmc.getName(),
+                jmc.getValue(),
+                jmc.getPath(),
+                exp > 0 ? new Date(exp) : null, // use null for no expiry
+                jmc.getSecure()
+               );
+        ret.setPathAttributeSpecified(jmc.isPathSpecified());
+        ret.setDomainAttributeSpecified(jmc.isDomainSpecified());
+        return ret;
+    }
+    
+    /**
+     * Get array of valid HttpClient cookies for the URL
+     * 
+     * @param url the target URL
+     * @return array of HttpClient cookies
+     * 
+     */
+    public org.apache.commons.httpclient.Cookie[] getCookiesForUrl(URL url){
+        CollectionProperty jar=getCookies();
+        org.apache.commons.httpclient.Cookie cookies[]=
+            new org.apache.commons.httpclient.Cookie[jar.size()];
+        int i=0;
+        for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();) {
+            Cookie jmcookie = (Cookie) iter.next().getObjectValue();
+            // Set to running version, to allow function evaluation for the cookie values (bug 28715)
+            if (ALLOW_VARIABLE_COOKIES) jmcookie.setRunningVersion(true);
+            cookies[i++] = makeCookie(jmcookie);
+            if (ALLOW_VARIABLE_COOKIES) jmcookie.setRunningVersion(false);
+        }
+        String host = url.getHost();
+        String protocol = url.getProtocol();
+        int port= HTTPSamplerBase.getDefaultPort(protocol,url.getPort());
+        String path = url.getPath();
+        boolean secure = HTTPSamplerBase.isSecure(protocol);
+        return cookieSpec.match(host, port, path, secure, cookies);
+    }
+    
+    /**
+     * Find cookies applicable to the given URL and build the Cookie header from
+     * them.
+     * 
+     * @param url
+     *            URL of the request to which the returned header will be added.
+     * @return the value string for the cookie header (goes after "Cookie: ").
+     */
+    public String getCookieHeaderForURL(URL url) {
+        org.apache.commons.httpclient.Cookie[] c = getCookiesForUrl(url);
+        int count = c.length;
+        boolean debugEnabled = log.isDebugEnabled();
+        if (debugEnabled){
+            log.debug("Found "+count+" cookies for "+url.toExternalForm());
+        }
+        if (count <=0){
+            return null;
+        }
+        String hdr=cookieSpec.formatCookieHeader(c).getValue();
+        if (debugEnabled){
+            log.debug("Cookie: "+hdr);
+        }
+        return hdr;
+    }
+    
 
-	/**
-	 * Find cookies applicable to the given URL and build the Cookie header from
-	 * them.
-	 * 
-	 * @param url
-	 *            URL of the request to which the returned header will be added.
-	 * @return the value string for the cookie header (goes after "Cookie: ").
-	 */
-	public String getCookieHeaderForURL(URL url) {
-		boolean debugEnabled = log.isDebugEnabled();
-		if (debugEnabled)
-			log.debug("Get cookie for URL= " + url);
-		if (!url.getProtocol().toUpperCase().trim().equals("HTTP")
-				&& !url.getProtocol().toUpperCase().trim().equals("HTTPS"))
-			return null;
+    public void addCookieFromHeader(String cookieHeader, URL url){
+        boolean debugEnabled = log.isDebugEnabled(); 
+        if (debugEnabled) {
+            log.debug("Received Cookie: " + cookieHeader + " From: " + url.toExternalForm());
+        }
+        String protocol = url.getProtocol();
+        String host = url.getHost();
+        int port= HTTPSamplerBase.getDefaultPort(protocol,url.getPort());
+        String path = url.getPath();
+        boolean isSecure=HTTPSamplerBase.isSecure(protocol);
+        org.apache.commons.httpclient.Cookie[] cookies= null;
+        try {
+            cookies = cookieSpec.parse(host, port, path, isSecure, cookieHeader);
+        } catch (MalformedCookieException e) {
+            log.warn(cookieHeader+e.getLocalizedMessage());
+        } catch (IllegalArgumentException e) {
+            log.warn(cookieHeader+e.getLocalizedMessage());
+        }
+        if (cookies == null) return;
+        for(int i=0;i<cookies.length;i++){
+            Date expiryDate = cookies[i].getExpiryDate();
+            long exp = 0;
+            if (expiryDate!= null) {
+                exp=expiryDate.getTime();
+            }
+            Cookie newCookie = new Cookie(
+                    cookies[i].getName(),
+                    cookies[i].getValue(),
+                    cookies[i].getDomain(),
+                    cookies[i].getPath(),
+                    cookies[i].getSecure(), 
+                    exp / 1000,
+                    cookies[i].isPathAttributeSpecified(),
+                    cookies[i].isDomainAttributeSpecified()
+                    );
 
-		StringBuffer header = new StringBuffer();
-		String host = "." + url.getHost();
-		if (debugEnabled)
-			log.debug("URL Host=" + host);
-		if (debugEnabled)
-			log.debug("Time now (secs)" + (System.currentTimeMillis() / 1000));
-		for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();) {
-			Cookie cookie = (Cookie) iter.next().getObjectValue();
-			// Add a leading dot to the host name so that host X matches
-			// domain .X. This is a breach of the standard, but it's how
-			// browsers behave:
-			if (debugEnabled) {
-				log.debug("Cookie name=" + cookie.getName() + " domain=" + cookie.getDomain() + " path="
-						+ cookie.getPath() + " expires=" + cookie.getExpires());
-			}
-			if (host.endsWith(cookie.getDomain()) && url.getFile().startsWith(cookie.getPath())
-					&& ((cookie.getExpires() == 0 && // treat as never expiring
-					(cookie.getPort() == 0 || cookie.getPort() == url.getPort())) 
-													// (bug 27713)
-					|| (System.currentTimeMillis() / 1000) <= cookie.getExpires())) {
-				if (header.length() > 0) {
-					header.append("; ");
-				}
-				if (debugEnabled)
-					log.debug("matched cookie, value = " + cookie.getValue());
-				header.append(cookie.getName()).append("=").append(cookie.getValue());
-			}
-		}
+            // Store session cookies as well as unexpired ones
+            if (exp == 0 || exp >= System.currentTimeMillis()) {
+                add(newCookie); // Has its own debug log; removes matching cookies
+            } else {
+                removeMatchingCookies(newCookie);
+                if (debugEnabled){
+                    log.debug("Dropping expired Cookie: "+newCookie.toString());
+                }      
+            }
+        }
 
-		if (header.length() != 0) {
-			if (debugEnabled)
-				log.debug(header.toString());
-			return header.toString();
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Parse the set-cookie header value and store the cookies for later
-	 * retrieval.
-	 * 
-	 * @param cookieHeader
-	 *            found after the "Set-Cookie: " in the response header
-	 * @param url
-	 *            URL used in the request for the above-mentioned response.
-	 */
-	public void addCookieFromHeader(String cookieHeader, URL url) {
-		if (log.isDebugEnabled()) {
-			log.debug("addCookieFromHeader(" + cookieHeader + "," + url.toExternalForm() + ")");
-		}
-		StringTokenizer st = new StringTokenizer(cookieHeader, ";");
-		String nvp;
-
-		// first n=v is name=value
-		nvp = st.nextToken();
-		int index = nvp.indexOf("=");
-		String name = nvp.substring(0, index);
-		String value = nvp.substring(index + 1);
-		String domain = "." + url.getHost(); // this is the default
-		// the leading dot breaks the standard, but helps in
-		// reproducing actual browser behaviour.
-		// The default is the path of the reques URL
-		String path = url.getPath();
-		if (path.length() == 0)
-			path = "/"; // default if no path specified
-
-		Cookie newCookie = new Cookie(name, value, domain, path, false, 0); // No
-																			// expiry
-																			// means
-																			// session
-																			// cookie
-		newCookie.setPort(url.getPort());
-		// check the rest of the headers
-		while (st.hasMoreTokens()) {
-			nvp = st.nextToken();
-			nvp = nvp.trim();
-			index = nvp.indexOf("=");
-			if (index == -1) {
-				index = nvp.length();
-			}
-			String key = nvp.substring(0, index);
-			if (key.equalsIgnoreCase("expires")) {
-				try {
-					String expires = nvp.substring(index + 1);
-					Date date = dateFormat.parse(expires);
-					// Always set expiry date - see Bugzilla id 29493
-					newCookie.setExpires(date.getTime() / 1000); // Set time
-																	// in
-																	// seconds
-				} catch (ParseException pe) {
-					// This means the cookie did not come in the proper format.
-					// Log an error and don't set an expiration time:
-					log.error("Couldn't parse Cookie expiration time.", pe);
-				} catch (Exception e) {
-					// DateFormat.parse() has been known to throw various
-					// unchecked exceptions in the past, and does still do that
-					// occasionally at the time of this writing (1.4.2 JDKs).
-					// E.g. see
-					// http://developer.java.sun.com/developer/bugParade/bugs/4699765.html
-					//
-					// As a workaround for such issues we will catch all
-					// exceptions and react just as we did for ParseException
-					// above:
-					log.error("Couln't parse Cookie expiration time: likely JDK bug.", e);
-				}
-			} else if (key.equalsIgnoreCase("domain")) {
-				// trim() is a workaround for bug in Oracle8iAS wherere
-				// cookies would have leading spaces in the domain portion
-				domain = nvp.substring(index + 1).trim();
-
-				// The standard dictates domains must have a leading dot,
-				// but the new standard (Cookie2) tells us to add it if it's not
-				// there:
-				if (!domain.startsWith(".")) {
-					domain = "." + domain;
-				}
-
-				newCookie.setDomain(domain);
-			} else if (key.equalsIgnoreCase("path")) {
-				newCookie.setPath(nvp.substring(index + 1).trim());
-			} else if (key.equalsIgnoreCase("secure")) {
-				newCookie.setSecure(true);
-			}
-		}
-
-		Vector removeIndices = new Vector();
-		for (int i = getCookies().size() - 1; i >= 0; i--) {
-			Cookie cookie = (Cookie) getCookies().get(i).getObjectValue();
-			if (cookie == null)
-				continue;
-			if (cookie.getPath().equals(newCookie.getPath()) && cookie.getDomain().equals(newCookie.getDomain())
-					&& cookie.getName().equals(newCookie.getName())) {
-				if (log.isDebugEnabled()) {
-					log
-							.debug("New Cookie = " + newCookie.toString() + " removing matching Cookie "
-									+ cookie.toString());
-				}
-				removeIndices.addElement(new Integer(i));
-			}
-		}
-
-		for (Enumeration e = removeIndices.elements(); e.hasMoreElements();) {
-			index = ((Integer) e.nextElement()).intValue();
-			remove(index);
-		}
-
-		long exp = newCookie.getExpires();
-		// Store session cookies as well as unexpired ones
-		if (exp == 0 || exp >= System.currentTimeMillis() / 1000) {
-			add(newCookie);
-		}
-	}
-
-	public void removeCookieNamed(String name) {
-		if (log.isDebugEnabled())
-			log.debug("Remove cookie named " + name);
-		PropertyIterator iter = getCookies().iterator();
-		while (iter.hasNext()) {
-			Cookie cookie = (Cookie) iter.next().getObjectValue();
-			if (cookie.getName().equals(name)) {
-				iter.remove();
-			}
-		}
-	}
-
-	/**
-	 * Takes a String and a tokenizer character, and returns a new array of
-	 * strings of the string split by the tokenizer character.
-	 * 
-	 * @param splittee
-	 *            string to be split
-	 * @param splitChar
-	 *            character to split the string on
-	 * @param def
-	 *            default value to place between two split chars that have
-	 *            nothing between them
-	 * @return array of all the tokens.
-	 */
-	public String[] split(String splittee, String splitChar, String def) {
-		if (splittee == null || splitChar == null)
-			return new String[0];
-		StringTokenizer tokens;
-		String temp;
-		int spot;
-		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1)
-			splittee = splittee.substring(0, spot + splitChar.length()) + def
-					+ splittee.substring(spot + 1 * splitChar.length(), splittee.length());
-		Vector returns = new Vector();
-		tokens = new StringTokenizer(splittee, splitChar);
-		while (tokens.hasMoreTokens()) {
-			temp = tokens.nextToken();
-			returns.addElement(temp);
-		}
-		String[] values = new String[returns.size()];
-		returns.copyInto(values);
-		return values;
-	}
-
+    }
+    private boolean match(Cookie a, Cookie b){
+        return 
+        a.getName().equals(b.getName())
+        &&
+        a.getPath().equals(b.getPath())
+        &&
+        a.getDomain().equals(b.getDomain());
+    }
+    
+    private void removeMatchingCookies(Cookie newCookie){
+        // Scan for any matching cookies
+        PropertyIterator iter = getCookies().iterator();
+        while (iter.hasNext()) {
+            Cookie cookie = (Cookie) iter.next().getObjectValue();
+            if (cookie == null)
+                continue;
+            if (match(cookie,newCookie)) { 
+                if (log.isDebugEnabled()) {
+                    log.debug("New Cookie = " + newCookie.toString()
+                              + " removing matching Cookie " + cookie.toString());
+                }
+                iter.remove();
+            }
+        }       
+    }
+    
 	public String getClassLabel() {
-		return JMeterUtils.getResString("cookie_manager_title");
+		return JMeterUtils.getResString("cookie_manager_title");// $NON-NLS-1$
 	}
 
 	public void testStarted() {
@@ -480,93 +424,5 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void testIterationStart(LoopIterationEvent event) {
 		if (getClearEachIteration())
 			clear();
-	}
-
-	public static class Test extends TestCase {
-		CookieManager man = null;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private JMeterContext jmctx = null;
-
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			man = new CookieManager();
-			man.setThreadContext(jmctx);
-		}
-
-		public void testRemoveCookie() throws Exception {
-			man.setThreadContext(jmctx);
-			man.add(new Cookie("id", "me", "127.0.0.1", "/", false, 0));
-			man.removeCookieNamed("id");
-			assertEquals(0, man.getCookieCount());
-		}
-
-		public void testSendCookie() throws Exception {
-			man.add(new Cookie("id", "value", "jakarta.apache.org", "/", false, 9999999999L));
-			HTTPSamplerBase sampler = new HTTPNullSampler();
-			sampler.setDomain("jakarta.apache.org");
-			sampler.setPath("/index.html");
-			sampler.setMethod(HTTPSamplerBase.GET);
-			assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
-		}
-
-		public void testSendCookie2() throws Exception {
-			man.add(new Cookie("id", "value", ".apache.org", "/", false, 9999999999L));
-			HTTPSamplerBase sampler = new HTTPNullSampler();
-			sampler.setDomain("jakarta.apache.org");
-			sampler.setPath("/index.html");
-			sampler.setMethod(HTTPSamplerBase.GET);
-			assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
-		}
-
-		/**
-		 * Test that the cookie domain field is actually handled as browsers do
-		 * (i.e.: host X matches domain .X):
-		 */
-		public void testDomainHandling() throws Exception {
-			URL url = new URL("http://jakarta.apache.org/");
-			man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
-			assertNotNull(man.getCookieHeaderForURL(url));
-		}
-
-		/**
-		 * Test that we won't be tricked by similar host names (this was a past
-		 * bug, although it never got reported in the bug database):
-		 */
-		public void testSimilarHostNames() throws Exception {
-			URL url = new URL("http://ache.org/");
-			man.addCookieFromHeader("test=1", url);
-			url = new URL("http://jakarta.apache.org/");
-			assertNull(man.getCookieHeaderForURL(url));
-		}
-
-		// Test session cookie is returned
-		public void testSessionCookie() throws Exception {
-			URL url = new URL("http://a.b.c/");
-			man.addCookieFromHeader("test=1", url);
-			String s = man.getCookieHeaderForURL(url);
-			assertNotNull(s);
-			assertEquals("test=1", s);
-		}
-
-		// Test Old cookie is not returned
-		public void testOldCookie() throws Exception {
-			URL url = new URL("http://a.b.c/");
-			man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-1990 00:00:00 GMT", url);
-			String s = man.getCookieHeaderForURL(url);
-			assertNull(s);
-		}
-
-		// Test New cookie is returned
-		public void testNewCookie() throws Exception {
-			URL url = new URL("http://a.b.c/");
-			man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-2990 00:00:00 GMT", url);
-			String s = man.getCookieHeaderForURL(url);
-			assertNotNull(s);
-			assertEquals("test=1", s);
-		}
 	}
 }

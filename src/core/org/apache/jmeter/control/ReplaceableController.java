@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,17 +18,12 @@
 
 package org.apache.jmeter.control;
 
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 
 /**
  * This interface represents a controller that gets replaced during the
  * compilation phase of test execution in an arbitrary way.
  * 
- * @see org.apache.jmeter.gui.action.AbstractAction
- * 
- * @author Thad Smith
- * @version $Revision$
  */
 public interface ReplaceableController {
 
@@ -37,10 +32,14 @@ public interface ReplaceableController {
 	 * subelements of the TestElement that is replacing the
 	 * ReplaceableController.
 	 * 
-	 * @param tree -
-	 *            The current HashTree to be executed.
 	 * @see org.apache.jorphan.collections.HashTree
-	 * @see org.apache.jmeter.gui.action.AbstractAction#convertSubTree
 	 */
 	public HashTree getReplacementSubTree();
+
+	/**
+     * Compute the replacement tree.
+     * 
+     * @param context
+     */
+    public void resolveReplacementSubTree(Object context);
 }

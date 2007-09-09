@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,29 +32,31 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public abstract class BaseJMSSampler extends AbstractSampler implements TestListener {
 
-	public static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory";
+	//++ These are JMX file names and must not be changed
+	private static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory"; // $NON-NLS-1$
 
-	public static final String PROVIDER_URL = "jms.provider_url";
+	private static final String PROVIDER_URL = "jms.provider_url"; // $NON-NLS-1$
 
-	public static final String CONN_FACTORY = "jms.connection_factory";
+	private static final String CONN_FACTORY = "jms.connection_factory"; // $NON-NLS-1$
 
-	public static final String TOPIC = "jms.topic";
+	private static final String TOPIC = "jms.topic"; // $NON-NLS-1$
 
-	public static final String PRINCIPAL = "jms.security_principle";
+	private static final String PRINCIPAL = "jms.security_principle"; // $NON-NLS-1$
 
-	public static final String CREDENTIALS = "jms.security_credentials";
+	private static final String CREDENTIALS = "jms.security_credentials"; // $NON-NLS-1$
 
-	public static final String ITERATIONS = "jms.iterations";
+	private static final String ITERATIONS = "jms.iterations"; // $NON-NLS-1$
 
-	public static final String USE_AUTH = "jms.authenticate";
+	private static final String USE_AUTH = "jms.authenticate"; // $NON-NLS-1$
 
-	public static final String USE_PROPERTIES_FILE = "jms.jndi_properties";
+	private static final String USE_PROPERTIES_FILE = "jms.jndi_properties"; // $NON-NLS-1$
 
-	public static String READ_RESPONSE = "jms.read_response";
+	private static final String READ_RESPONSE = "jms.read_response"; // $NON-NLS-1$
+	//--
 
-	public static String required = JMeterUtils.getResString("jms_auth_required");
+	public static final String required = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
-	public static String not_req = JMeterUtils.getResString("jms_auth_not_required");
+	public static final String not_req = JMeterUtils.getResString("jms_auth_not_required"); // $NON-NLS-1$
 
 	public BaseJMSSampler() {
 	}
@@ -91,7 +94,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	 * method returns the initial context factory for jndi initial context
 	 * lookup.
 	 * 
-	 * @return
+	 * @return the initial context factory 
 	 */
 	public String getJNDIInitialContextFactory() {
 		return getPropertyAsString(JNDI_INITIAL_CONTEXT_FAC);
@@ -100,7 +103,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * set the provider user for jndi
 	 * 
-	 * @param factory
+	 * @param url the provider URL
 	 */
 	public void setProviderUrl(String url) {
 		setProperty(PROVIDER_URL, url);
@@ -109,7 +112,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * method returns the provider url for jndi to connect to
 	 * 
-	 * @return
+	 * @return the provider URL
 	 */
 	public String getProviderUrl() {
 		return getPropertyAsString(PROVIDER_URL);
@@ -128,7 +131,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	 * return the connection factory parameter used to lookup the connection
 	 * factory from the JMS server
 	 * 
-	 * @return
+	 * @return the connection factory
 	 */
 	public String getConnectionFactory() {
 		return getPropertyAsString(CONN_FACTORY);
@@ -146,7 +149,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the topic used for the benchmark
 	 * 
-	 * @return
+	 * @return the topic
 	 */
 	public String getTopic() {
 		return getPropertyAsString(TOPIC);
@@ -164,7 +167,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the username used to login to the jms server
 	 * 
-	 * @return
+	 * @return the username used to login to the jms server
 	 */
 	public String getUsername() {
 		return getPropertyAsString(PRINCIPAL);
@@ -182,7 +185,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the password used to login to the jms server
 	 * 
-	 * @return
+	 * @return the password used to login to the jms server
 	 */
 	public String getPassword() {
 		return getPropertyAsString(CREDENTIALS);
@@ -200,7 +203,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * get the iterations as string
 	 * 
-	 * @return
+	 * @return the number of iterations
 	 */
 	public String getIterations() {
 		return getPropertyAsString(ITERATIONS);
@@ -209,7 +212,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the number of iterations as int instead of string
 	 * 
-	 * @return
+	 * @return the number of iterations as int instead of string
 	 */
 	public int getIterationCount() {
 		return getPropertyAsInt(ITERATIONS);
@@ -227,7 +230,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return whether jndi requires authentication
 	 * 
-	 * @return
+	 * @return whether jndi requires authentication
 	 */
 	public String getUseAuth() {
 		return getPropertyAsString(USE_AUTH);
@@ -236,7 +239,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * set whether the sampler should read the response or not
 	 * 
-	 * @param read
+	 * @param read whether the sampler should read the response or not
 	 */
 	public void setReadResponse(String read) {
 		setProperty(READ_RESPONSE, read);
@@ -245,7 +248,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return whether the sampler should read the response
 	 * 
-	 * @return
+	 * @return whether the sampler should read the response
 	 */
 	public String getReadResponse() {
 		return getPropertyAsString(READ_RESPONSE);
@@ -254,7 +257,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return whether the sampler should read the response as a boolean value
 	 * 
-	 * @return
+	 * @return whether the sampler should read the response as a boolean value
 	 */
 	public boolean getReadResponseAsBoolean() {
 		return getPropertyAsBoolean(READ_RESPONSE);
@@ -273,7 +276,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	 * return whether the sampler should use properties file instead of UI
 	 * parameters.
 	 * 
-	 * @return
+	 * @return  whether the sampler should use properties file instead of UI parameters.
 	 */
 	public String getUseJNDIProperties() {
 		return getPropertyAsString(USE_PROPERTIES_FILE);
@@ -282,7 +285,7 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	/**
 	 * return the properties as boolean true/false.
 	 * 
-	 * @return
+	 * @return whether the sampler should use properties file instead of UI parameters.
 	 */
 	public boolean getUseJNDIPropertiesAsBoolean() {
 		return getPropertyAsBoolean(USE_PROPERTIES_FILE);

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,20 +31,19 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Handles the following actions:
+ * - Clear (Data)
+ * - Clear All (Data)
+ * - Reset (Clear GUI)
  */
 public class Clear implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	public final static String CLEAR = "action.clear";
-
-	public final static String CLEAR_ALL = "action.clear_all";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(CLEAR);
-		commands.add(CLEAR_ALL);
+		commands.add(ActionNames.CLEAR);
+		commands.add(ActionNames.CLEAR_ALL);
+		commands.add(ActionNames.RESET_GUI);
 	}
 
 	public Clear() {
@@ -56,21 +55,28 @@ public class Clear implements Command {
 
 	public void doAction(ActionEvent e) {
 		GuiPackage guiPackage = GuiPackage.getInstance();
-		if (e.getActionCommand().equals(CLEAR)) {
-			JMeterGUIComponent model = guiPackage.getCurrentGui();
-			try {
-				((Clearable) model).clear();
-			} catch (Throwable ex) {
-				log.error("", ex);
+		final String actionCommand = e.getActionCommand();
+		if (actionCommand.equals(ActionNames.CLEAR)) {
+			JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
+			if (guiComp instanceof Clearable){
+				((Clearable) guiComp).clearData();				
 			}
+		} else if (actionCommand.equals(ActionNames.RESET_GUI)) {
+			JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
+			guiComp.clearGui();
 		} else {
 			Iterator iter = guiPackage.getTreeModel().getNodesOfType(Clearable.class).iterator();
 			while (iter.hasNext()) {
+                JMeterTreeNode node = null;
+                JMeterGUIComponent guiComp = null;
 				try {
-					Clearable item = (Clearable) guiPackage.getGui(((JMeterTreeNode) iter.next()).getTestElement());
-					item.clear();
+					Object next = iter.next();
+                    node = (JMeterTreeNode) next;
+                    guiComp = guiPackage.getGui(node.getTestElement());
+                    Clearable item = (Clearable) guiComp;
+					item.clearData();
 				} catch (Exception ex) {
-					log.error("", ex);
+					log.error("Can't clear: "+node+" "+guiComp, ex);
 				}
 			}
 		}

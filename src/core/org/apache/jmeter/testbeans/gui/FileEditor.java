@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,8 +32,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * A property editor for File properties.
@@ -45,7 +43,6 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class FileEditor implements PropertyEditor, ActionListener {
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The editor's panel.
@@ -69,7 +66,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
 		// Create a panel containing the combo and the button:
 		panel = new JPanel(new BorderLayout(5, 0));
 		panel.add(editor.getCustomEditor(), BorderLayout.CENTER);
-		panel.add(button, BorderLayout.EAST);// JDK1.4: was LINE_END
+		panel.add(button, BorderLayout.EAST);
 	}
 
 	/*

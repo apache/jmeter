@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,6 +19,7 @@
 package org.apache.jorphan.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
@@ -76,6 +77,16 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
 		init();
 	}
 
+    public JLabeledTextField(String pLabel, Color bk) {
+        super();
+        mTextField = createTextField(20);
+        mLabel = new JLabel(pLabel);
+        mLabel.setBackground(bk);
+        mLabel.setLabelFor(mTextField);
+        this.setBackground(bk);
+        init();
+    }
+    
 	public List getComponentList() {
 		List comps = new LinkedList();
 		comps.add(mLabel);

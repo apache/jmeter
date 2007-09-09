@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
-   $Header$
-   Copyright 2001-2004 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -15,6 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '17'>
+]>
 	
 <document prev="best-practices.html" next="component_reference.html" date="$Date$">
 
@@ -25,14 +29,14 @@
 
 <body>
 
-<section name="17. Help! My boss wants me to load test our web app!" anchor="boss">
+<section name="&sect-num;. Help! My boss wants me to load test our web app!" anchor="boss">
 <p>This is a fairly open-ended proposition. There are a number of questions to
 be asked first, and additionally a number of resources that will be needed. You
 will need some hardware to run the benchmarks/load-tests from. A number of
 tools will prove useful. There are a number of products to consider.  And finally,
 why is Java a good choice to implement a load-testing/Benchmarking product.
 </p>
-<subsection name="17.1 Questions to ask">
+<subsection name="&sect-num;.1 Questions to ask">
 <p>What is our anticipated average number of users (normal load) ?
 </p>
 <p>What is our anticipated peak number of users ?
@@ -43,14 +47,15 @@ bearing in mind that this may very well crash one or more of our servers ?
 <p>Does our application have state ? If so, how does our application manage it
 (cookies, session-rewriting, or some other method) ?
 </p>
+<p>What is the testing intended to achieve?</p>
 </subsection>
-<subsection name="17.2 Resources">
+<subsection name="&sect-num;.2 Resources">
 <p>The following resources will prove very helpful. Bear in mind that if you
 cannot locate these resources, <b>you</b> will become these resources. As you
 already have your work cut out for you, it is worth knowing who the following
 people are, so that you can ask them for help if you need it.
 </p>
-	<subsection name="17.2.1 Network">
+	<subsection name="&sect-num;.2.1 Network">
 	<p>Who knows our network topology ? If you run into any firewall or
 	proxy issues, this will become very important. As well, a private
 	testing network (which will therefore have very low network latency)
@@ -60,7 +65,7 @@ people are, so that you can ask them for help if you need it.
 	hardware ?
 	</p>
 	</subsection>
-	<subsection name="17.2.2 Application">
+	<subsection name="&sect-num;.2.2 Application">
 	<p>Who knows how our application functions ? The normal sequence is
 	<ul>
 		<li>test (low-volume - can we benchmark our application?)</li>
@@ -77,7 +82,7 @@ people are, so that you can ask them for help if you need it.
 	</p>
 	</subsection>
 </subsection>
-<subsection name="17.3 What platform should I use to run the benchmarks/load-tests ?">
+<subsection name="&sect-num;.3 What platform should I use to run the benchmarks/load-tests ?">
 <p>This should be a widely-used piece of hardware, with a standard
 (i.e. vanilla) software installation. Remember, if you publish your results,
 the first thing your clients will do is hire a graduate student to verify them.
@@ -104,24 +109,24 @@ configuration in your published benchmarks.
 <p>Don't forget JMeter batch mode. This can be useful if you have a powerful server 
 that supports Java but perhaps does not have a fast graphics implementation,
 or where you need to login remotely.
-Batch mode can reduce the network traffic compared with using a remote display or client-server mode.
+Batch (non-GUI) mode can reduce the network traffic compared with using a remote display or client-server mode.
 The batch log file can then be loaded into JMeter on a workstation for analysis, or you can
 use CSV output and import the data into a spreadsheet.</p>
 </subsection>
-<subsection name="17.4 Tools">
+<subsection name="&sect-num;.4 Tools">
 <p>The following tools will all prove useful. It is definitely worthwhile to
 become familiar with them. This should include trying them out, and reading the
 appropriate documentation (man-pages, info-files, application --help messages,
 and any supplied documentation).
 </p>
-	<subsection name="17.4.1 ping">
+	<subsection name="&sect-num;.4.1 ping">
 	<p>
 	This can be used to establish whether or not you can reach your
 	target site. Options can be specified so that 'ping' provides the
 	same type of route reporting as 'traceroute'.
 	</p>
 	</subsection>
-	<subsection name="17.4.2 nslookup/dig">
+	<subsection name="&sect-num;.4.2 nslookup/dig">
 	<p>
 	While the <u>user</u> will normally use a human-readable internet
 	address, <u>you</u> may wish to avoid the overhead of DNS lookups when
@@ -129,7 +134,7 @@ and any supplied documentation).
 	the unique address (dotted quad) of your target site.
 	</p>
 	</subsection>
-	<subsection name="17.4.3 traceroute">
+	<subsection name="&sect-num;.4.3 traceroute">
 	<p>
 	If you cannot "ping" your target site, this may be used to determine 
 	the problem (possibly a firewall or a proxy). It can also be used
@@ -140,7 +145,7 @@ and any supplied documentation).
 	</p>
 	</subsection>
 </subsection>
-<subsection name="17.5 What other products are there ?">
+<subsection name="&sect-num;.5 What other products are there ?">
 <p>There are a number of commercial products, which generally have fairly
 hefty pricetags. If you can justify it, these are probably the way to go.
 If, however, these products do not do exactly what you want, or you are on a
@@ -148,7 +153,7 @@ limited budget, the following are worth a look. In fact, you should probably
 start by trying the Apache <b>ab</b> tool, as it may very well do the job
 if your requirements are not particularly complicated.
 </p>
-	<subsection name="17.5.1 Apache 'ab' tool">
+	<subsection name="&sect-num;.5.1 Apache 'ab' tool">
 	<p>
 	You should definitely start with this one. It handles HTTP 'get' requests
 	very well, and can be made to handle HTTP 'post' requests with a little
@@ -156,7 +161,7 @@ if your requirements are not particularly complicated.
 	performance reporting.
 	</p>
 	</subsection>
-	<subsection name="17.5.2 HttpUnit">
+	<subsection name="&sect-num;.5.2 HttpUnit">
 	<p>
 	This is worth a look. It is a library (and therefore of more interest to
 	developers) that can be used to perform HTTP tests/benchmarks. It is
@@ -164,14 +169,14 @@ if your requirements are not particularly complicated.
 	conjunction with <b>JUnit</b>.
 	</p>
 	</subsection>
-	<subsection name="17.5.3 Microsoft WAS">
+	<subsection name="&sect-num;.5.3 Microsoft WAS">
 	<p>
 	This is definitely worth a look. It has an excellent user interface
 	but it may not do exactly what you want. If this is the case, be aware
 	that the functionality of this product is not likely to change.
 	</p>
 	</subsection>
-	<subsection name="17.5.4 JMeter">
+	<subsection name="&sect-num;.5.4 JMeter">
 	<p>
 	If you have non-standard requirements, then this solution offers an
 	open-source community to provide them (of course, if you are reading
@@ -180,7 +185,7 @@ if your requirements are not particularly complicated.
 	</p>
 	</subsection>
 </subsection>
-<subsection name="17.6 Why Java ?">
+<subsection name="&sect-num;.6 Why Java ?">
 <p>Why not Perl or C ?
 </p>
 <p>Well, Perl might be a very good choice except that the Benchmark package

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,7 +23,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 
 /**
- * @version $Revision$
+ * Holds context for a thread
  */
 public class JMeterContext {
 	JMeterVariables variables;
@@ -40,8 +40,9 @@ public class JMeterContext {
 
 	private JMeterThread thread;
 
-	// NOTUSED private ThreadGroup threadGroup;
-	private int threadNum;
+	private ThreadGroup threadGroup;
+	
+    private int threadNum;
 
 	private byte[] readBuffer = null;
 
@@ -139,6 +140,14 @@ public class JMeterContext {
 	public void setThread(JMeterThread thread) {
 		this.thread = thread;
 	}
+
+    public ThreadGroup getThreadGroup() {
+        return this.threadGroup;
+    }
+
+    public void setThreadGroup(ThreadGroup threadgrp) {
+        this.threadGroup = threadgrp;
+    }
 
 	public StandardJMeterEngine getEngine() {
 		return engine;

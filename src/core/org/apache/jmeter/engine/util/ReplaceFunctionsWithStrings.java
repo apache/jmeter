@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,6 +27,7 @@ import java.util.Map;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.StringUtilities;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -35,7 +36,6 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 
@@ -43,10 +43,14 @@ import org.apache.oro.text.regex.Util;
  * Transforms strings into variable references (in spite of the name, which
  * suggests the opposite!)
  * 
- * @version $Revision$
  */
 public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	// Functions are wrapped in ${ and }
+	private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
+
+	private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
 
 	private boolean regexMatch;// Should we match using regexes?
 
@@ -67,7 +71,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 	 * @see ValueTransformer#transformValue(JMeterProperty)
 	 */
 	public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
-		PatternMatcher pm = new Perl5Matcher();
+		PatternMatcher pm = JMeterUtils.getMatcher();
 		Pattern pattern = null;
 		PatternCompiler compiler = new Perl5Compiler();
 		Iterator iter = getVariables().keySet().iterator();
@@ -78,13 +82,14 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
 			if (regexMatch) {
 				try {
 					pattern = compiler.compile(value);
-					input = Util.substitute(pm, pattern, new StringSubstitution("${" + key + "}"), input,
-							Util.SUBSTITUTE_ALL);
+					input = Util.substitute(pm, pattern, 
+							new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX), 
+							input, Util.SUBSTITUTE_ALL);
 				} catch (MalformedPatternException e) {
 					log.warn("Malformed pattern " + value);
 				}
 			} else {
-				input = StringUtilities.substitute(input, value, "${" + key + "}");
+				input = StringUtilities.substitute(input, value, FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX);
 			}
 		}
 		StringProperty newProp = new StringProperty(prop.getName(), input);

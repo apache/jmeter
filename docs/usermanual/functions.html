@@ -1,0 +1,2374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!-- Content Stylesheet for Site -->
+
+	 
+<!-- start the processing -->
+	 <!-- ====================================================================== -->
+	 <!-- Main Page Section -->
+	 <!-- ====================================================================== -->
+	 <html>
+		  <head>
+				<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+
+				
+								
+				<title>JMeter - User's Manual: Functions and Variables</title>
+		  </head>
+
+		  <body bgcolor="#ffffff" text="#000000" link="#525D76">
+				<table border="0" cellspacing="0">
+					 <!-- TOP IMAGE -->
+					 <tr>
+						  <td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" border="0"/></a>
+</td>
+<td align="right">
+<a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
+</td>
+					 </tr>
+				</table>
+				<table border="0" width="100%" cellspacing="4">
+					 <tr><td colspan="2">
+						  <hr noshade size="1"/>
+					 </td></tr>
+
+					 <tr>
+						  <!-- LEFT SIDE NAVIGATION -->
+						  <td width="20%" valign="top" nowrap="true">
+						  	 		  <p><strong>About</strong></p>
+		  <ul>
+		  				<li>	 <a href="../index.html">Overview</a>
+</li>
+		  				<li>	 <a href="../changes.html">Changes</a>
+</li>
+		  				<li>	 <a href="../known_bugs.html">Known Bugs</a>
+</li>
+		  				<li>	 <a href="../license.html">License</a>
+</li>
+		  				<li>	 <a href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters">Contributors</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Download</strong></p>
+		  <ul>
+		  				<li>	 <a href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries">Download Binary</a>
+</li>
+		  				<li>	 <a href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources">Download Source</a>
+</li>
+		  				<li>	 <a href="../nightly.html">Developer (Nightly) Builds</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Documentation</strong></p>
+		  <ul>
+		  				<li>	 <a href="../usermanual/index.html">User Manual</a>
+</li>
+		  				<li>	 <a href="../api/index.html">Javadocs</a>
+</li>
+		  				<li>	 <a href="../localising/index.html">Localisation (Translator's Guide)</a>
+</li>
+		  				<li>	 <a href="../building.html">Building JMeter and Add-Ons</a>
+</li>
+		  				<li>	 <a href="http://wiki.apache.org/jakarta-jmeter">JMeter Wiki</a>
+</li>
+		  				<li>	 <a href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ">FAQ (Wiki)</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Tutorials (PDF format)</strong></p>
+		  <ul>
+		  				<li>	 <a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a>
+</li>
+		  				<li>	 <a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a>
+</li>
+		  				<li>	 <a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a>
+</li>
+		  				<li>	 <a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a>
+</li>
+		  				<li>	 <a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a>
+</li>
+		  		  </ul>
+	 		  <p><strong>Community</strong></p>
+		  <ul>
+		  				<li>	 <a href="http://jakarta.apache.org/site/getinvolved.html">Get Involved</a>
+</li>
+		  				<li>	 <a href="http://jakarta.apache.org/site/mail.html">Mailing Lists</a>
+</li>
+		  				<li>	 <a href="http://jakarta.apache.org/site/cvsindex.html">SVN Repositories</a>
+</li>
+		  		  </ul>
+	 						  </td>
+						  <td width="80%" align="left" valign="top">
+						    		<table>
+		<tr>
+		<td bgcolor="#525D76">
+        <div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+        </td>
+				<td bgcolor="#525D76">
+        <div align="right"><a href="regular_expressions.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+        </td>
+        				<td bgcolor="#525D76">
+        <div align="right"><a href="component_reference.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+        </td>
+                </tr>
+         </table>
+      						  <br>
+						  						  									 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#525D76">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="functions"><strong>19. Functions and Variables</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+JMeter functions are special values that can populate fields of any Sampler or other
+element in a test tree.  A function call looks like this:
+						</p>
+							  									 				<p	>
+												<code	>
+								${__functionName(var1,var2,var3)}
+						</code>
+							</p>
+							  									 				<p	>
+								
+Where "__functionName" matches the name of a function.
+
+												<br	>
+						</br>
+									
+Parentheses surround the parameters sent to the function, for example ${__time(YMD)}
+The actual parameters vary from function to function.  
+Functions that require no parameters can leave off the parentheses, for example ${__threadNum}.
+
+						</p>
+							  									 				<p	>
+								
+If a function parameter contains a comma, then be sure to escape this with "\", otherwise JMeter will treat it as a parameter delimiter.
+For example:
+
+												<pre	>
+								
+${__time(EEE\, d MMM yyyy)}
+
+						</pre>
+									
+
+						</p>
+							  									 				<p	>
+								Variables are referenced as follows:
+
+												<pre	>
+								
+${VARIABLE}
+
+						</pre>
+									
+
+						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+Properties are not the same as variables.
+Variables are local to a thread; properties are common to all threads.
+
+			</td></tr>
+	</table></p>
+							  									 				<p	>
+								List of functions:
+						</p>
+							  									 				<ul	>
+								
+        
+												<li	>
+												<a	 href="#__regexFunction">
+								regexFunction - regular expression evaluator
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__counter">
+								counter
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__threadNum">
+								threadNum - get thread number
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__intSum">
+								intSum - add variables
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__StringFromFile">
+								StringFromFile - read a line from a file
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__machineName">
+								machineName - get the local machine name
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__javaScript">
+								JavaScript (Mozilla Rhino)
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__Random">
+								random number
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__CSVRead">
+								CSVRead - read from CSV delimited file
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__property">
+								read a property
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__P">
+								P - read a property
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__setProperty">
+								setProperty - set a property
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__log">
+								log - log a message
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__logn">
+								logn - log a message
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__BeanShell">
+								BeanShell - run BeanShell
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__split">
+								split - Split a string into variables
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__XPath">
+								XPath - XPath use an xpath expression
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__time">
+								time - return current time in various formats
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__jexl">
+								jexl - evaluate a Commons Jexl expression
+						</a>
+							</li>
+									
+        
+												<li	>
+												<a	 href="#__V">
+								V evaluate a variable expression
+						</a>
+							</li>
+									
+
+						</ul>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="what_can_do"><strong>19.1 What can functions do</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								There are two kinds of functions: user-defined static values (or variables), and built-in functions.
+												<br	>
+						</br>
+									
+User-defined static values allow the user to define variables to be replaced with their static value when
+a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
+run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
+matter to change a test to target a different server with the same test.
+
+						</p>
+							  									 				<p	>
+								
+Note that variables cannot currently be nested; i.e ${Var${N}} does not work.
+The __V (variable) function (versions after 2.2) can be used to do this: ${__V(Var${N})}.
+In earlier JMeter versions one can use ${__BeanShell(vars.get("Var${N}")}.
+
+						</p>
+							  									 				<p	>
+								This type of replacement is possible without functions, but was less convenient and less intuitive.
+It required users to create default config elements that would fill in blank values of Samplers.
+Variables allow one to replace only part of any given value, not just filling in blank values.
+						</p>
+							  									 				<p	>
+								
+With built-in functions users can compute new values at run-time based on previous response data, which
+thread the function is in, the time, and many other sources.  These values are generated fresh for every
+request throughout the course of the test. 
+						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						Functions are shared between threads. 
+Each occurrence of a function call in a test plan is handled by a separate function instance.
+			</td></tr>
+	</table></p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="where"><strong>19.2 Where can functions be used?</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+Functions and variables can be written into any field of any test component.  Some fields do not allow random strings 
+because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
+functions.
+
+												<br	>
+						</br>
+									
+The Cookie Manager does not support variables/functions.
+
+						</p>
+							  									 				<p	>
+								
+Configuration elements are processed by a separate thread.
+Therefore functions such as __threadNum do not work properly in elements such as User Defined Variables.
+
+						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						When using variable/function references in SQL code (etc),
+remember to include any necessary quotes for text strings,
+i.e. use
+												<br	>
+						</br>
+									
+SELECT item from table where name='${VAR}'
+
+												<br	>
+						</br>
+													<b	>
+								not
+						</b>
+									
+
+												<br	>
+						</br>
+									
+SELECT item from table where name=${VAR}
+
+												<br	>
+						</br>
+									(unless VAR itself contains the quotes)
+
+			</td></tr>
+	</table></p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="how"><strong>19.3 Writing the function string</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								User-defined functions take the form: 
+												<code	>
+								${varName}
+						</code>
+									.  In the TestPlan tree element, a two-column table
+of user-defined values is kept, matching up variable names with static values.  Referencing the
+variable in a test element is done by bracketing the variable name with '${' and '}'.
+						</p>
+							  									 				<p	>
+								Built-in functions are written in the same manner, but by convention, the names of built-in
+functions begin with "__" to avoid conflict with user value names
+												<sup	>
+								*
+						</sup>
+									.  Some functions take arguments to
+configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
+be left out.
+						</p>
+							  									 				<p	>
+								Argument values that themselves contain commas should be escaped as necessary.
+If you need to include a comma in your parameter value, escape it like so: '\,'.
+This applies for example to the scripting functions - Javascript, Beanshell, Jexl - where it is necessary to escape any commas
+that may be needed in script method calls - e.g.
+
+						</p>
+							  									 				<pre	>
+								
+    ${__BeanShell(vars.put("name"\,"value"))}
+
+						</pre>
+							  									 				<p	>
+								
+JMeter provides a tool to help you construct
+function calls for various built-in functions, which you can then copy-paste. 
+It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.
+						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>										<sup	>
+								*
+						</sup>
+									If you define a user-defined static variable with the same name as a built-in function, your static
+variable will override the built-in function.
+			</td></tr>
+	</table></p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="function_helper"><strong>19.4 The Function Helper Dialog</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								The Function Helper dialog is available from JMeter's Tools menu.
+						</p>
+							  									 				<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="../images/screenshots/function_helper_dialog.png"><br>
+	<font size="-1">						Function Helper Dialog
+			</font></td></tr></table></p>
+							  									 				<p	>
+								Using the Function Helper, you can select a function from the pull down, and assign
+values for its arguments.  The left column in the table provides a brief description of the
+argument, and the right column is where you write in the value for that argument.  Different
+functions take different arguments.
+						</p>
+							  									 				<p	>
+								Once you have done this, click the "generate" button, and the appropriate string is generated
+for you to copy-paste into your test plan wherever you like.
+						</p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="functions"><strong>19.5 Functions</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__regexFunction"><h3>19.5.1 __regexFunction</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The Regex Function is used to parse the previous response using any regular
+expression (provided by user).  The function returns the template string with variable values filled
+in.
+						</p>
+									
+
+												<p	>
+								The __regexFunction stores values for future use.  In the sixth parameter, you can specify
+a reference name.  After this function executes, the same values can be retrieved at later times
+using the syntax for user-defined values.  For instance, if you enter "refName" as the sixth
+parameter you will be able to use:
+
+												<ul	>
+								
+
+												<li	>
+								${refName} to refer to the computed result of the second parameter ("Template for the
+replacement string") parsed by this function
+						</li>
+									
+
+												<li	>
+								${refName_g0} to refer to the entire match  parsed by this function.
+						</li>
+									
+
+												<li	>
+								${refName_g1} to refer to the first group parsed by this function.
+						</li>
+									
+
+												<li	>
+								${refName_g#} to refer to the n
+												<sup	>
+								th
+						</sup>
+									 group parsed by this function.
+						</li>
+									
+
+												<li	>
+								${refName_matchNr} to refer to the number of groups found by this function.
+						</li>
+									
+
+						</ul>
+									
+
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>First argument</td>
+			<td>						The first argument is the regular expression
+        to be applied to the response data.  It will grab all matches.  Any parts of this expression
+        that you wish to use in your template string, be sure to surround in parentheses.  Example:
+        &lt;a href="(.*)"&gt;.  This will grab the value of the link and store it as the first group (there is
+        only 1 group).  Another example: &lt;input type="hidden" name="(.*)" value="(.*)"&gt;.  This will
+        grab the name as the first group, and the value as the second group.  These values can be used
+        in your template string
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Second argument</td>
+			<td>						This is the template string that will replace
+        the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
+        $[group_number]$.  Ie: $1$, or $2$.  Your template can be any string.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Third argument</td>
+			<td>						The third argument tells JMeter which match
+        to use.  Your regular expression might find numerous matches.  You have four choices:
+                
+												<ul	>
+												<li	>
+								An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the
+                second, and so on
+						</li>
+									
+                
+												<li	>
+								RAND - Tells JMeter to choose a match at random.
+						</li>
+									
+                
+												<li	>
+								ALL - Tells JMeter to use all matches, and create a template string for each one and then
+                append them all together.  This option is little used.
+						</li>
+									
+                
+												<li	>
+								A float number between 0 and 1 - tells JMeter to find the Xth match using the formula:
+                (number_of_matches_found * float_number) rounded to nearest integer.
+						</li>
+									
+                
+						</ul>
+				</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Fourth argument</td>
+			<td>						If 'ALL' was selected for the above argument
+        value, then this argument will be inserted between each appended copy of the template value.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Fifth argument</td>
+			<td>						Default value returned if no match is found
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Sixth argument</td>
+			<td>						A reference name for reusing the values parsed by this function.
+												<br	>
+						</br>
+									
+        Stored values are ${refName} (the replacement template string) and ${refName_g#} where "#" is the
+        group number from the regular expression ("0" can be used to refer to the entire match).
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__counter"><h3>19.5.2 __counter</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The counter generates a new number each time it is called, starting with 1
+and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
+separate, or to use the same counter for all users.  If each user's values is incremented separately,
+that is like counting the number of iterations through the test plan.  A global counter is like
+counting how many times that request was run.
+
+						</p>
+									
+
+												<p	>
+								The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.
+						</p>
+									
+
+												<p	>
+								The counter function instances are now completely independent. 
+[JMeter 2.1.1 and earlier used a fixed thread variable to keep track of the per-user count, 
+so multiple counter functions operated on the same value.] 
+The global counter - "FALSE" - is separately maintained by each counter instance.
+
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>First argument</td>
+			<td>						TRUE if you wish each simulated user's counter
+        to be kept independent and separate from the other users.  FALSE for a global counter.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Second argument</td>
+			<td>						A reference name for reusing the value created by this function.
+												<br	>
+						</br>
+									
+                Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
+                multiple places. [For JMeter 2.1.1 and earlier this parameter was required.]
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__threadNum"><h3>19.5.3 __threadNum</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The thread number function simply returns the number of the thread currently
+being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
+is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.
+						</p>
+									
+
+
+												<p	>
+								There are no arguments for this function.
+						</p>
+									
+
+														  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+
+			</td></tr>
+	</table></p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__intSum"><h3>19.5.4 __intSum</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The intsum function can be used to compute the sum of two or more integer values.
+
+						</p>
+															  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>First argument</td>
+			<td>						The first int value.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Second argument</td>
+			<td>						The second int value.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>nth argument</td>
+			<td>						The nth int value.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>last argument</td>
+			<td>						A reference name for reusing the value
+                computed by this function.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 				<a	 name="_StringFromFile">
+						</a>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__StringFromFile"><h3>19.5.5 __StringFromFile</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								
+	The StringFromFile function can be used to read strings from a text file. 
+	This is useful for running tests that require lots of variable data.
+	For example when testing a banking application, 100s or 1000s of different account numbers might be required.
+	
+						</p>
+									
+	
+												<p	>
+								
+	See also the 
+	
+												<a	 href="component_reference.html#CSV_Data_Set_Config">
+								CSV Data Set Config test element
+						</a>
+									 
+	which may be easier to use. However, that does not currently support multiple input files.
+	
+						</p>
+									
+
+	
+												<p	>
+								
+	Each time it is called it reads the next line from the file.
+	When the end of the file is reached, it will start reading again from the beginning,
+	unless the maximum loop count has been reached.
+	If there are multiple references to the function in a test script, each will open the file independently,
+	even if the file names are the same.
+	[If the value is to be used again elsewhere, use different variable names for each function call.]
+	
+						</p>
+									
+	
+												<p	>
+								If an error occurs opening or reading the file, then the function returns the string "**ERR**"
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>File Name</td>
+			<td>						Path to the file name.
+        	(The path can be relative to the JMeter launch directory)
+        	If using optional sequence numbers, the path name should be suitable for passing to DecimalFormat.
+        	See below for examples.
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Variable Name</td>
+			<td>						
+A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+        
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Start sequence number</td>
+			<td>						Initial Sequence number (if omitted, the End sequence number is treated as a loop count)
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>End   sequence number</td>
+			<td>						Final sequence number (if omitted, seqence numbers can increase without limit)
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								The file name parameter is resolved when the file is opened or re-opened.
+						</p>
+							  									 				<p	>
+								The reference name parameter (if supplied) is resolved every time the function is executed.
+						</p>
+							  									 				<p	>
+												<b	>
+								Using sequence numbers:
+						</b>
+							</p>
+							  									 				<p	>
+								When using the optional sequence numbers, the path name is used as the format string for java.text.DecimalFormat.
+	The current sequence number is passed in as the only parameter.
+    If the optional start number is not specified, the path name is used as is.
+	Useful formatting sequences are:
+	
+						</p>
+							  									 				<p	>
+								
+
+												<code	>
+								
+# - insert the number, with no leading zeros or spaces
+												<br	>
+						</br>
+									
+000 - insert the number packed out to 3 digits with leading zeros if necessary
+
+												<p	>
+						</p>
+									
+Examples:
+												<br	>
+						</br>
+									
+ pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat
+												<br	>
+						</br>
+									
+ pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat
+												<br	>
+						</br>
+									
+ pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999
+
+						</code>
+													<p	>
+						</p>
+									
+	If more digits are required than there are formatting characters, the number will be
+	expanded as necessary.
+												<br	>
+						</br>
+									
+	
+												<b	>
+								To prevent a formatting character from being interpreted,
+	enclose it in single quotes. Note that "." is a formatting character,
+	and must be enclosed in single quotes
+						</b>
+									
+	(though #. and 000. work as expected in locales where the decimal point is also ".")
+	
+												<br	>
+						</br>
+									
+	In other locales (e.g. fr), the decimal point is "," - which means that "#."
+	becomes "nnn,".
+												<br	>
+						</br>
+									
+	See the documentation for DecimalFormat for full details.
+												<br	>
+						</br>
+									
+	If the path name does not contain any special formatting characters,
+	the current sequence number will be appended to the name, otherwise
+	the number will be inserted aaccording to the fomatting instructions.
+												<br	>
+						</br>
+									
+	If the start sequence number is omitted, and the end sequence number is specified,
+	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
+	In this case the filename is not formatted.
+	
+												<code	>
+								
+	
+												<br	>
+						</br>
+									
+	${_StringFromFile(PIN#'.'DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT
+												<br	>
+						</br>
+									
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice
+												<br	>
+						</br>
+									
+	
+						</code>
+									
+	Note that the "." in PIN.DAT above should 
+												<u	>
+								not
+						</u>
+									 be quoted.
+	In this case the start number is omitted, so the file name is used exactly as is.
+	
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__machineName"><h3>19.5.6 __machineName</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The machineName function returns the local host name
+						</p>
+															  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name of function</td>
+			<td>						A reference name for reusing the value
+                computed by this function.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__javaScript"><h3>19.5.7 __javaScript</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The javaScript function executes a piece of JavaScript (not Java!) code and returns its value
+
+						</p>
+									
+
+												<p	>
+								
+The JMeter Javascript function calls a standalone JavaScript interpreter.
+Javascript is used as a scripting language, so you can do calculations etc.
+						</p>
+									
+
+												<p	>
+								
+For details of the language, please see 
+												<a	 href="http://www.mozilla.org/rhino/overview.html">
+								Mozilla Rhino Overview
+						</a>
+									
+
+						</p>
+									
+
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
+
+			</td></tr>
+	</table></p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Expression</td>
+			<td>						The JavaScript expression to be executed. For example:
+        	
+												<ul	>
+								
+        		
+												<li	>
+								new Date() - return the current date and time
+						</li>
+									
+        		
+												<li	>
+								Math.floor(Math.random()*(${maxRandom}+1))
+        			- a random number between 0 and the variable maxRandom
+						</li>
+									
+        		
+												<li	>
+								${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1))
+        			- a random number between the variables minRandom and maxRandom
+						</li>
+									
+        		
+												<li	>
+								"${VAR}"=="abcd"
+						</li>
+									
+        	
+						</ul>
+									
+        	
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Name of function</td>
+			<td>						A reference name for reusing the value
+                computed by this function.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						Remember to include any necessary quotes for text strings and JMeter variables. Also, if
+the expression has commas, please make sure to escape them. For example in:
+
+												<br	>
+						</br>
+									
+${__javaScript('${sp}'.slice(7\,99999))}
+
+												<br	>
+						</br>
+									
+the comma after 7 is escaped.
+			</td></tr>
+	</table></p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__Random"><h3>19.5.8 __Random</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The random function returns a random number that lies between the given min and max values.
+						</p>
+															  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Minimum value</td>
+			<td>						A number
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Maximum value</td>
+			<td>						A bigger number
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Name of function</td>
+			<td>						A reference name for reusing the value
+                computed by this function.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__CSVRead"><h3>19.5.8 __CSVRead</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The CSVFile function returns a string from a CSV file (c.f. 
+												<a	 href="#_StringFromFile">
+								StringFromFile
+						</a>
+									)
+						</p>
+									
+	
+												<p	>
+								NOTE: versions up to 1.9.1 only supported a single file. 
+		JMeter versions since 1.9.1 support multiple file names.
+	
+						</p>
+									
+	
+												<p	>
+												<b	>
+								In most cases, the newer 
+	
+												<a	 href="component_reference.html#CSV_Data_Set_Config">
+								CSV Data Set Config element
+						</a>
+									
+	 is easier to use.
+						</b>
+							</p>
+									
+	
+												<p	>
+								
+	When a filename is first encountered, the file is opened and read into an internal
+	array. If a blank line is detected, this is treated as end of file - this allows
+	trailing comments to be used (N.B. this feature was introduced in versions after 1.9.1)
+	
+						</p>
+									
+	
+												<p	>
+								All subsequent references to the same file name use the same internal array.
+	N.B. the filename case is significant to the function, even if the OS doesn't care,
+	so CSVRead(abc.txt,0) and CSVRead(aBc.txt,0) would refer to different internal arrays.
+	
+						</p>
+									
+	
+												<p	>
+								
+	The *ALIAS feature allows the same file to be opened more than once,
+	and also allows for shorter file names.
+	
+						</p>
+									
+	
+												<p	>
+								
+	Each thread has its own internal pointer to its current row in the file array.
+	When a thread first refers to the file it will be allocated the next free row in
+	the array, so each thread will access a different row from all other threads.
+	[Unless there are more threads than there are rows in the array.]
+	
+						</p>
+									
+	
+												<p	>
+								
+	Note: the function splits the line at every comma by default.
+	If you want to enter columns containing commas, then you will need
+	to change the delimiter to a character that does not appear in any
+	column data, by setting the property: csvread.delimiter
+	
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>File Name</td>
+			<td>						The file (or *ALIAS) to read from
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Column number</td>
+			<td>						
+        	The column number in the file.
+        	0 = first column, 1 = second etc.
+        	"next" - go to next line of file.
+        	*ALIAS - open a file and assign it to the alias
+        	
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__property"><h3>19.5.9 __property</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The property function returns the value of a JMeter property. 
+	If the property value cannot be found, and no default has been supplied, it returns the property name.
+	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
+	
+						</p>
+									For example:
+												<p	>
+								
+		
+												<ul	>
+								
+
+												<li	>
+								${__property(user.dir)} - return value of user.dir
+						</li>
+									
+
+												<li	>
+								${__property(user.dir,UDIR)} - return value of user.dir and save in UDIR
+						</li>
+									
+
+												<li	>
+								${__property(abcd,ABCD,atod)} - return value of property abcd (or "atod" if not defined) and save in ABCD
+						</li>
+									
+
+												<li	>
+								${__property(abcd,,atod)} - return value of property abcd (or "atod" if not defined) but don't save it
+						</li>
+									
+
+						</ul>
+									
+
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Property Name</td>
+			<td>						The property name to be retrieved.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Name of function</td>
+			<td>						A reference name for reusing the value
+                computed by this function.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Default Value</td>
+			<td>						The default value for the property.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__P"><h3>19.5.10 __P</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								This is a simplified property function which is
+	intended for use with properties defined on the command line.
+	Unlike the __property function, there is no option to save the value in a variable,
+	and if no default value is supplied, it is assumed to be 1. 
+	The value of 1 was chosen because it is valid for common test variables such
+	as loops, thread count, ramp up etc.
+	
+						</p>
+									For example:
+												<p	>
+								
+
+												<code	>
+								
+Define the property value:
+
+												<br	>
+						</br>
+									
+jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
+
+												<br	>
+						</br>
+									
+
+Fetch the values:
+
+												<br	>
+						</br>
+									
+${__P(group1.threads)} - return the value of group1.threads
+
+												<br	>
+						</br>
+									
+${__P(group1.loops)} - return the value of group1.loops
+
+												<br	>
+						</br>
+									
+${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
+
+												<br	>
+						</br>
+									
+
+						</code>
+									
+In the examples above, the first function call would return 7, 
+the second would return 1 and the last would return www.dummy.org
+(unless those properties were defined elsewhere!)
+
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Property Name</td>
+			<td>						The property name to be retrieved.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Default Value</td>
+			<td>						The default value for the property.
+        	If omitted, the default is set to "1".
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__log"><h3>19.5.11 __log</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								
+	The log function logs a message, and returns its input string
+	
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>String to be logged</td>
+			<td>						A string
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Log Level</td>
+			<td>						OUT, ERR, DEBUG, INFO (default), WARN or ERROR
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Throwable text</td>
+			<td>						If non-empty, creates a Throwable to pass to the logger
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
+	In this case, the output is always printed - it does not depend on the current log setting.
+
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__logn"><h3>19.5.12 __logn</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								
+	The logn function logs a message, and returns the empty string
+	
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>String to be logged</td>
+			<td>						A string
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Log Level</td>
+			<td>						OUT, ERR, DEBUG, INFO (default), WARN or ERROR
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Throwable text</td>
+			<td>						If non-empty, creates a Throwable to pass to the logger
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
+	In this case, the output is always printed - it does not depend on the current log setting.
+
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__BeanShell"><h3>19.5.13 __BeanShell</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								
+	The BeanShell function evaluates the script passed to it, and returns the result.
+
+						</p>
+									
+
+												<p	>
+								
+
+												<b	>
+								Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+
+												<br	>
+						</br>
+									
+For full details on using BeanShell, please see the BeanShell web-site at 
+												<a	 href="http://www.beanshell.org/">
+								http://www.beanshell.org/
+						</a>
+									
+
+						</b>
+									
+
+						</p>
+									
+
+												<p	>
+								
+Note that a different Interpreter is used for each independent occurence of the function
+in a test script, but the same Interpreter is used for subsequent invocations.
+This means that variables persist across calls to the function.
+
+						</p>
+									
+
+												<p	>
+								
+A single instance of a function may be called from multiple threads.
+However the function execute() method is synchronised.
+
+						</p>
+									
+
+												<p	>
+								
+If the property "beanshell.function.init" is defined, it is passed to the Interpreter
+as the name of a sourced file. This can be used to define common methods and variables. There is a
+sample init file in the bin directory: BeanShellFunction.bshrc.
+
+						</p>
+									
+
+												<p	>
+								
+The following variables are set before the script is executed:
+
+												<ul	>
+								
+
+												<li	>
+								log - the logger for the BeanShell function (*)
+						</li>
+									
+
+												<li	>
+								ctx - the current JMeter context variable
+						</li>
+									
+
+												<li	>
+								vars - the current JMeter variables
+						</li>
+									
+
+												<li	>
+								threadName - the threadName
+						</li>
+									
+
+												<li	>
+								Sampler the current Sampler, if any
+						</li>
+									
+
+												<li	>
+								SampleResult - the current SampleResult, if any
+						</li>
+									
+
+						</ul>
+									
+(*) means that this is set before the init file, if any, is processed. 
+Other variables vary from invocation to invocation.
+
+						</p>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>BeanShell script</td>
+			<td>						A beanshell script (not a file name)
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Name of variable</td>
+			<td>						A reference name for reusing the value
+               computed by this function.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								
+Example:
+
+												<pre	>
+								
+${__BeanShell(123*456)} - returns 56088
+${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
+
+						</pre>
+									
+
+						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						Remember to include any necessary quotes for text strings and JMeter variables
+			</td></tr>
+	</table></p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__split"><h3>19.5.14 __split</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								
+	The split function splits the string passed to it according to the delimiter,
+    and returns the original string. If any delimiters are adjacent, "?" is returned as the value.
+    The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
+    The count of variables is returned in ${VAR_n}. 
+    From JMeter 2.1.2 onwards, a trailing delimiter is treated as a missing variable, and "?" is returned.
+    Also, to allow it to work better with the ForEach controller, 
+    __split now deletes the first unused variable in case it was set by a previous split.
+	
+						</p>
+									
+	
+												<p	>
+						</p>
+									
+	Example:
+	
+												<code	>
+								
+	
+												<br	>
+						</br>
+									
+	Define VAR="a||c|" in the test plan.
+	
+												<br	>
+						</br>
+									
+	${__split(${VAR},VAR),|}
+	
+												<br	>
+						</br>
+									
+	This will return the contents of VAR, i.e. "a||c|" and set the following variables:
+	
+												<br	>
+						</br>
+									
+        VAR_n=4 (3 in JMeter 2.1.1 and earlier)
+	
+												<br	>
+						</br>
+									
+        VAR_1=a
+	
+												<br	>
+						</br>
+									
+        VAR_2=?
+	
+												<br	>
+						</br>
+									
+        VAR_3=c
+	
+												<br	>
+						</br>
+									
+        VAR_4=? (null in JMeter 2.1.1 and earlier)
+	
+												<br	>
+						</br>
+									
+        VAR_5=null (in JMeter 2.1.2 and later)
+	
+						</code>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>String to split</td>
+			<td>						A delimited string, e.g. "a|b|c"
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Name of variable</td>
+			<td>						A reference name for reusing the value
+               computed by this function.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Delimiter</td>
+			<td>						The delimiter character, e.g. 
+												<b	>
+								|
+						</b>
+									. 
+If omitted, 
+												<b	>
+								,
+						</b>
+									 is used. Note that 
+												<b	>
+								,
+						</b>
+									 would need to be specified as 
+												<b	>
+								\,
+						</b>
+									.
+
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__XPath"><h3>19.5.15 __XPath</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								
+	The XPath function reads an XML file and matches the XPath, each
+	of the node match's are iterated through similar to the CVSReader.
+	
+						</p>
+									
+	
+												<p	>
+						</p>
+									
+	Example:
+	
+												<code	>
+								
+	
+												<br	>
+						</br>
+									
+		
+	
+												<br	>
+						</br>
+									
+	${__XPath(/path/to/build.xml, //target/@name)}
+	
+												<br	>
+						</br>
+									
+	This will match all targets in build.xml and return the name variable
+	
+						</code>
+									
+
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>XML file to parse</td>
+			<td>						 a XML file to parse
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>XPath</td>
+			<td>						 a XPath expression to match nodes in the XML file
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__setProperty"><h3>19.5.16 __setProperty</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								The setProperty function sets the value of a JMeter property. 
+		The default return value from the function is the empty string,
+		so the function call can be used anywhere functions are valid.
+						</p>
+									
+        
+												<p	>
+								The original value can be returned by setting the optional 3rd parameter to "true".
+						</p>
+									
+	
+												<p	>
+								Properties are global to JMeter,
+		so can be used to communicate between threads and thread groups
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Property Name</td>
+			<td>						The property name to be set.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Property Value</td>
+			<td>						The value for the property.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>True/False</td>
+			<td>						Should the original value be returned?
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__time"><h3>19.5.17 __time</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								The time function returns the current time in various formats.
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Format</td>
+			<td>						
+        The format to be passed to SimpleDateFormat. 
+        The function supports various shorthand aliases, see below.
+        
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Variable</td>
+			<td>						The name of the variable to set.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								If the format string is omitted, then the function returns the current time in milliseconds.
+Otherwise, the current time is passed to SimpleDateFormat.
+The following shorthand aliases are provided:
+
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								YMD = yyyyMMdd
+						</li>
+									
+
+												<li	>
+								HMS = HHmmss
+						</li>
+									
+
+												<li	>
+								YMDHMS = yyyyMMdd-HHmmss
+						</li>
+									
+
+												<li	>
+								USER1 = whatever is in the Jmeter property time.USER1
+						</li>
+									
+
+												<li	>
+								USER2 = whatever is in the Jmeter property time.USER2
+						</li>
+									
+
+						</ul>
+							  									 				<p	>
+								The defaults can be changed by setting the appropriate JMeter property, e.g.
+time.YMD=yyMMdd
+
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__jexl"><h3>19.5.18 __jexl</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								The jexl function returns the result of evaluating a 
+	
+												<a	 href="http://jakarta.apache.org/commons/jexl">
+								Commons JEXL expression
+						</a>
+									.
+	
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Expression</td>
+			<td>						
+        The expression to be evaluated. 
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__V"><h3>19.5.19 __V</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								The V (variable) function returns the result of evaluating a variable name expression.
+	This can be used to evaluate nested variable references (which are not currently supported).
+	
+						</p>
+									
+	
+												<p	>
+								For example, if one has variables A1,A2 and N=1:
+						</p>
+									
+	
+												<ul	>
+								
+	
+												<li	>
+								${A1} - works OK
+						</li>
+									
+	
+												<li	>
+								${A${N}} - does not work (nested variable reference)
+						</li>
+									
+	
+												<li	>
+								${__V(A${N})} - works OK. A${N} becomes A1, and the __V function returns the value of A1
+						</li>
+									
+	
+						</ul>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Variable name</td>
+			<td>						
+        The variable to be evaluated. 
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="predefinedvars"><strong>19.6 Pre-defined Variables</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+Most variables are set by calling functions or by test elements such as User Defined Variables; 
+in which case the user has full control over the variable name that is used.
+However some variables are defined internally by JMeter. These are listed below.
+
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								cookiename - contains the cookie value
+						</li>
+									
+
+												<li	>
+								JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false
+						</li>
+									
+
+												<li	>
+								START variables (see next section)
+						</li>
+									
+
+						</ul>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="predefinedprops"><strong>19.6 Pre-defined Properties</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+The set of JMeter properties is initialised from the system properties defined when JMeter starts;
+additional JMeter properties are defined in jmeter.properties, user.properties or on the command line.
+
+						</p>
+							  									 				<p	>
+								
+Some built-in properties are defined by JMeter. These are listed below.
+For convenience, the START properties are also copied to variables with the same names.
+
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								START.MS - start time in milliseconds
+						</li>
+									
+
+												<li	>
+								START.YMD - start time as yyyyMMdd
+						</li>
+									
+
+												<li	>
+								START.HMS - start time as HHmmss
+						</li>
+									
+
+						</ul>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  		  </blockquote>
+		  </p>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+						  						    		<table>
+		<tr>
+		<td bgcolor="#525D76">
+        <div align="right"><a href="index.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Index</font></a></div>
+        </td>
+				<td bgcolor="#525D76">
+        <div align="right"><a href="regular_expressions.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Next</font></a></div>
+        </td>
+        				<td bgcolor="#525D76">
+        <div align="right"><a href="component_reference.html"><font size=-1 color="#ffffff" face="arial,helvetica,sanserif">Prev</font></a></div>
+        </td>
+                </tr>
+         </table>
+      						  <br>
+						  </td>
+					 </tr>
+
+					 <tr><td colspan="2">
+						  <hr noshade size="1"/>
+					 </td></tr>
+					 <tr><td colspan="2">
+						  <div align="center"><font color="#525D76" size="-1"><em>
+						  Copyright &#169; 1999-2007, Apache Software Foundation
+						  </em></font></div>
+					 </td></tr>
+				</table>
+		  </body>
+	 </html>
+<!-- end the processing -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

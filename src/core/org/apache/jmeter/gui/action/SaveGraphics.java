@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -31,8 +31,6 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * SaveGraphics action is meant to be a generic reusable Action. The class will
@@ -43,16 +41,15 @@ import org.apache.log.Logger;
  * it will call SaveGraphicsService to save in the format.
  */
 public class SaveGraphics implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	public final static String SAVE_GRAPHICS = "save_graphics";
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(SAVE_GRAPHICS);
+		commands.add(ActionNames.SAVE_GRAPHICS);
+        commands.add(ActionNames.SAVE_GRAPHICS_ALL);
 	}
 
-	public static String[] extensions = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
+	private static final String[] extensions 
+        = { SaveGraphicsService.TIFF_EXTENSION, SaveGraphicsService.PNG_EXTENSION };
 
 	/**
 	 * Constructor for the Save object.
@@ -75,51 +72,44 @@ public class SaveGraphics implements Command {
 		if (!commands.contains(e.getActionCommand())) {
 			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
 		}
-		if (e.getActionCommand().equals(SAVE_GRAPHICS)) {
+		if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {
 			component = GuiPackage.getInstance().getCurrentGui();
 			// get the JComponent from the visualizer
 			if (component instanceof Printable) {
 				comp = ((Printable) component).getPrintableComponent();
-
-				String filename;
-				JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
-						.getCurrentNode().getName(), extensions);
-				if (chooser == null) {
-					return;
-				}
-				// Get the string given from the choose and check
-				// the file extension.
-				filename = chooser.getSelectedFile().getAbsolutePath();
-				if (filename != null) {
-					SaveGraphicsService save = new SaveGraphicsService();
-					String ext = filename.substring(filename.length() - 4);
-					String name = filename.substring(0, filename.length() - 4);
-					if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
-						save.saveJComponent(name, SaveGraphicsService.PNG, comp);
-					} else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
-						save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
-					} else {
-						save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
-					}
-				}
+                saveImage(comp);
 			}
 		}
+        if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS_ALL)) {
+            component = GuiPackage.getInstance().getCurrentGui();
+            comp=((JComponent) component).getRootPane();
+            saveImage(comp);
+        }
 	}
 
-	public static class Test extends junit.framework.TestCase {
-		SaveGraphics save;
+    private void saveImage(JComponent comp){
 
-		public Test(String name) {
-			super(name);
-		}
+        String filename;
+        JFileChooser chooser = FileDialoger.promptToSaveFile(GuiPackage.getInstance().getTreeListener()
+                .getCurrentNode().getName(), extensions);
+        if (chooser == null) {
+            return;
+        }
+        // Get the string given from the choose and check
+        // the file extension.
+        filename = chooser.getSelectedFile().getAbsolutePath();
+        if (filename != null) {
+            SaveGraphicsService save = new SaveGraphicsService();
+            String ext = filename.substring(filename.length() - 4);
+            String name = filename.substring(0, filename.length() - 4);
+            if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
+                save.saveJComponent(name, SaveGraphicsService.PNG, comp);
+            } else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
+                save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
+            } else {
+                save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
+            }
+        }
 
-		public void setUp() {
-			save = new SaveGraphics();
-		}
-
-		public void testSomething() {
-			// TODO write some tests
-		}
-	}
-
+    }
 }

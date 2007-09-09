@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,15 +32,11 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @version $Revision$ $Date$
- */
 public class BeanShellSamplerGui extends AbstractSamplerGui {
 
 	private JTextField filename;// script file name (if present)
 
-	private JTextField parameters;// parameters to pass to script file (or
-									// script)
+	private JTextField parameters;// parameters to pass to script file (or script)
 
 	private JTextArea scriptField;// script area
 
@@ -73,14 +69,25 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		te.setProperty(BeanShellSampler.FILENAME, filename.getText());
 		te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        filename.setText(""); //$NON-NLS-1$
+        parameters.setText(""); //$NON-NLS-1$
+        scriptField.setText(""); //$NON-NLS-1$
+    }    
 
 	public String getLabelResource() {
-		return "bsh_sampler_title";
+		return "bsh_sampler_title"; // $NON-NLS-1$
 	}
 
 	private JPanel createFilenamePanel()// TODO ought to be a FileChooser ...
 	{
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_file")); // $NON-NLS-1$
 
 		filename = new JTextField(10);
 		filename.setName(BeanShellSampler.FILENAME);
@@ -93,7 +100,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 	}
 
 	private JPanel createParameterPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script_parameters")); // $NON-NLS-1$
 
 		parameters = new JTextField(10);
 		parameters.setName(BeanShellSampler.PARAMETERS);
@@ -127,7 +134,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		scriptField.setLineWrap(true);
 		scriptField.setWrapStyleWord(true);
 
-		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script"));
+		JLabel label = new JLabel(JMeterUtils.getResString("bsh_script")); // $NON-NLS-1$
 		label.setLabelFor(scriptField);
 
 		JPanel panel = new JPanel(new BorderLayout());

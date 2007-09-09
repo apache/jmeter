@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +18,7 @@
 
 package org.apache.jmeter;
 
+// N.B. this must only use standard Java packages
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -29,8 +30,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
+ * Main class for JMeter - sets up initial classpath.
+ * 
  * @author Michael Stover
- * @version $Revision$
  */
 public final class NewDriver {
 	/** The class loader to use for loading JMeter classes. */
@@ -45,15 +47,22 @@ public final class NewDriver {
 
 		// Find JMeter home dir
 		StringTokenizer tok = new StringTokenizer(cp, File.pathSeparator);
-		if (tok.countTokens() == 1) {
+		if (tok.countTokens() == 1 
+				|| (tok.countTokens()  == 2 
+				    && System.getProperty("os.name").toLowerCase().startsWith("mac os x")
+				   )
+		   ) {
 			File jar = new File(tok.nextToken());
 			try {
 				jmDir = jar.getCanonicalFile().getParentFile().getParent();
 			} catch (IOException e) {
 			}
-		} else {
-			File userDir = new File(System.getProperty("user.dir"));
-			jmDir = userDir.getAbsoluteFile().getParent();
+		} else {// e.g. started from IDE with full classpath
+			jmDir = System.getProperty("jmeter.home","");// Allow override
+			if (jmDir.length() == 0) {
+				File userDir = new File(System.getProperty("user.dir"));
+				jmDir = userDir.getAbsoluteFile().getParent();
+			}
 		}
 
 		/*
@@ -98,9 +107,9 @@ public final class NewDriver {
 			}
 		}
 
+		// ClassFinder needs this
 		System.setProperty("java.class.path", System.getProperty("java.class.path") + classpath.toString());
 		loader = new DynamicClassLoader((URL[]) jars.toArray(new URL[0]));
-
 	}
 
 	/**
@@ -116,6 +125,20 @@ public final class NewDriver {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static void addURL(URL url) {
+        loader.addURL(url);
+    }
+    
+    public static void addPath(String path) throws MalformedURLException {
+		URL url = new URL("file","",path);
+        loader.addURL(url);
+    	StringBuffer sb = new StringBuffer(System.getProperty("java.class.path"));
+    	sb.append(System.getProperty("path.separator"));
+    	sb.append(path);
+		// ClassFinder needs this
+		System.setProperty("java.class.path",sb.toString());
     }
     
 	/**
@@ -135,7 +158,6 @@ public final class NewDriver {
 	 *            the command line arguments
 	 */
 	public static void main(String[] args) {
-		
 		Thread.currentThread().setContextClassLoader(loader);
 		if (System.getProperty("log4j.configuration") == null) {
 			File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");
@@ -151,6 +173,7 @@ public final class NewDriver {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("JMeter home directory was detected as: "+jmDir);
             }
         } else {
             try {
@@ -161,7 +184,8 @@ public final class NewDriver {
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+                System.out.println("JMeter home directory was detected as: "+jmDir);
+           }
         }
 	}
 }

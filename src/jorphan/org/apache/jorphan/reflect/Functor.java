@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -117,8 +118,9 @@ public class Functor {
 		try {
 			return createMethod(getTypes()).invoke(invokee, getArgs());
 		} catch (Exception e) {
-			log.warn("Trouble functing method: ", e);
-			throw new org.apache.jorphan.util.JMeterError(e); // JDK1.4
+			final String message = "Trouble functing method: "+methodName+" invokee: "+invokee.getClass().getName();
+			log.warn(message, e);
+			throw new org.apache.jorphan.util.JMeterError(message,e); // JDK1.4
 		}
 	}
 
@@ -170,6 +172,53 @@ public class Functor {
 		return methodToInvoke;
 	}
 
+	/*
+	 * Check if a read Functor method is valid.
+	 * 
+	 * @deprecated ** for use by Unit test code only **
+	 * 
+	 * @return true if method exists
+	 */
+	public boolean checkMethod(Object _invokee){
+		Method m = null;
+		this.invokee=_invokee;
+		try {
+		    m = createMethod(getTypes());
+		} catch (Exception e){
+			// ignored
+		}
+		return null != m;
+	}
+
+	/*
+	 * Check if a write Functor method is valid.
+	 * 
+	 * @deprecated ** for use by Unit test code only **
+	 * 
+	 * @return true if method exists
+	 */
+	public boolean checkMethod(Object _invokee, Class c){
+		Method m = null;
+		this.invokee=_invokee;
+		try {
+		    m = createMethod(new Class[]{c});
+		} catch (Exception e){
+			// ignored
+		}
+		return null != m;
+	}
+
+	public String toString(){
+		StringBuffer sb = new StringBuffer(100);
+		sb.append("method: ");
+		sb.append(methodName);
+		if (invokee != null){
+		    sb.append(" invokee: ");
+		    sb.append(invokee.getClass().getName());
+		}
+		return sb.toString();
+	}
+
 	protected Class getPrimitive(Class t) {
 		if (t.equals(Integer.class)) {
 			return int.class;
@@ -194,9 +243,10 @@ public class Functor {
 	protected Class[] getNewArray(int i, Class replacement, Class[] orig) {
 		Class[] newArray = new Class[orig.length];
 		for (int j = 0; j < newArray.length; j++) {
-			newArray[j] = orig[j];
 			if (j == i) {
 				newArray[j] = replacement;
+			} else {
+				newArray[j] = orig[j];				
 			}
 		}
 		return newArray;

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,9 +22,6 @@ import org.apache.jmeter.control.OnceOnlyController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class OnceOnlyControllerGui extends AbstractControllerGui {
 	public OnceOnlyControllerGui() {
 		init();
@@ -46,11 +43,11 @@ public class OnceOnlyControllerGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "once_only_controller_title";
+		return "once_only_controller_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 	}

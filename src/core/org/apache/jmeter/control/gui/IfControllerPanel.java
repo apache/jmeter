@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -37,13 +37,11 @@ import org.apache.jmeter.util.JMeterUtils;
  * should be executed while a condition holds. This component can be used
  * standalone or embedded into some other component.
  * 
- * @author Cyrus Montakab
- * @version $Revision$ $Date$
  */
 
 public class IfControllerPanel extends AbstractControllerGui implements ActionListener {
 
-	private static final String CONDITION_LABEL = "if_controller_label";
+	private static final String CONDITION_LABEL = "if_controller_label"; // $NON-NLS-1$
 
 	/**
 	 * A field allowing the user to specify the number of times the controller
@@ -59,7 +57,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	private boolean displayName = true;
 
 	/** The name of the loops field component. */
-	private static final String CONDITION = "JS_Condition";
+	private static final String CONDITION = "JS_Condition"; // $NON-NLS-1$
 
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
@@ -118,10 +116,18 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 			if (theCondition.getText().length() > 0) {
 				((IfController) controller).setCondition(theCondition.getText());
 			} else {
-				((IfController) controller).setCondition("");
+				((IfController) controller).setCondition(""); // $NON-NLS-1$
 			}
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        theCondition.setText(""); // $NON-NLS-1$
+    }
 
 	/**
 	 * Invoked when an action occurs. This implementation assumes that the
@@ -135,7 +141,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	}
 
 	public String getLabelResource() {
-		return "if_controller_title";
+		return "if_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -172,7 +178,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 		conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
 		// TEXT FIELD
-		theCondition = new JTextField("");
+		theCondition = new JTextField(""); // $NON-NLS-1$
 		theCondition.setName(CONDITION);
 		conditionLabel.setLabelFor(theCondition);
 		conditionPanel.add(theCondition, BorderLayout.CENTER);

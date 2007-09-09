@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,11 +23,23 @@ import java.util.LinkedList;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * @version $Revision$
  */
 public class DisabledComponentRemover implements HashTreeTraverser {
+
+    /*
+     * TODO - does this class work? and is it needed? 
+     * It is only called by Start, and then only after
+     * having called convertTree - which removes the disabled elements anyway.
+     * When tried in IncludeController, it failed to work.
+    */
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
 	HashTree tree;
 
 	LinkedList stack = new LinkedList();
@@ -41,8 +53,14 @@ public class DisabledComponentRemover implements HashTreeTraverser {
 	}
 
 	public void subtractNode() {
-		TestElement lastNode = (TestElement) stack.removeLast();
+		Object removeLast = stack.removeLast();
+        if (!(removeLast instanceof TestElement)) {
+            log.warn("Expected class TestElement, found "+removeLast.getClass().getName());
+            return;
+        }
+        TestElement lastNode = (TestElement) removeLast;
 		if (!lastNode.getPropertyAsBoolean(TestElement.ENABLED)) {
+            log.info("*** Removing *** "+lastNode);// TODO not sure this is ever called
 			tree.getTree(stack).remove(lastNode);
 		}
 	}

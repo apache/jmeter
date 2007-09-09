@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -59,41 +59,41 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 
 	private SampleResult ROOTSAMPLE;
 
-	public static final String LEGEND_HEALTH = JMeterUtils.getResString("monitor_legend_health");
+	public static final String LEGEND_HEALTH = JMeterUtils.getResString("monitor_legend_health"); //$NON-NLS-1$
 
-	public static final String LEGEND_LOAD = JMeterUtils.getResString("monitor_legend_load");
+	public static final String LEGEND_LOAD = JMeterUtils.getResString("monitor_legend_load"); //$NON-NLS-1$
 
-	public static final String LEGEND_MEM = JMeterUtils.getResString("monitor_legend_memory_per");
+	public static final String LEGEND_MEM = JMeterUtils.getResString("monitor_legend_memory_per"); //$NON-NLS-1$
 
-	public static final String LEGEND_THREAD = JMeterUtils.getResString("monitor_legend_thread_per");
+	public static final String LEGEND_THREAD = JMeterUtils.getResString("monitor_legend_thread_per"); //$NON-NLS-1$
 
-	public static final ImageIcon LEGEND_HEALTH_ICON = JMeterUtils.getImage("monitor-green-legend.gif");
+	public static final ImageIcon LEGEND_HEALTH_ICON = JMeterUtils.getImage("monitor-green-legend.gif"); //$NON-NLS-1$
 
-	public static final ImageIcon LEGEND_LOAD_ICON = JMeterUtils.getImage("monitor-blue-legend.gif");
+	public static final ImageIcon LEGEND_LOAD_ICON = JMeterUtils.getImage("monitor-blue-legend.gif"); //$NON-NLS-1$
 
-	public static final ImageIcon LEGEND_MEM_ICON = JMeterUtils.getImage("monitor-orange-legend.gif");
+	public static final ImageIcon LEGEND_MEM_ICON = JMeterUtils.getImage("monitor-orange-legend.gif"); //$NON-NLS-1$
 
-	public static final ImageIcon LEGEND_THREAD_ICON = JMeterUtils.getImage("monitor-red-legend.gif");
+	public static final ImageIcon LEGEND_THREAD_ICON = JMeterUtils.getImage("monitor-red-legend.gif"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_TOP = JMeterUtils.getResString("monitor_label_left_top");
+	public static final String GRID_LABEL_TOP = JMeterUtils.getResString("monitor_label_left_top"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_MIDDLE = JMeterUtils.getResString("monitor_label_left_middle");
+	public static final String GRID_LABEL_MIDDLE = JMeterUtils.getResString("monitor_label_left_middle"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_BOTTOM = JMeterUtils.getResString("monitor_label_left_bottom");
+	public static final String GRID_LABEL_BOTTOM = JMeterUtils.getResString("monitor_label_left_bottom"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_HEALTHY = JMeterUtils.getResString("monitor_label_right_healthy");
+	public static final String GRID_LABEL_HEALTHY = JMeterUtils.getResString("monitor_label_right_healthy"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_ACTIVE = JMeterUtils.getResString("monitor_label_right_active");
+	public static final String GRID_LABEL_ACTIVE = JMeterUtils.getResString("monitor_label_right_active"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_WARNING = JMeterUtils.getResString("monitor_label_right_warning");
+	public static final String GRID_LABEL_WARNING = JMeterUtils.getResString("monitor_label_right_warning"); //$NON-NLS-1$
 
-	public static final String GRID_LABEL_DEAD = JMeterUtils.getResString("monitor_label_right_dead");
+	public static final String GRID_LABEL_DEAD = JMeterUtils.getResString("monitor_label_right_dead"); //$NON-NLS-1$
 
-	public static final String PERF_TITLE = JMeterUtils.getResString("monitor_performance_title");
+	public static final String PERF_TITLE = JMeterUtils.getResString("monitor_performance_title"); //$NON-NLS-1$
 
-	public static final String SERVER_TITLE = JMeterUtils.getResString("monitor_performance_servers");
+	public static final String SERVER_TITLE = JMeterUtils.getResString("monitor_performance_servers"); //$NON-NLS-1$
 
-	protected Font plaintext = new Font("plain", Font.TRUETYPE_FONT, 10);
+	protected Font plaintext = new Font("plain", Font.TRUETYPE_FONT, 10); //$NON-NLS-1$
 
 	/**
 	 * 
@@ -286,10 +286,10 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 	 * clear will remove all child nodes from the ROOTNODE, clear the HashMap,
 	 * update the graph and jpanel for the server tree.
 	 */
-	public void clear() {
+	public void clearData() {
 		this.SERVERMAP.clear();
 		ROOTNODE.removeAllChildren();
 		SERVERTREE.updateUI();
-		GRAPH.clear();
+		GRAPH.clearData();
 	}
 }

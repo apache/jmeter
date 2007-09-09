@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,20 +25,15 @@ import java.io.Serializable;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import junit.framework.TestCase;
-import junit.textui.TestRunner;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
+import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -74,8 +70,9 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 	 */
 	public AssertionResult getResult(SampleResult response) {
 		// no error as default
-		AssertionResult result = new AssertionResult();
-		if (response.getResponseData() == null) {
+		AssertionResult result = new AssertionResult(getName());
+		byte[] responseData = response.getResponseData();
+		if (responseData.length == 0) {
 			return result.setResultForNull();
 		}
 		result.setFailure(false);
@@ -90,7 +87,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 		Document doc = null;
 
 		try {
-			doc = XPathUtil.makeDocument(new ByteArrayInputStream(response.getResponseData()), isValidating(),
+			doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
 					isWhitespace(), isNamespace(), isTolerant());
 		} catch (SAXException e) {
 			log.debug("Caught sax exception: " + e);
@@ -118,18 +115,39 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
 		NodeList nodeList = null;
 
+		final String pathString = getXPathString();
 		try {
-			nodeList = XPathAPI.selectNodeList(doc, getXPathString());
+			XObject xObject = XPathAPI.eval(doc, pathString);
+			switch (xObject.getType()) {
+				case XObject.CLASS_NODESET:
+					nodeList = xObject.nodelist();
+					break;
+				case XObject.CLASS_BOOLEAN:
+					if (!xObject.bool()){
+						result.setFailure(!isNegated());
+						result.setFailureMessage("No Nodes Matched " + pathString);
+					}
+					return result;
+				default:
+					result.setFailure(true);
+				    result.setFailureMessage("Cannot understand: " + pathString);
+				    return result;
+			}
 		} catch (TransformerException e) {
 			result.setError(true);
-			result.setFailureMessage(new StringBuffer("TransformerException: ").append(e.getMessage()).toString());
+			result.setFailureMessage(
+					new StringBuffer("TransformerException: ")
+					.append(e.getMessage())
+					.append(" for:")
+					.append(pathString)
+					.toString());
 			return result;
 		}
 
 		if (nodeList == null || nodeList.getLength() == 0) {
-			log.debug(new StringBuffer("nodeList null no match  ").append(getXPathString()).toString());
+			log.debug(new StringBuffer("nodeList null no match  ").append(pathString).toString());
 			result.setFailure(!isNegated());
-			result.setFailureMessage("No Nodes Matched " + getXPathString());
+			result.setFailureMessage("No Nodes Matched " + pathString);
 			return result;
 		}
 		log.debug("nodeList length " + nodeList.getLength());
@@ -150,20 +168,6 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 	 */
 	public String getXPathString() {
 		return getPropertyAsString(XPATH_KEY, DEFAULT_XPATH);
-	}
-
-	/**
-	 * Get a Property or return the default string
-	 * 
-	 * @param key
-	 *            Property Key
-	 * @param defaultValue
-	 *            Default Value
-	 * @return String property
-	 */
-	private String getPropertyAsString(String key, String defaultValue) {
-		String str = getPropertyAsString(key);
-		return (str == null || str.length() == 0) ? defaultValue : str;
 	}
 
 	/**
@@ -262,168 +266,4 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 		return getPropertyAsBoolean(NEGATE_KEY, false);
 	}
 
-	// //////////////////////////////// TEST CASES
-	// //////////////////////////////
-
-	public static class XPathAssertionTest extends TestCase {
-
-		XPathAssertion assertion;
-
-		SampleResult result;
-
-		JMeterVariables vars;
-
-		JMeterContext jmctx;
-
-		public XPathAssertionTest() {
-			super();
-		}
-
-		public XPathAssertionTest(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			assertion = new XPathAssertion();
-			assertion.setThreadContext(jmctx);// This would be done by the run
-												// command
-			// assertion.setRefName("regVal");
-
-			result = new SampleResult();
-			String data = "<company-xmlext-query-ret>" + "<row>" + "<value field=\"RetCode\">LIS_OK</value>"
-					+ "<value field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value>"
-					+ "<value field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value>"
-					+ "<value field=\"pinposition1\">1</value>" + "<value field=\"pinpositionvalue1\"></value>"
-					+ "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
-					+ "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
-					+ "</row>" + "</company-xmlext-query-ret>";
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-		}
-
-		public void testAssertion() throws Exception {
-			assertion.setXPathString("//row/value[@field = 'alias']");
-			AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
-			log.debug(" res " + res.isError());
-			log.debug(" failure " + res.getFailureMessage());
-			assertFalse(res.isError());
-			assertFalse(res.isFailure());
-		}
-
-		public void testNegateAssertion() throws Exception {
-			assertion.setXPathString("//row/value[@field = 'noalias']");
-			assertion.setNegated(true);
-
-			AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
-			log.debug(" res " + res.isError());
-			log.debug(" failure " + res.getFailureMessage());
-			assertFalse(res.isError());
-			assertFalse(res.isFailure());
-		}
-
-		public void testValidationFailure() throws Exception {
-			assertion.setXPathString("//row/value[@field = 'alias']");
-			assertion.setNegated(false);
-			assertion.setValidating(true);
-			AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
-			log.debug(res.getFailureMessage() + " error: " + res.isError() + " failure: " + res.isFailure());
-			assertTrue(res.isError());
-			assertFalse(res.isFailure());
-
-		}
-
-		public void testValidationSuccess() throws Exception {
-			String data = "<?xml version=\"1.0\"?>" + "<!DOCTYPE BOOK [" + "<!ELEMENT p (#PCDATA)>"
-					+ "<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
-					+ "<!ELEMENT OPENER       (TITLE_TEXT)*>" + "<!ELEMENT TITLE_TEXT   (#PCDATA)>"
-					+ "<!ELEMENT SUBTITLE     (#PCDATA)>" + "<!ELEMENT INTRODUCTION (HEADER, p+)+>"
-					+ "<!ELEMENT PART         (HEADER, CHAPTER+)>" + "<!ELEMENT SECTION      (HEADER, p+)>"
-					+ "<!ELEMENT HEADER       (#PCDATA)>" + "<!ELEMENT CHAPTER      (CHAPTER_NUMBER, CHAPTER_TEXT)>"
-					+ "<!ELEMENT CHAPTER_NUMBER (#PCDATA)>" + "<!ELEMENT CHAPTER_TEXT (p)+>" + "]>" + "<BOOK>"
-					+ "<OPENER>" + "<TITLE_TEXT>All About Me</TITLE_TEXT>" + "</OPENER>" + "<PART>"
-					+ "<HEADER>Welcome To My Book</HEADER>" + "<CHAPTER>"
-					+ "<CHAPTER_NUMBER>CHAPTER 1</CHAPTER_NUMBER>" + "<CHAPTER_TEXT>"
-					+ "<p>Glad you want to hear about me.</p>" + "<p>There's so much to say!</p>"
-					+ "<p>Where should we start?</p>" + "<p>How about more about me?</p>" + "</CHAPTER_TEXT>"
-					+ "</CHAPTER>" + "</PART>" + "</BOOK>";
-
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-			assertion.setXPathString("/");
-			assertion.setValidating(true);
-			AssertionResult res = assertion.getResult(result);
-			assertFalse(res.isError());
-			assertFalse(res.isFailure());
-		}
-
-		public void testValidationFailureWithDTD() throws Exception {
-			String data = "<?xml version=\"1.0\"?>" + "<!DOCTYPE BOOK [" + "<!ELEMENT p (#PCDATA)>"
-					+ "<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
-					+ "<!ELEMENT OPENER       (TITLE_TEXT)*>" + "<!ELEMENT TITLE_TEXT   (#PCDATA)>"
-					+ "<!ELEMENT SUBTITLE     (#PCDATA)>" + "<!ELEMENT INTRODUCTION (HEADER, p+)+>"
-					+ "<!ELEMENT PART         (HEADER, CHAPTER+)>" + "<!ELEMENT SECTION      (HEADER, p+)>"
-					+ "<!ELEMENT HEADER       (#PCDATA)>" + "<!ELEMENT CHAPTER      (CHAPTER_NUMBER, CHAPTER_TEXT)>"
-					+ "<!ELEMENT CHAPTER_NUMBER (#PCDATA)>" + "<!ELEMENT CHAPTER_TEXT (p)+>" + "]>" + "<BOOK>"
-					+ "<OPENER>" + "<TITLE_TEXT>All About Me</TITLE_TEXT>" + "</OPENER>" + "<PART>"
-					+ "<HEADER>Welcome To My Book</HEADER>" + "<CHAPTER>"
-					+ "<CHAPTER_NUMBER>CHAPTER 1</CHAPTER_NUMBER>" + "<CHAPTER_TEXT>"
-					+ "<p>Glad you want to hear about me.</p>" + "<p>There's so much to say!</p>"
-					+ "<p>Where should we start?</p>" + "<p>How about more about me?</p>" + "</CHAPTER_TEXT>"
-					+ "</CHAPTER>" + "<illegal>not defined in dtd</illegal>" + "</PART>" + "</BOOK>";
-
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-			assertion.setXPathString("/");
-			assertion.setValidating(true);
-			AssertionResult res = assertion.getResult(result);
-			log.debug("failureMessage: " + res.getFailureMessage());
-			assertTrue(res.isError());
-			assertFalse(res.isFailure());
-		}
-
-		public void testTolerance() throws Exception {
-			String data = "<html><head><title>testtitle</title></head>" + "<body>"
-					+ "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
-
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-			assertion.setXPathString("/html/head/title");
-			assertion.setValidating(true);
-			assertion.setTolerant(true);
-			AssertionResult res = assertion.getResult(result);
-			log.debug("failureMessage: " + res.getFailureMessage());
-			assertFalse(res.isFailure());
-			assertFalse(res.isError());
-		}
-
-		public void testNoTolerance() throws Exception {
-			String data = "<html><head><title>testtitle</title></head>" + "<body>"
-					+ "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
-
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-			assertion.setXPathString("/html/head/title");
-			assertion.setValidating(false);
-			assertion.setTolerant(false);
-			AssertionResult res = assertion.getResult(result);
-			log.debug("failureMessage: " + res.getFailureMessage());
-			assertTrue(res.isError());
-			assertFalse(res.isFailure());
-		}
-
-		public static void main(String[] args) {
-			TestRunner.run(XPathAssertionTest.class);
-		}
-	}
 }

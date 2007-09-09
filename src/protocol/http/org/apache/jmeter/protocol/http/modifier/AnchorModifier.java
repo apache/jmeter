@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.http.modifier;
 
-import java.io.FileInputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -32,33 +31,29 @@ import java.util.Random;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+// For Unit tests, @see TestAnchorModifier
 
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class AnchorModifier extends AbstractTestElement implements PreProcessor, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Random rand = new Random();
 
@@ -82,25 +77,28 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			result = (HTTPSampleResult) res;
 		}
 		List potentialLinks = new ArrayList();
-		String responseText = "";
+		String responseText = ""; // $NON-NLS-1$
 		try {
-			responseText = new String(result.getResponseData(), "8859_1");
+			responseText = new String(result.getResponseData(), result.getDataEncoding());
 		} catch (UnsupportedEncodingException e) {
 		}
 		Document html;
-		try {
-			int index = responseText.indexOf("<");
-			if (index == -1) {
-				index = 0;
-			}
-			html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
-		} catch (SAXException e) {
-			return;
+		int index = responseText.indexOf("<"); // $NON-NLS-1$
+		if (index == -1) {
+			index = 0;
 		}
+		if (log.isDebugEnabled()) {
+		    log.debug("Check for matches against: "+sampler.toString());
+		}
+		html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
 		addAnchorUrls(html, result, sampler, potentialLinks);
 		addFormUrls(html, result, sampler, potentialLinks);
+		addFramesetUrls(html, result, sampler, potentialLinks);
 		if (potentialLinks.size() > 0) {
 			HTTPSamplerBase url = (HTTPSamplerBase) potentialLinks.get(rand.nextInt(potentialLinks.size()));
+			if (log.isDebugEnabled()) {
+			    log.debug("Selected: "+url.toString());
+			}
 			sampler.setDomain(url.getDomain());
 			sampler.setPath(url.getPath());
 			if (url.getMethod().equals(HTTPSamplerBase.POST)) {
@@ -115,12 +113,16 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			}
 			sampler.setProtocol(url.getProtocol());
 			return;
+		} else {
+			log.debug("No matches found");
 		}
 		return;
 	}
 
 	private void modifyArgument(Argument arg, Arguments args) {
-		log.debug("Modifying argument: " + arg);
+		if (log.isDebugEnabled()) {
+		    log.debug("Modifying argument: " + arg);
+		}
 		List possibleReplacements = new ArrayList();
 		PropertyIterator iter = args.iterator();
 		Argument replacementArg;
@@ -131,7 +133,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 					possibleReplacements.add(replacementArg);
 				}
 			} catch (Exception ex) {
-				log.error("", ex);
+				log.error("Problem adding Argument", ex);
 			}
 		}
 
@@ -139,7 +141,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			replacementArg = (Argument) possibleReplacements.get(rand.nextInt(possibleReplacements.size()));
 			arg.setName(replacementArg.getName());
 			arg.setValue(replacementArg.getValue());
-			log.debug("Just set argument to values: " + arg.getName() + " = " + arg.getValue());
+			if (log.isDebugEnabled()) {
+			    log.debug("Just set argument to values: " + arg.getName() + " = " + arg.getValue());
+			}
 			args.removeArgument(replacementArg);
 		}
 	}
@@ -156,107 +160,81 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		Iterator iter = urls.iterator();
 		while (iter.hasNext()) {
 			HTTPSamplerBase newUrl = (HTTPSamplerBase) iter.next();
-			try {
-				newUrl.setMethod(HTTPSamplerBase.POST);
-				if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
-					potentialLinks.add(newUrl);
-				}
-			} catch (org.apache.oro.text.regex.MalformedPatternException e) {
-				log.error("Bad pattern", e);
+			newUrl.setMethod(HTTPSamplerBase.POST);
+			if (log.isDebugEnabled()) {
+			    log.debug("Potential Form match: " + newUrl.toString());
+			}
+			if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
+				log.debug("Matched!");
+				potentialLinks.add(newUrl);
 			}
 		}
 	}
 
 	private void addAnchorUrls(Document html, HTTPSampleResult result, HTTPSamplerBase config, List potentialLinks) {
 		String base = "";
-		NodeList baseList = html.getElementsByTagName("base");
+		NodeList baseList = html.getElementsByTagName("base"); // $NON-NLS-1$
 		if (baseList.getLength() > 0) {
-			base = baseList.item(0).getAttributes().getNamedItem("href").getNodeValue();
+			base = baseList.item(0).getAttributes().getNamedItem("href").getNodeValue(); // $NON-NLS-1$
 		}
-		NodeList nodeList = html.getElementsByTagName("a");
+		NodeList nodeList = html.getElementsByTagName("a"); // $NON-NLS-1$
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node tempNode = nodeList.item(i);
 			NamedNodeMap nnm = tempNode.getAttributes();
-			Node namedItem = nnm.getNamedItem("href");
+			Node namedItem = nnm.getNamedItem("href"); // $NON-NLS-1$
 			if (namedItem == null) {
 				continue;
 			}
 			String hrefStr = namedItem.getNodeValue();
+			if (hrefStr.startsWith("javascript:")) { // $NON-NLS-1$
+				continue; // No point trying these
+			}
 			try {
 				HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, new URL(result.getURL(), base));
 				newUrl.setMethod(HTTPSamplerBase.GET);
-				log.debug("possible match: " + newUrl);
+				if (log.isDebugEnabled()) {
+				    log.debug("Potential <a href> match: " + newUrl);
+				}
 				if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
-					log.debug("Is a match! " + newUrl);
+					log.debug("Matched!");
 					potentialLinks.add(newUrl);
 				}
 			} catch (MalformedURLException e) {
-			} catch (org.apache.oro.text.regex.MalformedPatternException e) {
-				log.error("Bad pattern", e);
+	            log.warn("Bad URL "+e);
 			}
 		}
 	}
-
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		private JMeterContext jmctx = null;
-
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-		}
-
-		public void testProcessingHTMLFile(String HTMLFileName) throws Exception {
-			HTTPSamplerBase config = (HTTPSamplerBase) SaveService.loadTree(
-					new FileInputStream(System.getProperty("user.dir") + "/testfiles/load_bug_list.jmx")).getArray()[0];
-			config.setRunningVersion(true);
-			HTTPSampleResult result = new HTTPSampleResult();
-			HTTPSamplerBase context = (HTTPSamplerBase) SaveService.loadTree(
-					new FileInputStream(System.getProperty("user.dir") + "/testfiles/Load_JMeter_Page.jmx")).getArray()[0];
-			jmctx.setCurrentSampler(context);
-			jmctx.setCurrentSampler(config);
-			result.setResponseData(new TextFile(System.getProperty("user.dir") + HTMLFileName).getText().getBytes());
-			result.setSampleLabel(context.toString());
-			result.setSamplerData(context.toString());
-			result.setURL(new URL("http://issues.apache.org/fakepage.html"));
-			jmctx.setPreviousResult(result);
-			AnchorModifier modifier = new AnchorModifier();
-			modifier.setThreadContext(jmctx);
-			modifier.process();
-			assertEquals("http://issues.apache.org/bugzilla/buglist.cgi?"
-					+ "bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED"
-					+ "&email1=&emailtype1=substring&emailassigned_to1=1"
-					+ "&email2=&emailtype2=substring&emailreporter2=1" + "&bugidtype=include&bug_id=&changedin=&votes="
-					+ "&chfieldfrom=&chfieldto=Now&chfieldvalue="
-					+ "&product=JMeter&short_desc=&short_desc_type=substring"
-					+ "&long_desc=&long_desc_type=substring&bug_file_loc=" + "&bug_file_loc_type=substring&keywords="
-					+ "&keywords_type=anywords" + "&field0-0-0=noop&type0-0-0=noop&value0-0-0="
-					+ "&cmdtype=doit&order=Reuse+same+sort+as+last+time", config.toString());
-			config.recoverRunningVersion();
-			assertEquals("http://issues.apache.org/bugzilla/buglist.cgi?"
-					+ "bug_status=.*&bug_status=.*&bug_status=.*&email1="
-					+ "&emailtype1=substring&emailassigned_to1=1&email2=" + "&emailtype2=substring&emailreporter2=1"
-					+ "&bugidtype=include&bug_id=&changedin=&votes=" + "&chfieldfrom=&chfieldto=Now&chfieldvalue="
-					+ "&product=JMeter&short_desc=&short_desc_type=substring"
-					+ "&long_desc=&long_desc_type=substring&bug_file_loc=" + "&bug_file_loc_type=substring&keywords="
-					+ "&keywords_type=anywords&field0-0-0=noop" + "&type0-0-0=noop&value0-0-0=&cmdtype=doit"
-					+ "&order=Reuse+same+sort+as+last+time", config.toString());
-		}
-
-		public void testModifySampler() throws Exception {
-			testProcessingHTMLFile("/testfiles/jmeter_home_page.html");
-		}
-
-		public void testModifySamplerWithRelativeLink() throws Exception {
-			testProcessingHTMLFile("/testfiles/jmeter_home_page_with_relative_links.html");
-		}
-
-		// * Feature not yet implemented. TODO: implement it.
-		public void testModifySamplerWithBaseHRef() throws Exception {
-			testProcessingHTMLFile("/testfiles/jmeter_home_page_with_base_href.html");
-		}
-		// */
-	}
+    private void addFramesetUrls(Document html, HTTPSampleResult result,
+       HTTPSamplerBase config, List potentialLinks) {
+       String base = "";
+       NodeList baseList = html.getElementsByTagName("base"); // $NON-NLS-1$
+       if (baseList.getLength() > 0) {
+           base = baseList.item(0).getAttributes().getNamedItem("href") // $NON-NLS-1$
+                   .getNodeValue();
+       }
+       NodeList nodeList = html.getElementsByTagName("frame"); // $NON-NLS-1$
+       for (int i = 0; i < nodeList.getLength(); i++) {
+           Node tempNode = nodeList.item(i);
+           NamedNodeMap nnm = tempNode.getAttributes();
+           Node namedItem = nnm.getNamedItem("src"); // $NON-NLS-1$
+           if (namedItem == null) {
+               continue;
+           }
+           String hrefStr = namedItem.getNodeValue();
+           try {
+               HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(
+                       hrefStr, new URL(result.getURL(), base));
+               newUrl.setMethod(HTTPSamplerBase.GET);
+               if (log.isDebugEnabled()) {
+                   log.debug("Potential <frame src> match: " + newUrl);
+               }
+               if (HtmlParsingUtils.isAnchorMatched(newUrl, config)) {
+                   log.debug("Matched!");
+                   potentialLinks.add(newUrl);
+               }
+           } catch (MalformedURLException e) {
+               log.warn("Bad URL "+e);
+           }
+       }
+   }
 }

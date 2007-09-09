@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
-   $Header$
-   Copyright 2001-2004 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -15,17 +15,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '4'>
+]>
+
 <document prev="build-test-plan.html" next="build-web-test-plan.html" date="$Date$">
 
 <properties>
-  <title>User's Manual: Elements of a Test Plan</title>
+<title>User's Manual: Elements of a Test Plan</title>
 </properties>
 
 <body>
 
-<section name="4. Elements of a Test Plan">
+<section name="&sect-num;. Elements of a Test Plan">
 
-<p>The Test Plan object has a new checkbox to select called "Functional Testing".  If selected, it
+<p>The Test Plan object has a checkbox called "Functional Testing".  If selected, it
 will cause JMeter to record the data returned from the server for each sample.  If you have 
 selected a file in your test listeners, this data will be written to file.  This can be useful if
 you are doing a small run to ensure that JMeter is configured correctly, and that your server
@@ -33,8 +38,9 @@ is returning the expected results.  The consequence is that the file will grow h
 JMeter's performance will suffer.  This option should be off if you are doing stress-testing (it
 is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
+<p>You can also use the Configuration button on a listener to decide what fields to save.</p>
 
-<subsection name="4.1 ThreadGroup" anchor="thread_group">
+<subsection name="&sect-num;.1 ThreadGroup" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.  All elements
 of a test plan must be under a thread group.  As the name implies, the thread group
 element controls the number of threads JMeter will use to execute your test.  The
@@ -54,19 +60,27 @@ JMeter will take 100 seconds to get all 10 threads up and running.  Each thread 
 start 10 (100/10) seconds after the previous thread was begun.  If there are 30 threads
 and a ramp-up period of 120 seconds, then each successive thread will be delayed by 4 seconds.</p>
 
-<p>By default, a thread group is configured to loop indefinitely through its elements.
-Alternatively, you can set the number of times the thread group will loop before ending.  If the number
-is set at one, then JMeter will execute the test only once before stopping.</p>
+<p>Ramp-up needs to be long enough to avoid too large a work-load at the start
+of a test, and short enough that the last threads start running before
+the first ones finish (unless one wants that to happen).
+</p>
+<p>
+Start with Ramp-up = number of threads and adjust as needed.
+</p>
+
+<p>By default, the thread group is configured to loop once through its elements.</p>
 
 <p>Version 1.9 introduces a test run <b>scheduler</b>. 
-	Click the checkbox at the bottom of the Thread Group panel to reveal two extra fields
+	Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
 	 in which you can enter the start and end times of the run. 
 	 When the test is started, JMeter will wait if necessary until the start-time has been reached.
 	 At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
 	 otherwise the test is allowed to continue until the iteration limit is reached.</p>
+	 <p>Alternatively, one can use the relative delay and duration fields. 
+	 Note that delay overrides start-time, and duration over-rides end-time.</p>
 </subsection>
 
-<subsection name="4.2 Controllers" anchor="controllers">
+<subsection name="&sect-num;.2 Controllers" anchor="controllers">
 
 <p> JMeter has two types of Controllers: Samplers and Logical Controllers.</p>
 
@@ -79,17 +93,15 @@ information, see
 
 <p>Logical Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  For example, you can add an Interleave
-Logic Controller to alternate between two HTTP Request Samplers.  Also,
-one particular Logic Controller, the Modification Manager, lets you modify
-the results of a request.  For more information,
-see <a href="#logic_controller">Logical Controllers</a>.</p>
+Logic Controller to alternate between two HTTP Request Samplers.
+For more information, see <a href="#logic_controller">Logical Controllers</a>.</p>
 
 </subsection>
 
-<subsection name="4.2.1 Samplers" anchor="samplers">
+<subsection name="&sect-num;.2.1 Samplers" anchor="samplers">
 
-<p>Samplers tell JMeter to send requests to a server. JMeter
-currently has the following samplers:
+<p>Samplers tell JMeter to send requests to a server. 
+JMeter samplers include:
 <ul>
 	<li>FTP Request</li>
 	<li>HTTP Request</li>
@@ -97,11 +109,11 @@ currently has the following samplers:
 	<li>Java object request</li>
 	<li>LDAP Request</li>
 	<li>SOAP/XML-RPC Request</li>
-	<li>WebService (SOAP) Request (Alpha Code)</li>
+	<li>WebService (SOAP) Request</li>
 </ul>
 Each sampler has several properties you can set.
 You can further customize a sampler by adding one or more Configuration Elements to it.
-Also, note that JMeter sends requests in the order that you add them to the tree.</p>
+Note that JMeter sends requests in the order that the samplers appear in the tree.</p>
 
 <p>If you are going to send multiple requests of the same type (for example,
 HTTP Request) to the same server, consider using a Defaults Configuration
@@ -121,7 +133,7 @@ expressions.</p>
 <p><a href="component_reference.html#samplers">JMeter's built-in samplers</a></p>
 </subsection>
 
-<subsection name="4.2.2 Logic Controllers" anchor="logic_controller">
+<subsection name="&sect-num;.2.2 Logic Controllers" anchor="logic_controller">
 <p>Logic Controllers let you customize the logic that JMeter uses to
 decide when to send requests.  Logic Controllers may have as child elements any
 of the following: Samplers (requests), Configuration Elements, and other Logic
@@ -204,14 +216,20 @@ will share the same cookies.</p>
 Logic Controllers</a>.</p>
 </subsection>
 
-<subsection name="4.3 Listeners" anchor="listeners">
+<subsection name="&sect-num;.3 Listeners" anchor="listeners">
 <p>Listeners provide access to the information JMeter gathers about the test cases while
-JMeter runs.  The simplest listener, the <complink name="Graph
-Results"/> listener plots the response times on a graph.  Listeners provide a
-graphical view of the data that JMeter generates.</p>
+JMeter runs.  The  <complink name="Graph
+Results"/> listener plots the response times on a graph.  
+The "View Results Tree" Listener shows details of sampler requests and responses, and can display basic HTML and XML representations of the response.
+Other listeners provide summary or aggregation information.
+</p>
 
-<p>Additionally, listeners can direct the data they collect to a file for later use.  Every 
-listener in JMeter provides a field to indicate the file to store data to.</p>
+<p>
+Additionally, listeners can direct the data to a file for later use.  
+Every listener in JMeter provides a field to indicate the file to store data to.
+There is also a Configuration button which can be used to choose which fields to save, and whether to use CSV or XML format.
+<b>Note that all Listeners save the same data; the only difference is in the way the data is presented on the screen.</b>
+</p>
 
 <p>Listeners can be added anywhere in the test.  They will collect data only from elements at or 
 below their level.  </p>
@@ -220,22 +238,22 @@ below their level.  </p>
 that come with JMeter.</p>
 </subsection>
 
-<subsection name="4.4 Timers" anchor="timers">
+<subsection name="&sect-num;.4 Timers" anchor="timers">
 
 <p>By default, a JMeter thread sends requests without pausing between each request.
 We recommend that you specify a delay by adding one of the available timers to
 your Thread Group. If you do not add a delay, JMeter could overwhelm your server by
 making too many requests in a very short amount of time.</p>
 
-<p>The timer will cause JMeter to delay a certain amount of time between each
+<p>The timer will cause JMeter to delay a certain amount of time before each
 request that a thread makes.</p>
 
 <p>
 If you choose to add more than one timer to a Thread Group, JMeter takes the sum of
-the timers and pauses for that amount of time.</p>
+the timers and pauses for that amount of time before executing the samplers to which they apply.</p>
 </subsection>
 
-<subsection name="4.5 Assertions" anchor="assertions">
+<subsection name="&sect-num;.5 Assertions" anchor="assertions">
 
 <p>Assertions allow you to assert facts about responses received from the
 server being tested. Using an assertion, you can essentially "test" that your
@@ -247,14 +265,17 @@ you can indicate that the response is to contain the text, or that it should mat
 the whole response.</p>
 
 <p>You can add an assertion to any Sampler. For example, you can
-add an assertion to a HTTP Request that checks for the text, "&lt;/HTML&gt;".  JMeter
+add an assertion to a HTTP Request that checks for the text, "&amp;lt;/HTML&amp;gt;".  JMeter
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
 
-<p>To view the assertion results, add an Assertion Listener to the Thread Group.</p>
+<p>To view the assertion results, add an Assertion Listener to the Thread Group.
+Failed Assertions will also show up in the Tree View and Table Listeners, 
+and will count towards the error %age for example in the Aggregate and Summary reports.
+</p>
 </subsection>
 
-<subsection name="4.6 Configuration Elements" anchor="config_elements">
+<subsection name="&sect-num;.6 Configuration Elements" anchor="config_elements">
 <p>A configuration element works closely with a Sampler.  Although it does not send requests
 (except for <complink name="HTTP Proxy Server"/>), it can add to or modify requests.</p>
 
@@ -271,12 +292,86 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 	Test Plan Showing Accessability of Configuration Elements</figure>
 </subsection>
 
-<subsection name="4.7 Pre-Processor Elements" anchor="preprocessors">
+<subsection name="&sect-num;.7 Pre-Processor Elements" anchor="preprocessors">
 <p>A Pre-Processor executes some action prior to a Sampler Request being made.  If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running.  A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
 </subsection>
 
-<subsection name="4.8 Post-Processor Elements" anchor="postprocessors">
+<subsection name="&sect-num;.8 Post-Processor Elements" anchor="postprocessors">
 <p>A Post-Processor executes some action after a Sampler Request has been made.  If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.  A Post-Processor is most often used to process the response data, often to extract values from it.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
+</subsection>
+
+<subsection name="&sect-num;.9 Execution order" anchor="executionorder">
+<ol>
+<li>Pre-Processors</li>
+<li>Timers</li>
+<li>Sampler</li>
+<li>Post-Processors (unless SampleResult is null)</li>
+<li>Assertions (unless SampleResult is null)</li>
+<li>Listeners (unless SampleResult is null)</li>
+</ol>
+
+<note>
+Please note that Timers, Assertions, Pre- and Post-Processors are only processed if there is a sampler to which they apply.
+Logic Controllers and Samplers are processed in the order in which they appear in the tree. 
+Other test elements are processed according to the scope in which they are found, and the type of test element.
+[Within a type, elements are processed in the order in which they appear in the tree].
+</note>
+<p>
+For example, in the following test plan:
+<ul>
+<li>Controller</li>
+<ul>
+<li>Post-Processor 1</li>
+<li>Sampler 1</li>
+<li>Sampler 2</li>
+<li>Timer 1</li>
+<li>Assertion 1</li>
+<li>Pre-Processor 1</li>
+<li>Timer 2</li>
+<li>Post-Processor 2</li>
+</ul>
+</ul>
+The order of execution would be:
+<pre>
+Pre-Processor 1
+Timer 1
+Timer 2
+Sampler 1
+Post-Processor 1
+Post-Processor 2
+Assertion 1
+
+Pre-Processor 1
+Timer 1
+Timer 2
+Sampler 2
+Post-Processor 1
+Post-Processor 2
+Assertion 1
+</pre>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.10 Properties and Variables" anchor="properties">
+
+<p>
+JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Gettting Started - Configuring JMeter</a> for more details).
+<br></br>
+Properties are global to jmeter, and are used to define some of the defaults JMeter uses.
+For example the property remote_hosts defines the servers that JMeter will try to run remotely.
+Properties can be referenced in test plans 
+- see <a href="functions.html#__property">Functions - read a property</a> -
+but cannot be used for thread-specific values.
+</p>
+<p>
+JMeter <b>variables</b> are local to each thread. The values may be the same for each thread, or they may be different.
+<br></br>
+If a variable is updated by a thread, only the thread copy of the variable is changed.
+For example the <complink name="Regular Expression Extractor"/> Post-Processor 
+will set its variables according to the sample that its thread has read, and these can be used later
+by the same thread.
+For details of how to reference variables and functions, see <a href="functions.html">Functions and Variables</a>
+</p>
 </subsection>
 
 </section>

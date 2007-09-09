@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,10 +25,8 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.ReportGuiPackage;
-import org.apache.jmeter.report.gui.action.ReportActionRouter;
-import org.apache.jmeter.gui.action.CheckDirty;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.Command;
-import org.apache.jmeter.gui.action.Save;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -77,7 +76,7 @@ public class ReportClose implements Command {
 					.getResString("Save?"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 				ReportActionRouter.getInstance().doActionNow(
-						new ActionEvent(e.getSource(), e.getID(), Save.SAVE));
+						new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
 			}
 		}
 		guiPackage.getTreeModel().clearTestPlan();
@@ -87,6 +86,6 @@ public class ReportClose implements Command {
 		ReportGuiPackage.getInstance().setReportPlanFile(null);
 
 		ReportActionRouter.getInstance().actionPerformed(
-				new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));
+				new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
 	}
 }

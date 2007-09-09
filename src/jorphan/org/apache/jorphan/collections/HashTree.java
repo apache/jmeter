@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,11 +29,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-
-import junit.framework.TestCase;
-
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class is used to create a tree structure of objects. Each element in the
@@ -603,7 +598,6 @@ public class HashTree implements Serializable, Map {
 	 * Create a clone of this HashTree. This is not a deep clone (ie, the
 	 * contents of the tree are not cloned).
 	 * 
-	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() {
 		HashTree newTree = new HashTree();
@@ -930,11 +924,11 @@ public class HashTree implements Serializable, Map {
 	/**
 	 * Method readObject.
 	 */
-	void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
 	}
 
-	void writeObject(ObjectOutputStream oos) throws IOException {
+	private void writeObject(ObjectOutputStream oos) throws IOException {
 		oos.defaultWriteObject();
 	}
 
@@ -990,7 +984,7 @@ public class HashTree implements Serializable, Map {
 
 	protected Map data;
 
-	private class TreeSearcher implements HashTreeTraverser {
+	private static class TreeSearcher implements HashTreeTraverser {
 		Object target;
 
 		HashTree result;
@@ -1038,7 +1032,7 @@ public class HashTree implements Serializable, Map {
 		}
 	}
 
-	private class ConvertToString implements HashTreeTraverser {
+	private static class ConvertToString implements HashTreeTraverser {
 		StringBuffer string = new StringBuffer(getClass().getName() + "{");
 
 		StringBuffer spaces = new StringBuffer();
@@ -1072,69 +1066,6 @@ public class HashTree implements Serializable, Map {
 				spaces.setLength(depth * 2);
 			}
 			return spaces.toString();
-		}
-	}
-
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testAdd1() throws Exception {
-			Logger log = LoggingManager.getLoggerForClass();
-			Collection treePath = Arrays.asList(new String[] { "1", "2", "3", "4" });
-			HashTree tree = new HashTree();
-			log.debug("treePath = " + treePath);
-			tree.add(treePath, "value");
-			log.debug("Now treePath = " + treePath);
-			log.debug(tree.toString());
-			assertEquals(1, tree.list(treePath).size());
-			assertEquals("value", tree.getArray(treePath)[0]);
-		}
-
-		public void testEqualsAndHashCode() throws Exception {
-			HashTree tree1 = new HashTree("abcd");
-			HashTree tree2 = new HashTree("abcd");
-			HashTree tree3 = new HashTree("abcde");
-			HashTree tree4 = new HashTree("abcde");
-
-			assertTrue(tree1.equals(tree1));
-			assertTrue(tree1.equals(tree2));
-			assertTrue(tree2.equals(tree1));
-			assertTrue(tree2.equals(tree2));
-			assertTrue(tree1.hashCode() == tree2.hashCode());
-
-			assertTrue(tree3.equals(tree3));
-			assertTrue(tree3.equals(tree4));
-			assertTrue(tree4.equals(tree3));
-			assertTrue(tree4.equals(tree4));
-			assertTrue(tree3.hashCode() == tree4.hashCode());
-
-			assertNotSame(tree1, tree2);
-			assertNotSame(tree1, tree3);
-			assertNotSame(tree1, tree4);
-			assertNotSame(tree2, tree3);
-			assertNotSame(tree2, tree4);
-
-			assertFalse(tree1.equals(tree3));
-			assertFalse(tree1.equals(tree4));
-			assertFalse(tree2.equals(tree3));
-			assertFalse(tree2.equals(tree4));
-
-			assertNotNull(tree1);
-			assertNotNull(tree2);
-
-			tree1.add("abcd", tree3);
-			assertFalse(tree1.equals(tree2));
-			assertFalse(tree2.equals(tree1));// Check reflexive
-			if (tree1.hashCode() == tree2.hashCode()) {
-				// This is not a requirement
-				System.out.println("WARN: unequal HashTrees should not have equal hashCodes");
-			}
-			tree2.add("abcd", tree4);
-			assertTrue(tree1.equals(tree2));
-			assertTrue(tree2.equals(tree1));
-			assertTrue(tree1.hashCode() == tree2.hashCode());
 		}
 	}
 }

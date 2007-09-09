@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -33,18 +33,17 @@ import org.apache.jmeter.util.JMeterUtils;
  * Provides an intSum function that adds two or more integer values.
  * 
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Id$
  */
 public class IntSum extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__intSum";
+	private static final String KEY = "__intSum"; //$NON-NLS-1$
 
 	static {
-		desc.add(JMeterUtils.getResString("intsum_param_1"));
-		desc.add(JMeterUtils.getResString("intsum_param_2"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("intsum_param_1")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("intsum_param_2")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -59,10 +58,10 @@ public class IntSum extends AbstractFunction implements Serializable {
 	 * Clone this Add object.
 	 * 
 	 * @return A new Add object.
+	 * @throws CloneNotSupportedException 
 	 */
-	public Object clone() {
-		IntSum newIntSum = new IntSum();
-		return newIntSum;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
@@ -94,7 +93,7 @@ public class IntSum extends AbstractFunction implements Serializable {
 	 * 
 	 * @see Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 		values = parameters.toArray();
 
 		if (values.length < 3) {

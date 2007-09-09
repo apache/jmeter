@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class WhileControllerGui extends AbstractControllerGui implements ActionListener {
 
-	private static final String CONDITION_LABEL = "while_controller_label";
+	private static final String CONDITION_LABEL = "while_controller_label"; // $NON-NLS-1$
 
 	/**
 	 * A field allowing the user to specify the condition (not yet used).
@@ -42,7 +42,7 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
 	private JTextField theCondition;
 
 	/** The name of the condition field component. */
-	private static final String CONDITION = "While_Condition";
+	private static final String CONDITION = "While_Condition"; // $NON-NLS-1$
 
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
@@ -86,10 +86,18 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
 			if (theCondition.getText().length() > 0) {
 				((WhileController) controller).setCondition(theCondition.getText());
 			} else {
-				((WhileController) controller).setCondition("");
+				((WhileController) controller).setCondition(""); // $NON-NLS-1$
 			}
 		}
 	}
+
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        theCondition.setText(""); // $NON-NLS-1$
+    }
 
 	/**
 	 * Invoked when an action occurs. This implementation assumes that the
@@ -103,7 +111,7 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
 	}
 
 	public String getLabelResource() {
-		return "while_controller_title";
+		return "while_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -133,8 +141,8 @@ public class WhileControllerGui extends AbstractControllerGui implements ActionL
 		conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
 		// TEXT FIELD
-		theCondition = new JTextField(""); // This means exit if last sample
-											// failed
+		// This means exit if last sample failed
+		theCondition = new JTextField("");  // $NON-NLS-1$
 		theCondition.setName(CONDITION);
 		conditionLabel.setLabelFor(theCondition);
 		conditionPanel.add(theCondition, BorderLayout.CENTER);

@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -50,14 +51,22 @@ public class XMLConfPanel extends JPanel {
 		add(getNamespace());
 		add(getValidate());
 		add(getWhitespace());
+		setDefaultValues();
 	}
+
+    public void setDefaultValues() {
+        setWhitespace(false);
+        setValidate(false);
+        setTolerant(false);
+        setNamespace(false);
+    }
 
 	/**
 	 * @return Returns the namespace.
 	 */
 	public JCheckBox getNamespace() {
 		if (namespace == null) {
-			namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button"));
+			namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
 		}
 		return namespace;
 	}
@@ -67,7 +76,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getTolerant() {
 		if (tolerant == null) {
-			tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button"));
+			tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
 			tolerant.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -83,7 +92,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getValidate() {
 		if (validate == null) {
-			validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button"));
+			validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
 		}
 		return validate;
 	}
@@ -93,7 +102,7 @@ public class XMLConfPanel extends JPanel {
 	 */
 	public JCheckBox getWhitespace() {
 		if (whitespace == null) {
-			whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button"));
+			whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
 		}
 		return whitespace;
 	}

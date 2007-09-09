@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,13 +40,13 @@ public class JavaScript extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__javaScript";
+	private static final String KEY = "__javaScript"; //$NON-NLS-1$
 
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	static {
-		desc.add("JavaScript expression to evaluate");
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("javascript_expression"));//$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -54,9 +54,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	public JavaScript() {
 	}
 
-	public Object clone() {
-		JavaScript newJavaScript = new JavaScript();
-		return newJavaScript;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/*
@@ -78,11 +77,12 @@ public class JavaScript extends AbstractFunction implements Serializable {
 		try {
 
 			Scriptable scope = cx.initStandardObjects(null);
-			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null);
+			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null); //$NON-NLS-1$
 
 			resultStr = Context.toString(result);
-			if (varName != null)
+			if (varName != null && vars != null) {// vars can be null if run from TestPlan
 				vars.put(varName, resultStr);
+            }
 
 		} catch (WrappedException e) {
 			log.error("Error processing Javascript", e);
@@ -106,7 +106,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	 * 
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		values = parameters.toArray();
 

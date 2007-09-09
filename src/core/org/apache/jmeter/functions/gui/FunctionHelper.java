@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -48,9 +48,6 @@ import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.reflect.ClassFinder;
 
-/**
- * @version $Revision$
- */
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener {
 	JLabeledChoice functionList;
 
@@ -63,25 +60,25 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 	JButton generateButton;
 
 	public FunctionHelper() {
-		super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false);
+		super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
 		init();
 	}
 
 	private void init() {
-		parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params"));
+		parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params")); //$NON-NLS-1$
 		initializeFunctionList();
 		this.getContentPane().setLayout(new BorderLayout(10, 10));
 		JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		comboPanel.add(functionList);
-		JButton helpButton = new JButton(JMeterUtils.getResString("help"));
+		JButton helpButton = new JButton(JMeterUtils.getResString("help")); //$NON-NLS-1$
 		helpButton.addActionListener(new HelpListener());
 		comboPanel.add(helpButton);
 		this.getContentPane().add(comboPanel, BorderLayout.NORTH);
 		this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
 		JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35);
+		cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
 		resultsPanel.add(cutPasteFunction);
-		generateButton = new JButton(JMeterUtils.getResString("generate"));
+		generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
 		generateButton.addActionListener(this);
 		resultsPanel.add(generateButton);
 		this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
@@ -102,7 +99,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 				functionMap.put(functionNames[count], cl);
 				count++;
 			}
-			functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames);
+			functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
 			functionList.addChangeListener(this);
 		} catch (IOException e) {
 		} catch (ClassNotFoundException e) {
@@ -119,7 +116,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 			Iterator iter = argumentDesc.iterator();
 			while (iter.hasNext()) {
 				String help = (String) iter.next();
-				args.addArgument(help, "");
+				args.addArgument(help, ""); //$NON-NLS-1$
 			}
 			parameterPanel.configure(args);
 			parameterPanel.revalidate();
@@ -159,7 +156,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 	private class HelpListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String[] source = new String[] { Help.HELP_FUNCTIONS, functionList.getText() };
-			ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help");
+			ActionEvent helpEvent = new ActionEvent(source, e.getID(), "help"); //$NON-NLS-1$
 			ActionRouter.getInstance().actionPerformed(helpEvent);
 		}
 	}

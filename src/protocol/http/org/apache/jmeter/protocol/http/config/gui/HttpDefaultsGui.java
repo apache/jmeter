@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,9 +36,6 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- * @version $Revision$
- */
 public class HttpDefaultsGui extends AbstractConfigGui {
 	JLabeledTextField protocol;
 
@@ -52,13 +49,15 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
 	private JCheckBox imageParser;
 
+	private JLabeledTextField encoding;
+	
 	public HttpDefaultsGui() {
 		super();
 		init();
 	}
 
 	public String getLabelResource() {
-		return "url_config_title";
+		return "url_config_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -87,7 +86,23 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		else {
 			config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
+		config.setProperty(HTTPSamplerBase.CONTENT_ENCODING, encoding.getText());
 	}
+
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        protocol.setText(""); //$NON-NLS-1$
+        domain.setText(""); //$NON-NLS-1$
+        path.setText(""); //$NON-NLS-1$
+        port.setText(""); //$NON-NLS-1$
+        encoding.setText(""); //$NON-NLS-1$
+        argPanel.clear();
+        imageParser.setSelected(false);
+    }    
 
 	public void configure(TestElement el) {
 		super.configure(el);
@@ -95,6 +110,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
 		path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
 		port.setText(el.getPropertyAsString(HTTPSamplerBase.PORT));
+        encoding.setText(el.getPropertyAsString(HTTPSamplerBase.CONTENT_ENCODING));
 		argPanel.configure((TestElement) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue());
 		imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
 	}
@@ -108,18 +124,19 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 		Box mainPanel = Box.createVerticalBox();
 
 		VerticalPanel urlPanel = new VerticalPanel();
-		protocol = new JLabeledTextField(JMeterUtils.getResString("url_config_protocol"));
-		urlPanel.add(protocol);
+		protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
+		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
+		path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
+		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
+		encoding = new JLabeledTextField(JMeterUtils.getResString("content_encoding")); // $NON-NLS-1$
 
-		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain"));
-		urlPanel.add(domain);
-
-		path = new JLabeledTextField(JMeterUtils.getResString("path"));
-		urlPanel.add(path);
-
-		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port"));
+        
+        urlPanel.add(domain);
 		urlPanel.add(port);
-
+        urlPanel.add(protocol);
+        urlPanel.add(path);
+        urlPanel.add(encoding);
+        
 		mainPanel.add(urlPanel);
 
 		argPanel = new HTTPArgumentsPanel();
@@ -127,7 +144,7 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
 		add(mainPanel, BorderLayout.CENTER);
 
-		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
+		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
 		add(imageParser, BorderLayout.SOUTH);
 	}
 

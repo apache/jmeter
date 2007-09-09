@@ -1,8 +1,10 @@
 /* 
- * Copyright 2002-2005 The Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  *   http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -32,7 +34,6 @@ import java.util.Vector;
  * Note that CLArgs uses a backing hashtable for the options index and so
  * duplicate arguments are only returned by getArguments().
  * 
- * @version $Revision$ $Date$
  * @see ParserControl
  * @see CLOption
  * @see CLOptionDescriptor
@@ -369,13 +370,8 @@ public final class CLArgsParser {
 
 		m_stringLength = m_args[m_argIndex].length();
 
-		// ch = peekAtChar();
-
 		while (true) {
 			m_ch = peekAtChar();
-
-			// System.out.println( "Pre State=" + m_state );
-			// System.out.println( "Pre Char=" + (char)ch + "/" + (int)ch );
 
 			if (m_argIndex >= m_args.length) {
 				break;
@@ -386,9 +382,6 @@ public final class CLArgsParser {
 				m_unparsedArgs = subArray(m_args, m_argIndex, m_stringIndex);
 				return;
 			}
-
-			// System.out.println( "State=" + m_state );
-			// System.out.println( "Char=" + (char)ch + "/" + (int)ch );
 
 			if (STATE_OPTION_MODE == m_state) {
 				// if get to an arg barrier then return to normal mode
@@ -404,14 +397,12 @@ public final class CLArgsParser {
 			} else if (STATE_NO_OPTIONS == m_state) {
 				// should never get to here when stringIndex != 0
 				addOption(new CLOption(m_args[m_argIndex++]));
-			} else if (STATE_OPTIONAL_ARG == m_state && m_isLong && m_ch != 0) {
-				m_state = STATE_NORMAL;
-				addOption(m_option);
 			} else {
 				parseArguments();
 			}
 		}
 
+		// Reached end of input arguments - perform final processing
 		if (m_option != null) {
 			if (STATE_OPTIONAL_ARG == m_state) {
 				m_options.addElement(m_option);
@@ -480,10 +471,13 @@ public final class CLArgsParser {
 		return m_args[m_argIndex].charAt(m_stringIndex++);
 	}
 
+	private char m_tokesep; // Keep track of token separator
+	
 	private final Token nextToken(final char[] separators) {
 		m_ch = getChar();
 
 		if (isSeparator(m_ch, separators)) {
+			m_tokesep=m_ch;
 			m_ch = getChar();
 			return new Token(TOKEN_SEPARATOR, null);
 		}
@@ -495,6 +489,7 @@ public final class CLArgsParser {
 			m_ch = getChar();
 		} while (!isSeparator(m_ch, separators));
 
+		m_tokesep=m_ch;
 		return new Token(TOKEN_STRING, sb.toString());
 	}
 
@@ -556,6 +551,12 @@ public final class CLArgsParser {
 				addOption(m_option);
 				m_state = STATE_NORMAL;
 				return;
+			}
+
+			if (m_isLong && '=' != m_tokesep){ // Long optional arg must have = as separator
+				addOption(m_option);
+				m_state = STATE_NORMAL;
+				return;				
 			}
 
 			if ('=' == m_ch) {

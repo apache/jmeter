@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample lt="0" s="true" lb="Java 1" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" by="10" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String">ResultData</responseData>
+  <responseFile class="java.lang.String"></responseFile>
+  <samplerData class="java.lang.String">SamplerData</samplerData>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Java 1" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" by="10" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String">ResultData</responseData>
+  <responseFile class="java.lang.String"></responseFile>
+  <samplerData class="java.lang.String">SamplerData</samplerData>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Java 1" rc="200" rm="OK" tn="Thread Group 1-1" dt="text" by="10" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String">ResultData</responseData>
+  <responseFile class="java.lang.String"></responseFile>
+  <samplerData class="java.lang.String">SamplerData</samplerData>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="If Test" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Loop" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Module" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Loop" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Module" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Loop" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+<sample lt="0" s="true" lb="Module" rc="200" rm="OK" tn="Thread Group 1-1" dt="" by="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseData class="java.lang.String"/>
+  <responseFile class="java.lang.String"></responseFile>
+  <null/>
+</sample>
+
+</testResults>

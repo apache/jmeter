@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -37,21 +37,20 @@ import org.apache.log.Logger;
 
 /**
  * 
- * @author unattributed
  * @version $Revision$ $Date$
  */
 public class Help implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	public final static String HELP = "help";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 
-	public static final String HELP_DOCS = "file:///" + JMeterUtils.getJMeterHome() + "/printable_docs/usermanual/";
+	private static final String HELP_DOCS = "file:///"  // $NON-NLS-1$
+		+ JMeterUtils.getJMeterHome() 
+		+ "/printable_docs/usermanual/"; // $NON-NLS-1$
 
-	public static final String HELP_PAGE = HELP_DOCS + "component_reference.html";
+	private static final String HELP_PAGE = HELP_DOCS + "component_reference.html"; // $NON-NLS-1$
 
-	public static final String HELP_FUNCTIONS = HELP_DOCS + "functions.html";
+	public static final String HELP_FUNCTIONS = HELP_DOCS + "functions.html"; // $NON-NLS-1$
 
 	private static JDialog helpWindow;
 
@@ -62,7 +61,7 @@ public class Help implements Command {
 	private static String currentPage;
 
 	static {
-		commands.add(HELP);
+		commands.add(ActionNames.HELP);
 		helpDoc = new HtmlPane();
 		scroller = new JScrollPane(helpDoc);
 		helpDoc.setEditable(false);
@@ -72,7 +71,7 @@ public class Help implements Command {
 		} catch (IOException err) {
 			String msg = "Couldn't load help file " + err.toString();
 			log.error(msg);
-			currentPage = "";// Avoid NPE in resetPage()
+			currentPage = "";// Avoid NPE in resetPage() // $NON-NLS-1$
 		}
 	}
 
@@ -111,7 +110,7 @@ public class Help implements Command {
 			} catch (IOException err) {
 				log.error(err.toString());
 				JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
-				currentPage = "";
+				currentPage = ""; // $NON-NLS-1$
 			}
 		}
 	}

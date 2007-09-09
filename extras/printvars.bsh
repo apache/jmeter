@@ -1,0 +1,11 @@
+// Sample script to print JMeter variables
+print(">>>>");
+Iterator i = vars.getIterator();
+while(i.hasNext())
+{
+      Map.Entry me = i.next();
+       if(String.class.equals(me.getValue().getClass())){
+             print(me);
+      }
+}
+print("<<<<");

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,9 +21,10 @@ package org.apache.jmeter.protocol.http.control.gui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @version $Revision$ on $Date$
+ * HTTP Sampler GUI for Apache HTTPClient HTTP implementation
  */
 public class HttpTestSampleGui2 extends HttpTestSampleGui {
 
@@ -32,17 +33,18 @@ public class HttpTestSampleGui2 extends HttpTestSampleGui {
 	}
 
 	public TestElement createTestElement() {
-		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler2");
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance(HTTPSamplerFactory.HTTP_SAMPLER_APACHE);
 		modifyTestElement(sampler);
 		return sampler;
 	}
 
 	public String getStaticLabel() {
-		return super.getStaticLabel() + " HTTPClient";
+		return JMeterUtils.getResString("web_testing2_title"); //$NON-NLS-1$
 	}
 
+    // Documentation is shared with our parent
     public String getDocAnchor() {
-        return super.getStaticLabel().replace(' ', '_');
+        return super.getStaticLabel().replace(' ', '_'); // $NON-NLS-1$  // $NON-NLS-2$
     }
 
 }

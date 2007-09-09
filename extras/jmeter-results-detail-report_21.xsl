@@ -1,11 +1,17 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<!-- Stylesheet for processing 2.1 output format test result files -->
+
+<!-- 
+	Stylesheet for processing 2.1 output format test result files 
+	To uses this directly in a browser, add the following to the JTL file as line 2:
+	<?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
+	and you can then view the JTL in a browser
+-->
 
 <xsl:output method="html" indent="yes" encoding="US-ASCII" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
 <!-- Defined parameters (overrideable) -->
-<xsl:param    name="showData" select="'N'"/>
+<xsl:param    name="showData" select="'n'"/>
 
 <xsl:template match="testResults">
 	<html>
@@ -278,26 +284,19 @@
 			         <tr>
 			            <th>Thread</th>
 			            <th>Iteration</th>
-			            <th>Time</th>
+			            <th>Time (milliseconds)</th>
+			            <th>Bytes</th>
 			            <th>Success</th>
-			            <!--
-			            itterations = position() - thread stuff
-			            time="312"
-			            timeStamp="1053622047640"
-			            responseMessage="OK"
-			            threadName="Thread Group-1"
-			            dataType="text"
-			            label="/CansysAandA/processAuthentication.do"
-			            success="true"
-			            -->
 			         </tr>
 			         		         
 			         <xsl:for-each select="../*[@lb = $label and @tn != $label]">			         			            
 			            <tr>
 			               <td><xsl:value-of select="@tn" /></td>
 			               <td><xsl:value-of select="position()" /></td>
-			               <td><xsl:value-of select="@t" />ms</td>
-			               <td><xsl:value-of select="@s" /></td>
+			               <td align="right"><xsl:value-of select="@t" /></td>
+			               <!--  TODO allow for missing bytes field -->
+			               <td align="right"><xsl:value-of select="@by" /></td>
+			               <td align="center"><xsl:value-of select="@s" /></td>
 			            </tr>
 			         </xsl:for-each>
 			         
@@ -334,7 +333,7 @@
 			
 				<xsl:for-each select="/testResults/*[@lb = current()/@lb][attribute::s='false']">
 					<tr>
-						<td><xsl:value-of select="@rs" /> - <xsl:value-of select="@rm" /></td>
+						<td><xsl:value-of select="@rc | @rs" /> - <xsl:value-of select="@rm" /></td>
 						<td><xsl:value-of select="assertionResult/failureMessage" /></td>
 						<xsl:if test="$showData = 'y'">
 							<td><xsl:value-of select="./binary" /></td>

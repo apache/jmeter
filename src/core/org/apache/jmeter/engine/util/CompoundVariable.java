@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,22 +40,21 @@ import org.apache.log.Logger;
  * CompoundFunction.
  * 
  * @author mstover
- * @version $Id$
  */
 public class CompoundVariable implements Function {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private String rawParameters;
 
-	static FunctionParser functionParser = new FunctionParser();
+	private static FunctionParser functionParser = new FunctionParser();
 
-	static Map functions = new HashMap();
+	private static Map functions = new HashMap();
 
 	private boolean hasFunction, isDynamic;
 
-	private String permanentResults = "";
+	private String permanentResults = ""; // $NON-NLS-1$
 
-	LinkedList compiledComponents = new LinkedList();
+	private LinkedList compiledComponents = new LinkedList();
 
 	static {
 		try {
@@ -64,7 +63,12 @@ public class CompoundVariable implements Function {
 			Iterator iter = classes.iterator();
 			while (iter.hasNext()) {
 				Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
-				functions.put(tempFunc.getReferenceKey(), tempFunc.getClass());
+				String referenceKey = tempFunc.getReferenceKey();
+                functions.put(referenceKey, tempFunc.getClass());
+                // TODO: find better way to include aliases for rename of function(s)
+                if (referenceKey.equals("__StringFromFile")){//$NON-NLS-1$
+                    functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
+                }
 			}
 		} catch (Exception err) {
 			log.error("", err);
@@ -91,9 +95,8 @@ public class CompoundVariable implements Function {
 			SampleResult previousResult = context.getPreviousResult();
 			Sampler currentSampler = context.getCurrentSampler();
 			return execute(previousResult, currentSampler);
-		} else {
-			return permanentResults;
 		}
+		return permanentResults; // $NON-NLS-1$
 	}
 
 	/**
@@ -112,7 +115,7 @@ public class CompoundVariable implements Function {
 	 */
 	public String execute(SampleResult previousResult, Sampler currentSampler) {
 		if (compiledComponents == null || compiledComponents.size() == 0) {
-			return "";
+			return ""; // $NON-NLS-1$
 		}
 		boolean testDynamic = false;
 		StringBuffer results = new StringBuffer();
@@ -178,14 +181,13 @@ public class CompoundVariable implements Function {
 	static Object getNamedFunction(String functionName) throws InvalidVariableException {
 		if (functions.containsKey(functionName)) {
 			try {
-				return (Function) ((Class) functions.get(functionName)).newInstance();
+				return ((Class) functions.get(functionName)).newInstance();
 			} catch (Exception e) {
-				log.error("", e);
+				log.error("", e); // $NON-NLS-1$
 				throw new InvalidVariableException();
 			}
-		} else {
-			return new SimpleVariable(functionName);
 		}
+		return new SimpleVariable(functionName);
 	}
 
 	public boolean hasFunction() {
@@ -196,12 +198,6 @@ public class CompoundVariable implements Function {
 	 * @see Function#getReferenceKey()
 	 */
 	public String getReferenceKey() {
-		return "";
+		return ""; // $NON-NLS-1$
 	}
-	/*
-	 * NOT USED
-	 * 
-	 * private JMeterVariables getVariables() { return
-	 * JMeterContextService.getContext().getVariables(); }
-	 */
 }
