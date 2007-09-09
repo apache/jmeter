@@ -2137,6 +2137,12 @@ Thus the value of a cookie with the name TEST can be referred to as ${TEST}</p>
 <p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
 the cookie will be shared by all JMeter threads.</p>
 <p>Note that such Cookies are created with an Expiration time far in the future</p>
+<p>
+Since version 2.0.3, cookies with null values are ignored by default.
+This can be changed by setting the JMeter property: CookieManager.delete_null_cookies=false.
+Note that this also applies to manually defined cookies - any such cookies will be removed from the display when it is updated.
+Note also that the cookie name must be unique - if a second cookie is defined with the same name, it will replace the first.
+</p>
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
@@ -2144,8 +2150,8 @@ the cookie will be shared by all JMeter threads.</p>
   This includes all the Cookies stored in the manager, so they will never be sent.</property>
   <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
   "compatibility" is the default, and should work in most cases.
-  See http://jakarta.apache.org/commons/httpclient/cookies.html and 
-  http://jakarta.apache.org/commons/httpclient/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
+  See http://jakarta.apache.org/httpcomponents/httpclient-3.x/cookies.html and 
+  http://jakarta.apache.org/httpcomponents/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
   [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
     </property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
