@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
-   $Header$
-   Copyright 2001-2004 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -196,7 +196,7 @@ and by following some simple rules, you will get cloning and saving to XML of yo
 
 config element for free (as in, you don't have to do anything!).  <b>AbstractConfigElement</b>
 
-stores all it's values in a Map, and provides getProperty and putProperty methods.  Your
+stores all its values in a Map, and provides getProperty and putProperty methods.  Your
 
 config element can provide <b>getXXX()</b> and <b>setXXX()</b> methods, but these should delegate
 
@@ -532,7 +532,7 @@ the information.</p>
 
 JMeter will call this method and hand the Saveable object to be saved (it will be
 
-the object that specified your TagHandler as the class responsible for it's saving).
+the object that specified your TagHandler as the class responsible for saving it).
 
 This method should use the given Writer object to print all the XML necessary to
 
@@ -546,7 +546,7 @@ JMeter uses reflection to generate method calls into your class.  When JMeter hi
 
 a tag that corresponds to your PrimaryTagName, an instance of your TagHandler will
 
-be created, and it's <b>setAtts()</b> method will get called.  Thereafter, methods are called
+be created, and its <b>setAtts()</b> method will get called.  Thereafter, methods are called
 
 depending on subsequent tags and character data.  For every tag, JMeter calls
 

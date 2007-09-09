@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -63,6 +63,8 @@ public class WSDLHelper {
 	protected String SOAPBINDING = null;
 
 	public String BINDNAME = null;
+    
+    protected URL bindingURL = null;
 
 	protected Object[] SOAPOPS = null;
 
@@ -95,6 +97,39 @@ public class WSDLHelper {
 		return this.WSDLURL;
 	}
 
+    /**
+     * Return the protocol from the URL. this is needed, so that HTTPS works
+     * as expected.
+     * @return
+     */
+    public String getProtocol() {
+        return this.bindingURL.getProtocol();
+    }
+    
+    /**
+     * Return the host in the WSDL binding address
+     * @return
+     */
+    public String getBindingHost() {
+        return this.bindingURL.getHost();
+    }
+    
+    /**
+     * Return the path in the WSDL for the binding address
+     * @return
+     */
+    public String getBindingPath() {
+        return this.bindingURL.getPath();
+    }
+    
+    /**
+     * Return the port for the binding address
+     * @return
+     */
+    public int getBindingPort() {
+        return this.bindingURL.getPort();
+    }
+    
 	/**
 	 * Returns the binding point for the webservice. Right now it naively
 	 * assumes there's only one binding point with numerous soap operations.
@@ -116,8 +151,7 @@ public class WSDLHelper {
 			}
 			for (int idx = 0; idx < ports.getLength(); idx++) {
 				Element pnode = (Element) ports.item(idx);
-				String portname = pnode.getAttribute("name");// TODO - why
-																// not used?
+				// NOTUSED String portname = pnode.getAttribute("name");
 				// used to check binding, but now it doesn't. it was
 				// failing when wsdl did not using binding as expected
 				NodeList servlist = pnode.getElementsByTagName("soap:address");
@@ -130,6 +164,7 @@ public class WSDLHelper {
 				}
 				Element addr = (Element) servlist.item(0);
 				this.SOAPBINDING = addr.getAttribute("location");
+                this.bindingURL = new URL(this.SOAPBINDING);
 				return this.SOAPBINDING;
 			}
 			return null;
@@ -333,7 +368,9 @@ public class WSDLHelper {
 				// if the first child is soap:operation
 				// we add it to the array
 				Element child = (Element) opnodes.item(idz);
-				NodeList soapnode = child.getElementsByTagName(soapOp);
+				
+                // TODO - the following code looks wrong - it does the same in both cases
+                NodeList soapnode = child.getElementsByTagName(soapOp);
 				if (soapnode.getLength() > 0) {
 					ops.add(child);
 				} else {
@@ -355,8 +392,8 @@ public class WSDLHelper {
 			WSDLHelper help =
 			// new WSDLHelper("http://localhost/WSTest/WSTest.asmx?WSDL");
 			// new WSDLHelper("http://localhost/AxisWSDL.xml");
-			// new WSDLHelper("http://localhost/test-setup.xml");
-			new WSDLHelper("http://services.bio.ifi.lmu.de:1046/prothesaurus/services/BiologicalNameService?wsdl");
+			new WSDLHelper("http://localhost:8080/ServiceGateway.wsdl");
+			// new WSDLHelper("http://services.bio.ifi.lmu.de:1046/prothesaurus/services/BiologicalNameService?wsdl");
 			long start = System.currentTimeMillis();
 			help.parse();
 			String[] methods = help.getWebMethods();
@@ -365,6 +402,7 @@ public class WSDLHelper {
 				System.out.println("method name: " + methods[idx]);
 			}
 			System.out.println("service url: " + help.getBinding());
+            System.out.println("protocol: " + help.getProtocol());
 			System.out.println("port=" + help.getURL().getPort());
 		} catch (Exception exception) {
 			System.out.println("main method catch:");

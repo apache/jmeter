@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,6 +32,7 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -55,7 +56,6 @@ import org.apache.log.Logger;
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  * 
- * @version $Revision$ on $Date$
  */
 public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable {
 	/** Logging */
@@ -69,6 +69,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 
 	/** A GUI panel containing the name of this component. */
 	protected NamePanel namePanel;
+    // used by AbstractReportGui
+	
+	private CommentPanel commentPanel;
 
 	/**
 	 * When constructing a new component, this takes care of basic tasks like
@@ -77,16 +80,25 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	 */
 	public AbstractJMeterGuiComponent() {
 		namePanel = new NamePanel();
-		setName(getStaticLabel());
+		commentPanel=new CommentPanel();
+		initGui();
 	}
 
 	/**
-	 * Provides a default implementation for the name property. It's unlikely
+	 * Provides a default implementation for setting the name property. It's unlikely
 	 * developers will need to override.
 	 */
 	public void setName(String name) {
 		namePanel.setName(name);
 	}
+
+    /**
+     * Provides a default implementation for setting the comment property. It's unlikely
+     * developers will need to override.
+     */
+    public void setComment(String comment) {
+        commentPanel.setText(comment);
+    }
 
 	/**
 	 * Provides a default implementation for the enabled property. It's unlikely
@@ -113,8 +125,21 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		if (getNamePanel() != null) {
 			return getNamePanel().getName();
 		} else
-			return "";
+			return ""; // $NON-NLS-1$
 	}
+    
+    /**
+     * Provides a default implementation for the comment property. It's unlikely
+     * developers will need to override.
+     */
+    public String getComment() {
+        if (getCommentPanel() != null) {
+            return getCommentPanel().getText();
+        }
+        else {
+            return ""; // $NON-NLS-1$
+        }
+    }
 
 	/**
 	 * Provides the Name Panel for extending classes. Extending classes are free
@@ -128,6 +153,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		return namePanel;
 	}
 
+	private CommentPanel getCommentPanel(){
+		return commentPanel;
+	}
 	/**
 	 * Provides a label containing the title for the component. Subclasses
 	 * typically place this label at the top of their GUI. The title is set to
@@ -166,17 +194,24 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		} else {
 			enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
 		}
+		getCommentPanel().setText(element.getPropertyAsString(TestPlan.COMMENTS));
 	}
 
 	/**
-	 * Provides a default implementat that resets the name field to the value of
-	 * getStaticLabel(), and sets enabled to true. Your GUI may need more things
+	 * Provides a default implementation that resets the name field to the value of
+	 * getStaticLabel(), reset comment and sets enabled to true. Your GUI may need more things
 	 * cleared, in which case you should override, clear the extra fields, and
-	 * still call super.clear().
+	 * still call super.clearGui().
 	 */
-	public void clear() {
-		setName(getStaticLabel());
+	public void clearGui() {
+		initGui();
 		enabled = true;
+	}
+
+	// helper method - also used by constructor
+	private void initGui() {
+		setName(getStaticLabel());
+		commentPanel.clearGui();
 	}
 
 	/**
@@ -200,6 +235,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		// This stores the state of the TestElement
 		log.debug("setting element to enabled: " + enabled);
 		mc.setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
+		mc.setProperty(TestPlan.COMMENTS, getComment());
 	}
 
 	/**
@@ -230,7 +266,11 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	protected Container makeTitlePanel() {
 		VerticalPanel titlePanel = new VerticalPanel();
 		titlePanel.add(createTitleLabel());
-		titlePanel.add(getNamePanel());
+		VerticalPanel contentPanel = new VerticalPanel();
+		contentPanel.setBorder(BorderFactory.createEtchedBorder());
+		contentPanel.add(getNamePanel());
+		contentPanel.add(getCommentPanel());
+		titlePanel.add(contentPanel);
 		return titlePanel;
 	}
 
@@ -305,22 +345,4 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	public JComponent getPrintableComponent() {
 		return this;
 	}
-
-	// /*
-	// * Dummy implementation so existing code still compiles.
-	// * Throws an error because it should not be invoked - and cannot provide a
-	// useful value.
-	// *
-	// * The target class should either implement getStaticLabel(), as before,
-	// or it
-	// * should implement getLabelResource()
-	// *
-	// * DONE: remove eventually
-	// */
-	// public String getLabelResource()
-	// {
-	// throw new UnsupportedOperationException("Needs to be implemented by the
-	// class: "
-	// +this.getClass().getName());
-	// }
 }

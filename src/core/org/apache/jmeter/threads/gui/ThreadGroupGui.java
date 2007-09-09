@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FocusRequester;
 import org.apache.jmeter.gui.util.JDateField;
@@ -50,11 +51,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemListener {
-	LoopControlPanel loopPanel;
+	private LoopControlPanel loopPanel;
 
 	private VerticalPanel mainPanel;
 
@@ -65,10 +63,6 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	private JTextField threadInput;
 
 	private JTextField rampInput;
-
-	// private final static String SCHEDULER = "scheduler";
-	// private final static String START_TIME= "start_time";
-	// private final static String END_TIME= "end_time";
 
 	private JDateField start;
 
@@ -90,6 +84,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	public ThreadGroupGui() {
 		super();
 		init();
+		initGui();
 	}
 
 	public Collection getMenuCategories() {
@@ -179,15 +174,23 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(new String[] { MenuFactory.CONTROLLERS, MenuFactory.LISTENERS,
-				MenuFactory.SAMPLERS, MenuFactory.ASSERTIONS,MenuFactory.TIMERS, MenuFactory.CONFIG_ELEMENTS, MenuFactory.PRE_PROCESSORS,
-				MenuFactory.POST_PROCESSORS }, JMeterUtils.getResString("Add"), "Add"));
+		pop.add(MenuFactory.makeMenus(new String[] { 
+				MenuFactory.CONTROLLERS, 
+				MenuFactory.LISTENERS,
+				MenuFactory.SAMPLERS, 
+				MenuFactory.ASSERTIONS,
+				MenuFactory.TIMERS, 
+				MenuFactory.CONFIG_ELEMENTS, 
+				MenuFactory.PRE_PROCESSORS,
+				MenuFactory.POST_PROCESSORS }, 
+				JMeterUtils.getResString("add"), // $NON-NLS-1$
+				ActionNames.ADD));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
 	}
 
-	public JPanel createControllerPanel() {
+	private JPanel createControllerPanel() {
 		loopPanel = new LoopControlPanel(false);
 		LoopController looper = (LoopController) loopPanel.createTestElement();
 		looper.setLoops(1);
@@ -202,10 +205,9 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	 */
 	private JPanel createStartTimePanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("starttime"));
+		JLabel label = new JLabel(JMeterUtils.getResString("starttime")); //$NON-NLS-1$
 		panel.add(label, BorderLayout.WEST);
-		Date today = new Date();
-		start = new JDateField(today);
+		start = new JDateField();
 		panel.add(start, BorderLayout.CENTER);
 		return panel;
 	}
@@ -217,10 +219,10 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	 */
 	private JPanel createEndTimePanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("endtime"));
+		JLabel label = new JLabel(JMeterUtils.getResString("endtime")); // $NON-NLS-1$
 		panel.add(label, BorderLayout.WEST);
-		Date today = new Date();
-		end = new JDateField(today);
+		
+		end = new JDateField();
 		panel.add(end, BorderLayout.CENTER);
 		return panel;
 	}
@@ -232,7 +234,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	 */
 	private JPanel createDurationPanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("duration"));
+		JLabel label = new JLabel(JMeterUtils.getResString("duration")); // $NON-NLS-1$
 		panel.add(label, BorderLayout.WEST);
 		duration = new JTextField();
 		panel.add(duration, BorderLayout.CENTER);
@@ -246,7 +248,7 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	 */
 	private JPanel createDelayPanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("delay"));
+		JLabel label = new JLabel(JMeterUtils.getResString("delay")); // $NON-NLS-1$
 		panel.add(label, BorderLayout.WEST);
 		delay = new JTextField();
 		panel.add(delay, BorderLayout.CENTER);
@@ -254,29 +256,47 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	}
 
 	public String getLabelResource() {
-		return "threadgroup";
+		return "threadgroup"; // $NON-NLS-1$
 	}
 
 	private JPanel createOnErrorPanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); // $NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 
-		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue"));
+		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); // $NON-NLS-1$
 		group.add(continueBox);
-		continueBox.setSelected(true);
 		panel.add(continueBox);
 
-		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread"));
+		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); // $NON-NLS-1$
 		group.add(stopThrdBox);
 		panel.add(stopThrdBox);
 
-		stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test"));
+		stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); // $NON-NLS-1$
 		group.add(stopTestBox);
 		panel.add(stopTestBox);
 
 		return panel;
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		initGui();
+	}
+	
+	// Initialise the gui field values
+	private void initGui(){
+		threadInput.setText("1"); // $NON-NLS-1$
+		rampInput.setText("1"); // $NON-NLS-1$
+		continueBox.setSelected(true);
+		loopPanel.clearGui();
+		scheduler.setSelected(false);
+		Date today = new Date();
+		end.setDate(today);
+		start.setDate(today);
+		delay.setText(""); // $NON-NLS-1$
+		duration.setText(""); // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -292,16 +312,16 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
 		// THREAD PROPERTIES
 		VerticalPanel threadPropsPanel = new VerticalPanel();
-		threadPropsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("thread_properties")));
+		threadPropsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("thread_properties"))); // $NON-NLS-1$
 
 		// NUMBER OF THREADS
 		JPanel threadPanel = new JPanel(new BorderLayout(5, 0));
 
-		JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads"));
+		JLabel threadLabel = new JLabel(JMeterUtils.getResString("number_of_threads")); // $NON-NLS-1$
 		threadPanel.add(threadLabel, BorderLayout.WEST);
 
-		threadInput = new JTextField("1", 5);
+		threadInput = new JTextField(5);
 		threadInput.setName(THREAD_NAME);
 		threadLabel.setLabelFor(threadInput);
 		threadPanel.add(threadInput, BorderLayout.CENTER);
@@ -311,10 +331,10 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 
 		// RAMP-UP
 		JPanel rampPanel = new JPanel(new BorderLayout(5, 0));
-		JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up"));
+		JLabel rampLabel = new JLabel(JMeterUtils.getResString("ramp_up")); // $NON-NLS-1$
 		rampPanel.add(rampLabel, BorderLayout.WEST);
 
-		rampInput = new JTextField("1", 5);
+		rampInput = new JTextField(5);
 		rampInput.setName(RAMP_NAME);
 		rampLabel.setLabelFor(rampInput);
 		rampPanel.add(rampInput, BorderLayout.CENTER);
@@ -327,12 +347,12 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		// mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
 		// add(mainPanel, BorderLayout.CENTER);
 
-		scheduler = new JCheckBox(JMeterUtils.getResString("scheduler"));
+		scheduler = new JCheckBox(JMeterUtils.getResString("scheduler")); // $NON-NLS-1$
 		scheduler.addItemListener(this);
 		threadPropsPanel.add(scheduler);
 		mainPanel = new VerticalPanel();
-		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("scheduler_configuration")));
+		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
 		mainPanel.add(createStartTimePanel());
 		mainPanel.add(createEndTimePanel());
 		mainPanel.add(createDurationPanel());

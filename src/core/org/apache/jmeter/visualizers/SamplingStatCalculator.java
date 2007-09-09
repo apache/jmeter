@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,11 +19,10 @@
 package org.apache.jmeter.visualizers;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
@@ -36,20 +35,13 @@ import org.apache.log.Logger;
  * the stats out with whatever methods you prefer.
  * 
  * @author James Boutcher
- * @version $Revision$
  */
 public class SamplingStatCalculator implements Serializable {
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
+	private final StatCalculator calculator = new StatCalculator();
 
-	private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
-
-	private static DecimalFormat kbFormatter = new DecimalFormat("#0.00");
-
-	private StatCalculator calculator = new StatCalculator();
-
-	private ArrayList storedValues = new ArrayList();
+	private final List storedValues = new Vector();
 
 	private double maxThroughput;
 
@@ -59,7 +51,8 @@ public class SamplingStatCalculator implements Serializable {
 
 	// private int index;
 
-	private SamplingStatCalculator() {// Don't (can't) use this...
+	public SamplingStatCalculator() {// Don't (can't) use this...
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
 	}
 
 	/**
@@ -89,9 +82,12 @@ public class SamplingStatCalculator implements Serializable {
 
 	public void addSamples(SamplingStatCalculator ssc) {
 		calculator.addAll(ssc.calculator);
-		storedValues.addAll(ssc.storedValues);
-		Collections.sort(storedValues);
-		if (firstTime > ssc.firstTime) {
+        synchronized( storedValues )
+        {
+            storedValues.addAll(ssc.storedValues);
+            Collections.sort(storedValues);
+        }
+        if (firstTime > ssc.firstTime) {
 			firstTime = ssc.firstTime;
 		}
 	}
@@ -105,10 +101,13 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	public Sample getCurrentSample() {
-		if (storedValues.size() == 0) {
-			return new Sample();
-		}
-		return (Sample) storedValues.get(storedValues.size() - 1);
+        synchronized( storedValues )
+        {
+            if (storedValues.size() == 0) {
+                return new Sample();
+            }
+            return (Sample) storedValues.get(storedValues.size() - 1);
+        }
 	}
 
 	/**
@@ -117,9 +116,9 @@ public class SamplingStatCalculator implements Serializable {
 	 * @return how long the samples took
 	 */
 	public long getElapsed() {
-		if (getCurrentSample().endTime == 0)
+		if (getCurrentSample().getEndTime() == 0)
 			return 0;// No samples collected ...
-		return getCurrentSample().endTime - firstTime;
+		return getCurrentSample().getEndTime() - firstTime;
 	}
 
 	/**
@@ -132,48 +131,15 @@ public class SamplingStatCalculator implements Serializable {
 		if (calculator.getCount() == 0)
 			return 0.0; // Better behaviour when howLong=0 or lastTime=0
 
-		return getCurrentSample().throughput;
+		return getCurrentSample().getThroughput();
 	}
 
 	/**
-	 * Returns a String that represents the throughput associated for this
-	 * sampler, in units appropriate to its dimension:
-	 * <p>
-	 * The number is represented in requests/second or requests/minute or
-	 * requests/hour.
-	 * <p>
-	 * Examples: "34.2/sec" "0.1/sec" "43.0/hour" "15.9/min"
+	 * Should calculate the average page size, which means divide the bytes by number
+	 * of samples - actually calculates the throughput in bytes / second
 	 * 
-	 * @return a String representation of the rate the samples are being taken
-	 *         at.
-	 */
-	public String getRateString() {
-		double rate = getRate();
-
-		if (rate == Double.MAX_VALUE) {
-			return "N/A";
-		}
-
-		String unit = "sec";
-
-		if (rate < 1.0) {
-			rate *= 60.0;
-			unit = "min";
-		}
-		if (rate < 1.0) {
-			rate *= 60.0;
-			unit = "hour";
-		}
-
-		String rval = rateFormatter.format(rate) + "/" + unit;
-
-		return (rval);
-	}
-
-	/**
-	 * calculates the average page size, which means divide the bytes by number
-	 * of samples.
-	 * 
+     * TODO - fix the name and comment
+     * 
 	 * @return
 	 */
 	public double getPageSize() {
@@ -187,16 +153,6 @@ public class SamplingStatCalculator implements Serializable {
 		return rate;
 	}
 
-	/**
-	 * formats the rate
-	 * 
-	 * @return
-	 */
-	public String getPageSizeString() {
-		double rate = getPageSize() / 1024;
-		return kbFormatter.format(rate);
-	}
-
 	public String getLabel() {
 		return label;
 	}
@@ -206,12 +162,11 @@ public class SamplingStatCalculator implements Serializable {
 	 * 
 	 */
 	public Sample addSample(SampleResult res) {
-		Sample s = null;
-		synchronized (calculator) {
-			long byteslength = 0;
-			// in case the sampler doesn't return the contents
-			// we see if the bytes was set
-			byteslength = res.getContentLength();
+        long rtime, cmean, cstdv, cmedian, cpercent, eCount, endTime;
+        double throughput;
+        boolean rbool;
+        synchronized (calculator) {
+			long byteslength = res.getBytes();
 			// if there was more than 1 loop in the sample, we
 			// handle it appropriately
 			if (res.getSampleCount() > 1) {
@@ -226,26 +181,33 @@ public class SamplingStatCalculator implements Serializable {
 				calculator.addBytes(byteslength);
 			}
 			setStartTime(res);
-			long eCount = getCurrentSample().errorCount;
+			eCount = getCurrentSample().getErrorCount();
 			if (!res.isSuccessful()) {
 				eCount++;
 			}
-			long endTime = getEndTime(res);
+			endTime = getEndTime(res);
 			long howLongRunning = endTime - firstTime;
-			double throughput = 0;
-			if (howLongRunning <= 0) {
-				throughput = Double.MAX_VALUE;
-			}
 			throughput = ((double) calculator.getCount() / (double) howLongRunning) * 1000.0;
 			if (throughput > maxThroughput) {
 				maxThroughput = throughput;
 			}
-			s = new Sample(null, res.getTime(), (long) calculator.getMean(), (long) calculator.getStandardDeviation(),
-					calculator.getMedian().longValue(), calculator.getPercentPoint(0.500).longValue(), throughput,
-					eCount, res.isSuccessful(), storedValues.size() + 1, endTime);
-			storedValues.add(s);
-		}
-		return s;
+
+            rtime = res.getTime();
+            cmean = (long)calculator.getMean();
+            cstdv = (long)calculator.getStandardDeviation();
+            cmedian = calculator.getMedian().longValue();
+            cpercent = calculator.getPercentPoint( 0.500 ).longValue();
+// TODO cpercent is the same as cmedian here - why? and why pass it to "distributionLine"? 
+            rbool = res.isSuccessful();
+        }
+
+        synchronized( storedValues ){
+            int count = storedValues.size() + 1;
+            Sample s =
+                new Sample( null, rtime, cmean, cstdv, cmedian, cpercent, throughput, eCount, rbool, count, endTime );
+            storedValues.add( s );
+            return s;
+        }
 	}
 
 	public List getSamples() {
@@ -253,15 +215,17 @@ public class SamplingStatCalculator implements Serializable {
 	}
 
 	public Sample getSample(int index) {
-		if (index < storedValues.size()) {
-			return (Sample) storedValues.get(index);
-		}
+        synchronized( storedValues ){
+            if (index < storedValues.size()) {
+                return (Sample) storedValues.get(index);
+            }
 		return null;
+        }
 	}
 
 	private long getEndTime(SampleResult res) {
-		long endTime = res.getTimeStamp();
-		long lastTime = getCurrentSample().endTime;
+		long endTime = res.getEndTime();
+		long lastTime = getCurrentSample().getEndTime();
 		if (res.isStampedAtStart()) {
 			endTime += res.getTime();
 		}
@@ -275,10 +239,7 @@ public class SamplingStatCalculator implements Serializable {
 	 * @param res
 	 */
 	private void setStartTime(SampleResult res) {
-		long startTime = res.getTimeStamp();
-		if (!res.isStampedAtStart()) {
-			startTime -= res.getTime();
-		}
+		long startTime = res.getStartTime();
 		if (firstTime > startTime) {
 			// this is our first sample, set the start time to current timestamp
 			firstTime = startTime;
@@ -287,8 +248,7 @@ public class SamplingStatCalculator implements Serializable {
 
 	/**
 	 * Returns the raw double value of the percentage of samples with errors
-	 * that were recorded. (Between 0.0 and 1.0) If you want a nicer return
-	 * format, see {@link #getErrorPercentageString()}.
+	 * that were recorded. (Between 0.0 and 1.0)
 	 * 
 	 * @return the raw double value of the percentage of samples with errors
 	 *         that were recorded.
@@ -299,28 +259,12 @@ public class SamplingStatCalculator implements Serializable {
 		if (calculator.getCount() == 0) {
 			return (rval);
 		}
-		rval = (double) getCurrentSample().errorCount / (double) calculator.getCount();
+		rval = (double) getCurrentSample().getErrorCount() / (double) calculator.getCount();
 		return (rval);
 	}
 
 	/**
-	 * Returns a String which represents the percentage of sample errors that
-	 * have occurred. ("0.00%" through "100.00%")
-	 * 
-	 * @return a String which represents the percentage of sample errors that
-	 *         have occurred.
-	 */
-	public String getErrorPercentageString() {
-		double myErrorPercentage = this.getErrorPercentage();
-		if (myErrorPercentage < 0) {
-			myErrorPercentage = 0.0;
-		}
-
-		return (errorFormatter.format(myErrorPercentage));
-	}
-
-	/**
-	 * For debugging purposes, mainly.
+	 * For debugging purposes, only.
 	 */
 	public String toString() {
 		StringBuffer mySB = new StringBuffer();
@@ -329,8 +273,8 @@ public class SamplingStatCalculator implements Serializable {
 		mySB.append("Avg: " + this.getMean() + "  ");
 		mySB.append("Min: " + this.getMin() + "  ");
 		mySB.append("Max: " + this.getMax() + "  ");
-		mySB.append("Error Rate: " + this.getErrorPercentageString() + "  ");
-		mySB.append("Sample Rate: " + this.getRateString());
+		mySB.append("Error Rate: " + this.getErrorPercentage() + "  ");
+		mySB.append("Sample Rate: " + this.getRate());
 		return (mySB.toString());
 	}
 
@@ -338,7 +282,7 @@ public class SamplingStatCalculator implements Serializable {
 	 * @return errorCount
 	 */
 	public long getErrorCount() {
-		return getCurrentSample().errorCount;
+		return getCurrentSample().getErrorCount();
 	}
 
 	/**
@@ -420,4 +364,4 @@ public class SamplingStatCalculator implements Serializable {
 	public double getStandardDeviation() {
 		return calculator.getStandardDeviation();
 	}
-} // class RunningSample
+}

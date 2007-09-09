@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,6 +30,7 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -79,11 +81,16 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	 * start of the test. The super.clear() method clears the name (and all
 	 * other properties), so it is called last.
 	 */
+	// TODO: is this clearData, clearGui or TestElement.clear() ?
 	public void clear() {
 		// System.out.println("-- "+me+this.getName()+"
 		// "+Thread.currentThread().getName());
 		super.clear();
 		sequenceNumber = 0; // TODO is this the right thing to do?
+	}
+
+	// TODO - is this the same as the above?
+	public void clearData() {
 	}
 
 	/**
@@ -92,11 +99,19 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	 * @see org.apache.jmeter.samplers.SampleListener#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)
 	 */
 	public void sampleOccurred(SampleEvent e) {
-		SampleResult s = e.getResult();
+      processSample(e.getResult());
+   }
+
+   /**
+    * Recurse the whole (sub)result hierarchy.
+    *
+    * @param s Sample result
+    */
+   private void processSample(SampleResult s) {
 		saveSample(s);
 		SampleResult[] sr = s.getSubResults();
 		for (int i = 0; i < sr.length; i++) {
-			saveSample(sr[i]);
+			processSample(sr[i]);
 		}
 	}
 
@@ -112,7 +127,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		nextNumber();
 		String fileName = makeFileName(s.getContentType());
 		log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
-		// System.out.println(fileName);
+        s.setResultFileName(fileName);// Associate sample with file name
 		File out = new File(fileName);
 		FileOutputStream pw = null;
 		try {
@@ -123,11 +138,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		} catch (IOException e1) {
 			log.error("Error saving sample " + s.getSampleLabel(), e1);
 		} finally {
-			try {
-				if (pw != null)
-					pw.close();
-			} catch (IOException e) {
-			}
+            JOrphanUtils.closeQuietly(pw);
 		}
 	}
 
@@ -177,4 +188,5 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	private boolean getErrorsOnly() {
 		return getPropertyAsBoolean(ERRORS_ONLY);
 	}
+
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,8 +18,6 @@
 
 /**
  * GUI class supporting the MD5Hex assertion functionality.
- * 
- * @version $Revision$ updated on $Date$
  * 
  */
 package org.apache.jmeter.assertions.gui;
@@ -55,10 +53,10 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 
 		// USER_INPUT
 		HorizontalPanel md5HexPanel = new HorizontalPanel();
-		md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("md5hex_assertion_md5hex_test")));
+		md5HexPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("md5hex_assertion_md5hex_test"))); // $NON-NLS-1$
 
-		md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label")));
+		md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label"))); //$NON-NLS-1$
 
 		md5HexInput = new JTextField(25);
 		// md5HexInput.addFocusListener(this);
@@ -76,7 +74,7 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 	}
 
 	public String getLabelResource() {
-		return "md5hex_assertion_title";
+		return "md5hex_assertion_title"; // $NON-NLS-1$
 	}
 
 	/*
@@ -102,4 +100,13 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
 		}
 		((MD5HexAssertion) element).setAllowedMD5Hex(md5HexString);
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        md5HexInput.setText(""); //$NON-NLS-1$
+    }    
 }

@@ -1,11 +1,11 @@
 #! /bin/sh
 
-##   $Id$
-##   Copyright 2001-2004 The Apache Software Foundation
-## 
-##   Licensed under the Apache License, Version 2.0 (the "License");
-##   you may not use this file except in compliance with the License.
-##   You may obtain a copy of the License at
+##   Licensed to the Apache Software Foundation (ASF) under one or more
+##   contributor license agreements.  See the NOTICE file distributed with
+##   this work for additional information regarding copyright ownership.
+##   The ASF licenses this file to You under the Apache License, Version 2.0
+##   (the "License"); you may not use this file except in compliance with
+##   the License.  You may obtain a copy of the License at
 ## 
 ##       http://www.apache.org/licenses/LICENSE-2.0
 ## 
@@ -14,6 +14,13 @@
 ##   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
+
+##   ==============================================
+##   Environment variables:
+##   JVM_ARGS - optional java args, e.g. -Dprop=val
+##
+##   ==============================================
+
 
 # The following should be reasonably good values for most tests running
 # on Sun JVMs. Following is the analysis on which it is based. If it's total
@@ -57,7 +64,7 @@ NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
 TENURING="-XX:MaxTenuringThreshold=2"
 
 # This evacuation ratio is OK (see the comments for SURVIVOR) during test
-# runs -- no so sure about operations that bring a lot of long-lived information into
+# runs -- not so sure about operations that bring a lot of long-lived information into
 # memory in a short period of time, such as loading tests or listener data files.
 # Increase it if you experience OutOfMemory problems during those operations
 # without having gone through a lot of Full GC-ing just before the OOM:
@@ -71,10 +78,10 @@ RMIGC="-Dsun.rmi.dgc.client.gcInterval=600000 -Dsun.rmi.dgc.server.gcInterval=60
 PERM="-XX:PermSize=64m -XX:MaxPermSize=64m"
 
 # Finally, some tracing to help in case things go astray:
-DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
+#DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
 
 SERVER="-server"
 
-ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM $DEBUG"
+ARGS="$SERVER $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $RMIGC $PERM"
 
-java -server -jar `dirname $0`/ApacheJMeter.jar "$@"
+java $JVM_ARGS $ARGS -jar `dirname $0`/ApacheJMeter.jar "$@"

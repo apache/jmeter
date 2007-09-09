@@ -1,10 +1,10 @@
-// $Header:
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,13 +22,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
+import org.apache.jmeter.testelement.AbstractChart;
 import org.apache.jmeter.testelement.AbstractTable;
 import org.apache.jmeter.testelement.BarChart;
 import org.apache.jmeter.testelement.TestElement;
@@ -38,14 +38,20 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 public class BarChartGui extends AbstractReportGui {
 
-    private JLabeledTextField xAxisLabel = 
-        new JLabeledTextField(JMeterUtils.getResString("report_chart_x_axis_label"));
+    private JLabeledChoice xAxisLabel = new JLabeledChoice();
     
     private JLabeledTextField yAxisLabel = 
         new JLabeledTextField(JMeterUtils.getResString("report_chart_y_axis_label"));
     
-	private JLabeledChoice checkItems = null;
-	private JLabeledChoice xItems = null;
+    private JLabeledTextField caption = 
+        new JLabeledTextField(JMeterUtils.getResString("report_chart_caption"),
+                Color.white);
+    private JLabeledTextField url = 
+        new JLabeledTextField(JMeterUtils.getResString("report_bar_graph_url"),
+                Color.white);
+
+    private JLabeledChoice yItems = new JLabeledChoice();
+	private JLabeledChoice xItems = new JLabeledChoice();
 
     public BarChartGui() {
 		super();
@@ -80,23 +86,32 @@ public class BarChartGui extends AbstractReportGui {
         JLabel xLabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis"));
 		HorizontalPanel xpanel = new HorizontalPanel(Color.white);
 		xLabel.setBorder(new EmptyBorder(5,2,5,2));
-        xItems = new JLabeledChoice();
         xItems.setBackground(Color.white);
         xItems.setValues(AbstractTable.xitems);
         xpanel.add(xLabel);
         xpanel.add(xItems);
         options.add(xpanel);
-        options.add(xAxisLabel);
+
+        JLabel xALabel = new JLabel(JMeterUtils.getResString("report_chart_x_axis_label"));
+        HorizontalPanel xApanel = new HorizontalPanel(Color.white);
+        xALabel.setBorder(new EmptyBorder(5,2,5,2));
+        xAxisLabel.setBackground(Color.white);
+        xAxisLabel.setValues(AbstractChart.X_LABELS);
+        xApanel.add(xALabel);
+        xApanel.add(xAxisLabel);
+        options.add(xApanel);
         
 		JLabel yLabel = new JLabel(JMeterUtils.getResString("report_chart_y_axis"));
 		HorizontalPanel ypanel = new HorizontalPanel(Color.white);
 		yLabel.setBorder(new EmptyBorder(5,2,5,2));
-        checkItems = new JLabeledChoice();
-        checkItems.setBackground(Color.white);
+        yItems.setBackground(Color.white);
+        yItems.setValues(AbstractTable.items);
         ypanel.add(yLabel);
-        ypanel.add(checkItems);
+        ypanel.add(yItems);
         options.add(ypanel);
         options.add(yAxisLabel);
+        options.add(caption);
+        options.add(url);
         
         add(pane,BorderLayout.NORTH);
         add(options,BorderLayout.CENTER);
@@ -112,22 +127,22 @@ public class BarChartGui extends AbstractReportGui {
 		this.configureTestElement(element);
 		BarChart bc = (BarChart)element;
 		bc.setXAxis(xItems.getText());
-		bc.setYAxis(checkItems.getText());
+		bc.setYAxis(yItems.getText());
 		bc.setXLabel(xAxisLabel.getText());
 		bc.setYLabel(yAxisLabel.getText());
+        bc.setCaption(caption.getText());
+        bc.setURL(url.getText());
 	}
 	
     public void configure(TestElement element) {
         super.configure(element);
         BarChart bc = (BarChart)element;
         xItems.setText(bc.getXAxis());
-        checkItems.setText(bc.getYAxis());
+        yItems.setText(bc.getYAxis());
         xAxisLabel.setText(bc.getXLabel());
         yAxisLabel.setText(bc.getYLabel());
-        if (bc.getCheckedItems() != null && bc.getCheckedItems().size() > 0) {
-        	String[] its = new String[bc.getCheckedItems().size()];
-        	checkItems.setValues((String[])bc.getCheckedItems().toArray(its));
-        }
+        caption.setText(bc.getCaption());
+        url.setText(bc.getURL());
     }
     
 }

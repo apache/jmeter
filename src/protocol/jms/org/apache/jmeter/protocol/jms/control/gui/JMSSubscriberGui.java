@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,52 +40,60 @@ import org.apache.jmeter.protocol.jms.sampler.SubscriberSampler;
 
 /**
  * This is the GUI for JMS Subscriber <br>
- * Created on: October 13, 2003
  * 
- * @author Peter Lin
- * @version $Id$
  */
 public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.event.ActionListener, ChangeListener {
 
-	JCheckBox useProperties = new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false);
+	private JCheckBox useProperties = 
+        new JCheckBox(JMeterUtils.getResString("jms_use_properties_file"), false); // $NON-NLS-1$
 
-	JLabeledTextField jndiICF = new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory"));
+	private JLabeledTextField jndiICF = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_initial_context_factory")); // $NON-NLS-1$
 
-	JLabeledTextField urlField = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url"));
+	private JLabeledTextField urlField = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); // $NON-NLS-1$
 
-	JLabeledTextField jndiConnFac = new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory"));
+	private JLabeledTextField jndiConnFac = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_connection_factory")); // $NON-NLS-1$
 
-	JLabeledTextField jmsTopic = new JLabeledTextField(JMeterUtils.getResString("jms_topic"));
+	private JLabeledTextField jmsTopic = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_topic")); // $NON-NLS-1$
 
-	JLabeledTextField jmsUser = new JLabeledTextField(JMeterUtils.getResString("jms_user"));
+	private JLabeledTextField jmsUser = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_user")); // $NON-NLS-1$
 
-	JLabeledTextField jmsPwd = new JLabeledTextField(JMeterUtils.getResString("jms_pwd"));
+	private JLabeledTextField jmsPwd = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_pwd")); // $NON-NLS-1$
 
-	JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions"));
+	private JLabeledTextField iterations = 
+        new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); // $NON-NLS-1$
 
-	private String required = JMeterUtils.getResString("jms_auth_required");
+	private static final String required = JMeterUtils.getResString("jms_auth_required"); // $NON-NLS-1$
 
-	private String not_req = JMeterUtils.getResString("jms_auth_not_required");
+	private static final String not_req = JMeterUtils.getResString("jms_auth_not_required"); // $NON-NLS-1$
 
-	private String[] auth_items = { required, not_req };
+	private static final String[] auth_items = { required, not_req };
 
-	JLabeledRadio reqAuth = new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req);
+	private JLabeledRadio reqAuth = 
+        new JLabeledRadio(JMeterUtils.getResString("jms_authentication"), auth_items, not_req); // $NON-NLS-1$
 
-	JCheckBox readResponse = new JCheckBox(JMeterUtils.getResString("jms_read_response"), true);
+	private JCheckBox readResponse = 
+        new JCheckBox(JMeterUtils.getResString("jms_read_response"), true); // $NON-NLS-1$
 
-	public static String receive_str = JMeterUtils.getResString("jms_subscriber_receive");
+	public static final String receive_str = JMeterUtils.getResString("jms_subscriber_receive"); // $NON-NLS-1$
 
-	public static String onmessage_str = JMeterUtils.getResString("jms_subscriber_on_message");
+	public static final String onmessage_str = JMeterUtils.getResString("jms_subscriber_on_message"); // $NON-NLS-1$
 
-	private String[] client_items = { receive_str, onmessage_str };
+	private static final String[] client_items = { receive_str, onmessage_str };
 
-	JLabeledRadio clientChoice = new JLabeledRadio(JMeterUtils.getResString("jms_client_type"), client_items,
+	private JLabeledRadio clientChoice = 
+        new JLabeledRadio(JMeterUtils.getResString("jms_client_type"), client_items, // $NON-NLS-1$
 			receive_str);
 
 	/**
 	 * This is the font for the note.
 	 */
-	Font plainText = new Font("plain", Font.PLAIN, 10);
+	//Font plainText = new Font("plain", Font.PLAIN, 10); // $NON-NLS-1$
 
 	private JPanel lookup = null;
 
@@ -93,7 +102,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
 	}
 
 	public String getLabelResource() {
-		return "jms_subscriber_title";
+		return "jms_subscriber_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -204,6 +213,21 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements java.awt.eve
 		reqAuth.setText(sampler.getUseAuth());
 		readResponse.setSelected(sampler.getReadResponseAsBoolean());
 		clientChoice.setText(sampler.getClientChoice());
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		useProperties.setSelected(false); // $NON-NLS-1$
+		jndiICF.setText(""); // $NON-NLS-1$
+		urlField.setText(""); // $NON-NLS-1$
+		jndiConnFac.setText(""); // $NON-NLS-1$
+		jmsTopic.setText(""); // $NON-NLS-1$
+		jmsUser.setText(""); // $NON-NLS-1$
+		jmsPwd.setText(""); // $NON-NLS-1$
+		iterations.setText(""); // $NON-NLS-1$
+		reqAuth.setText(""); // $NON-NLS-1$
+		readResponse.setSelected(true);
+		clientChoice.setText(""); // $NON-NLS-1$
 	}
 
 	/**

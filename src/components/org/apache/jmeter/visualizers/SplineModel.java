@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,10 +24,6 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class SplineModel implements Clearable {
 	public final int DEFAULT_NUMBER_OF_NODES = 10;
 
@@ -77,7 +73,7 @@ public class SplineModel implements Clearable {
 	}
 
 	public String getClassLabel() {
-		return JMeterUtils.getResString("spline_visualizer_title");
+		return JMeterUtils.getResString("spline_visualizer_title");// $NON-NLS-1$
 	}
 
 	public long getMinimum() {
@@ -93,11 +89,11 @@ public class SplineModel implements Clearable {
 	}
 
 	public long getCurrent() {
-		return samples.getCurrentSample().data;
+		return samples.getCurrentSample().getData();
 	}
 
 	public long getSample(int i) {
-		return samples.getSample(i).data;
+		return samples.getSample(i).getData();
 	}
 
 	public long getNumberOfCollectedSamples() {
@@ -109,10 +105,10 @@ public class SplineModel implements Clearable {
 	}
 
 	public void uncompile() {
-		clear();
+		clearData();
 	}
 
-	public synchronized void clear() {
+	public synchronized void clearData() {
 		// this.graph.clear();
 		samples.clear();
 
@@ -135,7 +131,7 @@ public class SplineModel implements Clearable {
 
 			for (int i = 0; i < numberOfNodes; i++) {
 				for (int j = 0; j < loadFactor; j++) {
-					floatNode[i] += samples.getSample((int) ((i * loadFactor) + j)).data;
+					floatNode[i] += samples.getSample((int) ((i * loadFactor) + j)).getData();
 				}
 				floatNode[i] = floatNode[i] / loadFactor;
 			}

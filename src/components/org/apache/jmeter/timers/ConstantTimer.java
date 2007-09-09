@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,11 +31,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @author <a href="mailto:stefano@apache.org">Stefano Mazzocchi</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
- * @version $Revision$ $Date$
  */
 public class ConstantTimer extends AbstractTestElement implements Timer, Serializable, LoopIterationListener {
 
-	public final static String DELAY = "ConstantTimer.delay";
+	public final static String DELAY = "ConstantTimer.delay"; //$NON-NLS-1$
 
 	private long delay = 0;
 
@@ -93,7 +92,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
 	 * @return the description of this timer class.
 	 */
 	public String toString() {
-		return JMeterUtils.getResString("constant_timer_memo");
+		return JMeterUtils.getResString("constant_timer_memo"); //$NON-NLS-1$
 	}
 
 	/**
@@ -105,22 +104,4 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
 		delay = getPropertyAsLong(DELAY);
 
 	}
-
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
-	 */
-	public void iterationEnd(LoopIterationEvent iterEvent) {
-	}
-
-	/*
-	 * This method doesn't appear to be used anymore. jeremy_a@bigfoot.com 02
-	 * May 2003
-	 * 
-	 * Make changes to variables available elsewhere.
-	 * 
-	 * @see ThreadListener#setJMeterVariables(JMeterVariables) public void
-	 *      setJMeterVariables(JMeterVariables jmVars) {
-	 *      //vars.addJMeterVariables(jmVars); }
-	 */
-
 }

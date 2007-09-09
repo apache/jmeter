@@ -1,0 +1,4 @@
+# JMeter generated Cookie file
+domain	TRUE	path	TRUE	0	name	value
+	TRUE		FALSE	0	name2	value2
+c	TRUE	d	TRUE	9223372036854775807	a	b

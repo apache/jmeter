@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,8 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -52,7 +50,6 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.gui.action.GlobalMouseListener;
 import org.apache.jmeter.gui.util.ReportMenuBar;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
 import org.apache.jmeter.report.gui.tree.ReportCellRenderer;
@@ -61,16 +58,20 @@ import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
- * The main JMeter frame, containing the menu bar, test tree, and an area for
- * JMeter component GUIs.
+ * ReportMainFrame is based on MainFrame. it uses the same basic structure,
+ * but with changes for the report gui.
  * 
- * @author Michael Stover
+ * @author Peter Lin
  * @version $Revision$
  */
 public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
     /** The menu bar. */
     protected ReportMenuBar menuBar;
 
@@ -84,7 +85,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
     protected JTree tree;
 
     /** An image which is displayed when a test is running. */
-	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
+	//private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
 
 	/** An image which is displayed when a test is not currently running. */
 	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");
@@ -99,11 +100,14 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	private JButton runningIndicator;
 
 	/** The set of currently running hosts. */
-	private Set hosts = new HashSet();
+	//private Set hosts = new HashSet();
 
 	/** A message dialog shown while JMeter threads are stopping. */
 	private JDialog stoppingMessage;
 
+    public ReportMainFrame(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
     /**
 	 * Create a new JMeter frame.
 	 * 
@@ -329,7 +333,6 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
-		addMouseListener(new GlobalMouseListener());
     }
 
     /**
@@ -415,7 +418,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
      * A window adapter used to detect when the main JMeter frame is being
      * closed.
      */
-    protected class WindowHappenings extends WindowAdapter {
+    protected static class WindowHappenings extends WindowAdapter {
         /**
          * Called when the main JMeter frame is being closed. Sends a
          * notification so that JMeter can react appropriately.

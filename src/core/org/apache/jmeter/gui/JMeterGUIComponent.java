@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -41,8 +41,6 @@ import org.apache.jmeter.testelement.TestElement;
  * @see org.apache.jmeter.visualizers.gui.AbstractVisualizer
  * @see org.apache.jmeter.samplers.gui.AbstractSamplerGui
  * 
- * @version $Revision$ on $Date$
- * 
  */
 
 public interface JMeterGUIComponent {
@@ -71,8 +69,13 @@ public interface JMeterGUIComponent {
 	 * It must be unique to the class.
 	 * 
 	 * It is also used by Help to find the appropriate location in the
-	 * documentation
+	 * documentation.
 	 * 
+	 * Normally getLabelResource() should be overridden instead of
+	 * this method; the definition of this method in AbstractJMeterGuiComponent
+	 * is intended for general use.
+	 * 
+	 * @see #getLabelResource()
 	 * @return GUI label for the component.
 	 */
 	String getStaticLabel();
@@ -81,6 +84,10 @@ public interface JMeterGUIComponent {
 	 * Get the component's resource name, which getStaticLabel uses to derive
 	 * the component's label in the local language. The resource name is fixed,
 	 * and does not vary with the selected language.
+	 * 
+	 * Normally this method should be overriden in preference to overriding
+	 * getStaticLabel(). However where the resource name is not available or required,
+	 * getStaticLabel() may be overridden instead.
 	 * 
 	 * @return the resource name
 	 */
@@ -183,7 +190,9 @@ public interface JMeterGUIComponent {
 	 * Clear the gui and return it to initial default values. This is necessary
 	 * because most gui classes are instantiated just once and re-used for
 	 * multiple test element objects and thus they need to be cleared between
-	 * use. TODO: implement this in all gui classes.
+	 * use.
 	 */
-	public void clear();
+	public void clearGui();
+	// N.B. originally called clear()
+	// @see also Clearable
 }

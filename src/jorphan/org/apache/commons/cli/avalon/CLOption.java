@@ -1,8 +1,10 @@
 /* 
- * Copyright 2002-2005 The Apache Software Foundation
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
- * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  *   http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -23,11 +25,10 @@ import java.util.Arrays;
 /**
  * Basic class describing an instance of option.
  * 
- * @version $Revision$ $Date$
  */
 public final class CLOption {
 	/**
-	 * Value of {@link #getId} when the option is a text argument.
+	 * Value of {@link CLOptionDescriptor#getId} when the option is a text argument.
 	 */
 	public static final int TEXT_ARGUMENT = 0;
 
@@ -64,19 +65,6 @@ public final class CLOption {
 		} else {
 			return m_arguments[index];
 		}
-	}
-
-	/**
-	 * Retrieve id of option.
-	 * 
-	 * The id is eqivalent to character code if it can be a single letter
-	 * option.
-	 * 
-	 * @return the id
-	 * @deprecated use <code>getDescriptor().getId()</code> instead
-	 */
-	public final int getId() {
-		return m_descriptor == null ? TEXT_ARGUMENT : m_descriptor.getId();
 	}
 
 	public final CLOptionDescriptor getDescriptor() {
@@ -144,8 +132,14 @@ public final class CLOption {
 	 */
 	public final String toString() {
 		final StringBuffer sb = new StringBuffer();
-		sb.append("[Option ");
-		sb.append((char) m_descriptor.getId());
+		sb.append("[");
+		final char id = (char) m_descriptor.getId();
+		if (id == TEXT_ARGUMENT) {
+			sb.append("TEXT ");
+		} else {
+			sb.append("Option ");
+			sb.append(id);			
+		}
 
 		if (null != m_arguments) {
 			sb.append(", ");
@@ -154,6 +148,28 @@ public final class CLOption {
 
 		sb.append(" ]");
 
+		return sb.toString();
+	}
+
+	/*
+	 * Convert to a shorter String for test purposes
+	 * 
+	 * @return the string value
+	 */
+	final String toShortString() {
+		final StringBuffer sb = new StringBuffer();
+		final char id = (char) m_descriptor.getId();
+		if (id != TEXT_ARGUMENT) {
+			sb.append("-");
+			sb.append(id);			
+		}
+
+		if (null != m_arguments) {
+			if (id != TEXT_ARGUMENT) {
+				sb.append("=");
+			}
+			sb.append(Arrays.asList(m_arguments));
+		}
 		return sb.toString();
 	}
 }

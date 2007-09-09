@@ -1,10 +1,11 @@
-//$Header:
+//$Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,7 +30,6 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.services.FileServer;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -51,7 +51,7 @@ public class ReportPlan extends AbstractTestElement implements Serializable, Tes
 
 	public final static String COMMENTS = "ReportPlan.comments";
 
-	public final static String BASEDIR = "basedir";
+	public final static String BASEDIR = "ReportPlan.basedir";
 
 	private transient List reportPages = new LinkedList();
 

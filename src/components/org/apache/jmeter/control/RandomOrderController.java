@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  *     http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -20,12 +20,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import junit.framework.TestSuite;
-
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.junit.stubs.TestSampler;
-import org.apache.jmeter.testelement.TestElement;
 
 /**
  * A controller that runs its children each at most once, but in a random order.
@@ -51,7 +45,7 @@ public class RandomOrderController extends GenericController implements Serializ
 	/**
 	 * @see GenericController#reInitialize()
 	 */
-	public void reInitialize() {
+	protected void reInitialize() {
 		super.reInitialize();
 		this.reorder();
 	}
@@ -86,64 +80,4 @@ public class RandomOrderController extends GenericController implements Serializ
 		// Replace subControllersAndSamplers with reordered copy.
 		this.subControllersAndSamplers = reordered;
 	}
-
-	public static class Test extends JMeterTestCase {
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testRandomOrder() {
-			testLog.debug("Testing RandomOrderController");
-			RandomOrderController roc = new RandomOrderController();
-			roc.addTestElement(new TestSampler("zero"));
-			roc.addTestElement(new TestSampler("one"));
-			roc.addTestElement(new TestSampler("two"));
-			roc.addTestElement(new TestSampler("three"));
-			TestElement sampler = null;
-			List usedSamplers = new ArrayList();
-			roc.initialize();
-			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getPropertyAsString(TestSampler.NAME);
-				if (usedSamplers.contains(samplerName)) {
-					assertTrue("Duplicate sampler returned from next()", false);
-				}
-				usedSamplers.add(samplerName);
-			}
-			assertTrue("All samplers were returned", usedSamplers.size() == 4);
-		}
-
-		public void testRandomOrderNoElements() {
-			RandomOrderController roc = new RandomOrderController();
-			roc.initialize();
-			assertTrue(roc.next() == null);
-		}
-
-		public void testRandomOrderOneElement() {
-			RandomOrderController roc = new RandomOrderController();
-			roc.addTestElement(new TestSampler("zero"));
-			TestElement sampler = null;
-			List usedSamplers = new ArrayList();
-			roc.initialize();
-			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getPropertyAsString(TestSampler.NAME);
-				if (usedSamplers.contains(samplerName)) {
-					assertTrue("Duplicate sampler returned from next()", false);
-				}
-				usedSamplers.add(samplerName);
-			}
-			assertTrue("All samplers were returned", usedSamplers.size() == 1);
-		}
-	}
-
-	public static void main(String args[]) {
-		junit.textui.TestRunner.run(suite());
-	}
-
-	public static TestSuite suite() {
-		TestSuite suite = new TestSuite();
-		suite.addTest(new Test("testRandomOrderController"));
-		return suite;
-	}
-
 }

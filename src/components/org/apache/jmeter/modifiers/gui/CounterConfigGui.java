@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,11 +27,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class CounterConfigGui extends AbstractPreProcessorGui {
-	private JLabeledTextField startField, incrField, endField, varNameField;
+	private JLabeledTextField startField, incrField, endField, varNameField, formatField;
 
 	private JCheckBox perUserField;
 
@@ -41,7 +38,7 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 	}
 
 	public String getLabelResource() {
-		return "counter_config_title";
+		return "counter_config_title";//$NON-NLS-1$
 	}
 
 	/**
@@ -68,10 +65,25 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 			}
 			config.setIncrement(incrField.getText());
 			config.setVarName(varNameField.getText());
+            config.setFormat(formatField.getText());
 			config.setIsPerUser(perUserField.isSelected());
 		}
 		super.configureTestElement(c);
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        startField.setText(""); //$NON-NLS-1$
+        incrField.setText(""); //$NON-NLS-1$
+        endField.setText(""); //$NON-NLS-1$
+        varNameField.setText(""); //$NON-NLS-1$
+        formatField.setText(""); //$NON-NLS-1$
+        perUserField.setSelected(false);
+    }
 
 	public void configure(TestElement element) {
 		super.configure(element);
@@ -79,26 +91,27 @@ public class CounterConfigGui extends AbstractPreProcessorGui {
 		startField.setText(config.getPropertyAsString(CounterConfig.START));
 		endField.setText(config.getPropertyAsString(CounterConfig.END));
 		incrField.setText(config.getPropertyAsString(CounterConfig.INCREMENT));
+        formatField.setText(config.getFormat());
 		varNameField.setText(config.getVarName());
 		perUserField.setSelected(config.isPerUser());
 	}
 
 	private void init() {
 		setBorder(makeBorder());
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
-		startField = new JLabeledTextField(JMeterUtils.getResString("start") + "          ");// TODO
-																								// proper
-																								// alignment
-		incrField = new JLabeledTextField(JMeterUtils.getResString("increment"));
-		endField = new JLabeledTextField(JMeterUtils.getResString("max"));
-		varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));
-		perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));
+		startField = new JLabeledTextField(JMeterUtils.getResString("start"));//$NON-NLS-1$
+		incrField = new JLabeledTextField(JMeterUtils.getResString("increment"));//$NON-NLS-1$
+		endField = new JLabeledTextField(JMeterUtils.getResString("max"));//$NON-NLS-1$
+		varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));//$NON-NLS-1$
+        formatField = new JLabeledTextField(JMeterUtils.getResString("format"));//$NON-NLS-1$
+		perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));//$NON-NLS-1$
 
 		add(makeTitlePanel());
 		add(startField);
 		add(incrField);
 		add(endField);
+        add(formatField);
 		add(varNameField);
 		add(perUserField);
 	}

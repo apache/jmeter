@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,12 +34,10 @@ import org.apache.log.Logger;
 public class ChangeLanguage implements Command {
 	private static final Set commands = new HashSet();
 
-	public final static String CHANGE_LANGUAGE = "change_language";
-
-	private Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	static {
-		commands.add(CHANGE_LANGUAGE);
+		commands.add(ActionNames.CHANGE_LANGUAGE);
 	}
 
 	/**

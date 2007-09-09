@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,17 +36,17 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * Implementation of a uniform random timer.
  * 
- * @version $Id$
  */
 public class UniformRandomTimerGui extends AbstractTimerGui {
 
+	// TODO - are these gui item names needed?
 	private static final String DELAY_FIELD = "Delay Field";
 
 	private static final String RANGE_FIELD = "Range Field";
 
-	public static final String DEFAULT_DELAY = "0"; // TODO: make private?
+	private static final String DEFAULT_DELAY = "0"; // $NON-NLS-1$
 
-	public static final String DEFAULT_RANGE = "100.0";// TODO: make private?
+	private static final String DEFAULT_RANGE = "100.0";// $NON-NLS-1$
 
 	private JTextField delayField;
 
@@ -72,7 +72,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 	}
 
 	public String getLabelResource() {
-		return "uniform_timer_title";
+		return "uniform_timer_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 	 * Initialize this component.
 	 */
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 		setBorder(makeBorder());
 
 		add(makeTitlePanel());
@@ -121,11 +121,11 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 		JPanel threadDelayPropsPanel = new JPanel();
 		threadDelayPropsPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
 		threadDelayPropsPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
-				.getResString("thread_delay_properties")));
+				.getResString("thread_delay_properties"))); //$NON-NLS-1$
 
 		// DELAY DEVIATION
 		Box delayDevPanel = Box.createHorizontalBox();
-		delayDevPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_range")));
+		delayDevPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_range"))); //$NON-NLS-1$
 		delayDevPanel.add(Box.createHorizontalStrut(5));
 
 		rangeField = new JTextField(6);
@@ -137,7 +137,7 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 
 		// AVG DELAY
 		Box avgDelayPanel = Box.createHorizontalBox();
-		avgDelayPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_delay")));
+		avgDelayPanel.add(new JLabel(JMeterUtils.getResString("uniform_timer_delay"))); //$NON-NLS-1$
 		avgDelayPanel.add(Box.createHorizontalStrut(5));
 
 		delayField = new JTextField(6);
@@ -156,11 +156,11 @@ public class UniformRandomTimerGui extends AbstractTimerGui {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
+	public void clearGui() {
 		rangeField.setText(DEFAULT_RANGE);
 		delayField.setText(DEFAULT_DELAY);
-		super.clear();
+		super.clearGui();
 	}
 }

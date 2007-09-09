@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -34,7 +35,6 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.MalformedPatternException;
 
 /**
  * HtmlParser implementation using regular expressions.
@@ -72,9 +72,9 @@ import org.apache.oro.text.regex.MalformedPatternException;
  * </ul>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class RegexpHTMLParser extends HTMLParser {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Regexp fragment matching a tag attribute's value (including the equals
@@ -96,29 +96,21 @@ class RegexpHTMLParser extends HTMLParser {
 	 * Regular expression used against the HTML code to find the URIs of images,
 	 * etc.:
 	 */
-	private static final String REGEXP = "<(?:" + "!--.*?-->" + "|BASE" + SEP + "HREF" + VALUE
-			+ "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE + "|APPLET" + SEP + "CODE(?:BASE)?"
-			+ VALUE + "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE + "|(?:BODY|TABLE|TR|TD)" + SEP
-			+ "BACKGROUND" + VALUE + "|INPUT(?:" + SEP + "(?:SRC" + VALUE
-			+ "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}" + "|LINK(?:" + SEP + "(?:HREF" + VALUE
+	private static final String REGEXP = 
+		      "<(?:" + "!--.*?-->"
+		    + "|BASE" + SEP + "HREF" + VALUE
+			+ "|(?:IMG|SCRIPT|FRAME|IFRAME|BGSOUND|FRAME)" + SEP + "SRC" + VALUE
+			+ "|APPLET" + SEP + "CODE(?:BASE)?"	+ VALUE
+			+ "|(?:EMBED|OBJECT)" + SEP + "(?:SRC|CODEBASE)" + VALUE
+			+ "|(?:BODY|TABLE|TR|TD)" + SEP + "BACKGROUND" + VALUE
+			+ "|[^<]+?STYLE\\s*=['\"].*?URL\\(\\s*['\"](.+?)['\"]\\s*\\)"
+			+ "|INPUT(?:" + SEP + "(?:SRC" + VALUE
+			+ "|TYPE\\s*=\\s*(?:\"image\"|'image'|image(?=[\\s>])))){2,}"
+			+ "|LINK(?:" + SEP + "(?:HREF" + VALUE
 			+ "|REL\\s*=\\s*(?:\"stylesheet\"|'stylesheet'|stylesheet(?=[\\s>])))){2,}" + ")";
 
 	// Number of capturing groups possibly containing Base HREFs:
 	private static final int NUM_BASE_GROUPS = 3;
-
-	/**
-	 * Compiled regular expression.
-	 */
-	static Pattern pattern;
-
-	/**
-	 * Thread-local matcher:
-	 */
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
 
 	/**
 	 * Thread-local input:
@@ -129,9 +121,6 @@ class RegexpHTMLParser extends HTMLParser {
 		}
 	};
 
-	/** Used to store the Logger (used for debug and error messages). */
-	transient private static Logger log;
-
 	protected boolean isReusable() {
 		return true;
 	}
@@ -141,21 +130,6 @@ class RegexpHTMLParser extends HTMLParser {
 	 */
 	protected RegexpHTMLParser() {
 		super();
-
-		// Define this here to ensure it's ready to report any trouble
-		// with the regexp:
-		log = LoggingManager.getLoggerForClass();
-
-		// Compile the regular expression:
-		try {
-			Perl5Compiler c = new Perl5Compiler();
-			pattern = c.compile(REGEXP, Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK
-					| Perl5Compiler.READ_ONLY_MASK);
-		} catch (MalformedPatternException mpe) {
-			log.error("Internal error compiling regular expression in ParseRegexp.");
-			log.error("MalformedPatternException - " + mpe);
-			throw new Error(mpe.toString());// JDK1.4: remove .toString()
-		}
 	}
 
 	/*
@@ -166,17 +140,23 @@ class RegexpHTMLParser extends HTMLParser {
 	 */
 	public Iterator getEmbeddedResourceURLs(byte[] html, URL baseUrl, URLCollection urls) {
 
-		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
 		PatternMatcherInput input = (PatternMatcherInput) localInput.get();
 		// TODO: find a way to avoid the cost of creating a String here --
 		// probably a new PatternMatcherInput working on a byte[] would do
 		// better.
 		input.setInput(new String(html));
+		Pattern pattern=JMeterUtils.getPatternCache().getPattern(
+				REGEXP, 
+				Perl5Compiler.CASE_INSENSITIVE_MASK 
+				| Perl5Compiler.SINGLELINE_MASK
+				| Perl5Compiler.READ_ONLY_MASK);
+		
 		while (matcher.contains(input, pattern)) {
 			MatchResult match = matcher.getMatch();
 			String s;
 			if (log.isDebugEnabled())
-				log.debug("match groups " + match.groups());
+				log.debug("match groups " + match.groups() + " " + match.toString());
 			// Check for a BASE HREF:
 			for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
 				s = match.group(g);
@@ -197,10 +177,10 @@ class RegexpHTMLParser extends HTMLParser {
 			}
 			for (int g = NUM_BASE_GROUPS + 1; g <= match.groups(); g++) {
 				s = match.group(g);
-				if (log.isDebugEnabled()) {
-					log.debug("group " + g + " - " + match.group(g));
-				}
 				if (s != null) {
+					if (log.isDebugEnabled()) {
+						log.debug("group " + g + " - " + match.group(g));
+					}
 					urls.addURL(s, baseUrl);
 				}
 			}

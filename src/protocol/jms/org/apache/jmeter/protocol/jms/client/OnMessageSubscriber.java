@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,7 +25,6 @@ import javax.jms.JMSException;
 import javax.jms.MessageListener;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
@@ -117,7 +117,6 @@ public class OnMessageSubscriber {
 	 */
 	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
-			TopicConnectionFactory connfac = ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
 			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
@@ -151,7 +150,6 @@ public class OnMessageSubscriber {
 			this.SUBSCRIBER = null;
 			this.SESSION = null;
 			this.CONN = null;
-			this.finalize();
 		} catch (JMSException e) {
 			log.error(e.getMessage());
 		} catch (Throwable e) {

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,12 +22,6 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
-// Mark Walsh, 2002-08-03, add metadata attribute
-// add constructor Argument(String name, Object value, Object metadata)
-// add MetaData get and set methods
 
 /**
  * Class representing an argument. Each argument consists of a name/value pair,
@@ -35,11 +29,9 @@ import org.apache.log.Logger;
  * 
  * @author Michael Stover
  * @author Mark Walsh
- * @version $Revision$
  */
 public class Argument extends AbstractTestElement implements Serializable {
-    private static Logger log = LoggingManager.getLoggerForClass();
-	/** Name used to store the argument's name. */
+ 	/** Name used to store the argument's name. */
 	public static final String ARG_NAME = "Argument.name";
 
 	/** Name used to store the argument's value. */

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,14 +29,15 @@ import java.util.Enumeration;
 import java.util.Random;
 import java.util.Hashtable;
 
-import javax.mail.MessagingException;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
@@ -59,47 +60,45 @@ import org.w3c.dom.Document;
  * <p>
  * Created on: Jun 26, 2003
  * 
- * @version $Revision$
  */
 public class WebServiceSampler extends HTTPSamplerBase {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String XML_DATA = "HTTPSamper.xml_data";
+	public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
-	public static final String SOAP_ACTION = "Soap.Action";
+	public static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
 
-	public static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file";
+	public static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file"; //$NON-NLS-1$
 
-	public static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc";
+	public static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc"; //$NON-NLS-1$
 
-	public static final String MEMORY_CACHE = "WebServiceSampler.memory_cache";
+	public static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
 
-	public static final String READ_RESPONSE = "WebServiceSampler.read_response";
+	public static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
 
-	public static final String USE_PROXY = "WebServiceSampler.use_proxy";
+	public static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
 
-	public static final String PROXY_HOST = "WebServiceSampler.proxy_host";
+	public static final String PROXY_HOST = "WebServiceSampler.proxy_host"; //$NON-NLS-1$
 
-	public static final String PROXY_PORT = "WebServiceSampler.proxy_port";
+	public static final String PROXY_PORT = "WebServiceSampler.proxy_port"; //$NON-NLS-1$
 
-	public static final String WSDL_URL = "WebserviceSampler.wsdl_url";
+	public static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
 
-	/**
-	 * size of File[] array
-	 */
-	private int FILE_COUNT = -1;
+    public static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
 
-	/**
-	 * List of files that have .xml extension
-	 */
-	private File[] FILE_LIST = null;
+    private static final String PROXY_USER = 
+        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
+    
+    private static final String PROXY_PASS = 
+        JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_PASS,""); // $NON-NLS-1$
+    
 
-	/**
+	/*
 	 * Random class for generating random numbers.
 	 */
-	private Random RANDOM = new Random();
+	private final Random RANDOM = new Random();
 
-	private String FILE_CONTENTS = null;
+	private String fileContents = null;
 
 	/**
 	 * Set the path where XML messages are stored for random selection.
@@ -136,31 +135,6 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	}
 
 	/**
-	 * Method uses jorphan TextFile class to load the contents of the file. I
-	 * wonder if we should cache the DOM Document to save on parsing the
-	 * message. Parsing XML is CPU intensive, so it could restrict the number of
-	 * threads a test plan can run effectively. To cache the documents, it may
-	 * be good to have an external class to provide caching that is efficient.
-	 * We could just use a HashMap, but for large tests, it will be slow.
-	 * Ideally, the cache would be indexed, so that large tests will run
-	 * efficiently.
-	 * 
-	 * @return String contents of the file
-	 */
-	private File retrieveRuntimeXmlData() {
-		String file = getRandomFileName();
-		if (file.length() > 0) {
-			if (this.getReadResponse()) {
-				TextFile tfile = new TextFile(file);
-				FILE_CONTENTS = tfile.getText();
-			}
-			return new File(file);
-		} else {
-			return null;
-		}
-	}
-
-	/**
 	 * Method is used internally to check if a random file should be used for
 	 * the message. Messages must be valid. This is one way to load test with
 	 * different messages. The limitation of this approach is parsing XML takes
@@ -172,9 +146,8 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		if (this.getXmlPathLoc() != null) {
 			File src = new File(this.getXmlPathLoc());
 			if (src.isDirectory() && src.list() != null) {
-				FILE_LIST = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }));
-				this.FILE_COUNT = FILE_LIST.length;
-				File one = FILE_LIST[RANDOM.nextInt(FILE_COUNT)];
+				File [] fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }, false));
+				File one = fileList[RANDOM.nextInt(fileList.length)];
 				// return the absolutePath of the file
 				return one.getAbsolutePath();
 			} else {
@@ -330,12 +303,12 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		return getPropertyAsString(WSDL_URL);
 	}
 
-	/**
+	/*
 	 * The method will check to see if JMeter was started in NonGui mode. If it
 	 * was, it will try to pick up the proxy host and port values if they were
 	 * passed to JMeter.java.
 	 */
-	public void checkProxy() {
+	private void checkProxy() {
 		if (System.getProperty("JMeter.NonGui") != null && System.getProperty("JMeter.NonGui").equals("true")) {
 			this.setUseProxy(true);
 			// we check to see if the proxy host and port are set
@@ -344,78 +317,86 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			if (host == null || host.length() == 0) {
 				// it's not set, lets check if the user passed
 				// proxy host and port from command line
-				if (System.getProperty("http.proxyHost") != null) {
-					host = System.getProperty("http.proxyHost");
+                host = System.getProperty("http.proxyHost");
+				if (host != null) {
 					this.setProxyHost(host);
 				}
 			}
 			if (port == null || port.length() == 0) {
 				// it's not set, lets check if the user passed
 				// proxy host and port from command line
-				if (System.getProperty("http.proxyPort") != null) {
-					port = System.getProperty("http.proxyPort");
+                port = System.getProperty("http.proxyPort");
+				if (port != null) {
 					this.setProxyPort(port);
 				}
 			}
 		}
 	}
 
-	/**
+	/*
 	 * This method uses Apache soap util to create the proper DOM elements.
 	 * 
 	 * @return Element
 	 */
-	public org.w3c.dom.Element createDocument() {
-		if (getPropertyAsBoolean(MEMORY_CACHE)) {
-			String next = this.getRandomFileName();
-			if (DOMPool.getDocument(next) != null) {
-				return DOMPool.getDocument(next).getDocumentElement();
-			} else {
-				return openDocument(next).getDocumentElement();
-			}
-		} else {
-			Document doc = openDocument(null);
-			if (doc == null)
-				return null;
-			return doc.getDocumentElement();
-		}
+	private org.w3c.dom.Element createDocument() throws SAXException, IOException {
+        Document doc = null;
+        String next = this.getRandomFileName();//get filename or ""
+        
+        /* Note that the filename is also used as a key to the pool (if used)
+        ** Documents provided in the testplan are not currently pooled, as they may change
+        *  between samples.
+        */
+        
+        if (next.length() > 0 && getMemoryCache()) {
+			doc = DOMPool.getDocument(next);
+            if (doc == null){
+                doc = openDocument(next);
+                if (doc != null) {// we created the document
+                    DOMPool.putDocument(next, doc);
+                }
+            }
+		} else { // Must be local content - or not using pool
+            doc = openDocument(next);
+        }
+
+        if (doc == null) {
+			return null;
+        }
+		return doc.getDocumentElement();
 	}
 
 	/**
 	 * Open the file and create a Document.
 	 * 
-	 * @param key
+     * @param file - input filename or empty if using data from tesplan
 	 * @return Document
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
-	protected Document openDocument(String key) {
+	private Document openDocument(String file) throws SAXException, IOException {
 		/*
 		 * Consider using Apache commons pool to create a pool of document
 		 * builders or make sure XMLParserUtils creates builders efficiently.
 		 */
 		DocumentBuilder XDB = XMLParserUtils.getXMLDocBuilder();
+		XDB.setErrorHandler(null);//Suppress messages to stdout
 
 		Document doc = null;
 		// if either a file or path location is given,
 		// get the file object.
-		if (getXmlFile().length() > 0 || getXmlPathLoc().length() > 0) {
-			try {
-				doc = XDB.parse(new FileInputStream(retrieveRuntimeXmlData()));
-			} catch (Exception e) {
-				// there should be a file, if not fail silently
-				log.debug(e.getMessage());
-			}
-		} else {
-			FILE_CONTENTS = getXmlData();
-			if (FILE_CONTENTS != null && FILE_CONTENTS.length() > 0) {
-				try {
-					doc = XDB.parse(new InputSource(new StringReader(FILE_CONTENTS)));
-				} catch (Exception ex) {
-					log.debug(ex.getMessage());
-				}
-			}
-		}
-		if (this.getPropertyAsBoolean(MEMORY_CACHE)) {
-			DOMPool.putDocument(key, doc);
+		if (file.length() > 0) {// we have a file
+            if (this.getReadResponse()) {
+                TextFile tfile = new TextFile(file);
+                fileContents = tfile.getText();
+            }
+			doc = XDB.parse(new FileInputStream(file));
+		} else {// must be a "here" document
+			fileContents = getXmlData();
+			if (fileContents != null && fileContents.length() > 0) {
+				doc = XDB.parse(new InputSource(new StringReader(fileContents)));
+			} else {
+			    log.warn("No post data provided!");
+            }
 		}
 		return doc;
 	}
@@ -437,17 +418,19 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	 * the server goes into the ether.
 	 */
 	public SampleResult sample() {
-		SampleResult RESULT = new SampleResult();
+		SampleResult result = new SampleResult();
+		result.setSuccessful(false); // Assume it will fail
+		result.setResponseCode("000"); // ditto $NON-NLS-1$
+		result.setSampleLabel(getName());
 		try {
-			RESULT.setURL(this.getUrl());
-			RESULT.setSampleLabel(getName());
+			result.setURL(this.getUrl());
 			org.w3c.dom.Element rdoc = createDocument();
 			if (rdoc == null)
 				throw new SOAPException("Could not create document", null);
 			Envelope msgEnv = Envelope.unmarshall(rdoc);
 			// create a new message
 			Message msg = new Message();
-			RESULT.sampleStart();
+			result.sampleStart();
 			SOAPHTTPConnection spconn = null;
 			// if a blank HeaderManager exists, try to
 			// get the SOAPHTTPConnection. After the first
@@ -458,6 +441,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			} else {
 				spconn = new SOAPHTTPConnection();
 			}
+            
+            spconn.setTimeout(getTimeoutAsInt());
+            
 			// set the auth. thanks to KiYun Roe for contributing the patch
 			// I cleaned up the patch slightly. 5-26-05
 			if (getAuthManager() != null) {
@@ -492,6 +478,10 @@ public class WebServiceSampler extends HTTPSamplerBase {
 				if (phost.length() > 0 && pport > 0) {
 					spconn.setProxyHost(phost);
 					spconn.setProxyPort(pport);
+					if (PROXY_USER.length()>0 && PROXY_PASS.length()>0){
+						spconn.setProxyUserName(PROXY_USER);
+						spconn.setProxyPassword(PROXY_PASS);
+					}
 				}
 			}
 			// by default we maintain the session.
@@ -504,38 +494,40 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			}
 
 			SOAPTransport st = msg.getSOAPTransport();
-			RESULT.setDataType(SampleResult.TEXT);
+			result.setDataType(SampleResult.TEXT);
 			BufferedReader br = null;
 			// check to see if SOAPTransport is not nul and receive is
 			// also not null. hopefully this will improve the error
 			// reporting. 5/13/05 peter lin
 			if (st != null && st.receive() != null) {
 				br = st.receive();
-				if (this.getPropertyAsBoolean(READ_RESPONSE)) {
+				if (getReadResponse()) {
 					StringBuffer buf = new StringBuffer();
 					String line;
 					while ((line = br.readLine()) != null) {
 						buf.append(line);
 					}
-					RESULT.sampleEnd();
+					result.sampleEnd();
 					// set the response
-					RESULT.setResponseData(buf.toString().getBytes());
+					result.setResponseData(buf.toString().getBytes());
 				} else {
 					// by not reading the response
 					// for real, it improves the
 					// performance on slow clients
 					br.read();
-					RESULT.sampleEnd();
-					RESULT.setResponseData(JMeterUtils.getResString("read_response_message").getBytes());
+					result.sampleEnd();
+					result.setResponseData(JMeterUtils.getResString("read_response_message").getBytes()); //$NON-NLS-1$
 				}
-				RESULT.setSuccessful(true);
-				RESULT.setResponseCode("200");
-				RESULT.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
+				result.setSuccessful(true);
+				result.setResponseCodeOK();
+				result.setResponseHeaders(this.convertSoapHeaders(st.getHeaders()));
 			} else {
-				RESULT.setSuccessful(false);
-				RESULT.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
-				RESULT.setResponseCode("000");
-				RESULT.setResponseHeaders("error");
+				result.sampleEnd();
+				result.setSuccessful(false);
+				if (st != null){
+				    result.setResponseData(st.getResponseSOAPContext().getContentType().getBytes());
+				}
+				result.setResponseHeaders("error");
 			}
 			// 1-22-04 updated the sampler so that when read
 			// response is set, it also sets SamplerData with
@@ -543,9 +535,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// sent. if read response is not checked, it will
 			// not set sampler data with the request message.
 			// peter lin.
-			RESULT.setSamplerData(getUrl().getProtocol() + "://" + getUrl().getHost() + "/" + getUrl().getFile() + "\n"
-					+ FILE_CONTENTS);
-			RESULT.setDataEncoding(st.getResponseSOAPContext().getContentType());
+            // Removed URL, as that is already stored elsewere
+			result.setSamplerData(fileContents);// WARNING - could be large
+			result.setEncodingAndType(st.getResponseSOAPContext().getContentType());
 			// setting this is just a formality, since
 			// soap will return a descriptive error
 			// message, soap errors within the response
@@ -553,29 +545,39 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			if (br != null) {
 				br.close();
 			}
-			msg = null;
-			st = null;
 			// reponse code doesn't really apply, since
 			// the soap driver doesn't provide a
 			// response code
+		} catch (IllegalArgumentException exception){
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
+		} catch (SAXException exception) {
+			log.warn(exception.toString());
+			result.setResponseMessage(exception.getMessage());
 		} catch (SOAPException exception) {
-			log.warn(exception.getMessage());
-			RESULT.setSuccessful(false);
+			log.warn(exception.toString());
+			result.setResponseMessage(exception.getMessage());
 		} catch (MalformedURLException exception) {
-			// keep this debug, since a bad URL, means the
-			// soap driver can't get to it anyways
-			log.warn(exception.getMessage());
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
 		} catch (IOException exception) {
-			// if the Webservice is unable or the stream
-			// is null for some reason we can continue
-			log.warn(exception.getMessage());
-		} catch (MessagingException exception) {
-			// keep this one debug, since it means soap isn't
-			// able to parse the document, so it can't continue
-			// anyways
-			log.warn(exception.getMessage());
+			String message = exception.getMessage();
+			log.warn(message);
+			result.setResponseMessage(message);
+		} catch (NoClassDefFoundError error){
+			log.error("Missing class: ",error);
+			result.setResponseMessage(error.toString());			
+		} catch (Exception exception) {
+			if ("javax.mail.MessagingException".equals(exception.getClass().getName())){
+				log.warn(exception.toString());
+				result.setResponseMessage(exception.getMessage());
+			} else {
+				throw new RuntimeException(exception);
+			}
 		}
-		return RESULT;
+		return result;
 	}
 
 	/**
@@ -591,8 +593,20 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		StringBuffer buf = new StringBuffer();
 		while (en.hasMoreElements()) {
 			Object key = en.nextElement();
-			buf.append((String) key + "=" + (String) ht.get(key) + "\n");
+			buf.append((String) key).append("=").append((String) ht.get(key)).append("\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return buf.toString();
 	}
+
+    public String getTimeout() {
+        return getPropertyAsString(TIMEOUT);
+    }
+
+    public int getTimeoutAsInt() {
+        return getPropertyAsInt(TIMEOUT);
+    }
+
+    public void setTimeout(String text) {
+        setProperty(TIMEOUT, text);
+    }
 }

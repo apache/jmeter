@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,12 +17,9 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.io.ObjectInputStream;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 
 import org.apache.jmeter.samplers.Entry;
@@ -46,7 +44,7 @@ import org.apache.log.Logger;
 public class SubscriberSampler extends BaseJMSSampler implements TestListener, MessageListener {
 
 	// private Subscriber SUBSCRIBER = null;
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private transient ReceiveSubscriber SUBSCRIBER = null;
 
@@ -58,7 +56,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 
 	private transient boolean RUN = true;
 
-	public static String CLIENT_CHOICE = "jms.client_choice";
+	private static final String CLIENT_CHOICE = "jms.client_choice"; // $NON-NLS-1$
 
 	public SubscriberSampler() {
 	}
@@ -83,11 +81,6 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 		this.BUFFER = null;
 		if (this.SUBSCRIBER != null) {
 			this.SUBSCRIBER = null;
-		}
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			log.error(e.getMessage());
 		}
 	}
 
@@ -181,12 +174,11 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 			}
 		}
 		result.sampleEnd();
-        result.setSamplerData(this.BUFFER.toString());
 		result.setResponseMessage(loop + " samples messages recieved");
 		if (this.getReadResponseAsBoolean()) {
 			result.setResponseData(this.BUFFER.toString().getBytes());
 		} else {
-			result.setContentLength(this.BUFFER.toString().getBytes().length);
+			result.setBytes(this.BUFFER.toString().getBytes().length);
 		}
 		result.setSuccessful(true);
 		result.setResponseCode(loop + " message(s) recieved successfully");
@@ -222,26 +214,11 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 			}
 		}
 		result.sampleEnd();
-		result.setResponseHeaders(loop + " samples messages recieved");
-        if (this.SUBSCRIBER.getMessageType() == ReceiveSubscriber.TEXT) {
-            result.setSamplerData(this.SUBSCRIBER.getMessage());
-            result.setContentType(SampleResult.TEXT);
-        }
+		result.setResponseMessage(loop + " samples messages recieved");
 		if (this.getReadResponseAsBoolean()) {
-            // added an a check to make sure the message is TextMessage
-            // before trying to set the SampleResult.
-            if (this.SUBSCRIBER.getMessageType() == ReceiveSubscriber.TEXT) {
-                result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
-            } else {
-                result.setResponseData(
-                        this.SUBSCRIBER.getObjectMessage().toString().getBytes());
-            }
+			result.setResponseData(this.SUBSCRIBER.getMessage().getBytes());
 		} else {
-            // right now I'm not sure how to handle ObjectMessages, since there
-            // isn't an easy way to count the bytes of an object message.
-            if (this.SUBSCRIBER.getMessageType() == ReceiveSubscriber.TEXT) {
-                result.setContentLength(this.SUBSCRIBER.getMessage().getBytes().length);
-            }
+			result.setBytes(this.SUBSCRIBER.getMessage().getBytes().length);
 		}
 		result.setSuccessful(true);
 		result.setResponseCode(loop + " message(s) recieved successfully");
@@ -266,10 +243,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 					this.BUFFER.append(content);
 					count(1);
 				}
-			} else if (message instanceof ObjectMessage) {
-                ObjectMessage msg = (ObjectMessage)message;
-                this.BUFFER.append(msg.getObject().toString());
-            }
+			}
 		} catch (JMSException e) {
 			log.error(e.getMessage());
 		}

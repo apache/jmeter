@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -42,11 +43,11 @@ import org.apache.log.Logger;
  */
 public class ConnectionFactory implements TestListener {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
 	private static TopicConnectionFactory factory = null;
 
 	private static QueueConnectionFactory qfactory = null;
-
-	static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * 
@@ -68,7 +69,7 @@ public class ConnectionFactory implements TestListener {
 	 * @see junit.framework.TestListener#endTest(junit.framework.Test)
 	 */
 	public void testEnded() {
-		factory = null;
+        ConnectionFactory.factory = null;//N.B. static reference
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class ConnectionFactory implements TestListener {
 					factory = (TopicConnectionFactory) objfac;
 				}
 			} catch (NamingException e) {
-				log.error(e.getRootCause().toString());// JDK1.4 getCause()
+				log.error(e.toString());
 			}
 		}
 		return factory;

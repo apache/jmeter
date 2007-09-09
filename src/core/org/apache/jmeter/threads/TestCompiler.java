@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.threads;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,14 +30,12 @@ import java.util.Set;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.Controller;
-import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.control.TransactionController;
+import org.apache.jmeter.control.TransactionSampler;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.processor.PreProcessor;
-import org.apache.jmeter.samplers.AbstractSampler;
-import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -46,27 +43,19 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
-import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author unascribed
- * @version $Revision$
- */
-public class TestCompiler implements HashTreeTraverser, SampleListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+public class TestCompiler implements HashTreeTraverser {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private LinkedList stack = new LinkedList();
 
 	private Map samplerConfigMap = new HashMap();
 
-	// Set objectsWithFunctions = new HashSet();
+	private Map transactionControllerConfigMap = new HashMap();
+	
 	private HashTree testTree;
-
-	// NOTREAD SampleResult previousResult;
-	// NOTREAD Sampler currentSampler;
-	// NOTREAD JMeterVariables threadVars;
 
 	/*
 	 * This set keeps track of which ObjectPairs have been seen Its purpose is
@@ -74,10 +63,9 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 	 */
 	private static Set pairing = new HashSet();
 
-	List loopIterListeners = new ArrayList();
+	//List loopIterListeners = new ArrayList();
 
 	public TestCompiler(HashTree testTree, JMeterVariables vars) {
-		// NOTREAD threadVars = vars;
 		this.testTree = testTree;
 	}
 
@@ -92,25 +80,20 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 		}
 	}
 
-	public void sampleOccurred(SampleEvent e) {
-		// NOTREAD previousResult = e.getResult();
-	}
-
-	public void sampleStarted(SampleEvent e) {
-	}
-
-	public void sampleStopped(SampleEvent e) {
-	}
-
 	public SamplePackage configureSampler(Sampler sampler) {
-		// NOTREAD currentSampler = sampler;
 		SamplePackage pack = (SamplePackage) samplerConfigMap.get(sampler);
 		pack.setSampler(sampler);
 		configureWithConfigElements(sampler, pack.getConfigs());
 		runPreProcessors(pack.getPreProcessors());
-		// replaceStatics(ret);
 		return pack;
 	}
+    
+    public SamplePackage configureTransactionSampler(TransactionSampler transactionSampler) {
+        TransactionController controller = transactionSampler.getTransactionController();
+        SamplePackage pack = (SamplePackage) transactionControllerConfigMap.get(controller);
+        pack.setSampler(transactionSampler);
+        return pack;
+    }
 
 	private void runPreProcessors(List preProcessors) {
 		Iterator iter = preProcessors.iterator();
@@ -139,6 +122,9 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 		if (child instanceof Sampler) {
 			saveSamplerConfigs((Sampler) child);
 		}
+        else if(child instanceof TransactionController) {
+            saveTransactionControllerConfigs((TransactionController) child);
+        }
 		stack.removeLast();
 		if (stack.size() > 0) {
 			ObjectPair pair = new ObjectPair(child, (TestElement) stack.getLast());
@@ -159,12 +145,11 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 				TestElement item = (TestElement) iter.previous();
 				if (item == child) {
 					continue;
-				} else {
-					if (item instanceof Controller) {
-						TestBeanHelper.prepare(child);
-						((Controller) item).addIterationListener((LoopIterationListener) child);
-						break;
-					}
+				}
+				if (item instanceof Controller) {
+					TestBeanHelper.prepare(child);
+					((Controller) item).addIterationListener((LoopIterationListener) child);
+					break;
 				}
 			}
 		}
@@ -219,6 +204,37 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 		pack.setRunningVersion(true);
 		samplerConfigMap.put(sam, pack);
 	}
+    
+    private void saveTransactionControllerConfigs(TransactionController tc) {
+        List configs = new LinkedList();
+        List modifiers = new LinkedList();
+        List controllers = new LinkedList();
+        List responseModifiers = new LinkedList();
+        List listeners = new LinkedList();
+        List timers = new LinkedList();
+        List assertions = new LinkedList();
+        LinkedList posts = new LinkedList();
+        LinkedList pres = new LinkedList();
+        for (int i = stack.size(); i > 0; i--) {
+            addDirectParentControllers(controllers, (TestElement) stack.get(i - 1));
+            Iterator iter = testTree.list(stack.subList(0, i)).iterator();
+            while (iter.hasNext()) {
+                TestElement item = (TestElement) iter.next();
+                if (item instanceof SampleListener) {
+                    listeners.add(item);
+                }
+                if (item instanceof Assertion) {
+                    assertions.add(item);
+                }
+            }
+        }
+
+        SamplePackage pack = new SamplePackage(configs, modifiers, responseModifiers, listeners, timers, assertions,
+                posts, pres, controllers);
+        pack.setSampler(new TransactionSampler(tc, tc.getName()));
+        pack.setRunningVersion(true);
+        transactionControllerConfigMap.put(tc, pack);
+    }
 
 	/**
 	 * @param controllers
@@ -231,44 +247,7 @@ public class TestCompiler implements HashTreeTraverser, SampleListener {
 		}
 	}
 
-	/**
-	 * @version $Revision$
-	 */
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testConfigGathering() throws Exception {
-			ListedHashTree testing = new ListedHashTree();
-			GenericController controller = new GenericController();
-			ConfigTestElement config1 = new ConfigTestElement();
-			config1.setName("config1");
-			config1.setProperty("test.property", "A test value");
-			TestSampler sampler = new TestSampler();
-			sampler.setName("sampler");
-			testing.add(controller, config1);
-			testing.add(controller, sampler);
-			TestCompiler.initialize();
-
-			TestCompiler compiler = new TestCompiler(testing, new JMeterVariables());
-			testing.traverse(compiler);
-			sampler = (TestSampler) compiler.configureSampler(sampler).getSampler();
-			assertEquals("A test value", sampler.getPropertyAsString("test.property"));
-		}
-
-		class TestSampler extends AbstractSampler {
-			public SampleResult sample(org.apache.jmeter.samplers.Entry e) {
-				return null;
-			}
-
-			public Object clone() {
-				return new TestSampler();
-			}
-		}
-	}
-
-	private class ObjectPair // TODO - should this be static?
+	private static class ObjectPair
 	{
 		TestElement child, parent;
 

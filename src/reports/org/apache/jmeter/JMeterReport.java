@@ -1,10 +1,11 @@
-//$Header:
+//$Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -222,10 +223,11 @@ public class JMeterReport implements JMeterPlugin {
 
         ReportActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ReportCheckDirty.ADD_ALL));
         if (testFile != null) {
+            FileInputStream reader = null;
             try {
                 File f = new File(testFile.getArgument());
                 log.info("Loading file: " + f);
-                FileInputStream reader = new FileInputStream(f);
+                reader = new FileInputStream(f);
                 HashTree tree = SaveService.loadTree(reader);
 
                 ReportGuiPackage.getInstance().setReportPlanFile(f.getAbsolutePath());
@@ -234,6 +236,9 @@ public class JMeterReport implements JMeterPlugin {
             } catch (Exception e) {
                 log.error("Failure loading test file", e);
                 JMeterUtils.reportErrorToUser(e.toString());
+            }
+            finally{
+                JOrphanUtils.closeQuietly(reader);
             }
         }
     }
@@ -303,6 +308,9 @@ public class JMeterReport implements JMeterPlugin {
 			System.out.println("Error in NonGUIDriver " + e.toString());
 			log.error("", e);
 		}
+        finally{
+            JOrphanUtils.closeQuietly(reader);
+        }
 	}
 
     
@@ -457,7 +465,7 @@ public class JMeterReport implements JMeterPlugin {
      * Listen to test and exit program after test completes, after a 5 second
      * delay to give listeners a chance to close out their files.
      */
-    private class ListenToTest implements TestListener, Runnable, Remoteable {
+    private static class ListenToTest implements TestListener, Runnable, Remoteable {
         int started = 0;
 
         private JMeterReport _parent;

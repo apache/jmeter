@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,29 +22,24 @@ import java.io.Serializable;
 
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Dolf Smits
- * @author Michael Stover
- * @author Thad Smith
- * @version $Revision$
- */
 public class ForeachController extends GenericController implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String INPUTVAL = "ForeachController.inputVal";
+	private final static String INPUTVAL = "ForeachController.inputVal";// $NON-NLS-1$
 
-	private final static String RETURNVAL = "ForeachController.returnVal";
+	private final static String RETURNVAL = "ForeachController.returnVal";// $NON-NLS-1$
 
-	private final static String USE_SEPARATOR = "ForeachController.useSeparator";
+	private final static String USE_SEPARATOR = "ForeachController.useSeparator";// $NON-NLS-1$
 
 	private int loopCount = 0;
 
-	private static final String DEFAULT_SEPARATOR = "_";
+	private static final String DEFAULT_SEPARATOR = "_";// $NON-NLS-1$
 
 	public ForeachController() {
 	}
@@ -76,7 +71,7 @@ public class ForeachController extends GenericController implements Serializable
 	}
 
 	private String getSeparator() {
-		return getUseSeparator() ? DEFAULT_SEPARATOR : "";
+		return getUseSeparator() ? DEFAULT_SEPARATOR : "";// $NON-NLS-1$
 	}
 
 	public void setUseSeparator(boolean b) {
@@ -95,9 +90,13 @@ public class ForeachController extends GenericController implements Serializable
 	public boolean isDone() {
 		JMeterContext context = getThreadContext();
 		String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
-		if (context.getVariables().get(inputVariable) != null) {
-			context.getVariables().put(getReturnVal(), context.getVariables().get(inputVariable));
-			log.debug("ForEach resultstring isDone=" + context.getVariables().get(getReturnVal()));
+		final JMeterVariables variables = context.getVariables();
+		final Object currentVariable = variables.getObject(inputVariable);
+		if (currentVariable != null) {
+			variables.putObject(getReturnVal(), currentVariable);
+			if (log.isDebugEnabled()) {
+				log.debug("ForEach resultstring isDone=" + variables.get(getReturnVal()));
+			}
 			return false;
 		}
 		return super.isDone();
@@ -106,38 +105,38 @@ public class ForeachController extends GenericController implements Serializable
 	private boolean endOfArguments() {
 		JMeterContext context = getThreadContext();
 		String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
-		if (context.getVariables().get(inputVariable) != null) {
+		if (context.getVariables().getObject(inputVariable) != null) {
 			log.debug("ForEach resultstring eofArgs= false");
 			return false;
-		} else {
-			log.debug("ForEach resultstring eofArgs= true");
-			return true;
 		}
+		log.debug("ForEach resultstring eofArgs= true");
+		return true;
 	}
 
 	// Prevent entry if nothing to do
-	public Sampler doNext() {
+	public Sampler next() {
 		if (emptyList()) {
 			reInitialize();
 			return null;
 		}
-		return super.doNext();
+		return super.next();
 	}
 
 	/**
 	 * Check if there are any matching entries
 	 * 
-	 * @return whethere any entries in the list
+	 * @return whether any entries in the list
 	 */
 	private boolean emptyList() {
 		JMeterContext context = getThreadContext();
-		String inputVariable = getInputVal() + getSeparator() + "1";
-		if (context.getVariables().get(inputVariable) != null) {
+		String inputVariable = getInputVal() + getSeparator() + "1";// $NON-NLS-1$
+		if (context.getVariables().getObject(inputVariable) != null) {
 			return false;
-		} else {
-			log.debug("No entries found - null first entry: " + inputVariable);
-			return true;
 		}
+		if (log.isDebugEnabled()) {
+			log.debug("No entries found - null first entry: " + inputVariable);
+		}
+		return true;
 	}
 
 	/*
@@ -151,9 +150,8 @@ public class ForeachController extends GenericController implements Serializable
 			// setDone(true);
 			resetLoopCount();
 			return null;
-		} else {
-			return doNext();
 		}
+		return next();
 	}
 
 	protected void incrementLoopCount() {

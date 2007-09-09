@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,6 +31,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -45,7 +46,7 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class TextFile extends File {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * File encoding. null means use the platform's default.
@@ -118,16 +119,11 @@ public class TextFile extends File {
 			}
 			writer.write(body);
 			writer.flush();
-			writer.close();
 		} catch (IOException ioe) {
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (IOException e) {
-			}
 			log.error("", ioe);
-		}
+		} finally {
+            JOrphanUtils.closeQuietly(writer);
+        }
 	}
 
 	/**
@@ -136,17 +132,18 @@ public class TextFile extends File {
 	 * @return the content of the file
 	 */
 	public String getText() {
-		String lineEnd = System.getProperty("line.separator");
+		String lineEnd = System.getProperty("line.separator"); //$NON-NLS-1$
 		StringBuffer sb = new StringBuffer();
 		Reader reader = null;
+		BufferedReader br = null;
 		try {
 			if (encoding == null) {
 				reader = new FileReader(this);
 			} else {
 				reader = new InputStreamReader(new FileInputStream(this), encoding);
 			}
-			BufferedReader br = new BufferedReader(reader);
-			String line = "NOTNULL";
+			br = new BufferedReader(reader);
+			String line = "NOTNULL"; //$NON-NLS-1$
 			while (line != null) {
 				line = br.readLine();
 				if (line != null) {
@@ -154,13 +151,9 @@ public class TextFile extends File {
 				}
 			}
 		} catch (IOException ioe) {
-			log.error("", ioe);
+			log.error("", ioe); //$NON-NLS-1$
 		} finally {
-			if (reader != null)
-				try {
-					reader.close();
-				} catch (IOException e) {
-				}
+			JOrphanUtils.closeQuietly(br); // closes reader as well
 		}
 
 		return sb.toString();

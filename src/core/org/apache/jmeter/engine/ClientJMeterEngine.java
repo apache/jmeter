@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,11 +31,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author unattributed
- * @version $Revision$ Updated on: $Date$
+ * Class to run remote tests from the client JMeter and collect remote samples
  */
 public class ClientJMeterEngine implements JMeterEngine, Runnable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	RemoteJMeterEngine remote;
 
@@ -49,7 +48,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 
 	private static RemoteJMeterEngine getEngine(String h) throws MalformedURLException, RemoteException,
 			NotBoundException {
-		return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine");
+		return (RemoteJMeterEngine) Naming.lookup("//" + h + "/JMeterEngine"); // $NON-NLS-1$ $NON-NLS-2$
 	}
 
 	public ClientJMeterEngine(String host) throws MalformedURLException, NotBoundException, RemoteException {
@@ -83,7 +82,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 		try {
 			remote.stopTest();
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 	}
 
@@ -96,7 +95,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 				remote.reset();
 			}
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 	}
 
@@ -108,16 +107,13 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 	public void run() {
 		log.info("running clientengine run method");
 		testListeners = new SearchByClass(TestListener.class);
-		getTestTree().traverse(testListeners);
 		sampleListeners = new ConvertListeners();
-
-		// TODO this is a temporary fix - see bug 23487
-		try {
-			getTestTree().traverse(sampleListeners);
-		} catch (IndexOutOfBoundsException e) {
-			log.warn("Error replacing sample listeners", e);
+		HashTree testTree = getTestTree();
+		synchronized(testTree) {
+			testTree.traverse(testListeners);
+			testTree.traverse(sampleListeners);
 		}
-
+		
 		try {
 			JMeterContextService.startTest();
 			remote.setHost(host);
@@ -127,7 +123,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 			remote.runTest();
 			log.info("sent run command");
 		} catch (Exception ex) {
-			log.error("", ex);
+			log.error("", ex); // $NON-NLS-1$
 		}
 	}
 

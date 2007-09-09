@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,9 +39,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$
- */
 public class TestActionGui extends AbstractSamplerGui {
 	// Gui components
 	private JComboBox targetBox;
@@ -60,19 +58,19 @@ public class TestActionGui extends AbstractSamplerGui {
 	private int duration;
 
 	// String in the panel
-	private static final String targetLabel = JMeterUtils.getResString("test_action_target");
+	private static final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
 
-	private static final String threadTarget = JMeterUtils.getResString("test_action_target_thread");
+	private static final String threadTarget = JMeterUtils.getResString("test_action_target_thread"); // $NON-NLS-1$
 
-	private static final String testTarget = JMeterUtils.getResString("test_action_target_test");
+	private static final String testTarget = JMeterUtils.getResString("test_action_target_test"); // $NON-NLS-1$
 
-	private static final String actionLabel = JMeterUtils.getResString("test_action_action");
+	private static final String actionLabel = JMeterUtils.getResString("test_action_action"); // $NON-NLS-1$
 
-	private static final String pauseAction = JMeterUtils.getResString("test_action_pause");
+	private static final String pauseAction = JMeterUtils.getResString("test_action_pause"); // $NON-NLS-1$
 
-	private static final String stopAction = JMeterUtils.getResString("test_action_stop");
+	private static final String stopAction = JMeterUtils.getResString("test_action_stop"); // $NON-NLS-1$
 
-	private static final String durationLabel = JMeterUtils.getResString("test_action_duration");
+	private static final String durationLabel = JMeterUtils.getResString("test_action_duration"); // $NON-NLS-1$
 
 	public TestActionGui() {
 		super();
@@ -82,7 +80,7 @@ public class TestActionGui extends AbstractSamplerGui {
 	}
 
 	public String getLabelResource() {
-		return "test_action_title";
+		return "test_action_title"; // $NON-NLS-1$
 	}
 
 	public void configure(TestElement element) {
@@ -127,8 +125,24 @@ public class TestActionGui extends AbstractSamplerGui {
 		ta.setDuration(duration);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        targetBox.setSelectedIndex(0);
+        durationField.setText(""); //$NON-NLS-1$
+        pauseButton.setSelected(true);
+        stopButton.setSelected(false);
+        action = TestAction.PAUSE;
+        target = TestAction.THREAD;
+        duration = 0;
+        
+    }    
+
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
@@ -198,7 +212,7 @@ public class TestActionGui extends AbstractSamplerGui {
 			public void focusGained(FocusEvent e) {
 			}
 		});
-		durationPanel.add(new JLabel("Duration"));
+		durationPanel.add(new JLabel(durationLabel));
 		durationPanel.add(durationField);
 		add(durationPanel);
 	}

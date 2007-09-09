@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -35,11 +35,9 @@ import org.xml.sax.SAXException;
 /**
  * HtmlParser implementation using JTidy.
  * 
- * @version $Revision$ updated on $Date$
  */
 class JTidyHTMLParser extends HTMLParser {
-	/** Used to store the Logger (used for debug and error messages). */
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	protected JTidyHTMLParser() {
 		super();
@@ -100,8 +98,8 @@ class JTidyHTMLParser extends HTMLParser {
 		case Node.ELEMENT_NODE:
 
 			NamedNodeMap attrs = node.getAttributes();
-			if (name.equalsIgnoreCase("base")) {
-				String tmp = getValue(attrs, "href");
+			if (name.equalsIgnoreCase(TAG_BASE)) {
+				String tmp = getValue(attrs, ATT_HREF);
 				if (tmp != null)
 					try {
 						baseUrl = new URL(baseUrl, tmp);
@@ -111,47 +109,47 @@ class JTidyHTMLParser extends HTMLParser {
 				break;
 			}
 
-			if (name.equalsIgnoreCase("img") || name.equalsIgnoreCase("embed")) {
-				urls.addURL(getValue(attrs, "src"), baseUrl);
+			if (name.equalsIgnoreCase(TAG_IMAGE) || name.equalsIgnoreCase(TAG_EMBED)) {
+				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
 				break;
 			}
 
-			if (name.equalsIgnoreCase("applet")) {
+			if (name.equalsIgnoreCase(TAG_APPLET)) {
 				urls.addURL(getValue(attrs, "code"), baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase("input")) {
-				String src = getValue(attrs, "src");
-				String typ = getValue(attrs, "type");
-				if ((src != null) && (typ.equalsIgnoreCase("image"))) {
+			if (name.equalsIgnoreCase(TAG_INPUT)) {
+				String src = getValue(attrs, ATT_SRC);
+				String typ = getValue(attrs, ATT_TYPE);
+				if ((src != null) && (typ.equalsIgnoreCase(ATT_IS_IMAGE))) {
 					urls.addURL(src, baseUrl);
 				}
 				break;
 			}
-			if (name.equalsIgnoreCase("link") && getValue(attrs, "rel").equalsIgnoreCase("stylesheet")) {
-				urls.addURL(getValue(attrs, "href"), baseUrl);
+			if (name.equalsIgnoreCase(TAG_LINK) && getValue(attrs, ATT_REL).equalsIgnoreCase(STYLESHEET)) {
+				urls.addURL(getValue(attrs, ATT_HREF), baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase("script")) {
-				urls.addURL(getValue(attrs, "src"), baseUrl);
+			if (name.equalsIgnoreCase(TAG_SCRIPT)) {
+				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase("frame")) {
-				urls.addURL(getValue(attrs, "src"), baseUrl);
+			if (name.equalsIgnoreCase(TAG_FRAME)) {
+				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
 				break;
 			}
-			String back = getValue(attrs, "background");
+			String back = getValue(attrs, ATT_BACKGROUND);
 			if (back != null) {
 				urls.addURL(back, baseUrl);
+			}
+			if (name.equalsIgnoreCase(TAG_BGSOUND)) {
+				urls.addURL(getValue(attrs, ATT_SRC), baseUrl);
 				break;
 			}
-			if (name.equalsIgnoreCase("bgsound")) {
-				urls.addURL(getValue(attrs, "src"), baseUrl);
-				break;
-			}
-			if (name.equalsIgnoreCase("frame")) {
-				urls.addURL(getValue(attrs, "src"), baseUrl);
-				break;
+
+			String style = getValue(attrs, ATT_STYLE);
+			if (style != null) {
+            	HtmlParsingUtils.extractStyleURLs(baseUrl, urls, style);
 			}
 
 			NodeList children = node.getChildNodes();
@@ -161,6 +159,7 @@ class JTidyHTMLParser extends HTMLParser {
 					baseUrl = scanNodes(children.item(i), urls, baseUrl);
 				}
 			}
+
 			break;
 
 		// case Node.TEXT_NODE:

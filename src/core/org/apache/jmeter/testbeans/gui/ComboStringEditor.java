@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,14 +20,13 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyEditorSupport;
+import java.util.Arrays;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This class implements a property editor for possibly null String properties
@@ -44,10 +43,8 @@ import org.apache.log.Logger;
  * </ul>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
-	protected static Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The list of options to be offered by this editor.
@@ -82,9 +79,10 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	 * non-editable during processing of secondary events.
 	 */
 
-	private static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined"));
+	// Needs to be visible to test cases
+	static final Object UNDEFINED = new UniqueObject(JMeterUtils.getResString("property_undefined")); //$NON-NLS-1$
 
-	private static final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit"));
+	private static final Object EDIT = new UniqueObject(JMeterUtils.getResString("property_edit")); //$NON-NLS-1$
 
 	ComboStringEditor() {
 		// Create the combo box we will use to edit this property:
@@ -274,7 +272,7 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	 * @param strings
 	 */
 	public void setTags(String[] strings) {
-		if (tags.equals(strings))
+		if (Arrays.equals(tags,strings))
 			return;
 
 		for (int i = 0; i < tags.length; i++)
@@ -302,44 +300,6 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 
 		public String toString() {
 			return s;
-		}
-	}
-
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		private void testSetGet(ComboStringEditor e, Object value) throws Exception {
-			e.setValue(value);
-			assertEquals(value, e.getValue());
-		}
-
-		private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
-			e.setAsText(text);
-			assertEquals(text, e.getAsText());
-		}
-
-		public void testSetGet() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
-
-			testSetGet(e, "any string");
-			testSetGet(e, "");
-			testSetGet(e, null);
-			testSetGet(e, "${var}");
-		}
-
-		public void testSetGetAsText() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
-
-			testSetGetAsText(e, "any string");
-			testSetGetAsText(e, "");
-			testSetGetAsText(e, null);
-			testSetGetAsText(e, "${var}");
-
-			// Check "Undefined" does not become a "reserved word":
-			e.setAsText(UNDEFINED.toString());
-			assertNotNull(e.getAsText());
 		}
 	}
 }

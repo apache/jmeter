@@ -1,68 +1,45 @@
-<jmeterTestPlan version="1.1" properties="1.7">
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="1.8">
   <hashTree>
-    <TestPlan>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <collectionProp name="TestPlan.thread_groups"/>
-      <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="server" elementType="org.apache.jmeter.config.Argument">
+          <elementProp name="server" elementType="Argument">
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.value">jakarta.apache.org</stringProp>
             <stringProp name="Argument.name">server</stringProp>
           </elementProp>
-          <elementProp name="server" elementType="org.apache.jmeter.config.Argument">
+          <elementProp name="server" elementType="Argument">
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.value">jakarta.apache.org</stringProp>
             <stringProp name="Argument.name">server</stringProp>
           </elementProp>
         </collectionProp>
-        <stringProp name="TestElement.name">User Defined Variables</stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
-      <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
-      <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
-      <stringProp name="TestElement.name">Test Plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestElement.enabled">true</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Components" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Components</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Assertions</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Assertions" enabled="true"/>
         <hashTree>
-          <ResponseAssertion>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.assertions.gui.AssertionGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.assertions.ResponseAssertion</stringProp>
-            <stringProp name="TestElement.name">Assertion</stringProp>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="0"></stringProp>
               <stringProp name="0"></stringProp>
@@ -73,57 +50,30 @@
               <stringProp name="0"></stringProp>
               <stringProp name="0"></stringProp>
             </collectionProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <intProp name="Assertion.test_type">2</intProp>
             <stringProp name="Assertion.assume_success">false</stringProp>
+            <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
-          <DurationAssertion>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.assertions.gui.DurationAssertionGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.assertions.DurationAssertion</stringProp>
-            <stringProp name="TestElement.name">Duration Assertion</stringProp>
+          <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Duration Assertion" enabled="true">
             <longProp name="DurationAssertion.duration">0</longProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </DurationAssertion>
           <hashTree/>
-          <SizeAssertion>
+          <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="true">
             <intProp name="SizeAssertion.operator">1</intProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.assertions.gui.SizeAssertionGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.assertions.SizeAssertion</stringProp>
-            <stringProp name="TestElement.name">Size Assertion</stringProp>
             <longProp name="SizeAssertion.size">0</longProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </SizeAssertion>
           <hashTree/>
-          <XMLAssertion>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.assertions.gui.XMLAssertionGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.assertions.XMLAssertion</stringProp>
-            <stringProp name="TestElement.name">XML Assertion</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-          </XMLAssertion>
+          <XMLAssertion guiclass="XMLAssertionGui" testclass="XMLAssertion" testname="XML Assertion" enabled="true"/>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Control</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Control" enabled="true"/>
         <hashTree>
-          <InterleaveControl>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.InterleaveControlGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.InterleaveControl</stringProp>
-            <stringProp name="TestElement.name">Interleave Controller</stringProp>
+          <InterleaveControl guiclass="InterleaveControlGui" testclass="InterleaveControl" testname="Interleave Controller" enabled="true">
             <intProp name="InterleaveControl.style">1</intProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </InterleaveControl>
           <hashTree/>
-          <ModuleController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.ModuleControllerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.ModuleController</stringProp>
-            <stringProp name="TestElement.name">ModuleController</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
+          <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="ModuleController" enabled="true">
             <collectionProp name="ModuleController.node_path">
               <stringProp name="-1227702913">WorkBench</stringProp>
               <stringProp name="764597751">Test Plan</stringProp>
@@ -133,89 +83,51 @@
             </collectionProp>
           </ModuleController>
           <hashTree/>
-          <OnceOnlyController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.OnceOnlyControllerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.OnceOnlyController</stringProp>
-            <stringProp name="TestElement.name">Once Only Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-          </OnceOnlyController>
+          <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller" enabled="true"/>
           <hashTree/>
-          <RandomController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.RandomControlGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.RandomController</stringProp>
-            <stringProp name="TestElement.name">Random Controller</stringProp>
+          <RandomController guiclass="RandomControlGui" testclass="RandomController" testname="Random Controller" enabled="true">
             <intProp name="InterleaveControl.style">1</intProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </RandomController>
           <hashTree/>
-          <ThroughputController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.ThroughputControllerGui</stringProp>
+          <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Throughput Controller" enabled="true">
             <intProp name="ThroughputController.style">0</intProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.ThroughputController</stringProp>
-            <stringProp name="TestElement.name">Throughput Controller</stringProp>
             <FloatProperty>
               <value>100.0</value>
               <savedValue>0.0</savedValue>
               <name>ThroughputController.percentThroughput</name>
             </FloatProperty>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <boolProp name="ThroughputController.perThread">true</boolProp>
             <intProp name="ThroughputController.maxThroughput">1</intProp>
           </ThroughputController>
           <hashTree/>
-          <IfController>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller" enabled="true">
             <stringProp name="IfController.condition">${__threadNum()} == 3</stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.IfControllerPanel</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.IfController</stringProp>
-            <stringProp name="TestElement.name">If Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </IfController>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Post Processors</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Post Processors" enabled="true"/>
         <hashTree>
-          <RegexExtractor>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
             <stringProp name="RegexExtractor.default"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.extractor.gui.RegexExtractorGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.extractor.RegexExtractor</stringProp>
             <stringProp name="RegexExtractor.regex"></stringProp>
-            <stringProp name="TestElement.name">Regular Expression Extractor</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-            <stringProp name="RegexExtractor.template"></stringProp>
             <stringProp name="RegexExtractor.match_number"></stringProp>
+            <stringProp name="RegexExtractor.template"></stringProp>
             <stringProp name="RegexExtractor.refname"></stringProp>
           </RegexExtractor>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Pre Processors</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Pre Processors" enabled="true"/>
         <hashTree>
-          <CounterConfig>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.modifiers.gui.CounterConfigGui</stringProp>
+          <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter Config" enabled="true">
             <stringProp name="CounterConfig.start">0</stringProp>
             <stringProp name="CounterConfig.incr">0</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.modifiers.CounterConfig</stringProp>
             <stringProp name="CounterConfig.name"></stringProp>
-            <stringProp name="TestElement.name">Counter Config</stringProp>
             <boolProp name="CounterConfig.per_user">false</boolProp>
             <stringProp name="CounterConfig.end">0</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </CounterConfig>
           <hashTree/>
-          <UserParameters>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.modifiers.gui.UserParametersGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.modifiers.UserParameters</stringProp>
-            <stringProp name="TestElement.name">User Parameters</stringProp>
+          <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
             <collectionProp name="UserParameters.names">
               <stringProp name="username">username</stringProp>
               <stringProp name="password">password</stringProp>
@@ -242,68 +154,37 @@
                 <stringProp name=""></stringProp>
               </collectionProp>
             </collectionProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <boolProp name="UserParameters.per_iteration">true</boolProp>
           </UserParameters>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Timers</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Timers" enabled="true"/>
         <hashTree>
-          <ConstantThroughputTimer>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.timers.ConstantThroughputTimer</stringProp>
+          <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
             <stringProp name="throughput">60</stringProp>
-            <stringProp name="calcMode">this thread only</stringProp>
-            <stringProp name="TestElement.name">Constant Throughput Timer</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <boolProp name="legacyMode">false</boolProp>
           </ConstantThroughputTimer>
           <hashTree/>
-          <ConstantTimer>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.timers.gui.ConstantTimerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.timers.ConstantTimer</stringProp>
-            <stringProp name="TestElement.name">Constant Timer</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">300</stringProp>
           </ConstantTimer>
           <hashTree/>
-          <GaussianRandomTimer>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.timers.gui.GaussianRandomTimerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.timers.GaussianRandomTimer</stringProp>
-            <stringProp name="TestElement.name">Gaussian Random Timer</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <stringProp name="RandomTimer.range">100.0</stringProp>
+          <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Gaussian Random Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">300</stringProp>
+            <stringProp name="RandomTimer.range">100.0</stringProp>
           </GaussianRandomTimer>
           <hashTree/>
-          <UniformRandomTimer>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.timers.gui.UniformRandomTimerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.timers.UniformRandomTimer</stringProp>
-            <stringProp name="TestElement.name">Uniform Random Timer</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <stringProp name="RandomTimer.range">100.0</stringProp>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
             <stringProp name="ConstantTimer.delay">300</stringProp>
+            <stringProp name="RandomTimer.range">100.0</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Visualizers</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Visualizers" enabled="true"/>
         <hashTree>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.AssertionVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">Assertion Visualizer</stringProp>
+          <ResultCollector guiclass="AssertionVisualizer" testclass="ResultCollector" testname="Assertion Visualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -322,25 +203,19 @@
                 <fieldNames>true</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
-                <contentLength>false</contentLength>
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphAccumVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">Graph Accum Visualizer</stringProp>
+          <ResultCollector guiclass="GraphAccumVisualizer" testclass="ResultCollector" testname="Graph Accum Visualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -362,21 +237,16 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">Graph Visualizer</stringProp>
+          <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Visualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -398,21 +268,16 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.SimpleDataWriter</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">Simple Data Writer</stringProp>
+          <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -434,21 +299,16 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.SplineVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">Spline Visualizer</stringProp>
+          <ResultCollector guiclass="SplineVisualizer" testclass="ResultCollector" testname="Spline Visualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -470,21 +330,16 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.StatVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">StatVisualizer</stringProp>
+          <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="StatVisualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -506,21 +361,16 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.TableVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">Table Visualizer</stringProp>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="Table Visualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -542,21 +392,16 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.ViewResultsFullVisualizer</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-            <stringProp name="TestElement.name">View Results Full Visualizer</stringProp>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Full Visualizer" enabled="true">
             <objProp>
-              <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+              <value class="SampleSaveConfiguration">
                 <time>true</time>
                 <latency>true</latency>
                 <timestamp>true</timestamp>
@@ -578,276 +423,145 @@
                 <responseDataOnError>false</responseDataOnError>
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
-                <printMilliseconds>false</printMilliseconds>
               </value>
               <name>saveConfig</name>
             </objProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
             <boolProp name="ResultCollector.error_logging">false</boolProp>
           </ResultCollector>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Core" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Core</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Config</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config" enabled="true"/>
         <hashTree>
-          <ConfigTestElement>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.LoginConfigGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">Login Config Element</stringProp>
+          <ConfigTestElement guiclass="LoginConfigGui" testclass="ConfigTestElement" testname="Login Config Element" enabled="true">
             <stringProp name="ConfigTestElement.username"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
           </ConfigTestElement>
           <hashTree/>
-          <ConfigTestElement>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.SimpleConfigGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">Simple Config Element</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-          </ConfigTestElement>
+          <ConfigTestElement guiclass="SimpleConfigGui" testclass="ConfigTestElement" testname="Simple Config Element" enabled="true"/>
           <hashTree/>
-          <CSVDataSet>
-            <stringProp name="delimiter">,</stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.CSVDataSet</stringProp>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
             <stringProp name="variableNames"></stringProp>
-            <stringProp name="TestElement.name">CSV Data Set Config</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="filename"></stringProp>
           </CSVDataSet>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Control</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Control" enabled="true"/>
         <hashTree>
-          <GenericController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-            <stringProp name="TestElement.name">Simple Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-          </GenericController>
+          <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Simple Controller" enabled="true"/>
           <hashTree/>
-          <LoopController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
             <stringProp name="LoopController.loops">1</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-            <stringProp name="TestElement.name">Loop Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <boolProp name="LoopController.continue_forever">true</boolProp>
           </LoopController>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Protocol: FTP" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Protocol: FTP</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Config</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config" enabled="true"/>
         <hashTree>
-          <ConfigTestElement>
+          <ConfigTestElement guiclass="FtpConfigGui" testclass="ConfigTestElement" testname="FTP Config" enabled="true">
             <stringProp name="FTPSampler.server"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.ftp.config.gui.FtpConfigGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">FTP Config</stringProp>
             <stringProp name="FTPSampler.filename"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </ConfigTestElement>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Control</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Control" enabled="true"/>
         <hashTree>
-          <FTPSampler>
+          <FTPSampler guiclass="FtpTestSamplerGui" testclass="FTPSampler" testname="FTP Test Sampler" enabled="true">
             <stringProp name="FTPSampler.server"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.ftp.control.gui.FtpTestSamplerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.ftp.sampler.FTPSampler</stringProp>
-            <stringProp name="TestElement.name">FTP Test Sampler</stringProp>
             <stringProp name="FTPSampler.filename"></stringProp>
             <stringProp name="ConfigTestElement.username"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
           </FTPSampler>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Protocol: HTTP" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Protocol: HTTP</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Config</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config" enabled="true"/>
         <hashTree>
-          <ConfigTestElement>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+          <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
             <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">HTTP Request Defaults</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
-              <stringProp name="TestElement.name">Argument List</stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
           </ConfigTestElement>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Control</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Control" enabled="true"/>
         <hashTree>
-          <RecordingController>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.RecordController</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.control.RecordingController</stringProp>
-            <stringProp name="TestElement.name">Recording Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-          </RecordingController>
+          <RecordingController guiclass="RecordController" testclass="RecordingController" testname="Recording Controller" enabled="true"/>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">GUI</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="GUI" enabled="true"/>
         <hashTree>
-          <AuthManager>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.AuthPanel</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.control.AuthManager</stringProp>
-            <stringProp name="TestElement.name">AuthPanel</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
+          <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="AuthPanel" enabled="true">
             <collectionProp name="AuthManager.auth_list"/>
           </AuthManager>
           <hashTree/>
-          <CookieManager>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.CookiePanel</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.control.CookieManager</stringProp>
-            <stringProp name="TestElement.name">Cookie Panel</stringProp>
+          <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="Cookie Panel" enabled="true">
             <boolProp name="CookieManager.clearEachIteration">false</boolProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <collectionProp name="CookieManager.cookies"/>
           </CookieManager>
           <hashTree/>
-          <HeaderManager>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HeaderPanel</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.control.HeaderManager</stringProp>
-            <stringProp name="TestElement.name">Header Panel</stringProp>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Header Panel" enabled="true">
             <collectionProp name="HeaderManager.headers"/>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Pre Processors</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Pre Processors" enabled="true"/>
         <hashTree>
-          <AnchorModifier>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.modifier.gui.AnchorModifierGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.modifier.AnchorModifier</stringProp>
-            <stringProp name="TestElement.name">Anchor Modifier</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-          </AnchorModifier>
+          <AnchorModifier guiclass="AnchorModifierGui" testclass="AnchorModifier" testname="Anchor Modifier" enabled="true"/>
           <hashTree/>
-          <ParamModifier>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.modifier.gui.ParamModifierGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.modifier.ParamModifier</stringProp>
-            <stringProp name="TestElement.name">Param Modifier</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <elementProp name="ParamModifier.mask" elementType="org.apache.jmeter.protocol.http.modifier.ParamMask">
+          <ParamModifier guiclass="ParamModifierGui" testclass="ParamModifier" testname="Param Modifier" enabled="true">
+            <elementProp name="ParamModifier.mask" elementType="ParamMask">
               <longProp name="ParamModifier.upper_bound">10</longProp>
               <stringProp name="ParamModifier.prefix"></stringProp>
               <longProp name="ParamModifier.lower_bound">0</longProp>
@@ -857,86 +571,60 @@
             </elementProp>
           </ParamModifier>
           <hashTree/>
-          <URLRewritingModifier>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.modifier.gui.URLRewritingModifierGui</stringProp>
+          <URLRewritingModifier guiclass="URLRewritingModifierGui" testclass="URLRewritingModifier" testname="URL Rewriting Modifier" enabled="true">
             <boolProp name="path_extension">false</boolProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.modifier.URLRewritingModifier</stringProp>
-            <stringProp name="TestElement.name">URL Rewriting Modifier</stringProp>
             <boolProp name="path_extension_no_questionmark">false</boolProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <boolProp name="path_extension_no_equals">false</boolProp>
             <stringProp name="argument_name"></stringProp>
+            <boolProp name="path_extension_no_equals">false</boolProp>
           </URLRewritingModifier>
           <hashTree/>
-          <UserParameterModifier>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.modifier.gui.UserParameterModifierGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.modifier.UserParameterModifier</stringProp>
-            <stringProp name="TestElement.name">User Parameter Modifier</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
+          <UserParameterModifier guiclass="UserParameterModifierGui" testclass="UserParameterModifier" testname="User Parameter Modifier" enabled="true">
             <stringProp name="UserParameterModifier.xmluri">users.xml</stringProp>
           </UserParameterModifier>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Samplers</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
         <hashTree>
-          <HTTPSampler>
+          <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="HTTP Test Sampler" enabled="true">
             <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
               <collectionProp name="Arguments.arguments"/>
-              <stringProp name="TestElement.name">Argument List</stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
             <stringProp name="HTTPSampler.mimetype"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
             <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-            <stringProp name="TestElement.name">HTTP Test Sampler</stringProp>
             <stringProp name="HTTPSampler.monitor">false</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           </HTTPSampler>
           <hashTree/>
-          <SoapSampler>
+          <SoapSampler guiclass="SoapSamplerGui" testclass="SoapSampler" testname="SOAP Sampler" enabled="true">
             <stringProp name="HTTPSampler.path">/</stringProp>
             <stringProp name="HTTPSampler.encoded_path">/</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.SoapSampler</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
             <intProp name="HTTPSampler.port">-1</intProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.SoapSamplerGui</stringProp>
-            <stringProp name="TestElement.name">SOAP Sampler</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSamper.xml_data"></stringProp>
             <stringProp name="SoapSampler.URL_DATA"></stringProp>
           </SoapSampler>
           <hashTree/>
-          <WebServiceSampler>
+          <WebServiceSampler guiclass="WebServiceSamplerGui" testclass="WebServiceSampler" testname="WebService (SOAP) Request" enabled="true">
             <stringProp name="HTTPSampler.path">/</stringProp>
             <stringProp name="HTTPSampler.encoded_path">/</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.WebServiceSampler</stringProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <stringProp name="WebServiceSampler.proxy_host"></stringProp>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
             <stringProp name="WebServiceSampler.proxy_port"></stringProp>
@@ -944,190 +632,139 @@
             <stringProp name="WebServiceSampler.use_proxy">false</stringProp>
             <stringProp name="Soap.Action"></stringProp>
             <stringProp name="WebServiceSampler.xml_data_file"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.WebServiceSamplerGui</stringProp>
-            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
-            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
             <stringProp name="WebServiceSampler.read_response">false</stringProp>
+            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
+            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
             <stringProp name="WebServiceSampler.memory_cache">false</stringProp>
-            <stringProp name="TestElement.name">WebService (SOAP) Request</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSamper.xml_data"></stringProp>
           </WebServiceSampler>
           <hashTree/>
-          <AccessLogSampler>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.AccessLogSampler</stringProp>
+          <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Tomcat Access Log Sampler" enabled="true">
             <stringProp name="AccessLogSampler.parser_class_name">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <boolProp name="HTTPSampler.image_parser">false</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
             <intProp name="HTTPSampler.port">80</intProp>
             <stringProp name="parserClassName">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</stringProp>
             <stringProp name="portString"></stringProp>
             <stringProp name="logFile"></stringProp>
-            <stringProp name="TestElement.name">Tomcat Access Log Sampler</stringProp>
             <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="domain"></stringProp>
             <stringProp name="AccessLogSampler.generator_class_name">org.apache.jmeter.protocol.http.util.accesslog.StandardGenerator</stringProp>
-            <stringProp name="AccessLogSampler.log_file"></stringProp>
             <boolProp name="imageParsing">false</boolProp>
+            <stringProp name="AccessLogSampler.log_file"></stringProp>
           </AccessLogSampler>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Protocol: Java" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Protocol: Java</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Config</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config" enabled="true"/>
         <hashTree>
-          <JavaConfig>
+          <JavaConfig guiclass="JavaConfigGui" testclass="JavaConfig" testname="Java Config" enabled="true">
             <stringProp name="classname">org.apache.jmeter.protocol.java.test.SleepTest</stringProp>
-            <elementProp name="arguments" elementType="org.apache.jmeter.config.Arguments">
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments">
-                <elementProp name="SleepTime" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="SleepTime" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">1000</stringProp>
                   <stringProp name="Argument.name">SleepTime</stringProp>
                 </elementProp>
-                <elementProp name="SleepMask" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="SleepMask" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">0x3FF</stringProp>
                   <stringProp name="Argument.name">SleepMask</stringProp>
                 </elementProp>
               </collectionProp>
-              <stringProp name="TestElement.name"></stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.java.config.gui.JavaConfigGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.java.config.JavaConfig</stringProp>
-            <stringProp name="TestElement.name">Java Config</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </JavaConfig>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Control</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Control" enabled="true"/>
         <hashTree>
-          <JavaSampler>
-            <elementProp name="arguments" elementType="org.apache.jmeter.config.Arguments">
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+          <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Java SleepTest" enabled="true">
+            <stringProp name="classname">org.apache.jmeter.protocol.java.test.SleepTest</stringProp>
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments">
-                <elementProp name="SleepTime" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="SleepTime" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">1000</stringProp>
                   <stringProp name="Argument.name">SleepTime</stringProp>
                 </elementProp>
-                <elementProp name="SleepMask" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="SleepMask" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">0x3FF</stringProp>
                   <stringProp name="Argument.name">SleepMask</stringProp>
                 </elementProp>
               </collectionProp>
-              <stringProp name="TestElement.name"></stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
-            <stringProp name="classname">org.apache.jmeter.protocol.java.test.SleepTest</stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.java.control.gui.JavaTestSamplerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.java.sampler.JavaSampler</stringProp>
-            <stringProp name="TestElement.name">Java SleepTest</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </JavaSampler>
           <hashTree/>
-          <JavaSampler>
-            <elementProp name="arguments" elementType="org.apache.jmeter.config.Arguments">
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+          <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="JavaTest" enabled="true">
+            <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments">
-                <elementProp name="Sleep_Time" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">100</stringProp>
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
                 </elementProp>
-                <elementProp name="Sleep_Mask" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="Sleep_Mask" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">0xFF</stringProp>
                   <stringProp name="Argument.name">Sleep_Mask</stringProp>
                 </elementProp>
-                <elementProp name="Label" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="Label" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">JavaTest</stringProp>
                   <stringProp name="Argument.name">Label</stringProp>
                 </elementProp>
-                <elementProp name="ResponseCode" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="ResponseCode" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">200 (or any other number)</stringProp>
                   <stringProp name="Argument.name">ResponseCode</stringProp>
                 </elementProp>
-                <elementProp name="ResponseMessage" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="ResponseMessage" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">OK (or any other text)</stringProp>
                   <stringProp name="Argument.name">ResponseMessage</stringProp>
                 </elementProp>
-                <elementProp name="Status" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="Status" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">OK</stringProp>
                   <stringProp name="Argument.name">Status</stringProp>
                 </elementProp>
-                <elementProp name="SamplerData" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="SamplerData" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">SamplerData goes here</stringProp>
                   <stringProp name="Argument.name">SamplerData</stringProp>
                 </elementProp>
-                <elementProp name="ResultData" elementType="org.apache.jmeter.config.Argument">
+                <elementProp name="ResultData" elementType="Argument">
                   <stringProp name="Argument.metadata">=</stringProp>
                   <stringProp name="Argument.value">ResultData goes here</stringProp>
                   <stringProp name="Argument.name">ResultData</stringProp>
                 </elementProp>
               </collectionProp>
-              <stringProp name="TestElement.name"></stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
-            <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.java.control.gui.JavaTestSamplerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.java.sampler.JavaSampler</stringProp>
-            <stringProp name="TestElement.name">JavaTest</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </JavaSampler>
           <hashTree/>
-          <BeanShellSampler>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler" enabled="true">
             <stringProp name="BeanShellSampler.filename"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.java.control.gui.BeanShellSamplerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.java.sampler.BeanShellSampler</stringProp>
-            <stringProp name="TestElement.name">BeanShell Sampler</stringProp>
             <stringProp name="BeanShellSampler.query">ResponseCode=12;
 ResponseMessage=&quot;Buckle my shoe&quot;;
 IsSuccess=false;
@@ -1135,81 +772,53 @@ Label=&quot;Sticky&quot;;
 // FileName is the Script file name
 // bsh.args[1] == &quot;quick&quot;
 return &quot;This will go into the Response Data field&quot;;</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="BeanShellSampler.parameters">the quick brown fox</stringProp>
           </BeanShellSampler>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Protocol: JDBC" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Protocol: JDBC</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Config</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config" enabled="true"/>
         <hashTree>
-          <JDBCDataSource>
+          <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
             <stringProp name="password"></stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.jdbc.config.DataSourceElement</stringProp>
             <stringProp name="checkQuery">Select 1</stringProp>
             <stringProp name="timeout">10000</stringProp>
             <stringProp name="trimInterval">60000</stringProp>
             <boolProp name="autocommit">true</boolProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="poolMax">10</stringProp>
             <stringProp name="driver"></stringProp>
             <stringProp name="connectionAge">5000</stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</stringProp>
             <stringProp name="dataSource"></stringProp>
-            <stringProp name="TestElement.name">JDBC Connection Configuration</stringProp>
-            <boolProp name="keepAlive">true</boolProp>
             <stringProp name="username"></stringProp>
+            <boolProp name="keepAlive">true</boolProp>
             <stringProp name="dbUrl"></stringProp>
           </JDBCDataSource>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Control</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Control" enabled="true"/>
         <hashTree>
-          <JDBCSampler>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Test Sample" enabled="true">
             <stringProp name="JDBCSampler.url"></stringProp>
             <stringProp name="JDBCSampler.connections">1</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.jdbc.sampler.JDBCSampler</stringProp>
             <stringProp name="ConfigTestElement.username"></stringProp>
             <stringProp name="JDBCSampler.maxuse">50</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
-            <boolProp name="queryOnly">true</boolProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.testbeans.gui.TestBeanGUI</stringProp>
             <stringProp name="dataSource"></stringProp>
             <stringProp name="query"></stringProp>
-            <stringProp name="TestElement.name">JDBC Test Sample</stringProp>
             <stringProp name="JDBCSampler.driver"></stringProp>
             <stringProp name="JDBCSampler.connPoolClass">org.apache.jmeter.protocol.jdbc.util.JMeter19ConnectionPool</stringProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
@@ -1217,63 +826,37 @@ return &quot;This will go into the Response Data field&quot;;</stringProp>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="LDAP" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <intProp name="LoopController.loops">-1</intProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">LDAP</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
       </ThreadGroup>
       <hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Config</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config" enabled="true"/>
         <hashTree>
-          <ConfigTestElement>
+          <ConfigTestElement guiclass="LdapConfigGui" testclass="ConfigTestElement" testname="LDAP Request Defaults" enabled="true">
             <stringProp name="rootdn"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.ldap.config.gui.LdapConfigGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">LDAP Request Defaults</stringProp>
             <stringProp name="servername"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="port"></stringProp>
             <boolProp name="user_defined">false</boolProp>
           </ConfigTestElement>
           <hashTree/>
         </hashTree>
-        <GenericController>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LogicControllerGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.GenericController</stringProp>
-          <stringProp name="TestElement.name">Samplers</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
-        </GenericController>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
         <hashTree>
-          <LDAPSampler>
+          <LDAPSampler guiclass="LdapTestSamplerGui" testclass="LDAPSampler" testname="LDAP Request" enabled="true">
             <stringProp name="rootdn"></stringProp>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.ldap.control.gui.LdapTestSamplerGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.ldap.sampler.LDAPSampler</stringProp>
-            <stringProp name="TestElement.name">LDAP Request</stringProp>
             <stringProp name="servername"></stringProp>
             <stringProp name="ConfigTestElement.username"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="port"></stringProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
             <boolProp name="user_defined">false</boolProp>

@@ -1,9 +1,10 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,10 +19,6 @@ package org.apache.jmeter.protocol.mail.sampler.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -41,10 +38,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @author Thad Smith
- */
 public class MailReaderSamplerGui extends AbstractSamplerGui {
+
 	// Gui Components
 	private JComboBox serverTypeBox;
 
@@ -67,39 +62,35 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 	private JCheckBox deleteBox;
 
 	// Labels
-	private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");
+	private final static String POP3Label = JMeterUtils.getResString("mail_reader_pop3");// $NON-NLS-1$
 
-	private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");
+	private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");// $NON-NLS-1$
 
-	private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");
+	private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
-	private final static String ServerLabel = JMeterUtils.getResString("mail_reader_server");
+	private final static String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
 
-	private final static String AccountLabel = JMeterUtils.getResString("mail_reader_account");
+	private final static String AccountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
 
-	private final static String PasswordLabel = JMeterUtils.getResString("mail_reader_password");
+	private final static String PasswordLabel = JMeterUtils.getResString("mail_reader_password");// $NON-NLS-1$
 
-	private final static String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");
+	private final static String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");// $NON-NLS-1$
 
-	private final static String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");
+	private final static String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");// $NON-NLS-1$
 
-	private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");
+	private final static String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
 
-	private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");
+	private final static String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
 
-	// NOTREAD private String type;
-	private boolean delete;
-
-	private int num_messages;
+	private static final String INBOX = "INBOX"; // $NON-NLS-1$
 
 	public MailReaderSamplerGui() {
-		// NOTREAD type = MailReaderSampler.TYPE_POP3;
-		delete = false;
 		init();
+		initGui();
 	}
 
 	public String getLabelResource() {
-		return "mail_reader_title";
+		return "mail_reader_title"; // $NON-NLS-1$
 	}
 
 	/*
@@ -111,7 +102,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		MailReaderSampler mrs = (MailReaderSampler) element;
 		if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3)) {
 			serverTypeBox.setSelectedItem(POP3Label);
-			folderBox.setText("INBOX");
+			folderBox.setText(INBOX);
 		} else {
 			serverTypeBox.setSelectedItem(IMAPLabel);
 			folderBox.setText(mrs.getFolder());
@@ -119,12 +110,12 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		serverBox.setText(mrs.getServer());
 		usernameBox.setText(mrs.getUserName());
 		passwordBox.setText(mrs.getPassword());
-		if (mrs.getNumMessages() == -1) {
+		if (mrs.getNumMessages() == MailReaderSampler.ALL_MESSAGES) {
 			allMessagesButton.setSelected(true);
-			someMessagesField.setText(Integer.toString(0));
+			someMessagesField.setText("0"); // $NON-NLS-1$
 		} else {
 			someMessagesButton.setSelected(true);
-			someMessagesField.setText(Integer.toString(mrs.getNumMessages()));
+			someMessagesField.setText(mrs.getNumMessagesString());
 		}
 		deleteBox.setSelected(mrs.getDeleteMessages());
 		super.configure(element);
@@ -163,17 +154,19 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		mrs.setUserName(usernameBox.getText());
 		mrs.setPassword(passwordBox.getText());
 		if (allMessagesButton.isSelected())
-			mrs.setNumMessages(-1);
+			mrs.setNumMessages(MailReaderSampler.ALL_MESSAGES);
 		else
-			mrs.setNumMessages(num_messages);
-		mrs.setDeleteMessages(delete);
+			mrs.setNumMessages(someMessagesField.getText());
+		mrs.setDeleteMessages(deleteBox.isSelected());
 	}
 
+	// TODO - fix GUI layout problems
+	
 	/*
 	 * Helper method to set up the GUI screen
 	 */
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
@@ -186,12 +179,10 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		serverTypeBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label)) {
-					// NOTREAD type = MailReaderSampler.TYPE_POP3;
 					folderLabel.setEnabled(false);
-					folderBox.setText("INBOX");
+					folderBox.setText(INBOX);
 					folderBox.setEnabled(false);
 				} else {
-					// NOTREAD type = MailReaderSampler.TYPE_IMAP;
 					folderLabel.setEnabled(true);
 					folderBox.setEnabled(true);
 				}
@@ -220,7 +211,7 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 		JPanel folderPanel = new JPanel();
 		folderLabel = new JLabel(FolderLabel);
-		folderBox = new JTextField("INBOX", 10);
+		folderBox = new JTextField(INBOX, 10);
 		folderPanel.add(folderLabel);
 		folderPanel.add(folderBox);
 		add(folderPanel);
@@ -247,35 +238,29 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		nmbg.add(allMessagesButton);
 		nmbg.add(someMessagesButton);
 		someMessagesField = new JTextField(5);
-		someMessagesField.setText(Integer.toString(0));
-		someMessagesField.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-			}
-
-			public void focusLost(FocusEvent e) {
-				try {
-					num_messages = Integer.parseInt(someMessagesField.getText());
-				} catch (NumberFormatException nfe) {
-					num_messages = 0;
-				}
-			}
-		});
 		allMessagesButton.setSelected(true);
 		numMessagesPanel.add(allMessagesButton);
 		numMessagesPanel.add(someMessagesButton);
 		numMessagesPanel.add(someMessagesField);
 		add(numMessagesPanel);
 
-		deleteBox = new JCheckBox(DeleteLabel, delete);
-		deleteBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent event) {
-				if (event.getStateChange() == ItemEvent.SELECTED) {
-					delete = true;
-				} else {
-					delete = false;
-				}
-			}
-		});
+		deleteBox = new JCheckBox(DeleteLabel);
 		add(deleteBox);
+	}
+
+	public void clearGui() {
+		super.clearGui();
+		initGui();	
+	}
+
+	private void initGui() {
+		allMessagesButton.setSelected(true);
+		//someMessagesButton.setSelected(false);
+		//someMessagesField.setText("0");
+		deleteBox.setSelected(false);
+		folderBox.setText(INBOX);
+		passwordBox.setText("");
+		serverBox.setText("");
+		usernameBox.setText("");
 	}
 }

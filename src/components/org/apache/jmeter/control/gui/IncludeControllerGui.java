@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,41 +18,23 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.awt.FlowLayout;
-import java.util.Collection;
-import java.util.Iterator;
-
-import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.control.IncludeController;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * 
- * 
- * @version $Revision$ on $Date$
- */
 public class IncludeControllerGui extends AbstractControllerGui
-                                                                /*
-																 * implements
-																 * UnsharedComponent
-																 */
+       // implements UnsharedComponent
 {
 
-	private JLabel warningLabel;
-
     private FilePanel includePanel = 
-        new FilePanel(JMeterUtils.getResString("include_path"), ".jmx");
-
-    public static final String CONTROLLER = "Module To Run";
-
+        new FilePanel(JMeterUtils.getResString("include_path"), ".jmx"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * Initializes the gui panel for the ModuleController instance.
@@ -62,7 +44,7 @@ public class IncludeControllerGui extends AbstractControllerGui
 	}
 
 	public String getLabelResource() {
-		return "include_controller";
+		return "include_controller";//$NON-NLS-1$
 	}
 
 	/*
@@ -74,23 +56,6 @@ public class IncludeControllerGui extends AbstractControllerGui
 		super.configure(el);
 		IncludeController controller = (IncludeController) el;
         this.includePanel.setFilename(controller.getIncludePath());
-	}
-
-	private String renderPath(Collection path) {
-		Iterator iter = path.iterator();
-		StringBuffer buf = new StringBuffer();
-		boolean first = true;
-		while (iter.hasNext()) {
-			if (first) {
-				first = false;
-				iter.next();
-				continue;
-			}
-			buf.append(iter.next());
-			if (iter.hasNext())
-				buf.append(" > ");
-		}
-		return buf.toString();
 	}
 
 	/*
@@ -114,11 +79,24 @@ public class IncludeControllerGui extends AbstractControllerGui
         IncludeController controller = (IncludeController)element;
         controller.setIncludePath(this.includePanel.getFilename());
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        includePanel.clearGui();
+    }
 
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[] { MenuFactory.CONFIG_ELEMENTS, MenuFactory.ASSERTIONS,
-				MenuFactory.TIMERS, MenuFactory.LISTENERS, }, JMeterUtils.getResString("Add"), "Add");
+		JMenu addMenu = MenuFactory.makeMenus(new String[] {
+				MenuFactory.CONFIG_ELEMENTS, 
+				MenuFactory.ASSERTIONS,
+				MenuFactory.TIMERS, 
+				MenuFactory.LISTENERS, 
+				}, JMeterUtils.getResString("add"), // $NON-NLS-1$
+				ActionNames.ADD);
 		menu.add(addMenu);
 		MenuFactory.addEditMenu(menu, true);
 		MenuFactory.addFileMenu(menu);
@@ -126,26 +104,10 @@ public class IncludeControllerGui extends AbstractControllerGui
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
-		// DROP-DOWN MENU
-		JPanel modulesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-		modulesPanel.add(new JLabel(CONTROLLER));
-		warningLabel = new JLabel("");
-		modulesPanel.add(warningLabel);
-		add(modulesPanel);
         add(includePanel);
-	}
-
-	private String spaces(int level) {
-		int multi = 4;
-		StringBuffer spaces = new StringBuffer(level * multi);
-		for (int i = 0; i < level * multi; i++) {
-			spaces.append(" ");
-		}
-		return spaces.toString();
-	}
-    
+	}    
 }

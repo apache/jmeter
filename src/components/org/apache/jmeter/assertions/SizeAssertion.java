@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,11 +27,12 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
+//@see org.apache.jmeter.assertions.PackageTest for unit tests
+
 /**
  * Checks if the results of a Sample matches a particular size.
  * 
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version $Revision$, $Date$
+ * author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
  */
 public class SizeAssertion extends AbstractTestElement implements Serializable, Assertion {
 
@@ -51,39 +52,33 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	public final static int LESSTHANEQUAL = 6;
 
 	/** Key for storing assertion-informations in the jmx-file. */
-	private static final String SIZE_KEY = "SizeAssertion.size";
+	private static final String SIZE_KEY = "SizeAssertion.size"; // $NON-NLS-1$
 
-	private static final String OPERATOR_KEY = "SizeAssertion.operator";
+	private static final String OPERATOR_KEY = "SizeAssertion.operator"; // $NON-NLS-1$
 
 	byte[] resultData;
 
 	/**
-	 * Returns the result of the Assertion. Here it checks wether the Sample
-	 * took to long to be considered successful. If so an AssertionResult
-	 * containing a FailureMessage will be returned. Otherwise the returned
-	 * AssertionResult will reflect the success of the Sample.
+	 * Returns the result of the Assertion. 
+	 * Here it checks the Sample responseData length.
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
-		if (response.getResponseData() == null) {
-			return result.setResultForNull();
-		}
-		// is the Sample the correct size?
 		resultData = response.getResponseData();
 		long resultSize = resultData.length;
-		if ((!(compareSize(resultSize)) && (getAllowedSize() > 0))) {
+		// is the Sample the correct size?
+		if (!(compareSize(resultSize))) {
 			result.setFailure(true);
 			Object[] arguments = { new Long(resultSize), comparatorErrorMessage, new Long(getAllowedSize()) };
-			String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments);
+			String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
 			result.setFailureMessage(message);
 		}
 		return result;
 	}
 
 	/**
-	 * Returns the size in bytes to be asserted. A duration of 0 indicates this
-	 * assertion is to be ignored.
+	 * Returns the size in bytes to be asserted.
 	 */
 	public long getAllowedSize() {
 		return getPropertyAsLong(SIZE_KEY);
@@ -119,7 +114,7 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 	 */
 	public void setAllowedSize(long size) throws IllegalArgumentException {
 		if (size < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
 		}
 		if (size == Long.MAX_VALUE) {
 			setProperty(new LongProperty(SIZE_KEY, 0));
@@ -142,27 +137,27 @@ public class SizeAssertion extends AbstractTestElement implements Serializable, 
 		switch (comp) {
 		case EQUAL:
 			result = (resultSize == getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal"); //$NON-NLS-1$
 			break;
 		case NOTEQUAL:
 			result = (resultSize != getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal"); //$NON-NLS-1$
 			break;
 		case GREATERTHAN:
 			result = (resultSize > getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater"); //$NON-NLS-1$
 			break;
 		case LESSTHAN:
 			result = (resultSize < getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less"); //$NON-NLS-1$
 			break;
 		case GREATERTHANEQUAL:
 			result = (resultSize >= getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal"); //$NON-NLS-1$
 			break;
 		case LESSTHANEQUAL:
 			result = (resultSize <= getAllowedSize());
-			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal");
+			comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
 			break;
 		}
 		return result;

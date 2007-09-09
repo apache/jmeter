@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,14 +22,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$
- */
 public class CollectionProperty extends MultiProperty {
-	protected Collection value;
+
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
+	private Collection value;
 
 	transient private Collection savedValue;
 
@@ -80,9 +79,8 @@ public class CollectionProperty extends MultiProperty {
 	public JMeterProperty get(int row) {
 		if (value instanceof List) {
 			return (JMeterProperty) ((List) value).get(row);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	public void remove(int index) {
@@ -179,9 +177,8 @@ public class CollectionProperty extends MultiProperty {
 	protected Class getPropertyType() {
 		if (value.size() > 0) {
 			return value.iterator().next().getClass();
-		} else {
-			return NullProperty.class;
 		}
+		return NullProperty.class;
 	}
 
 	/*
@@ -194,20 +191,6 @@ public class CollectionProperty extends MultiProperty {
 			value = savedValue;
 		}
 		recoverRunningVersionOfSubElements(owner);
-	}
-
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testAddingProperties() throws Exception {
-			CollectionProperty coll = new CollectionProperty();
-			coll.addItem("joe");
-			coll.addProperty(new FunctionProperty());
-			assertEquals("joe", coll.get(0).getStringValue());
-			assertEquals("org.apache.jmeter.testelement.property.FunctionProperty", coll.get(1).getClass().getName());
-		}
 	}
 
 	/*

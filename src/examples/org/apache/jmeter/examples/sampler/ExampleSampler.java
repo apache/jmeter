@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,13 +40,12 @@ import org.apache.log.Logger;
  */
 public class ExampleSampler extends AbstractSampler {
 
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// The name of the property used to hold our data
 	public final static String DATA = "ExampleSampler.data"; //$NON-NLS-1$
 
-	private transient static int classCount = 0; // keep track of classes
-													// created
+	private static int classCount = 0; // keep track of classes created
 
 	// (for instructional purposes only!)
 
@@ -85,12 +84,12 @@ public class ExampleSampler extends AbstractSampler {
 			res.setResponseData(response.getBytes());
 			res.setDataType(SampleResult.TEXT);
 
-			res.setResponseCode("200");
-			res.setResponseMessage("OK");
+			res.setResponseCodeOK();
+			res.setResponseMessage("OK");// $NON-NLS-1$
 			isOK = true;
 		} catch (Exception ex) {
 			log.debug("", ex);
-			res.setResponseCode("500");
+			res.setResponseCode("500");// $NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 		}
 		res.sampleEnd(); // End timimg

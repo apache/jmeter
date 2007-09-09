@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,7 +40,6 @@ import org.apache.log.Logger;
  * 
  * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
  *         Exports Ltd. Created Apr 29 2003 11:00 AM
- * @version $Revision$ Last updated: $Date$
  */
 public class LdapClient {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -59,9 +58,9 @@ public class LdapClient {
 	public void connect(String host, String port, String rootdn, String username, String password)
 			throws NamingException {
 		Hashtable env = new Hashtable();
-		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-		env.put(Context.PROVIDER_URL, "ldap://" + host + ":" + port + "/" + rootdn);
-		env.put(Context.REFERRAL, "throw");
+		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory"); //$NON-NLS-1$
+		env.put(Context.PROVIDER_URL, "ldap://" + host + ":" + port + "/" + rootdn); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+		env.put(Context.REFERRAL, "throw"); //$NON-NLS-1$
 		env.put(Context.SECURITY_CREDENTIALS, password);
 		env.put(Context.SECURITY_PRINCIPAL, username);
 		dirContext = new InitialDirContext(env);
@@ -91,8 +90,8 @@ public class LdapClient {
 	 */
 	public boolean searchTest(String searchBase, String searchFilter) throws NamingException {
 		// System.out.println("Base="+searchBase+" Filter="+searchFilter);
-		SearchControls searchcontrols = new SearchControls(SearchControls.SUBTREE_SCOPE, 1L, // count
-																								// limit
+		SearchControls searchcontrols = new SearchControls(SearchControls.SUBTREE_SCOPE, 
+				1L, // count limit
 				0, // time limit
 				null,// attributes (null = all)
 				false,// return object ?

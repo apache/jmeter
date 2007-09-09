@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -82,16 +80,9 @@ public class GenericController extends AbstractTestElement implements Controller
 	/**
 	 * @see org.apache.jmeter.control.Controller#next()
 	 */
-	public final Sampler next() {
+	public Sampler next() {
 		fireIterEvents();
 		log.debug("Calling next on: " + this.getClass().getName());
-		Sampler returnValue = doNext();
-		fireIterEvents(returnValue);
-		return returnValue;
-	}
-	
-	protected Sampler doNext()
-	{
 		if (isDone())
 			return null;
 		Sampler returnValue = null;
@@ -225,14 +216,6 @@ public class GenericController extends AbstractTestElement implements Controller
 			first = false;
 		}
 	}
-	
-	protected void fireIterEvents(Object sampler)
-	{
-		if(sampler == null)
-		{
-			fireIterationEnd();
-		}
-	}
 
 	protected void fireIterationStart() {
 		Iterator iter = iterationListeners.iterator();
@@ -240,17 +223,6 @@ public class GenericController extends AbstractTestElement implements Controller
 		while (iter.hasNext()) {
 			LoopIterationListener item = (LoopIterationListener) iter.next();
 			item.iterationStart(event);
-		}
-	}
-	
-	protected void fireIterationEnd()
-	{
-		Iterator iter = iterationListeners.iterator();
-		LoopIterationEvent event = new LoopIterationEvent(this, getIterCount());
-		while(iter.hasNext())
-		{
-			LoopIterationListener item = (LoopIterationListener)iter.next();
-			item.iterationEnd(event);
 		}
 	}
 
@@ -264,40 +236,5 @@ public class GenericController extends AbstractTestElement implements Controller
 
 	protected void resetIterCount() {
 		iterCount = 0;
-	}
-
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testProcessing() throws Exception {
-			testLog.debug("Testing Generic Controller");
-			GenericController controller = new GenericController();
-			GenericController sub_1 = new GenericController();
-			sub_1.addTestElement(new TestSampler("one"));
-			sub_1.addTestElement(new TestSampler("two"));
-			controller.addTestElement(sub_1);
-			controller.addTestElement(new TestSampler("three"));
-			GenericController sub_2 = new GenericController();
-			GenericController sub_3 = new GenericController();
-			sub_2.addTestElement(new TestSampler("four"));
-			sub_3.addTestElement(new TestSampler("five"));
-			sub_3.addTestElement(new TestSampler("six"));
-			sub_2.addTestElement(sub_3);
-			sub_2.addTestElement(new TestSampler("seven"));
-			controller.addTestElement(sub_2);
-			String[] order = new String[] { "one", "two", "three", "four", "five", "six", "seven" };
-			int counter = 7;
-			controller.initialize();
-			for (int i = 0; i < 2; i++) {
-				assertEquals(7, counter);
-				counter = 0;
-				TestElement sampler = null;
-				while ((sampler = controller.next()) != null) {
-					assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
-				}
-			}
-		}
 	}
 }

@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,6 +37,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -59,6 +61,12 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 	public final static String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
+	public final static String RE_USE_CONNECTION = "TCPSampler.reUseConnection"; //$NON-NLS-1$
+
+	private final static String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
+
+	private final static String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
+
 	// If set, this is the regex that is used to extract the status from the
 	// response
 	// NOT implemented yet private final static String STATUS_REGEX =
@@ -76,29 +84,29 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	private static boolean haveStatusProps = false;
 
 	static {
-		log.info("Protocol Handler name=" + getClassname());
-		log.info("Status prefix=" + STATUS_PREFIX);
-		log.info("Status suffix=" + STATUS_SUFFIX);
-		log.info("Status properties=" + STATUS_PROPERTIES);
+		log.debug("Protocol Handler name=" + getClassname());
+		log.debug("Status prefix=" + STATUS_PREFIX);
+		log.debug("Status suffix=" + STATUS_SUFFIX);
+		log.debug("Status properties=" + STATUS_PROPERTIES);
 		if (STATUS_PROPERTIES.length() > 0) {
 			File f = new File(STATUS_PROPERTIES);
+			FileInputStream fis = null;
 			try {
-				statusProps.load(new FileInputStream(f));
-				log.info("Successfully loaded properties");
+				fis = new FileInputStream(f);
+				statusProps.load(fis);
+				log.debug("Successfully loaded properties");
 				haveStatusProps = true;
 			} catch (FileNotFoundException e) {
-				log.info("Property file not found");
+				log.debug("Property file not found");
 			} catch (IOException e) {
-				log.info("Property file error " + e.toString());
+				log.debug("Property file error " + e.toString());
+			} finally {
+				JOrphanUtils.closeQuietly(fis);
 			}
 		}
 	}
 
-	/*
-     * The cache of TCP Connections - key is "hostname:port".
-     * The hostname is used as-is - no case conversion is done.
-     * This allows for more than one connection to a single host if required. 
-     */
+	/** the cache of TCP Connections */
 	private static ThreadLocal tp = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
@@ -106,13 +114,6 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	};
 
 	private transient TCPClient protocolHandler;
-    
-    private transient String hashKey=null; // key for cache
-    
-    // Must save host details in case need to re-establish connection
-    private transient String hostName=null;
-    private transient int portNumber=-1;
-    private transient Exception except=null; // Used to pass back error from getSocket()
 
 	public TCPSampler() {
 		log.debug("Created " + this);
@@ -120,36 +121,37 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 		log.debug("Using Protocol Handler: " + protocolHandler.getClass().getName());
 	}
 
-	private Socket getSocket() {
-        // Is this the first call? If so, set up the socket details
-        if (hashKey == null){
-            hostName = getServer();
-            portNumber = getPort();
-            hashKey=hostName + ":" + portNumber;
-            log.debug("Initialising socket "+hashKey);
-        }
+	private String getError() {
 		Map cp = (Map) tp.get();
-		Socket con = (Socket) cp.get(hashKey);
-		if (con != null) {
-			log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
-			return con;
+		return (String) cp.get(ERRKEY);
+	}
+
+	private Socket getSocket() {
+		Map cp = (Map) tp.get();
+		Socket con = null;
+		if (isReUseConnection()) {
+			con = (Socket) cp.get(TCPKEY);
+			if (con != null) {
+				log.debug(this + " Reusing connection " + con); //$NON-NLS-1$
+				return con;
+			}
 		}
 
 		// Not in cache, so create new one and cache it
 		try {
-			con = new Socket(hostName, portNumber);
+			con = new Socket(getServer(), getPort());
 			con.setSoTimeout(getTimeout());
 			con.setTcpNoDelay(getNoDelay());
 
 			log.debug(this + "  Timeout " + getTimeout() + " NoDelay " + getNoDelay()); //$NON-NLS-1$
 			log.debug("Created new connection " + con); //$NON-NLS-1$
-			cp.put(hashKey, con);
+			cp.put(TCPKEY, con);
 		} catch (UnknownHostException e) {
 			log.warn("Unknown host for " + getLabel(), e);//$NON-NLS-1$
-            except=e;
+			cp.put(ERRKEY, e.toString());
 		} catch (IOException e) {
 			log.warn("Could not create socket for " + getLabel(), e); //$NON-NLS-1$
-            except=e;
+			cp.put(ERRKEY, e.toString());
 		}
 		return con;
 	}
@@ -168,6 +170,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 	public String getServer() {
 		return getPropertyAsString(SERVER);
+	}
+
+	public void setReUseConnection(String newServer) {
+		this.setProperty(RE_USE_CONNECTION, newServer);
+	}
+
+	public boolean isReUseConnection() {
+		return getPropertyAsBoolean(RE_USE_CONNECTION);
 	}
 
 	public void setPort(String newFilename) {
@@ -269,7 +279,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 			Socket sock = getSocket();
 			if (sock == null) {
 				res.setResponseCode("500");
-				res.setResponseMessage(except.toString());
+				res.setResponseMessage(getError());
 			} else {
 				InputStream is = sock.getInputStream();
 				OutputStream os = sock.getOutputStream();
@@ -280,7 +290,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 				String in = protocolHandler.read(is);
 				res.setResponseData(in.getBytes());
 				res.setDataType(SampleResult.TEXT);
-				res.setResponseCode("200");
+				res.setResponseCodeOK();
 				res.setResponseMessage("OK");
 				isSuccessful = true;
 				// Reset the status code if the message contains one
@@ -304,7 +314,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 				}
 			}
 		} catch (IOException ex) {
-			log.debug(getName(), ex);
+			log.debug("", ex);
 			res.setResponseCode("500");
 			res.setResponseMessage(ex.toString());
             closeSocket();
@@ -314,14 +324,17 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
     
     		// Set if we were successful or not
     		res.setSuccessful(isSuccessful);
+
+			if (!isReUseConnection()) {
+				closeSocket();
+			}
         }
 
 		return res;
 	}
 
-    /**
-	 * @param rc
-	 *            response code
+	/**
+	 * @param rc response code
 	 * @return whether this represents success or not
 	 */
 	private boolean checkResponseCode(String rc) {
@@ -335,25 +348,24 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 	}
 
     public void threadStarted() {
-        log.debug(getName() + " Thread Started");
+        log.debug("Thread Started");
     }
 
     private void closeSocket() {
         Map cp = (Map) tp.get();
-        if (hashKey==null) return;
-        Socket con = (Socket) cp.remove(hashKey);
+        Socket con = (Socket) cp.remove(TCPKEY);
         if (con != null) {
-            log.debug(getName()+" Closing socket for " + hashKey); //$NON-NLS-1$
+            log.debug(this + " Closing connection " + con); //$NON-NLS-1$
             try {
                 con.close();
             } catch (IOException e) {
-                log.warn(getName()+" Error closing socket for "+hashKey+" "+e);  //$NON-NLS-1$
+                log.warn("Error closing socket "+e);
             }
         }
     }
 
     public void threadFinished() {
-        log.debug(getName()+" Thread Finished");
+        log.debug("Thread Finished");
         closeSocket();
     }
 }

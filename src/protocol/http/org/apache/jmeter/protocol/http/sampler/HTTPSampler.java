@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,16 +18,25 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.net.BindException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -48,23 +58,25 @@ import org.apache.log.Logger;
  * 
  */
 public class HTTPSampler extends HTTPSamplerBase {
-	private transient static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final int MAX_CONN_RETRIES = 10; // Maximum connection
+	private static final int MAX_CONN_RETRIES = 
+		JMeterUtils.getPropDefault("http.java.sampler.retries" // $NON-NLS-1$
+				,10); // Maximum connection retries
 
-	// retries
-
-	// protected static String encoding= "iso-8859-1";
-	private static final PostWriter postWriter = new PostWriter();
-
-	static {// TODO - document what this is doing and why
-		System.setProperty("java.protocol.handler.pkgs", JMeterUtils.getPropDefault("ssl.pkgs",
-				"com.sun.net.ssl.internal.www.protocol"));
-		System.setProperty("javax.net.ssl.debug", "all");
+	static {
+		log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
 	}
+	
+	private static final byte[] NULL_BA = new byte[0];// can share these
+
+	/** Handles writing of a post request */
+    private PostWriter postWriter;
 
 	/**
 	 * Constructor for the HTTPSampler object.
+     * 
+     * Consider using HTTPSamplerFactory.newInstance() instead
 	 */
 	public HTTPSampler() {
 	}
@@ -78,20 +90,50 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	protected void setPostHeaders(URLConnection conn) throws IOException {
+		postWriter = new PostWriter();
 		postWriter.setHeaders(conn, this);
 	}
+
+    private void setPutHeaders(URLConnection conn)
+     {
+         String filename = getFilename();
+         if ((filename != null) && (filename.trim().length() > 0))
+         {
+             conn.setRequestProperty(HEADER_CONTENT_TYPE, getMimetype());
+             conn.setDoOutput(true);
+             conn.setDoInput(true);
+        }
+    }
 
 	/**
 	 * Send POST data from <code>Entry</code> to the open connection.
 	 * 
 	 * @param connection
 	 *            <code>URLConnection</code> where POST data should be sent
+     * @return a String show what was posted. Will not contain actual file upload content
 	 * @exception IOException
 	 *                if an I/O exception occurs
 	 */
-	protected void sendPostData(URLConnection connection) throws IOException {
-		postWriter.sendPostData(connection, this);
+	protected String sendPostData(URLConnection connection) throws IOException {
+		return postWriter.sendPostData(connection, this);
 	}
+
+    private void sendPutData(URLConnection conn) throws IOException {
+        String filename = getFilename();
+        if ((filename != null) && (filename.trim().length() > 0)) {
+            OutputStream out = conn.getOutputStream();
+            byte[] buf = new byte[1024];
+            int read;
+            InputStream in = new BufferedInputStream(new FileInputStream(filename));
+            while ((read = in.read(buf)) > 0) {
+                out.write(buf, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        }
+    }
+
 
 	/**
 	 * Returns an <code>HttpURLConnection</code> fully ready to attempt
@@ -103,7 +145,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 * @param u
 	 *            <code>URL</code> of the URL request
 	 * @param method
-	 *            http/https
+	 *            GET, POST etc
 	 * @param res
 	 *            sample result to save request infos to
 	 * @return <code>HttpURLConnection</code> ready for .connect
@@ -111,30 +153,26 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O Exception occurs
 	 */
 	protected HttpURLConnection setupConnection(URL u, String method, HTTPSampleResult res) throws IOException {
-		HttpURLConnection conn;
-		// [Jordi <jsalvata@atg.com>]
-		// I've not been able to find out why we're not using this
-		// feature of HttpURLConnections and we're doing redirection
-		// by hand instead. Everything would be so much simpler...
-		// [/Jordi]
-		// Mike: answer - it didn't work. Maybe in JDK1.4 it works, but
-		// honestly, it doesn't seem like they're working on this.
-		// My longer term plan is to use Apache's home grown HTTP Client, or
-		// maybe even HTTPUnit's classes. I'm sure both would be better than
-		// Sun's.
+        SSLManager sslmgr = null;
+        if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
+            try {
+                sslmgr=SSLManager.getInstance(); // N.B. this needs to be done before opening the connection
+            } catch (Exception e) {
+                log.warn("Problem creating the SSLManager: ", e);
+            }
+        }
+		
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        // Update follow redirects setting just for this connection
+        conn.setInstanceFollowRedirects(getAutoRedirects());
 
-		// [sebb] Make redirect following configurable (see bug 19004)
-		// They do seem to work on JVM 1.4.1_03 (Sun/WinXP)
-		HttpURLConnection.setFollowRedirects(getPropertyAsBoolean(AUTO_REDIRECTS));
-
-		conn = (HttpURLConnection) u.openConnection();
-		// Delegate SSL specific stuff to SSLManager so that compilation still
-		// works otherwise.
-		if ("https".equalsIgnoreCase(u.getProtocol())) {
+        if (PROTOCOL_HTTPS.equalsIgnoreCase(u.getProtocol())) {
 			try {
-				SSLManager.getInstance().setContext(conn);
+				if (null != sslmgr){
+				    sslmgr.setContext(conn); // N.B. must be done after opening connection
+				}
 			} catch (Exception e) {
-				log.warn("You may have forgotten to set the ssl.provider property " + "in jmeter.properties", e);
+				log.warn("Problem setting the SSLManager for the connection: ", e);
 			}
 		}
 
@@ -143,41 +181,30 @@ public class HTTPSampler extends HTTPSamplerBase {
 		// leave it to the server to close the connection after their
 		// timeout period. Leave it to the JMeter user to decide.
 		if (getUseKeepAlive()) {
-			conn.setRequestProperty("Connection", "keep-alive");
+			conn.setRequestProperty(HEADER_CONNECTION, KEEP_ALIVE);
 		} else {
-			conn.setRequestProperty("Connection", "close");
+			conn.setRequestProperty(HEADER_CONNECTION, CONNECTION_CLOSE);
 		}
 
 		conn.setRequestMethod(method);
-		String hdrs = setConnectionHeaders(conn, u, getHeaderManager());
+		setConnectionHeaders(conn, u, getHeaderManager());
 		String cookies = setConnectionCookie(conn, u, getCookieManager());
-		if (res != null) {
-			StringBuffer sb = new StringBuffer();
-			if (method.equals(POST)) {
-				String q = this.getQueryString();
-				sb.append("\nQuery data:\n");
-				sb.append(q);
-				res.setQueryString(sb.toString());
-			}
-			if (cookies != null) {
-				StringBuffer temp = new StringBuffer("\nCookie Data:\n");
-				temp.append(cookies);
-				temp.append('\n');
-				res.setCookies(temp.toString());
-				sb.append(temp);
-			}
-			res.setSamplerData(sb.toString());
-			// TODO rather than stuff all the information in here,
-			// pick it up from the individual fields later
 
-			res.setURL(u);
-			res.setHTTPMethod(method);
-			res.setRequestHeaders(hdrs);
-		}
-		setConnectionAuthorization(conn, u, getAuthManager());
+        setConnectionAuthorization(conn, u, getAuthManager());
+
 		if (method.equals(POST)) {
 			setPostHeaders(conn);
-		}
+		} else if (method.equals(PUT)) {
+            setPutHeaders(conn);
+        }
+        
+        if (res != null) {
+            res.setURL(u);
+            res.setHTTPMethod(method);
+            res.setRequestHeaders(getConnectionHeaders(conn));
+            res.setCookies(cookies);
+        }
+        
 		return conn;
 	}
 
@@ -193,41 +220,49 @@ public class HTTPSampler extends HTTPSamplerBase {
 	protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
 		byte[] readBuffer = getThreadContext().getReadBuffer();
 		BufferedInputStream in;
-		boolean logError = false; // Should we log the error?
+
+        if ((conn.getContentLength() == 0) 
+        	&& JMeterUtils.getPropDefault("httpsampler.obey_contentlength", // $NON-NLS-1$
+        	false)) {
+            log.info("Content-Length: 0, not reading http-body");
+			res.setResponseHeaders(getResponseHeaders(conn));
+			return NULL_BA;
+		}
+
 		try {
-			if ("gzip".equals(conn.getContentEncoding()))// works OK even if
-			// CE is null
-			{
+            // works OK even if ContentEncoding is null
+			if (ENCODING_GZIP.equals(conn.getContentEncoding())) {
 				in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
 			} else {
 				in = new BufferedInputStream(conn.getInputStream());
 			}
 		} catch (IOException e) {
-			// TODO: try to improve error discrimination when using JDK1.3
-			// and/or conditionally call .getCause()
-
-			// JDK1.4: if (e.getCause() instanceof FileNotFoundException)
-			// JDK1.4: {
-			// JDK1.4: log.warn(e.getCause().toString());
-			// JDK1.4: }
-			// JDK1.4: else
+			if (! (e.getCause() instanceof FileNotFoundException))
 			{
-				log.error(e.toString());
-				// JDK1.4: Throwable cause = e.getCause();
-				// JDK1.4: if (cause != null){
-				// JDK1.4: log.error("Cause: "+cause);
-				// JDK1.4: }
-				logError = true;
+				log.error("readResponse: "+e.toString());
+				Throwable cause = e.getCause();
+				if (cause != null){
+				    log.error("Cause: "+cause);
+				}
+			}
+			// Normal InputStream is not available
+			InputStream errorStream = conn.getErrorStream();
+			if (errorStream == null) {
+				log.info("Error Response Code: "+conn.getResponseCode()+", Server sent no Errorpage");
+				res.setResponseHeaders(getResponseHeaders(conn));
+				return NULL_BA;
+			}
+			else {
+				log.info("Error Response Code: "+conn.getResponseCode());
+			}
+			in = new BufferedInputStream(errorStream);
+		} catch (Exception e) {
+			log.error("readResponse: "+e.toString());
+			Throwable cause = e.getCause();
+			if (cause != null){
+			    log.error("Cause: "+cause);
 			}
 			in = new BufferedInputStream(conn.getErrorStream());
-		} catch (Exception e) {
-			log.error(e.toString());
-			// JDK1.4: Throwable cause = e.getCause();
-			// JDK1.4: if (cause != null){
-			// JDK1.4: log.error("Cause: "+cause);
-			// JDK1.4: }
-			in = new BufferedInputStream(conn.getErrorStream());
-			logError = true;
 		}
 		java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
 		int x = 0;
@@ -242,15 +277,6 @@ public class HTTPSampler extends HTTPSamplerBase {
 		in.close();
 		w.flush();
 		w.close();
-		if (logError) {
-			String s;
-			if (w.size() > 1000) {
-				s = "\n" + w.toString().substring(0, 1000) + "\n\t...";
-			} else {
-				s = "\n" + w.toString();
-			}
-			log.error(s);
-		}
 		return w.toByteArray();
 	}
 
@@ -261,7 +287,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *            connection from which the headers are read
 	 * @return string containing the headers, one per line
 	 */
-	protected String getResponseHeaders(HttpURLConnection conn) throws IOException {
+	protected String getResponseHeaders(HttpURLConnection conn) {
 		StringBuffer headerBuf = new StringBuffer();
 		headerBuf.append(conn.getHeaderField(0));// Leave header as is
 		// headerBuf.append(conn.getHeaderField(0).substring(0, 8));
@@ -269,34 +295,20 @@ public class HTTPSampler extends HTTPSamplerBase {
 		// headerBuf.append(conn.getResponseCode());
 		// headerBuf.append(" ");
 		// headerBuf.append(conn.getResponseMessage());
-		headerBuf.append("\n");
+		headerBuf.append("\n"); //$NON-NLS-1$
 
-		for (int i = 1; conn.getHeaderFieldKey(i) != null; i++) {
-			modifyHeaderValues(conn, i, headerBuf);
+        String hfk;
+		for (int i = 1; (hfk=conn.getHeaderFieldKey(i)) != null; i++) {
+            // TODO - why is this not saved? A: it might be a proxy server specific field.
+            // If JMeter is using a proxy, the browser wouldn't know about that.
+            if (!TRANSFER_ENCODING.equalsIgnoreCase(hfk)) {
+                headerBuf.append(hfk);
+                headerBuf.append(": "); // $NON-NLS-1$
+                headerBuf.append(conn.getHeaderField(i));
+                headerBuf.append("\n"); // $NON-NLS-1$
+            }
 		}
 		return headerBuf.toString();
-	}
-
-	/**
-	 * @param conn
-	 *            connection
-	 * @param headerIndex
-	 *            which header to use
-	 * @param resultBuf
-	 *            output string buffer
-	 */
-	protected void modifyHeaderValues(HttpURLConnection conn, int headerIndex, StringBuffer resultBuf) {
-		if ("transfer-encoding" // TODO - why is this not saved? A: it might be
-		// a proxy server specific field.
-				// If JMeter is using a proxy, the browser wouldn't know about
-				// that.
-				.equalsIgnoreCase(conn.getHeaderFieldKey(headerIndex))) {
-			return;
-		}
-		resultBuf.append(conn.getHeaderFieldKey(headerIndex));
-		resultBuf.append(": ");
-		resultBuf.append(conn.getHeaderField(headerIndex));
-		resultBuf.append("\n");
 	}
 
 	/**
@@ -317,7 +329,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		if (cookieManager != null) {
 			cookieHeader = cookieManager.getCookieHeaderForURL(u);
 			if (cookieHeader != null) {
-				conn.setRequestProperty("Cookie", cookieHeader);
+				conn.setRequestProperty(HEADER_COOKIE, cookieHeader);
 			}
 		}
 		return cookieHeader;
@@ -335,10 +347,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 * @param headerManager
 	 *            the <code>HeaderManager</code> containing all the cookies
 	 *            for this <code>UrlConfig</code>
-	 * @return the headers as a string
 	 */
-	private String setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager) {
-		StringBuffer hdrs = new StringBuffer(100);
+	private void setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager) {
+        // Add all the headers from the HeaderManager
 		if (headerManager != null) {
 			CollectionProperty headers = headerManager.getHeaders();
 			if (headers != null) {
@@ -347,16 +358,41 @@ public class HTTPSampler extends HTTPSamplerBase {
 					Header header = (Header) i.next().getObjectValue();
 					String n = header.getName();
 					String v = header.getValue();
-					conn.setRequestProperty(n, v);
-					hdrs.append(n);
-					hdrs.append(": ");
-					hdrs.append(v);
-					hdrs.append("\n");
+					conn.addRequestProperty(n, v);
 				}
 			}
 		}
-		return hdrs.toString();
 	}
+    
+    /**
+     * Get all the headers for the <code>HttpURLConnection</code> passed in
+     * 
+     * @param conn
+     *            <code>HttpUrlConnection</code> which represents the URL
+     *            request
+     * @return the headers as a string
+     */
+    private String getConnectionHeaders(HttpURLConnection conn) {
+        // Get all the request properties, which are the headers set on the connection
+        StringBuffer hdrs = new StringBuffer(100);
+        Map requestHeaders = conn.getRequestProperties();
+        Set headerFields = requestHeaders.entrySet();
+        for(Iterator i = headerFields.iterator(); i.hasNext();) {
+        	Map.Entry entry = (Map.Entry)i.next();
+        	String headerKey=(String) entry.getKey();
+            // Exclude the COOKIE header, since cookie is reported separately in the sample
+            if(!HEADER_COOKIE.equalsIgnoreCase(headerKey)) {            
+            	List values = (List) entry.getValue();// value is a List of Strings
+            	for (int j=0;j<values.size();j++){            		
+                    hdrs.append(headerKey);
+                    hdrs.append(": "); // $NON-NLS-1$                
+                    hdrs.append((String) values.get(j));
+                    hdrs.append("\n"); // $NON-NLS-1$
+            	}
+            }
+        }
+        return hdrs.toString();
+    }
 
 	/**
 	 * Extracts all the required authorization for that particular URL request
@@ -373,9 +409,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 */
 	private void setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
 		if (authManager != null) {
-			String authHeader = authManager.getAuthHeaderForURL(u);
-			if (authHeader != null) {
-				conn.setRequestProperty("Authorization", authHeader);
+			Authorization auth = authManager.getAuthForURL(u);
+			if (auth != null) {
+				conn.setRequestProperty(HEADER_AUTHORIZATION, auth.toBasicHeader());
 			}
 		}
 	}
@@ -406,11 +442,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 		log.debug("Start : sample" + urlStr);
 
 		HTTPSampleResult res = new HTTPSampleResult();
-		if (this.getPropertyAsBoolean(MONITOR)) {
-			res.setMonitor(true);
-		} else {
-			res.setMonitor(false);
-		}
+		res.setMonitor(isMonitor());
+        
 		res.setSampleLabel(urlStr);
 		res.sampleStart(); // Count the retries as well in the time
 		try {
@@ -443,8 +476,11 @@ public class HTTPSampler extends HTTPSamplerBase {
 			}
 			// Nice, we've got a connection. Finish sending the request:
 			if (method.equals(POST)) {
-				sendPostData(conn);
-			}
+				String postBody = sendPostData(conn);
+				res.setQueryString(postBody);
+			} else if (method.equals(PUT)) {
+                sendPutData(conn);
+            }
 			// Request sent. Now get the response:
 			byte[] responseData = readResponse(conn, res);
 
@@ -456,37 +492,48 @@ public class HTTPSampler extends HTTPSamplerBase {
 			res.setResponseData(responseData);
 
 			int errorLevel = conn.getResponseCode();
-			res.setResponseCode(Integer.toString(errorLevel));
-			res.setSuccessful(200 <= errorLevel && errorLevel <= 399);
+            String respMsg = conn.getResponseMessage();
+    		String hdr=conn.getHeaderField(0);
+    		if (hdr == null) hdr="(null)";  // $NON-NLS-1$
+            if (errorLevel == -1){// Bug 38902 - sometimes -1 seems to be returned unnecessarily
+            	if (respMsg != null) {// Bug 41902 - NPE
+	                try {
+	                    errorLevel = Integer.parseInt(respMsg.substring(0, 3));
+	                    log.warn("ResponseCode==-1; parsed "+respMsg+ " as "+errorLevel);
+	                  } catch (NumberFormatException e) {
+	                    log.warn("ResponseCode==-1; could not parse "+respMsg+" hdr: "+hdr);
+	                  }
+            	} else {
+            		respMsg=hdr; // for result
+                    log.warn("ResponseCode==-1 & null ResponseMessage. Header(0)= "+hdr);
+            	}
+            }
+            if (errorLevel == -1) {
+            	res.setResponseCode("(null)"); // $NON-NLS-1$
+            } else {
+			    res.setResponseCode(Integer.toString(errorLevel));
+            }
+			res.setSuccessful(isSuccessCode(errorLevel));
 
-			res.setResponseMessage(conn.getResponseMessage());
-
-			String ct = conn.getContentType();// getHeaderField("Content-type");
-			res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
-			if (ct != null) {
-				// Extract charset and store as DataEncoding
-				// TODO do we need process http-equiv META tags, e.g.:
-				// <META http-equiv="content-type" content="text/html;
-				// charset=foobar">
-				// or can we leave that to the renderer ?
-				String de = ct.toLowerCase();
-				final String cs = "charset=";
-				int cset = de.indexOf(cs);
-				if (cset >= 0) {
-					res.setDataEncoding(de.substring(cset + cs.length()));
-				}
-				if (ct.startsWith("image/")) {
-					res.setDataType(HTTPSampleResult.BINARY);
-				} else {
-					res.setDataType(HTTPSampleResult.TEXT);
-				}
+			if (respMsg == null) {// has been seen in a redirect
+				respMsg=hdr; // use header (if possible) if no message found
 			}
+			res.setResponseMessage(respMsg);
+
+			String ct = conn.getContentType();
+			res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+            res.setEncodingAndType(ct);
 
 			res.setResponseHeaders(getResponseHeaders(conn));
 			if (res.isRedirect()) {
-				res.setRedirectLocation(conn.getHeaderField("Location"));
+				res.setRedirectLocation(conn.getHeaderField(HEADER_LOCATION));
 			}
 
+            // If we redirected automatically, the URL may have changed
+            if (getAutoRedirects()){
+                res.setURL(conn.getURL());
+            }
+            
 			// Store any cookies received in the cookie manager:
 			saveConnectionCookies(conn, url, getCookieManager());
 
@@ -496,21 +543,26 @@ public class HTTPSampler extends HTTPSamplerBase {
 			return res;
 		} catch (IOException e) {
 			res.sampleEnd();
+			// We don't want to continue using this connection, even if KeepAlive is set
+            if (conn != null) { // May not exist
+            	conn.disconnect();
+            }
+            conn=null; // Don't process again
 			return errorResult(e, res);
 		} finally {
 			// calling disconnect doesn't close the connection immediately,
 			// but indicates we're through with it. The JVM should close
 			// it when necessary.
-			disconnect(conn);
+			disconnect(conn); // Disconnect unless using KeepAlive
 		}
 	}
 
 	protected void disconnect(HttpURLConnection conn) {
 		if (conn != null) {
-			String connection = conn.getHeaderField("Connection");
+			String connection = conn.getHeaderField(HEADER_CONNECTION);
 			String protocol = conn.getHeaderField(0);
-			if ((connection == null && (protocol == null || !protocol.startsWith("HTTP/1.1")))
-					|| (connection != null && connection.equalsIgnoreCase("close"))) {
+			if ((connection == null && (protocol == null || !protocol.startsWith(HTTP_1_1)))
+					|| (connection != null && connection.equalsIgnoreCase(CONNECTION_CLOSE))) {
 				conn.disconnect();
 			}
 		}
@@ -532,7 +584,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	private void saveConnectionCookies(HttpURLConnection conn, URL u, CookieManager cookieManager) {
 		if (cookieManager != null) {
 			for (int i = 1; conn.getHeaderFieldKey(i) != null; i++) {
-				if (conn.getHeaderFieldKey(i).equalsIgnoreCase("set-cookie")) {
+				if (conn.getHeaderFieldKey(i).equalsIgnoreCase(HEADER_SET_COOKIE)) {
 					cookieManager.addCookieFromHeader(conn.getHeaderField(i), u);
 				}
 			}

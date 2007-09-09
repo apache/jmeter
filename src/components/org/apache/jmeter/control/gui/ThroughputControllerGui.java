@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -35,9 +35,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class ThroughputControllerGui extends AbstractControllerGui {
 	private JComboBox styleBox;
 
@@ -49,15 +46,15 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 
 	private boolean isPerThread = true;
 
-	private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label");
+	private String BYNUMBER_LABEL = JMeterUtils.getResString("throughput_control_bynumber_label"); // $NON-NLS-1$
 
-	private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label");
+	private String BYPERCENT_LABEL = JMeterUtils.getResString("throughput_control_bypercent_label"); // $NON-NLS-1$
 
-	private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel");
+	private String THROUGHPUT_LABEL = JMeterUtils.getResString("throughput_control_tplabel"); // $NON-NLS-1$
 
-	private String THROUGHPUT = "Througput Field";
+	private String THROUGHPUT = "Througput Field"; // $NON-NLS-1$
 
-	private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label");
+	private String PERTHREAD_LABEL = JMeterUtils.getResString("throughput_control_perthread_label"); // $NON-NLS-1$
 
 	public ThroughputControllerGui() {
 		init();
@@ -93,6 +90,16 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        styleBox.setSelectedIndex(0);
+        throughput.setText("1"); // $NON-NLS-1$
+        perthread.setSelected(true);
+    }
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		if (((ThroughputController) el).getStyle() == ThroughputController.BYNUMBER) {
@@ -106,11 +113,11 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 	}
 
 	public String getLabelResource() {
-		return "throughput_control_title";
+		return "throughput_control_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
@@ -138,7 +145,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 		throughput = new JTextField(5);
 		tpPanel.add(throughput);
 		throughput.setName(THROUGHPUT);
-		throughput.setText("1");
+		throughput.setText("1"); // $NON-NLS-1$
 		// throughput.addActionListener(this);
 		tpPanel.add(throughput);
 		add(tpPanel);
