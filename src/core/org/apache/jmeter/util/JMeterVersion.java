@@ -39,10 +39,12 @@ public class JMeterVersion {
 	 * pattern: VERSION = <quote>.*<quote>
 	 * 
 	 * The string is made private so the compiler can't propagate it into
-	 * JMeterUtils This ensures that JMeterUtils always gets the correct
-	 * version, even if it is not re-compiled during the build.
+	 * JMeterUtils. (Java compilers may make copies of final variables)
+	 * 
+	 * This ensures that JMeterUtils always gets the correct
+	 * version, even if JMeterUtils is not re-compiled during the build.
 	 */
-	private static final String VERSION = "2.3.20070902";
+	private static final String VERSION = "2.3.20070909";
 
 	static final String COPYRIGHT = "Copyright (c) 1998-2007 The Apache Software Foundation";
 
