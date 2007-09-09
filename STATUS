@@ -1,9 +1,12 @@
-STATUS as at August 2006
+STATUS as at September 2007
 ======
 
 SVN status:
-- trunk is outdated, and contains some Java 1.5+ only code (I believe)
-- branches/rel-2-2 is the current development branch for 2.2.x (Java 1.4+)
+- trunk is outdated, and contains some Java 1.5+ only code
+- branches/rel-2-2 is the current development branch for 2.2.x and 2.3.x (Java 1.4+)
 
+Branch history:
+rel-2-1:325546 was copied from trunk:325542
+rel-2-2:413997 was copied from rel-2-1:413996
 
 sebb AT apache DOT org
