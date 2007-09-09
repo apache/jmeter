@@ -1,9 +1,10 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,13 +18,15 @@
 
 package org.apache.jmeter.save.converters;
 
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -33,18 +36,19 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * @author mstover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class TestElementConverter extends AbstractCollectionConverter {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	
+    private final boolean testFormat22=SaveService.isSaveTestPlanFormat22();
 
 	/**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; //$NON-NLS-1$
 	}
 
 	/*
@@ -65,9 +69,24 @@ public class TestElementConverter extends AbstractCollectionConverter {
 	 */
 	public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
 		TestElement el = (TestElement) arg0;
-		PropertyIterator iter = el.propertyIterator();
+        if (testFormat22){
+            ConversionHelp.saveSpecialProperties(el,writer);
+        }
+        PropertyIterator iter = el.propertyIterator();
 		while (iter.hasNext()) {
-			writeItem(iter.next(), context, writer);
+            JMeterProperty jmp=iter.next();
+            // Skip special properties if required
+            if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) {
+            	// Don't save empty comments - except for the TestPlan (to maintain compatibility)
+	       		if (!(
+		       			TestPlan.COMMENTS.equals(jmp.getName())
+		       			&& jmp.getStringValue().length()==0
+		       			&& !el.getClass().equals(TestPlan.class)
+	       			))
+	       		{
+		            writeItem(jmp, context, writer);
+	       		}
+            }
 		}
 	}
 
@@ -78,7 +97,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		String classAttribute = reader.getAttribute("class");
+		String classAttribute = reader.getAttribute(ConversionHelp.ATT_CLASS);
 		Class type;
 		if (classAttribute == null) {
 			type = mapper().realClass(reader.getNodeName());
@@ -87,6 +106,8 @@ public class TestElementConverter extends AbstractCollectionConverter {
 		}
 		try {
 			TestElement el = (TestElement) type.newInstance();
+            // No need to check version, just process the attributes if present
+            ConversionHelp.restoreSpecialProperties(el, reader);
 			while (reader.hasMoreChildren()) {
 				reader.moveDown();
 				JMeterProperty prop = (JMeterProperty) readItem(reader, context, el);
@@ -102,9 +123,8 @@ public class TestElementConverter extends AbstractCollectionConverter {
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public TestElementConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public TestElementConverter(Mapper arg0) {
+		super(arg0);
 	}
 }

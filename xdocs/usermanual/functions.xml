@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <!--
-   Copyright 2001-2005 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -14,25 +15,61 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document prev="component_reference.html" next="glossary.html" date="2004/06/12">
+
+<!DOCTYPE document
+[
+<!ENTITY sect-num '19'>
+]>
+
+<document prev="component_reference.html" next="regular_expressions.html" date="2004/06/12">
 
 <properties>
-  <title>User's Manual: Functions</title>
+  <title>User's Manual: Functions and Variables</title>
 </properties>
 
 <body>
 
-<section name="19. Functions" anchor="functions">
+<!--
+	Because this is an XML document, all tags must be properly closed, including ones
+	which are passed unchanged into the HTML output, e.g. <br/>, not just <br>.
+	
+	Unfortunately Java does not currently allow for this - it outputs the trailing > -
+	which messes up the Help display. 
+	To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
+
+ -->
+
+<section name="&sect-num;. Functions and Variables" anchor="functions">
 <p>
-JMeter functions are special values that can populate fields of any Sampler or other configuration
-element in a test tree.  A function looks like this:</p>
+JMeter functions are special values that can populate fields of any Sampler or other
+element in a test tree.  A function call looks like this:</p>
 
 <p><code>${__functionName(var1,var2,var3)}</code></p>
 
-<p>Where "__functionName" matches the name of an existing built-in or user-defined function.<br/>
-Parentheses surround the parameters sent to the function.  The actual parameters vary from function 
-to function.  Functions that require no parameters can leave off the parentheses.  The function itself
-is wrapped in ${}.</p>
+<p>
+Where "__functionName" matches the name of a function.
+<br></br>
+Parentheses surround the parameters sent to the function, for example ${__time(YMD)}
+The actual parameters vary from function to function.  
+Functions that require no parameters can leave off the parentheses, for example ${__threadNum}.
+</p>
+
+<p>
+If a function parameter contains a comma, then be sure to escape this with "\", otherwise JMeter will treat it as a parameter delimiter.
+For example:
+<pre>
+${__time(EEE\, d MMM yyyy)}
+</pre>
+</p>
+<p>Variables are referenced as follows:
+<pre>
+${VARIABLE}
+</pre>
+</p>
+<note>
+Properties are not the same as variables.
+Variables are local to a thread; properties are common to all threads.
+</note>
 <p>List of functions:</p>
 <ul>
         <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
@@ -41,7 +78,7 @@ is wrapped in ${}.</p>
         <li><a href="#__intSum">intSum - add variables</a></li>
         <li><a href="#__StringFromFile">StringFromFile - read a line from a file</a></li>
         <li><a href="#__machineName">machineName - get the local machine name</a></li>
-        <li><a href="#__javaScript">JavaScript (Apache Rhino)</a></li>
+        <li><a href="#__javaScript">JavaScript (Mozilla Rhino)</a></li>
         <li><a href="#__Random">random number</a></li>
         <li><a href="#__CSVRead">CSVRead - read from CSV delimited file</a></li>
         <li><a href="#__property">read a property</a></li>
@@ -52,30 +89,46 @@ is wrapped in ${}.</p>
         <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
         <li><a href="#__split">split - Split a string into variables</a></li>
         <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
+        <li><a href="#__time">time - return current time in various formats</a></li>
+        <li><a href="#__jexl">jexl - evaluate a Commons Jexl expression</a></li>
+        <li><a href="#__V">V evaluate a variable expression</a></li>
 </ul>
 
-<subsection name="19.1 What can functions do" anchor="what_can_do">
-<p>There are two kinds of functions: user-defined static values, and built-in functions.<br/>
+<subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
+<p>There are two kinds of functions: user-defined static values (or variables), and built-in functions.<br></br>
 User-defined static values allow the user to define variables to be replaced with their static value when
 a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
 run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
 matter to change a test to target a different server with the same test.
 </p>
+<p>
+Note that variables cannot currently be nested; i.e ${Var${N}} does not work.
+The __V (variable) function (versions after 2.2) can be used to do this: ${__V(Var${N})}.
+In earlier JMeter versions one can use ${__BeanShell(vars.get("Var${N}")}.
+</p>
 <p>This type of replacement is possible without functions, but was less convenient and less intuitive.
-It required users to create default config elements that would fill in blank values of Samplers.  User-defined
-functions allow one to replace only part of any given value, not just filling in blank values.</p>
+It required users to create default config elements that would fill in blank values of Samplers.
+Variables allow one to replace only part of any given value, not just filling in blank values.</p>
 <p>
 With built-in functions users can compute new values at run-time based on previous response data, which
 thread the function is in, the time, and many other sources.  These values are generated fresh for every
 request throughout the course of the test. </p>
+<note>Functions are shared between threads. 
+Each occurrence of a function call in a test plan is handled by a separate function instance.</note>
 </subsection>
 
-<subsection name="19.2 Where can functions be used?" anchor="where">
-<p>A user-defined function can be written into any field of any test component.  Some fields do not allow random strings 
+<subsection name="&sect-num;.2 Where can functions be used?" anchor="where">
+<p>
+Functions and variables can be written into any field of any test component.  Some fields do not allow random strings 
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
-functions.</p>
-<p>Built-in functions can be written into any field of non-controller test components. This includes
-Samplers, Timers, Listeners, Modifiers, Assertions, Pre-Processors, Post-Processors and Config Elements.</p>
+functions.
+<br></br>
+The Cookie Manager does not support variables/functions.
+</p>
+<p>
+Configuration elements are processed by a separate thread.
+Therefore functions such as __threadNum do not work properly in elements such as User Defined Variables.
+</p>
 <note>When using variable/function references in SQL code (etc),
 remember to include any necessary quotes for text strings,
 i.e. use<br></br>
@@ -87,21 +140,33 @@ SELECT item from table where name=${VAR}
 </note>
 </subsection>
 
-<subsection name="19.3 Writing the function string" anchor="how">
+<subsection name="&sect-num;.3 Writing the function string" anchor="how">
 <p>User-defined functions take the form: <code>${varName}</code>.  In the TestPlan tree element, a two-column table
 of user-defined values is kept, matching up variable names with static values.  Referencing the
 variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
 <p>Built-in functions are written in the same manner, but by convention, the names of built-in
-parameters begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
+functions begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
 configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
-be left out.  A further complication for argument values that themselves contain commas is that the value
-should be escaped as necessary.  Thus, if you need to include a comma in your parameter value, escape it like so: '\,'.  JMeter provides a tool to help you construct
-function calls for various built-in functions, which you can then copy-paste.  It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
+be left out.</p>
+
+<p>Argument values that themselves contain commas should be escaped as necessary.
+If you need to include a comma in your parameter value, escape it like so: '\,'.
+This applies for example to the scripting functions - Javascript, Beanshell, Jexl - where it is necessary to escape any commas
+that may be needed in script method calls - e.g.
+</p>
+<pre>
+    ${__BeanShell(vars.put("name"\,"value"))}
+</pre>
+<p>
+JMeter provides a tool to help you construct
+function calls for various built-in functions, which you can then copy-paste. 
+It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
+
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
 variable will override the built-in function.</note>
 </subsection>
 
-<subsection name="19.4 The Function Helper Dialog" anchor="function_helper">
+<subsection name="&sect-num;.4 The Function Helper Dialog" anchor="function_helper">
 <p>The Function Helper dialog is available from JMeter's Tools menu.</p>
 <figure image="function_helper_dialog.png">Function Helper Dialog</figure>
 <p>Using the Function Helper, you can select a function from the pull down, and assign
@@ -112,9 +177,9 @@ functions take different arguments.</p>
 for you to copy-paste into your test plan wherever you like.</p>
 </subsection>
 
-<subsection name="19.5 Functions" anchor="functions">
+<subsection name="&sect-num;.5 Functions" anchor="functions">
 
-<component index="19.5.1" name="__regexFunction">
+<component index="&sect-num;.5.1" name="__regexFunction">
 <description><p>The Regex Function is used to parse the previous response using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p>
@@ -163,33 +228,43 @@ replacement string") parsed by this function</li>
 </properties>
 </component>
 
-<component index="19.5.2" name="__counter">
+<component index="&sect-num;.5.2" name="__counter">
 <description><p>The counter generates a new number each time it is called, starting with 1
 and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
-separate, or to use the same counter for all user.  If each user's values is incremented separately,
+separate, or to use the same counter for all users.  If each user's values is incremented separately,
 that is like counting the number of iterations through the test plan.  A global counter is like
-counting how many times that request was run.</p></description>
-
+counting how many times that request was run.
+</p>
+<p>The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.</p>
+<p>The counter function instances are now completely independent. 
+[JMeter 2.1.1 and earlier used a fixed thread variable to keep track of the per-user count, 
+so multiple counter functions operated on the same value.] 
+The global counter - "FALSE" - is separately maintained by each counter instance.
+</p>
+</description>
 <properties>
         <property name="First argument" required="Yes">TRUE if you wish each simulated user's counter
         to be kept independent and separate from the other users.  FALSE for a global counter.</property>
 
-<property name="Second argument" required="Yes">A reference name for reusing the value created by this function.<br></br>
+<property name="Second argument" required="No">A reference name for reusing the value created by this function.<br></br>
                 Stored values are of the form ${refName}.  This allows you to keep one counter and refer to its value in
-                multiple places.</property>
+                multiple places. [For JMeter 2.1.1 and earlier this parameter was required.]</property>
 </properties>
 </component>
 
-<component index="19.5.3" name="__threadNum">
+<component index="&sect-num;.5.3" name="__threadNum">
 <description><p>The thread number function simply returns the number of the thread currently
 being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
 
 <p>There are no arguments for this function.</p>
 </description>
+<note>
+This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+</note>
 </component>
 
-<component index="19.5.4" name="__intSum">
+<component index="&sect-num;.5.4" name="__intSum">
 <description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
@@ -203,8 +278,8 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </component>
 
 <!-- Alternate spelling -->
-<a name="__StringFromFile"/>
-<component index="19.5.5" name="_StringFromFile">
+<a name="_StringFromFile"/>
+<component index="&sect-num;.5.5" name="__StringFromFile">
 
 <description>
 	<p>
@@ -212,6 +287,12 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 	This is useful for running tests that require lots of variable data.
 	For example when testing a banking application, 100s or 1000s of different account numbers might be required.
 	</p>
+	<p>
+	See also the 
+	<a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config test element</a> 
+	which may be easier to use. However, that does not currently support multiple input files.
+	</p>
+
 	<p>
 	Each time it is called it reads the next line from the file.
 	When the end of the file is reached, it will start reading again from the beginning,
@@ -245,38 +326,41 @@ A reference name - refName - for reusing the value created by this function. Sto
 	</p>
 	<p>
 <code>
-# - insert the number, with no leading zeros or spaces<br/>
-000 - insert the number packed out to 3 digits with leading zeros if necessary<br/>
+# - insert the number, with no leading zeros or spaces<br></br>
+000 - insert the number packed out to 3 digits with leading zeros if necessary
 <p/>
-Examples:<br/>
- pin#.dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br/>
- pin000.dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br/>
- pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999<br/>
- N.B: pin.dat# -> pin1.0dat, ... pin9.0dat ... pin999.0dat<br/>
+Examples:<br></br>
+ pin#'.'dat -> pin1.dat, ... pin9.dat, pin10.dat, ... pin9999.dat<br></br>
+ pin000'.'dat -> pin001.dat ... pin099.dat ... pin999.dat ... pin9999.dat<br></br>
+ pin'.'dat# -> pin.dat1, ... pin.dat9 ... pin.dat999
 </code><p/>
 	If more digits are required than there are formatting characters, the number will be
-	expanded as necessary.<br/>
-	To prevent a formatting character from being interpreted,
-	enclose it in single quotes. Note that the decimal point is a formatting character,
-	and must be enclosed in single quotes (though it works as expected for #. and 000.)
-	N.B. the decimal point varies between locales, but in the UK and US, at least, it is
-	the same character as is used to separate parts of file names.<br/>
-	See the documentation for DecimalFormat for full details.<br/>
+	expanded as necessary.<br></br>
+	<b>To prevent a formatting character from being interpreted,
+	enclose it in single quotes. Note that "." is a formatting character,
+	and must be enclosed in single quotes</b>
+	(though #. and 000. work as expected in locales where the decimal point is also ".")
+	<br></br>
+	In other locales (e.g. fr), the decimal point is "," - which means that "#."
+	becomes "nnn,".<br></br>
+	See the documentation for DecimalFormat for full details.<br></br>
 	If the path name does not contain any special formatting characters,
 	the current sequence number will be appended to the name, otherwise
-	the number will be inserted aaccording to the fomatting instructions.<br/>
+	the number will be inserted aaccording to the fomatting instructions.<br></br>
 	If the start sequence number is omitted, and the end sequence number is specified,
 	the sequence number is interpreted as a loop count, and the file will be used at most "end" times.
 	In this case the filename is not formatted.
 	<code>
-	
-	${_StringFromFile(PIN#.DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT
-	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice
+	<br></br>
+	${_StringFromFile(PIN#'.'DAT,,1,2)} - reads PIN1.DAT, PIN2.DAT<br></br>
+	${_StringFromFile(PIN.DAT,,,2)} - reads PIN.DAT twice<br></br>
 	</code>
+	Note that the "." in PIN.DAT above should <u>not</u> be quoted.
+	In this case the start number is omitted, so the file name is used exactly as is.
 	</p>
 </component>
 
-<component index="19.5.6" name="__machineName">
+<component index="&sect-num;.5.6" name="__machineName">
 <description><p>The machineName function returns the local host name</p></description>
 
 <properties>
@@ -285,9 +369,21 @@ Examples:<br/>
 </properties>
 </component>
 
-<component index="19.5.7" name="__javaScript">
-<description><p>The javaScript function executes a piece of JavaScript (not Java!) code and returns its value</p>
-	</description>
+<component index="&sect-num;.5.7" name="__javaScript">
+<description>
+<p>
+The javaScript function executes a piece of JavaScript (not Java!) code and returns its value
+</p>
+<p>
+The JMeter Javascript function calls a standalone JavaScript interpreter.
+Javascript is used as a scripting language, so you can do calculations etc.</p>
+<p>
+For details of the language, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
+</p>
+<note>
+JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
+</note>
+</description>
 
 <properties>
         <property name="Expression" required="Yes">The JavaScript expression to be executed. For example:
@@ -297,14 +393,21 @@ Examples:<br/>
         			- a random number between 0 and the variable maxRandom</li>
         		<li>${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1))
         			- a random number between the variables minRandom and maxRandom</li>
+        		<li>"${VAR}"=="abcd"</li>
         	</ul>
         	</property>
-        <property name="Name of function" required="Yes">A reference name for reusing the value
+        <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+<note>Remember to include any necessary quotes for text strings and JMeter variables. Also, if
+the expression has commas, please make sure to escape them. For example in:
+<br></br>
+${__javaScript('${sp}'.slice(7\,99999))}
+<br></br>
+the comma after 7 is escaped.</note>
 </component>
 
-<component index="19.5.8" name="__Random">
+<component index="&sect-num;.5.8" name="__Random">
 <description><p>The random function returns a random number that lies between the given min and max values.</p></description>
 
 <properties>
@@ -315,19 +418,19 @@ Examples:<br/>
 </properties>
 </component>
 
-<component index="19.5.8" name="__CSVRead">
+<component index="&sect-num;.5.8" name="__CSVRead">
 <description><p>The CSVFile function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
 	<p>NOTE: versions up to 1.9.1 only supported a single file. 
 		JMeter versions since 1.9.1 support multiple file names.
 	</p>
+	<p><b>In most cases, the newer 
+	<a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
+	 is easier to use.</b></p>
 	<p>
 	When a filename is first encountered, the file is opened and read into an internal
-	array.
+	array. If a blank line is detected, this is treated as end of file - this allows
+	trailing comments to be used (N.B. this feature was introduced in versions after 1.9.1)
 	</p>
-	<note>If an empty line is detected, this is treated as end of file.
-	This allows	trailing comments to be used.
-	(N.B. this feature was introduced in versions after 1.9.1)
-	</note>
 	<p>All subsequent references to the same file name use the same internal array.
 	N.B. the filename case is significant to the function, even if the OS doesn't care,
 	so CSVRead(abc.txt,0) and CSVRead(aBc.txt,0) would refer to different internal arrays.
@@ -338,27 +441,30 @@ Examples:<br/>
 	</p>
 	<p>
 	Each thread has its own internal pointer to its current row in the file array.
-	When a thread first refers to the file (or uses next) it will be allocated the next unread row in
+	When a thread first refers to the file it will be allocated the next free row in
 	the array, so each thread will access a different row from all other threads.
-	When the end of the file is reached, it starts from the beginning again.
+	[Unless there are more threads than there are rows in the array.]
+	</p>
+	<p>
+	Note: the function splits the line at every comma by default.
+	If you want to enter columns containing commas, then you will need
+	to change the delimiter to a character that does not appear in any
+	column data, by setting the property: csvread.delimiter
 	</p>
 </description>
 
 <properties>
         <property name="File Name" required="Yes">The file (or *ALIAS) to read from</property>
         <property name="Column number" required="Yes">
-        	The column number in the file:
-        	<ul>
-        	<li>0 = first column, 1 = second etc.</li>
-        	<li>next or next() - go to next unread line of file.</li>
-        	<li>3next - extract 4th column, and go to next unread line of file.</li>
-        	<li>*ALIAS - open a file and assign it to the alias</li>
-        	</ul>
+        	The column number in the file.
+        	0 = first column, 1 = second etc.
+        	"next" - go to next line of file.
+        	*ALIAS - open a file and assign it to the alias
         	</property>
 </properties>
 </component>
 
-<component index="19.5.9" name="__property">
+<component index="&sect-num;.5.9" name="__property">
 <description><p>The property function returns the value of a JMeter property. 
 	If the property value cannot be found, and no default has been supplied, it returns the property name.
 	When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
@@ -380,7 +486,7 @@ Examples:<br/>
 </properties>
 </component>
 
-<component index="19.5.10" name="__P">
+<component index="&sect-num;.5.10" name="__P">
 <description><p>This is a simplified property function which is
 	intended for use with properties defined on the command line.
 	Unlike the __property function, there is no option to save the value in a variable,
@@ -390,18 +496,18 @@ Examples:<br/>
 	</p>For example:<p>
 <code>
 Define the property value:
-<br/>
+<br></br>
 jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
-<br/>
+<br></br>
 
 Fetch the values:
-<br/>
+<br></br>
 ${__P(group1.threads)} - return the value of group1.threads
-<br/>
+<br></br>
 ${__P(group1.loops)} - return the value of group1.loops
-<br/>
+<br></br>
 ${__P(hostname,www.dummy.org)} - return value of property hostname or www.dummy.org if not defined
-<br/>
+<br></br>
 </code>
 In the examples above, the first function call would return 7, 
 the second would return 1 and the last would return www.dummy.org
@@ -416,7 +522,7 @@ the second would return 1 and the last would return www.dummy.org
 </properties>
 </component>
 
-<component index="19.5.11" name="__log">
+<component index="&sect-num;.5.11" name="__log">
 <description>
 	<p>
 	The log function logs a message, and returns its input string
@@ -433,7 +539,7 @@ the second would return 1 and the last would return www.dummy.org
 </p>
 </component>
 
-<component index="19.5.12" name="__logn">
+<component index="&sect-num;.5.12" name="__logn">
 <description>
 	<p>
 	The logn function logs a message, and returns the empty string
@@ -450,10 +556,16 @@ the second would return 1 and the last would return www.dummy.org
 </p>
 </component>
 
-<component index="19.5.13" name="__BeanShell">
+<component index="&sect-num;.5.13" name="__BeanShell">
 <description>
 	<p>
 	The BeanShell function evaluates the script passed to it, and returns the result.
+</p>
+<p>
+<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+<br></br>
+For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
+</b>
 </p>
 <p>
 Note that a different Interpreter is used for each independent occurence of the function
@@ -497,33 +609,41 @@ ${__BeanShell(123*456)} - returns 56088
 ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
 </pre>
 </p>
+<note>Remember to include any necessary quotes for text strings and JMeter variables</note>
 </component>
 
-<component index="19.5.14" name="__split">
+<component index="&sect-num;.5.14" name="__split">
 <description>
 	<p>
 	The split function splits the string passed to it according to the delimiter,
     and returns the original string. If any delimiters are adjacent, "?" is returned as the value.
     The split strings are returned in the variables ${VAR_1}, ${VAR_2} etc. 
     The count of variables is returned in ${VAR_n}. 
+    From JMeter 2.1.2 onwards, a trailing delimiter is treated as a missing variable, and "?" is returned.
+    Also, to allow it to work better with the ForEach controller, 
+    __split now deletes the first unused variable in case it was set by a previous split.
 	</p>
 	<p/>
 	Example:
 	<code>
-	<br/>
-	Define VAR="a,,c" in the test plan.
-	<br/>
-	${__split(${VAR},VAR)}
-	<br/>
-	This will return the contents of VAR, i.e. "a,,c" and set the following variables:
-	<br/>
+	<br></br>
+	Define VAR="a||c|" in the test plan.
+	<br></br>
+	${__split(${VAR},VAR),|}
+	<br></br>
+	This will return the contents of VAR, i.e. "a||c|" and set the following variables:
+	<br></br>
+        VAR_n=4 (3 in JMeter 2.1.1 and earlier)
+	<br></br>
         VAR_1=a
-	<br/>
+	<br></br>
         VAR_2=?
-	<br/>
+	<br></br>
         VAR_3=c
-	<br/>
-        VAR_n=3
+	<br></br>
+        VAR_4=? (null in JMeter 2.1.1 and earlier)
+	<br></br>
+        VAR_5=null (in JMeter 2.1.2 and later)
 	</code>
 </description>
 
@@ -531,13 +651,13 @@ ${__BeanShell(source("function.bsh"))} - processes the script in function.bsh
         <property name="String to split" required="Yes">A delimited string, e.g. "a|b|c"</property>
         <property name="Name of variable" required="Yes">A reference name for reusing the value
                computed by this function.</property>
-        <property name="Delimiter" required="No">The delimiter character, e.g. "|". 
-If omitted, "," is used. Note that "," would need to be specified as "\,".
+        <property name="Delimiter" required="No">The delimiter character, e.g. <b>|</b>. 
+If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <b>\,</b>.
 </property>
         
 </properties>
 </component>
-<component index="19.5.15" name="__XPath">
+<component index="&sect-num;.5.15" name="__XPath">
 <description>
 	<p>
 	The XPath function reads an XML file and matches the XPath, each
@@ -546,11 +666,11 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
 	<p/>
 	Example:
 	<code>
-	<br/>
+	<br></br>
 		
-	<br/>
+	<br></br>
 	${__XPath(/path/to/build.xml, //target/@name)}
-	<br/>
+	<br></br>
 	This will match all targets in build.xml and return the name variable
 	</code>
 </description>
@@ -561,11 +681,12 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
 </properties>
 </component>
 
-<component index="19.5.16" name="__setProperty">
+<component index="&sect-num;.5.16" name="__setProperty">
 <description>
 	<p>The setProperty function sets the value of a JMeter property. 
-		The return value from the function is the empty string,
+		The default return value from the function is the empty string,
 		so the function call can be used anywhere functions are valid.</p>
+        <p>The original value can be returned by setting the optional 3rd parameter to "true".</p>
 	<p>Properties are global to JMeter,
 		so can be used to communicate between threads and thread groups</p>
 	</description>
@@ -573,12 +694,102 @@ If omitted, "," is used. Note that "," would need to be specified as "\,".
 <properties>
         <property name="Property Name" required="Yes">The property name to be set.</property>
         <property name="Property Value" required="Yes">The value for the property.</property>
+        <property name="True/False" required="No">Should the original value be returned?</property>
 </properties>
 </component>
 
 
+<component index="&sect-num;.5.17" name="__time">
+<description>
+	<p>The time function returns the current time in various formats.</p>
+	</description>
+
+<properties>
+        <property name="Format" required="No">
+        The format to be passed to SimpleDateFormat. 
+        The function supports various shorthand aliases, see below.
+        </property>
+        <property name="Variable" required="No">The name of the variable to set.</property>
+</properties>
+<p>If the format string is omitted, then the function returns the current time in milliseconds.
+Otherwise, the current time is passed to SimpleDateFormat.
+The following shorthand aliases are provided:
+</p>
+<ul>
+<li>YMD = yyyyMMdd</li>
+<li>HMS = HHmmss</li>
+<li>YMDHMS = yyyyMMdd-HHmmss</li>
+<li>USER1 = whatever is in the Jmeter property time.USER1</li>
+<li>USER2 = whatever is in the Jmeter property time.USER2</li>
+</ul>
+<p>The defaults can be changed by setting the appropriate JMeter property, e.g.
+time.YMD=yyMMdd
+</p>
+</component>
+
+<component index="&sect-num;.5.18" name="__jexl">
+<description>
+	<p>The jexl function returns the result of evaluating a 
+	<a href="http://jakarta.apache.org/commons/jexl">Commons JEXL expression</a>.
+	</p>
+	</description>
+
+<properties>
+        <property name="Expression" required="Yes">
+        The expression to be evaluated. 
+        </property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.19" name="__V">
+<description>
+	<p>The V (variable) function returns the result of evaluating a variable name expression.
+	This can be used to evaluate nested variable references (which are not currently supported).
+	</p>
+	<p>For example, if one has variables A1,A2 and N=1:</p>
+	<ul>
+	<li>${A1} - works OK</li>
+	<li>${A${N}} - does not work (nested variable reference)</li>
+	<li>${__V(A${N})} - works OK. A${N} becomes A1, and the __V function returns the value of A1</li>
+	</ul>
+	</description>
+
+<properties>
+        <property name="Variable name" required="Yes">
+        The variable to be evaluated. 
+        </property>
+</properties>
+</component>
+
 </subsection>
 
+<subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
+<p>
+Most variables are set by calling functions or by test elements such as User Defined Variables; 
+in which case the user has full control over the variable name that is used.
+However some variables are defined internally by JMeter. These are listed below.
+</p>
+<ul>
+<li>cookiename - contains the cookie value</li>
+<li>JMeterThread.last_sample_ok - whether or not the last sample was OK - true/false</li>
+<li>START variables (see next section)</li>
+</ul>
+</subsection>
+<subsection name="&sect-num;.6 Pre-defined Properties" anchor="predefinedprops">
+<p>
+The set of JMeter properties is initialised from the system properties defined when JMeter starts;
+additional JMeter properties are defined in jmeter.properties, user.properties or on the command line.
+</p>
+<p>
+Some built-in properties are defined by JMeter. These are listed below.
+For convenience, the START properties are also copied to variables with the same names.
+</p>
+<ul>
+<li>START.MS - start time in milliseconds</li>
+<li>START.YMD - start time as yyyyMMdd</li>
+<li>START.HMS - start time as HHmmss</li>
+</ul>
+</subsection>
 </section>
 
 </body>

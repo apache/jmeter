@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.gui.util;
 
-import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,8 +37,9 @@ import javax.swing.MenuElement;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
@@ -48,31 +49,31 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Revision$ updated on $Date$
- */
 public final class MenuFactory {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String TIMERS = "menu_timer";
+	/*
+	 *  Predefined strings for makeMenu().
+	 *  These are used as menu categories in the menuMap Hashmap, 
+	 *  and also for resource lookup in messages.properties
+	*/
+	public final static String TIMERS = "menu_timer"; //$NON-NLS-1$
 
-	public final static String CONTROLLERS = "menu_logic_controller";
+	public final static String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
 
-	public final static String SAMPLERS = "menu_generative_controller";
+	public final static String SAMPLERS = "menu_generative_controller"; //$NON-NLS-1$
 
-	public final static String CONFIG_ELEMENTS = "menu_config_element";
+	public final static String CONFIG_ELEMENTS = "menu_config_element"; //$NON-NLS-1$
 
-	public final static String POST_PROCESSORS = "menu_post_processors";
+	public final static String POST_PROCESSORS = "menu_post_processors"; //$NON-NLS-1$
 
-	public final static String PRE_PROCESSORS = "menu_pre_processors";
+	public final static String PRE_PROCESSORS = "menu_pre_processors"; //$NON-NLS-1$
 
-	public final static String ASSERTIONS = "menu_assertions";
+	public final static String ASSERTIONS = "menu_assertions"; //$NON-NLS-1$
 
-	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements";
+	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements"; //$NON-NLS-1$
 
-	public final static String LISTENERS = "menu_listener";
+	public final static String LISTENERS = "menu_listener"; //$NON-NLS-1$
 
 	private static Map menuMap = new HashMap();
 
@@ -80,34 +81,38 @@ public final class MenuFactory {
 
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
-	private static final String[] MENU_ADD_CONTROLLER = new String[] { MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-			MenuFactory.ASSERTIONS, MenuFactory.CONFIG_ELEMENTS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
-			MenuFactory.POST_PROCESSORS };
+	private static final String[] MENU_ADD_CONTROLLER = new String[] {
+        MenuFactory.CONTROLLERS, 
+        MenuFactory.SAMPLERS,
+		MenuFactory.ASSERTIONS, 
+		MenuFactory.CONFIG_ELEMENTS, 
+        MenuFactory.TIMERS, 
+        MenuFactory.LISTENERS, 
+        MenuFactory.PRE_PROCESSORS,
+		MenuFactory.POST_PROCESSORS };
 
-	private static final String[] MENU_PARENT_CONTROLLER = new String[] { MenuFactory.CONTROLLERS };
+	private static final String[] MENU_PARENT_CONTROLLER = new String[] { 
+        MenuFactory.CONTROLLERS };
 
-	private static final String[] MENU_ADD_SAMPLER = new String[] { MenuFactory.CONFIG_ELEMENTS,
-			MenuFactory.ASSERTIONS, MenuFactory.TIMERS, MenuFactory.LISTENERS, MenuFactory.PRE_PROCESSORS,
-			MenuFactory.POST_PROCESSORS };
+	private static final String[] MENU_ADD_SAMPLER = new String[] { 
+        MenuFactory.CONFIG_ELEMENTS,
+		MenuFactory.ASSERTIONS, 
+		MenuFactory.TIMERS, 
+		MenuFactory.LISTENERS, 
+        MenuFactory.PRE_PROCESSORS,
+		MenuFactory.POST_PROCESSORS };
 
-	private static final String[] MENU_PARENT_SAMPLER = new String[] { MenuFactory.CONTROLLERS };
+	private static final String[] MENU_PARENT_SAMPLER = new String[] { 
+        MenuFactory.CONTROLLERS };
 
-	private static List timers, controllers, samplers, configElements, assertions, listeners, nonTestElements,
-			postProcessors, preProcessors;
-
-	// private static JMenu timerMenu;
-	// private static JMenu controllerMenu;
-	// private static JMenu generativeControllerMenu;
-	// private static JMenu listenerMenu;
-	// private static JMenu assertionMenu;
-	// private static JMenu configMenu;
-	// private static JMenu insertControllerMenu;
-	// private static JMenu postProcessorMenu;
-	// private static JMenu preProcessorMenu;
+	private static List timers, controllers, samplers, configElements, 
+        assertions, listeners, nonTestElements,
+		postProcessors, preProcessors;
 
 	static {
 		try {
-			String[] classesToSkip = JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ",");
+			String[] classesToSkip = 
+                JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ","); //$NON-NLS-1$
 			for (int i = 0; i < classesToSkip.length; i++) {
 				elementsToSkip.add(classesToSkip[i].trim());
 			}
@@ -130,31 +135,57 @@ public final class MenuFactory {
 
 	public static void addEditMenu(JPopupMenu menu, boolean removable) {
 		addSeparator(menu);
+		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
+                "Cut", ActionNames.CUT, //$NON-NLS-1$
+                KeyStrokes.CUT));
+		menu.add(makeMenuItem(JMeterUtils.getResString("copy"),  //$NON-NLS-1$
+                "Copy", ActionNames.COPY, //$NON-NLS-1$
+                KeyStrokes.COPY));
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
+                "Paste", ActionNames.PASTE, //$NON-NLS-1$
+                KeyStrokes.PASTE));
+// Does not appear to be any different to Paste
+//		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
+//                "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
+		menu.add(makeMenuItem(JMeterUtils.getResString("reset_gui"), //$NON-NLS-1$
+                "Reset", ActionNames.RESET_GUI //$NON-NLS-1$
+                ));
 		if (removable) {
-			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), "Remove", "remove", KeyStroke.getKeyStroke(
-					KeyEvent.VK_DELETE, 0)));
+			menu.add(makeMenuItem(JMeterUtils.getResString("remove"), //$NON-NLS-1$
+                    "Remove", ActionNames.REMOVE, //$NON-NLS-1$
+                    KeyStrokes.REMOVE));
 		}
-		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), "Cut", "Cut", KeyStroke.getKeyStroke(KeyEvent.VK_X,
-				KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("copy"), "Copy", "Copy", KeyStroke.getKeyStroke(KeyEvent.VK_C,
-				KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), "Paste", "Paste", KeyStroke.getKeyStroke(
-				KeyEvent.VK_V, KeyEvent.CTRL_MASK)));
-		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), "Paste Insert", "Paste Insert"));
 	}
 
 	public static void addFileMenu(JPopupMenu menu) {
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("open"), "Open", "open"));
-		menu.add(makeMenuItem(JMeterUtils.getResString("save_as"), "Save As", "save_as"));
-		JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"), "Save Image", "save_graphics",
-				KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_MASK));
+		menu.add(makeMenuItem(JMeterUtils.getResString("open"),// $NON-NLS-1$
+                "Open", ActionNames.OPEN));// $NON-NLS-1$
+        menu.add(makeMenuItem(JMeterUtils.getResString("menu_merge"),// $NON-NLS-1$
+                "Merge", ActionNames.MERGE));// $NON-NLS-1$
+        menu.add(makeMenuItem(JMeterUtils.getResString("save_as"),// $NON-NLS-1$
+                "Save As", ActionNames.SAVE_AS));// $NON-NLS-1$
+
+		addSeparator(menu);
+        JMenuItem savePicture = makeMenuItem(JMeterUtils.getResString("save_as_image"),// $NON-NLS-1$
+                "Save Image", ActionNames.SAVE_GRAPHICS,// $NON-NLS-1$
+				KeyStrokes.SAVE_GRAPHICS);
 		menu.add(savePicture);
 		if (!(GuiPackage.getInstance().getCurrentGui() instanceof Printable)) {
 			savePicture.setEnabled(false);
 		}
-		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"), "Disable", "disable");
-		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"), "Enable", "enable");
+        
+        JMenuItem savePictureAll = makeMenuItem(JMeterUtils.getResString("save_as_image_all"),// $NON-NLS-1$
+                "Save Image All", ActionNames.SAVE_GRAPHICS_ALL,// $NON-NLS-1$
+                KeyStrokes.SAVE_GRAPHICS_ALL);
+        menu.add(savePictureAll);
+
+        addSeparator(menu);
+        
+		JMenuItem disabled = makeMenuItem(JMeterUtils.getResString("disable"),// $NON-NLS-1$
+                "Disable", ActionNames.DISABLE);// $NON-NLS-1$
+		JMenuItem enabled = makeMenuItem(JMeterUtils.getResString("enable"),// $NON-NLS-1$
+                "Enable", ActionNames.ENABLE);// $NON-NLS-1$
 		boolean isEnabled = GuiPackage.getInstance().getTreeListener().getCurrentNode().isEnabled();
 		if (isEnabled) {
 			disabled.setEnabled(true);
@@ -166,7 +197,8 @@ public final class MenuFactory {
 		menu.add(enabled);
 		menu.add(disabled);
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("help"), "Help", "help"));
+		menu.add(makeMenuItem(JMeterUtils.getResString("help"), // $NON-NLS-1$
+                "Help", ActionNames.HELP));// $NON-NLS-1$
 	}
 
 	public static JMenu makeMenus(String[] categories, String label, String actionCommand) {
@@ -179,10 +211,12 @@ public final class MenuFactory {
 
 	public static JPopupMenu getDefaultControllerMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
-		pop.add(makeMenus(MENU_PARENT_CONTROLLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
+		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, 
+				JMeterUtils.getResString("add"),// $NON-NLS-1$
+				ActionNames.ADD));
+		pop.add(makeMenus(MENU_PARENT_CONTROLLER, 
+				JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+				ActionNames.ADD_PARENT));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
@@ -190,10 +224,12 @@ public final class MenuFactory {
 
 	public static JPopupMenu getDefaultSamplerMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
-		pop.add(makeMenus(MENU_PARENT_SAMPLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
+		pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER, 
+				JMeterUtils.getResString("add"),// $NON-NLS-1$
+                ActionNames.ADD));
+		pop.add(makeMenus(MENU_PARENT_SAMPLER, 
+				JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+                ActionNames.ADD_PARENT));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
@@ -234,10 +270,25 @@ public final class MenuFactory {
 		return pop;
 	}
 
+	/**
+	 * 
+	 * @param category - predefined string (used as key for menuMap HashMap and messages.properties lookup)
+	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
+	 *     @see org.apache.jmeter.gui.action.ActionNames
+	 * @return
+	 */
 	public static JMenu makeMenu(String category, String actionCommand) {
 		return makeMenu((Collection) menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
 	}
 
+	/**
+	 * 
+	 * @param menuInfo - collection of MenuInfo items
+	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
+	 *     @see org.apache.jmeter.gui.action.ActionNames
+	 * @param menuName
+	 * @return
+	 */
 	public static JMenu makeMenu(Collection menuInfo, String actionCommand, String menuName) {
 		Iterator iter = menuInfo.iterator();
 		JMenu menu = new JMenu(menuName);
@@ -254,6 +305,14 @@ public final class MenuFactory {
 		}
 	}
 
+	/**
+	 * 
+	 * @param label for the MenuItem
+	 * @param name for the MenuItem
+	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
+	 *     @see org.apache.jmeter.gui.action.ActionNames
+	 * @return
+	 */
 	public static JMenuItem makeMenuItem(String label, String name, String actionCommand) {
 		JMenuItem newMenuChoice = new JMenuItem(label);
 		newMenuChoice.setName(name);
@@ -304,7 +363,8 @@ public final class MenuFactory {
 				 * 
 				 * TODO: find a better way of checking this
 				 */
-				if (name.endsWith("JMeterTreeNode") || name.endsWith("TestBeanGUI")) {
+				if (name.endsWith("JMeterTreeNode") // $NON-NLS-1$
+                        || name.endsWith("TestBeanGUI")) {// $NON-NLS-1$
 					continue;// Don't try to instantiate these
 				}
 
@@ -370,9 +430,9 @@ public final class MenuFactory {
 				}
 
 			}
-		} catch (Exception e) {
-			log.error("", e);
-		}
+		} catch (IOException e) {
+            log.error("", e);
+        }
 	}
 
 	private static void addSeparator(JPopupMenu menu) {
@@ -382,38 +442,38 @@ public final class MenuFactory {
 		}
 	}
 
-	// //////////////////////////// Test code
-	// ////////////////////////////////////
-
-	public static class Test extends JMeterTestCase {
-
-		public Test() {
-			super();
-		}
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private static void check(String s, int i) throws Exception {
-			assertFalse("The number of " + s + " should not be 0", 0 == i);
-		}
-
-		public void testMenu() throws Exception {
-			check("menumap", menuMap.size());
-
-			check("assertions", assertions.size());
-			check("configElements", configElements.size());
-			check("controllers", controllers.size());
-			check("listeners", listeners.size());
-			check("nonTestElements", nonTestElements.size());
-			check("postProcessors", postProcessors.size());
-			check("preProcessors", preProcessors.size());
-			check("samplers", samplers.size());
-			check("timers", timers.size());
-
-			check("elementstoskip", elementsToSkip.size());
-
-		}
+	// Methods used for Test cases
+	static int menuMap_size() {
+		return menuMap.size();
+	}
+	static int assertions_size() {
+		return assertions.size();
+	}
+	static int configElements_size() {
+		return configElements.size();
+	}
+	static int controllers_size() {
+		return controllers.size();
+	}
+	static int listeners_size() {
+		return listeners.size();
+	}
+	static int nonTestElements_size() {
+		return nonTestElements.size();
+	}
+	static int postProcessors_size() {
+		return postProcessors.size();
+	}
+	static int preProcessors_size() {
+		return preProcessors.size();
+	}
+	static int samplers_size() {
+		return samplers.size();
+	}
+	static int timers_size() {
+		return timers.size();
+	}
+	static int elementsToSkip_size() {
+		return elementsToSkip.size();
 	}
 }

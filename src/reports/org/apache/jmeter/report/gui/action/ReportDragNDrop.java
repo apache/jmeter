@@ -1,9 +1,11 @@
+//$Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,7 +26,6 @@ import java.util.Set;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.report.gui.action.AbstractAction;
-import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.samplers.Sampler;
@@ -51,7 +52,7 @@ public class ReportDragNDrop extends AbstractAction {
 	}
 
 	/**
-	 * @see Command#doAction(ActionEvent)
+	 * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
 	 */
 	public void doAction(ActionEvent e) {
 		String action = e.getActionCommand();
@@ -118,7 +119,7 @@ public class ReportDragNDrop extends AbstractAction {
 	}
 
 	/**
-	 * @see Command#getActionNames()
+	 * @see org.apache.jmeter.gui.action.Command#getActionNames()
 	 */
 	public Set getActionNames() {
 		return commands;

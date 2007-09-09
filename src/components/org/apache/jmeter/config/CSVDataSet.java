@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,29 +25,43 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
  * @author mstover
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static final public long serialVersionUID = 1;
+	private static final long serialVersionUID = 2;
 
-	transient String filename;
+    private static final String EOFVALUE = // value to return at EOF 
+        JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
 
-	transient String variableNames;
+    private transient String filename;
 
-	transient String delimiter;
+    private transient String fileEncoding;
 
-	transient private String[] vars;
+    private transient String variableNames;
 
+    private transient String delimiter;
+
+    private transient boolean recycle = true;
+    
+    private transient boolean stopThread = false;
+
+    transient private String[] vars;
+
+    private Object readResolve(){
+        recycle = true;
+        return this;
+    }
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -54,25 +69,35 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	 */
 	public void iterationStart(LoopIterationEvent iterEvent) {
 		FileServer server = FileServer.getFileServer();
+		String _fileName = getFilename();
 		if (vars == null) {
-			server.reserveFile(getFilename());
-			vars = JOrphanUtils.split(getVariableNames(), ",");
+			server.reserveFile(_fileName, getFileEncoding());
+			vars = JOrphanUtils.split(getVariableNames(), ","); // $NON-NLS-1$
 		}
 		try {
 			String delim = getDelimiter();
-			if (delim.equals("\\t"))
-				delim = "\t";// Make it easier to enter a Tab
-			String[] lineValues = JOrphanUtils.split(server.readLine(getFilename()), delim,false);
-			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-				this.getThreadContext().getVariables().put(vars[a], lineValues[a]);
-			}
+			if (delim.equals("\\t")) // $NON-NLS-1$
+				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
+            JMeterVariables threadVars = this.getThreadContext().getVariables();
+			String line = server.readLine(_fileName,getRecycle());
+            if (line!=null) {// i.e. not EOF
+                String[] lineValues = JOrphanUtils.split(line, delim,false);
+    			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+    				threadVars.put(vars[a], lineValues[a]);
+    			}
+    			// TODO - provide option to set unused variables ?
+            } else {
+            	if (getStopThread()) {
+            		throw new JMeterStopThreadException("End of file detected");
+            	}
+                for (int a = 0; a < vars.length ; a++) {
+                    threadVars.put(vars[a], EOFVALUE);
+                }
+            }
 		} catch (IOException e) {
-			log.error("Failed to read file: " + getFilename());
+			log.error(e.toString());
 		}
 	}
-	
-	public void iterationEnd(LoopIterationEvent iterEvent)
-	{}
 
 	/**
 	 * @return Returns the filename.
@@ -87,6 +112,21 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	 */
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	/**
+	 * @return Returns the file encoding.
+	 */
+	public String getFileEncoding() {
+		return fileEncoding;
+	}
+
+	/**
+	 * @param fileEncoding
+	 *            The fileEncoding to set.
+	 */
+	public void setFileEncoding(String fileEncoding) {
+		this.fileEncoding = fileEncoding;
 	}
 
 	/**
@@ -111,5 +151,21 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
+
+    public boolean getRecycle() {
+        return recycle;
+    }
+
+    public void setRecycle(boolean recycle) {
+        this.recycle = recycle;
+    }
+
+    public boolean getStopThread() {
+        return stopThread;
+    }
+
+    public void setStopThread(boolean value) {
+        this.stopThread = value;
+    }
 
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.config.gui;
 
-import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -36,8 +36,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.TestElement;
@@ -51,7 +49,6 @@ import org.apache.jorphan.reflect.Functor;
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  * 
- * @version $Revision$ on $Date$
  */
 public class ArgumentsPanel extends AbstractConfigGui implements ActionListener {
 
@@ -82,14 +79,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	private boolean standalone = true;
 
 	/** Command for adding a row to the table. */
-	private static final String ADD = "add";
+	private static final String ADD = "add"; // $NON-NLS-1$
 
 	/** Command for removing a row from the table. */
-	private static final String DELETE = "delete";
+	private static final String DELETE = "delete"; // $NON-NLS-1$
 
-	public static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name");
+	public static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
 
-	public static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value");
+	public static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
 
 	// NOTUSED private static final String COLUMN_NAMES_2 =
 	// JMeterUtils.getResString("metadata");
@@ -98,7 +95,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * Create a new ArgumentsPanel as a standalone component.
 	 */
 	public ArgumentsPanel() {
-		tableLabel = new JLabel(JMeterUtils.getResString("user_defined_variables"));
+		tableLabel = new JLabel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
 		standalone = true;
 		init();
 	}
@@ -118,9 +115,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
     /**
      * Create a new ArgumentsPanel with a border and color background
-     * @param label
-     * @param borderHeight
-     * @param borderWidth
+     * @param label text for label
+     * @param bkg background colour
      */
     public ArgumentsPanel(String label, Color bkg) {
         tableLabel = new JLabel(label);
@@ -139,13 +135,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	public Collection getMenuCategories() {
 		if (standalone) {
 			return super.getMenuCategories();
-		} else {
-			return null;
-		}
+		} 
+		return null;
 	}
 
 	public String getLabelResource() {
-		return "user_defined_variables";
+		return "user_defined_variables"; // $NON-NLS-1$
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */
@@ -165,7 +160,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 			arguments.clear();
 			while (modelData.hasNext()) {
 				Argument arg = (Argument) modelData.next();
-				arg.setMetaData("=");
+				arg.setMetaData("="); // $NON-NLS-1$
 				arguments.addArgument(arg);
 			}
 		}
@@ -241,6 +236,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 		} else {
 			delete.setEnabled(true);
 		}
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		clear();
 	}
 
 	/**
@@ -326,7 +326,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * @return a new Argument object
 	 */
 	protected Object makeNewArgument() {
-		return new Argument("", "");
+		return new Argument("", ""); // $NON-NLS-1$ // $NON-NLS-2$
 	}
 
 	/**
@@ -344,18 +344,30 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * Initialize the table model used for the arguments table.
 	 */
 	protected void initializeTableModel() {
-		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 }, new Functor[] {
-				new Functor("getName"), new Functor("getValue") }, new Functor[] { new Functor("setName"),
-				new Functor("setValue") }, new Class[] { String.class, String.class });
+		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
+				Argument.class,
+				new Functor[] {
+				new Functor("getName"), // $NON-NLS-1$
+				new Functor("getValue") },  // $NON-NLS-1$
+				new Functor[] {
+			    new Functor("setName"), // $NON-NLS-1$
+				new Functor("setValue") }, // $NON-NLS-1$
+				new Class[] { String.class, String.class });
 	}
 
+	public static boolean testFunctors(){
+		ArgumentsPanel instance = new ArgumentsPanel();
+		instance.initializeTableModel();
+		return instance.tableModel.checkFunctors(null,instance.getClass());
+	}
+	
 	/**
 	 * Resize the table columns to appropriate widths.
 	 * 
-	 * @param table
+	 * @param _table
 	 *            the table to resize columns for
 	 */
-	protected void sizeColumns(JTable table) {
+	protected void sizeColumns(JTable _table) {
 	}
 
 	/**
@@ -393,11 +405,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 	 * @return a GUI panel containing the buttons
 	 */
 	private JPanel makeButtonPanel() {
-		add = new JButton(JMeterUtils.getResString("add"));
+		add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
 		add.setActionCommand(ADD);
 		add.setEnabled(true);
 
-		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 		delete.setActionCommand(DELETE);
 
 		checkDeleteStatus();
@@ -441,38 +453,5 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
 
 		table.revalidate();
 		sizeColumns(table);
-	}
-
-	/**
-	 * Tests for the ArgumentsPanel component.
-	 */
-	public static class Test extends TestCase {
-		/**
-		 * Create a new test.
-		 * 
-		 * @param name
-		 *            the name of the test
-		 */
-		public Test(String name) {
-			super(name);
-		}
-
-		/**
-		 * Test that adding an argument to the table results in an appropriate
-		 * TestElement being created.
-		 * 
-		 * @throws Exception
-		 *             if an exception occurred during the test
-		 */
-		public void testArgumentCreation() throws Exception {
-			ArgumentsPanel gui = new ArgumentsPanel();
-			gui.tableModel.addRow(new Argument());
-			gui.tableModel.setValueAt("howdy", 0, 0);
-			gui.tableModel.addRow(new Argument());
-			gui.tableModel.setValueAt("doody", 0, 1);
-
-			assertEquals("=", ((Argument) ((Arguments) gui.createTestElement()).getArguments().get(0).getObjectValue())
-					.getMetaData());
-		}
 	}
 }

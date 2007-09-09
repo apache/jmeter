@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -72,9 +73,9 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 	private boolean displayName = true;
 
 	/** The names of the columns in the table. */
-	private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name");
+	private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
 
-	private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value");
+	private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
 
 	// NOTUSED private static final String COLUMN_NAMES_2 =
 	// JMeterUtils.getResString("metadata");
@@ -102,7 +103,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 	}
 
 	public String getLabelResource() {
-		return "simple_config_element";
+		return "simple_config_element"; // $NON-NLS-1$
 	}
 
 	/**
@@ -208,12 +209,12 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 	 * @return a GUI panel containing the buttons
 	 */
 	private JPanel createButtonPanel() {
-		add = new JButton(JMeterUtils.getResString("add"));
+		add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
 		add.setActionCommand(ADD);
 		add.addActionListener(this);
 		add.setEnabled(true);
 
-		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
 		delete.setActionCommand(DELETE);
 		delete.addActionListener(this);
 

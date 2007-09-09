@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,9 +19,11 @@
 package org.apache.jmeter.samplers;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.samplers.StatisticalSampleSender;
 
 /**
  * @author Michael Freeman
+ * 10/24/2005 - added statistical mode for distributed testing
  */
 public class SampleSenderFactory {
 	/**
@@ -43,13 +46,12 @@ public class SampleSenderFactory {
 		} else if (type.equalsIgnoreCase("Batch")) {
 			BatchSampleSender b = new BatchSampleSender(listener);
 			return b;
-		} else if(type.equalsIgnoreCase("Full")) {
+		} else if (type.equalsIgnoreCase("Statistical")) {
+			StatisticalSampleSender s = new StatisticalSampleSender(listener);
+			return s;
+		} else {
 			StandardSampleSender s = new StandardSampleSender(listener);
 			return s;
-		}  else if(type.equalsIgnoreCase("Stripped Batch")) {
-			return new DataStrippingSampleSender(new BatchSampleSender(listener));
-		} else {
-			return new DataStrippingSampleSender(listener);
 		}
 	}
 }

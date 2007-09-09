@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -54,25 +54,24 @@ import org.apache.log.Logger;
  * @version $Revision$ Last Updated: $Date$
  */
 public class CSVRead extends AbstractFunction implements Serializable {
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String KEY = "__CSVRead"; // Function name
+	private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 
 	private static final List desc = new LinkedList();
 
 	private Object[] values; // Parameter list
 
 	static {
-		desc.add(JMeterUtils.getResString("csvread_file_file_name"));
-		desc.add(JMeterUtils.getResString("column_number"));
+		desc.add(JMeterUtils.getResString("csvread_file_file_name")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("column_number")); //$NON-NLS-1$
 	}
 
 	public CSVRead() {
 	}
 
-	public Object clone() {
-		CSVRead newReader = new CSVRead();
-		return newReader;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
@@ -80,7 +79,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		String myValue = "";
+		String myValue = ""; //$NON-NLS-1$
 
 		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
 		String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
@@ -88,16 +87,16 @@ public class CSVRead extends AbstractFunction implements Serializable {
 		log.debug("execute (" + fileName + " , " + columnOrNext + ")   ");
 
 		// Process __CSVRead(filename,*ALIAS)
-		if (columnOrNext.startsWith("*")) {
+		if (columnOrNext.startsWith("*")) { //$NON-NLS-1$
 			FileWrapper.open(fileName, columnOrNext);
 			/*
 			 * All done, so return
 			 */
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		// if argument is 'next' - go to the next line
-		if (columnOrNext.equals("next()") || columnOrNext.equals("next")) {
+		if (columnOrNext.equals("next()") || columnOrNext.equals("next")) { //$NON-NLS-1$ //$NON-NLS-2$
 			FileWrapper.endRow(fileName);
 
 			/*
@@ -109,14 +108,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 			 * otherwise the wrong line can be retrieved when using multiple
 			 * threads.
 			 */
-			return "";
-		}
-
-		boolean getNext = false;// Should we get the next line after this column?
-		int idxNext;
-		if ((idxNext=columnOrNext.indexOf("next"))!=-1) {
-			getNext=true;
-			columnOrNext=columnOrNext.substring(0,idxNext);
+			return ""; //$NON-NLS-1$
 		}
 
 		try {
@@ -133,9 +125,6 @@ public class CSVRead extends AbstractFunction implements Serializable {
 
 		log.debug("execute value: " + myValue);
 
-		if (getNext) {
-			FileWrapper.endRow(fileName);
-		}
 		return myValue;
 	}
 
@@ -156,7 +145,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 	/**
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 		log.debug("setParameter - Collection.size=" + parameters.size());
 
 		values = parameters.toArray();
@@ -176,8 +165,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 		 * for functions to detect that a run is starting seems to be the
 		 * setParameters() call.
 		 */
-		FileWrapper.clearAll();// TODO only clear the relevant entry - if
-								// possible...
+		FileWrapper.clearAll();// TODO only clear the relevant entry - if possible...
 
 	}
 }

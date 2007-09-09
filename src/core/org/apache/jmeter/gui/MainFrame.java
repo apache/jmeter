@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashSet;
@@ -47,18 +48,22 @@ import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
-import org.apache.jmeter.gui.action.GlobalMouseListener;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.samplers.Remoteable;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
@@ -68,11 +73,10 @@ import org.apache.jorphan.gui.ComponentUtil;
  * JMeter component GUIs.
  * 
  * @author Michael Stover
- * @version $Revision$
  */
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
-	/** The menu bar. */
+    /** The menu bar. */
 	private JMeterMenuBar menuBar;
 
 	/** The main panel where components display their GUIs. */
@@ -105,6 +109,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	/** A message dialog shown while JMeter threads are stopping. */
 	private JDialog stoppingMessage;
 
+    private JLabel totalThreads;
+    private JLabel activeThreads;
+    
 	/**
 	 * Create a new JMeter frame.
 	 * 
@@ -124,6 +131,9 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		runningIndicator.setMargin(new Insets(0, 0, 0, 0));
 		runningIndicator.setBorder(BorderFactory.createEmptyBorder());
 
+        totalThreads = new JLabel("0");
+        activeThreads = new JLabel("0");
+        
 		tree = makeTree(treeModel, treeListener);
 
 		GuiPackage.getInstance().setMainFrame(this);
@@ -242,8 +252,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 *            the host where JMeter threads are stopping
 	 */
 	public void showStoppingMessage(String host) {
-		stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true);
-		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host);
+		stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
+		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host); //$NON-NLS-1$
 		stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		stoppingMessage.getContentPane().add(stopLabel);
 		stoppingMessage.pack();
@@ -256,6 +266,15 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 			}
 		});
 	}
+
+    public void updateCounts() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
+                totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
+            }
+        });
+    }
 
 	/***************************************************************************
 	 * !ToDo (Method description)
@@ -299,6 +318,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	public void testStarted(String host) {
 		hosts.add(host);
 		runningIndicator.setIcon(runningIcon);
+        activeThreads.setText("0");
+        totalThreads.setText("0");
 		menuBar.setRunning(true, host);
 	}
 
@@ -330,6 +351,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 			stoppingMessage.dispose();
 			stoppingMessage = null;
 		}
+        activeThreads.setText("0");
+        totalThreads.setText("0");
 	}
 
 	/* Implements TestListener#testIterationStart(LoopIterationEvent) */
@@ -339,7 +362,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	/**
 	 * Create the GUI components and layout.
 	 */
-	protected void init() {
+	private void init() {
 		menuBar = new JMeterMenuBar();
 		setJMenuBar(menuBar);
 
@@ -362,7 +385,6 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
-		addMouseListener(new GlobalMouseListener());
 	}
 
 	/**
@@ -370,11 +392,15 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * 
 	 * @return a panel containing the running indicator
 	 */
-	protected Component createToolBar() {
+	private Component createToolBar() {
 		Box toolPanel = new Box(BoxLayout.X_AXIS);
 		toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
 		toolPanel.add(Box.createGlue());
-		toolPanel.add(runningIndicator);
+        toolPanel.add(activeThreads);
+        toolPanel.add(new JLabel(" / "));
+        toolPanel.add(totalThreads);
+        toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+        toolPanel.add(runningIndicator);
 		return toolPanel;
 	}
 
@@ -384,7 +410,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * 
 	 * @return a scroll pane containing the test tree GUI
 	 */
-	protected JScrollPane createTreePanel() {
+	private JScrollPane createTreePanel() {
 		JScrollPane treeP = new JScrollPane(tree);
 		treeP.setMinimumSize(new Dimension(100, 0));
 		return treeP;
@@ -395,7 +421,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * 
 	 * @return the main scroll pane
 	 */
-	protected JScrollPane createMainPanel() {
+	private JScrollPane createMainPanel() {
 		return new JScrollPane();
 	}
 
@@ -410,7 +436,26 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * @return the initialized test tree GUI
 	 */
 	private JTree makeTree(TreeModel treeModel, JMeterTreeListener treeListener) {
-		JTree treevar = new JTree(treeModel);
+		JTree treevar = new JTree(treeModel) {
+			public String getToolTipText(MouseEvent event) {
+				TreePath path = this.getPathForLocation(event.getX(), event.getY());
+				if (path != null) {
+					Object treeNode = path.getLastPathComponent();
+					if (treeNode instanceof DefaultMutableTreeNode) {
+						Object testElement = ((DefaultMutableTreeNode) treeNode).getUserObject();
+						if (testElement instanceof TestElement) {
+							String comment =
+								((TestElement) testElement).getPropertyAsString(TestPlan.COMMENTS);
+							if (comment != null && comment.length() > 0) {
+								return comment;
+								}
+							}
+						}
+					}
+				return null;
+				}
+			};
+       	treevar.setToolTipText("");
 		treevar.setCellRenderer(getCellRenderer());
 		treevar.setRootVisible(false);
 		treevar.setShowsRootHandles(true);
@@ -429,7 +474,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * 
 	 * @return a renderer to draw the test tree nodes
 	 */
-	protected TreeCellRenderer getCellRenderer() {
+	private TreeCellRenderer getCellRenderer() {
 		DefaultTreeCellRenderer rend = new JMeterCellRenderer();
 		rend.setFont(new Font("Dialog", Font.PLAIN, 11));
 		return rend;
@@ -459,7 +504,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * A window adapter used to detect when the main JMeter frame is being
 	 * closed.
 	 */
-	protected class WindowHappenings extends WindowAdapter {
+	private static class WindowHappenings extends WindowAdapter {
 		/**
 		 * Called when the main JMeter frame is being closed. Sends a
 		 * notification so that JMeter can react appropriately.
@@ -468,7 +513,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		 *            the WindowEvent to handle
 		 */
 		public void windowClosing(WindowEvent event) {
-			ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), "exit"));
+			ActionRouter.getInstance().actionPerformed(new ActionEvent(this, event.getID(), ActionNames.EXIT));
 		}
 	}
 }

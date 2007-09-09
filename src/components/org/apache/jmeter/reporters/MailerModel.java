@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,8 +19,6 @@
 package org.apache.jmeter.reporters;
 
 import java.io.Serializable;
-// import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -44,11 +42,12 @@ import org.apache.log.Logger;
 /**
  * The model for a MailerVisualizer.
  * 
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
- * @version $Revision$ $Date$
  */
 public class MailerModel extends AbstractTestElement implements Serializable {
-	private static final String MAIL_SMTP_HOST = "mail.smtp.host";
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final String MAIL_SMTP_HOST = "mail.smtp.host"; //$NON-NLS-1$
 
 	private long failureCount = 0;
 
@@ -60,24 +59,24 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
 	private boolean successMsgSent = false;
 
-	private static final String FROM_KEY = "MailerModel.fromAddress";
+	private static final String FROM_KEY = "MailerModel.fromAddress"; //$NON-NLS-1$
 
-	private static final String TO_KEY = "MailerModel.addressie";
+	private static final String TO_KEY = "MailerModel.addressie"; //$NON-NLS-1$
 
-	private static final String HOST_KEY = "MailerModel.smtpHost";
+	private static final String HOST_KEY = "MailerModel.smtpHost"; //$NON-NLS-1$
 
-	private static final String SUCCESS_SUBJECT = "MailerModel.successSubject";
+	private static final String SUCCESS_SUBJECT = "MailerModel.successSubject"; //$NON-NLS-1$
 
-	private static final String FAILURE_SUBJECT = "MailerModel.failureSubject";
+	private static final String FAILURE_SUBJECT = "MailerModel.failureSubject"; //$NON-NLS-1$
 
-	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit";
+	private static final String FAILURE_LIMIT_KEY = "MailerModel.failureLimit"; //$NON-NLS-1$
 
-	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit";
+	private static final String SUCCESS_LIMIT_KEY = "MailerModel.successLimit"; //$NON-NLS-1$
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final String DEFAULT_LIMIT = "2"; //$NON-NLS-1$
 
 	/** The listener for changes. */
-	ChangeListener changeListener;
+	transient ChangeListener changeListener;
 
 	/**
 	 * Constructs a MailerModel.
@@ -85,8 +84,8 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	public MailerModel() {
 		super();
 
-		setProperty(SUCCESS_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.successlimit", "2"));
-		setProperty(FAILURE_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.failurelimit", "2"));
+		setProperty(SUCCESS_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.successlimit", DEFAULT_LIMIT)); //$NON-NLS-1$
+		setProperty(FAILURE_LIMIT_KEY, JMeterUtils.getPropDefault("mailer.failurelimit", DEFAULT_LIMIT)); //$NON-NLS-1$
 	}
 
 	public void addChangeListener(ChangeListener list) {
@@ -129,14 +128,14 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 		Vector addressVector = new Vector();
 
 		if (theAddressie != null) {
-			String addressSep = ",";
+			String addressSep = ","; //$NON-NLS-1$
 
 			StringTokenizer next = new StringTokenizer(theAddressie, addressSep);
 
 			while (next.hasMoreTokens()) {
 				String theToken = next.nextToken().trim();
 
-				if (theToken.indexOf("@") > 0) {
+				if (theToken.indexOf("@") > 0) { //$NON-NLS-1$
 					addressVector.addElement(theToken);
 				}
 			}
@@ -215,7 +214,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	 * reset any mail-specific attributes (like sender, mail-subject...) since
 	 * they are independent of the sampling.
 	 */
-	public synchronized void clear() {
+	public synchronized void clear() {// TODO: should this be clearData()?
 		failureCount = 0;
 		successCount = 0;
 		siteDown = false;
@@ -252,7 +251,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 	 *            the smtp-server used to send the mail.
 	 */
 	public synchronized void sendMail(String from, Vector vEmails, String subject, String attText, String smtpHost)
-			throws UnknownHostException, AddressException, MessagingException {
+			throws AddressException, MessagingException {
 		String host = smtpHost;
 		boolean debug = Boolean.valueOf(host).booleanValue();
 		// InetAddress remote = InetAddress.getByName(host);
@@ -288,7 +287,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 		Transport.send(msg);
 	}
 
-	public synchronized void sendTestMail() throws UnknownHostException, AddressException, MessagingException {
+	public synchronized void sendTestMail() throws AddressException, MessagingException {
 		String to = getToAddress();
 		String from = getFromAddress();
 		String subject = "Testing mail-addresses";

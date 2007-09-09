@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,14 +26,13 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 /**
  * This class is an HTTP Header encapsulator.
  * 
- * @author <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
- * @version $Revision$ last updated $Date$
  */
 public class Header extends AbstractTestElement implements Serializable {
-	private static final String HNAME = "Header.name"; // See
-														// TestElementPropertyConverter
+	
+	private static final String HNAME = "Header.name";  //$NON-NLS-1$
+	// See TestElementPropertyConverter
 
-	private static final String VALUE = "Header.value";
+	private static final String VALUE = "Header.value"; //$NON-NLS-1$
 
 	/**
 	 * Create the header.
@@ -56,10 +55,6 @@ public class Header extends AbstractTestElement implements Serializable {
 
 	public boolean expectsModification() {
 		return false;
-	}
-
-	public String getClassLabel() {
-		return "Header";
 	}
 
 	/**
@@ -94,6 +89,6 @@ public class Header extends AbstractTestElement implements Serializable {
 	 * Creates a string representation of this header.
 	 */
 	public String toString() {
-		return getName() + "\t" + getValue();
+		return getName() + "\t" + getValue(); //$NON-NLS-1$
 	}
 }

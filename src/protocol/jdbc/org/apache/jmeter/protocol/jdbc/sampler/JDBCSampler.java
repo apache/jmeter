@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,17 +18,26 @@
 
 package org.apache.jmeter.protocol.jdbc.sampler;
 
+import java.lang.reflect.Field;
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.avalon.excalibur.datasource.DataSourceComponent;
+import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.Data;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -36,21 +45,77 @@ import org.apache.log.Logger;
 /**
  * A sampler which understands JDBC database requests.
  * 
- * @author Original author unknown
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Revision$
  */
 public class JDBCSampler extends AbstractSampler implements TestBean {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String QUERY = "query";
-	public static final String SELECT = "Select Statement";
+	// This value is used for both the connection (perConnCache) and statement (preparedStatementMap) caches.
+	// TODO - do they have to be the same size?
+	private static final int MAX_ENTRIES = 
+		JMeterUtils.getPropDefault("jdbcsampler.cachesize",200); // $NON-NLS-1$
 
-	public String query = "";
+	// String used to indicate a null value
+	private static final String NULL_MARKER = 
+		JMeterUtils.getPropDefault("jdbcsampler.nullmarker","]NULL["); // $NON-NLS-1$
 
-	public String dataSource = "";
+	private static final Map mapJdbcNameToInt;
 
-	public String queryType = SELECT;
+    static {
+        // based on e291. Getting the Name of a JDBC Type from javaalmanac.com
+        // http://javaalmanac.com/egs/java.sql/JdbcInt2Str.html
+		mapJdbcNameToInt = new HashMap();
+		
+		//Get all fields in java.sql.Types and store the corresponding int values
+		Field[] fields = java.sql.Types.class.getFields();
+        for (int i=0; i<fields.length; i++) {
+            try {
+                String name = fields[i].getName();                
+                Integer value = (Integer)fields[i].get(null);
+                mapJdbcNameToInt.put(name.toLowerCase(),value);
+            } catch (IllegalAccessException e) {
+            	throw new RuntimeException(e); // should not happen
+            }
+        }    		
+    }
+
+    // Query types (used to communicate with GUI)
+    // N.B. These must not be changed, as they are used in the JMX files
+	static final String SELECT   = "Select Statement"; // $NON-NLS-1$
+	static final String UPDATE   = "Update Statement"; // $NON-NLS-1$
+	static final String CALLABLE = "Callable Statement"; // $NON-NLS-1$
+	static final String PREPARED_SELECT = "Prepared Select Statement"; // $NON-NLS-1$
+	static final String PREPARED_UPDATE = "Prepared Update Statement"; // $NON-NLS-1$
+	static final String COMMIT   = "Commit"; // $NON-NLS-1$
+	static final String ROLLBACK = "Rollback"; // $NON-NLS-1$
+	static final String AUTOCOMMIT_FALSE = "AutoCommit(false)"; // $NON-NLS-1$
+	static final String AUTOCOMMIT_TRUE  = "AutoCommit(true)"; // $NON-NLS-1$
+
+	private String query = ""; // $NON-NLS-1$
+
+	private String dataSource = ""; // $NON-NLS-1$
+
+	private String queryType = SELECT;
+	private String queryArguments = ""; // $NON-NLS-1$
+	private String queryArgumentsTypes = ""; // $NON-NLS-1$
+	
+	/**
+	 *  Cache of PreparedStatements stored in a per-connection basis. Each entry of this 
+	 *  cache is another Map mapping the statement string to the actual PreparedStatement.
+	 *  The cache has a fixed size of MAX_ENTRIES and it will throw aways all PreparedStatements 
+	 *  from the least recently used connections.  
+	 */
+	private static Map perConnCache = new LinkedHashMap(MAX_ENTRIES){
+		protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
+			if (size() > MAX_ENTRIES) {
+				final Object value = arg0.getValue();
+				if (value instanceof Map) {
+					closeAllStatements(((Map)value).values());
+				}
+				return true;
+			}
+			return false;
+		}
+	};
 
 	/**
 	 * Creates a JDBCSampler.
@@ -60,9 +125,17 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 	public SampleResult sample(Entry e) {
 		log.debug("sampling jdbc");
-		SampleResult res = new SampleResult();
+		
+        SampleResult res = new SampleResult();
 		res.setSampleLabel(getName());
 		res.setSamplerData(toString());
+        res.setDataType(SampleResult.TEXT);
+        // Bug 31184 - make sure encoding is specified
+        res.setDataEncoding(System.getProperty("file.encoding")); // $NON-NLS-1$
+
+        // Assume we will be successful
+        res.setSuccessful(true);
+
 
 		res.sampleStart();
 		DataSourceComponent pool = (DataSourceComponent) getThreadContext().getVariables().getObject(getDataSource());
@@ -78,58 +151,192 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			// TODO: Consider creating a sub-result with the time to get the
 			// connection.
 			conn = pool.getConnection();
-			stmt = conn.createStatement();
 
-			// Based on query return value, get results
-			if (SELECT.equals(getQueryType())) {
+            // Based on query return value, get results
+            String _queryType = getQueryType();
+            if (SELECT.equals(_queryType)) {
+            	stmt = conn.createStatement();
 				ResultSet rs = null;
 				try {
 					rs = stmt.executeQuery(getQuery());
 					Data data = getDataFromResultSet(rs);
 					res.setResponseData(data.toString().getBytes());
 				} finally {
-					if (rs != null) {
-						try {
-							rs.close();
-						} catch (SQLException exc) {
-							log.warn("Error closing ResultSet", exc);
-						}
-					}
+					close(rs);
 				}
-			} else {
-				stmt.execute(getQuery());
+            } else if (CALLABLE.equals(_queryType)) {
+            	CallableStatement cstmt = getCallableStatement(conn);
+            	setArguments(cstmt);
+            	// A CallableStatement can return more than 1 ResultSets
+            	// plus a number of update counts. 
+            	boolean hasResultSet = cstmt.execute();
+            	String sb = resultSetsToString(cstmt,hasResultSet);
+            	res.setResponseData(sb.toString().getBytes());       	
+            } else if (UPDATE.equals(_queryType)) {
+            	stmt = conn.createStatement();
+				stmt.executeUpdate(getQuery());
 				int updateCount = stmt.getUpdateCount();
 				String results = updateCount + " updates";
 				res.setResponseData(results.getBytes());
+            } else if (PREPARED_SELECT.equals(_queryType)) {
+            	PreparedStatement pstmt = getPreparedStatement(conn);
+            	setArguments(pstmt);
+            	pstmt.executeQuery();
+            	String sb = resultSetsToString(pstmt,true);
+            	res.setResponseData(sb.toString().getBytes());
+            } else if (PREPARED_UPDATE.equals(_queryType)) {
+            	PreparedStatement pstmt = getPreparedStatement(conn);
+            	setArguments(pstmt);
+            	pstmt.executeUpdate();
+				String sb = resultSetsToString(pstmt,false);
+            	res.setResponseData(sb.toString().getBytes());
+            } else if (ROLLBACK.equals(_queryType)){
+            	conn.rollback();
+            	res.setResponseData(ROLLBACK.getBytes());
+            } else if (COMMIT.equals(_queryType)){
+            	conn.commit();
+            	res.setResponseData(COMMIT.getBytes());
+            } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
+            	conn.setAutoCommit(false);
+            	res.setResponseData(AUTOCOMMIT_FALSE.getBytes());
+            } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
+            	conn.setAutoCommit(true);
+            	res.setResponseData(AUTOCOMMIT_TRUE.getBytes());
+            } else { // User provided incorrect query type
+                String results="Unexpected query type: "+_queryType;
+                res.setResponseMessage(results);
+                res.setSuccessful(false);
 			}
 
-			res.setDataType(SampleResult.TEXT);
-			// Bug 31184 - make sure encoding is specified
-			res.setDataEncoding(System.getProperty("file.encoding"));
-			res.setSuccessful(true);
 		} catch (SQLException ex) {
-			log.error("Error in JDBC sampling", ex);
+			final String errCode = Integer.toString(ex.getErrorCode());
+			log.error("SQLstate: "+ex.getSQLState()+
+					" SQLcode: "+errCode+
+					" Message: "+ex.getMessage(),
+					ex);
 			res.setResponseMessage(ex.toString());
+			res.setResponseCode(errCode);
 			res.setSuccessful(false);
 		} finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException ex) {
-					log.warn("Error closing statement", ex);
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException ex) {
-					log.warn("Error closing connection", ex);
-				}
-			}
+			close(stmt);
+			close(conn);
 		}
 
 		res.sampleEnd();
 		return res;
+	}
+
+	private String resultSetsToString(PreparedStatement pstmt, boolean result) throws SQLException {
+		StringBuffer sb = new StringBuffer();
+		sb.append("\n"); // $NON-NLS-1$
+		int updateCount = 0;
+		if (!result) {
+			updateCount = pstmt.getUpdateCount();
+		}
+		do {
+			if (result) {
+				ResultSet rs = null;
+				try {
+					rs = pstmt.getResultSet();
+					Data data = getDataFromResultSet(rs);
+					sb.append(data.toString()).append("\n"); // $NON-NLS-1$
+				} finally {
+					close(rs);
+				}
+			} else {
+				sb.append(updateCount).append(" updates.\n");
+			}
+			result = pstmt.getMoreResults();
+			if (!result) {
+				updateCount = pstmt.getUpdateCount();
+			}
+		} while (result || (updateCount != -1));
+		return sb.toString();
+	}
+
+
+	private void setArguments(PreparedStatement pstmt) throws SQLException {
+		if (getQueryArguments().trim().length()==0) {
+			return;
+		}
+		String[] arguments = getQueryArguments().split(","); // $NON-NLS-1$
+		String[] argumentsTypes = getQueryArgumentsTypes().split(","); // $NON-NLS-1$
+		if (arguments.length != argumentsTypes.length) {
+			throw new SQLException("number of arguments ("+arguments.length+") and number of types ("+argumentsTypes.length+") are not equal");
+		}
+		for (int i = 0; i < arguments.length; i++) {
+			String argument = arguments[i];
+			String argumentType = argumentsTypes[i];
+		    int targetSqlType = getJdbcType(argumentType);
+		    try {
+		    	if (argument.equals(NULL_MARKER)){
+		    		pstmt.setNull(i+1, targetSqlType);
+		    	} else {
+		    		pstmt.setObject(i+1, argument, targetSqlType);
+		    	}
+			} catch (NullPointerException e) { // thrown by Derby JDBC (at least) if there are no "?" markers in statement
+				throw new SQLException("Could not set argument no: "+(i+1)+" - missing parameter marker?");
+			}
+		}
+	}
+    
+    
+    private static int getJdbcType(String jdbcType) throws SQLException {
+    	Integer entry = (Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase());
+    	if (entry == null) {
+    		throw new SQLException("Invalid data type: "+jdbcType);
+    	}
+		return (entry).intValue();
+    }
+	
+
+	private CallableStatement getCallableStatement(Connection conn) throws SQLException {
+		return (CallableStatement) getPreparedStatement(conn,true);
+		
+	}
+	private PreparedStatement getPreparedStatement(Connection conn) throws SQLException {
+		return getPreparedStatement(conn,false);
+	}
+
+	private PreparedStatement getPreparedStatement(Connection conn, boolean callable) throws SQLException {
+		Map preparedStatementMap = (Map) perConnCache.get(conn); 
+		if (null == preparedStatementMap ) {
+		    // MRU PreparedStatements cache. 
+			preparedStatementMap = new LinkedHashMap(MAX_ENTRIES) {
+				protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
+					final int theSize = size();
+					if (theSize > MAX_ENTRIES) {
+						Object value = arg0.getValue();
+						if (value instanceof PreparedStatement) {
+							PreparedStatement pstmt = (PreparedStatement) value;
+							close(pstmt);
+						}
+						return true;
+					}
+					return false;
+				}
+			};
+			perConnCache.put(conn, preparedStatementMap);
+		}
+		PreparedStatement pstmt = (PreparedStatement) preparedStatementMap.get(getQuery());
+		if (null == pstmt) {
+			if (callable) {
+				pstmt = conn.prepareCall(getQuery());
+			} else {
+				pstmt = conn.prepareStatement(getQuery());
+			}
+			preparedStatementMap.put(getQuery(), pstmt);
+		}
+		pstmt.clearParameters();
+		return pstmt;
+	}
+
+	private static void closeAllStatements(Collection collection) {
+		Iterator iterator = collection.iterator();
+		while (iterator.hasNext()) {
+			PreparedStatement pstmt = (PreparedStatement) iterator.next();
+			close(pstmt);
+		}		
 	}
 
 	/**
@@ -164,12 +371,41 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 		return data;
 	}
 
+	public static void close(Connection c) {
+		try {
+			if (c != null) c.close();
+		} catch (SQLException e) {
+			log.warn("Error closing Connection", e);
+		}
+	}
+	
+	public static void close(Statement s) {
+		try {
+			if (s != null) s.close();
+		} catch (SQLException e) {
+			log.warn("Error closing Statement " + s.toString(), e);
+		}
+	}
+
+	public static void close(ResultSet rs) {
+		try {
+			if (rs != null) rs.close();
+		} catch (SQLException e) {
+			log.warn("Error closing ResultSet", e);
+		}
+	}
+
 	public String getQuery() {
 		return query;
 	}
 
 	public String toString() {
-		return getQuery();
+        StringBuffer sb = new StringBuffer(80);
+        sb.append("["); // $NON-NLS-1$
+        sb.append(getQueryType());
+        sb.append("] "); // $NON-NLS-1$
+        sb.append(getQuery());
+		return sb.toString();
 	}
 
 	/**
@@ -207,5 +443,21 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	 */
 	public void setQueryType(String queryType) {
 		this.queryType = queryType;
+	}
+
+	public String getQueryArguments() {
+		return queryArguments;
+	}
+
+	public void setQueryArguments(String queryArguments) {
+		this.queryArguments = queryArguments;
+	}
+
+	public String getQueryArgumentsTypes() {
+		return queryArgumentsTypes;
+	}
+
+	public void setQueryArgumentsTypes(String queryArgumentsType) {
+		this.queryArgumentsTypes = queryArgumentsType;
 	}
 }

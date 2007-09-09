@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,7 +23,6 @@
  * one calculated from the response OR when the expected hex is left empty.
  * 
  * @author	<a href="mailto:jh@domek.be">Jorg Heymans</a>
- * @version $Revision$ last updated $Date$
  */
 package org.apache.jmeter.assertions;
 
@@ -31,8 +30,6 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
-
-import junit.framework.TestCase;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -53,11 +50,11 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 	 */
 	public AssertionResult getResult(SampleResult response) {
 
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
 		byte[] resultData = response.getResponseData();
 
-		if (resultData == null) {
+		if (resultData.length == 0) {
 			result.setError(false);
 			result.setFailure(true);
 			result.setFailureMessage("Response was null");
@@ -80,7 +77,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 			result.setFailure(true);
 
 			Object[] arguments = { md5Result, getAllowedMD5Hex() };
-			String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments);
+			String message = MessageFormat.format(JMeterUtils.getResString("md5hex_assertion_failure"), arguments); // $NON-NLS-1$
 			result.setFailureMessage(message);
 
 		}
@@ -96,7 +93,8 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 		return getPropertyAsString(MD5HexAssertion.MD5HEX_KEY);
 	}
 
-	private static String baToHex(byte ba[]) {
+	// package protected so can be accessed by test class
+	static String baToHex(byte ba[]) {
 		StringBuffer sb = new StringBuffer(32);
 		for (int i = 0; i < ba.length; i++) {
 			int j = ba[i] & 0xff;
@@ -107,7 +105,8 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 		return sb.toString();
 	}
 
-	private static String baMD5Hex(byte ba[]) {
+	// package protected so can be accessed by test class
+	static String baMD5Hex(byte ba[]) {
 		byte[] md5Result = {};
 
 		try {
@@ -118,17 +117,5 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 			log.error("", e);
 		}
 		return baToHex(md5Result);
-	}
-
-	public static class Test extends TestCase {
-		public void testHex() throws Exception {
-			assertEquals("00010203", baToHex(new byte[] { 0, 1, 2, 3 }));
-			assertEquals("03020100", baToHex(new byte[] { 3, 2, 1, 0 }));
-			assertEquals("0f807fff", baToHex(new byte[] { 0xF, -128, 127, -1 }));
-		}
-
-		public void testMD5() throws Exception {
-			assertEquals("D41D8CD98F00B204E9800998ECF8427E", baMD5Hex(new byte[] {}).toUpperCase());
-		}
 	}
 }

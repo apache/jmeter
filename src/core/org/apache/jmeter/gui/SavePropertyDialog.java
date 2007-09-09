@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -23,7 +24,6 @@ package org.apache.jmeter.gui;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
-// import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
@@ -42,17 +42,31 @@ import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
 /**
+ * Generates Configure pop-up dialogue for Listeners from all methods in SampleSaveConfiguration
+ * with the signature "boolean saveXXX()". 
+ * There must be a corresponding "void setXXX(boolean)" method, and a property save_XXX which is
+ * used to name the field on the dialogue.
+ * 
  * @author mstover
  */
 public class SavePropertyDialog extends JDialog implements ActionListener {
-	protected static transient Logger log = LoggingManager.getLoggerForClass();
 
-	static Map functors = new HashMap();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static final long serialVersionUID = 1;
+	private static Map functors = new HashMap();
 
-	SampleSaveConfiguration saveConfig;
+	private static final long serialVersionUID = 1;
 
+    private static final String NAME_SAVE_PFX   = "save";  // $NON-NLS-1$ i.e. boolean saveXXX()
+    private static final String NAME_SET_PREFIX = "set";   // $NON-NLS-1$ i.e. void setXXX(boolean)
+    private static final String RESOURCE_PREFIX = "save_"; // $NON-NLS-1$ e.g. save_XXX property
+    private static final int    NAME_SAVE_PFX_LEN = NAME_SAVE_PFX.length();
+
+    private SampleSaveConfiguration saveConfig;
+
+    public SavePropertyDialog(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
 	/**
 	 * @param owner
 	 * @param title
@@ -64,15 +78,16 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 	{
 		super(owner, title, modal);
 		saveConfig = s;
-		log.info("SampleSaveConfiguration = " + saveConfig);
+		log.debug("SampleSaveConfiguration = " + saveConfig);// $NON-NLS-1$
 		dialogInit();
 	}
 
 	private int countMethods(Method[] m) {
 		int count = 0;
 		for (int i = 0; i < m.length; i++) {
-			if (m[i].getName().startsWith("save"))
+			if (m[i].getName().startsWith(NAME_SAVE_PFX)) {
 				count++;
+            }
 		}
 		return count;
 	}
@@ -88,20 +103,22 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 			this.getContentPane().setLayout(new BorderLayout());
 			Method[] methods = SampleSaveConfiguration.class.getMethods();
 			int x = (countMethods(methods) / 3) + 1;
-			log.info("grid panel is " + 3 + " by " + x);
+			log.debug("grid panel is " + 3 + " by " + x);
 			JPanel checkPanel = new JPanel(new GridLayout(x, 3));
 			for (int i = 0; i < methods.length; i++) {
 				String name = methods[i].getName();
-				if (name.startsWith("save") && methods[i].getParameterTypes().length == 0) {
+				if (name.startsWith(NAME_SAVE_PFX) && methods[i].getParameterTypes().length == 0) {
 					try {
-						name = name.substring(4);
-						JCheckBox check = new JCheckBox(JMeterUtils.getResString("save " + name), ((Boolean) methods[i]
-								.invoke(saveConfig, new Object[0])).booleanValue());
+						name = name.substring(NAME_SAVE_PFX_LEN);
+						JCheckBox check = new JCheckBox(
+                                JMeterUtils.getResString(RESOURCE_PREFIX + name)// $NON-NLS-1$
+                                ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
 						checkPanel.add(check, BorderLayout.NORTH);
 						check.addActionListener(this);
-						check.setActionCommand("set" + name);
-						if (!functors.containsKey(check.getActionCommand())) {
-							functors.put(check.getActionCommand(), new Functor(check.getActionCommand()));
+                        String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$
+						check.setActionCommand(actionCommand);
+                        if (!functors.containsKey(actionCommand)) {
+							functors.put(actionCommand, new Functor(actionCommand));
 						}
 					} catch (Exception e) {
 						log.warn("Problem creating save config dialog", e);
@@ -109,7 +126,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 				}
 			}
 			getContentPane().add(checkPanel, BorderLayout.NORTH);
-			JButton exit = new JButton(JMeterUtils.getResString("done"));
+			JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
 			this.getContentPane().add(exit, BorderLayout.SOUTH);
 			exit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -127,7 +144,8 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		Functor f = (Functor) functors.get(action);
-		f.invoke(saveConfig, new Object[] { new Boolean(((JCheckBox) e.getSource()).isSelected()) });
+		f.invoke(saveConfig, new Object[] {
+                Boolean.valueOf(((JCheckBox) e.getSource()).isSelected()) });
 	}
 
 	/**

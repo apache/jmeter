@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -47,11 +47,10 @@ import org.apache.log.Logger;
  * The <code>JavaConfigGui</code> class provides the user interface for the
  * {@link JavaConfig} object.
  * 
- * @version $Revision$ on $Date$
  */
 public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 	/** Logging */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** The name of the classnameCombo JComboBox */
 	private static final String CLASSNAMECOMBO = "classnamecombo";
@@ -91,7 +90,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 	}
 
 	public String getLabelResource() {
-		return "java_request_defaults";
+		return "java_request_defaults"; // $NON-NLS-1$
 	}
 
 	/**
@@ -135,7 +134,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 			log.debug("Exception getting interfaces.", e);
 		}
 
-		JLabel label = new JLabel(JMeterUtils.getResString("protocol_java_classname"));
+		JLabel label = new JLabel(JMeterUtils.getResString("protocol_java_classname")); // $NON-NLS-1$
 
 		classnameCombo = new JComboBox(possibleClasses.toArray());
 		classnameCombo.addActionListener(this);
@@ -213,7 +212,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 	 * @return a panel containing the relevant components
 	 */
 	private JPanel createParameterPanel() {
-		argsPanel = new ArgumentsPanel(JMeterUtils.getResString("paramtable"));
+		argsPanel = new ArgumentsPanel(JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
 		return argsPanel;
 	}
 

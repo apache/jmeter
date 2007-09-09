@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,15 +22,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
-import org.apache.jmeter.samplers.Clearable;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.monitor.model.ObjectFactory;
 import org.apache.jmeter.monitor.model.Status;
 import org.apache.jmeter.monitor.util.Stats;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
+import org.apache.jmeter.samplers.Clearable;
+import org.apache.jmeter.samplers.SampleResult;
 
 public class MonitorAccumModel implements Clearable, Serializable {
 
@@ -149,24 +149,24 @@ public class MonitorAccumModel implements Clearable, Serializable {
 		URL surl = null;
 		if (sample instanceof HTTPSampleResult) {
 			surl = ((HTTPSampleResult) sample).getURL();
-		}
-		// String rescontent = new String(sample.getResponseData());
-		if (sample.getResponseCode().equals("200") && ((HTTPSampleResult) sample).isMonitor()) {
-			ObjectFactory of = ObjectFactory.getInstance();
-			Status st = of.parseBytes(sample.getResponseData());
-			if (st != null) {
-				MonitorStats stat = new MonitorStats(Stats.calculateStatus(st), Stats.calculateLoad(st), 0, Stats
-						.calculateMemoryLoad(st), Stats.calculateThreadLoad(st), surl.getHost(), String.valueOf(surl
-						.getPort()), surl.getProtocol(), System.currentTimeMillis());
-				MonitorModel mo = new MonitorModel(stat);
-				this.addSample(mo);
-				notifyListeners(mo);
-			} else {
-				noResponse(surl);
-			}
-		} else if (((HTTPSampleResult) sample).isMonitor()) {
-			noResponse(surl);
-		}
+    		// String rescontent = new String(sample.getResponseData());
+    		if (sample.isResponseCodeOK() && ((HTTPSampleResult) sample).isMonitor()) {
+    			ObjectFactory of = ObjectFactory.getInstance();
+    			Status st = of.parseBytes(sample.getResponseData());
+    			if (st != null) {
+    				MonitorStats stat = new MonitorStats(Stats.calculateStatus(st), Stats.calculateLoad(st), 0, Stats
+    						.calculateMemoryLoad(st), Stats.calculateThreadLoad(st), surl.getHost(), String.valueOf(surl
+    						.getPort()), surl.getProtocol(), System.currentTimeMillis());
+    				MonitorModel mo = new MonitorModel(stat);
+    				this.addSample(mo);
+    				notifyListeners(mo);
+    			} else {
+    				noResponse(surl);
+    			}
+    		} else if (((HTTPSampleResult) sample).isMonitor()) {
+    			noResponse(surl);
+    		}
+        }
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
 	 * clear listeners, subsequent "run" will not notify the gui of data
 	 * changes.
 	 */
-	public void clear() {
+	public void clearData() {
 		Iterator itr = this.MAP.keySet().iterator();
 		while (itr.hasNext()) {
 			List lt = (List) this.MAP.get(itr.next());

@@ -1,9 +1,11 @@
+//$Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,8 +21,6 @@ package org.apache.jmeter.report.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.Writer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -39,6 +39,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -110,16 +111,14 @@ public class ReportSave implements Command {
 			convertSubTree(subTree);
 		} catch (Exception err) {
 		}
-		Writer writer = null;
 		FileOutputStream ostream = null;
 		try {
+			ostream = new FileOutputStream(updateFile);
 			if (SaveService.isSaveTestPlanFormat20()) {
-				ostream = new FileOutputStream(updateFile);
 				OldSaveService.saveSubTree(subTree, ostream);
                 log.info("saveSubTree");
 			} else {
-				writer = new FileWriter(updateFile);
-				SaveService.saveTree(subTree, writer);
+				SaveService.saveTree(subTree, ostream);
                 log.info("saveTree");
 			}
 		} catch (Throwable ex) {
@@ -127,8 +126,7 @@ public class ReportSave implements Command {
 			log.error("", ex);
 			throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile);
 		} finally {
-			closeWriter(writer);
-			closeStream(ostream);
+            JOrphanUtils.closeQuietly(ostream);
 		}
 	}
 
@@ -141,25 +139,4 @@ public class ReportSave implements Command {
 			tree.replace(item, testElement);
 		}
 	}
-
-	private void closeWriter(Writer writer) {
-		if (writer != null) {
-			try {
-				writer.close();
-			} catch (Exception ex) {
-				log.error("", ex);
-			}
-		}
-	}
-
-	private void closeStream(FileOutputStream fos) {
-		if (fos != null) {
-			try {
-				fos.close();
-			} catch (Exception ex) {
-				log.error("", ex);
-			}
-		}
-	}
-
 }

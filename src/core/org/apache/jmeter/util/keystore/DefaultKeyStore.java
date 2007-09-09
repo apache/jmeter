@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,7 +29,6 @@ import java.util.Enumeration;
  * Use this Keystore to wrap the normal KeyStore implementation.
  * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public class DefaultKeyStore extends JmeterKeyStore {
 	private X509Certificate[] certChain;
@@ -46,34 +45,37 @@ public class DefaultKeyStore extends JmeterKeyStore {
 
 	public void load(InputStream is, String pword) throws Exception {
 		store.load(is, pword.toCharArray());
-		PrivateKey key = null;
-		X509Certificate[] certChain = null;
+		PrivateKey _key = null;
+		X509Certificate[] _certChain = null;
 
-		Enumeration aliases = store.aliases();
-		while (aliases.hasMoreElements()) {
-			this.alias = (String) aliases.nextElement();
-			if (store.isKeyEntry(alias)) {
-				key = (PrivateKey) store.getKey(alias, pword.toCharArray());
-				Certificate[] chain = store.getCertificateChain(alias);
-				certChain = new X509Certificate[chain.length];
-
-				for (int i = 0; i < chain.length; i++) {
-					certChain[i] = (X509Certificate) chain[i];
+		if (null != is){ // No point checking an empty keystore
+			
+			Enumeration aliases = store.aliases();
+			while (aliases.hasMoreElements()) {
+				this.alias = (String) aliases.nextElement();
+				if (store.isKeyEntry(alias)) {
+					_key = (PrivateKey) store.getKey(alias, pword.toCharArray());
+					Certificate[] chain = store.getCertificateChain(alias);
+					_certChain = new X509Certificate[chain.length];
+	
+					for (int i = 0; i < chain.length; i++) {
+						_certChain[i] = (X509Certificate) chain[i];
+					}
+	
+					break;
 				}
+			}
 
-				break;
+			if (null == _key) {
+				throw new Exception("No key found");
+			}
+			if (null == _certChain) {
+				throw new Exception("No certificate chain found");
 			}
 		}
-
-		if (null == key) {
-			throw new Exception("No key found");
-		}
-		if (null == certChain) {
-			throw new Exception("No certificate chain found");
-		}
-
-		this.key = key;
-		this.certChain = certChain;
+		
+		this.key = _key;
+		this.certChain = _certChain;
 	}
 
 	public final X509Certificate[] getCertificateChain() {

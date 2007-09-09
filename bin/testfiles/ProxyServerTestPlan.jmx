@@ -1,61 +1,42 @@
-<jmeterTestPlan version="1.1" properties="1.7">
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="1.8">
   <hashTree>
-    <TestPlan>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <collectionProp name="TestPlan.thread_groups"/>
-      <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
-        <stringProp name="TestElement.name">User Defined Variables</stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
-      <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
-      <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
-      <stringProp name="TestElement.name">Test Plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestElement.enabled">true</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <stringProp name="LoopController.loops">1</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Thread Group</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
       </ThreadGroup>
       <hashTree>
-        <org.apache.jmeter.protocol.http.proxy.ProxyControl>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.proxy.gui.ProxyControlGui</stringProp>
+        <ProxyControl guiclass="ProxyControlGui" testclass="ProxyControl" testname="HTTP Proxy Server" enabled="true">
           <intProp name="ProxyControlGui.grouping_mode">0</intProp>
           <boolProp name="ProxyControlGui.capture_http_headers">true</boolProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.proxy.ProxyControl</stringProp>
-          <stringProp name="TestElement.name">HTTP Proxy Server</stringProp>
           <boolProp name="ProxyControlGui.use_keepalive">true</boolProp>
           <collectionProp name="ProxyControlGui.include_list">
             <stringProp name="58624487">&lt;html</stringProp>
           </collectionProp>
           <collectionProp name="ProxyControlGui.exclude_list"/>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <stringProp name="ProxyControlGui.port">8080</stringProp>
           <boolProp name="ProxyControlGui.add_assertion">false</boolProp>
-        </org.apache.jmeter.protocol.http.proxy.ProxyControl>
+        </ProxyControl>
         <hashTree/>
       </hashTree>
     </hashTree>

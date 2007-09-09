@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -93,7 +93,6 @@ class FunctionParser {
 	Object makeFunction(StringReader reader) throws InvalidVariableException {
 		char[] current = new char[1];
 		char previous = ' ';
-		;
 		StringBuffer buffer = new StringBuffer();
 		Object function;
 		try {
@@ -106,20 +105,24 @@ class FunctionParser {
 					buffer.append(current[0]);
 					continue;
 				} else if (current[0] == '(' && previous != ' ') {
-					function = CompoundVariable.getNamedFunction(buffer.toString());
+                    String funcName = buffer.toString();
+					function = CompoundVariable.getNamedFunction(funcName);
 					buffer.setLength(0);
 					if (function instanceof Function) {
 						((Function) function).setParameters(parseParams(reader));
 						if (reader.read(current) == 0 || current[0] != '}') {
-							throw new InvalidVariableException();
+                            reader.reset();// set to start of string
+                            char []cb = new char[100];
+                            reader.read(cb);// return deliberately ignored
+							throw new InvalidVariableException
+                            ("Expected } after "+funcName+" function call in "+new String(cb));
 						}
 						if (function instanceof TestListener) {
 							StandardJMeterEngine.register((TestListener) function);
 						}
 						return function;
-					} else {
-						continue;
 					}
+					continue;
 				} else if (current[0] == '}') {
 					function = CompoundVariable.getNamedFunction(buffer.toString());
 					buffer.setLength(0);

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,17 +36,11 @@ import org.apache.jmeter.testelement.WorkBench;
  * @version $Revision$
  */
 public class DragNDrop extends AbstractAction {
-	public final static String ADD = "drag_n_drop.add";//$NON-NLS-1$
-
-	public final static String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
-
-	public final static String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
-
 	private static Set commands = new HashSet();
 	static {
-		commands.add(ADD);
-		commands.add(INSERT_BEFORE);
-		commands.add(INSERT_AFTER);
+		commands.add(ActionNames.DRAG_ADD);
+		commands.add(ActionNames.INSERT_BEFORE);
+		commands.add(ActionNames.INSERT_AFTER);
 	}
 
 	/**
@@ -65,19 +59,19 @@ public class DragNDrop extends AbstractAction {
 		}
 		// System.out.println(action+" "+te.getClass().getName());
 
-		if (ADD.equals(action) && canAddTo(currentNode)) {
+		if (ActionNames.DRAG_ADD.equals(action) && canAddTo(currentNode)) {
 			removeNodesFromParents(draggedNodes);
 			for (int i = 0; i < draggedNodes.length; i++) {
 				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
 						currentNode.getChildCount());
 			}
-		} else if (INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
+		} else if (ActionNames.INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
 			removeNodesFromParents(draggedNodes);
 			for (int i = 0; i < draggedNodes.length; i++) {
 				int index = parentNode.getIndex(currentNode);
 				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
 			}
-		} else if (INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
+		} else if (ActionNames.INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
 			removeNodesFromParents(draggedNodes);
 			for (int i = 0; i < draggedNodes.length; i++) {
 				int index = parentNode.getIndex(currentNode) + 1;

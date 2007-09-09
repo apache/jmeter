@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -28,10 +28,6 @@ import javax.swing.JRadioButton;
 import org.apache.jmeter.testelement.OnErrorTestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * 
- * @version $Revision$ $Date$
- */
 public class OnErrorPanel extends JPanel {
 	// Sampler error action buttons
 	private JRadioButton continueBox;
@@ -42,20 +38,20 @@ public class OnErrorPanel extends JPanel {
 
 	private JPanel createOnErrorPanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sampler_on_error_action"))); //$NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 
-		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue"));
+		continueBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_continue")); //$NON-NLS-1$
 		group.add(continueBox);
 		continueBox.setSelected(true);
 		panel.add(continueBox);
 
-		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread"));
+		stopThrdBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_thread")); //$NON-NLS-1$
 		group.add(stopThrdBox);
 		panel.add(stopThrdBox);
 
-		stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test"));
+		stopTestBox = new JRadioButton(JMeterUtils.getResString("sampler_on_error_stop_test")); //$NON-NLS-1$
 		group.add(stopTestBox);
 		panel.add(stopTestBox);
 

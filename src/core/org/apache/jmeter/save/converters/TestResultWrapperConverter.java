@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -26,7 +27,7 @@ import java.util.Collection;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.TestResultWrapper;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -36,8 +37,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 /**
  * @author mstover
  * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public class TestResultWrapperConverter extends AbstractCollectionConverter {
 
@@ -46,15 +45,14 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$";  //$NON-NLS-1$
 	}
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public TestResultWrapperConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public TestResultWrapperConverter(Mapper arg0) {
+		super(arg0);
 	}
 
 	/*
@@ -87,9 +85,9 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		TestResultWrapper results = new TestResultWrapper();
 		Collection samples = new ArrayList();
-		String ver = reader.getAttribute("version");
+		String ver = reader.getAttribute("version");  //$NON-NLS-1$
 		if (ver == null || ver.length() == 0)
-			ver = "1.0";
+			ver = "1.0";  //$NON-NLS-1$
 		results.setVersion(ver);
 		ConversionHelp.setInVersion(ver);// Make sure decoding follows input
 											// file
@@ -101,8 +99,5 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 		}
 		results.setSampleResults(samples);
 		return results;
-	}
-
-	public static void main(String[] args) {
 	}
 }

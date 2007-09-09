@@ -178,8 +178,6 @@
               <requestHeaders>true</requestHeaders>
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
-              <delimiter>,</delimiter>
-              <printMilliseconds>true</printMilliseconds>
             </value>
             <name>saveConfig</name>
           </org.apache.jmeter.testelement.property.ObjectProperty>

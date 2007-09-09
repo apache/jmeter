@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,7 +39,6 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListener {
 
@@ -49,9 +48,10 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 
 	private JTextField mimetypeField;
 
+	// TODO these are used as names for the GUI elements - are they needed? are they NLS?
 	private static String FILENAME = "filename";
 
-	private static String BROWSE = "browse";
+	private static String BROWSE = "browse";  // $NON-NLS-1$ used as an ActionName locally
 
 	private static String PARAMNAME = "paramname";
 
@@ -88,7 +88,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 	}
 
 	public String getLabelResource() {
-		return "url_multipart_config_title";
+		return "url_multipart_config_title"; // $NON-NLS-1$
 	}
 
 	public void updateGui() {
@@ -116,10 +116,13 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 
 		// WEB SERVER PANEL
 		VerticalPanel webServerPanel = new VerticalPanel();
-		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("web_server")));
-		webServerPanel.add(getDomainPanel());
-		webServerPanel.add(getPortPanel());
+		webServerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("web_server"))); // $NON-NLS-1$
+		final JPanel domainPanel = getDomainPanel();
+		final JPanel portPanel = getPortPanel();
+		domainPanel.add(portPanel,BorderLayout.EAST);
+		webServerPanel.add(domainPanel);
+		//webServerPanel.add(getPortPanel());
 
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
@@ -129,8 +132,8 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 		// WEB REQUEST PANEL
 		JPanel webRequestPanel = new JPanel();
 		webRequestPanel.setLayout(new BorderLayout());
-		webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("web_request")));
+		webRequestPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("web_request"))); // $NON-NLS-1$
 
 		webRequestPanel.add(northPanel, BorderLayout.NORTH);
 		webRequestPanel.add(getParameterPanel(), BorderLayout.CENTER);
@@ -142,8 +145,8 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 
 	protected JPanel getFilePanel() {
 		JPanel filePanel = new VerticalPanel();
-		filePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("send_file")));
+		filePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+				JMeterUtils.getResString("send_file"))); // $NON-NLS-1$
 
 		filePanel.add(createFilenamePanel());
 		filePanel.add(createFileParamNamePanel());
@@ -156,7 +159,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 		mimetypeField = new JTextField(15);
 		mimetypeField.setName(MIMETYPE);
 
-		JLabel mimetypeLabel = new JLabel(JMeterUtils.getResString("send_file_mime_label"));
+		JLabel mimetypeLabel = new JLabel(JMeterUtils.getResString("send_file_mime_label")); // $NON-NLS-1$
 		mimetypeLabel.setLabelFor(mimetypeField);
 		JPanel mimePanel = new JPanel(new BorderLayout(5, 0));
 		mimePanel.add(mimetypeLabel, BorderLayout.WEST);
@@ -168,7 +171,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 		paramNameField = new JTextField(15);
 		paramNameField.setName(PARAMNAME);
 
-		JLabel paramNameLabel = new JLabel(JMeterUtils.getResString("send_file_param_name_label"));
+		JLabel paramNameLabel = new JLabel(JMeterUtils.getResString("send_file_param_name_label")); // $NON-NLS-1$
 		paramNameLabel.setLabelFor(paramNameField);
 
 		JPanel paramNamePanel = new JPanel(new BorderLayout(5, 0));
@@ -181,10 +184,10 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 		filenameField = new JTextField(15);
 		filenameField.setName(FILENAME);
 
-		JLabel filenameLabel = new JLabel(JMeterUtils.getResString("send_file_filename_label"));
+		JLabel filenameLabel = new JLabel(JMeterUtils.getResString("send_file_filename_label")); // $NON-NLS-1$
 		filenameLabel.setLabelFor(filenameField);
 
-		JButton browseFileButton = new JButton(JMeterUtils.getResString("send_file_browse"));
+		JButton browseFileButton = new JButton(JMeterUtils.getResString("send_file_browse")); // $NON-NLS-1$
 		browseFileButton.setActionCommand(BROWSE);
 		browseFileButton.addActionListener(this);
 
@@ -203,8 +206,8 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 	public void clear() {
 		// TODO Auto-generated method stub
 		super.clear();
-		filenameField.setText("");
-		mimetypeField.setText("");
-		paramNameField.setText("");
+		filenameField.setText(""); // $NON-NLS-1$
+		mimetypeField.setText(""); // $NON-NLS-1$
+		paramNameField.setText(""); // $NON-NLS-1$
 	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,15 +22,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
+// For JUnit tests, @see TestTCLogParser
 
 /**
  * Description:<br>
@@ -100,6 +102,11 @@ public class TCLogParser implements LogParser {
 	 */
 	protected Filter FILTER = null;
 
+    /**
+     * by default, we probably should decode the parameter values
+     */
+    protected boolean decode = true;
+    
 	// TODO downcase UPPER case variables
 
 	/**
@@ -116,6 +123,23 @@ public class TCLogParser implements LogParser {
 		setSourceFile(source);
 	}
 
+    /**
+     * by default decode is set to true. if the parameters shouldn't be
+     * decoded, call the method with false
+     * @param decodeparams
+     */
+    public void setDecodeParameterValues(boolean decodeparams) {
+        this.decode = decodeparams;
+    }
+    
+    /**
+     * decode the parameter values is to true by default
+     * @return
+     */
+    public boolean decodeParameterValue() {
+        return this.decode;
+    }
+    
 	/**
 	 * Calls this method to set whether or not to use the path in the log. We
 	 * may want to provide the ability to filter the log file later on. By
@@ -465,7 +489,15 @@ public class TCLogParser implements LogParser {
 		}
 		if (value == null) {
 			value = "";
-		}
+		} else {
+            if (decode) {
+                try {
+                    value = URLDecoder.decode(value,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    log.warn(e.getMessage());
+                }
+            }
+        }
 		return new NVPair(name.trim(), value.trim());
 	}
 
@@ -510,38 +542,4 @@ public class TCLogParser implements LogParser {
 			// do nothing
 		}
 	}
-
-	// TODO write some more tests
-
-	// /////////////////////////// Start of Test Code //////////////////////////
-
-	public static class Test extends JMeterTestCase {
-		private static final TCLogParser tclp = new TCLogParser();
-
-		private static final String URL1 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook/ HTTP/1.1\" 200 1981";
-
-		private static final String URL2 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook?x=y HTTP/1.1\" 200 1981";
-
-		public void testConstruct() throws Exception {
-			TCLogParser tcp;
-			tcp = new TCLogParser();
-			assertNull("Should not have set the filename", tcp.FILENAME);
-
-			String file = "testfiles/access.log";
-			tcp = new TCLogParser(file);
-			assertEquals("Filename should have been saved", file, tcp.FILENAME);
-		}
-
-		public void testcleanURL() throws Exception {
-			String res = tclp.cleanURL(URL1);
-			assertEquals("/addrbook/", res);
-			assertNull(tclp.stripFile(res, new HTTPNullSampler()));
-		}
-
-		public void testcheckURL() throws Exception {
-			assertFalse("URL is not have a query", tclp.checkURL(URL1));
-			assertTrue("URL is a query", tclp.checkURL(URL2));
-		}
-	}
-
 }

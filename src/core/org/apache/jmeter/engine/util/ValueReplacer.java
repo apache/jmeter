@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.engine.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,19 +25,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
-import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -48,11 +41,11 @@ import org.apache.log.Logger;
  * @version $Revision$ updated on $Date$
  */
 public class ValueReplacer {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	CompoundVariable masterFunction = new CompoundVariable();
+	private CompoundVariable masterFunction = new CompoundVariable();
 
-	Map variables = new HashMap();
+	private Map variables = new HashMap();
 
 	public ValueReplacer() {
 	}
@@ -61,6 +54,9 @@ public class ValueReplacer {
 		setUserDefinedVariables(tp.getUserDefinedVariables());
 	}
 
+	boolean containsKey(String k){
+		return variables.containsKey(k);
+	}
 	public void setUserDefinedVariables(Map variables) {
 		this.variables = variables;
 	}
@@ -146,61 +142,5 @@ public class ValueReplacer {
 			props.add(val);
 		}
 		return props;
-	}
-
-	public static class Test extends TestCase {
-		TestPlan variables;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			variables = new TestPlan();
-			variables.addParameter("server", "jakarta.apache.org");
-			variables.addParameter("username", "jack");
-			variables.addParameter("password", "jacks_password");
-			variables.addParameter("regex", ".*");
-			JMeterVariables vars = new JMeterVariables();
-			vars.put("server", "jakarta.apache.org");
-			JMeterContextService.getContext().setVariables(vars);
-			JMeterContextService.getContext().setSamplingStarted(true);
-		}
-
-		public void testReverseReplacement() throws Exception {
-			ValueReplacer replacer = new ValueReplacer(variables);
-			assertTrue(variables.getUserDefinedVariables().containsKey("server"));
-			assertTrue(replacer.variables.containsKey("server"));
-			TestElement element = new TestPlan();
-			element.setProperty(new StringProperty("domain", "jakarta.apache.org"));
-			List args = new ArrayList();
-			args.add("username is jack");
-			args.add("jacks_password");
-			element.setProperty(new CollectionProperty("args", args));
-			replacer.reverseReplace(element);
-			assertEquals("${server}", element.getPropertyAsString("domain"));
-			args = (List) element.getProperty("args").getObjectValue();
-			assertEquals("${password}", ((JMeterProperty) args.get(1)).getStringValue());
-		}
-
-		public void testReplace() throws Exception {
-			ValueReplacer replacer = new ValueReplacer();
-			replacer.setUserDefinedVariables(variables.getUserDefinedVariables());
-			TestElement element = new ConfigTestElement();
-			element.setProperty(new StringProperty("domain", "${server}"));
-			replacer.replaceValues(element);
-			log.debug("domain property = " + element.getProperty("domain"));
-			element.setRunningVersion(true);
-			assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see junit.framework.TestCase#tearDown()
-		 */
-		protected void tearDown() throws Exception {
-			JMeterContextService.getContext().setSamplingStarted(false);
-		}
 	}
 }

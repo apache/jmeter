@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,20 +29,19 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- * @version $Revision$ last updated $Date$
- */
 public class URLRewritingModifierGui extends AbstractPreProcessorGui {
-	JLabeledTextField argumentName;
+	private JLabeledTextField argumentName;
 
-	JCheckBox pathExt;
+    private JCheckBox pathExt;
 
-	JCheckBox pathExtNoEquals;
+    private JCheckBox pathExtNoEquals;
 
-	JCheckBox pathExtNoQuestionmark;
+    private JCheckBox pathExtNoQuestionmark;
+    
+    private JCheckBox shouldCache;
 
 	public String getLabelResource() {
-		return "http_url_rewriting_modifier_title";
+		return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
 	}
 
 	public URLRewritingModifierGui() {
@@ -57,17 +56,21 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 
 		VerticalPanel mainPanel = new VerticalPanel();
 
-		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10);
+		argumentName = new JLabeledTextField(JMeterUtils.getResString("session_argument_name"), 10); // $NON-NLS-1$
 		mainPanel.add(argumentName);
 
-		pathExt = new JCheckBox(JMeterUtils.getResString("Path_Extension_choice"));
+		pathExt = new JCheckBox(JMeterUtils.getResString("path_extension_choice")); // $NON-NLS-1$
 		mainPanel.add(pathExt);
 
-		pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals"));
+		pathExtNoEquals = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_equals")); // $NON-NLS-1$
 		mainPanel.add(pathExtNoEquals);
 
-		pathExtNoQuestionmark = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_questionmark"));
+		pathExtNoQuestionmark = new JCheckBox(JMeterUtils.getResString("path_extension_dont_use_questionmark")); // $NON-NLS-1$
 		mainPanel.add(pathExtNoQuestionmark);
+
+        shouldCache = new JCheckBox(JMeterUtils.getResString("cache_session_id")); // $NON-NLS-1$
+        shouldCache.setSelected(true);
+        mainPanel.add(shouldCache);
 
 		add(mainPanel, BorderLayout.CENTER);
 	}
@@ -90,17 +93,34 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
 	 */
 	public void modifyTestElement(TestElement modifier) {
 		this.configureTestElement(modifier);
-		((URLRewritingModifier) modifier).setArgumentName(argumentName.getText());
-		((URLRewritingModifier) modifier).setPathExtension(pathExt.isSelected());
-		((URLRewritingModifier) modifier).setPathExtensionNoEquals(pathExtNoEquals.isSelected());
-		((URLRewritingModifier) modifier).setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
+		URLRewritingModifier rewritingModifier = ((URLRewritingModifier) modifier);
+        rewritingModifier.setArgumentName(argumentName.getText());
+		rewritingModifier.setPathExtension(pathExt.isSelected());
+		rewritingModifier.setPathExtensionNoEquals(pathExtNoEquals.isSelected());
+		rewritingModifier.setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
+        rewritingModifier.setShouldCache((shouldCache.isSelected()));
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        argumentName.setText(""); //$NON-NLS-1$
+        pathExt.setSelected(false);
+        pathExtNoEquals.setSelected(false);
+        pathExtNoQuestionmark.setSelected(false);
+        shouldCache.setSelected(false);
+    }    
+
 	public void configure(TestElement el) {
-		argumentName.setText(((URLRewritingModifier) el).getArgumentName());
-		pathExt.setSelected(((URLRewritingModifier) el).isPathExtension());
-		pathExtNoEquals.setSelected(((URLRewritingModifier) el).isPathExtensionNoEquals());
-		pathExtNoQuestionmark.setSelected(((URLRewritingModifier) el).isPathExtensionNoQuestionmark());
+		URLRewritingModifier rewritingModifier = ((URLRewritingModifier) el);
+        argumentName.setText(rewritingModifier.getArgumentName());
+		pathExt.setSelected(rewritingModifier.isPathExtension());
+		pathExtNoEquals.setSelected(rewritingModifier.isPathExtensionNoEquals());
+		pathExtNoQuestionmark.setSelected(rewritingModifier.isPathExtensionNoQuestionmark());
+        shouldCache.setSelected(rewritingModifier.shouldCache());
 
 		super.configure(el);
 	}

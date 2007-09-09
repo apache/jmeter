@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -45,11 +45,9 @@ import org.apache.log.Logger;
  * 
  * 
  * Created 2001/08/11
- * 
- * @version $Revision$ $Date$
  */
 public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphAccumListener, Clearable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	protected transient GraphAccumModel model;
 
@@ -70,7 +68,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 	}
 
 	public String getLabelResource() {
-		return "graph_full_results_title";
+		return "graph_full_results_title"; // $NON-NLS-1$
 	}
 
 	public void add(SampleResult res) {
@@ -123,9 +121,9 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 	/**
 	 * Clear this visualizer data.
 	 */
-	public synchronized void clear() {
-		model.clear();
-		graph.clear();
+	public synchronized void clearData() {
+		model.clearData();
+		graph.clearData();
 		log.debug("Start : clear1");
 		repaint();
 		log.debug("End : clear1");
@@ -161,7 +159,7 @@ public class GraphAccumVisualizer extends AbstractVisualizer implements ImageVis
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
 		// TITLE
-		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title"));
+		JLabel panelTitleLabel = new JLabel(JMeterUtils.getResString("graph_full_results_title")); // $NON-NLS-1$
 		Font curFont = panelTitleLabel.getFont();
 		int curFontSize = curFont.getSize();
 

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,28 +21,37 @@ package org.apache.jmeter.protocol.http.control;
 import java.io.Serializable;
 
 import org.apache.jmeter.config.ConfigElement;
+import org.apache.jmeter.protocol.http.util.Base64Encoder;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
 /**
  * This class is an Authorization encapsulator.
  * 
- * @author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
- * @version $Revision$
+ * author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
  */
 public class Authorization extends AbstractTestElement implements Serializable {
-	private static String URL = "Authorization.url";
 
-	private static String USERNAME = "Authorization.username";
+	private static String URL = "Authorization.url"; // $NON-NLS-1$
 
-	private static String PASSWORD = "Authorization.password";
+	private static String USERNAME = "Authorization.username"; // $NON-NLS-1$
+
+	private static String PASSWORD = "Authorization.password"; // $NON-NLS-1$
+
+	private static String DOMAIN = "Authorization.domain"; // $NON-NLS-1$
+
+	private static String REALM = "Authorization.realm"; // $NON-NLS-1$
+
+	private static final String TAB = "\t"; // $NON-NLS-1$
 
 	/**
 	 * create the authorization
 	 */
-	Authorization(String url, String user, String pass) {
+	Authorization(String url, String user, String pass, String domain, String realm) {
 		setURL(url);
 		setUser(user);
 		setPass(pass);
+		setDomain(domain);
+		setRealm(realm);
 	}
 
 	public boolean expectsModification() {
@@ -50,13 +59,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
 	}
 
 	public Authorization() {
-		setURL("");
-		setUser("");
-		setPass("");
-	}
-
-	public String getClassLabel() {
-		return "Authorization";
+		this("","","","","");
 	}
 
 	public void addConfigElement(ConfigElement config) {
@@ -86,7 +89,28 @@ public class Authorization extends AbstractTestElement implements Serializable {
 		setProperty(PASSWORD, pass);
 	}
 
-	public String toString() {
-		return getURL() + "\t" + getUser() + "\t" + getPass();
+	public synchronized String getDomain() {
+		return getPropertyAsString(DOMAIN);
 	}
+
+	public synchronized void setDomain(String domain) {
+		setProperty(DOMAIN, domain);
+	}
+
+	public synchronized String getRealm() {
+		return getPropertyAsString(REALM);
+	}
+
+	public synchronized void setRealm(String realm) {
+		setProperty(REALM, realm);
+	}
+
+	// Used for saving entries to a file
+	public String toString() {
+		return getURL() + TAB + getUser() + TAB + getPass() + TAB + getDomain() + TAB + getRealm();
+	}
+    
+    public String toBasicHeader(){
+        return "Basic " + Base64Encoder.encode(getUser() + ":" + getPass());
+    }
 }

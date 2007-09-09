@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,16 +20,16 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
+// @see TestWhileController for unit tests
 
 /**
  * @version $Revision$
@@ -39,9 +39,9 @@ public class WhileController extends GenericController implements Serializable {
 
 	private final static String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
-	private static boolean testMode = false; // To make testing easier
+	static boolean testMode = false; // To make testing easier
 
-	private static boolean testModeResult = false; // dummy sample result
+	static boolean testModeResult = false; // dummy sample result
 
 	public WhileController() {
 	}
@@ -98,10 +98,9 @@ public class WhileController extends GenericController implements Serializable {
 		reInitialize();
 		if (!endOfLoop(true)) {
 			return super.next();
-		} else {
-			setDone(true);
-			return null;
 		}
+		setDone(true);
+		return null;
 	}
 
 	/*
@@ -111,17 +110,16 @@ public class WhileController extends GenericController implements Serializable {
 	 * distinguish this from previous failure *inside* loop
 	 * 
 	 */
-	public Sampler doNext() {
+	public Sampler next() {
 		if (current != 0) { // in the middle of the loop
-			return super.doNext();
+			return super.next();
 		}
 		// Must be start of loop
 		if (!endOfLoop(false)) {
-			return super.doNext(); // OK to continue
-		} else {
-			reInitialize(); // Don't even start the loop
-			return null;
+			return super.next(); // OK to continue
 		}
+		reInitialize(); // Don't even start the loop
+		return null;
 	}
 
 	/**
@@ -138,180 +136,10 @@ public class WhileController extends GenericController implements Serializable {
 	 */
 	public String getCondition() {
 		String cnd;
-		cnd = getPropertyAsString(CONDITION);
+        JMeterProperty prop=getProperty(CONDITION);
+        prop.recoverRunningVersion(this);
+		cnd = prop.getStringValue();
 		log.debug("getCondition() => " + cnd);
 		return cnd;
-	}
-
-	public static class Test extends JMeterTestCase {
-		static {
-			// LoggingManager.setPriority("DEBUG","jmeter");
-			// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-		}
-
-		public Test(String name) {
-			super(name);
-		}
-
-		// Get next sample and its name
-		private String nextName(GenericController c) {
-			Sampler s = c.next();
-			if (s == null) {
-				return null;
-			} else {
-				return s.getPropertyAsString(TestElement.NAME);
-			}
-		}
-
-		// While (blank), previous sample OK - should loop until false
-		public void testBlankPrevOK() throws Exception {
-			log.info("testBlankPrevOK");
-			runtestPrevOK("");
-		}
-
-		// While (LAST), previous sample OK - should loop until false
-		public void testLastPrevOK() throws Exception {
-			log.info("testLASTPrevOK");
-			runtestPrevOK("LAST");
-		}
-
-		private static final String OTHER = "X"; // Dummy for testing
-													// functions
-
-		// While (LAST), previous sample OK - should loop until false
-		public void testOtherPrevOK() throws Exception {
-			log.info("testOtherPrevOK");
-			runtestPrevOK(OTHER);
-		}
-
-		public void runtestPrevOK(String type) throws Exception {
-			testMode = true;
-			testModeResult = true;
-			GenericController controller = new GenericController();
-			WhileController while_cont = new WhileController();
-			while_cont.setCondition(type);
-			while_cont.addTestElement(new TestSampler("one"));
-			while_cont.addTestElement(new TestSampler("two"));
-			while_cont.addTestElement(new TestSampler("three"));
-			controller.addTestElement(while_cont);
-			controller.addTestElement(new TestSampler("four"));
-			controller.initialize();
-			assertEquals("one", nextName(controller));
-			assertEquals("two", nextName(controller));
-			assertEquals("three", nextName(controller));
-			assertEquals("one", nextName(controller));
-			assertEquals("two", nextName(controller));
-			assertEquals("three", nextName(controller));
-			assertEquals("one", nextName(controller));
-			testModeResult = false;// one and two fail
-			if (type.equals(OTHER))
-				while_cont.setCondition("false");
-			assertEquals("two", nextName(controller));
-			assertEquals("three", nextName(controller));
-			testModeResult = true;// but three OK, so does not exit
-			if (type.equals(OTHER))
-				while_cont.setCondition(OTHER);
-			assertEquals("one", nextName(controller));
-			assertEquals("two", nextName(controller));
-			assertEquals("three", nextName(controller));
-			testModeResult = false;// three fails, so exits while
-			if (type.equals(OTHER))
-				while_cont.setCondition("false");
-			assertEquals("four", nextName(controller));
-			assertNull(nextName(controller));
-			testModeResult = true;
-			if (type.equals(OTHER))
-				while_cont.setCondition(OTHER);
-			assertEquals("one", nextName(controller));
-		}
-
-		// While (blank), previous sample failed - should run once
-		public void testBlankPrevFailed() throws Exception {
-			log.info("testBlankPrevFailed");
-			testMode = true;
-			testModeResult = false;
-			GenericController controller = new GenericController();
-			WhileController while_cont = new WhileController();
-			while_cont.setCondition("");
-			while_cont.addTestElement(new TestSampler("one"));
-			while_cont.addTestElement(new TestSampler("two"));
-			controller.addTestElement(while_cont);
-			controller.addTestElement(new TestSampler("three"));
-			controller.initialize();
-			assertEquals("one", nextName(controller));
-			assertEquals("two", nextName(controller));
-			assertEquals("three", nextName(controller));
-			assertNull(nextName(controller));
-			assertEquals("one", nextName(controller));
-			assertEquals("two", nextName(controller));
-			assertEquals("three", nextName(controller));
-			assertNull(nextName(controller));
-		}
-
-		// While LAST, previous sample failed - should not run
-		public void testLASTPrevFailed() throws Exception {
-			log.info("testLastPrevFailed");
-			runTestPrevFailed("LAST");
-		}
-
-		// While False, previous sample failed - should not run
-		public void testfalsePrevFailed() throws Exception {
-			log.info("testFalsePrevFailed");
-			runTestPrevFailed("False");
-		}
-
-		public void runTestPrevFailed(String s) throws Exception {
-			testMode = true;
-			testModeResult = false;
-			GenericController controller = new GenericController();
-			WhileController while_cont = new WhileController();
-			while_cont.setCondition(s);
-			while_cont.addTestElement(new TestSampler("one"));
-			while_cont.addTestElement(new TestSampler("two"));
-			controller.addTestElement(while_cont);
-			controller.addTestElement(new TestSampler("three"));
-			controller.initialize();
-			assertEquals("three", nextName(controller));
-			assertNull(nextName(controller));
-			assertEquals("three", nextName(controller));
-			assertNull(nextName(controller));
-		}
-
-		// Tests for Stack Overflow (bug 33954)
-		public void testAlwaysFailOK() throws Exception {
-			runTestAlwaysFail(true); // Should be OK
-		}
-
-		// TODO - re-enable when fix found
-		public void disabletestAlwaysFailBAD() throws Exception {
-			runTestAlwaysFail(false); // Currently fails
-		}
-
-		public void runTestAlwaysFail(boolean other) {
-			testMode = true;
-			testModeResult = false;
-			LoopController controller = new LoopController();
-			controller.setContinueForever(true);
-			controller.setLoops(-1);
-			WhileController while_cont = new WhileController();
-			while_cont.setCondition("false");
-			while_cont.addTestElement(new TestSampler("one"));
-			while_cont.addTestElement(new TestSampler("two"));
-			controller.addTestElement(while_cont);
-			if (other)
-				controller.addTestElement(new TestSampler("three"));
-			controller.initialize();
-			try {
-				if (other) {
-					assertEquals("three", nextName(controller));
-				} else {
-					assertNull(nextName(controller));
-				}
-			} catch (StackOverflowError e) {
-				// e.printStackTrace();
-				fail(e.toString());
-			}
-		}
-
 	}
 }

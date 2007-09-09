@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -128,37 +128,5 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
 	 */
 	public void focusLost(FocusEvent e) {
 		firePropertyChange();
-	}
-
-	public static class Test extends junit.framework.TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		private void testSetGet(ComboStringEditor e, Object value) throws Exception {
-			e.setValue(value);
-			assertEquals(value, e.getValue());
-		}
-
-		private void testSetGetAsText(ComboStringEditor e, String text) throws Exception {
-			e.setAsText(text);
-			assertEquals(text, e.getAsText());
-		}
-
-		public void testSetGet() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
-
-			testSetGet(e, "any string");
-			testSetGet(e, "");
-			testSetGet(e, "${var}");
-		}
-
-		public void testSetGetAsText() throws Exception {
-			ComboStringEditor e = new ComboStringEditor();
-
-			testSetGetAsText(e, "any string");
-			testSetGetAsText(e, "");
-			testSetGetAsText(e, "${var}");
-		}
 	}
 }

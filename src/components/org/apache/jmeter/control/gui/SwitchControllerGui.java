@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -28,11 +28,8 @@ import org.apache.jmeter.control.SwitchController;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @version $Revision$ on $Date$
- */
 public class SwitchControllerGui extends AbstractControllerGui {
-	private static final String SWITCH_LABEL = "switch_controller_label";
+	private static final String SWITCH_LABEL = "switch_controller_label"; // $NON-NLS-1$
 
 	private JTextField switchValue;
 
@@ -56,13 +53,21 @@ public class SwitchControllerGui extends AbstractControllerGui {
 		((SwitchController) ic).setSelection(switchValue.getText());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        switchValue.setText(""); // $NON-NLS-1$
+    }
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		switchValue.setText(((SwitchController) el).getSelection());
 	}
 
 	public String getLabelResource() {
-		return "switch_controller_title";
+		return "switch_controller_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -78,11 +83,10 @@ public class SwitchControllerGui extends AbstractControllerGui {
 	private JPanel createSwitchPanel() {
 		JPanel switchPanel = new JPanel(new BorderLayout(5, 0));
 		JLabel selectionLabel = new JLabel(JMeterUtils.getResString(SWITCH_LABEL));
-		switchValue = new JTextField("");
+		switchValue = new JTextField(""); // $NON-NLS-1$
 		selectionLabel.setLabelFor(switchValue);
 		switchPanel.add(selectionLabel, BorderLayout.WEST);
 		switchPanel.add(switchValue, BorderLayout.CENTER);
 		return switchPanel;
 	}
-
 }

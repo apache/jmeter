@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,11 +22,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
-
 public interface TestElement extends Cloneable {
 	public final static String NAME = "TestElement.name";
 
@@ -39,6 +34,8 @@ public interface TestElement extends Cloneable {
 	public void addTestElement(TestElement child);
 
 	public void setProperty(String key, String value);
+
+	public void setProperty(String key, boolean value);
 
 	/**
 	 * Check if ENABLED property is present and true ; defaults to true
@@ -75,11 +72,15 @@ public interface TestElement extends Cloneable {
 	 */
 	public boolean getPropertyAsBoolean(String key);
 
+	public boolean getPropertyAsBoolean(String key, boolean defaultValue);
+
 	public long getPropertyAsLong(String key);
 
 	public int getPropertyAsInt(String key);
 
 	public float getPropertyAsFloat(String key);
+	
+	public double getPropertyAsDouble(String key);
 
 	/**
 	 * Make the test element the running version, or make it no longer the
@@ -101,8 +102,12 @@ public interface TestElement extends Cloneable {
 	 * Clear the TestElement of all data.
 	 */
 	public void clear();
+	// TODO - yet another ambiguous name - does it need changing?
+	// See also: Clearable, JMeterGUIComponent
 
 	public String getPropertyAsString(String key);
+
+	public String getPropertyAsString(String key, String defaultValue);
 
 	/**
 	 * Sets and overwrites a property in the TestElement. This call will be
@@ -164,4 +169,8 @@ public interface TestElement extends Cloneable {
 	 * @return true if safe to remove the element
 	 */
 	public boolean canRemove();
+	
+	public String getName();
+	
+	public void setName(String name);
 }

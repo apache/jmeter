@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,17 +20,11 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
-
-// NOTUSED import org.apache.jorphan.logging.LoggingManager;
-// NOTUSED import org.apache.log.Logger;
 
 /**
  * @author Michael Stover
@@ -38,11 +32,10 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * @version $Revision$
  */
 public class LoopController extends GenericController implements Serializable {
-	// NOTUSED private static Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String LOOPS = "LoopController.loops";
+	private final static String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
-	private final static String CONTINUE_FOREVER = "LoopController.continue_forever";
+	private final static String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
 
 	private transient int loopCount = 0;
 
@@ -85,18 +78,19 @@ public class LoopController extends GenericController implements Serializable {
 		return getPropertyAsBoolean(CONTINUE_FOREVER);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.Controller#isDone()
-	 */
-	public boolean isDone() {
-		if (getLoops() != 0) {
-			return super.isDone();
-		} else {
-			return true;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.control.Controller#next()
+     */
+    public Sampler next() {
+        if(endOfLoop()) {
+            return null;
+        }
+        else {
+            return super.next();
+        }
+    }
 
 	private boolean endOfLoop() {
 		return (getLoops() > -1) && loopCount >= getLoops();
@@ -116,9 +110,8 @@ public class LoopController extends GenericController implements Serializable {
 				resetLoopCount();
 			}
 			return null;
-		} else {
-			return doNext();
 		}
+		return next();
 	}
 
 	protected void incrementLoopCount() {
@@ -148,68 +141,5 @@ public class LoopController extends GenericController implements Serializable {
 		resetCurrent();
 		incrementLoopCount();
 		recoverRunningVersion();
-	}
-
-	// /////////////////////// Start of Test code
-	// ///////////////////////////////
-
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testProcessing() throws Exception {
-			GenericController controller = new GenericController();
-			GenericController sub_1 = new GenericController();
-			sub_1.addTestElement(new TestSampler("one"));
-			sub_1.addTestElement(new TestSampler("two"));
-			controller.addTestElement(sub_1);
-			controller.addTestElement(new TestSampler("three"));
-			LoopController sub_2 = new LoopController();
-			sub_2.setLoops(3);
-			GenericController sub_3 = new GenericController();
-			sub_2.addTestElement(new TestSampler("four"));
-			sub_3.addTestElement(new TestSampler("five"));
-			sub_3.addTestElement(new TestSampler("six"));
-			sub_2.addTestElement(sub_3);
-			sub_2.addTestElement(new TestSampler("seven"));
-			controller.addTestElement(sub_2);
-			String[] order = new String[] { "one", "two", "three", "four", "five", "six", "seven", "four", "five",
-					"six", "seven", "four", "five", "six", "seven" };
-			int counter = 15;
-			controller.setRunningVersion(true);
-			sub_1.setRunningVersion(true);
-			sub_2.setRunningVersion(true);
-			sub_3.setRunningVersion(true);
-			controller.initialize();
-			for (int i = 0; i < 2; i++) {
-				assertEquals(15, counter);
-				counter = 0;
-				TestElement sampler = null;
-				while ((sampler = controller.next()) != null) {
-					assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
-				}
-			}
-		}
-
-		public void testLoopZeroTimes() throws Exception {
-			LoopController loop = new LoopController();
-			loop.setLoops(0);
-			loop.addTestElement(new TestSampler("never run"));
-			loop.initialize();
-			assertNull(loop.next());
-		}
-
-		public void testInfiniteLoop() throws Exception {
-			LoopController loop = new LoopController();
-			loop.setLoops(-1);
-			loop.addTestElement(new TestSampler("never run"));
-			loop.setRunningVersion(true);
-			loop.initialize();
-			for (int i = 0; i < 42; i++) {
-				assertNotNull(loop.next());
-			}
-		}
-
 	}
 }

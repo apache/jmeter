@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,9 +27,11 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+
+// @see org.apache.jmeter.functions.PackageTest for unit tests
 
 /**
  * Function to log a message
@@ -46,7 +48,7 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__split";
+	private static final String KEY = "__split";// $NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
@@ -63,8 +65,8 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 	public SplitFunction() {
 	}
 
-	public Object clone() {
-		return new SplitFunction();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
@@ -78,18 +80,25 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 		if (values.length > 2) { // Split string provided
 			splitString = ((CompoundVariable) values[2]).execute();
 		}
-		String parts[] = JMeterUtils.split(stringToSplit, splitString, "?");
+        if (log.isDebugEnabled()){
+            log.debug("Split "+stringToSplit+ " using "+ splitString+ " into "+varNamePrefix);
+        }
+		String parts[] = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$
 
 		vars.put(varNamePrefix, stringToSplit);
-		vars.put(varNamePrefix + "_n", "" + parts.length);
+		vars.put(varNamePrefix + "_n", "" + parts.length);// $NON-NLS-1$ // $NON-NLS-2$
 		for (int i = 1; i <= parts.length; i++) {
-			vars.put(varNamePrefix + "_" + i, parts[i - 1]);
-		}
+            if (log.isDebugEnabled()){
+                log.debug(parts[i-1]);
+            }
+			vars.put(varNamePrefix + "_" + i, parts[i - 1]);// $NON-NLS-1$
+		} 
+		vars.remove(varNamePrefix + "_" + (parts.length+1));
 		return stringToSplit;
 
 	}
 
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		values = parameters.toArray();
 

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,9 +34,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * The user interface for a foreach controller which specifies that its
  * subcomponents should be executed some number of times in a loop. This
  * component can be used standalone or embedded into some other component.
- * Copyright: 2000
- * 
- * @version $Revision$ on $Date
  */
 
 public class ForeachControlPanel extends AbstractControllerGui {
@@ -64,10 +61,10 @@ public class ForeachControlPanel extends AbstractControllerGui {
 	private boolean displayName = true;
 
 	/** The name of the infinite checkbox component. */
-	private static final String INPUTVAL = "Input Field";
+	private static final String INPUTVAL = "Input Field"; // $NON-NLS-1$
 
 	/** The name of the loops field component. */
-	private static final String RETURNVAL = "Return Field";
+	private static final String RETURNVAL = "Return Field"; // $NON-NLS-1$
 
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
@@ -121,19 +118,31 @@ public class ForeachControlPanel extends AbstractControllerGui {
 			if (inputVal.getText().length() > 0) {
 				((ForeachController) lc).setInputVal(inputVal.getText());
 			} else {
-				((ForeachController) lc).setInputVal("");
+				((ForeachController) lc).setInputVal(""); // $NON-NLS-1$
 			}
 			if (returnVal.getText().length() > 0) {
 				((ForeachController) lc).setReturnVal(returnVal.getText());
 			} else {
-				((ForeachController) lc).setReturnVal("");
+				((ForeachController) lc).setReturnVal(""); // $NON-NLS-1$
 			}
 			((ForeachController) lc).setUseSeparator(useSeparator.isSelected());
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        inputVal.setText(""); // $NON-NLS-1$
+        returnVal.setText(""); // $NON-NLS-1$
+        useSeparator.setSelected(true);
+    }
+    
 
 	public String getLabelResource() {
-		return "foreach_controller_title";
+		return "foreach_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -173,12 +182,12 @@ public class ForeachControlPanel extends AbstractControllerGui {
 		VerticalPanel loopPanel = new VerticalPanel();
 
 		// LOOP LABEL
-		JLabel inputValLabel = new JLabel(JMeterUtils.getResString("foreach_input"));
-		JLabel returnValLabel = new JLabel(JMeterUtils.getResString("foreach_output"));
+		JLabel inputValLabel = new JLabel(JMeterUtils.getResString("foreach_input")); // $NON-NLS-1$
+		JLabel returnValLabel = new JLabel(JMeterUtils.getResString("foreach_output")); // $NON-NLS-1$
 
 		// TEXT FIELD
 		JPanel inputValSubPanel = new JPanel(new BorderLayout(5, 0));
-		inputVal = new JTextField("", 5);
+		inputVal = new JTextField("", 5); // $NON-NLS-1$
 		inputVal.setName(INPUTVAL);
 		inputValLabel.setLabelFor(inputVal);
 		inputValSubPanel.add(inputValLabel, BorderLayout.WEST);
@@ -186,14 +195,14 @@ public class ForeachControlPanel extends AbstractControllerGui {
 
 		// TEXT FIELD
 		JPanel returnValSubPanel = new JPanel(new BorderLayout(5, 0));
-		returnVal = new JTextField("", 5);
+		returnVal = new JTextField("", 5); // $NON-NLS-1$
 		returnVal.setName(RETURNVAL);
 		returnValLabel.setLabelFor(returnVal);
 		returnValSubPanel.add(returnValLabel, BorderLayout.WEST);
 		returnValSubPanel.add(returnVal, BorderLayout.CENTER);
 
 		// Checkbox
-		useSeparator = new JCheckBox(JMeterUtils.getResString("foreach_use_separator"), true);
+		useSeparator = new JCheckBox(JMeterUtils.getResString("foreach_use_separator"), true); // $NON-NLS-1$
 
 		loopPanel.add(inputValSubPanel);
 		loopPanel.add(returnValSubPanel);
@@ -201,5 +210,4 @@ public class ForeachControlPanel extends AbstractControllerGui {
 
 		return loopPanel;
 	}
-
 }

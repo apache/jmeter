@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -62,11 +63,11 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 	 * 
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		// Note: initialised with error = failure = false
 
 		byte data[] = response.getResponseData();
-		if (data == null || data.length == 0) {
+		if (data.length == 0) {
 			return result.setResultForNull();
 		}
 		String resultData = new String(getResultBody(data));
@@ -175,7 +176,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 	/**
 	 * SAXErrorHandler class
 	 */
-	private class SAXErrorHandler implements ErrorHandler {
+	private static class SAXErrorHandler implements ErrorHandler {
 		private AssertionResult result;
 
 		public SAXErrorHandler(AssertionResult result) {

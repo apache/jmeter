@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.WorkBench;
@@ -34,7 +35,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing a work bench where users can make
  * preparations for the test plan.
  * 
- * @version $Revision$ on $Date$
  */
 public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	/**
@@ -95,8 +95,14 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	 */
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
-		JMenu addMenu = MenuFactory.makeMenus(new String[] { MenuFactory.CONTROLLERS, MenuFactory.SAMPLERS,
-				MenuFactory.CONFIG_ELEMENTS, MenuFactory.NON_TEST_ELEMENTS }, JMeterUtils.getResString("Add"), "Add");
+		JMenu addMenu = MenuFactory.makeMenus(new String[] { 
+				MenuFactory.CONTROLLERS, 
+				MenuFactory.SAMPLERS,
+				MenuFactory.CONFIG_ELEMENTS, 
+				MenuFactory.NON_TEST_ELEMENTS 
+				}, 
+				JMeterUtils.getResString("add"), // $NON-NLS-1$
+				ActionNames.ADD);
 		menu.add(addMenu);
 		MenuFactory.addEditMenu(menu, false);
 		MenuFactory.addFileMenu(menu);
@@ -104,7 +110,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	}
 
 	public String getLabelResource() {
-		return "workbench_title";
+		return "workbench_title"; // $NON-NLS-1$
 	}
 
 	/**

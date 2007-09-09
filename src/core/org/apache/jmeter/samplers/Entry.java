@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,30 +19,25 @@
 package org.apache.jmeter.samplers;
 
 import java.util.HashMap;
-// import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-// import java.util.Set;
 
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
+// TODO - not used at present - could perhaps be removed
 /**
  * @author Michael Stover
- * @version $Revision$
  */
 public class Entry {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	Map configSet;
+	private Map configSet;
 
 	// Set clonedSet;
-	Class sampler;
+	private Class sampler;
 
-	List assertions;
+	private List assertions;
 
 	public Entry() {
 		configSet = new HashMap();
@@ -92,17 +87,7 @@ public class Entry {
 	private ConfigElement cloneIfNecessary(ConfigElement config) {
 		if (config.expectsModification()) {
 			return config;
-		} else {
-			return (ConfigElement) config.clone();
 		}
-	}
-
-	public Object clone() {
-		try {
-			return super.clone();
-		} catch (Exception ex) {
-			log.error("", ex);
-		}
-		return null;
+		return (ConfigElement) config.clone();
 	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,11 +21,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.beans.BeanInfo;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyDescriptor;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -93,28 +92,25 @@ import org.apache.log.Logger;
  * </dl>
  * 
  * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
-public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer, PropertyChangeListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String GROUP = "group";
+	public static final String GROUP = "group"; //$NON-NLS-1$
 
-	public static final String ORDER = "order";
+	public static final String ORDER = "order"; //$NON-NLS-1$
 
-	public static final String TAGS = "tags";
+	public static final String TAGS = "tags"; //$NON-NLS-1$
 
-	public static final String NOT_UNDEFINED = "notUndefined";
+	public static final String NOT_UNDEFINED = "notUndefined"; //$NON-NLS-1$
 
-	public static final String NOT_EXPRESSION = "notExpression";
+	public static final String NOT_EXPRESSION = "notExpression"; //$NON-NLS-1$
 
-	public static final String NOT_OTHER = "notOther";
+	public static final String NOT_OTHER = "notOther"; //$NON-NLS-1$
 
-	public static final String DEFAULT = "default";
-	
-	public static final String MULTILINE = "multiline";
+	public static final String DEFAULT = "default"; //$NON-NLS-1$
 
-	public static final String RESOURCE_BUNDLE = "resourceBundle";
+	public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
 	public static final String ORDER(String group) {
 		return "group." + group + ".order";
@@ -127,18 +123,18 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	/**
 	 * BeanInfo object for the class of the objects being edited.
 	 */
-	private BeanInfo beanInfo;
+	private transient BeanInfo beanInfo;
 
 	/**
 	 * Property descriptors from the beanInfo.
 	 */
-	private PropertyDescriptor[] descriptors;
+	private transient PropertyDescriptor[] descriptors;
 
 	/**
 	 * Property editors -- or null if the property can't be edited. Unused if
 	 * customizerClass==null.
 	 */
-	private PropertyEditor[] editors;
+	private transient PropertyEditor[] editors;
 
 	/**
 	 * Message format for property field labels:
@@ -155,6 +151,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 */
 	private Map propertyMap;
 
+    public GenericTestBeanCustomizer(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
 	/**
 	 * Create a customizer for a given test bean type.
 	 * 
@@ -215,17 +214,13 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 				editors[i] = null;
 				continue;
 			}
-			String[] tags = mergeTags(propertyEditor,descriptors[i]);
+
 			if (!propertyEditor.supportsCustomEditor()) {
-				propertyEditor = createWrapperEditor(propertyEditor, descriptors[i],tags);
+				propertyEditor = createWrapperEditor(propertyEditor, descriptors[i]);
 
 				if (log.isDebugEnabled()) {
 					log.debug("Editor for property " + name + " is wrapped in " + propertyEditor);
 				}
-			}
-			if(propertyEditor instanceof TestBeanPropertyEditor)
-			{
-				((TestBeanPropertyEditor)propertyEditor).setDescriptor(descriptors[i]);
 			}
 			if (propertyEditor.getCustomEditor() instanceof JScrollPane) {
 				scrollerCount++;
@@ -236,14 +231,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 			// Initialize the editor with the provided default value or null:
 			setEditorValue(i, descriptors[i].getValue(DEFAULT));
 
-			// Now subscribe as a listener (we didn't want to receive the event
-			// for the setEditorValue above!)
-			propertyEditor.addPropertyChangeListener(this);
 		}
 
 		// Obtain message formats:
-		propertyFieldLabelMessage = new MessageFormat(JMeterUtils.getResString("property_as_field_label"));
-		propertyToolTipMessage = new MessageFormat(JMeterUtils.getResString("property_tool_tip"));
+		propertyFieldLabelMessage = new MessageFormat(JMeterUtils.getResString("property_as_field_label")); //$NON-NLS-1$
+		propertyToolTipMessage = new MessageFormat(JMeterUtils.getResString("property_tool_tip")); //$NON-NLS-1$
 
 		// Initialize the GUI:
 		init();
@@ -257,7 +249,22 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 * @param descriptor
 	 * @return
 	 */
-	private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor,String[] tags) {
+	private WrapperEditor createWrapperEditor(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
+		String[] editorTags = typeEditor.getTags();
+		String[] additionalTags = (String[]) descriptor.getValue(TAGS);
+		String[] tags = null;
+		if (editorTags == null)
+			tags = additionalTags;
+		else if (additionalTags == null)
+			tags = editorTags;
+		else {
+			tags = new String[editorTags.length + additionalTags.length];
+			int j = 0;
+			for (int i = 0; i < editorTags.length; i++)
+				tags[j++] = editorTags[i];
+			for (int i = 0; i < additionalTags.length; i++)
+				tags[j++] = additionalTags[i];
+		}
 
 		boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
 		boolean notExpression = Boolean.TRUE.equals(descriptor.getValue(NOT_EXPRESSION));
@@ -281,30 +288,6 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 				descriptor.getValue(DEFAULT));
 
 		return wrapper;
-	}
-
-	/**
-	 * @param typeEditor
-	 * @param descriptor
-	 * @return
-	 */
-	protected String[] mergeTags(PropertyEditor typeEditor, PropertyDescriptor descriptor) {
-		String[] editorTags = typeEditor.getTags();
-		String[] additionalTags = (String[]) descriptor.getValue(TAGS);
-		String[] tags = null;
-		if (editorTags == null)
-			tags = additionalTags;
-		else if (additionalTags == null)
-			tags = editorTags;
-		else {
-			tags = new String[editorTags.length + additionalTags.length];
-			int j = 0;
-			for (int i = 0; i < editorTags.length; i++)
-				tags[j++] = editorTags[i];
-			for (int i = 0; i < additionalTags.length; i++)
-				tags[j++] = additionalTags[i];
-		}
-		return tags;
 	}
 
 	/**
@@ -370,23 +353,23 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		}
 	}
 
-	/**
-	 * Find the index of the property of the given name.
-	 * 
-	 * @param name
-	 *            the name of the property
-	 * @return the index of that property in the descriptors array, or -1 if
-	 *         there's no property of this name.
-	 */
-	private int descriptorIndex(String name) // NOTUSED
-	{
-		for (int i = 0; i < descriptors.length; i++) {
-			if (descriptors[i].getName().equals(name)) {
-				return i;
-			}
-		}
-		return -1;
-	}
+//	/**
+//	 * Find the index of the property of the given name.
+//	 * 
+//	 * @param name
+//	 *            the name of the property
+//	 * @return the index of that property in the descriptors array, or -1 if
+//	 *         there's no property of this name.
+//	 */
+//	private int descriptorIndex(String name) // NOTUSED
+//	{
+//		for (int i = 0; i < descriptors.length; i++) {
+//			if (descriptors[i].getName().equals(name)) {
+//				return i;
+//			}
+//		}
+//		return -1;
+//	}
 
 	/**
 	 * Initialize the GUI.
@@ -396,7 +379,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
 		GridBagConstraints cl = new GridBagConstraints(); // for labels
 		cl.gridx = 0;
-		cl.anchor = GridBagConstraints.EAST;// JDK1.4: was LINE_END
+		cl.anchor = GridBagConstraints.EAST;
 		cl.insets = new Insets(0, 1, 0, 1);
 
 		GridBagConstraints ce = new GridBagConstraints(); // for editors
@@ -440,9 +423,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 			Component customEditor = editors[i].getCustomEditor();
 
 			boolean multiLineEditor = false;
-			if (descriptors[i].getValue(MULTILINE) != null ||
-					customEditor.getPreferredSize().height > 50 || 
-					customEditor instanceof JScrollPane) {
+			if (customEditor.getPreferredSize().height > 50 || customEditor instanceof JScrollPane) {
 				// TODO: the above works in the current situation, but it's
 				// just a hack. How to get each editor to report whether it
 				// wants to grow bigger? Whether the property label should
@@ -455,9 +436,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
 			cl.gridy = y;
 			cl.gridwidth = multiLineEditor ? 2 : 1;
-			cl.anchor = multiLineEditor ? GridBagConstraints.CENTER : GridBagConstraints.EAST;// JDK1.4:
-																								// was
-																								// LINE_END
+			cl.anchor = multiLineEditor ? GridBagConstraints.CENTER : GridBagConstraints.EAST;
 			currentPanel.add(label, cl);
 
 			ce.gridx = multiLineEditor ? 0 : 1;
@@ -526,7 +505,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	/**
 	 * Comparator used to sort properties for presentation in the GUI.
 	 */
-	private class PropertyComparator implements Comparator {
+	private class PropertyComparator implements Comparator, Serializable {
 		public int compare(Object o1, Object o2) {
 			return compare((PropertyDescriptor) o1, (PropertyDescriptor) o2);
 		}
@@ -581,27 +560,54 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+	/**
+	 * Save values from the GUI fields into the property map
 	 */
-	public void propertyChange(PropertyChangeEvent evt) {
+	void saveGuiFields() {
 		for (int i = 0; i < editors.length; i++) {
-			if (editors[i] == evt.getSource()) {
-				Object value = editors[i].getValue();
+			PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
+			if (propertyEditor != null) {
+				Object value = propertyEditor.getValue();
 				String name = descriptors[i].getName();
 				if (value == null) {
 					propertyMap.remove(name);
-					log.debug("Unset " + name);
+					if (log.isDebugEnabled()) {
+						log.debug("Unset " + name);
+					}
 				} else {
 					propertyMap.put(name, value);
-					log.debug("Set " + name + "= " + value);
+					if (log.isDebugEnabled()) {
+						log.debug("Set " + name + "= " + value);
+					}
 				}
-				firePropertyChange(name, evt.getOldValue(), value);
-				return;
 			}
 		}
-		throw new Error("Unexpected propertyChange event received: " + evt);
 	}
+
+	void clearGuiFields() {
+		for (int i = 0; i < editors.length; i++) {
+			PropertyEditor propertyEditor=editors[i]; // might be null (e.g. in testing)
+			if (propertyEditor != null) {
+				try {
+				if (propertyEditor instanceof WrapperEditor){
+					WrapperEditor we = (WrapperEditor) propertyEditor;
+					String tags[]=we.getTags();
+					if (tags != null) {
+						we.setAsText(tags[0]);
+					} else {
+						we.setValue("");
+					}
+				} else if (propertyEditor instanceof ComboStringEditor) {
+					ComboStringEditor cse = (ComboStringEditor) propertyEditor;
+					cse.setAsText(cse.getInitialEditValue());
+				} else {
+					propertyEditor.setAsText("");
+				}
+				} catch (IllegalArgumentException ex){
+					log.error("Failed to set field "+descriptors[i].getName(),ex);
+				}
+			}
+		}
+	}
+
 }

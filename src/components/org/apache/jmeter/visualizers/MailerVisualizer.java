@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,8 +24,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.UnknownHostException;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.swing.BorderFactory;
@@ -42,6 +40,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.reporters.MailerModel;
 import org.apache.jmeter.reporters.MailerResultCollector;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
@@ -59,10 +58,9 @@ import org.apache.log.Logger;
 /**
  * This class implements a visualizer that mails a message when an error occurs.
  * 
- * @version $Revision$ $Date$
  */
 public class MailerVisualizer extends AbstractVisualizer implements ActionListener, Clearable, ChangeListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JButton testerButton;
 
@@ -102,7 +100,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	/**
 	 * Clears any stored sampling-informations.
 	 */
-	public synchronized void clear() {
+	public synchronized void clearData() {
 		if (getModel() != null) {
 			((MailerResultCollector) getModel()).getMailerModel().clear();
 		}
@@ -228,7 +226,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	}
 
 	public String getLabelResource() {
-		return "mailer_visualizer_title";
+		return "mailer_visualizer_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -238,7 +236,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	 * @return The title of the component.
 	 */
 	public String getAttributesTitle() {
-		return JMeterUtils.getResString("mailer_attributes_panel");
+		return JMeterUtils.getResString("mailer_attributes_panel"); //$NON-NLS-1$
 	}
 
 	// ////////////////////////////////////////////////////////////
@@ -256,19 +254,20 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == testerButton) {
+			ResultCollector testElement = getModel();
+			modifyTestElement(testElement);
 			try {
-				MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
+				MailerModel model = ((MailerResultCollector) testElement).getMailerModel();
 				model.sendTestMail();
-				displayMessage(JMeterUtils.getResString("mail_sent"), false);
-			} catch (UnknownHostException e1) {
-				log.error("Invalid Mail Server ", e1);
-				displayMessage(JMeterUtils.getResString("invalid_mail_server"), true);
+				displayMessage(JMeterUtils.getResString("mail_sent"), false); //$NON-NLS-1$
 			} catch (AddressException ex) {
 				log.error("Invalid mail address ", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail_address") + "\n" + ex.getMessage(), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail_address") //$NON-NLS-1$
+						+ "\n" + ex.getMessage(), true); //$NON-NLS-1$
 			} catch (MessagingException ex) {
 				log.error("Couldn't send mail...", ex);
-				displayMessage(JMeterUtils.getResString("invalid_mail") + "\n" + ex.getMessage(), true);
+				displayMessage(JMeterUtils.getResString("invalid_mail") //$NON-NLS-1$
+						+ "\n" + ex.getMessage(), true); //$NON-NLS-1$
 			}
 		}
 	}

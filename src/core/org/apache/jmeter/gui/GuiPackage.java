@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001,2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
@@ -41,7 +42,6 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
-import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -54,13 +54,10 @@ import org.apache.log.Logger;
  * affect the GUI, they typically use GuiPackage to get access to different
  * parts of the GUI.
  * 
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 public final class GuiPackage implements LocaleChangeListener {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** Singleton instance. */
 	private static GuiPackage guiPack;
@@ -159,13 +156,13 @@ public final class GuiPackage implements LocaleChangeListener {
 		String guiClassName = node.getPropertyAsString(TestElement.GUI_CLASS);
 		try {
 			Class testClass;
-			if (testClassName.equals("")) {
+			if (testClassName.equals("")) { // $NON-NLS-1$
 				testClass = node.getClass();
 			} else {
 				testClass = Class.forName(testClassName);
 			}
 			Class guiClass = null;
-			if (!guiClassName.equals("")) {
+			if (!guiClassName.equals("")) { // $NON-NLS-1$
 				guiClass = Class.forName(guiClassName);
 			}
 			return getGui(node, guiClass, testClass);
@@ -229,12 +226,7 @@ public final class GuiPackage implements LocaleChangeListener {
 			updateCurrentNode();
 			TestElement curNode = treeListener.getCurrentNode().getTestElement();
 			JMeterGUIComponent comp = getGui(curNode);
-			if (!(comp instanceof AbstractVisualizer)) // TODO: a hack that
-														// needs to be fixed for
-														// 2.0
-			{
-				comp.clear();
-			}
+			comp.clearGui();
 			log.debug("Updating gui to new node");
 			comp.configure(curNode);
 			currentNodeUpdated = false;
@@ -270,7 +262,7 @@ public final class GuiPackage implements LocaleChangeListener {
 	public TestElement createTestElement(Class guiClass, Class testClass) {
 		try {
 			JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -301,7 +293,7 @@ public final class GuiPackage implements LocaleChangeListener {
 			} else {
 				comp = getGuiFromCache(c, null);
 			}
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -353,7 +345,7 @@ public final class GuiPackage implements LocaleChangeListener {
 	 *             if the specified GUI class cannot be found
 	 */
 	private JMeterGUIComponent getGuiFromCache(Class guiClass, Class testClass) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+			IllegalAccessException {
 		JMeterGUIComponent comp;
 		if (guiClass == TestBeanGUI.class) {
 			comp = (TestBeanGUI) testBeanGUIs.get(testClass);
@@ -400,9 +392,8 @@ public final class GuiPackage implements LocaleChangeListener {
 				TestElement el = currentNode.getTestElement();
 				comp.modifyTestElement(el);
 			}
-			if (currentNode != treeListener.getCurrentNode()) {
-				currentNodeUpdated = true;
-			}
+			// The current node is now updated
+			currentNodeUpdated = true;
 			currentNode = treeListener.getCurrentNode();
 		} catch (Exception e) {
 			log.error("Problem retrieving gui", e);
@@ -623,4 +614,27 @@ public final class GuiPackage implements LocaleChangeListener {
 	public String getTestPlanFile() {
 		return testPlanFile;
 	}
+
+
+    public static void showErrorMessage(final String message, final String title){
+        showMessage(message,title,JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showInfoMessage(final String message, final String title){
+        showMessage(message,title,JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void showWarningMessage(final String message, final String title){
+        showMessage(message,title,JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void showMessage(final String message, final String title, final int type){
+        if (guiPack == null) return ;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JOptionPane.showMessageDialog(null,message,title,type);
+            }
+        });
+        
+    }
 }

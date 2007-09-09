@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -43,23 +43,21 @@ import org.w3c.tidy.Tidy;
  */
 public class HTMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-	// constants
-	public static final String DEFAULT_DOCTYPE = "omit";
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String DOCTYPE_KEY = "html_assertion_doctype";
+	public static final String DEFAULT_DOCTYPE = "omit"; //$NON-NLS-1$
 
-	public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly";
+	public static final String DOCTYPE_KEY = "html_assertion_doctype"; //$NON-NLS-1$
 
-	public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold";
+	public static final String ERRORS_ONLY_KEY = "html_assertion_errorsonly"; //$NON-NLS-1$
 
-	public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold";
+	public static final String ERROR_THRESHOLD_KEY = "html_assertion_error_threshold"; //$NON-NLS-1$
 
-	public static final String FORMAT_KEY = "html_assertion_format";
+	public static final String WARNING_THRESHOLD_KEY = "html_assertion_warning_threshold"; //$NON-NLS-1$
 
-	public static final String FILENAME_KEY = "html_assertion_filename";
+	public static final String FORMAT_KEY = "html_assertion_format"; //$NON-NLS-1$
 
-	// class attributes
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	public static final String FILENAME_KEY = "html_assertion_filename"; //$NON-NLS-1$
 
 	/**
 	 * 
@@ -77,9 +75,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 		log.debug("HTMLAssertions.getResult() called");
 
 		// no error as default
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 
-		if (inResponse.getResponseData() == null) {
+		if (inResponse.getResponseData().length == 0) {
 			return result.setResultForNull();
 		}
 
@@ -115,7 +113,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 			}
 			log.debug("HTMLAssertions.getResult(): Tidy instance created!");
 
-		} catch (Exception e) {
+		} catch (Exception e) {//TODO replace with proper Exception
 			log.error("Unable to instantiate tidy parser", e);
 			result.setFailure(true);
 			result.setFailureMessage("Unable to instantiate tidy parser");
@@ -167,7 +165,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 				result.setFailure(false);
 			}
 
-		} catch (Exception e) {
+		} catch (Exception e) {//TODO replace with proper Exception
 			// return with an error
 			log.warn("Cannot parse result content", e);
 			result.setFailure(true);
@@ -207,7 +205,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 				if (lOutputWriter != null) {
 					try {
 						lOutputWriter.close();
-					} catch (Exception e) {
+					} catch (IOException e) {
 					}
 				}
 			}
@@ -279,7 +277,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 	 */
 	public void setErrorThreshold(long inErrorThreshold) {
 		if (inErrorThreshold < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
 		}
 		if (inErrorThreshold == Long.MAX_VALUE) {
 			setProperty(new LongProperty(ERROR_THRESHOLD_KEY, 0));
@@ -295,7 +293,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 	 */
 	public void setWarningThreshold(long inWarningThreshold) {
 		if (inWarningThreshold < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
+			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative")); //$NON-NLS-1$
 		}
 		if (inWarningThreshold == Long.MAX_VALUE) {
 			setProperty(new LongProperty(WARNING_THRESHOLD_KEY, 0));

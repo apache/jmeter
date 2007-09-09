@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,8 +39,6 @@ import javax.swing.text.Document;
  * the text changing in the Text Field. The registered change listeners are only
  * called when the text has changed.
  * 
- * @author S.Coleman
- * @version $Revision$
  */
 public class JLabeledTextArea extends JPanel implements JLabeledField, FocusListener {
 	private JLabel mLabel;
@@ -63,16 +61,27 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
 	/**
 	 * Constructs a new component with the label displaying the passed text.
 	 * 
+	 * @param label
+	 *            The text to display in the label.
+	 */
+	public JLabeledTextArea(String label) {
+		this(label, null);
+	}
+
+	/**
+	 * Constructs a new component with the label displaying the passed text.
+	 * 
 	 * @param pLabel
-	 *            The text to in the label.
+	 *            The text to display in the label.
+	 * @param docModel the document for the text area
 	 */
 	public JLabeledTextArea(String pLabel, Document docModel) {
 		super();
 		mLabel = new JLabel(pLabel);
-		if (docModel != null) {
-			setDocumentModel(docModel);
-		}
 		init();
+		if (docModel != null) {
+            mTextArea.setDocument(docModel);
+		}
 	}
 
 	public List getComponentList() {

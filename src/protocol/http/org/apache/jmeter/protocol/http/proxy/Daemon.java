@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -67,6 +70,11 @@ public class Daemon extends Thread {
 	 */
 	private Class proxyClass = Proxy.class;
 
+    /** A Map of url string to page character encoding of that page */
+    private Map pageEncodings;
+    /** A Map of url string to character encoding for the form */
+    private Map formEncodings;
+
 	/**
 	 * Default constructor.
 	 */
@@ -110,11 +118,11 @@ public class Daemon extends Thread {
 	/**
 	 * Configure the Daemon to listen on the specified port.
 	 * 
-	 * @param daemonPort
+	 * @param _daemonPort
 	 *            the port to listen on
 	 */
-	public void configureProxy(int daemonPort) {
-		this.daemonPort = daemonPort;
+	public void configureProxy(int _daemonPort) {
+		this.daemonPort = _daemonPort;
 		log.info("Proxy: OK");
 	}
 
@@ -161,6 +169,10 @@ public class Daemon extends Thread {
 		running = true;
 		ServerSocket mainSocket = null;
 
+        // Maps to contain page and form encodings
+        pageEncodings = Collections.synchronizedMap(new HashMap());
+        formEncodings = Collections.synchronizedMap(new HashMap());
+        
 		try {
 			log.info("Creating Daemon Socket... on port " + daemonPort);
 			mainSocket = new ServerSocket(daemonPort);
@@ -174,7 +186,7 @@ public class Daemon extends Thread {
 					if (running) {
 						// Pass request to new proxy thread
 						Proxy thd = (Proxy) proxyClass.newInstance();
-						thd.configure(clientSocket, target);
+                        thd.configure(clientSocket, target, pageEncodings, formEncodings);
 						thd.start();
 					} else {
 						// The socket was accepted after we were told to stop.
@@ -199,6 +211,10 @@ public class Daemon extends Thread {
 			} catch (Exception exc) {
 			}
 		}
+        
+        // Clear maps
+        pageEncodings = null;
+        formEncodings = null;
 	}
 
 	/**

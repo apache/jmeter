@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,9 +20,7 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -32,23 +30,28 @@ import org.mozilla.javascript.Scriptable;
 /*******************************************************************************
  * 
  * @author Cyrus Montakab created 2003/06/30
- * @version $Date$ $Revision$ This is a Conditional
- *          Controller; it will execute the set of statements
- *          (samplers/controllers, etc) while the 'condition' is true. In a
- *          programming world - this is equivalant of : if (condition) {
- *          statements .... } In JMeter you may have : Thread-Group (set to loop
- *          a number of times or indefinitely, ... Samplers ... (e.g. Counter )
- *          ... Other Controllers .... ... IfController ( condition set to
- *          something like - ${counter}<10) ... statements to perform if
- *          condition is true ... ... Other Controllers /Samplers }
+ * 
+ * This is a Conditional Controller; it will execute the set of statements
+ * (samplers/controllers, etc) while the 'condition' is true. 
+ * In a programming world - this is equivalant of : 
+ * if (condition) {
+ *          statements .... 
+ *          } 
+ * In JMeter you may have : Thread-Group (set to loop a number of times or indefinitely, 
+ *    ... Samplers ... (e.g. Counter )
+ *    ... Other Controllers .... 
+ *    ... IfController ( condition set to something like - ${counter}<10) 
+ *       ... statements to perform if condition is true 
+ *       ... 
+ *    ... Other Controllers /Samplers }
  * 
  ******************************************************************************/
 
 public class IfController extends GenericController implements Serializable {
 
-	private static Logger logger = LoggingManager.getLoggerForClass();
+	private static final Logger logger = LoggingManager.getLoggerForClass();
 
-	private final static String CONDITION = "IfController.condition";
+	private final static String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
 	/**
 	 * constructor
@@ -97,9 +100,9 @@ public class IfController extends GenericController implements Serializable {
 			, "<cmd>", 1, null);
 			resultStr = Context.toString(cxResultObject);
 
-			if (resultStr.equals("false")) {
+			if (resultStr.equals("false")) { //$NON-NLS-1$
 				result = false;
-			} else if (resultStr.equals("true")) {
+			} else if (resultStr.equals("true")) { //$NON-NLS-1$
 				result = true;
 			} else {
 				throw new Exception(" BAD CONDITION :: " + cond);
@@ -134,81 +137,25 @@ public class IfController extends GenericController implements Serializable {
 	}
 
 	/**
-	 * @see org.apache.jmeter.control.Controller#next() 'JMeterThread' iterates
-	 *      thru the Controller by calling this method. IF a valid 'Sampler' is
-	 *      returned, then it executes the sampler (calls sampler.sampler(xxx)
-	 *      method) . So here we make sure that the samplers belonging to this
-	 *      Controller do not get called - if isDone is true - if its the first
-	 *      time this is run. The first time is special cause it is called prior
-	 *      the iteration even starts !
+	 * @see org.apache.jmeter.control.Controller#next()
 	 */
-	public Sampler doNext() {
-		boolean result = evaluateCondition(getCondition());
-		if (result)
-			return super.doNext();
-		else
-			try {
-				return nextIsNull();
-			} catch (NextIsNullException e1) {
-				return null;
-			}
-	}
-
-	// //////////////////////////// Start of Test Code
-	// ///////////////////////////
-
-	/**
-	 * JUnit test
-	 */
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
+	public Sampler next() {
+        // We should only evalute the condition if it is the first
+        // time ( first "iteration" ) we are called.
+        // For subsequent calls, we are inside the IfControllerGroup,
+        // so then we just pass the control to the next item inside the if control
+        boolean result = true;
+        if(isFirst()) {
+            result = evaluateCondition(getCondition());
+        }
+        
+		if (result) {
+			return super.next();
 		}
-
-		public void testProcessing() throws Exception {
-
-			GenericController controller = new GenericController();
-
-			controller.addTestElement(new IfController("false==false"));
-			controller.addTestElement(new IfController(" \"a\".equals(\"a\")"));
-			controller.addTestElement(new IfController("2<100"));
-
-			/*
-			 * GenericController sub_1 = new GenericController();
-			 * sub_1.addTestElement(new IfController("3==3"));
-			 * controller.addTestElement(sub_1); controller.addTestElement(new
-			 * IfController("false==true"));
-			 */
-
-			/*
-			 * GenericController controller = new GenericController();
-			 * GenericController sub_1 = new GenericController();
-			 * sub_1.addTestElement(new IfController("10<100"));
-			 * sub_1.addTestElement(new IfController("true==false"));
-			 * controller.addTestElement(sub_1); controller.addTestElement(new
-			 * IfController("false==false"));
-			 * 
-			 * IfController sub_2 = new IfController(); sub_2.setCondition( "10<10000");
-			 * GenericController sub_3 = new GenericController();
-			 * 
-			 * sub_2.addTestElement(new IfController( " \"a\".equals(\"a\")" ) );
-			 * sub_3.addTestElement(new IfController("2>100"));
-			 * sub_3.addTestElement(new IfController("false==true"));
-			 * sub_2.addTestElement(sub_3); sub_2.addTestElement(new
-			 * IfController("2==3")); controller.addTestElement(sub_2);
-			 */
-
-			/*
-			 * IfController controller = new IfController("12==12");
-			 * controller.initialize();
-			 */
-			logger.debug(">>>>>   testProcessing : Starting the iteration  ");
-			TestElement sampler = null;
-			while ((sampler = controller.next()) != null) {
-				logger.debug("    ->>>  Gonna assertTrue :" + sampler.getClass().getName() + " Property is   ---->>>"
-						+ sampler.getPropertyAsString(TestElement.NAME));
-			}
+		try {
+			return nextIsNull();
+		} catch (NextIsNullException e1) {
+			return null;
 		}
 	}
-
 }

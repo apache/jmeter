@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -131,47 +132,74 @@ public class PowerTableModel extends DefaultTableModel {
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { String.class });
 				return constr.newInstance(new Object[] { "" });
-			} catch (Exception err) {
-			}
+			} catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
+            }
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Integer.TYPE });
 				return constr.newInstance(new Object[] { new Integer(0) });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Long.TYPE });
 				return constr.newInstance(new Object[] { new Long(0L) });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Boolean.TYPE });
 				return constr.newInstance(new Object[] { Boolean.FALSE });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Float.TYPE });
 				return constr.newInstance(new Object[] { new Float(0F) });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Double.TYPE });
 				return constr.newInstance(new Object[] { new Double(0D) });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Character.TYPE });
 				return constr.newInstance(new Object[] { new Character(' ') });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Byte.TYPE });
 				return constr.newInstance(new Object[] { new Byte(Byte.MIN_VALUE) });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 			try {
 				Constructor constr = colClass.getConstructor(new Class[] { Short.TYPE });
 				return constr.newInstance(new Object[] { new Short(Short.MIN_VALUE) });
-			} catch (Exception err) {
+            } catch (NoSuchMethodException err) {
+            } catch (InstantiationException err) {
+            } catch (IllegalAccessException err) {
+            } catch (InvocationTargetException err) {
 			}
 		}
 		return "";

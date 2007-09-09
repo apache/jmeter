@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,7 +20,6 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 
-import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
@@ -28,10 +27,9 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * This listener can record results to a file but not to the UI. It is meant to
  * provide an efficient means of recording data by eliminating GUI overhead.
  * 
- * @version $Revision$ $Date$
  ******************************************************************************/
 
-public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
+public class SimpleDataWriter extends AbstractVisualizer {
 	/***************************************************************************
 	 * Create the SimpleDataWriter.
 	 **************************************************************************/
@@ -42,7 +40,7 @@ public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
 	}
 
 	public String getLabelResource() {
-		return "simple_data_writer_title";
+		return "simple_data_writer_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -60,7 +58,7 @@ public class SimpleDataWriter extends AbstractVisualizer implements Clearable {
 	 * Does nothing, but required by interface.
 	 */
 
-	public void clear() {
+	public void clearData() {
 	}
 
 	/**

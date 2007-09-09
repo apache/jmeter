@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.Scrollable;
@@ -36,8 +37,6 @@ import org.apache.log.Logger;
 /**
  * Implements a simple graph for displaying performance results.
  * 
- * @author Michael Stover Created March 21, 2002
- * @version $Revision$ Last updated: $Date$
  */
 public class Graph extends JComponent implements Scrollable, Clearable {
 	private static Logger log = LoggingManager.getLoggerForClass();
@@ -132,7 +131,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 	/**
 	 * Clears this graph.
 	 */
-	public void clear() {
+	public void clearData() {
 		graphMax = 1;
 		throughputMax = 1;
 	}
@@ -160,8 +159,12 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 	public void updateGui(final Sample oneSample) {
 		long h = model.getPercentPoint((float) 0.90).longValue();
 		boolean repaint = false;
-		if ((oneSample.count % 20 == 0 || oneSample.count < 20) && h > (graphMax * 1.2) || graphMax > (h * 1.2)) {
-			graphMax = h;
+		if ((oneSample.getCount() % 20 == 0 || oneSample.getCount() < 20) && h > (graphMax * 1.2) || graphMax > (h * 1.2)) {
+			if (h >= 1) {
+                graphMax = h;
+            } else {
+                graphMax = 1;
+            }
 			repaint = true;
 		}
 		if (model.getMaxThroughput() > throughputMax) {
@@ -188,8 +191,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		synchronized (model.getSamples()) {
-			Iterator e = model.getSamples().iterator();
+        List samples = model.getSamples();
+        synchronized (samples ) {
+			Iterator e = samples.iterator();
 
 			for (int i = 0; e.hasNext(); i++) {
 				Sample s = (Sample) e.next();
@@ -204,9 +208,9 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 		int height = getHeight();
 		log.debug("Drawing a sample at " + x);
 		if (wantData) {
-			int data = (int) (oneSample.data * height / graphMax);
+			int data = (int) (oneSample.getData() * height / graphMax);
 
-			if (oneSample.success) {
+			if (oneSample.isSuccess()) {
 				g.setColor(Color.black);
 			} else {
 				g.setColor(JMeterColor.YELLOW);
@@ -216,27 +220,27 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 		}
 
 		if (wantAverage) {
-			int average = (int) (oneSample.average * height / graphMax);
+			int average = (int) (oneSample.getAverage() * height / graphMax);
 
 			g.setColor(Color.blue);
 			g.drawLine(x % width, height - average, x % width, (height - average - 1));
 		}
 
 		if (wantMedian) {
-			int median = (int) (oneSample.median * height / graphMax);
+			int median = (int) (oneSample.getMedian() * height / graphMax);
 
 			g.setColor(JMeterColor.purple);
 			g.drawLine(x % width, height - median, x % width, (height - median - 1));
 		}
 
 		if (wantDeviation) {
-			int deviation = (int) (oneSample.deviation * height / graphMax);
+			int deviation = (int) (oneSample.getDeviation() * height / graphMax);
 
 			g.setColor(Color.red);
 			g.drawLine(x % width, height - deviation, x % width, (height - deviation - 1));
 		}
 		if (wantThroughput) {
-			int throughput = (int) (oneSample.throughput * height / throughputMax);
+			int throughput = (int) (oneSample.getThroughput() * height / throughputMax);
 
 			g.setColor(JMeterColor.dark_green);
 			g.drawLine(x % width, height - throughput, x % width, (height - throughput - 1));

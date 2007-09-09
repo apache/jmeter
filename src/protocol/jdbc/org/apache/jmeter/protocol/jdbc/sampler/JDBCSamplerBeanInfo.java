@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,21 +39,47 @@ public class JDBCSamplerBeanInfo extends BeanInfoSupport {
 	public JDBCSamplerBeanInfo() {
 		super(JDBCSampler.class);
 
-		createPropertyGroup("varName", new String[] { "dataSource" });
+		createPropertyGroup("varName", // $NON-NLS-1$
+				new String[]{"dataSource" }); // $NON-NLS-1$
 
-		createPropertyGroup("sql", new String[] { "queryType", "query" });
+		createPropertyGroup("sql", // $NON-NLS-1$
+				new String[] { 
+				"queryType", // $NON-NLS-1$
+				"query", // $NON-NLS-1$
+				"queryArguments", // $NON-NLS-1$
+				"queryArgumentsTypes" // $NON-NLS-1$
+				});
 
-		PropertyDescriptor p = property("dataSource");
+		PropertyDescriptor p = property("dataSource"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");
 
-		p = property("queryType");
+		p = property("queryArguments"); // $NON-NLS-1$
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+		
+		p = property("queryArgumentsTypes"); // $NON-NLS-1$
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, "");
+		
+
+		p = property("queryType"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, JDBCSampler.SELECT);
 		p.setValue(NOT_OTHER,Boolean.TRUE);
-		p.setValue(TAGS,new String[]{JDBCSampler.SELECT,"Update Statement"});
+		p.setValue(TAGS,new String[]{
+				JDBCSampler.SELECT,
+				JDBCSampler.UPDATE,
+				JDBCSampler.CALLABLE, 
+				JDBCSampler.PREPARED_SELECT, 
+				JDBCSampler.PREPARED_UPDATE,
+				JDBCSampler.COMMIT,
+				JDBCSampler.ROLLBACK,
+				JDBCSampler.AUTOCOMMIT_FALSE,
+				JDBCSampler.AUTOCOMMIT_TRUE,
+				});
 
-		p = property("query");
+		p = property("query"); // $NON-NLS-1$
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");
 		p.setPropertyEditorClass(TextAreaEditor.class);

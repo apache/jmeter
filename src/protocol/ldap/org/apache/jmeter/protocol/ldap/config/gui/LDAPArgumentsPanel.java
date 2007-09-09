@@ -1,10 +1,10 @@
-//$Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.ldap.config.gui;
 
-import org.apache.jmeter.config.gui.AbstractConfigGui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -36,15 +35,12 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
-import junit.framework.TestCase;
-
+import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
@@ -61,7 +57,7 @@ import org.apache.log.Logger;
 
 public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListener {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	//private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** The title label for this component. */
 	private JLabel tableLabel;
@@ -79,19 +75,22 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	private JButton delete;
 
 	/** Command for adding a row to the table. */
-	private static final String ADD = "add";
+	private static final String ADD = "add"; //$NON-NLS-1$
 
 	/** Command for removing a row from the table. */
-	private static final String DELETE = "delete";
+	private static final String DELETE = "delete"; //$NON-NLS-1$
 
-	public static final String[] COLUMN_NAMES = { JMeterUtils.getResString("attribute"),
-			JMeterUtils.getResString("value"), JMeterUtils.getResString("opcode"), JMeterUtils.getResString("metadata") };
+	private static final String[] COLUMN_NAMES = {
+		    JMeterUtils.getResString("attribute"), //$NON-NLS-1$
+			JMeterUtils.getResString("value"),  //$NON-NLS-1$
+			JMeterUtils.getResString("opcode"),  //$NON-NLS-1$
+			JMeterUtils.getResString("metadata") }; //$NON-NLS-1$
 
 	/**
 	 * Create a new LDAPArgumentsPanel, using the default title.
 	 */
 	public LDAPArgumentsPanel() {
-		this(JMeterUtils.getResString("paramtable"));
+		this(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
 	}
 
 	/**
@@ -323,11 +322,18 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	 */
 	protected void initializeTableModel() {
 		tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES[0], COLUMN_NAMES[1], COLUMN_NAMES[2] },
+				LDAPArgument.class,
 				new Functor[] { new Functor("getName"), new Functor("getValue"), new Functor("getOpcode") },
 				new Functor[] { new Functor("setName"), new Functor("setValue"), new Functor("setOpcode") },
 				new Class[] { String.class, String.class, String.class });
 	}
 
+	public static boolean testFunctors(){
+		LDAPArgumentsPanel instance = new LDAPArgumentsPanel();
+		instance.initializeTableModel();
+		return instance.tableModel.checkFunctors(null,instance.getClass());
+	}
+	
 	/*
 	 * protected void initializeTableModel() { tableModel = new
 	 * ObjectTableModel( new String[] { ArgumentsPanel.COLUMN_NAMES_0,
@@ -341,10 +347,10 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	/**
 	 * Resize the table columns to appropriate widths.
 	 * 
-	 * @param table
+	 * @param _table
 	 *            the table to resize columns for
 	 */
-	protected void sizeColumns(JTable table) {
+	protected void sizeColumns(JTable _table) {
 	}
 
 	/**
@@ -376,11 +382,11 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 	 * @return a GUI panel containing the buttons
 	 */
 	private JPanel makeButtonPanel() {
-		add = new JButton(JMeterUtils.getResString("add"));
+		add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
 		add.setActionCommand(ADD);
 		add.setEnabled(true);
 
-		delete = new JButton(JMeterUtils.getResString("delete"));
+		delete = new JButton(JMeterUtils.getResString("delete")); //$NON-NLS-1$
 		delete.setActionCommand(DELETE);
 
 		checkDeleteStatus();
@@ -408,38 +414,5 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 
 		table.revalidate();
 		sizeColumns(table);
-	}
-
-	/**
-	 * Tests for the LDAPArgumentsPanel component.
-	 */
-	public static class Test extends TestCase {
-		/**
-		 * Create a new test.
-		 * 
-		 * @param name
-		 *            the name of the test
-		 */
-		public Test(String name) {
-			super(name);
-		}
-
-		/**
-		 * Test that adding an argument to the table results in an appropriate
-		 * TestElement being created.
-		 * 
-		 * @throws Exception
-		 *             if an exception occurred during the test
-		 */
-		public void testLDAPArgumentCreation() throws Exception {
-			LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
-			gui.tableModel.addRow(new LDAPArgument());
-			gui.tableModel.setValueAt("howdy", 0, 0);
-			gui.tableModel.addRow(new LDAPArgument());
-			gui.tableModel.setValueAt("doody", 0, 1);
-
-			assertEquals("=", ((LDAPArgument) ((LDAPArguments) gui.createTestElement()).getArguments().get(0)
-					.getObjectValue()).getMetaData());
-		}
 	}
 }

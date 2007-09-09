@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,17 +39,31 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
-/**
- * 
- * author Michael Stover
- * 
- * @version $Revision$
- */
 public class JMeterTreeModel extends DefaultTreeModel {
 
+	public JMeterTreeModel(TestElement tp, TestElement wb) {
+		super(new JMeterTreeNode(wb, null));
+		initTree(tp,wb);
+	}
+
 	public JMeterTreeModel() {
-		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
-		initTree();
+		this(new TestPlanGui().createTestElement(),new WorkBenchGui().createTestElement());
+//		super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
+//		TestElement tp = new TestPlanGui().createTestElement();
+//		initTree(tp);
+	}
+
+	/**
+	 * Hack to allow TreeModel to be used in non-GUI and headless mode.
+	 * 
+	 * @deprecated - only for use by JMeter class!
+	 * @param o - dummy
+	 */
+	public JMeterTreeModel(Object o) {
+		this(new TestPlan(),new WorkBench());
+//		super(new JMeterTreeNode(new WorkBench(), null));
+//		TestElement tp = new TestPlan();
+//		initTree(tp, new WorkBench());
 	}
 
 	/**
@@ -104,12 +118,17 @@ public class JMeterTreeModel extends DefaultTreeModel {
 		}
 		component.setProperty(TestElement.GUI_CLASS, NameUpdater.getCurrentName(component
 				.getPropertyAsString(TestElement.GUI_CLASS)));
-		GuiPackage.getInstance().updateCurrentNode();
-		JMeterGUIComponent guicomp = GuiPackage.getInstance().getGui(component);
-		guicomp.configure(component);
-		guicomp.modifyTestElement(component);
-		GuiPackage.getInstance().getCurrentGui(); // put the gui object back
-													// to the way it was.
+
+		GuiPackage guiPackage = GuiPackage.getInstance();
+		if (guiPackage != null) {
+			// The node can be added in non GUI mode at startup 
+			guiPackage.updateCurrentNode();
+			JMeterGUIComponent guicomp = guiPackage.getGui(component);
+			guicomp.configure(component);
+			guicomp.modifyTestElement(component);
+			guiPackage.getCurrentGui(); // put the gui object back
+										// to the way it was.
+		}
 		JMeterTreeNode newNode = new JMeterTreeNode(component, this);
 
 		// This check the state of the TestElement and if returns false it
@@ -174,19 +193,45 @@ public class JMeterTreeModel extends DefaultTreeModel {
 		return getCurrentSubTree((JMeterTreeNode) ((JMeterTreeNode) this.getRoot()).getChildAt(0));
 	}
 
+    /**
+     * Clear the test plan, and use default node for test plan and workbench
+     */
 	public void clearTestPlan() {
-		super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 0));
-		initTree();
-	}
-
-	private void initTree() {
 		TestElement tp = new TestPlanGui().createTestElement();
-		TestElement wb = new WorkBenchGui().createTestElement();
-		this.insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
-		try {
-			super.removeNodeFromParent((JMeterTreeNode) getChild(getRoot(), 1));
-		} catch (RuntimeException e) {
-		}
-		this.insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
+		clearTestPlan(tp);
+	}
+    
+    /**
+     * Clear the test plan, and use specified node for test plan and default node for workbench
+     * 
+     * @param testPlan the node to use as the testplan top node
+     */
+    public void clearTestPlan(TestElement testPlan) {
+        // Remove the workbench and testplan nodes
+        int children = getChildCount(getRoot());
+        while (children > 0) {
+            JMeterTreeNode child = (JMeterTreeNode)getChild(getRoot(), 0);
+            super.removeNodeFromParent(child);
+            children = getChildCount(getRoot());
+        }
+        // Init the tree
+        initTree(testPlan,new WorkBenchGui().createTestElement()); // Assumes this is only called from GUI mode
+    }
+    
+	/**
+     * Initialize the model with nodes for testplan and workbench.
+     * 
+     * @param tp the element to use as testplan
+     * @param wb the element to use as workbench
+     */
+	private void initTree(TestElement tp, TestElement wb) {
+        // Insert the test plan node
+        insertNodeInto(new JMeterTreeNode(tp, this), (JMeterTreeNode) getRoot(), 0);
+        // Insert the workbench node
+		insertNodeInto(new JMeterTreeNode(wb, this), (JMeterTreeNode) getRoot(), 1);
+        // Let others know that the tree content has changed.
+        // This should not be necessary, but without it, nodes are not shown when the user
+        // uses the Close menu item
+        nodeStructureChanged((JMeterTreeNode)getRoot());
 	}
 }

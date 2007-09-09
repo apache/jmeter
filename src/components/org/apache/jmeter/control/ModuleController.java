@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,8 +32,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * The goal of ModuleController is to add modularity to JMeter. The general idea
@@ -48,12 +46,10 @@ import org.apache.log.Logger;
  * (which user logs in, which account is created, etc.) of the module.
  * 
  * @author Thad Smith
- * @version $Revision$
  */
 public class ModuleController extends GenericController implements ReplaceableController {
-	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String NODE_PATH = "ModuleController.node_path";
+	private static final String NODE_PATH = "ModuleController.node_path";// $NON-NLS-1$
 
 	private JMeterTreeNode selectedNode = null;
 
@@ -116,23 +112,31 @@ public class ModuleController extends GenericController implements ReplaceableCo
 		JMeterProperty prop = getProperty(NODE_PATH);
 		if (!(prop instanceof NullProperty)) {
 			return (List) ((CollectionProperty) prop).getObjectValue();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
-	private void restoreSelected() {
-		if (selectedNode == null) {
-			List nodePath = getNodePath();
-			if (nodePath != null && nodePath.size() > 0) {
-				GuiPackage gp = GuiPackage.getInstance();
-				if (gp != null) {
-					JMeterTreeNode root = (JMeterTreeNode) gp.getTreeModel().getRoot();
-					traverse(root, nodePath, 1);
-				}
-			}
-		}
-	}
+    private void restoreSelected() {
+        GuiPackage gp = GuiPackage.getInstance();
+        if (gp != null) {
+            JMeterTreeNode root = (JMeterTreeNode) gp.getTreeModel().getRoot();
+            resolveReplacementSubTree(root);
+        }
+    }
+
+    /**
+     * Compute the replacement tree.
+     * @param context
+     */
+    public void resolveReplacementSubTree(Object context) {
+        JMeterTreeNode root = (JMeterTreeNode) context;
+        if (selectedNode == null) {
+            List nodePathList = getNodePath();
+            if (nodePathList != null && nodePathList.size() > 0) {
+                traverse(root, nodePathList, 1);
+            }
+        }
+    }
 
 	private void traverse(JMeterTreeNode node, List nodePath, int level) {
 		if (node != null && nodePath.size() > level) {
@@ -150,17 +154,17 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	/**
 	 * Copies the controller's subelements into the execution tree
 	 * 
-	 * @param tree -
-	 *            The current tree under which the nodes will be added
 	 */
 	public HashTree getReplacementSubTree() {
-		if (!selectedNode.isEnabled()) {
-			selectedNode = cloneTreeNode(selectedNode);
-			selectedNode.setEnabled(true);
-		}
-		HashTree tree = new ListedHashTree();
-		tree.add(selectedNode);
-		createSubTree(tree, selectedNode);
+        HashTree tree = new ListedHashTree();
+        if (selectedNode != null) {
+    		if (!selectedNode.isEnabled()) {
+    			selectedNode = cloneTreeNode(selectedNode);
+    			selectedNode.setEnabled(true);
+    		}
+    		tree.add(selectedNode);
+    		createSubTree(tree, selectedNode);
+        }
 		return tree;
 	}
 
