@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,8 +27,6 @@ import java.util.Map;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 // Mark Walsh, 2002-08-03 add method:
 // addArgument(String name, Object value, Object metadata)
@@ -38,14 +36,10 @@ import org.apache.log.Logger;
 /**
  * A set of Argument objects.
  * 
- * @author Michael Stover
- * @author Mark Walsh
- * @version $Revision$
  */
 public class Arguments extends ConfigTestElement implements Serializable {
-    private static Logger log = LoggingManager.getLoggerForClass();
 	/** The name of the property used to store the arguments. */
-	public static final String ARGUMENTS = "Arguments.arguments";
+	public static final String ARGUMENTS = "Arguments.arguments"; //$NON-NLS-1$
 
 	/**
 	 * Create a new Arguments object with no arguments.
@@ -162,13 +156,16 @@ public class Arguments extends ConfigTestElement implements Serializable {
 		PropertyIterator iter = getArguments().iterator();
 		while (iter.hasNext()) {
 			Argument arg = (Argument) iter.next().getObjectValue();
-			if (arg.getMetaData() == null) {
-				str.append(arg.getName() + "=" + arg.getValue());
+			final String metaData = arg.getMetaData();
+			str.append(arg.getName());
+			if (metaData == null) {
+				str.append("="); //$NON-NLS-1$
 			} else {
-				str.append(arg.getName() + arg.getMetaData() + arg.getValue());
+				str.append(metaData);
 			}
+			str.append(arg.getValue());
 			if (iter.hasNext()) {
-				str.append("&");
+				str.append("&"); //$NON-NLS-1$
 			}
 		}
 		return str.toString();

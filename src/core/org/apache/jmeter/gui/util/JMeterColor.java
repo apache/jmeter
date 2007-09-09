@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,14 +20,8 @@ package org.apache.jmeter.gui.util;
 
 import java.awt.Color;
 
-/**
- * @author mstover
- * @version $Revision$
- */
 public class JMeterColor extends Color {
 	public final static Color dark_green = new JMeterColor(0F, .5F, 0F);
-
-	public final static Color YELLOW = new JMeterColor(1F, 1F, 0);
 
 	public final static Color LAVENDER = new JMeterColor(206F / 255F, 207F / 255F, 1F);
 

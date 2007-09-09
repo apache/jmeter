@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -22,16 +22,9 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.LinkedList;
 
-import org.apache.jmeter.testbeans.gui.TableEditor;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.MultiProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
 import org.apache.log.Logger;
@@ -56,6 +49,7 @@ public class TestBeanHelper {
 	 * property value map.
 	 * <p>
 	 * 
+	 * @deprecated to limit it's usage in expectation of moving it elsewhere.
 	 */
 	public static void prepare(TestElement el) {
 		if (!(el instanceof TestBean)) {
@@ -73,8 +67,7 @@ public class TestBeanHelper {
 				// Obtain a value of the appropriate type for this property.
 				JMeterProperty jprop = el.getProperty(desc[x].getName());
 				Class type = desc[x].getPropertyType();
-				Object value = null;
-				value = unwrapProperty(desc[x], jprop, type);
+				Object value = Converter.convert(jprop.getStringValue(), type);
 
 				if (log.isDebugEnabled())
 					log.debug("Setting " + jprop.getName() + "=" + value);
@@ -84,60 +77,13 @@ public class TestBeanHelper {
 				// We can't assign null to primitive types.
 				{
 					param[0] = value;
-					invokeOrBailOut(el, desc[x].getWriteMethod(), param);
+					Method writeMethod = desc[x].getWriteMethod();
+					if (writeMethod!=null) invokeOrBailOut(el, writeMethod, param);
 				}
 			}
 		} catch (IntrospectionException e) {
 			log.error("Couldn't set properties for " + el.getClass().getName(), e);
 		}
-	}
-
-	/**
-	 * @param desc
-	 * @param x
-	 * @param jprop
-	 * @param type
-	 * @return
-	 */
-	private static Object unwrapProperty(PropertyDescriptor desc, JMeterProperty jprop, Class type) {
-		Object value;
-		if(jprop instanceof TestElementProperty)
-		{
-			TestElement te = ((TestElementProperty)jprop).getElement();
-			if(te instanceof TestBean)
-			{
-				prepare(te);
-			}
-			value = te;
-		}
-		else if(jprop instanceof MultiProperty)
-		{
-			value = unwrapCollection((MultiProperty)jprop,(String)desc.getValue(TableEditor.CLASSNAME));
-		}
-		else value = Converter.convert(jprop.getStringValue(), type);
-		return value;
-	}
-	
-	private static Object unwrapCollection(MultiProperty prop,String type)
-	{
-		if(prop instanceof CollectionProperty)
-		{
-			Collection values = new LinkedList();
-			PropertyIterator iter = prop.iterator();
-			while(iter.hasNext())
-			{
-				try
-				{
-					values.add(unwrapProperty(null,iter.next(),Class.forName(type)));
-				}
-				catch(Exception e)
-				{
-					log.error("Couldn't convert object: " + prop.getObjectValue() + " to " + type,e);
-				}
-			}
-			return values;
-		}
-		return null;
 	}
 
 	/**

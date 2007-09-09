@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,11 +21,13 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
+
+// For JUnit tests, @see TestLogFilter
 
 /**
  * Description:<br>
@@ -204,7 +206,7 @@ public class LogFilter implements Filter, Serializable {
 	 * all entries are included unless it matches, which means it should be
 	 * excluded.
 	 * 
-	 * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(java.lang.String)
+	 * @see org.apache.jmeter.protocol.http.util.accesslog.Filter#isFiltered(String, TestElement)
 	 * @param path
 	 * @return boolean
 	 */
@@ -405,147 +407,9 @@ public class LogFilter implements Filter, Serializable {
 		try {
 			return JMeterUtils.getPatternCache().getPattern(pattern,
 					Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-		} catch (Exception exception) {
+		} catch (MalformedCachePatternException exception) {
 			exception.printStackTrace();
 			return null;
-		}
-	}
-
-	// ///////////////////// Start of Test Code //////////////////////
-
-	public static class Test extends JMeterTestCase {
-
-		private static final String TESTSTR = "/test/helloworld.html";
-
-		private static final String TESTSTROUT = "/test/helloworld.jsp";
-
-		private static class TestData {
-			private final String file;
-
-			private final boolean exclfile;
-
-			private final boolean inclfile;
-
-			private final boolean exclpatt;
-
-			private final boolean inclpatt;
-
-			TestData(String f, boolean exf, boolean inf, boolean exp, boolean inp) {
-				file = f;
-				exclfile = exf;
-				inclfile = inf;
-				exclpatt = exp;
-				inclpatt = inp;
-			}
-		}
-
-		private static final String[] INCL = { "hello.html", "index.html", "/index.jsp" };
-
-		private static final String[] PATTERNS = { "index", ".jtml" };
-
-		private static final TestData[] TESTDATA = {
-		// file exclf inclf exclp inclp
-				new TestData("/test/hello.jsp", true, false, true, false),
-				new TestData("/test/one/hello.html", false, true, true, false),
-				new TestData("hello.jsp", true, false, true, false),
-				new TestData("hello.htm", true, false, true, false),
-				new TestData("/test/open.jsp", true, false, true, false),
-				new TestData("/test/open.html", true, false, true, false),
-				new TestData("/index.jsp", false, true, false, true),
-				new TestData("/index.jhtml", true, false, false, true),
-				new TestData("newindex.jsp", true, false, false, true),
-				new TestData("oldindex.jsp", true, false, false, true),
-				new TestData("oldindex1.jsp", true, false, false, true),
-				new TestData("oldindex2.jsp", true, false, false, true),
-				new TestData("oldindex3.jsp", true, false, false, true),
-				new TestData("oldindex4.jsp", true, false, false, true),
-				new TestData("oldindex5.jsp", true, false, false, true),
-				new TestData("oldindex6.jsp", true, false, false, true),
-				new TestData("/test/index.htm", true, false, false, true) };
-
-		public void testConstruct() {
-			new LogFilter();
-		}
-
-		private LogFilter testf;
-
-		public void setUp() {
-			testf = new LogFilter();
-		}
-
-		public void testReplaceExtension() {
-			testf.setReplaceExtension("html", "jsp");
-			testf.isFiltered(TESTSTR,null);// set the required variables
-			assertEquals(TESTSTROUT, testf.filter(TESTSTR));
-		}
-
-		public void testExcludeFiles() {
-			testf.excludeFiles(INCL);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.exclfile;
-
-				testf.isFiltered(theFile,null);
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
-		}
-
-		public void testIncludeFiles() {
-			testf.includeFiles(INCL);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.inclfile;
-
-				testf.isFiltered(theFile,null);
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
-
-		}
-
-		public void testExcludePattern() {
-			testf.excludePattern(PATTERNS);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.exclpatt;
-
-				assertEquals(!expect, testf.isFiltered(theFile,null));
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
-		}
-
-		public void testIncludePattern() {
-			testf.includePattern(PATTERNS);
-			for (int idx = 0; idx < TESTDATA.length; idx++) {
-				TestData td = TESTDATA[idx];
-				String theFile = td.file;
-				boolean expect = td.inclpatt;
-
-				assertEquals(!expect, testf.isFiltered(theFile,null));
-				String line = testf.filter(theFile);
-				if (line != null) {
-					assertTrue("Expect to accept " + theFile, expect);
-				} else {
-					assertFalse("Expect to reject " + theFile, expect);
-				}
-			}
 		}
 	}
 

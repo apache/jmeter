@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,9 +35,9 @@ import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
+ * Regular Expression Extractor Post-Processor GUI
  */
 public class RegexExtractorGui extends AbstractPostProcessorGui {
 	private JLabeledTextField regexField;
@@ -49,10 +50,13 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
 	private JLabeledTextField refNameField;
 
-	// NOTUSED private JCheckBox scanHeader;
 	private JRadioButton useBody;
 
 	private JRadioButton useHeaders;
+    
+    private JRadioButton useURL;
+
+	private ButtonGroup group;
 
 	public RegexExtractorGui() {
 		super();
@@ -60,18 +64,22 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 	}
 
 	public String getLabelResource() {
-		return "regex_extractor_title";
+		return "regex_extractor_title"; //$NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {
 		super.configure(el);
-		useHeaders.setSelected(el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
-		useBody.setSelected(!el.getPropertyAsBoolean(RegexExtractor.USEHEADERS));
-		regexField.setText(el.getPropertyAsString(RegexExtractor.REGEX));
-		templateField.setText(el.getPropertyAsString(RegexExtractor.TEMPLATE));
-		defaultField.setText(el.getPropertyAsString(RegexExtractor.DEFAULT));
-		matchNumberField.setText(el.getPropertyAsString(RegexExtractor.MATCH_NUMBER));
-		refNameField.setText(el.getPropertyAsString(RegexExtractor.REFNAME));
+		if (el instanceof RegexExtractor){
+			RegexExtractor re = (RegexExtractor) el;
+			useHeaders.setSelected(re.useHeaders());
+			useBody.setSelected(re.useBody());
+	        useURL.setSelected(re.useUrl());
+			regexField.setText(re.getRegex());
+			templateField.setText(re.getTemplate());
+			defaultField.setText(re.getDefaultValue());
+			matchNumberField.setText(re.getMatchNumberAsString());
+			refNameField.setText(re.getRefName());
+		}
 	}
 
 	/**
@@ -90,16 +98,33 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 	 */
 	public void modifyTestElement(TestElement extractor) {
 		super.configureTestElement(extractor);
-		extractor.setProperty(RegexExtractor.USEHEADERS, JOrphanUtils.booleanToString(useHeaders.isSelected()));
-		extractor.setProperty(RegexExtractor.MATCH_NUMBER, matchNumberField.getText());
 		if (extractor instanceof RegexExtractor) {
 			RegexExtractor regex = (RegexExtractor) extractor;
+			regex.setUseField(group.getSelection().getActionCommand());			
 			regex.setRefName(refNameField.getText());
 			regex.setRegex(regexField.getText());
 			regex.setTemplate(templateField.getText());
 			regex.setDefaultValue(defaultField.getText());
+			regex.setMatchNumber(matchNumberField.getText());
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        useBody.setSelected(true);
+        useHeaders.setSelected(false);
+        useURL.setSelected(false);
+        
+        regexField.setText(""); //$NON-NLS-1$
+        templateField.setText(""); //$NON-NLS-1$
+        defaultField.setText(""); //$NON-NLS-1$
+        refNameField.setText(""); //$NON-NLS-1$
+        matchNumberField.setText(""); //$NON-NLS-1$
+    }    
 
 	private void init() {
 		setLayout(new BorderLayout());
@@ -114,28 +139,37 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 
 	private JPanel makeSourcePanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("regex_source")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("regex_source"))); //$NON-NLS-1$
 
-		useBody = new JRadioButton(JMeterUtils.getResString("regex_src_body"));
-		useHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs"));
+		useBody = new JRadioButton(JMeterUtils.getResString("regex_src_body")); //$NON-NLS-1$
+		useHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs")); //$NON-NLS-1$
+        useURL = new JRadioButton(JMeterUtils.getResString("regex_src_url")); //$NON-NLS-1$
 
-		ButtonGroup group = new ButtonGroup();
+		group = new ButtonGroup();
 		group.add(useBody);
 		group.add(useHeaders);
+        group.add(useURL);
 
 		panel.add(useBody);
 		panel.add(useHeaders);
+        panel.add(useURL);
 
 		useBody.setSelected(true);
+		
+		// So we know which button is selected
+		useBody.setActionCommand(RegexExtractor.USE_BODY);
+		useHeaders.setActionCommand(RegexExtractor.USE_HDRS);
+		useURL.setActionCommand(RegexExtractor.USE_URL);
+		
 		return panel;
 	}
 
 	private JPanel makeParameterPanel() {
-		regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field"));
-		templateField = new JLabeledTextField(JMeterUtils.getResString("template_field"));
-		defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field"));
-		refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));
-		matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field"));
+		regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field")); //$NON-NLS-1$
+		templateField = new JLabeledTextField(JMeterUtils.getResString("template_field")); //$NON-NLS-1$
+		defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field")); //$NON-NLS-1$
+		refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field")); //$NON-NLS-1$
+		matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field")); //$NON-NLS-1$
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -158,14 +192,16 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 		panel.add((Component) item.get(0), gbc.clone());
 		gbc.gridx++;
 		gbc.weightx = 1;
-		;
+		gbc.fill=GridBagConstraints.HORIZONTAL;
 		panel.add((Component) item.get(1), gbc.clone());
 	}
 
+	// Next line
 	private void resetContraints(GridBagConstraints gbc) {
 		gbc.gridx = 0;
 		gbc.gridy++;
 		gbc.weightx = 0;
+        gbc.fill=GridBagConstraints.NONE;
 	}
 
 	private void initConstraints(GridBagConstraints gbc) {

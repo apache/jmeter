@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,7 +35,9 @@ public class RunningSample {
 
 	private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
 
-	private long counter;
+	// The counts all need to be volatile - or else the get() methods need to be synchronised.
+	
+	private volatile long counter;
 
 	private volatile long runningSum;
 
@@ -54,7 +57,7 @@ public class RunningSample {
 	}
 
 	/**
-	 * Use this constructor.
+	 * Use this constructor to create the initial instance
 	 */
 	public RunningSample(String label, int index) {
 		this.label = label;
@@ -63,11 +66,10 @@ public class RunningSample {
 	}
 
 	/**
-	 * Copy constructor to a duplicate of existing instance (without the
-	 * disadvantages of clone()0
+	 * Copy constructor to create a duplicate of existing instance (without the
+	 * disadvantages of clone()
 	 * 
-	 * @param src
-	 *            RunningSample
+	 * @param src existing RunningSample to be copied
 	 */
 	public RunningSample(RunningSample src) {
 		this.counter = src.counter;
@@ -199,13 +201,17 @@ public class RunningSample {
 		boolean aSuccessFlag = res.isSuccessful();
 
 		counter++;
-		long startTime = res.getTimeStamp() - aTimeInMillis;
+		long startTime = res.getStartTime();
+		long endTime = res.getEndTime();
+		
 		if (firstTime > startTime) {
 			// this is our first sample, set the start time to current timestamp
 			firstTime = startTime;
 		}
-		if (lastTime < res.getTimeStamp()) {
-			lastTime = res.getTimeStamp();
+		
+		// Always update the end time
+		if (lastTime < endTime) {
+			lastTime = endTime;
 		}
 		runningSum += aTimeInMillis;
 
@@ -344,4 +350,4 @@ public class RunningSample {
 		return errorCount;
 	}
 
-} // class RunningSample
+}

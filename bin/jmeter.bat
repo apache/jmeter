@@ -1,11 +1,11 @@
 @echo off
 
-rem   $Id$
-rem   Copyright 2001-2004 The Apache Software Foundation
-rem 
-rem   Licensed under the Apache License, Version 2.0 (the "License");
-rem   you may not use this file except in compliance with the License.
-rem   You may obtain a copy of the License at
+rem   Licensed to the Apache Software Foundation (ASF) under one or more
+rem   contributor license agreements.  See the NOTICE file distributed with
+rem   this work for additional information regarding copyright ownership.
+rem   The ASF licenses this file to You under the Apache License, Version 2.0
+rem   (the "License"); you may not use this file except in compliance with
+rem   the License.  You may obtain a copy of the License at
 rem 
 rem       http://www.apache.org/licenses/LICENSE-2.0
 rem 
@@ -14,6 +14,15 @@ rem   distributed under the License is distributed on an "AS IS" BASIS,
 rem   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem   See the License for the specific language governing permissions and
 rem   limitations under the License.
+
+rem   =====================================================
+rem   Environment variables that can be defined externally:
+rem
+rem   JMETER_BIN - JMeter bin directory (must end in \)
+rem   JM_LAUNCH - java.exe (default) or javaw.exe
+rem   JVM_ARGS - additional java options, e.g. -Dprop=val
+rem
+rem   =====================================================
 
 if .%JM_LAUNCH% == . set JM_LAUNCH=java.exe
 
@@ -25,8 +34,7 @@ rem Need to check if we are using the 4NT shell...
 if "%eval[2+2]" == "4" goto setup4NT
 
 if exist jmeter.bat goto winNT1
-echo Changing to JMeter home directory
-cd /D %~dp0
+if .%JMETER_BIN% == . set JMETER_BIN=%~dp0
 
 :winNT1
 rem On NT/2K grab all arguments at once
@@ -39,7 +47,7 @@ goto doneStart
 
 :win9xStart
 rem Slurp the command line arguments.  This loop allows for an unlimited number of 
-rem agruments (up to the command line limit, anyway).
+rem arguments (up to the command line limit, anyway).
 
 set JMETER_CMD_LINE_ARGS=
 
@@ -78,6 +86,6 @@ rem Setting this flag to true enables hardware-accelerated scaling.
 rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Collect the settings defined above
-set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DEBUG% %DDRAW%
+set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
 
-%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar ApacheJMeter.jar %JMETER_CMD_LINE_ARGS%
+%JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%

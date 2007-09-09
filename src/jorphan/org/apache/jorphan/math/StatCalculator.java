@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 /**
  * This class serves as a way to calculate the median of a list of values. It is
@@ -80,7 +78,7 @@ public class StatCalculator implements Serializable {
 	}
 
 	public void addAll(StatCalculator calc) {
-		Iterator iter = values.iterator();
+		Iterator iter = calc.values.iterator();
 		while (iter.hasNext()) {
 			addValue((Number) iter.next());
 		}
@@ -104,7 +102,7 @@ public class StatCalculator implements Serializable {
 	 * are below, the remaining 10% are above.
 	 * 
 	 * @param percent
-	 * @return
+	 * @return number of values less than the percentage
 	 */
 	public Number getPercentPoint(float percent) {
 		if (count > 0) {
@@ -120,7 +118,7 @@ public class StatCalculator implements Serializable {
 	 * are below, the remaining 10% are above.
 	 * 
 	 * @param percent
-	 * @return
+	 * @return number of values less than the percentage
 	 */
 	public Number getPercentPoint(double percent) {
 		if (count > 0) {
@@ -133,14 +131,11 @@ public class StatCalculator implements Serializable {
 	 * The method has a limit of 1% as the finest granularity. We do this to
 	 * make sure we get a whole number for iterating.
 	 * 
-	 * @param percentRange
-	 * @return
 	 */
 	public synchronized HashMap getDistribution() {
 		HashMap items = new HashMap();
 		Iterator itr = this.values.iterator();
-		Long n = new Long(0);
-		Number[] dis = new Number[0];
+		Number[] dis;
 		while (itr.hasNext()) {
 			Long nx = (Long) itr.next();
 			if (items.containsKey(nx)) {
@@ -148,11 +143,10 @@ public class StatCalculator implements Serializable {
 				dis[1] = new Integer(dis[1].intValue() + 1);
 				items.put(nx, dis);
 			} else {
-				n = nx;
 				dis = new Number[2];
-				dis[0] = n;
+				dis[0] = nx;
 				dis[1] = new Integer(1);
-				items.put(n, dis);
+				items.put(nx, dis);
 			}
 		}
 		return items;
@@ -207,35 +201,4 @@ public class StatCalculator implements Serializable {
 			values.add((index * (-1)) - 1, val);
 		}
 	}
-
-	public static class Test extends TestCase {
-		StatCalculator calc;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			calc = new StatCalculator();
-		}
-
-		public void testCalculation() {
-			calc.addValue(18);
-			calc.addValue(10);
-			calc.addValue(9);
-			calc.addValue(11);
-			calc.addValue(28);
-			calc.addValue(3);
-			calc.addValue(30);
-			calc.addValue(15);
-			calc.addValue(15);
-			calc.addValue(21);
-			assertEquals(16, (int) calc.getMean());
-			assertEquals(8.0622577F, (float) calc.getStandardDeviation(), 0F);
-			assertEquals(30, calc.getMax().intValue());
-			assertEquals(3, calc.getMin().intValue());
-			assertEquals(15, calc.getMedian().intValue());
-		}
-	}
-
 }

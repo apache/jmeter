@@ -1,9 +1,10 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,12 +33,15 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * Preferences - Java - Code Generation - Code and Comments
  */
 public class IntegerPropertyConverter implements Converter {
-	/**
+    
+	private static final String ATT_NAME = "name"; // $NON-NLS-1$
+
+    /**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; // $NON-NLS-1$
 	}
 
 	/*
@@ -58,7 +62,7 @@ public class IntegerPropertyConverter implements Converter {
 	 */
 	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext arg2) {
 		IntegerProperty prop = (IntegerProperty) obj;
-		writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
+		writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
 		writer.setValue(prop.getStringValue());
 	}
 
@@ -69,7 +73,7 @@ public class IntegerPropertyConverter implements Converter {
 	 *      com.thoughtworks.xstream.converters.UnmarshallingContext)
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext arg1) {
-		IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute("name")), Integer
+		IntegerProperty prop = new IntegerProperty(ConversionHelp.decode(reader.getAttribute(ATT_NAME)), Integer
 				.parseInt(reader.getValue()));
 		return prop;
 	}

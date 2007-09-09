@@ -1,10 +1,11 @@
-//$Header:
+//$Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,9 +19,7 @@
 package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
-import org.apache.jmeter.report.gui.AbstractReportGui;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -44,12 +43,10 @@ public class ReportPage extends AbstractTestElement implements Serializable {
      * No-arg constructor.
      */
     public ReportPage() {
-        // setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
     }
 
     public static ReportPage createReportPage(String name) {
         ReportPage page = new ReportPage();
-        // page.setProperty(TestElement.GUI_CLASS,AbstractReportGui.class.getName());
         return page;
     }
 
@@ -100,4 +97,5 @@ public class ReportPage extends AbstractTestElement implements Serializable {
     public void setIntroduction(String intro) {
         setProperty(REPORT_PAGE_INTRO,intro);
     }
+    
 }

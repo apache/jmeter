@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,13 +21,14 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -41,77 +43,84 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * The <code>JavaTestSamplerGui</code> class provides the user interface
- * for the {@link JavaSampler}.
+ * The <code>JUnitTestSamplerGui</code> class provides the user interface
+ * for the {@link JUnitSampler}.
  * 
- * @version $Revision$ on $Date$
  */
 public class JUnitTestSamplerGui extends AbstractSamplerGui 
 implements ChangeListener, ActionListener
 {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** The name of the classnameCombo JComboBox */
-    private static final String CLASSNAMECOMBO = "classnamecombo";
-    private static final String METHODCOMBO = "methodcombo";
-    private static final String PREFIX = "test";
-    public static final String ONETIMESETUP = "oneTimeSetUp";
-    public static final String ONETIMETEARDOWN = "oneTimeTearDown";
-    public static final String SUITE = "suite";
-    protected String[] SPATHS = null;
-
-    JLabeledTextField constructorLabel =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_constructor_string"));
-
-    JLabel methodLabel =
-        new JLabel(
-            JMeterUtils.getResString("junit_test_method"));
-
-    JLabeledTextField successMsg =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_success_msg"));
-
-    JLabeledTextField failureMsg =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_failure_msg"));
+    private static final String CLASSNAMECOMBO = "classnamecombo"; //$NON-NLS-1$
+    private static final String METHODCOMBO = "methodcombo"; //$NON-NLS-1$
+    private static final String PREFIX = "test"; //$NON-NLS-1$
     
-    JLabeledTextField errorMsg =
-        new JLabeledTextField(
-            JMeterUtils.getResString("junit_error_msg"));
+    // Names of JUnit methods
+    private static final String ONETIMESETUP = "oneTimeSetUp"; //$NON-NLS-1$
+    private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
+    private static final String SUITE = "suite"; //$NON-NLS-1$
+    
+    private static final String[] SPATHS = new String[] {
+            JMeterUtils.getJMeterHome() + "/lib/junit/", //$NON-NLS-1$
+    };
 
-    JLabeledTextField successCode =
+    private JLabeledTextField constructorLabel =
         new JLabeledTextField(
-            JMeterUtils.getResString("junit_success_code"));
+            JMeterUtils.getResString("junit_constructor_string")); //$NON-NLS-1$
 
-    JLabeledTextField failureCode =
+    private JLabel methodLabel =
+        new JLabel(
+            JMeterUtils.getResString("junit_test_method")); //$NON-NLS-1$
+
+    private JLabeledTextField successMsg =
         new JLabeledTextField(
-            JMeterUtils.getResString("junit_failure_code"));
+            JMeterUtils.getResString("junit_success_msg")); //$NON-NLS-1$
 
-    JLabeledTextField errorCode =
+    private JLabeledTextField failureMsg =
         new JLabeledTextField(
-            JMeterUtils.getResString("junit_error_code"));
-
-    JLabeledTextField filterpkg =
+            JMeterUtils.getResString("junit_failure_msg")); //$NON-NLS-1$
+    
+    private JLabeledTextField errorMsg =
         new JLabeledTextField(
-            JMeterUtils.getResString("junit_pkg_filter"));
+            JMeterUtils.getResString("junit_error_msg")); //$NON-NLS-1$
 
-    JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown"));
+    private JLabeledTextField successCode =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_success_code")); //$NON-NLS-1$
+
+    private JLabeledTextField failureCode =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_failure_code")); //$NON-NLS-1$
+
+    private JLabeledTextField errorCode =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_error_code")); //$NON-NLS-1$
+
+    private JLabeledTextField filterpkg =
+        new JLabeledTextField(
+            JMeterUtils.getResString("junit_pkg_filter")); //$NON-NLS-1$
+
+    private JCheckBox doSetup = new JCheckBox(JMeterUtils.getResString("junit_do_setup_teardown")); //$NON-NLS-1$
+    private JCheckBox appendError = new JCheckBox(JMeterUtils.getResString("junit_append_error")); //$NON-NLS-1$
+    private JCheckBox appendExc = new JCheckBox(JMeterUtils.getResString("junit_append_exception")); //$NON-NLS-1$
     
     /** A combo box allowing the user to choose a test class. */
     private JComboBox classnameCombo;
     private JComboBox methodName;
-    private TestCase TESTCLASS = null;
+    private transient TestCase TESTCLASS = null;
     private List METHODLIST = null;
-    protected ClassFilter FILTER = new ClassFilter();
-    protected List CLASSLIST = null;
     
-    private static transient Logger log = LoggingManager.getLoggerForClass();
-
+    private transient ClassFilter FILTER = new ClassFilter();
+    private List CLASSLIST = null;
+    
     /**
-     * Constructor for JavaTestSamplerGui
+     * Constructor for JUnitTestSamplerGui
      */
     public JUnitTestSamplerGui()
     {
@@ -121,7 +130,7 @@ implements ChangeListener, ActionListener
 
     public String getLabelResource()
     {
-        return "junit_request";
+        return "junit_request"; //$NON-NLS-1$
     }
 
     /**
@@ -141,9 +150,6 @@ implements ChangeListener, ActionListener
     private JPanel createClassPanel()
     {
         METHODLIST = new java.util.ArrayList();
-        SPATHS = new String[2];
-        SPATHS[0] = JMeterUtils.getSearchPaths()[0];
-        SPATHS[1] = JMeterUtils.getJMeterHome() + "/lib/junit/";
 
         try
         {
@@ -153,13 +159,13 @@ implements ChangeListener, ActionListener
                     SPATHS,
                     new Class[] { TestCase.class });
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            log.debug("Exception getting interfaces.", e);
-        }
+            log.error("Exception getting interfaces.", e);
+        } 
 
         JLabel label =
-            new JLabel(JMeterUtils.getResString("protocol_java_classname"));
+            new JLabel(JMeterUtils.getResString("protocol_java_classname")); //$NON-NLS-1$
 
         classnameCombo = new JComboBox(CLASSLIST.toArray());
         classnameCombo.addActionListener(this);
@@ -197,9 +203,29 @@ implements ChangeListener, ActionListener
         panel.add(errorMsg);
         panel.add(errorCode);
         panel.add(doSetup);
+        panel.add(appendError);
+        panel.add(appendExc);
         return panel;
     }
 
+    private void initGui(){ // TODO - unfinished?
+    	appendError.setSelected(false);
+    	appendExc.setSelected(false);
+    	doSetup.setSelected(false);
+    	filterpkg.setText(""); //$NON-NLS-1$
+    	constructorLabel.setText(""); //$NON-NLS-1$
+        successCode.setText(JMeterUtils.getResString("junit_success_default_code")); //$NON-NLS-1$
+        successMsg.setText(JMeterUtils.getResString("junit_success_default_msg")); //$NON-NLS-1$
+        failureCode.setText(JMeterUtils.getResString("junit_failure_default_code")); //$NON-NLS-1$
+        failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg")); //$NON-NLS-1$
+        errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg")); //$NON-NLS-1$
+        errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
+    }
+
+    public void clearGui() {
+		super.clearGui();
+		initGui();
+	}
     
     /* Implements JMeterGuiComponent.createTestElement() */ 
     public TestElement createTestElement()
@@ -229,6 +255,8 @@ implements ChangeListener, ActionListener
         sampler.setFailure(failureMsg.getText());
         sampler.setFailureCode(failureCode.getText());
         sampler.setDoNotSetUpTearDown(doSetup.isSelected());
+        sampler.setAppendError(appendError.isSelected());
+        sampler.setAppendException(appendExc.isSelected());
     }
 
     /* Overrides AbstractJMeterGuiComponent.configure(TestElement) */
@@ -244,34 +272,36 @@ implements ChangeListener, ActionListener
         if (sampler.getSuccessCode().length() > 0) {
             successCode.setText(sampler.getSuccessCode());
         } else {
-            successCode.setText(JMeterUtils.getResString("junit_success_default_code"));
+            successCode.setText(JMeterUtils.getResString("junit_success_default_code")); //$NON-NLS-1$
         }
         if (sampler.getSuccess().length() > 0) {
             successMsg.setText(sampler.getSuccess());
         } else {
-            successMsg.setText(JMeterUtils.getResString("junit_success_default_msg"));
+            successMsg.setText(JMeterUtils.getResString("junit_success_default_msg")); //$NON-NLS-1$
         }
         if (sampler.getFailureCode().length() > 0) {
             failureCode.setText(sampler.getFailureCode());
         } else {
-            failureCode.setText(JMeterUtils.getResString("junit_failure_default_code"));
+            failureCode.setText(JMeterUtils.getResString("junit_failure_default_code")); //$NON-NLS-1$
         }
         if (sampler.getFailure().length() > 0) {
             failureMsg.setText(sampler.getFailure());
         } else {
-            failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg"));
+            failureMsg.setText(JMeterUtils.getResString("junit_failure_default_msg")); //$NON-NLS-1$
         }
         if (sampler.getError().length() > 0) {
             errorMsg.setText(sampler.getError());
         } else {
-            errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg"));
+            errorMsg.setText(JMeterUtils.getResString("junit_error_default_msg")); //$NON-NLS-1$
         }
         if (sampler.getErrorCode().length() > 0) {
             errorCode.setText(sampler.getErrorCode());
         } else {
-            errorCode.setText(JMeterUtils.getResString("junit_error_default_code"));
+            errorCode.setText(JMeterUtils.getResString("junit_error_default_code")); //$NON-NLS-1$
         }
         doSetup.setSelected(sampler.getDoNotSetUpTearDown());
+        appendError.setSelected(sampler.getAppendError());
+        appendExc.setSelected(sampler.getAppendException());
     }
     
     public void instantiateClass(){
@@ -287,6 +317,13 @@ implements ChangeListener, ActionListener
         }
     }
 
+    public void showErrorDialog() {
+        JOptionPane.showConfirmDialog(this, 
+                JMeterUtils.getResString("junit_constructor_error"),  //$NON-NLS-1$
+                "Warning",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+    }
+    
     public void configureMethodCombo(){
         if (TESTCLASS != null) {
             clearMethodCombo();
@@ -318,9 +355,8 @@ implements ChangeListener, ActionListener
         if (list.size() > 0){
             Method[] rmeth = new Method[list.size()];
             return (Method[])list.toArray(rmeth);
-        } else {
-            return new Method[0];
         }
+		return new Method[0];
     }
     
     public String[] getMethodNames(Method[] meths)
@@ -335,11 +371,9 @@ implements ChangeListener, ActionListener
     public Class[] filterClasses(Class[] clz) {
         if (clz != null && clz.length > 0){
             Class[] nclz = null;
-            ArrayList matches = new ArrayList();
             return nclz;
-        } else {
-            return clz;
         }
+		return clz;
     }
   
     /**
@@ -362,7 +396,7 @@ implements ChangeListener, ActionListener
      */
     public void stateChanged(ChangeEvent event) {
         if ( event.getSource() == filterpkg) {
-            FILTER.setPackges(filterpkg.getText().split(","));
+            FILTER.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
             classnameCombo.removeAllItems();
             // change the classname drop down
             Object[] clist = FILTER.filterArray(CLASSLIST);

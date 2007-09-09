@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -75,7 +75,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	}
 
 	public String getLabelResource() {
-		return "monitor_health_title";
+		return "monitor_health_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	 */
 	public void createHealthPane(MonitorTabPane pane) {
 		HEALTHPANE = new MonitorHealthPanel(MODEL);
-		pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE);
+		pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE); // $NON-NLS-1$
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	 */
 	public void createPerformancePane(MonitorTabPane pane) {
 		PERFPANE = new MonitorPerformancePanel(MODEL, GRAPH);
-		pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE);
+		pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE); // $NON-NLS-1$
 	}
 
 	protected Container makeTitlePanel() {
@@ -162,12 +162,12 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	}
 
 	/**
-	 * Clear will clear the MonitorAccumModel and create a new instance.
+	 * Clears the MonitorAccumModel.
 	 */
-	public void clear() {
-		this.MODEL.clear();
-		this.HEALTHPANE.clear();
-		this.PERFPANE.clear();
+	public void clearData() {
+		this.MODEL.clearData();
+		this.HEALTHPANE.clearData();
+		this.PERFPANE.clearData();
 	}
 
 }

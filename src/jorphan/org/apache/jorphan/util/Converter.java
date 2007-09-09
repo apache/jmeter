@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -57,7 +58,7 @@ public class Converter {
 		} else if (toType.equals(long.class) || toType.equals(Long.class)) {
 			return new Long(getLong(value));
 		} else if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-			return new Boolean(getBoolean(value));
+			return  Boolean.valueOf(getBoolean(value));
 		} else if (toType.equals(java.util.Date.class)) {
 			return getDate(value);
 		} else if (toType.equals(Calendar.class)) {
@@ -212,7 +213,7 @@ public class Converter {
 		} else if (o instanceof Boolean) {
 			return ((Boolean) o).booleanValue();
 		} else
-			return new Boolean(o.toString()).booleanValue();
+			return Boolean.valueOf(o.toString()).booleanValue();
 	}
 
 	/**
@@ -373,10 +374,11 @@ public class Converter {
 			return replacement.toString();
 		}
 	}
-
-	public static String insertSpaceBreaks(String v, String insertion) {
-		return v.trim().replaceAll("\\s+", insertion);
-	}
+// Does not appear to be used.
+// Remove as replaceAll() requires 1.4
+//	public static String insertSpaceBreaks(String v, String insertion) {
+//		return v.trim().replaceAll("\\s+", insertion);
+//	}
 
 	/**
 	 * Converts object to a String, defaults to empty string if object is null.

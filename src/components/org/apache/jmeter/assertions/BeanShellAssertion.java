@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,28 +18,24 @@
 
 package org.apache.jmeter.assertions;
 
-import java.io.IOException;
-import java.io.Serializable;
-
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
  * A sampler which understands BeanShell
  * 
- * @version $Revision$ Updated on: $Date$
  */
-public class BeanShellAssertion extends AbstractTestElement implements Serializable, Assertion {
-	private static Logger log = LoggingManager.getLoggerForClass();
+public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 3;
 
 	public static final String FILENAME = "BeanShellAssertion.filename"; //$NON-NLS-1$
 
@@ -47,26 +43,12 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 
 	public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
 
-	transient private BeanShellInterpreter bshInterpreter = null;
-
 	// can be specified in jmeter.properties
 	public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
 
-	public BeanShellAssertion() {
-		try {
-			bshInterpreter = new BeanShellInterpreter();
-			String init = JMeterUtils.getProperty(INIT_FILE);
-			try {
-				bshInterpreter.init(init, log);
-			} catch (IOException e) {
-				log.warn("Could not initialise interpreter", e);
-			} catch (JMeterException e) {
-				log.warn("Could not initialise interpreter", e);
-			}
-		} catch (ClassNotFoundException e) {
-			log.error("Could not establish BeanShellInterpreter: " + e);
-		}
-	}
+    protected String getInitFileProperty() {
+        return INIT_FILE;
+    }
 
 	public String getScript() {
 		return getPropertyAsString(SCRIPT);
@@ -86,8 +68,9 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 	 * @see org.apache.jmeter.assertions.Assertion#getResult(org.apache.jmeter.samplers.SampleResult)
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 
+		final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
 		if (bshInterpreter == null) {
 			result.setFailure(true);
 			result.setError(true);
@@ -99,19 +82,14 @@ public class BeanShellAssertion extends AbstractTestElement implements Serializa
 			String fileName = getFilename();
 
 			bshInterpreter.set("FileName", getFilename());//$NON-NLS-1$
-			bshInterpreter.set("Parameters", getParameters());// as a single
-																// line
-																// $NON-NLS-1$
+			// Set params as a single line
+			bshInterpreter.set("Parameters", getParameters()); // $NON-NLS-1$
 			bshInterpreter.set("bsh.args",//$NON-NLS-1$
 					JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
 
 			// Add SamplerData for consistency with BeanShell Sampler
-			bshInterpreter.set("SampleResult", response);// Raw access to the
-															// response
-															// //$NON-NLS-1$
-			bshInterpreter.set("Response", response);// Raw access to the
-														// response
-														// //$NON-NLS-1$
+			bshInterpreter.set("SampleResult", response); //$NON-NLS-1$
+			bshInterpreter.set("Response", response); //$NON-NLS-1$
 			bshInterpreter.set("ResponseData", response.getResponseData());//$NON-NLS-1$
 			bshInterpreter.set("ResponseCode", response.getResponseCode());//$NON-NLS-1$
 			bshInterpreter.set("ResponseMessage", response.getResponseMessage());//$NON-NLS-1$

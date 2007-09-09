@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,48 +30,44 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+// @see org.apache.jmeter.functions.PackageTest for unit tests
+
 /**
  * The function represented by this class allows data to be read from XML files.
  * Syntax is similar to the CVSRead function. The function allows the test to
  * line-thru the nodes in the XML file - one node per each test. E.g. inserting
  * the following in the test scripts :
  * 
- * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // match the (first) node of
- * 'c:/BOF/abcd.xml' , return the 1st column ( represented by the '0'),
- * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // read (first) match of '/xpath/'
- * expressions ${_XPath(c:/BOF/abcd.xml,/xpath/)} // Go to next match of
- * '/xpath/' expressions
+ * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // match the (first) node
+ * ${_XPath(c:/BOF/abcd.xml,/xpath/)} // Go to next match of '/xpath/' expression
  * 
- * NOTE: A single instance of each different file is opened and used for all
- * threads.
- * 
- * 
+ * NOTE: A single instance of each different file/expression combination
+ * is opened and used for all threads.
  * 
  */
 public class XPath extends AbstractFunction implements Serializable {
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// static {
 	// LoggingManager.setPriority("DEBUG","jmeter");
 	// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
 	// }
-	private static final String KEY = "__XPath"; // Function name
+	private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
 	private static final List desc = new LinkedList();
 
 	private Object[] values; // Parameter list
 
 	static {
-		desc.add(JMeterUtils.getResString("xpath_file_file_name"));
-		desc.add(JMeterUtils.getResString("xpath_expression"));
+		desc.add(JMeterUtils.getResString("xpath_file_file_name")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("xpath_expression")); //$NON-NLS-1$
 	}
 
 	public XPath() {
 	}
 
-	public Object clone() {
-		XPath newReader = new XPath();
-		return newReader;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
@@ -79,23 +75,20 @@ public class XPath extends AbstractFunction implements Serializable {
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		String myValue = "";
+		String myValue = ""; //$NON-NLS-1$
 
 		String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
 		String xpathString = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
 
-		log.debug("execute (" + fileName + " " + xpathString + ")   ");
+        if (log.isDebugEnabled()){
+    		log.debug("execute (" + fileName + " " + xpathString + ")   ");
+        }
 
-		try {
-			myValue = XPathWrapper.getXPathString(fileName, xpathString);
-		} catch (NumberFormatException e) {
-			log.warn(Thread.currentThread().getName() + " - can't parse column number: " + " " + e.toString());
-		} catch (IndexOutOfBoundsException e) {
-			log.warn(Thread.currentThread().getName() + " - invalid column number:  at row "
-					+ XPathWrapper.getCurrentRow(fileName) + " " + e.toString());
-		}
+		myValue = XPathWrapper.getXPathString(fileName, xpathString);
 
-		log.debug("execute value: " + myValue);
+        if (log.isDebugEnabled()){
+    		log.debug("execute value: " + myValue);
+        }
 
 		return myValue;
 	}
@@ -117,7 +110,7 @@ public class XPath extends AbstractFunction implements Serializable {
 	/**
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 		log.debug("setParameter - Collection.size=" + parameters.size());
 
 		values = parameters.toArray();
@@ -137,8 +130,7 @@ public class XPath extends AbstractFunction implements Serializable {
 		 * for functions to detect that a run is starting seems to be the
 		 * setParameters() call.
 		 */
-		XPathWrapper.clearAll();// TODO only clear the relevant entry - if
-								// possible...
+		XPathWrapper.clearAll();// TODO only clear the relevant entry - if possible...
 
 	}
 }

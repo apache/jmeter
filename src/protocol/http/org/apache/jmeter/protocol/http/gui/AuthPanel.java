@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -54,19 +54,17 @@ import org.apache.log.Logger;
  * Handles input for determining if authentication services are required for a
  * Sampler. It also understands how to get AuthManagers for the files that the
  * user selects.
- * 
- * @version $Revision$ Last updated: $Date$
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String ADD_COMMAND = "Add";
+	private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
 
-	private static final String DELETE_COMMAND = "Delete";
+	private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
 
-	private static final String LOAD_COMMAND = "Load";
+	private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
 
-	private static final String SAVE_COMMAND = "Save";
+	private static final String SAVE_COMMAND = "Save"; //$NON-NLS-1$
 
 	private InnerTableModel tableModel;
 
@@ -111,6 +109,17 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		configureTestElement(el);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clear
+     */
+    public void clearGui() {
+        super.clearGui();
+
+        tableModel.clearData();
+        deleteButton.setEnabled(false);
+        saveButton.setEnabled(false);
+    }    
+
 	public void configure(TestElement el) {
 		super.configure(el);
 		tableModel.manager.clear();
@@ -118,7 +127,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	}
 
 	public String getLabelResource() {
-		return "auth_manager_title";
+		return "auth_manager_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -209,7 +218,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {
+			} catch (NullPointerException err) {// TODO WHY?
 			}
 		} else if (action.equals(SAVE_COMMAND)) {
 			try {
@@ -219,7 +228,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {
+			} catch (NullPointerException err) {// TODO WHY?
 			}
 		}
 	}
@@ -230,13 +239,13 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		TableColumn passwordColumn = authTable.getColumnModel().getColumn(2);
+		TableColumn passwordColumn = authTable.getColumnModel().getColumn(AuthManager.COL_PASSWORD);
 		passwordColumn.setCellEditor(new DefaultCellEditor(new JPasswordField()));
 		passwordColumn.setCellRenderer(new PasswordCellRenderer());
 
 		JPanel panel = new JPanel(new BorderLayout(0, 5));
-		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("auths_stored")));
+		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				JMeterUtils.getResString("auths_stored"))); //$NON-NLS-1$
 		panel.add(new JScrollPane(authTable));
 		panel.add(createButtonPanel(), BorderLayout.SOUTH);
 		return panel;
@@ -254,10 +263,10 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	private JPanel createButtonPanel() {
 		boolean tableEmpty = (tableModel.getRowCount() == 0);
 
-		addButton = createButton("add", 'A', ADD_COMMAND, true);
-		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty);
-		loadButton = createButton("load", 'L', LOAD_COMMAND, true);
-		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty);
+		addButton = createButton("add", 'A', ADD_COMMAND, true); //$NON-NLS-1$
+		deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); //$NON-NLS-1$
+		loadButton = createButton("load", 'L', LOAD_COMMAND, true); //$NON-NLS-1$
+		saveButton = createButton("save", 'S', SAVE_COMMAND, !tableEmpty); //$NON-NLS-1$
 
 		// Button Panel
 		JPanel buttonPanel = new JPanel();
@@ -268,10 +277,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		return buttonPanel;
 	}
 
-	/**
-	 * @version $Revision$
-	 */
-	private class InnerTableModel extends AbstractTableModel {
+	private static class InnerTableModel extends AbstractTableModel {
 		AuthManager manager;
 
 		public InnerTableModel(AuthManager man) {
@@ -281,6 +287,11 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		public InnerTableModel() {
 			manager = new AuthManager();
 		}
+        
+        public void clearData() {
+            manager.clear();
+            fireTableDataChanged();
+        }
 
 		public void removeRow(int row) {
 			manager.remove(row);
@@ -326,33 +337,48 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		public Object getValueAt(int row, int column) {
 			Authorization auth = manager.getAuthObjectAt(row);
 
-			if (column == 0) {
-				return auth.getURL();
-			} else if (column == 1) {
-				return auth.getUser();
-			} else if (column == 2) {
-				return auth.getPass();
+			switch (column){
+				case AuthManager.COL_URL:
+					return auth.getURL();					
+				case AuthManager.COL_USERNAME:
+					return auth.getUser();					
+				case AuthManager.COL_PASSWORD:
+					return auth.getPass();					
+				case AuthManager.COL_DOMAIN:
+					return auth.getDomain();
+				case AuthManager.COL_REALM:
+					return auth.getRealm();					
+				default:
+					return null;
 			}
-			return null;
 		}
 
 		public void setValueAt(Object value, int row, int column) {
 			Authorization auth = manager.getAuthObjectAt(row);
 			log.debug("Setting auth value: " + value);
-			if (column == 0) {
-				auth.setURL((String) value);
-			} else if (column == 1) {
-				auth.setUser((String) value);
-			} else if (column == 2) {
-				auth.setPass((String) value);
-			}
+			switch (column){
+				case AuthManager.COL_URL:
+					auth.setURL((String) value);
+					break;
+				case AuthManager.COL_USERNAME:
+					auth.setUser((String) value);
+					break;
+				case AuthManager.COL_PASSWORD:
+					auth.setPass((String) value);
+					break;
+				case AuthManager.COL_DOMAIN:
+					auth.setDomain((String) value);
+					break;
+				case AuthManager.COL_REALM:
+					auth.setRealm((String) value);
+					break;
+				default:
+					break;
+		    }
 		}
 	}
 
-	/**
-	 * @version $Revision$
-	 */
-	private class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
+	private static class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
 		private Border myBorder;
 
 		public PasswordCellRenderer() {

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -64,12 +64,13 @@ import org.apache.log.Logger;
  * Created on: Jun 26, 2003
  * 
  * @author Peter Lin
- * @version $Revision$ last updated $Date$
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser";
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
+	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 
 	/** private members used by class * */
 	transient private LogParser PARSER = null;
@@ -347,12 +348,4 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
         if(filter instanceof ThreadListener)
             ((ThreadListener)filter).threadFinished();
     }
-
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.testelement.ThreadListener#threadStarted()
-	 */
-	public void threadStarted() {
-		// TODO Auto-generated method stub
-		
-	}
 }

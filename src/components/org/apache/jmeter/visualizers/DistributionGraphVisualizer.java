@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -45,8 +45,6 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * distribution of data points. Results tend to clump together.
  * 
  * Created May 25, 2004
- * 
- * @version $Revision:
  */
 public class DistributionGraphVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener,
 		Clearable {
@@ -109,11 +107,11 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
 	}
 
 	public String getLabelResource() {
-		return "distribution_graph_title";
+		return "distribution_graph_title"; // $NON-NLS-1$
 	}
 
-	public synchronized void clear() {
-		this.graph.clear();
+	public synchronized void clearData() {
+		this.graph.clearData();
 		model.clear();
 		repaint();
 	}
@@ -213,7 +211,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
 	private Box createGraphInfoPanel() {
 		Box graphInfoPanel = Box.createHorizontalBox();
 		this.noteField = new JTextField();
-		graphInfoPanel.add(this.createInfoLabel("distribution_note1", this.noteField));
+		graphInfoPanel.add(this.createInfoLabel("distribution_note1", this.noteField)); // $NON-NLS-1$
 		return graphInfoPanel;
 	}
 

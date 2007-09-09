@@ -1,11 +1,11 @@
 #!/bin/sh
 
-##   $Id$
-##   Copyright 2001-2004 The Apache Software Foundation
-## 
-##   Licensed under the Apache License, Version 2.0 (the "License");
-##   you may not use this file except in compliance with the License.
-##   You may obtain a copy of the License at
+##   Licensed to the Apache Software Foundation (ASF) under one or more
+##   contributor license agreements.  See the NOTICE file distributed with
+##   this work for additional information regarding copyright ownership.
+##   The ASF licenses this file to You under the Apache License, Version 2.0
+##   (the "License"); you may not use this file except in compliance with
+##   the License.  You may obtain a copy of the License at
 ## 
 ##       http://www.apache.org/licenses/LICENSE-2.0
 ## 
@@ -15,11 +15,16 @@
 ##   See the License for the specific language governing permissions and
 ##   limitations under the License.
 
+##   To change the RMI/Server port:
+##
+##   SERVER_PORT=1234 jmeter-server
+##
+
 set OLDCLASSPATH=$CLASSPATH
 export OLDCLASSPATH
 set CLASSPATH=`dirname $0`/../lib/ext/ApacheJMeter_core.jar:`dirname $0`/../lib/jorphan.jar:`dirname $0`/../lib/logkit-1.2.jar
 export CLASSPATH
-rmiregistry &
+rmiregistry $SERVER_PORT &
 set CLASSPATH=$OLDCLASSPATH
 export CLASSPATH
-`dirname $0`/jmeter -s "$@"
+`dirname $0`/jmeter -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"

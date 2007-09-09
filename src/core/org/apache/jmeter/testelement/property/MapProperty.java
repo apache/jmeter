@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,13 +22,13 @@ import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$
- */
 public class MapProperty extends MultiProperty {
-	Map value;
 
-	transient Map savedValue = null;
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
+    private Map value;
+
+	private transient Map savedValue = null;
 
 	public MapProperty(String name, Map value) {
 		super(name);
@@ -73,9 +73,8 @@ public class MapProperty extends MultiProperty {
 	protected Class getPropertyType() {
 		if (value.size() > 0) {
 			return valueIterator().next().getClass();
-		} else {
-			return NullProperty.class;
 		}
+		return NullProperty.class;
 	}
 
 	/**
@@ -92,9 +91,6 @@ public class MapProperty extends MultiProperty {
 		return value;
 	}
 
-	/**
-	 * @see java.lang.Object#clone()
-	 */
 	public Object clone() {
 		MapProperty prop = (MapProperty) super.clone();
 		prop.value = cloneMap();

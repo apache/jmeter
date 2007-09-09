@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,27 +27,29 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * This class provides an interface to headers file to pass HTTP headers along
  * with a request.
  * 
- * @author <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
+ * author <a href="mailto:giacomo@apache.org">Giacomo Pati</a>
  * @version $Revision$ $Date$
  */
 public class HeaderManager extends ConfigTestElement implements Serializable {
 
-	public static final String HEADERS = "HeaderManager.headers";
+	public static final String HEADERS = "HeaderManager.headers";// $NON-NLS-1$
 
 	private final static int columnCount = 2;
 
-	private final static String[] columnNames = { JMeterUtils.getResString("name"), JMeterUtils.getResString("value") };
+	private final static String[] columnNames 
+    = { JMeterUtils.getResString("name")// $NON-NLS-1$
+        , JMeterUtils.getResString("value") };// $NON-NLS-1$
 
 	/**
 	 * Apache SOAP driver does not provide an easy way to get and set the cookie
@@ -59,6 +61,11 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 	public HeaderManager() {
 		setProperty(new CollectionProperty(HEADERS, new ArrayList()));
 	}
+    
+    public void clear() {
+        super.clear();
+        setProperty(new CollectionProperty(HEADERS, new ArrayList()));
+    }
 
 	public CollectionProperty getHeaders() {
 		return (CollectionProperty) getProperty(HEADERS);
@@ -86,10 +93,11 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 	public void save(String headFile) throws IOException {
 		File file = new File(headFile);
 		if (!file.isAbsolute()) {
-			file = new File(System.getProperty("user.dir") + File.separator + headFile);
+			file = new File(System.getProperty("user.dir")// $NON-NLS-1$ 
+                    + File.separator + headFile);
 		}
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
-		writer.println("# JMeter generated Header file");
+		writer.println("# JMeter generated Header file");// $NON-NLS-1$
 		for (int i = 0; i < getHeaders().size(); i++) {
 			Header head = (Header) getHeaders().get(i);
 			writer.println(head.toString());
@@ -104,7 +112,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 	public void addFile(String headerFile) throws IOException {
 		File file = new File(headerFile);
 		if (!file.isAbsolute()) {
-			file = new File(System.getProperty("user.dir") + File.separator + headerFile);
+			file = new File(System.getProperty("user.dir")// $NON-NLS-1$ 
+                    + File.separator + headerFile);
 		}
 		BufferedReader reader = null;
 		if (file.canRead()) {
@@ -116,10 +125,10 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 		String line;
 		while ((line = reader.readLine()) != null) {
 			try {
-				if (line.startsWith("#") || line.trim().length() == 0) {
+				if (line.startsWith("#") || line.trim().length() == 0) {// $NON-NLS-1$
 					continue;
 				}
-				String[] st = split(line, "\t", " ");
+				String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$
 				int name = 0;
 				int value = 1;
 				Header header = new Header(st[name], st[value]);
@@ -221,43 +230,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
 		}
 	}
 
-	/**
-	 * Takes a String and a tokenizer character, and returns a new array of
-	 * strings of the string split by the tokenizer character.
-	 * 
-	 * @param splittee
-	 *            string to be split
-	 * @param splitChar
-	 *            character to split the string on
-	 * @param def
-	 *            default value to place between two split chars that have
-	 *            nothing between them
-	 * @return array of all the tokens.
-	 */
-	public String[] split(String splittee, String splitChar, String def) {
-		if (splittee == null || splitChar == null) {
-			return new String[0];
-		}
-		StringTokenizer tokens;
-		String temp;
-		int spot;
-		while ((spot = splittee.indexOf(splitChar + splitChar)) != -1) {
-			splittee = splittee.substring(0, spot + splitChar.length()) + def
-					+ splittee.substring(spot + (1 * splitChar.length()), splittee.length());
-		}
-		Vector returns = new Vector();
-		tokens = new StringTokenizer(splittee, splitChar);
-		while (tokens.hasMoreTokens()) {
-			temp = tokens.nextToken();
-			returns.addElement(temp);
-		}
-		String[] values = new String[returns.size()];
-		returns.copyInto(values);
-		return values;
-	}
-
 	public String getClassLabel() {
-		return JMeterUtils.getResString("header_manager_title");
+		return JMeterUtils.getResString("header_manager_title");// $NON-NLS-1$
 	}
 
 	/**

@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,7 +27,6 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
@@ -36,12 +36,10 @@ import org.apache.log.Logger;
 /**
  * @author pete
  * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class Publisher {
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
 
@@ -51,9 +49,9 @@ public class Publisher {
 
 	private TopicPublisher PUBLISHER = null;
 
-	private byte[] RESULT = null;
+	//private byte[] RESULT = null;
 
-	private Object OBJ_RESULT = null;
+	//private Object OBJ_RESULT = null;
 
 	/**
 	 * 
@@ -65,7 +63,7 @@ public class Publisher {
 		if (ctx != null) {
 			initConnection(ctx, connfactory, topic);
 		} else {
-			log.equals("Could not initialize JNDI Initial Context Factory");
+			log.error("Could not initialize JNDI Initial Context Factory");
 		}
 	}
 
@@ -84,7 +82,7 @@ public class Publisher {
 
 	public void initConnection(Context ctx, String connfactory, String topic) {
 		try {
-			TopicConnectionFactory connfac = ConnectionFactory.getTopicConnectionFactory(ctx, connfactory);
+			ConnectionFactory.getTopicConnectionFactory(ctx,connfactory);
 			this.CONN = ConnectionFactory.getTopicConnection();
 			this.TOPIC = InitialContextFactory.lookupTopic(ctx, topic);
 			this.SESSION = this.CONN.createTopicSession(false, TopicSession.AUTO_ACKNOWLEDGE);
@@ -125,7 +123,6 @@ public class Publisher {
 			this.PUBLISHER = null;
 			this.SESSION = null;
 			this.CONN = null;
-			this.finalize();
 		} catch (JMSException e) {
 			log.error(e.getMessage());
 		} catch (Throwable e) {

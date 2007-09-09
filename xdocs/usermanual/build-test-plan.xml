@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
-   $Header$
-   Copyright 2001-2004 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -15,6 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '3'>
+]>
+
 <document prev="get-started.html" next="test_plan.html" date="$Date$">
 
 <properties>
@@ -23,13 +28,13 @@
 
 <body>
 
-<section name="3. Building a Test Plan">
+<section name="&sect-num;. Building a Test Plan">
 <p>A test plan describes a series of steps JMeter will execute when run.  A complete
 test plan will consiste of one or more Thread Groups, logic conrollers, sample generating
 controllers, listeners, timers, assertions, and configuration elements.
 </p>
 
-<subsection name="3.1 Adding and Removing Elements" anchor="add_remove">
+<subsection name="&sect-num;.1 Adding and Removing Elements" anchor="add_remove">
 <p>Adding <a href="test_plan.html">elements to a test plan</a> can be done by right-clicking on an element in the
 tree, and choosing a new element from the "add" list.  Alternatively, elements can
 be loaded from file and added by choosing the "open" option.  </p>
@@ -38,7 +43,7 @@ be loaded from file and added by choosing the "open" option.  </p>
 and choose the "remove" option.</p>
 </subsection>
 
-<subsection name="3.2 Loading and Saving Elements" anchor="load_save">
+<subsection name="&sect-num;.2 Loading and Saving Elements" anchor="load_save">
 <p>To load an element from file, right click on the existing tree element to which
 you want to add the loaded element, and select the "open" option.  Choose the file where
 your elements are saved.  JMeter will load the elements into the tree.</p>
@@ -47,10 +52,10 @@ your elements are saved.  JMeter will load the elements into the tree.</p>
 JMeter will save the element selected, plus all child elements beneath it.  In this way,
 you can save test tree fragments, individual elements, or the entire test plan.</p>
 
-<note>The test plan file format changed with version 1.7. Versions later than 1.8 are no longer capable of reading test plans in the old format. If you need to use an old test plan, use JMeter 1.7 or 1.8 to load and re-save it in the new format.</note>
+<note>The workbench is not automatically saved with the test plan, but it can be saved separately as above.</note>
 </subsection>
 
-<subsection name="3.3 Configuring Tree Elements" anchor="config_element">
+<subsection name="&sect-num;.3 Configuring Tree Elements" anchor="config_element">
 <p>Any element in the test tree will present controls in JMeter's right-hand frame.  These
 controls allow you to configure the behavior of that particular test element.  What can be
 configured for an element depends on what type of element it is.</p>
@@ -58,16 +63,38 @@ configured for an element depends on what type of element it is.</p>
 <note>The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</note>
 </subsection>
 
-<subsection name="3.4 Running a Test Plan" anchor="run">
-<p>To run your test plan, choose "start" from the "run" menu item.  To stop your test
-plan, choose "stop" from the same menu.  JMeter does not automatically give any
-indication of whether it is currently running.  Some listeners make it obvious if
-JMeter is running, but the only way to be sure is to check the "run" menu.  If "start"
-is disabled, and "stop" is enabled, JMeter is running your test plan (or, at least, it
-thinks it is).</p>
+<subsection name="&sect-num;.4 Saving the Test Plan" anchor="saving">
+<p>Although it is not required, we recommend that you save the Test Plan to a
+file before running it.  To save the Test Plan, select Save Test Plan from the
+File menu (with the latest release, it is no longer necessary to select the
+Test Plan element first).</p>
+
+<note>JMeter allows you to save the entire Test Plan tree or
+only a portion of it.  To save only the elements located in a particular "branch"
+of the Test Plan tree, select the Test Plan element in the tree from which to start
+the "branch", and then click your right mouse button to access the Save As menu item.
+Alternatively, select the appropriate Test Plan element  and then select Save As from
+the Edit menu.
+</note>
 </subsection>
 
-<subsection name="3.5 Scoping Rules" anchor="scoping_rules">
+<subsection name="&sect-num;.5 Running a Test Plan" anchor="run">
+<p>To run your test plan, choose "start" from the "run" menu item.  To stop your test
+plan, choose "stop" from the same menu.  
+When JMeter is running, it shows a small green box at the right hand end of the section just under the menu bar.
+You can also check the "run" menu.  
+If "start" is disabled, and "stop" is enabled,
+then JMeter is running your test plan (or, at least, it thinks it is).</p>
+<p>
+There are two types of stop command:
+<ul>
+<li>Stop (Control + '.') - stops the threads immediately</li>
+<li>Shutdown (Control + ',')- requests the threads to stop at the end of any current work</li>
+</ul>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.6 Scoping Rules" anchor="scoping_rules">
 <p>
 The JMeter test tree contains elements that are both hierarchical and ordered.  Some elements in the test trees are strictly hierarchical (Listeners, Config Elements, Post-Procesors, Pre-Processors, Assertions, Timers), and some are primarily ordered (controllers, samplers).  When you create your test plan, you will create an ordered list of sample request (via Samplers) that represent a set of steps to be executed.  These requests are often organized within controllers that are also ordered.  Given the following test tree:</p>
 <figure image="scoping1.png">Example test tree</figure>
@@ -91,6 +118,18 @@ However, the settings from the Managers are not merged.
 If more than one Manager is in the scope of a Sampler, 
 only one Manager is used, but there is currently no way to specify <b>which</b> is used.
 </b>
+</subsection>
+<subsection name="&sect-num;.7 Error reporting" anchor="error_reporting">
+<p>
+JMeter reports warnings and errors to the jmeter.log file, as well as some information on the test run itself.
+Just occaisionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
+If a test is not behaving as you expect, please check the log file in case any errors have been reported (e.g. perhaps a syntax error in a function call).
+</p>
+<p>
+Sampling errors (e.g. HTTP 404 - file not found) are not normally reported in the log file. 
+Instead these are stored as attributes of the sample result.
+The status of a sample result can be seen in the various different Listeners.
+</p>
 </subsection>
 
 </section>

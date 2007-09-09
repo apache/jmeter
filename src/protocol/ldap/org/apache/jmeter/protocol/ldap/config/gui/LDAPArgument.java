@@ -1,10 +1,10 @@
-//$Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -43,16 +43,16 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
 	// TODO should these be public?
 
 	/** Name used to store the argument's name. */
-	public static final String ARG_NAME = "Argument.name";
+	public static final String ARG_NAME = "Argument.name"; //$NON-NLS$
 
 	/** Name used to store the argument's value. */
-	public static final String VALUE = "Argument.value";
+	public static final String VALUE = "Argument.value"; //$NON-NLS$
 
 	/** Name used to store the argument's value. */
-	public static final String OPCODE = "Argument.opcode";
+	public static final String OPCODE = "Argument.opcode"; //$NON-NLS$
 
 	/** Name used to store the argument's metadata. */
-	public static final String METADATA = "Argument.metadata";
+	public static final String METADATA = "Argument.metadata"; //$NON-NLS$
 
 	/**
 	 * Create a new Argument without a name, value, or metadata.
@@ -132,7 +132,7 @@ public class LDAPArgument extends AbstractTestElement implements Serializable {
 	/**
 	 * Sets the opcode of the Argument.
 	 * 
-	 * @param newValue
+	 * @param newOpcode
 	 *            the new value
 	 */
 	public void setOpcode(String newOpcode) {

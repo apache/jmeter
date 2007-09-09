@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
-   $Header$
-   Copyright 2001-2004 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -15,6 +15,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
+<!DOCTYPE document[<!ENTITY sect-num '11'>]>
+
 <document prev="build-ws-test-plan.html" next="build-jms-topic-test-plan.html" date="$Date$">
 
     <properties>
@@ -23,26 +26,36 @@
 
     <body>
 
-        <section name="11. Building a JMS Point-to-Point Test Plan" anchor="building">
+
+        <section name="&sect-num;. Building a JMS Point-to-Point Test Plan" anchor="building">
+
+        <note>
+            Make sure the required jar files are in JMeter's lib directory. If they are not, shutdown JMeter,
+            copy the jar files over and restart JMeter. 
+            See <a href="get-started.html#libraries_activemq">Getting Started</a> for details.
+        </note>
+
             <p>In this section, you will learn how to create a
                 <a href="build-test-plan.html">Test Plan</a> to test a JMS Point-to-Point messaging solution.
 The setup of the test is 1 threadgroup with 5 threads sending 4 messages each through a request queue.
 A fixed reply queue will be used for monitoring the reply messages.
-each one to 10 iterations. To construct the Test Plan, you will use the
+To construct the Test Plan, you will use the
 following elements:
                 <a href="test_plan.html#thread_group">Thread Group</a>,
                 <complink name="JMS Point-to-Point"/>, and
                 <complink name="Graph Results"/>.
             </p>
 
-            <p>General notes on JMS. There are currently two JMS samplers. One uses JMS topics
-and the other uses queues. Topic messages are commonly know as pub/sub messaging.
-It is generally used in cases where a message is publish by a producer and
-consumed by multiple subscribers. </p>
+            <p>General notes on JMS: There are currently two JMS samplers. One uses JMS topics
+and the other uses queues. Topic messages are commonly known as pub/sub messaging.
+Topic messaging is generally used in cases where a message is published by a producer and
+consumed by multiple subscribers.  A JMS sampler needs the JMS implementation jar files;
+for example, from Apache ActiveMQ.  See <a href="#libraries_activemq">here</a> for the list
+of jars provided by ActiveMQ 3.0.</p>
 
         </section>
 
-        <section name="11.1 Adding a Thread Group" anchor="adding_threadgroup">
+        <section name="&sect-num;.1 Adding a Thread Group" anchor="adding_threadgroup">
             <p>The first step you want to do with every JMeter Test Plan is to add a
                 <a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
 JMeter the number of users you want to simulate, how often the users should send
@@ -59,18 +72,18 @@ Test Plan element.</p>
 
             <p>Next, you need to modify the default properties.  Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 11.1
+Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
             <figure image="webtest/threadgroup.png">
-Figure 11.1. Thread Group with Default Values</figure>
+Figure &sect-num;.1. Thread Group with Default Values</figure>
 
             <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter Point-to-Point.</p>
 
             <p>Next, increase the number of users (called threads) to 5.</p>
 
-            <p>In the next field, the Ramp-Up Period, leave the the default value of 0
+            <p>In the next field, the Ramp-Up Period, leave set the value to 0
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
 finish starting all of your users by the end of the 5 seconds.  So, if we have
@@ -93,16 +106,10 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
         </section>
 
-        <section name="11.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
-
-            <note>
-                Make sure the required jar files are in JMeter's lib directory. If they are not, shutdown JMeter,
-                copy the jar files over and restart JMeter. See <a href="#libraries_activemq">here</a> for details
-                on ActiveMQ 3.0.
-            </note>
+        <section name="&sect-num;.2 Adding JMS Point-to-Point Sampler" anchor="adding_point_to_point_sampler">
 
             <p>Start by adding the sampler <complink name="JMS Point-to-Point"/>
-to the Jakarta Users element (Add --&gt; Sampler --&gt; JMS Point-to-Point).
+to the Point-to-Point element (Add --&gt; Sampler --&gt; JMS Point-to-Point).
 Then, select the JMS Point-to-Point sampler element in the tree.
  In building the example a configuration will be provided that works with ActiveMQ 3.0.
             </p>
@@ -163,9 +170,9 @@ Then, select the JMS Point-to-Point sampler element in the tree.
                         <th colspan="3"> Properties</th>
                     </tr>
                     <tr>
-                        <td colspan="1">brokerURL</td>
+                        <td colspan="1">providerURL</td>
                         <td>tcp://localhost:61616</td>
-                        <td>This defines the url of the active mq messaging system.</td>
+                        <td>This defines the URL of the active mq messaging system.</td>
                     </tr>
                     <tr>
                         <td>queue.Q.REQ</td>
@@ -182,14 +189,14 @@ Then, select the JMS Point-to-Point sampler element in the tree.
 
         </section>
 
-        <section name="11.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
+        <section name="&sect-num;.3 Adding a Listener to View Store the Test Results" anchor="adding_listener">
             <p>The final element you need to add to your Test Plan is a
                 <a href="component_reference.html#listeners">Listener</a>. This element is
-responsible for storing all of the results of your HTTP requests in a file and presenting
+responsible for storing all of the results of your JMS requests in a file and presenting
 a visual model of the data.
             </p>
 
-            <p>Select the Jakarta Users element and add a
+            <p>Select the Thread Group element and add a
                 <complink name="Graph Results"/> listener (Add --&gt; Listener
 --&gt; Graph Results).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
@@ -197,63 +204,8 @@ Browse button and browse to a directory and then enter a filename.
             </p>
 
             <figure image="graph_results.png">
-Figure 11.2. Graph Results Listener</figure>
+Figure &sect-num;.2. Graph Results Listener</figure>
 
-        </section>
-
-        <section name="11.4 Saving the Test Plan" anchor="saving">
-            <p>Although it is not required, we recommend that you save the Test Plan to a
-file before running it.  To save the Test Plan, select Save Test Plan from the
-File menu (with the latest release, it is no longer necessary to select the
-Test Plan element first).</p>
-
-            <note>JMeter allows you to save the entire Test Plan tree or
-only a portion of it.  To save only the elements located in a particular "branch"
-of the Test Plan tree, select the Test Plan element in the tree from which to start
-the "branch", and then click your right mouse button to access the Save As menu item.
-Alternatively, select the appropriate Test Plan element  and then select Save As from
-the Edit menu.
-            </note>
-
-        </section>
-
-        <section name="11.5 Running the Test Plan" anchor="running">
-
-            <p>From the Run menu, select Run.</p>
-
-            <note>JMeter lights up a green square in the upper-right-hand corner to indicate if a test is
-currently running.  The square is turned gray when all tests stop.  Even after you select "stop",
-the green light will stay on until all test threads have exited.</note>
-
-            <p>Once JMeter has finished running your Test Plan, select Stop from the
-Run menu.</p>
-            <p>If you selected a file to save the results to in your listener, then you will have a file that can be
-opened in any visualizer.  Each visualizer will display the results in it's own fashion.</p>
-
-            <note>It is possible to have the same file open in more than one visualizer.  This is not a problem.  JMeter
-will ensure during the test run that no sample is recorded to the same file more than once.</note>
-
-        </section>
-
-        <section name="11.6 Libraries for ActiveMQ 3.0" anchor="libraries_activemq">
-            <p>The following libraries have to be supplied in the lib\ext directory of JMeter:
-                <ol>
-                    <li>activation.jar</li>
-                    <li>activeio-1.0-SNAPSHOT.jar</li>
-                    <li>activemq-3.0.jar</li>
-                    <li>activemq-core-3.0.jar</li>
-                    <li>commons-logging-1.0.3.jar</li>
-                    <li>concurrent-1.3.4.jar</li>
-                    <li>geronimo-spec-j2ee-jacc-1.0-rc4.jar</li>
-                    <li>geronimo-spec-j2ee-management-1.0-rc4.jar</li>
-                    <li>geronimo-spec-jms-1.1-rc4.jar</li>
-                    <li>geronimo-spec-jta-1.0.1B-rc4.jar</li>
-                    <li>jms.jar</li>
-                    <li>jndi.jar</li>
-                    <li>log4j-1.2.8.jar</li>
-                    <li>spring-1.1.jar</li>
-                </ol>
-            </p>
         </section>
 
     </body>

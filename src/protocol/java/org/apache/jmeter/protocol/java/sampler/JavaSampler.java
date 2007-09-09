@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,9 +39,11 @@ import org.apache.log.Logger;
  * information on writing Java code to be executed by this sampler.
  * 
  * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
- * @version $Revision$
  */
 public class JavaSampler extends AbstractSampler implements TestListener {
+
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	/**
 	 * Property key representing the classname of the JavaSamplerClient to user.
 	 */
@@ -159,9 +161,16 @@ public class JavaSampler extends AbstractSampler implements TestListener {
 			createJavaClient();
 			javaClient.setupTest(context);
 		}
+        
+        SampleResult result = createJavaClient().runTest(context);
+        
+        // Only set the default label if it has not been set
+        if (result != null && result.getSampleLabel().length() == 0) {
+            result.setSampleLabel(getName());
+        }
 
-		return createJavaClient().runTest(context);
-	}
+        return result;
+    }
 
 	/**
 	 * Returns reference to <code>JavaSamplerClient</code>.
@@ -212,6 +221,8 @@ public class JavaSampler extends AbstractSampler implements TestListener {
 		sb.append(Thread.currentThread().getName());
 		sb.append("@");
 		sb.append(Integer.toHexString(hashCode()));
+		sb.append("-");
+		sb.append(getName());
 		return sb.toString();
 	}
 
@@ -265,7 +276,7 @@ public class JavaSampler extends AbstractSampler implements TestListener {
 		/**
 		 * Return SampleResult with data on error.
 		 * 
-		 * @see JavaSamplerClient#runTest()
+		 * @see JavaSamplerClient#runTest(JavaSamplerContext)
 		 */
 		public SampleResult runTest(JavaSamplerContext p_context) {
 			log.debug(whoAmI() + "\trunTest");

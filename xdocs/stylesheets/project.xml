@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-   Copyright 2001-2004 The Apache Software Foundation
- 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
  
        http://www.apache.org/licenses/LICENSE-2.0
  
@@ -19,7 +20,7 @@
 
 	 <title>JMeter</title>
 	 <!---->
-	 <logo href="/images/logo.jpg">JMeter</logo>
+	 <logo width="221" height="102" href="/images/logo.jpg">JMeter</logo>
 	 <!---->
 	 <body>
 	 <menu name="About">
@@ -32,24 +33,27 @@
 	 <menu name="Download">
 	 	<item name="Download Binary"    href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries"/>
         <item name="Download Source"    href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources"/>
-		<item name="Nightly Builds"  	href="/nightly.html"/>
+		<item name="Developer (Nightly) Builds"  	href="/nightly.html"/>
 	 </menu>
 	 <menu name="Documentation">
 		<item name="User Manual"         href="/usermanual/index.html"/>
 		<item name="Javadocs"		     href="/api/index.html"/>
         <item name="Localisation (Translator's Guide)" href="/localising/index.html"></item>
-	   <item name="FAQ (Wiki)"			href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
-	 </menu>
-	 <menu name="JMeter Resources">
+		<item name="Building JMeter and Add-Ons"     href="/building.html"/>
 		<item name="JMeter Wiki"		 href="http://wiki.apache.org/jakarta-jmeter"/>
-	 	<item name="JMeter Articles"     href="http://wiki.apache.org/jakarta-jmeter/JMeterLinks"/>
-	 	<item name="JMeter on IRC"       href="/jmeter_irc.html"/>
-	 	<item name="Developer Notes"     href="http://wiki.apache.org/jakarta-jmeter/JMeterDevelopment"/>
+ 	    <item name="FAQ (Wiki)"			 href="http://wiki.apache.org/jakarta-jmeter/JMeterFAQ"/>
+	 </menu>
+	 <menu name="Tutorials (PDF format)">
+		<item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.pdf"/>
+		<item name="Recording Tests"	 href="/usermanual/jmeter_proxy_step_by_step.pdf"/>
+		<item name="JUnit Sampler"		 href="/usermanual/junitsampler_tutorial.pdf"/>
+		<item name="Access Log Sampler"	 href="/usermanual/jmeter_accesslog_sampler_step_by_step.pdf"/>
+		<item name="Extending JMeter"	 href="/extending/jmeter_tutorial.pdf"/>
 	 </menu>
 	 <menu name="Community">
 		<item name="Get Involved"        href="/site/getinvolved.html"/>
 		<item name="Mailing Lists"       href="/site/mail.html"/>
-		<item name="CVS Repositories"    href="/site/cvsindex.html"/>
+		<item name="SVN Repositories"    href="/site/cvsindex.html"/>
 	 </menu>
 	 </body>
 </project>

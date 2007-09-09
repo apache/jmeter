@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -79,11 +80,29 @@ public class TCPClientImpl implements TCPClient {
 			os.write(s.getBytes());
 			os.flush();
 		} catch (IOException e) {
-			log.debug("Write error", e);
+			log.warn("Write error", e);
 		}
 		log.debug("Wrote: " + s);
 		return;
 	}
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
+     *      java.io.InputStream)
+     */
+    public void write(OutputStream os, InputStream is) {
+        byte buff[]=new byte[512];
+        try {
+            while(is.read(buff) > 0){
+                os.write(buff);
+                os.flush();
+            }
+        } catch (IOException e) {
+            log.warn("Write error", e);
+        }
+    }
 
 	/*
 	 * (non-Javadoc)
@@ -125,17 +144,6 @@ public class TCPClientImpl implements TCPClient {
 		// do we need to close byte array (or flush it?)
 		log.debug("Read: " + w.size() + "\n" + w.toString());
 		return w.toString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#write(java.io.OutputStream,
-	 *      java.io.InputStream)
-	 */
-	public void write(OutputStream os, InputStream is) {
-		// TODO Auto-generated method stub
-		return;
 	}
 
 	/**

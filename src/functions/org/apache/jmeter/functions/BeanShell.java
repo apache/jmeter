@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,13 +39,14 @@ import org.apache.log.Logger;
 /**
  * A function which understands BeanShell
  * 
- * @version $Revision$ Updated on: $Date$
  */
 
 public class BeanShell extends AbstractFunction implements Serializable {
 
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__BeanShell"; //$NON-NLS-1$
@@ -64,8 +65,8 @@ public class BeanShell extends AbstractFunction implements Serializable {
 	public BeanShell() {
 	}
 
-	public Object clone() {
-		return new BeanShell();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/*
@@ -85,12 +86,12 @@ public class BeanShell extends AbstractFunction implements Serializable {
 		JMeterVariables vars = jmctx.getVariables();
 
 		String script = ((CompoundVariable) values[0]).execute();
-		String varName = "";
+		String varName = ""; //$NON-NLS-1$
 		if (values.length > 1) {
 			varName = ((CompoundVariable) values[1]).execute();
 		}
 
-		String resultStr = "";
+		String resultStr = ""; //$NON-NLS-1$
 
 		log.debug("Script=" + script);
 
@@ -141,7 +142,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 	 * 
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		values = parameters.toArray();
 
@@ -150,14 +151,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 		}
 
 		try {
-			bshInterpreter = new BeanShellInterpreter();
-			try {
-				bshInterpreter.init(JMeterUtils.getProperty(INIT_FILE), log);
-			} catch (IOException e) {
-				log.warn("Can't init interpreter");
-			} catch (JMeterException e) {
-				log.warn("Can't init interpreter");
-			}
+			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);
 		} catch (ClassNotFoundException e) {
 			throw new InvalidVariableException("BeanShell not found");
 		}

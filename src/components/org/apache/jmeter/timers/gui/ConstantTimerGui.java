@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,7 +32,6 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 /**
  * The GUI for ConstantTimer.
  * 
- * @version $Revision$ on $Date$
  */
 public class ConstantTimerGui extends AbstractTimerGui {
 	/**
@@ -64,7 +63,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
 	}
 
 	public String getLabelResource() {
-		return "constant_timer_title";
+		return "constant_timer_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -102,13 +101,13 @@ public class ConstantTimerGui extends AbstractTimerGui {
 	 * Initialize this component.
 	 */
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 
 		setBorder(makeBorder());
 		add(makeTitlePanel());
 
 		Box delayPanel = Box.createHorizontalBox();
-		JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));
+		JLabel delayLabel = new JLabel(JMeterUtils.getResString("constant_timer_delay"));//$NON-NLS-1$
 		delayPanel.add(delayLabel);
 
 		delayField = new JTextField(6);
@@ -121,10 +120,10 @@ public class ConstantTimerGui extends AbstractTimerGui {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
+	public void clearGui() {
 		delayField.setText(DEFAULT_DELAY);
-		super.clear();
+		super.clearGui();
 	}
 }

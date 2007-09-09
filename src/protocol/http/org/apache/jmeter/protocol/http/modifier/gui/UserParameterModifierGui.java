@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,7 +36,6 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * A swing panel to allow UI with the UserParameterModifier class.
  * 
- * @version $Revision$ on $Date$
  */
 public class UserParameterModifierGui extends AbstractPreProcessorGui {
 	// -------------------------------------------
@@ -68,12 +67,20 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 		this.configureTestElement(mod);
 		((UserParameterModifier) mod).setXmlUri(fileNameField.getText());
 	}
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        fileNameField.setText("users.xml"); //$NON-NLS-1$
+    }    
 
 	public void updateGui() {
 	}
 
 	public String getLabelResource() {
-		return "http_user_parameter_modifier";
+		return "http_user_parameter_modifier"; // $NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {
@@ -93,7 +100,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 		mainPanel.add(getFileLocator(), BorderLayout.NORTH);
 
 		// We want the help text to look like a label, but wrap like a text area
-		JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note"));
+		JTextArea helpText = new JTextArea(JMeterUtils.getResString("user_param_mod_help_note")); // $NON-NLS-1$
 		helpText.setLineWrap(true);
 		helpText.setWrapStyleWord(true);
 		helpText.setBackground(getBackground());
@@ -110,7 +117,7 @@ public class UserParameterModifierGui extends AbstractPreProcessorGui {
 
 	private JPanel getFileLocator() {
 		fileNameField = new JTextField("users.xml", 15);
-		JLabel label = new JLabel(JMeterUtils.getResString("filename"));
+		JLabel label = new JLabel(JMeterUtils.getResString("filename")); // $NON-NLS-1$
 		label.setLabelFor(fileNameField);
 
 		JPanel fileLocator = new JPanel(new BorderLayout());

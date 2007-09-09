@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -44,6 +45,9 @@ import org.apache.log.Logger;
  * Created 2001/08/11
  */
 public class GraphAccum extends JComponent implements Scrollable, GraphAccumListener {
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
 	private GraphAccumModel model;
 
 	private GraphAccumVisualizer visualizer;
@@ -67,8 +71,6 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
 	protected final static int width = 2000;
 
 	private final static int PLOT_X_WIDTH = 10;
-
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Constructor.
@@ -239,7 +241,7 @@ public class GraphAccum extends JComponent implements Scrollable, GraphAccumList
 	/**
 	 * Clears this graph.
 	 */
-	public void clear() {
+	public void clearData() {
 		setNoLegendYet(true);
 		((JPanel) visualizer.getWhiteCanvas()).removeAll();
 		previousPts = null;

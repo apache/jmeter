@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,7 +38,7 @@ import org.apache.log.Logger;
  */
 public class FileWrapper {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private FileRowColContainer container;
 
@@ -46,10 +46,14 @@ public class FileWrapper {
 
 	private static final int NO_LINE = -1;
 
-	private static String defaultFile = ""; // for omitted file names
+	private static String defaultFile = ""; // for omitted file names //$NON-NLS-1$
 
-	private static Map fileContainers = new HashMap(); // Map file names to
-														// containers
+	/*
+     * This Map serves two purposes:
+     * - maps file names to  containers
+     * - ensures only one container per file across all threads
+	 */
+	private static Map fileContainers = new HashMap(); 
 
 	/*
 	 * Only needed locally
@@ -60,7 +64,7 @@ public class FileWrapper {
 		currentRow = -1;
 	}
 
-	/* The cache of file packs */
+	/* The cache of file packs - used to improve thread access */
 	private static ThreadLocal filePacks = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
@@ -145,7 +149,7 @@ public class FileWrapper {
 		FileWrapper fw = (FileWrapper) (my).get(file);
 		if (fw == null) // First call
 		{
-			if (file.startsWith("*")) {
+			if (file.startsWith("*")) { //$NON-NLS-1$
 				log.warn("Cannot perform initial open using alias " + file);
 			} else {
 				file = checkDefault(file);
@@ -181,9 +185,8 @@ public class FileWrapper {
 		if (fw == null) // Not yet open
 		{
 			return -1;
-		} else {
-			return fw.currentRow;
 		}
+		return fw.currentRow;
 	}
 
 	/**
@@ -198,6 +201,6 @@ public class FileWrapper {
 			i.remove();
 		}
 		fileContainers.clear();
-		defaultFile = "";
+		defaultFile = ""; //$NON-NLS-1$
 	}
 }

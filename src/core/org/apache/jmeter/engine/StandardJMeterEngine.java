@@ -1,9 +1,10 @@
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -21,7 +22,6 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,6 +40,7 @@ import org.apache.jmeter.threads.JMeterThreadMonitor;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.ThreadGroup;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.collections.SearchByClass;
@@ -49,14 +50,18 @@ import org.apache.log.Logger;
 /**
  */
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
 	private transient Thread runningThread;
 
 	private static long WAIT_TO_DIE = 5 * 1000; // 5 seconds
 
 	private transient Map allThreads;
 
+	private volatile boolean startingGroups; // flag to show that groups are still being created
+	
 	private boolean running = false;
 
 	private boolean serialized = false;
@@ -71,6 +76,15 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
 	private transient ListenerNotifier notifier;
 
+    private static final boolean startListenersLater = 
+        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true);
+
+    static {
+        if (startListenersLater){
+            log.info("Listeners will be started after enabling running version");
+            log.info("To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false");
+        }
+    }
 	// Allow engine and threads to be stopped from outside a thread
 	// e.g. from beanshell server
 	// Assumes that there is only one instance of the engine
@@ -125,12 +139,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				if (t != null) {
 					t.interrupt();
 				}
-
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	// End of code to allow engine to be controlled remotely
@@ -234,8 +246,8 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	public synchronized void threadFinished(JMeterThread thread) {
 		try {
             allThreads.remove(thread);
-            log.info("Ending thread " + thread.getThreadNum());
-            if (!serialized && allThreads.size() == 0 && !schcdule_run) {
+            log.info("Ending thread " + thread.getThreadName());
+            if (!serialized && !schcdule_run && !startingGroups && allThreads.size() == 0 ) {
             	log.info("Stopping test");
             	stopTest();
             }
@@ -302,18 +314,28 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 			serialized = true;
 		}
         JMeterContextService.startTest();
-		compileTree();
+        try {
+        	compileTree();
+	    } catch (RuntimeException e) {
+	    	log.error("Error occurred compiling the tree:",e);
+	    	JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file");
+	    	return; // no point continuing
+        }
 		/**
 		 * Notification of test listeners needs to happen after function
 		 * replacement, but before setting RunningVersion to true.
 		 */
 		testListeners = new SearchByClass(TestListener.class);
 		getTestTree().traverse(testListeners);
-		Collection col = testListeners.getSearchResults();
-		col.addAll(testList);
-		testList = null;
-		notifyTestListenersOfStart();
+		
+		//	Merge in any additional test listeners
+		// currently only used by the function parser
+		testListeners.getSearchResults().addAll(testList);
+		testList = null; // no longer needed
+		
+		if (!startListenersLater )notifyTestListenersOfStart();
 		getTestTree().traverse(new TurnElementsOn());
+        if (startListenersLater)notifyTestListenersOfStart();
 
 		List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
 		removeThreadGroups(testLevelElements);
@@ -323,7 +345,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		// for each thread group, generate threads
 		// hand each thread the sampler controller
 		// and the listeners, and the timer
-		JMeterThread[] threads;
 		Iterator iter = searcher.getSearchResults().iterator();
 
 		/*
@@ -338,17 +359,18 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		schcdule_run = true;
 		JMeterContextService.getContext().setSamplingStarted(true);
 		int groupCount = 0;
+        JMeterContextService.clearTotalThreads();
+        startingGroups = true;
 		while (iter.hasNext()) {
 			groupCount++;
 			ThreadGroup group = (ThreadGroup) iter.next();
 			int numThreads = group.getNumThreads();
+            JMeterContextService.addTotalThreads(numThreads);
 			boolean onErrorStopTest = group.getOnErrorStopTest();
 			boolean onErrorStopThread = group.getOnErrorStopThread();
 			String groupName = group.getName();
 			int rampUp = group.getRampUp();
 			float perThreadDelay = ((float) (rampUp * 1000) / (float) numThreads);
-			threads = new JMeterThread[numThreads];
-
 			log.info("Starting " + numThreads + " threads for group " + groupName + ". Ramp up = " + rampUp + ".");
 
 			if (onErrorStopTest) {
@@ -361,26 +383,25 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
             ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
             threadGroupTree.add(group, testLevelElements);
-			for (int i = 0; running && i < threads.length; i++) {
-				threads[i] = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
-				threads[i].setThreadNum(i);
-				threads[i].setThreadGroup(group);
-				threads[i].setInitialContext(JMeterContextService.getContext());
-				threads[i].setInitialDelay((int) (perThreadDelay * i));
-				threads[i].setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
+			for (int i = 0; running && i < numThreads; i++) {
+                final JMeterThread jmeterThread = new JMeterThread(cloneTree(threadGroupTree), this, notifier);
+                jmeterThread.setThreadNum(i);
+				jmeterThread.setThreadGroup(group);
+				jmeterThread.setInitialContext(JMeterContextService.getContext());
+				jmeterThread.setInitialDelay((int) (perThreadDelay * i));
+				jmeterThread.setThreadName(groupName + " " + (groupCount) + "-" + (i + 1));
 
-				scheduleThread(threads[i], group);
+				scheduleThread(jmeterThread, group);
 
 				// Set up variables for stop handling
-				threads[i].setEngine(this);
-				threads[i].setOnErrorStopTest(onErrorStopTest);
-				threads[i].setOnErrorStopThread(onErrorStopThread);
+				jmeterThread.setEngine(this);
+				jmeterThread.setOnErrorStopTest(onErrorStopTest);
+				jmeterThread.setOnErrorStopThread(onErrorStopThread);
 
-				Thread newThread = new Thread(threads[i]);
-				newThread.setName(threads[i].getThreadName());
-				allThreads.put(threads[i], newThread);
-				if (serialized && !iter.hasNext() && i == threads.length - 1) // last
-				// thread
+				Thread newThread = new Thread(jmeterThread);
+				newThread.setName(jmeterThread.getThreadName());
+				allThreads.put(jmeterThread, newThread);
+				if (serialized && !iter.hasNext() && i == numThreads - 1) // last thread
 				{
 					serialized = false;
 				}
@@ -396,6 +417,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				}
 			}
 		}
+        startingGroups = false;
 	}
 
 	/**
@@ -427,19 +449,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
 			// Enables the scheduler
 			thread.setScheduled(true);
-		}
-	}
-
-	public synchronized void pauseTest(int milis) {
-		Iterator iter = new HashSet(allThreads.keySet()).iterator();
-		while (iter.hasNext()) {
-			Thread t = (Thread) allThreads.get(iter.next());
-			if (t != null && t.isAlive()) {
-				try {
-					Thread.sleep(milis);
-				} catch (InterruptedException e) {
-				}
-			}
 		}
 	}
 

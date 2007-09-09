@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -23,13 +24,13 @@ package org.apache.jmeter.services;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,25 +56,33 @@ import org.apache.log.Logger;
  * test plans to execute on unknown boxes that only have Java installed.
  */
 public class FileServer {
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	File base;
+    private static final String DEFAULT_BASE = JMeterUtils.getProperty("user.dir");
+    
+	private File base;
 
-	Map files = Collections.synchronizedMap(new HashMap());
+    //TODO - make "files" and "random" static as the class is a singleton?
+    
+	private final Map files = new HashMap();
+    
+	private static final FileServer server = new FileServer();
 
-	private static FileServer server = new FileServer();
-
-	private Random random = new Random();
+	private final Random random = new Random();
 
 	private FileServer() {
-		base = new File(JMeterUtils.getProperty("user.dir"));
+		base = new File(DEFAULT_BASE);
 	}
 
 	public static FileServer getFileServer() {
 		return server;
 	}
 
-	public void setBasedir(String basedir) throws IOException {
+    public void resetBase() throws IOException{
+        setBasedir(DEFAULT_BASE);
+    }
+    
+	public synchronized void setBasedir(String basedir) throws IOException {
 		if (filesOpen()) {
 			throw new IOException("Files are still open, cannot change base directory");
 		}
@@ -86,83 +95,125 @@ public class FileServer {
 		}
 	}
 
-	public String getBaseDir() {
+	public synchronized String getBaseDir() {
 		return base.getAbsolutePath();
 	}
 
+    /**
+     * Creates an association between a filename and a File inputOutputObject,
+     * and stores it for later use - unless it is already stored.
+     * 
+     * @param filename - relative (to base) or absolute file name
+     */
 	public synchronized void reserveFile(String filename) {
+		reserveFile(filename,null);
+	}
+
+    /**
+     * Creates an association between a filename and a File inputOutputObject,
+     * and stores it for later use - unless it is already stored.
+     * 
+     * @param filename - relative (to base) or absolute file name
+     * @param charsetName - the character set encoding to use for the file
+     */
+	public synchronized void reserveFile(String filename, String charsetName) {
 		if (!files.containsKey(filename)) {
-			Object[] file = new Object[2];
-			file[0] = new File(base,filename);
-			if(!((File)file[0]).exists() && !((File)file[0]).getParentFile().exists())
-			{
-				file[0] = new File(filename);
-			}
+            File f = new File(filename); 
+            FileEntry file = 
+                new FileEntry(f.isAbsolute() ? f : new File(base, filename),null,charsetName);
+            log.info("Stored: "+filename);
 			files.put(filename, file);
 		}
 	}
 
-	/**
-	 * Get the next line of the named file.
-	 * 
-	 * @param filename
-	 * @return
+   /**
+	 * Get the next line of the named file, recycle by default.
+	 *
+     * @param filename
+	 * @return String containing the next line in the file
 	 * @throws IOException
 	 */
-	public String readLine(String filename) throws IOException {
-		Object[] file = getFileObjects(filename);
-		synchronized(file)
-		{
-			if (file != null) {
-				if (file[1] == null) {
-					BufferedReader r = new BufferedReader(new FileReader((File) file[0]));
-					file[1] = r;
-				}
-				BufferedReader reader = (BufferedReader) file[1];
-				String line = reader.readLine();
-				if (line == null) {
-					reader.close();
-					reader = new BufferedReader(new FileReader((File) file[0]));
-					file[1] = reader;
-					line = reader.readLine();
-				}
-				return line;
+    public String readLine(String filename) throws IOException {
+      return readLine(filename, true);
+    }
+
+   /**
+	 * Get the next line of the named file.
+	 * 
+     * @param filename
+     * @param recycle - should file be restarted at EOF?
+	 * @return String containing the next line in the file (null if EOF reached and not recycle)
+	 * @throws IOException
+	 */
+	public synchronized String readLine(String filename, boolean recycle) throws IOException {
+		FileEntry fileEntry = (FileEntry) files.get(filename);
+		if (fileEntry != null) {
+			if (fileEntry.inputOutputObject == null) {
+				fileEntry.inputOutputObject = createBufferedReader(fileEntry, filename);
+            } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
+                throw new IOException("File " + filename + " already in use");
+            }
+			BufferedReader reader = (BufferedReader) fileEntry.inputOutputObject;
+			String line = reader.readLine();
+			if (line == null && recycle) {
+				reader.close();
+				reader = createBufferedReader(fileEntry, filename);
+				fileEntry.inputOutputObject = reader;
+				line = reader.readLine();
 			}
+            if (log.isDebugEnabled()) log.debug("Read:"+line);
+			return line;
 		}
-		throw new IOException("File never reserved");
+		throw new IOException("File never reserved: "+filename);
 	}
 	
-	protected Object[] getFileObjects(String filename)
-	{
-		Object[] file = (Object[]) files.get(filename);
-		if(file == null)
-		{
-			reserveFile(filename);
-			file = (Object[]) files.get(filename);
+	private BufferedReader createBufferedReader(FileEntry fileEntry, String filename) throws IOException { 
+		FileInputStream fis = new FileInputStream(fileEntry.file);				
+		InputStreamReader isr = null;
+        // If file encoding is specified, read using that encoding, otherwise use default platform encoding
+		String charsetName = fileEntry.charSetEncoding;
+		if(charsetName != null && charsetName.trim().length() > 0) {
+			isr = new InputStreamReader(fis, charsetName); 
+		} else {
+			isr = new InputStreamReader(fis); 
 		}
-		return file;		
+		return new BufferedReader(isr);
 	}
 
-	public void write(String filename, String value) throws IOException {
-		Object[] file = getFileObjects(filename);
-		synchronized(file)
-		{
-			if (file != null) {
-				if (file[1] == null) {
-					file[1] = new PrintWriter((File) file[0],"utf-8");
-				} else if (!(file[1] instanceof Writer)) {
-					throw new IOException("File " + filename + " already in use for reading");
-				}
-				PrintWriter writer = (PrintWriter) file[1];
-				writer.write(value);
+	public synchronized void write(String filename, String value) throws IOException {
+		FileEntry fileEntry = (FileEntry) files.get(filename);
+		if (fileEntry != null) {
+			if (fileEntry.inputOutputObject == null) {
+				fileEntry.inputOutputObject = createBufferedWriter(fileEntry, filename);
+			} else if (!(fileEntry.inputOutputObject instanceof Writer)) {
+				throw new IOException("File " + filename + " already in use");
 			}
+			BufferedWriter writer = (BufferedWriter) fileEntry.inputOutputObject;
+            if (log.isDebugEnabled()) log.debug("Write:"+value);
+			writer.write(value);
+		} else {
+            throw new IOException("File never reserved: "+filename);      
+        }
+	}
+
+	private BufferedWriter createBufferedWriter(FileEntry fileEntry, String filename) throws IOException { 
+		FileOutputStream fos = new FileOutputStream(fileEntry.file);				
+		OutputStreamWriter osw = null;
+        // If file encoding is specified, write using that encoding, otherwise use default platform encoding
+		String charsetName = fileEntry.charSetEncoding;
+		if(charsetName != null && charsetName.trim().length() > 0) {
+			osw = new OutputStreamWriter(fos, charsetName); 
+		} else {
+			osw = new OutputStreamWriter(fos); 
 		}
+		return new BufferedWriter(osw);
 	}
 
 	public void closeFiles() throws IOException {
-		Iterator iter = files.keySet().iterator();
+		Iterator iter = files.entrySet().iterator();
 		while (iter.hasNext()) {
-			closeFile((String) iter.next());
+            Map.Entry me = (Map.Entry) iter.next();
+			closeFile((String)me.getKey(),(FileEntry)me.getValue() );
 		}
 		files.clear();
 	}
@@ -171,23 +222,30 @@ public class FileServer {
 	 * @param name
 	 * @throws IOException
 	 */
-	public void closeFile(String name) throws IOException {
-		Object[] file = (Object[]) files.get(name);
-		synchronized(file)
-		{
-			if (file != null && file.length == 2 && file[1] != null) {
-				((Reader) file[1]).close();
-				file[1] = null;
-			}
-		}
+	public synchronized void closeFile(String name) throws IOException {
+		FileEntry fileEntry = (FileEntry) files.get(name);
+		closeFile(name, fileEntry);
 	}
 
+    private void closeFile(String name, FileEntry fileEntry) throws IOException {
+        if (fileEntry != null && fileEntry.inputOutputObject != null) {
+            log.info("Close: "+name);
+            if (fileEntry.inputOutputObject instanceof Reader) {
+                ((Reader) fileEntry.inputOutputObject).close();
+            } else if (fileEntry.inputOutputObject instanceof Writer) {
+                ((Writer) fileEntry.inputOutputObject).close();
+            } else { 
+                log.error("Unknown inputOutputObject type : " + fileEntry.inputOutputObject.getClass());
+            }
+			fileEntry.inputOutputObject = null;
+		}
+    }
+
 	protected boolean filesOpen() {
-		Iterator iter = files.keySet().iterator();
+		Iterator iter = files.values().iterator();
 		while (iter.hasNext()) {
-			String name = (String) iter.next();
-			Object[] file = (Object[]) files.get(name);
-			if (file[1] != null) {
+			FileEntry fileEntry = (FileEntry) iter.next();
+            if (fileEntry.inputOutputObject != null) {
 				return true;
 			}
 		}
@@ -214,4 +272,15 @@ public class FileServer {
 		}
 		return input;
 	}
+    
+    private static class FileEntry{
+        private File file;
+        private Object inputOutputObject; // Reader/Writer
+        private String charSetEncoding;
+        FileEntry(File f, Object o, String e){
+            file=f;
+            inputOutputObject=o;
+            charSetEncoding=e;
+        }
+    }
 }

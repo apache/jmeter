@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,6 +16,17 @@
  * 
  */
 
+/////////////////////////////////////////
+////////
+//////// This code is mostly unused at present
+//////// it seems that only notifyListeners()
+//////// is used.
+////////
+//////// However, it does look useful.
+//////// And it may one day be used...
+////////
+/////////////////////////////////////////
+
 package org.apache.jmeter.threads;
 
 import java.util.Iterator;
@@ -23,9 +34,11 @@ import java.util.List;
 
 import org.apache.commons.collections.Buffer;
 import org.apache.commons.collections.BufferUtils;
-import org.apache.commons.collections.UnboundedFifoBuffer;
+import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.testbeans.TestBeanHelper;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -222,7 +235,9 @@ public class ListenerNotifier {
 		Iterator iter = listeners.iterator();
 		while (iter.hasNext()) {
 			try {
-				((SampleListener) iter.next()).sampleOccurred(res);
+				SampleListener sampleListener = ((SampleListener) iter.next());
+				TestBeanHelper.prepare((TestElement) sampleListener);
+				sampleListener.sampleOccurred(res);
 			} catch (RuntimeException e) {
 				log.error("Detected problem in Listener: ", e);
 				log.info("Continuing to process further listeners");

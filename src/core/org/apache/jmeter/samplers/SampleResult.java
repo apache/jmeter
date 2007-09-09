@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,24 +19,22 @@
 package org.apache.jmeter.samplers;
 
 import java.io.Serializable;
-import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.LogTarget;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.apache.log.format.Formatter;
-import org.apache.log.format.RawFormatter;
-import org.apache.log.output.io.WriterTarget;
+
+// For unit tests, @see TestSampleResult
 
 /**
  * This is a nice packaging for the various information returned from taking a
@@ -43,12 +42,18 @@ import org.apache.log.output.io.WriterTarget;
  * 
  */
 public class SampleResult implements Serializable {
+
+    // Needs to be accessible from Test code
+    static final Logger log = LoggingManager.getLoggerForClass();
+
 	// Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
 	// However the suggested System.getProperty("file.encoding") is Cp1252 on
 	// Windows
 	// So use a new property with the original value as default
-	private static final String DEFAULT_ENCODING = JMeterUtils.getPropDefault("sampleresult.default.encoding",
-			"ISO-8859-1");
+    // needs to be accessible from test code
+	static final String DEFAULT_ENCODING 
+            = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
+			"ISO-8859-1"); // $NON-NLS-1$
 
 	/**
 	 * Data type value indicating that the response data is text.
@@ -56,7 +61,7 @@ public class SampleResult implements Serializable {
 	 * @see #getDataType
 	 * @see #setDataType(java.lang.String)
 	 */
-	public final static String TEXT = "text";
+	public final static String TEXT = "text"; // $NON-NLS-1$
 
 	/**
 	 * Data type value indicating that the response data is binary.
@@ -64,7 +69,7 @@ public class SampleResult implements Serializable {
 	 * @see #getDataType
 	 * @see #setDataType(java.lang.String)
 	 */
-	public final static String BINARY = "bin";
+	public final static String BINARY = "bin"; // $NON-NLS-1$
 
 	/* empty arrays which can be returned instead of null */
 	private static final byte[] EMPTY_BA = new byte[0];
@@ -91,13 +96,15 @@ public class SampleResult implements Serializable {
 
 	private byte[] responseData = EMPTY_BA;
 
-	private String responseCode;
+	private String responseCode = "";// Never return null
 
-	private String label;
+	private String label = "";// Never return null
 
+    private String resultFileName = ""; // Filename used by ResultSaver
+    
 	private String samplerData;
 
-	private String threadName;
+	private String threadName = ""; // Never return null
 
 	private String responseMessage = "";
 
@@ -121,14 +128,15 @@ public class SampleResult implements Serializable {
 
 	private List subResults;
 
-	private String dataType;
+	private String dataType=""; // Don't return null if not set
 
 	private boolean success;
 
-	private Set files;
+	private Set files; // files that this sample has been saved in
 
 	private String dataEncoding;// (is this really the character set?) e.g.
 								// ISO-8895-1, UTF-8
+	// If null, then DEFAULT_ENCODING is returned by getDataEncoding()
 
 	private long time = 0;
 
@@ -142,16 +150,14 @@ public class SampleResult implements Serializable {
 
 	private int sampleCount = 1;
 
-	private int contentLength = 0;
+	private int bytes = 0;
 
-	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult
-	// instead?
+	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
-	private final static String TOTAL_TIME = "totalTime";
+	private final static String TOTAL_TIME = "totalTime"; // $NON-NLS-1$
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
-	private static final boolean startTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
+	private static final boolean startTimeStamp 
+        = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
 	static {
 		if (startTimeStamp) {
@@ -175,7 +181,8 @@ public class SampleResult implements Serializable {
 	 */
 	public SampleResult(SampleResult res) {
 		setStartTime(res.getStartTime());
-		setTime(0);
+		setEndTime(res.getStartTime()); 
+		// was setElapsed(0) which is the same as setStartTime=setEndTime=now
 
 		setSampleLabel(res.getSampleLabel());
 		setRequestHeaders(res.getRequestHeaders());
@@ -185,6 +192,9 @@ public class SampleResult implements Serializable {
 		setResponseMessage(res.getResponseMessage());
 		setDataType(res.getDataType());
 		setResponseHeaders(res.getResponseHeaders());
+        setContentType(res.getContentType());
+        setDataEncoding(res.getDataEncoding());
+		setURL(res.getURL());
 
 		addSubResult(res); // this will add res.getTime() to getTime().
 	}
@@ -247,14 +257,18 @@ public class SampleResult implements Serializable {
 	 * Allow users to create a sample with specific timestamp and elapsed times
 	 * for cloning purposes, but don't allow the times to be changed later
 	 * 
-	 * Currently used by SaveService only
+	 * Currently used by OldSaveService only
 	 * 
 	 * @param stamp -
 	 *            this may be a start time or an end time
 	 * @param elapsed
 	 */
 	public SampleResult(long stamp, long elapsed) {
-		// Maintain the timestamp relationships
+		stampAndTime(stamp, elapsed);
+	}
+
+	// Helper method to maintain timestamp relationships
+	private void stampAndTime(long stamp, long elapsed) {
 		if (startTimeStamp) {
 			setTimes(stamp, stamp + elapsed);
 		} else {
@@ -262,11 +276,28 @@ public class SampleResult implements Serializable {
 		}
 	}
 
+	/*
+	 * For use by SaveService only.
+	 *  
+	 * @param stamp -
+	 *            this may be a start time or an end time
+	 * @param elapsed
+	 */
+	public void setStampAndTime(long stamp, long elapsed) {
+		if (startTime != 0 || endTime != 0){
+			throw new RuntimeException("Calling setStampAndTime() after start/end times have been set");
+		}
+		stampAndTime(stamp, elapsed);
+	}
+
 	/**
 	 * Method to set the elapsed time for a sample. Retained for backward
-	 * compatibility with 3rd party add-ons It is assumed that the method is
-	 * called at the end of a sample
+	 * compatibility with 3rd party add-ons.
+     * It is assumed that the method is only called at the end of a sample
+     * and that timeStamps are end-times
 	 * 
+     * Also used by SampleResultConverter when creating results from files.
+     * 
 	 * Must not be used in conjunction with sampleStart()/End()
 	 * 
 	 * @deprecated use sampleStart() and sampleEnd() instead
@@ -274,8 +305,11 @@ public class SampleResult implements Serializable {
 	 *            time in milliseconds
 	 */
 	public void setTime(long elapsed) {
+		if (startTime != 0 || endTime != 0){
+			throw new RuntimeException("Calling setTime() after start/end times have been set");
+		}
 		long now = System.currentTimeMillis();
-		setTimes(now - elapsed, now);
+	    setTimes(now - elapsed, now);
 	}
 
 	public void setMarked(String filename) {
@@ -293,10 +327,23 @@ public class SampleResult implements Serializable {
 		return responseCode;
 	}
 
+    private static final String OK = Integer.toString(HttpURLConnection.HTTP_OK);
+    
+    /**
+     * Set response code to OK, i.e. "200"
+     *
+     */
+    public void setResponseCodeOK(){
+        responseCode=OK;
+    }
+    
 	public void setResponseCode(String code) {
 		responseCode = code;
 	}
 
+    public boolean isResponseCodeOK(){
+        return responseCode.equals(OK);
+    }
 	public String getResponseMessage() {
 		return responseMessage;
 	}
@@ -304,6 +351,10 @@ public class SampleResult implements Serializable {
 	public void setResponseMessage(String msg) {
 		responseMessage = msg;
 	}
+
+    public void setResponseMessageOK() {
+        responseMessage = "OK"; // $NON-NLS-1$       
+    }
 
 	public String getThreadName() {
 		return threadName;
@@ -313,6 +364,14 @@ public class SampleResult implements Serializable {
 		this.threadName = threadName;
 	}
 
+    /**
+     * Get the sample timestamp, which may be either the start time or the end time.
+     * 
+     * @see #getStartTime()
+     * @see #getEndTime()
+     * 
+     * @return timeStamp in milliseconds
+     */
 	public long getTimeStamp() {
 		return timeStamp;
 	}
@@ -346,14 +405,37 @@ public class SampleResult implements Serializable {
 	}
 
 	public void addSubResult(SampleResult subResult) {
-		subResult.setThreadName(getThreadName());
+		String tn = getThreadName();
+        if (tn.length()==0) {
+        	tn=Thread.currentThread().getName();//TODO do this more efficiently
+            this.setThreadName(tn);
+        }
+        subResult.setThreadName(tn);
 		if (subResults == null) {
 			subResults = new ArrayList();
 		}
 		subResults.add(subResult);
-		setTime(getTime() + subResult.getTime());
+		// Extend the time to the end of the added sample
+		setEndTime(subResult.getEndTime());
+		// Include the byte count for the added sample
+		setBytes(getBytes() + subResult.getBytes());
 		subResult.setParent(this);
 	}
+
+    /**
+     * Add a subresult read from a results file.
+     * 
+     * As for addSubResult(), except that the fields don't need to be accumulated
+     * 
+     * @param subResult
+     */
+    public void storeSubResult(SampleResult subResult) {
+        if (subResults == null) {
+            subResults = new ArrayList();
+        }
+        subResults.add(subResult);
+        subResult.setParent(this);
+    }
 
 	/**
 	 * Gets the subresults associated with this sample.
@@ -380,8 +462,19 @@ public class SampleResult implements Serializable {
 	 */
 	public void setResponseData(byte[] response) {
 		responseData = response;
-		setContentLength(response.length);
 	}
+
+    /**
+     * Sets the responseData attribute of the SampleResult object.
+     * 
+     * @param response
+     *            the new responseData value (String)
+     * 
+     * @deprecated - only intended for use from BeanShell code
+     */
+    public void setResponseData(String response) {
+        responseData = response.getBytes();
+    }
 
 	/**
 	 * Gets the responseData attribute of the SampleResult object.
@@ -392,14 +485,29 @@ public class SampleResult implements Serializable {
 		return responseData;
 	}
 
+    /**
+     * Gets the responseData attribute of the SampleResult object.
+     * 
+     * @return the responseData value as a String, converted according to the encoding
+     */
+    public String getResponseDataAsString() {
+        try {
+            return new String(responseData,getDataEncoding());
+        } catch (UnsupportedEncodingException e) {
+            log.warn("Using "+dataEncoding+" caused "+e);
+            return new String(responseData);
+        }
+    }
+
 	/**
 	 * Convenience method to get responseData as a non-null byte array
 	 * 
 	 * @return the responseData. If responseData is null then an empty byte
 	 *         array is returned rather than null.
-	 * 
+	 *
+	 * @deprecated - no longer needed, as getResponseData() does not return null
 	 */
-	public byte[] responseDataAsBA() {
+	public byte[] getResponseDataAsBA() {
 		return responseData == null ? EMPTY_BA : responseData;
 	}
 
@@ -432,6 +540,36 @@ public class SampleResult implements Serializable {
 	public String getDataType() {
 		return dataType;
 	}
+    /**
+     * Set Encoding and DataType from ContentType
+     * @param ct - content type (may be null)
+     */
+    public void setEncodingAndType(String ct){
+        if (ct != null) {
+            // Extract charset and store as DataEncoding
+            // TODO do we need process http-equiv META tags, e.g.:
+            // <META http-equiv="content-type" content="text/html;
+            // charset=foobar">
+            // or can we leave that to the renderer ?
+            final String CS_PFX = "charset="; // $NON-NLS-1$
+            int cset = ct.toLowerCase().indexOf(CS_PFX);
+            if (cset >= 0) {
+            	// TODO - assumes charset is not followed by anything else
+                String charSet = ct.substring(cset + CS_PFX.length());
+                // Check for quoted string
+                if (charSet.startsWith("\"")){ // $NON-NLS-1$
+                	setDataEncoding(charSet.substring(1, charSet.length()-1)); // remove quotes
+                } else {
+				    setDataEncoding(charSet);
+                }
+            }
+            if (ct.startsWith("image/")) {// $NON-NLS-1$
+                setDataType(BINARY);
+            } else {
+                setDataType(TEXT);
+            }
+        }
+    }
 
 	/**
 	 * Sets the successful attribute of the SampleResult object.
@@ -458,9 +596,8 @@ public class SampleResult implements Serializable {
 	public String getDataEncoding() {
 		if (dataEncoding != null) {
 			return dataEncoding;
-		} else {
-			return DEFAULT_ENCODING;
 		}
+		return DEFAULT_ENCODING;
 	}
 
 	/**
@@ -532,11 +669,19 @@ public class SampleResult implements Serializable {
 	}
 
 	/**
-	 * @return the content type - e.g. text/html [;charset=utf-8 ]
+	 * @return the full content type - e.g. text/html [;charset=utf-8 ]
 	 */
 	public String getContentType() {
 		return contentType;
 	}
+
+    /**
+     * Get the media type from the Content Type
+     * @return the media type - e.g. text/html (without charset, if any)
+     */
+    public String getMediaType() {
+        return JOrphanUtils.trim(contentType," ;").toLowerCase();
+    }
 
 	/**
 	 * @param string
@@ -545,6 +690,13 @@ public class SampleResult implements Serializable {
 		contentType = string;
 	}
 
+    /**
+     * @return idleTime
+     */
+    public long getIdleTime() {
+        return idleTime;
+    }
+    
 	/**
 	 * @return the end time
 	 */
@@ -572,7 +724,7 @@ public class SampleResult implements Serializable {
 		}
 	}
 
-	private void setEndTime(long end) {
+	protected void setEndTime(long end) {
 		endTime = end;
 		if (!startTimeStamp) {
 			timeStamp = endTime;
@@ -681,8 +833,8 @@ public class SampleResult implements Serializable {
 	 * 
 	 * @param length
 	 */
-	public void setContentLength(int length) {
-		contentLength = length;
+	public void setBytes(int length) {
+		bytes = length;
 	}
 
 	/**
@@ -690,69 +842,8 @@ public class SampleResult implements Serializable {
 	 * 
 	 * @return
 	 */
-	public int getContentLength() {
-		return contentLength;
-	}
-
-	// //////////////////////////// Start of Test Code
-	// ///////////////////////////
-
-	// TODO need more tests - particularly for the new functions
-
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testElapsed() throws Exception {
-			SampleResult res = new SampleResult();
-
-			// Check sample increments OK
-			res.sampleStart();
-			Thread.sleep(100);
-			res.sampleEnd();
-			assertTrue(res.getTime() >= 100);
-		}
-
-		public void testPause() throws Exception {
-			SampleResult res = new SampleResult();
-			// Check sample increments OK
-			res.sampleStart();
-			Thread.sleep(100);
-			res.samplePause();
-
-			Thread.sleep(200);
-
-			// Re-increment
-			res.sampleResume();
-			Thread.sleep(100);
-			res.sampleEnd();
-			long sampleTime = res.getTime();
-			if ((sampleTime < 200) || (sampleTime > 290)) {
-				fail("Accumulated time (" + sampleTime + ") was not between 200 and 290 ms");
-			}
-		}
-
-		private static Formatter fmt = new RawFormatter();
-
-		private StringWriter wr = null;
-
-		public void divertLog() {
-			wr = new StringWriter(1000);
-			LogTarget[] lt = { new WriterTarget(wr, fmt) };
-			log.setLogTargets(lt);
-		}
-
-		public void testPause2() throws Exception {
-			divertLog();
-			SampleResult res = new SampleResult();
-			res.sampleStart();
-			res.samplePause();
-			assertTrue(wr.toString().length() == 0);
-			res.samplePause();
-			assertFalse(wr.toString().length() == 0);
-		}
-		// TODO some more invalid sequence tests needed
+	public int getBytes() {
+		return bytes == 0 ? responseData.length : bytes;
 	}
 
 	/**
@@ -762,11 +853,17 @@ public class SampleResult implements Serializable {
 		return latency;
 	}
 
+    /**
+     * Set the time to the first response
+     *
+     */
 	public void latencyEnd() {
 		latency = System.currentTimeMillis() - startTime - idleTime;
 	}
 
 	/**
+     * This is only intended for use by SampleResultConverter!
+     * 
 	 * @param latency
 	 *            The latency to set.
 	 */
@@ -775,6 +872,8 @@ public class SampleResult implements Serializable {
 	}
 
 	/**
+     * This is only intended for use by SampleResultConverter!
+     *
 	 * @param timeStamp
 	 *            The timeStamp to set.
 	 */
@@ -791,6 +890,15 @@ public class SampleResult implements Serializable {
 	public URL getURL() {
 		return location;
 	}
+	
+	/**
+	 * Get a String representation of the URL (if defined).
+	 * 
+	 * @return ExternalForm of URL, or empty string if url is null
+	 */
+	public String getUrlAsString() {
+		return location == null ? "" : location.toExternalForm();
+	}
 
 	/**
 	 * @return Returns the parent.
@@ -806,4 +914,12 @@ public class SampleResult implements Serializable {
 	public void setParent(SampleResult parent) {
 		this.parent = parent;
 	}
+
+    public String getResultFileName() {
+        return resultFileName;
+    }
+
+    public void setResultFileName(String resultFileName) {
+        this.resultFileName = resultFileName;
+    }
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,14 +38,13 @@ import org.apache.log.Logger;
  * Returns: - Empty String (so can be used where return value would be a
  * nuisance)
  * 
- * @version $Revision$ Updated: $Date$
  */
 public class LogFunction2 extends AbstractFunction implements Serializable {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__logn";
+	private static final String KEY = "__logn"; //$NON-NLS-1$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;
@@ -64,8 +63,8 @@ public class LogFunction2 extends AbstractFunction implements Serializable {
 	public LogFunction2() {
 	}
 
-	public Object clone() {
-		return new LogFunction2();
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
@@ -92,7 +91,7 @@ public class LogFunction2 extends AbstractFunction implements Serializable {
 
 	}
 
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		values = parameters.toArray();
 

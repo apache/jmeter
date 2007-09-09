@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,20 +24,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
-import org.apache.oro.text.PatternCacheLRU;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcher;
@@ -46,33 +42,44 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
-/**
- * @version $Revision$
- */
+// @see org.apache.jmeter.extractor.TestRegexExtractor for unit tests
+
 public class RegexExtractor extends AbstractTestElement implements PostProcessor, Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String USEHEADERS = "RegexExtractor.useHeaders";
 
-	public static final String REGEX = "RegexExtractor.regex";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String REFNAME = "RegexExtractor.refname";
+	// What to match against. N.B. do not change the string value or test plans will break!
+	private static final String MATCH_AGAINST = "RegexExtractor.useHeaders"; // $NON-NLS-1$
+	/*
+	 * Permissible values: 
+	 *  true - match against headers
+	 *  false or absent - match against body (this was the original default)
+	 *  URL - match against URL
+	 *  These are passed to the setUseField() method
+	 *  
+	 *  Do not change these values!
+	*/
+	public static final String USE_HDRS = "true"; // $NON-NLS-1$
+	public static final String USE_BODY = "false"; // $NON-NLS-1$
+    public static final String USE_URL = "URL"; // $NON-NLS-1$
 
-	public static final String MATCH_NUMBER = "RegexExtractor.match_number";
+	private static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
 
-	public static final String DEFAULT = "RegexExtractor.default";
+	private static final String REFNAME = "RegexExtractor.refname"; // $NON-NLS-1$
 
-	public static final String TEMPLATE = "RegexExtractor.template";
+	private static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
 
-	private Object[] template = null;
+	private static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
+	private static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
 
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
+    private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
+
+    private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+
+
+    private Object[] template = null;
 
 	/**
 	 * Parses the response data using regular expressions and saving the results
@@ -83,7 +90,8 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 	public void process() {
 		initTemplate();
 		JMeterContext context = getThreadContext();
-		if (context.getPreviousResult() == null || context.getPreviousResult().getResponseData() == null) {
+		SampleResult previousResult = context.getPreviousResult();
+		if (previousResult == null) {
 			return;
 		}
 		log.debug("RegexExtractor processing result");
@@ -93,14 +101,28 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		String refName = getRefName();
 		int matchNumber = getMatchNumber();
 
-		vars.put(refName, getDefaultValue());
+		final String defaultValue = getDefaultValue();
+        if (defaultValue.length() > 0){// Only replace default if it is provided
+            vars.put(refName, defaultValue);
+        }
 
-		Perl5Matcher matcher = (Perl5Matcher) localMatcher.get();
-		PatternMatcherInput input = new PatternMatcherInput(useHeaders() ? context.getPreviousResult()
-				.getResponseHeaders() : new String(context.getPreviousResult().getResponseData()));
-		log.debug("Regex = " + getRegex());
+		Perl5Matcher matcher = JMeterUtils.getMatcher();
+		String inputString = 
+			useUrl() ? previousResult.getUrlAsString() // Bug 39707 
+			:
+			useHeaders() ? previousResult.getResponseHeaders()
+		    : previousResult.getResponseDataAsString() // Bug 36898
+		    ; 
+   		if (log.isDebugEnabled()) {
+   			log.debug("Input = " + inputString);
+   		}
+		PatternMatcherInput input = new PatternMatcherInput(inputString);
+   		String regex = getRegex();
+		if (log.isDebugEnabled()) {
+			log.debug("Regex = " + regex);
+   		}
 		try {
-			Pattern pattern = patternCache.getPattern(getRegex(), Perl5Compiler.READ_ONLY_MASK);
+			Pattern pattern = JMeterUtils.getPatternCache().getPattern(regex, Perl5Compiler.READ_ONLY_MASK);
 			List matches = new ArrayList();
 			int x = 0;
 			boolean done = false;
@@ -121,34 +143,36 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 					if (match != null) {
 						vars.put(refName, generateResult(match));
 						saveGroups(vars, refName, match);
-					}
+					} else {
+                        vars.remove(refName + "_g"); // $NON-NLS-1$
+                        vars.remove(refName + "_g0"); // $NON-NLS-1$
+                        vars.remove(refName + "_g1"); // $NON-NLS-1$
+                        //TODO - remove other groups if present?
+                    }
 				} else // < 0 means we save all the matches
 				{
 					int prevCount = 0;
-					String prevString = vars.get(refName + "_matchNr");
+					String prevString = vars.get(refName + REF_MATCH_NR);
 					if (prevString != null) {
 						try {
 							prevCount = Integer.parseInt(prevString);
 						} catch (NumberFormatException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+                            log.warn("Could not parse "+prevString+" "+e1);
 						}
 					}
-					vars.put(refName + "_matchNr", "" + matches.size());// Save
-																		// the
-																		// count
+					vars.put(refName + REF_MATCH_NR, "" + matches.size());// Save the count
 					for (int i = 1; i <= matches.size(); i++) {
 						match = getCorrectMatch(matches, i);
 						if (match != null) {
-							vars.put(refName + "_" + i, generateResult(match));
-							saveGroups(vars, refName + "_" + i, match);
+							vars.put(refName + UNDERSCORE + i, generateResult(match));
+							saveGroups(vars, refName + UNDERSCORE + i, match);
 						}
 					}
 					for (int i = matches.size() + 1; i <= prevCount; i++) {
-						vars.remove(refName + "_" + i);
-						vars.remove(refName + "_" + i + "_g0");// Remove known
-																// groups ...
-						vars.remove(refName + "_" + i + "_g1");// ...
+						vars.remove(refName + UNDERSCORE + i);
+                        // Remove known groups
+						vars.remove(refName + UNDERSCORE + i + "_g0"); // $NON-NLS-1$
+						vars.remove(refName + UNDERSCORE + i + "_g1"); // $NON-NLS-1$
 						// TODO remove other groups if present?
 					}
 				}
@@ -156,19 +180,22 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 				log.warn("Error while generating result");
 			}
 		} catch (MalformedCachePatternException e) {
-			log.warn("Error in pattern: " + getRegex());
+			log.warn("Error in pattern: " + regex);
 		}
 	}
 
 	private void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
 		StringBuffer buf = new StringBuffer();
+        buf.append(basename);
+        buf.append("_g"); // $NON-NLS-1$
+        int pfxlen=buf.length();
+        //Note: match.groups() includes group 0
 		for (int x = 0; x < match.groups(); x++) {
-			buf.append(basename);
-			buf.append("_g");
 			buf.append(x);
 			vars.put(buf.toString(), match.group(x));
-			buf.setLength(0);
+			buf.setLength(pfxlen);
 		}
+        vars.put(buf.toString(), Integer.toString(match.groups()-1));
 	}
 
 	public Object clone() {
@@ -198,8 +225,9 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		List pieces = new ArrayList();
 		List combined = new LinkedList();
 		String rawTemplate = getTemplate();
-		PatternMatcher matcher = (Perl5Matcher) localMatcher.get();
-		Pattern templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK
+		PatternMatcher matcher = JMeterUtils.getMatcher();
+		Pattern templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$"  // $NON-NLS-1$
+                , Perl5Compiler.READ_ONLY_MASK
 				& Perl5Compiler.SINGLELINE_MASK);
 		log.debug("Pattern = " + templatePattern);
 		log.debug("template = " + rawTemplate);
@@ -234,9 +262,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
 	private boolean isFirstElementGroup(String rawData) {
 		try {
-			Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK
+			Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$" // $NON-NLS-1$
+                    , Perl5Compiler.READ_ONLY_MASK
 					& Perl5Compiler.SINGLELINE_MASK);
-			return ((Perl5Matcher) localMatcher.get()).contains(rawData, pattern);
+			return (JMeterUtils.getMatcher()).contains(rawData, pattern);
 		} catch (RuntimeException e) {
 			log.error("", e);
 			return false;
@@ -292,8 +321,16 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		setProperty(new IntegerProperty(MATCH_NUMBER, matchNumber));
 	}
 
+	public void setMatchNumber(String matchNumber) {
+		setProperty(MATCH_NUMBER, matchNumber);
+	}
+
 	public int getMatchNumber() {
 		return getPropertyAsInt(MATCH_NUMBER);
+	}
+
+	public String getMatchNumberAsString() {
+		return getPropertyAsString(MATCH_NUMBER);
 	}
 
 	/**
@@ -317,160 +354,21 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		return getPropertyAsString(TEMPLATE);
 	}
 
-	private boolean useHeaders() {
-		return "true".equalsIgnoreCase(getPropertyAsString(USEHEADERS));
+	public boolean useHeaders() {
+		return USE_HDRS.equalsIgnoreCase( getPropertyAsString(MATCH_AGAINST));
 	}
 
-	public static class Test extends TestCase {
-		RegexExtractor extractor;
+	// Allow for property not yet being set (probably only applies to Test cases)
+	public boolean useBody() {
+    	String body = getPropertyAsString(MATCH_AGAINST);
+        return body.length()==0 || USE_BODY.equalsIgnoreCase(body);// $NON-NLS-1$
+    }
 
-		SampleResult result;
-
-		JMeterVariables vars;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private JMeterContext jmctx = null;
-
-		public void setUp() {
-			jmctx = JMeterContextService.getContext();
-			extractor = new RegexExtractor();
-			extractor.setThreadContext(jmctx);// This would be done by the run
-												// command
-			extractor.setRefName("regVal");
-			result = new SampleResult();
-			String data = "<company-xmlext-query-ret>" + "<row>" + "<value field=\"RetCode\">LIS_OK</value>"
-					+ "<value field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value>"
-					+ "<value field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value>"
-					+ "<value field=\"pinposition1\">1</value>" + "<value field=\"pinpositionvalue1\"></value>"
-					+ "<value field=\"pinposition2\">5</value>" + "<value field=\"pinpositionvalue2\"></value>"
-					+ "<value field=\"pinposition3\">6</value>" + "<value field=\"pinpositionvalue3\"></value>"
-					+ "</row>" + "</company-xmlext-query-ret>";
-			result.setResponseData(data.getBytes());
-			result.setResponseHeaders("Header1: Value1\nHeader2: Value2");
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-		}
-
-		public void testVariableExtraction() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$2$");
-			extractor.setMatchNumber(2);
-			extractor.process();
-			assertEquals("5", vars.get("regVal"));
-			assertEquals("pinposition2", vars.get("regVal_g1"));
-			assertEquals("5", vars.get("regVal_g2"));
-			assertEquals("<value field=\"pinposition2\">5</value>", vars.get("regVal_g0"));
-		}
-
-		static void templateSetup(RegexExtractor rex, String tmp) {
-			rex.setRegex("<company-(\\w+?)-(\\w+?)-(\\w+?)>");
-			rex.setMatchNumber(1);
-			rex.setTemplate(tmp);
-			rex.process();
-		}
-
-		public void testTemplate1() throws Exception {
-			templateSetup(extractor, "");
-			assertEquals("<company-xmlext-query-ret>", vars.get("regVal_g0"));
-			assertEquals("xmlext", vars.get("regVal_g1"));
-			assertEquals("query", vars.get("regVal_g2"));
-			assertEquals("ret", vars.get("regVal_g3"));
-			assertEquals("", vars.get("regVal"));
-		}
-
-		public void testTemplate2() throws Exception {
-			templateSetup(extractor, "ABC");
-			assertEquals("ABC", vars.get("regVal"));
-		}
-
-		public void testTemplate3() throws Exception {
-			templateSetup(extractor, "$2$");
-			assertEquals("query", vars.get("regVal"));
-		}
-
-		public void testTemplate4() throws Exception {
-			templateSetup(extractor, "PRE$2$");
-			assertEquals("PREquery", vars.get("regVal"));
-		}
-
-		public void testTemplate5() throws Exception {
-			templateSetup(extractor, "$2$POST");
-			assertEquals("queryPOST", vars.get("regVal"));
-		}
-
-		public void testTemplate6() throws Exception {
-			templateSetup(extractor, "$2$$1$");
-			assertEquals("queryxmlext", vars.get("regVal"));
-		}
-
-		public void testTemplate7() throws Exception {
-			templateSetup(extractor, "$2$MID$1$");
-			assertEquals("queryMIDxmlext", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction2() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(3);
-			extractor.process();
-			assertEquals("pinposition3", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction6() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$2$");
-			extractor.setMatchNumber(4);
-			extractor.setDefaultValue("default");
-			extractor.process();
-			assertEquals("default", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction3() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("_$1$");
-			extractor.setMatchNumber(2);
-			extractor.process();
-			assertEquals("_pinposition2", vars.get("regVal"));
-		}
-
-		public void testVariableExtraction5() throws Exception {
-			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
-			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(-1);
-			extractor.process();
-			assertEquals("3", vars.get("regVal_matchNr"));
-			assertEquals("pinposition1", vars.get("regVal_1"));
-			assertEquals("pinposition2", vars.get("regVal_2"));
-			assertEquals("pinposition3", vars.get("regVal_3"));
-			assertEquals("pinposition1", vars.get("regVal_1_g1"));
-			assertEquals("1", vars.get("regVal_1_g2"));
-			assertEquals("<value field=\"pinposition1\">1</value>", vars.get("regVal_1_g0"));
-			assertNull(vars.get("regVal_4"));
-
-			// Check old values don't hang around:
-			extractor.setRegex("(\\w+)count"); // fewer matches
-			extractor.process();
-			assertEquals("2", vars.get("regVal_matchNr"));
-			assertEquals("position", vars.get("regVal_1"));
-			assertEquals("invalidpin", vars.get("regVal_2"));
-			assertNull("Unused variables should be null", vars.get("regVal_3"));
-			assertNull("Unused variables should be null", vars.get("regVal_3_g0"));
-			assertNull("Unused variables should be null", vars.get("regVal_3_g1"));
-		}
-
-		public void testVariableExtraction7() throws Exception {
-			extractor.setRegex("Header1: (\\S+)");
-			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(1);
-			assertFalse("useHdrs should be false", extractor.useHeaders());
-			extractor.setProperty(USEHEADERS, "true");
-			assertTrue("useHdrs should be true", extractor.useHeaders());
-			extractor.process();
-			assertEquals("Value1", vars.get("regVal"));
-		}
+	public boolean useUrl() {
+    	String body = getPropertyAsString(MATCH_AGAINST);
+        return USE_URL.equalsIgnoreCase(body);
+    }
+	public void setUseField(String actionCommand) {
+		setProperty(MATCH_AGAINST,actionCommand);
 	}
 }

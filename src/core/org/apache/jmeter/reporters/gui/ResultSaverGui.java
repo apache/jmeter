@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,15 +30,14 @@ import org.apache.jmeter.reporters.ResultSaver;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Create a ResultSaver test element, which saves the sample information in set
  * of files
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class ResultSaverGui extends AbstractPostProcessorGui {
+	// TODO should this implements Clearable ?
 
 	private JTextField filename;
 
@@ -82,8 +81,18 @@ public class ResultSaverGui extends AbstractPostProcessorGui {
 	public void modifyTestElement(TestElement te) {
 		super.configureTestElement(te);
 		te.setProperty(ResultSaver.FILENAME, filename.getText());
-		te.setProperty(ResultSaver.ERRORS_ONLY, JOrphanUtils.booleanToString(errorsOnly.isSelected()));
+		te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
 	}
+
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        filename.setText(""); //$NON-NLS-1$
+        errorsOnly.setSelected(false);
+    }
 
 	private void init() {
 		setLayout(new BorderLayout());

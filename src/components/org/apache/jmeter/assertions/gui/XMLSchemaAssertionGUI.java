@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,7 +41,7 @@ import org.apache.log.Logger;
 
 public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 	// class attributes
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	 private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JTextField xmlSchema;
 
@@ -55,7 +56,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 	 * Returns the label to be shown within the JTree-Component.
 	 */
 	public String getLabelResource() {
-		return "xmlschema_assertion_title";
+		return "xmlschema_assertion_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -79,6 +80,15 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 		configureTestElement(inElement);
 		((XMLSchemaAssertion) inElement).setXsdFileName(xmlSchema.getText());
 	}
+
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        xmlSchema.setText(""); //$NON-NLS-1$
+    }    
 
 	/**
 	 * Configures the GUI from the associated test element.
@@ -110,7 +120,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
 		// doctype
 		HorizontalPanel xmlSchemaPanel = new HorizontalPanel();
 
-		xmlSchemaPanel.add(new JLabel(JMeterUtils.getResString("xmlschema_assertion_label")));
+		xmlSchemaPanel.add(new JLabel(JMeterUtils.getResString("xmlschema_assertion_label"))); //$NON-NLS-1$
 
 		xmlSchema = new JTextField(26);
 		xmlSchemaPanel.add(xmlSchema);

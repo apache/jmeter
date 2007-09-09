@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,30 +24,26 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.engine.JMeterEngineException;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.engine.util.DisabledComponentRemover;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover Created March 1, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class Start extends AbstractAction {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(JMeterMenuBar.ACTION_START);
-		commands.add(JMeterMenuBar.ACTION_STOP);
-		commands.add(JMeterMenuBar.ACTION_SHUTDOWN);
+		commands.add(ActionNames.ACTION_START);
+		commands.add(ActionNames.ACTION_STOP);
+		commands.add(ActionNames.ACTION_SHUTDOWN);
 	}
 
 	private StandardJMeterEngine engine;
@@ -68,16 +64,16 @@ public class Start extends AbstractAction {
 	}
 
 	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals(JMeterMenuBar.ACTION_START)) {
+		if (e.getActionCommand().equals(ActionNames.ACTION_START)) {
 			popupShouldSave(e);
 			startEngine();
-		} else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_STOP)) {
+		} else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
 			if (engine != null) {
 				GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 				engine.stopTest();
 				engine = null;
 			}
-		} else if (e.getActionCommand().equals(JMeterMenuBar.ACTION_SHUTDOWN)) {
+		} else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
 			if (engine != null) {
 				GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
 				engine.askThreadsToStop();
@@ -90,7 +86,7 @@ public class Start extends AbstractAction {
 		GuiPackage gui = GuiPackage.getInstance();
 		engine = new StandardJMeterEngine();
 		HashTree testTree = gui.getTreeModel().getTestPlan();
-		convertSubTree(testTree);
+		JMeter.convertSubTree(testTree);
 		DisabledComponentRemover remover = new DisabledComponentRemover(testTree);
 		testTree.traverse(remover);
 		testTree.add(testTree.getArray()[0], gui.getMainFrame());

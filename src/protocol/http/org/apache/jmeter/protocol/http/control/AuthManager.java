@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -33,8 +33,6 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.protocol.http.util.Base64Encoder;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -43,23 +41,36 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+// For Unit tests, @see TestAuthManager
+
 /**
  * This class provides a way to provide Authorization in jmeter requests. The
  * format of the authorization file is: URL user pass where URL is an HTTP URL,
  * user a username to use and pass the appropriate password.
  * 
- * @author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
- * @version $Revision$
+ * author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
  */
 public class AuthManager extends ConfigTestElement implements ConfigElement, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final static String AUTH_LIST = "AuthManager.auth_list";
+	private final static String AUTH_LIST = "AuthManager.auth_list"; //$NON-NLS-1$
 
-	private final static int columnCount = 3;
+	private final static String[] columnNames = {
+		JMeterUtils.getResString("auth_base_url"), //$NON-NLS-1$
+		JMeterUtils.getResString("username"),  //$NON-NLS-1$
+		JMeterUtils.getResString("password"),  //$NON-NLS-1$
+		JMeterUtils.getResString("domain"),  //$NON-NLS-1$
+		JMeterUtils.getResString("realm"),  //$NON-NLS-1$
+		};
 
-	private final static String[] columnNames = { JMeterUtils.getResString("auth_base_url"),
-			JMeterUtils.getResString("username"), JMeterUtils.getResString("password") };
+	// Column numbers - must agree with order above
+	public final static int COL_URL = 0;
+	public final static int COL_USERNAME = 1;
+	public final static int COL_PASSWORD = 2;
+	public final static int COL_DOMAIN = 3;
+	public final static int COL_REALM = 4;
+
+	private final static int columnCount = columnNames.length;
 
 	/**
 	 * Default Constructor.
@@ -76,8 +87,8 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	/**
 	 * Update an authentication record.
 	 */
-	public void set(int index, String url, String user, String pass) {
-		Authorization auth = new Authorization(url, user, pass);
+	public void set(int index, String url, String user, String pass, String domain, String realm) {
+		Authorization auth = new Authorization(url, user, pass, domain, realm);
 		if (index >= 0) {
 			getAuthObjects().set(index, new TestElementProperty(auth.getName(), auth));
 		} else {
@@ -114,7 +125,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	}
 
 	public String getClassLabel() {
-		return JMeterUtils.getResString("auth_manager_title");
+		return JMeterUtils.getResString("auth_manager_title"); //$NON-NLS-1$
 	}
 
 	public Class getGuiClass() {
@@ -129,14 +140,14 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	 * Return the record at index i
 	 */
 	public Authorization get(int i) {
-		return (Authorization) getAuthObjects().get(i);
+		return (Authorization) getAuthObjects().get(i).getObjectValue();
 	}
 
 	public String getAuthHeaderForURL(URL url) {
 		Authorization auth = getAuthForURL(url);
 		if (auth == null)
 			return null;
-		return "Basic " + Base64Encoder.encode(auth.getUser() + ":" + auth.getPass());
+		return auth.toBasicHeader();
 	}
 
 	public Authorization getAuthForURL(URL url) {
@@ -171,14 +182,18 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		if (url2 != null)
 			s2 = url2.toString();
 
+		    log.debug("Target URL strings to match against: "+s1+" and "+s2);
 		// TODO should really return most specific (i.e. longest) match.
 		for (PropertyIterator iter = getAuthObjects().iterator(); iter.hasNext();) {
 			Authorization auth = (Authorization) iter.next().getObjectValue();
 
 			String uRL = auth.getURL();
+			log.debug("Checking match against auth'n entry: "+uRL);
 			if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL)) {
+				log.debug("Matched");
 				return auth;
 			}
+			log.debug("Did not match");
 		}
 		return null;
 	}
@@ -202,7 +217,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		return false;
 	}
 
-	public void uncompile() {
+	public void uncompile() {// TODO is this used?
 	}
 
 	/**
@@ -216,7 +231,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
 		writer.println("# JMeter generated Authorization file");
 		for (int i = 0; i < getAuthObjects().size(); i++) {
-			Authorization auth = (Authorization) getAuthObjects().get(i);
+			Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();
 			writer.println(auth.toString());
 		}
 		writer.flush();
@@ -241,14 +256,20 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		String line;
 		while ((line = reader.readLine()) != null) {
 			try {
-				if (line.startsWith("#") || line.trim().length() == 0) {
+				if (line.startsWith("#") || line.trim().length() == 0) { //$NON-NLS-1$
 					continue;
 				}
-				StringTokenizer st = new StringTokenizer(line, "\t");
+				StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
 				String url = st.nextToken();
 				String user = st.nextToken();
 				String pass = st.nextToken();
-				Authorization auth = new Authorization(url, user, pass);
+				String domain = "";
+				String realm = "";
+				if (st.hasMoreTokens()){// Allow for old format file without the extra columnns
+				    domain = st.nextToken();
+				    realm = st.nextToken();
+				}
+				Authorization auth = new Authorization(url, user, pass,domain,realm);
 				getAuthObjects().addItem(auth);
 			} catch (Exception e) {
 				reader.close();
@@ -268,42 +289,13 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	/**
 	 * Return the number of records.
 	 */
-	public int size() {
+	public int getAuthCount() {
 		return getAuthObjects().size();
 	}
 
-	private static boolean isSupportedProtocol(URL url) {
-		return url.getProtocol().toUpperCase().equals("HTTP") || url.getProtocol().toUpperCase().equals("HTTPS");
-	}
-
-	// ////////////////////// UNIT TESTS ////////////////////////////
-
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testHttp() throws Exception {
-			assertTrue(isSupportedProtocol(new URL("http:")));
-		}
-
-		public void testHttps() throws Exception {
-			assertTrue(isSupportedProtocol(new URL("https:")));
-		}
-
-		public void testFile() throws Exception {
-			AuthManager am = new AuthManager();
-			CollectionProperty ao = am.getAuthObjects();
-			assertEquals(0, ao.size());
-			am.addFile("testfiles/TestAuth.txt");
-			assertEquals(5, ao.size());
-			Authorization at;
-			at = am.getAuthForURL(new URL("http://a.b.c/"));
-			assertEquals("login", at.getUser());
-			assertEquals("password", at.getPass());
-			at = am.getAuthForURL(new URL("http://a.b.c/1"));
-			assertEquals("login1", at.getUser());
-			assertEquals("password1", at.getPass());
-		}
+    // Needs to be package protected for Unit test
+	static boolean isSupportedProtocol(URL url) {
+		String protocol = url.getProtocol().toUpperCase();
+		return protocol.equals("HTTP") || protocol.equals("HTTPS"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

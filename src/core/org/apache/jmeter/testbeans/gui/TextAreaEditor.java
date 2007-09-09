@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -43,8 +44,7 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
 	 */
 	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
-
+        
 	}
 
 	/*
@@ -55,9 +55,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 	public void focusLost(FocusEvent e) {
 		firePropertyChange();
 
-	}
-
-	public static void main(String[] args) {
 	}
 
 	protected void init() {
@@ -142,7 +139,6 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
 	 * @see java.beans.PropertyEditor#supportsCustomEditor()
 	 */
 	public boolean supportsCustomEditor() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }

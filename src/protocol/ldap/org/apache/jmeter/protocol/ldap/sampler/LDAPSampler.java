@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -44,34 +44,33 @@ import org.apache.log.Logger;
  * 
  * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
  *         Exports Ltd. Created Apr 29 2003 11:00 AM
- * @version $Revision$ Last updated: $Date$
  */
 public class LDAPSampler extends AbstractSampler {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SERVERNAME = "servername";
+	public final static String SERVERNAME = "servername"; //$NON-NLS-1$
 
-	public final static String PORT = "port";
+	public final static String PORT = "port"; //$NON-NLS-1$
 
-	public final static String ROOTDN = "rootdn";
+	public final static String ROOTDN = "rootdn"; //$NON-NLS-1$
 
-	public final static String TEST = "test";
+	public final static String TEST = "test"; //$NON-NLS-1$
 
-	public final static String ADD = "add";
+	public final static String ADD = "add"; //$NON-NLS-1$
 
-	public final static String MODIFY = "modify";
+	public final static String MODIFY = "modify"; //$NON-NLS-1$
 
-	public final static String DELETE = "delete";
+	public final static String DELETE = "delete"; //$NON-NLS-1$
 
-	public final static String SEARCHBASE = "search";
+	public final static String SEARCHBASE = "search"; //$NON-NLS-1$
 
-	public final static String SEARCHFILTER = "searchfilter";
+	public final static String SEARCHFILTER = "searchfilter"; //$NON-NLS-1$
 
-	public final static String USER_DEFINED = "user_defined";
+	public final static String USER_DEFINED = "user_defined"; //$NON-NLS-1$
 
-	public final static String ARGUMENTS = "arguments";
+	public final static String ARGUMENTS = "arguments"; //$NON-NLS-1$
 
-	public final static String BASE_ENTRY_DN = "base_entry_dn";
+	public final static String BASE_ENTRY_DN = "base_entry_dn"; //$NON-NLS-1$
 
 	// For In build test case using this counter
 	// create the new entry in the server
@@ -243,11 +242,11 @@ public class LDAPSampler extends AbstractSampler {
 	 * @return the BasicAttributes
 	 */
 	private BasicAttributes getUserAttributes() {
-		BasicAttribute basicattribute = new BasicAttribute("objectclass");
-		basicattribute.add("top");
-		basicattribute.add("person");
-		basicattribute.add("organizationalPerson");
-		basicattribute.add("inetOrgPerson");
+		BasicAttribute basicattribute = new BasicAttribute("objectclass"); //$NON-NLS-1$
+		basicattribute.add("top"); //$NON-NLS-1$
+		basicattribute.add("person"); //$NON-NLS-1$
+		basicattribute.add("organizationalPerson"); //$NON-NLS-1$
+		basicattribute.add("inetOrgPerson"); //$NON-NLS-1$
 		BasicAttributes attrs = new BasicAttributes(true);
 		attrs.put(basicattribute);
 		BasicAttribute attr;
@@ -291,9 +290,9 @@ public class LDAPSampler extends AbstractSampler {
 	private ModificationItem[] getModificationItem() {
 		ModificationItem[] mods = new ModificationItem[2];
 		// replace (update) attribute
-		Attribute mod0 = new BasicAttribute("userpassword", "secret");
+		Attribute mod0 = new BasicAttribute("userpassword", "secret"); //$NON-NLS-1$ //$NON-NLS-2$
 		// add mobile phone number attribute
-		Attribute mod1 = new BasicAttribute("mobile", "123-456-1234");
+		Attribute mod1 = new BasicAttribute("mobile", "123-456-1234"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		mods[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, mod0);
 		mods[1] = new ModificationItem(DirContext.ADD_ATTRIBUTE, mod1);
@@ -309,23 +308,23 @@ public class LDAPSampler extends AbstractSampler {
 	 */
 	private BasicAttributes getBasicAttributes() {
 		BasicAttributes basicattributes = new BasicAttributes();
-		BasicAttribute basicattribute = new BasicAttribute("objectclass");
-		basicattribute.add("top");
-		basicattribute.add("person");
-		basicattribute.add("organizationalPerson");
-		basicattribute.add("inetOrgPerson");
+		BasicAttribute basicattribute = new BasicAttribute("objectclass"); //$NON-NLS-1$
+		basicattribute.add("top"); //$NON-NLS-1$
+		basicattribute.add("person"); //$NON-NLS-1$
+		basicattribute.add("organizationalPerson"); //$NON-NLS-1$
+		basicattribute.add("inetOrgPerson"); //$NON-NLS-1$
 		basicattributes.put(basicattribute);
-		String s1 = "User";
-		String s3 = "Test";
-		String s5 = "user";
-		String s6 = "test";
+		String s1 = "User"; //$NON-NLS-1$
+		String s3 = "Test"; //$NON-NLS-1$
+		String s5 = "user"; //$NON-NLS-1$
+		String s6 = "test"; //$NON-NLS-1$
 		counter += 1;
-		basicattributes.put(new BasicAttribute("givenname", s1));
-		basicattributes.put(new BasicAttribute("sn", s3));
-		basicattributes.put(new BasicAttribute("cn", "TestUser" + counter));
-		basicattributes.put(new BasicAttribute("uid", s5));
-		basicattributes.put(new BasicAttribute("userpassword", s6));
-		setProperty(new StringProperty(ADD, "cn=TestUser" + counter));
+		basicattributes.put(new BasicAttribute("givenname", s1)); //$NON-NLS-1$
+		basicattributes.put(new BasicAttribute("sn", s3)); //$NON-NLS-1$
+		basicattributes.put(new BasicAttribute("cn", "TestUser" + counter)); //$NON-NLS-1$ //$NON-NLS-2$
+		basicattributes.put(new BasicAttribute("uid", s5)); //$NON-NLS-1$
+		basicattributes.put(new BasicAttribute("userpassword", s6)); //$NON-NLS-1$
+		setProperty(new StringProperty(ADD, "cn=TestUser" + counter)); //$NON-NLS-1$
 		return basicattributes;
 	}
 
@@ -352,7 +351,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the add test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void addTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (getPropertyAsBoolean(USER_DEFINED)) {
@@ -371,7 +369,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the delete test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void deleteTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (!getPropertyAsBoolean(USER_DEFINED)) {
@@ -387,7 +384,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the search test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void searchTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (!getPropertyAsBoolean(USER_DEFINED)) {
@@ -407,7 +403,6 @@ public class LDAPSampler extends AbstractSampler {
 	 * This will do the search test for the User defined TestCase as well as
 	 * inbuilt test case.
 	 * 
-	 * @return executed time for the give test case
 	 */
 	private void modifyTest(LdapClient ldap, SampleResult res) throws NamingException {
 		if (getPropertyAsBoolean(USER_DEFINED)) {
@@ -434,39 +429,39 @@ public class LDAPSampler extends AbstractSampler {
 		try {
 			ldap.connect(getServername(), getPort(), getRootdn(), getUsername(), getPassword());
 
-			if (getPropertyAsString(TEST).equals("add")) {
+			if (getPropertyAsString(TEST).equals(ADD)) {
 				addTest(ldap, res);
-			} else if (getPropertyAsString(TEST).equals("delete")) {
+			} else if (getPropertyAsString(TEST).equals(DELETE)) {
 				deleteTest(ldap, res);
-			} else if (getPropertyAsString(TEST).equals("modify")) {
+			} else if (getPropertyAsString(TEST).equals(MODIFY)) {
 				modifyTest(ldap, res);
-			} else if (getPropertyAsString(TEST).equals("search")) {
+			} else if (getPropertyAsString(TEST).equals(SEARCHBASE)) {
 				searchTest(ldap, res);
 			}
 
 			// TODO - needs more work ...
-			if (getPropertyAsString(TEST).equals("search") && !searchFoundEntries) {
-				res.setResponseCode("201");// TODO is this a sensible number?
+			if (getPropertyAsString(TEST).equals(SEARCHBASE) && !searchFoundEntries) {
+				res.setResponseCode("201");// TODO is this a sensible number? //$NON-NLS-1$
 				res.setResponseMessage("OK - no results");
 				res.setResponseData("successful - no results".getBytes());
 			} else {
-				res.setResponseCode("200");
-				res.setResponseMessage("OK");
+				res.setResponseCodeOK();
+				res.setResponseMessage("OK"); //$NON-NLS-1$
 				res.setResponseData("successful".getBytes());
 			}
 			res.setDataType(SampleResult.TEXT);
 			isSuccessful = true;
-			ldap.disconnect();
 		} catch (Exception ex) {
 			log.error("Ldap client - ", ex);
 			// Could time this
 			// res.sampleEnd();
 			// if sampleEnd() is not called, elapsed time will remain zero
-			res.setResponseCode("500");// TODO distinguish errors better
+			res.setResponseCode("500");// TODO distinguish errors better //$NON-NLS-1$
 			res.setResponseMessage(ex.toString());
-			ldap.disconnect();
 			isSuccessful = false;
-		}
+		} finally {
+            ldap.disconnect();
+        }
 
 		// Set if we were successful or not
 		res.setSuccessful(isSuccessful);

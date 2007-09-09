@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,8 +31,6 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
-import org.apache.jmeter.testelement.AbstractChart;
-import org.apache.jmeter.testelement.AbstractTable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.property.NullProperty;
@@ -108,9 +107,6 @@ public class ReportTreeModel extends DefaultTreeModel {
 		guicomp.configure(component);
 		guicomp.modifyTestElement(component);
 		ReportGuiPackage.getInstance().getCurrentGui(); // put the gui object back
-		if (component instanceof AbstractChart) {
-			((AbstractChart)component).setParentTable((AbstractTable)node.getUserObject());
-		}
 		// to the way it was.
 		ReportTreeNode newNode = new ReportTreeNode(component, this);
 

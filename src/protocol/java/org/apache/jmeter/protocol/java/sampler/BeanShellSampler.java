@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,28 +18,27 @@
 
 package org.apache.jmeter.protocol.java.sampler;
 
-import java.io.IOException;
-
-import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.BeanShellTestElement;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
  * A sampler which understands BeanShell
  * 
- * @version $Revision$ Updated on: $Date$
  */
-public class BeanShellSampler extends AbstractSampler {
+public class BeanShellSampler extends BeanShellTestElement implements Sampler
+{
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 3;
 
 	public static final String FILENAME = "BeanShellSampler.filename"; //$NON-NLS-1$
 
@@ -48,24 +47,10 @@ public class BeanShellSampler extends AbstractSampler {
 	public static final String PARAMETERS = "BeanShellSampler.parameters"; //$NON-NLS-1$
 
 	public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
-
-	transient private BeanShellInterpreter bshInterpreter;
-
-	public BeanShellSampler() {
-		try {
-			bshInterpreter = new BeanShellInterpreter();
-			String init = JMeterUtils.getProperty(INIT_FILE);
-			try {
-				bshInterpreter.init(init, log);
-			} catch (IOException e) {
-				log.warn("Could not initialise interpreter", e);
-			} catch (JMeterException e) {
-				log.warn("Could not initialise interpreter", e);
-			}
-		} catch (ClassNotFoundException e) {
-			log.error("Could not establish BeanShellInterpreter: " + e);
-		}
-	}
+    
+    protected String getInitFileProperty() {
+        return INIT_FILE;
+    }
 
 	/**
 	 * Returns a formatted string label describing this sampler
@@ -96,6 +81,7 @@ public class BeanShellSampler extends AbstractSampler {
 		boolean isSuccessful = false;
 		res.setSampleLabel(getLabel());
 		res.sampleStart();
+		final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
 		if (bshInterpreter == null) {
 			res.sampleEnd();
 			res.setResponseCode("503");//$NON-NLS-1$
@@ -115,9 +101,11 @@ public class BeanShellSampler extends AbstractSampler {
 			bshInterpreter.set("Label", getLabel()); //$NON-NLS-1$
 			bshInterpreter.set("FileName", getFilename()); //$NON-NLS-1$
 			bshInterpreter.set("SampleResult", res); //$NON-NLS-1$
-			bshInterpreter.set("Parameters", getParameters());// as a single
-																// line//$NON-NLS-1$
-			bshInterpreter.set("bsh.args", JOrphanUtils.split(getParameters(), " "));
+			
+			// Save parameters as single line and as string array
+			bshInterpreter.set("Parameters", getParameters());//$NON-NLS-1$
+			bshInterpreter.set("bsh.args", //$NON-NLS-1$
+					JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
 
 			// Set default values
 			bshInterpreter.set("ResponseCode", "200"); //$NON-NLS-1$
@@ -130,7 +118,9 @@ public class BeanShellSampler extends AbstractSampler {
 			bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
 			bshInterpreter.set("vars", vars);//$NON-NLS-1$
 
-			Object bshOut;
+            res.setDataType(SampleResult.TEXT); // assume text output - script can override if necessary
+
+            Object bshOut;
 
 			if (fileName.length() == 0) {
 				bshOut = bshInterpreter.eval(request);
@@ -138,14 +128,12 @@ public class BeanShellSampler extends AbstractSampler {
 				bshOut = bshInterpreter.source(fileName);
 			}
 
-			String out;
-			if (bshOut == null) {// Script did not return anything...
-				out = "";
-			} else {
-				out = bshOut.toString();
+			if (bshOut != null) {// Set response data
+                String out = bshOut.toString();
+                res.setResponseData(out.getBytes());
 			}
-			res.setResponseData(out.getBytes());
-			res.setDataType(SampleResult.TEXT);
+            // script can also use setResponseData() so long as it returns null
+            
 			res.setResponseCode(bshInterpreter.get("ResponseCode").toString());//$NON-NLS-1$
 			res.setResponseMessage(bshInterpreter.get("ResponseMessage").toString());//$NON-NLS-1$
 			isSuccessful = Boolean.valueOf(bshInterpreter.get("IsSuccess") //$NON-NLS-1$

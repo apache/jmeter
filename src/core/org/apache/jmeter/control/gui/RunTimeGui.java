@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,7 +36,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * should be executed some number of seconds in a loop. This component can be
  * used standalone or embedded into some other component.
  * 
- * @version $Revision$ on $Date$
  */
 
 public class RunTimeGui extends AbstractControllerGui implements ActionListener {
@@ -113,6 +112,15 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        seconds.setText("1"); // $NON-NLS-1$
+    }
+
 	/**
 	 * Invoked when an action occurs. This implementation assumes that the
 	 * target component is the infinite seconds checkbox.
@@ -125,7 +133,7 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 	}
 
 	public String getLabelResource() {
-		return "runtime_controller_title";
+		return "runtime_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -164,13 +172,13 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 		JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
 
 		// SECONDS LABEL
-		JLabel secondsLabel = new JLabel(JMeterUtils.getResString("runtime_seconds"));
+		JLabel secondsLabel = new JLabel(JMeterUtils.getResString("runtime_seconds")); // $NON-NLS-1$
 		loopPanel.add(secondsLabel, BorderLayout.WEST);
 
 		JPanel loopSubPanel = new JPanel(new BorderLayout(5, 0));
 
 		// TEXT FIELD
-		seconds = new JTextField("60", 5);
+		seconds = new JTextField("1", 5); // $NON-NLS-1$
 		secondsLabel.setLabelFor(seconds);
 		loopSubPanel.add(seconds, BorderLayout.CENTER);
 
@@ -207,6 +215,6 @@ public class RunTimeGui extends AbstractControllerGui implements ActionListener 
 	 */
 	private void setState(long secsCount) {
 		seconds.setEnabled(true);
-		seconds.setText("" + secsCount);
+		seconds.setText("" + secsCount); // $NON-NLS-1$
 	}
 }
