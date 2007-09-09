@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -68,7 +67,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
-		KeyListener, FocusListener, UnsharedComponent {
+		KeyListener, UnsharedComponent {
 	private static transient Logger log = LoggingManager.getLoggerForClass();
 
 	private JTextField portField;
@@ -200,6 +199,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
 	 */
 	public void modifyTestElement(TestElement el) {
+		if (excludeTable.isEditing()) {// Bug 42948
+			excludeTable.getCellEditor().stopCellEditing();
+		}
+		if (includeTable.isEditing()) {// Bug 42948
+			includeTable.getCellEditor().stopCellEditing();
+		}
 		configureTestElement(el);
 		if (el instanceof ProxyControl) {
 			model = (ProxyControl) el;
@@ -286,16 +291,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 			p_model.addRow(new Object[] { iter.next().getStringValue() });
 		}
 		p_model.fireTableDataChanged();
-	}
-
-	public void focusLost(FocusEvent e) {
-		try {
-			((JTable) e.getSource()).getCellEditor().stopCellEditing();
-		} catch (Exception err) {
-		}
-	}
-
-	public void focusGained(FocusEvent e) {
 	}
 
 	/*
@@ -698,7 +693,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
 		includeTable = new JTable(includeModel);
 		includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
-		includeTable.addFocusListener(this);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
@@ -714,7 +708,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
 		excludeTable = new JTable(excludeModel);
 		excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
-		excludeTable.addFocusListener(this);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
