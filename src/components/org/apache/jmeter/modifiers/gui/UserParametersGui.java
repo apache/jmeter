@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -47,13 +47,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @version $Revision$
- */
 public class UserParametersGui extends AbstractPreProcessorGui {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	private String THREAD_COLUMNS = JMeterUtils.getResString("user");
+	private String THREAD_COLUMNS_PREFIX = JMeterUtils.getResString("user") + "_"; // $NON-NLS-1$ $NON-NLS-2$
 
 	private JTable paramTable;
 
@@ -71,7 +68,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 	}
 
 	public String getLabelResource() {
-		return "user_parameters_title";
+		return "user_parameters_title"; // $NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {
@@ -87,7 +84,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 		}
 		int count = 2;
 		while (iter.hasNext()) {
-			String colName = THREAD_COLUMNS + "_" + count;
+			String colName = THREAD_COLUMNS_PREFIX + count;
 			tableModel.addNewColumn(colName, String.class);
 			tableModel.setColumnData(count, (List) iter.next().getObjectValue());
 			count++;
@@ -115,12 +112,12 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 			paramTable.getCellEditor().stopCellEditing();
 		}
 		((UserParameters) params).setNames(new CollectionProperty(UserParameters.NAMES, tableModel
-				.getColumnData(JMeterUtils.getResString("name"))));
+				.getColumnData(JMeterUtils.getResString("name")))); // $NON-NLS-1$
 		CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList());
 		log.debug("making threadlists from gui = " + threadLists);
 		for (int x = 1; x < tableModel.getColumnCount(); x++) {
-			threadLists.addItem(tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
-			log.debug("Adding column to threadlist: " + tableModel.getColumnData(THREAD_COLUMNS + "_" + x));
+			threadLists.addItem(tableModel.getColumnData(THREAD_COLUMNS_PREFIX + x));
+			log.debug("Adding column to threadlist: " + tableModel.getColumnData(THREAD_COLUMNS_PREFIX + x));
 			log.debug("Threadlists now = " + threadLists);
 		}
 		log.debug("In the end, threadlists = " + threadLists);
@@ -129,13 +126,24 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 		super.configureTestElement(params);
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        initTableModel();
+        paramTable.setModel(tableModel);
+        perIterationCheck.setSelected(false);
+    }    
+
 	private void init() {
 		setBorder(makeBorder());
 		setLayout(new BorderLayout());
 		JPanel vertPanel = new VerticalPanel();
 		vertPanel.add(makeTitlePanel());
 
-		perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"), true);
+		perIterationCheck = new JCheckBox(JMeterUtils.getResString("update_per_iter"), true); // $NON-NLS-1$
 		Box perIterationPanel = Box.createHorizontalBox();
 		perIterationPanel.add(perIterationCheck);
 		perIterationPanel.add(Box.createHorizontalGlue());
@@ -146,7 +154,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 	}
 
 	private JPanel makeParameterPanel() {
-		JLabel tableLabel = new JLabel(JMeterUtils.getResString("user_parameters_table"));
+		JLabel tableLabel = new JLabel(JMeterUtils.getResString("user_parameters_table")); // $NON-NLS-1$
 		initTableModel();
 		paramTable = new JTable(tableModel);
 		// paramTable.setRowSelectionAllowed(true);
@@ -166,17 +174,17 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 	}
 
 	protected void initTableModel() {
-		tableModel = new PowerTableModel(new String[] { JMeterUtils.getResString("name"),
-				THREAD_COLUMNS + "_" + numUserColumns }, new Class[] { String.class, String.class });
+		tableModel = new PowerTableModel(new String[] { JMeterUtils.getResString("name"), // $NON-NLS-1$
+				THREAD_COLUMNS_PREFIX + numUserColumns }, new Class[] { String.class, String.class });
 	}
 
 	private JPanel makeButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(2, 2));
-		addParameterButton = new JButton(JMeterUtils.getResString("add_parameter"));
-		addUserButton = new JButton(JMeterUtils.getResString("add_user"));
-		deleteRowButton = new JButton(JMeterUtils.getResString("delete_parameter"));
-		deleteColumnButton = new JButton(JMeterUtils.getResString("delete_user"));
+		addParameterButton = new JButton(JMeterUtils.getResString("add_parameter")); // $NON-NLS-1$
+		addUserButton = new JButton(JMeterUtils.getResString("add_user")); // $NON-NLS-1$
+		deleteRowButton = new JButton(JMeterUtils.getResString("delete_parameter")); // $NON-NLS-1$
+		deleteColumnButton = new JButton(JMeterUtils.getResString("delete_user")); // $NON-NLS-1$
 		buttonPanel.add(addParameterButton);
 		buttonPanel.add(deleteRowButton);
 		buttonPanel.add(addUserButton);
@@ -217,7 +225,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 				cellEditor.stopCellEditing();
 			}
 
-			tableModel.addNewColumn(THREAD_COLUMNS + "_" + tableModel.getColumnCount(), String.class);
+			tableModel.addNewColumn(THREAD_COLUMNS_PREFIX + tableModel.getColumnCount(), String.class);
 			tableModel.fireTableDataChanged();
 
 			// Enable DELETE (which may already be enabled, but it won't hurt)
@@ -272,7 +280,9 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
 			int colSelected = paramTable.getSelectedColumn();
 			if (colSelected == 0 || colSelected == 1) {
-				JOptionPane.showMessageDialog(null, JMeterUtils.getResString("column_delete_disallowed"), "Error",
+				JOptionPane.showMessageDialog(null, 
+						JMeterUtils.getResString("column_delete_disallowed"), // $NON-NLS-1$
+						"Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -34,7 +34,7 @@ import java.util.Map;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.collections.LRUMap;
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.gui.AbstractAssertionGui;
 import org.apache.jmeter.config.ConfigElement;
@@ -64,6 +64,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -84,14 +85,13 @@ import org.apache.log.Logger;
  * instance will be used for each element. For efficiency reasons, most
  * customizers should implement SharedCustomizer.
  * 
- * @version $Revision$ updated on $Date$
  */
 public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUIComponent {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Class testBeanClass;
 
-	private BeanInfo beanInfo;
+	private transient BeanInfo beanInfo;
 
 	private Class customizerClass;
 
@@ -126,18 +126,18 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
 	static {
 		List paths = new LinkedList();
-		paths.add("org.apache.jmeter.testbeans.gui");
+		paths.add("org.apache.jmeter.testbeans.gui");// $NON-NLS-1$
 		paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
-		String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);
+		String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);// $NON-NLS-1$
 		if (s != null) {
-			paths.addAll(Arrays.asList(JMeterUtils.split(s, ",", "")));
+			paths.addAll(Arrays.asList(JOrphanUtils.split(s, ",", "")));// $NON-NLS-1$ // $NON-NLS-2$
 		}
 		PropertyEditorManager.setEditorSearchPath((String[]) paths.toArray(new String[0]));
 	}
 
 	// Dummy for JUnit test
-	TestBeanGUI() {
-		log.warn("Only for use in testing");
+	public TestBeanGUI() {
+		log.warn("Constructor only for use in testing");// $NON-NLS-1$
 	}
 
 	public TestBeanGUI(Class testBeanClass) {
@@ -191,7 +191,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 */
 	public String getStaticLabel() {
 		if (beanInfo == null)
-			return "null";
+			return "null";// $NON-NLS-1$
 		return beanInfo.getBeanDescriptor().getDisplayName();
 	}
 
@@ -225,6 +225,11 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(org.apache.jmeter.testelement.TestElement)
 	 */
 	public void modifyTestElement(TestElement element) {
+		// Fetch data from screen fields
+		if (customizer instanceof GenericTestBeanCustomizer) {
+			GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
+			gtbc.saveGuiFields(); 
+		}
 		configureTestElement(element);
 
 		// Copy all property values from the map into the element:
@@ -234,7 +239,8 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 			Object value = propertyMap.get(name);
 			log.debug("Modify " + name + " to " + value);
 			if (value == null) {
-				if (((Boolean) props[i].getValue(BeanInfoSupport.NOT_UNDEFINED)).booleanValue()) {
+				Object valueNotUnDefined = props[i].getValue(BeanInfoSupport.NOT_UNDEFINED);
+				if (valueNotUnDefined != null && ((Boolean) valueNotUnDefined).booleanValue()) {
 					setPropertyInElement(element, name, props[i].getValue(BeanInfoSupport.DEFAULT));
 				} else {
 					element.removeProperty(name);
@@ -262,10 +268,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 */
 	public JPopupMenu createPopupMenu() {
 		// TODO: this menu is too wide (allows, e.g. to add controllers, no
-		// matter the
-		// type of the element). Change to match the actual bean's capabilities.
-		if (Timer.class.isAssignableFrom(testBeanClass))// HACK: Fix one such
-														// problem
+		// matter what the type of the element).
+        // Change to match the actual bean's capabilities.
+		if (Timer.class.isAssignableFrom(testBeanClass))// HACK: Fix one such problem
 		{
 			return MenuFactory.getDefaultTimerMenu();
 		}
@@ -301,7 +306,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	public void configure(TestElement element) {
 		if (!initialized)
 			init();
-		clear();
+		clearGui();
 
 		super.configure(element);
 
@@ -418,17 +423,20 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getLabelResource()
 	 */
 	public String getLabelResource() {
-		// TODO Auto-generated method stub
+		// @see getStaticLabel
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
-		super.clear();
-		propertyMap.clear();
+	public void clearGui() {
+		super.clearGui();
+		if (customizer instanceof GenericTestBeanCustomizer) {
+			GenericTestBeanCustomizer gtbc = (GenericTestBeanCustomizer) customizer;
+			gtbc.clearGuiFields(); 
+		}
 	}
 }

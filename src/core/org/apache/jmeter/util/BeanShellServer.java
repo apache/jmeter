@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,8 +21,6 @@ package org.apache.jmeter.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
-
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -37,7 +35,7 @@ import org.apache.log.Logger;
  */
 public class BeanShellServer implements Runnable {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private final int serverport;
 
@@ -63,6 +61,7 @@ public class BeanShellServer implements Runnable {
 		return JMeterUtils.getPropDefault(s, s);
 	}
 
+	// For use by the server script
 	private static void setprop(String s, String v) {
 		JMeterUtils.getJMeterProperties().setProperty(s, v);
 	}
@@ -72,58 +71,35 @@ public class BeanShellServer implements Runnable {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
 		try {
-			Class Interpreter = loader.loadClass("bsh.Interpreter");
+			Class Interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
 			Object instance = Interpreter.newInstance();
 			Class string = String.class;
 			Class object = Object.class;
 
-			Method eval = Interpreter.getMethod("eval", new Class[] { string });
-			Method setObj = Interpreter.getMethod("set", new Class[] { string, object });
-			Method setInt = Interpreter.getMethod("set", new Class[] { string, int.class });
-			Method source = Interpreter.getMethod("source", new Class[] { string });
+			Method eval = Interpreter.getMethod("eval", new Class[] { string });//$NON-NLS-1$
+			Method setObj = Interpreter.getMethod("set", new Class[] { string, object });//$NON-NLS-1$
+			Method setInt = Interpreter.getMethod("set", new Class[] { string, int.class });//$NON-NLS-1$
+			Method source = Interpreter.getMethod("source", new Class[] { string });//$NON-NLS-1$
 
-			setObj.invoke(instance, new Object[] { "t", this });
-			setInt.invoke(instance, new Object[] { "portnum", new Integer(serverport) });
+			setObj.invoke(instance, new Object[] { "t", this });//$NON-NLS-1$
+			setInt.invoke(instance, new Object[] { "portnum", new Integer(serverport) });//$NON-NLS-1$
 
 			if (serverfile.length() > 0) {
 				try {
 					source.invoke(instance, new Object[] { serverfile });
 				} catch (InvocationTargetException e1) {
 					log.warn("Could not source " + serverfile);
-					// JDK1.4: Throwable t= e1.getCause();
-					// JDK1.4: if (t != null) log.warn(t.toString());
+					Throwable t= e1.getCause();
+					if (t != null) log.warn(t.toString());
 				}
 			}
-			eval.invoke(instance, new Object[] { "setAccessibility(true);" });
-			eval.invoke(instance, new Object[] { "server(portnum);" });
+			eval.invoke(instance, new Object[] { "setAccessibility(true);" });//$NON-NLS-1$
+			eval.invoke(instance, new Object[] { "server(portnum);" });//$NON-NLS-1$
 
 		} catch (ClassNotFoundException e) {
 			log.error("Beanshell Interpreter not found");
 		} catch (Exception e) {
 			log.error("Problem starting BeanShell server ", e);
-		}
-	}
-
-	public static class Test extends TestCase {
-		// private static Logger log = LoggingManager.getLoggerForClass();
-
-		public Test() {
-			super();
-		}
-
-		public void testServer() throws Exception {
-			BeanShellServer bshs = new BeanShellServer(9876, "");
-			assertNotNull(bshs);
-			// Not sure we can test anything else here
-		}
-
-		public void testProps() throws Exception {
-			if (JMeterUtils.getJMeterProperties() != null) {// Can't test
-															// standalone
-				assertNotNull("Property user.dir should not be null", getprop("user.dir"));
-				setprop("beanshelltest", "xyz");
-				assertEquals("xyz", getprop("beanshelltest"));
-			}
 		}
 	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -50,8 +50,6 @@ import org.apache.log.Logger;
  * provides optional support for JMeter 'expressions' (you can choose whether
  * they make valid property values).
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
 	protected static Logger log = LoggingManager.getLoggerForClass();
@@ -105,40 +103,40 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		initialize(typeEditor, guiEditor, acceptsNull, acceptsExpressions, acceptsOther, defaultValue);
 	}
 
-	private void initialize(PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull,
-			boolean acceptsExpressions, boolean acceptsOther, Object defaultValue) {
-		this.typeEditor = typeEditor;
-		this.guiEditor = guiEditor;
-		this.acceptsNull = acceptsNull;
-		this.acceptsExpressions = acceptsExpressions;
-		this.acceptsOther = acceptsOther;
+	private void initialize(PropertyEditor _typeEditor, PropertyEditor _guiEditor, boolean _acceptsNull,
+			boolean _acceptsExpressions, boolean _acceptsOther, Object defaultValue) {
+		this.typeEditor = _typeEditor;
+		this.guiEditor = _guiEditor;
+		this.acceptsNull = _acceptsNull;
+		this.acceptsExpressions = _acceptsExpressions;
+		this.acceptsOther = _acceptsOther;
 
 		setValue(defaultValue);
 		lastValidValue = getAsText();
 
-		if (guiEditor instanceof ComboStringEditor) {
-			String[] tags = ((ComboStringEditor) guiEditor).getTags();
+		if (_guiEditor instanceof ComboStringEditor) {
+			String[] tags = ((ComboStringEditor) _guiEditor).getTags();
 
 			// Provide an initial edit value if necessary -- this is an
 			// heuristic that tries to provide the most convenient
 			// initial edit value:
 
 			String v;
-			if (!acceptsOther)
+			if (!_acceptsOther)
 				v = "${}";
 			else if (isValidValue(""))
 				v = "";
-			else if (acceptsExpressions)
+			else if (_acceptsExpressions)
 				v = "${}";
 			else if (tags != null && tags.length > 0)
 				v = tags[0];
 			else
 				v = getAsText();
 
-			((ComboStringEditor) guiEditor).setInitialEditValue(v);
+			((ComboStringEditor) _guiEditor).setInitialEditValue(v);
 		}
 
-		guiEditor.addPropertyChangeListener(this);
+		_guiEditor.addPropertyChangeListener(this);
 	}
 
 	public boolean supportsCustomEditor() {
@@ -298,7 +296,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 		if (value == null) {
 			if (!acceptsNull)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Null is not allowed");
 			text = null;
 		} else if (acceptsExpressions && isExpression(value)) {
 			text = (String) value;
@@ -308,7 +306,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			text = typeEditor.getAsText();
 
 			if (!acceptsOther && !isATag(text))
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Value not allowed: "+text);
 		}
 
 		guiEditor.setValue(text);
@@ -349,7 +347,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 		if (text == null) {
 			if (!acceptsNull)
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Null parameter not allowed");
 			value = null;
 		} else {
 			if (acceptsExpressions && isExpression(text)) {
@@ -357,12 +355,11 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			} else {
 				// Some editors do tiny transformations (e.g. "true" to
 				// "True",...):
-				typeEditor.setAsText(text); // may throw
-											// IllegalArgumentException
+				typeEditor.setAsText(text); // may throw IllegalArgumentException
 				value = typeEditor.getAsText();
 
 				if (!acceptsOther && !isATag(text))
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("Value not allowed: "+text);
 			}
 		}
 

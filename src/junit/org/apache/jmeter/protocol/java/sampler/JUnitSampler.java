@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,9 +20,14 @@ package org.apache.jmeter.protocol.java.sampler;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.ComparisonFailure;
+import junit.framework.Protectable;
 import junit.framework.TestCase;
+import junit.framework.TestFailure;
 import junit.framework.TestResult;
 
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -40,6 +46,8 @@ import org.apache.log.Logger;
  */
 public class JUnitSampler extends AbstractSampler {
 
+	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	
     /**
      * Property key representing the classname of the JavaSamplerClient to
      * user.
@@ -55,20 +63,23 @@ public class JUnitSampler extends AbstractSampler {
     public static final String SUCCESSCODE = "junitsampler.success.code";
     public static final String FILTER = "junitsampler.pkg.filter";
     public static final String DOSETUP = "junitsampler.exec.setup";
+    public static final String APPEND_ERROR = "junitsampler.append.error";
+    public static final String APPEND_EXCEPTION = "junitsampler.append.exception";
     
     public static final String SETUP = "setUp";
     public static final String TEARDOWN = "tearDown";
+    public static final String RUNTEST = "run";
     /// the Method objects for setUp and tearDown methods
-    protected Method SETUP_METHOD = null;
-    protected Method TDOWN_METHOD = null;
+    protected transient Method SETUP_METHOD = null;
+    protected transient Method TDOWN_METHOD = null;
     protected boolean checkStartUpTearDown = false;
     
-    protected TestCase TEST_INSTANCE = null;
+    protected transient TestCase TEST_INSTANCE = null;
     
     /**
      * Logging
      */
-    private static transient Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public JUnitSampler(){
     }
@@ -264,12 +275,51 @@ public class JUnitSampler extends AbstractSampler {
         setProperty(FILTER,text);
     }
     
+    /**
+     * if the sample shouldn't call setup/teardown, the
+     * method returns true. It's meant for onetimesetup
+     * and onetimeteardown.
+     * @return
+     */
     public boolean getDoNotSetUpTearDown(){
         return getPropertyAsBoolean(DOSETUP);
     }
-    
+
+    /**
+     * set the setup/teardown option
+     * @param setup
+     */
     public void setDoNotSetUpTearDown(boolean setup){
         setProperty(DOSETUP,String.valueOf(setup));
+    }
+
+    /**
+     * If append error is not set, by default it is set to false,
+     * which means users have to explicitly set the sampler to
+     * append the assert errors. Because of how junit works, there
+     * should only be one error
+     * @return
+     */
+    public boolean getAppendError() {
+        return getPropertyAsBoolean(APPEND_ERROR,false);
+    }
+    
+    public void setAppendError(boolean error) {
+        setProperty(APPEND_ERROR,String.valueOf(error));
+    }
+
+    /**
+     * If append exception is not set, by default it is set to false.
+     * Users have to explicitly set it to true to see the exceptions
+     * in the result tree.
+     * @return
+     */
+    public boolean getAppendException() {
+        return getPropertyAsBoolean(APPEND_EXCEPTION,false);
+    }
+    
+    public void setAppendException(boolean exc) {
+        setProperty(APPEND_EXCEPTION,String.valueOf(exc));
     }
     
     /* (non-Javadoc)
@@ -283,8 +333,8 @@ public class JUnitSampler extends AbstractSampler {
         } else {
             rlabel = JUnitSampler.class.getName();
         }
-        sresult.setSampleLabel(rlabel);
-        sresult.setSamplerData(getClassname() + "." + getMethod());
+        sresult.setSampleLabel(getName());// Bug 41522 - don't use rlabel here
+        sresult.setSamplerData(getClassname() + "." + getMethod());   
         // check to see if the test class is null. if it is, we create
         // a new instance. this should only happen at the start of a
         // test run
@@ -295,15 +345,40 @@ public class JUnitSampler extends AbstractSampler {
             initMethodObjects(this.TEST_INSTANCE);
             // create a new TestResult
             TestResult tr = new TestResult();
+            this.TEST_INSTANCE.setName(getMethod());
             try {
+                
                 if (!getDoNotSetUpTearDown() && SETUP_METHOD != null){
-                    SETUP_METHOD.invoke(TEST_INSTANCE,new Class[0]);
+                    try {
+                        SETUP_METHOD.invoke(this.TEST_INSTANCE,new Class[0]);
+                    } catch (InvocationTargetException e) {
+                        tr.addFailure(this.TEST_INSTANCE, 
+                                new AssertionFailedError(e.getMessage()));
+                    } catch (IllegalAccessException e) {
+                        tr.addFailure(this.TEST_INSTANCE, 
+                                new AssertionFailedError(e.getMessage()));
+                    } catch (IllegalArgumentException e) {
+                        tr.addFailure(this.TEST_INSTANCE, 
+                                new AssertionFailedError(e.getMessage()));
+                    }
                 }
-                Method m = getMethod(TEST_INSTANCE,getMethod());
+                final Method m = getMethod(this.TEST_INSTANCE,getMethod());
+                final TestCase theClazz = this.TEST_INSTANCE;
+                tr.startTest(this.TEST_INSTANCE);
                 sresult.sampleStart();
-                m.invoke(TEST_INSTANCE,null);
+                // Do not use TestCase.run(TestResult) method, since it will
+                // call setUp and tearDown. Doing that will result in calling
+                // the setUp and tearDown method twice and the elapsed time
+                // will include setup and teardown.
+                Protectable p = new Protectable() {
+                    public void protect() throws Throwable {
+                        m.invoke(theClazz,new Class[0]);
+                    }
+                };
+                tr.runProtected(theClazz, p);
+                tr.endTest(this.TEST_INSTANCE);
                 sresult.sampleEnd();
-                // log.info("invoked " + getMethod());
+                
                 if (!getDoNotSetUpTearDown() && TDOWN_METHOD != null){
                     TDOWN_METHOD.invoke(TEST_INSTANCE,new Class[0]);
                 }
@@ -315,6 +390,11 @@ public class JUnitSampler extends AbstractSampler {
                 sresult.setSuccessful(false);
             } catch (IllegalAccessException e) {
                 // log.warn(e.getMessage());
+                sresult.setResponseCode(getErrorCode());
+                sresult.setResponseMessage(getError());
+                sresult.setResponseData(e.getMessage().getBytes());
+                sresult.setSuccessful(false);
+            } catch (ComparisonFailure e) {
                 sresult.setResponseCode(getErrorCode());
                 sresult.setResponseMessage(getError());
                 sresult.setResponseData(e.getMessage().getBytes());
@@ -338,18 +418,28 @@ public class JUnitSampler extends AbstractSampler {
             if ( !tr.wasSuccessful() ){
                 sresult.setSuccessful(false);
                 StringBuffer buf = new StringBuffer();
-                buf.append(getFailure());
+                buf.append( getFailure() );
                 Enumeration en = tr.errors();
                 while (en.hasMoreElements()){
-                    buf.append((String)en.nextElement());
+                    Object item = en.nextElement();
+                    if (getAppendError() && item instanceof TestFailure) {
+                        buf.append( "Trace -- ");
+                        buf.append( ((TestFailure)item).trace() );
+                        buf.append( "Failure -- ");
+                        buf.append( ((TestFailure)item).toString() );
+                    } else if (getAppendException() && item instanceof Throwable) {
+                        buf.append( ((Throwable)item).getMessage() );
+                    }
                 }
                 sresult.setResponseMessage(buf.toString());
+                sresult.setRequestHeaders(buf.toString());
                 sresult.setResponseCode(getFailureCode());
             } else {
                 // this means there's no failures
                 sresult.setSuccessful(true);
                 sresult.setResponseMessage(getSuccess());
                 sresult.setResponseCode(getSuccessCode());
+                sresult.setResponseData("Not Applicable".getBytes());
             }
         } else {
             // we should log a warning, but allow the test to keep running
@@ -357,6 +447,10 @@ public class JUnitSampler extends AbstractSampler {
             // this should be externalized to the properties
             sresult.setResponseMessage("failed to create an instance of the class");
         }
+        sresult.setBytes(0);
+        sresult.setContentType("text");
+        sresult.setDataType("Not Applicable");
+        sresult.setRequestHeaders("Not Applicable");
 		return sresult;
 	}
 
@@ -370,15 +464,14 @@ public class JUnitSampler extends AbstractSampler {
         Object testclass = null;
         if (className != null){
             Constructor con = null;
+            Constructor strCon = null;
             Class theclazz = null;
+            Object[] strParams = null;
             Object[] params = null;
             try
             {
-                theclazz = Class.forName(
-                            className.trim(),
-                            true,
-                            Thread.currentThread().getContextClassLoader()
-                        );
+                theclazz = 
+                    Thread.currentThread().getContextClassLoader().loadClass(className.trim());
             } catch (ClassNotFoundException e) {
                 log.warn("ClassNotFoundException:: " + e.getMessage());
             }
@@ -387,9 +480,19 @@ public class JUnitSampler extends AbstractSampler {
                 // constructor. if it is doesn't we look for
                 // empty constructor.
                 try {
-                    con = theclazz.getDeclaredConstructor(
+                    strCon = theclazz.getDeclaredConstructor(
                             new Class[] {String.class});
-                    params = new Object[]{label};
+                    // we have to check and make sure the constructor is
+                    // accessible. if we didn't it would throw an exception
+                    // and cause a NPE.
+                    if (label == null || label.length() == 0) {
+                        label = className;
+                    }
+                    if (strCon.getModifiers() == Modifier.PUBLIC) {
+                        strParams = new Object[]{label};
+                    } else {
+                        strCon = null;
+                    }
                 } catch (NoSuchMethodException e) {
                     log.info("String constructor:: " + e.getMessage());
                 }
@@ -404,8 +507,13 @@ public class JUnitSampler extends AbstractSampler {
                     }
                 }
                 try {
-                    if (con != null){
-                        testclass = (TestCase)con.newInstance(params);
+                    // if the string constructor is not null, we use it.
+                    // if the string constructor is null, we use the empty
+                    // constructor to get a new instance
+                    if (strCon != null) {
+                        testclass = strCon.newInstance(strParams);
+                    } else if (con != null){
+                        testclass = con.newInstance(params);
                     }
                 } catch (InvocationTargetException e) {
                     log.warn(e.getMessage());
@@ -427,10 +535,24 @@ public class JUnitSampler extends AbstractSampler {
      */
     public Method getMethod(Object clazz, String method){
         if (clazz != null && method != null){
-            log.info("class " + clazz.getClass().getName() +
-                    " method name is " + method);
+            // log.info("class " + clazz.getClass().getName() +
+            //        " method name is " + method);
             try {
                 return clazz.getClass().getMethod(method,new Class[0]);
+            } catch (NoSuchMethodException e) {
+                log.warn(e.getMessage());
+            }
+        }
+        return null;
+    }
+    
+    public Method getRunTestMethod(Object clazz){
+        if (clazz != null){
+            // log.info("class " + clazz.getClass().getName() +
+            //        " method name is " + RUNTEST);
+            try {
+                Class[] param = {TestResult.class};
+                return clazz.getClass().getMethod(RUNTEST,param);
             } catch (NoSuchMethodException e) {
                 log.warn(e.getMessage());
             }

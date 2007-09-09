@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,34 +31,44 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__counter";
+	private static final String KEY = "__counter"; //$NON-NLS-1$
 
-	private static final String perThreadCounter = "perThreadCounter";
-
-	static {
-		desc.add(JMeterUtils.getResString("iteration_counter_arg_1"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
+    private transient ThreadLocal perThreadInt;
+    
+	private void init(){
+        perThreadInt = new ThreadLocal(){
+            protected synchronized Object initialValue() {
+                return new Integer(0);
+            };
+        };
+    }
+        
+    static {
+		desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	transient private Object[] variables;
 
-	transient private int[] counter;
-
-	transient private String key; // Used to keep track of counter
+	transient private int globalCounter;//MAXINT = 2,147,483,647
 
 	public IterationCounter() {
-		counter = new int[1];
-		// TODO use better key if poss. Can't use varName - it may not be
-		// present
-		key = KEY + System.identityHashCode(this);
-	}
+        init();
+        globalCounter=0;
+    }
 
-	public Object clone() {
-		IterationCounter newCounter = new IterationCounter();
-		newCounter.counter = counter;
-		return newCounter;
+    private Object readResolve(){
+        init();
+        globalCounter=0;
+        return this;
+    }
+    
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/*
@@ -68,29 +78,28 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 	 */
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		counter[0]++;
+
+        new Integer(1);
+        globalCounter++;
 
 		JMeterVariables vars = getVariables();
 
 		boolean perThread = Boolean.valueOf(((CompoundVariable) variables[0]).execute()).booleanValue();
 
-		String varName = ((CompoundVariable) variables[variables.length - 1]).execute();
-		String counterString = "";
+		String varName = ""; //$NON-NLS-1$
+        if (variables.length >=2) {// Ensure variable has been provided
+            varName = ((CompoundVariable) variables[1]).execute();
+        }
+		
+        String counterString = ""; //$NON-NLS-1$
 
 		if (perThread) {
-			// counterString = Integer.toString(vars.getIteration());
-			int counterInt;
-			try {
-				counterInt = ((Integer) vars.getObject(perThreadCounter)).intValue() + 1;
-
-			} catch (NullPointerException e) {
-				// First Time! Initialize
-				counterInt = 1;
-			}
-			vars.putObject(perThreadCounter, new Integer(counterInt));
-			counterString = Integer.toString(counterInt);
+			int threadCounter;
+            threadCounter = ((Integer) perThreadInt.get()).intValue() + 1;                
+            perThreadInt.set(new Integer(threadCounter));
+			counterString = String.valueOf(threadCounter);
 		} else {
-			counterString = String.valueOf(counter[0]);
+			counterString = String.valueOf(globalCounter);
 		}
 
 		if (varName.length() > 0)
@@ -103,12 +112,12 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 	 * 
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
+	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		variables = parameters.toArray();
 
-		if (variables.length < 2) {
-			throw new InvalidVariableException("Fewer than 2 parameters");
+		if (variables.length < 1) {
+			throw new InvalidVariableException("Need at least 1 parameter");
 		}
 	}
 

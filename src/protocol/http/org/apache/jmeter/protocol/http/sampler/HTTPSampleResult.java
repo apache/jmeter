@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,17 +21,21 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.net.URL;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
+ * author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
 public class HTTPSampleResult extends SampleResult {
-	private static Logger log = LoggingManager.getLoggerForClass();
+
+	private String cookies = ""; // never null
+
+	private String method;
+
+	private String redirectLocation;
+
+	private String queryString = ""; // never null
 
 	public HTTPSampleResult() {
 		super();
@@ -50,12 +54,11 @@ public class HTTPSampleResult extends SampleResult {
 	 */
 	public HTTPSampleResult(HTTPSampleResult res) {
 		super(res);
-		setHTTPMethod(res.getHTTPMethod());
-		setURL(res.getURL());
-		setCookies(res.getCookies());
+		method=res.method;
+		cookies=res.cookies;
+        queryString=res.queryString;
+        redirectLocation=res.redirectLocation;
 	}
-
-	private String method;
 
 	public void setHTTPMethod(String method) {
 		this.method = method;
@@ -64,8 +67,6 @@ public class HTTPSampleResult extends SampleResult {
 	public String getHTTPMethod() {
 		return method;
 	}
-
-	private String redirectLocation;
 
 	public void setRedirectLocation(String redirectLocation) {
 		this.redirectLocation = redirectLocation;
@@ -92,27 +93,33 @@ public class HTTPSampleResult extends SampleResult {
 
 	/*
 	 * (non-Javadoc)
+     * Overrides version in Sampler data to provide more details
 	 * 
 	 * @see org.apache.jmeter.samplers.SampleResult#getSamplerData()
 	 */
 	public String getSamplerData() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(getHTTPMethod());
+		sb.append(method);
 		URL u = super.getURL();
 		if (u != null) {
 			sb.append(' ');
 			sb.append(u.toString());
-			if ("POST".equals(getHTTPMethod())) {
-				sb.append(getQueryString());
-			}
-			sb.append("\n");
-			sb.append(getRequestHeaders());
-			sb.append(getCookies());
+            sb.append("\n");
+			if (HTTPSamplerBase.POST.equals(method)) {
+                sb.append("\nPOST data:\n");
+				sb.append(queryString);
+                sb.append("\n");
+            }
+            if (cookies.length()>0){
+                sb.append("\nCookie Data:\n");
+    			sb.append(cookies);
+            } else {
+                sb.append("\n[no cookies]");
+            }
+            sb.append("\n");
 		}
 		return sb.toString();
 	}
-
-	private String cookies = ""; // never null
 
 	/**
 	 * @return cookies as a string
@@ -126,10 +133,12 @@ public class HTTPSampleResult extends SampleResult {
 	 *            representing the cookies
 	 */
 	public void setCookies(String string) {
-		cookies = string;
+        if (string == null) {
+            cookies="";// $NON-NLS-1$
+        } else {
+    		cookies = string;
+        }
 	}
-
-	private String queryString = ""; // never null
 
 	/**
 	 * Fetch the query string
@@ -147,7 +156,11 @@ public class HTTPSampleResult extends SampleResult {
 	 *            the query string
 	 */
 	public void setQueryString(String string) {
-		queryString = string;
+        if (string == null ) {
+            queryString="";// $NON-NLS-1$
+        } else {
+    		queryString = string;
+        }
 	}
-
+    
 }

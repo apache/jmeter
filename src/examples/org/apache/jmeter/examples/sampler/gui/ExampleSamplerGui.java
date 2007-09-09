@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,8 +27,7 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import javax.swing.JTextArea;
 import org.apache.jmeter.examples.sampler.ExampleSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -43,11 +42,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * The GUI class is not invoked in non-GUI mode, so it should not perform any
  * additional setup that a test would need at run-time
  * 
- * @version $Revision$ $Date$
  */
 public class ExampleSamplerGui extends AbstractSamplerGui {
 
-	private JTextField data;
+	private JTextArea data;
 
 	public ExampleSamplerGui() {
 		init();
@@ -59,7 +57,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
 	 */
 	public String getLabelResource() {
-		return "example_title";
+		return "example_title"; // $NON-NLS-1$
 	}
 
 	/*
@@ -114,9 +112,9 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 	 * @return the panel for entering the data
 	 */
 	private Component createDataPanel() {
-		JLabel label = new JLabel(JMeterUtils.getResString("example_data"));
+		JLabel label = new JLabel(JMeterUtils.getResString("example_data")); //$NON-NLS-1$
 
-		data = new JTextField(10);
+		data = new JTextArea();
 		data.setName(ExampleSampler.DATA);
 		label.setLabelFor(data);
 
@@ -125,5 +123,11 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
 		dataPanel.add(data, BorderLayout.CENTER);
 
 		return dataPanel;
+	}
+
+	public void clearGui() {
+		super.clearGui();
+		data.setText(""); // $NON-NLS-1$
+		
 	}
 }

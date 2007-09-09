@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,18 +18,22 @@
 
 package org.apache.jmeter.save;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -45,12 +49,13 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.Converter;
-import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 import org.xml.sax.SAXException;
 
@@ -61,11 +66,52 @@ import org.xml.sax.SAXException;
  * 
  * @version $Revision$ $Date$
  */
-public final class OldSaveService implements SaveServiceConstants {
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+public final class OldSaveService {
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	// Initial config from properties
+    // ---------------------------------------------------------------------
+    // XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
+    // ---------------------------------------------------------------------
+
+    // Shared with TestElementSaver
+    final static String PRESERVE = "preserve"; // $NON-NLS-1$
+    final static String XML_SPACE = "xml:space"; // $NON-NLS-1$
+
+    private static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON-NLS-1$
+    private static final String BINARY = "binary"; // $NON-NLS-1$
+    private static final String DATA_TYPE = "dataType"; // $NON-NLS-1$
+    private static final String ERROR = "error"; // $NON-NLS-1$
+    private static final String FAILURE = "failure"; // $NON-NLS-1$
+    private static final String FAILURE_MESSAGE = "failureMessage"; // $NON-NLS-1$
+    private static final String LABEL = "label"; // $NON-NLS-1$
+    private static final String RESPONSE_CODE = "responseCode"; // $NON-NLS-1$
+    private static final String RESPONSE_MESSAGE = "responseMessage"; // $NON-NLS-1$
+    private static final String SAMPLE_RESULT_TAG_NAME = "sampleResult"; // $NON-NLS-1$
+    private static final String SUCCESSFUL = "success"; // $NON-NLS-1$
+    private static final String THREAD_NAME = "threadName"; // $NON-NLS-1$
+    private static final String TIME = "time"; // $NON-NLS-1$
+    private static final String TIME_STAMP = "timeStamp"; // $NON-NLS-1$
+
+    // ---------------------------------------------------------------------
+    // ADDITIONAL CSV RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
+    // ---------------------------------------------------------------------
+
+    private static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
+    private static final String CSV_BYTES= "bytes"; // $NON-NLS-1$
+    private static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
+    private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
+    private static final String CSV_URL = "URL"; // $NON-NLS-1$
+    private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
+    private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
+    private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
+    
+    // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
+
+	// Date format to try if the time format does not parse as milliseconds
+	// (this is the suggested value in jmeter.properties)
+	private static final String DEFAULT_DATE_FORMAT_STRING = "MM/dd/yy HH:mm:ss"; // $NON-NLS-1$
+	private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(DEFAULT_DATE_FORMAT_STRING);
 
 	private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 
@@ -74,148 +120,253 @@ public final class OldSaveService implements SaveServiceConstants {
 	 */
 	private OldSaveService() {
 	}
-	
-	public static SampleResult makeResultFromDelimitedString(String delim)
-	{
-		return makeResultFromDelimitedString(delim,_saveConfig);
-	}
 
-	/**
-	 * Make a SampleResult given a delimited string.
-	 * 
-	 * @param delim
-	 * @return SampleResult
-	 */
-	public static SampleResult makeResultFromDelimitedString(String delim,SampleSaveConfiguration saveConfig) {
-		SampleResult result = null;
+    //////////////////////////////////////////////////////////////////////////////
+    //                  Start of CSV methods
+    
+    // TODO - move to separate file? If so, remember that some of the
+      
+    /**
+     * Make a SampleResult given a delimited string.
+     * 
+     * @param inputLine - line from CSV file
+     * @param saveConfig - configuration
+     * @param lineNumber - line number for error reporting
+     * @return SampleResult or null if header line detected
+     * 
+     * @throws JMeterError
+     */
+    public static SampleResult makeResultFromDelimitedString(
+    		final String inputLine, 
+    		final SampleSaveConfiguration saveConfig, // may be updated
+    		final long lineNumber) {
+ 
+    	SampleResult result = null;
 		long timeStamp = 0;
 		long elapsed = 0;
-		StringTokenizer splitter = new StringTokenizer(delim, saveConfig.getDelimiter());
+		/*
+		 * Bug 40772: replaced StringTokenizer with String.split(), as the
+		 * former does not return empty tokens.
+		 */
+		// The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
+		String parts[]=inputLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
 		String text = null;
+		String field = null; // Save the name for error reporting
+		int i=0;
 
 		try {
-			if (saveConfig.printMilliseconds()) {
-				text = splitter.nextToken();
-				timeStamp = Long.parseLong(text);
-			} else if (saveConfig.formatter() != null) {
-				text = splitter.nextToken();
-				Date stamp = saveConfig.formatter().parse(text);
-				timeStamp = stamp.getTime();
+			if (saveConfig.saveTimestamp()){
+				field = TIME_STAMP;
+				text = parts[i++];
+				if (saveConfig.printMilliseconds()) {
+					try {
+						timeStamp = Long.parseLong(text);
+					} catch (NumberFormatException e) {// see if this works
+						log.warn(e.toString());
+						Date stamp = DEFAULT_DATE_FORMAT.parse(text);
+						timeStamp = stamp.getTime();
+						log.warn("Setting date format to: "+DEFAULT_DATE_FORMAT_STRING);
+						saveConfig.setFormatter(DEFAULT_DATE_FORMAT);
+					}
+				} else if (saveConfig.formatter() != null) {
+					Date stamp = saveConfig.formatter().parse(text);
+					timeStamp = stamp.getTime();
+				} else { // can this happen?
+					final String msg = "Unknown timestamp format";
+					log.warn(msg);
+					throw new JMeterError(msg);
+				}
 			}
 
 			if (saveConfig.saveTime()) {
-				text = splitter.nextToken();
+				field = CSV_ELAPSED;
+				text = parts[i++];
 				elapsed = Long.parseLong(text);
 			}
 
 			result = new SampleResult(timeStamp, elapsed);
 
-			if (saveConfig.saveContentLength()) {
-				text = splitter.nextToken();
-				result.setContentLength(Converter.getInt(text));
-			}
-
 			if (saveConfig.saveLabel()) {
-				text = splitter.nextToken();
+				field = LABEL;
+				text = parts[i++];
 				result.setSampleLabel(text);
 			}
 			if (saveConfig.saveCode()) {
-				text = splitter.nextToken();
+				field = RESPONSE_CODE;
+				text = parts[i++];
 				result.setResponseCode(text);
 			}
 
 			if (saveConfig.saveMessage()) {
-				text = splitter.nextToken();
+				field = RESPONSE_MESSAGE;
+				text = parts[i++];
 				result.setResponseMessage(text);
 			}
 
 			if (saveConfig.saveThreadName()) {
-				text = splitter.nextToken();
+				field = THREAD_NAME;
+				text = parts[i++];
 				result.setThreadName(text);
 			}
 
 			if (saveConfig.saveDataType()) {
-				text = splitter.nextToken();
+				field = DATA_TYPE;
+				text = parts[i++];
 				result.setDataType(text);
 			}
 
 			if (saveConfig.saveSuccess()) {
-				text = splitter.nextToken();
+				field = SUCCESSFUL;
+				text = parts[i++];
 				result.setSuccessful(Boolean.valueOf(text).booleanValue());
 			}
 
 			if (saveConfig.saveAssertionResultsFailureMessage()) {
-				text = splitter.nextToken();
+				i++;
+                // TODO - should this be restored?
 			}
+            
+            if (saveConfig.saveBytes()) {
+            	field = CSV_BYTES;
+                text = parts[i++];
+                result.setBytes(Integer.parseInt(text));
+            }
+        
+            if (saveConfig.saveThreadCounts()) {
+                i+=2;// two counts
+                // Not saved, as not part of a result
+            }
+
+            if (saveConfig.saveUrl()) {
+                i++;
+                // TODO: should this be restored?
+            }
+        
+            if (saveConfig.saveFileName()) {
+            	field = CSV_FILENAME;
+                text = parts[i++];
+                result.setResultFileName(text);
+            }            
+            if (saveConfig.saveLatency()) {
+            	field = CSV_LATENCY;
+                text = parts[i++];
+                result.setLatency(Long.parseLong(text));
+            }
+
+            if (saveConfig.saveEncoding()) {
+            	field = CSV_ENCODING;
+                text = parts[i++];
+                result.setEncodingAndType(text);
+            }
+
+            
 		} catch (NumberFormatException e) {
-			log.warn("Error parsing number " + e);
-			throw e;
+			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
+			throw new JMeterError(e);
 		} catch (ParseException e) {
-			log.warn("Error parsing line " + e);
-			throw new RuntimeException(e.toString());
+			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
+			throw new JMeterError(e);
+		} catch (ArrayIndexOutOfBoundsException e){
+			log.warn("Insufficient columns to parse field '" + field + "' at line " + lineNumber);
+			throw new JMeterError(e);
 		}
 		return result;
 	}
 
+    /**
+     * Generates the field names for the output file
+     * 
+     * @return the field names as a string
+     */
+    public static String printableFieldNamesToString() {
+        return printableFieldNamesToString(_saveConfig);
+    }
+    
 	/**
 	 * Generates the field names for the output file
 	 * 
 	 * @return the field names as a string
 	 */
-	public static String printableFieldNamesToString() {
+	public static String printableFieldNamesToString(SampleSaveConfiguration saveConfig) {
 		StringBuffer text = new StringBuffer();
-		String delim = _saveConfig.getDelimiter();
+		String delim = saveConfig.getDelimiter();
 
-		if (_saveConfig.printMilliseconds() || (_saveConfig.formatter() != null)) {
-			text.append(SaveServiceConstants.TIME_STAMP);
-			text.append(delim);
-		}
-
-		if (_saveConfig.saveTime()) {
-			text.append(SaveServiceConstants.TIME);
-			text.append(delim);
-		}
-		
-		if(_saveConfig.saveContentLength())
-		{
-			text.append(SaveServiceConstants.CONTENT_LENGTH);
+		if (saveConfig.saveTimestamp()) {
+			text.append(TIME_STAMP);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveLabel()) {
-			text.append(SaveServiceConstants.LABEL);
+		if (saveConfig.saveTime()) {
+			text.append(CSV_ELAPSED);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveCode()) {
-			text.append(SaveServiceConstants.RESPONSE_CODE);
+		if (saveConfig.saveLabel()) {
+			text.append(LABEL);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveMessage()) {
-			text.append(SaveServiceConstants.RESPONSE_MESSAGE);
+		if (saveConfig.saveCode()) {
+			text.append(RESPONSE_CODE);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveThreadName()) {
-			text.append(SaveServiceConstants.THREAD_NAME);
+		if (saveConfig.saveMessage()) {
+			text.append(RESPONSE_MESSAGE);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveDataType()) {
-			text.append(SaveServiceConstants.DATA_TYPE);
+		if (saveConfig.saveThreadName()) {
+			text.append(THREAD_NAME);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveSuccess()) {
-			text.append(SaveServiceConstants.SUCCESSFUL);
+		if (saveConfig.saveDataType()) {
+			text.append(DATA_TYPE);
 			text.append(delim);
 		}
 
-		if (_saveConfig.saveAssertionResultsFailureMessage()) {
-			text.append(SaveServiceConstants.FAILURE_MESSAGE);
+		if (saveConfig.saveSuccess()) {
+			text.append(SUCCESSFUL);
 			text.append(delim);
 		}
+
+		if (saveConfig.saveAssertionResultsFailureMessage()) {
+			text.append(FAILURE_MESSAGE);
+			text.append(delim);
+		}
+
+        if (saveConfig.saveBytes()) {
+            text.append(CSV_BYTES);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveThreadCounts()) {
+            text.append(CSV_THREAD_COUNT1);
+            text.append(delim);
+            text.append(CSV_THREAD_COUNT2);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveUrl()) {
+            text.append(CSV_URL);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveFileName()) {
+            text.append(CSV_FILENAME);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveLatency()) {
+            text.append(CSV_LATENCY);
+            text.append(delim);
+        }
+
+        if (saveConfig.saveEncoding()) {
+            text.append(CSV_ENCODING);
+            text.append(delim);
+        }
 
 		String resultString = null;
 		int size = text.length();
@@ -229,8 +380,222 @@ public final class OldSaveService implements SaveServiceConstants {
 		}
 		return resultString;
 	}
+	
+	// Map header names to set() methods
+	private static final Map headerLabelMethods = new HashMap();
+	
+	static {
+		    headerLabelMethods.put(TIME_STAMP, new Functor("setTimestamp"));
+			headerLabelMethods.put(CSV_ELAPSED, new Functor("setTime"));
+			headerLabelMethods.put(LABEL, new Functor("setLabel"));
+			headerLabelMethods.put(RESPONSE_CODE, new Functor("setCode"));
+			headerLabelMethods.put(RESPONSE_MESSAGE, new Functor("setMessage"));
+			headerLabelMethods.put(THREAD_NAME, new Functor("setThreadName"));
+			headerLabelMethods.put(DATA_TYPE, new Functor("setDataType"));
+			headerLabelMethods.put(SUCCESSFUL, new Functor("setSuccess"));
+			headerLabelMethods.put(FAILURE_MESSAGE, new Functor("setAssertionResultsFailureMessage"));
+            headerLabelMethods.put(CSV_BYTES, new Functor("setBytes"));
+            headerLabelMethods.put(CSV_URL, new Functor("setUrl"));
+            headerLabelMethods.put(CSV_FILENAME, new Functor("setFileName"));
+            headerLabelMethods.put(CSV_LATENCY, new Functor("setLatency"));
+            headerLabelMethods.put(CSV_ENCODING, new Functor("setEncoding"));
+            headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
+            headerLabelMethods.put(CSV_THREAD_COUNT2, new Functor("setThreadCounts"));
+	}
 
-	public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException {
+	/**
+	 * Parse a CSV header line
+	 * @param headerLine from CSV file
+	 * @return config corresponding to the header items found or null if not a header line
+	 */
+	public static SampleSaveConfiguration getSampleSaveConfiguration(String headerLine){
+		String parts[]=headerLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
+
+		// Check if the line is a header
+		for(int i=0;i<parts.length;i++){
+			if (!headerLabelMethods.containsKey(parts[i])){
+				return null; // unknown column name
+			}
+		}
+
+		// We know the column names all exist, so create the config 
+		SampleSaveConfiguration saveConfig=new SampleSaveConfiguration(false);
+		
+		for(int i=0;i<parts.length;i++){
+			Functor set = (Functor) headerLabelMethods.get(parts[i]);
+			set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
+		}
+		return saveConfig;
+	}
+
+	/**
+     * Method will save aggregate statistics as CSV. For now I put it here.
+     * Not sure if it should go in the newer SaveService instead of here.
+     * if we ever decide to get rid of this class, we'll need to move this
+     * method to the new save service.
+     * @param data
+     * @param writer
+     * @throws IOException
+     */
+    public static void saveCSVStats(Vector data, FileWriter writer) throws IOException {
+        for (int idx=0; idx < data.size(); idx++) {
+            Vector row = (Vector)data.elementAt(idx);
+            for (int idy=0; idy < row.size(); idy++) {
+                if (idy > 0) {
+                    writer.write(","); // $NON-NLS-1$
+                }
+                Object item = row.elementAt(idy);
+                writer.write( String.valueOf(item) );
+            }
+            writer.write(System.getProperty("line.separator")); // $NON-NLS-1$
+        }
+    }
+
+    /**
+     * Convert a result into a string, where the fields of the result are
+     * separated by the default delimiter.
+     * 
+     * @param sample
+     *            the test result to be converted
+     * @return the separated value representation of the result
+     */
+    public static String resultToDelimitedString(SampleResult sample) {
+    	return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
+    }
+
+    /**
+     * Convert a result into a string, where the fields of the result are
+     * separated by a specified String.
+     * 
+     * @param sample
+     *            the test result to be converted
+     * @param delimiter
+     *            the separation string
+     * @return the separated value representation of the result
+     */
+    public static String resultToDelimitedString(SampleResult sample, String delimiter) {
+    	StringBuffer text = new StringBuffer();
+    	SampleSaveConfiguration saveConfig = sample.getSaveConfig();
+    
+    	if (saveConfig.saveTimestamp()) {
+    		if (saveConfig.printMilliseconds()){
+    			text.append(sample.getTimeStamp());
+    			text.append(delimiter);
+    		} else if (saveConfig.formatter() != null) {
+    			String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
+    			text.append(stamp);
+    			text.append(delimiter);
+    		}
+    	}
+    
+    	if (saveConfig.saveTime()) {
+    		text.append(sample.getTime());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveLabel()) {
+    		text.append(sample.getSampleLabel());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveCode()) {
+    		text.append(sample.getResponseCode());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveMessage()) {
+    		text.append(sample.getResponseMessage());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveThreadName()) {
+    		text.append(sample.getThreadName());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveDataType()) {
+    		text.append(sample.getDataType());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveSuccess()) {
+    		text.append(sample.isSuccessful());
+    		text.append(delimiter);
+    	}
+    
+    	if (saveConfig.saveAssertionResultsFailureMessage()) {
+    		String message = null;
+    		AssertionResult[] results = sample.getAssertionResults();
+    
+    		if (results != null) {
+    			// Find the first non-null message
+    			for (int i = 0; i < results.length; i++){
+        			message = results[i].getFailureMessage();
+    				if (message != null) break;
+    			}
+    		}
+    
+    		if (message != null) {
+    			text.append(message);
+    		}
+    		text.append(delimiter);
+    	}
+    
+        if (saveConfig.saveBytes()) {
+            text.append(sample.getBytes());
+            text.append(delimiter);
+        }
+    
+        if (saveConfig.saveThreadCounts()) {
+        	org.apache.jmeter.threads.ThreadGroup 
+        	threadGroup=JMeterContextService.getContext().getThreadGroup();
+        	int numThreads =0;
+        	if (threadGroup != null) { // can be null for remote testing
+        	    numThreads = threadGroup.getNumberOfThreads();
+        	}
+            text.append(numThreads);
+            text.append(delimiter);
+            text.append(JMeterContextService.getNumberOfThreads());
+            text.append(delimiter);
+        }
+        if (saveConfig.saveUrl()) {
+            text.append(sample.getURL());
+            text.append(delimiter);
+        }
+    
+        if (saveConfig.saveFileName()) {
+            text.append(sample.getResultFileName());
+            text.append(delimiter);
+        }
+    
+        if (saveConfig.saveLatency()) {
+            text.append(sample.getLatency());
+            text.append(delimiter);
+        }
+
+        if (saveConfig.saveEncoding()) {
+            text.append(sample.getDataEncoding());
+            text.append(delimiter);
+        }
+
+    	String resultString = null;
+    	int size = text.length();
+    	int delSize = delimiter.length();
+    
+    	// Strip off the trailing delimiter
+    	if (size >= delSize) {
+    		resultString = text.substring(0, size - delSize);
+    	} else {
+    		resultString = text.toString();
+    	}
+    	return resultString;
+    }
+
+    //              End of CSV methods
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //              Start of Avalon methods
+    
+    public static void saveSubTree(HashTree subTree, OutputStream writer) throws IOException {
 		Configuration config = (Configuration) getConfigsFromTree(subTree).get(0);
 		DefaultConfigurationSerializer saver = new DefaultConfigurationSerializer();
 
@@ -243,22 +608,22 @@ public final class OldSaveService implements SaveServiceConstants {
 			throw new IOException("Problem using Avalon Configuration tools");
 		}
 	}
-
-	public static SampleResult getSampleResult(Configuration config) {
+    
+    public static SampleResult getSampleResult(Configuration config) {
 		SampleResult result = new SampleResult(config.getAttributeAsLong(TIME_STAMP, 0L), config.getAttributeAsLong(
 				TIME, 0L));
 
-		result.setThreadName(config.getAttribute(THREAD_NAME, ""));
+		result.setThreadName(config.getAttribute(THREAD_NAME, "")); // $NON-NLS-1$
 		result.setDataType(config.getAttribute(DATA_TYPE, ""));
-		result.setResponseCode(config.getAttribute(RESPONSE_CODE, ""));
-		result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, ""));
+		result.setResponseCode(config.getAttribute(RESPONSE_CODE, "")); // $NON-NLS-1$
+		result.setResponseMessage(config.getAttribute(RESPONSE_MESSAGE, "")); // $NON-NLS-1$
 		result.setSuccessful(config.getAttributeAsBoolean(SUCCESSFUL, false));
-		result.setSampleLabel(config.getAttribute(LABEL, ""));
+		result.setSampleLabel(config.getAttribute(LABEL, "")); // $NON-NLS-1$
 		result.setResponseData(getBinaryData(config.getChild(BINARY)));
 		Configuration[] subResults = config.getChildren(SAMPLE_RESULT_TAG_NAME);
 
 		for (int i = 0; i < subResults.length; i++) {
-			result.addSubResult(getSampleResult(subResults[i]));
+			result.storeSubResult(getSampleResult(subResults[i]));
 		}
 		Configuration[] assResults = config.getChildren(ASSERTION_RESULT_TAG_NAME);
 
@@ -266,9 +631,9 @@ public final class OldSaveService implements SaveServiceConstants {
 			result.addAssertionResult(getAssertionResult(assResults[i]));
 		}
 
-		Configuration[] samplerData = config.getChildren("property");
+		Configuration[] samplerData = config.getChildren("property"); // $NON-NLS-1$
 		for (int i = 0; i < samplerData.length; i++) {
-			result.setSamplerData(samplerData[i].getValue(""));
+			result.setSamplerData(samplerData[i].getValue("")); // $NON-NLS-1$
 		}
 		return result;
 	}
@@ -279,7 +644,7 @@ public final class OldSaveService implements SaveServiceConstants {
 
 		while (iter.hasNext()) {
 			TestElement item = (TestElement) iter.next();
-			DefaultConfiguration config = new DefaultConfiguration("node", "node");
+			DefaultConfiguration config = new DefaultConfiguration("node", "node"); // $NON-NLS-1$ // $NON-NLS-2$
 
 			config.addChild(getConfigForTestElement(null, item));
 			List configList = getConfigsFromTree(subTree.getTree(item));
@@ -294,12 +659,12 @@ public final class OldSaveService implements SaveServiceConstants {
 	}
 
 	public static Configuration getConfiguration(byte[] bin) {
-		DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service");
+		DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service"); // $NON-NLS-1$
 
 		try {
-			config.setValue(new String(bin, "UTF-8"));
+			config.setValue(new String(bin, "UTF-8")); // $NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
-			log.error("", e);
+			log.error("", e); // $NON-NLS-1$
 		}
 		return config;
 	}
@@ -309,14 +674,14 @@ public final class OldSaveService implements SaveServiceConstants {
 			return new byte[0];
 		}
 		try {
-			return config.getValue("").getBytes("UTF-8");
+			return config.getValue("").getBytes("UTF-8"); // $NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
 			return new byte[0];
 		}
 	}
 
 	public static AssertionResult getAssertionResult(Configuration config) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(""); //TODO provide proper name?
 		result.setError(config.getAttributeAsBoolean(ERROR, false));
 		result.setFailure(config.getAttributeAsBoolean(FAILURE, false));
 		result.setFailureMessage(config.getAttribute(FAILURE_MESSAGE, ""));
@@ -338,14 +703,14 @@ public final class OldSaveService implements SaveServiceConstants {
 	 * 
 	 * @param result
 	 *            the object containing all of the data that has been collected.
-	 * @param funcTest
-	 *            an indicator of whether the user wants all data recorded.
+	 * @param saveConfig
+	 *            the configuration giving the data items to be saved.
 	 */
 	public static Configuration getConfiguration(SampleResult result, SampleSaveConfiguration saveConfig) {
-		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service");
+		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service"); // $NON-NLS-1$
 
 		if (saveConfig.saveTime()) {
-			config.setAttribute(TIME, "" + result.getTime());
+			config.setAttribute(TIME, String.valueOf(result.getTime()));
 		}
 		if (saveConfig.saveLabel()) {
 			config.setAttribute(LABEL, result.getSampleLabel());
@@ -364,7 +729,7 @@ public final class OldSaveService implements SaveServiceConstants {
 		}
 
 		if (saveConfig.printMilliseconds()) {
-			config.setAttribute(TIME_STAMP, "" + result.getTimeStamp());
+			config.setAttribute(TIME_STAMP, String.valueOf(result.getTimeStamp()));
 		} else if (saveConfig.formatter() != null) {
 			String stamp = saveConfig.formatter().format(new Date(result.getTimeStamp()));
 
@@ -372,7 +737,7 @@ public final class OldSaveService implements SaveServiceConstants {
 		}
 
 		if (saveConfig.saveSuccess()) {
-			config.setAttribute(SUCCESSFUL, JOrphanUtils.booleanToString(result.isSuccessful()));
+			config.setAttribute(SUCCESSFUL, Boolean.toString(result.isSuccessful()));
 		}
 
 		SampleResult[] subResults = result.getSubResults();
@@ -386,7 +751,7 @@ public final class OldSaveService implements SaveServiceConstants {
 		AssertionResult[] assResults = result.getAssertionResults();
 
 		if (saveConfig.saveSamplerData(result)) {
-			config.addChild(createConfigForString("samplerData", result.getSamplerData()));
+			config.addChild(createConfigForString("samplerData", result.getSamplerData())); // $NON-NLS-1$
 		}
 		if (saveConfig.saveAssertions() && assResults != null) {
 			for (int i = 0; i < assResults.length; i++) {
@@ -397,110 +762,6 @@ public final class OldSaveService implements SaveServiceConstants {
 			config.addChild(getConfiguration(result.getResponseData()));
 		}
 		return config;
-	}
-
-	/**
-	 * Convert a result into a string, where the fields of the result are
-	 * separated by the default delimiter.
-	 * 
-	 * @param sample
-	 *            the test result to be converted
-	 * @return the separated value representation of the result
-	 */
-	public static String resultToDelimitedString(SampleResult sample) {
-		return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
-	}
-
-	/**
-	 * Convert a result into a string, where the fields of the result are
-	 * separated by a specified String.
-	 * 
-	 * @param sample
-	 *            the test result to be converted
-	 * @param delimiter
-	 *            the separation string
-	 * @return the separated value representation of the result
-	 */
-	public static String resultToDelimitedString(SampleResult sample, String delimiter) {
-		StringBuffer text = new StringBuffer();
-		SampleSaveConfiguration saveConfig = sample.getSaveConfig();
-
-		if (saveConfig.saveTimestamp()) {
-			text.append(sample.getTimeStamp());
-			text.append(delimiter);
-		} else if (saveConfig.formatter() != null) {
-			String stamp = saveConfig.formatter().format(new Date(sample.getTimeStamp()));
-			text.append(stamp);
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveTime()) {
-			text.append(sample.getTime());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveContentLength()) {
-			text.append(sample.getContentLength());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveLabel()) {
-			text.append(sample.getSampleLabel());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveCode()) {
-			text.append(sample.getResponseCode());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveMessage()) {
-			text.append(sample.getResponseMessage());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveThreadName()) {
-			text.append(sample.getThreadName());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveDataType()) {
-			text.append(sample.getDataType());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveSuccess()) {
-			text.append(sample.isSuccessful());
-			text.append(delimiter);
-		}
-
-		if (saveConfig.saveAssertionResultsFailureMessage()) {
-			String message = null;
-			AssertionResult[] results = sample.getAssertionResults();
-
-			if ((results != null) && (results.length > 0)) {
-				message = results[0].getFailureMessage();
-			}
-
-			if (message != null) {
-				text.append(message);
-			}
-			text.append(delimiter);
-		}
-		// text.append(sample.getSamplerData().toString());
-		// text.append(getAssertionResult(sample));
-
-		String resultString = null;
-		int size = text.length();
-		int delSize = delimiter.length();
-
-		// Strip off the trailing delimiter
-		if (size >= delSize) {
-			resultString = text.substring(0, size - delSize);
-		} else {
-			resultString = text.toString();
-		}
-		return resultString;
 	}
 
 	public static Configuration getConfigForTestElement(String named, TestElement item) {
@@ -531,36 +792,6 @@ public final class OldSaveService implements SaveServiceConstants {
 		return config;
 	}
 
-	/*
-	 * 
-	 * NOTUSED private static Configuration createConfigForCollection( String
-	 * propertyName, Collection list) { DefaultConfiguration config = new
-	 * DefaultConfiguration("collection", "collection");
-	 * 
-	 * if (propertyName != null) { config.setAttribute("name", propertyName); }
-	 * config.setAttribute("class", list.getClass().getName()); Iterator iter =
-	 * list.iterator();
-	 * 
-	 * while (iter.hasNext()) { Object item = iter.next();
-	 * 
-	 * if (item instanceof TestElement) { config.addChild(
-	 * getConfigForTestElement(null, (TestElement) item)); } else if (item
-	 * instanceof Collection) { config.addChild( createConfigForCollection(null,
-	 * (Collection) item)); } else {
-	 * config.addChild(createConfigForString(item.toString())); } } return
-	 * config; }
-	 */
-
-	/*
-	 * NOTUSED
-	 * 
-	 * private static Configuration createConfigForString(String value) {
-	 * DefaultConfiguration config = new DefaultConfiguration("string",
-	 * "string");
-	 * 
-	 * config.setValue(value); config.setAttribute(XML_SPACE, PRESERVE); return
-	 * config; }
-	 */
 
 	private static Configuration createConfigForString(String name, String value) {
 		if (value == null) {
@@ -595,27 +826,40 @@ public final class OldSaveService implements SaveServiceConstants {
 			ClassNotFoundException, IllegalAccessException, InstantiationException {
 		TestElement element = null;
 
-		String testClass = config.getAttribute("class");
-		element = (TestElement) Class.forName(NameUpdater.getCurrentName(testClass)).newInstance();
+		String testClass = config.getAttribute("class"); // $NON-NLS-1$
+		
+        String gui_class=""; // $NON-NLS-1$
 		Configuration[] children = config.getChildren();
+        for (int i = 0; i < children.length; i++) {
+            if (children[i].getName().equals("property")) { // $NON-NLS-1$
+                if (children[i].getAttribute("name").equals(TestElement.GUI_CLASS)){ // $NON-NLS-1$
+                    gui_class=children[i].getValue();
+                }
+            }  
+        }
+        
+        String newClass = NameUpdater.getCurrentTestName(testClass,gui_class);
 
-		for (int i = 0; i < children.length; i++) {
-			if (children[i].getName().equals("property")) {
+        element = (TestElement) Class.forName(newClass).newInstance();
+
+        for (int i = 0; i < children.length; i++) {
+			if (children[i].getName().equals("property")) { // $NON-NLS-1$
 				try {
-					element.setProperty(createProperty(children[i], testClass));
+                    JMeterProperty prop = createProperty(children[i], newClass);
+					if (prop!=null) element.setProperty(prop);
 				} catch (Exception ex) {
 					log.error("Problem loading property", ex);
-					element.setProperty(children[i].getAttribute("name"), "");
+					element.setProperty(children[i].getAttribute("name"), ""); // $NON-NLS-1$ // $NON-NLS-2$
 				}
-			} else if (children[i].getName().equals("testelement")) {
-				element.setProperty(new TestElementProperty(children[i].getAttribute("name", ""),
+			} else if (children[i].getName().equals("testelement")) { // $NON-NLS-1$
+				element.setProperty(new TestElementProperty(children[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createTestElement(children[i])));
-			} else if (children[i].getName().equals("collection")) {
-				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""), createCollection(
-						children[i], testClass)));
-			} else if (children[i].getName().equals("map")) {
-				element.setProperty(new MapProperty(children[i].getAttribute("name", ""), createMap(children[i],
-						testClass)));
+			} else if (children[i].getName().equals("collection")) { // $NON-NLS-1$
+				element.setProperty(new CollectionProperty(children[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
+                        createCollection(children[i], newClass)));
+			} else if (children[i].getName().equals("map")) { // $NON-NLS-1$
+				element.setProperty(new MapProperty(children[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
+                        createMap(children[i],newClass)));
 			}
 		}
 		return element;
@@ -623,21 +867,23 @@ public final class OldSaveService implements SaveServiceConstants {
 
 	private static Collection createCollection(Configuration config, String testClass) throws ConfigurationException,
 			ClassNotFoundException, IllegalAccessException, InstantiationException {
-		Collection coll = (Collection) Class.forName(config.getAttribute("class")).newInstance();
+		Collection coll = (Collection) Class.forName(config.getAttribute("class")).newInstance(); // $NON-NLS-1$ 
 		Configuration[] items = config.getChildren();
 
 		for (int i = 0; i < items.length; i++) {
-			if (items[i].getName().equals("property")) {
-				coll.add(createProperty(items[i], testClass));
-			} else if (items[i].getName().equals("testelement")) {
-				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i])));
-			} else if (items[i].getName().equals("collection")) {
-				coll.add(new CollectionProperty(items[i].getAttribute("name", ""),
+			if (items[i].getName().equals("property")) { // $NON-NLS-1$ 
+                JMeterProperty prop = createProperty(items[i], testClass);
+				if (prop!=null) coll.add(prop);
+			} else if (items[i].getName().equals("testelement")) { // $NON-NLS-1$ 
+				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i]))); // $NON-NLS-1$ // $NON-NLS-2$
+			} else if (items[i].getName().equals("collection")) { // $NON-NLS-1$ 
+				coll.add(new CollectionProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createCollection(items[i], testClass)));
-			} else if (items[i].getName().equals("string")) {
-				coll.add(createProperty(items[i], testClass));
-			} else if (items[i].getName().equals("map")) {
-				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass)));
+			} else if (items[i].getName().equals("string")) { // $NON-NLS-1$ 
+                JMeterProperty prop = createProperty(items[i], testClass);
+				if (prop!=null) coll.add(prop);
+			} else if (items[i].getName().equals("map")) { // $NON-NLS-1$ 
+				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass))); // $NON-NLS-1$ // $NON-NLS-2$
 			}
 		}
 		return coll;
@@ -645,19 +891,27 @@ public final class OldSaveService implements SaveServiceConstants {
 
 	private static JMeterProperty createProperty(Configuration config, String testClass) throws IllegalAccessException,
 			ClassNotFoundException, InstantiationException {
-		String value = config.getValue("");
-		String name = config.getAttribute("name", value);
-		String type = config.getAttribute("propType", StringProperty.class.getName());
+		String value = config.getValue(""); // $NON-NLS-1$ 
+		String name = config.getAttribute("name", value); // $NON-NLS-1$ 
+        String oname = name;
+		String type = config.getAttribute("propType", StringProperty.class.getName()); // $NON-NLS-1$ 
 
 		// Do upgrade translation:
 		name = NameUpdater.getCurrentName(name, testClass);
-		if (TestElement.GUI_CLASS.equals(name) || TestElement.TEST_CLASS.equals(name)) {
+		if (TestElement.GUI_CLASS.equals(name)) {
 			value = NameUpdater.getCurrentName(value);
+        } else if (TestElement.TEST_CLASS.equals(name)) {
+            value=testClass; // must always agree
 		} else {
 			value = NameUpdater.getCurrentName(value, name, testClass);
 		}
 
-		// Create the property:
+        // Delete any properties whose name converts to the empty string
+        if (oname.length() != 0 && name.length()==0) {
+            return null;
+        }
+
+        // Create the property:
 		JMeterProperty prop = (JMeterProperty) Class.forName(type).newInstance();
 		prop.setName(name);
 		prop.setObjectValue(value);
@@ -671,17 +925,19 @@ public final class OldSaveService implements SaveServiceConstants {
 		Configuration[] items = config.getChildren();
 
 		for (int i = 0; i < items.length; i++) {
-			if (items[i].getName().equals("property")) {
+			if (items[i].getName().equals("property")) { // $NON-NLS-1$ 
 				JMeterProperty prop = createProperty(items[i], testClass);
-				map.put(prop.getName(), prop);
-			} else if (items[i].getName().equals("testelement")) {
-				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""),
+				if (prop!=null) map.put(prop.getName(), prop);
+			} else if (items[i].getName().equals("testelement")) { // $NON-NLS-1$ 
+				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createTestElement(items[i])));
-			} else if (items[i].getName().equals("collection")) {
-				map.put(items[i].getAttribute("name"), new CollectionProperty(items[i].getAttribute("name", ""),
+			} else if (items[i].getName().equals("collection")) { // $NON-NLS-1$ 
+				map.put(items[i].getAttribute("name"),  // $NON-NLS-1$ 
+						new CollectionProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createCollection(items[i], testClass)));
-			} else if (items[i].getName().equals("map")) {
-				map.put(items[i].getAttribute("name", ""), new MapProperty(items[i].getAttribute("name", ""),
+			} else if (items[i].getName().equals("map")) { // $NON-NLS-1$ 
+				map.put(items[i].getAttribute("name", ""),  // $NON-NLS-1$ // $NON-NLS-2$
+						new MapProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createMap(items[i], testClass)));
 			}
 		}
@@ -692,13 +948,13 @@ public final class OldSaveService implements SaveServiceConstants {
 		TestElement element = null;
 
 		try {
-			element = createTestElement(config.getChild("testelement"));
+			element = createTestElement(config.getChild("testelement")); // $NON-NLS-1$ 
 		} catch (Exception e) {
 			log.error("Problem loading part of file", e);
 			return null;
 		}
 		HashTree subTree = new ListedHashTree(element);
-		Configuration[] subNodes = config.getChildren("node");
+		Configuration[] subNodes = config.getChildren("node"); // $NON-NLS-1$ 
 
 		for (int i = 0; i < subNodes.length; i++) {
 			HashTree t = generateNode(subNodes[i]);

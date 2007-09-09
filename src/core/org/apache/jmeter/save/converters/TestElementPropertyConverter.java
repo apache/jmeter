@@ -1,9 +1,10 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,14 +19,16 @@
 package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -39,14 +42,19 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * Preferences - Java - Code Generation - Code and Comments
  */
 public class TestElementPropertyConverter extends AbstractCollectionConverter {
-	Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private final boolean testFormat22=SaveService.isSaveTestPlanFormat22();
+    
+    private static final String HEADER_CLASSNAME 
+        = "org.apache.jmeter.protocol.http.control.Header"; // $NON-NLS-1$
 
 	/**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$"; // $NON-NLS-1$
 	}
 
 	/*
@@ -67,16 +75,33 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
 	 */
 	public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
 		TestElementProperty prop = (TestElementProperty) arg0;
-		writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
-		writer.addAttribute("elementType", prop.getObjectValue().getClass().getName());
+		writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
+        Class clazz = prop.getObjectValue().getClass();
+		writer.addAttribute(ConversionHelp.ATT_ELEMENT_TYPE,
+                testFormat22 ?  mapper().serializedClass(clazz) : clazz.getName());
+        if (testFormat22){
+            TestElement te = (TestElement)prop.getObjectValue();
+            ConversionHelp.saveSpecialProperties(te,writer);
+        }
 		PropertyIterator iter = prop.iterator();
 		while (iter.hasNext()) {
-			writeItem(iter.next(), context, writer);
+            JMeterProperty jmp=iter.next();
+            // Skip special properties if required
+            if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) 
+            {
+            	// Don't save empty comments
+	       		if (!(TestPlan.COMMENTS.equals(jmp.getName())
+		       			&& jmp.getStringValue().length()==0))
+		       	{
+		            writeItem(jmp, context, writer);
+		       	}
+            }
 		}
+        //TODO clazz is probably always the same as testclass
 	}
 
 	/*
-	 * TODO - convert to woek more like upgrade.properties/NameUpdater.java
+	 * TODO - convert to work more like upgrade.properties/NameUpdater.java
 	 * 
 	 * Special processing is carried out for the Header Class The String
 	 * property TestElement.name is converted to Header.name for example:
@@ -98,17 +123,20 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		try {
 			TestElementProperty prop = (TestElementProperty) createCollection(context.getRequiredType());
-			prop.setName(ConversionHelp.decode(reader.getAttribute("name")));
-			String element = reader.getAttribute("elementType");
-			boolean isHeader = "org.apache.jmeter.protocol.http.control.Header".equals(element);
-			prop.setObjectValue(Class.forName(element).newInstance());
+			prop.setName(ConversionHelp.decode(reader.getAttribute(ConversionHelp.ATT_NAME)));
+			String element = reader.getAttribute(ConversionHelp.ATT_ELEMENT_TYPE);
+			boolean isHeader = HEADER_CLASSNAME.equals(element);
+			prop.setObjectValue(mapper().realClass(element).newInstance());// Always decode
+            TestElement te = (TestElement)prop.getObjectValue();
+            // No need to check version, just process the attributes if present
+            ConversionHelp.restoreSpecialProperties(te, reader);
 			while (reader.hasMoreChildren()) {
 				reader.moveDown();
 				JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
 				if (isHeader) {
 					String name = subProp.getName();
 					if (TestElement.NAME.equals(name)) {
-						subProp.setName("Header.name");
+						subProp.setName("Header.name");// $NON-NLS-1$
 						// Must be same as Header.HNAME - but that is built
 						// later
 					}
@@ -119,15 +147,14 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
 			return prop;
 		} catch (Exception e) {
 			log.error("Couldn't unmarshall TestElementProperty", e);
-			return new TestElementProperty("ERROR", new ConfigTestElement());
+			return new TestElementProperty("ERROR", new ConfigTestElement());// $NON-NLS-1$
 		}
 	}
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public TestElementPropertyConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public TestElementPropertyConverter(Mapper arg0) {
+		super(arg0);
 	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,8 +21,11 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,15 +33,18 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.RendererUtils;
+import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.math.StatCalculator;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
@@ -49,14 +55,28 @@ import org.apache.log.Logger;
  * 
  * created March 10, 2002
  * 
- * @version $Revision$ Updated on $Date$
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
+	private static final ImageIcon imageSuccess = JMeterUtils.getImage(
+            JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
+            		"icon_success_sml.gif"), //$NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_success")); //$NON-NLS-1$
 
-	private final String[] COLUMNS = new String[] { JMeterUtils.getResString("table_visualizer_sample_num"),
-			JMeterUtils.getResString("url"), JMeterUtils.getResString("table_visualizer_sample_time"),
-			JMeterUtils.getResString("Success?"), JMeterUtils.getResString("table_visualizer_bytes") };
+	private static final ImageIcon imageFailure = JMeterUtils.getImage(
+            JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
+            		"icon_warning_sml.gif"), //$NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_warning")); //$NON-NLS-1$
+
+	private final String[] COLUMNS = new String[] {
+            JMeterUtils.getResString("table_visualizer_sample_num"), // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_start_time"), // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_thread_name"),// $NON-NLS-1$
+			JMeterUtils.getResString("sampler_label"),  // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_sample_time"), // $NON-NLS-1$
+			JMeterUtils.getResString("table_visualizer_status"),  // $NON-NLS-1$
+            JMeterUtils.getResString("table_visualizer_bytes") }; // $NON-NLS-1$
 
 	private ObjectTableModel model = null;
 
@@ -72,24 +92,54 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
 	private JScrollPane tableScrollPanel = null;
 
-	private StatCalculator calc = new StatCalculator();
+	private transient Calculator calc = new Calculator();
 
 	private long currentData = 0;
+
+    private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
+    
+	// Column renderers
+	private static final TableCellRenderer[] RENDERERS = 
+		new TableCellRenderer[]{
+		    null, // Count
+		    new RightAlignRenderer(), // Start Time
+		    null, // Thread Name
+		    null, // Label
+		    null, // Sample Time
+		    null, // Status
+		    null, // Bytes
+		};
 
 	/**
 	 * Constructor for the TableVisualizer object.
 	 */
 	public TableVisualizer() {
 		super();
-		model = new ObjectTableModel(COLUMNS, new Functor[] { new Functor("getCount"), new Functor("getLabel"),
-				new Functor("getData"), new Functor("isSuccess"), new Functor("getBytes") }, new Functor[] { null,
-				null, null, null, null }, new Class[] { Long.class, String.class, Long.class, Boolean.class,
-				Integer.class });
+		model = new ObjectTableModel(COLUMNS,
+				Sample.class,         // The object used for each row
+				new Functor[] {
+                new Functor("getCount"), // $NON-NLS-1$
+                new Functor("getStartTimeFormatted",  // $NON-NLS-1$
+                        new Object[]{format}),
+                new Functor("getThreadName"), // $NON-NLS-1$
+                new Functor("getLabel"), // $NON-NLS-1$
+				new Functor("getData"), // $NON-NLS-1$
+                new SampleSuccessFunctor("isSuccess"), // $NON-NLS-1$
+                new Functor("getBytes") }, // $NON-NLS-1$
+                new Functor[] { null, null, null, null, null, null, null }, 
+                new Class[] { 
+				Long.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Integer.class });
 		init();
 	}
 
+	public static boolean testFunctors(){
+		TableVisualizer instance = new TableVisualizer();
+		return instance.model.checkFunctors(null,instance.getClass());
+	}
+	
+
 	public String getLabelResource() {
-		return "view_results_in_table";
+		return "view_results_in_table"; // $NON-NLS-1$
 	}
 
 	protected synchronized void updateTextFields() {
@@ -100,26 +150,26 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 	}
 
 	public void add(SampleResult res) {
+        currentData = res.getTime();
 		synchronized (calc) {
-			calc.addValue(res.getTime());
-			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0, res.isSuccessful(), calc
-					.getCount(), res.getTimeStamp());
-			newS.setBytes(res.getResponseData().length);
+			calc.addValue(currentData);
+			int count = calc.getCount();
+			Sample newS = new Sample(res.getSampleLabel(), res.getTime(), 0, 0, 0, 0, 0, 0,
+                    res.isSuccessful(), count, res.getEndTime(),res.getBytes(),
+                    res.getThreadName());
 			model.addRow(newS);
 		}
-		currentData = res.getTime();
 		updateTextFields();
 	}
 
-	public synchronized void clear() {
-		log.debug("Clear called", new Exception("Debug"));
-		// this.graph.clear();
+	public synchronized void clearData() {
 		model.clearData();
 		currentData = 0;
 		calc.clear();
-		dataField.setText("0000");
-		averageField.setText("0000");
-		deviationField.setText("0000");
+		noSamplesField.setText("0"); // $NON-NLS-1$
+		dataField.setText("0"); // $NON-NLS-1$
+		averageField.setText("0"); // $NON-NLS-1$
+		deviationField.setText("0"); // $NON-NLS-1$
 		repaint();
 	}
 
@@ -135,7 +185,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		Border margin = new EmptyBorder(10, 10, 5, 10);
 
 		mainPanel.setBorder(margin);
-		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.LEFT));
+		mainPanel.setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
 		// NAME
 		mainPanel.add(makeTitlePanel());
@@ -143,12 +193,14 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		// Set up the table itself
 		table = new JTable(model);
 		// table.getTableHeader().setReorderingAllowed(false);
+		RendererUtils.applyRenderers(table, RENDERERS);
+
 		tableScrollPanel = new JScrollPane(table);
 		tableScrollPanel.setViewportBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		// Set up footer of table which displays numerics of the graphs
 		JPanel dataPanel = new JPanel();
-		JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample"));
+		JLabel dataLabel = new JLabel(JMeterUtils.getResString("graph_results_latest_sample")); // $NON-NLS-1$
 		dataLabel.setForeground(Color.black);
 		dataField = new JTextField(5);
 		dataField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -159,7 +211,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		dataPanel.add(dataField);
 
 		JPanel averagePanel = new JPanel();
-		JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average"));
+		JLabel averageLabel = new JLabel(JMeterUtils.getResString("graph_results_average")); // $NON-NLS-1$
 		averageLabel.setForeground(Color.blue);
 		averageField = new JTextField(5);
 		averageField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -170,7 +222,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		averagePanel.add(averageField);
 
 		JPanel deviationPanel = new JPanel();
-		JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation"));
+		JLabel deviationLabel = new JLabel(JMeterUtils.getResString("graph_results_deviation")); // $NON-NLS-1$
 		deviationLabel.setForeground(Color.red);
 		deviationField = new JTextField(5);
 		deviationField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -181,7 +233,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		deviationPanel.add(deviationField);
 
 		JPanel noSamplesPanel = new JPanel();
-		JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples"));
+		JLabel noSamplesLabel = new JLabel(JMeterUtils.getResString("graph_results_no_samples")); // $NON-NLS-1$
 
 		noSamplesField = new JTextField(10);
 		noSamplesField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -210,5 +262,27 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 		// Add the main panel and the graph
 		this.add(mainPanel, BorderLayout.NORTH);
 		this.add(tablePanel, BorderLayout.CENTER);
+	}
+	
+	public static class SampleSuccessFunctor extends Functor {
+		public SampleSuccessFunctor(String methodName) {
+			super(methodName);
+		}
+		
+		public Object invoke(Object p_invokee) {
+			Boolean success = (Boolean)super.invoke(p_invokee);
+			
+			if(success != null) {
+				if(success.booleanValue()) {
+					return imageSuccess;
+				}
+				else {
+					return imageFailure;
+				}
+			}
+			else {
+				return null;
+			}
+		}
 	}
 }

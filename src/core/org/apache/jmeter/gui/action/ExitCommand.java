@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,18 +27,11 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Brendan Burns
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
- * @version $Revision$ updated on $Date$
- */
 public class ExitCommand implements Command {
-
-	public static final String EXIT = "exit";
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(EXIT);
+		commands.add(ActionNames.EXIT);
 	}
 
 	/**
@@ -63,15 +56,16 @@ public class ExitCommand implements Command {
 	 *            Description of Parameter
 	 */
 	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		if (GuiPackage.getInstance().isDirty()) {
 			int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("cancel_exit_to_save"), JMeterUtils.getResString("Save?"),
+					.getResString("cancel_exit_to_save"), // $NON-NLS-1$
+					JMeterUtils.getResString("save?"), // $NON-NLS-1$
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (chosenOption == JOptionPane.NO_OPTION) {
 				System.exit(0);
 			} else if (chosenOption == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE_ALL_AS));
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE_ALL_AS));
 				if (!GuiPackage.getInstance().isDirty()) {
 					System.exit(0);
 				}

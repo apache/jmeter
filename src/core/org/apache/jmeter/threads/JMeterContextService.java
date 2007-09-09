@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,13 +18,10 @@
 
 package org.apache.jmeter.threads;
 
-import java.io.Serializable;
-
 /**
- * @author Thad Smith
  * @version $Revision$
  */
-public final class JMeterContextService implements Serializable {
+public final class JMeterContextService {
 	static private ThreadLocal threadContext = new ThreadLocal() {
 		public Object initialValue() {
 			return new JMeterContext();
@@ -33,7 +30,9 @@ public final class JMeterContextService implements Serializable {
 
 	private static long testStart = 0;
 
-	private static int numberOfThreads = 0;
+	private static int numberOfThreads = 0; // Active thread count
+    
+    private static int totalThreads = 0;
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -45,7 +44,7 @@ public final class JMeterContextService implements Serializable {
 		return (JMeterContext) threadContext.get();
 	}
 
-	static public void startTest() {
+	static public void startTest() {//TODO should this be synchronized?
 		if (testStart == 0) {
 			numberOfThreads = 0;
 			testStart = System.currentTimeMillis();
@@ -69,13 +68,24 @@ public final class JMeterContextService implements Serializable {
 		return numberOfThreads;
 	}
 
-	static public void endTest() {
+	static public void endTest() {//TODO should this be synchronized?
 		testStart = 0;
 		numberOfThreads = 0;
 	}
 
-	static public long getTestStartTime() {
+	static public long getTestStartTime() {// NOT USED
 		return testStart;
 	}
 
+    public static synchronized int getTotalThreads() {
+        return totalThreads;
+    }
+
+    public static synchronized void addTotalThreads(int thisGroup) {
+        totalThreads += thisGroup;
+    }
+
+    public static synchronized void clearTotalThreads() {
+        totalThreads = 0;
+    }
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -39,11 +39,11 @@ import javax.swing.JTextField;
  * This will set the date "yyyy/MM/dd HH:mm:ss" in this format only.
  * </p>
  * 
- * @author T.Elanjchezhiyan
- * @version $Revision$ Last update: $Date$
  */
 public class JDateField extends JTextField {
-	private final static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	
+	// Datefields are not thread-safe
+	private final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); // $NON-NLS-1$
 
 	/*
 	 * The following array must agree with dateFormat
@@ -132,7 +132,7 @@ public class JDateField extends JTextField {
 	/**
 	 * Converts a date/time to a calendar using the defined format
 	 */
-	private static Calendar parseDate(String datetime) {
+	private Calendar parseDate(String datetime) {
 		Calendar c = Calendar.getInstance();
 		try {
 			Date dat = dateFormat.parse(datetime);
@@ -165,10 +165,6 @@ public class JDateField extends JTextField {
 
 	}
 
-	/**
-	 * @author T.Elanjchezhiyan
-	 * @version $Revision$
-	 */
 	class KeyFocus extends KeyAdapter {
 		KeyFocus() {
 		}
@@ -182,10 +178,6 @@ public class JDateField extends JTextField {
 		}
 	}
 
-	/**
-	 * @author T.Elanjchezhiyan
-	 * @version $Revision$
-	 */
 	class FocusClass implements FocusListener {
 		FocusClass() {
 		}

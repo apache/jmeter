@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -33,13 +33,12 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @author <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a> Created
  *         June 6, 2002
- * @version $Revision$ Last updated: $Date$
  */
 public class Close implements Command {
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add("close");
+		commands.add(ActionNames.CLOSE);
 	}
 
 	/**
@@ -64,13 +63,29 @@ public class Close implements Command {
 	 *            the generic UI action event
 	 */
 	public void doAction(ActionEvent e) {
-		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), CheckDirty.CHECK_DIRTY));
+		performAction(e);
+	}
+	
+	/**
+	 * Helper routine to allow action to be shared by LOAD.
+	 * 
+	 * @param e event
+	 * @return true if Close was not cancelled
+	 */
+	static boolean performAction(ActionEvent e){
+		ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
 		GuiPackage guiPackage = GuiPackage.getInstance();
 		if (guiPackage.isDirty()) {
-			if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-					.getResString("cancel_new_to_save"), JMeterUtils.getResString("Save?"), JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), Save.SAVE));
+			int response;
+			if ((response=JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+					JMeterUtils.getResString("cancel_new_to_save"), // $NON-NLS-1$
+					JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
+				ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
+			}
+			if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
+				return false; // Don't clear the plan
 			}
 		}
 		guiPackage.getTreeModel().clearTestPlan();
@@ -79,6 +94,7 @@ public class Close implements Command {
 		// Clear the name of the test plan file
 		GuiPackage.getInstance().setTestPlanFile(null);
 
-		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), CheckDirty.ADD_ALL));
+		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
+		return true;
 	}
 }

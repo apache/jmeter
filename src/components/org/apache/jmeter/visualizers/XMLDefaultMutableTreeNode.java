@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +19,9 @@
 package org.apache.jmeter.visualizers;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -34,10 +38,15 @@ import org.xml.sax.SAXException;
  * 
  */
 public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
+    private static final Logger log = LoggingManager.getLoggerForClass();
 	// private static final int LIMIT_STR_SIZE = 100;
 	// private boolean isRoot;
-	private Node xmlNode;
+	private transient Node xmlNode;
 
+    public XMLDefaultMutableTreeNode(){
+        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
+    
 	public XMLDefaultMutableTreeNode(Node root) throws SAXException {
 		super(root.getNodeName());
 		initAttributeNode(root, this);
@@ -133,7 +142,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 		NamedNodeMap nm = node.getAttributes();
 		for (int i = 0; i < nm.getLength(); i++) {
 			Attr nmNode = (Attr) nm.item(i);
-			String value = nmNode.getName() + " = \"" + nmNode.getValue() + "\"";
+			String value = nmNode.getName() + " = \"" + nmNode.getValue() + "\""; // $NON-NLS-1$ $NON-NLS-2$
 			XMLDefaultMutableTreeNode attributeNode = new XMLDefaultMutableTreeNode(value, nmNode);
 			mTreeNode.add(attributeNode);
 
@@ -149,8 +158,8 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 	 */
 	private void initCommentNode(Comment node, DefaultMutableTreeNode mTreeNode) throws SAXException {
 		String data = node.getData();
-		if (data != null || data.length() > 0) {
-			String value = "<!--" + node.getData() + "-->";
+		if (data != null && data.length() > 0) {
+			String value = "<!--" + node.getData() + "-->"; // $NON-NLS-1$ $NON-NLS-2$
 			XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value, node);
 			mTreeNode.add(commentNode);
 		}
@@ -165,8 +174,8 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 	 */
 	private void initCDATASectionNode(CDATASection node, DefaultMutableTreeNode mTreeNode) throws SAXException {
 		String data = node.getData();
-		if (data != null || data.length() > 0) {
-			String value = "<!-[CDATA" + node.getData() + "]]>";
+		if (data != null && data.length() > 0) {
+			String value = "<!-[CDATA" + node.getData() + "]]>"; // $NON-NLS-1$ $NON-NLS-2$
 			XMLDefaultMutableTreeNode commentNode = new XMLDefaultMutableTreeNode(value, node);
 			mTreeNode.add(commentNode);
 		}

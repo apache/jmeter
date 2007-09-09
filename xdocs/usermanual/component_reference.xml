@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <!-- 
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,7 +20,7 @@
 [
 <!ENTITY sect-num '18'>
 ]>
-<document index="yes" index-level-2="yes" colbreak="&sect-num;.4"
+<document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
   prev="boss.html" next="functions.html" date="$Date$">
 
 <properties>
@@ -37,24 +38,34 @@
 	To avoid these artefacts, use the form <br></br>, which Java does seem to handle OK.
 
  -->
-
 <section name="&sect-num;.1 Samplers" anchor="samplers">
 <description>
-	<br></br>
+	<p>
+	Samplers perform the actual work of JMeter.
+	Each sampler (except Test Action) generates one or more sample results.
+	The sample results have various attributes (success/fail, elapsed time, data size etc) and can be viewed in the various listeners.
+	</p>
 </description>
-<component name="FTP Request" index="&sect-num;.1.1" screenshot="gen-controller/ftp-request.gif">
-<description>This controller lets you send an FTP "retrieve file" request to an FTP server.
+<component name="FTP Request" index="&sect-num;.1.1" width="502" height="299" screenshot="ftptest/ftp-request.png">
+<description>This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a <complink name="FTP Request Defaults"/> Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
-Controller. </description>
+Controller. When downloading a file, it can be stored on disk (Local File) or in the Response Data, or both.</description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server Name or IP" required="Yes">Domain name or IP address of the FTP server.
 JMeter assumes the FTP server is listening on the default port.</property>
-        <property name="File to Retrieve From Server" required="Yes">Path and name of the file to retrieve.</property>
+        <property name="Remote File:" required="Yes">File to retrieve or upload.</property>
+        <property name="Local File:" required="Yes, if uploading">File to upload, or destination for downloads.</property>
+        <property name="get(RETR) / put(STOR)" required="Yes">Whether to retrieve or upload a file.</property>
+        <property name="Use Binary mode ?" required="Yes">Check this to use Binary mode (default Ascii)</property>
+        <property name="Save File in Response ?" required="Yes, if downloading">
+        Whether to store contents of retrieved file in response data.
+        If the mode is Ascii, then the contents will be visible in the Tree View Listener.
+        </property>
         <property name="Username" required="Usually">FTP account username.</property>
-        <property name="Password" required="Usually">FTP account password.</property>
+        <property name="Password" required="Usually">FTP account password. N.B. This will be visible in the test plan.</property>
 </properties>
 <links>
         <link href="test_plan.html#assertions">Assertions</link>
@@ -64,12 +75,26 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2" screenshot="gen-controller/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="558" height="600" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
         also lets you control whether or not JMeter parses HTML files for images and
-        Java applets and sends HTTP requests to retrieve them.</p>
+        other embedded resources and sends HTTP requests to retrieve them.
+        The following types of embedded resource are retrieved:</p>
+        <ul>
+        <li>images</li>
+        <li>applets</li>
+        <li>stylesheets</li>
+        <li>external scripts</li>
+        <li>frames</li>
+        <li>background images (body, table, TD, TR)</li>
+        <li>background sound</li>
+        </ul>
+        <p>
+        The default parser is htmlparser.
+        This can be changed by using the property "htmlparser.classname" - see jmeter.properties for details.
+        </p>
         <p>If you are going to send multiple requests to the same web server, consider
         using an <complink name="HTTP Request Defaults"/>
         Configuration Element so you do not have to enter the same information for each
@@ -81,11 +106,37 @@ JMeter assumes the FTP server is listening on the default port.</property>
         parameters.</p>
 
         <p>There are two versions of the sampler
-         - one uses the default Java HTTP implementation, the other uses Commons HttpClient</p>
-         
-        <p>If the request requires a login authorization, you will also have to add an
-        <complink name="HTTP Authorization Manager"/>
-        Configuration Element. And, if the request uses cookies, then you will also need an
+         - one uses the default Java HTTP implementation, the other uses Commons HttpClient.
+         </p>
+         <p>The default (Java) implementation has some limitations:</p>
+         <ul>
+         <li>There is no control over how connections are re-used. 
+         When a connection is released by JMeter, it may or may not be re-used by the same thread.</li>
+         <li>The API is best suited to single-threaded usage - various settings (e.g. proxy) 
+         are defined via system properties, and therefore apply to all connections.</li>
+         <li>There is a bug in the handling of HTTPS via a Proxy (the CONNECT is not handled correctly).
+         See Java bugs 6226610 and 6208335.
+         </li>
+         </ul>
+         <p>Note: the FILE protocol is intended for testing puposes only. 
+         It is handled by the same code regardless of which HTTP Sampler is used.</p>
+        <p>If the request requires server or proxy login authorization (i.e. where a browser would create a pop-up dialog box),
+         you will also have to add an <complink name="HTTP Authorization Manager"/> Configuration Element.
+         For normal logins (i.e. where the user enters login information in a form), you will need to work out what the form submit button does,
+         and create an HTTP request with the appropriate method (usually POST) 
+         and the appropriate parameters from the form definition. 
+         If the page uses HTTP, you can use the JMeter Proxy to capture the login sequence.
+        </p>
+        <p>
+        In versions of JMeter up to 2.2, only a single SSL context was used for all threads and samplers.
+        This did not generate the proper load for multiple users.
+        A separate SSL context is now used for each thread.
+        To revert to the original behaviour, set the JMeter property:
+<pre>
+https.sessioncontext.shared=true
+</pre>
+        </p>
+        <p>If the request uses cookies, then you will also need an
         <complink name="HTTP Cookie Manager"/>.  You can
         add either of these elements to the Thread Group or the HTTP Request.  If you have
         more than one HTTP Request that needs authorizations or cookies, then add the
@@ -97,18 +148,28 @@ JMeter assumes the FTP server is listening on the default port.</property>
         <a href="build-adv-web-test-plan.html#session_url_rewriting">6.1 Handling User Sessions With URL Rewriting</a>
         for additional configuration steps.</p>
 </description>
-
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
-        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
-        <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
-        <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
-		<property name="Redirect Automatically" required="No">Set the http connection to automatically follow redirects. 
-                  If set, the redirects will not appear as samples, as JMeter never sees them.
+        <property name="Server" required="No">Domain name or IP address of the web server.</property>
+        <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
+        <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
+        <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
+        <property name="Content Encoding" required="No">Content encoding to be used (for POST and FILE)</property>
+		<property name="Redirect Automatically" required="Yes">
+		Sets the underlying http protocol handler to automatically follow redirects,
+		so they are not seen by JMeter, and thus will not appear as samples.
+		In versions after 2.2, this is now the default.
+		<b>Warning: see below for information on cookie handling.</b>
         </property>
-		<property name="Follow Redirects" required="No">If set, the JMeter sampler will follow redirects, which will thus appear as samples.</property>
-		<property name="Use KeepAlive" required="No">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
+		<property name="Follow Redirects" required="Yes">
+		This only has any effect if "Redirect Automatically" is not enabled.
+		If set, the JMeter sampler will check if the response is a redirect and follow it if so.
+		The redirect response will appear as an additional sample.
+		Note that the HttpClient sampler may log the following message:<br/>
+		"Redirect requested but followRedirects is disabled"<br/>
+		This can be ignored.
+		</property>
+		<property name="Use KeepAlive" required="Yes">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
                   It does work with the Jakarta httpClient implementation.</property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
@@ -127,14 +188,44 @@ resource requires query string parameters, add them below in the
         question marks, then encoding is usually required.</p></property>
         <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
-        a multipart form request.</property>
-        <property name="Parameter Name" required="No (Yes if Filename filled in)">Name of the web request parameter.</property>
-        <property name="MIME Type" required="No (Yes if Filename filled in)">MIME type (for example, text/plain).</property>
+        a multipart form request.
+        <b>In versions of JMeter after 2.2: if both the 'name' atribute and MIME type (below) are omitted, then the file is sent as the body
+        of the POST request. This allows arbitrary POST bodies to be sent.</b>
+        </property>
+        <property name="Value for 'name' attribute" required="No">Value of the "name" web request parameter.</property>
+        <property name="MIME Type" required="No">MIME type (for example, text/plain).</property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
-and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.</property>
-        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
+and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
+        See below for more details.
+        </property>
+        <property name="Use as monitor" required="Yes">For use with the <complink name="Monitor Results"/> listener.</property>
+        <property name="Embedded URLs must match:" required="No">
+        If present, this must be a regular expression that is used to match against any embedded URLs found.
+        So if you only want to download embedded resources from http://server.com/, use the expression:
+        http://server\.com/.*
+        </property>
 </properties>
-
+<p>
+<b>N.B.</b> when using automatic redirection, cookies are only sent for the initial URL.
+This can cause unexpected behaviour for web-sites that redirect to a local server.
+E.g. if www.example.com redirects to www.example.co.uk.
+In this case the server will probably return cookies for both URLs, but JMeter will only see the cookies for the last
+host, i.e. www.example.co.uk. If the next request uses www.example.com, 
+rather than www.example.co.uk, it will not get the correct cookies.
+This is generally only a problem for manually created test plans,
+as a test plan created using a recorder would continue from the redirected URL.
+</p>
+<p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
+embedded resources. Other content-types were assumed to be something other than HTML.
+JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is a list of parser ids,
+ e.g. <b>htmlParser</b> and <b>wmlParser</b>. For each id found, JMeter checks two further properties:</p>
+ <ul>
+ <li>id.types - a list of content types</li>
+ <li>id.className - the parser to be used to extract the embedded resources</li>
+ </ul>
+ <p>See jmeter.properties file for the details of the settings. 
+ If the HTTPResponse.parser property is not set, JMeter reverts to the previous behaviour,
+ i.e. only text/html responses will be scanned</p>
 <links>
         <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-web-test-plan.html">Building a Web Test Plan</link>
@@ -150,7 +241,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 
 </component>
 
-<component name="JDBC Request" index="&sect-num;.1.3" screenshot="gen-controller/jdbc-request.gif">
+<component name="JDBC Request" index="&sect-num;.1.3"  width="449" height="335" screenshot="jdbctest/jdbc-request.png">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
@@ -159,21 +250,61 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-		<property name="Variable Name" required="Yes">Name of the JMeter variable that the connection pool is bound to</property>
-		<property name="Query Only" required="Yes">Set this to true for Selects, otherwise False</property>
-        <property name="SQL Query" required="Yes">SQL query (for example, "select * from t_customers").</property>
+		<property name="Variable Name" required="Yes">
+		Name of the JMeter variable that the connection pool is bound to.
+		This must agree with the 'Variable Name' field of a JDBC Connection Configuration.
+		</property>
+		<property name="Query Type" required="Yes">Set this according to the statement type:
+		    <ul>
+		    <li>Select Statement</li>
+		    <li>Update Statement - use this for Inserts as well</li>
+		    <li>Callable Statement</li>
+		    <li>Prepared Select Statement</li>
+		    <li>Prepared Update Statement - use this for Inserts as well</li>
+		    <li>Commit</li>
+		    <li>Rollback</li>
+		    <li>Autocommit(false)</li>
+		    <li>Autocommit(true)</li>
+		    <li>Edit - this should be a variable reference that evaluates to one of the above</li>
+		    </ul>
+		</property>
+        <property name="SQL Query" required="Yes">
+        SQL query.
+        Do not enter a trailing semi-colon.
+        There is no need to use { and } to enclose Callable statements.
+        For example:
+        <ul>
+        <li>select * from t_customers where id=23</li>
+        <li>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)
+        <ul>
+        <li>Parameter values: tablename,filename</li>
+        <li>Parameter types:  VARCHAR,VARCHAR</li>
+        </ul>
+        </li>
+        The second example assumes you are using Apache Derby.
+        </ul>
+        </property>
+        <property name="Parameter values" required="Yes, if a prepared or callable statement has parameters">
+        Comma-separated list of parameter values. Use ]NULL[ to indicate a NULL parameter.
+        (If required, the null string can be changed by defining the property "jdbcsampler.nullmarker".)
+        <br></br>
+        There must be as many values as there are placeholders in the statement.
+        </property>
+        <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
+        Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        <br></br>
+        There must be as many values as there are placeholders in the statement.
+        </property>
 </properties>
 
 <links>
-        <link href="test_plan.html#assertions">Assertion</link>
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
-        <complink name="JDBC SQL Query Defaults"/>
 </links>
 
 </component>
 
-<component name="Java Request" index="&sect-num;.1.4" screenshot="java_request.gif">
+<component name="Java Request" index="&sect-num;.1.4"  width="406" height="307" screenshot="java_request.png">
 
 <description><p>This sampler lets you control a java class that implements the
 JavaSamplerClient interface.  By writing your own implementation of this interface,
@@ -181,8 +312,16 @@ you can use JMeter to harness multiple threads, input parameter control, and
 data collection.</p>
 <p>The pull-down menu provides the list of all such implementations found by
 JMeter in its classpath.  The parameters can then be specified in the
-table below - as defined by your implementation.  A simple example (SleepTest) is
-provided.</p></description>
+table below - as defined by your implementation.  Two simple examples (JavaTest and SleepTest) are provided.
+</p>
+<p>
+The JavaTest example sampler can be useful for checking test plans, because it allows one to set
+values in almost all the fields. These can then be used by Assertions, etc.
+The fields allow variables to be used, so the values of these can readily be seen.
+</p>
+</description>
+
+<note>The Add/Delete buttons don't serve any purpose at present.</note>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler
@@ -193,38 +332,120 @@ provided.</p></description>
         arguments that will be passed to the sampled class.  All arguments
         are sent as Strings.</property>
         </properties>
-
 </component>
 
-<component name="SOAP/XML-RPC Request" index="&sect-num;.1.5" screenshot="soap_sampler.png">
+<p>The sleep time is calculated as follows:</p>
+<pre>
+SleepTime is in milliseconds
+SleepMask is used to add a "random" element to the time:
+totalSleepTime = SleepTime + (System.currentTimeMillis() % SleepMask)
+</pre>
+<component name="SOAP/XML-RPC Request" index="&sect-num;.1.5"  width="474" height="236" screenshot="soap_sampler.png">
 
 <description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
 used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
-POST content. To change the "Content-type", use the HeaderManager. The sampler will pick up any
-required headers from the HeaderManager. The primary difference between the soap sampler and
+POST content. 
+To change the "Content-type" from the default of "text/html", use a HeaderManager. 
+Note that the sampler will use all the headers from the HeaderManager.
+If a SOAP action is specified, that will override any SOAPaction in the HeaderManager.
+The primary difference between the soap sampler and
 webservice sampler, is the soap sampler uses raw post and does not require conformance to
 XML.</p>
+<note>For versions of JMeter later than 2.2, the sampler no longer uses chunked encoding by default.<br/>
+For screen input, it now always uses the size of the data.<br/>
+File input uses the file length as determined by Java.<br/>
+On some OSes this may not work for all files, in which case add a child Header Manager
+with Content-Length set to the actual length of the file.<br/>
+Or set Content-Length to -1 to force chunked encoding.
+</note>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler
          that is shown in the tree.</property>
         <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
-        <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC
-        instructions.</property>
+        <property name="Send SOAP action" required="No">Send a SOAP action header? (overrides the Header Manager)</property>
+        <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC instructions.
+        Not used if the filename is provided.
+        </property>
+        <property name="Filename" required="No">If specified, then the contents of the file are sent, and the Data field is ignored</property>
         </properties>
 
 </component>
 
-<component name="LDAP Request" index="&sect-num;.1.6" screenshot="ldap_request.png">
-  <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to a LDAP server.
+<component name="WebService(SOAP) Request" index="&sect-num;.1.6"  width="536" height="934" screenshot="webservice_sampler.png">
+<description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
+ It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
+ The sampler uses Apache SOAP driver to serialize the message and set the header
+ with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
+ handling, since Apache SOAP currently does not provide support for it. Both IBM
+ and SUN provide WSDL drivers. There are 3 options for the post data: text area,
+ external file, or directory. If you want the sampler to randomly select a message,
+ use the directory. Otherwise, use the text area or a file. The if either the
+ file or path are set, it will not use the message in the text area. If you need
+ to test a soap service that uses different encoding, use the file or path. If you
+ paste the message in to text area, it will not retain the encoding and will result
+ in errors. Save your message to a file with the proper encoding, and the sampler
+ will read it as java.io.FileInputStream.</p>
+ <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
+ requires the libs. Because mail.jar and activation.jar are distributed by Sun,
+ you have to download it separately.</p>
+ <p>An important note on the sampler is it will automatically use the proxy host
+ and port passed to JMeter from command line, if thoe fields in the sampler are
+ left blank. If a sampler has values in the proxy host and port text field, it
+ will use the ones provided by the user. This behavior may not be what users
+ expect.</p>
+ <p>By default, the webservice sampler set SOAPHTTPConnection.setMaintainSession
+ (true). If you need to maintain the session, add a blank Header Manager. The
+ sampler uses the Header Manager to store the SOAPHTTPConnection object, since
+ there apache soap does provide a easy way to get and set the cookies.</p>
+ <p><b>Note:</b> If you are using CSVDataSet, do not check "Memory Cache". If memory
+ cache is checked, it will not iterate to the next value. That means all the requests
+ will use the first value.</p>
+ <p>Make sure you use &amp;lt;soap:Envelope rather than &amp;lt;Envelope. For example:</p>
+ <pre>
+&amp;lt;?xml version="1.0" encoding="utf-8"?>
+&amp;lt;soap:Envelope 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+&amp;lt;soap:Body>
+&amp;lt;foo xmlns="http://clients-xlmns"/>
+&amp;lt;/soap:Body>
+&amp;lt;/soap:Envelope>
+</pre>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this sampler
+         that is shown in the tree.</property>
+        <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
+        <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
+        <property name="Protocol" required="Yes">HTTP or HTTPS are acceptable protocol.</property>
+        <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
+        <property name="Port Number" required="Yes">Port Number.</property>
+        <property name="Path" required="Yes">Path for the webservice.</property>
+        <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
+        <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
+        <property name="Soap file" required="No">File containing soap message</property>
+        <property name="Message Folder" required="No">Folder containing soap files</property>
+        <property name="Memory cache" required="Yes">caches the request data</property>
+        <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
+        <property name="Proxy Host" required="No">Proxy hostname</property>
+        <property name="Proxy Port" required="No">Proxy host port</property>
+        </properties>
+
+</component>
+
+<component name="LDAP Request" index="&sect-num;.1.7"  width="505" height="476" screenshot="ldap_request.png">
+  <description>This Sampler lets you send a different Ldap request(Add, Modify, Delete and Search) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
       Configuration Element so you do not have to enter the same information for each
       LDAP Request.</p> The same way the <complink name="Login Config Element"/> also using for Login and password.
   </description>
 
-  <p>There are two ways to create test cases for testing a LDAP Server.</p>
+  <p>There are two ways to create test cases for testing an LDAP Server.</p>
   <ol><li>Inbuilt Test cases.</li>
     <li>User defined Test cases.</li></ol>
 
@@ -291,23 +512,24 @@ XML.</p>
                                       </properties>
 
                                       <links>
-                                        <link href="build-ldap-test-plan.html">Building a Ldap Test Plan</link>
+                                        <link href="build-ldap-test-plan.html">Building an Ldap Test Plan</link>
                                         <complink name="LDAP Request Defaults"/>
                                       </links>
 
 </component>
-<component name="LDAP Extended Request (ALPHA)" index="&sect-num;.1.6b" screenshot="ldapext_request.png">
-  <description>This Sampler can send all 8 different LDAP request to a LDAP server. It is an extended version of the LDAP sampler,
+
+<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="594" height="309" screenshot="ldapext_request.png">
+  <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
-      using an <complink name="LDAP Extended Request Defaults (ALPHA)"/>
+      using an <complink name="LDAP Extended Request Defaults"/>
       Configuration Element so you do not have to enter the same information for each
       LDAP Request.</p> </description>
 
    <p>There are nine test operations defined. These operations are given below:</p>
     <ol>
-      <li>Thread bind</li>
-      <p>Any LDAP request is part of a LDAP session, so the first thing that should be done is starting a session to the LDAP server.
+      <li><b>Thread bind</b></li>
+      <p>Any LDAP request is part of an LDAP session, so the first thing that should be done is starting a session to the LDAP server.
        For starting this session a thread bind is used, which is equal to the LDAP "bind" operation.
        The user is requested to give a username (Distinghuised name) and password, 
        which will be used to initiate a session.
@@ -324,15 +546,16 @@ XML.</p>
      <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
      If is is incorrect, the sampler will return an error and revert to an anonymous bind.</property>
     </properties>
-         
-      <li>Thread unbind</li>
+ <br />       
+      <li><b>Thread unbind</b></li>
       <p>This is simply the operation to end a session. 
       It is equal to the LDAP "unbind" operation.</p>
      <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     </properties>
      
-      <li>Single bind/unbind</li>
+ <br />       
+      <li><b>Single bind/unbind</b></li>
 		<p> This is a combination of the LDAP "bind" and "unbind" operations.
 		It can be used for an authentication request/password check for any user. It will open an new session, just to
 		check the validity of the user/password combination, and end the session again.</p>
@@ -343,7 +566,8 @@ XML.</p>
      If is is incorrect, the sampler will return an error.</property>
      </properties>
 		
-      <li>Rename entry</li>
+ <br />       
+      <li><b>Rename entry</b></li>
        <p>This is the LDAP "moddn" operation. It can be used to rename an entry, but 
        also for moving an entry or a complete subtree to a different place in 
        the LDAP tree.  </p>
@@ -355,7 +579,8 @@ XML.</p>
       relative to the given DN in the thread bind operation.</property>
      </properties>
        
-        <li>Add test</li>
+ <br />       
+        <li><b>Add test</b></li>
        <p>This is the ldap "add" operation. It can be used to add any kind of 
        object to the LDAP server.  </p>
     <properties>
@@ -366,7 +591,8 @@ XML.</p>
      values several times to the list.</property>
      </properties>
        
-      <li>Delete test</li>
+ <br />       
+      <li><b>Delete test</b></li>
        <p> This is the LDAP "delete" operation, it can be used to delete an 
        object from the LDAP tree </p>
     <properties>
@@ -374,7 +600,8 @@ XML.</p>
       <property name="Delete" required="Yes">Distinghuished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
       </properties>
        
-      <li>Search test</li>
+ <br />       
+      <li><b>Search test</b></li>
        <p>This is the LDAP "search" operation, and will be used for defining searches.  </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
@@ -388,8 +615,9 @@ XML.</p>
       <property name="Return object" required="No">Whether the object will be returned (true) or not (false). Default=false</property>
       <property name="Dereference aliases" required="No">If true, it will dereference aliases, if false, it will not follow them (default=false)</property>
      </properties>
-       .
-      <li>Modification test</li>
+
+ <br />       
+      <li><b>Modification test</b></li>
        <p>This is the LDAP "modify" operation. It can be used to modify an object. It
        can be used to add, delete or replace values of an attribute. </p>
     <properties>
@@ -397,12 +625,13 @@ XML.</p>
       <property name="Entry name" required="Yes">Distinghuished name of the object you want to modify, relative 
       to the given DN in the thread bind operation</property>
      <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any 
-     valid LDAP operationCode (add, delete or replace). If you don't specify a value with a delete operation,
+     valid LDAP operationCode (add, delete/remove or replace). If you don't specify a value with a delete operation,
      all values of the given attribute will be deleted. If you do specify a value in a delete operation, only 
      the given value will be deleted. If this value is non-existent, the sampler will fail the test.</property>
      </properties>
        
-      <li>compare</li>
+ <br />       
+      <li><b>Compare</b></li>
        <p>This is the LDAP "compare" operation. It can be used to compare the value 
        of a given attribute with some already known value. In reality this is mostly 
        used to check whether a given person is a member of some group. In such a case
@@ -418,61 +647,16 @@ XML.</p>
     </ol>
        
     <links>
-      <link href="build-ldapext-test-plan.html">Building a Ldap Test Plan</link>
-      <complink name="LDAP Extended Request Defaults (ALPHA)"/>
+      <link href="build-ldapext-test-plan.html">Building an LDAP Test Plan</link>
+      <complink name="LDAP Extended Request Defaults"/>
     </links>
 
 </component>
 
 
-<component name="WebService(SOAP) Request" index="&sect-num;.1.7" screenshot="webservice_sampler.png">
-<center><h2>(Beta Code)</h2></center>
-<description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
- It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
- The sampler uses Apache SOAP driver to serialize the message and set the header
- with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
- handling, since Apache SOAP currently does not provide support for it. Both IBM
- and SUN provide WSDL drivers. There are 3 options for the post data: text area,
- external file, or directory. If you want the sampler to randomly select a message,
- use the directory. Otherwise, use the text area or a file. The if either the
- file or path are set, it will not use the message in the text area. If you need
- to test a soap service that uses different encoding, use the file or path. If you
- paste the message in to text area, it will not retain the encoding and will result
- in errors. Save your message to a file with the proper encoding, and the sampler
- will read it as java.io.FileInputStream.</p>
- <p>The sampler requires mail.jar and activation.jar. This is because Apache SOAP
- requires the libs. Because mail.jar and activation.jar are distributed by Sun,
- you have to download it separately.</p>
- <p>An important note on the sampler is it will automatically use the proxy host
- and port passed to JMeter from command line, if thoe fields in the sampler are
- left blank. If a sampler has values in the proxy host and port text field, it
- will use the ones provided by the user. This behavior may not be what users
- expect.</p>
- <p>By default, the webservice sampler set SOAPHTTPConnection.setMaintainSession
- (true). If you need to maintain the session, add a blank Header Manager. The
- sampler uses the Header Manager to store the SOAPHTTPConnection object, since
- there apache soap does provide a easy way to get and set the cookies.</p>
-</description>
 
-<properties>
-        <property name="Name" required="No">Descriptive name for this sampler
-         that is shown in the tree.</property>
-        <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
-        <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
-        <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
-        <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
-        <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
-        <property name="Soap file" required="No">File containing soap message</property>
-        <property name="Message Folder" required="No">Folder containing soap files</property>
-        <property name="Memory cache" required="Yes">caches the request data</property>
-        <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
-        <property name="Proxy Host" required="No">Proxy hostname</property>
-        <property name="Proxy Port" required="No">Proxy host port</property>
-        </properties>
 
-</component>
-
-<component name="Access Log Sampler" index="&sect-num;.1.8" screenshot="">
+<component name="Access Log Sampler" index="&sect-num;.1.9"  width="582" height="301" screenshot="accesslogsampler.png">
 <center><h2>(Alpha Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
@@ -525,12 +709,17 @@ StandardGenerator and TCLogParser.
 
 </component>
 
-<component name="BeanShell Sampler" index="&sect-num;.1.9" screenshot="">
+<component name="BeanShell Sampler" index="&sect-num;.1.10"  width="601" height="244" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
-		<br/>
+		<br></br>
         For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
 </p>
 	</description>
 <properties>
@@ -546,7 +735,7 @@ and Samplers are only called from a single thread
 If the property "beanshell.sampler.init" is defined, it is passed to the Interpreter
 as the name of a sourced file.
 This can be used to define common methods and variables. 
-There is a sample init file in the bin directory: BeanShellFunction.bshrc.
+There is a sample init file in the bin directory: BeanShellSampler.bshrc.
 </p><p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p>
 		<p>Before invoking the script, some variables are set up in the BeanShell interpreter:
@@ -566,7 +755,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseMessage = "OK"</li>
 			<li>IsSuccess = true</li>
 			<li>ctx - JMeterContext</li>
-			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value");</li>
+			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
 		</ul>
 		<p>When the script completes, control is returned to the Sampler, and it copies the contents
 			of the following script variables into the corresponding variables in the SampleResult:</p>
@@ -575,7 +764,12 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseMessage - for example "OK"</li>
 			<li>IsSuccess - true/false</li>
 			</ul>
-			<p>The Sampler ResponseData is set from the return value of the script.</p>
+			<p>The Sampler ResponseData is set from the return value of the script.
+			Since version 2.1.2, if the script returns null, it can set the response directly, by using the method 
+			SampleResponse.setResponseData(data), where data is either a String or a byte array.
+			The data type defaults to "text", but can be set to binary by using the method
+			SampleResponse.setDataType(SampleResponse.BINARY).
+			</p>
 			<p>The SampleResult variable gives the script full access to all the fields and
 				methods in the SampleResult. For example, the script has access to the methods
 				setStopThread(boolean) and setStopTest(boolean).
@@ -588,30 +782,83 @@ if (bsh.args[0].equalsIgnoreCase("StopThread")) {
     SampleResult.setStopThread(true);
 }
 return "Data from sample with Label "+Label;
+//or, since version 2.1.2
+SampleResult.setResponseData("My data");
+return null;
 </pre>
+<p>Another example:<br></br> ensure that the property <b>beanshell.sampler.init=BeanShellSampler.bshrc</b> is defined in jmeter.properties. 
+The following script will show the values of all the variables in the ResponseData field:
+</p>
+<pre>
+return getVariables();
+</pre>
+<p>
+For details on the methods available for the various classes (JMeterVariables, SampleResult etc) please check the Javadoc or the source code.
+Beware however that misuse of any methods can cause subtle faults that may be difficult to find ...
+</p>
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.10" screenshot="">
-<note>This is Alpha code</note>
+<component name="BSF Sampler" index="&sect-num;.1.11"  width="396" height="217" screenshot="bsfsampler.png">
 	<description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
-		
-		<br></br>
-		Please note that the BSF jar file is not included with JMeter; it needs to be separately downloaded.
-		For full details, please see the BSF web-site at http://bsf.jakarta.apache.org/.
-		
+		See the <a href="http://jakarta.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
+		website for details of the languages supported.
+		You may need to download the appropriate jars for the language; they should be put in the JMeter <b>lib</b> directory.
 		</p>
 	</description>
 <properties>
-	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
-	<property name="Script File" required="no">Name of a file to be used as a BeanShell script</property>
-	<property name="Script" required="no">Script to be passed to BeanShell</property>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.</property>
+	<property name="Script File" required="No">Name of a file to be used as a BSF script</property>
+	<property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
+	<property name="Script" required="Yes (unless script file is provided)">Script to be passed to BSF language</property>
 </properties>
-TBC
+<p>
+If a script file is supplied, that will be used, otherwise the script will be used.</p>
+<p>
+Before invoking the script, some variables are set up:
+</p>
+<p>
+The contents of the Parameters field is put into the variable "Parameters".
+The string is also split into separate tokens using a single space as the separator, and the resulting list
+is stored in the String array args.
+</p>
+<p>
+The full list of variables that is set up is as follows:</p>
+<ul>
+<li>log - the Logger</li>
+<li>Label - the Sampler label</li>
+<li>FileName - the file name, if any</li>
+<li>Parameters - text from the Parameters field</li>
+<li>args - the parameters, split as described above</li>
+<li>SampleResult - pointer to the current SampleResult</li>
+<li>ctx - JMeterContext</li>
+<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
+</ul>
+<p>
+The Sampler ResponseData is set from the return value of the script.
+If the script returns null, it can set the response directly, by using the method 
+SampleResponse.setResponseData(data), where data is either a String or a byte array.
+The data type defaults to "text", but can be set to binary by using the method
+SampleResponse.setDataType(SampleResponse.BINARY).
+</p>
+<p>
+The SampleResult variable gives the script full access to all the fields and
+methods in the SampleResult. For example, the script has access to the methods
+setStopThread(boolean) and setStopTest(boolean).
+</p>
+<p>
+Unlike the Beanshell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
+Currently the only way to changes these is via the SampleResponse methods:
+<ul>
+<li>SampleResponse.setSuccessful(true/false)</li>
+<li>SampleResponse.setResponseCode("code")</li>
+<li>SampleResponse.setResponseMessage("message")</li>
+</ul>
+</p>
 </component>
 
-<component name="TCP Sampler" index="&sect-num;.1.11" screenshot="">
+<component name="TCP Sampler" index="&sect-num;.1.12"  width="631" height="305" screenshot="tcpsampler.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -632,8 +879,9 @@ TBC
 		<ul>
 			<li>tcp.status.prefix - text that precedes a status number</li>
 			<li>tcp.status.suffix - text that follows a status number</li>
-			<li>tcp.status.properties - name of property file</li>
+			<li>tcp.status.properties - name of property file to convert status codes to messages</li>
 			<li>tcp.handler - Name of TCP Handler class (default TCPClientImpl)</li>
+			<li>tcp.eolByte - decimal value. Defines the end of line byte value; used to determine when a response has been received</li>
 		</ul>
 		The class that handles the connection is defined by the property tcp.handler. 
 		If not found, the class is then searched for in the package org.apache.jmeter.protocol.tcp.sampler.
@@ -671,7 +919,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Publisher" index="&sect-num;.1.12" screenshot="">
+<component name="JMS Publisher" index="&sect-num;.1.13"  width="438" height="750" screenshot="jmspublisher.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -680,6 +928,7 @@ TBC
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -696,7 +945,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Subscriber" index="&sect-num;.1.13" screenshot="">
+<component name="JMS Subscriber" index="&sect-num;.1.14"  width="497" height="434" screenshot="jmssubscriber.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -705,6 +954,7 @@ TBC
 		numerous JMS servers on the market and several open source options.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -721,7 +971,7 @@ TBC
 </properties>
 </component>
 
-<component name="JMS Point-to-Point" index="&sect-num;.1.14" screenshot="jms/JMS_Point-to-Point.png">
+<component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="568" height="730" screenshot="jms/JMS_Point-to-Point.png">
 <note>ALPHA CODE</note>
 	<description>
 		<p>
@@ -729,6 +979,7 @@ TBC
         It is different from pub/sub messages and is generally used for handling transactions.
 		</p>
 		<br></br>
+<note>JMeter does not include the JMS jar; this must be downloaded and put in the lib directory</note>
 	</description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -755,6 +1006,9 @@ TBC
       The timeout in milliseconds for the reply-messages. If a reply has not been received within the specified
       time, the specific testcase failes and the specific reply message received after the timeout is discarded.
   </property>
+  <property name="Use non-persistent delivery mode?" required="Yes">
+      Whether to set DeliveryMode.NON_PERSISTENT.
+  </property>
   <property name="Content" required="No">
       The content of the message.
   </property>
@@ -775,94 +1029,120 @@ TBC
 </properties>
 </component>
 
-<component name="Test Action" index="&sect-num;.1.15" screenshot="test_action.png">
-<description>TBA
+
+
+<component name="JUnit Request" index="&sect-num;.1.16"  width="522" height="405" screenshot="junit_sampler.png">
+<description>
+The current implementation supports standard Junit convention and extensions. It also
+includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works like the
+JavaSampler with some differences.
+<br></br>1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
+<br></br>2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
+<br></br>3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
+<br></br>4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
+<br></br>5. Each time the test method is called, Jmeter will pass the result to the listeners.
+<br></br>6. Support for oneTimeSetUp and oneTimeTearDown is done as a method. Since Jmeter is multi-threaded, we cannot call oneTimeSetUp/oneTimeTearDown the same way Maven does it.
+<br></br>7. The sampler reports unexpected exceptions as errors.
+There are some important differences between standard JUnit test runners and JMeter's
+implementation. Rather than make a new instance of the class for each test, JMeter
+creates 1 instance per sampler and reuses it.<br></br>
+The current implementation of the sampler will try to create an instance using the string constructor first. If the test class does not declare a string constructor, the sampler will look for an empty constructor. Example below:&lt;br>
+&lt;br>
+Empty Constructor:&lt;br>
+public class myTestCase {&lt;br>
+  public myTestCase() {}&lt;br>
+}&lt;br>
+&lt;br>
+String Constructor:&lt;br>
+public class myTestCase {&lt;br>
+  public myTestCase(String text) {&lt;br>
+    super(text);&lt;br>
+  }&lt;br>
+}&lt;br>
+By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.&lt;br>
+General Guidelines<br></br>
+If you use setUp and tearDown, make sure the methods are declared public. If you do not, the test may not run properly.
+<br></br>
+Here are some general guidelines for writing Junit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.&lt;br>
+&lt;br>
+1. Write the setUp and tearDown methods so they are thread safe. This generally means avoid using static memebers.&lt;br>
+2. Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a descrete operation, it makes it easier to combine test methods to create new test plans.&lt;br>
+3. Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default Junit behavior.&lt;br>
+4. If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.&lt;br>
+5. Each sampler creates an instance of the test class, so write your test so the setup happens in oneTimeSetUp and oneTimeTearDown.
 </description>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Package filter" required="">Comma separated list of packages to show. Example, org.apache.jmeter,junit.framework.</property>
+  <property name="Class name" required="">Fully qualified name of the JUnit test class.</property>
+  <property name="Constructor string" required="">String pass to the string constructor. If a string is set, the sampler will use the
+   string constructor instead of the empty constructor.</property>
+  <property name="Test method" required="">The method to test.</property>
+  <property name="Success message" required="">A descriptive message indicating what success means.</property>
+  <property name="Success code" required="">An unique code indicating the test was successful.</property>
+  <property name="Failure message" required="">A descriptive message indicating what failure means.</property>
+  <property name="Failure code" required="">An unique code indicating the test failed.</property>
+  <property name="Error message" required="">A description for errors.</property>
+  <property name="Error code" required="">Some code for errors. Does not need to be unique.</property>
+  <property name="Do not call setUp and tearDown" required="">Set the sampler not to call setUp and tearDown.
+   By default, setUp and tearDown should be called. Not calling those methods could affect the test and make it inaccurate.
+    This option should only be used with calling oneTimeSetUp and oneTimeTearDown. If the selected method is oneTimeSetUp or oneTimeTearDown,
+     this option should be checked.</property>
 </properties>
 </component>
+
+<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="344" height="318" screenshot="mailreader_sampler.png">
+<description>TBA</description>
+</component>
+
+<component name="Test Action" index="&sect-num;.1.18"  width="304" height="232" screenshot="test_action.png">
+<description>
+The Test Action sampler is a sampler that is intended for use in a conditional controller.
+Rather than generate a sample, the test element eithers pauses - or stops the selected target.
+<p>This sampler can also be useful in conjunction with the Transaction Controller, as it allows
+pauses to be included without needing to generate a sample. 
+For variable delays, set the pause time to zero, and add a Timer as a child.</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Target" required="Yes">Current Thread / All Threads (ignored for Pause)</property>
+  <property name="Action" required="Yes">Pause / Stop</property>
+  <property name="Duration" required="Yes">How long to pause for (milliseconds)</property>
+</properties>
+</component><a href="#">^</a>
 
 </section>
 
 <section name="&sect-num;.2 Logic Controllers" anchor="logic_controllers">
 <description>
-	<br></br>
+	<br>Logic Controllers determine the order in which Samplers are processed.</br>
 </description>
 
-<component index="&sect-num;.2.1" name="Interleave Controller" screenshot="logic-controller/interleave-controller.png">
-<description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
-other controllers for each loop iteration. </p>
+<component name="Simple Controller" index="&sect-num;.2.1" anchor="simple_controller"  width="390" height="62" screenshot="logic-controller/simple-controller.gif">
+<description>
+<p>The Simple Logic Controller lets  you organize your Samplers and other
+Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
+storage device.</p>
 </description>
 <properties>
-        <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
 
-<!--
-For example, if you
-add three HTTP Requests to an Interleave Controller and configure the Thread
-Group to loop, here is the sequence in which JMeter sends the requests:
-</p>
-<table border="1" cellspacing="0" cellpadding="4">
-<tr valign="top"><td>Loop Iteration</td><td>Description</td></tr>
-<tr valign="top"><td>1</td><td>JMeter sends the first HTTP Request.</td></tr>
-<tr valign="top"><td>2</td><td>JMeter sends the second HTTP Request.</td></tr>
-<tr valign="top"><td>3</td><td>JMeter sends the third HTTP Request.</td></tr>
-<tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request.</td></tr>
-<tr valign="top"><td>5</td><td>JMeter sends the second HTTP Request.</td></tr>
-<tr valign="top"><td>(and so on)</td><td>...</td></tr>
-</table>
--->
-<example title="Simple Interleave Example" anchor="simple_interleave_example">
+<example title="Using the Simple Controller" anchor="simple_controller_example">
+<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure 6).
+In this example, we created a Test Plan that sends two Ant HTTP requests and two
+Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
+Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
+processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
+following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
+Note, the File Reporter
+is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
+<figure image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
 
-<p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 1).  In this example,
-we configured the Thread Group to have two threads and a loop count of five, for a total of ten
-requests per thread. See the table below for the sequence JMeter sends the HTTP Requests.</p>
-
-<figure image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
-
-<table border="1" cellspacing="0" cellpadding="4">
-<tr valign="top"><td>Loop Iteration</td><td>Each JMeter Thread Sends These HTTP Requests</td></tr>
-<tr valign="top"><td>1</td><td>News Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
-<tr valign="top"><td>2</td><td>FAQ Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
-<tr valign="top"><td>3</td><td>Gump Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
-<tr valign="top"><td>4</td><td>Because there are no more requests in the controller,<br> </br> JMeter starts over and sends the first HTTP Request, which is the News Page.</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
-<tr valign="top"><td>5</td><td>FAQ Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
-</table>
-
-
-</example>
-
-<example title="Useful Interleave Example" anchor="useful_interleave_example">
-
-<p><a href="../demos/InterleaveTestPlan2.jmx">Download</a> another example (see Figure 2).  In this
-example, we configured the Thread Group
-to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
-two Interleave Controllers inside of it.</p>
-
-<figure image="logic-controller/interleave2.png">
-        Figure 2 - Interleave Controller Example 2
-</figure>
-
-<p>The outer Interleave Controller alternates between the
-two inner ones.  Then, each inner Interleave Controller alternates between each of the HTTP Requests.  Each JMeter
-thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.
-Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
-
-<figure image="logic-controller/interleave3.png">
-        Figure 3 - Interleave Controller Example 3
-</figure>
-<p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.  However, if "ignore sub-controller blocks" was checked on the main interleave controller, then the order would be: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
 </example>
 </component>
 
-<component index="&sect-num;.2.2" name="Loop Controller" anchor="loop" screenshot="logic-controller/loop-controller.gif">
+<component name="Loop Controller" index="&sect-num;.2.2" anchor="loop"  width="397" height="111" screenshot="logic-controller/loop-controller.gif">
 <description><p>If you add Generative or Logic Controllers to a Loop Controller, JMeter will
 loop through them a certain number of times, in addition to the loop value you
 specified for the Thread Group.  For example, if you add one HTTP Request to a
@@ -901,8 +1181,7 @@ is configured to store the results in a file named "loop-test.dat" in the curren
 
 </component>
 
-<component index="&sect-num;.2.3" name="Once Only Controller" anchor="once_only_controller"
-screenshot="logic-controller/once-only-controller.gif">
+<component name="Once Only Controller" index="&sect-num;.2.3" anchor="once_only_controller"  width="390" height="62" screenshot="logic-controller/once-only-controller.gif">
 <description>
 <p>The Once Only Logic Controller tells JMeter to process the controller(s) inside it only once, and pass over any requests under it
 during further iterations through the test plan.</p>
@@ -929,31 +1208,79 @@ Bug Page, Bug Page. Note, the File Reporter is configured to store the results i
 </example>
 </component>
 
-<component index="&sect-num;.2.4" name="Simple Controller" anchor="simple_controller" screenshot="logic-controller/simple-controller.gif">
-<description>
-<p>The Simple Logic Controller lets  you organize your Samplers and other
-Logic Controllers.  Unlike other Logic Controllers, this controller provides no functionality beyond that of a
-storage device.</p>
+<component name="Interleave Controller" index="&sect-num;.2.4"  width="219" height="90" screenshot="logic-controller/interleave-controller.png">
+<description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
+other controllers for each loop iteration. </p>
 </description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
 </properties>
 
-<example title="Using the Simple Controller" anchor="simple_controller_example">
-<p><a href="../demos/SimpleTestPlan.jmx">Download</a> this example (see Figure 6).
-In this example, we created a Test Plan that sends two Ant HTTP requests and two
-Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
-Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
-processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
-following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
-Note, the File Reporter
-is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-<figure image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
+<!--
+For example, if you
+add three HTTP Requests to an Interleave Controller and configure the Thread
+Group to loop, here is the sequence in which JMeter sends the requests:
+</p>
+<table border="1" cellspacing="0" cellpadding="4">
+<tr valign="top"><th>Loop Iteration</th><th>Description</th></tr>
+<tr valign="top"><td>1</td><td>JMeter sends the first HTTP Request.</td></tr>
+<tr valign="top"><td>2</td><td>JMeter sends the second HTTP Request.</td></tr>
+<tr valign="top"><td>3</td><td>JMeter sends the third HTTP Request.</td></tr>
+<tr valign="top"><td>4</td><td>Because there are no more requests in controller, JMeter start over and sends the first HTTP Request.</td></tr>
+<tr valign="top"><td>5</td><td>JMeter sends the second HTTP Request.</td></tr>
+<tr valign="top"><td>(and so on)</td><td>...</td></tr>
+</table>
+-->
+<example title="Simple Interleave Example" anchor="simple_interleave_example">
 
+<p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 1).  In this example,
+we configured the Thread Group to have two threads and a loop count of five, for a total of ten
+requests per thread. See the table below for the sequence JMeter sends the HTTP Requests.</p>
+
+<figure image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
+
+<table border="1" cellspacing="0" cellpadding="4">
+<tr valign="top"><th>Loop Iteration</th><th>Each JMeter Thread Sends These HTTP Requests</th></tr>
+<tr valign="top"><td>1</td><td>News Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>2</td><td>FAQ Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>3</td><td>Gump Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>4</td><td>Because there are no more requests in the controller,<br> </br> JMeter starts over and sends the first HTTP Request, which is the News Page.</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>5</td><td>FAQ Page</td></tr>
+<tr valign="top"><td>2</td><td>Log Page</td></tr>
+</table>
+
+
+</example>
+
+<example title="Useful Interleave Example" anchor="useful_interleave_example">
+
+<p><a href="../demos/InterleaveTestPlan2.jmx">Download</a> another example (see Figure 2).  In this
+example, we configured the Thread Group
+to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
+two Interleave Controllers inside of it.</p>
+
+<figure image="logic-controller/interleave2.png">
+        Figure 2 - Interleave Controller Example 2
+</figure>
+
+<p>The outer Interleave Controller alternates between the
+two inner ones.  Then, each inner Interleave Controller alternates between each of the HTTP Requests.  Each JMeter
+thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.
+Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
+
+<figure image="logic-controller/interleave3.png">
+        Figure 3 - Interleave Controller Example 3
+</figure>
+<p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.  However, if "ignore sub-controller blocks" was checked on the main interleave controller, then the order would be: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
 </example>
 </component>
 
-<component index="&sect-num;.2.5" name="Random Controller" screenshot="logic-controller/random-controller.gif">
+<component name="Random Controller" index="&sect-num;.2.5"  width="238" height="84" screenshot="logic-controller/random-controller.gif">
 <description>
 <p>The Random Logic Controller acts similarly to the Interleave Controller, except that
 instead of going in order through its sub-controllers and samplers, it picks one
@@ -968,38 +1295,19 @@ what results any given interaction will give</note>
 
 </component>
 
-<component index="&sect-num;.2.6" name="Recording Controller" screenshot="logic-controller/recording-controller.gif">
-<description>
-<p>The Recording Controller is a place holder indicating where the proxy server should
-record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
-recording using the <complink name="HTTP Proxy Server"/>, all recorded samples will by default
-be saved under the Recording Controller.</p>
 
-</description>
+
+<component name="Random Order Controller" index="&sect-num;.2.6"  width="358" height="131" screenshot="randomordercontroller.png">
+	<description>
+		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
+		 element at most once, but the order of execution of the nodes will be random.</p>
+	</description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 </properties>
-
 </component>
 
-<component index="&sect-num;.2.7" name="Module Controller" screenshot="module_controller.png">
-<description>
-<p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
-module effectively, one might have a number of Controllers under the <complink name="WorkBench"/>, each with a different series of
-samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
-the appropriate controller in it's drop down box.  This provides convenience for running many alternate test plans quickly and easily.
-</p>
-</description>
-<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
-<properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
-        the one you want to substitute in at runtime.</property>
-</properties>
-
-</component>
-
-<component index="&sect-num;.2.8" name="Throughput Controller" screenshot="throughput_controller.png">
+<component name="Throughput Controller" index="&sect-num;.2.7"  width="223" height="148" screenshot="throughput_controller.png">
 <description>
 <p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
 executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
@@ -1015,34 +1323,92 @@ setting is reset when a parent Loop Controller restarts.
 </properties>
 
 </component>
-<component name="If Controller" index="&sect-num;.2.9" screenshot="">
+
+<component name="Runtime Controller" index="&sect-num;.2.8"  width="358" height="131" screenshot="runtimecontroller.png">
+	<description>
+		<p>The Runtime Controller controls how long its children are allowed to run.
+		</p>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
+</properties>
+</component>
+
+<component name="If Controller" index="&sect-num;.2.9"  width="358" height="131" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
 	</description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Condition" required="yes">Javascript code that returns "true" or "false"</property>
+	<property name="Condition" required="Yes"><b>Javascript</b> code that returns "true" or "false"</property>
 </properties>
 	<p>Examples:
 		<ul>
 			<li>${COUNT} &lt; 10</li>
 			<li>"${VAR}" == "abcd"</li>
+			<li>"${JMeterThread.last_sample_ok}" == "true" (check if last sample succeeded)</li>
 		</ul>
 		If there is an error interpreting the code, the condition is assumed to be false, and a message is logged in jmeter.log.
 	</p>
 </component>
 
-<component name="Random Order Controller" index="&sect-num;.2.10" screenshot="">
+
+
+
+
+
+
+
+<component name="While Controller" index="&sect-num;.2.10"  width="358" height="131" screenshot="whilecontroller.png">
 	<description>
-		<p>The Random Order Controller is much like a Simple Controller in that it will execute each child
-		 element at most once, but the order of execution of the nodes will be random.</p>
+<p>
+The While Controller runs its children until the condition is "false".
+</p>
+
+<p>Possible condition values:</p>
+<ul>
+<li>blank - exit loop when last sample in loop fails</li>
+<li>LAST - exit loop when last sample in loop fails. 
+If the last sample just before the loop failed, don't enter loop.</li>
+<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
+</ul>
+<note>In contrast to the IfController, the condition is not evaluated as a JavaScript expression.
+The condition can be any variable or function that eventually evaluates to the string "false". 
+This allows the use of JavaScript, BeanShell, properties or variables as needed.
+</note>
+<br></br>
+For example:
+<ul>
+	<li>${VAR} - where VAR is set to false by some other test element</li>
+	<li>${__javaScript(${C}==10,dummy)}</li>
+	<li>${__javaScript("${VAR2}"=="abcd",dummy)}</li>
+	<li>${_P(property)} - where property is set to "false" somewhere else</li>
+</ul>
 	</description>
 <properties>
-	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Condition" required="Yes">blank, LAST, or variable/function</property>
 </properties>
 </component>
 
-<component name="ForEach Controller" index="&sect-num;.2.11" anchor="loop" screenshot="logic-controller/foreach-controller.png">
+<component name="Switch Controller" index="&sect-num;.2.11"  width="358" height="131" screenshot="switchcontroller.png">
+	<description>
+<p>
+The Switch Controller acts like the <complink name="Interleave Controller"/> 
+in that it runs one of the subordinate elements on each iteration, but rather than
+run them in sequence, the controller runs the element number defined by the switch value.
+</p>
+<p>If the switch value is out of range, it will run the zeroth element, 
+which therefore acts as the default.</p>
+</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
+</properties>
+</component>
+
+<component name="ForEach Controller" index="&sect-num;.2.12" anchor="loop"  width="410" height="153" screenshot="logic-controller/foreach-controller.png">
 <description><p>A ForEach controller loops through the values of a set of related variables. 
 When you add samplers (or controllers) to a ForEach controller, every sample sample (or controller)
 is executed one or more times, where during every loop the variable has a new value.
@@ -1114,75 +1480,97 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 </example>
 </component>
 
-<component name="Transaction Controller" index="&sect-num;.2.12" screenshot="">
-	<description>
-		<p>The Transaction Controller times how long it takes for all its children to run.
-			It then adds a "sample" entry to the test output with the total elapsed time.
-			The name of the element is used to name the "sample".
-		</p>
-	</description>
+<component name="Module Controller" index="&sect-num;.2.13"  width="409" height="255" screenshot="module_controller.png">
+<description>
+<p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
+module effectively, one might have a number of Controllers under the <complink name="WorkBench" />, each with a different series of
+samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
+the appropriate controller in its drop down box.  This provides convenience for running many alternate test plans quickly and easily.
+</p>
+</description>
+<note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
 <properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Module to Run" required="Yes">The module controller provides a list of all controllers loaded into the gui.  Select
+        the one you want to substitute in at runtime.</property>
 </properties>
+
 </component>
 
-<component name="Runtime Controller" index="&sect-num;.2.12" screenshot="">
-	<description>
-		<p>The Runtime Controller controls how long its children are allowed to run.
-		</p>
-	</description>
-<properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Runtime (seconds)" required="Yes">Desired runtime in seconds</property>
-</properties>
-</component>
-<component name="While Controller" index="15.2.13" screenshot="">
+<component name="Include Controller" index="&sect-num;.2.14"  width="419" height="118" screenshot="includecontroller.png">
 	<description>
 <p>
-The While Controller runs its children until the condition is "false".
+The include controller is designed to use an external jmx file. To use it, add
+samples to a simple controller, then save the simple controller as a jmx file.
+The file can then be used in a test plan.
 </p>
-
-<p>Possible condition values:</p>
-<ul>
-<li>blank - exit loop when last sample in loop fails</li>
-<li>LAST - exit loop when last sample in loop fails. 
-If the last sample just before the loop failed, don't enter loop.</li>
-<li>Otherwise - exit (or don't enter) the loop when the condition is equal to the string "false"</li>
-</ul>
-<note>In contrast to the IfController, the condition is not evaluated as a JavaScript expression.
-The condition can be any variable or function that eventually evaluates to the string "false". 
-This allows the use of JavaScript, BeanShell, properties or variables as needed.
+<note>
+This element does not support variables/functions in the filename field.<br></br>
+However, if the property <b>includecontroller.prefix</b> is defined, 
+the contents are used to prefix the pathname.
 </note>
-<br></br>
-For example:
-<ul>
-	<li>${VAR} - where VAR is set to false by some other test element</li>
-	<li>${__javaScript(${C}==10,dummy)}</li>
-	<li>${__javaScript("${VAR2}"=="abcd",dummy)}</li>
-	<li>${_P(property)} - where property is set to "false" somewhere else</li>
-</ul>
-	</description>
-<properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Condition" required="Yes">blank, LAST, or variable/function</property>
-</properties>
-</component>
-
-<component name="Switch Controller" index="&sect-num;.2.14" screenshot="">
-	<description>
-<p>
-The Switch Controller acts like the <complink name="Interleave Controller"/> 
-in that it runs one of the subordinate elements on each iteration, but rather than
-run them in sequence, the controller runs the element number defined by the switch value.
-</p>
-<p>If the switch value is out of range, it will run the zeroth element, 
-which therefore acts as the default.</p>
 </description>
 <properties>
-	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-	<property name="Switch Value" required="Yes">The number of the subordinate element to be invoked. Elements are numbered from 0.</property>
+	<property name="Filename" required="Yes">The file to include.</property>
 </properties>
 </component>
+
+<component name="Transaction Controller" index="&sect-num;.2.15"  width="358" height="131" screenshot="transactioncontroller.png">
+	<description>
+	    <p>
+	    The Transaction Comntroller is used to group samplers by generating an additional
+	    sample which totals the nested samples.
+	    For JMeter versions after 2.3, there are two modes of operation
+	    <ul>
+	    <li>additional sample is added after the nested samples</li>
+	    <li>additional sample is added as a parent of the nested samples</li>
+	    </ul>
+	    </p>
+		<p>
+		The generated sample time includes all the times for the nested samplers, and any timers etc.
+		Depending on the clock resolution, it may be slightly longer than the sum of the individual samplers plus timers.
+		The clock might tick after the controller recorded the start time but before the first sample starts.
+		Similarly at the end.
+		</p>
+		<p>The generated sample is only regarded as successful if all its sub-samples are successful.</p>
+		<p>
+		In parent mode, the individual samples can still be seen in the Tree View Listener,
+		but no longer appear as separate entries in other Listeners.
+		Also, the sub-samples do not appear in CSV log files, but they can be saved to XML files.
+		</p>
+		<note>
+		In parent mode, Assertions (etc) can be added to the Transaction Controller.
+		However by default they will be applied to both the individual samples and the overall transaction sample.
+		To limit the scope of the Assertions, use a Simple Controller to contain the samples, and add the Assertions
+		to the Simple Controller.
+		Parent mode controllers do not currently properly support nested transaction controllers of either type.
+		</note>
+	</description>
+<properties>
+	<property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+	<property name="Generate Parent Sample" required="Yes">
+	If checked, then the sample is generated as a parent of the other samples,
+	otherwise the sample is generated as an independent sample.
+	</property>
+</properties>
+</component>
+
+<component name="Recording Controller" index="&sect-num;.2.16"  width="417" height="70" screenshot="logic-controller/recording-controller.gif">
+<description>
+<p>The Recording Controller is a place holder indicating where the proxy server should
+record samples to.  During test run, it has no effect, similar to the Simple Controller.  But during
+recording using the <complink name="HTTP Proxy Server" />, all recorded samples will by default
+be saved under the Recording Controller.</p>
+
+</description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+</properties>
+
+</component>
+
+
+<a href="#">^</a>
 
 </section>
 
@@ -1190,18 +1578,34 @@ which therefore acts as the default.</p>
 <description>
 	<br></br>
 Most of the listeners perform several roles in addition to "listening"
-to the test results.  They frequently also provide means to view,
-save, and read saved test results.
+to the test results.  
+They also provide means to view, save, and read saved test results.
 <p>Note that Listeners are processed at the end of the scope in which they are found.</p>
 <p>
 The saving and reading of test results is generic.  The various
-listeners generally have a panel whereby one can specify the file to
-which the results will be written (or read).  By default,
-the results are stored as CSV
+listeners have a panel whereby one can specify the file to
+which the results will be written (or read from).
+By default, the results are stored as CSV
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
 <note>To read existing results and display them, use the file panel Browse button to open the file.
 </note>
-<p>To change the format, in jmeter.properties, find the following line:</p>
+<p>Results can be read from XML or CSV format files.
+When reading from CSV results files, the header (if present) is ignored.
+<b>In order to interpret a CSV file correctly, the appropriate properties must be set in jmeter.properties.</b>
+</p>
+<p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
+Most of the listeners currently keep a copy of every sample in their scope, apart from:
+</p>
+<ul>
+<li>Simple Data Writer</li>
+<li>BeanShell Listener</li>
+<li>Assertion Results</li>
+<li>Mailer Visualizer</li>
+<li>Monitor Results</li>
+<li>Summary Report</li>
+</ul>
+<p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
+<p>To change the default format, find the following line in jmeter.properties:</p>
 <p>jmeter.save.saveservice.output_format=csv</p>
 <p>Change "csv" to "xml" for greater detail.</p>
 <p>
@@ -1276,39 +1680,47 @@ HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
 Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
+<note>The entries in jmeter.properties are used to define the defaults; 
+these can be overriden for individual listeners by using the Configure button,
+as shown below. 
+The settings in jmeter.properties also apply to the listener that is added
+by using the -l command-line flag.
+</note>
 <p>
 The internal viewing capabilities are described in the following subsections.</p>
 	<br></br>
 
 </description>
-<component index="&sect-num;.3.1" name="Mailer Visualizer" screenshot="mailer_vis.png">
-<description><p>The mailer visualizer can be set up to send email if a test run receives too many
-failed responses from the server.</p></description>
 
-<properties>
-        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="From" required="Yes">Email address to send messages from.</property>
-        <property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
-        <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
-        server.</property>
-        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
-        <property name="Success Subject" required="No">Email subject line for success messages.</property>
-        <property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
-        email is sent.</property>
-        <property name="Success Limit" required="Yes">Once this number of successful responses are
-        received <strong>after previously reaching the failure limit</strong>, a success email
-        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
-        <property name="Test Mail" required="No"></property>
-        <property name="Failures" required="No">A field that keeps a running total of number
-        of failures so far received.</property>
-</properties>
+<component name="Sample Result Save Configuration" index="&sect-num;.3.1"  width="767" height="252" screenshot="sample_result_config.png">
+<description>
+<p>
+Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
+The defaults are defined as described in the previous section.
+</p>
+<p>Meaning of the sample attributes in the log files:</p>
+<ul>
+<li> t - elapsed time (ms)</li>
+<li>lt - latency = time to initial response (ms)</li>
+<li>ts - timestamp (ms since 1970)</li>
+<li> s - successful (true/false)</li>
+<li>lb - label</li>
+<li>rc - response code (e.g. 200)</li>
+<li>rm - response message (e.g. OK)</li>
+<li>tn - thread name</li>
+<li>dt - data type</li>
+<li>de - data encoding</li>
+</ul>
+</description>
 </component>
 
-<component index="&sect-num;.3.2" name="Graph Full Results" screenshot="">
+
+
+<component name="Graph Full Results" index="&sect-num;.3.2"  width="672" height="316" screenshot="graphfullresults.png">
 <description>No Description</description>
 </component>
 
-<component index="&sect-num;.3.3" name="Graph Results" screenshot="graph_results.png">
+<component name="Graph Results" index="&sect-num;.3.3"  width="605" height="435" screenshot="graph_results.png">
 <description><p>The Graph Results listener generates a simple graph that plots all sample times.  Along
 the bottom of the graph, the current sample (black), the current average of all samples(blue), the
 current standard deviation (red), and the current throughput rate (green) are displayed in milliseconds.</p>
@@ -1319,18 +1731,31 @@ real - your server in fact handled that many requests per minute, and you can in
 and/or decrease the delays to discover your server's maximum throughput.  Whereas if you made calculations
 that factored out delays and JMeter's processing, it would be unclear what you could conclude from that
 number.</p></description>
+<p>The following table briefly describes the items on the graph. 
+Further details on the precise meaning of the statistical terms can be found on the web
+ - e.g. Wikipedia - or by consulting a book on statistics.
+ </p>
+ <ul>
+ <li>Data - plot the actual data values</li>
+ <li>Average - plot the Average</li>
+ <li>Median - plot the Median (midway value)</li>
+ <li>Deviation - plot the Standard Deviation (a measure of the variation)</li>
+ <li>Throughput - plot the number of samples per unit of time</li>
+ </ul>
+ <p>The individual figures at the bottom of the display are the current values. 
+ "Latest Sample" is the current elapsed sample time, shown on the graph as "Data".</p>
 </component>
 
-<component index="&sect-num;.3.4" name="Spline Visualizer" screenshot="spline_visualizer.png">
+<component name="Spline Visualizer" index="&sect-num;.3.4"  width="581" height="440" screenshot="spline_visualizer.png">
 <description><p>The Spline Visualizer provides a view of all sample times from the start
 of the test till the end, regardless of how many samples have been taken.  The spline
 has 10 points, each representing 10% of the samples, and connected using spline
 logic to show a single continuous line.</p></description>
 </component>
 
-<component index="&sect-num;.3.5" name="Assertion Results" screenshot="assertion_results.png">
-<description><p>The Assertion Results visualizer shows the URL of each sample taken (no time information
-is shown).  It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
+<component name="Assertion Results" index="&sect-num;.3.5"  width="658" height="277" screenshot="assertion_results.png">
+<description><p>The Assertion Results visualizer shows the Label of each sample taken.
+It also reports failures of any <a href="test_plan.html#assertions">Assertions</a> that
 are part of the test plan.</p></description>
 
 <links>
@@ -1338,13 +1763,14 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component index="&sect-num;.3.6" name="View Results Tree" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6"  width="791" height="506" screenshot="view_results_tree.png">
 <description>The View Results Tree shows a tree of all sample responses, allowing you to view the
 response for any sample.  In addition to showing the response, you can see the time it took to get
 this response, and some response codes.
+Note that the Request panel only shows the headers added by JMeter.
+It does not show any headers (such as Host) that may be added by the HTTP protocol implementation.
 <p>
-There are three ways to view the response, selectable by a radio
-button.</p>
+There are several ways to view the response, selectable by a radio button.</p>
 <p>The default view shows all of the text contained in the
 response.</p>
 <p>The HTML view attempts to render the response as
@@ -1358,6 +1784,7 @@ If the checkbox is not selected, the renderer will not download images etc.
 <p>The Render XML view will show response in tree style. 
 Any DTD nodes or Prolog nodes will not show up in tree; however, response may contain those nodes.
 </p>
+<p>The Render JSON view will show the response in tree style (also handles JSON embedded in JavaScript).</p>
 </description>
 <p>
 	The Control Panel (above) shows an example of an HTML display.
@@ -1366,27 +1793,55 @@ Any DTD nodes or Prolog nodes will not show up in tree; however, response may co
 </p>
 </component>
 
-<component index="&sect-num;.3.7" name="Aggregate Report" screenshot="aggregate_report.png">
+<component name="Aggregate Report" index="&sect-num;.3.7"  width="762" height="235" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
-Once the test is done, the throughput is the actual through for the duration of the entire test.</description>
+Once the test is done, the throughput is the actual through for the duration of the entire test.
+<p>
+The thoughput is calculated from the point of view of the sampler target 
+(e.g. the remote server in the case of HTTP samples).
+JMeter takes into account the total time over which the requests have been generated.
+If other samplers and timers are in the same thread, these will increase the total time,
+and therefore reduce the throughput value. 
+So two identical samplers with different names will have half the throughput of two samplers with the same name.
+It is important to choose the sampler names correctly to get the best results from
+the Aggregate Report.
+</p>
+<note>
+Calculation of the Median and 90% Line values requires a lot of memory as details of every Sample have to be saved.
+See the <complink name="Summary Report"/> for a similar Listener that does not need so much memory.
+</note>
+<ul>
+<li>Label - The label of the sample.</li>
+<li># Samples - The number of samples for the URL</li>
+<li>Average - The average time of a set of results</li>
+<li>Median - The median is the time in the middle of a set of results.</li>
+<li>90% Line - the maximum time taken for the fastest 90% of the samples. #
+The remaining samples took longer than this.</li>
+<li>Min - The lowest time for the samples of the given URL</li>
+<li>Max - The longest time for the samples of the given URL</li>
+<li>Error % - Percent of requests with errors</li>
+<li>Throughput - Throughput measured in requests per second/minute/hour</li>
+<li>Kb/sec - The throughput measured in Kilobytes per second</li>
+</ul>
+</description>
 </component>
 
-<component index="&sect-num;.3.8" name="View Results in Table" screenshot="table_results.png">
+<component name="View Results in Table" index="&sect-num;.3.8"  width="643" height="678" screenshot="table_results.png">
 <description>This visualizer creates a row for every sample result.  Each sample result's URL,
 time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
 this visualizer uses a lot of memory. The last column shows the number of bytes for the
 response from the server.</description>
 </component>
 
-<component index="&sect-num;.3.9" name="Simple Data Writer" screenshot="">
+<component name="Simple Data Writer" index="&sect-num;.3.9"  width="649" height="157" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.</description>
 </component>
 
-<component index="&sect-num;.3.10" name="Monitor Results" screenshot="monitor_screencap.png">
+<component name="Monitor Results" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
 <description>
 <p>Monitor Results is a new Visualizer for displaying server
 status. It is designed for Tomcat 5, but any servlet container
@@ -1406,10 +1861,14 @@ aggressive and have a potential of impacting the server. With a buffer of
 1000 data points at 5 second intervals, the monitor would check the server
 status 12 times a minute or 720 times a hour. This means the buffer shows
 the performance history of each machine for the last hour.</p>
+<note>
+The monitor requires Tomcat 5 or above. 
+Use a browser to check that you can access the Tomcat status servlet OK.
+</note>
 </description>
 </component>
 
-<component index="&sect-num;.3.11" name="Distribution Graph (alpha)" screenshot="distribution_graph.png">
+<component name="Distribution Graph (alpha)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
 <description>
 <p>The distribution graph will display a bar for every unique response time. Since the
 granularity of System.currentTimeMillis() is 10 milliseconds, the 90% threshold should be
@@ -1427,6 +1886,97 @@ know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
+<component name="Aggregate Graph" index="&sect-num;.3.12"  width="839" height="770" screenshot="aggregate_graph.png">
+<description>The aggregate graph is similar to the aggregate report. The primary
+difference is the aggregate graph provides an easy way to generate bar graphs and save
+the graph as a PNG file. By default, the aggregate graph will generate a bar chart
+450 x 250 pixels.</description>
+</component>
+
+<component name="Mailer Visualizer" index="&sect-num;.3.13"  width="645" height="345" screenshot="mailervisualizer.png">
+<description><p>The mailer visualizer can be set up to send email if a test run receives too many
+failed responses from the server.</p></description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+        <property name="From" required="Yes">Email address to send messages from.</property>
+        <property name="Addressie(s)" required="Yes">Email address to send messages to.</property>
+        <property name="SMTP Host" required="No">IP address or host name of SMTP (email redirector)
+        server.</property>
+        <property name="Failure Subject" required="No">Email subject line for fail messages.</property>
+        <property name="Success Subject" required="No">Email subject line for success messages.</property>
+        <property name="Failure Limit" required="Yes">Once this number of failed responses are received, a failure
+        email is sent.</property>
+        <property name="Success Limit" required="Yes">Once this number of successful responses are
+        received <strong>after previously reaching the failure limit</strong>, a success email
+        is sent.  The mailer will thus only send out messages in a sequence of failed-succeeded-failed-succeeded, etc.</property>
+        <property name="Test Mail" required="No">Press this button to send a test mail</property>
+        <property name="Failures" required="No">A field that keeps a running total of number
+        of failures so far received.</property>
+</properties>
+</component>
+
+<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="768" height="230" screenshot="beanshell_listener.png">
+<description>
+<p>
+The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
+</p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>sampleResult - (SampleResult) - gives access to the previous SampleResult</li>
+<li>sampleEvent (SampleEvent) gives access to the current sample event</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+</component>
+
+<component name="Summary Report" index="&sect-num;.3.15"  width="643" height="255" screenshot="summary_report.png">
+<description>The summary report creates a table row for each differently named request in your
+test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
+<p>
+The thoughput is calculated from the point of view of the sampler target 
+(e.g. the remote server in the case of HTTP samples).
+JMeter takes into account the total time over which the requests have been generated.
+If other samplers and timers are in the same thread, these will increase the total time,
+and therefore reduce the throughput value. 
+So two identical samplers with different names will have half the throughput of two samplers with the same name.
+It is important to choose the sampler labels correctly to get the best results from
+the Report.
+</p>
+<ul>
+<li>Label - The label of the sample.</li>
+<li># Samples - The number of samples for the URL</li>
+<li>Average - The average elapsed time of a set of results</li>
+<li>Min - The lowest elapsed time for the samples of the given URL</li>
+<li>Max - The longest elapsed time for the samples of the given URL</li>
+<li>Std. Dev. - the standard deviation of the sample elapsed time</li>
+<li>Error % - Percent of requests with errors</li>
+<li>Throughput - Throughput measured in requests per second/minute/hour</li>
+<li>Kb/sec - The throughput measured in Kilobytes per second</li>
+<li>Avg. Bytes - average size of the sample response in bytes. (in JMeter 2.2 it wrongly showed the value in kB)</li>
+</ul>
+</description>
+</component>
+
+
+<a href="#">^</a>
 
 </section>
 
@@ -1438,20 +1988,84 @@ know for sure is to use a profiling tool.</p>
 	i.e. before any samplers in the same scope.
 	<br></br>
 </description>
-<component index="&sect-num;.4.1" name="HTTP Authorization Manager" screenshot="http-config/http-auth-manager.gif">
+
+<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="360" height="196" screenshot="csvdatasetconfig.png">
+<description>
+        <p>
+	CSV Data Set Config is used to read lines from a file, and split them into variables.
+	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	</p>
+	<p>
+	The file is only opened once, and each thread will use a different line from the file. 
+	Lines are read as the threads need them.
+	</p>
+	<note>CSV Dataset variables are defined after configuration processing is completed,
+	so they cannot be used for some configuration items - such as JDBC Config - 
+	that process their contents at configuration time (see <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=40934">Bug 40394 </a>)
+	However the variables do work in the HTTP Auth Manager, as the username etc are processed at run-time.
+	</note>
+	<p>
+	As a special case, the string "\t" (without quotes) is treated as a Tab.
+	</p>
+	<p>
+	When the end of file (EOF) is reached, and the recycle option is true, reading starts again with the first line of the file.
+	</p>
+	<p>
+	If the recycle option is false, and stopThread is false, then all the variables are set to <b>&amp;lt;EOF&gt;</b> when the end of file is reached.
+	This value can be changed by setting the JMeter property <b>csvdataset.eofstring</b>.
+	</p>
+	<p>
+	If the Recycle option is false, and Stop Thread is true, then reaching EOF will cause the thread to be stopped.
+	</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="Filename" required="Yes">Name of the file to be read. 
+  Relative file names are resolved with respect to the current test plan.
+  Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
+  unless the remote server has the same directory structure.
+  </property>
+  <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
+  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.
+  If there are fewer values on the line than there are variables the remaining variables are not updated -
+  so they will retain their previous value (if any).</property>
+  <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching EOF? (default is true)</property>
+  <property name="Stop thread on EOF?" required="Yes">Should the thread be stopped on EOF, if Recycle is false? (default is false)</property>
+</properties>
+</component>
+
+<component name="FTP Request Defaults" index="&sect-num;.4.2"  width="404" height="144" screenshot="ftp-config/ftp-request-defaults.gif">
+<description></description>
+</component>
+
+<component name="HTTP Authorization Manager" index="&sect-num;.4.3"  width="575" height="340" screenshot="http-config/http-auth-manager.gif">
 <note>If there is more than one Authorization Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
 <description>
 <p>The Authorization Manager lets you specify one or more user logins for web pages that are
-restricted using Basic HTTP Authentication.  You see this type of authentication when you use
+restricted using server authentication.  You see this type of authentication when you use
 your browser to access a restricted page, and your browser displays a login dialog box.  JMeter
 transmits the login information when it encounters this type of page.</p>
+<p>
+In versions of JMeter after 2.2, the HttpClient sampler defaults to pre-emptive authentication
+if the setting has not been defined. To disable this, set the values as below, in which case
+authentication will only be performed in response to a challenge.
+<pre>
+jmeter.properties:
+httpclient.parameters.file=httpclient.parameters
 
-<note>In the current release, all JMeter threads in a Thread Group use the same username/password
-for a given Base URL even if you create multiple users with the same Base URL in the authorization table.
-We plan to correct this in a future release.  As a workwaround, you can create multiple Thread Groups for your
-Test Plan, with each Thread Group having its own Authorization Manager.
+httpclient.parameters:
+http.authentication.preemptive$Boolean=false
+</pre>
+Note: the above settings only apply to the HttpClient sampler (and the SOAP samplers, which use Httpclient).
+</p>
+<note>
+When looking for a match against a URL, JMeter checks each entry in turn, and stops when it finds the first match.
+Thus the most specific URLs should appear first in the list, followed by less specific ones.
+Duplicate URLs will be ignored.
+If you want to use different usernames/passwords for different threads, you can use variables.
+These can be set up using a <complink name="CSV Data Set Config"/> Element (for example).
 </note>
 </description>
 
@@ -1463,8 +2077,16 @@ a password of "jmeter".  If you send an HTTP request to the URL
 "http://jakarta.apache.org/restricted/ant/myPage.html", the Authorization Manager sends the login
 information for the user named, "jmeter".</property>
   <property name="Username" required="Yes">The username to authorize.</property>
-  <property name="Password" required="Yes">The password to authorize.</property>
+  <property name="Password" required="Yes">The password for the user.</property>
+  <property name="Domain" required="No">The domain to use for NTLM.</property>
+  <property name="Realm" required="No">The realm to use for NTLM.</property>
 </properties>
+<note>
+The Realm only applies to the HttpClient sampler.
+In JMeter 2.2, the domain and realm did not have separate columns, and were encoded as part of
+the user name in the form: [domain\]username[@realm].
+This was an experimental feature and has been removed.
+</note>
 <b>Controls:</b>
 <ul>
   <li>Add Button - Add an entry to the authorization table.</li>
@@ -1475,7 +2097,7 @@ authorization table entries.</li>
 </ul>
 
 <note>When you save the Test Plan, JMeter automatically saves all of the authorization
-table entries.</note>
+table entries - including any passwords, which are not encrypted.</note>
 
 <example title="Authorization Example" anchor="authorization_example">
 
@@ -1484,7 +2106,7 @@ other is open to everyone.  See figure 10 to see the makeup of our Test Plan.  O
 directory named, "secret", which contains two files, "index.html" and "index2.html".  We created a login id named, "kevin",
 which has a password of "spot".  So, in our Authorization Manager, we created an entry for the restricted directory and
 a username and password (see figure 11).  The two HTTP requests named "SecretPage1" and "SecretPage2" make requests
-to "/secret/index1.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
+to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
 "/index.html".</p>
 
 <figure image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
@@ -1499,10 +2121,10 @@ be able to run it.  However, you can use it as a reference in constructing your 
 
 </component>
 
-<component index="&sect-num;.4.2" name="HTTP Cookie Manager" screenshot="http-config/http-cookie-manager.gif">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.4"  width="548" height="319" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
-there is currently no way to sepcify which one is to be used.</note>
+there is currently no way to specify which one is to be used.</note>
 
 <description><p>The Cookie Manager element has two functions:<br></br>
 First, it stores and sends cookies just like a web browser. If you have an HTTP Request and
@@ -1510,27 +2132,47 @@ the response contains a cookie, the Cookie Manager automatically stores that coo
 use it for all future requests to that particular web site.  Each JMeter thread has its own
 "cookie storage area".  So, if you are testing a web site that uses a cookie for storing
 session information, each JMeter thread will have its own session.</p>
-
+<p>Received Cookies are stored as JMeter thread variables. 
+Thus the value of a cookie with the name TEST can be referred to as ${TEST}</p>
 <p>Second, you can manually add a cookie to the Cookie Manager.  However, if you do this,
 the cookie will be shared by all JMeter threads.</p>
-<p>Note that an Expiration time of 0 is treated as never expiring.</p>
+<p>Note that such Cookies are created with an Expiration time far in the future</p>
+<p>
+Since version 2.0.3, cookies with null values are ignored by default.
+This can be changed by setting the JMeter property: CookieManager.delete_null_cookies=false.
+Note that this also applies to manually defined cookies - any such cookies will be removed from the display when it is updated.
+Note also that the cookie name must be unique - if a second cookie is defined with the same name, it will replace the first.
+</p>
 </description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
+  <property name="Clear Cookies each Iteration" required="Yes">If selected, all cookies are cleared each time the main Thread Group loop is executed.
+  This includes all the Cookies stored in the manager, so they will never be sent.</property>
+  <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
+  "compatibility" is the default, and should work in most cases.
+  See http://jakarta.apache.org/httpcomponents/httpclient-3.x/cookies.html and 
+  http://jakarta.apache.org/httpcomponents/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html
+  [Note: "ignoreCookies" is equivalent to omitting the CookieManager.]
+    </property>
   <property name="Cookies Stored in the Cookie Manager" required="No (discouraged, unless you know what you're doing)">This
-  gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.</property>
+  gives you the opportunity to use hardcoded cookies that will be used by all threads during the test execution.
+  <br></br>
+  The "domain" is the hostname of the server (without http://); the port is currently ignored.
+  </property>
   <property name="Add Button" required="N/A">Add an entry to the cookie table.</property>
   <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
   <property name="Load Button" required="N/A">Load a previously saved cookie table and add the entries to the existing
 cookie table entries.</property>
-  <property name="Save As Button" required="N/A">Save the current cookie table to a file.</property>
+  <property name="Save As Button" required="N/A">
+  Save the current cookie table to a file (does not save any cookies extracted from HTTP Responses).
+  </property>
 </properties>
 
 </component>
 
-<component index="&sect-num;.4.3" name="HTTP Proxy Server" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.4.5"  width="689" height="464" screenshot="proxy_control.png">
 <note>The Proxy Server can only record HTTP traffic. 
-There is currently no support for recording HTTPS (SSL) sessions.</note>
+It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
 with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
@@ -1547,6 +2189,18 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 		<property name="Set Keep-Alive" required="Yes">Automatically set Keep-Alive in the generated samplers?</property>
 		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
 		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
+        <property name="Attempt https Spoofing" required="Yes">
+          When you enable https spoofing, the following  happens:
+          <ul>
+            <li>All http requests from the client are turned into https (between the proxy
+              and the web server).</li>
+            <li>All text response data is scanned and any occurrence of the string "https" 
+              is replaced with &quot;http.&quot;</li>
+          </ul>
+          So if you want to use this feature, while you are browsing in your client,
+          instead of typing "https://..." into the browser, type &quot;http://...&quot;.  JMeter
+          will request and record <i>everything</i> as https, whether it should be or not.
+        </property>
         <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
@@ -1556,6 +2210,9 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
              <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
              <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
            </ul>
+           The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
+           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
+           If you are using grouping, pleas ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
@@ -1628,7 +2285,7 @@ If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
 If you want to match /images at the start of a string only, use the value "^/images".
 Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
 but retain the trailing / in the output by using "^/images(?=/)".
-Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&lt;=...)".
+Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&amp;lt;=...) or (?&amp;lt;!...)".
 <br></br>
 If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
 so be sure to check this if UDVs are not working as expected.
@@ -1644,22 +2301,26 @@ You can also add a <complink name="Save Responses to a file"/> Post-Processor wh
 
 </component>
 
-<component index="&sect-num;.4.4" name="HTTP Request Defaults"
-        screenshot="http-config/http-request-defaults.png">
+<component name="HTTP Request Defaults" index="&sect-num;.4.6" 
+         width="533" height="316" screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
 you could add a single HTTP Request Defaults element with the "Server Name or IP" field filled in.  Then, when
 you add the 25 HTTP Request controllers, leave the "Server Name or IP" field empty.  The controllers will inherit
 this field value from the HTTP Request Defaults element.</p>
+<note>
+In JMeter 2.2 and earlier, port 80 was treated specially - it was ignored if the sampler used the https protocol.
+JMeter 2.3 and later treat all port values equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
+</note>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
-        <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server.</property>
+        <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
-        <property name="Method" required="Yes">HTTP GET or HTTP POST.</property>
-        <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
+        <property name="Method" required="No">HTTP GET or HTTP POST.</property>
+        <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
         <property name="Send Parameters With the Request" required="No">The query string will
@@ -1672,53 +2333,7 @@ resource requires query string parameters, add them below in the
 </properties>
 </component>
 
-<component index="&sect-num;.4.5" name="FTP Request Defaults"
-                screenshot="ftp-config/ftp-request-defaults.gif">
-<description></description>
-</component>
-
-<component index="&sect-num;.4.6" name="JDBC Connection Configuration"
-                screenshot="jdbc-config/jdbc-conn-config.png">
-	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
-	 with JDBC Connection settings.
-	</description>
-	<properties>
-		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
-		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
-		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
-		to select the pool to draw connections from.</property>
-		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool</property>
-		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
-		process of trying to retrieve a connection</property>
-		<property name="Idle Cleanup Interval (ms)" required="Yes">Uncertain what exactly this does.</property>
-		<property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
-		<property name="Keep-alive" required="Yes">Uncertain what exactly this does.</property>
-		<property name="Max Connection Age (ms)" required="Yes">Uncertain what exactly this does.</property>
-		<property name="Validation Query" required="Yes">A simple query used to determine if the database is still
-		responding.</property>
-		<property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
-		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
-		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
-		<property name="Username" required="Yes">Name of user to connect as.</property>
-		<property name="Password" required="Yes">Password to connect with.</property>
-	</properties>
-</component>
-
-<component index="&sect-num;.4.7" name="JDBC SQL Query Defaults"
-	screenshot="jdbc-config/jdbc-sql-query.png">
-<description>Defines a default query for the <complink name="JDBC Request"/>Sampler.
-	<br></br>
-	 Connection settings are defined by the <complink name="JDBC Connection Configuration"/>element.
-	</description>
-</component>
-
-<component index="&sect-num;.4.8" name="Mail Reader Sampler">
-<description>TBA</description>
-</component>
-
-
-
-<component index="&sect-num;.4.9" name="HTTP Header Manager" screenshot="http-config/http-header-manager.gif">
+<component name="HTTP Header Manager" index="&sect-num;.4.7"  width="" height="" screenshot="http-config/http-header-manager.gif">
 <note>If there is more than one Header Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
@@ -1750,7 +2365,55 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="&sect-num;.4.10" name="Login Config Element" screenshot="login-config.png">
+<component name="Java Request Defaults" index="&sect-num;.4.8"  width="454" height="283" screenshot="java_defaults.png">
+<description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request" />.</p>
+</description>
+
+</component>
+
+<component name="JDBC Connection Configuration" index="&sect-num;.4.9" 
+                 width="369" height="443" screenshot="jdbc-config/jdbc-conn-config.png">
+	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
+	 with JDBC Connection settings.
+	</description>
+	<properties>
+		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
+		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
+		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
+		to select the pool to draw connections from.</property>
+		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool</property>
+		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
+		process of trying to retrieve a connection</property>
+		<property name="Idle Cleanup Interval (ms)" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
+		<property name="Keep-alive" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Max Connection Age (ms)" required="Yes">Uncertain what exactly this does.</property>
+		<property name="Validation Query" required="Yes">A simple query used to determine if the database is still
+		responding.</property>
+		<property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
+		<property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
+		JMeter's classpath - easiest to copy .jar file into JMeter's /lib directory).</property>
+		<property name="Username" required="No">Name of user to connect as.</property>
+		<property name="Password" required="No">Password to connect with.</property>
+	</properties>
+<p>Different databases and JDBC drivers require different JDBC settings. 
+The Database URL and JDBC Driver class are defined by the provider of the JDBC implementation.</p>
+<p>Some possible settings are shown below. Please check the exact details in the JDBC driver documentation.</p>
+
+<table>
+<tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
+<tr><td>MySQL</td><td>com.mysql.jdbc.Driver</td><td>jdbc:mysql://host[:port]/dbname</td></tr>
+<tr><td>PostgreSQL</td><td>org.postgresql.Driver</td><td>jdbc:postgresql:{dbname}</td></tr>
+<tr><td>Oracle</td><td>oracle.jdbc.driver.OracleDriver</td><td>jdbc:oracle:thin:user/pass@//host:port/service</td></tr>
+<tr><td>Ingres (2006)</td><td>ingres.jdbc.IngresDriver</td><td>jdbc:ingres://host:port/db[;attr=value]</td></tr>
+<tr><td>SQL Server (MS JDBC driver)</td><td>com.microsoft.sqlserver.jdbc.SQLServerDriver</td><td>jdbc:sqlserver://host:port;DatabaseName=dbname</td></tr>
+<tr><td>Apache Derby</td><td>org.apache.derby.jdbc.ClientDriver</td><td>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;...]]</td></tr>
+</table>
+<note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
+</component>
+
+
+<component name="Login Config Element" index="&sect-num;.4.11"  width="352" height="112" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -1762,7 +2425,51 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component index="&sect-num;.4.11" name="Simple Config Element" screenshot="simple_config_element.png">
+
+
+<component name="LDAP Request Defaults" index="&sect-num;.4.12"  width="465" height="375" screenshot="ldap_defaults.png">
+<description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
+</description>
+
+</component>
+
+<component name="LDAP Extended Request Defaults" index="&sect-num;.4.13"  width="597" height="545" screenshot="ldapext_defaults.png">
+<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
+</description>
+
+</component>
+
+<component name="TCP Sampler Config" index="&sect-num;.4.14"  width="645" height="256" screenshot="tcpsamplerconfig.png">
+	<note>ALPHA CODE</note>
+<description>
+        <p>
+	The TCP Sampler Config provides default data for the TCP Sampler
+	</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="ServerName or IP" required="">Name or IP of TCP server</property>
+  <property name="Port Number" required="">Port to be used</property>
+  <property name="Timeout (milliseconds)" required="">Timeout for replies</property>
+  <property name="Set Nodelay" required="">Should the nodelay property be set?</property>
+  <property name="Text to Send" required="">Text to be sent</property>
+</properties>
+</component>
+
+<component name="User Defined Variables" index="&sect-num;.4.15"  width="690" height="394" screenshot="user_defined_variables.png">
+<description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan" />.
+The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
+</description>
+<properties>
+  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+  <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
+  	column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
+  	whole ${...} will then be replaced by the string in the "Value" column.</property>
+</properties>
+<note>If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.</note>
+</component>
+
+<component name="Simple Config Element" index="&sect-num;.4.16"  width="393" height="245" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
@@ -1777,79 +2484,8 @@ GUI that they can use while developing new JMeter components.</p>
 
 </component>
 
-<component index="&sect-num;.4.12" name="LDAP Request Defaults" screenshot="ldap_defaults.png">
-<description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
-</description>
 
-</component>
-
-<component index="&sect-num;.4.12b" name="LDAP Extended Request Defaults (ALPHA)" screenshot="ldapext_defaults.png">
-<description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request (ALPHA)"/>.</p>
-</description>
-
-</component>
-
-
-<component index="&sect-num;.4.13" name="Java Request Defaults" screenshot="java_defaults.png">
-<description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request"/>.</p>
-</description>
-
-</component>
-
-<component index="&sect-num;.4.14" name="User Defined Variables" screenshot="user_defined_variables.png">
-<description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan"/>.
-The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
-  	column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
-  	whole ${...} will then be replaced by the string in the "Value" column.</property>
-</properties>
-</component>
-
-<component index="&sect-num;.4.15" name="TCP Sampler Config" screenshot="">
-	<note>ALPHA CODE</note>
-<description>
-	The TCP Sampler Config provides default data for the TCP Sampler
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="ServerName or IP" required="">Name or IP of TCP server</property>
-  <property name="Port Number" required="">Port to be used</property>
-  <property name="Timeout (milliseconds)" required="">Timeout for replies</property>
-  <property name="Set Nodelay" required="">Should the nodelay property be set?</property>
-  <property name="Text to Send" required="">Text to be sent</property>
-</properties>
-</component>
-
-<component index="&sect-num;.4.16" name="CSV Data Set Config" screenshot="">
-<description>
-	CSV DataSet Config is used to read lines from a file, and split them into variables.
-	<p>
-	As a special case, the string "\\t" (without quotes) is treated as a Tab.
-	</p>
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Filename" required="Yes">Name of the file to be read.</property>
-  <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
-  <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.</property>
-</properties>
-</component>
-
-<component name="JNDI Default Configuration" index="&sect-num;.4.17" screenshot="jndi_config.png">
-<description>
-	<p>
-		TBA.
-	</p>
-</description>
-<properties>
-  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-  <property name="Initial Context Factory" required="No">TBA</property>
-  <property name="Provider URL" required="No">TBA</property>
-</properties>
-</component>
+<a href="#">^</a>
 
 </section>
 
@@ -1859,19 +2495,30 @@ The variables in User Defined Variables components will take precedence over tho
 	Assertions are used to perform additional checks on samplers, and are processed after <b>each sampler</b>
 	in the same scope.
 	<br></br>
+	<note>
+	The variable <b>JMeterThread.last_sample_ok</b> is set to
+	"true" or "false" after all assertions for a sampler have been run.
+	 </note>
 </description>
-<component index="&sect-num;.5.1" name="Response Assertion" anchor="basic_assertion" screenshot="assertion/assertion.gif">
+<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="766" height="382" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
-	The pattern strings are Perl5-style regular expressions. You can also choose whether the strings will be expected
+	The pattern strings are Perl5-style regular expressions. 
+	</p>
+	<p>
+	A summary of the pattern matching characters can be found at <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html</a>
+	</p>
+	<p>You can also choose whether the strings will be expected
 to <b>match</b> the entire response, or if the response is only expected to <b>contain</b> the
 pattern. You can attach multiple assertions to any controller for additional flexibility.</p>
 <p>Note that the pattern string should not include the enclosing delimiters, 
 	i.e. use <b>Price: \d+</b> not <b>/Price: \d+/</b>.
+	</p>
+	<p>
 	By default, the pattern is in multi-line mode, which means that the "." meta-character does not match newline.
     In multi-line mode, "^" and "$" match the start or end of any line anywhere within the string 
-    - not just the start and end of the entire string.
+    - not just the start and end of the entire string. Note that \s does match new-line.
 	Case is also significant. To override these settings, one can use the extended regular expression syntax.
 	For example:
 </p>
@@ -1888,6 +2535,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
                 This may be the Response Text from the server, the URL string that was sampled,
+                the Response Headers (JMeter version 2.3RC3 and earlier included the headers with the Text),
                 the Response Code (e.g. 404) or the Response Message (e.g. Not Found).
                 <p>
                 The overall success of the sample is determined by combining the result of the
@@ -1898,6 +2546,8 @@ pattern. You can attach multiple assertions to any controller for additional fle
                 HTTP Responses with statuses in the 4xx and 5xx ranges are normally
                 regarded as unsuccessful. 
                 The "Ignore status" checkbox can be used to set the status successful before performing further checks.
+                Note that this will have the effect of clearing any previous assertion failures,
+                so make sure that this is only set on the first assertion.
                 </property>
         <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
         must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
@@ -1905,14 +2555,18 @@ pattern. You can attach multiple assertions to any controller for additional fle
         <property name="Patterns to Test" required="Yes">A list of regular expressions to
         be tested.  Each pattern is tested separately.  There is no difference between setting up
         one Assertion with multiple patterns and setting up multiple Assertions with one
-        pattern each (assuming the other options are the same).</property>
+        pattern each (assuming the other options are the same).
+        <b>However, when the Ignore Status checkbox is selected, this has the effect of cancelling any
+        previous assertion failures - so make sure that the Ignore Status checkbox is only used on
+        the first Assertion.</b>
+        </property>
 </properties>
 <p>
 	The pattern is a Perl5-style regular expression, but without the enclosing brackets.
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
 <figure image="assertion/example1a.png">Figure 14 - Test Plan</figure>
-<figure image="assertion/example1b.gif">Figure 15 - Assertion Control Panel with Pattern</figure>
+<figure image="assertion/example1b.png">Figure 15 - Assertion Control Panel with Pattern</figure>
 <figure image="assertion/example1c-pass.gif">Figure 16 - Assertion Listener Results (Pass)</figure>
 <figure image="assertion/example1c-fail.gif">Figure 17 - Assertion Listener Results (Fail)</figure>
 </example>
@@ -1920,7 +2574,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 
 </component>
 
-<component index="&sect-num;.5.2" name="Duration Assertion" screenshot="duration_assertion.png">
+<component name="Duration Assertion" index="&sect-num;.5.2"  width="391" height="147" screenshot="duration_assertion.png">
 <description><p>The Duration Assertion tests that each response was received within a given amount
 of time.  Any response that takes longer than the given number of milliseconds (specified by the
 user) is marked as a failed response.</p></description>
@@ -1933,9 +2587,11 @@ user) is marked as a failed response.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.5.3" name="Size Assertion" screenshot="size_assertion.png">
+<component name="Size Assertion" index="&sect-num;.5.3"  width="331" height="346" screenshot="size_assertion.png">
 <description><p>The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
-the size be equal to, greater than, less than, or not equal to a given number of bytes.</p></description>
+the size be equal to, greater than, less than, or not equal to a given number of bytes.</p>
+<note>Since JMeter 2.3RC3, an empty response is treated as being 0 bytes rather than reported as an error.</note>
+</description>
 
 <properties>
 <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -1946,7 +2602,7 @@ the size be equal to, greater than, less than, or not equal to a given number of
 </properties>
 </component>
 
-<component index="&sect-num;.5.4" name="XML Assertion" screenshot="xml_assertion.png">
+<component name="XML Assertion" index="&sect-num;.5.4"  width="303" height="196" screenshot="xml_assertion.png">
 <description><p>The XML Assertion tests that the response data consists of a formally correct XML document.  It does not
 validate the XML based on a DTD or schema or do any further validation.</p></description>
 
@@ -1956,13 +2612,13 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </properties>
 </component>
 
-<component index="&sect-num;.5.5" name="BeanShell Assertion" screenshot="bsh_assertion.png">
+<component name="BeanShell Assertion" index="&sect-num;.5.5"  width="632" height="253" screenshot="bsh_assertion.png">
 <description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
 </p>
 <p>
 <b>Please note that the BeanShell jar file is not included with JMeter;
 it needs to be downloaded separately and placed in the lib directory.
-<br/>
+<br></br>
 For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
 </p><p>
 Note that a different Interpreter is used for each independent occurence of the assertion
@@ -1976,6 +2632,11 @@ All Assertions are called from the same thread as the sampler.
 If the property "beanshell.assertion.init" is defined, it is passed to the Interpreter
 as the name of a sourced file. This can be used to define common methods and variables.
 There is a sample init file in the bin directory: BeanShellAssertion.bshrc
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 
@@ -2019,7 +2680,7 @@ These are strings unless otherwise noted:
 </ul></p>
 </component>
 
-<component index="&sect-num;.5.6" name="MD5Hex Assertion">
+<component name="MD5Hex Assertion" index="&sect-num;.5.6">
 <description><p>The MD5Hex Assertion allows the user to check the MD5 hash of the response data.</p></description>
 
 <properties>
@@ -2029,7 +2690,7 @@ These are strings unless otherwise noted:
 </properties>
 </component>
 
-<component index="&sect-num;.5.7" name="HTML Assertion" screenshot="assertion/HTMLAssertion.png">
+<component name="HTML Assertion" index="&sect-num;.5.7"  width="631" height="365" screenshot="assertion/HTMLAssertion.png">
 <description><p>The HTML Assertion allows the user to check the HTML syntax of the response data using JTidy.</p></description>
 
 <properties>
@@ -2043,11 +2704,12 @@ These are strings unless otherwise noted:
 
 </properties>
 </component>
-<component index="&sect-num;.5.8" name="XPath Assertion" screenshot="xpath_assertion.png">
+<component name="XPath Assertion" index="&sect-num;.5.8"  width="678" height="231" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "/" will match any well-formed
-document, and is the default XPath Expression.
+document, and is the default XPath Expression. 
+The assertion also supports boolean expressions, such as "count(//*error)=2".
 See <a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a> for more information
 on XPath.
 </p></description>
@@ -2062,7 +2724,7 @@ on XPath.
 <property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
 </component>
-<component index="&sect-num;.5.9" name="XML Schema Assertion" screenshot="assertion/XMLSchemaAssertion.png">
+<component name="XML Schema Assertion" index="&sect-num;.5.9"  width="771" height="171" screenshot="assertion/XMLSchemaAssertion.png">
 <description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
 
 <properties>
@@ -2070,20 +2732,29 @@ on XPath.
 <property name="File Name" required="Yes">Specify XML Schema File Name</property>
 </properties>
 </component>
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.6 Timers" anchor="timers">
 <description>
 	<br></br>
-	Note that timers are processed at the start of the scope in which they are found;
-	if there are several timers in the same scope, all the timers will be processed.
-	To apply a timer to a single sampler, add the timer as a child element to the sampler.
+	<p>
+	Note that timers are processed <b>before</b> each sampler in the scope in which they are found;
+	if there are several timers in the same scope, <b>all</b> the timers will be processed <b>before
+	each</b> sampler.
+	<br></br>
+	Timers are only processed in conjunction with a sampler.
+	A timer which is not in the same scope as a sampler will not be processed at all.
+	<br></br>
+	To apply a timer to a single sampler, add the timer as a child element of the sampler.
 	The timer will be applied before the sampler is executed.
 	To apply a timer after a sampler, either add it to the next sampler, or add it as the
-	child of a simple logic controller immediately after the sampler.
-	<br></br>
+	child of a <complink name="Test Action"/> Sampler.
+	</p>
 </description>
-<component index="&sect-num;.6.1" name="Constant Timer" anchor="constant" screenshot="timers/constant_timer.gif">
+<component name="Constant Timer" index="&sect-num;.6.1" anchor="constant"  width="390" height="100" screenshot="timers/constant_timer.gif">
 <description>
 <p>If you want to have each thread pause for the same amount of time between
 requests, use this timer.</p></description>
@@ -2094,7 +2765,7 @@ requests, use this timer.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.6.2" name="Gaussian Random Timer" screenshot="timers/gauss_random_timer.gif">
+<component name="Gaussian Random Timer" index="&sect-num;.6.2"  width="390" height="182" screenshot="timers/gauss_random_timer.gif">
 
 <description><p>This timer pauses each thread request for a random amount of time, with most
 of the time intervals ocurring near a particular value.  The total delay is the
@@ -2111,7 +2782,7 @@ to the random delay.</property>
 
 </component>
 
-<component index="&sect-num;.6.3" name="Uniform Random Timer" screenshot="timers/uniform_random_timer.gif">
+<component name="Uniform Random Timer" index="&sect-num;.6.3"  width="390" height="182" screenshot="timers/uniform_random_timer.gif">
 
 <description><p>This timer pauses each thread request for a random amount of time, with
 each time interval having the same probability of occurring. The total delay
@@ -2127,25 +2798,46 @@ to the random delay.</property>
 
 </component>
 
-<component index="&sect-num;.6.4" name="Constant Throughput Timer" screenshot="timers/constant_throughput_timer.png">
+<component name="Constant Throughput Timer" index="&sect-num;.6.4"  width="542" height="155" screenshot="timers/constant_throughput_timer.png">
 
 <description><p>This timer introduces variable pauses, calculated to keep the total throughput (in terms of samples per minute) as close as possible to a give figure. Of course the throughput will be lower if the server is not capable of handling it, or if other timers or time-consuming test elements prevent it.</p>
-
-<p>Only samples within the container where you put the timer count towards the calculated throughput. Also note that the total time (used in the denominator to calculate the throughput) starts counting with the first such sample -- not with the test start.</p></description>
-
+<p>
+N.B. although the Timer is called the Constant Throughput timer, the throughput value does not need to be constant.
+It can be defined in terms of a variable or function call, and the value can be changed during a test.
+The value can be changed in various ways:
+</p>
+<ul>
+<li>using a counter variable</li>
+<li>using a JavaScript or BeanShell function to provide a changing value</li>
+<li>using the remote BeanShell server to change a JMeter property</li>
+</ul>
+<p>See <a href="best-practices.html">Best Practices</a> for further details.
+Note that the throughput value should not be changed too often during a test
+- it will take a while for the new value to take effect.
+</p>
+</description>
 <properties>
-        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
+  <property name="Name" required="No">Descriptive name for this timer that is shown in the tree. </property>
   <property name="Target Throughput" required="Yes">Throughput we want the timer to try to generate.</property>
-  <property name="Legacy Mode" required="Yes">
-	If True, calculate throughput for each thread separately.
-	<br></br>
-	If False, calculate throughput based on the total number of threads.
-	</property>
+  <property name="Calculate Throughput based on" required="Yes">
+   <ul>
+    <li>this thread only - each thread will try to maintain the target throughput. The overall throughput will be proportional to the number of active threads.</li>
+    <li>all active threads in current thread group - the target throughput is divided amongst all the active threads in the group. 
+    Each thread will delay as needed, based on when it last ran.</li>
+    <li>all active threads - the target throughput is divided amongst all the active threads in all Thread Groups.
+    Each thread will delay as needed, based on when it last ran.
+    In this case, each other Thread Group will need a Constant Throughput timer with the same settings.</li>
+    <li>all active threads in current thread group (shared) - as above, but each thread is delayed based on when any thread in the group last ran.</li>
+    <li>all active threads (shared) - as above; each thread is delayed based on when any thread last ran.</li>
+   </ul>
+  </property>
+  <p>The shared and non-shared algorithms both aim to generate the desired thoughput, and will produce similar results.
+  The shared algorithm should generate a more accurate overall transaction rate.
+  The non-shared algortihm should generate a more even spread of transactions across threads.</p>
 </properties>
-
 </component>
 
-<component index="&sect-num;.6.5" name="Synchronizing Timer" screenshot="timers/sync_timer.png">
+<component name="Synchronizing Timer" index="&sect-num;.6.5"  width="335" height="146" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
@@ -2162,6 +2854,40 @@ points of the test plan.
 
 </component>
 
+<component name="BeanShell Timer" index="&sect-num;.6.6"  width="459" height="238" screenshot="timers/beanshell_timer.png">
+<description>
+<p>
+The BeanShell Timer can be used to generate a delay.
+</p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">
+        The BeanShell script. The return value is used as the number of milliseconds to wait.
+        </property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+</component>
+
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.7 Pre Processors" anchor="preprocessors">
@@ -2170,7 +2896,7 @@ points of the test plan.
 		Preprocessors are used to modify the Samplers in their scope.
 	<br></br>
 	</description>
-<component index="&sect-num;.7.1" name="HTML Link Parser" anchor="html_link_parser">
+<component name="HTML Link Parser" index="&sect-num;.7.1" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
 links and forms.  A URL test sample that passes through this modifier will be examined to
@@ -2179,7 +2905,10 @@ from the immediately previous response.  It would then replace the values in the
 test sample with appropriate values from the matching link or form.  Perl-type regular
 expressions are used to find matches.</p>
 </description>
-
+<note>
+Matches are performed using protocol, host, path and parameter names.
+The target sampler cannot contain parameters that are not in the response links.
+</note>
 <example title="Spidering Example" anchor="spider_example">
 <p>Consider a simple example: let's say you wanted JMeter to &quot;spider&quot; through your site,
 hitting link after link parsed from the HTML returned from your server (this is not
@@ -2220,7 +2949,7 @@ your dynamic test sample.</note>
 
 </component>
 
-<component index="&sect-num;.7.2" name="HTTP URL Re-writing Modifier" screenshot="url_rewriter.png">
+<component name="HTTP URL Re-writing Modifier" index="&sect-num;.7.2"  width="485" height="247" screenshot="url_rewriter.png">
 <description><p>This modifier works similarly to the HTML Link Parser, except it has a specific purpose for which
 it is easier to use than the HTML Link Parser, and more efficient.  For web applications that
 use URL Re-writing to store session ids instead of cookies, this element can be attached at the
@@ -2241,10 +2970,13 @@ Clever users will even determine that this modifier can be used to grab values t
         a semi-colon plus the session id parameter.  Check this box if that is so.</property>
         <property name="Do not use equals in path extension" required="No">Some web apps rewrite URLs without using an &quot;=&quot; sign between the parameter name and value (such as Intershop Enfinity).</property>
         <property name="Do not use questionmark in path extension" required="No">Prevents the query string to end up in the path extension (such as Intershop Enfinity).</property>
+        <property name="Cache Session Id?" required="Yes">
+        Should the value of the session Id be saved for later use when the session Id is not present?
+        </property>
 </properties>
 </component>
 
-<component index="&sect-num;.7.3" name="HTML Parameter Mask" useinstead="Counter" screenshot="parameter_mask.png">
+<component name="HTML Parameter Mask" index="&sect-num;.7.3" useinstead="Counter"  width="624" height="209" screenshot="parameter_mask.png">
 <description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
 specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
 modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
@@ -2272,16 +3004,15 @@ user_4, etc.</p></description>
 </properties>
 </component>
 
-<component index="&sect-num;.7.4" name="HTTP User Parameter Modifier" useinstead="User Parameters" screenshot="user_param_modifier.gif">
-<description><p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
+<component name="HTTP User Parameter Modifier" index="&sect-num;.7.4" useinstead="User Parameters"  width="514" height="251" screenshot="user_param_modifier.gif">
+<description>
+<p>See also the <complink name="CSV Data Set Config"/> element, which is more suitable for large numbers of parameters</p>
+<p>The User Parameter Modifier uses an XML file get values for HTTP arguments.  Any
 HTTP Request that this modifier modifies will be checked for the existence of the specified
 arguments.  If found, the values for those arguments will be replaced by the values found in the
 xml file.  The XML file can have multiple sets of the same values.  This modifier will iterate
 through these values in a round-robin style, thus each request will get a different set of values
 until the last set of values is reached, at which point it will begin again at the first set.</p>
-<note>If the number of value sets is equal to the number of threads in your test, then it will work
-out that each thread will get the same set of values each time, which will be a different set from
-any other thread</note>
 </description>
 
 <properties>
@@ -2291,7 +3022,7 @@ any other thread</note>
 </properties>
 </component>
 
-<component index="&sect-num;.7.5" name="User Parameters" screenshot="user_params.png">
+<component name="User Parameters" index="&sect-num;.7.5"  width="638" height="274" screenshot="user_params.png">
 <description><p>Allows the user to specify values for User Variables specific to individual threads.</p>
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
@@ -2302,31 +3033,41 @@ user id to be used by each thread. User variables can be referenced in any field
 To add a new value to the series, click the 'Add User' button and fill in the desired value in the newly added column.</p>
 
 <p>Values can be accessed in any test component in the same thread group, using the <a href="functions.html">function syntax</a>: ${variable}.</p>
+<p>See also the <complink name="CSV Data Set Config"/> element, which is more suitable for large numbers of parameters</p>
 </description>
 
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Update Once Per Iteration" required="Yes">A flag to indicate whether the User Paramters element
-        should update it's variables only once per iteration.  if you embed functions into the UP, then you may need greater
+        should update its variables only once per iteration.  if you embed functions into the UP, then you may need greater
         control over how often the values of the variables are updated.  Keep this box checked to ensure the values are
         updated each time through the UP's parent controller.  Uncheck the box, and the UP will update the parameters for 
-        every sample request made within it's <a href="build-test-plan.html#scoping_rules">scope</a>.</property>
+        every sample request made within its <a href="build-test-plan.html#scoping_rules">scope</a>.</property>
         
 </properties>
 </component>
 
-<component index="&sect-num;.7.6" name="Counter" screenshot="counter.png">
+<component name="Counter" index="&sect-num;.7.6"  width="399" height="244" screenshot="counter.png">
 <description><p>Allows the user to create a counter that can be referenced anywhere
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
-with the start, continuing on like that until the test is ended.  </p></description>
+with the start, continuing on like that until the test is ended.  </p>
+<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from -2^63 to 2^63-1.</p>
+</description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
         <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
         number during the first iteration.</property>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
-        <property name="Maximum" required="Yes">If the counter exceeds the maximum, then it is reset to the Start value.</property>
+        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the Start value.
+        For versions after 2.2 the default is Long.MAX_VALUE (previously it was 0).
+        </property>
+        <property name="Format" required="No">Optional format, e.g. 000 will format as 001, 002 etc. 
+        This is passed to DecimalFormat, so any valid formats can be used.
+        If there is a problem interpreting the format, then it is ignored.
+	[The default format is generated using Long.toString()]
+        </property>
         <property name="Reference Name" required="Yes">This controls how you refer to this value in other elements.  Syntax is
         as in <a href="functions.html">user-defined values</a>: <code>$(reference_name}</code>.</property>
         <property name="Track Counter Independently for each User" required="No">In other words, is this a global counter, or does each user get their
@@ -2334,6 +3075,41 @@ with the start, continuing on like that until the test is ended.  </p></descript
         the first iteration).  If checked, each user has an independent counter.</property>
 </properties>
 </component>
+
+<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="461" height="188" screenshot="beanshell_preprocessor.png">
+<description>
+<p>
+The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
+</p>
+<p>For versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
+<li>sampler - (Sampler)- gives access to the current sampler</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.preprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+</component>
+
+
+<a href="#">^</a>
 
 </section>
 
@@ -2345,15 +3121,17 @@ with the start, continuing on like that until the test is ended.  </p></descript
 		is applied only to a particular sampler, add it as a child of the sampler.
 	<br></br>
 	</description>
-<component index="&sect-num;.8.1" name="Regular Expression Extractor" screenshot="regex_extractor.png">
+<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="395" height="241" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Response Field to check" required="yes">Body or Headers. These refer to the Sampler Response. Headers can be useful for HTTP samples; it may not be present for other sample types.</property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
         This must contain at least one set of parentheses "()" to capture a portion of the string, unless using the group $0$.
+        Do not enclose the expression in / / - unless of course you want to match these characters as well.
         </property>
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '$1$' to refer to
@@ -2365,8 +3143,25 @@ generate the template string, and store the result into the given variable name.
         		<li> Negative numbers are used in conjunction with the ForEach controller - see below.</li>
         	</ul>
         </property>
-        <property name="Default Value" required="No">If no matches are found, the default value is stored in the variable.</property>
+        <property name="Default Value" required="No">
+        If no matches are found - and a default is provided - the default value is stored in the variable.
+        </property>
 </properties>
+<p>
+	If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
+	<ul>
+		<li>refName - the value of the template</li>
+		<li>refName_gn, where n=0,1,2 - the groups for the match</li>
+		<li>refName_g - the number of groups in the Regex (excluding 0)</li>
+	</ul>
+	If no match occurs, then the refName variable is set to the default (unless this is absent). 
+	Also, the following variables are removed:
+	<ul>
+		<li>refName_g0</li>
+		<li>refName_g1</li>
+		<li>refName_g</li>
+	</ul>
+</p>
 <p>
 	If the match number is set to a negative number, then all the possible matches in the sampler data are processed.
 	The variables are set as follows:
@@ -2379,10 +3174,79 @@ generate the template string, and store the result into the given variable name.
 	</ul>
 	Note that the refName variable is always set to the default value in this case, 
 	and the associated group variables are not set.
+	<p>See also <a href="regular_expressions.html">further information on regular expressions.</a></p>
 </p>
 </component>
 
-<component index="&sect-num;.8.2" name="Result Status Action Handler" screenshot="resultstatusactionhandler.png">
+<component name="XPath Extractor" index="&sect-num;.8.2"  width="374" height="179" screenshot="xpath_extractor.png">
+	<description>This test element allows the user to extract value from 
+		structured response - XML or (X)HTML - using XPath
+		query language.
+   </description>
+   <properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+	   <property name="Use Tidy" required="Yes">If checked use Tidy to parse HTML response into XHTML.
+	   <ul>
+		   <li>"Use Tidy" should be checked on for HTML response. Such response is converted to valid XHTML (XML compatible HTML) using Tidy</li>
+		   <li>"Use Tidy" should be unchecked for both XHTML or XML response (for example RSS)</li>
+	   </ul>
+	   </property>
+        <property name="Use Namespace?" required="Yes">
+        If checked, then the XML parser will use namespace resolution.
+        Note that currently only namespaces declared on the root element will be recognised.
+        A later version of JMeter may support user-definition of additional workspace names.
+        Meanwhile, a work-round is to replace: 
+        <br></br>
+        //mynamespace:tagname
+        <br></br>
+        by
+        <br></br>
+        //*[local-name()='tagname' and namespace-uri()='uri-for-namespace']
+        <br></br>
+        where "uri-for-namespace" is the uri for the "mynamespace" namespace.
+        
+        (not applicable if Tidy is selected)
+        </property>
+        <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
+	<property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match. </property>
+	<property name="Default Value" required="">Default value returned when no match found</property>
+   </properties>
+   <p>To allow for use in a ForEach Controller, the following variables are set on return:</p>
+   <ul>
+   <li>refName - set to first (or only) match; if no match, then set to default</li>
+   <li>refName_matchNr - set to number of matches (may be 0)</li>
+   <li>refName_n - n=1,2,3 etc. Set to the 1st, 2nd 3rd match etc. 
+   </li>
+   </ul>
+   <p>Note: The next refName_n variable is set to null - e.g. if there are 2 matches, then refName_3 is set to null,
+   and if there are no matches, then refName_1 is set to null.
+   </p>
+   <p>XPath is query language targeted primarily for XSLT transformations. However it is usefull as generic query language for structured data too. See 
+	   <a href="http://www.topxml.com/xsl/xpathref.asp">XPath Reference</a> or <a href="http://www.w3.org/TR/xpath">XPath specification</a> for more information. Here are few examples:
+   </p>
+  <dl> 
+   <dt>/html/head/title</dt>
+     <dd>extracts title element from HTML response</dd>
+   <dt>/book/page[2]</dt>
+     <dd>extracts 2nd page from a book</dd>
+   <dt>/book/page</dt>
+     <dd>extracts all pages from a book</dd>
+     <dt>//form[@name='countryForm']//select[@name='country']/option[text()='Czech Republic'])/@value</dt>
+    <dd>extracts value attribute of option element that match text 'Czech Republic'
+        inside of select element with name attribute  'country' inside of
+        form with name attribute 'countryForm'</dd>
+ </dl>
+ <note>When "Use Tidy" is checked on - resulting XML document may slightly differ from original HTML response:
+	 <ul>
+		 <li>All elements and attribute names are converted to lowercase</li>
+		 <li>Tidy attempts to correct improperly nested elements. For example - original (incorrect) <code>ul/font/li</code> becomes correct <code>ul/li/font</code></li>
+	 </ul>
+	 See <a href="http://jtidy.sf.net">Tidy homepage</a> for more information.
+ </note>
+ 
+</component>
+
+<component name="Result Status Action Handler" index="&sect-num;.8.3"  width="697" height="132" screenshot="resultstatusactionhandler.png">
    <description>This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </description>
    <properties>
@@ -2390,26 +3254,29 @@ generate the template string, and store the result into the given variable name.
    </properties>
 </component>
 
-<component index="&sect-num;.8.3" name="Save Responses to a file" screenshot="savetofile.png">
+<component name="Save Responses to a file" index="&sect-num;.8.4"  width="401" height="130" screenshot="savetofile.png">
 	<description>This test element can be placed anywhere in the test plan.
 		For each sample in its scope, it will create a file of the response Data.
 		The primary use for this is in creating functional tests.
 		The file name is created from the specified prefix, plus a number.
-		The file extension is created from the document type, if know.
+		The file extension is created from the document type, if known.
+		The generated file name is stored in the sample response, and can be saved
+		in the test log output file if required.
 	</description>
  <properties>
- <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
- <property name="Filename Prefix" required="">Prefix for the generate file name</property>
+ <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+ <property name="Filename Prefix" required="Yes">Prefix for the generated file names</property>
+ <property name="Save Failed Responses only" required="Yes">If selected, then only failed responses are saved</property>
  </properties>
 </component>
 
-<component index="&sect-num;.8.4" name="Generate Summary Results" screenshot="summary.png">
+<component name="Generate Summary Results" index="&sect-num;.8.5"  width="358" height="131" screenshot="summary.png">
 	<description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
 Output is generated every n seconds (default 3 minutes) on the appropriate
 time boundary, so that multiple test runs on the same time will be
- synchronised.
+ synchronised.The interval is defined by the property "summariser.interval" - see jmeter.properties.
 
 This is mainly intended for batch (non-GUI) runs.
 	</description>
@@ -2418,17 +3285,53 @@ This is mainly intended for batch (non-GUI) runs.
  </properties>
 </component>
 
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.6"  width="461" height="188" screenshot="beanshell_postprocessor.png">
+<description>
+<p>
+The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
+</p>
+<p>
+		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
+		<br></br>
+        For full details on using BeanShell, please see the BeanShell web-site at http://www.beanshell.org/.</b>
+</p>
+<p>
+The test element supports the ThreadListener and TestListener methods.
+These should be defined in the initialisation file.
+See the file BeanShellListeners.bshrc for example definitions.
+</p>
+</description>
+<properties>
+        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+</properties>
+<ul>
+<li>log - (Logger) - can be used to write to the log file</li>
+<li>ctx - (JMeterContext) - gives access to the context</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>prev - (SampleResult) - gives access to the previous SampleResult</li>
+<li>data - (byte [])- gives access to the current sample data</li>
+</ul>
+<p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
+<p>If the property <b>beanshell.postprocessor.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
+</component>
+
+
+<a href="#">^</a>
+
 </section>
 
 <section name="&sect-num;.9 Miscellaneous Features" anchor="Miscellaneous_Features">
 <description>
 		<br></br>
 </description>
-<component index="&sect-num;.9.1" name="Test Plan" screenshot="testplan.png">
-<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p></description>
+<component name="Test Plan" index="&sect-num;.9.1"  width="516" height="763" screenshot="testplan.png">
+<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
+<p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
+<p>In jmeter.properties, edit "user.classpath" to include additional libraries. Note that paths with spaces may cause problems for Java.</p></description>
 </component>
 
-<component index="&sect-num;.9.2" name="Thread Group" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="305" height="390" screenshot="threadgroup.png">
 <description><p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p></description>
 
 <properties>
@@ -2453,25 +3356,31 @@ This is mainly intended for batch (non-GUI) runs.
 </properties>
 </component>
 
-<component index="&sect-num;.9.3" name="WorkBench" screenshot="workbench.png">
-<description><p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire.  When you save your test plan, WorkBench items are not saved with it.  Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p></description>
+<component name="WorkBench" index="&sect-num;.9.3"  width="232" height="68" screenshot="workbench.png">
+<description>
+<p>The WorkBench simply provides a place to temporarily store test elements while not in use, for copy/paste purposes, or any other purpose you desire. 
+When you save your test plan, WorkBench items are not saved with it. 
+Your WorkBench can be saved independently, if you like (right-click on WorkBench and choose Save).</p>
+<p>Certain test elements are only available on the WorkBench:</p>
+<ul>
+<li>HTTP Proxy Server</li>
+<li>HTTP Mirror Server</li>
+</ul>
+</description>
 </component>
 
-<component index="&sect-num;.9.4" name="SSL Manager" screenshot="">
+<component name="SSL Manager" index="&sect-num;.9.4" screenshot="">
 <p>
   The SSL Manager is a way to select a client certificate so that you can test
-  applications that use Public Key Infrastructure (PKI).  In order to use it,
-  you must have JSSE 1.0.2 installed.  Unfortunately, there is no standard method
-  for controling who a client is--and that won't be introduced until JDK 1.4 is
-  officially available.  The SSL Manager should still work with JDK 1.4, so this
-  is the best solution we could come up with.
+  applications that use Public Key Infrastructure (PKI).
+  It is only needed if you have not set up the appropriate System properties.
 </p>
 
 <b>Choosing a Client Certificate</b>
 <p>
   You may either use a Java Key Store (JKS) format key store, or a Public Key
   Certificate Standard #12 (PKCS12) file for your client certificates.  There
-  is a bug in the JSSE libraries that require you to have at least a six character
+  is a feature of the JSSE libraries that require you to have at least a six character
   password on your key (at least for the keytool utility that comes with your
   JDK).
 </p>
@@ -2486,15 +3395,12 @@ This is mainly intended for batch (non-GUI) runs.
   for the keystore is also the password for the private key of the client you want
   to authenticate as.
 </p>
+<p>Or you can set the appropriate System properties - see the system.properties file.</p>
 <p>
   The next time you run your test, the SSL Manager will examine your key store to
-  see if it has more than one key available to it.  If there is only one key, SSL
-  Manager will select it for you.  If there is more than one key, you will be prompted
-  to select the alias you wish to authenticate as.  If SSL Manager cannot detect
-  any keys in your keystore, it will give you a text box for the off chance you know
-  something it doesn't.  Keep in mind that for the first run, you will be prompted
-  once per thread.  Try to use only one thread for the first run to ensure everything
-  is working properly.
+  see if it has at least one key available to it.  If there is only one key, SSL
+  Manager will select it for you.  If there is more than one key, it currently selects the first key.
+  There is currently no way to select other entries in the keystore, so the desired key must be the first.
 </p>
 <b>Things to Look Out For</b>
 <p>
@@ -2510,8 +3416,52 @@ This is mainly intended for batch (non-GUI) runs.
   installed.
 </p>
 </component>
+
+<component name="HTTP Mirror Server" index="&sect-num;.9.5"  width="303" height="139" screenshot="mirrorserver.png">
+<description>
+<p>
+The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
+This is useful for checking the content of HTTP requests.
+</p>
+</description>
+</component>
+
+<a href="#">^</a>
+
+</section>
+
+<section name="&sect-num;.10 Reports" anchor="Reports">
+<description>
+		<br></br>
+</description>
+
+<component name="Report Plan" index="&sect-num;.10.1" screenshot="">
+<description><p></p></description>
+</component>
+
+<component name="Report Table" index="&sect-num;.10.2" screenshot="">
+<description><p></p></description>
+</component>
+
+<component name="HTML Report Writer" index="&sect-num;.10.3" screenshot="">
+<description><p></p></description>
+</component>
+
+<component name="Report Page" index="&sect-num;.10.4" screenshot="">
+<description><p></p></description>
+</component>
+
+<component name="Line Graph" index="&sect-num;.10.5" screenshot="">
+<description><p></p></description>
+</component>
+
+<component name="Bar Chart" index="&sect-num;.10.6" screenshot="">
+<description><p></p></description>
+</component>
+
+<a href="#">^</a>
+
 </section>
 
 </body>
 </document>
-

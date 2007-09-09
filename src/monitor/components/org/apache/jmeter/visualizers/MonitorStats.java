@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,23 +22,23 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 
 public class MonitorStats extends AbstractTestElement implements Serializable {
 
-	public static String HEALTH = "stats.health";
+	private static final String HEALTH = "stats.health";
 
-	public static String LOAD = "stats.load";
+	private static final String LOAD = "stats.load";
 
-	public static String CPULOAD = "stats.cpuload";
+	private static final String CPULOAD = "stats.cpuload";
 
-	public static String MEMLOAD = "stats.memload";
+	private static final String MEMLOAD = "stats.memload";
 
-	public static String THREADLOAD = "stats.threadload";
+	private static final String THREADLOAD = "stats.threadload";
 
-	public static String HOST = "stats.host";
+	private static final String HOST = "stats.host";
 
-	public static String PORT = "stats.port";
+	private static final String PORT = "stats.port";
 
-	public static String PROTOCOL = "stats.protocol";
+	private static final String PROTOCOL = "stats.protocol";
 
-	public static String TIMESTAMP = "stats.timestamp";
+	private static final String TIMESTAMP = "stats.timestamp";
 
 	/**
 	 * 

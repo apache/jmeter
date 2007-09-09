@@ -1,9 +1,10 @@
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -29,21 +30,23 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Provides a Random function which returns a random integer between a min
- * (first argument) and a max (seceond argument).
+ * Provides a Random function which returns a random long integer between a min
+ * (first argument) and a max (second argument).
  * 
  * @author <a href="mailto:sjkwadzo@praize.com">Jonathan Kwadzo</a>
  */
 public class Random extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__Random";
+	private static final String KEY = "__Random"; //$NON-NLS-1$
 
 	static {
-		desc.add(JMeterUtils.getResString("minimum_param"));
-		desc.add(JMeterUtils.getResString("maximum_param"));
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("minimum_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("maximum_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	private transient CompoundVariable varName, minimum, maximum;
@@ -54,14 +57,8 @@ public class Random extends AbstractFunction implements Serializable {
 	public Random() {
 	}
 
-	/**
-	 * Clone this Add object.
-	 * 
-	 * @return A new Add object.
-	 */
-	public Object clone() {
-		Random newRandom = new Random();
-		return newRandom;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
@@ -74,12 +71,12 @@ public class Random extends AbstractFunction implements Serializable {
 
 		JMeterVariables vars = getVariables();
 
-		int min = Integer.parseInt(minimum.execute().trim());
-		int max = Integer.parseInt(maximum.execute().trim());
+		long min = Long.parseLong(minimum.execute().trim());
+		long max = Long.parseLong(maximum.execute().trim());
 
-		int rand = (int) Math.round(min + Math.random() * (max - min));
+		long rand = min + (long) (Math.random() * (max - min + 1));
 
-		String randString = Integer.toString(rand);
+		String randString = Long.toString(rand);
 		vars.put(varName.execute(), randString);
 
 		return randString;
@@ -96,11 +93,10 @@ public class Random extends AbstractFunction implements Serializable {
 
 		if (values.length < 3) {
 			throw new InvalidVariableException();
-		} else {
-			varName = (CompoundVariable) values[2];
-			minimum = (CompoundVariable) values[0];
-			maximum = (CompoundVariable) values[1];
 		}
+		varName = (CompoundVariable) values[2];
+		minimum = (CompoundVariable) values[0];
+		maximum = (CompoundVariable) values[1];
 
 	}
 

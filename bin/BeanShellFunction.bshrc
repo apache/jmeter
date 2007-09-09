@@ -27,4 +27,9 @@ stopThread(){// Stop current JMeter thread
 	org.apache.jmeter.engine.StandardJMeterEngine.stopThread(Thread.currentThread().getName());
 }
 
+// Fix ampersands in a string
+String fixAmps(s) {
+  return s.replaceAll("&amp;","&");
+}
+
 //print("Initialisation complete");

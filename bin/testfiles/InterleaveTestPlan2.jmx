@@ -1,128 +1,81 @@
-<jmeterTestPlan version="1.1" properties="1.7">
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="1.8">
   <hashTree>
-    <TestPlan>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <collectionProp name="TestPlan.thread_groups"/>
-      <elementProp name="TestPlan.user_defined_variables" elementType="org.apache.jmeter.config.Arguments">
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.config.gui.ArgumentsPanel</stringProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
-        <stringProp name="TestElement.name">User Defined Variables</stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
       </elementProp>
-      <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.TestPlanGui</stringProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
-      <stringProp name="TestElement.test_class">org.apache.jmeter.testelement.TestPlan</stringProp>
-      <stringProp name="TestElement.name">Test Plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestElement.enabled">true</boolProp>
       <stringProp name="TestPlan.comments"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Jakarta Users" enabled="true">
         <longProp name="ThreadGroup.start_time">0</longProp>
-        <stringProp name="TestElement.test_class">org.apache.jmeter.threads.ThreadGroup</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
-        <boolProp name="TestElement.enabled">true</boolProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="TestElement.gui_class">org.apache.jmeter.threads.gui.ThreadGroupGui</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="org.apache.jmeter.control.LoopController">
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.LoopControlPanel</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <stringProp name="LoopController.loops">8</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.LoopController</stringProp>
-          <stringProp name="TestElement.name">Loop Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="TestElement.name">Jakarta Users</stringProp>
         <longProp name="ThreadGroup.end_time">0</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
       </ThreadGroup>
       <hashTree>
-        <InterleaveControl>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.InterleaveControlGui</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.control.InterleaveControl</stringProp>
+        <InterleaveControl guiclass="InterleaveControlGui" testclass="InterleaveControl" testname="Interleave Controller" enabled="true">
           <intProp name="InterleaveControl.style">0</intProp>
-          <stringProp name="TestElement.name">Interleave Controller</stringProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
         </InterleaveControl>
         <hashTree>
-          <ConfigTestElement>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui</stringProp>
+          <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="Defaults" enabled="true">
             <stringProp name="HTTPSampler.path">/</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.config.ConfigTestElement</stringProp>
-            <stringProp name="TestElement.name">Defaults</stringProp>
             <stringProp name="HTTPSampler.domain">jakarta.apache.org</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
             <stringProp name="HTTPSampler.port"></stringProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
               <collectionProp name="Arguments.arguments"/>
-              <stringProp name="TestElement.name"></stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
             </elementProp>
           </ConfigTestElement>
           <hashTree/>
-          <InterleaveControl>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.InterleaveControlGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.InterleaveControl</stringProp>
+          <InterleaveControl guiclass="InterleaveControlGui" testclass="InterleaveControl" testname="Interleave Controller" enabled="true">
             <intProp name="InterleaveControl.style">0</intProp>
-            <stringProp name="TestElement.name">Interleave Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </InterleaveControl>
           <hashTree>
-            <HTTPSampler>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Home Page" enabled="true">
               <stringProp name="HTTPSampler.path">/</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
               <stringProp name="HTTPSampler.method">GET</stringProp>
               <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
               <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
               <boolProp name="HTTPSampler.image_parser">false</boolProp>
               <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-                <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-                <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
-                <stringProp name="TestElement.name"></stringProp>
-                <boolProp name="TestElement.enabled">true</boolProp>
               </elementProp>
               <stringProp name="HTTPSampler.port"></stringProp>
               <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
               <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="TestElement.name">Home Page</stringProp>
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
             </HTTPSampler>
             <hashTree/>
-            <HTTPSampler>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="CVS Page" enabled="true">
               <stringProp name="HTTPSampler.path">/site/cvsindex.html</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
               <stringProp name="HTTPSampler.method">GET</stringProp>
               <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
               <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
               <boolProp name="HTTPSampler.image_parser">false</boolProp>
               <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-                <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-                <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
-                <stringProp name="TestElement.name"></stringProp>
-                <boolProp name="TestElement.enabled">true</boolProp>
               </elementProp>
               <stringProp name="HTTPSampler.port"></stringProp>
               <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
               <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="TestElement.name">CVS Page</stringProp>
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
@@ -130,62 +83,42 @@
             </HTTPSampler>
             <hashTree/>
           </hashTree>
-          <InterleaveControl>
-            <stringProp name="TestElement.gui_class">org.apache.jmeter.control.gui.InterleaveControlGui</stringProp>
-            <stringProp name="TestElement.test_class">org.apache.jmeter.control.InterleaveControl</stringProp>
+          <InterleaveControl guiclass="InterleaveControlGui" testclass="InterleaveControl" testname="Interleave Controller" enabled="true">
             <intProp name="InterleaveControl.style">0</intProp>
-            <stringProp name="TestElement.name">Interleave Controller</stringProp>
-            <boolProp name="TestElement.enabled">true</boolProp>
           </InterleaveControl>
           <hashTree>
-            <HTTPSampler>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Bug Page" enabled="true">
               <stringProp name="HTTPSampler.path">/site/bugs.html</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
               <stringProp name="HTTPSampler.method">GET</stringProp>
               <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
               <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
               <boolProp name="HTTPSampler.image_parser">false</boolProp>
               <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-                <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-                <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
-                <stringProp name="TestElement.name"></stringProp>
-                <boolProp name="TestElement.enabled">true</boolProp>
               </elementProp>
               <stringProp name="HTTPSampler.port"></stringProp>
               <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
               <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="TestElement.name">Bug Page</stringProp>
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
             </HTTPSampler>
             <hashTree/>
-            <HTTPSampler>
+            <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="FAQ Page" enabled="true">
               <stringProp name="HTTPSampler.path">/site/faqs.html</stringProp>
-              <stringProp name="TestElement.test_class">org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
               <stringProp name="HTTPSampler.method">GET</stringProp>
               <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
               <stringProp name="HTTPSampler.protocol">http</stringProp>
-              <boolProp name="TestElement.enabled">true</boolProp>
               <boolProp name="HTTPSampler.image_parser">false</boolProp>
               <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-              <elementProp name="HTTPsampler.Arguments" elementType="org.apache.jmeter.config.Arguments">
-                <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel</stringProp>
-                <stringProp name="TestElement.test_class">org.apache.jmeter.config.Arguments</stringProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
-                <stringProp name="TestElement.name"></stringProp>
-                <boolProp name="TestElement.enabled">true</boolProp>
               </elementProp>
               <stringProp name="HTTPSampler.port"></stringProp>
               <stringProp name="HTTPSampler.mimetype"></stringProp>
-              <stringProp name="TestElement.gui_class">org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
               <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
-              <stringProp name="TestElement.name">FAQ Page</stringProp>
               <stringProp name="HTTPSampler.monitor">false</stringProp>
               <stringProp name="HTTPSampler.domain"></stringProp>
               <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
@@ -194,12 +127,9 @@
             <hashTree/>
           </hashTree>
         </hashTree>
-        <ResultCollector>
-          <stringProp name="TestElement.gui_class">org.apache.jmeter.visualizers.GraphVisualizer</stringProp>
-          <stringProp name="TestElement.test_class">org.apache.jmeter.reporters.ResultCollector</stringProp>
-          <stringProp name="TestElement.name">File Reporter</stringProp>
+        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="File Reporter" enabled="true">
           <objProp>
-            <value class="org.apache.jmeter.samplers.SampleSaveConfiguration">
+            <value class="SampleSaveConfiguration">
               <time>true</time>
               <latency>true</latency>
               <timestamp>true</timestamp>
@@ -221,11 +151,9 @@
               <responseDataOnError>false</responseDataOnError>
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
-              <printMilliseconds>false</printMilliseconds>
             </value>
             <name>saveConfig</name>
           </objProp>
-          <boolProp name="TestElement.enabled">true</boolProp>
           <stringProp name="filename">interleave-test2.dat</stringProp>
           <boolProp name="ResultCollector.error_logging">false</boolProp>
         </ResultCollector>

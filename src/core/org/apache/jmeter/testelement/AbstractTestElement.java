@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,8 +20,8 @@ package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +47,7 @@ import org.apache.log.Logger;
 public abstract class AbstractTestElement implements TestElement, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Map propMap = Collections.synchronizedMap(new HashMap());
+	private Map propMap = Collections.synchronizedMap(new LinkedHashMap());
 
 	private transient Set temporaryProperties;
 
@@ -58,18 +59,20 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	private transient String threadName = null;
 
 	public Object clone() {
-		TestElement clonedElement = null;
 		try {
-			clonedElement = (TestElement) this.getClass().newInstance();
+			TestElement clonedElement = (TestElement) this.getClass().newInstance();
 
 			PropertyIterator iter = propertyIterator();
 			while (iter.hasNext()) {
 				clonedElement.setProperty((JMeterProperty) iter.next().clone());
 			}
 			clonedElement.setRunningVersion(runningVersion);
-		} catch (Exception e) {
-		}
-		return clonedElement;
+			return clonedElement;
+		} catch (InstantiationException e) {
+			throw new AssertionError(e); // clone should never return null
+        } catch (IllegalAccessException e) {
+        	throw new AssertionError(e); // clone should never return null
+        }
 	}
 
 	public void clear() {
@@ -88,6 +91,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		}
 	}
 
+	// TODO temporary hack to avoid unnecessary bug reports for subclasses
+	
+	public int hashCode(){
+		return System.identityHashCode(this);
+	}
 	/*
 	 * URGENT: TODO - sort out equals and hashCode() - at present equal
 	 * instances can/will have different hashcodes - problem is, when a proper
@@ -123,9 +131,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	public JMeterProperty getProperty(String key) {
 		JMeterProperty prop = (JMeterProperty) propMap.get(key);
 		if (prop == null) {
-			// TODO URGENT - does it make sense to create "different"
-			// NullProperty items for each key?
-			// Or would it be better to create them all with a key of "" ?
 			prop = new NullProperty(key);
 		}
 		return prop;
@@ -195,6 +200,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		return getProperty(key).getStringValue();
 	}
 
+    public String getPropertyAsString(String key, String defaultValue) {
+        JMeterProperty jmp = getProperty(key);
+        return jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
+    }
+
 	protected void addProperty(JMeterProperty property) {
 		if (isRunningVersion()) {
 			setTemporary(property);
@@ -246,6 +256,10 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 
 	public void setProperty(String name, String value) {
 		setProperty(new StringProperty(name, value));
+	}
+
+	public void setProperty(String name, boolean value) {
+		setProperty(new StringProperty(name, Boolean.toString(value)));
 	}
 
 	public PropertyIterator propertyIterator() {
@@ -326,7 +340,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	 */
 	public void setTemporary(JMeterProperty property) {
 		if (temporaryProperties == null) {
-			temporaryProperties = new HashSet();
+			temporaryProperties = new LinkedHashSet();
 		}
 		temporaryProperties.add(property);
 		if (property instanceof MultiProperty) {
@@ -385,12 +399,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		this.threadName = inthreadName;
 	}
 
-	/**
-	 * 
-	 */
 	public AbstractTestElement() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	// Default implementation

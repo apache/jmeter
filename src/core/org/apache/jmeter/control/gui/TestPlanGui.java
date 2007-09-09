@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,7 +23,6 @@ import java.awt.Container;
 import java.util.Collection;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -32,6 +31,8 @@ import javax.swing.JTextArea;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
+import org.apache.jmeter.gui.action.ActionNames;
+import org.apache.jmeter.gui.util.FileListPanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -44,7 +45,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * JMeter GUI component representing the test plan which will be executed when
  * the test is run.
  * 
- * @version $Revision$ Last Updated: $Date$
  */
 public class TestPlanGui extends AbstractJMeterGuiComponent {
 
@@ -59,10 +59,9 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 	/** A panel allowing the user to define variables. */
 	private ArgumentsPanel argsPanel;
 
-	/** A panel to contain comments on the test plan. */
-	private JTextArea commentPanel;
+    FileListPanel browseJar = null;
 
-	/**
+    /**
 	 * Create a new TestPlanGui.
 	 */
 	public TestPlanGui() {
@@ -83,15 +82,15 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 	 */
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		JMenu addMenu = new JMenu(JMeterUtils.getResString("Add"));
+		JMenu addMenu = new JMenu(JMeterUtils.getResString("add")); // $NON-NLS-1$
 		addMenu.add(MenuFactory.makeMenuItem(new ThreadGroupGui().getStaticLabel(), ThreadGroupGui.class.getName(),
-				"Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, "Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, "Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, "Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, "Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, "Add"));
-		addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, "Add"));
+				ActionNames.ADD));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, ActionNames.ADD));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.CONFIG_ELEMENTS, ActionNames.ADD));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.ASSERTIONS, ActionNames.ADD));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.PRE_PROCESSORS, ActionNames.ADD));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, ActionNames.ADD));
+		addMenu.add(MenuFactory.makeMenu(MenuFactory.TIMERS, ActionNames.ADD));
 		pop.add(addMenu);
 		MenuFactory.addFileMenu(pop);
 		return pop;
@@ -112,12 +111,12 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 			tp.setFunctionalMode(functionalMode.isSelected());
 			tp.setSerialized(serializedMode.isSelected());
 			tp.setUserDefinedVariables((Arguments) argsPanel.createTestElement());
-			tp.setProperty(TestPlan.COMMENTS, commentPanel.getText());
+            tp.setTestPlanClasspathArray(browseJar.getFiles());
 		}
 	}
 
 	public String getLabelResource() {
-		return "test_plan";
+		return "test_plan"; // $NON-NLS-1$
 	}
 
 	/**
@@ -150,7 +149,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null) {
 			argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue());
 		}
-		commentPanel.setText(el.getPropertyAsString(TestPlan.COMMENTS));
+        browseJar.setFiles( ((TestPlan)el).getTestPlanClasspathArray() );
 	}
 
 	/**
@@ -159,20 +158,15 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 	 * @return a panel for user-defined variables
 	 */
 	private JPanel createVariablePanel() {
-		argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables"));
+		argsPanel = new ArgumentsPanel(JMeterUtils.getResString("user_defined_variables")); // $NON-NLS-1$
 
 		return argsPanel;
 	}
 
-	private Container createCommentPanel() {
-		Container panel = makeTitlePanel();
-		commentPanel = new JTextArea();
-		JLabel label = new JLabel(JMeterUtils.getResString("testplan_comments"));
-		label.setLabelFor(commentPanel);
-		panel.add(label);
-		panel.add(commentPanel);
-		return panel;
-	}
+    protected Container createClassPathPanel() {
+        browseJar = new FileListPanel(JMeterUtils.getResString("test_plan_classpath_browse"), ".jar"); // $NON-NLS-1$ $NON-NLS-2$
+        return browseJar;
+    }
 
 	/**
 	 * Initialize the components and layout of this component.
@@ -181,19 +175,20 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		setLayout(new BorderLayout(10, 10));
 		setBorder(makeBorder());
 
-		add(createCommentPanel(), BorderLayout.NORTH);
+		add(makeTitlePanel(), BorderLayout.NORTH);
 
 		add(createVariablePanel(), BorderLayout.CENTER);
 
 		VerticalPanel southPanel = new VerticalPanel();
-		serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized"));
+		serializedMode = new JCheckBox(JMeterUtils.getResString("testplan.serialized")); // $NON-NLS-1$
 		southPanel.add(serializedMode);
-		functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode"));
+		functionalMode = new JCheckBox(JMeterUtils.getResString("functional_mode")); // $NON-NLS-1$
 		southPanel.add(functionalMode);
-		JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation"));
+		JTextArea explain = new JTextArea(JMeterUtils.getResString("functional_mode_explanation")); // $NON-NLS-1$
 		explain.setEditable(false);
 		explain.setBackground(this.getBackground());
 		southPanel.add(explain);
+        southPanel.add(createClassPathPanel());
 
 		add(southPanel, BorderLayout.SOUTH);
 	}

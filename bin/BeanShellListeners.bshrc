@@ -1,0 +1,29 @@
+// Example BeanShell Listener definitions
+
+// ThreadListener methods
+
+threadStarted(){
+    print("threadStarted");
+}
+
+threadFinished(){
+    print("threadFinished");
+}
+
+// TestListener methods
+
+testStarted(){
+    print("testStarted");
+}
+
+testEnded(){
+    print("testEnded");
+}
+
+testStarted(String s){
+    print("testStarted "+s);
+}
+
+testEnded(String s){
+    print("testEnded "+s);
+}

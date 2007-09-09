@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,11 +30,6 @@ import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * Created Apr 29 2003 11:52 AM
- * 
- * @version $Revision$ Last updated: $Date$
- */
 public class LdapTestSamplerGui extends AbstractSamplerGui {
 	private LoginConfigGui loginPanel;
 
@@ -76,9 +71,19 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
 		((LDAPSampler) sampler).addTestElement(loginPanel.createTestElement());
 		this.configureTestElement(sampler);
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+
+        ldapDefaultPanel.clearGui();
+        loginPanel.clearGui();
+    }    
 
 	public String getLabelResource() {
-		return "ldap_testing_title";
+		return "ldap_testing_title"; // $NON-NLS-1$
 	}
 
 	private void init() {
@@ -88,7 +93,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
 		VerticalPanel mainPanel = new VerticalPanel();
 		loginPanel = new LoginConfigGui(false);
 		ldapDefaultPanel = new LdapConfigGui(false);
-		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config")));
+		loginPanel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("login_config"))); // $NON-NLS-1$
 		add(makeTitlePanel(), BorderLayout.NORTH);
 		mainPanel.add(loginPanel);
 		mainPanel.add(ldapDefaultPanel);

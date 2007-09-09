@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -41,28 +41,33 @@ import org.apache.log.Logger;
 /**
  * StringFromFile Function to read a String from a text file.
  * 
- * Parameters: - file name - variable name (optional - defaults to
- * StringFromFile_)
+ * Parameters: 
+ * - file name 
+ * - variable name (optional - defaults to StringFromFile_)
  * 
- * Returns: - the next line from the file - or **ERR** if an error occurs -
- * value is also saved in the variable for later re-use.
+ * Returns: 
+ * - the next line from the file
+ * - or **ERR** if an error occurs
+ * - value is also saved in the variable for later re-use.
  * 
  * Ensure that different variable names are used for each call to the function
  * 
  * 
- * Notes: - JMeter instantiates a copy of each function for every reference in a
- * Sampler or elsewhere; each instance will open its own copy of the the file -
- * the file name is resolved at file (re-)open time - the output variable name
- * is resolved every time the function is invoked
+ * Notes: 
+ * - JMeter instantiates a copy of each function for every reference in a
+ * Sampler or elsewhere; each instance will open its own copy of the the file
+ * - the file name is resolved at file (re-)open time
+ * - the output variable name is resolved every time the function is invoked
  * 
- * @version $Revision$ Updated on: $Date$
  */
 public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 1L;
+	
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "_StringFromFile";//$NON-NLS-1$
+	private static final String KEY = "__StringFromFile";//$NON-NLS-1$
 
 	// Function name (only 1 _)
 
@@ -85,9 +90,9 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
 	private static final int MAX_PARAM_COUNT = 4;
 
-	transient private String myValue = ERR_IND;
+	transient private String myValue;
 
-	transient private String myName = "StringFromFile_";//$NON-NLS-1$ - Name to store the value in
+	transient private String myName;
 
 	transient private Object[] values;
 
@@ -101,13 +106,24 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	transient private String fileName; // needed for error messages
 
 	public StringFromFile() {
+		init();
 		if (log.isDebugEnabled()) {
 			log.debug("++++++++ Construct " + this);
 		}
 	}
 
-	public Object clone() {
-		StringFromFile newReader = new StringFromFile();
+	private void init(){
+		myValue = ERR_IND;
+		myName = "StringFromFile_";//$NON-NLS-1$		
+	}
+	
+	private Object readResolve(){
+		init();
+		return this;
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		StringFromFile newReader = (StringFromFile) super.clone();
 		if (log.isDebugEnabled()) { // Skip expensive parameter creation ..
 			log.debug(this + "::StringFromFile.clone()", new Throwable("debug"));//$NON-NLS-1$
 		}
@@ -217,7 +233,6 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
 
-		JMeterVariables vars = getVariables();
 
 		if (values.length >= PARAM_NAME) {
 			myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute();
@@ -268,6 +283,7 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 		}
 
 		if (myName.length() > 0) {
+            JMeterVariables vars = getVariables();
 			vars.put(myName, myValue);
 		}
 
@@ -341,7 +357,7 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	}
 
 	public void testEnded() {
-		this.testEnded("");
+		this.testEnded(""); //$NON-NLS-1$
 	}
 
 	public void testEnded(String host) {

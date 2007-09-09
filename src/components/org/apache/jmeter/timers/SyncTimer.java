@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -34,15 +35,22 @@ import org.apache.log.Logger;
  * 
  */
 public class SyncTimer extends AbstractTestElement implements Timer, Serializable, TestBean {
-	private static final long serialVersionUID = 1;
+	private static final long serialVersionUID = 2;
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	int[] timerCounter = new int[] { 0 };
+    // Must be an Object so it will be shared between threads
+	private int[] timerCounter = new int[] { 0 };
 
-	transient Object sync = new Object();
+	private transient Object sync = new Object();
 
-	int groupSize;
+	private int groupSize;
+
+	// Ensure transient object is created by the server
+	private Object readResolve(){
+		sync = new Object();
+		return this;
+	}
 
 	/**
 	 * @return Returns the numThreads.
@@ -67,23 +75,28 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
 	public long delay() {
 		synchronized (sync) {
 			timerCounter[0]++;
-			if ((getGroupSize() == 0 && timerCounter[0] >= JMeterContextService.getNumberOfThreads())
-					|| (getGroupSize() > 0 && timerCounter[0] >= getGroupSize())) {
-				timerCounter[0] = 0;
+			final int groupSz = getGroupSize();
+            final int count = timerCounter[0];
+            if (
+                (groupSz == 0 && count >= JMeterContextService.getNumberOfThreads())
+				||
+                (groupSz > 0 && count >= groupSz)
+                ) {
 				sync.notifyAll();
 			} else {
 				try {
 					sync.wait();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.warn(e.getLocalizedMessage());
 				}
 			}
+            timerCounter[0]=0; // Reset for next time
 		}
 		return 0;
 	}
 
 	/**
-	 * We have to controll the cloning process because we need some cross-thread
+	 * We have to control the cloning process because we need some cross-thread
 	 * communication if our synctimers are to be able to determine when to block
 	 * and when to release.
 	 */

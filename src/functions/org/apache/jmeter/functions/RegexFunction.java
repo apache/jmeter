@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,7 +18,9 @@
 
 package org.apache.jmeter.functions;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,32 +29,30 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.apache.oro.text.PatternCacheLRU;
+import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.oro.text.regex.Util;
 
 public class RegexFunction extends AbstractFunction implements Serializable {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String ALL = "ALL";
+	private static final long serialVersionUID = 1L;
+	
+	public static final String ALL = "ALL"; //$NON-NLS-1$
 
-	public static final String RAND = "RAND";
+	public static final String RAND = "RAND"; //$NON-NLS-1$
 
-	public static final String KEY = "__regexFunction";
+	public static final String KEY = "__regexFunction"; //$NON-NLS-1$
 
 	private Object[] values;// Parameters are stored here
 
@@ -59,49 +60,53 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(1000, new Perl5Compiler());
-
-	private Pattern templatePattern;// initialised to the regex \$(\d+)\$
-
-	private static ThreadLocal localMatcher = new ThreadLocal() {
-		protected Object initialValue() {
-			return new Perl5Matcher();
-		}
-	};
+	private transient Pattern templatePattern;// initialised to the regex \$(\d+)\$
 
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
 
 	private static final int MAX_PARAMETER_COUNT = 6;
 	static {
-		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex
-		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template
-		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match
-		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text
-		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text
-		desc.add(JMeterUtils.getResString("function_name_param"));
+		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
 	public RegexFunction() {
-		templatePattern = patternCache.getPattern("\\$(\\d+)\\$", Perl5Compiler.READ_ONLY_MASK);
+		initPattern();
 	}
+
+	private void initPattern() {
+		templatePattern = JMeterUtils.getPatternCache().getPattern("\\$(\\d+)\\$",  //$NON-NLS-1$
+				Perl5Compiler.READ_ONLY_MASK);
+	}
+
+    // For serialised objects, do the same work as the constructor:
+    private Object readResolve() throws ObjectStreamException {
+        initPattern();
+        return this;
+    }
+
 
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
-		String valueIndex = "", defaultValue = "", between = "";
-		String name = "";
+		String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String name = ""; //$NON-NLS-1$
 		Pattern searchPattern;
 		Object[] tmplt;
 		try {
-			searchPattern = patternCache.getPattern(((CompoundVariable) values[0]).execute(),
+			searchPattern = JMeterUtils.getPatternCache().getPattern(((CompoundVariable) values[0]).execute(),
 					Perl5Compiler.READ_ONLY_MASK);
 			tmplt = generateTemplate(((CompoundVariable) values[1]).execute());
 
 			if (values.length > 2) {
 				valueIndex = ((CompoundVariable) values[2]).execute();
 			}
-			if (valueIndex.equals("")) {
-				valueIndex = "1";
+			if (valueIndex.equals("")) { //$NON-NLS-1$
+				valueIndex = "1"; //$NON-NLS-1$
 			}
 
 			if (values.length > 3) {
@@ -110,7 +115,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 			if (values.length > 4) {
 				String dv = ((CompoundVariable) values[4]).execute();
-				if (!dv.equals("")) {
+				if (!dv.equals("")) { //$NON-NLS-1$
 					defaultValue = dv;
 				}
 			}
@@ -118,33 +123,35 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			if (values.length > 5) {
 				name = ((CompoundVariable) values[values.length - 1]).execute();
 			}
-		} catch (Exception e) {
+		} catch (MalformedCachePatternException e) {
 			throw new InvalidVariableException(e.toString());
 		}
 
 		JMeterVariables vars = getVariables();// Relatively expensive
 												// operation, so do it once
 		vars.put(name, defaultValue);
-		if (previousResult == null || previousResult.getResponseData() == null) {
+		if (previousResult == null || previousResult.getResponseData().length == 0) {
 			return defaultValue;
 		}
 
 		List collectAllMatches = new ArrayList();
 		try {
-			PatternMatcher matcher = (PatternMatcher) localMatcher.get();
-			String responseText = new String(previousResult.getResponseData());
+			PatternMatcher matcher = JMeterUtils.getMatcher();
+			String responseText = new String(previousResult.getResponseData(),
+                    previousResult.getDataEncoding()); // Bug 37140
 			PatternMatcherInput input = new PatternMatcherInput(responseText);
 			while (matcher.contains(input, searchPattern)) {
 				MatchResult match = matcher.getMatch();
 				collectAllMatches.add(match);
 			}
-		} catch (NumberFormatException e) {
-			log.error("", e);
+		} catch (NumberFormatException e) {//TODO: can this occur?
+			log.error("", e); //$NON-NLS-1$
 			return defaultValue;
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException e) {
+            log.error("Can't convert ResponseData", e);
 			return defaultValue;
 		} finally {
-			vars.put(name + "_matchNr", "" + collectAllMatches.size());
+			vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		if (collectAllMatches.size() == 0) {
@@ -187,7 +194,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
 		if (result != null) {
 			for (int x = 0; x < result.groups(); x++) {
-				vars.put(namep + "_g" + x, result.group(x));
+				vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
 			}
 		}
 	}
@@ -228,8 +235,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	private Object[] generateTemplate(String rawTemplate) {
 		List pieces = new ArrayList();
 		List combined = new LinkedList();
-		PatternMatcher matcher = new Perl5Matcher();
-		Util.split(pieces, new Perl5Matcher(), templatePattern, rawTemplate);
+		PatternMatcher matcher = JMeterUtils.getMatcher();
+		Util.split(pieces, matcher, templatePattern, rawTemplate);
 		PatternMatcherInput input = new PatternMatcherInput(rawTemplate);
 		Iterator iter = pieces.iterator();
 		boolean startsWith = isFirstElementGroup(rawTemplate);
@@ -254,126 +261,9 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	}
 
 	private boolean isFirstElementGroup(String rawData) {
-		Pattern pattern = patternCache.getPattern("^\\$\\d+\\$", Perl5Compiler.READ_ONLY_MASK);
-		return new Perl5Matcher().contains(rawData, pattern);
+		Pattern pattern = JMeterUtils.getPatternCache().getPattern("^\\$\\d+\\$",  //$NON-NLS-1$
+				Perl5Compiler.READ_ONLY_MASK);
+		return JMeterUtils.getMatcher().contains(rawData, pattern);
 	}
 
-	/**/
-	public static class Test extends JMeterTestCase {
-		RegexFunction variable;
-
-		SampleResult result;
-
-		Collection params;
-
-		private JMeterVariables vars;
-
-		private JMeterContext jmctx = null;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			variable = new RegexFunction();
-			result = new SampleResult();
-			jmctx = JMeterContextService.getContext();
-			String data = "<company-xmlext-query-ret><row>" + "<value field=\"RetCode\">" + "LIS_OK</value><value"
-					+ " field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value><value"
-					+ " field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value><value"
-					+ " field=\"pinposition1\">1</value><value" + " field=\"pinpositionvalue1\"></value><value"
-					+ " field=\"pinposition2\">5</value><value" + " field=\"pinpositionvalue2\"></value><value"
-					+ " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
-					+ "</row></company-xmlext-query-ret>";
-			result.setResponseData(data.getBytes());
-			vars = new JMeterVariables();
-			jmctx.setVariables(vars);
-			jmctx.setPreviousResult(result);
-		}
-
-		public void testVariableExtraction() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$"));
-			params.add(new CompoundVariable("2"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("5", match);
-		}
-
-		public void testVariableExtraction2() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$1$"));
-			params.add(new CompoundVariable("3"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("pinposition3", match);
-		}
-
-		public void testVariableExtraction5() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$1$"));
-			params.add(new CompoundVariable("ALL"));
-			params.add(new CompoundVariable("_"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("pinposition1_pinposition2_pinposition3", match);
-		}
-
-		public void testVariableExtraction6() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$"));
-			params.add(new CompoundVariable("4"));
-			params.add(new CompoundVariable(""));
-			params.add(new CompoundVariable("default"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("default", match);
-		}
-
-		public void testComma() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value,? field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$1$"));
-			params.add(new CompoundVariable("3"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("pinposition3", match);
-		}
-
-		public void testVariableExtraction3() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("_$1$"));
-			params.add(new CompoundVariable("2"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("_pinposition2", match);
-		}
-
-		public void testVariableExtraction4() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$, "));
-			params.add(new CompoundVariable(".333"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("1, ", match);
-		}
-
-		public void testDefaultValue() throws Exception {
-			params = new LinkedList();
-			params.add(new CompoundVariable("<value,, field=\"(pinposition\\d+)\">(\\d+)</value>"));
-			params.add(new CompoundVariable("$2$, "));
-			params.add(new CompoundVariable(".333"));
-			params.add(new CompoundVariable(""));
-			params.add(new CompoundVariable("No Value Found"));
-			variable.setParameters(params);
-			String match = variable.execute(result, null);
-			assertEquals("No Value Found", match);
-		}
-	}
 }

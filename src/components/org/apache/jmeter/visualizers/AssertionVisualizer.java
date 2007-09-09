@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,6 +19,7 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -33,10 +34,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
-/**
- * 
- * @version $Revision$ on $Date$
- */
 public class AssertionVisualizer extends AbstractVisualizer implements Clearable {
 
 	private JTextArea textArea;
@@ -47,26 +44,21 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 	}
 
 	public String getLabelResource() {
-		return "assertion_visualizer_title";
+		return "assertion_visualizer_title"; // $NON-NLS-1$
 	}
 
 	public void add(SampleResult sample) {
 		StringBuffer sb = new StringBuffer(100);
-		String sd = sample.getSamplerData();
-		if (null != sd) {
-			sb.append(sd);
-		} else {
-			sb.append(sample.getSampleLabel());
-		}
+		sb.append(sample.getSampleLabel());
 		sb.append(getAssertionResult(sample));
-		sb.append("\n");
+		sb.append("\n"); // $NON-NLS-1$
 		synchronized (textArea) {
 			textArea.append(sb.toString());
 		}
 	}
 
-	public void clear() {
-		textArea.setText("");
+	public void clearData() {
+		textArea.setText(""); // $NON-NLS-1$
 	}
 
 	private String getAssertionResult(SampleResult res) {
@@ -77,7 +69,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 				AssertionResult item = assertionResults[i];
 
 				if (item.isFailure() || item.isError()) {
-					display.append("\n\t\t");
+					display.append("\n\t"); // $NON-NLS-1$
+					display.append(item.getName() != null ? item.getName() + " : " : "");// $NON-NLS-1$
 					display.append(item.getFailureMessage());
 				}
 			}
@@ -98,7 +91,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 		this.add(makeTitlePanel(), BorderLayout.NORTH);
 
 		// TEXTAREA LABEL
-		JLabel textAreaLabel = new JLabel(JMeterUtils.getResString("assertion_textarea_label"));
+		JLabel textAreaLabel = 
+            new JLabel(JMeterUtils.getResString("assertion_textarea_label")); // $NON-NLS-1$
 		Box mainPanel = Box.createVerticalBox();
 		mainPanel.add(textAreaLabel);
 
@@ -111,8 +105,8 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
 		areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+        areaScrollPane.setPreferredSize(new Dimension(mainPanel.getWidth(),mainPanel.getHeight()));
 		mainPanel.add(areaScrollPane);
-		mainPanel.add(Box.createVerticalGlue());
 		this.add(mainPanel, BorderLayout.CENTER);
 	}
 }

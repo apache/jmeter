@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -200,12 +200,12 @@ public final class LoggingManager {
 		return wt;
 	}
 
-	/*
+	/**
 	 * Handle LOG_PRIORITY.category=priority and LOG_FILE.category=file_name
 	 * properties. If the prefix is detected, then remove it to get the
 	 * category.
 	 */
-	private static void setLoggingLevels(Properties appProperties) {
+	public static void setLoggingLevels(Properties appProperties) {
 		Iterator props = appProperties.keySet().iterator();
 		while (props.hasNext()) {
 			String prop = (String) props.next();
@@ -232,12 +232,15 @@ public final class LoggingManager {
 	 */
 	private static String getCallerClassName() {
 		String name = ClassContext.getCallerClassNameAt(3);
-		if (name.startsWith(PACKAGE_PREFIX)) { // remove the package prefix
-			name = name.substring(PACKAGE_PREFIX.length());
-		}
 		return name;
 	}
 
+    public static String removePrefix(String name){
+        if (name.startsWith(PACKAGE_PREFIX)) { // remove the package prefix
+            name = name.substring(PACKAGE_PREFIX.length());
+        }
+        return name;
+    }
 	/**
 	 * Get the Logger for a class - no argument needed because the calling class
 	 * name is derived automatically from the call stack.
@@ -246,16 +249,29 @@ public final class LoggingManager {
 	 */
 	public static Logger getLoggerForClass() {
 		String className = getCallerClassName();
-		return Hierarchy.getDefaultHierarchy().getLoggerFor(className);
+		return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(className));
 	}
 
 	public static Logger getLoggerFor(String category) {
 		return Hierarchy.getDefaultHierarchy().getLoggerFor(category);
 	}
 
+    public static Logger getLoggerForShortName(String category) {
+        return Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(category));
+    }
+    
 	public static void setPriority(String p, String category) {
 		setPriority(Priority.getPriorityForName(p), category);
 	}
+
+    /**
+     * 
+     * @param p - priority, e.g. DEBUG, INFO
+     * @param fullName - e.g. org.apache.jmeter.etc
+     */
+    public static void setPriorityFullName(String p, String fullName) {
+        setPriority(Priority.getPriorityForName(p), removePrefix(fullName));
+    }
 
 	public static void setPriority(Priority p, String category) {
 		Hierarchy.getDefaultHierarchy().getLoggerFor(category).setPriority(p);

@@ -1,9 +1,21 @@
 /*
- * Created on Jun 19, 2004
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
  */
+
 package org.apache.jmeter.gui.action;
 
 import java.io.File;
@@ -28,9 +40,9 @@ public class TestLoad extends JMeterTestCase {
 	}
 
 	public void setUp() {
-		testFile1 = // TODO: not used - why?
-		new File(System.getProperty("user.dir") + "/testfiles", "Test Plan.jmx");
-		testFile2 = // TODO: not used - why?
+//		testFile1 = // Old-style format; no longer used
+//		new File(System.getProperty("user.dir") + "/testfiles", "Test Plan.jmx");
+		testFile2 =
 		new File(System.getProperty("user.dir") + "/testfiles", "Modification Manager.jmx");
 		testFile3 = new File(System.getProperty("user.dir") + "/testfiles", "proxy.jmx");
 		testFile4 = new File(System.getProperty("user.dir") + "/testfiles", "AssertionTestPlan.jmx");
@@ -42,8 +54,17 @@ public class TestLoad extends JMeterTestCase {
 		testFile10 = new File(System.getProperty("user.dir") + "/testfiles", "OnceOnlyTestPlan.jmx");
 		testFile11 = new File(System.getProperty("user.dir") + "/testfiles", "ProxyServerTestPlan.jmx");
 		testFile12 = new File(System.getProperty("user.dir") + "/testfiles", "SimpleTestPlan.jmx");
-		testFile13 = // TODO: not used - why?
-		new File(System.getProperty("user.dir") + "/testfiles", "URLRewritingExample.jmx");
+		// Incomplete file
+//		testFile13 =
+//		new File(System.getProperty("user.dir") + "/testfiles", "URLRewritingExample.jmx");
+	}
+
+//	public void testFile1() throws Exception {
+//		assertTree(getTree(testFile1));
+//	}
+
+	public void testFile2() throws Exception {
+		assertTree(getTree(testFile2));
 	}
 
 	public void testFile3() throws Exception {
@@ -51,7 +72,10 @@ public class TestLoad extends JMeterTestCase {
 	}
 
 	private void assertTree(HashTree tree) throws Exception {
-		assertTrue(tree.getArray()[0] instanceof org.apache.jmeter.testelement.TestPlan);
+		final Object object = tree.getArray()[0];
+		if (! (object instanceof org.apache.jmeter.testelement.TestPlan)){
+			fail("Hash tree should be TestPlan, but is "+object.getClass().getName());
+		}
 	}
 
 	public void testFile4() throws Exception {
@@ -89,6 +113,10 @@ public class TestLoad extends JMeterTestCase {
 	public void testFile12() throws Exception {
 		assertTree(getTree(testFile12));
 	}
+
+//	public void testFile13() throws Exception {
+//		assertTree(getTree(testFile13));
+//	}
 
 	private HashTree getTree(File f) throws Exception {
 		HashTree tree = SaveService.loadTree(new FileInputStream(f));

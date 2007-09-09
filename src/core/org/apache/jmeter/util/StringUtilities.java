@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,56 +18,39 @@
 
 package org.apache.jmeter.util;
 
-import junit.framework.TestCase;
-
 /**
  * @version $Revision$
  */
 public final class StringUtilities {
-	public static String substitute(String input, String pattern, String sub) {
-		StringBuffer ret = new StringBuffer();
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private StringUtilities() {
+    }
+
+    /**
+     * Replace all patterns in a String
+     * 
+     * @see String.replaceAll(String,String)
+     *  - JDK1.4 only
+     * 
+     * @param input - string to be transformed
+     * @param pattern - pattern to replace
+     * @param sub - replacement
+     * @return the updated string
+     */
+	public static String substitute(final String input, final String pattern, final String sub) {
+		StringBuffer ret = new StringBuffer(input.length());
 		int start = 0;
 		int index = -1;
+        final int length = pattern.length();
 		while ((index = input.indexOf(pattern, start)) >= start) {
 			ret.append(input.substring(start, index));
 			ret.append(sub);
-			start = index + pattern.length();
+            start = index + length;
 		}
 		ret.append(input.substring(start));
 		return ret.toString();
-	}
-
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private StringUtilities() {
-	}
-
-	public static class Test extends TestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testSub1() throws Exception {
-			String input = "http://jakarta.apache.org/jmeter/index.html";
-			String pattern = "jakarta.apache.org";
-			String sub = "${server}";
-			assertEquals("http://${server}/jmeter/index.html", StringUtilities.substitute(input, pattern, sub));
-		}
-
-		public void testSub2() throws Exception {
-			String input = "arg1=param1;param1";
-			String pattern = "param1";
-			String sub = "${value}";
-			assertEquals("arg1=${value};${value}", StringUtilities.substitute(input, pattern, sub));
-		}
-
-		public void testSub3() throws Exception {
-			String input = "jakarta.apache.org";
-			String pattern = "jakarta.apache.org";
-			String sub = "${server}";
-			assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
-		}
-
 	}
 }

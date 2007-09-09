@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,28 +25,50 @@ import org.apache.jmeter.testbeans.BeanInfoSupport;
 /**
  * @author mstover
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
 
-	/**
-	 * @param beanClass
-	 */
+    // These names must agree case-wise with the variable and property names
+    private static final String FILENAME = "filename";               //$NON-NLS-1$
+    private static final String FILE_ENCODING = "fileEncoding";      //$NON-NLS-1$
+    private static final String VARIABLE_NAMES = "variableNames";    //$NON-NLS-1$
+    private static final String DELIMITER = "delimiter";             //$NON-NLS-1$
+    private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
+    private static final String STOPTHREAD = "stopThread";           //$NON-NLS-1$
+
 	public CSVDataSetBeanInfo() {
 		super(CSVDataSet.class);
-		createPropertyGroup("csv_data", new String[] { "filename", "variableNames", "delimiter" });
-		PropertyDescriptor p = property("filename");
+		createPropertyGroup("csv_data",             //$NON-NLS-1$
+                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, RECYCLE, STOPTHREAD });
+        
+		PropertyDescriptor p = property(FILENAME);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+		p.setValue(DEFAULT, "");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-		p = property("variableNames");
+        
+		p = property(FILE_ENCODING);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
+		p.setValue(DEFAULT, "");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
-		p = property("delimiter");
+		
+		p = property(VARIABLE_NAMES);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, ",");
+		p.setValue(DEFAULT, "");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+		
+        p = property(DELIMITER);
+		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+		p.setValue(DEFAULT, ",");        //$NON-NLS-1$
+		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        
+        p = property(RECYCLE);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.TRUE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+
+        p = property(STOPTHREAD);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 	}
 }

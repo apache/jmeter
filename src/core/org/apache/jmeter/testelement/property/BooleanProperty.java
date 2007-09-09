@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,15 +19,14 @@
 package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * @version $Revision$
  */
 public class BooleanProperty extends AbstractProperty {
-	boolean value; // TODO: should these be private?
+	private boolean value;
 
-	transient boolean savedValue;
+	private transient boolean savedValue;
 
 	public BooleanProperty(String name, boolean v) {
 		super(name);
@@ -50,19 +49,16 @@ public class BooleanProperty extends AbstractProperty {
 	 * @see JMeterProperty#getStringValue()
 	 */
 	public String getStringValue() {
-		return JOrphanUtils.booleanToString(value);
+		return Boolean.toString(value);
 	}
 
 	/**
 	 * @see JMeterProperty#getObjectValue()
 	 */
 	public Object getObjectValue() {
-		return JOrphanUtils.valueOf(value);
+		return Boolean.valueOf(value);
 	}
 
-	/**
-	 * @see Object#clone()
-	 */
 	public Object clone() {
 		BooleanProperty prop = (BooleanProperty) super.clone();
 		prop.value = value;

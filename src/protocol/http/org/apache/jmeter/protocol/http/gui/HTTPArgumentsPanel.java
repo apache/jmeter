@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -32,22 +33,34 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
 public class HTTPArgumentsPanel extends ArgumentsPanel {
-	/*
-	 * NOTUSED private static final String ENCODED_VALUE =
-	 * JMeterUtils.getResString("encoded_value");
-	 */
-	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?");
 
-	private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals");
+	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?"); //$NON-NLS-1$
+
+	private static final String INCLUDE_EQUALS = JMeterUtils.getResString("include_equals"); //$NON-NLS-1$
 
 	protected void initializeTableModel() {
-		tableModel = new ObjectTableModel(new String[] { ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1,
-				ENCODE_OR_NOT, INCLUDE_EQUALS }, new Functor[] { new Functor("getName"), new Functor("getValue"),
-				new Functor("isAlwaysEncoded"), new Functor("isUseEquals") }, new Functor[] { new Functor("setName"),
-				new Functor("setValue"), new Functor("setAlwaysEncoded"), new Functor("setUseEquals") }, new Class[] {
-				String.class, String.class, Boolean.class, Boolean.class });
+		tableModel = new ObjectTableModel(new String[] {
+				ArgumentsPanel.COLUMN_NAMES_0, ArgumentsPanel.COLUMN_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS },
+				HTTPArgument.class,
+				new Functor[] {
+				new Functor("getName"), //$NON-NLS-1$
+				new Functor("getValue"), //$NON-NLS-1$
+				new Functor("isAlwaysEncoded"), //$NON-NLS-1$
+				new Functor("isUseEquals") }, //$NON-NLS-1$
+				new Functor[] { 
+				new Functor("setName"), //$NON-NLS-1$
+				new Functor("setValue"), //$NON-NLS-1$
+				new Functor("setAlwaysEncoded"), //$NON-NLS-1$
+				new Functor("setUseEquals") }, //$NON-NLS-1$
+				new Class[] {String.class, String.class, Boolean.class, Boolean.class });
 	}
 
+	public static boolean testFunctors(){
+		HTTPArgumentsPanel instance = new HTTPArgumentsPanel();
+		instance.initializeTableModel();
+		return instance.tableModel.checkFunctors(null,instance.getClass());
+	}
+	
 	protected void sizeColumns(JTable table) {
 		int resizeMode = table.getAutoResizeMode();
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -72,7 +85,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 	}
 
 	public HTTPArgumentsPanel() {
-		super(JMeterUtils.getResString("paramtable"));
+		super(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
 	}
 
 	public TestElement createTestElement() {

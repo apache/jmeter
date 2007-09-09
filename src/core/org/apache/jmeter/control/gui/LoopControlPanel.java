@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -38,7 +38,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * should be executed some number of times in a loop. This component can be used
  * standalone or embedded into some other component.
  * 
- * @version $Revision$ on $Date$
  */
 
 public class LoopControlPanel extends AbstractControllerGui implements ActionListener {
@@ -62,10 +61,10 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 	private boolean displayName = true;
 
 	/** The name of the infinite checkbox component. */
-	private static final String INFINITE = "Infinite Field";
+	private static final String INFINITE = "Infinite Field"; // $NON-NLS-1$
 
 	/** The name of the loops field component. */
-	private static final String LOOPS = "Loops Field";
+	private static final String LOOPS = "Loops Field"; // $NON-NLS-1$
 
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
@@ -127,6 +126,16 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 		}
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        loops.setText("1"); // $NON-NLS-1$
+        infinite.setSelected(false);
+    }
+
 	/**
 	 * Invoked when an action occurs. This implementation assumes that the
 	 * target component is the infinite loops checkbox.
@@ -136,7 +145,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 	 */
 	public void actionPerformed(ActionEvent event) {
 		if (infinite.isSelected()) {
-			loops.setText("");
+			loops.setText(""); // $NON-NLS-1$
 			loops.setEnabled(false);
 		} else {
 			loops.setEnabled(true);
@@ -145,7 +154,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 	}
 
 	public String getLabelResource() {
-		return "loop_controller_title";
+		return "loop_controller_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -184,19 +193,19 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 		JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
 
 		// LOOP LABEL
-		JLabel loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num"));
+		JLabel loopsLabel = new JLabel(JMeterUtils.getResString("iterator_num")); // $NON-NLS-1$
 		loopPanel.add(loopsLabel, BorderLayout.WEST);
 
 		JPanel loopSubPanel = new JPanel(new BorderLayout(5, 0));
 
 		// TEXT FIELD
-		loops = new JTextField("1", 5);
+		loops = new JTextField("1", 5); // $NON-NLS-1$
 		loops.setName(LOOPS);
 		loopsLabel.setLabelFor(loops);
 		loopSubPanel.add(loops, BorderLayout.CENTER);
 
 		// FOREVER CHECKBOX
-		infinite = new JCheckBox(JMeterUtils.getResString("infinite"));
+		infinite = new JCheckBox(JMeterUtils.getResString("infinite")); // $NON-NLS-1$
 		infinite.setActionCommand(INFINITE);
 		infinite.addActionListener(this);
 		loopSubPanel.add(infinite, BorderLayout.WEST);
@@ -220,7 +229,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 	 *            the String representation of the number of loops
 	 */
 	private void setState(String loopCount) {
-		if (loopCount.startsWith("-")) {
+		if (loopCount.startsWith("-")) { // $NON-NLS-1$
 			setState(-1);
 		} else {
 			loops.setText(loopCount);
@@ -241,11 +250,11 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
 		if (loopCount <= -1) {
 			infinite.setSelected(true);
 			loops.setEnabled(false);
-			loops.setText("");
+			loops.setText(""); // $NON-NLS-1$
 		} else {
 			infinite.setSelected(false);
 			loops.setEnabled(true);
-			loops.setText("" + loopCount);
+			loops.setText(Integer.toString(loopCount));
 		}
 	}
 }

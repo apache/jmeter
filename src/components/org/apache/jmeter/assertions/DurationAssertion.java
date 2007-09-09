@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,19 +23,18 @@ import java.text.MessageFormat;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Checks if an Sample is sampled within a specified time-frame. If the duration
  * is larger than the timeframe the Assertion is considered a failure.
  * 
- * @author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
+ * author <a href="mailto:wolfram.rittmeyer@web.de">Wolfram Rittmeyer</a>
  * @version $Revision$, $Date$
  */
 public class DurationAssertion extends AbstractTestElement implements Serializable, Assertion {
 	/** Key for storing assertion-informations in the jmx-file. */
-	private static final String DURATION_KEY = "DurationAssertion.duration";
+	public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
 
 	/**
 	 * Returns the result of the Assertion. Here it checks wether the Sample
@@ -44,14 +43,20 @@ public class DurationAssertion extends AbstractTestElement implements Serializab
 	 * AssertionResult will reflect the success of the Sample.
 	 */
 	public AssertionResult getResult(SampleResult response) {
-		AssertionResult result = new AssertionResult();
+		AssertionResult result = new AssertionResult(getName());
 		result.setFailure(false);
-		// has the Sample lasted to long?
-		if (((response.getTime() > getAllowedDuration()) && (getAllowedDuration() > 0))) {
-			result.setFailure(true);
-			Object[] arguments = { new Long(response.getTime()), new Long(getAllowedDuration()) };
-			String message = MessageFormat.format(JMeterUtils.getResString("duration_assertion_failure"), arguments);
-			result.setFailureMessage(message);
+		long duration=getAllowedDuration();
+		if (duration > 0) {
+			long responseTime=response.getTime();
+		// has the Sample lasted too long?
+			if ( responseTime > duration) {
+				result.setFailure(true);
+				Object[] arguments = { new Long(responseTime), new Long(duration) };
+				String message = MessageFormat.format(
+						JMeterUtils.getResString("duration_assertion_failure") // $NON-NLS-1$
+						, arguments);
+				result.setFailureMessage(message);
+			}
 		}
 		return result;
 	}
@@ -60,29 +65,8 @@ public class DurationAssertion extends AbstractTestElement implements Serializab
 	 * Returns the duration to be asserted. A duration of 0 indicates this
 	 * assertion is to be ignored.
 	 */
-	public long getAllowedDuration() {
+	private long getAllowedDuration() {
 		return getPropertyAsLong(DURATION_KEY);
 	}
 
-	/**
-	 * Set the duration that shall be asserted.
-	 * 
-	 * @param duration
-	 *            a period of time in milliseconds. Is not allowed to be
-	 *            negative. Use Double.MAX_VALUE to indicate illegal or empty
-	 *            inputs. This will result to not checking the assertion.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if <code>duration</code> is negative.
-	 */
-	public void setAllowedDuration(long duration) throws IllegalArgumentException {
-		if (duration < 0L) {
-			throw new IllegalArgumentException(JMeterUtils.getResString("argument_must_not_be_negative"));
-		}
-		if (duration == Long.MAX_VALUE) {
-			setProperty(new LongProperty(DURATION_KEY, 0));
-		} else {
-			setProperty(new LongProperty(DURATION_KEY, duration));
-		}
-	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,7 +23,6 @@ import java.io.Serializable;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jorphan.util.JOrphanUtils;
 
@@ -33,51 +32,60 @@ import org.apache.jorphan.util.JOrphanUtils;
  * @author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  */
 public class Cookie extends AbstractTestElement implements Serializable {
-	private static String VALUE = "Cookie.value";
+	private static final String TAB = "\t";
 
-	private static String DOMAIN = "Cookie.domain";
+    private static String VALUE = "Cookie.value"; //$NON-NLS-1$
 
-	private static String EXPIRES = "Cookie.expires";
+	private static String DOMAIN = "Cookie.domain"; //$NON-NLS-1$
 
-	private static String SECURE = "Cookie.secure";
+	private static String EXPIRES = "Cookie.expires"; //$NON-NLS-1$
 
-	private static String PATH = "Cookie.path";
-	
-	private static String PORT = "Cookie.port";
+	private static String SECURE = "Cookie.secure"; //$NON-NLS-1$
+
+	private static String PATH = "Cookie.path"; //$NON-NLS-1$
+
+    private static String PATH_SPECIFIED = "Cookie.path_specified"; //$NON-NLS-1$
+
+    private static String DOMAIN_SPECIFIED = "Cookie.domain_specified"; //$NON-NLS-1$
 
 	/**
 	 * create the coookie
 	 */
 	public Cookie() {
-		this.setName("");
-		this.setValue("");
-		this.setDomain("");
-		this.setPath("");
-		this.setSecure(false);
-		this.setExpires(0);
+        this("","","","",false,0,false,false);
 	}
 
-	/**
+    /**
 	 * create the coookie
+     * 
+     * @param expires - this is in seconds
+     * 
 	 */
 	public Cookie(String name, String value, String domain, String path, boolean secure, long expires) {
-		this.setName(name);
-		this.setValue(value);
-		this.setDomain(domain);
-		this.setPath(path);
-		this.setSecure(secure);
-		this.setExpires(expires);
+        this(name,value,domain,path,secure,expires,true,true);
 	}
 
-	public void addConfigElement(ConfigElement config) {
-	}
+    /**
+     * create the coookie
+     * 
+     * @param expires - this is in seconds
+     * @param hasPath - was the path explicitly specified?
+     * @param hasDomain - was the domain explicitly specified?
+     * 
+     */
+    public Cookie(String name, String value, String domain, String path, 
+            boolean secure, long expires, boolean hasPath, boolean hasDomain) {
+        this.setName(name);
+        this.setValue(value);
+        this.setDomain(domain);
+        this.setPath(path);
+        this.setSecure(secure);
+        this.setExpires(expires);
+        this.setPathSpecified(hasPath);
+        this.setDomainSpecified(hasDomain);
+    }
 
-	public boolean expectsModification() {
-		return false;
-	}
-
-	public String getClassLabel() {
-		return "Cookie";
+    public void addConfigElement(ConfigElement config) {
 	}
 
 	/**
@@ -109,14 +117,27 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	}
 
 	/**
-	 * get the expires for this object.
+	 * get the expiry time for the cookie
+     * 
+     * @return Expiry time in seconds since the Java epoch
 	 */
 	public synchronized long getExpires() {
 		return getPropertyAsLong(EXPIRES);
 	}
 
+    /**
+     * get the expiry time for the cookie
+     * 
+     * @return Expiry time in milli-seconds since the Java epoch, 
+     * i.e. same as System.currentTimeMillis()
+     */
+    public synchronized long getExpiresMillis() {
+        return getPropertyAsLong(EXPIRES)*1000;
+    }
+
 	/**
-	 * set the expires for this object.
+	 * set the expiry time for the cookie
+     * @param expires - expiry time in seconds since the Java epoch
 	 */
 	public synchronized void setExpires(long expires) {
 		setProperty(new LongProperty(EXPIRES, expires));
@@ -149,22 +170,39 @@ public class Cookie extends AbstractTestElement implements Serializable {
 	public synchronized void setPath(String path) {
 		setProperty(PATH, path);
 	}
-	
-	public void setPort(int port)
-	{
-		setProperty(new IntegerProperty(PORT,port));
-	}
-	
-	public int getPort()
-	{
-		return getProperty(PORT).getIntValue();
-	}
 
+    public void setPathSpecified(boolean b) {
+        setProperty(PATH_SPECIFIED, b);
+    }
+
+    public boolean isPathSpecified(){
+        return getPropertyAsBoolean(PATH_SPECIFIED);
+    }
+    
+    public void setDomainSpecified(boolean b) {
+        setProperty(DOMAIN_SPECIFIED, b);
+    }
+
+    public boolean isDomainSpecified(){
+        return getPropertyAsBoolean(DOMAIN_SPECIFIED);
+    }
+    
 	/**
 	 * creates a string representation of this cookie
 	 */
 	public String toString() {
-		return getDomain() + "\tTRUE\t" + getPath() + "\t" + JOrphanUtils.booleanToSTRING(getSecure()) + "\t"
-				+ getExpires() + "\t" + getName() + "\t" + getValue();
+        StringBuffer sb=new StringBuffer(80);
+        sb.append(getDomain());
+        // flag - if all machines within a given domain can access the variable.
+        //(from http://www.cookiecentral.com/faq/ 3.5)
+        sb.append(TAB).append("TRUE");
+        sb.append(TAB).append(getPath());
+        sb.append(TAB).append(JOrphanUtils.booleanToSTRING(getSecure())); 
+        sb.append(TAB).append(getExpires());
+        sb.append(TAB).append(getName());
+        sb.append(TAB).append(getValue());
+        return sb.toString();
 	}
+
+
 }

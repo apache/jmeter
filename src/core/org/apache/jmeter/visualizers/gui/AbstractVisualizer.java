@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2000-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -40,11 +40,10 @@ import org.apache.jmeter.gui.util.FilePanel;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.reporters.AbstractListenerElement;
 import org.apache.jmeter.reporters.ResultCollector;
-import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.Printable;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
@@ -88,7 +87,7 @@ import org.apache.log.Logger;
  * visualizers don't calculate, or displaying the results visually in a new and
  * interesting way. Making a new visualizer for either of these purposes is easy -
  * just extend this class and implement the
- * {@link org.apache.jmeter.visualizers.Visualizer#add(SampleResult) add(SampleResult)}
+ * {@link org.apache.jmeter.visualizers.Visualizer#add add(SampleResult)}
  * method and display the results as you see fit. This AbstractVisualizer and
  * the default
  * {@link org.apache.jmeter.reporters.ResultCollector ResultCollector} handle
@@ -105,12 +104,13 @@ import org.apache.log.Logger;
  * {@link org.apache.jmeter.visualizers.MailerVisualizer MailerVisualizer}.
  * <p>
  * 
- * @version $Revision$
  */
-public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent implements Visualizer, ChangeListener,
-		UnsharedComponent, Printable {
+public abstract class AbstractVisualizer 
+    extends AbstractJMeterGuiComponent 
+    implements Visualizer, ChangeListener, UnsharedComponent, Clearable 
+    {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** A panel allowing results to be saved. */
 	private FilePanel filePanel;
@@ -120,8 +120,6 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 
 	private JButton saveConfigButton;
 
-	SampleSaveConfiguration saveConfig;
-
 	protected ResultCollector collector = new ResultCollector();
 
 	protected boolean isStats = false;
@@ -129,19 +127,21 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	public AbstractVisualizer() {
 		super();
 
-		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only"));
-		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings"));
+		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
+		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
 		saveConfigButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SavePropertyDialog d = new SavePropertyDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils
-						.getResString("Sample Result Save Configuration"), true, collector.getSaveConfig());
+				SavePropertyDialog d = new SavePropertyDialog(
+                        GuiPackage.getInstance().getMainFrame(), 
+                        JMeterUtils.getResString("sample_result_save_configuration"), // $NON-NLS-1$
+                        true, collector.getSaveConfig());
 				d.pack();
 				ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), d);
 				d.setVisible(true);
 			}
 		});
 
-		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl");
+		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl"); // $NON-NLS-1$ $NON-NLS-2$
 		filePanel.addChangeListener(this);
 		filePanel.add(errorLogging);
 		filePanel.add(saveConfigButton);
@@ -243,13 +243,9 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	 *            the event that has occurred
 	 */
 	public void stateChanged(ChangeEvent e) {
-		log.info("getting new collector");
+		log.debug("getting new collector");
 		collector = (ResultCollector) createTestElement();
-		try {
-			collector.loadExistingFile();
-		} catch (Exception err) {
-			log.debug("Error occurred while loading file", err);
-		}
+        collector.loadExistingFile();
 	}
 
 	/**
@@ -361,5 +357,10 @@ public abstract class AbstractVisualizer extends AbstractJMeterGuiComponent impl
 	 */
 	public JComponent getPrintableComponent() {
 		return this;
+	}
+
+	public void clearGui(){
+		super.clearGui();
+		filePanel.clearGui();
 	}
 }

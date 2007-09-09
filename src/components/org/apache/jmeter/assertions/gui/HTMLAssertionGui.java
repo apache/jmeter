@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -50,6 +50,8 @@ import org.apache.log.Logger;
  */
 public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener, ChangeListener {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
 	// instance attributes
 	private JTextField errorThresholdField = null;
 
@@ -67,9 +69,6 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 
 	private FilePanel filePanel = null;
 
-	// class attributes
-	transient private static Logger log = LoggingManager.getLoggerForClass();
-
 	/**
 	 * The constructor.
 	 */
@@ -81,7 +80,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 	 * Returns the label to be shown within the JTree-Component.
 	 */
 	public String getLabelResource() {
-		return "html_assertion_title";
+		return "html_assertion_title"; // $NON-NLS-1$
 	}
 
 	/**
@@ -139,6 +138,22 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		((HTMLAssertion) inElement).setFilename(filePanel.getFilename());
 	}
 
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+
+        docTypeBox.setSelectedIndex(0);
+        htmlRadioButton.setSelected(true);
+        xhtmlRadioButton.setSelected(false);
+        xmlRadioButton.setSelected(false);
+        errorThresholdField.setText("0"); //$NON-NLS-1$
+        warningThresholdField.setText("0"); //$NON-NLS-1$
+        filePanel.setFilename(""); //$NON-NLS-1$
+        errorsOnly.setSelected(false);
+    }    
+
 	/**
 	 * Configures the associated test element.
 	 * 
@@ -161,6 +176,10 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		if (lAssertion.isErrorsOnly()) {
 			warningThresholdField.setEnabled(false);
 			warningThresholdField.setEditable(false);
+		}
+		else {
+			warningThresholdField.setEnabled(true);
+			warningThresholdField.setEditable(true);
 		}
 		filePanel.setFilename(lAssertion.getFilename());
 	}
@@ -186,7 +205,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		docTypeBox = new JComboBox(new Object[] { "omit", "auto", "strict", "loose" });
 		docTypeBox.addFocusListener(this);
 		// docTypePanel.add(new
-		// JLabel(JMeterUtils.getResString("duration_assertion_label")));
+		// JLabel(JMeterUtils.getResString("duration_assertion_label"))); //$NON-NLS-1$
 		docTypePanel.add(new JLabel("Doctype:"));
 		docTypePanel.add(docTypeBox);
 		assertionPanel.add(docTypePanel);
@@ -215,17 +234,17 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		// thresholds
 		HorizontalPanel thresholdPanel = new HorizontalPanel();
 		thresholdPanel.add(new JLabel("Error threshold:"));
-		errorThresholdField = new JTextField("0", 5);
+		errorThresholdField = new JTextField("0", 5); // $NON-NLS-1$
 		errorThresholdField.addFocusListener(this);
 		thresholdPanel.add(errorThresholdField);
 		thresholdPanel.add(new JLabel("Warning threshold:"));
-		warningThresholdField = new JTextField("0", 5);
+		warningThresholdField = new JTextField("0", 5); // $NON-NLS-1$
 		warningThresholdField.addFocusListener(this);
 		thresholdPanel.add(warningThresholdField);
 		assertionPanel.add(thresholdPanel);
 
 		// file panel
-		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".txt");
+		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
 		filePanel.addChangeListener(this);
 		assertionPanel.add(filePanel);
 

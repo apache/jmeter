@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -44,23 +44,25 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * GUI interface for a {@link ResponseAssertion}.
  * 
- * @version $Revision$ on $Date$
  */
 public class AssertionGui extends AbstractAssertionGui {
 	/** The name of the table column in the list of patterns. */
-	private static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test");
+	private static final String COL_NAME = JMeterUtils.getResString("assertion_patterns_to_test"); //$NON-NLS-1$
 
 	/** Radio button indicating that the text response should be tested. */
 	private JRadioButton responseStringButton;
 
 	/** Radio button indicating that the URL should be tested. */
-	private JRadioButton labelButton;
+	private JRadioButton urlButton;
 
 	/** Radio button indicating that the responseMessage should be tested. */
 	private JRadioButton responseMessageButton;
 
 	/** Radio button indicating that the responseCode should be tested. */
 	private JRadioButton responseCodeButton;
+
+	/** Radio button indicating that the headers should be tested. */
+	private JRadioButton responseHeadersButton;
 
 	/**
 	 * Checkbox to indicate whether the response should be forced successful
@@ -81,6 +83,11 @@ public class AssertionGui extends AbstractAssertionGui {
 	private JRadioButton matchesBox;
 
 	/**
+	 * Radio button indicating if the field equals the first pattern.
+	 */
+	private JRadioButton equalsBox;
+
+    /**
 	 * Checkbox indicating to test that the field does NOT contain/match the
 	 * patterns.
 	 */
@@ -106,7 +113,7 @@ public class AssertionGui extends AbstractAssertionGui {
 	}
 
 	public String getLabelResource() {
-		return "assertion_title";
+		return "assertion_title"; // $NON-NLS-1$
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */
@@ -128,20 +135,24 @@ public class AssertionGui extends AbstractAssertionGui {
 				ra.addTestString(testStrings[i]);
 			}
 
-			if (labelButton.isSelected()) {
-				ra.setTestField(ResponseAssertion.SAMPLE_LABEL);
+			if (responseStringButton.isSelected()) {
+				ra.setTestFieldResponseData();
 			} else if (responseCodeButton.isSelected()) {
-				ra.setTestField(ResponseAssertion.RESPONSE_CODE);
+				ra.setTestFieldResponseCode();
 			} else if (responseMessageButton.isSelected()) {
-				ra.setTestField(ResponseAssertion.RESPONSE_MESSAGE);
-			} else {
-				ra.setTestField(ResponseAssertion.RESPONSE_DATA);
+				ra.setTestFieldResponseMessage();
+			} else if (responseHeadersButton.isSelected()) {
+				ra.setTestFieldResponseHeaders();
+			} else { // Assume URL
+				ra.setTestFieldURL();
 			}
 
 			ra.setAssumeSuccess(assumeSuccess.isSelected());
 
 			if (containsBox.isSelected()) {
 				ra.setToContainsType();
+			} else if (equalsBox.isSelected()) {
+                ra.setToEqualsType();
 			} else {
 				ra.setToMatchType();
 			}
@@ -153,6 +164,27 @@ public class AssertionGui extends AbstractAssertionGui {
 			}
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        tableModel.clearData();
+
+        responseStringButton.setSelected(true);
+        urlButton.setSelected(false);
+        responseCodeButton.setSelected(false);
+        responseMessageButton.setSelected(false);
+        responseHeadersButton.setSelected(false);
+        assumeSuccess.setSelected(false);
+        
+        containsBox.setSelected(true);
+        matchesBox.setSelected(false);
+        equalsBox.setSelected(false);
+        notBox.setSelected(false);
+    }    
 
 	/**
 	 * A newly created component can be initialized with the contents of a Test
@@ -170,9 +202,15 @@ public class AssertionGui extends AbstractAssertionGui {
 		if (model.isContainsType()) {
 			containsBox.setSelected(true);
 			matchesBox.setSelected(false);
+            equalsBox.setSelected(false);
+        } else if (model.isEqualsType()) {
+			containsBox.setSelected(false);
+			matchesBox.setSelected(false);
+            equalsBox.setSelected(true);
 		} else {
 			containsBox.setSelected(false);
 			matchesBox.setSelected(true);
+            equalsBox.setSelected(false);
 		}
 
 		if (model.isNotType()) {
@@ -181,15 +219,17 @@ public class AssertionGui extends AbstractAssertionGui {
 			notBox.setSelected(false);
 		}
 
-		if (ResponseAssertion.RESPONSE_DATA.equals(model.getTestField())) {
+		if (model.isTestFieldResponseData()) {
 			responseStringButton.setSelected(true);
-		} else if (ResponseAssertion.RESPONSE_CODE.equals(model.getTestField())) {
+		} else if (model.isTestFieldResponseCode()) {
 			responseCodeButton.setSelected(true);
-		} else if (ResponseAssertion.RESPONSE_MESSAGE.equals(model.getTestField())) {
+		} else if (model.isTestFieldResponseMessage()) {
 			responseMessageButton.setSelected(true);
+		} else if (model.isTestFieldResponseHeaders()) {
+			responseHeadersButton.setSelected(true);
 		} else // Assume it is the URL
 		{
-			labelButton.setSelected(true);
+			urlButton.setSelected(true);
 		}
 
 		assumeSuccess.setSelected(model.getAssumeSuccess());
@@ -232,27 +272,30 @@ public class AssertionGui extends AbstractAssertionGui {
 	 */
 	private JPanel createFieldPanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field"))); //$NON-NLS-1$
 
-		responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp"));
-		labelButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp"));
-		responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp"));
-		responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp"));
+		responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp")); //$NON-NLS-1$
+		urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp")); //$NON-NLS-1$
+		responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
+		responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
+		responseHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_headers")); //$NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(responseStringButton);
-		group.add(labelButton);
+		group.add(urlButton);
 		group.add(responseCodeButton);
 		group.add(responseMessageButton);
+		group.add(responseHeadersButton);
 
 		panel.add(responseStringButton);
-		panel.add(labelButton);
+		panel.add(urlButton);
 		panel.add(responseCodeButton);
 		panel.add(responseMessageButton);
+		panel.add(responseHeadersButton);
 
 		responseStringButton.setSelected(true);
 
-		assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success"));
+		assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success")); //$NON-NLS-1$
 		panel.add(assumeSuccess);
 
 		return panel;
@@ -266,20 +309,24 @@ public class AssertionGui extends AbstractAssertionGui {
 	 */
 	private JPanel createTypePanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_pattern_match_rules")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_pattern_match_rules"))); //$NON-NLS-1$
 
 		ButtonGroup group = new ButtonGroup();
 
-		containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains"));
+		containsBox = new JRadioButton(JMeterUtils.getResString("assertion_contains")); //$NON-NLS-1$
 		group.add(containsBox);
 		containsBox.setSelected(true);
 		panel.add(containsBox);
 
-		matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches"));
+		matchesBox = new JRadioButton(JMeterUtils.getResString("assertion_matches")); //$NON-NLS-1$
 		group.add(matchesBox);
 		panel.add(matchesBox);
 
-		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not"));
+		equalsBox = new JRadioButton(JMeterUtils.getResString("assertion_equals")); //$NON-NLS-1$
+		group.add(equalsBox);
+		panel.add(equalsBox);
+
+		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not")); //$NON-NLS-1$
 		panel.add(notBox);
 
 		return panel;
@@ -303,7 +350,7 @@ public class AssertionGui extends AbstractAssertionGui {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test")));
+		panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_patterns_to_test"))); //$NON-NLS-1$
 
 		panel.add(new JScrollPane(stringTable), BorderLayout.CENTER);
 		panel.add(createButtonPanel(), BorderLayout.SOUTH);
@@ -317,10 +364,10 @@ public class AssertionGui extends AbstractAssertionGui {
 	 * @return the new panel with add and delete buttons
 	 */
 	private JPanel createButtonPanel() {
-		addPattern = new JButton(JMeterUtils.getResString("add"));
+		addPattern = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
 		addPattern.addActionListener(new AddPatternListener());
 
-		deletePattern = new JButton(JMeterUtils.getResString("delete"));
+		deletePattern = new JButton(JMeterUtils.getResString("delete")); //$NON-NLS-1$
 		deletePattern.addActionListener(new ClearPatternsListener());
 		deletePattern.setEnabled(false);
 
@@ -333,8 +380,6 @@ public class AssertionGui extends AbstractAssertionGui {
 	/**
 	 * An ActionListener for deleting a pattern.
 	 * 
-	 * @author
-	 * @version $Revision$ Last updated: $Date$
 	 */
 	private class ClearPatternsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -353,7 +398,6 @@ public class AssertionGui extends AbstractAssertionGui {
 	/**
 	 * An ActionListener for adding a pattern.
 	 * 
-	 * @version $Revision$ Last updated: $Date$
 	 */
 	private class AddPatternListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {

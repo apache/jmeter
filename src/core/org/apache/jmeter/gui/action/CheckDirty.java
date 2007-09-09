@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,40 +34,28 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author mstover
- * @version $Revision$
+ * Check if the TestPlan has been changed since it was last saved
+ *
  */
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Map previousGuiItems;
+	private Map previousGuiItems;
 
-	public static final String CHECK_DIRTY = "check_dirty";
+	private boolean checkMode = false;
 
-	public static final String SUB_TREE_SAVED = "sub_tree_saved";
+	private boolean removeMode = false;
 
-	public static final String SUB_TREE_LOADED = "sub_tree_loaded";
-
-	public static final String ADD_ALL = "add_all";
-
-	// Not implemented: public static final String SAVE = "save_as";
-	// Not implemented: public static final String SAVE_ALL = "save_all";
-	// Not implemented: public static final String SAVE_TO_PREVIOUS = "save";
-	public static final String REMOVE = "check_remove";
-
-	boolean checkMode = false;
-
-	boolean removeMode = false;
-
-	boolean dirty = false;
+	private boolean dirty = false;
 
 	private static Set commands = new HashSet();
 	static {
-		commands.add(CHECK_DIRTY);
-		commands.add(SUB_TREE_SAVED);
-		commands.add(SUB_TREE_LOADED);
-		commands.add(ADD_ALL);
-		commands.add(REMOVE);
+		commands.add(ActionNames.CHECK_DIRTY);
+		commands.add(ActionNames.SUB_TREE_SAVED);
+		commands.add(ActionNames.SUB_TREE_MERGED);
+		commands.add(ActionNames.SUB_TREE_LOADED);
+		commands.add(ActionNames.ADD_ALL);
+		commands.add(ActionNames.CHECK_REMOVE);
 	}
 
 	public CheckDirty() {
@@ -76,7 +64,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals(ExitCommand.EXIT)) {
+		if (e.getActionCommand().equals(ActionNames.EXIT)) {
 			doAction(e);
 		}
 	}
@@ -86,16 +74,16 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 	 */
 	public void doAction(ActionEvent e) {
 		String action = e.getActionCommand();
-		if (action.equals(SUB_TREE_SAVED)) {
+		if (action.equals(ActionNames.SUB_TREE_SAVED)) {
 			HashTree subTree = (HashTree) e.getSource();
 			subTree.traverse(this);
-		} else if (action.equals(SUB_TREE_LOADED)) {
+		} else if (action.equals(ActionNames.SUB_TREE_LOADED)) {
 			ListedHashTree addTree = (ListedHashTree) e.getSource();
 			addTree.traverse(this);
-		} else if (action.equals(ADD_ALL)) {
+		} else if (action.equals(ActionNames.ADD_ALL)) {
 			previousGuiItems.clear();
 			GuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
-		} else if (action.equals(REMOVE)) {
+		} else if (action.equals(ActionNames.CHECK_REMOVE)) {
 			GuiPackage guiPackage = GuiPackage.getInstance();
 			JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
 			removeMode = true;
@@ -104,12 +92,18 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 			}
 			removeMode = false;
 		}
-		checkMode = true;
-		dirty = false;
-		HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
-		wholeTree.traverse(this);
+		// If we are merging in another test plan, we know the test plan is dirty now
+		if(action.equals(ActionNames.SUB_TREE_MERGED)) {
+			dirty = true;
+		}
+		else {
+			dirty = false;
+			checkMode = true;
+			HashTree wholeTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
+			wholeTree.traverse(this);
+			checkMode = false;
+		}
 		GuiPackage.getInstance().setDirty(dirty);
-		checkMode = false;
 	}
 
 	/**
@@ -120,12 +114,15 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 		log.debug("Node is class:" + node.getClass());
 		JMeterTreeNode treeNode = (JMeterTreeNode) node;
 		if (checkMode) {
-			if (previousGuiItems.containsKey(treeNode)) {
-				if (!previousGuiItems.get(treeNode).equals(treeNode.getTestElement())) {
+			// Only check if we have not found any differences so far
+			if(!dirty) {
+				if (previousGuiItems.containsKey(treeNode)) {
+					if (!previousGuiItems.get(treeNode).equals(treeNode.getTestElement())) {
+						dirty = true;
+					}
+				} else {
 					dirty = true;
 				}
-			} else {
-				dirty = true;
 			}
 		} else if (removeMode) {
 			previousGuiItems.remove(treeNode);

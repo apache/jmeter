@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,18 +20,13 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
-import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/**
- * @version $Revision$
- */
 public class RunTime extends GenericController implements Serializable {
 
-	private final static String SECONDS = "RunTime.seconds";
+	private final static String SECONDS = "RunTime.seconds"; //$NON-NLS-1$
 
 	private volatile long startTime = 0;
 
@@ -68,16 +63,15 @@ public class RunTime extends GenericController implements Serializable {
 	public boolean isDone() {
 		if (getRuntime() > 0 && getSubControllers().size() > 0) {
 			return super.isDone();
-		} else {
-			return true; // Runtime is zero - no point staying around
 		}
+		return true; // Runtime is zero - no point staying around
 	}
 
 	private boolean endOfLoop() {
 		return System.currentTimeMillis() - startTime >= 1000 * getRuntime();
 	}
 
-	public Sampler doNext() {
+	public Sampler next() {
 		if (startTime == 0)
 			startTime = System.currentTimeMillis();
 		if (endOfLoop()) {
@@ -85,7 +79,7 @@ public class RunTime extends GenericController implements Serializable {
 			resetLoopCount();
 			return null;
 		}
-		return super.doNext();
+		return super.next();
 	}
 
 	/*
@@ -98,9 +92,8 @@ public class RunTime extends GenericController implements Serializable {
 		if (endOfLoop()) {
 			resetLoopCount();
 			return null;
-		} else {
-			return doNext();
 		}
+		return next();
 	}
 
 	protected void incrementLoopCount() {
@@ -125,55 +118,4 @@ public class RunTime extends GenericController implements Serializable {
 		incrementLoopCount();
 		recoverRunningVersion();
 	}
-
-	// ////////////////////////////Start of Test Code
-	// ///////////////////////////
-
-	/**
-	 * JUnit test
-	 */
-	public static class Test extends JMeterTestCase {
-		public Test(String name) {
-			super(name);
-		}
-
-		public void testProcessing() throws Exception {
-
-			RunTime controller = new RunTime();
-			controller.setRuntime(10);
-			TestSampler samp1 = new TestSampler("Sample 1", 500);
-			TestSampler samp2 = new TestSampler("Sample 2", 500);
-
-			LoopController sub1 = new LoopController();
-			sub1.setLoops(2);
-			sub1.setContinueForever(false);
-			sub1.addTestElement(samp1);
-
-			LoopController sub2 = new LoopController();
-			sub2.setLoops(40);
-			sub2.setContinueForever(false);
-			sub2.addTestElement(samp2);
-			controller.addTestElement(sub1);
-			controller.addTestElement(sub2);
-			controller.setRunningVersion(true);
-			sub1.setRunningVersion(true);
-			sub2.setRunningVersion(true);
-			controller.initialize();
-			Sampler sampler = null;
-			int loops = 0;
-			long now = System.currentTimeMillis();
-			while ((sampler = controller.next()) != null) {
-				loops++;
-				sampler.sample(null);
-			}
-			long elapsed = System.currentTimeMillis() - now;
-			assertTrue("Should be at least 20 loops", loops >= 20);
-			assertTrue("Should be fewer than 30 loops", loops < 30);
-			assertTrue("Should take at least 10 seconds", elapsed >= 10000);
-			assertTrue("Should take less than 12 seconds", elapsed <= 12000);
-			assertEquals("Sampler 1 should run 2 times", 2, samp1.getSamples());
-			assertTrue("Sampler 2 should run >= 18 times", samp2.getSamples() >= 18);
-		}
-	}
-
 }

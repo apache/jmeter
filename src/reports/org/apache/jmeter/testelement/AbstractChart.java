@@ -1,10 +1,11 @@
-// $Header:
+//$Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,10 +18,14 @@
  */
 package org.apache.jmeter.testelement;
 
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import javax.swing.JComponent;
+
+import org.apache.jmeter.report.ReportChart;
+import org.apache.jmeter.visualizers.SamplingStatCalculator;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * The general idea of the chart graphs information for a table.
@@ -29,16 +34,25 @@ import javax.swing.JComponent;
  * @author Peter Lin
  *
  */
-public abstract class AbstractChart extends AbstractTestElement implements Chart {
+public abstract class AbstractChart extends AbstractTestElement implements ReportChart {
 
-    public static final String REPORT_CHART_X_AXIS = "ReportTable.chart.x.axis";
-    public static final String REPORT_CHART_Y_AXIS = "ReportTable.chart.y.axis";
-    public static final String REPORT_CHART_X_LABEL = "ReportTable.chart.x.label";
-    public static final String REPORT_CHART_Y_LABEL = "ReportTable.chart.y.label";
-    public static final String REPORT_CHART_TITLE = "ReportTable.chart.title";
-
-    protected AbstractTable parent = null;
+    public static final String REPORT_CHART_X_AXIS = "ReportChart.chart.x.axis";
+    public static final String REPORT_CHART_Y_AXIS = "ReportChart.chart.y.axis";
+    public static final String REPORT_CHART_X_LABEL = "ReportChart.chart.x.label";
+    public static final String REPORT_CHART_Y_LABEL = "ReportChart.chart.y.label";
+    public static final String REPORT_CHART_TITLE = "ReportChart.chart.title";
+    public static final String REPORT_CHART_CAPTION = "ReportChart.chart.caption";
+    public static final String REPORT_CHART_WIDTH = "ReportChart.chart.width";
+    public static final String REPORT_CHART_HEIGHT = "ReportChart.chart.height";
     
+    public static final int DEFAULT_WIDTH = 350;
+    public static final int DEFAULT_HEIGHT = 350;
+    
+    public static final String X_DATA_FILENAME_LABEL = "Filename";
+    public static final String X_DATA_DATE_LABEL = "Date";
+    public static final String[] X_LABELS = { X_DATA_FILENAME_LABEL, X_DATA_DATE_LABEL };
+    protected BufferedImage image = null;
+
     public AbstractChart() {
 		super();
 	}
@@ -47,6 +61,14 @@ public abstract class AbstractChart extends AbstractTestElement implements Chart
     	return getPropertyAsString(REPORT_CHART_X_AXIS);
     }
     
+    public String getFormattedXAxis() {
+        String text = getXAxis();
+        if (text.indexOf('.') > -1) {
+            text = text.substring(text.indexOf('.') + 1);
+            text = JOrphanUtils.replaceAllChars(text,'_'," ");
+        }
+        return text;
+    }
     public void setXAxis(String field) {
     	setProperty(REPORT_CHART_X_AXIS,field);
     }
@@ -63,6 +85,11 @@ public abstract class AbstractChart extends AbstractTestElement implements Chart
     	return getPropertyAsString(REPORT_CHART_X_LABEL);
     }
     
+    /**
+     * The X data labels should be either the filename, date or some
+     * other series of values
+     * @param label
+     */
     public void setXLabel(String label) {
     	setProperty(REPORT_CHART_X_LABEL,label);
     }
@@ -75,34 +102,140 @@ public abstract class AbstractChart extends AbstractTestElement implements Chart
     	setProperty(REPORT_CHART_Y_LABEL,label);
     }
     
+    /**
+     * The title is a the name for the chart. A page link will
+     * be generated using the title. The title will also be
+     * used for a page index.
+     * @return
+     */
     public String getTitle() {
     	return getPropertyAsString(REPORT_CHART_TITLE);
     }
     
+    /**
+     * The title is a the name for the chart. A page link will
+     * be generated using the title. The title will also be
+     * used for a page index.
+     * @param title
+     */
     public void setTitle(String title) {
     	setProperty(REPORT_CHART_TITLE,title);
     }
+
+    /**
+     * The caption is a description for the chart explaining
+     * what the chart means.
+     * @return
+     */
+    public String getCaption() {
+        return getPropertyAsString(REPORT_CHART_CAPTION);
+    }
     
-    public void setParentTable(AbstractTable table) {
-    	this.parent = table;
+    /**
+     * The caption is a description for the chart explaining
+     * what the chart means.
+     * @param caption
+     */
+    public void setCaption(String caption) {
+        setProperty(REPORT_CHART_CAPTION,caption);
+    }
+    
+    /**
+     * if no width is set, the default is returned
+     * @return
+     */
+    public int getWidth() {
+        int w = getPropertyAsInt(REPORT_CHART_WIDTH);
+        if (w <= 0) {
+            return DEFAULT_WIDTH;
+        } else {
+            return w;
+        }
+    }
+    
+    /**
+     * set the width of the graph
+     * @param width
+     */
+    public void setWidth(String width) {
+        setProperty(REPORT_CHART_WIDTH,String.valueOf(width));
+    }
+    
+    /**
+     * if the height is not set, the default is returned
+     * @return
+     */
+    public int getHeight() {
+        int h = getPropertyAsInt(REPORT_CHART_HEIGHT); 
+        if (h <= 0) {
+            return DEFAULT_HEIGHT;
+        } else {
+            return h;
+        }
     }
 
     /**
-     * Method returns the items that are checked
-     * @return
+     * set the height of the graph
+     * @param height
      */
-    public List getCheckedItems() {
-    	ArrayList checked = new ArrayList();
-    	if ( this.parent != null) {
-        	for (int idx=0; idx < AbstractTable.items.length; idx++) {
-        		if (this.parent.getPropertyAsString(
-        				AbstractTable.items[idx]).equals(String.valueOf(true))) {
-        			checked.add(AbstractTable.items[idx]);
-        		}
-        	}
-    	}
-    	return checked;
+    public void setHeight(String height) {
+        setProperty(REPORT_CHART_HEIGHT,String.valueOf(height));
     }
     
-	public abstract JComponent renderChart(TestElement element);
+    /**
+     * Subclasses will need to implement the method by doing the following:
+     * 1. get the x and y axis
+     * 2. filter the table data
+     * 3. pass the data to the chart library
+     * 4. return the generated chart
+     */
+	public abstract JComponent renderChart(List data);
+    
+    /**
+     * this makes it easy to get the bufferedImage
+     * @return
+     */
+    public BufferedImage getBufferedImage() {
+        return this.image;
+    }
+    
+    /**
+     * in case an user wants set the bufferdImage
+     * @param img
+     */
+    public void setBufferedImage(BufferedImage img) {
+        this.image = img;
+    }
+    
+    /**
+     * convienance method for getting the selected value. Rather than use
+     * Method.invoke(Object,Object[]), it's simpler to just check which
+     * column is selected and call the method directly.
+     * @param stat
+     * @return
+     */
+    public double getValue(SamplingStatCalculator stat) {
+        if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_50_PERCENT)) {
+            return stat.getPercentPoint(.50).doubleValue();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_90_PERCENT)){
+            return stat.getPercentPoint(.90).doubleValue();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_ERROR_RATE)) {
+            return stat.getErrorPercentage();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MAX)) {
+            return stat.getMax().doubleValue();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MEAN)) {
+            return stat.getMean();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MEDIAN)) {
+            return stat.getMedian().doubleValue();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_MIN)) {
+            return stat.getMin().doubleValue();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_RESPONSE_RATE)) {
+            return stat.getRate();
+        } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_TRANSFER_RATE)) {
+            // return the pagesize divided by 1024 to get kilobytes
+            return stat.getPageSize()/1024;
+        } else {
+            return Double.NaN;
+        }
+    }
 }

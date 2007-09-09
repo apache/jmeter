@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -27,7 +28,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.converters.SampleResultConverter;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -44,15 +45,14 @@ public class HTTPResultConverter extends SampleResultConverter {
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$";  //$NON-NLS-1$
 	}
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public HTTPResultConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public HTTPResultConverter(Mapper arg0) {
+		super(arg0);
 	}
 
 	/*
@@ -93,12 +93,14 @@ public class HTTPResultConverter extends SampleResultConverter {
 	protected void saveSamplerData(HierarchicalStreamWriter writer, MarshallingContext context, HTTPSampleResult res,
 			SampleSaveConfiguration save) {
 		if (save.saveSamplerData(res)) {
-			writeString(writer, "cookies", res.getCookies());
-			writeString(writer, "method", res.getHTTPMethod());
-			writeString(writer, "queryString", res.getQueryString());
-			writeString(writer, "redirectLocation", res.getRedirectLocation());
-			writeItem(res.getURL(), context, writer);
+			writeString(writer, TAG_COOKIES, res.getCookies());
+			writeString(writer, TAG_METHOD, res.getHTTPMethod());
+			writeString(writer, TAG_QUERY_STRING, res.getQueryString());
+			writeString(writer, TAG_REDIRECT_LOCATION, res.getRedirectLocation());
 		}
+        if (save.saveUrl()) {
+            writeItem(res.getURL(), context, writer);
+        }
 	}
 
 	/*
@@ -118,20 +120,27 @@ public class HTTPResultConverter extends SampleResultConverter {
 			}
 			reader.moveUp();
 		}
+
+        // If we have a file, but no data, then read the file
+        String resultFileName = res.getResultFileName();
+        if (resultFileName.length()>0 
+        &&  res.getResponseData().length == 0) {
+            readFile(resultFileName,res);
+        }
 		return res;
 	}
 
-	protected void retrieveHTTPItem(HierarchicalStreamReader reader, UnmarshallingContext context,
+    protected void retrieveHTTPItem(HierarchicalStreamReader reader, UnmarshallingContext context,
 			HTTPSampleResult res, Object subItem) {
 		if (subItem instanceof URL) {
 			res.setURL((URL) subItem);
-		} else if (reader.getNodeName().equals("cookies")) {
+		} else if (reader.getNodeName().equals(TAG_COOKIES)) {
 			res.setCookies((String) subItem);
-		} else if (reader.getNodeName().equals("method")) {
+		} else if (reader.getNodeName().equals(TAG_METHOD)) {
 			res.setHTTPMethod((String) subItem);
-		} else if (reader.getNodeName().equals("queryString")) {
+		} else if (reader.getNodeName().equals(TAG_QUERY_STRING)) {
 			res.setQueryString((String) subItem);
-		} else if (reader.getNodeName().equals("redirectLocation")) {
+		} else if (reader.getNodeName().equals(TAG_REDIRECT_LOCATION)) {
 			res.setRedirectLocation((String) subItem);
 		}
 	}

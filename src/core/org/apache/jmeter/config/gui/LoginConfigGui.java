@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -35,7 +35,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * A GUI component allowing the user to enter a username and password for a
  * login.
  * 
- * @version $Revision$ on $Date$
  */
 public class LoginConfigGui extends AbstractConfigGui {
 	/** Field allowing the user to enter a username. */
@@ -74,7 +73,7 @@ public class LoginConfigGui extends AbstractConfigGui {
 	}
 
 	public String getLabelResource() {
-		return "login_config_element";
+		return "login_config_element"; // $NON-NLS-1$
 	}
 
 	/**
@@ -107,6 +106,15 @@ public class LoginConfigGui extends AbstractConfigGui {
 		String passwordString = new String(password.getPassword());
 		element.setProperty(new StringProperty(ConfigTestElement.PASSWORD, passwordString));
 	}
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        username.setText(""); //$NON-NLS-1$
+        password.setText(""); //$NON-NLS-1$
+    }    
 
 	/**
 	 * Initialize the components and layout of this component.
@@ -132,7 +140,7 @@ public class LoginConfigGui extends AbstractConfigGui {
 	 */
 	private JPanel createUsernamePanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("username"));
+		JLabel label = new JLabel(JMeterUtils.getResString("username")); // $NON-NLS-1$
 		label.setLabelFor(username);
 		panel.add(label, BorderLayout.WEST);
 		panel.add(username, BorderLayout.CENTER);
@@ -146,7 +154,7 @@ public class LoginConfigGui extends AbstractConfigGui {
 	 */
 	private JPanel createPasswordPanel() {
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		JLabel label = new JLabel(JMeterUtils.getResString("password"));
+		JLabel label = new JLabel(JMeterUtils.getResString("password")); // $NON-NLS-1$
 		label.setLabelFor(password);
 		panel.add(label, BorderLayout.WEST);
 		panel.add(password, BorderLayout.CENTER);

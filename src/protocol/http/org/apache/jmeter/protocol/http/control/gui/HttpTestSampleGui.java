@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -24,10 +24,8 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
 import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
@@ -35,9 +33,13 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledTextField;
+
+//For unit tests, @see TestHttpTestSampleGui
 
 /**
- * @version $Revision$ on $Date$
+ * HTTP Sampler GUI
+ * 
  */
 public class HttpTestSampleGui extends AbstractSamplerGui {
 	private UrlConfigGui urlConfigGui;
@@ -46,6 +48,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	private JCheckBox isMon;
 
+	private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
+	
 	public HttpTestSampleGui() {
 		init();
 	}
@@ -53,12 +57,14 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	public void configure(TestElement element) {
 		super.configure(element);
 		urlConfigGui.configure(element);
-		getImages.setSelected(((HTTPSamplerBase) element).isImageParser());
-		isMon.setSelected(((HTTPSamplerBase) element).isMonitor());
+		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
+		getImages.setSelected(samplerBase.isImageParser());
+		isMon.setSelected(samplerBase.isMonitor());
+		embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
 	}
 
 	public TestElement createTestElement() {
-		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance("HTTPSampler");
+		HTTPSamplerBase sampler = HTTPSamplerFactory.newInstance();// create default sampler
 		modifyTestElement(sampler);
 		return sampler;
 	}
@@ -72,21 +78,20 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		TestElement el = urlConfigGui.createTestElement();
 		sampler.clear();
 		sampler.addTestElement(el);
+		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
 		if (getImages.isSelected()) {
-			((HTTPSamplerBase) sampler).setImageParser(true);
+			samplerBase.setImageParser(true);
 		} else {
+			// The default is false, so we can remove the property to simplify JMX files
 			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
-		if (isMon.isSelected()) {
-			((HTTPSamplerBase) sampler).setMonitor("true");
-		} else {
-			((HTTPSamplerBase) sampler).setMonitor("false");
-		}
+		samplerBase.setMonitor(isMon.isSelected());
+		samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
 		this.configureTestElement(sampler);
 	}
 
 	public String getLabelResource() {
-		return "web_testing_title";
+		return "web_testing_title"; // $NON-NLS-1$
 	}
 
 	protected void init() {
@@ -105,19 +110,21 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	private JPanel createOptionalTasksPanel() {
 		// OPTIONAL TASKS
-		HorizontalPanel optionalTasksPanel = new HorizontalPanel();
+	    JPanel optionalTasksPanel = new VerticalPanel();
 		optionalTasksPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("optional_tasks")));
+				.getResString("optional_tasks"))); // $NON-NLS-1$
 
+		JPanel checkBoxPanel = new HorizontalPanel();
 		// RETRIEVE IMAGES
-		JPanel retrieveImagesPanel = new JPanel();
-		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images"));
-		retrieveImagesPanel.add(getImages);
-		JPanel isMonitorPanel = new JPanel();
-		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title"));
-		isMonitorPanel.add(isMon);
-		optionalTasksPanel.add(retrieveImagesPanel);
-		optionalTasksPanel.add(isMonitorPanel);
+		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
+		// Is monitor
+		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
+		checkBoxPanel.add(getImages);
+		checkBoxPanel.add(isMon);
+		optionalTasksPanel.add(checkBoxPanel);
+		// Embedded URL match regex
+		embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
+		optionalTasksPanel.add(embeddedRE);
 		return optionalTasksPanel;
 	}
 
@@ -125,36 +132,16 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		return getMinimumSize();
 	}
 
-	public static class Test extends TestCase {
-		HttpTestSampleGui gui;
-
-		public Test(String name) {
-			super(name);
-		}
-
-		public void setUp() {
-			gui = new HttpTestSampleGui();
-		}
-
-		public void testCloneSampler() throws Exception {
-			HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
-			sampler.addArgument("param", "value");
-			HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
-			clonedSampler.setRunningVersion(true);
-			sampler.getArguments().getArgument(0).setValue("new value");
-			assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
-					.getValue());
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clear()
+	 * @see org.apache.jmeter.gui.JMeterGUIComponent#clearGui()
 	 */
-	public void clear() {
-		super.clear();
+	public void clearGui() {
+		super.clearGui();
 		getImages.setSelected(false);
+		isMon.setSelected(false);
 		urlConfigGui.clear();
+		embeddedRE.setText(""); // $NON-NLS-1$
 	}
 }

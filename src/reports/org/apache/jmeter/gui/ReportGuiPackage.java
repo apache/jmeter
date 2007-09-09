@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001,2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -46,16 +46,11 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * GuiPackage is a static class that provides convenient access to information
- * about the current state of JMeter's GUI. Any GUI class can grab a handle to
- * GuiPackage by calling the static method {@link #getInstance()} and then use
- * it to query the GUI about it's state. When actions, for instance, need to
- * affect the GUI, they typically use GuiPackage to get access to different
- * parts of the GUI.
+ * ReportGuiPackage is based on GuiPackage, but with changes for 
+ * the reporting tool. Because of how the gui components work, it
+ * was safer to just make a new class, rather than braking existing
+ * JMeter gui code.
  * 
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 public final class ReportGuiPackage implements LocaleChangeListener {
 	/** Logging. */
@@ -231,12 +226,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 			updateCurrentNode();
 			TestElement curNode = treeListener.getCurrentNode().getTestElement();
 			JMeterGUIComponent comp = getGui(curNode);
-			if (!(comp instanceof AbstractVisualizer)) // TODO: a hack that
-														// needs to be fixed for
-														// 2.0
-			{
-				comp.clear();
-			}
+			comp.clearGui();
 			log.debug("Updating gui to new node");
 			comp.configure(curNode);
 			currentNodeUpdated = false;
@@ -272,7 +262,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	public TestElement createTestElement(Class guiClass, Class testClass) {
 		try {
 			JMeterGUIComponent comp = getGuiFromCache(guiClass, testClass);
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -303,7 +293,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 			} else {
 				comp = getGuiFromCache(c, null);
 			}
-			comp.clear();
+			comp.clearGui();
 			TestElement node = comp.createTestElement();
 			nodesToGui.put(node, comp);
 			return node;
@@ -350,7 +340,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 *             if the specified GUI class cannot be found
 	 */
 	private JMeterGUIComponent getGuiFromCache(Class guiClass, Class testClass) throws InstantiationException,
-			IllegalAccessException, ClassNotFoundException {
+			IllegalAccessException {
 		JMeterGUIComponent comp;
 		if (guiClass == TestBeanGUI.class) {
 			comp = (TestBeanGUI) testBeanGUIs.get(testClass);

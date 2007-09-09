@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,8 +18,12 @@
 
 package org.apache.jmeter.threads;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * @version $Revision$
@@ -28,9 +32,25 @@ public class JMeterVariables {
 	private Map variables = new HashMap();
 
 	private int iteration = 0;
+    
+    // Property names to preload into JMeter variables:
+    private static final String [] PRE_LOAD = {
+      "START.MS", "START.YMD", "START.HMS"  
+    };
 
 	public JMeterVariables() {
+        preloadVariables();
 	}
+
+    private void preloadVariables(){
+        for (int i = 0; i<PRE_LOAD.length;i++){
+            String property=PRE_LOAD[i];
+            String value=JMeterUtils.getProperty(property);
+            if (value != null){
+                variables.put(property,value);
+            }
+        }
+    }
 
 	public String getThreadName() {
 		return Thread.currentThread().getName();
@@ -44,8 +64,10 @@ public class JMeterVariables {
 		iteration++;
 	}
 
+    // Does not appear to be used
 	public void initialize() {
 		variables.clear();
+        preloadVariables();
 	}
 
 	public Object remove(String key) {
@@ -78,5 +100,9 @@ public class JMeterVariables {
 
 	public Object getObject(String key) {
 		return variables.get(key);
+	}
+	
+	public Iterator getIterator(){
+		return Collections.unmodifiableMap(variables).entrySet().iterator() ;
 	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,6 +20,7 @@ package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +32,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
 
+// 
 /**
  * SSL Manager Command. The SSL Manager provides a mechanism to change your
  * client authentication if required by the server. If you have JSSE 1.0.2
@@ -44,15 +46,18 @@ import org.apache.jmeter.util.SSLManager;
  * can have a whopping one key keystore. The advantage is that you can test a
  * connection using the assigned Certificate from a Certificate Authority.
  * </p>
+ * TODO ? 
+ * N.B. The present implementation does not seem to allow selection of keys,
+ * it only allows a change of keystore at run-time, or to provide one if not
+ * already defined via the property.
  * 
  * @author <a href="bloritsch@apache.org">Berin Loritsch</a>
- * @version CVS $Revision$ $Date$
  */
 public class SSLManagerCommand implements Command {
 	private static Set commandSet;
 	static {
 		HashSet commands = new HashSet();
-		commands.add("sslManager");
+		commands.add(ActionNames.SSL_MANAGER);
 		SSLManagerCommand.commandSet = Collections.unmodifiableSet(commands);
 	}
 
@@ -64,7 +69,7 @@ public class SSLManagerCommand implements Command {
 	 * if at all possible.
 	 */
 	public void doAction(ActionEvent e) {
-		if (e.getActionCommand().equals("sslManager")) {
+		if (e.getActionCommand().equals(ActionNames.SSL_MANAGER)) {
 			this.sslManager();
 		}
 	}
@@ -77,14 +82,13 @@ public class SSLManagerCommand implements Command {
 	}
 
 	/**
-	 * Called by sslManager button. Raises sslManager dialog. Currently the
-	 * sslManager box has the product image and the copyright notice. The dialog
-	 * box is centered over the MainFrame.
+	 * Called by sslManager button. Raises sslManager dialog.
+	 * I.e. a FileChooser for PCSI12 (.p12|.P12) files.
 	 */
 	private void sslManager() {
 		SSLManager.reset();
 
-		keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir"));
+		keyStoreChooser = new JFileChooser(JMeterUtils.getJMeterProperties().getProperty("user.dir")); //$NON-NLS-1$
 		keyStoreChooser.addChoosableFileFilter(new AcceptPKCS12FileFilter());
 		keyStoreChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int retVal = keyStoreChooser.showOpenDialog(GuiPackage.getInstance().getMainFrame());
@@ -92,9 +96,9 @@ public class SSLManagerCommand implements Command {
 		if (JFileChooser.APPROVE_OPTION == retVal) {
 			File selectedFile = keyStoreChooser.getSelectedFile();
 			try {
-				JMeterUtils.getJMeterProperties()
-						.setProperty("javax.net.ssl.keyStore", selectedFile.getCanonicalPath());
-			} catch (Exception e) {
+				System.setProperty(SSLManager.JAVAX_NET_SSL_KEY_STORE, selectedFile.getCanonicalPath());
+			} catch (IOException e) {
+				//Ignored
 			}
 		}
 
@@ -112,18 +116,20 @@ public class SSLManagerCommand implements Command {
 		 * @return description
 		 */
 		public String getDescription() {
-			return JMeterUtils.getResString("pkcs12_desc");
+			return JMeterUtils.getResString("pkcs12_desc"); //$NON-NLS-1$
 		}
 
 		/**
 		 * Tests to see if the file ends with "*.p12" or "*.P12".
 		 * 
-		 * @param testfile
+		 * @param testFile
 		 *            file to test
 		 * @return true if file is accepted, false otherwise
 		 */
 		public boolean accept(File testFile) {
-			return testFile.isDirectory() || testFile.getName().endsWith(".p12") || testFile.getName().endsWith(".P12");
+			return testFile.isDirectory() 
+			|| testFile.getName().endsWith(".p12")  //$NON-NLS-1$
+			|| testFile.getName().endsWith(".P12"); //$NON-NLS-1$
 		}
 	}
 }

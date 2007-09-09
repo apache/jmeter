@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,21 +28,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
-// import org.apache.jorphan.logging.LoggingManager;
-// import org.apache.log.Logger;
-
-/**
- * 
- * author <a href="mailto:jspears@astrology.com">Justin Spears </a>
- * 
- */
-
 public class XPathAssertionGui extends AbstractAssertionGui {
 
-	// private static transient Logger log = LoggingManager.getLoggerForClass();
-	// private static final String OPERATOR_KEY = null;
-
-	// private int execState;
 	private XPathPanel xpath;
 
 	private XMLConfPanel xml;
@@ -54,7 +42,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 	 * Returns the label to be shown within the JTree-Component.
 	 */
 	public String getLabelResource() {
-		return "xpath_assertion_title";
+		return "xpath_assertion_title"; //$NON-NLS-1$
 	}
 
 	/**
@@ -67,7 +55,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 	}
 
 	public String getXPathAttributesTitle() {
-		return JMeterUtils.getResString("xpath_assertion_test");
+		return JMeterUtils.getResString("xpath_assertion_test"); //$NON-NLS-1$
 	}
 
 	public void configure(TestElement el) {
@@ -84,7 +72,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 	}
 
 	private void init() {
-		setLayout(new VerticalLayout(5, VerticalLayout.LEFT, VerticalLayout.TOP));
+		setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
 		setBorder(makeBorder());
 
 		add(makeTitlePanel());
@@ -99,7 +87,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 
 		xml = new XMLConfPanel();
 		xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-				.getResString("xpath_assertion_option")));
+				.getResString("xpath_assertion_option"))); //$NON-NLS-1$
 		add(xml);
 
 		add(sizePanel);
@@ -122,4 +110,16 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 			assertion.setXPathString(xpath.getXPath());
 		}
 	}
+    
+    /**
+     * Implements JMeterGUIComponent.clearGui
+     */
+    public void clearGui() {
+        super.clearGui();
+        
+        xpath.setXPath("/"); //$NON-NLS-1$
+        xpath.setNegated(false);
+        
+        xml.setDefaultValues();
+    }    
 }

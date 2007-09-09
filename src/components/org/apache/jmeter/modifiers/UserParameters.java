@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -34,17 +34,14 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @version $Revision$
- */
 public class UserParameters extends AbstractTestElement implements Serializable, PreProcessor, LoopIterationListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String NAMES = "UserParameters.names";
+	public static final String NAMES = "UserParameters.names";// $NON-NLS-1$
 
-	public static final String THREAD_VALUES = "UserParameters.thread_values";
+	public static final String THREAD_VALUES = "UserParameters.thread_values";// $NON-NLS-1$
 
-	public static final String PER_ITERATION = "UserParameters.per_iteration";
+	public static final String PER_ITERATION = "UserParameters.per_iteration";// $NON-NLS-1$
 
 	/*
 	 * Although the lock appears to be an instance lock, in fact the lock is
@@ -106,9 +103,8 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 		CollectionProperty threadValues = (CollectionProperty) getProperty(THREAD_VALUES);
 		if (threadValues.size() > 0) {
 			return (CollectionProperty) threadValues.get(getThreadContext().getThreadNum() % threadValues.size());
-		} else {
-			return new CollectionProperty("noname", new LinkedList());
 		}
+		return new CollectionProperty("noname", new LinkedList());
 	}
 
 	public boolean isPerIteration() {
@@ -157,12 +153,6 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 		if (isPerIteration()) {
 			setValues();
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.apache.jmeter.engine.event.LoopIterationListener#iterationEnd(org.apache.jmeter.engine.event.LoopIterationEvent)
-	 */
-	public void iterationEnd(LoopIterationEvent iterEvent) {
 	}
 
 	/*

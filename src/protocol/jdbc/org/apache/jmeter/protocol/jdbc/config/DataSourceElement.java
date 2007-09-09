@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -15,7 +16,8 @@
  */
 package org.apache.jmeter.protocol.jdbc.config;
 
-import org.apache.avalon.excalibur.datasource.DataSourceComponent;
+import java.io.ObjectStreamException;
+
 import org.apache.avalon.excalibur.datasource.ResourceLimitingJdbcDataSource;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.LogKitLogger;
@@ -42,11 +44,19 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 
 	transient ResourceLimitingJdbcDataSource excaliburSource;
 
+	// TODO: why is this an object, and not a plain boolean?
 	transient boolean[] started;
 
 	public DataSourceElement() {
 		started = new boolean[] { false };
 	}
+	
+	// For serialised objects, do the same work as the constructor:
+	private Object readResolve() throws ObjectStreamException {
+		started = new boolean[] { false };
+		return this;
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -121,7 +131,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		return el;
 	}
 
-	public DataSourceComponent initPool() throws Exception {
+	private void initPool() throws Exception {
 		excaliburSource = new ResourceLimitingJdbcDataSource();
 		DefaultConfiguration config = new DefaultConfiguration("rl-jdbc");
 
@@ -141,8 +151,13 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		poolController.setAttribute("blocking", "true");
 		poolController.setAttribute("timeout", getTimeout());
 		poolController.setAttribute("trim-interval", getTrimInterval());
-		poolController.setAttribute("auto-commit", String.valueOf(isAutocommit()));
 		config.addChild(poolController);
+
+		DefaultConfiguration autoCommit = new DefaultConfiguration("auto-commit");
+		autoCommit.setValue(String.valueOf(isAutocommit()));
+		config.addChild(autoCommit);
+		
+//		config.setAttribute("auto-commit", String.valueOf(isAutocommit()));
 
 		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer(40);
@@ -160,6 +175,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		cfgKeepAlive.setValue(getCheckQuery());
 		poolController.addChild(cfgKeepAlive);
 
+		String _username = getUsername();
 		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer(40);
 			sb.append("Driver: ");
@@ -167,7 +183,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 			sb.append(" DbUrl: ");
 			sb.append(getDbUrl());
 			sb.append(" User: ");
-			sb.append(getUsername());
+			sb.append(_username);
 			log.debug(sb.toString());
 		}
 		DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
@@ -176,19 +192,21 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl");
 		cfgDbUrl.setValue(getDbUrl());
 		config.addChild(cfgDbUrl);
-		DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
-		cfgUsername.setValue(getUsername());
-		config.addChild(cfgUsername);
-		DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
-		cfgPassword.setValue(getPassword());
-		config.addChild(cfgPassword);
+
+		if (_username.length() > 0){
+			DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
+			cfgUsername.setValue(_username);
+			config.addChild(cfgUsername);
+			DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
+			cfgPassword.setValue(getPassword());
+			config.addChild(cfgPassword);
+		}
 
 		// log is required to ensure errors are available
 		excaliburSource.enableLogging(new LogKitLogger(log));
 		excaliburSource.configure(config);
 		excaliburSource.setInstrumentableName(getDataSource());
 		started[0] = true;
-		return excaliburSource;
 	}
 
 	/*

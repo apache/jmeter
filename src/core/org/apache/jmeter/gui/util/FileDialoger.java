@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -60,14 +60,16 @@ public final class FileDialoger {
 		// JFileChooser jfc = null;
 
 		if (lastJFCDirectory == null) {
-			String start = JMeterUtils.getPropDefault("user.dir", "");
+			String start = JMeterUtils.getPropDefault("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
 
-			if (!start.equals("")) {
+			if (start.length() > 0) {
 				jfc.setCurrentDirectory(new File(start));
 			}
 		}
 		clearFileFilters();
-		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+        if(exts != null && exts.length > 0) {
+    		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+        }
 		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 
@@ -99,7 +101,7 @@ public final class FileDialoger {
 	 * 
 	 * @return the JFileChooser that interacted with the user, after they are
 	 *         finished using it (accept or otherwise).
-	 * @see #promptToOpenFile
+	 * @see #promptToOpenFile()
 	 */
 	public static JFileChooser promptToSaveFile(String filename) {
 		return promptToSaveFile(filename, null);
@@ -108,23 +110,23 @@ public final class FileDialoger {
 	/**
 	 * Get a JFileChooser with a new FileFilter.
 	 * 
-	 * @param filename
-	 * @param filters
-	 * @return
+	 * @param filename file name
+	 * @param extensions list of extensions
+	 * @return the FileChooser
 	 */
 	public static JFileChooser promptToSaveFile(String filename, String[] extensions) {
 		if (lastJFCDirectory == null) {
-			String start = JMeterUtils.getPropDefault("user.dir", "");
-			if (!start.equals("")) {
+			String start = JMeterUtils.getPropDefault("user.dir", "");//$NON-NLS-1$//$NON-NLS-2$
+			if (start.length() > 0) {
 				jfc = new JFileChooser(new File(start));
 			}
 			lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 		}
-		String ext = ".jmx";
+		String ext = ".jmx";//$NON-NLS-1$
 		if (filename != null) {
 			jfc.setSelectedFile(new File(lastJFCDirectory, filename));
 			int i = -1;
-			if ((i = filename.lastIndexOf(".")) > -1) {
+			if ((i = filename.lastIndexOf(".")) > -1) {//$NON-NLS-1$
 				ext = filename.substring(i);
 			}
 		}

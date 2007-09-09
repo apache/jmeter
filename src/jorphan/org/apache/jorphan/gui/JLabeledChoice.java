@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,7 +36,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class JLabeledChoice extends JPanel implements JLabeledField {
-	private JLabel mLabel = new JLabel();
+	private static final Object[] EMPTY_OBJECT_ARRAY = new Object [0];
+
+    private JLabel mLabel = new JLabel();
 
 	private JComboBox choiceList;
 
@@ -123,7 +125,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 			 * Callback method when the focus to the Text Field component is
 			 * lost.
 			 * 
-			 * @param pFocusEvent
+			 * @param e
 			 *            The focus event that occured.
 			 */
 			public void itemStateChanged(ItemEvent e) {
@@ -169,17 +171,33 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 		choiceList.setSelectedItem(pText);
 	}
 
+	public void setSelectedIndex(int index){
+		choiceList.setSelectedIndex(index);
+	}
 	/**
 	 * Returns the text in the Text Field.
 	 * 
-	 * @return The text in the Text Field.
+	 * @return The text in the Text Field. Never returns null.
 	 */
 	public String getText() {
-		return (String) choiceList.getSelectedItem();
+        Object item = choiceList.getSelectedItem();
+        if (item == null) {
+            return "";
+        } else {
+    		return (String) item;
+        }
+	}
+	
+	public int getSelectedIndex(){
+		return choiceList.getSelectedIndex();
 	}
 
 	public Object[] getSelectedItems() {
-		return choiceList.getSelectedObjects();
+        Object list[]=choiceList.getSelectedObjects();
+        if (list==null) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+		return list;
 	}
 
 	public String[] getItems() {

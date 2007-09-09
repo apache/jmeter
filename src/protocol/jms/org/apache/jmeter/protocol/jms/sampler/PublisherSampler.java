@@ -1,9 +1,10 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,33 +31,29 @@ import org.apache.jmeter.protocol.jms.client.Publisher;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author pete
- * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
 public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
-	public static final String INPUT_FILE = "jms.input_file";
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String RANDOM_PATH = "jms.random_path";
+	//++ These are JMX file names and must not be changed
+	private static final String INPUT_FILE = "jms.input_file"; //$NON-NLS-1$
 
-	public static final String TEXT_MSG = "jms.text_message";
+	private static final String RANDOM_PATH = "jms.random_path"; //$NON-NLS-1$
 
-	public static final String CONFIG_CHOICE = "jms.config_choice";
+	private static final String TEXT_MSG = "jms.text_message"; //$NON-NLS-1$
 
-	public static final String MESSAGE_CHOICE = "jms.config_msg_type";
+	private static final String CONFIG_CHOICE = "jms.config_choice"; //$NON-NLS-1$
 
-	private Publisher PUB = null;
+	private static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
+    //--
+	
+	private transient Publisher PUB = null;
 
 	private StringBuffer BUFFER = new StringBuffer();
 
 	private static FileServer FSERVER = FileServer.getFileServer();
 
 	private String file_contents = null;
-
-	static Logger log = LoggingManager.getLoggerForClass();
 
 	public PublisherSampler() {
 	}
@@ -87,11 +84,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 		this.BUFFER.setLength(0);
 		this.BUFFER = null;
 		ClientPool.clearClient();
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			log.error(e.getMessage());
-		}
 	}
 
 	/**
@@ -148,16 +140,11 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 			}
 			result.sampleEnd();
 			String content = this.BUFFER.toString();
-			result.setContentLength(content.getBytes().length);
+			result.setBytes(content.getBytes().length);
 			result.setResponseCode("message published successfully");
 			result.setResponseMessage(loop + " messages published");
 			result.setSuccessful(true);
-            // we have to set the ReponseData so that it gets counted in
-            // the aggregate listener. Since JMS performance is about
-            // the throughput of both pub/sub, it's important to measure
-            // both. Peter Lin
 			result.setResponseData(content.getBytes());
-            result.setSamplerData(content);
 			result.setSampleCount(loop);
 			this.BUFFER.setLength(0);
 		}

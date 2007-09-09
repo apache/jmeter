@@ -1,9 +1,10 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -27,12 +28,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+//@see org.apache.jmeter.functions.PackageTest for unit tests
 
 /**
  * File data container for XML files Data is accessible via XPath
@@ -40,7 +43,7 @@ import org.xml.sax.SAXException;
  */
 public class XPathFileContainer {
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static Logger log = LoggingManager.getLoggerForClass();
 
 	private NodeList nodeList;
 
@@ -50,7 +53,10 @@ public class XPathFileContainer {
 
 	/** Keeping track of which row is next to be read. */
 	private int nextRow;
-
+	int getNextRow(){// give access to Test code
+		return nextRow;
+	}
+	
 	private XPathFileContainer()// Not intended to be called directly
 	{
 	}
@@ -95,8 +101,7 @@ public class XPathFileContainer {
 			log.warn(e.toString());
 			throw e;
 		} finally {
-			if (fis != null)
-				fis.close();
+            JOrphanUtils.closeQuietly(fis);
 		}
 	}
 
@@ -124,75 +129,6 @@ public class XPathFileContainer {
 
 	public int size() {
 		return (nodeList == null) ? -1 : nodeList.getLength();
-	}
-
-	public static class Test extends JMeterTestCase {
-
-		static {
-			// LoggingManager.setPriority("DEBUG","jmeter");
-			// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-		}
-
-		public Test(String a) {
-			super(a);
-		}
-
-		public void testNull() throws Exception {
-			try {
-				new XPathFileContainer("nosuch.xml", "/");
-				fail("Should not find the file");
-			} catch (FileNotFoundException e) {
-			}
-		}
-
-		public void testrowNum() throws Exception {
-			XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/target/@name");
-			assertNotNull(f);
-			// assertEquals("Expected 4 lines",4,f.size());
-
-			int myRow = f.nextRow();
-			assertEquals(0, myRow);
-			assertEquals(1, f.nextRow);
-
-			myRow = f.nextRow();
-			assertEquals(1, myRow);
-			assertEquals(2, f.nextRow);
-
-			myRow = f.nextRow();
-			assertEquals(2, myRow);
-			assertEquals(3, f.nextRow);
-
-			// myRow = f.nextRow();
-			// assertEquals(3,myRow);
-			// assertEquals(0,f.nextRow);
-
-			// myRow = f.nextRow();
-			// assertEquals(0,myRow);
-			// assertEquals(1,f.nextRow);
-
-		}
-
-		public void testColumns() throws Exception {
-			XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/target/@name");
-			assertNotNull(f);
-			assertTrue("Not empty", f.size() > 0);
-			int last = 0;
-			for (int i = 0; i < f.size(); i++) {
-				last = f.nextRow();
-				log.debug("found [" + i + "]" + f.getXPathString(last));
-			}
-			assertEquals(last + 1, f.size());
-
-		}
-
-		public void testDefault() throws Exception {
-			XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/@default");
-			assertNotNull(f);
-			assertTrue("Not empty", f.size() > 0);
-			assertEquals("all", f.getXPathString(0));
-
-		}
-
 	}
 
 	/**

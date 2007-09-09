@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -35,10 +35,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 
-import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.ReportGuiPackage;
+import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.report.gui.action.ReportActionRouter;
-import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.util.JMeterUtils;
@@ -49,8 +49,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @author <a href="mailto:klancast@swbell.net">Keith Lancaster</a>
+ * @author Peter Lin
  * @version $Revision$ updated on $Date$
  */
 public final class ReportMenuFactory {
@@ -86,13 +85,13 @@ public final class ReportMenuFactory {
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
-	private static final String[] MENU_ADD_REPORT_PAGE = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
-			ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS,
-			ReportMenuFactory.TABLES };
-	
-	private static final String[] MENU_ADD_TABLES = new String[] { ReportMenuFactory.TABLES };
-
-	private static final String[] MENU_PARENT_SAMPLER = new String[] { ReportMenuFactory.CONTROLLERS };
+//	private static final String[] MENU_ADD_REPORT_PAGE = new String[] { ReportMenuFactory.CONFIG_ELEMENTS,
+//			ReportMenuFactory.PRE_PROCESSORS, ReportMenuFactory.POST_PROCESSORS,
+//			ReportMenuFactory.TABLES };
+//	
+//	private static final String[] MENU_ADD_TABLES = new String[] { ReportMenuFactory.TABLES };
+//
+//	private static final String[] MENU_PARENT_SAMPLER = new String[] { ReportMenuFactory.CONTROLLERS };
 
 	private static List controllers, configElements, listeners, nonTestElements,
 			postProcessors, preProcessors, reportPage, tables;
@@ -181,10 +180,12 @@ public final class ReportMenuFactory {
 
 	public static JPopupMenu getDefaultControllerMenu() {
 		JPopupMenu pop = new JPopupMenu();
-		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER, JMeterUtils.getResString("Add"),// $NON-NLS-1$
-				"Add"));
-		pop.add(makeMenus(MENU_PARENT_CONTROLLER, JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-				"Add Parent"));
+		pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
+				JMeterUtils.getResString("add"),// $NON-NLS-1$
+				ActionNames.ADD));
+		pop.add(makeMenus(MENU_PARENT_CONTROLLER, 
+				JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+				ActionNames.ADD_PARENT));
 		MenuFactory.addEditMenu(pop, true);
 		MenuFactory.addFileMenu(pop);
 		return pop;
@@ -365,38 +366,6 @@ public final class ReportMenuFactory {
 		MenuElement[] elements = menu.getSubElements();
 		if ((elements.length > 0) && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
 			menu.addSeparator();
-		}
-	}
-
-	// //////////////////////////// Test code
-	// ////////////////////////////////////
-
-	public static class Test extends JMeterTestCase {
-
-		public Test() {
-			super();
-		}
-
-		public Test(String name) {
-			super(name);
-		}
-
-		private static void check(String s, int i) throws Exception {
-			assertFalse("The number of " + s + " should not be 0", 0 == i);
-		}
-
-		public void testMenu() throws Exception {
-			check("menumap", menuMap.size());
-
-			check("configElements", configElements.size());
-			check("controllers", controllers.size());
-			check("listeners", listeners.size());
-			check("nonTestElements", nonTestElements.size());
-			check("postProcessors", postProcessors.size());
-			check("preProcessors", preProcessors.size());
-
-			check("elementstoskip", elementsToSkip.size());
-
 		}
 	}
 }

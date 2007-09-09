@@ -1,9 +1,10 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -23,7 +24,7 @@ import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
-import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
@@ -38,12 +39,14 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class MultiPropertyConverter extends AbstractCollectionConverter {
 
-	/**
+	private static final String ATT_NAME = "name";  //$NON-NLS-1$
+
+    /**
 	 * Returns the converter version; used to check for possible
 	 * incompatibilities
 	 */
 	public static String getVersion() {
-		return "$Revision$";
+		return "$Revision$";  //$NON-NLS-1$
 	}
 
 	/*
@@ -64,7 +67,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
 	 */
 	public void marshal(Object arg0, HierarchicalStreamWriter writer, MarshallingContext context) {
 		MultiProperty prop = (MultiProperty) arg0;
-		writer.addAttribute("name", ConversionHelp.encode(prop.getName()));
+		writer.addAttribute(ATT_NAME, ConversionHelp.encode(prop.getName()));
 		PropertyIterator iter = prop.iterator();
 		while (iter.hasNext()) {
 			writeItem(iter.next(), context, writer);
@@ -80,7 +83,7 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		MultiProperty prop = (MultiProperty) createCollection(context.getRequiredType());
-		prop.setName(ConversionHelp.decode(reader.getAttribute("name")));
+		prop.setName(ConversionHelp.decode(reader.getAttribute(ATT_NAME)));
 		while (reader.hasMoreChildren()) {
 			reader.moveDown();
 			JMeterProperty subProp = (JMeterProperty) readItem(reader, context, prop);
@@ -92,9 +95,8 @@ public class MultiPropertyConverter extends AbstractCollectionConverter {
 
 	/**
 	 * @param arg0
-	 * @param arg1
 	 */
-	public MultiPropertyConverter(ClassMapper arg0, String arg1) {
-		super(arg0, arg1);
+	public MultiPropertyConverter(Mapper arg0) {
+		super(arg0);
 	}
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -38,11 +39,15 @@ public final class NameUpdater {
 
 	static {
 		nameMap = new Properties();
+		FileInputStream fis = null;
 		try {
-			nameMap.load(new FileInputStream(JMeterUtils.getJMeterHome()
-					+ JMeterUtils.getPropDefault("upgrade_properties", "/bin/upgrade.properties")));
+			fis = new FileInputStream(JMeterUtils.getJMeterHome()
+								+ JMeterUtils.getPropDefault("upgrade_properties", "/bin/upgrade.properties"));
+			nameMap.load(fis);
 		} catch (Exception e) {
 			log.error("Bad upgrade file", e);
+		} finally {
+			JOrphanUtils.closeQuietly(fis);
 		}
 	}
 
@@ -54,6 +59,24 @@ public final class NameUpdater {
 		}
 		return className;
 	}
+    /**
+     * Looks up test element / gui class combination; if that
+     * does not exist in the map, then defaults to getCurrentName.
+     * 
+     * @param testClassName - test element class name
+     * @param guiClassName - associated gui class name
+     * @return new test class name
+     */
+
+    public static String getCurrentTestName(String testClassName, String guiClassName) {
+        String key = testClassName + "|" + guiClassName;
+        if (nameMap.containsKey(key)) {
+            String newName = nameMap.getProperty(key);
+            log.info("Upgrading " + key + " to " + newName);
+            return newName;
+        }
+        return getCurrentName(testClassName);
+    }
 
 	public static String getCurrentName(String propertyName, String className) {
 		String key = className + "/" + propertyName;

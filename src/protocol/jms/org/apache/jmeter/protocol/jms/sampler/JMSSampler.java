@@ -1,9 +1,10 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -23,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
@@ -31,7 +33,6 @@ import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
-import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -52,34 +53,37 @@ import org.apache.log.Logger;
  * Sampler for JMS Communication. <br>
  * Created on: October 28, 2004
  * 
- * author Martijn Blankestijn
- * @version $Id$
  */
 public class JMSSampler extends AbstractSampler implements ThreadListener {
 
-	public static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory";
-
-	public static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl";
-
-	public static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties";
+	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
 	private static final int DEFAULT_TIMEOUT = 2000;
 
-	public final static String TIMEOUT = "JMSSampler.timeout";
+	//++ These are JMX names, and must not be changed
+	private static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
 
-	public static final String IS_ONE_WAY = "JMSSampler.isFireAndForget";
+	private static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
 
-	public static final String JMS_PROPERTIES = "arguments";
+	private static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties"; // $NON-NLS-1$
 
-	public static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue";
+	private static final String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
 
-	public static final String XML_DATA = "HTTPSamper.xml_data";
+	private static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
 
-	public final static String SEND_QUEUE = "JMSSampler.SendQueue";
+	private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
 
-	public final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory";
+	private static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue"; // $NON-NLS-1$
 
-	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+	private static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
+
+	private final static String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
+
+	private final static String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
+	
+	private static final String IS_NON_PERSISTENT = "JMSSampler.isNonPersistent"; // $NON-NLS-1$
+
+	//--
 
 	//
 	// Member variables
@@ -87,26 +91,26 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	/** Factory for the connections to the queueing system. */
 	// NOTUSED private QueueConnectionFactory factory;
 	/** Queue for receiving messages (if applicable). */
-	private Queue receiveQueue;
+	private transient Queue receiveQueue;
 
 	/** The session with the queueing system. */
-	private QueueSession session;
+	private transient QueueSession session;
 
 	/** Connection to the queueing system. */
-	private QueueConnection connection;
+	private transient QueueConnection connection;
 
 	/** Queue for sending messages. */
-	private Queue sendQueue;
+	private transient Queue sendQueue;
 
 	/** Is the communication oneway? */
 	// NOTUSED private boolean oneway;
 	/** The executor for (pseudo) synchronous communication. */
-	private QueueExecutor executor;
+	private transient QueueExecutor executor;
 
 	/** Producer of the messages. */
-	private QueueSender producer;
+	private transient QueueSender producer;
 
-	private Receiver receiverThread = null;
+	private transient Receiver receiverThread = null;
 
 	/*
 	 * (non-Javadoc)
@@ -141,7 +145,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 				} else {
 					if (replyMsg instanceof TextMessage) {
 						res.setResponseData(((TextMessage) replyMsg).getText().getBytes());
-                        res.setContentLength(((TextMessage) replyMsg).getText().getBytes().length);
 					} else {
 						res.setResponseData(replyMsg.toString().getBytes());
 					}
@@ -169,10 +172,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	private void addJMSProperties(TextMessage msg) throws JMSException {
 		Map map = getArguments(JMSSampler.JMS_PROPERTIES).getArgumentsAsMap();
-		Iterator argIt = map.keySet().iterator();
+		Iterator argIt = map.entrySet().iterator();
 		while (argIt.hasNext()) {
-			String name = (String) argIt.next();
-			String value = (String) map.get(name);
+            Map.Entry me = (Map.Entry) argIt.next();
+			String name = (String) me.getKey();
+			String value = (String) me.getValue();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Adding property [" + name + "=" + value + "]");
 			}
@@ -184,8 +188,16 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		return getArguments(JMSSampler.JMS_PROPERTIES);
 	}
 
+	public void setJMSProperties(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+	}
+
 	public Arguments getJNDIProperties() {
 		return getArguments(JMSSampler.JNDI_PROPERTIES);
+	}
+
+	public void setJNDIProperties(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, args));
 	}
 
 	public String getQueueConnectionFactory() {
@@ -224,6 +236,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		return getPropertyAsBoolean(IS_ONE_WAY);
 	}
 
+	public boolean isNonPersistent() {
+		return getPropertyAsBoolean(IS_NON_PERSISTENT);
+	}
+
 	public String getInitialContextFactory() {
 		return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
 	}
@@ -234,6 +250,10 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 	public void setIsOneway(boolean isOneway) {
 		setProperty(new BooleanProperty(IS_ONE_WAY, isOneway));
+	}
+
+	public void setNonPersistent(boolean value) {
+		setProperty(new BooleanProperty(IS_NON_PERSISTENT, value));
 	}
 
 	public String toString() {
@@ -253,11 +273,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		// LOGGER.debug("testIterationStart");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestElement#threadStarted()
-	 */
 	public void threadStarted() {
 		logThreadStart();
 
@@ -289,12 +304,18 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
 			if (getPropertyAsBoolean(IS_ONE_WAY)) {
 				producer = session.createSender(sendQueue);
+				if (isNonPersistent()) {
+					producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+				}
 			} else {
 
 				if (useTemporyQueue()) {
 					executor = new TemporaryQueueExecutor(session, sendQueue);
 				} else {
 					producer = session.createSender(sendQueue);
+					if (isNonPersistent()) {
+						producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+					}
 					executor = new FixedQueueExecutor(producer, getTimeout());
 				}
 			}
@@ -425,12 +446,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		return (Arguments) getProperty(name).getObjectValue();
 	}
 
-	/**
-	 * @param i
-	 */
-	public void setTimeout(int i) {
-		setProperty(JMSSampler.TIMEOUT, String.valueOf(i));
-
+	public void setTimeout(String s) {
+		setProperty(JMSSampler.TIMEOUT, s);
 	}
 
 	/**

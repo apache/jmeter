@@ -1,10 +1,10 @@
-// $Header:
 /*
- * Copyright 2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,37 +17,43 @@
  */
 package org.apache.jmeter.testelement;
 
-import org.apache.jmeter.report.gui.AbstractReportGui;
+import java.util.List;
+
+import org.apache.jmeter.report.ReportTable;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * AbstractTable is the base Element for different kinds of report tables.
  * @author pete
  *
  */
-public abstract class AbstractTable extends AbstractTestElement {
+public abstract class AbstractTable extends AbstractTestElement 
+    implements ReportTable 
+{
 
-    public static final String REPORT_TABLE_MEAN = "ReportTable.mean";
-    public static final String REPORT_TABLE_MEDIAN = "ReportTable.median";
-    public static final String REPORT_TABLE_MAX = "ReportTable.max";
-    public static final String REPORT_TABLE_MIN = "ReportTable.min";
-    public static final String REPORT_TABLE_RESPONSE_RATE = "ReportTable.response.rate";
-    public static final String REPORT_TABLE_TRANSFER_RATE = "ReportTable.transfer.rate";
-    public static final String REPORT_TABLE_50_PERCENT = "ReportTable.50.percent";
-    public static final String REPORT_TABLE_90_PERCENT = "ReportTable.90.percent";
-    public static final String REPORT_TABLE_ERROR_RATE = "ReportTable.error.rate";
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    public static final String REPORT_TABLE_MEAN = "ReportTable.Mean";
+    public static final String REPORT_TABLE_MEDIAN = "ReportTable.Median";
+    public static final String REPORT_TABLE_MAX = "ReportTable.Max";
+    public static final String REPORT_TABLE_MIN = "ReportTable.Min";
+    public static final String REPORT_TABLE_RESPONSE_RATE = "ReportTable.Response_rate";
+    public static final String REPORT_TABLE_TRANSFER_RATE = "ReportTable.Transfer_rate";
+    public static final String REPORT_TABLE_50_PERCENT = "ReportTable.50_percent";
+    public static final String REPORT_TABLE_90_PERCENT = "ReportTable.90_percent";
+    public static final String REPORT_TABLE_ERROR_RATE = "ReportTable.Error.rate";
     public static final String[] items = {
     	REPORT_TABLE_MEAN, REPORT_TABLE_MEDIAN, REPORT_TABLE_MAX, REPORT_TABLE_MIN,
     	REPORT_TABLE_RESPONSE_RATE, REPORT_TABLE_TRANSFER_RATE, REPORT_TABLE_50_PERCENT,
     	REPORT_TABLE_90_PERCENT, REPORT_TABLE_ERROR_RATE };
 
-    public static final String REPORT_TABLE_FILE = "ReportTable.file";
-    public static final String REPORT_TABLE_DATE = "ReportTable.test.date";
+    public static final String REPORT_TABLE_TOTAL = "ReportTable.total";
     public static final String REPORT_TABLE_URL = "ReportTable.url";
     
-    public static final String[] xitems = { REPORT_TABLE_FILE, REPORT_TABLE_DATE,
+    public static final String[] xitems = { REPORT_TABLE_TOTAL,
     	REPORT_TABLE_URL };
     
-
     public AbstractTable() {
 		super();
 	}
@@ -125,9 +131,17 @@ public abstract class AbstractTable extends AbstractTestElement {
     }
     
 	public void addTestElement(TestElement el) {
-		super.addTestElement(el);
-		if (el instanceof AbstractChart) {
-			((AbstractChart)el).setParentTable(this);
-		}
+        if (el != null) {
+            super.addTestElement(el);
+            log.info("TestElement: " + el.getClass().getName());
+        }
 	}
+    
+    /**
+     * method isn't implemented and is left abstract. Subclasses
+     * need to filter the data in the list and return statistics.
+     * The statistics should be like the aggregate listener.
+     */
+    public abstract String[][] getTableData(List data);
+    
 }

@@ -1,10 +1,10 @@
-// $Header$
 /*
- * Copyright 2003-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -45,13 +45,56 @@ public class ObjectTableModel extends DefaultTableModel {
 	private transient ArrayList readFunctors = new ArrayList();
 
 	private transient ArrayList writeFunctors = new ArrayList();
+	
+	private transient Class objectClass = null; // if provided
 
+	/**
+	 * The ObjectTableModel is a TableModel whose rows are objects;
+	 * columns are defined as Functors on the object.
+	 * 
+	 * @param headers - Column names
+	 * @param _objClass - Object class that will be used
+	 * @param readFunctors - used to get the values
+	 * @param writeFunctors - used to set the values
+	 * @param editorClasses - class for each column
+	 */
+	public ObjectTableModel(String[] headers, Class _objClass, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
+		this(headers, readFunctors, writeFunctors, editorClasses);
+		this.objectClass=_objClass;
+	}
+
+	/**
+	 * The ObjectTableModel is a TableModel whose rows are objects;
+	 * columns are defined as Functors on the object.
+	 * 
+	 * @param headers - Column names
+	 * @param readFunctors - used to get the values
+	 * @param writeFunctors - used to set the values
+	 * @param editorClasses - class for each column
+	 */
 	public ObjectTableModel(String[] headers, Functor[] readFunctors, Functor[] writeFunctors, Class[] editorClasses) {
 		this.headers.addAll(Arrays.asList(headers));
 		this.classes.addAll(Arrays.asList(editorClasses));
 		this.readFunctors = new ArrayList(Arrays.asList(readFunctors));
 		this.writeFunctors = new ArrayList(Arrays.asList(writeFunctors));
 
+        int numHeaders = headers.length;
+
+        int numClasses = classes.size();
+        if (numClasses != numHeaders){
+            log.warn("Header count="+numHeaders+" but classes count="+numClasses);
+        }
+        
+        // Functor count = 0 is handled specially 
+        int numWrite = writeFunctors.length;
+        if (numWrite > 0 && numWrite != numHeaders){
+            log.warn("Header count="+numHeaders+" but writeFunctor count="+numWrite);
+        }
+        
+        int numRead = readFunctors.length;
+        if (numRead > 0 && numRead != numHeaders){
+            log.warn("Header count="+numHeaders+" but readFunctor count="+numRead);
+        }
 	}
 
 	public Iterator iterator() {
@@ -66,17 +109,15 @@ public class ObjectTableModel extends DefaultTableModel {
 
 	public void addRow(Object value) {
 		log.debug("Adding row value: " + value);
+		if (objectClass != null) {
+			final Class valueClass = value.getClass();
+			if (!objectClass.isAssignableFrom(valueClass)){
+				throw new IllegalArgumentException("Trying to add class: "+valueClass.getName()
+						+"; expecting class: "+objectClass.getName());
+			}
+		}
 		objects.add(value);
 		super.fireTableRowsInserted(objects.size() - 1, objects.size());
-	}
-	
-	public void setRows(Iterable rows)
-	{
-		clearData();
-		for(Object val : rows)
-		{
-			addRow(val);
-		}
 	}
 
 	public void insertRow(Object value, int index) {
@@ -177,9 +218,52 @@ public class ObjectTableModel extends DefaultTableModel {
 		return (Class) classes.get(arg0);
 	}
 	
-	public List getObjectList()
-	{
-		return objects;
+	/**
+	 * Check all registered functors.
+	 * <p>
+	 * <b>** only for use in unit test code **</b>
+	 * </p>
+	 * 
+	 * @param _value - an instance of the table model row data item 
+	 * (if null, use the class passed to the constructor).
+	 * 
+	 * @param caller - class of caller.
+	 * 
+	 * @return false if at least one Functor cannot be found.
+	 */
+	public boolean checkFunctors(Object _value, Class caller){
+		Object value;
+		if (_value == null && objectClass != null) {
+			try {
+				value = objectClass.newInstance();
+			} catch (InstantiationException e) {
+				log.error("Cannot create instance of class "+objectClass.getName(),e);
+				return false;
+			} catch (IllegalAccessException e) {
+				log.error("Cannot create instance of class "+objectClass.getName(),e);
+				return false;
+			}			
+		} else {
+			value = _value;			
+		}
+		boolean status = true;
+		for(int i=0;i<getColumnCount();i++){
+			Functor setMethod = (Functor) writeFunctors.get(i);
+			if (setMethod != null) {
+				if (!setMethod.checkMethod(value,getColumnClass(i))){
+					status=false;
+					log.warn(caller.getName()+" is attempting to use nonexistent "+setMethod.toString());
+				}
+			}
+			Functor getMethod = (Functor) readFunctors.get(i);
+			if (getMethod != null) {
+				if (!getMethod.checkMethod(value)){
+					status=false;
+					log.warn(caller.getName()+" is attempting to use nonexistent "+getMethod.toString());
+				}
+			}
+			
+		}
+		return status;
 	}
-
 }
