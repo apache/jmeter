@@ -27,6 +27,20 @@
 
 <!--  ===================  -->
 
+<h3>Version 2.3.1</h3>
+
+<h4>Bug fixes</h4>
+<ul>
+<li>SaveService no longer needs to instantiate classes</li>
+</ul>
+
+<h4>Improvements</h4>
+<ul>
+<li></li>
+</ul>
+
+<!--  ===================  -->
+
 <h3>Version 2.3</h3>
 
 <h3>Fixes since 2.3RC4</h3>

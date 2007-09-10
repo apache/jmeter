@@ -55,18 +55,42 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 /**
- * author Mike Stover
- * author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell </a>
+ * Handles setting up XStream serialisation.
+ * The class reads alias definitions from saveservice.properties.
+ * 
  */
 public class SaveService {
-    private static final XStream saver = new XStream(new PureJavaReflectionProvider());
-
+	
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final XStream saver = new XStream(new PureJavaReflectionProvider()){
+    	// Override wrapMapper in order to insert the Wrapper in the chain
+    	protected MapperWrapper wrapMapper(MapperWrapper next) {
+    		// Provide our own aliasing using strings rather than classes
+            return new MapperWrapper(next){
+    		// Translate alias to classname and then delegate to wrapped class
+    	    public Class realClass(String alias) {
+    	    	String fullName = aliasToClass(alias);
+    	    	return super.realClass(fullName == null ? alias : fullName);
+    	    }
+    		// Translate to alias and then delegate to wrapped class
+    	    public String serializedClass(Class type) {
+    	    	if (type == null) {
+    	    		return super.serializedClass(type);
+    	    	}
+    	    	String alias = classToAlias(type.getName());
+                return alias == null ? super.serializedClass(type) : alias ;
+    	        }
+            };
+        }
+    };
+
 	// The XML header, with placeholder for encoding, since that is controlled by property
 	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"<ph>\"?>"; // $NON-NLS-1$
 
@@ -132,20 +156,11 @@ public class SaveService {
 
 	// Helper method to simplify alias creation from properties
 	private static void makeAlias(String alias, String clazz) {
-		try {
-			saver.alias(alias, Class.forName(clazz));
-            aliasToClass.setProperty(alias,clazz);
-            Object oldval=classToAlias.setProperty(clazz,alias);
-            if (oldval != null) {
-                log.error("Duplicate alias detected for "+clazz+": "+alias+" & "+oldval);
-            }
-		} catch (ClassNotFoundException e) {
-			log.warn("Could not set up alias " + alias + " " + e.toString());
-		} catch (NoClassDefFoundError e) {
-			log.warn("Could not set up alias " + alias + " " + e.toString());
-		} catch (Throwable e) {// (e.g. InternalError : may happen on headless boxes 
-			log.error("Could not set up alias " + alias,e);
-		}
+        aliasToClass.setProperty(alias,clazz);
+        Object oldval=classToAlias.setProperty(clazz,alias);
+        if (oldval != null) {
+            log.error("Duplicate alias detected for "+clazz+": "+alias+" & "+oldval);
+        }
 	}
 
     public static Properties loadProperties() throws IOException{
