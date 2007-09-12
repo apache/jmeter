@@ -1489,10 +1489,29 @@ which clearly won't match. Thus the For 2 Sampler will not be run.
 
 <component name="Module Controller" index="&sect-num;.2.13"  width="409" height="255" screenshot="module_controller.png">
 <description>
-<p>The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.  To use this
-module effectively, one might have a number of Controllers under the <complink name="WorkBench" />, each with a different series of
+<p>
+The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.
+</p>
+<p>
+A test plan fragment consists of a Controller and all the test elements (samplers etc) contained in it. 
+The fragment can be located in any Thread Group, or on the <complink name="WorkBench" />.
+If the fragment is located in a Thread Group, then its Controller can be disabled to prevent the fragment being run
+except by the Module Controller. 
+Or you can store the fragments in a dummy Thread Group, and disable the entire Thread Group. 
+</p>
+<p>
+There can be multiple fragments, each with a different series of
 samplers under them.  The module controller can then be used to easily switch between these multiple test cases simply by choosing
 the appropriate controller in its drop down box.  This provides convenience for running many alternate test plans quickly and easily.
+</p>
+<p>
+A fragment name is made up of the Controller name and all its parent names.
+For example:
+<pre>
+Test Plan / Protocol: JDBC / Control / Interleave Controller
+</pre>
+Any fragments used by the Module Controller must have a unique name,
+as the name is used to find the target controller when a test plan is reloaded.
 </p>
 </description>
 <note>The Module Controller should not be used with remote testing or non-gui testing in conjunction with Workbench components since the Workbench test elements are not part of test plan .jmx files.  Any such test will fail.</note>
