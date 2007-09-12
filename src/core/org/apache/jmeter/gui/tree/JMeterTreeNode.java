@@ -38,10 +38,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -72,31 +68,32 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
 	}
 
 	public ImageIcon getIcon(boolean enabled) {
+		TestElement testElement = getTestElement();
 		try {
-			if (getTestElement() instanceof TestBean) {
+			if (testElement instanceof TestBean) {
+				Class testClass = testElement.getClass();
 				try {
-					Image img = Introspector.getBeanInfo(getTestElement().getClass())
-							.getIcon(BeanInfo.ICON_COLOR_16x16);
+					Image img = Introspector.getBeanInfo(testClass).getIcon(BeanInfo.ICON_COLOR_16x16);
 					// If icon has not been defined, then use GUI_CLASS property
-					if (img == null) {//
-						Object clazz = Introspector.getBeanInfo(getTestElement().getClass()).getBeanDescriptor()
+					if (img == null) {
+						Object clazz = Introspector.getBeanInfo(testClass).getBeanDescriptor()
 								.getValue(TestElement.GUI_CLASS);
 						if (clazz == null) {
-							log.error("Can't obtain GUI class for " + getTestElement().getClass().getName());
+							log.warn("getIcon(): Can't obtain GUI class from " + testClass.getName());
 							return null;
 						}
 						return GUIFactory.getIcon(Class.forName((String) clazz), enabled);
 					}
 					return new ImageIcon(img);
 				} catch (IntrospectionException e1) {
-					log.error("Can't obtain icon", e1);
+					log.error("Can't obtain icon for class "+testElement, e1);
 					throw new org.apache.jorphan.util.JMeterError(e1);
 				}
 			}
-			return GUIFactory.getIcon(Class.forName(getTestElement().getPropertyAsString(TestElement.GUI_CLASS)),
+			return GUIFactory.getIcon(Class.forName(testElement.getPropertyAsString(TestElement.GUI_CLASS)),
 						enabled);
 		} catch (ClassNotFoundException e) {
-			log.warn("Can't get icon for class " + getTestElement(), e);
+			log.warn("Can't get icon for class " + testElement, e);
 			return null;
 		}
 	}
