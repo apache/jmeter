@@ -136,6 +136,13 @@ JMeter assumes the FTP server is listening on the default port.</property>
 https.sessioncontext.shared=true
 </pre>
         </p>
+        <p>
+        JMeter defaults to the SSL protocol level TLS.
+        If the server needs a different level, e.g. SSLv3, change the JMeter property, for example:
+<pre>
+https.default.protocol=SSLv3
+</pre> 
+        </p>
         <p>If the request uses cookies, then you will also need an
         <complink name="HTTP Cookie Manager"/>.  You can
         add either of these elements to the Thread Group or the HTTP Request.  If you have

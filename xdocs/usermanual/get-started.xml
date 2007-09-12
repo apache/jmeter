@@ -122,8 +122,12 @@ To enable Email support, add Sun's JavaMail packages and the activation packages
 <p>To test a web server using SSL encryption (HTTPS), JMeter requires that an
 implementation of SSL be provided, as is the case with Sun Java 1.4 and above.
 If your version of Java does not include SSL support, then it is possible to add an external implementation.
-Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  Also, update <a href="#configuring_jmeter">jmeter.properties</a>
-to register the SSL Provider.</p>
+Include the necessary encryption packages in JMeter's <a href="#classpath">classpath</a>.  
+Also, update <a href="#configuring_jmeter">system.properties</a> to register the SSL Provider.</p>
+<p>
+JMeter defaults to protocol level TLS. This can be changed by editting the JMeter property 
+"https.default.protocol" in jmeter.properties or user.properties.
+</p>
 <p><b>JMeter is configured to accept all certificates,
 whether trusted or not, regardless of validity periods etc.</b>
 This is to allow the maximum flexibility in testing servers.</p>
