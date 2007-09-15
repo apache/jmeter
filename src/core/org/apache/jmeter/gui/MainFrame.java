@@ -176,6 +176,16 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	}
 
 	/**
+	 * Specify whether or not the File|Revert item should be enabled.
+	 * 
+	 * @param enabled
+	 *            true if the menu item should be enabled, false otherwise
+	 */
+    public void setFileRevertEnabled(boolean enabled) {
+		menuBar.setFileRevertEnabled(enabled);
+	}
+
+	/**
 	 * Set the menu that should be used for the Edit menu.
 	 * 
 	 * @param menu

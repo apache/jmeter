@@ -88,13 +88,20 @@ public class Close implements Command {
 				return false; // Don't clear the plan
 			}
 		}
+		
+		closeProject(e);
+		return true;
+	}
+	
+	static void closeProject(ActionEvent e) {
+		GuiPackage guiPackage = GuiPackage.getInstance();
+
 		guiPackage.getTreeModel().clearTestPlan();
 		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
 
 		// Clear the name of the test plan file
-		GuiPackage.getInstance().setTestPlanFile(null);
+		guiPackage.setTestPlanFile(null);
 
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
-		return true;
 	}
 }
