@@ -49,6 +49,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem file_save_as;
 
+    private JMenuItem file_revert;
+
     private JMenuItem file_load;
 
     private JMenuItem file_merge;
@@ -121,7 +123,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 	}
 
 	public void setFileSaveEnabled(boolean enabled) {
-		file_save_as.setEnabled(enabled);
+        if(file_save_as != null) {
+            file_save_as.setEnabled(enabled);
+        }
 	}
 
 	public void setFileLoadEnabled(boolean enabled) {
@@ -132,6 +136,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 			file_merge.setEnabled(enabled);
 		}
 	}
+
+    public void setFileRevertEnabled(boolean enabled) {
+        if(file_revert != null) {
+            file_revert.setEnabled(enabled);
+        }
+    }
 
 	public void setEditEnabled(boolean enabled) {
 		if (editMenu != null) {
@@ -439,6 +449,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		file_save_as.addActionListener(ActionRouter.getInstance());
 		file_save_as.setEnabled(true);
 
+		file_revert = new JMenuItem(JMeterUtils.getResString("revert_project"), 'R'); //$NON-NLS-1$
+		file_revert.setActionCommand(ActionNames.REVERT_PROJECT);
+		file_revert.addActionListener(ActionRouter.getInstance());
+		file_revert.setEnabled(false);
+
 		file_load = new JMenuItem(JMeterUtils.getResString("menu_open"), 'O'); //$NON-NLS-1$
 		file_load.setAccelerator(KeyStrokes.OPEN);
 		file_load.addActionListener(ActionRouter.getInstance());
@@ -469,8 +484,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		fileMenu.add(file_close);
 		fileMenu.add(file_load);
 		fileMenu.add(file_merge);
+        fileMenu.addSeparator();
 		fileMenu.add(file_save);
 		fileMenu.add(file_save_as);
+        fileMenu.add(file_revert);
         fileMenu.addSeparator();
         fileMenu.add(file_exit);
 	}
