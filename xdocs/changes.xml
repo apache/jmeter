@@ -37,6 +37,7 @@
 <h4>Improvements</h4>
 <ul>
 <li>Add run_gui Ant target, to package and then start the JMeter GUI from Ant</li>
+<li>Add File->Revert to easily drop the current changes and reload the project file currently loaded</li>
 </ul>
 
 <!--  ===================  -->

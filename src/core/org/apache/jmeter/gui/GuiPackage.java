@@ -603,7 +603,10 @@ public final class GuiPackage implements LocaleChangeListener {
 	 */
 	public void setTestPlanFile(String f) {
 		testPlanFile = f;
-		GuiPackage.getInstance().getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
+        getMainFrame().setTitle(JMeterUtils.getExtendedFrameTitle(testPlanFile));
+        // Enable file revert action if a file is used
+        getMainFrame().setFileRevertEnabled(f != null);
+
 		try {
 			FileServer.getFileServer().setBasedir(testPlanFile);
 		} catch (IOException e1) {
