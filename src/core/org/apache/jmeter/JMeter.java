@@ -228,7 +228,7 @@ public class JMeter implements JMeterPlugin {
 
 				GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
 
-				new Load().insertLoadedTree(1, tree);
+				Load.insertLoadedTree(1, tree);
             } catch (ConversionException e) {
                 log.error("Failure loading test file", e);
                 JMeterUtils.reportErrorToUser(SaveService.CEtoString(e));
