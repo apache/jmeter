@@ -73,20 +73,28 @@ public class Load implements Command {
 		if (chooser == null) {
 			return;
 		}
+        File selectedFile = chooser.getSelectedFile();
+        if(selectedFile != null) {
+            boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
+            // We must ask the user if it is ok to close current project
+            if(!merging) {
+				if (!Close.performAction(e)) return;
+            }
+            loadProjectFile(e, selectedFile, merging);
+        }
+	}
+	
+	static void loadProjectFile(ActionEvent e, File f, boolean merging) {
+        GuiPackage guiPackage = GuiPackage.getInstance();
 		InputStream reader = null;
 		try {
-            File f = chooser.getSelectedFile();
 			if (f != null) {
                 boolean isTestPlan = false;
-                boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
 
 				if (merging) {
 					log.info("Merging file: " + f);
 				} else {
 					log.info("Loading file: " + f);
-                    // Close the test plan currently open
-					if (!Close.performAction(e)) return;
-
 					FileServer.getFileServer().setBasedir(f.getAbsolutePath());
 				}
 				reader = new FileInputStream(f);
@@ -95,7 +103,7 @@ public class Load implements Command {
                 
                 // don't change name if merging
                 if (!merging && isTestPlan) {
-                    GuiPackage.getInstance().setTestPlanFile(f.getAbsolutePath());
+                	guiPackage.setTestPlanFile(f.getAbsolutePath());
                 }
 			}
 		} catch (NoClassDefFoundError ex) // Allow for missing optional jars
@@ -118,15 +126,15 @@ public class Load implements Command {
 			JMeterUtils.reportErrorToUser(msg);
 		} finally {
             JOrphanUtils.closeQuietly(reader);
-			GuiPackage.getInstance().updateCurrentGui();
-			GuiPackage.getInstance().getMainFrame().repaint();
+            guiPackage.updateCurrentGui();
+            guiPackage.getMainFrame().repaint();
 		}
 	}
 
 	/**
 	 * Returns a boolean indicating whether the loaded tree was a full test plan
 	 */
-	public boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws Exception, IllegalUserActionException {
+	public static boolean insertLoadedTree(int id, HashTree tree, boolean merging) throws Exception, IllegalUserActionException {
 		// convertTree(tree);
 		if (tree == null) {
 			throw new Exception("Error in TestPlan - see log file");
@@ -164,7 +172,7 @@ public class Load implements Command {
 		return isTestPlan;
 	}
     
-	public boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
+	public static boolean insertLoadedTree(int id, HashTree tree) throws Exception, IllegalUserActionException {
 		return insertLoadedTree(id, tree, false);
 	}
 }
