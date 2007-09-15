@@ -704,6 +704,16 @@
   depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-report"
   description="Compile everything."/>
 
+  <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
+    <java classname="org.apache.jmeter.NewDriver" fork="true">
+      <classpath>
+        <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
+        <path refid="classpath"/>
+      </classpath>
+      <sysproperty key="jmeter.home" value="${basedir}"/>
+    </java>
+  </target>
+	
   <target name="package" depends="compile, package-only"
      description="Compile everything and create the jars"/>
   

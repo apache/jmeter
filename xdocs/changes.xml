@@ -36,7 +36,7 @@
 
 <h4>Improvements</h4>
 <ul>
-<li></li>
+<li>Add run_gui Ant target, to package and then start the JMeter GUI from Ant</li>
 </ul>
 
 <!--  ===================  -->
