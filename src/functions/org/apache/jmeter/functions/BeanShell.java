@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -33,14 +32,12 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 /**
  * A function which understands BeanShell
  * 
  */
-
 public class BeanShell extends AbstractFunction implements Serializable {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
