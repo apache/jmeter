@@ -185,6 +185,15 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		menuBar.setFileRevertEnabled(enabled);
 	}
 
+    /**
+     * Specify the project file that was just loaded
+     * 
+     * @param file - the full path to the file that was loaded
+     */
+    public void setProjectFileLoaded(String file) {
+        menuBar.setProjectFileLoaded(file);
+    }
+    
 	/**
 	 * Set the menu that should be used for the Edit menu.
 	 * 

@@ -22,8 +22,10 @@ import java.awt.Component;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -34,6 +36,7 @@ import javax.swing.UIManager;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.action.LoadRecentProject;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
@@ -52,6 +55,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private JMenuItem file_revert;
 
     private JMenuItem file_load;
+
+    private List file_load_recent_files;
 
     private JMenuItem file_merge;
 
@@ -111,6 +116,9 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 	private Collection remote_engine_exit;
 
 	public JMeterMenuBar() {
+		// List for recent files menu items
+        file_load_recent_files = new LinkedList();
+		// Lists for remote engines menu items
 		remote_engine_start = new LinkedList();
 		remote_engine_stop = new LinkedList();
 		remote_engine_exit = new LinkedList();
@@ -140,6 +148,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     public void setFileRevertEnabled(boolean enabled) {
         if(file_revert != null) {
             file_revert.setEnabled(enabled);
+        }
+    }
+    
+    public void setProjectFileLoaded(String file) {
+        if(file_load_recent_files != null && file != null) {
+            LoadRecentProject.updateRecentFileMenuItems(file_load_recent_files, file);
         }
     }
 
@@ -489,6 +503,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		fileMenu.add(file_save_as);
         fileMenu.add(file_revert);
         fileMenu.addSeparator();
+        // Add the recent files, which will also add a separator that is
+        // visible when needed
+        file_load_recent_files = LoadRecentProject.getRecentFileMenuItems();
+        for(Iterator i = file_load_recent_files.iterator(); i.hasNext();) {
+            fileMenu.add((JComponent)i.next());
+        }
         fileMenu.add(file_exit);
 	}
 
