@@ -23,11 +23,15 @@
 <section name="Known Bugs"> 
 <ul>
 <li>
-<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Minor&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=JMeter&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=Bug+Number">
-BugZilla - Open bugs</a></li>
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?query_format=specific&amp;order=relevance+desc&amp;bug_status=__open__&amp;product=JMeter&amp;content=">
+Bugzilla - All open bugs</a>
+</li>
 <li>
-<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=Enhancement&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=JMeter&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=Bug+Number">
-BugZilla - Enhancements</a>
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+BugZilla - Open bugs (excluding enhancements)</a></li>
+<li>
+<a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Enhancement&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
+BugZilla - Enhancements only</a>
 </li>
 </ul>
 </section>
