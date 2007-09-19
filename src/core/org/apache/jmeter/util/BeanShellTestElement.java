@@ -28,6 +28,7 @@ import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public abstract class BeanShellTestElement extends AbstractTestElement
@@ -35,9 +36,16 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 3;
+    private static final long serialVersionUID = 4;
 
-    private String script; // For TestBean implementations only
+    //++ For TestBean implementations only
+	private String parameters; // passed to file or script
+	
+	private String filename; // file to source (overrides script)
+
+	private String script; // script (if file not provided)
+	//-- For TestBean implementations only
+
     
     transient private BeanShellInterpreter bshInterpreter = null;
 
@@ -74,6 +82,23 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         o.init();
         o.setScript(getScript());
         return o;
+    }
+
+    protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{
+		String fileName = getFilename();
+
+		bsh.set("FileName", getFilename());//$NON-NLS-1$
+		// Set params as a single line
+		bsh.set("Parameters", getParameters()); // $NON-NLS-1$
+		// and set as an array
+		bsh.set("bsh.args",//$NON-NLS-1$
+				JOrphanUtils.split(getParameters(), " "));//$NON-NLS-1$
+
+		if (fileName.length() == 0) {
+			return bsh.eval(getScript());
+		} else {
+			return bsh.source(fileName);
+		}
     }
 
     /**
@@ -160,5 +185,21 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 		} catch (JMeterException ignored) {
             log.debug(getClass().getName() + " : " + ignored.getLocalizedMessage()); // $NON-NLS-1$
 		}		
+	}
+
+	public String getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(String s) {
+		parameters = s;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String s) {
+		filename = s;
 	}
 }
