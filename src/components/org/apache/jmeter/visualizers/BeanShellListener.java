@@ -37,7 +37,7 @@ public class BeanShellListener extends BeanShellTestElement
 	
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 2;
+    private static final long serialVersionUID = 4;
 
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.listener.init"; //$NON-NLS-1$
@@ -62,7 +62,7 @@ public class BeanShellListener extends BeanShellTestElement
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
             bshInterpreter.set("sampleEvent", se);//$NON-NLS-1$
             bshInterpreter.set("sampleResult", samp);//$NON-NLS-1$
-            bshInterpreter.eval(getScript());
+            processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }		
