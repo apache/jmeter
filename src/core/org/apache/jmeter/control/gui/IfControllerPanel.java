@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -41,13 +42,13 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IfControllerPanel extends AbstractControllerGui implements ActionListener {
 
-	private static final String CONDITION_LABEL = "if_controller_label"; // $NON-NLS-1$
-
 	/**
 	 * A field allowing the user to specify the number of times the controller
 	 * should loop.
 	 */
 	private JTextField theCondition;
+	
+	private JCheckBox evaluateAll;
 
 	/**
 	 * Boolean indicating whether or not this component should display its name.
@@ -55,9 +56,6 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	 * intended to be used as a subpanel for another component.
 	 */
 	private boolean displayName = true;
-
-	/** The name of the loops field component. */
-	private static final String CONDITION = "JS_Condition"; // $NON-NLS-1$
 
 	/**
 	 * Create a new LoopControlPanel as a standalone component.
@@ -93,7 +91,9 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	public void configure(TestElement element) {
 		super.configure(element);
 		if (element instanceof IfController) {
-			theCondition.setText(((IfController) element).getCondition());
+			IfController ifController = (IfController) element;
+			theCondition.setText(ifController.getCondition());
+			evaluateAll.setSelected(ifController.isEvaluateAll());
 		}
 
 	}
@@ -113,11 +113,9 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 	public void modifyTestElement(TestElement controller) {
 		configureTestElement(controller);
 		if (controller instanceof IfController) {
-			if (theCondition.getText().length() > 0) {
-				((IfController) controller).setCondition(theCondition.getText());
-			} else {
-				((IfController) controller).setCondition(""); // $NON-NLS-1$
-			}
+			IfController ifController = (IfController) controller;
+			ifController.setCondition(theCondition.getText());
+			ifController.setEvaluateAll(evaluateAll.isSelected());
 		}
 	}
     
@@ -127,6 +125,7 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
     public void clearGui() {
         super.clearGui();
         theCondition.setText(""); // $NON-NLS-1$
+        evaluateAll.setSelected(false);
     }
 
 	/**
@@ -174,12 +173,11 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 		JPanel conditionPanel = new JPanel(new BorderLayout(5, 0));
 
 		// Condition LABEL
-		JLabel conditionLabel = new JLabel(JMeterUtils.getResString(CONDITION_LABEL));
+		JLabel conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
 		conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
 		// TEXT FIELD
 		theCondition = new JTextField(""); // $NON-NLS-1$
-		theCondition.setName(CONDITION);
 		conditionLabel.setLabelFor(theCondition);
 		conditionPanel.add(theCondition, BorderLayout.CENTER);
 		theCondition.addActionListener(this);
@@ -187,6 +185,9 @@ public class IfControllerPanel extends AbstractControllerGui implements ActionLi
 		conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
 				+ theCondition.getPreferredSize().width), BorderLayout.NORTH);
 
+		// Evaluate All checkbox
+		evaluateAll = new JCheckBox(JMeterUtils.getResString("if_controller_evaluate_all")); // $NON-NLS-1$
+		conditionPanel.add(evaluateAll,BorderLayout.SOUTH);
 		return conditionPanel;
 	}
 }
