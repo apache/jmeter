@@ -38,6 +38,7 @@
 <li>Bug 43332 - 2.3RC4 does not clear Guis based on TestBean</li>
 <li>Bug 42948 - Problems with Proxy gui table fields in Java 1.6</li>
 <li>Fixup broken jmeter-server script</li>
+<li>Bug 43364 - option to revert If Controller to pre 2.3RC3 behaviour</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -385,7 +386,7 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 <li>Function methods setParameters() need to be synchronized</li>
 <li>Fix CLI long optional argument to require "=" (as for short options)</li>
 <li>Fix SlowSocket to work properly with Httpclient (both http and https)</li>
-<li>Bug 41612 - Loop nested in IF behaves erratically</li>
+<li>Bug 41612 - Loop nested in If Controller behaves erratically</li>
 <li>Bug 42232 - changing language clears UDV contents</li>
 <li>Jexl function did not allow variables</li>
 </ul>

@@ -53,6 +53,8 @@ public class IfController extends GenericController implements Serializable {
 
 	private final static String CONDITION = "IfController.condition"; //$NON-NLS-1$
 
+	private final static String EVALUATE_ALL = "IfController.evaluateAll"; //$NON-NLS-1$
+
 	/**
 	 * constructor
 	 */
@@ -105,7 +107,7 @@ public class IfController extends GenericController implements Serializable {
 			} else if (resultStr.equals("true")) { //$NON-NLS-1$
 				result = true;
 			} else {
-				throw new Exception(" BAD CONDITION :: " + cond);
+				throw new Exception(" BAD CONDITION :: " + cond + " :: expected true or false");
 			}
 
 			logger.debug("    >> evaluate Condition -  [ " + cond + "] results is  [" + result + "]");
@@ -145,7 +147,7 @@ public class IfController extends GenericController implements Serializable {
         // For subsequent calls, we are inside the IfControllerGroup,
         // so then we just pass the control to the next item inside the if control
         boolean result = true;
-        if(isFirst()) {
+        if(isEvaluateAll() || isFirst()) {
             result = evaluateCondition(getCondition());
         }
         
@@ -157,5 +159,13 @@ public class IfController extends GenericController implements Serializable {
 		} catch (NextIsNullException e1) {
 			return null;
 		}
+	}
+
+	public boolean isEvaluateAll() {
+		return getPropertyAsBoolean(EVALUATE_ALL,false);
+	}
+
+	public void setEvaluateAll(boolean b) {
+		setProperty(EVALUATE_ALL,b);
 	}
 }

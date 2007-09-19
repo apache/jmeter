@@ -1345,16 +1345,26 @@ setting is reset when a parent Loop Controller restarts.
 <component name="If Controller" index="&sect-num;.2.9"  width="358" height="131" screenshot="ifcontroller.png">
 	<description>
 		<p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
+		<p>
+		Prior to JMeter 2.3RC3, the condition was evaluated for every runnable element contained in the controller.
+		This sometimes caused unexpected behaviour, so 2.3RC3 was changed to evaluate the condition only once on initial entry.
+		However, the original behaviour is also useful, so versions of JMeter after 2.3RC4 have an additional
+		option to select the original behaviour.
+		</p>
 	</description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
 	<property name="Condition" required="Yes"><b>Javascript</b> code that returns "true" or "false"</property>
+	<property name="Evaluate for all children" required="Yes">
+	Should condition be evaluated for all children?
+	If not checked, then the condition is only evaluated on entry.
+	</property>
 </properties>
 	<p>Examples:
 		<ul>
 			<li>${COUNT} &lt; 10</li>
 			<li>"${VAR}" == "abcd"</li>
-			<li>"${JMeterThread.last_sample_ok}" == "true" (check if last sample succeeded)</li>
+			<li>${JMeterThread.last_sample_ok} (check if last sample succeeded)</li>
 		</ul>
 		If there is an error interpreting the code, the condition is assumed to be false, and a message is logged in jmeter.log.
 	</p>
