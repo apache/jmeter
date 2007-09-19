@@ -20,7 +20,7 @@
 ##   SERVER_PORT=1234 jmeter-server
 ##
 
-DIRNAME=${DIRNAME}
+DIRNAME=`dirname $0`
 CLASSPATH=${DIRNAME}/../lib/ext/ApacheJMeter_core.jar:${DIRNAME}/../lib/jorphan.jar:${DIRNAME}/../lib/logkit-1.2.jar rmiregistry $SERVER_PORT &
 # stop rmiregistry on interrupt 
 trap "kill $!" 2
