@@ -63,6 +63,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     }
 
 	private void init() {
+		parameters=""; // ensure variables are not null
+		filename="";
+		script="";
 		try {
             String initFileName = JMeterUtils.getProperty(getInitFileProperty());
             hasInitFile = initFileName != null;
@@ -80,8 +83,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     public Object clone() {
         BeanShellTestElement o = (BeanShellTestElement) super.clone();
         o.init();
-        o.setScript(getScript());
-        return o;
+       return o;
     }
 
     protected Object processFileOrScript(BeanShellInterpreter bsh) throws JMeterException{
