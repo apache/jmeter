@@ -20,11 +20,8 @@
 ##   SERVER_PORT=1234 jmeter-server
 ##
 
-set OLDCLASSPATH=$CLASSPATH
-export OLDCLASSPATH
-set CLASSPATH=`dirname $0`/../lib/ext/ApacheJMeter_core.jar:`dirname $0`/../lib/jorphan.jar:`dirname $0`/../lib/logkit-1.2.jar
-export CLASSPATH
-rmiregistry $SERVER_PORT &
-set CLASSPATH=$OLDCLASSPATH
-export CLASSPATH
-`dirname $0`/jmeter -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"
+DIRNAME=${DIRNAME}
+CLASSPATH=${DIRNAME}/../lib/ext/ApacheJMeter_core.jar:${DIRNAME}/../lib/jorphan.jar:${DIRNAME}/../lib/logkit-1.2.jar rmiregistry $SERVER_PORT &
+# stop rmiregistry on interrupt 
+trap "kill $!" 2
+${DIRNAME}/jmeter -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"
