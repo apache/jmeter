@@ -148,6 +148,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
 				return properties[i];
 			}
 		}
+		log.warn("Cannot find property: "+name);
 		return null;
 	}
 

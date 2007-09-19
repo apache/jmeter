@@ -35,7 +35,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 3;
+    private static final long serialVersionUID = 4;
     
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.postprocessor.init"; //$NON-NLS-1$
@@ -50,6 +50,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
         SampleResult prev = jmctx.getPreviousResult();
 		final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
 		if (prev == null || bshInterpreter == null) {
+        	log.error("BeanShell not found");
 			return;
 		}
 
@@ -60,7 +61,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
             bshInterpreter.set("prev", prev);//$NON-NLS-1$
             bshInterpreter.set("data", prev.getResponseData());//$NON-NLS-1$
-            bshInterpreter.eval(getScript());
+            processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }
