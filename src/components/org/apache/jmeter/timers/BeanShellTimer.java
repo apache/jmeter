@@ -31,7 +31,7 @@ import org.apache.log.Logger;
 public class BeanShellTimer extends BeanShellTestElement implements Cloneable, Timer, TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 2;
+    private static final long serialVersionUID = 4;
 
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.timer.init"; //$NON-NLS-1$
@@ -58,7 +58,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             // Add variables for access to context and variables
             bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
-            Object o = bshInterpreter.eval(getScript());
+            Object o = processFileOrScript(bshInterpreter);
             if (o != null) ret=o.toString();
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);

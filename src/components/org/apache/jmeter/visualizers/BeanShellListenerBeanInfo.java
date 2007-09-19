@@ -18,23 +18,12 @@
 
 package org.apache.jmeter.visualizers;
 
-import java.beans.PropertyDescriptor;
+import org.apache.jmeter.util.BeanShellBeanInfoSupport;
 
-import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jmeter.testbeans.gui.TextAreaEditor;
-
-public class BeanShellListenerBeanInfo extends BeanInfoSupport {
+public class BeanShellListenerBeanInfo extends BeanShellBeanInfoSupport {
 
 	public BeanShellListenerBeanInfo() {
 		super(BeanShellListener.class);
-
-        createPropertyGroup("scripting", new String[] { "script" });
-
-		PropertyDescriptor p = property("script");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
-        p.setPropertyEditorClass(TextAreaEditor.class);
-
 	}
 
 }

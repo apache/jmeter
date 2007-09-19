@@ -730,10 +730,16 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 	</description>
 <properties>
-	<property name="Name" required="no">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Parameters" required="no">List of parameters to be passed to the script file or the script.</property>
-	<property name="Script File" required="(yes)">Name of a file to be used as a BeanShell script</property>
-	<property name="Script" required="(yes)">Script to be passed to BeanShell</property>
+	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+    <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+	The parameters are stored in the following variables:
+	<ul>
+		<li>Parameters - string containing the parameters as a single variable</li>
+	    <li>bsh.args - String array containing parameters, split on white-space</li>
+	</ul></property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. 
+    The return value (if not null) is stored as the sampler result.</property>
 </properties>
 <p>
 N.B. Each Sampler instance has its own BeanShell interpeter,
@@ -825,19 +831,12 @@ If a script file is supplied, that will be used, otherwise the script will be us
 <p>
 Before invoking the script, some variables are set up:
 </p>
-<p>
-The contents of the Parameters field is put into the variable "Parameters".
-The string is also split into separate tokens using a single space as the separator, and the resulting list
-is stored in the String array args.
-</p>
-<p>
-The full list of variables that is set up is as follows:</p>
 <ul>
 <li>log - the Logger</li>
 <li>Label - the Sampler label</li>
 <li>FileName - the file name, if any</li>
 <li>Parameters - text from the Parameters field</li>
-<li>args - the parameters, split as described above</li>
+<li>bsh.args - the parameters, split as described above</li>
 <li>SampleResult - pointer to the current SampleResult</li>
 <li>ctx - JMeterContext</li>
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
@@ -1942,7 +1941,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="768" height="230" screenshot="beanshell_listener.png">
+<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="516" height="286" screenshot="beanshell_listener.png">
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
@@ -1959,9 +1958,17 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+    <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+	The parameters are stored in the following variables:
+	<ul>
+		<li>Parameters - string containing the parameters as a single variable</li>
+	    <li>bsh.args - String array containing parameters, split on white-space</li>
+	</ul></property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run</property>
+    <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
+<p>The following variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -2667,15 +2674,15 @@ See the file BeanShellListeners.bshrc for example definitions.
 </description>
 
 <properties>
-<property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-<property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+    <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
 	<ul>
 		<li>Parameters - string containing the parameters as a single variable</li>
 	    <li>bsh.args - String array containing parameters, split on white-space</li>
 	</ul></property>
-<property name="Script file" required="No">A file containing the BeanShell script to run</property>
-<property name="Script" required="No">The BeanShell script to run</property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run. This overrides the script.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The BeanShell script to run. The return value is ignored.</property>
 </properties>
 <p>There's a <a href="../demos/BeanShellAssertion.bsh">sample script</a> you can try.</p>
 <p>The following variables are defined to the script. 
@@ -2880,7 +2887,7 @@ points of the test plan.
 
 </component>
 
-<component name="BeanShell Timer" index="&sect-num;.6.6"  width="459" height="238" screenshot="timers/beanshell_timer.png">
+<component name="BeanShell Timer" index="&sect-num;.6.6"  width="516" height="286" screenshot="timers/beanshell_timer.png">
 <description>
 <p>
 The BeanShell Timer can be used to generate a delay.
@@ -2897,11 +2904,23 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Script" required="Yes">
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+	The parameters are stored in the following variables:
+	<ul>
+		<li>Parameters - string containing the parameters as a single variable</li>
+	    <li>bsh.args - String array containing parameters, split on white-space</li>
+	</ul>
+	</property>
+    <property name="Script file" required="No">
+    A file containing the BeanShell script to run.
+     The return value is used as the number of milliseconds to wait.
+     </property>
+    <property name="Script" required="Yes (unless script file is provided)">
         The BeanShell script. The return value is used as the number of milliseconds to wait.
-        </property>
+    </property>
 </properties>
+<p>The following variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -3102,7 +3121,7 @@ with the start, continuing on like that until the test is ended.  </p>
 </properties>
 </component>
 
-<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="461" height="188" screenshot="beanshell_preprocessor.png">
+<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="516" height="286" screenshot="beanshell_preprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
@@ -3120,9 +3139,17 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+	The parameters are stored in the following variables:
+	<ul>
+		<li>Parameters - string containing the parameters as a single variable</li>
+	    <li>bsh.args - String array containing parameters, split on white-space</li>
+	</ul></property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
+<p>The following variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
@@ -3311,7 +3338,7 @@ This is mainly intended for batch (non-GUI) runs.
  </properties>
 </component>
 
-<component name="BeanShell PostProcessor"  index="&sect-num;.8.6"  width="461" height="188" screenshot="beanshell_postprocessor.png">
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.6"  width="516" height="286" screenshot="beanshell_postprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
@@ -3328,9 +3355,17 @@ See the file BeanShellListeners.bshrc for example definitions.
 </p>
 </description>
 <properties>
-        <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Script" required="Yes">The BeanShell script. The return value is ignored. See below for variables defined to the script.</property>
+    <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+	The parameters are stored in the following variables:
+	<ul>
+		<li>Parameters - string containing the parameters as a single variable</li>
+	    <li>bsh.args - String array containing parameters, split on white-space</li>
+	</ul></property>
+    <property name="Script file" required="No">A file containing the BeanShell script to run.</property>
+    <property name="Script" required="Yes (unless script file is provided)">The BeanShell script. The return value is ignored.</property>
 </properties>
+<p>The following variables are set up for use by the script:</p>
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
