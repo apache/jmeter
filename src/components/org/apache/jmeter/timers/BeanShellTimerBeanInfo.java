@@ -18,23 +18,12 @@
 
 package org.apache.jmeter.timers;
 
-import java.beans.PropertyDescriptor;
+import org.apache.jmeter.util.BeanShellBeanInfoSupport;
 
-import org.apache.jmeter.testbeans.BeanInfoSupport;
-import org.apache.jmeter.testbeans.gui.TextAreaEditor;
-
-public class BeanShellTimerBeanInfo extends BeanInfoSupport {
+public class BeanShellTimerBeanInfo extends BeanShellBeanInfoSupport {
 
 	public BeanShellTimerBeanInfo() {
 		super(BeanShellTimer.class);
-
-        createPropertyGroup("scripting", new String[] { "script" });
-
-		PropertyDescriptor p = property("script");
-		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-		p.setValue(DEFAULT, "");
-        p.setPropertyEditorClass(TextAreaEditor.class);
-
 	}
 
 }

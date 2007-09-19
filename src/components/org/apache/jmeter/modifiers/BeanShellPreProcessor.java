@@ -36,7 +36,7 @@ public class BeanShellPreProcessor extends BeanShellTestElement
 {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    private static final long serialVersionUID = 3;
+    private static final long serialVersionUID = 4;
     
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.preprocessor.init"; //$NON-NLS-1$
@@ -48,7 +48,8 @@ public class BeanShellPreProcessor extends BeanShellTestElement
     public void process(){
         final BeanShellInterpreter bshInterpreter = getBeanShellInterpreter();
 		if (bshInterpreter == null) {
-            return;
+        	log.error("BeanShell not found");
+        	return;
         }
         JMeterContext jmctx = JMeterContextService.getContext();
         JMeterVariables vars = jmctx.getVariables();
@@ -61,7 +62,7 @@ public class BeanShellPreProcessor extends BeanShellTestElement
             bshInterpreter.set("sampler", sam);//$NON-NLS-1$
             bshInterpreter.set("prev", prev);//$NON-NLS-1$
             
-            bshInterpreter.eval(getScript());
+            processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }
