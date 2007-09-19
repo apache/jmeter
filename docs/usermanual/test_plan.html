@@ -845,6 +845,68 @@ Assertion 1
 		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="properties"><strong>4.10 Properties and Variables</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+JMeter 
+												<b	>
+								properties
+						</b>
+									 are defined in jmeter.properties (see 
+												<a	 href="get-started.html#configuring_jmeter">
+								Gettting Started - Configuring JMeter
+						</a>
+									 for more details).
+
+												<br	>
+						</br>
+									
+Properties are global to jmeter, and are used to define some of the defaults JMeter uses.
+For example the property remote_hosts defines the servers that JMeter will try to run remotely.
+Properties can be referenced in test plans 
+- see 
+												<a	 href="functions.html#__property">
+								Functions - read a property
+						</a>
+									 -
+but cannot be used for thread-specific values.
+
+						</p>
+							  									 				<p	>
+								
+JMeter 
+												<b	>
+								variables
+						</b>
+									 are local to each thread. The values may be the same for each thread, or they may be different.
+
+												<br	>
+						</br>
+									
+If a variable is updated by a thread, only the thread copy of the variable is changed.
+For example the 
+												<a href="../usermanual/component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a>
+									 Post-Processor 
+will set its variables according to the sample that its thread has read, and these can be used later
+by the same thread.
+For details of how to reference variables and functions, see 
+												<a	 href="functions.html">
+								Functions and Variables
+						</a>
+									
+
+						</p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
 							  		  </blockquote>
 		  </p>
 		</td></tr>
