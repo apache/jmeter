@@ -37,6 +37,7 @@
 <li>If Java HTTP sampler sees null ResponseMessage, replace with HTTP header</li>
 <li>Bug 43332 - 2.3RC4 does not clear Guis based on TestBean</li>
 <li>Bug 42948 - Problems with Proxy gui table fields in Java 1.6</li>
+<li>Fixup broken jmeter-server script</li>
 </ul>
 
 <h4>Improvements</h4>
