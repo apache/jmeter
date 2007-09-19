@@ -140,6 +140,13 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(label, BorderLayout.NORTH);
 		panel.add(new JScrollPane(scriptField), BorderLayout.CENTER);
+		
+		JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_script_variables")); //$NON-NLS-1$
+		explain.setLineWrap(true);
+		explain.setEditable(false);
+		explain.setBackground(this.getBackground());
+		panel.add(explain, BorderLayout.SOUTH);
+
 		return panel;
 	}
 }
