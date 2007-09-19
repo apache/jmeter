@@ -29,7 +29,6 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
 
 /**
  * Handles the loading of recent files, and also the content and
@@ -89,7 +88,7 @@ public class LoadRecentProject extends Load {
             // Set the KeyStroke to use
             int shortKey = getShortcutKey(i);
             if(shortKey >= 0) {
-                recentFile.setAccelerator(KeyStroke.getKeyStroke(shortKey, 0));
+                recentFile.setMnemonic(shortKey);
             }            
             // Add the menu item
             menuItems.add(recentFile);
@@ -160,7 +159,10 @@ public class LoadRecentProject extends Load {
             String recentFilePath = getRecentFile(prefs, i);
             if(recentFilePath != null) {
                 File file = new File(recentFilePath);
-                recentFile.setText(getMenuItemDisplayName(file));
+                StringBuffer sb = new StringBuffer(60);
+                if (i<9) sb.append(i+1).append(" "); //$NON-NLS-1$
+                sb.append(getMenuItemDisplayName(file));
+                recentFile.setText(sb.toString());
                 recentFile.setToolTipText(recentFilePath);
                 recentFile.setEnabled(true);
                 recentFile.setVisible(true);
