@@ -17,6 +17,13 @@
     <download-page rdf:resource="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi" />
     <programming-language>Java</programming-language>
     <category rdf:resource="http://projects.apache.org/category/testing" />
+   <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2006-06-14</created>
+        <revision>2.2</revision>
+      </Version>
+    </release>
     <release>
       <Version>
         <name>Apache Jakarta JMeter</name>
