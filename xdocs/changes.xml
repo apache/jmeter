@@ -32,6 +32,7 @@
 <h4>Bug fixes</h4>
 <ul>
 <li>SaveService no longer needs to instantiate classes</li>
+<li>Bug 43430 - Count of active threads is incorrect for remote samples</li>
 </ul>
 
 <h4>Improvements</h4>

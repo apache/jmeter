@@ -49,7 +49,6 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -233,8 +232,13 @@ public final class OldSaveService {
             }
         
             if (saveConfig.saveThreadCounts()) {
-                i+=2;// two counts
-                // Not saved, as not part of a result
+            	field = CSV_THREAD_COUNT1;
+                text = parts[i++];
+                result.setGroupThreads(Integer.parseInt(text));
+                
+            	field = CSV_THREAD_COUNT2;
+                text = parts[i++];
+                result.setAllThreads(Integer.parseInt(text));
             }
 
             if (saveConfig.saveUrl()) {
@@ -547,15 +551,9 @@ public final class OldSaveService {
         }
     
         if (saveConfig.saveThreadCounts()) {
-        	org.apache.jmeter.threads.ThreadGroup 
-        	threadGroup=JMeterContextService.getContext().getThreadGroup();
-        	int numThreads =0;
-        	if (threadGroup != null) { // can be null for remote testing
-        	    numThreads = threadGroup.getNumberOfThreads();
-        	}
-            text.append(numThreads);
+            text.append(sample.getGroupThreads());
             text.append(delimiter);
-            text.append(JMeterContextService.getNumberOfThreads());
+            text.append(sample.getAllThreads());
             text.append(delimiter);
         }
         if (saveConfig.saveUrl()) {
