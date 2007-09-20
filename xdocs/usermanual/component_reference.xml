@@ -762,7 +762,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseMessage = "OK"</li>
 			<li>IsSuccess = true</li>
 			<li>ctx - JMeterContext</li>
-			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
+			<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
 		</ul>
 		<p>When the script completes, control is returned to the Sampler, and it copies the contents
 			of the following script variables into the corresponding variables in the SampleResult:</p>
@@ -840,7 +840,7 @@ The full list of variables that is set up is as follows:</p>
 <li>args - the parameters, split as described above</li>
 <li>SampleResult - pointer to the current SampleResult</li>
 <li>ctx - JMeterContext</li>
-<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");</li>
+<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
 </ul>
 <p>
 The Sampler ResponseData is set from the return value of the script.
@@ -1975,7 +1975,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>sampleResult - (SampleResult) - gives access to the previous SampleResult</li>
 <li>sampleEvent (SampleEvent) gives access to the current sample event</li>
 </ul>
@@ -2704,7 +2704,7 @@ These are strings unless otherwise noted:
 	<li>SampleLabel</li>
 	<li>SamplerData - data that was sent to the server</li>
 	<li>ctx - JMeterContext</li>
-	<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value");</li>
+	<li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());</li>
 </ul>
 </p>
 <p>The following methods of the Response object may be useful:
@@ -2915,7 +2915,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 </ul>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 <p>If the property <b>beanshell.timer.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
@@ -3136,7 +3136,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>prev - (SampleResult) - gives access to the previous SampleResult (if any)</li>
 <li>sampler - (Sampler)- gives access to the current sampler</li>
 </ul>
@@ -3344,7 +3344,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <ul>
 <li>log - (Logger) - can be used to write to the log file</li>
 <li>ctx - (JMeterContext) - gives access to the context</li>
-<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)</li>
+<li>vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());</li>
 <li>prev - (SampleResult) - gives access to the previous SampleResult</li>
 <li>data - (byte [])- gives access to the current sample data</li>
 </ul>
