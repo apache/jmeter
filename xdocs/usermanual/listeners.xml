@@ -256,10 +256,6 @@ The sample attributes have the following meaning:
 <tr><td>ng</td><td>Number of active threads in this group</td></tr>
 <tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
 </table>
-<note>
-The active thread counts are always zero for remote tests.
-This is a restriction of the current implementation.
-</note>
 <p>
 Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
 This has been corrected so that it is always saved as "rc"; either "rc" or "rs" can be read.
