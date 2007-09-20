@@ -161,6 +161,29 @@ The chosen port will be logged in the server jmeter.log file (rmiregistry does n
 </p>
 </subsection>
 
+<subsection name="&sect-num;.4 Using sample batching" anchor="batchmode">
+<p>
+Listeners in the test plan send their results back to the client JMeter which writes the results to the specified files
+By default, samples are sent back as they are generated. This can place a large load on the network and the JMeter client.
+There are some JMeter properties that can be set to alter this behaviour.
+</p>
+<ul>
+<li>mode - sample sending mode - default is Standard</li>
+    <ul>
+    <li>Standard - send samples as soon as they are generated</li>
+    <li>Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server.</li>
+    <li>Batch - send saved samples when either the count or time exceeds a threshold</li>
+    <li>Statistical - send a summary report when either the count or time exceeds a threshold</li>
+    </ul>
+</ul>
+<p>The following properties apply to the Batch and Statistical modes:</p>
+    <ul>
+    <li>num_sample_threshold - number of samples in a batch (default 100)</li>
+    <li>time_threshold - number of milliseconds to wait (default 60 seconds)</li>
+    </ul>
+</subsection>
+
+
 
 
 </section>
