@@ -20,8 +20,8 @@
     <release>
       <Version>
         <name>Apache Jakarta JMeter</name>
-        <created>2005-10-02</created>
-        <revision>2.1.1</revision>
+        <created>2007-09-04</created>
+        <revision>2.3RC4</revision>
       </Version>
     </release>
     <repository>
