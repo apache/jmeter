@@ -284,11 +284,10 @@
   <!-- Jars for binary release -->
   <patternset id="external.jars">
     <include name="LICENSE"/>
+    <include name="LICENSE*.txt"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="MANIFEST"/>
-    <include name="${lib.dir}/*.html"/>
-    <include name="${lib.dir}/LICENSE*.*"/>
     <include name="${avalon-framework.jar}"/>
     <include name="${apache-bsf.jar}"/>
     <include name="${jakarta-oro.jar}"/>
@@ -1019,12 +1018,10 @@ run JMeter unless all the JMeter jars are added.
       List of Unix executable files in the binary distribution
       These need special handling to create the correct file mode
   -->
-  <property name="dist.executables" value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter-server"/>
+  <property name="dist.executables" value="${dest.jar.jmeter}/jmeter ${dest.jar.jmeter}/jmeter.sh ${dest.jar.jmeter}/jmeter-server"/>
 
   <patternset id="dist.sources">
     <include name="LICENSE"/>
-    <include name="LICENSE*.txt"/>
-    <include name="LICENSE*.html"/>
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="MANIFEST"/>
