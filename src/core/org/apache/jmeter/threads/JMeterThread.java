@@ -300,6 +300,8 @@ public class JMeterThread implements Runnable, Serializable {
                         
                             // If we got any results, then perform processing on the result
                             if (result != null) {
+                            	result.setGroupThreads(threadGroup.getNumberOfThreads());
+                            	result.setAllThreads(JMeterContextService.getNumberOfThreads());
                                 result.setThreadName(threadName);
                                 threadContext.setPreviousResult(result);
                                 runPostProcessors(pack.getPostProcessors());
