@@ -28,7 +28,6 @@ import java.io.UnsupportedEncodingException;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.Converter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -248,17 +247,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncoding()));
 		if (save.saveBytes())
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
-        if (save.saveThreadCounts()){// These cannot be restored
-        	org.apache.jmeter.threads.ThreadGroup 
-        	threadGroup=JMeterContextService.getContext().getThreadGroup();
-        	int numThreads =0;
-        	if (threadGroup != null) { // can be null for remote testing
-        	    numThreads = threadGroup.getNumberOfThreads();
-        	}
-            writer.addAttribute(ATT_GRP_THRDS,
-                    String.valueOf(numThreads));
-            writer.addAttribute(ATT_ALL_THRDS,
-                    String.valueOf(JMeterContextService.getNumberOfThreads()));
+        if (save.saveThreadCounts()){
+           writer.addAttribute(ATT_GRP_THRDS, String.valueOf(res.getGroupThreads()));
+           writer.addAttribute(ATT_ALL_THRDS, String.valueOf(res.getAllThreads()));
         }
 	}
 
@@ -357,7 +348,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 				Converter.getLong(reader.getAttribute(ATT_TIME)));
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
-        // ATT_GRP_THRDS and ATT_ALL_THRDS are write only
+		res.setGroupThreads(Converter.getInt(reader.getAttribute(ATT_GRP_THRDS)));
+		res.setAllThreads(Converter.getInt(reader.getAttribute(ATT_ALL_THRDS)));
 	}
 
     protected void readFile(String resultFileName, SampleResult res) {
