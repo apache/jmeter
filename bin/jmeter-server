@@ -24,4 +24,12 @@ DIRNAME=`dirname $0`
 CLASSPATH=${DIRNAME}/../lib/ext/ApacheJMeter_core.jar:${DIRNAME}/../lib/jorphan.jar:${DIRNAME}/../lib/logkit-1.2.jar rmiregistry $SERVER_PORT &
 # stop rmiregistry on interrupt 
 trap "kill $!" 2
-${DIRNAME}/jmeter -Dserver_port=${SERVER_PORT:-1099} -s -j jmeter-server.log "$@"
+
+# If the client fails with:
+# ERROR - jmeter.engine.ClientJMeterEngine: java.rmi.ConnectException: Connection refused to host: 127.0.0.1
+# then it may be due to the server host returning 127.0.0.1 as its address 
+
+# One way to fix this is to define RMI_HOST_DEF below
+#RMI_HOST_DEF=-Djava.rmi.server.hostname=xxx.xxx.xxx.xxx
+
+${DIRNAME}/jmeter -Dserver_port=${SERVER_PORT:-1099} $RMI_HOST_DEF -s -j jmeter-server.log "$@"
