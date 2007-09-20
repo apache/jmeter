@@ -172,7 +172,7 @@ The LDAP Extended Sampler now uses the same panel for both Thread Bind and Singl
 This means that any tests using the Single-bind test will need to be updated to set the username and password.
 </p>
 <p>
-Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
+Bug 41140: JMeterThread behaviour was changed so that PostProcessors are run in forward order
 (as they appear in the test plan) rather than reverse order as previously.
 The original behaviour can be restored by setting the following JMeter property:
 <br/>
@@ -333,6 +333,7 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 <li>Bug 41029 - JMeter -t fails to close input JMX file</li>
 <li>Bug 40954 - Statistical mode in distributed testing shows wrong results</li>
 <li>Fix ClassCast Exception when using sampler that returns null, e..g TestAction</li>
+<li>Bug 41140 - Post-processors are run in reverse order</li>
 <li>Bug 41277 - add Latency and Encoding to CSV output</li>
 <li>Bug 41414 - Mac OS X may add extra item to -jar classpath</li>
 <li>Fix NPE when saving thread counts in remote testing</li>
