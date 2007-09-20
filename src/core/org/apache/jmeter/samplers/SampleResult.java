@@ -151,6 +151,10 @@ public class SampleResult implements Serializable {
 	private int sampleCount = 1;
 
 	private int bytes = 0;
+	
+	private volatile int groupThreads = 0; // Active threads in this thread group
+	
+	private volatile int allThreads = 0; // Active threads in all thread groups
 
 	// TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
 
@@ -195,6 +199,9 @@ public class SampleResult implements Serializable {
         setContentType(res.getContentType());
         setDataEncoding(res.getDataEncoding());
 		setURL(res.getURL());
+
+		setGroupThreads(res.getGroupThreads());
+		setAllThreads(res.getAllThreads());
 
 		addSubResult(res); // this will add res.getTime() to getTime().
 	}
@@ -820,7 +827,7 @@ public class SampleResult implements Serializable {
 	/**
 	 * return the sample count. by default, the value is 1.
 	 * 
-	 * @return
+	 * @return the sample count
 	 */
 	public int getSampleCount() {
 		return sampleCount;
@@ -840,7 +847,7 @@ public class SampleResult implements Serializable {
 	/**
 	 * return the bytes returned by the response.
 	 * 
-	 * @return
+	 * @return byte count
 	 */
 	public int getBytes() {
 		return bytes == 0 ? responseData.length : bytes;
@@ -922,4 +929,20 @@ public class SampleResult implements Serializable {
     public void setResultFileName(String resultFileName) {
         this.resultFileName = resultFileName;
     }
+
+	public int getGroupThreads() {
+		return groupThreads;
+	}
+
+	public void setGroupThreads(int n) {
+		this.groupThreads = n;
+	}
+
+	public int getAllThreads() {
+		return allThreads;
+	}
+
+	public void setAllThreads(int n) {
+		this.allThreads = n;
+	}
 }
