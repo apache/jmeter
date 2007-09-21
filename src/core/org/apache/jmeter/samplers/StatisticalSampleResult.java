@@ -38,7 +38,11 @@ public class StatisticalSampleResult extends SampleResult implements
     }
     
 	public StatisticalSampleResult(SampleResult res) {
+		// Copy data that is shared between samples:
 		setSampleLabel(res.getSampleLabel());
+		setThreadName(res.getThreadName());
+		setSuccessful(true); // Assume result is OK
+		setSampleCount(0); // because we add the sample count in later
 	}
 
 	public void add(SampleResult res) {
@@ -59,6 +63,9 @@ public class StatisticalSampleResult extends SampleResult implements
 		    this.setStartTime(Math.min(getStartTime(), res.getStartTime()));
         }
 		this.setEndTime(Math.max(getEndTime(), res.getEndTime()));
+		
+		setLatency(getLatency()+ res.getLatency());
+
 	}
 
 	public long getTime() {
