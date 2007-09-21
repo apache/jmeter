@@ -263,9 +263,11 @@ public class JMeterThread implements Runnable, Serializable {
                             if(transactionSampler.isTransactionDone()) {
                                 // Get the transaction sample result
                                 SampleResult transactionResult = transactionSampler.getTransactionResult();
+                                transactionResult.setThreadName(threadName);
+                                transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
+                                transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
 
                                 // Check assertions for the transaction sample
-                                transactionResult.setThreadName(threadName);
                                 checkAssertions(transactionPack.getAssertions(), transactionResult);
                                 // Notify listeners with the transaction sample result
                                 notifyListeners(transactionPack.getSampleListeners(), transactionResult);
