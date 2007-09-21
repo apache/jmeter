@@ -377,7 +377,8 @@ These are shown below.</p>
   <note>
   Note: since 2.2, you can define additional JMeter properties in the file defined by the
   JMeter property <b>user.properties</b> which has the default value <b>user.properties</b>.
-  The file will be automatically loaded if it is found in the current directory.
+  The file will be automatically loaded if it is found in the current directory
+  or if it is found in the JMeter bin directory.
   Similarly, <b>system.properties</b> is used to update system properties.
   </note>
   <properties>
