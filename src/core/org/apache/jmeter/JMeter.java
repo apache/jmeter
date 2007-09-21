@@ -485,9 +485,9 @@ public class JMeter implements JMeterPlugin {
 		if (userProp.length() > 0){ //$NON-NLS-1$
 			FileInputStream fis=null;
 			try {
-                File file = new File(userProp);
+                File file = JMeterUtils.findFile(userProp);
                 if (file.canRead()){
-                	log.info("Loading user properties from: "+userProp);
+                	log.info("Loading user properties from: "+file.getCanonicalPath());
 					fis = new FileInputStream(file);
 					Properties tmp = new Properties();
 					tmp.load(fis);
@@ -506,9 +506,9 @@ public class JMeter implements JMeterPlugin {
 		if (sysProp.length() > 0){
 			FileInputStream fis=null;
 			try {
-                File file = new File(sysProp);
+                File file = JMeterUtils.findFile(sysProp);
                 if (file.canRead()){
-                	log.info("Loading system properties from: "+sysProp);
+                	log.info("Loading system properties from: "+file.getCanonicalPath());
 					fis = new FileInputStream(file);
 					System.getProperties().load(fis);
                 }

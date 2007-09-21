@@ -47,6 +47,7 @@
 <li>Add NULL parameter option to JDBC sampler</li>
 <li>Add documentation links for Rhino and BeanShell to functions; clarify variables and properties</li>
 <li>Ensure uncaught exceptions are logged</li>
+<li>Look for user.properties and system.properties in JMeter bin directory if not found locally</li>
 </ul>
 
 <h4>Fixes since 2.3RC3</h4>
