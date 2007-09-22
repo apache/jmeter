@@ -91,7 +91,7 @@
 			<!-- Force suitable defaults -->
 			<property name="jmeter.save.saveservice.output_format" value="xml"/>
 			<property name="jmeter.save.saveservice.assertion_results" value="all"/>
-			<property name="jmeter.save.saveservice.bytesx" value="true"/>
+			<property name="jmeter.save.saveservice.bytes" value="true"/>
 			<property name="file_format.testlog" value="${format}"/>
 			<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
 		</jmeter>
