@@ -1,19 +1,19 @@
-label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,grpThreads,allThreads,URL,Filename,SampleCount
-Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,1
-Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,1
-Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,1
-If Test,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Loop,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Module,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Loop,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Module,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Loop,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Module,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Java If once 1,,,Thread Group 1-1,,false,,0,1,1,null,,1
-Java If once 2,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Java If all 1,,,Thread Group 1-1,,false,,0,1,1,null,,1
-Java OK,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Java If once 1,,,Thread Group 1-1,,false,,0,1,1,null,,1
-Java If once 2,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
-Java If all 1,,,Thread Group 1-1,,false,,0,1,1,null,,1
-Java OK,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1
+label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,grpThreads,allThreads,URL,Filename,SampleCount,ErrorCount
+Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,1,0
+Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,1,0
+Java 1,200,OK,Thread Group 1-1,text,true,,10,1,1,null,,1,0
+If Test,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Loop,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Module,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Loop,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Module,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Loop,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Module,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Java If once 1,,,Thread Group 1-1,,false,,0,1,1,null,,1,1
+Java If once 2,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Java If all 1,,,Thread Group 1-1,,false,,0,1,1,null,,1,1
+Java OK,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Java If once 1,,,Thread Group 1-1,,false,,0,1,1,null,,1,1
+Java If once 2,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
+Java If all 1,,,Thread Group 1-1,,false,,0,1,1,null,,1,1
+Java OK,200,OK,Thread Group 1-1,,true,,0,1,1,null,,1,0
