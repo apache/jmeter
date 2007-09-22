@@ -232,6 +232,7 @@
               <url>true</url>
               <fileName>true</fileName>
               <threadCounts>true</threadCounts>
+              <sampleCount>true</sampleCount>
             </value>
             <name>saveConfig</name>
           </objProp>
@@ -243,7 +244,7 @@
           <objProp>
             <value class="SampleSaveConfiguration">
               <time>false</time>
-              <latency>true</latency>
+              <latency>false</latency>
               <timestamp>false</timestamp>
               <success>true</success>
               <label>true</label>
@@ -267,6 +268,7 @@
               <url>true</url>
               <fileName>true</fileName>
               <threadCounts>true</threadCounts>
+              <sampleCount>true</sampleCount>
             </value>
             <name>saveConfig</name>
           </objProp>
@@ -278,7 +280,7 @@
           <objProp>
             <value class="SampleSaveConfiguration">
               <time>true</time>
-              <latency>true</latency>
+              <latency>false</latency>
               <timestamp>true</timestamp>
               <success>true</success>
               <label>true</label>
