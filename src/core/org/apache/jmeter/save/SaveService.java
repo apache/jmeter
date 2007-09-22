@@ -34,17 +34,17 @@ import java.util.Properties;
 
 import java.nio.charset.Charset;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.save.converters.BooleanPropertyConverter;
-import org.apache.jmeter.save.converters.HashTreeConverter;
-import org.apache.jmeter.save.converters.IntegerPropertyConverter;
-import org.apache.jmeter.save.converters.LongPropertyConverter;
-import org.apache.jmeter.save.converters.MultiPropertyConverter;
-import org.apache.jmeter.save.converters.SampleResultConverter;
-import org.apache.jmeter.save.converters.SampleSaveConfigurationConverter;
-import org.apache.jmeter.save.converters.StringPropertyConverter;
-import org.apache.jmeter.save.converters.TestElementConverter;
-import org.apache.jmeter.save.converters.TestElementPropertyConverter;
-import org.apache.jmeter.save.converters.TestResultWrapperConverter;
+//import org.apache.jmeter.save.converters.BooleanPropertyConverter;
+//import org.apache.jmeter.save.converters.HashTreeConverter;
+//import org.apache.jmeter.save.converters.IntegerPropertyConverter;
+//import org.apache.jmeter.save.converters.LongPropertyConverter;
+//import org.apache.jmeter.save.converters.MultiPropertyConverter;
+//import org.apache.jmeter.save.converters.SampleResultConverter;
+//import org.apache.jmeter.save.converters.SampleSaveConfigurationConverter;
+//import org.apache.jmeter.save.converters.StringPropertyConverter;
+//import org.apache.jmeter.save.converters.TestElementConverter;
+//import org.apache.jmeter.save.converters.TestElementPropertyConverter;
+//import org.apache.jmeter.save.converters.TestResultWrapperConverter;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -335,20 +335,20 @@ public class SaveService {
 		return rev;
 	}
 
-	private static void checkVersion(Class clazz, String expected) {
-
-		String actual = "*NONE*"; // $NON-NLS-1$
-		try {
-			actual = (String) clazz.getMethod("getVersion", null).invoke(null, null);
-			actual = extractVersion(actual);
-		} catch (Exception ignored) {
-			// Not needed
-		}
-		if (0 != actual.compareTo(expected)) {
-			versionsOK = false;
-			log.warn("Version mismatch: expected '" + expected + "' found '" + actual + "' in " + clazz.getName());
-		}
-	}
+//	private static void checkVersion(Class clazz, String expected) {
+//
+//		String actual = "*NONE*"; // $NON-NLS-1$
+//		try {
+//			actual = (String) clazz.getMethod("getVersion", null).invoke(null, null);
+//			actual = extractVersion(actual);
+//		} catch (Exception ignored) {
+//			// Not needed
+//		}
+//		if (0 != actual.compareTo(expected)) {
+//			versionsOK = false;
+//			log.warn("Version mismatch: expected '" + expected + "' found '" + actual + "' in " + clazz.getName());
+//		}
+//	}
 
     // Routines for TestSaveService
     static boolean checkPropertyVersion(){
@@ -361,28 +361,29 @@ public class SaveService {
 
     static boolean checkVersions() {
 		versionsOK = true;
-		checkVersion(BooleanPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(HashTreeConverter.class, "514283"); // $NON-NLS-1$
-		checkVersion(IntegerPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(LongPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(MultiPropertyConverter.class, "514283"); // $NON-NLS-1$
-		checkVersion(SampleResultConverter.class, "571992"); // $NON-NLS-1$
-
-        // Not built until later, so need to use this method:
-        try {
-            checkVersion(
-                    Class.forName("org.apache.jmeter.protocol.http.util.HTTPResultConverter"), // $NON-NLS-1$
-                    "514283"); // $NON-NLS-1$
-        } catch (ClassNotFoundException e) {
-            versionsOK = false;
-            log.warn(e.getLocalizedMessage());
-        }
-		checkVersion(StringPropertyConverter.class, "493779"); // $NON-NLS-1$
-		checkVersion(TestElementConverter.class, "549987"); // $NON-NLS-1$
-		checkVersion(TestElementPropertyConverter.class, "549987"); // $NON-NLS-1$
-		checkVersion(ScriptWrapperConverter.class, "514283"); // $NON-NLS-1$
-		checkVersion(TestResultWrapperConverter.class, "514283"); // $NON-NLS-1$
-        checkVersion(SampleSaveConfigurationConverter.class,"549936"); // $NON-NLS-1$
+		// Disable converter version checks as they are more of a nuisance than helpful
+//		checkVersion(BooleanPropertyConverter.class, "493779"); // $NON-NLS-1$
+//		checkVersion(HashTreeConverter.class, "514283"); // $NON-NLS-1$
+//		checkVersion(IntegerPropertyConverter.class, "493779"); // $NON-NLS-1$
+//		checkVersion(LongPropertyConverter.class, "493779"); // $NON-NLS-1$
+//		checkVersion(MultiPropertyConverter.class, "514283"); // $NON-NLS-1$
+//		checkVersion(SampleResultConverter.class, "571992"); // $NON-NLS-1$
+//
+//        // Not built until later, so need to use this method:
+//        try {
+//            checkVersion(
+//                    Class.forName("org.apache.jmeter.protocol.http.util.HTTPResultConverter"), // $NON-NLS-1$
+//                    "514283"); // $NON-NLS-1$
+//        } catch (ClassNotFoundException e) {
+//            versionsOK = false;
+//            log.warn(e.getLocalizedMessage());
+//        }
+//		checkVersion(StringPropertyConverter.class, "493779"); // $NON-NLS-1$
+//		checkVersion(TestElementConverter.class, "549987"); // $NON-NLS-1$
+//		checkVersion(TestElementPropertyConverter.class, "549987"); // $NON-NLS-1$
+//		checkVersion(ScriptWrapperConverter.class, "514283"); // $NON-NLS-1$
+//		checkVersion(TestResultWrapperConverter.class, "514283"); // $NON-NLS-1$
+//        checkVersion(SampleSaveConfigurationConverter.class,"549936"); // $NON-NLS-1$
 
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
 			log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
