@@ -47,6 +47,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 	private static final String NODE_URL = "url"; // $NON-NLS-1$
 	private static final String NODE_BYTES = "bytes"; // $NON-NLS-1$
     private static final String NODE_THREAD_COUNT = "threadCounts"; // $NON-NLS-1$
+    private static final String NODE_SAMPLE_COUNT = "sampleCount"; // $NON-NLS-1$
 
     // Additional member names which are currently not written out
     private static final String NODE_DELIMITER = "delimiter"; // $NON-NLS-1$
@@ -61,11 +62,14 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         
         public boolean shouldSerializeMember(Class definedIn, String fieldName) {
             if (SampleSaveConfiguration.class != definedIn) return true;
+            // These are new fields; not saved unless true
             if (fieldName.equals(NODE_BYTES)) return false; 
             if (fieldName.equals(NODE_URL)) return false; 
             if (fieldName.equals(NODE_FILENAME)) return false; 
             if (fieldName.equals(NODE_THREAD_COUNT)) return false; 
+            if (fieldName.equals(NODE_SAMPLE_COUNT)) return false; 
 
+            // These fields are not currently saved or restored
             if (fieldName.equals(NODE_DELIMITER)) return false; 
             if (fieldName.equals(NODE_PRINTMS)) return false; 
             return true;
@@ -109,6 +113,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         createNode(writer,prop.saveUrl(),NODE_URL);
         createNode(writer,prop.saveFileName(),NODE_FILENAME);
         createNode(writer,prop.saveThreadCounts(),NODE_THREAD_COUNT);
+        createNode(writer,prop.saveSampleCount(),NODE_SAMPLE_COUNT);
 	}
 
     // Helper method to simplify marshall routine
