@@ -94,7 +94,7 @@ public class Calculator {
     public void addSample(SampleResult res) {
         addBytes(res.getBytes());
         addValue(res.getTime(),res.getSampleCount());
-        if (!res.isSuccessful()) errors++;
+        errors+=res.getErrorCount(); // account for multiple samples
         if (startTime == 0){
             startTime=res.getStartTime();
         }
@@ -170,7 +170,7 @@ public class Calculator {
      * calculates the average page size, which means divide the bytes by number
      * of samples.
      * 
-     * @return
+     * @return average page size
      */
     public double getPageSize() {
         if (count > 0 && bytes > 0) {
@@ -182,11 +182,11 @@ public class Calculator {
     /**
      * Throughput in bytes / second
      * 
-     * @return
+     * @return throughput in bytes/second
      */
     public double getBytesPerSecond() {
         if (elapsedTime > 0) {
-            return bytes / ((double) elapsedTime / 1000);
+            return bytes / ((double) elapsedTime / 1000); // 1000 = millisecs/sec
         }
         return 0.0;
     }
@@ -194,10 +194,10 @@ public class Calculator {
     /**
      * Throughput in kilobytes / second
      * 
-     * @return
+     * @return Throughput in kilobytes / second
      */
     public double getKBPerSecond() {
-        return getBytesPerSecond() / 1024;
+        return getBytesPerSecond() / 1024; // 1024=bytes per kb
     }
 
 }
