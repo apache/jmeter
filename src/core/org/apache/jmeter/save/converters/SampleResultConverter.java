@@ -78,6 +78,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_RESPONSE_CODE_OLD = "rs"; //$NON-NLS-1$
     
     private static final String ATT_SUCCESS           = "s";  //$NON-NLS-1$
+    private static final String ATT_SAMPLE_COUNT      = "sc"; //$NON-NLS-1$
     private static final String ATT_TIME              = "t";  //$NON-NLS-1$
     private static final String ATT_TIME_STAMP        = "ts"; //$NON-NLS-1$
     private static final String ATT_THREADNAME        = "tn"; //$NON-NLS-1$
@@ -248,6 +249,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncoding()));
 		if (save.saveBytes())
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
+        if (save.saveSampleCount()){
+        	writer.addAttribute(ATT_SAMPLE_COUNT, String.valueOf(res.getSampleCount()));
+        }
         if (save.saveThreadCounts()){// These cannot be restored
         	org.apache.jmeter.threads.ThreadGroup 
         	threadGroup=JMeterContextService.getContext().getThreadGroup();
@@ -357,6 +361,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 				Converter.getLong(reader.getAttribute(ATT_TIME)));
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
+		res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1
         // ATT_GRP_THRDS and ATT_ALL_THRDS are write only
 	}
 
