@@ -100,6 +100,7 @@ public final class OldSaveService {
     private static final String CSV_BYTES= "bytes"; // $NON-NLS-1$
     private static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
     private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
+    private static final String CSV_SAMPLE_COUNT = "SampleCount"; // $NON-NLS-1$
     private static final String CSV_URL = "URL"; // $NON-NLS-1$
     private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
@@ -259,6 +260,12 @@ public final class OldSaveService {
                 result.setEncodingAndType(text);
             }
 
+            if (saveConfig.saveEncoding()) {
+            	field = CSV_SAMPLE_COUNT;
+                text = parts[i++];
+                result.setSampleCount(Integer.parseInt(text));
+            }
+
             
 		} catch (NumberFormatException e) {
 			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
@@ -368,6 +375,11 @@ public final class OldSaveService {
             text.append(delim);
         }
 
+		if (saveConfig.saveSampleCount()) {
+			text.append(CSV_SAMPLE_COUNT);
+			text.append(delim);
+		}
+
 		String resultString = null;
 		int size = text.length();
 		int delSize = delim.length();
@@ -399,8 +411,10 @@ public final class OldSaveService {
             headerLabelMethods.put(CSV_FILENAME, new Functor("setFileName"));
             headerLabelMethods.put(CSV_LATENCY, new Functor("setLatency"));
             headerLabelMethods.put(CSV_ENCODING, new Functor("setEncoding"));
+            // Both these are needed in the list even though they set the same variable
             headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
-            headerLabelMethods.put(CSV_THREAD_COUNT2, new Functor("setThreadCounts"));
+            headerLabelMethods.put(CSV_THREAD_COUNT2,new Functor("setThreadCounts"));
+            headerLabelMethods.put(CSV_SAMPLE_COUNT, new Functor("setSampleCount"));
 	}
 
 	/**
@@ -578,6 +592,11 @@ public final class OldSaveService {
             text.append(delimiter);
         }
 
+    	if (saveConfig.saveSampleCount()) {
+    		text.append(sample.getSampleCount());
+    		text.append(delimiter);
+    	}
+    
     	String resultString = null;
     	int size = text.length();
     	int delSize = delimiter.length();
@@ -697,6 +716,10 @@ public final class OldSaveService {
 		return config;
 	}
 
+	/*
+	 * TODO - I think this is used for the original test plan format
+	 * It seems to be rather out of date, as many attributes are missing?
+	*/
 	/**
 	 * This method determines the content of the result data that will be
 	 * stored.
