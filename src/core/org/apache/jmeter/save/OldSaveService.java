@@ -43,6 +43,7 @@ import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
+import org.apache.jmeter.samplers.StatisticalSampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -101,6 +102,7 @@ public final class OldSaveService {
     private static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
     private static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
     private static final String CSV_SAMPLE_COUNT = "SampleCount"; // $NON-NLS-1$
+    private static final String CSV_ERROR_COUNT = "ErrorCount"; // $NON-NLS-1$
     private static final String CSV_URL = "URL"; // $NON-NLS-1$
     private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
@@ -185,7 +187,11 @@ public final class OldSaveService {
 				elapsed = Long.parseLong(text);
 			}
 
-			result = new SampleResult(timeStamp, elapsed);
+			if (saveConfig.saveSampleCount()) {
+				result = new StatisticalSampleResult(timeStamp, elapsed);
+			} else {
+				result = new SampleResult(timeStamp, elapsed);
+			}
 
 			if (saveConfig.saveLabel()) {
 				field = LABEL;
@@ -260,10 +266,13 @@ public final class OldSaveService {
                 result.setEncodingAndType(text);
             }
 
-            if (saveConfig.saveEncoding()) {
+            if (saveConfig.saveSampleCount()) {
             	field = CSV_SAMPLE_COUNT;
                 text = parts[i++];
                 result.setSampleCount(Integer.parseInt(text));
+            	field = CSV_ERROR_COUNT;
+                text = parts[i++];
+                result.setErrorCount(Integer.parseInt(text));
             }
 
             
@@ -378,6 +387,8 @@ public final class OldSaveService {
 		if (saveConfig.saveSampleCount()) {
 			text.append(CSV_SAMPLE_COUNT);
 			text.append(delim);
+			text.append(CSV_ERROR_COUNT);
+			text.append(delim);
 		}
 
 		String resultString = null;
@@ -414,7 +425,9 @@ public final class OldSaveService {
             // Both these are needed in the list even though they set the same variable
             headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
             headerLabelMethods.put(CSV_THREAD_COUNT2,new Functor("setThreadCounts"));
+            // Both these are needed in the list even though they set the same variable
             headerLabelMethods.put(CSV_SAMPLE_COUNT, new Functor("setSampleCount"));
+            headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
 	}
 
 	/**
@@ -592,8 +605,10 @@ public final class OldSaveService {
             text.append(delimiter);
         }
 
-    	if (saveConfig.saveSampleCount()) {
+    	if (saveConfig.saveSampleCount()) {// Need both sample and error count to be any use
     		text.append(sample.getSampleCount());
+    		text.append(delimiter);
+    		text.append(sample.getErrorCount());
     		text.append(delimiter);
     	}
     

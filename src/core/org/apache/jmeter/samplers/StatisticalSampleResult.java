@@ -21,23 +21,37 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 
 /**
- * @author Lars Krog-Jensen
- *         Created: 2005-okt-04
+ * Aggregates sample results for use by the Statistical remote batch mode.
+ * Samples are aggregated by the key defined by getKey().
+ * TODO: merge error count into parent class? 
  */
 public class StatisticalSampleResult extends SampleResult implements
 		Serializable {
     
-	private static final long serialVersionUID = 23L;
+	private static final long serialVersionUID = 24L;
 
 	private int errorCount;
 
     public StatisticalSampleResult(){// May be called by XStream
     }
     
+	/**
+	 * Allow OldSaveService to generate a suitable result when sample/error counts have been saved.
+	 * 
+	 * @deprecated Needs to be replaced when multiple sample results are sorted out
+	 * 
+	 * @param stamp
+	 * @param elapsed
+	 */
+	public StatisticalSampleResult(long stamp, long elapsed) {
+		super(stamp, elapsed);
+	}
+
 	public StatisticalSampleResult(SampleResult res) {
-		// Copy data that is shared between samples:
+		// Copy data that is shared between samples (i.e. the key items):
 		setSampleLabel(res.getSampleLabel());
 		setThreadName(res.getThreadName());
+
 		setSuccessful(true); // Assume result is OK
 		setSampleCount(0); // because we add the sample count in later
 	}
@@ -51,6 +65,7 @@ public class StatisticalSampleResult extends SampleResult implements
 		// Add Error Counter
 		if (!res.isSuccessful()) {
 			errorCount++;
+			this.setSuccessful(false);
 		}
 
 		// Set start/end times
@@ -73,14 +88,27 @@ public class StatisticalSampleResult extends SampleResult implements
 		return getEndTime();
 	}
 
-	public int getErrorCount() {
+	public int getErrorCount() {// Overrides SampleResult
 		return errorCount;
 	}
 
-	public static String getKey(SampleEvent event) {
-		String key = event.getResult().getSampleLabel() + "-"
-				+ event.getThreadGroup();
+	public void setErrorCount(int e) {// for reading CSV files
+		errorCount = e;
+	}
 
-		return key;
+	/**
+	 * Generates the key to be used for aggregating samples as follows:<br/>
+	 * <code>sampleLabel</code> "-" <code>threadGroup</code>
+	 * 
+	 * N.B. the key should agree with the fixed items that are saved in the sample.
+	 * 
+	 * @param event sample event whose key is to be calculated
+	 * @return the key to use for aggregating samples
+	 */
+	public static String getKey(SampleEvent event) {
+		SampleResult result = event.getResult();
+		StringBuffer sb = new StringBuffer(80);
+		sb.append(result.getSampleLabel()).append("-").append(result.getThreadName());
+		return sb.toString();
 	}
 }

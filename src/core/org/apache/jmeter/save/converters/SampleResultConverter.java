@@ -64,6 +64,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
     private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
     private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
+    private static final String ATT_ERROR_COUNT      = "ec"; //$NON-NLS-1$
     private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
     private static final String ATT_LATENCY           = "lt"; //$NON-NLS-1$
 
@@ -251,6 +252,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
         if (save.saveSampleCount()){
         	writer.addAttribute(ATT_SAMPLE_COUNT, String.valueOf(res.getSampleCount()));
+        	writer.addAttribute(ATT_ERROR_COUNT, String.valueOf(res.getErrorCount()));
         }
         if (save.saveThreadCounts()){// These cannot be restored
         	org.apache.jmeter.threads.ThreadGroup 
@@ -362,6 +364,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
 		res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
 		res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1
+		res.setErrorCount(Converter.getInt(reader.getAttribute(ATT_ERROR_COUNT),0)); // default is 0
         // ATT_GRP_THRDS and ATT_ALL_THRDS are write only
 	}
 

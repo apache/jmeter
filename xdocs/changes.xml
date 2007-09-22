@@ -40,7 +40,7 @@
 <li>Fixup broken jmeter-server script</li>
 <li>Bug 43364 - option to revert If Controller to pre 2.3RC3 behaviour</li>
 <li>Bug 43449 - Statistical Remote mode does not handle Latency</li>
-<li>Bug 43450 (partial fix) - Allow SampleCount to be saved/restored from files</li>
+<li>Bug 43450 (partial fix) - Allow SampleCount and ErrorCount to be saved to/restored from files</li>
 </ul>
 
 <h4>Improvements</h4>

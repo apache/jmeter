@@ -820,12 +820,40 @@ public class SampleResult implements Serializable {
 	/**
 	 * return the sample count. by default, the value is 1.
 	 * 
-	 * @return
+	 * @return the count of samples
 	 */
 	public int getSampleCount() {
 		return sampleCount;
 	}
 
+	/**
+	 * Returns the count of errors.
+	 * 
+	 * @return 0 - or 1 if the sample failed
+	 */
+	public int getErrorCount(){
+		return success ? 0 : 1;
+	}
+	
+	public void setErrorCount(int i){// for reading from CSV files
+		// ignored currently
+	}
+	/*
+	 * TODO: error counting needs to be sorted out after 2.3 final.
+	 * At present the Statistical Sampler tracks errors separately
+	 * It would make sense to move the error count here, but this would
+	 * mean lots of changes.
+	 * It's also tricky maintaining the count - it can't just be incremented/decremented
+	 * when the success flag is set as this may be done multiple times.
+	 * The work-round for now is to do the work in the StatisticalSampleResult,
+	 * which overrides this method.
+	 * Note that some JMS samplers also create samples with > 1 sample count
+	 * Also the Transaction Controller probably needs to be changed to do
+	 * proper sample and error accounting.
+	 * The purpose of this work-round is to allow at least minimal support for
+	 * errors in remote statistical batch mode.
+	 * 
+	 */
 	/**
 	 * In the event the sampler does want to pass back the actual contents, we
 	 * still want to calculate the throughput. The bytes is the bytes of the
@@ -840,7 +868,7 @@ public class SampleResult implements Serializable {
 	/**
 	 * return the bytes returned by the response.
 	 * 
-	 * @return
+	 * @return number of bytes in response
 	 */
 	public int getBytes() {
 		return bytes == 0 ? responseData.length : bytes;
