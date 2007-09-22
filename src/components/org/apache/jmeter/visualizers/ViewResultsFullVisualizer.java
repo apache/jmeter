@@ -363,6 +363,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 						statsBuff.append("Sample Start: ").append(startTime).append(NL);
 						statsBuff.append("Load time: ").append(res.getTime()).append(NL);
 						statsBuff.append("Size in bytes: ").append(res.getBytes()).append(NL);
+						statsBuff.append("Sample Count: ").append(res.getSampleCount()).append(NL);
 						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
 						statsBuff = new StringBuffer(); //reset for reuse
 						
