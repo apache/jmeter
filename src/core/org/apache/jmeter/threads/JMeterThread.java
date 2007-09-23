@@ -568,7 +568,7 @@ public class JMeterThread implements Runnable, Serializable {
 	}
 
 	private void notifyListeners(List listeners, SampleResult result) {
-		SampleEvent event = new SampleEvent(result, controller.getPropertyAsString(TestElement.NAME));
+		SampleEvent event = new SampleEvent(result, threadGroup.getName());
 		notifier.notifyListeners(event, listeners);
 
 	}
