@@ -50,7 +50,7 @@ public class StatisticalSampleResult extends SampleResult implements
 	public StatisticalSampleResult(SampleResult res) {
 		// Copy data that is shared between samples (i.e. the key items):
 		setSampleLabel(res.getSampleLabel());
-		setThreadName(res.getThreadName());
+		// Nothing else can be saved, as the samples may come from any thread
 
 		setSuccessful(true); // Assume result is OK
 		setSampleCount(0); // because we add the sample count in later
@@ -106,9 +106,8 @@ public class StatisticalSampleResult extends SampleResult implements
 	 * @return the key to use for aggregating samples
 	 */
 	public static String getKey(SampleEvent event) {
-		SampleResult result = event.getResult();
 		StringBuffer sb = new StringBuffer(80);
-		sb.append(result.getSampleLabel()).append("-").append(result.getThreadName());
+		sb.append(event.getResult().getSampleLabel()).append("-").append(event.getThreadGroup());
 		return sb.toString();
 	}
 }
