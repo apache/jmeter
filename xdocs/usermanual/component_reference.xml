@@ -75,7 +75,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="558" height="600" screenshot="webtest/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="688" height="592" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -178,6 +178,9 @@ https.default.protocol=SSLv3
 		</property>
 		<property name="Use KeepAlive" required="Yes">JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
                   It does work with the Jakarta httpClient implementation.</property>
+        <property name="Use multipart/form-data for HTTP POST" required="Yes">
+        Use a multipart/form-data or application/x-www-form-urlencoded post request
+        </property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.</property>
@@ -525,7 +528,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 
 </component>
 
-<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="594" height="309" screenshot="ldapext_request.png">
+<component name="LDAP Extended Request" index="&sect-num;.1.8"  width="595" height="542" screenshot="ldapext_request.png">
   <description>This Sampler can send all 8 different LDAP request to an LDAP server. It is an extended version of the LDAP sampler,
   therefore it is harder to configure, but can be made much closer resembling a real LDAP session.
     <p>If you are going to send multiple requests to the same LDAP server, consider
@@ -1621,13 +1624,13 @@ They also provide means to view, save, and read saved test results.
 The saving and reading of test results is generic.  The various
 listeners have a panel whereby one can specify the file to
 which the results will be written (or read from).
-By default, the results are stored as CSV
+By default, the results are stored as XML
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).</p>
 <note>To read existing results and display them, use the file panel Browse button to open the file.
 </note>
 <p>Results can be read from XML or CSV format files.
-When reading from CSV results files, the header (if present) is ignored.
-<b>In order to interpret a CSV file correctly, the appropriate properties must be set in jmeter.properties.</b>
+When reading from CSV results files, the header (if present) is used to determine which fields are present.
+<b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in jmeter.properties.</b>
 </p>
 <p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
 Most of the listeners currently keep a copy of every sample in their scope, apart from:
@@ -1642,16 +1645,14 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 </ul>
 <p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 <p>To change the default format, find the following line in jmeter.properties:</p>
-<p>jmeter.save.saveservice.output_format=csv</p>
-<p>Change "csv" to "xml" for greater detail.</p>
+<p>jmeter.save.saveservice.output_format=</p>
 <p>
 The information to be saved is configurable.  For maximum information, choose "xml" as the format and specify "Functional Test Mode" on the Test Plan element.  If this box is not checked, the default saved
 data includes a time stamp (the number of milliseconds since midnight,
 January 1, 1970 UTC), the data type, the thread name, the label, the
 response time, message, and code, and a success indicator.  If checked, all information, including the full response data will be logged.</p>
 <p>
-One can get a more selective set of information my modifying the
-jmeter.properties file.  The following example indicates how to set
+The following example indicates how to set
 properties to get a vertical bar ("|") delimited format that will
 output results like:.</p>
 <p>
@@ -1728,7 +1729,7 @@ The internal viewing capabilities are described in the following subsections.</p
 
 </description>
 
-<component name="Sample Result Save Configuration" index="&sect-num;.3.1"  width="767" height="252" screenshot="sample_result_config.png">
+<component name="Sample Result Save Configuration" index="&sect-num;.3.1"  width="767" height="276" screenshot="sample_result_config.png">
 <description>
 <p>
 Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
@@ -1736,16 +1737,21 @@ The defaults are defined as described in the previous section.
 </p>
 <p>Meaning of the sample attributes in the log files:</p>
 <ul>
-<li> t - elapsed time (ms)</li>
-<li>lt - latency = time to initial response (ms)</li>
-<li>ts - timestamp (ms since 1970)</li>
-<li> s - successful (true/false)</li>
+<li>by - bytes in responses</li>
+<li>de - data encoding</li>
+<li>dt - data type</li>
+<li>ec - error count (0 or 1, unless multiple samples are aggregated)</li>
 <li>lb - label</li>
+<li>lt - latency = time to initial response (ms)</li>
+<li>na - number of active threads in all thread groups</li>
+<li>ng - number of active threads in current thread group</li>
 <li>rc - response code (e.g. 200)</li>
 <li>rm - response message (e.g. OK)</li>
+<li> s - successful (true/false)</li>
+<li>sc - sample count (1, unless multiple samples are aggregated)</li>
+<li> t - elapsed time (ms)</li>
 <li>tn - thread name</li>
-<li>dt - data type</li>
-<li>de - data encoding</li>
+<li>ts - timestamp (ms since 1970)</li>
 </ul>
 </description>
 </component>
@@ -1864,17 +1870,20 @@ The remaining samples took longer than this.</li>
 </description>
 </component>
 
-<component name="View Results in Table" index="&sect-num;.3.8"  width="643" height="678" screenshot="table_results.png">
-<description>This visualizer creates a row for every sample result.  Each sample result's URL,
-time in milliseconds, success/failure is displayed.  Like the <complink name="View Results Tree"/>,
-this visualizer uses a lot of memory. The last column shows the number of bytes for the
-response from the server.</description>
+<component name="View Results in Table" index="&sect-num;.3.8"  width="658" height="700" screenshot="table_results.png">
+<description>This visualizer creates a row for every sample result.  
+Like the <complink name="View Results Tree"/>, this visualizer uses a lot of memory.
+</description>
 </component>
 
 <component name="Simple Data Writer" index="&sect-num;.3.9"  width="649" height="157" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
-recording data by eliminating GUI overhead.</description>
+recording data by eliminating GUI overhead.
+When running in non-GUI mode, the -l flag can be used to create a data file.
+The fields to save are defined by JMeter properties.
+See the jmeter.properties file for details.
+</description>
 </component>
 
 <component name="Monitor Results" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
