@@ -964,7 +964,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
-    <fixcrlf srcdir="." eol="lf" includes="**/jmeter,**/jmeter-server,**/jmeter-report"/>
+    <fixcrlf srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
   </target>
 
   <target name="all" depends="clean,install" 
@@ -1636,11 +1636,8 @@ run JMeter unless all the JMeter jars are added.
    	  </path>
       <!-- The task def is nested here so that a missing jar only causes an error if the task is used -->
    	  <taskdef resource="svntask.properties" classpathref="svn.classpath"/>
-    	<svn javahl="true">
+    	<svn>
           <status path="build.xml" 
-          	textStatusProperty="testStatus.textStatus"
-    		propStatusProperty="testStatus.propStatus"
-    		lastChangedRevisionProperty="testStatus.lastCommitRevision"
     		revisionProperty="svnCheck.revision"/>
     	</svn>
     </target>
