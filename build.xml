@@ -31,10 +31,10 @@
       ant docs-all
 
     To build all and package up the files for distribution
-      ant distribution [ -Djmeter.version=vvvv ]
+      ant distribution -Djmeter.version=vvvv [-Dsvn.revision=nnnnn]
 
   	To create a nightly build (separate bin/src/lib jars):
-      ant nightly [ -Djmeter.version=vvvv ]
+      ant nightly [-Dsvn.revision=nnnnn]
   	
     To create tar and tgz of the web-site documentation (docs and api)
       ant site [ -Djmeter.version=vvvv ]
@@ -403,7 +403,9 @@
   	    This is overridden for formal releases.
   	-->
     <property name="jmeter.version" value="2.3.${DSTAMP}"/>
+    <property name="implementation.version" value="${jmeter.version} r${svn.revision}"/>
    	<echo>jmeter.version = ${jmeter.version}</echo>
+   	<echo>implementation.version = ${implementation.version}</echo>
   </target>
 
   <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
@@ -411,8 +413,12 @@
 
 	<!-- Get version from SVN status -->
   <target name="init-svnVersion" depends="svnCheck">
-   	<property name="jmeter.version" value="r${svnCheck.revision}"/>
+  	<fail message="Could not get SVN revision" unless="svn.revision"/>
+   	<property name="jmeter.version" value="r${svn.revision}"/>
+  	<!-- Copy the value to avoid duplication of revision in Manifests -->
+    <property name="implementation.version" value="${jmeter.version}"/>
    	<echo>jmeter.version = ${jmeter.version}</echo>
+   	<echo>implementation.version = ${implementation.version}</echo>
   </target>
 
   
@@ -738,7 +744,7 @@ run JMeter unless all the JMeter jars are added.
     	<manifest>
            <attribute name="Main-Class" value="org.apache.jmeter.NewDriver"/>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -760,7 +766,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -773,7 +779,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -786,7 +792,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -799,7 +805,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -812,7 +818,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -825,7 +831,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -838,7 +844,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -851,7 +857,7 @@ run JMeter unless all the JMeter jars are added.
     	<manifest>
 	   <attribute name="Main-Class" value="org.apache.jmeter.util.BeanShellClient"/>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -864,7 +870,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -877,7 +883,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -890,7 +896,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -903,7 +909,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -916,7 +922,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -929,7 +935,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -944,7 +950,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -956,7 +962,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -977,7 +983,7 @@ run JMeter unless all the JMeter jars are added.
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
            <attribute name="Built-By" value="${user.name}"/>
-           <attribute name="Implementation-Version" value="${jmeter.version}"/>
+           <attribute name="Implementation-Version" value="${implementation.version}"/>
            <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
@@ -1059,17 +1065,22 @@ run JMeter unless all the JMeter jars are added.
 		<include name="${velocity.jar}"/>
   	</patternset>
 
-	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org
+	<!-- Invoke with -Djmeter.version=m.n -Duser.name=xyz@apache.org [-Dsvn.revision=nnnnn]
 	Creates clean build and all documentation
 	Creates runtime and source distributions and site documentation
 	-->
 	<target name="distribution" 
-		depends="clean,install,docs-printable,test,_distribution"
+		depends="svnCheck,check-versions,clean,install,docs-printable,test,_distribution"
 		description="Build JMeter for end-user distribution"/>
+
+	<target name="check-versions">
+		<fail message="jmeter.version must be defined" unless="jmeter.version"/>
+		<fail message="svn.revision must be defined" unless="svn.revision"/>
+	</target>
 
 	<target
 		name="nightly"
-		depends="package,docs-printable,pack-nightly"
+		depends="init-svnVersion,check-versions,package,docs-printable,pack-nightly"
 		description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
 		
 	<!-- Internal target -->
@@ -1628,17 +1639,20 @@ run JMeter unless all the JMeter jars are added.
     </junitreport>
   </target>
 
-    <target name="svnCheck" description="Use SVN to get the current revision">
-   	  <path id="svn.classpath">
-   	  	<pathelement location="${lib.opt}/svnant.jar"/>
-   	  	<pathelement location="${lib.opt}/svnClientAdapter.jar"/>
-   	  	<pathelement location="${lib.opt}/svnjavahl.jar"/>
-   	  </path>
-      <!-- The task def is nested here so that a missing jar only causes an error if the task is used -->
-   	  <taskdef resource="svntask.properties" classpathref="svn.classpath"/>
+	<path id="svnant.classpath">
+ 	  	<pathelement location="${lib.opt}/svnant.jar"/>
+ 	  	<pathelement location="${lib.opt}/svnClientAdapter.jar"/>
+ 	  	<pathelement location="${lib.opt}/svnjavahl.jar"/>
+ 	</path>
+
+	<available resource="svntask.properties" classpathref="svnant.classpath" property="svnAnt.present"/>
+
+    <target name="svnCheck" description="Use SVN to get the current revision" if="svnAnt.present">
+      <!-- The task def is nested here so that a missing jar does not cause an error -->
+   	  <taskdef resource="svntask.properties" classpathref="svnant.classpath"/>
     	<svn>
           <status path="build.xml" 
-    		revisionProperty="svnCheck.revision"/>
+    		revisionProperty="svn.revision"/>
     	</svn>
     </target>
 </project>
