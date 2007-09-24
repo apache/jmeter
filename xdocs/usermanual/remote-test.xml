@@ -173,7 +173,18 @@ There are some JMeter properties that can be set to alter this behaviour.
     <li>Standard - send samples as soon as they are generated</li>
     <li>Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server.</li>
     <li>Batch - send saved samples when either the count or time exceeds a threshold</li>
-    <li>Statistical - send a summary report when either the count or time exceeds a threshold</li>
+    <li>Statistical - send a summary sample when either the count or time exceeds a threshold. 
+    The samples are summarised by thread group name and sample label.
+    The following fields are accumulated:
+    <ul>
+    <li>elapsed time</li>
+    <li>latency</li>
+    <li>bytes</li>
+    <li>sample count</li>
+    <li>error count</li>
+    </ul>
+    Other fields that vary between samples are lost. 
+    </li>
     </ul>
 </ul>
 <p>The following properties apply to the Batch and Statistical modes:</p>
