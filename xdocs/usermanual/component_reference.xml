@@ -1674,40 +1674,62 @@ misnomer in this case.</p>
 <p>
 <code>
 <pre>
-    #---------------------------------------------------------------------------
-    # Results file configuration
-    #---------------------------------------------------------------------------
-    
-    # This section helps determine how result data will be saved.
-    # The commented out values are the defaults.
-    
-    # legitimate values: xml, csv, db.  Only xml and csv are currently supported.
-    jmeter.save.saveservice.output_format=csv
-    
-    # true when field should be saved; false otherwise
-    
-    # assertion_results_failure_message only affects CSV output
-    jmeter.save.saveservice.assertion_results_failure_message=true
-    jmeter.save.saveservice.data_type=true
-    jmeter.save.saveservice.label=true
-    jmeter.save.saveservice.response_code=true
-    jmeter.save.saveservice.response_data=false
-    jmeter.save.saveservice.response_message=false
-    jmeter.save.saveservice.successful=true
-    jmeter.save.saveservice.thread_name=true
-    jmeter.save.saveservice.time=true
-    
-    # legitimate values: none, ms, or a format suitable for SimpleDateFormat
-    #jmeter.save.saveservice.timestamp_format=ms
-    jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
-    
-    # legitimate values: none, first, all
-    jmeter.save.saveservice.assertion_results=first
-    
-    # For use with Comma-separated value (CSV) files or other formats
-    # where the fields' values are separated by specified delimiters.
-    jmeter.save.saveservice.default_delimiter=|
-    jmeter.save.saveservice.print_field_names=true
+#---------------------------------------------------------------------------
+# Results file configuration
+#---------------------------------------------------------------------------
+
+# This section helps determine how result data will be saved.
+# The commented out values are the defaults.
+
+# legitimate values: xml, csv, db.  Only xml and csv are currently supported.
+#jmeter.save.saveservice.output_format=xml
+
+
+# true when field should be saved; false otherwise
+
+# assertion_results_failure_message only affects CSV output
+#jmeter.save.saveservice.assertion_results_failure_message=false
+#
+#jmeter.save.saveservice.data_type=true
+#jmeter.save.saveservice.label=true
+#jmeter.save.saveservice.response_code=true
+# response_data is not currently supported for CSV output
+#jmeter.save.saveservice.response_data=false
+# Save ResponseData for failed samples
+#jmeter.save.saveservice.response_data.on_error=false
+#jmeter.save.saveservice.response_message=true
+#jmeter.save.saveservice.successful=true
+#jmeter.save.saveservice.thread_name=true
+#jmeter.save.saveservice.time=true
+#jmeter.save.saveservice.subresults=true
+#jmeter.save.saveservice.assertions=true
+#jmeter.save.saveservice.latency=true
+#jmeter.save.saveservice.samplerData=false
+#jmeter.save.saveservice.responseHeaders=false
+#jmeter.save.saveservice.requestHeaders=false
+#jmeter.save.saveservice.encoding=false
+#jmeter.save.saveservice.bytes=true
+#jmeter.save.saveservice.url=false
+#jmeter.save.saveservice.filename=false
+#jmeter.save.saveservice.thread_counts=false
+#jmeter.save.saveservice.sample_count=false
+
+# Timestamp format
+# legitimate values: none, ms, or a format suitable for SimpleDateFormat
+#jmeter.save.saveservice.timestamp_format=ms
+#jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
+
+# Put the start time stamp in logs instead of the end
+sampleresult.timestamp.start=true
+
+
+# legitimate values: none, first, all
+#jmeter.save.saveservice.assertion_results=none
+
+# For use with Comma-separated value (CSV) files or other formats
+# where the fields' values are separated by specified delimiters.
+#jmeter.save.saveservice.default_delimiter=,
+#jmeter.save.saveservice.print_field_names=false
 </pre>
 </code></p>
 <p>
