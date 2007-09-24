@@ -974,7 +974,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
-    <fixcrlf srcdir="." eol="lf" includes="**/jmeter,**/jmeter-server,**/jmeter-report"/>
+  	<fixcrlf srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/jmeter-report"/>
   </target>
 
   <target name="all" depends="clean,install" 
