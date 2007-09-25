@@ -21,7 +21,10 @@
  */
 package org.apache.jmeter.util;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -40,12 +43,16 @@ public final class NameUpdater {
 	static {
 		nameMap = new Properties();
 		FileInputStream fis = null;
+		File f = new File(JMeterUtils.getJMeterHome(),
+				JMeterUtils.getPropDefault("upgrade_properties", // $NON-NLS-1$
+						"/bin/upgrade.properties")); // $NON-NLS-1$
 		try {
-			fis = new FileInputStream(JMeterUtils.getJMeterHome()
-								+ JMeterUtils.getPropDefault("upgrade_properties", "/bin/upgrade.properties"));
+			fis = new FileInputStream(f);
 			nameMap.load(fis);
-		} catch (Exception e) {
-			log.error("Bad upgrade file", e);
+		} catch (FileNotFoundException e) {
+			log.error("Could not find upgrade file: ", e);
+		} catch (IOException e) {
+			log.error("Error processing upgrade file: "+f.getPath(), e);
 		} finally {
 			JOrphanUtils.closeQuietly(fis);
 		}
