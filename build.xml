@@ -1052,7 +1052,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <include name="eclipse.classpath"/>
     <include name="eclipse.readme"/>
-    <include name="${lib.dir}/jar_usage.txt"/>
+    <include name="${lib.dir}/aareadme.txt"/>
     <include name="${lib.api}/*.jar"/>
     <include name="fb-*.x*"/>
     <include name="KEYS.txt"/>
