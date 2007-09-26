@@ -41,6 +41,7 @@
 <li>Add File->Revert to easily drop the current changes and reload the project file currently loaded</li>
 <li>Bug 31366 - Remember recently opened file(s)</li>
 <li>Bug 43351 - Add support for Parameters and script file to all BeanShell test elements</li>
+<li>New functions: __eval() and __evalVar()</li>
 </ul>
 
 <!--  ===================  -->

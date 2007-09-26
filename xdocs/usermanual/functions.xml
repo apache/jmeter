@@ -761,6 +761,43 @@ time.YMD=yyMMdd
 </properties>
 </component>
 
+<component index="&sect-num;.5.20" name="__evalVar">
+<description>
+	<p>The eval function returns the result of evaluating an expression stored in a variable.
+	</p>
+	<p>
+	This allows one to read a string from a file, and process any variable references in it.
+	For example, if the variable "query" contains "select ${column} from ${table}" 
+	and "column" and "table" contain "name" and "customers", then ${__evalVar(query)}
+	will evaluate as "select name from customers". 
+	</p>
+	</description>
+
+<properties>
+        <property name="Variable name" required="Yes">
+        The variable to be evaluated. 
+        </property>
+</properties>
+</component>
+<component index="&sect-num;.5.21" name="__eval">
+<description>
+	<p>The eval function returns the result of evaluating an expression.
+	</p>
+	<p>
+	This allows one to interpolate variable and function references in a string.
+	For example, if "column" and "table" contain "name" and "customers", 
+	then ${__eval(select ${column} from ${table})}
+	will evaluate as "select name from customers". 
+	</p>
+	</description>
+
+<properties>
+        <property name="Variable name" required="Yes">
+        The variable to be evaluated. 
+        </property>
+</properties>
+</component>
+
 </subsection>
 
 <subsection name="&sect-num;.6 Pre-defined Variables" anchor="predefinedvars">
