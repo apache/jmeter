@@ -126,6 +126,10 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		super.configure(el);
 		tableModel.manager.clear();
 		tableModel.manager.addTestElement((AuthManager) el.clone());
+		if (tableModel.getRowCount() != 0) {
+			deleteButton.setEnabled(true);
+			saveButton.setEnabled(true);
+		}
 	}
 
 	public String getLabelResource() {
