@@ -43,9 +43,6 @@ import org.apache.log.Logger;
  * Information about the request and response is stored so it can be used in a
  * JMeter test plan.
  * 
- * @author mike
- * @version $Revision$ Last updated: $Date$ Created
- *          June 8, 2001
  */
 public class Proxy extends Thread {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -182,6 +179,7 @@ public class Proxy extends Thread {
 			 * We don't want to store any cookies in the generated test plan
 			 */
 			headers.removeHeaderNamed("cookie");// Always remove cookies // $NON-NLS-1$
+			headers.removeHeaderNamed("Authorization");// Always remove cookies // $NON-NLS-1$
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.", uhe);
 			writeErrorToClient(HttpReplyHdr.formServerNotFound());
