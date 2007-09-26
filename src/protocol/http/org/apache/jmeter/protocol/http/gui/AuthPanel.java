@@ -56,6 +56,8 @@ import org.apache.log.Logger;
  * user selects.
  */
 public class AuthPanel extends AbstractConfigGui implements ActionListener {
+	private static final long serialVersionUID = -9214884465261470761L;
+
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
@@ -206,7 +208,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 			authTable.setRowSelectionInterval(rowToSelect, rowToSelect);
 		} else if (action.equals(LOAD_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
+                final String [] _txt={".txt"}; //$NON-NLS-1$
+				File tmp = FileDialoger.promptToOpenFile(_txt).getSelectedFile();
 				if (tmp != null) {
 					tableModel.manager.addFile(tmp.getAbsolutePath());
 					tableModel.fireTableDataChanged();
@@ -222,7 +225,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 			}
 		} else if (action.equals(SAVE_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToSaveFile(null).getSelectedFile();
+				File tmp = FileDialoger.promptToSaveFile("auth.txt").getSelectedFile();
 				if (tmp != null) {
 					tableModel.manager.save(tmp.getAbsolutePath());
 				}
@@ -278,6 +281,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	}
 
 	private static class InnerTableModel extends AbstractTableModel {
+		private static final long serialVersionUID = 4638155137475747946L;
 		AuthManager manager;
 
 		public InnerTableModel(AuthManager man) {
@@ -379,6 +383,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	}
 
 	private static class PasswordCellRenderer extends JPasswordField implements TableCellRenderer {
+		private static final long serialVersionUID = 5169856333827579927L;
 		private Border myBorder;
 
 		public PasswordCellRenderer() {
