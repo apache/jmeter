@@ -45,11 +45,11 @@ import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$ $Date$
+ * Test cases for Functions
  */
 public class PackageTest extends JMeterTestCase {
 
-	transient private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	static {
 		// LoggingManager.setPriority("DEBUG","jmeter");
@@ -184,8 +184,14 @@ public class PackageTest extends JMeterTestCase {
         allsuites.addTest(par3);
 
         TestSuite variable = new TestSuite("Variable");
-        random.addTest(new PackageTest("VariableTest1"));
+        variable.addTest(new PackageTest("VariableTest1"));
         allsuites.addTest(variable);
+        
+        TestSuite eval = new TestSuite("Eval");
+        eval.addTest(new PackageTest("EvalTest1"));
+        eval.addTest(new PackageTest("EvalTest2"));
+        allsuites.addTest(eval);
+
         return allsuites;
 	}
 
@@ -857,5 +863,34 @@ public class PackageTest extends JMeterTestCase {
         r.setParameters(parms);
         s = r.execute(null,null);
         assertEquals("a1",s);
+    }        
+
+    public void EvalTest1() throws Exception {
+        EvalFunction eval = new EvalFunction();
+        vars.put("query","select ${column} from ${table}");
+        vars.put("column","name");
+        vars.put("table","customers");
+        Collection parms;
+        String s;
+        
+        parms = MakeParams("${query}",null,null);
+        eval.setParameters(parms);
+        s = eval.execute(null,null);
+        assertEquals("select name from customers",s);
+        
+    }
+
+    public void EvalTest2() throws Exception {
+        EvalVarFunction evalVar = new EvalVarFunction();
+        vars.put("query","select ${column} from ${table}");
+        vars.put("column","name");
+        vars.put("table","customers");
+        Collection parms;
+        String s;
+        
+        parms = MakeParams("query",null,null);
+        evalVar.setParameters(parms);
+        s = evalVar.execute(null,null);
+        assertEquals("select name from customers",s);
     }        
 }
