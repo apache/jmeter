@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.apache.jmeter.config.ConfigElement;
@@ -226,7 +227,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 	public void save(String authFile) throws IOException {
 		File file = new File(authFile);
 		if (!file.isAbsolute()) {
-			file = new File(System.getProperty("user.dir") + File.separator + authFile);
+			file = new File(System.getProperty("user.dir"),authFile);
 		}
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
 		writer.println("# JMeter generated Authorization file");
@@ -254,6 +255,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		}
 
 		String line;
+		boolean ok = true;
 		while ((line = reader.readLine()) != null) {
 			try {
 				if (line.startsWith("#") || line.trim().length() == 0) { //$NON-NLS-1$
@@ -271,12 +273,15 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 				}
 				Authorization auth = new Authorization(url, user, pass,domain,realm);
 				getAuthObjects().addItem(auth);
-			} catch (Exception e) {
-				reader.close();
-				throw new IOException("Error parsing auth line\n\t'" + line + "'\n\t" + e);
+			} catch (NoSuchElementException e) {
+				log.error("Error parsing auth line: '" + line + "'");
+				ok = false;
 			}
 		}
 		reader.close();
+		if (!ok){
+			JMeterUtils.reportErrorToUser("One or more errors found when reading the Auth file - see the log file");
+		}
 	}
 
 	/**
