@@ -1523,7 +1523,7 @@ run JMeter unless all the JMeter jars are added.
        </classpath>
     	<!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
        <sysproperty key="java.awt.headless" value="false"/>
-        <arg value="-pjmeter-batch.properties"/>
+        <arg value="-ptestfiles/jmeter-batch.properties"/>
        <arg value="-n"/>
        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
@@ -1609,6 +1609,7 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <arg value="${build.test},../lib/ext"/>
+   	<!-- The file must currently be in the JMeter home directory as it is used to find the home directory -->
       <arg value="./jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
