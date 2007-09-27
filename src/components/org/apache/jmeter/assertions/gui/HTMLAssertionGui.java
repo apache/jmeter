@@ -22,7 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -33,8 +34,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.assertions.HTMLAssertion;
 import org.apache.jmeter.gui.util.FilePanel;
@@ -48,9 +47,16 @@ import org.apache.log.Logger;
 /**
  * GUI for HTMLAssertion
  */
-public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListener, ActionListener, ChangeListener {
+public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListener, ActionListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final long serialVersionUID = 1L;
+
+	// Names for the fields
+	private static final String WARNING_THRESHOLD_FIELD = "warningThresholdField"; // $NON-NLS-1$
+
+	private static final String ERROR_THRESHOLD_FIELD = "errorThresholdField"; // $NON-NLS-1$
 
 	// instance attributes
 	private JTextField errorThresholdField = null;
@@ -203,7 +209,6 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		// doctype
 		HorizontalPanel docTypePanel = new HorizontalPanel();
 		docTypeBox = new JComboBox(new Object[] { "omit", "auto", "strict", "loose" });
-		docTypeBox.addFocusListener(this);
 		// docTypePanel.add(new
 		// JLabel(JMeterUtils.getResString("duration_assertion_label"))); //$NON-NLS-1$
 		docTypePanel.add(new JLabel("Doctype:"));
@@ -213,9 +218,9 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		// format (HMTL, XHTML, XML)
 		VerticalPanel formatPanel = new VerticalPanel();
 		formatPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Format"));
-		htmlRadioButton = new JRadioButton("HTML", true);
-		xhtmlRadioButton = new JRadioButton("XHTML", false);
-		xmlRadioButton = new JRadioButton("XML", false);
+		htmlRadioButton = new JRadioButton("HTML", true); //$NON-NLS-1$
+		xhtmlRadioButton = new JRadioButton("XHTML", false); //$NON-NLS-1$
+		xmlRadioButton = new JRadioButton("XML", false); //$NON-NLS-1$
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(htmlRadioButton);
 		buttonGroup.add(xhtmlRadioButton);
@@ -227,7 +232,6 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 
 		// errors only
 		errorsOnly = new JCheckBox("Errors only", false);
-		errorsOnly.addFocusListener(this);
 		errorsOnly.addActionListener(this);
 		assertionPanel.add(errorsOnly);
 
@@ -235,17 +239,18 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		HorizontalPanel thresholdPanel = new HorizontalPanel();
 		thresholdPanel.add(new JLabel("Error threshold:"));
 		errorThresholdField = new JTextField("0", 5); // $NON-NLS-1$
-		errorThresholdField.addFocusListener(this);
+		errorThresholdField.setName(ERROR_THRESHOLD_FIELD);
+		errorThresholdField.addKeyListener(this);
 		thresholdPanel.add(errorThresholdField);
 		thresholdPanel.add(new JLabel("Warning threshold:"));
 		warningThresholdField = new JTextField("0", 5); // $NON-NLS-1$
-		warningThresholdField.addFocusListener(this);
+		warningThresholdField.setName(WARNING_THRESHOLD_FIELD);
+		warningThresholdField.addKeyListener(this);
 		thresholdPanel.add(warningThresholdField);
 		assertionPanel.add(thresholdPanel);
 
 		// file panel
 		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
-		filePanel.addChangeListener(this);
 		assertionPanel.add(filePanel);
 
 		mainPanel.add(assertionPanel, BorderLayout.NORTH);
@@ -319,13 +324,36 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements FocusListe
 		}
 	}
 
-	/**
-	 * This method is called on change of output file input
-	 * 
-	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
-	 */
-	public void stateChanged(ChangeEvent e) {
-		log.debug("HTMLAssertionGui.stateChanged() called");
+	public void keyPressed(KeyEvent e) {
+	}
+
+	public void keyReleased(KeyEvent e) {
+		String fieldName = e.getComponent().getName();
+
+		if (fieldName.equals(WARNING_THRESHOLD_FIELD)) {
+			validateInteger(warningThresholdField);
+		}
+		
+		if (fieldName.equals(ERROR_THRESHOLD_FIELD)) {
+			validateInteger(errorThresholdField);
+		}
+	}
+
+	private void validateInteger(JTextField field){
+		try {
+			Integer.parseInt(field.getText());
+		} catch (NumberFormatException nfe) {
+			int length = field.getText().length();
+			if (length > 0) {
+				JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
+						JOptionPane.WARNING_MESSAGE);
+				// Drop the last character:
+				field.setText(field.getText().substring(0, length-1));
+			}
+		}
+
+	}
+	public void keyTyped(KeyEvent e) {
 	}
 
 }
