@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -69,6 +68,8 @@ import org.apache.log.Logger;
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
 		KeyListener, UnsharedComponent {
 	private static transient Logger log = LoggingManager.getLoggerForClass();
+
+	private static final long serialVersionUID = 1L;
 
 	private JTextField portField;
 
@@ -415,18 +416,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 			try {
 				Integer.parseInt(portField.getText());
 			} catch (NumberFormatException nfe) {
-				if (portField.getText().length() > 0) {
-					JOptionPane.showMessageDialog(this, "You must enter a valid number", "Invalid data",
+				int length = portField.getText().length();
+				if (length > 0) {
+					JOptionPane.showMessageDialog(this, "Only digits allowed", "Invalid data",
 							JOptionPane.WARNING_MESSAGE);
-
-					// Right now, the cleanest thing to do is simply clear the
-					// entire text field. We do not want to set the text to
-					// the default because that would be confusing to the user.
-					// For example, the user typed "5t" instead of "56". After
-					// the user closes the error dialog, the text would change
-					// from "5t" to "1". A litle confusing. If anything, it
-					// should display just "5". Future enhancement...
-					portField.setText(""); // $NON-NLS-1$
+					// Drop the last character:
+					portField.setText(portField.getText().substring(0, length-1));
 				}
 			}
 			enableRestart();
