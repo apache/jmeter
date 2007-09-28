@@ -31,7 +31,6 @@
 
 <h4>Bug fixes</h4>
 <ul>
-<li>SaveService no longer needs to instantiate classes</li>
 <li>Bug 43430 - Count of active threads is incorrect for remote samples</li>
 </ul>
 
@@ -41,7 +40,10 @@
 <li>Add File->Revert to easily drop the current changes and reload the project file currently loaded</li>
 <li>Bug 31366 - Remember recently opened file(s)</li>
 <li>Bug 43351 - Add support for Parameters and script file to all BeanShell test elements</li>
+<li>SaveService no longer needs to instantiate classes</li>
 <li>New functions: __eval() and __evalVar()</li>
+<li>Menu items now appear in execution order</li>
+<li>Test Plan items can now only be dropped/pasted into parts of the tree where they are allowed</li>
 </ul>
 
 <!--  ===================  -->

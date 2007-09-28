@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +27,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -57,12 +59,14 @@ public class Paste extends AbstractAction {
 		JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
 		JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
 		JMeterTreeNode currentNode = treeListener.getCurrentNode();
-		if (DragNDrop.canAddTo(currentNode)) {
+		if (MenuFactory.canAddTo(currentNode, draggedNodes)) {
 			for (int i = 0; i < draggedNodes.length; i++) {
 				if (draggedNodes[i] != null) {
                     addNode(currentNode, draggedNodes[i]);
 				}
 			}
+		} else {
+			Toolkit.getDefaultToolkit().beep();
 		}
 		GuiPackage.getInstance().getMainFrame().repaint();
 	}
