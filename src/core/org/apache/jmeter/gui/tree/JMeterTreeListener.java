@@ -43,6 +43,7 @@ import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -177,10 +178,12 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
 			item.addActionListener(actionHandler);
 			item.setActionCommand(ActionNames.INSERT_AFTER);
 			dragNdrop.add(item);
-			item = new JMenuItem(JMeterUtils.getResString("add_as_child")); // $NON-NLS-1$
-			item.addActionListener(actionHandler);
-			item.setActionCommand(ActionNames.DRAG_ADD);
-			dragNdrop.add(item);
+			if (MenuFactory.canAddTo(getCurrentNode(), draggedNodes)){
+				item = new JMenuItem(JMeterUtils.getResString("add_as_child")); // $NON-NLS-1$
+				item.addActionListener(actionHandler);
+				item.setActionCommand(ActionNames.DRAG_ADD);
+				dragNdrop.add(item);
+			}
 			dragNdrop.addSeparator();
 			item = new JMenuItem(JMeterUtils.getResString("cancel")); // $NON-NLS-1$
 			dragNdrop.add(item);

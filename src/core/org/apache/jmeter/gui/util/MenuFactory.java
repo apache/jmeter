@@ -35,13 +35,19 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 
+import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
+import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.logging.LoggingManager;
@@ -445,6 +451,66 @@ public final class MenuFactory {
 		if ((elements.length > 0) && !(elements[elements.length - 1] instanceof JPopupMenu.Separator)) {
 			menu.addSeparator();
 		}
+	}
+
+	/**
+	 * Determine whether or not nodes can be added to this parent.
+	 * 
+	 * Used by DragNDrop and Paste.
+	 * 
+	 * @param parentNode
+	 * @param nodes - array of nodes that are to be added
+	 * 
+	 * @return whether it is OK to add the dragged nodes to this parent
+	 */
+	public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode nodes[]) {
+		if (null == parentNode) {
+			return false;
+		}
+		if (foundClass(nodes, new Class[]{WorkBench.class})){// Can't add a Workbench anywhere
+			return false;
+		}
+		if (foundClass(nodes, new Class[]{TestPlan.class})){// Can't add a TestPlan anywhere
+			return false;
+		}
+		TestElement parent = parentNode.getTestElement();
+		if (parent instanceof TestPlan) {// Samplers and Controllers need not apply ...
+			if (foundClass(nodes, new Class[]{Sampler.class, Controller.class})){
+				return false;
+			}
+			return true;
+		}
+		// ThreadGroup is only allowed under a TestPlan
+		if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.ThreadGroup.class})){
+			return false;
+		}
+		if (parent instanceof Controller) {// Includes thread group; anything goes
+			return true;
+		}
+		if (parent instanceof Sampler) {// Samplers and Controllers need not apply ...
+			if (foundClass(nodes, new Class[]{Sampler.class, Controller.class})){
+				return false;
+			}
+			return true;
+		}
+		if (parent instanceof WorkBench) {// TODO are there any items that don't make sense here?
+			return true;
+		}
+		// All other 
+		return false;
+	}
+
+	// Is any top-level node an instance of the class?
+	private static boolean foundClass(JMeterTreeNode nodes[],Class classes[]){
+		for (int i = 0; i < nodes.length; i++) {
+			JMeterTreeNode node = nodes[i];
+			for (int j=0; j < classes.length; j++) {
+				if (classes[j].isInstance(node.getUserObject())){
+					return true;
+				}				
+			}
+		}
+		return false;
 	}
 
 	// Methods used for Test cases
