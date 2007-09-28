@@ -400,23 +400,19 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 		if (!isErrorLogging() || !result.isSuccessful()) {
 			sendToVisualizer(result);
-
-			SampleSaveConfiguration config = getSaveConfig();
-			result.setSaveConfig(config);
-
-			try {
-				if (!config.saveAsXml()) {
-					if (out != null) {
+			if ( out != null) {// no point otherwise
+				SampleSaveConfiguration config = getSaveConfig();
+				result.setSaveConfig(config);
+				try {
+					if (config.saveAsXml()) {
+						recordResult(result);
+					} else {
 						String savee = OldSaveService.resultToDelimitedString(result);
 						out.println(savee);
 					}
+				} catch (Exception err) {
+					log.error("Error trying to record a sample", err); // should throw exception back to caller
 				}
-				// Save results as XML
-				else {
-					recordResult(result);
-				}
-			} catch (Exception err) {
-				log.error("", err); // should throw exception back to caller
 			}
 		}
 	}
@@ -427,16 +423,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		}
 	}
 
+	// Only called if out != null
 	private void recordResult(SampleResult result) throws Exception {
-		if (out != null) {
-			if (!isResultMarked(result) && !this.isStats) {
-				if (SaveService.isSaveTestLogFormat20()) {
-					if (serializer == null)
-						serializer = new DefaultConfigurationSerializer();
-					out.write(getSerializedSampleResult(result));
-				} else {
-					SaveService.saveSampleResult(result, out);
-				}
+		if (!isResultMarked(result) && !this.isStats) {
+			if (SaveService.isSaveTestLogFormat20()) {
+				if (serializer == null)
+					serializer = new DefaultConfigurationSerializer();
+				out.write(getSerializedSampleResult(result));
+			} else {
+				SaveService.saveSampleResult(result, out);
 			}
 		}
 	}
