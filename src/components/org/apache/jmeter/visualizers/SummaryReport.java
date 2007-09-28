@@ -34,7 +34,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
@@ -144,15 +143,6 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
 		tableRows.clear();
 		tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
 		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
-	}
-
-	// overrides AbstractVisualizer
-	// forces GUI update after sample file has been read
-	public TestElement createTestElement() {
-		TestElement t = super.createTestElement();
-
-		// sleepTill = 0;
-		return t;
 	}
 
 	/**
