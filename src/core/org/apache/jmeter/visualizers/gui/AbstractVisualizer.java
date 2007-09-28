@@ -261,7 +261,7 @@ public abstract class AbstractVisualizer
 		return Arrays.asList(new String[] { MenuFactory.LISTENERS });
 	}
 
-	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
+	/* Implements JMeterGUIComponent.createTestElement() */
 	public TestElement createTestElement() {
 		if (collector == null) {
 			collector = new ResultCollector();
