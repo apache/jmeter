@@ -144,6 +144,11 @@
 						</li>
 									
 
+												<li	>
+								Bug 43430 - Count of active threads is incorrect for remote samples
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -168,6 +173,11 @@
 
 												<li	>
 								Bug 43351 - Add support for Parameters and script file to all BeanShell test elements
+						</li>
+									
+
+												<li	>
+								New functions: __eval() and __evalVar()
 						</li>
 									
 
@@ -209,6 +219,21 @@
 						</li>
 									
 
+												<li	>
+								Bug 43364 - option to revert If Controller to pre 2.3RC3 behaviour
+						</li>
+									
+
+												<li	>
+								Bug 43449 - Statistical Remote mode does not handle Latency
+						</li>
+									
+
+												<li	>
+								Bug 43450 (partial fix) - Allow SampleCount and ErrorCount to be saved to/restored from files
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -233,6 +258,11 @@
 
 												<li	>
 								Ensure uncaught exceptions are logged
+						</li>
+									
+
+												<li	>
+								Look for user.properties and system.properties in JMeter bin directory if not found locally
 						</li>
 									
 
@@ -593,7 +623,7 @@ This means that any tests using the Single-bind test will need to be updated to 
 						</p>
 							  									 				<p	>
 								
-Bug 41104: JMeterThread behaviour was changed so that PostProcessors are run in forward order
+Bug 41140: JMeterThread behaviour was changed so that PostProcessors are run in forward order
 (as they appear in the test plan) rather than reverse order as previously.
 The original behaviour can be restored by setting the following JMeter property:
 
@@ -1126,6 +1156,11 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 									
 
 												<li	>
+								Bug 41140 - Post-processors are run in reverse order
+						</li>
+									
+
+												<li	>
 								Bug 41277 - add Latency and Encoding to CSV output
 						</li>
 									
@@ -1383,7 +1418,7 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 									
 
 												<li	>
-								Bug 41612 - Loop nested in IF behaves erratically
+								Bug 41612 - Loop nested in If Controller behaves erratically
 						</li>
 									
 
