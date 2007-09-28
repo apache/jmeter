@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -25,7 +24,6 @@ import java.awt.Font;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -36,21 +34,13 @@ import org.apache.jmeter.gui.util.ReportMenuFactory;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
- * @author Peter Lin
  *
  * This is the abstract base for report gui's
  */
-public abstract class AbstractReportGui extends AbstractJMeterGuiComponent 
-    implements Printable
+public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
 {
-    /** Logging */
-    private static Logger log = LoggingManager.getLoggerForClass();
-
 	/**
 	 * 
 	 */
@@ -115,14 +105,5 @@ public abstract class AbstractReportGui extends AbstractJMeterGuiComponent
         titleLabel.setFont(curFont.deriveFont((float) curFont.getSize() + 4));
         titleLabel.setBackground(Color.white);
         return titleLabel;
-    }
-    /**
-     * Subclasses need to over this method, if they wish to return something
-     * other than the Visualizer itself.
-     * 
-     * @return
-     */
-    public JComponent getPrintableComponent() {
-        return this;
     }
 }

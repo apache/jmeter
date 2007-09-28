@@ -21,21 +21,17 @@ package org.apache.jmeter.config.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.visualizers.Printable;
 
 /**
  * This is the base class for JMeter GUI components which provide configuration
  * for some other component.
  * 
- * @author Michael Stover
- * @version $Revision$
  */
-public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent implements Printable {
+public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent {
 	/**
 	 * When a user right-clicks on the component in the test tree, or selects
 	 * the edit menu when the component is selected, the component will be asked
@@ -62,15 +58,5 @@ public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent imple
 	 */
 	public Collection getMenuCategories() {
 		return Arrays.asList(new String[] { MenuFactory.CONFIG_ELEMENTS });
-	}
-
-	/**
-	 * Subclasses need to over this method, if they wish to return something
-	 * other than the Visualizer itself.
-	 * 
-	 * @return
-	 */
-	public JComponent getPrintableComponent() {
-		return this;
 	}
 }
