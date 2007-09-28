@@ -18,23 +18,19 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
-import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
-/**
- * @author mstover
- * @version $Revision$
- */
 public class DragNDrop extends AbstractAction {
 	private static Set commands = new HashSet();
 	static {
@@ -59,19 +55,19 @@ public class DragNDrop extends AbstractAction {
 		}
 		// System.out.println(action+" "+te.getClass().getName());
 
-		if (ActionNames.DRAG_ADD.equals(action) && canAddTo(currentNode)) {
+		if (ActionNames.DRAG_ADD.equals(action) && canAddTo(currentNode,draggedNodes)) {
 			removeNodesFromParents(draggedNodes);
 			for (int i = 0; i < draggedNodes.length; i++) {
 				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], currentNode,
 						currentNode.getChildCount());
 			}
-		} else if (ActionNames.INSERT_BEFORE.equals(action) && canAddTo(parentNode)) {
+		} else if (ActionNames.INSERT_BEFORE.equals(action) && canAddTo(parentNode,draggedNodes)) {
 			removeNodesFromParents(draggedNodes);
 			for (int i = 0; i < draggedNodes.length; i++) {
 				int index = parentNode.getIndex(currentNode);
 				GuiPackage.getInstance().getTreeModel().insertNodeInto(draggedNodes[i], parentNode, index);
 			}
-		} else if (ActionNames.INSERT_AFTER.equals(action) && canAddTo(parentNode)) {
+		} else if (ActionNames.INSERT_AFTER.equals(action) && canAddTo(parentNode,draggedNodes)) {
 			removeNodesFromParents(draggedNodes);
 			for (int i = 0; i < draggedNodes.length; i++) {
 				int index = parentNode.getIndex(currentNode) + 1;
@@ -81,27 +77,12 @@ public class DragNDrop extends AbstractAction {
 		GuiPackage.getInstance().getMainFrame().repaint();
 	}
 
-	/**
-	 * Determine whether or not dragged nodes can be added to this parent. Also
-	 * used by Paste TODO tighten rules TODO move to MenuFactory?
-	 * 
-	 * @param parentNode
-	 * @return whether it is OK to add the dragged nodes to this parent
-	 */
-	static boolean canAddTo(JMeterTreeNode parentNode) {
-		if (null == parentNode)
-			return false;
-		TestElement te = parentNode.getTestElement();
-		// System.out.println("Add to: "+te.getClass().getName());
-		if (te instanceof Controller)
-			return true;
-		if (te instanceof Sampler)
-			return true;
-		if (te instanceof WorkBench)
-			return true;
-		if (te instanceof TestPlan)
-			return true;
-		return false;
+	private static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode[] draggedNodes) {
+		boolean ok = MenuFactory.canAddTo(parentNode, draggedNodes);
+		if (!ok){
+			Toolkit.getDefaultToolkit().beep();
+		}
+		return ok;
 	}
 
 	protected void removeNodesFromParents(JMeterTreeNode[] nodes) {
