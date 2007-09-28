@@ -27,7 +27,6 @@ import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -347,16 +346,6 @@ public abstract class AbstractVisualizer
 	 */
 	protected void setModel(ResultCollector collector) {
 		this.collector = collector;
-	}
-
-	/**
-	 * Subclasses need to over this method, if they wish to return something
-	 * other than the Visualizer itself.
-	 * 
-	 * @return
-	 */
-	public JComponent getPrintableComponent() {
-		return this;
 	}
 
 	public void clearGui(){
