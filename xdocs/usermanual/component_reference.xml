@@ -2244,7 +2244,7 @@ cookie table entries.</property>
 
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.4.5"  width="689" height="464" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.4.5"  width="960" height="650" screenshot="proxy_control.png">
 <note>The Proxy Server can only record HTTP traffic. 
 It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
@@ -2259,10 +2259,6 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
-		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
-		<property name="Set Keep-Alive" required="Yes">Automatically set Keep-Alive in the generated samplers?</property>
-		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
-		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
         <property name="Attempt https Spoofing" required="Yes">
           When you enable https spoofing, the following  happens:
           <ul>
@@ -2275,7 +2271,6 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
           instead of typing "https://..." into the browser, type &quot;http://...&quot;.  JMeter
           will request and record <i>everything</i> as https, whether it should be or not.
         </property>
-        <!--TODO: there's some undocumented flags here -->
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
            <ul>
@@ -2289,6 +2284,21 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
            If you are using grouping, pleas ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
+		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
+		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
+		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
+        <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
+        <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
+        <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?</property>
+		<property name="Use Keep-Alive" required="Yes">Set Use Keep-Alive in the generated samplers?</property>
+		<property name="Retrieve all Embedded Resources" required="Yes">Set Retrieve all Embedded Resources in the generated samplers?</property>
+		<property name="Content Type filter" required="No">
+		Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
+		The fields are regular expressions which are checked to see if they are contained in the content-type.
+		[Does not have to match the entire field].
+		The include filter is checked first, then the exclude filter.
+		Samples which are filtered out will not be stored.
+		</property>
         <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
         those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
         left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
