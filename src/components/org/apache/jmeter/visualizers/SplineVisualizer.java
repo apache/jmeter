@@ -106,7 +106,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 		model.clearData();
 	}
 
-	public void setGUI() {
+	private void setGUI() {
 		Color backColor = BACKGROUND_COLOR;
 
 		this.setBackground(backColor);
@@ -211,7 +211,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 		return "Show the samples analysis as a Spline curve";
 	}
 
-	public String formatMeasureToDisplay(long measure) {
+	private String formatMeasureToDisplay(long measure) {
 		String numberString = String.valueOf(measure);
 
 		if (FILL_UP_WITH_ZEROS) {
@@ -222,31 +222,31 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 		return numberString;
 	}
 
-	public void setMinimum(long n) {
+	private void setMinimum(long n) {
 		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS;
 
 		this.minimumNumberLabel.setText(text);
 	}
 
-	public void setMaximum(long n) {
+	private void setMaximum(long n) {
 		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS;
 
 		this.maximumNumberLabel.setText(text);
 	}
 
-	public void setAverage(long n) {
+	private void setAverage(long n) {
 		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS; 
 
 		this.averageNumberLabel.setText(text);
 	}
 
-	public void setIncoming(long n) {
+	private void setIncoming(long n) {
 		String text = this.formatMeasureToDisplay(n) + SUFFIX_MS;
 
 		this.incomingNumberLabel.setText(text);
 	}
 
-	public JPanel getControlPanel() {
+	public JPanel getControlPanel() {// TODO - is this needed?
 		return this;
 	}
 
