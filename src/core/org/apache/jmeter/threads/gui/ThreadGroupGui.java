@@ -176,13 +176,14 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 		JPopupMenu pop = new JPopupMenu();
 		pop.add(MenuFactory.makeMenus(new String[] { 
 				MenuFactory.CONTROLLERS, 
-				MenuFactory.LISTENERS,
+				MenuFactory.CONFIG_ELEMENTS, 
+				MenuFactory.TIMERS, 
+				MenuFactory.PRE_PROCESSORS,
 				MenuFactory.SAMPLERS, 
 				MenuFactory.ASSERTIONS,
-				MenuFactory.TIMERS, 
-				MenuFactory.CONFIG_ELEMENTS, 
-				MenuFactory.PRE_PROCESSORS,
-				MenuFactory.POST_PROCESSORS }, 
+				MenuFactory.POST_PROCESSORS,
+				MenuFactory.LISTENERS,
+				}, 
 				JMeterUtils.getResString("add"), // $NON-NLS-1$
 				ActionNames.ADD));
 		MenuFactory.addEditMenu(pop, true);
