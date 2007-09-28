@@ -83,24 +83,26 @@ public final class MenuFactory {
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
 	private static final String[] MENU_ADD_CONTROLLER = new String[] {
         MenuFactory.CONTROLLERS, 
-        MenuFactory.SAMPLERS,
-		MenuFactory.ASSERTIONS, 
 		MenuFactory.CONFIG_ELEMENTS, 
         MenuFactory.TIMERS, 
-        MenuFactory.LISTENERS, 
         MenuFactory.PRE_PROCESSORS,
-		MenuFactory.POST_PROCESSORS };
+        MenuFactory.SAMPLERS,
+		MenuFactory.ASSERTIONS, 
+		MenuFactory.POST_PROCESSORS,
+        MenuFactory.LISTENERS, 
+		};
 
 	private static final String[] MENU_PARENT_CONTROLLER = new String[] { 
         MenuFactory.CONTROLLERS };
 
 	private static final String[] MENU_ADD_SAMPLER = new String[] { 
         MenuFactory.CONFIG_ELEMENTS,
-		MenuFactory.ASSERTIONS, 
 		MenuFactory.TIMERS, 
-		MenuFactory.LISTENERS, 
         MenuFactory.PRE_PROCESSORS,
-		MenuFactory.POST_PROCESSORS };
+		MenuFactory.ASSERTIONS, 
+		MenuFactory.POST_PROCESSORS,
+		MenuFactory.LISTENERS, 
+		};
 
 	private static final String[] MENU_PARENT_SAMPLER = new String[] { 
         MenuFactory.CONTROLLERS };
@@ -271,23 +273,25 @@ public final class MenuFactory {
 	}
 
 	/**
+	 * Create a menu from a menu category.
 	 * 
 	 * @param category - predefined string (used as key for menuMap HashMap and messages.properties lookup)
 	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
 	 *     @see org.apache.jmeter.gui.action.ActionNames
-	 * @return
+	 * @return the menu
 	 */
 	public static JMenu makeMenu(String category, String actionCommand) {
 		return makeMenu((Collection) menuMap.get(category), actionCommand, JMeterUtils.getResString(category));
 	}
 
 	/**
+	 * Create a menu from a collection of items.
 	 * 
 	 * @param menuInfo - collection of MenuInfo items
 	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
 	 *     @see org.apache.jmeter.gui.action.ActionNames
 	 * @param menuName
-	 * @return
+	 * @return the menu
 	 */
 	public static JMenu makeMenu(Collection menuInfo, String actionCommand, String menuName) {
 		Iterator iter = menuInfo.iterator();
@@ -306,12 +310,13 @@ public final class MenuFactory {
 	}
 
 	/**
+	 * Create a single menu item
 	 * 
 	 * @param label for the MenuItem
 	 * @param name for the MenuItem
 	 * @param actionCommand - predefined string, e.g. ActionNames.ADD
 	 *     @see org.apache.jmeter.gui.action.ActionNames
-	 * @return
+	 * @return the menu item
 	 */
 	public static JMenuItem makeMenuItem(String label, String name, String actionCommand) {
 		JMenuItem newMenuChoice = new JMenuItem(label);
