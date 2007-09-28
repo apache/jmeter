@@ -68,7 +68,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 		init();
 	}
 
-	public void initModel() {
+	private void initModel() {
 		MODEL = new MonitorAccumModel();
 		GRAPH = new MonitorGraph(MODEL);
 		MODEL.setBufferSize(JMeterUtils.getPropDefault(BUFFER, 800));
@@ -126,7 +126,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 		this.createTabs();
 	}
 
-	protected void createTabs() {
+	private void createTabs() {
 		TABPANE = new MonitorTabPane();
 		createHealthPane(TABPANE);
 		createPerformancePane(TABPANE);
@@ -138,7 +138,7 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	 * 
 	 * @param pane
 	 */
-	public void createHealthPane(MonitorTabPane pane) {
+	private void createHealthPane(MonitorTabPane pane) {
 		HEALTHPANE = new MonitorHealthPanel(MODEL);
 		pane.addTab(JMeterUtils.getResString("monitor_health_tab_title"), HEALTHPANE); // $NON-NLS-1$
 	}
@@ -148,17 +148,9 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 	 * 
 	 * @param pane
 	 */
-	public void createPerformancePane(MonitorTabPane pane) {
+	private void createPerformancePane(MonitorTabPane pane) {
 		PERFPANE = new MonitorPerformancePanel(MODEL, GRAPH);
 		pane.addTab(JMeterUtils.getResString("monitor_performance_tab_title"), PERFPANE); // $NON-NLS-1$
-	}
-
-	protected Container makeTitlePanel() {
-		VerticalPanel titlePanel = new VerticalPanel();
-		titlePanel.add(createTitleLabel());
-		titlePanel.add(getNamePanel());
-		titlePanel.add(getFilePanel());
-		return titlePanel;
 	}
 
 	/**
