@@ -21,20 +21,16 @@ package org.apache.jmeter.samplers.gui;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import org.apache.jmeter.gui.AbstractJMeterGuiComponent;
 import org.apache.jmeter.gui.util.MenuFactory;
-import org.apache.jmeter.visualizers.Printable;
 
 /**
  * This is the base class for JMeter GUI components which manage samplers.
  * 
- * @author Michael Stover
- * @version $Revision$
  */
-public abstract class AbstractSamplerGui extends AbstractJMeterGuiComponent implements Printable {
+public abstract class AbstractSamplerGui extends AbstractJMeterGuiComponent {
 	/**
 	 * When a user right-clicks on the component in the test tree, or selects
 	 * the edit menu when the component is selected, the component will be asked
@@ -61,15 +57,5 @@ public abstract class AbstractSamplerGui extends AbstractJMeterGuiComponent impl
 	 */
 	public Collection getMenuCategories() {
 		return Arrays.asList(new String[] { MenuFactory.SAMPLERS });
-	}
-
-	/**
-	 * Subclasses need to over this method, if they wish to return something
-	 * other than the Visualizer itself.
-	 * 
-	 * @return
-	 */
-	public JComponent getPrintableComponent() {
-		return this;
 	}
 }
