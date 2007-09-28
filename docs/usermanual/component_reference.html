@@ -595,7 +595,7 @@ https.default.protocol=SSLv3
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='558' height='600' src="../images/screenshots/webtest/http-request.png"></div>
+						<div align="center"><img width='688' height='592' src="../images/screenshots/webtest/http-request.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -690,6 +690,16 @@ https.default.protocol=SSLv3
 			<td>Use KeepAlive</td>
 			<td>						JMeter sets the Connection: keep-alive header. This does not work properly with the default HTTP implementation, as connection re-use is not under user-control. 
                   It does work with the Jakarta httpClient implementation.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Use multipart/form-data for HTTP POST</td>
+			<td>						
+        Use a multipart/form-data or application/x-www-form-urlencoded post request
+        
 			</td>
 			<td>
 											Yes
@@ -1775,7 +1785,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 						</p>
 									 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='594' height='309' src="../images/screenshots/ldapext_request.png"></div>
+						<div align="center"><img width='595' height='542' src="../images/screenshots/ldapext_request.png"></div>
 											  									 				<p	>
 								There are nine test operations defined. These operations are given below:
 						</p>
@@ -2632,7 +2642,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 									
 			
 												<li	>
-								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");
+								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
 						</li>
 									
 		
@@ -2837,7 +2847,7 @@ Before invoking the script, some variables are set up:
 									
 
 												<li	>
-								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3");
+								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());
 						</li>
 									
 
@@ -4499,6 +4509,16 @@ setting is reset when a parent Loop Controller restarts.
 								The If Controller allows the user to control whether the test elements below it (its children) are run or not.
 						</p>
 									
+		
+												<p	>
+								
+		Prior to JMeter 2.3RC3, the condition was evaluated for every runnable element contained in the controller.
+		This sometimes caused unexpected behaviour, so 2.3RC3 was changed to evaluate the condition only once on initial entry.
+		However, the original behaviour is also useful, so versions of JMeter after 2.3RC4 have an additional
+		option to select the original behaviour.
+		
+						</p>
+									
 	
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='358' height='131' src="../images/screenshots/ifcontroller.png"></div>
@@ -4525,6 +4545,17 @@ setting is reset when a parent Loop Controller restarts.
 											Yes
 								</td>
 		</tr>
+			<tr>
+			<td>Evaluate for all children</td>
+			<td>						
+	Should condition be evaluated for all children?
+	If not checked, then the condition is only evaluated on entry.
+	
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
 		</table>
 	</p>
 							  									 				<p	>
@@ -4544,7 +4575,7 @@ setting is reset when a parent Loop Controller restarts.
 									
 			
 												<li	>
-								"${JMeterThread.last_sample_ok}" == "true" (check if last sample succeeded)
+								${JMeterThread.last_sample_ok} (check if last sample succeeded)
 						</li>
 									
 		
@@ -5252,7 +5283,7 @@ They also provide means to view, save, and read saved test results.
 The saving and reading of test results is generic.  The various
 listeners have a panel whereby one can specify the file to
 which the results will be written (or read from).
-By default, the results are stored as CSV
+By default, the results are stored as XML
 files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).
 						</p>
 									
@@ -5266,10 +5297,10 @@ files, typically with a ".jtl" extension.  Storing as CSV is the most efficient 
 
 												<p	>
 								Results can be read from XML or CSV format files.
-When reading from CSV results files, the header (if present) is ignored.
+When reading from CSV results files, the header (if present) is used to determine which fields are present.
 
 												<b	>
-								In order to interpret a CSV file correctly, the appropriate properties must be set in jmeter.properties.
+								In order to interpret a header-less CSV file correctly, the appropriate properties must be set in jmeter.properties.
 						</b>
 									
 
@@ -5333,12 +5364,7 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 									
 
 												<p	>
-								jmeter.save.saveservice.output_format=csv
-						</p>
-									
-
-												<p	>
-								Change "csv" to "xml" for greater detail.
+								jmeter.save.saveservice.output_format=
 						</p>
 									
 
@@ -5353,8 +5379,7 @@ response time, message, and code, and a success indicator.  If checked, all info
 
 												<p	>
 								
-One can get a more selective set of information my modifying the
-jmeter.properties file.  The following example indicates how to set
+The following example indicates how to set
 properties to get a vertical bar ("|") delimited format that will
 output results like:.
 						</p>
@@ -5399,40 +5424,62 @@ misnomer in this case.
 
 												<pre	>
 								
-    #---------------------------------------------------------------------------
-    # Results file configuration
-    #---------------------------------------------------------------------------
-    
-    # This section helps determine how result data will be saved.
-    # The commented out values are the defaults.
-    
-    # legitimate values: xml, csv, db.  Only xml and csv are currently supported.
-    jmeter.save.saveservice.output_format=csv
-    
-    # true when field should be saved; false otherwise
-    
-    # assertion_results_failure_message only affects CSV output
-    jmeter.save.saveservice.assertion_results_failure_message=true
-    jmeter.save.saveservice.data_type=true
-    jmeter.save.saveservice.label=true
-    jmeter.save.saveservice.response_code=true
-    jmeter.save.saveservice.response_data=false
-    jmeter.save.saveservice.response_message=false
-    jmeter.save.saveservice.successful=true
-    jmeter.save.saveservice.thread_name=true
-    jmeter.save.saveservice.time=true
-    
-    # legitimate values: none, ms, or a format suitable for SimpleDateFormat
-    #jmeter.save.saveservice.timestamp_format=ms
-    jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
-    
-    # legitimate values: none, first, all
-    jmeter.save.saveservice.assertion_results=first
-    
-    # For use with Comma-separated value (CSV) files or other formats
-    # where the fields' values are separated by specified delimiters.
-    jmeter.save.saveservice.default_delimiter=|
-    jmeter.save.saveservice.print_field_names=true
+#---------------------------------------------------------------------------
+# Results file configuration
+#---------------------------------------------------------------------------
+
+# This section helps determine how result data will be saved.
+# The commented out values are the defaults.
+
+# legitimate values: xml, csv, db.  Only xml and csv are currently supported.
+#jmeter.save.saveservice.output_format=xml
+
+
+# true when field should be saved; false otherwise
+
+# assertion_results_failure_message only affects CSV output
+#jmeter.save.saveservice.assertion_results_failure_message=false
+#
+#jmeter.save.saveservice.data_type=true
+#jmeter.save.saveservice.label=true
+#jmeter.save.saveservice.response_code=true
+# response_data is not currently supported for CSV output
+#jmeter.save.saveservice.response_data=false
+# Save ResponseData for failed samples
+#jmeter.save.saveservice.response_data.on_error=false
+#jmeter.save.saveservice.response_message=true
+#jmeter.save.saveservice.successful=true
+#jmeter.save.saveservice.thread_name=true
+#jmeter.save.saveservice.time=true
+#jmeter.save.saveservice.subresults=true
+#jmeter.save.saveservice.assertions=true
+#jmeter.save.saveservice.latency=true
+#jmeter.save.saveservice.samplerData=false
+#jmeter.save.saveservice.responseHeaders=false
+#jmeter.save.saveservice.requestHeaders=false
+#jmeter.save.saveservice.encoding=false
+#jmeter.save.saveservice.bytes=true
+#jmeter.save.saveservice.url=false
+#jmeter.save.saveservice.filename=false
+#jmeter.save.saveservice.thread_counts=false
+#jmeter.save.saveservice.sample_count=false
+
+# Timestamp format
+# legitimate values: none, ms, or a format suitable for SimpleDateFormat
+#jmeter.save.saveservice.timestamp_format=ms
+#jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
+
+# Put the start time stamp in logs instead of the end
+sampleresult.timestamp.start=true
+
+
+# legitimate values: none, first, all
+#jmeter.save.saveservice.assertion_results=none
+
+# For use with Comma-separated value (CSV) files or other formats
+# where the fields' values are separated by specified delimiters.
+#jmeter.save.saveservice.default_delimiter=,
+#jmeter.save.saveservice.print_field_names=false
 
 						</pre>
 									
@@ -5507,7 +5554,27 @@ The defaults are defined as described in the previous section.
 								
 
 												<li	>
-								 t - elapsed time (ms)
+								by - bytes in responses
+						</li>
+									
+
+												<li	>
+								de - data encoding
+						</li>
+									
+
+												<li	>
+								dt - data type
+						</li>
+									
+
+												<li	>
+								ec - error count (0 or 1, unless multiple samples are aggregated)
+						</li>
+									
+
+												<li	>
+								lb - label
 						</li>
 									
 
@@ -5517,17 +5584,12 @@ The defaults are defined as described in the previous section.
 									
 
 												<li	>
-								ts - timestamp (ms since 1970)
+								na - number of active threads in all thread groups
 						</li>
 									
 
 												<li	>
-								 s - successful (true/false)
-						</li>
-									
-
-												<li	>
-								lb - label
+								ng - number of active threads in current thread group
 						</li>
 									
 
@@ -5542,17 +5604,27 @@ The defaults are defined as described in the previous section.
 									
 
 												<li	>
+								 s - successful (true/false)
+						</li>
+									
+
+												<li	>
+								sc - sample count (1, unless multiple samples are aggregated)
+						</li>
+									
+
+												<li	>
+								 t - elapsed time (ms)
+						</li>
+									
+
+												<li	>
 								tn - thread name
 						</li>
 									
 
 												<li	>
-								dt - data type
-						</li>
-									
-
-												<li	>
-								de - data encoding
+								ts - timestamp (ms since 1970)
 						</li>
 									
 
@@ -5560,7 +5632,7 @@ The defaults are defined as described in the previous section.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='767' height='252' src="../images/screenshots/sample_result_config.png"></div>
+						<div align="center"><img width='767' height='276' src="../images/screenshots/sample_result_config.png"></div>
 											  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
@@ -5867,14 +5939,13 @@ The remaining samples took longer than this.
 		  </font>
 		</td></tr>
 				<tr><td>
-		  															This visualizer creates a row for every sample result.  Each sample result's URL,
-time in milliseconds, success/failure is displayed.  Like the 
+		  															This visualizer creates a row for every sample result.  
+Like the 
 												<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
-									,
-this visualizer uses a lot of memory. The last column shows the number of bytes for the
-response from the server.
+									, this visualizer uses a lot of memory.
+
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='643' height='678' src="../images/screenshots/table_results.png"></div>
+						<div align="center"><img width='658' height='700' src="../images/screenshots/table_results.png"></div>
 											  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
@@ -5889,6 +5960,10 @@ response from the server.
 		  															This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.
+When running in non-GUI mode, the -l flag can be used to create a data file.
+The fields to save are defined by JMeter properties.
+See the jmeter.properties file for details.
+
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='649' height='157' src="../images/screenshots/simpledatawriter.png"></div>
 											  		</td></tr>
@@ -6224,7 +6299,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 												<li	>
-								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 						</li>
 									
 
@@ -6911,7 +6986,7 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='689' height='464' src="../images/screenshots/proxy_control.png"></div>
+						<div align="center"><img width='960' height='650' src="../images/screenshots/proxy_control.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -6927,38 +7002,6 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 			<tr>
 			<td>Port</td>
 			<td>						The port that the Proxy Server listens to.  8080 is the default, but you can change it.
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Capture HTTP Headers</td>
-			<td>						Should headers be added to the plan?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Set Keep-Alive</td>
-			<td>						Automatically set Keep-Alive in the generated samplers?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Add Assertions</td>
-			<td>						Add a blank assertion to each sampler?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Regex Matching</td>
-			<td>						Use Regex Matching when replacing variables?
 			</td>
 			<td>
 											Yes
@@ -7049,6 +7092,76 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 			</td>
 			<td>
 											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Capture HTTP Headers</td>
+			<td>						Should headers be added to the plan?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Add Assertions</td>
+			<td>						Add a blank assertion to each sampler?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Regex Matching</td>
+			<td>						Use Regex Matching when replacing variables?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Redirect Automatically</td>
+			<td>						Set Redirect Automatically in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Follow Redirects</td>
+			<td>						Set Follow Redirects in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Use Keep-Alive</td>
+			<td>						Set Use Keep-Alive in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Retrieve all Embedded Resources</td>
+			<td>						Set Retrieve all Embedded Resources in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Content Type filter</td>
+			<td>						
+		Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
+		The fields are regular expressions which are checked to see if they are contained in the content-type.
+		[Does not have to match the entire field].
+		The include filter is checked first, then the exclude filter.
+		Samples which are filtered out will not be stored.
+		
+			</td>
+			<td>
+											No
 								</td>
 		</tr>
 			<tr>
@@ -8598,7 +8711,7 @@ These are strings unless otherwise noted:
 									
 	
 												<li	>
-								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value");
+								vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.putObject("OBJ1",new Object());
 						</li>
 									
 
@@ -9373,7 +9486,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 												<li	>
-								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 						</li>
 									
 
@@ -10083,7 +10196,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 												<li	>
-								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 						</li>
 									
 
@@ -10819,7 +10932,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 												<li	>
-								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val)
+								vars - (JMeterVariables) - gives read/write access to variables: vars.get(key); vars.put(key,val); vars.putObject("OBJ1",new Object());
 						</li>
 									
 

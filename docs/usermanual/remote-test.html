@@ -433,12 +433,119 @@ $ SERVER_PORT=1664 jmeter-server [other options]
 In both cases, the script starts rmiregistry on the specified port, 
 and then starts JMeter in server mode, having defined the "server_port" property.
 
+
 						</p>
 							  									 				<p	>
 								
 The chosen port will be logged in the server jmeter.log file (rmiregistry does not create a log file).
 
 						</p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="batchmode"><strong>15.4 Using sample batching</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+Listeners in the test plan send their results back to the client JMeter which writes the results to the specified files
+By default, samples are sent back as they are generated. This can place a large load on the network and the JMeter client.
+There are some JMeter properties that can be set to alter this behaviour.
+
+						</p>
+							  									 				<ul	>
+								
+
+												<li	>
+								mode - sample sending mode - default is Standard
+						</li>
+									
+    
+												<ul	>
+								
+    
+												<li	>
+								Standard - send samples as soon as they are generated
+						</li>
+									
+    
+												<li	>
+								Hold - hold samples in an array until the end of a run. This may use a lot of memory on the server.
+						</li>
+									
+    
+												<li	>
+								Batch - send saved samples when either the count or time exceeds a threshold
+						</li>
+									
+    
+												<li	>
+								Statistical - send a summary sample when either the count or time exceeds a threshold. 
+    The samples are summarised by thread group name and sample label.
+    The following fields are accumulated:
+    
+												<ul	>
+								
+    
+												<li	>
+								elapsed time
+						</li>
+									
+    
+												<li	>
+								latency
+						</li>
+									
+    
+												<li	>
+								bytes
+						</li>
+									
+    
+												<li	>
+								sample count
+						</li>
+									
+    
+												<li	>
+								error count
+						</li>
+									
+    
+						</ul>
+									
+    Other fields that vary between samples are lost. 
+    
+						</li>
+									
+    
+						</ul>
+									
+
+						</ul>
+							  									 				<p	>
+								The following properties apply to the Batch and Statistical modes:
+						</p>
+							  									 				<ul	>
+								
+    
+												<li	>
+								num_sample_threshold - number of samples in a batch (default 100)
+						</li>
+									
+    
+												<li	>
+								time_threshold - number of milliseconds to wait (default 60 seconds)
+						</li>
+									
+    
+						</ul>
 							  		  </blockquote>
 		</td></tr>
 		<tr><td><br></td></tr>

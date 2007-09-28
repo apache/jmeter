@@ -2224,6 +2224,96 @@ time.YMD=yyMMdd
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__evalVar"><h3>19.5.20 __evalVar</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								The eval function returns the result of evaluating an expression stored in a variable.
+	
+						</p>
+									
+	
+												<p	>
+								
+	This allows one to read a string from a file, and process any variable references in it.
+	For example, if the variable "query" contains "select ${column} from ${table}" 
+	and "column" and "table" contain "name" and "customers", then ${__evalVar(query)}
+	will evaluate as "select name from customers". 
+	
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Variable name</td>
+			<td>						
+        The variable to be evaluated. 
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__eval"><h3>19.5.21 __eval</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+	
+												<p	>
+								The eval function returns the result of evaluating an expression.
+	
+						</p>
+									
+	
+												<p	>
+								
+	This allows one to interpolate variable and function references in a string.
+	For example, if "column" and "table" contain "name" and "customers", 
+	then ${__eval(select ${column} from ${table})}
+	will evaluate as "select name from customers". 
+	
+						</p>
+									
+	
+														  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Variable name</td>
+			<td>						
+        The variable to be evaluated. 
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
 							  		  </blockquote>
 		</td></tr>
 		<tr><td><br></td></tr>
