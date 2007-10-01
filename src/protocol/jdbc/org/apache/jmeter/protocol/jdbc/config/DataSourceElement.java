@@ -17,7 +17,10 @@
 package org.apache.jmeter.protocol.jdbc.config;
 
 import java.io.ObjectStreamException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
+import org.apache.avalon.excalibur.datasource.DataSourceComponent;
 import org.apache.avalon.excalibur.datasource.ResourceLimitingJdbcDataSource;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.LogKitLogger;
@@ -27,6 +30,7 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -110,6 +114,20 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 		getThreadContext().getVariables().putObject(getDataSource(), excaliburSource);
 	}
 
+	/*
+	 * Utility routine to get the connection from the pool.
+	 * Purpose:
+	 * - allows JDBCSampler to be entirely independent of the pooling classes
+	 * - allows the pool storage mechanism to be changed if necessary
+	 */
+	public static Connection getConnection(String poolName) throws SQLException{
+		DataSourceComponent pool = (DataSourceComponent) 
+		    JMeterContextService.getContext().getVariables().getObject(poolName);
+		if (pool == null) {
+			throw new SQLException("No pool found named: '" + poolName + "'");
+		}
+		return pool.getConnection();
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
