@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.avalon.excalibur.datasource.DataSourceComponent;
+import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -138,19 +138,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 
 		res.sampleStart();
-		DataSourceComponent pool = (DataSourceComponent) getThreadContext().getVariables().getObject(getDataSource());
-		log.debug("DataSourceComponent: " + pool);
 		Connection conn = null;
 		Statement stmt = null;
 
 		try {
 
-			if (pool == null)
-				throw new SQLException("No pool created");
-
-			// TODO: Consider creating a sub-result with the time to get the
-			// connection.
-			conn = pool.getConnection();
+			// TODO: Consider creating a sub-result with the time to get the connection.
+			conn = DataSourceElement.getConnection(getDataSource());
 
             // Based on query return value, get results
             String _queryType = getQueryType();
