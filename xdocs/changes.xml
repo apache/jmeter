@@ -32,6 +32,7 @@
 <h4>Bug fixes</h4>
 <ul>
 <li>Bug 43430 - Count of active threads is incorrect for remote samples</li>
+<li>Throughput Controller was not working for "all thread" counts</li>
 </ul>
 
 <h4>Improvements</h4>
