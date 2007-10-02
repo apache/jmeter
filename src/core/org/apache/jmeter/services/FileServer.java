@@ -72,6 +72,7 @@ public class FileServer {
 
 	private FileServer() {
 		base = new File(DEFAULT_BASE);
+		log.info("Default base="+base.getPath());
 	}
 
 	public static FileServer getFileServer() {
@@ -92,6 +93,7 @@ public class FileServer {
 			if (!base.isDirectory()) {
 				base = base.getParentFile();
 			}
+			log.info("Set new base="+base.getPath());
 		}
 	}
 
