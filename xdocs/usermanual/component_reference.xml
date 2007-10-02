@@ -2095,7 +2095,7 @@ the Report.
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="Filename" required="Yes">Name of the file to be read. 
-  Relative file names are resolved with respect to the current test plan.
+  <b>Relative file names are resolved with respect to the path of the active test plan.</b>
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
   </property>
