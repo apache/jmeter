@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.control;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import org.apache.jmeter.engine.event.LoopIterationEvent;
@@ -32,12 +31,13 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 /**
- * This class represents a controller that can controll the number of times that
+ * This class represents a controller that can control the number of times that
  * it is executed, either by the total number of times the user wants the
  * controller executed (BYNUMBER) or by the percentage of time it is called
  * (BYPERCENT)
  * 
- * @author Thad Smith
+ * The current implementation executes the first N samples (BYNUMBER)
+ * or the last N% of samples (BYPERCENT).
  */
 public class ThroughputController extends GenericController implements Serializable, LoopIterationListener,
 		TestListener {
@@ -54,11 +54,11 @@ public class ThroughputController extends GenericController implements Serializa
 
 	private static final String PERCENTTHROUGHPUT = "ThroughputController.percentThroughput";// $NON-NLS-1$
 
-	private int globalNumExecutions;
+	private static int globalNumExecutions;
 
-	private int globalIteration;
+	private static int globalIteration;
 
-	private transient Object counterLock;
+	private static Object counterLock; // ensure counts are updated correctly
 
 	/**
 	 * Number of iterations on which we've chosen to deliver samplers.
@@ -76,9 +76,6 @@ public class ThroughputController extends GenericController implements Serializa
 	private boolean runThisTime;
 
 	public ThroughputController() {
-		globalNumExecutions = 0;
-		globalIteration = -1;
-		counterLock = new Object();
 		setStyle(BYNUMBER);
 		setPerThread(true);
 		setMaxThroughput(1);
@@ -154,40 +151,11 @@ public class ThroughputController extends GenericController implements Serializa
 		return retVal;
 	}
 
-	protected void setExecutions(int executions) {
-		if (!isPerThread()) {
-			globalNumExecutions = executions;
-		}
-		this.numExecutions = executions;
-	}
-
-	protected int getExecutions() {
+	private int getExecutions() {
 		if (!isPerThread()) {
 			return globalNumExecutions;
 		}
 		return numExecutions;
-	}
-
-	private void increaseExecutions() {
-		setExecutions(getExecutions() + 1);
-	}
-
-	protected void setIteration(int iteration) {
-		if (!isPerThread()) {
-			globalIteration = iteration;
-		}
-		this.iteration = iteration;
-	}
-
-	protected int getIteration() {
-		if (!isPerThread()) {
-			return globalIteration;
-		}
-		return iteration;
-	}
-
-	private void increaseIteration() {
-		setIteration(getIteration() + 1);
 	}
 
 	/**
@@ -203,11 +171,7 @@ public class ThroughputController extends GenericController implements Serializa
 	/**
 	 * Decide whether to return any samplers on this iteration.
 	 */
-	private boolean decide() {
-		int executions, iterations;
-
-		executions = getExecutions();
-		iterations = getIteration();
+	private boolean decide(int executions, int iterations) {
 		if (getStyle() == BYNUMBER) {
 			return executions < getMaxThroughputAsInt();
 		}
@@ -232,78 +196,42 @@ public class ThroughputController extends GenericController implements Serializa
 		ThroughputController clone = (ThroughputController) super.clone();
 		clone.numExecutions = numExecutions;
 		clone.iteration = iteration;
-		clone.globalNumExecutions = globalNumExecutions;
-		clone.globalIteration = globalIteration;
-		clone.counterLock = counterLock;
 		clone.runThisTime = false;
 		return clone;
 	}
 
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		counterLock = new Object();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see LoopIterationListener#iterationStart(LoopIterationEvent)
-	 */
 	public void iterationStart(LoopIterationEvent iterEvent) {
 		if (!isPerThread()) {
 			synchronized (counterLock) {
-				increaseIteration();
-				runThisTime = decide();
+				globalIteration++;
+				runThisTime = decide(globalNumExecutions, globalIteration);
 				if (runThisTime)
-					increaseExecutions();
+					globalNumExecutions++;
 			}
 		} else {
-			increaseIteration();
-			runThisTime = decide();
+			iteration++;
+			runThisTime = decide(numExecutions, iteration);
 			if (runThisTime)
-				increaseExecutions();
+				numExecutions++;
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
-	 */
 	public void testStarted() {
-		setExecutions(0);
-		setIteration(-1);
+		globalNumExecutions = 0;
+		globalIteration = -1;
+		counterLock = new Object();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
-	 */
+	public void testStarted(String host) {
+		testStarted();
+	}
+
 	public void testEnded() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestListener#testStarted(String)
-	 */
-	public void testStarted(String host) {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestListener#testEnded(String)
-	 */
 	public void testEnded(String host) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see TestListener#testIterationStart(LoopIterationEvent)
-	 */
 	public void testIterationStart(LoopIterationEvent event) {
 	}
 }
