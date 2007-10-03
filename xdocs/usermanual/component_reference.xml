@@ -2281,7 +2281,7 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
            </ul>
            The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
            to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
-           If you are using grouping, pleas ensure that you leave the required gap between clicks.
+           If you are using grouping, please ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
 		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
@@ -2312,16 +2312,20 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
   useful when you change/add/delete an include/exclude filter expression.</property>
 </properties>
 
-<p>To add an entry to the Include or Exclude field, type the entry into the text field, and hit &quot;Enter&quot; when done.
-The text will be added to the List box to the right of the text field.  To clear the text field, hit the &quot;clear&quot;
-button.  Currently, there is no way to individually select items and delete them.</p>
-
-<p>These entries will be treated as Perl-type regular expressions.  They will be matched against the host name + the path of
-each browser request.  Thus, if the URL you are browsing is <b>http://jakarta.apache.org/jmeter/index.html?username=xxxx</b>,
+<p>These entries will be treated as regular expressions (using Jakarta ORO).
+They will be matched against the host name + the path of each browser request.
+If the URL you are browsing is <b>http://jakarta.apache.org/jmeter/index.html?username=xxxx</b>,
 then the regular expression will be tested against the string: <b>&quot;jakarta.apache.org/jmeter/index.html&quot;</b>.  Thus,
-if you wanted to include all .html files, you're regular expression might look like: <b>&quot;.*\.html&quot;</b>.  Using a
-combination of includes and excludes, you should be able to record what you are interested in and skip what you are
-not.</p>
+if you want to include all .html files, your regular expression might look like: <b>&quot;.*\.html&quot;</b>.
+</p>
+<p>
+If there are any include patterns, then the URL <b>must match at least one</b> of the patterns
+, otherwise it will not be recorded.
+If there are any exclude patterns, then the URL <b>must not match any</b> of the patterns
+, otherwise it will not be recorded.
+Using a combination of includes and excludes,
+you should be able to record what you are interested in and skip what you are not.
+</p>
 
 <p>
 N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
