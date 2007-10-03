@@ -137,6 +137,19 @@ public class Functor {
 	}
 
 	/**
+	 * Create a functor with the class, method name, and argument class types.
+	 *
+     * Subsequent invoke() calls must provide the appropriate ivokee object.
+     *
+	 * @param _clazz the class in which to find the method
+	 * @param _methodName method name
+	 * @param types
+	 */
+	public Functor(Class _clazz, String _methodName, Class[] types) {
+		this(_clazz, null, _methodName, null, types);
+	}
+
+	/**
 	 * Create a functor with just the method name.
 	 * 
 	 * The invokee and any parameters must be provided in all invoke() calls.
@@ -232,6 +245,7 @@ public class Functor {
 		try {
 			Method method = doCreateMethod(_class , argTypes);
 			if (method == null){
+				log.error("Can't find method "+_class+typesToString(argTypes));
 				throw new JMeterError("Can't find method "+_class+typesToString(argTypes));
 			}
 			return method.invoke(_invokee, _args);
@@ -330,9 +344,11 @@ public class Functor {
 						}
 					}
 					Class parent = p_types[i].getSuperclass();
-					methodToInvoke = doCreateMethod(p_class,getNewArray(i, parent, p_types));
-					if (methodToInvoke != null) {
-						return methodToInvoke;
+					if (parent != null) {
+						methodToInvoke = doCreateMethod(p_class,getNewArray(i, parent, p_types));
+						if (methodToInvoke != null) {
+							return methodToInvoke;
+						}
 					}
 				}
 			}
