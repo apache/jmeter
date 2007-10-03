@@ -28,8 +28,6 @@ import org.apache.jmeter.testelement.TestElement;
  * controller executed (BYNUMBER) or by the percentage of time it is called
  * (BYPERCENT)
  * 
- * @author Thad Smith
- * @version $Revision$
  */
 public class TestThroughputController extends JMeterTestCase {
 		public TestThroughputController(String name) {
@@ -65,8 +63,7 @@ public class TestThroughputController extends JMeterTestCase {
 			for (int counter = 0; counter < order.length; counter++) {
 				TestElement sampler = test.next();
 				assertNotNull(sampler);
-				assertEquals("Counter: " + counter + ", executions: " + sub_1.getExecutions() + ", iteration: "
-						+ sub_1.getIteration(), order[counter], sampler.getPropertyAsString(TestElement.NAME));
+				assertEquals("Counter: " + counter, order[counter], sampler.getPropertyAsString(TestElement.NAME));
 			}
 			assertNull(test.next());
 			sub_1.testEnded();
