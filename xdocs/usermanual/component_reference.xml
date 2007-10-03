@@ -3542,6 +3542,15 @@ This is useful for checking the content of HTTP requests.
 </description>
 </component>
 
+<component name="Property Display" index="&sect-num;.9.6"  width="776" height="502" screenshot="property_display.png">
+<description>
+<p>
+The Property Display shows the values of System or JMeter properties.
+Values can be changed by entering new text in the Value column.
+</p>
+</description>
+</component>
+
 <a href="#">^</a>
 
 </section>
