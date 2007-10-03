@@ -140,12 +140,12 @@
 								
 
 												<li	>
-								SaveService no longer needs to instantiate classes
+								Bug 43430 - Count of active threads is incorrect for remote samples
 						</li>
 									
 
 												<li	>
-								Bug 43430 - Count of active threads is incorrect for remote samples
+								Throughput Controller was not working for "all thread" counts
 						</li>
 									
 
@@ -177,7 +177,34 @@
 									
 
 												<li	>
+								SaveService no longer needs to instantiate classes
+						</li>
+									
+
+												<li	>
 								New functions: __eval() and __evalVar()
+						</li>
+									
+
+												<li	>
+								Menu items now appear in execution order
+						</li>
+									
+
+												<li	>
+								Test Plan items can now only be dropped/pasted into parts of the tree where they are allowed
+						</li>
+									
+
+						</ul>
+							  									 				<h4	>
+								Non-functional Improvements
+						</h4>
+							  									 				<ul	>
+								
+
+												<li	>
+								Functor code tightened up; Functor can now be used with interfaces, as well as pre-defined targets and parameters.
 						</li>
 									
 
@@ -2886,6 +2913,7 @@ More work is needed to be able to control this from the GUI
 												<li	>
 								Extra Proxy Server options: 
 Create all samplers with keep-alive disabled 
+
 Add Separator markers between sets of samples 
 Add Response Assertion to first sampler in each set 
 						</li>

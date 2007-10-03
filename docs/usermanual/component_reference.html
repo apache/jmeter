@@ -251,6 +251,7 @@
 					<li><a href="#WorkBench">WorkBench</a></li>
 					<li><a href="#SSL_Manager">SSL Manager</a></li>
 					<li><a href="#HTTP_Mirror_Server">HTTP Mirror Server</a></li>
+					<li><a href="#Property_Display">Property Display</a></li>
 				</ul>
 			<li><a href="#Reports">18.10 Reports</a></li>
 		<ul>
@@ -6540,7 +6541,11 @@ the Report.
 			<tr>
 			<td>Filename</td>
 			<td>						Name of the file to be read. 
-  Relative file names are resolved with respect to the current test plan.
+  
+												<b	>
+								Relative file names are resolved with respect to the path of the active test plan.
+						</b>
+									
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
   
@@ -7087,7 +7092,7 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 						</b>
 									 determines the minimum gap that JMeter needs between requests
            to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
-           If you are using grouping, pleas ensure that you leave the required gap between clicks.
+           If you are using grouping, please ensure that you leave the required gap between clicks.
         
 			</td>
 			<td>
@@ -7113,6 +7118,14 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 			<tr>
 			<td>Regex Matching</td>
 			<td>						Use Regex Matching when replacing variables?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Type</td>
+			<td>						Which type of sampler to generate (the Java default or HTTPClient)
 			</td>
 			<td>
 											Yes
@@ -7229,13 +7242,9 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 		</table>
 	</p>
 							  									 				<p	>
-								To add an entry to the Include or Exclude field, type the entry into the text field, and hit "Enter" when done.
-The text will be added to the List box to the right of the text field.  To clear the text field, hit the "clear"
-button.  Currently, there is no way to individually select items and delete them.
-						</p>
-							  									 				<p	>
-								These entries will be treated as Perl-type regular expressions.  They will be matched against the host name + the path of
-each browser request.  Thus, if the URL you are browsing is 
+								These entries will be treated as regular expressions (using Jakarta ORO).
+They will be matched against the host name + the path of each browser request.
+If the URL you are browsing is 
 												<b	>
 								http://jakarta.apache.org/jmeter/index.html?username=xxxx
 						</b>
@@ -7245,13 +7254,30 @@ then the regular expression will be tested against the string:
 								"jakarta.apache.org/jmeter/index.html"
 						</b>
 									.  Thus,
-if you wanted to include all .html files, you're regular expression might look like: 
+if you want to include all .html files, your regular expression might look like: 
 												<b	>
 								".*\.html"
 						</b>
-									.  Using a
-combination of includes and excludes, you should be able to record what you are interested in and skip what you are
-not.
+									.
+
+						</p>
+							  									 				<p	>
+								
+If there are any include patterns, then the URL 
+												<b	>
+								must match at least one
+						</b>
+									 of the patterns
+, otherwise it will not be recorded.
+If there are any exclude patterns, then the URL 
+												<b	>
+								must not match any
+						</b>
+									 of the patterns
+, otherwise it will not be recorded.
+Using a combination of includes and excludes,
+you should be able to record what you are interested in and skip what you are not.
+
 						</p>
 							  									 				<p	>
 								
@@ -11242,6 +11268,29 @@ This is useful for checking the content of HTTP requests.
 
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='303' height='139' src="../images/screenshots/mirrorserver.png"></div>
+											  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="Property_Display"><h3>18.9.6 Property Display</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The Property Display shows the values of System or JMeter properties.
+Values can be changed by entering new text in the Value column.
+
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='776' height='502' src="../images/screenshots/property_display.png"></div>
 											  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
