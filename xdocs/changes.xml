@@ -47,6 +47,11 @@
 <li>Test Plan items can now only be dropped/pasted into parts of the tree where they are allowed</li>
 </ul>
 
+<h4>Non-functional Improvements</h4>
+<ul>
+<li>Functor code tightened up; Functor can now be used with interfaces, as well as pre-defined targets and parameters.</li>
+</ul>
+
 <!--  ===================  -->
 
 <h3>Version 2.3</h3>
