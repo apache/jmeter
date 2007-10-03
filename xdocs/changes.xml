@@ -45,6 +45,7 @@
 <li>New functions: __eval() and __evalVar()</li>
 <li>Menu items now appear in execution order</li>
 <li>Test Plan items can now only be dropped/pasted into parts of the tree where they are allowed</li>
+<li>Property Display to show the value of System and JMeter properties and allow them to be changed</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
