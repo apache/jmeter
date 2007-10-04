@@ -1005,7 +1005,9 @@ JMeter 2.1.2 introduces the a new property
 			<td>						
         SQL query.
         Do not enter a trailing semi-colon.
-        There is no need to use { and } to enclose Callable statements.
+        There is generally no need to use { and } to enclose Callable statements;
+        however they mey be used if the database uses a non-standard syntax.
+        [The JDBC driver automatically converts the statement if necessary when it is enclosed in {}].
         For example:
         
 												<ul	>
@@ -1067,6 +1069,9 @@ JMeter 2.1.2 introduces the a new property
 			<td>Parameter types</td>
 			<td>						
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
+        appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".
+        If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         
 												<br	>
 						</br>
