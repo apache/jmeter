@@ -66,9 +66,15 @@ public final class ActionRouter implements ActionListener {
 	}
 
 	private void performAction(final ActionEvent e) {
+		String actionCommand = e.getActionCommand();
 		try {
-			GuiPackage.getInstance().updateCurrentGui();
-			Set commandObjects = (Set) commands.get(e.getActionCommand());
+			try {
+			    GuiPackage.getInstance().updateCurrentGui();
+			} catch (Exception err){
+				log.error("performAction(" + actionCommand + ") updateCurrentGui() on" + e.toString() + " caused", err);				
+				JMeterUtils.reportErrorToUser("Problem updating GUI - see log file for details");
+			}
+			Set commandObjects = (Set) commands.get(actionCommand);
 			Iterator iter = commandObjects.iterator();
 			while (iter.hasNext()) {
 				try {
@@ -83,8 +89,8 @@ public final class ActionRouter implements ActionListener {
 				}
 			}
 		} catch (NullPointerException er) {
-			log.error("performAction(" + e.getActionCommand() + ") " + e.toString() + " caused", er);
-			JMeterUtils.reportErrorToUser("Sorry, this feature (" + e.getActionCommand() + ") not yet implemented");
+			log.error("performAction(" + actionCommand + ") " + e.toString() + " caused", er);
+			JMeterUtils.reportErrorToUser("Sorry, this feature (" + actionCommand + ") not yet implemented");
 		}
 	}
 
