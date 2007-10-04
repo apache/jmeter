@@ -3229,13 +3229,14 @@ See the file BeanShellListeners.bshrc for example definitions.
 		is applied only to a particular sampler, add it as a child of the sampler.
 	<br></br>
 	</description>
-<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="395" height="241" screenshot="regex_extractor.png">
+<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="494" height="257" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
-this element will execute after each Sample request in its <scope/>, applying the regular expression, extracting the requested values,
+this element will execute after each Sample request in its scope, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Response Field to check" required="yes">Body or Headers. These refer to the Sampler Response. Headers can be useful for HTTP samples; it may not be present for other sample types.</property>
+        <property name="Response Field to check" required="yes">Body, Headers, URL, Response Code, Response Message.
+        These refer to the Sampler Response. Headers can be useful for HTTP samples; it may not be present for other sample types.</property>
         <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.  Also note that each group is stored as [refname]_g#, where [refname] is the string you entered as the reference name, and # is the group number, where group 0 is the entire match, group 1 is the match from the first set of parentheses, etc.</property>
         <property name="Regular Expression" required="Yes">The regular expression used to parse the response data. 
         This must contain at least one set of parentheses "()" to capture a portion of the string, unless using the group $0$.

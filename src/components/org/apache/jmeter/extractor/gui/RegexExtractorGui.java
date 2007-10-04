@@ -56,6 +56,10 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     
     private JRadioButton useURL;
 
+    private JRadioButton useCode;
+
+    private JRadioButton useMessage;
+
 	private ButtonGroup group;
 
 	public RegexExtractorGui() {
@@ -74,6 +78,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 			useHeaders.setSelected(re.useHeaders());
 			useBody.setSelected(re.useBody());
 	        useURL.setSelected(re.useUrl());
+	        useCode.setSelected(re.useCode());
+	        useMessage.setSelected(re.useMessage());
 			regexField.setText(re.getRegex());
 			templateField.setText(re.getTemplate());
 			defaultField.setText(re.getDefaultValue());
@@ -116,8 +122,6 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         super.clearGui();
         
         useBody.setSelected(true);
-        useHeaders.setSelected(false);
-        useURL.setSelected(false);
         
         regexField.setText(""); //$NON-NLS-1$
         templateField.setText(""); //$NON-NLS-1$
@@ -144,15 +148,21 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 		useBody = new JRadioButton(JMeterUtils.getResString("regex_src_body")); //$NON-NLS-1$
 		useHeaders = new JRadioButton(JMeterUtils.getResString("regex_src_hdrs")); //$NON-NLS-1$
         useURL = new JRadioButton(JMeterUtils.getResString("regex_src_url")); //$NON-NLS-1$
+        useCode = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
+        useMessage = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
 
 		group = new ButtonGroup();
 		group.add(useBody);
 		group.add(useHeaders);
         group.add(useURL);
+        group.add(useCode);
+        group.add(useMessage);
 
 		panel.add(useBody);
 		panel.add(useHeaders);
         panel.add(useURL);
+        panel.add(useCode);
+        panel.add(useMessage);
 
 		useBody.setSelected(true);
 		
@@ -160,6 +170,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
 		useBody.setActionCommand(RegexExtractor.USE_BODY);
 		useHeaders.setActionCommand(RegexExtractor.USE_HDRS);
 		useURL.setActionCommand(RegexExtractor.USE_URL);
+		useCode.setActionCommand(RegexExtractor.USE_CODE);
+		useMessage.setActionCommand(RegexExtractor.USE_MESSAGE);
 		
 		return panel;
 	}
