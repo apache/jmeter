@@ -19,17 +19,20 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 
 /**
@@ -99,6 +102,17 @@ public class SaveGraphics implements Command {
         // the file extension.
         filename = chooser.getSelectedFile().getAbsolutePath();
         if (filename != null) {
+			File f = new File(filename);
+			if(f.exists()) {
+				int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), 
+						JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+						JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+					return ; // Do not save, user does not want to overwrite
+				}
+			}
             SaveGraphicsService save = new SaveGraphicsService();
             String ext = filename.substring(filename.length() - 4);
             String name = filename.substring(0, filename.length() - 4);
