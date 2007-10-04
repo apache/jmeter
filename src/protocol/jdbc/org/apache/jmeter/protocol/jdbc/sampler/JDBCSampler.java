@@ -26,10 +26,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
@@ -47,6 +49,10 @@ import org.apache.log.Logger;
  * 
  */
 public class JDBCSampler extends AbstractSampler implements TestBean {
+	private static final String INOUT = "INOUT";
+
+	private static final String OUT = "OUT";
+
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// This value is used for both the connection (perConnCache) and statement (preparedStatementMap) caches.
@@ -160,11 +166,11 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 				}
             } else if (CALLABLE.equals(_queryType)) {
             	CallableStatement cstmt = getCallableStatement(conn);
-            	setArguments(cstmt);
+            	int out[]=setArguments(cstmt);
             	// A CallableStatement can return more than 1 ResultSets
             	// plus a number of update counts. 
             	boolean hasResultSet = cstmt.execute();
-            	String sb = resultSetsToString(cstmt,hasResultSet);
+            	String sb = resultSetsToString(cstmt,hasResultSet, out);
             	res.setResponseData(sb.toString().getBytes());       	
             } else if (UPDATE.equals(_queryType)) {
             	stmt = conn.createStatement();
@@ -176,13 +182,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             	PreparedStatement pstmt = getPreparedStatement(conn);
             	setArguments(pstmt);
             	pstmt.executeQuery();
-            	String sb = resultSetsToString(pstmt,true);
+            	String sb = resultSetsToString(pstmt,true,null);
             	res.setResponseData(sb.toString().getBytes());
             } else if (PREPARED_UPDATE.equals(_queryType)) {
             	PreparedStatement pstmt = getPreparedStatement(conn);
             	setArguments(pstmt);
             	pstmt.executeUpdate();
-				String sb = resultSetsToString(pstmt,false);
+				String sb = resultSetsToString(pstmt,false,null);
             	res.setResponseData(sb.toString().getBytes());
             } else if (ROLLBACK.equals(_queryType)){
             	conn.rollback();
@@ -220,7 +226,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 		return res;
 	}
 
-	private String resultSetsToString(PreparedStatement pstmt, boolean result) throws SQLException {
+	private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\n"); // $NON-NLS-1$
 		int updateCount = 0;
@@ -245,33 +251,63 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 				updateCount = pstmt.getUpdateCount();
 			}
 		} while (result || (updateCount != -1));
+		if (out!=null && pstmt instanceof CallableStatement){
+			CallableStatement cs = (CallableStatement) pstmt;
+			sb.append("Output variables by position:\n");
+			for(int i=0; i < out.length; i++){
+				if (out[i]!=java.sql.Types.NULL){
+					sb.append("[");
+					sb.append(i+1);
+					sb.append("] ");
+					sb.append(cs.getObject(i+1));
+					sb.append("\n");
+				}
+			}
+		}
 		return sb.toString();
 	}
 
 
-	private void setArguments(PreparedStatement pstmt) throws SQLException {
+	private int[] setArguments(PreparedStatement pstmt) throws SQLException {
 		if (getQueryArguments().trim().length()==0) {
-			return;
+			return new int[]{};
 		}
 		String[] arguments = getQueryArguments().split(","); // $NON-NLS-1$
 		String[] argumentsTypes = getQueryArgumentsTypes().split(","); // $NON-NLS-1$
 		if (arguments.length != argumentsTypes.length) {
 			throw new SQLException("number of arguments ("+arguments.length+") and number of types ("+argumentsTypes.length+") are not equal");
 		}
+		int[] outputs= new int[arguments.length];
 		for (int i = 0; i < arguments.length; i++) {
 			String argument = arguments[i];
 			String argumentType = argumentsTypes[i];
+			String[] arg = argumentType.split(" ");
+			String inputOutput="";
+			if (arg.length > 1) {
+				argumentType = arg[1];
+				inputOutput=arg[0];
+			}
 		    int targetSqlType = getJdbcType(argumentType);
 		    try {
-		    	if (argument.equals(NULL_MARKER)){
-		    		pstmt.setNull(i+1, targetSqlType);
+		    	if (!OUT.equalsIgnoreCase(inputOutput)){
+			    	if (argument.equals(NULL_MARKER)){
+			    		pstmt.setNull(i+1, targetSqlType);
+			    	} else {
+			    		pstmt.setObject(i+1, argument, targetSqlType);
+			    	}
+		    	}
+		    	if (OUT.equalsIgnoreCase(inputOutput)||INOUT.equalsIgnoreCase(inputOutput)) {
+		    		CallableStatement cs = (CallableStatement) pstmt;
+		    		cs.registerOutParameter(i+1, targetSqlType);
+		    		outputs[i]=targetSqlType;
 		    	} else {
-		    		pstmt.setObject(i+1, argument, targetSqlType);
+		    		outputs[i]=java.sql.Types.NULL; // can't have an output parameter type null
 		    	}
 			} catch (NullPointerException e) { // thrown by Derby JDBC (at least) if there are no "?" markers in statement
 				throw new SQLException("Could not set argument no: "+(i+1)+" - missing parameter marker?");
 			}
 		}
+		return outputs;
 	}
     
     
