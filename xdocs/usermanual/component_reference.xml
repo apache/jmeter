@@ -281,7 +281,9 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
         <property name="SQL Query" required="Yes">
         SQL query.
         Do not enter a trailing semi-colon.
-        There is no need to use { and } to enclose Callable statements.
+        There is generally no need to use { and } to enclose Callable statements;
+        however they mey be used if the database uses a non-standard syntax.
+        [The JDBC driver automatically converts the statement if necessary when it is enclosed in {}].
         For example:
         <ul>
         <li>select * from t_customers where id=23</li>
@@ -302,6 +304,9 @@ JMeter 2.1.2 introduces the a new property <b>HTTPResponse.parsers</b>, which is
         </property>
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. INTEGER, DATE, VARCHAR, DOUBLE).
+        If the callable statement has INOUT or OUT parameters, then these must be indicated by prefixing the
+        appropriate parameter types, e.g. instead of "INTEGER", use "INOUT INTEGER".
+        If not specified, "IN" is assumed, i.e. "DATE" is the same as "IN DATE".
         <br></br>
         There must be as many values as there are placeholders in the statement.
         </property>
