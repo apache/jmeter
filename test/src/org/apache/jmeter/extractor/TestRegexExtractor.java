@@ -60,6 +60,8 @@ public class TestRegexExtractor extends TestCase {
 					+ "</row>" + "</company-xmlext-query-ret>";
 			result.setResponseData(data.getBytes());
 			result.setResponseHeaders("Header1: Value1\nHeader2: Value2");
+			result.setResponseCode("abcd");
+			result.setResponseMessage("The quick brown fox");
 			vars = new JMeterVariables();
 			jmctx.setVariables(vars);
 			jmctx.setPreviousResult(result);
@@ -211,6 +213,29 @@ public class TestRegexExtractor extends TestCase {
 			result.setURL(new URL("http://jakarta.apache.org/index.html?abcd"));
 			extractor.process();
 			assertEquals("index",vars.get("regVal"));
+		}
+
+		public void testVariableExtraction9() throws Exception {
+			extractor.setRegex("(\\w+)");
+			extractor.setTemplate("$1$");
+			extractor.setMatchNumber(1);
+			extractor.setUseField(RegexExtractor.USE_CODE);
+			assertFalse("useHdrs should be false", extractor.useHeaders());
+			assertFalse("useBody should be false", extractor.useBody());
+			assertFalse("useURL should be false", extractor.useUrl());
+			assertFalse("useMessage should be false", extractor.useMessage());
+			assertTrue("useCode should be true", extractor.useCode());
+			extractor.process();
+			assertEquals("abcd",vars.get("regVal"));
+			extractor.setUseField(RegexExtractor.USE_MESSAGE);
+			assertFalse("useHdrs should be false", extractor.useHeaders());
+			assertFalse("useBody should be false", extractor.useBody());
+			assertFalse("useURL should be false", extractor.useUrl());
+			assertTrue("useMessage should be true", extractor.useMessage());
+			assertFalse("useCode should be falsee", extractor.useCode());
+			extractor.setMatchNumber(3);
+			extractor.process();
+			assertEquals("brown",vars.get("regVal"));
 		}
 
         public void testNoDefault() throws Exception {
