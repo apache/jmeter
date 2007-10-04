@@ -63,6 +63,9 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 	public static final String USE_HDRS = "true"; // $NON-NLS-1$
 	public static final String USE_BODY = "false"; // $NON-NLS-1$
     public static final String USE_URL = "URL"; // $NON-NLS-1$
+	public static final String USE_CODE = "code"; // $NON-NLS-1$
+	public static final String USE_MESSAGE = "message"; // $NON-NLS-1$
+
 
 	private static final String REGEX = "RegexExtractor.regex"; // $NON-NLS-1$
 
@@ -108,9 +111,10 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
 		Perl5Matcher matcher = JMeterUtils.getMatcher();
 		String inputString = 
-			useUrl() ? previousResult.getUrlAsString() // Bug 39707 
-			:
-			useHeaders() ? previousResult.getResponseHeaders()
+			  useUrl() ? previousResult.getUrlAsString() // Bug 39707 
+			: useHeaders() ? previousResult.getResponseHeaders()
+			: useCode() ? previousResult.getResponseCode() //Bug 43451
+			: useMessage() ? previousResult.getResponseMessage() //Bug 43451
 		    : previousResult.getResponseDataAsString() // Bug 36898
 		    ; 
    		if (log.isDebugEnabled()) {
@@ -360,14 +364,25 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 
 	// Allow for property not yet being set (probably only applies to Test cases)
 	public boolean useBody() {
-    	String body = getPropertyAsString(MATCH_AGAINST);
-        return body.length()==0 || USE_BODY.equalsIgnoreCase(body);// $NON-NLS-1$
+    	String prop = getPropertyAsString(MATCH_AGAINST);
+        return prop.length()==0 || USE_BODY.equalsIgnoreCase(prop);// $NON-NLS-1$
     }
 
 	public boolean useUrl() {
-    	String body = getPropertyAsString(MATCH_AGAINST);
-        return USE_URL.equalsIgnoreCase(body);
+    	String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_URL.equalsIgnoreCase(prop);
     }
+
+	public boolean useCode() {
+    	String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_CODE.equalsIgnoreCase(prop);
+	}
+
+	public boolean useMessage() {
+    	String prop = getPropertyAsString(MATCH_AGAINST);
+        return USE_MESSAGE.equalsIgnoreCase(prop);
+	}
+
 	public void setUseField(String actionCommand) {
 		setProperty(MATCH_AGAINST,actionCommand);
 	}

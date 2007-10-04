@@ -10295,13 +10295,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 				<tr><td>
 		  																			<p	>
 								Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
-this element will execute after each Sample request in its 
-											 			<a href="build-test-plan.html#scoping_rules">scope</a>
-										, applying the regular expression, extracting the requested values,
+this element will execute after each Sample request in its scope, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.
 						</p>
 															<p><b>Control Panel</b></p>
-						<div align="center"><img width='395' height='241' src="../images/screenshots/regex_extractor.png"></div>
+						<div align="center"><img width='494' height='257' src="../images/screenshots/regex_extractor.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -10316,7 +10314,8 @@ generate the template string, and store the result into the given variable name.
 		</tr>
 			<tr>
 			<td>Response Field to check</td>
-			<td>						Body or Headers. These refer to the Sampler Response. Headers can be useful for HTTP samples; it may not be present for other sample types.
+			<td>						Body, Headers, URL, Response Code, Response Message.
+        These refer to the Sampler Response. Headers can be useful for HTTP samples; it may not be present for other sample types.
 			</td>
 			<td>
 											yes
