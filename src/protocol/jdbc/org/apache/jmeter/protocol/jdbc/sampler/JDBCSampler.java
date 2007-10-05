@@ -26,12 +26,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
@@ -111,6 +109,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	 *  from the least recently used connections.  
 	 */
 	private static Map perConnCache = new LinkedHashMap(MAX_ENTRIES){
+		private static final long serialVersionUID = 1L;
 		protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
 			if (size() > MAX_ENTRIES) {
 				final Object value = arg0.getValue();
@@ -210,12 +209,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 		} catch (SQLException ex) {
 			final String errCode = Integer.toString(ex.getErrorCode());
-			log.error("SQLstate: "+ex.getSQLState()+
-					" SQLcode: "+errCode+
-					" Message: "+ex.getMessage(),
-					ex);
 			res.setResponseMessage(ex.toString());
-			res.setResponseCode(errCode);
+			res.setResponseCode(ex.getSQLState()+ " " +errCode);
 			res.setSuccessful(false);
 		} finally {
 			close(stmt);
