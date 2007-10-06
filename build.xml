@@ -1009,7 +1009,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
-    <exclude name="${dest.jar.jmeter}/jmetertest.properties"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
@@ -1047,7 +1046,6 @@ run JMeter unless all the JMeter jars are added.
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="build.properties"/>
-    <include name="${dest.jar.jmeter}/jmetertest.properties"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <include name="eclipse.classpath"/>
@@ -1609,8 +1607,7 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <arg value="${build.test},../lib/ext"/>
-   	<!-- The file must currently be in the JMeter home directory as it is used to find the home directory -->
-      <arg value="./jmetertest.properties"/>
+      <arg value="${basedir}/bin/testfiles/jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
   </target>
