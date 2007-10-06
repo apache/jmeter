@@ -83,6 +83,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 			samplerBase.setImageParser(true);
 		} else {
 			// The default is false, so we can remove the property to simplify JMX files
+			// This also allows HTTPDefaults to work for this checkbox
 			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
 		samplerBase.setMonitor(isMon.isSelected());
