@@ -48,6 +48,7 @@
 <li>Property Display to show the value of System and JMeter properties and allow them to be changed</li>
 <li>Bug 43451 - Allow Regex Extractor to operate on Response Code/Message</li>
 <li>JDBC Sampler now allows INOUT and OUT parameters for Called procedures</li>
+<li>JDBC Sampler now allows per-thread connections</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
