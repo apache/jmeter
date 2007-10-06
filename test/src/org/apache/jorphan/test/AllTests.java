@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -130,9 +131,11 @@ public final class AllTests {
 			System.out.println("You must specify a comma-delimited list of paths to search " + "for unit tests");
 			System.exit(0);
 		}
+		String home=new File(System.getProperty("user.dir")).getParent();
+		System.out.println("Setting JMeterHome: "+home);
+		JMeterUtils.setJMeterHome(home);
 		initializeLogging(args);
 		initializeManager(args);
-		// end : added - 11 July 2001
 
 		log.info("JMeterVersion="+JMeterUtils.getJMeterVersion());
 		logprop("java.version", true);
@@ -215,7 +218,7 @@ public final class AllTests {
 		TestRunner.run(suite);
 		// ++
 		// Recheck settings:
-		System.out.println("+++++++++++");
+		//System.out.println("+++++++++++");
 		// System.out.println(e+"="+System.getProperty(e));
 		// System.out.println(g+"="+System.getProperty(g));
 		// System.out.println("Headless?
@@ -230,7 +233,7 @@ public final class AllTests {
 		// } catch (java.lang.InternalError e1){
 		// System.out.println("Error with class "+n+" "+e1);
 		// }
-		System.out.println("------------");
+		//System.out.println("------------");
 		// --
 		System.exit(0);
 	}
@@ -270,7 +273,13 @@ public final class AllTests {
 				UnitTestManager um = (UnitTestManager) Class.forName(args[2]).newInstance();
 				System.out.println("Setting up initial properties using: " + args[1]);
 				um.initializeProperties(args[1]);
-			} catch (Exception e) {
+			} catch (ClassNotFoundException e) {
+				System.out.println("Couldn't create: " + args[2]);
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				System.out.println("Couldn't create: " + args[2]);
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
 				System.out.println("Couldn't create: " + args[2]);
 				e.printStackTrace();
 			}
