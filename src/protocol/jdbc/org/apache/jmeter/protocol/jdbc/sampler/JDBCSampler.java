@@ -148,8 +148,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 		try {
 
-			// TODO: Consider creating a sub-result with the time to get the connection.
 			conn = DataSourceElement.getConnection(getDataSource());
+			res.latencyEnd(); // use latency to measure connection time
+			res.setResponseHeaders(conn.toString());
 
             // Based on query return value, get results
             String _queryType = getQueryType();
@@ -217,6 +218,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 			close(conn);
 		}
 
+		// TODO: process warnings? Set Code and Message to success?
 		res.sampleEnd();
 		return res;
 	}
