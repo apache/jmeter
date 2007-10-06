@@ -21,11 +21,15 @@ package org.apache.jmeter.testelement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 
 /**
- * @version $Revision$ on $Date$
+ * TestListener interface is used for methods that are called at different
+ * stages of each test.
+ * 
  */
 public interface TestListener {
 	/**
 	 * Called just before the start of the test from the main engine thread.
+	 * 
+	 * This is before the test elements are cloned.
 	 * 
 	 * Note that not all the test
 	 * variables will have been set up at this point.
@@ -38,6 +42,8 @@ public interface TestListener {
 	/**
 	 * Called just before the start of the test from the main engine thread.
 	 * 
+	 * This is before the test elements are cloned.
+	 * 
 	 * Note that not all the test
 	 * variables will have been set up at this point.
 	 * 
@@ -49,6 +55,8 @@ public interface TestListener {
 	/**
 	 * Called once for all threads after the end of a test.
 	 * 
+	 * This will use the same element instances as at the start of the test.
+	 * 
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
 	 * 
 	 */
@@ -56,6 +64,8 @@ public interface TestListener {
 
 	/**
 	 * Called once for all threads after the end of a test.
+	 * 
+	 * This will use the same element instances as at the start of the test.
 	 * 
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
 	 * 
@@ -66,6 +76,9 @@ public interface TestListener {
 	/**
 	 * Each time through a Thread Group's test script, an iteration event is
 	 * fired for each thread.
+	 * 
+	 * This will be after the test elements have been cloned, so in general
+	 * the instance will not be the same as the ones the start/end methods call.
 	 * 
 	 * @param event
 	 */
