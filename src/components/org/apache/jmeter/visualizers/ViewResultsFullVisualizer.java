@@ -222,7 +222,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	/**
 	 * Update the visualizer with new data.
 	 */
-	public synchronized void updateGui(SampleResult res) {
+	private synchronized void updateGui(SampleResult res) {
 		log.debug("Start : updateGui1");
 		if (log.isDebugEnabled()) {
 			log.debug("updateGui1 : sample result - " + res);
@@ -362,6 +362,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 						String startTime = dateFormat.format(new Date(res.getStartTime()));
 						statsBuff.append("Sample Start: ").append(startTime).append(NL);
 						statsBuff.append("Load time: ").append(res.getTime()).append(NL);
+						statsBuff.append("Latency: ").append(res.getLatency()).append(NL);
 						statsBuff.append("Size in bytes: ").append(res.getBytes()).append(NL);
 						statsBuff.append("Sample Count: ").append(res.getSampleCount()).append(NL);
 						statsBuff.append("Error Count: ").append(res.getErrorCount()).append(NL);
