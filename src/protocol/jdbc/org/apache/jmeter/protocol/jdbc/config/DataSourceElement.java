@@ -19,8 +19,10 @@ package org.apache.jmeter.protocol.jdbc.config;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.avalon.excalibur.datasource.DataSourceComponent;
@@ -68,11 +70,6 @@ public class DataSourceElement extends AbstractTestElement
 	public DataSourceElement() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
-	 */
 	public void testEnded() {
 		synchronized (this) {
 			if (excaliburSource != null) {
@@ -90,28 +87,13 @@ public class DataSourceElement extends AbstractTestElement
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testEnded(java.lang.String)
-	 */
 	public void testEnded(String host) {
 		testEnded();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)
-	 */
 	public void testIterationStart(LoopIterationEvent event) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
-	 */
 	public void testStarted() {
         this.setRunningVersion(true);
         TestBeanHelper.prepare(this);
@@ -133,6 +115,16 @@ public class DataSourceElement extends AbstractTestElement
 		}
 	}
 
+	public void testStarted(String host) {
+		testStarted();
+	}
+
+	public Object clone() {
+		DataSourceElement el = (DataSourceElement) super.clone();
+		el.excaliburSource = excaliburSource;
+		return el;
+	}
+
 	/*
 	 * Utility routine to get the connection from the pool.
 	 * Purpose:
@@ -147,26 +139,11 @@ public class DataSourceElement extends AbstractTestElement
 		}
 		return pool.getConnection();
 	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.testelement.TestListener#testStarted(java.lang.String)
-	 */
-	public void testStarted(String host) {
-		testStarted();
-	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	public Object clone() {
-		DataSourceElement el = (DataSourceElement) super.clone();
-		el.excaliburSource = excaliburSource;
-		return el;
-	}
-
+	 * Set up the DataSource - maxPool is a parameter, so the same code can
+	 * also be used for setting up the per-thread pools.
+	*/
 	private ResourceLimitingJdbcDataSource initPool(String maxPool) {
 		ResourceLimitingJdbcDataSource source = null;
 		source = new ResourceLimitingJdbcDataSource();
@@ -251,7 +228,11 @@ public class DataSourceElement extends AbstractTestElement
 	}
 
 	// used to hold per-thread singleton connection pools
-	private static ThreadLocal perThreadPool = new ThreadLocal();
+	private static ThreadLocal perThreadPoolMap = new ThreadLocal(){
+		protected synchronized Object initialValue() {
+            return new HashMap();
+        }
+	};
 	
 	/*
 	 * Wrapper class to allow getConnection() to be implemented for both shared
@@ -276,10 +257,11 @@ public class DataSourceElement extends AbstractTestElement
 			if (sharedDSC != null){ // i.e. shared pool
 				dsc = sharedDSC;
 			} else {
-				dsc = (DataSourceComponent) perThreadPool.get();
+				Map poolMap = (Map) perThreadPoolMap.get();
+				dsc = (DataSourceComponent) poolMap.get(getDataSource());
 				if (dsc == null){
 					dsc = initPool("1");
-					perThreadPool.set(dsc);
+					poolMap.put(getDataSource(),dsc);
 					perThreadPoolSet.add(dsc);
 				}
 			}
