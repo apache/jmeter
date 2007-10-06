@@ -148,8 +148,11 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 		try {
 
-			conn = DataSourceElement.getConnection(getDataSource());
-			res.latencyEnd(); // use latency to measure connection time
+			try {
+			    conn = DataSourceElement.getConnection(getDataSource());
+			} finally {
+				res.latencyEnd(); // use latency to measure connection time
+			}
 			res.setResponseHeaders(conn.toString());
 
             // Based on query return value, get results
