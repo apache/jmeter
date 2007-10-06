@@ -220,7 +220,7 @@ public class JMeterUtils implements UnitTestManager {
 	 * @param expression
 	 * @return compiled pattern
 	 * 
-	 * @throws MalformedPatternException (Runtime)
+	 * @throws  org.apache.oro.text.regex.MalformedPatternException (Runtime)
 	 * This should be caught for expressions that may vary (e.g. user input)
 	 * 
 	 */
@@ -235,7 +235,7 @@ public class JMeterUtils implements UnitTestManager {
 	 * @param options e.g. READ_ONLY_MASK
 	 * @return compiled pattern
 	 * 
-	 * @throws MalformedPatternException (Runtime)
+	 * @throws  org.apache.oro.text.regex.MalformedPatternException (Runtime)
 	 * This should be caught for expressions that may vary (e.g. user input)
 	 * 
 	 */
@@ -246,17 +246,6 @@ public class JMeterUtils implements UnitTestManager {
 	public void initializeProperties(String file) {
 		System.out.println("Initializing Properties: " + file);
 		getProperties(file);
-		String home;
-		int pathend = file.lastIndexOf("/"); // $NON-NLS-1$
-		if (pathend == -1) {// No path separator found, must be in current
-							// directory
-			home = "."; // $NON-NLS-1$
-		} else {
-			home = file.substring(0, pathend);
-		}
-		home = new File(home + "/..").getAbsolutePath(); // $NON-NLS-1$
-		System.out.println("Setting JMeter home: " + home);
-		setJMeterHome(home);
 	}
 
 	public static String[] getSearchPaths() {
