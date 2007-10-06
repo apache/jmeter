@@ -3196,7 +3196,6 @@ with the start, continuing on like that until the test is ended.  </p>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 </p>
-<p>For versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 		<br></br>
@@ -3414,6 +3413,7 @@ This is mainly intended for batch (non-GUI) runs.
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
 </p>
+<p>For JMeter versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
 		<br></br>
