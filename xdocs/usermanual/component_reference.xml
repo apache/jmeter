@@ -2473,8 +2473,18 @@ instead. (see figures 9 and 10).</p>
 		<property name="Name" required="No">Descriptive name for the connection pool that is shown in the tree.</property>
 		<property name="Variable Name" required="Yes">The name of the variable the connection pool is tied to.  
 		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
-		to select the pool to draw connections from.</property>
-		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool</property>
+		to select the pool to draw connections from.
+		<b>Each pool name must be different. If there are two configuration elements using the same pool name,
+		only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.</b>
+		</property>
+		<property name="Max Number of Connections" required="Yes">Maximum number of connections allowed in the pool.
+		To ensure that threads don't have to wait for connections, set the max count to the same as	the number of threads.
+		In versions of JMeter after 2.3, the value "0" is treated specially.
+		Instead of sharing the pool between all threads in the test plan, a pool containing a single connection
+		is created for each thread. This ensures that the same connection can be re-used for multiple samplers
+		in the same thread.
+		Multiple such pools can be used - e.g. for connecting to different databases - just give them different names.
+		</property>
 		<property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
 		process of trying to retrieve a connection</property>
 		<property name="Idle Cleanup Interval (ms)" required="Yes">Uncertain what exactly this does.</property>
