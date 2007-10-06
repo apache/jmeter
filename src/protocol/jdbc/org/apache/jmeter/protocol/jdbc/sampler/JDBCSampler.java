@@ -47,10 +47,6 @@ import org.apache.log.Logger;
  * 
  */
 public class JDBCSampler extends AbstractSampler implements TestBean {
-	private static final String INOUT = "INOUT";
-
-	private static final String OUT = "OUT";
-
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// This value is used for both the connection (perConnCache) and statement (preparedStatementMap) caches.
@@ -61,6 +57,10 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	// String used to indicate a null value
 	private static final String NULL_MARKER = 
 		JMeterUtils.getPropDefault("jdbcsampler.nullmarker","]NULL["); // $NON-NLS-1$
+
+	private static final String INOUT = "INOUT"; // $NON-NLS-1$
+
+	private static final String OUT = "OUT"; // $NON-NLS-1$
 
 	private static final Map mapJdbcNameToInt;
 
