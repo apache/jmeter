@@ -16,21 +16,28 @@
  */
 package org.apache.jmeter.protocol.jdbc.config;
 
-import java.io.ObjectStreamException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.avalon.excalibur.datasource.DataSourceComponent;
 import org.apache.avalon.excalibur.datasource.ResourceLimitingJdbcDataSource;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.LogKitLogger;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -38,7 +45,9 @@ import org.apache.log.Logger;
  * @author Michael Stover
  * 
  */
-public class DataSourceElement extends AbstractTestElement implements ConfigElement, TestListener, TestBean {
+public class DataSourceElement extends AbstractTestElement 
+    implements ConfigElement, TestListener, TestBean, NoThreadClone
+    {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
@@ -46,21 +55,18 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 
 	transient boolean keepAlive, autocommit;
 
+	/*
+	 *  The datasource is set up by testStarted and cleared by testEnded.
+	 *  These are called from different threads, so access must be synchronized.
+	 *  The same instance is called in each case.
+	*/
 	transient ResourceLimitingJdbcDataSource excaliburSource;
 
-	// TODO: why is this an object, and not a plain boolean?
-	transient boolean[] started;
-
-	public DataSourceElement() {
-		started = new boolean[] { false };
-	}
+	// Keep a record of the pre-thread pools so that they can be disposed of at the end of a test
+	private transient Set perThreadPoolSet = Collections.synchronizedSet(new HashSet());
 	
-	// For serialised objects, do the same work as the constructor:
-	private Object readResolve() throws ObjectStreamException {
-		started = new boolean[] { false };
-		return this;
+	public DataSourceElement() {
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -68,15 +74,20 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 	 * @see org.apache.jmeter.testelement.TestListener#testEnded()
 	 */
 	public void testEnded() {
-		if (started[0]) {
-			synchronized (excaliburSource) {
-				if (started[0]) {
-					excaliburSource.dispose();
-				}
+		synchronized (this) {
+			if (excaliburSource != null) {
+				excaliburSource.dispose();
 			}
+		    excaliburSource = null;
 		}
-		excaliburSource = null;
-		started[0] = false;
+		if (perThreadPoolSet != null) {// in case
+			Iterator it = perThreadPoolSet.iterator();
+			while(it.hasNext()){
+				ResourceLimitingJdbcDataSource dsc = (ResourceLimitingJdbcDataSource)it.next();
+				dsc.dispose();
+			}
+			perThreadPoolSet.clear();
+		}
 	}
 
 	/*
@@ -102,16 +113,24 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 	 * @see org.apache.jmeter.testelement.TestListener#testStarted()
 	 */
 	public void testStarted() {
-		if (!started[0]) {
-			try {
-                this.setRunningVersion(true);
-                TestBeanHelper.prepare(this);
-				initPool();
-			} catch (Exception e) {
-				log.error("Unable to start database connection pool.", e);
+        this.setRunningVersion(true);
+        TestBeanHelper.prepare(this);
+		JMeterVariables variables = getThreadContext().getVariables();
+		String poolName = getDataSource();
+		if (variables.getObject(poolName) != null) {
+			log.error("JDBC data source already defined for: "+poolName);
+		} else {
+			String maxPool = getPoolMax();
+			if (maxPool.equals("0")){ // i.e. if we want per thread pooling
+				variables.putObject(poolName, new DataSourceComponentImpl()); // pool will be created later
+			} else {
+				ResourceLimitingJdbcDataSource src=initPool(maxPool);
+				synchronized(this){
+					excaliburSource = src;
+				    variables.putObject(poolName, new DataSourceComponentImpl(excaliburSource));
+				}
 			}
 		}
-		getThreadContext().getVariables().putObject(getDataSource(), excaliburSource);
 	}
 
 	/*
@@ -145,38 +164,38 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 	public Object clone() {
 		DataSourceElement el = (DataSourceElement) super.clone();
 		el.excaliburSource = excaliburSource;
-		el.started = started;
 		return el;
 	}
 
-	private void initPool() throws Exception {
-		excaliburSource = new ResourceLimitingJdbcDataSource();
-		DefaultConfiguration config = new DefaultConfiguration("rl-jdbc");
+	private ResourceLimitingJdbcDataSource initPool(String maxPool) {
+		ResourceLimitingJdbcDataSource source = null;
+		source = new ResourceLimitingJdbcDataSource();
+		DefaultConfiguration config = new DefaultConfiguration("rl-jdbc"); // $NON-NLS-1$
 
 		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer(40);
 			sb.append("MaxPool: ");
-			sb.append(getPoolMax());
+			sb.append(maxPool);
 			sb.append(" Timeout: ");
 			sb.append(getTimeout());
 			sb.append(" TrimInt: ");
 			sb.append(getTrimInterval());
+			sb.append(" Auto-Commit: ");
+			sb.append(isAutocommit());
 			log.debug(sb.toString());
 		}
-		DefaultConfiguration poolController = new DefaultConfiguration("pool-controller");
-		poolController.setAttribute("max", getPoolMax());
-		poolController.setAttribute("max-strict", "true");
-		poolController.setAttribute("blocking", "true");
-		poolController.setAttribute("timeout", getTimeout());
-		poolController.setAttribute("trim-interval", getTrimInterval());
+		DefaultConfiguration poolController = new DefaultConfiguration("pool-controller"); // $NON-NLS-1$
+		poolController.setAttribute("max", maxPool); // $NON-NLS-1$
+		poolController.setAttribute("max-strict", "true"); // $NON-NLS-1$ $NON-NLS-2$
+		poolController.setAttribute("blocking", "true"); // $NON-NLS-1$ $NON-NLS-2$
+		poolController.setAttribute("timeout", getTimeout()); // $NON-NLS-1$
+		poolController.setAttribute("trim-interval", getTrimInterval()); // $NON-NLS-1$
 		config.addChild(poolController);
 
-		DefaultConfiguration autoCommit = new DefaultConfiguration("auto-commit");
+		DefaultConfiguration autoCommit = new DefaultConfiguration("auto-commit"); // $NON-NLS-1$
 		autoCommit.setValue(String.valueOf(isAutocommit()));
 		config.addChild(autoCommit);
 		
-//		config.setAttribute("auto-commit", String.valueOf(isAutocommit()));
-
 		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer(40);
 			sb.append("KeepAlive: ");
@@ -187,9 +206,9 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 			sb.append(getCheckQuery());
 			log.debug(sb.toString());
 		}
-		DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive");
-		cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive()));
-		cfgKeepAlive.setAttribute("age", getConnectionAge());
+		DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive"); // $NON-NLS-1$
+		cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive())); // $NON-NLS-1$
+		cfgKeepAlive.setAttribute("age", getConnectionAge()); // $NON-NLS-1$
 		cfgKeepAlive.setValue(getCheckQuery());
 		poolController.addChild(cfgKeepAlive);
 
@@ -204,42 +223,80 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 			sb.append(_username);
 			log.debug(sb.toString());
 		}
-		DefaultConfiguration cfgDriver = new DefaultConfiguration("driver");
+		DefaultConfiguration cfgDriver = new DefaultConfiguration("driver"); // $NON-NLS-1$
 		cfgDriver.setValue(getDriver());
 		config.addChild(cfgDriver);
-		DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl");
+		DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl"); // $NON-NLS-1$
 		cfgDbUrl.setValue(getDbUrl());
 		config.addChild(cfgDbUrl);
 
 		if (_username.length() > 0){
-			DefaultConfiguration cfgUsername = new DefaultConfiguration("user");
+			DefaultConfiguration cfgUsername = new DefaultConfiguration("user"); // $NON-NLS-1$
 			cfgUsername.setValue(_username);
 			config.addChild(cfgUsername);
-			DefaultConfiguration cfgPassword = new DefaultConfiguration("password");
+			DefaultConfiguration cfgPassword = new DefaultConfiguration("password"); // $NON-NLS-1$
 			cfgPassword.setValue(getPassword());
 			config.addChild(cfgPassword);
 		}
 
 		// log is required to ensure errors are available
-		excaliburSource.enableLogging(new LogKitLogger(log));
-		excaliburSource.configure(config);
-		excaliburSource.setInstrumentableName(getDataSource());
-		started[0] = true;
+		source.enableLogging(new LogKitLogger(log));
+		try {
+			source.configure(config);
+			source.setInstrumentableName(getDataSource());
+		} catch (ConfigurationException e) {
+			log.error("Could not configure datasource for pool: "+getDataSource(),e);
+		}
+		return source;
 	}
 
+	// used to hold per-thread singleton connection pools
+	private static ThreadLocal perThreadPool = new ThreadLocal();
+	
 	/*
-	 * (non-Javadoc)
+	 * Wrapper class to allow getConnection() to be implemented for both shared
+	 * and per-thread pools.
 	 * 
-	 * @see org.apache.jmeter.config.ConfigElement#addConfigElement(org.apache.jmeter.config.ConfigElement)
 	 */
+	private class DataSourceComponentImpl implements DataSourceComponent{
+
+		private final DataSourceComponent sharedDSC;
+		
+		DataSourceComponentImpl(){
+			sharedDSC=null;
+		}
+		
+		DataSourceComponentImpl(DataSourceComponent p_dsc){
+			sharedDSC=p_dsc;
+		}
+
+		public Connection getConnection() throws SQLException {
+			Connection conn = null;
+			DataSourceComponent dsc = null;
+			if (sharedDSC != null){ // i.e. shared pool
+				dsc = sharedDSC;
+			} else {
+				dsc = (DataSourceComponent) perThreadPool.get();
+				if (dsc == null){
+					dsc = initPool("1");
+					perThreadPool.set(dsc);
+					perThreadPoolSet.add(dsc);
+				}
+			}
+			if (dsc != null) {
+			    conn=dsc.getConnection();
+			}
+			return conn;
+		}
+
+		public void configure(Configuration arg0) throws ConfigurationException {
+		}
+		
+	}
+
 	public void addConfigElement(ConfigElement config) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.config.ConfigElement#expectsModification()
-	 */
 	public boolean expectsModification() {
 		return false;
 	}
@@ -275,7 +332,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 	}
 
 	/**
-	 * @return Returns the dataSource.
+	 * @return Returns the poolname.
 	 */
 	public String getDataSource() {
 		return dataSource;
@@ -283,7 +340,7 @@ public class DataSourceElement extends AbstractTestElement implements ConfigElem
 
 	/**
 	 * @param dataSource
-	 *            The dataSource to set.
+	 *            The poolname to set.
 	 */
 	public void setDataSource(String dataSource) {
 		this.dataSource = dataSource;
