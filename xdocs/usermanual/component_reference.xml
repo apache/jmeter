@@ -2225,8 +2225,8 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
-  <property name="Clear Cookies each Iteration" required="Yes">If selected, all cookies are cleared each time the main Thread Group loop is executed.
-  This includes all the Cookies stored in the manager, so they will never be sent.</property>
+  <property name="Clear Cookies each Iteration" required="Yes">If selected, all server-defined cookies are cleared each time the main Thread Group loop is executed.
+  In JMeter versions after 2.3, any cookies defined in the GUI are not cleared.</property>
   <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
   "compatibility" is the default, and should work in most cases.
   See http://jakarta.apache.org/httpcomponents/httpclient-3.x/cookies.html and 

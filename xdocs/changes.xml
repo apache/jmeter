@@ -49,6 +49,7 @@
 <li>Bug 43451 - Allow Regex Extractor to operate on Response Code/Message</li>
 <li>JDBC Sampler now allows INOUT and OUT parameters for Called procedures</li>
 <li>JDBC Sampler now allows per-thread connections</li>
+<li>Cookie Manager not longer clears cookies defined in the GUI</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>

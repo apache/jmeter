@@ -55,7 +55,7 @@ import org.apache.log.Logger;
  * 
  */
 public class CookieManager extends ConfigTestElement implements TestListener, Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String CLEAR = "CookieManager.clearEachIteration";// $NON-NLS-1$
 
@@ -75,6 +75,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
     private transient CookieSpec cookieSpec;
 
+    private transient CollectionProperty initialCookies;
+    
     public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
 
 	public CookieManager() {
@@ -83,7 +85,14 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         setCookiePolicy(DEFAULT_POLICY);
 	}
 
-    public String getPolicy() {
+	// ensure that the initial cookies are copied to the per-thread instances
+	public Object clone(){
+		CookieManager clone = (CookieManager) super.clone();
+		clone.initialCookies = initialCookies;
+		return clone;
+	}
+
+	public String getPolicy() {
         return getPropertyAsString(POLICY,DEFAULT_POLICY);
     }
 
@@ -237,10 +246,15 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 		}
 	}
 
-	/**
+	public void clear(){
+		super.clear();
+		clearCookies(); // ensure data is set up OK initially
+	}
+
+	/*
 	 * Remove all the cookies.
 	 */
-	public void clear() {// TODO: should this call super.clear()?
+	private void clearCookies() {
 		log.debug("Clear all cookies from store");
 		setProperty(new CollectionProperty(COOKIES, new ArrayList()));
 	}
@@ -410,19 +424,23 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	}
 
 	public void testStarted() {
+		initialCookies = getCookies();
 	}
 
 	public void testEnded() {
 	}
 
 	public void testStarted(String host) {
+		testStarted();
 	}
 
 	public void testEnded(String host) {
 	}
 
 	public void testIterationStart(LoopIterationEvent event) {
-		if (getClearEachIteration())
-			clear();
+		if (getClearEachIteration()) {
+			clearCookies();
+			setProperty(initialCookies);
+		}
 	}
 }
