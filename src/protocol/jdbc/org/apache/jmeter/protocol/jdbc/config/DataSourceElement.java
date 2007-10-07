@@ -33,7 +33,6 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.LogKitLogger;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
-import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -48,7 +47,7 @@ import org.apache.log.Logger;
  * 
  */
 public class DataSourceElement extends AbstractTestElement 
-    implements ConfigElement, TestListener, TestBean, NoThreadClone
+    implements ConfigElement, TestListener, TestBean
     {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -81,6 +80,7 @@ public class DataSourceElement extends AbstractTestElement
 			Iterator it = perThreadPoolSet.iterator();
 			while(it.hasNext()){
 				ResourceLimitingJdbcDataSource dsc = (ResourceLimitingJdbcDataSource)it.next();
+				log.debug("Disposing pool: "+dsc.getInstrumentableName()+" @"+System.identityHashCode(dsc));
 				dsc.dispose();
 			}
 			perThreadPoolSet.clear();
@@ -122,6 +122,7 @@ public class DataSourceElement extends AbstractTestElement
 	public Object clone() {
 		DataSourceElement el = (DataSourceElement) super.clone();
 		el.excaliburSource = excaliburSource;
+		el.perThreadPoolSet = perThreadPoolSet;
 		return el;
 	}
 
@@ -241,27 +242,28 @@ public class DataSourceElement extends AbstractTestElement
 	 */
 	private class DataSourceComponentImpl implements DataSourceComponent{
 
-		private final DataSourceComponent sharedDSC;
+		private final ResourceLimitingJdbcDataSource sharedDSC;
 		
 		DataSourceComponentImpl(){
 			sharedDSC=null;
 		}
 		
-		DataSourceComponentImpl(DataSourceComponent p_dsc){
+		DataSourceComponentImpl(ResourceLimitingJdbcDataSource p_dsc){
 			sharedDSC=p_dsc;
 		}
 
 		public Connection getConnection() throws SQLException {
 			Connection conn = null;
-			DataSourceComponent dsc = null;
+			ResourceLimitingJdbcDataSource dsc = null;
 			if (sharedDSC != null){ // i.e. shared pool
 				dsc = sharedDSC;
 			} else {
 				Map poolMap = (Map) perThreadPoolMap.get();
-				dsc = (DataSourceComponent) poolMap.get(getDataSource());
+				dsc = (ResourceLimitingJdbcDataSource) poolMap.get(getDataSource());
 				if (dsc == null){
 					dsc = initPool("1");
 					poolMap.put(getDataSource(),dsc);
+					log.debug("Storing pool: "+dsc.getInstrumentableName()+" @"+System.identityHashCode(dsc));
 					perThreadPoolSet.add(dsc);
 				}
 			}
