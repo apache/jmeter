@@ -30,16 +30,18 @@ import org.apache.log.Logger;
 
 /**
  * @author mstover
- * @version $Revision$
  */
 public class PowerTableModel extends DefaultTableModel {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	Data model = new Data();
 
 	Class[] columnClasses;
 
 	public PowerTableModel(String[] headers, Class[] cc) {
+		if (headers.length != cc.length){
+			throw new IllegalArgumentException("Header and column array sizes differ");
+		}
 		model.setHeaders(headers);
 		columnClasses = cc;
 	}
@@ -48,6 +50,9 @@ public class PowerTableModel extends DefaultTableModel {
 	}
 
 	public void setRowValues(int row, Object[] values) {
+		if (values.length != model.getHeaderCount()){
+			throw new IllegalArgumentException("Incorrect number of data items");
+		}
 		model.setCurrentPos(row);
 		for (int i = 0; i < values.length; i++) {
 			model.addColumnValue(model.getHeaders()[i], values[i]);
@@ -98,6 +103,9 @@ public class PowerTableModel extends DefaultTableModel {
 	}
 
 	public void addRow(Object data[]) {
+		if (data.length != model.getHeaderCount()){
+			throw new IllegalArgumentException("Incorrect number of data items");
+		}
 		model.setCurrentPos(model.size());
 		for (int i = 0; i < data.length; i++) {
 			model.addColumnValue(model.getHeaders()[i], data[i]);
