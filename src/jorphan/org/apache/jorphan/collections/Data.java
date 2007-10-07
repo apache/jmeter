@@ -489,6 +489,10 @@ public class Data implements Serializable {
 		return r;
 	}
 
+	public int getHeaderCount(){
+		return header.size();
+	}
+
 	/**
 	 * This method will retrieve every entry in a certain column. It returns an
 	 * array of Objects from the column.
