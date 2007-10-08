@@ -774,12 +774,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
                 log.warn("Unexpected argument type: "+objectValue.getClass().getName());
 				item = new HTTPArgument((Argument) objectValue);
 			}
+			final String encodedName = item.getEncodedName();
+			if (encodedName.length() == 0) {
+				continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+			}
 			if (!first) {
 				buf.append(QRY_SEP);
 			} else {
 				first = false;
 			}
-			buf.append(item.getEncodedName());
+			buf.append(encodedName);
 			if (item.getMetaData() == null) {
 				buf.append(ARG_VAL_SEP);
 			} else {
