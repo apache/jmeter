@@ -33,6 +33,7 @@
 <ul>
 <li>Bug 43430 - Count of active threads is incorrect for remote samples</li>
 <li>Throughput Controller was not working for "all thread" counts</li>
+<li>If a POST body is built from parameter values only, these are now encoded if the checkbox is set.</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -50,6 +51,7 @@
 <li>JDBC Sampler now allows INOUT and OUT parameters for Called procedures</li>
 <li>JDBC Sampler now allows per-thread connections</li>
 <li>Cookie Manager not longer clears cookies defined in the GUI</li>
+<li>HTTP Parameters without names are ignored (except for POST requests with no file)</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
