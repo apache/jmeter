@@ -192,6 +192,7 @@ resource requires query string parameters, add them below in the
         appended to the URL, if POST, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
+        <b>See below for some further information on parameter handling.</b>
         <p>
         Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
@@ -224,6 +225,16 @@ host, i.e. www.example.co.uk. If the next request uses www.example.com,
 rather than www.example.co.uk, it will not get the correct cookies.
 This is generally only a problem for manually created test plans,
 as a test plan created using a recorder would continue from the redirected URL.
+</p>
+<p>
+Parameter Handling:<br></br>
+For the POST method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
+then the body is created by concatenating all the value(s) of the parameters. 
+The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
+<br></br>
+For other methods, if the name of the parameter is missing,
+then the parameter is ignored. This allows the use of optional parameters defined by variables.
+(versions of JMeter after 2.3)
 </p>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
