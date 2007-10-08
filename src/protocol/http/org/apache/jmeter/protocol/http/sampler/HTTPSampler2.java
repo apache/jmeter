@@ -274,7 +274,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             // Add any parameters
             PropertyIterator args = getArguments().iterator();
             while (args.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+               HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+               String parameterName = arg.getName();
+               if (parameterName.length()==0){
+            	   continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+               }
                 parts[partNo++] = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
             }
             
@@ -347,7 +351,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 post.setRequestEntity(fileRequestEntity);
                 
                 // We just add placeholder text for file content
-                postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
+                postedBody.append("<actual file content, not shown here>");
             }
             else {            
                 // In an application/x-www-form-urlencoded request, we only support
@@ -360,14 +364,31 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 // If a content encoding is specified, we set it as http parameter, so that
                 // the post body will be encoded in the specified content encoding
                 final String contentEncoding = getContentEncoding();
+                boolean haveContentEncoding = false;
                 if(contentEncoding != null && contentEncoding.trim().length() > 0) {
                     post.getParams().setContentCharset(contentEncoding);
+                    haveContentEncoding = true;
                 }
                 
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
-                if(!getSendParameterValuesAsPostBody()) {
-                    // It is a normal post request, with parameter names and values
+                if(getSendParameterValuesAsPostBody()) {
+                    // Just append all the non-empty parameter values, and use that as the post body
+                    StringBuffer postBody = new StringBuffer();
+                    PropertyIterator args = getArguments().iterator();
+                    while (args.hasNext()) {
+                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                        String value;
+                        if (haveContentEncoding){
+                        	value = arg.getEncodedValue(contentEncoding);
+                        } else {
+                        	value = arg.getEncodedValue();
+                        }
+						postBody.append(value);
+                    }
+                    StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), post.getRequestCharSet());
+                    post.setRequestEntity(requestEntity);
+                } else { // It is a normal post request, with parameter names and values
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
@@ -375,6 +396,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         // so if the argument is already encoded, we have to decode
                         // it before adding it to the post request
                         String parameterName = arg.getName();
+                        if (parameterName.length()==0){
+                     	   continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+                        }
                         String parameterValue = arg.getValue();
                         if(!arg.isAlwaysEncoded()) {
                             // The value is already encoded by the user
@@ -406,17 +430,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 //                    StringRequestEntity requestEntity = new StringRequestEntity(getQueryString(contentEncoding), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), contentCharSet);
 //                    post.setRequestEntity(requestEntity);
 */                    
-                }
-                else {
-                    // Just append all the parameter values, and use that as the post body
-                    StringBuffer postBody = new StringBuffer();
-                    PropertyIterator args = getArguments().iterator();
-                    while (args.hasNext()) {
-                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                        postBody.append(arg.getValue());
-                    }
-                    StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), post.getRequestCharSet());
-                    post.setRequestEntity(requestEntity);
                 }
                 
                 // If the request entity is repeatable, we can send it first to
