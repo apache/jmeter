@@ -3574,8 +3574,38 @@ This is useful for checking the content of HTTP requests.
 <p>
 The Property Display shows the values of System or JMeter properties.
 Values can be changed by entering new text in the Value column.
+It is available only on the WorkBench.
 </p>
 </description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+</properties>
+</component>
+
+<component name="Debug Sampler" index="&sect-num;.9.7"  width="355" height="172" screenshot="debug_sampler.png">
+<description>
+<p>
+The Debug Sampler generates a sample containing the values of all JMeter variables and/or properties.
+</p>
+</description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+        <property name="JMeter Properties" required="Yes">Include JMeter properties ?</property>
+        <property name="JMeter Variables" required="Yes">Include JMeter variables ?</property>
+        <property name="System Properties" required="Yes">Include System properties ?</property>
+</properties>
+</component>
+
+<component name="Debug PostProcessor" index="&sect-num;.9.8"  width="341" height="134" screenshot="debug_postprocessor.png">
+<description>
+<p>
+The Debug PostProcessor creates a subSample with the details of the previous sampler properties.
+This is intended for developer use only.
+</p>
+</description>
+<properties>
+        <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+</properties>
 </component>
 
 <a href="#">^</a>

@@ -252,6 +252,8 @@
 					<li><a href="#SSL_Manager">SSL Manager</a></li>
 					<li><a href="#HTTP_Mirror_Server">HTTP Mirror Server</a></li>
 					<li><a href="#Property_Display">Property Display</a></li>
+					<li><a href="#Debug_Sampler">Debug Sampler</a></li>
+					<li><a href="#Debug_PostProcessor">Debug PostProcessor</a></li>
 				</ul>
 			<li><a href="#Reports">18.10 Reports</a></li>
 		<ul>
@@ -735,6 +737,11 @@ resource requires query string parameters, add them below in the
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
         
+												<b	>
+								See below for some further information on parameter handling.
+						</b>
+									
+        
 												<p	>
 								
         Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
@@ -828,6 +835,24 @@ host, i.e. www.example.co.uk. If the next request uses www.example.com,
 rather than www.example.co.uk, it will not get the correct cookies.
 This is generally only a problem for manually created test plans,
 as a test plan created using a recorder would continue from the redirected URL.
+
+						</p>
+							  									 				<p	>
+								
+Parameter Handling:
+												<br	>
+						</br>
+									
+For the POST method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
+then the body is created by concatenating all the value(s) of the parameters. 
+The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
+
+												<br	>
+						</br>
+									
+For other methods, if the name of the parameter is missing,
+then the parameter is ignored. This allows the use of optional parameters defined by variables.
+(versions of JMeter after 2.3)
 
 						</p>
 							  									 				<p	>
@@ -6888,8 +6913,8 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
 		</tr>
 			<tr>
 			<td>Clear Cookies each Iteration</td>
-			<td>						If selected, all cookies are cleared each time the main Thread Group loop is executed.
-  This includes all the Cookies stored in the manager, so they will never be sent.
+			<td>						If selected, all server-defined cookies are cleared each time the main Thread Group loop is executed.
+  In JMeter versions after 2.3, any cookies defined in the GUI are not cleared.
 			</td>
 			<td>
 											Yes
@@ -7683,6 +7708,13 @@ instead. (see figures 9 and 10).
 			<td>						The name of the variable the connection pool is tied to.  
 		Multiple connection pools can be used, each tied to a different variable, allowing JDBC Samplers
 		to select the pool to draw connections from.
+		
+												<b	>
+								Each pool name must be different. If there are two configuration elements using the same pool name,
+		only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.
+						</b>
+									
+		
 			</td>
 			<td>
 											Yes
@@ -7690,7 +7722,14 @@ instead. (see figures 9 and 10).
 		</tr>
 			<tr>
 			<td>Max Number of Connections</td>
-			<td>						Maximum number of connections allowed in the pool
+			<td>						Maximum number of connections allowed in the pool.
+		To ensure that threads don't have to wait for connections, set the max count to the same as	the number of threads.
+		In versions of JMeter after 2.3, the value "0" is treated specially.
+		Instead of sharing the pool between all threads in the test plan, a pool containing a single connection
+		is created for each thread. This ensures that the same connection can be re-used for multiple samplers
+		in the same thread.
+		Multiple such pools can be used - e.g. for connecting to different databases - just give them different names.
+		
 			</td>
 			<td>
 											Yes
@@ -9936,6 +9975,7 @@ until the last set of values is reached, at which point it will begin again at t
 												<p	>
 								User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
+
 in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
 user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.
 						</p>
@@ -10121,11 +10161,6 @@ with the start, continuing on like that until the test is ended.
 								
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
 
-						</p>
-									
-
-												<p	>
-								For versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data
 						</p>
 									
 
@@ -10865,6 +10900,11 @@ The BeanShell PreProcessor allows arbitrary code to be applied after taking a sa
 									
 
 												<p	>
+								For JMeter versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data
+						</p>
+									
+
+												<p	>
 								
 		
 												<b	>
@@ -11289,13 +11329,125 @@ This is useful for checking the content of HTTP requests.
 								
 The Property Display shows the values of System or JMeter properties.
 Values can be changed by entering new text in the Value column.
+It is available only on the WorkBench.
 
 						</p>
 									
 
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='776' height='502' src="../images/screenshots/property_display.png"></div>
-											  		</td></tr>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="Debug_Sampler"><h3>18.9.7 Debug Sampler</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The Debug Sampler generates a sample containing the values of all JMeter variables and/or properties.
+
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='355' height='172' src="../images/screenshots/debug_sampler.png"></div>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>JMeter Properties</td>
+			<td>						Include JMeter properties ?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>JMeter Variables</td>
+			<td>						Include JMeter variables ?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>System Properties</td>
+			<td>						Include System properties ?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="Debug_PostProcessor"><h3>18.9.8 Debug PostProcessor</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  															
+
+												<p	>
+								
+The Debug PostProcessor creates a subSample with the details of the previous sampler properties.
+This is intended for developer use only.
+
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='341' height='134' src="../images/screenshots/debug_postprocessor.png"></div>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this element that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
