@@ -52,7 +52,7 @@ public abstract class JMeterTestCase extends TestCase {
 	 */
 	static {
 		if (JMeterUtils.getJMeterProperties() == null) {
-			String file = "jmetertest.properties";
+			String file = "testfiles/jmetertest.properties";
 			File f = new File(file);
 			if (!f.canRead()) {
 				System.out.println("Can't find " + file + " - trying bin directory");
