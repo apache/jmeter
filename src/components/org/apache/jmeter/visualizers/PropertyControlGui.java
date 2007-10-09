@@ -56,30 +56,13 @@ import org.apache.jorphan.reflect.Functor;
 public class PropertyControlGui extends AbstractConfigGui
     implements ActionListener, UnsharedComponent {
 
-	// Can't use Functor to access private Hashatble.Entry instances
-	// Probably a limitation of Functor?
-	public static class PropertyEntry {
-		private Map.Entry me;
-		PropertyEntry(Map.Entry me){
-			this.me=me;
-		}
-		public Object getKey() {
-			return me.getKey();
-		}
-		public Object getValue() {
-			return me.getValue();
-		}
-		public Object setValue(String value) {
-			return me.setValue(value);
-		}
-
-	}
 	private static final long serialVersionUID = 1L;
 
 	private static final String COLUMN_NAMES_0 = JMeterUtils.getResString("name"); // $NON-NLS-1$
 
 	private static final String COLUMN_NAMES_1 = JMeterUtils.getResString("value"); // $NON-NLS-1$
 
+	// TODO: add and delete not currently supported
 	private static final String ADD = "add"; // $NON-NLS-1$
 
 	private static final String DELETE = "delete"; // $NON-NLS-1$
