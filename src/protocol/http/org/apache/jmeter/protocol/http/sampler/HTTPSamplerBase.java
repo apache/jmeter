@@ -930,7 +930,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 			res.sampleEnd();			
 			res.setResponseData(responseData);
 		    res.setResponseCodeOK();
-			res.setResponseMessage(""); // TODO - what should this be?
+			res.setResponseMessageOK();
 			res.setSuccessful(true);
 			String ct = ctb.toString();
 			res.setContentType(ct);
