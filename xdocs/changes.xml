@@ -58,6 +58,7 @@
 <ul>
 <li>Functor code tightened up; Functor can now be used with interfaces, as well as pre-defined targets and parameters.</li>
 <li>Save graphics function now prompts before overwriting an existing file</li>
+<li>Debug Sampler and Debug PostProcessor added.</li>
 </ul>
 
 <!--  ===================  -->
