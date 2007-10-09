@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 
 /*
@@ -84,6 +85,10 @@ public class TestFunctor extends JMeterTestCase {
 		super(arg0);
 	}
     
+	public void setUp(){
+		LoggingManager.setPriority("FATAL_ERROR",LoggingManager.removePrefix(Functor.class.getName()));		
+	}
+
 	public void testName() throws Exception{
 		Functor f1 = new Functor("getName");
 		Functor f2 = new Functor("getName");
