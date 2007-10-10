@@ -52,6 +52,7 @@
 <li>JDBC Sampler now allows per-thread connections</li>
 <li>Cookie Manager not longer clears cookies defined in the GUI</li>
 <li>HTTP Parameters without names are ignored (except for POST requests with no file)</li>
+<li>"Save Selection As" added to main menu; now checks only item is selected</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
