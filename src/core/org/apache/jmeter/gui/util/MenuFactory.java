@@ -456,6 +456,21 @@ public final class MenuFactory {
 	/**
 	 * Determine whether or not nodes can be added to this parent.
 	 * 
+	 * Used by Merge
+	 * 
+	 * @param parentNode
+	 * @param element - top-level test element to be added
+	 * 
+	 * @return whether it is OK to add the element to this parent
+	 */
+	public static boolean canAddTo(JMeterTreeNode parentNode, TestElement element) {
+		JMeterTreeNode node = new JMeterTreeNode(element, null);
+		return canAddTo(parentNode, new JMeterTreeNode[]{node});
+	}
+
+	/**
+	 * Determine whether or not nodes can be added to this parent.
+	 * 
 	 * Used by DragNDrop and Paste.
 	 * 
 	 * @param parentNode
@@ -474,8 +489,14 @@ public final class MenuFactory {
 			return false;
 		}
 		TestElement parent = parentNode.getTestElement();
-		if (parent instanceof TestPlan) {// Samplers and Controllers need not apply ...
-			if (foundClass(nodes, new Class[]{Sampler.class, Controller.class})){
+		if (parent instanceof WorkBench) {// allow everything else
+			return true;
+		}
+		if (parent instanceof TestPlan) {
+			if (foundClass(nodes, 
+					 new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
+			         org.apache.jmeter.threads.ThreadGroup.class)  // but ThreadGroup (Controller) is OK
+			    ){
 				return false;
 			}
 			return true;
@@ -493,14 +514,11 @@ public final class MenuFactory {
 			}
 			return true;
 		}
-		if (parent instanceof WorkBench) {// TODO are there any items that don't make sense here?
-			return true;
-		}
 		// All other 
 		return false;
 	}
 
-	// Is any top-level node an instance of the class?
+	// Is any node an instance of one of the classes?
 	private static boolean foundClass(JMeterTreeNode nodes[],Class classes[]){
 		for (int i = 0; i < nodes.length; i++) {
 			JMeterTreeNode node = nodes[i];
@@ -508,6 +526,22 @@ public final class MenuFactory {
 				if (classes[j].isInstance(node.getUserObject())){
 					return true;
 				}				
+			}
+		}
+		return false;
+	}
+
+	// Is any node an instance of one of the classes, but not an exception?
+	private static boolean foundClass(JMeterTreeNode nodes[],Class classes[], Class except){
+		for (int i = 0; i < nodes.length; i++) {
+			JMeterTreeNode node = nodes[i];
+			Object userObject = node.getUserObject();
+			if (!except.isInstance(userObject)) {
+				for (int j=0; j < classes.length; j++) {
+					if (classes[j].isInstance(userObject)){
+						return true;
+					}				
+				}
 			}
 		}
 		return false;
