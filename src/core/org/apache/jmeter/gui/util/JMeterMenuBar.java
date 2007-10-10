@@ -52,6 +52,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem file_save_as;
 
+    private JMenuItem file_selection_as;
+
     private JMenuItem file_revert;
 
     private JMenuItem file_load;
@@ -463,6 +465,11 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		file_save_as.addActionListener(ActionRouter.getInstance());
 		file_save_as.setEnabled(true);
 
+		file_selection_as = new JMenuItem(JMeterUtils.getResString("save_as")); //$NON-NLS-1$
+		file_selection_as.setActionCommand(ActionNames.SAVE_AS);
+		file_selection_as.addActionListener(ActionRouter.getInstance());
+		file_selection_as.setEnabled(true);
+
 		file_revert = new JMenuItem(JMeterUtils.getResString("revert_project"), 'R'); //$NON-NLS-1$
 		file_revert.setActionCommand(ActionNames.REVERT_PROJECT);
 		file_revert.addActionListener(ActionRouter.getInstance());
@@ -501,6 +508,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileMenu.addSeparator();
 		fileMenu.add(file_save);
 		fileMenu.add(file_save_as);
+		fileMenu.add(file_selection_as);
         fileMenu.add(file_revert);
         fileMenu.addSeparator();
         // Add the recent files, which will also add a separator that is
