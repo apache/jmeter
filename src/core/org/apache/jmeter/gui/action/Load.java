@@ -33,10 +33,12 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -142,15 +144,28 @@ public class Load implements Command {
 		boolean isTestPlan = tree.getArray()[0] instanceof TestPlan;
 
 		// If we are loading a new test plan, initialize the tree with the testplan node we are loading
+		GuiPackage guiInstance = GuiPackage.getInstance();
 		if(isTestPlan && !merging) {
-			GuiPackage.getInstance().getTreeModel().clearTestPlan((TestElement)tree.getArray()[0]);
+			guiInstance.getTreeModel().clearTestPlan((TestElement)tree.getArray()[0]);
 		}
 
-		HashTree newTree = GuiPackage.getInstance().addSubTree(tree);
-		GuiPackage.getInstance().updateCurrentGui();
-		GuiPackage.getInstance().getMainFrame().getTree().setSelectionPath(
+		if (merging){ // Check if target of merge is reasonable
+			TestElement te = (TestElement)tree.getArray()[0];
+			if (!(te instanceof WorkBench || te instanceof TestPlan)){// These are handled specially by addToTree
+				boolean ok = MenuFactory.canAddTo(guiInstance.getCurrentNode(), te);
+				if (!ok){
+					String name = te.getName();
+					String className = te.getClass().getName();
+					className = className.substring(className.lastIndexOf(".")+1);
+					throw new IllegalUserActionException("Can't merge "+name+" ("+className+") here");
+				}				
+			}
+		}
+		HashTree newTree = guiInstance.addSubTree(tree);
+		guiInstance.updateCurrentGui();
+		guiInstance.getMainFrame().getTree().setSelectionPath(
 				new TreePath(((JMeterTreeNode) newTree.getArray()[0]).getPath()));
-		tree = GuiPackage.getInstance().getCurrentSubTree();
+		tree = guiInstance.getCurrentSubTree();
 		// Send different event wether we are merging a test plan into another test plan,
 		// or loading a testplan from scratch
 		ActionEvent actionEvent = null;
@@ -162,12 +177,13 @@ public class Load implements Command {
 		}
 
 		ActionRouter.getInstance().actionPerformed(actionEvent);
-	    if (expandTree) {
-			JTree jTree = GuiPackage.getInstance().getMainFrame().getTree();
-			   for(int i = 0; i < jTree.getRowCount(); i++) {
-			     jTree.expandRow(i);
-			   }
-	    }
+// Disabled for now, as it is disconcerting
+//	    if (expandTree) {
+//			JTree jTree = guiInstance.getMainFrame().getTree();
+//			   for(int i = 0; i < jTree.getRowCount(); i++) {
+//			     jTree.expandRow(i);
+//			   }
+//	    }
 
 		return isTestPlan;
 	}
