@@ -335,11 +335,11 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	 * @param stringPattern
 	 * @return the message for the assertion report 
 	 */
-	// TODO strings should be resources
+	// TODO strings should be resources (but currently must not contain commas or the CSV file will be broken)
 	private String getFailText(String stringPattern, String toCheck) {
 		
 		StringBuffer sb = new StringBuffer(200);
-		sb.append("Test failed, ");
+		sb.append("Test failed: ");
 
 		if (isTestFieldResponseData()) {
 			sb.append("text");
