@@ -137,24 +137,19 @@ public final class MenuFactory {
 	private MenuFactory() {
 	}
 
-	public static String doNothing() {
-		return "doing nothing";
-	}
-
 	public static void addEditMenu(JPopupMenu menu, boolean removable) {
 		addSeparator(menu);
-		menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
+		if (removable) {
+			menu.add(makeMenuItem(JMeterUtils.getResString("cut"), //$NON-NLS-1$
                 "Cut", ActionNames.CUT, //$NON-NLS-1$
                 KeyStrokes.CUT));
+        }
 		menu.add(makeMenuItem(JMeterUtils.getResString("copy"),  //$NON-NLS-1$
                 "Copy", ActionNames.COPY, //$NON-NLS-1$
                 KeyStrokes.COPY));
 		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
                 "Paste", ActionNames.PASTE, //$NON-NLS-1$
                 KeyStrokes.PASTE));
-// Does not appear to be any different to Paste
-//		menu.add(makeMenuItem(JMeterUtils.getResString("paste_insert"), //$NON-NLS-1$
-//                "Paste Insert", ActionNames.PASTE)); //$NON-NLS-1$
 		menu.add(makeMenuItem(JMeterUtils.getResString("reset_gui"), //$NON-NLS-1$
                 "Reset", ActionNames.RESET_GUI //$NON-NLS-1$
                 ));
@@ -163,6 +158,13 @@ public final class MenuFactory {
                     "Remove", ActionNames.REMOVE, //$NON-NLS-1$
                     KeyStrokes.REMOVE));
 		}
+	}
+
+	public static void addPasteMenu(JPopupMenu menu) {
+		addSeparator(menu);
+		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
+                "Paste", ActionNames.PASTE, //$NON-NLS-1$
+                KeyStrokes.PASTE));
 	}
 
 	public static void addFileMenu(JPopupMenu menu) {
