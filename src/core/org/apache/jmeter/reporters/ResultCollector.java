@@ -198,7 +198,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
                     	long lineNumber=1;
-                    	SampleSaveConfiguration saveConfig = OldSaveService.getSampleSaveConfiguration(line);
+                    	SampleSaveConfiguration saveConfig = OldSaveService.getSampleSaveConfiguration(line,filename);
                     	if (saveConfig == null) {// not a valid header
                     		saveConfig = (SampleSaveConfiguration) getSaveConfig().clone(); // OldSaveService may change the format
                     	} else { // header line has been processed, so read the next
@@ -218,7 +218,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             readSamples(SaveService.loadTestResults(bufferedInputStream));
                             parsedOK = true;
                         } catch (Exception e) {
-                            log.info("File load failure, trying old XML format. "+e.getLocalizedMessage());
+                            log.info("Failed to load "+filename+" using XStream, trying old XML format. Error was: "+e);
                             try {
                                 Configuration savedSamples = getConfiguration(filename);
                                 Configuration[] samples = savedSamples.getChildren();
@@ -316,13 +316,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			if (len < MIN_XML_FILE_LEN) {
 				return false;
 			}
-			raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not
-															// work on all OSes?
+			raf.seek(len - TESTRESULTS_END.length() - 10);// TODO: may not work on all OSes?
 			String line;
 			long pos = raf.getFilePointer();
 			int end = 0;
-			while ((line = raf.readLine()) != null)// reads to end of line OR
-													// file
+			while ((line = raf.readLine()) != null)// reads to end of line OR end of file
 			{
 				end = line.indexOf(TESTRESULTS_END);
 				if (end >= 0) // found the string
