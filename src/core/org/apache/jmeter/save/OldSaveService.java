@@ -50,6 +50,7 @@ import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -57,6 +58,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternMatcherInput;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 import org.xml.sax.SAXException;
 
 /**
@@ -151,7 +156,7 @@ public final class OldSaveService {
 		 * former does not return empty tokens.
 		 */
 		// The \Q prefix is needed to ensure that meta-characters (e.g. ".") work.
-		String parts[]=inputLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
+		String parts[]=inputLine.split("\\Q"+saveConfig.getDelimiter());// $NON-NLS-1$
 		String text = null;
 		String field = null; // Save the name for error reporting
 		int i=0;
@@ -437,18 +442,34 @@ public final class OldSaveService {
 	/**
 	 * Parse a CSV header line
 	 * @param headerLine from CSV file
+	 * @param filename name of file (for log message only)
 	 * @return config corresponding to the header items found or null if not a header line
 	 */
-	public static SampleSaveConfiguration getSampleSaveConfiguration(String headerLine){
-		String parts[]=headerLine.split("\\Q"+_saveConfig.getDelimiter());// $NON-NLS-1$
+	public static SampleSaveConfiguration getSampleSaveConfiguration(String headerLine, String filename){
+		String[] parts = splitHeader(headerLine,_saveConfig.getDelimiter()); // Try default delimiter
 
-		// Check if the line is a header
-		for(int i=0;i<parts.length;i++){
-			if (!headerLabelMethods.containsKey(parts[i])){
-				return null; // unknown column name
+		String delim = null;
+		
+		if (parts == null){
+			Perl5Matcher matcher = JMeterUtils.getMatcher();
+			PatternMatcherInput input = new PatternMatcherInput(headerLine);
+			Pattern pattern = JMeterUtils.getPatternCache()
+			// This assumes the header names are all single words with no spaces
+			// word followed by 0 or more repeats of (non-word char + word)
+			// where the non-word char (\2) is the same
+			// e.g.  abc|def|ghi but not abd|def~ghi
+			        .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*", // $NON-NLS-1$
+					Perl5Compiler.READ_ONLY_MASK);
+			if (matcher.matches(input, pattern)) {
+				delim = matcher.getMatch().group(2);
+				parts = splitHeader(headerLine,delim);// now validate the result
 			}
 		}
-
+		
+		if (parts == null) {
+			return null; // failed to recognise the header
+		}
+		
 		// We know the column names all exist, so create the config 
 		SampleSaveConfiguration saveConfig=new SampleSaveConfiguration(false);
 		
@@ -456,7 +477,23 @@ public final class OldSaveService {
 			Functor set = (Functor) headerLabelMethods.get(parts[i]);
 			set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
 		}
+
+		if (delim != null){
+			log.warn("Default delimiter '"+_saveConfig.getDelimiter()+"' did not work; using alternate '"+delim+"' for reading "+filename);
+			saveConfig.setDelimiter(delim);
+		}
 		return saveConfig;
+	}
+
+	private static String[] splitHeader(String headerLine, String delim) {
+		String parts[]=headerLine.split("\\Q"+delim);// $NON-NLS-1$
+		// Check if the line is a header
+		for(int i=0;i<parts.length;i++){
+			if (!headerLabelMethods.containsKey(parts[i])){
+				return null; // unknown column name
+			}
+		}
+		return parts;
 	}
 
 	/**
