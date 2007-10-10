@@ -34,6 +34,7 @@
 <li>Bug 43430 - Count of active threads is incorrect for remote samples</li>
 <li>Throughput Controller was not working for "all thread" counts</li>
 <li>If a POST body is built from parameter values only, these are now encoded if the checkbox is set.</li>
+<li>Bug 43584 - Assertion Failure Message contains a comma that is also used as the delimiter for CSV files</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -53,6 +54,7 @@
 <li>Cookie Manager not longer clears cookies defined in the GUI</li>
 <li>HTTP Parameters without names are ignored (except for POST requests with no file)</li>
 <li>"Save Selection As" added to main menu; now checks only item is selected</li>
+<li>Test Plan now has Paste menu item (paste was already supported via ^V)</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
