@@ -95,18 +95,19 @@ public class MultipartUrlConfig implements Serializable {
 		myArgs.addArgument(new HTTPArgument(name, value, metadata));
 	}
 
-    /**
-     * @deprecated values in a multipart/form-data are not urlencoded,
-     * so it does not make sense to add a value as a encoded value
-     */
-	public void addEncodedArgument(String name, String value) {
-		Arguments myArgs = getArguments();
-		HTTPArgument arg = new HTTPArgument(name, value, true);
-		if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue())) {
-			arg.setAlwaysEncoded(false);
-		}
-		myArgs.addArgument(arg);
-	}
+// NOT USED	
+//    /**
+//     * @deprecated values in a multipart/form-data are not urlencoded,
+//     * so it does not make sense to add a value as a encoded value
+//     */
+//	public void addEncodedArgument(String name, String value) {
+//		Arguments myArgs = getArguments();
+//		HTTPArgument arg = new HTTPArgument(name, value, true);
+//		if (arg.getName().equals(arg.getEncodedName()) && arg.getValue().equals(arg.getEncodedValue())) {
+//			arg.setAlwaysEncoded(false);
+//		}
+//		myArgs.addArgument(arg);
+//	}
     
     /**
      * Add a value that is not URL encoded, and make sure it
