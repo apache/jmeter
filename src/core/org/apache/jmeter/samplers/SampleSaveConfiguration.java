@@ -286,7 +286,11 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _requestHeaders  = TRUE.equalsIgnoreCase(props.getProperty(REQUESTHEADERS_PROP, FALSE));
         _encoding        = TRUE.equalsIgnoreCase(props.getProperty(ENCODING_PROP, FALSE));
 
-		_delimiter = props.getProperty(DEFAULT_DELIMITER_PROP, DEFAULT_DELIMITER);
+        String dlm = props.getProperty(DEFAULT_DELIMITER_PROP, DEFAULT_DELIMITER);
+        if (dlm.equals("\\t")) {// Make it easier to enter a tab (can use \<tab> but that is awkward)
+        	dlm="\t";
+        }
+		_delimiter = dlm;
 
 		_fieldNames = TRUE.equalsIgnoreCase(props.getProperty(PRINT_FIELD_NAMES_PROP, FALSE));
 
@@ -735,6 +739,11 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public String getXmlPi() {
         return JMeterUtils.getJMeterProperties().getProperty(XML_PI, ""); // Defaults to empty;
     }
+
+    // Used by old Save service
+	public void setDelimiter(String delim) {
+		delimiter=delim;
+	}
 
     // Used by SampleSaveConfigurationConverter.unmarshall()
 	public void setDefaultDelimiter() {
