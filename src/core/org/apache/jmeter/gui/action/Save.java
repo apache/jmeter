@@ -82,6 +82,13 @@ public class Save implements Command {
 			throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
 		}
 		if (e.getActionCommand().equals(ActionNames.SAVE_AS)) {
+			JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
+			if (nodes.length > 1){
+				JMeterUtils.reportErrorToUser(
+						JMeterUtils.getResString("save_as_error"), // $NON-NLS-1$
+						JMeterUtils.getResString("save_as")); // $NON-NLS-1$
+				return;
+			}
 			subTree = GuiPackage.getInstance().getCurrentSubTree();
 		} else {
 			subTree = GuiPackage.getInstance().getTreeModel().getTestPlan();
