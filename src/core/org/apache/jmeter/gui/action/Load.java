@@ -177,13 +177,12 @@ public class Load implements Command {
 		}
 
 		ActionRouter.getInstance().actionPerformed(actionEvent);
-// Disabled for now, as it is disconcerting
-//	    if (expandTree) {
-//			JTree jTree = guiInstance.getMainFrame().getTree();
-//			   for(int i = 0; i < jTree.getRowCount(); i++) {
-//			     jTree.expandRow(i);
-//			   }
-//	    }
+	    if (expandTree && !merging) { // don't automatically expand when merging
+			JTree jTree = guiInstance.getMainFrame().getTree();
+			   for(int i = 0; i < jTree.getRowCount(); i++) {
+			     jTree.expandRow(i);
+			   }
+	    }
 
 		return isTestPlan;
 	}
