@@ -30,11 +30,15 @@ public class TestHTTPArgument extends TestCase {
 
 		public void testCloning() throws Exception {
 			HTTPArgument arg = new HTTPArgument("name.?", "value_ here");
+			assertEquals("name.?", arg.getName());
+			assertEquals("value_ here", arg.getValue());
 			assertEquals("name.%3F", arg.getEncodedName());
 			assertEquals("value_+here", arg.getEncodedValue());
 			HTTPArgument clone = (HTTPArgument) arg.clone();
 			assertEquals("name.%3F", clone.getEncodedName());
 			assertEquals("value_+here", clone.getEncodedValue());
+			assertEquals("name.?", clone.getName());
+			assertEquals("value_ here", clone.getValue());
 		}
 
 		public void testConversion() throws Exception {
@@ -49,5 +53,21 @@ public class TestHTTPArgument extends TestCase {
 			httpArg = (HTTPArgument) argList.get(1).getObjectValue();
 			assertEquals("name%24of+property", httpArg.getEncodedName());
 			assertEquals("value_.%2B", httpArg.getEncodedValue());
+		}
+		
+		public void testEncoding() throws Exception {
+			HTTPArgument arg;
+			arg = new HTTPArgument("name.?", "value_ here", false);
+			assertEquals("name.?", arg.getName());
+			assertEquals("value_ here", arg.getValue());
+			assertEquals("name.%3F", arg.getEncodedName());
+			assertEquals("value_+here", arg.getEncodedValue());
+			arg = new HTTPArgument("name.?", "value_ here", true);
+			assertEquals("name.?", arg.getName());
+			assertEquals("value_ here", arg.getValue());
+			// TODO - should these be enabled? 
+			// i.e. Does it make sense that name/value are decoded if alreadyEncoded is true?
+			//assertEquals("name.?", arg.getEncodedName());
+			//assertEquals("value_ here", arg.getEncodedValue());
 		}
 }
