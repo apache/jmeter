@@ -396,9 +396,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     }
 
     private void testPostRequest_BodyFromParameterValues(int samplerType, String samplerDefaultEncoding) throws Exception {
-        String titleField = "";
+        final String titleField = ""; // ensure only values are used
         String titleValue = "mytitle";
-        String descriptionField = "";
+        final String descriptionField = ""; // ensure only values are used
         String descriptionValue = "mydescription";
 
         // Test sending data with default encoding
