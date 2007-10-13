@@ -154,6 +154,11 @@
 						</li>
 									
 
+												<li	>
+								Bug 43584 - Assertion Failure Message contains a comma that is also used as the delimiter for CSV files
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -197,7 +202,7 @@
 									
 
 												<li	>
-								Test Plan items can now only be dropped/pasted into parts of the tree where they are allowed
+								Test Plan items can now only be dropped/pasted/merged into parts of the tree where they are allowed
 						</li>
 									
 
@@ -228,6 +233,21 @@
 
 												<li	>
 								HTTP Parameters without names are ignored (except for POST requests with no file)
+						</li>
+									
+
+												<li	>
+								"Save Selection As" added to main menu; now checks only item is selected
+						</li>
+									
+
+												<li	>
+								Test Plan now has Paste menu item (paste was already supported via ^V)
+						</li>
+									
+
+												<li	>
+								If the default delimiter does not work when loading a CSV file, guess the delimiter by analysing the header line.
 						</li>
 									
 
