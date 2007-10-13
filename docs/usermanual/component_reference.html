@@ -6555,7 +6555,7 @@ the Report.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='360' height='196' src="../images/screenshots/csvdatasetconfig.png"></div>
+						<div align="center"><img width='363' height='251' src="../images/screenshots/csvdatasetconfig.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -6582,6 +6582,14 @@ the Report.
 			</td>
 			<td>
 											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>File Encoding</td>
+			<td>						The encoding to be used to read the file, if not the platform default.
+			</td>
+			<td>
+											No
 								</td>
 		</tr>
 			<tr>
@@ -9975,7 +9983,6 @@ until the last set of values is reached, at which point it will begin again at t
 												<p	>
 								User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
-
 in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
 user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.
 						</p>
