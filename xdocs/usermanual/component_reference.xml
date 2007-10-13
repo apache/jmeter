@@ -2079,7 +2079,7 @@ the Report.
 	<br></br>
 </description>
 
-<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="360" height="196" screenshot="csvdatasetconfig.png">
+<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="363" height="251" screenshot="csvdatasetconfig.png">
 <description>
         <p>
 	CSV Data Set Config is used to read lines from a file, and split them into variables.
@@ -2115,6 +2115,7 @@ the Report.
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
   </property>
+  <property name="File Encoding" required="No">The encoding to be used to read the file, if not the platform default.</property>
   <property name="Variable Names" required="Yes">List of variable names (comma-delimited)</property>
   <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
