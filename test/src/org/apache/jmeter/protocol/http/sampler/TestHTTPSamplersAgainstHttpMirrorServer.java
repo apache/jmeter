@@ -127,7 +127,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     }
 
     public void testPostRequest_FileUpload() throws Exception {
-        testPostRequest_FileUpload(HTTP_SAMPLER, ISO_8859_1.toLowerCase());
+        testPostRequest_FileUpload(HTTP_SAMPLER, ISO_8859_1);
     }
 
     public void testPostRequest_FileUpload2() throws Exception {        
@@ -815,16 +815,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         //checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
-        String dataSentToMirrorServer = new String(res.getResponseData(), contentEncoding);
-        int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
-        String headersSent = null;
-        String bodySent = null;
-        if(posDividerHeadersAndBody >= 0) {
-            headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
-            // Skip the blank line with crlf dividing headers and body
-            bodySent = dataSentToMirrorServer.substring(posDividerHeadersAndBody+2);
-        }
-        else {
+        String headersSent = getHeadersSent(res.getResponseData());
+        if(headersSent == null) {
             fail("No header and body section found");
         }
         // Check response headers
@@ -836,12 +828,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
                         Integer.toString(expectedPostBody.length)
                 )
         );
-        assertNotNull("Sent body should not be null",bodySent);
+        byte[] bodySent = getBodySent(res.getResponseData());
+        assertNotNull("Sent body should not be null", bodySent);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
-        // We cannot check this merely by getting the body in the contentEncoding,
-        // since the actual file content is sent binary, without being encoded
-        //checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
+        checkArraysHaveSameContent(expectedPostBody, bodySent);
         // Check method, path and query sent
         checkMethodPathQuery(headersSent, sampler.getMethod(), sampler.getPath(), null);
     }
@@ -1022,8 +1013,59 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         }
     }
 
+    private String getHeadersSent(byte[] responseData) throws IOException {
+        // Find the data sent to the mirror server, which the mirror server is sending back to us
+        // We assume the headers are in ISO_8859_1, and the body can be in any content encoding.
+        String dataSentToMirrorServer = new String(responseData, ISO_8859_1);
+        int posDividerHeadersAndBody = getPositionOfBody(dataSentToMirrorServer);
+        String headersSent = null;
+        if(posDividerHeadersAndBody >= 0) {
+            headersSent = dataSentToMirrorServer.substring(0, posDividerHeadersAndBody);
+        }
+        return headersSent;
+    }
+
+    private byte[] getBodySent(byte[] responseData) throws IOException {
+        // Find the data sent to the mirror server, which the mirror server is sending back to us
+        // We assume the headers are in ISO_8859_1, and the body can be in any content encoding.
+        // Therefore we get the data sent in ISO_8859_1, to be able to determine the end of the
+        // header part, and then we just construct a byte array to hold the body part, not taking
+        // encoding of the body into consideration, because it can contain file data, which is
+        // sent as raw byte data
+        byte[] bodySent = null;
+        String headersSent = getHeadersSent(responseData);
+        if(headersSent != null) {
+            // Get the content length, it tells us how much data to read
+            // TODO : Maybe support chunked encoding, then we cannot rely on content length
+            String contentLengthValue = getSentRequestHeaderValue(headersSent, HTTPSamplerBase.HEADER_CONTENT_LENGTH);
+            int contentLength = -1;
+            if(contentLengthValue != null) {
+                contentLength = new Integer(contentLengthValue).intValue();
+            }
+            else {
+                fail("Did not receive any content-lenght header");
+            }
+            bodySent = new byte[contentLength];
+            System.arraycopy(responseData, responseData.length - contentLength, bodySent, 0, contentLength);
+        }
+        return bodySent;
+    }
+
     private boolean isInRequestHeaders(String requestHeaders, String headerName, String headerValue) {
         return checkRegularExpression(requestHeaders, headerName + ": " + headerValue);
+    }
+    
+    private String getSentRequestHeaderValue(String requestHeaders, String headerName) {
+        Perl5Matcher localMatcher = JMeterUtils.getMatcher();
+        String expression = ".*" + headerName + ": (\\d*).*";
+        Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK);
+        if(localMatcher.matches(requestHeaders, pattern)) {
+            // The value is in the first group, group 0 is the whole match
+            return localMatcher.getMatch().group(1);
+        }
+        else {
+            return null;
+        }
     }
 
     private boolean checkRegularExpression(String stringToCheck, String regularExpression) {
@@ -1138,6 +1180,17 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
                     	System.out.println("====================");
                     	System.out.println(new String(actual,0,i+1));
                     	System.out.println("<<<<<<<<<<<<<<<<<<<<");
+/*                        
+                        // Useful to when debugging
+                        for(int j = 0; j  < expected.length; j++) {
+                            System.out.print(expected[j] + " ");
+                        }
+                        System.out.println();
+                        for(int j = 0; j  < actual.length; j++) {
+                            System.out.print(actual[j] + " ");
+                        }
+                        System.out.println();
+*/                        
                         fail("byte at position " + i + " is different, expected is " + expected[i] + ", actual is " + actual[i]);
                     }
                 }
@@ -1279,7 +1332,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     
     /**
      * Create the expected output post body for form data and file multiparts
-     * with specified values
+     * with specified values, when request is multipart
      */
     private byte[] createExpectedFormAndUploadOutput(
             String boundaryString,
