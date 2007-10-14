@@ -36,6 +36,8 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
+import org.apache.jorphan.util.JMeterError;
+import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 /**
@@ -268,7 +270,8 @@ public final class ActionRouter implements ActionListener {
 					.forName("org.apache.jmeter.gui.action.Command") });
 			commands = new HashMap(listClasses.size());
 			if (listClasses.size() == 0) {
-				log.warn("!!!!!Uh-oh, didn't find any action handlers!!!!!");
+				log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
+				throw new JMeterError("No action handlers found - check JMeterHome and libraries");
 			}
 			iterClasses = listClasses.iterator();
 			while (iterClasses.hasNext()) {
@@ -292,6 +295,8 @@ public final class ActionRouter implements ActionListener {
 			}
 		} catch (HeadlessException e){
 			log.warn(e.toString());
+		} catch (JMeterError e) {
+			throw e;
 		} catch (Exception e) {
 			log.error("exception finding action handlers", e);
 		}
