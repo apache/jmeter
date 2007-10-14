@@ -610,7 +610,7 @@ public class JMeter implements JMeterPlugin {
 			}
 		} catch (Exception ex) {
 			log.error("Giving up, as server failed with:", ex);
-			System.exit(0);// Give up
+			System.exit(1);// Give up
 		}
 	}
 
@@ -801,7 +801,7 @@ public class JMeter implements JMeterPlugin {
 			engine = new ClientJMeterEngine(hostName);
 		} catch (Exception e) {
 			log.fatalError("Failure connecting to remote host", e);
-			System.exit(0);
+			System.exit(1);
 		}
 		engine.configure(testTree);
 		return engine;
