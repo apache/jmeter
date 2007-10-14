@@ -49,6 +49,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
@@ -231,7 +232,8 @@ public class SaveService {
 				}
 			}
 		} catch (IOException e) {
-			log.error("Bad saveservice properties file", e);
+			log.fatalError("Bad saveservice properties file", e);
+			throw new JMeterError("JMeter requires the saveservice properties file to continue");
 		}
 	}
 
