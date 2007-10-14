@@ -125,7 +125,7 @@ public class PostWriter {
         }
         else {
             // If there are no arguments, we can send a file as the body of the request
-            if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+            if(sampler.getArguments() != null && !sampler.hasArguments() && sampler.getSendFileAsPostBody()) {
                 OutputStream out = connection.getOutputStream();
                 writeFileToStream(sampler.getFilename(), out);
                 out.flush();
@@ -174,10 +174,14 @@ public class PostWriter {
             PropertyIterator args = sampler.getArguments().iterator();
             while (args.hasNext()) {
                 HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                String parameterName = arg.getName();
+                if (parameterName.length()==0){
+                    continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+                }
                 // End the previous multipart
                 bos.write(CRLF);
                 // Write multipart for parameter
-                writeFormMultipart(bos, arg.getName(), arg.getValue(), contentEncoding);
+                writeFormMultipart(bos, parameterName, arg.getValue(), contentEncoding);
             }
             // If there are any files, we need to end the previous multipart
             if(sampler.hasUploadableFiles()) {
