@@ -125,7 +125,7 @@ public class HttpMirrorControlGui extends LogicControllerGui
 		myBox.add(createPortPanel());
 		mainPanel.add(myBox, BorderLayout.NORTH);
 
-        mainPanel.add(createControls(), BorderLayout.SOUTH);
+        mainPanel.add(createControls(), BorderLayout.CENTER);
 
 		add(mainPanel, BorderLayout.CENTER);
 	}
