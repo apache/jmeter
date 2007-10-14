@@ -406,6 +406,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         String contentEncoding = "";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         HTTPSampleResult res = executeSampler(sampler);
         String expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
@@ -415,6 +417,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         contentEncoding = ISO_8859_1;
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
@@ -426,6 +430,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
@@ -437,8 +443,22 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription   /\\";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
+        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
+
+        // Test sending data as UTF-8, with values that will change when urlencoded, and where
+        // we tell the sampler to urlencode the parameter value
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "mytitle/=";
+        descriptionValue = "mydescription   /\\";
+        setupUrl(sampler, contentEncoding);
+        setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
+        res = executeSampler(sampler);
+        expectedPostBody = URLEncoder.encode(titleValue + descriptionValue, contentEncoding);
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
 
         // Test sending data as UTF-8, with values that have been urlencoded
@@ -447,9 +467,23 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         titleValue = "mytitle%2F%3D";
         descriptionValue = "mydescription+++%2F%5C";
         setupUrl(sampler, contentEncoding);
+        setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
+        res = executeSampler(sampler);
+        expectedPostBody = titleValue + descriptionValue;
+        checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
+
+        // Test sending data as UTF-8, with values that have been urlencoded, and
+        // where we tell the sampler to urlencode the parameter values
+        sampler = createHttpSampler(samplerType);
+        contentEncoding = "UTF-8";
+        titleValue = "mytitle%2F%3D";
+        descriptionValue = "mydescription+++%2F%5C";
+        setupUrl(sampler, contentEncoding);
         setupFormData(sampler, true, titleField, titleValue, descriptionField, descriptionValue);
         res = executeSampler(sampler);
-        expectedPostBody = URLDecoder.decode(titleValue, contentEncoding) + URLDecoder.decode(descriptionValue, contentEncoding);
+        expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
 
         // Test sending data as UTF-8, with values similar to __VIEWSTATE parameter that .net uses
@@ -459,6 +493,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         res = executeSampler(sampler);
         expectedPostBody = titleValue + descriptionValue;
         checkPostRequestBody(sampler, res, samplerDefaultEncoding, contentEncoding, expectedPostBody);
@@ -498,6 +534,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         descriptionValue = "mydescription\u0153\u20a1\u0115\u00c5${description_suffix}";
         setupUrl(sampler, contentEncoding);
         setupFormData(sampler, false, titleField, titleValue, descriptionField, descriptionValue);
+        ((HTTPArgument)sampler.getArguments().getArgument(0)).setAlwaysEncoded(false);
+        ((HTTPArgument)sampler.getArguments().getArgument(1)).setAlwaysEncoded(false);
         // Replace the variables in the sampler
         replacer.replaceValues(sampler);
         res = executeSampler(sampler);
