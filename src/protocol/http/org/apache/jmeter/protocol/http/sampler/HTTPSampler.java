@@ -95,18 +95,32 @@ public class HTTPSampler extends HTTPSamplerBase {
 	}
 
     private void setPutHeaders(URLConnection conn)
-     {
-         String filename = getFilename();
-         if ((filename != null) && (filename.trim().length() > 0))
-         {
-             conn.setRequestProperty(HEADER_CONTENT_TYPE, getMimetype());
-             conn.setDoOutput(true);
-             conn.setDoInput(true);
+    {
+        boolean hasPutBody = false;
+        // Check if any files should be uploaded
+        if (hasUploadableFiles())
+        {
+            // Set content-type if we have a value for it
+            if(getMimetype() != null && getMimetype().trim().length() > 0) {
+                conn.setRequestProperty(HEADER_CONTENT_TYPE, getMimetype());
+            }
+            hasPutBody = true;
+        }
+        // Check if any parameters should be sent as body
+        if(getSendParameterValuesAsPostBody()) {
+            hasPutBody = true;
+        }
+        // If there is any files to upload, or other body content to be sent,
+        // we set the connection to accept output
+        if(hasPutBody) {
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
         }
     }
 
 	/**
 	 * Send POST data from <code>Entry</code> to the open connection.
+     * This also handles sending data for PUT requests
 	 * 
 	 * @param connection
 	 *            <code>URLConnection</code> where POST data should be sent
@@ -118,22 +132,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 		return postWriter.sendPostData(connection, this);
 	}
 
-    private void sendPutData(URLConnection conn) throws IOException {
-        String filename = getFilename();
-        if ((filename != null) && (filename.trim().length() > 0)) {
-            OutputStream out = conn.getOutputStream();
-            byte[] buf = new byte[1024];
-            int read;
-            InputStream in = new BufferedInputStream(new FileInputStream(filename));
-            while ((read = in.read(buf)) > 0) {
-                out.write(buf, 0, read);
-            }
-            in.close();
-            out.flush();
-            out.close();
-        }
+    private String sendPutData(URLConnection connection) throws IOException {
+        return postWriter.sendPostData(connection, this);
     }
-
 
 	/**
 	 * Returns an <code>HttpURLConnection</code> fully ready to attempt
@@ -478,8 +479,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 			if (method.equals(POST)) {
 				String postBody = sendPostData(conn);
 				res.setQueryString(postBody);
-			} else if (method.equals(PUT)) {
-                sendPutData(conn);
+            }
+            else if (method.equals(PUT)) {
+                String putBody = sendPutData(conn);
+                res.setQueryString(putBody);
             }
 			// Request sent. Now get the response:
 			byte[] responseData = readResponse(conn, res);

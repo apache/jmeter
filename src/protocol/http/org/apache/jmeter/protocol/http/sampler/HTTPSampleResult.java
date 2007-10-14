@@ -105,9 +105,10 @@ public class HTTPSampleResult extends SampleResult {
 			sb.append(' ');
 			sb.append(u.toString());
             sb.append("\n");
-			if (HTTPSamplerBase.POST.equals(method)) {
+            // Include request body if it is a post or put
+            if (HTTPSamplerBase.POST.equals(method) || HTTPSamplerBase.PUT.equals(method)) {
                 sb.append("\nPOST data:\n");
-				sb.append(queryString);
+                sb.append(queryString);
                 sb.append("\n");
             }
             if (cookies.length()>0){
