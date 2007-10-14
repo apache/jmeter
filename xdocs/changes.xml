@@ -35,6 +35,7 @@
 <li>Throughput Controller was not working for "all thread" counts</li>
 <li>If a POST body is built from parameter values only, these are now encoded if the checkbox is set.</li>
 <li>Bug 43584 - Assertion Failure Message contains a comma that is also used as the delimiter for CSV files</li>
+<li>HTTP Mirror Server now always returns the exact same content, it used to return wrong if UTF-8 encoding was used for HTTP POST body, for example</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -57,6 +58,8 @@
 <li>Test Plan now has Paste menu item (paste was already supported via ^V)</li>
 <li>If the default delimiter does not work when loading a CSV file, guess the delimiter by analysing the header line.</li>
 <li>Add optional "loopback" protocol for HttpClient sampler</li>
+<li>HTTP Mirror Server now supports blocking waiting for more data to appear, if content-length header is present in request</li>
+<li>HTTP Mirror Server GUI now has the Start and Stop buttons in a more visible place</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
