@@ -375,7 +375,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      *            The encoding used for the querystring parameter values
      */
     public void setPath(String path, String contentEncoding) {
-        if (GET.equals(getMethod())) {
+        if (GET.equals(getMethod()) || DELETE.equals(getMethod())) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
                 setProperty(PATH, path.substring(0, index));
@@ -528,6 +528,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public void addArgument(String name, String value, String metadata) {
 		this.getArguments().addArgument(new HTTPArgument(name, value, metadata));
+	}
+	
+	public boolean hasArguments() {
+		return getArguments().getArgumentCount() > 0;
 	}
 
 	public void addTestElement(TestElement el) {
@@ -708,8 +712,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         }
         pathAndQuery.append(path);
 
-        // Add the query string if it is a HTTP GET request
-        if(GET.equals(getMethod())) {
+        // Add the query string if it is a HTTP GET or DELETE request
+        if(GET.equals(getMethod()) || DELETE.equals(getMethod())) {
             // Get the query string encoded in specified encoding
             // If no encoding is specified by user, we will get it
             // encoded in UTF-8, which is what the HTTP spec says
@@ -861,11 +865,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     }
 
 	public String toString() {
-		try {
-			return this.getUrl().toString() + ((POST.equals(getMethod())) ? "\nQuery Data: " + getQueryString() : "");
-		} catch (MalformedURLException e) {
-			return "";
-		}
+        try {
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(this.getUrl().toString());
+            // Append body if it is a post or put
+            if(POST.equals(getMethod()) || PUT.equals(getMethod())) {
+                stringBuffer.append("\nQuery Data: ");
+                stringBuffer.append(getQueryString());
+            }
+            return stringBuffer.toString();
+        } catch (MalformedURLException e) {
+            return "";
+        }
 	}
 
 	/**
@@ -1293,7 +1304,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      * Method to tell if the request has any files to be uploaded
      */
     protected boolean hasUploadableFiles() {
-        return getFilename() != null && getFilename().length() > 0;        
+        return getFilename() != null && getFilename().trim().length() > 0;        
     }
 
     public static String[] getValidMethodsAsArray(){

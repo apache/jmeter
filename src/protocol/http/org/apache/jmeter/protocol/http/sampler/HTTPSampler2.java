@@ -282,9 +282,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
                String parameterName = arg.getName();
                if (parameterName.length()==0){
-            	   continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+                   continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
                }
-                parts[partNo++] = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
+               parts[partNo++] = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
             }
             
             // Add any files
@@ -341,7 +341,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
 
             // If there are no arguments, we can send a file as the body of the request
-            if(getArguments().getArgumentCount() == 0 && getSendFileAsPostBody()) {
+            if(!hasArguments() && getSendFileAsPostBody()) {
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
                     if(getMimetype() != null && getMimetype().length() > 0) {
@@ -358,7 +358,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>");
             }
-            else {            
+            else {
                 // In an application/x-www-form-urlencoded request, we only support
                 // parameters, no file upload is allowed
                 if(!hasContentTypeHeader) {
@@ -402,7 +402,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                         // it before adding it to the post request
                         String parameterName = arg.getName();
                         if (parameterName.length()==0){
-                     	   continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
+                            continue; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
                         }
                         String parameterValue = arg.getValue();
                         if(!arg.isAlwaysEncoded()) {
@@ -448,7 +448,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     bos.close();
                 }
                 else {
-                    postedBody.append("<Multipart was not repeatable, cannot view what was sent>"); // $NON-NLS-1$
+                    postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
                 }
             }
         }
@@ -563,6 +563,15 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		}
 
 		return httpClient;
+	}
+
+    /**
+     * Set any default request headers to include
+     * 
+     * @param httpMethod the HttpMethod used for the request
+     */
+	protected void setDefaultRequestHeaders(HttpMethod httpMethod) {
+        // Method left empty here, but allows subclasses to override
 	}
 
 	/**
@@ -750,8 +759,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 		String urlStr = url.toString();
 
-		log.debug("Start : sample" + urlStr);
-		log.debug("method" + method);
+		log.debug("Start : sample " + urlStr);
+		log.debug("method " + method);
 
         HttpMethodBase httpMethod = null;
 
@@ -784,13 +793,17 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			    httpMethod = new GetMethod(urlStr);
 			}
 
+			// Set any default request headers
+			setDefaultRequestHeaders(httpMethod);
+            // Setup connection
 			client = setupConnection(url, httpMethod, res);
-
+			// Handle the various methods
 			if (method.equals(POST)) {
 				String postBody = sendPostData((PostMethod)httpMethod);
 				res.setQueryString(postBody);
 			} else if (method.equals(PUT)) {
-                setPutHeaders((PutMethod) httpMethod);
+                String putBody = sendPutData((PutMethod)httpMethod);
+                res.setQueryString(putBody);
             }
 
             res.setRequestHeaders(getConnectionHeaders(httpMethod));
@@ -893,17 +906,92 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	}
 
     /**
-     * Set up the PUT data (if present)
+     * Set up the PUT data
      */
-	private void setPutHeaders(PutMethod put) 
-     {
-         String filename = getFilename();
-         if ((filename != null) && (filename.trim().length() > 0))
-         {
-             RequestEntity requestEntity = 
-            	 new FileRequestEntity(new File(filename),getMimetype());
-             put.setRequestEntity(requestEntity);
-         }
+    private String sendPutData(PutMethod put) throws IOException {
+        // Buffer to hold the put body, except file content
+        StringBuffer putBody = new StringBuffer(1000);
+        boolean hasPutBody = false;
+        
+        // Check if the header manager had a content type header
+        // This allows the user to specify his own content-type for a POST request
+        Header contentTypeHeader = put.getRequestHeader(HEADER_CONTENT_TYPE);
+        boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
+
+        // If there are no arguments, we can send a file as the body of the request
+        if(!hasArguments() && getSendFileAsPostBody()) {
+            hasPutBody = true;
+                
+            FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(getFilename()),null); 
+            put.setRequestEntity(fileRequestEntity);
+                
+            // We just add placeholder text for file content
+            putBody.append("<actual file content, not shown here>");
+        }
+        // If none of the arguments have a name specified, we
+        // just send all the values as the post body
+        else if(getSendParameterValuesAsPostBody()) {
+            hasPutBody = true;
+
+            // If a content encoding is specified, we set it as http parameter, so that
+            // the post body will be encoded in the specified content encoding
+            final String contentEncoding = getContentEncoding();
+            boolean haveContentEncoding = false;
+            if(contentEncoding != null && contentEncoding.trim().length() > 0) {
+                put.getParams().setContentCharset(contentEncoding);
+                haveContentEncoding = true;
+            }
+                
+            // Just append all the parameter values, and use that as the post body
+            StringBuffer putBodyContent = new StringBuffer();
+            PropertyIterator args = getArguments().iterator();
+            while (args.hasNext()) {
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                String value = null;
+                if (haveContentEncoding){
+                    value = arg.getEncodedValue(contentEncoding);
+                } else {
+                    value = arg.getEncodedValue();
+                }
+                putBody.append(value);
+            }
+            String contentTypeValue = null;
+            if(hasContentTypeHeader) {
+                contentTypeValue = put.getRequestHeader(HEADER_CONTENT_TYPE).getValue();
+            }
+            StringRequestEntity requestEntity = new StringRequestEntity(putBodyContent.toString(), contentTypeValue, put.getRequestCharSet());
+            put.setRequestEntity(requestEntity);
+        }
+        // Check if we have any content to send for body
+        if(hasPutBody) {                
+            // If the request entity is repeatable, we can send it first to
+            // our own stream, so we can return it
+            if(put.getRequestEntity().isRepeatable()) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                put.getRequestEntity().writeRequest(bos);
+                bos.flush();
+                // We get the posted bytes as UTF-8, since java is using UTF-8
+                putBody.append(new String(bos.toByteArray() , "UTF-8")); // $NON-NLS-1$
+                bos.close();
+            }
+            else {
+                putBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
+            }
+            if(!hasContentTypeHeader) {
+                // Allow the mimetype of the file to control the content type
+                // This is not obvious in GUI if you are not uploading any files,
+                // but just sending the content of nameless parameters
+                if(getMimetype() != null && getMimetype().length() > 0) {
+                    put.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                }
+            }
+            // Set the content length
+            put.setRequestHeader(HEADER_CONTENT_LENGTH, Long.toString(put.getRequestEntity().getContentLength()));
+            return putBody.toString();
+        }
+        else {
+            return null;
+        }        
      }
 
 	// Implement locally, as current httpclient InputStreamRI implementation does not close file...
