@@ -56,6 +56,7 @@
 <li>"Save Selection As" added to main menu; now checks only item is selected</li>
 <li>Test Plan now has Paste menu item (paste was already supported via ^V)</li>
 <li>If the default delimiter does not work when loading a CSV file, guess the delimiter by analysing the header line.</li>
+<li>Add optional "loopback" protocol for HttpClient sampler</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
