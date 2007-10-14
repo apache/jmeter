@@ -64,7 +64,7 @@ public class LoopbackHTTPSocket extends Socket {
 	private LoopbackHTTPSocket() throws IOException{
 		os=new LoopbackOutputStream();
 		// Preload the output so that can be read back as HTTP
-		os.write("HTTP/1.1 200 OK\nContent-Type: text/plain\n\n".getBytes());
+		os.write("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n".getBytes());
 	}
 	
     public LoopbackHTTPSocket(String host, int port, InetAddress localAddress, int localPort, int timeout) throws IOException {
