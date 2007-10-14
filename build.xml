@@ -1606,7 +1606,7 @@ run JMeter unless all the JMeter jars are added.
       </classpath>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
-      <arg value="${build.test},../lib/ext"/>
+      <arg value="${build.test}"/>
       <arg value="${basedir}/bin/testfiles/jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
