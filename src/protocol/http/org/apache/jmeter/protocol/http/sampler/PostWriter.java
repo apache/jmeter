@@ -262,7 +262,7 @@ public class PostWriter {
                     PropertyIterator args = sampler.getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-                        postBodyBuffer.append(arg.getValue());
+                        postBodyBuffer.append(arg.getEncodedValue(contentEncoding));
                     }
                     postBody = postBodyBuffer.toString();
                 }
