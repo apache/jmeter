@@ -71,8 +71,9 @@ import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
-import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.LoopbackHttpClientSocketFactory;
+import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
@@ -196,6 +197,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         log.info("Local host = "+localHost);
         
         setDefaultParams();
+        
+        if (JMeterUtils.getPropDefault("httpclient.loopback",false)){// $NON-NLS-1$
+        	LoopbackHttpClientSocketFactory.setup();
+        }
 	}
 
     // Set default parameters as needed
