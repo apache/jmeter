@@ -129,7 +129,7 @@ public final class AllTests {
 	public static void main(String[] args) {
 		if (args.length < 1) {
 			System.out.println("You must specify a comma-delimited list of paths to search " + "for unit tests");
-			System.exit(0);
+			System.exit(1);
 		}
 		String home=new File(System.getProperty("user.dir")).getParent();
 		System.out.println("Setting JMeterHome: "+home);
@@ -235,7 +235,7 @@ public final class AllTests {
 		// }
 		//System.out.println("------------");
 		// --
-		System.exit(0);
+		System.exit(0); // this is needed because the test may start the AWT EventQueue thread which is not a daemon.
 	}
 
 	/**
