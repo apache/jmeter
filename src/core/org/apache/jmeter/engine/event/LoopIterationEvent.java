@@ -25,9 +25,9 @@ import org.apache.jmeter.testelement.TestElement;
  * source of the event.
  */
 public class LoopIterationEvent {
-	int iteration;
+	private final int iteration;
 
-	TestElement source;
+	private final TestElement source;
 
 	public LoopIterationEvent(TestElement source, int iter) {
 		iteration = iter;
@@ -52,13 +52,4 @@ public class LoopIterationEvent {
 		return source;
 	}
 
-	/**
-	 * Sets the iteration.
-	 * 
-	 * @param iteration
-	 *            The iteration to set
-	 */
-	public void setIteration(int iteration) {
-		this.iteration = iteration;
-	}
 }
