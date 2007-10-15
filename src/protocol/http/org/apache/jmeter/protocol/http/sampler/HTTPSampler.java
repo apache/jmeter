@@ -94,8 +94,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 		postWriter.setHeaders(conn, this);
 	}
 
-    private void setPutHeaders(URLConnection conn)
-    {
+    private void setPutHeaders(URLConnection conn) throws IOException {
+        postWriter = new PostWriter();
+        postWriter.setHeaders(conn, this);
+/*
         boolean hasPutBody = false;
         // Check if any files should be uploaded
         if (hasUploadableFiles())
@@ -116,6 +118,7 @@ public class HTTPSampler extends HTTPSamplerBase {
             conn.setDoInput(true);
             conn.setDoOutput(true);
         }
+*/        
     }
 
 	/**
