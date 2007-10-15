@@ -953,7 +953,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 } else {
                     value = arg.getEncodedValue();
                 }
-                putBody.append(value);
+                putBodyContent.append(value);
             }
             String contentTypeValue = null;
             if(hasContentTypeHeader) {
