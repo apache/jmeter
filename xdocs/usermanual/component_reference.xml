@@ -188,8 +188,8 @@ resource requires query string parameters, add them below in the
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
         <i>value</i>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
         don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
-        the choice of "Method" you made (ie if you chose GET, the query string will be
-        appended to the URL, if POST, then it will be sent separately).  Also, if you are
+        the choice of "Method" you made (ie if you chose GET or DELETE, the query string will be
+        appended to the URL, if POST or PUT, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
         <b>See below for some further information on parameter handling.</b>
@@ -200,11 +200,19 @@ resource requires query string parameters, add them below in the
         <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
-        <b>In versions of JMeter after 2.2: if both the 'name' atribute and MIME type (below) are omitted, then the file is sent as the body
-        of the POST request. This allows arbitrary POST bodies to be sent.</b>
+        <p>
+        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the body
+        of the request. This allows arbitrary bodies to be sent. This functionality is present for POST requests
+        after version 2.2, and also for PUT requests after version 2.3.
+        <b>See below for some further information on parameter handling.</b>
+        </p>
         </property>
         <property name="Value for 'name' attribute" required="No">Value of the "name" web request parameter.</property>
-        <property name="MIME Type" required="No">MIME type (for example, text/plain).</property>
+        <property name="MIME Type" required="No">MIME type (for example, text/plain).
+        If it is a POST or PUT request and either the 'name' atribute (below) are omitted or the request body is
+        constructed from parameter values only, then the value of this field is used as the value of the
+        content-type request header.
+        </property>
         <property name="Retrieve All Embedded Resources from HTML Files" required="No">Tell JMeter to parse the HTML file
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
@@ -228,13 +236,20 @@ as a test plan created using a recorder would continue from the redirected URL.
 </p>
 <p>
 Parameter Handling:<br></br>
-For the POST method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
-then the body is created by concatenating all the value(s) of the parameters. 
+For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
+then the body is created by concatenating all the value(s) of the parameters.
+This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
+See also the MIME Type above how you can control the content-type request header that are sent.
 <br></br>
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 (versions of JMeter after 2.3)
+</p>
+<p>
+Method Handling:<br></br>
+The POST and PUT request methods work similar, except that the PUT method does not support multipart requests.
+The GET and DELETE request methods work similar.
 </p>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.
