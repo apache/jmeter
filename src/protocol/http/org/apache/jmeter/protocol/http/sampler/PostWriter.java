@@ -245,11 +245,6 @@ public class PostWriter {
                 contentLength = inputFile.length();
             }
             else {
-                // Set the content type
-                if(!hasContentTypeHeader) {
-                    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
-                }
-                
                 // We create the post body content now, so we know the size
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 
@@ -257,10 +252,22 @@ public class PostWriter {
                 // just send all the values as the post body
                 String postBody = null;
                 if(!sampler.getSendParameterValuesAsPostBody()) {
+                    // Set the content type
+                    if(!hasContentTypeHeader) {
+                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                    }
+
                     // It is a normal post request, with parameter names and values
                     postBody = sampler.getQueryString(contentEncoding);
                 }
                 else {
+                    // Allow the mimetype of the file to control the content type
+                    // This is not obvious in GUI if you are not uploading any files,
+                    // but just sending the content of nameless parameters
+                    if(!hasContentTypeHeader && sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
+                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                    }
+                    
                     // Just append all the parameter values, and use that as the post body
                     StringBuffer postBodyBuffer = new StringBuffer();
                     PropertyIterator args = sampler.getArguments().iterator();
