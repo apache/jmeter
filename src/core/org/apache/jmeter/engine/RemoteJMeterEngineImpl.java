@@ -37,6 +37,8 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 
 	private JMeterEngine backingEngine;
 
+	private String hostName;
+
 	public static final int DEFAULT_RMI_PORT = 
 		JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
 
@@ -68,7 +70,9 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 		}
 		try {
 			Registry reg = LocateRegistry.getRegistry(port);
-			backingEngine = new StandardJMeterEngine(InetAddress.getLocalHost().getHostName());
+			hostName = InetAddress.getLocalHost().getHostName();
+			log.info("Creating JMeter engine on host "+hostName);
+			backingEngine = new StandardJMeterEngine(hostName);// see setHost()
 			reg.rebind("JMeterEngine", this); // $NON-NLS-1$
 			log.info("Bound to registry on port " + port);
 		} catch (Exception ex) {
@@ -78,7 +82,9 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 		}
 	}
 
+	// TODO: is this really needed? The hostname is passed in when the engine is created
 	public void setHost(String host) {
+		hostName=host;
 		log.info("received host: " + host);
 		backingEngine.setHost(host);
 	}
@@ -99,7 +105,7 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 		log.info("running test");
 		log.debug("This = " + this);
 		long now=System.currentTimeMillis();
-		System.out.println("Starting the test @ "+new Date(now)+" ("+now+")");
+		System.out.println("Starting the test on host " + hostName + " @ "+new Date(now)+" ("+now+")");
 		backingEngine.runTest();
 	}
 
