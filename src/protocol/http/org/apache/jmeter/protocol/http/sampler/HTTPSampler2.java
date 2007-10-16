@@ -359,12 +359,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 postedBody.append("<actual file content, not shown here>");
             }
             else {
-                // In an application/x-www-form-urlencoded request, we only support
+                // In a post request which is not multipart, we only support
                 // parameters, no file upload is allowed
-                if(!hasContentTypeHeader) {
-                    // Set the content type
-                    post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
-                }
 
                 // If a content encoding is specified, we set it as http parameter, so that
                 // the post body will be encoded in the specified content encoding
@@ -378,6 +374,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
                 if(getSendParameterValuesAsPostBody()) {
+                    // Allow the mimetype of the file to control the content type
+                    // This is not obvious in GUI if you are not uploading any files,
+                    // but just sending the content of nameless parameters
+                    if(!hasContentTypeHeader && getMimetype() != null && getMimetype().length() > 0) {
+                        post.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                    }
+                    
                     // Just append all the non-empty parameter values, and use that as the post body
                     StringBuffer postBody = new StringBuffer();
                     PropertyIterator args = getArguments().iterator();
@@ -393,7 +396,15 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     }
                     StringRequestEntity requestEntity = new StringRequestEntity(postBody.toString(), post.getRequestHeader(HEADER_CONTENT_TYPE).getValue(), post.getRequestCharSet());
                     post.setRequestEntity(requestEntity);
-                } else { // It is a normal post request, with parameter names and values
+                }
+                else {
+                    // It is a normal post request, with parameter names and values
+                    
+                    // Set the content type
+                    if(!hasContentTypeHeader) {
+                        post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                    }
+                    // Add the parameters
                     PropertyIterator args = getArguments().iterator();
                     while (args.hasNext()) {
                         HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
@@ -929,7 +940,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             putBody.append("<actual file content, not shown here>");
         }
         // If none of the arguments have a name specified, we
-        // just send all the values as the post body
+        // just send all the values as the put body
         else if(getSendParameterValuesAsPostBody()) {
             hasPutBody = true;
 
@@ -992,7 +1003,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         else {
             return null;
         }        
-     }
+    }
 
 	// Implement locally, as current httpclient InputStreamRI implementation does not close file...
 	private class FileRequestEntity implements RequestEntity {
