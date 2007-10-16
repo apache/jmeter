@@ -596,26 +596,17 @@ public class JMeter implements JMeterPlugin {
 	
 	}
 
-	//TODO - is this needed?
-	public void startServer() {
-		startServer(0);
-	}
-
-	//TODO - should this be public?
-	public void startServer(int port) {
+	private void startServer(int port) {
 		try {
 			new RemoteJMeterEngineImpl(port);
-			while (true) {
-				Thread.sleep(Long.MAX_VALUE);
-			}
 		} catch (Exception ex) {
 			log.error("Giving up, as server failed with:", ex);
+			System.err.println("Server failed to start: "+ex);
 			System.exit(1);// Give up
 		}
 	}
 
-    // TODO - should this be public?
-	public void startNonGui(CLOption testFile, CLOption logFile, CLOption remoteStart)
+	private void startNonGui(CLOption testFile, CLOption logFile, CLOption remoteStart)
 			throws IllegalUserActionException {
 		// add a system property so samplers can check to see if JMeter
 		// is running in NonGui mode
