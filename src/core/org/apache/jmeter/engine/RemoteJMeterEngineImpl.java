@@ -30,7 +30,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$ Updated on: $Date$
+ * This is the JMeter server main code.
  */
 public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject implements RemoteJMeterEngine {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -40,6 +40,10 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 	public static final int DEFAULT_RMI_PORT = 
 		JMeterUtils.getPropDefault("server.rmi.port", 1099); // $NON-NLS-1$
 
+	// Should we create our own copy of the RMI registry?
+	private static final boolean createServer =
+		JMeterUtils.getPropDefault("server.rmi.create", true); // $NON-NLS-1$
+	
 	public RemoteJMeterEngineImpl() throws RemoteException {
 		init(DEFAULT_RMI_PORT);
 	}
@@ -51,6 +55,17 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 	private void init(int port) throws RemoteException {
 		log.info("Starting backing engine on " + port);
 		log.debug("This = " + this);
+		if (createServer){
+			log.info("Creating RMI registry (server.rmi.create=true)");
+			try {
+			    LocateRegistry.createRegistry(port);
+			} catch (RemoteException e){
+				String msg="Problem creating registry: "+e;
+				log.warn(msg);
+				System.err.println(msg);
+				System.err.println("Continuing...");
+			}
+		}
 		try {
 			Registry reg = LocateRegistry.getRegistry(port);
 			backingEngine = new StandardJMeterEngine(InetAddress.getLocalHost().getHostName());
@@ -101,24 +116,5 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 	public void exit() throws RemoteException {
 		log.info("Exitting");
 		backingEngine.exit();
-	}
-
-	/**
-	 * The main program for the RemoteJMeterEngineImpl class.
-	 * 
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String[] args) {
-		log.info("Starting main");
-		try {
-			new RemoteJMeterEngineImpl();
-			while (true) {
-				Thread.sleep(Long.MAX_VALUE);
-			}
-		} catch (Exception ex) {
-			log.error("", ex); // $NON-NLS-1$
-		}
-
 	}
 }
