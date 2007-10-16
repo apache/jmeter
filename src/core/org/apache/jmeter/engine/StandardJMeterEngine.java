@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -243,6 +244,10 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 			}
 		}
 		log.info("Test has ended");
+		if (host != null) {
+			long now=System.currentTimeMillis();
+			System.out.println("Finished the test on host " + host + " @ "+new Date(now)+" ("+now+")");
+		}
 	}
 
 	private ListedHashTree cloneTree(ListedHashTree tree) {
