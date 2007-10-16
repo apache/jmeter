@@ -89,3 +89,8 @@ rem Collect the settings defined above
 set ARGS=%HEAP% %NEW% %SURVIVOR% %TENURING% %EVACUATION% %RMIGC% %PERM% %DDRAW%
 
 %JM_START% %JM_LAUNCH% %JVM_ARGS% %ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
+
+echo level=%ERRORLEVEL%
+
+if NOT errorlevel 0 pause
+if errorlevel 1 pause
