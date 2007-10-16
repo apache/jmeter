@@ -76,6 +76,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>HTTP Mirror Server GUI now has the Start and Stop buttons in a more visible place</li>
 <li>Server mode now creates the RMI registry; to disable set the JMeter property server.rmi.create=false</li>
 <li>HTTP Sampler now supports using MIME Type field to specify content-type request header when body is constructed from parameter values</li>
+<li>Enable exit after a single server test - define JMeter property server.exitaftertest=true</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
