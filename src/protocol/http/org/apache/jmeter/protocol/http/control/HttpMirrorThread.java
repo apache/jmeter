@@ -135,7 +135,11 @@ public class HttpMirrorThread extends Thread {
                 }
             }
             else {
-                log.error("No content-length header found, and it is not chunked transfer, we cannot read the request");
+                // The reqest has no body, or it has a transfer encoding we do not support.
+                // In either case, we read any data available
+                while(in.available() > 0 && ((length = in.read(buffer)) != -1)) {
+                    out.write(buffer, 0, length);
+                }
             }
             out.flush();
         } catch (Exception e) {
