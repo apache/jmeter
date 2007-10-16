@@ -47,9 +47,9 @@ public class PostWriter {
 	public static final String ENCODING = "ISO-8859-1"; // $NON-NLS-1$
 
     /** The form data that is going to be sent as url encoded */
-    private byte[] formDataUrlEncoded;    
+    protected byte[] formDataUrlEncoded;    
     /** The form data that is going to be sent in post body */
-    private byte[] formDataPostBody;
+    protected byte[] formDataPostBody;
     /** The start of the file multipart to be sent */
     private byte[] formDataFileStartMultipart;
     /** The boundary string for multipart */
