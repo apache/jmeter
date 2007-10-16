@@ -49,6 +49,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>If a POST body is built from parameter values only, these are now encoded if the checkbox is set.</li>
 <li>Bug 43584 - Assertion Failure Message contains a comma that is also used as the delimiter for CSV files</li>
 <li>HTTP Mirror Server now always returns the exact same content, it used to return wrong if UTF-8 encoding was used for HTTP POST body, for example</li>
+<li>Bug 43612 - HTTP PUT does not honor request parameters</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -74,6 +75,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>HTTP Mirror Server now supports blocking waiting for more data to appear, if content-length header is present in request</li>
 <li>HTTP Mirror Server GUI now has the Start and Stop buttons in a more visible place</li>
 <li>Server mode now creates the RMI registry; to disable set the JMeter property server.rmi.create=false</li>
+<li>HTTP Sampler now supports using MIME Type field to specify content-type request header when body is constructed from parameter values</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
