@@ -18,7 +18,6 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,12 +48,12 @@ import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.FileRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.OptionsMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.methods.TraceMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
@@ -1004,46 +1003,6 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             return null;
         }        
     }
-
-	// Implement locally, as current httpclient InputStreamRI implementation does not close file...
-	private class FileRequestEntity implements RequestEntity {
-
-	    final File file;
-	    final String contentType;
-	    
-	    public FileRequestEntity(final File file, final String contentType) {
-	        super();
-	        if (file == null) {
-	            throw new IllegalArgumentException("File may not be null");
-	        }
-	        this.file = file;
-	        this.contentType = contentType;
-	    }
-	    public long getContentLength() {
-	        return this.file.length();
-	    }
-
-	    public String getContentType() {
-	        return this.contentType;
-	    }
-
-	    public boolean isRepeatable() {
-	        return true;
-	    }
-
-	    public void writeRequest(OutputStream out) throws IOException {
-	        InputStream in = new FileInputStream(this.file);
-	        try {
-	            int l;
-	            byte[] buffer = new byte[1024];
-	            while ((l = in.read(buffer)) != -1) {
-	                out.write(buffer, 0, l);
-	            }
-	        } finally {
-	            in.close();
-	        }
-	    }
-	}
     
     /**
      * Class extending FilePart, so that we can send placeholder text
