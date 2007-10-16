@@ -53,7 +53,7 @@ import org.apache.log.Logger;
 public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, Runnable, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	private static final long serialVersionUID = 231L; // Remember to change this when the class changes ...
 	
 	private transient Thread runningThread;
 
@@ -77,8 +77,12 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 
 	private transient ListenerNotifier notifier;
 
+	// Should we exit at end of the test? (only applies to server, because host is non-null)
+	private static final boolean exitAfterTest =
+		JMeterUtils.getPropDefault("server.exitaftertest", false);  // $NON-NLS-1$
+
     private static final boolean startListenersLater = 
-        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true);
+        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true); // $NON-NLS-1$
 
     static {
         if (startListenersLater){
@@ -247,6 +251,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		if (host != null) {
 			long now=System.currentTimeMillis();
 			System.out.println("Finished the test on host " + host + " @ "+new Date(now)+" ("+now+")");
+			if (exitAfterTest){
+				exit();
+			}
 		}
 	}
 
