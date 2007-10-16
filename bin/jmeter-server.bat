@@ -49,9 +49,12 @@ goto exit
 
 :setCP
 echo Found ApacheJMeter_core.jar
-set CLASSPATH=%JMETER_HOME%\lib\ext\ApacheJMeter_core.jar;%JMETER_HOME%\lib\jorphan.jar;%JMETER_HOME%\lib\logkit-1.2.jar
 
-START rmiregistry %SERVER_PORT%
+REM No longer need to create the rmiregistry as it is done by the server
+REM set CLASSPATH=%JMETER_HOME%\lib\ext\ApacheJMeter_core.jar;%JMETER_HOME%\lib\jorphan.jar;%JMETER_HOME%\lib\logkit-1.2.jar
+
+REM START rmiregistry %SERVER_PORT%
+REM
 
 if not "%OS%"=="Windows_NT" goto win9xStart
 :winNTStart
