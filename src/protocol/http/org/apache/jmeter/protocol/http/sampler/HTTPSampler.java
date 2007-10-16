@@ -18,11 +18,9 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import java.net.BindException;
 import java.net.HttpURLConnection;
@@ -95,30 +93,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 	}
 
     private void setPutHeaders(URLConnection conn) throws IOException {
-        postWriter = new PostWriter();
+        postWriter = new PutWriter();
         postWriter.setHeaders(conn, this);
-/*
-        boolean hasPutBody = false;
-        // Check if any files should be uploaded
-        if (hasUploadableFiles())
-        {
-            // Set content-type if we have a value for it
-            if(getMimetype() != null && getMimetype().trim().length() > 0) {
-                conn.setRequestProperty(HEADER_CONTENT_TYPE, getMimetype());
-            }
-            hasPutBody = true;
-        }
-        // Check if any parameters should be sent as body
-        if(getSendParameterValuesAsPostBody()) {
-            hasPutBody = true;
-        }
-        // If there is any files to upload, or other body content to be sent,
-        // we set the connection to accept output
-        if(hasPutBody) {
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-        }
-*/        
     }
 
 	/**
@@ -443,7 +419,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 		HttpURLConnection conn = null;
 
 		String urlStr = url.toString();
-		log.debug("Start : sample" + urlStr);
+		log.debug("Start : sample " + urlStr);
 
 		HTTPSampleResult res = new HTTPSampleResult();
 		res.setMonitor(isMonitor());
