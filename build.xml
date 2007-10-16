@@ -1478,8 +1478,39 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
   </target>
   
+  <target name="batchtestserver" description="Run the batch test using client-server mode">
+  	<parallel>
+  		<daemons>
+  		    <java classname="org.apache.jmeter.NewDriver" fork="yes" dir="${basedir}/bin">
+  		       <classpath>
+  		     	<fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
+  		     	<fileset dir="${dest.jar}" includes="*.jar"/>
+  		     	<path refid="classpath"/>
+  		       </classpath>
+  		       <sysproperty key="java.awt.headless" value="true"/>
+  		        <arg value="-j"/>
+  		        <arg value="${basedir}/bin/jmeter-server.log"/>
+   		        <arg value="-s"/>
+  		    	<arg value="-Jserver.exitaftertest=true"/>
+  		     </java>
+ 		</daemons>
+  		<sequential>
+  	  		<sleep seconds="1"/>
+  			<antcall target="batchtest">
+  				<param name="remote" value="-Rlocalhost"/>
+  			</antcall>
+  		</sequential>
+  	</parallel>
+	   	<delete>
+	 	    <fileset dir="${basedir}/bin">
+	             <include name="jmeter-server.log"/>
+	 	    </fileset>
+	     </delete>
+  </target>
+	
   <target name="batchtest" description="Run the batch test and compare output files">
 
+	<property name="remote" value=""/>
   	<property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
   	<property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
@@ -1526,6 +1557,7 @@ run JMeter unless all the JMeter jars are added.
        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
         <arg value="${batchtest.name}.log"/>
+        <arg value="${remote}"/>
      </java>
 
   	<checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
