@@ -786,6 +786,7 @@ public class JMeter implements JMeterPlugin {
 			engine = new ClientJMeterEngine(hostName);
 		} catch (Exception e) {
 			log.fatalError("Failure connecting to remote host", e);
+			System.err.println("Failure connecting to remote host"+e);
 			System.exit(1);
 		}
 		engine.configure(testTree);
