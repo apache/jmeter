@@ -99,22 +99,22 @@ public class Proxy extends Thread {
     /**
      * Configure the Proxy.
      * 
-     * @param clientSocket
+     * @param _clientSocket
      *            the socket connection to the client
-     * @param target
+     * @param _target
      *            the ProxyControl which will receive the generated sampler
-     * @param pageEncodings
+     * @param _pageEncodings
      *            reference to the Map of Deamon, with mappings from page urls to encoding used
      * @param formEncodingsEncodings
      *            reference to the Map of Deamon, with mappings from form action urls to encoding used
      */
-    void configure(Socket clientSocket, ProxyControl target, Map pageEncodings, Map formEncodings) {
-        this.target = target;
-        this.clientSocket = clientSocket;
-        this.captureHttpHeaders = target.getCaptureHttpHeaders();
-        this.httpsSpoof = target.getHttpsSpoof();
-        this.pageEncodings = pageEncodings;
-        this.formEncodings = formEncodings;
+    void configure(Socket _clientSocket, ProxyControl _target, Map _pageEncodings, Map _formEncodings) {
+        this.target = _target;
+        this.clientSocket = _clientSocket;
+        this.captureHttpHeaders = _target.getCaptureHttpHeaders();
+        this.httpsSpoof = _target.getHttpsSpoof();
+        this.pageEncodings = _pageEncodings;
+        this.formEncodings = _formEncodings;
     }
 
 	/**
