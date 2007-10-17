@@ -442,7 +442,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 						throw e;
 					}
 					log.debug("Bind exception, try again");
-					conn.disconnect();
+					if (conn!=null) conn.disconnect();
 					this.setUseKeepAlive(false);
 					continue; // try again
 				} catch (IOException e) {
