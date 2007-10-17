@@ -38,6 +38,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 public class PostWriter {
     
 	private static final String DASH_DASH = "--";  // $NON-NLS-1$
+	private static final byte[] DASH_DASH_BYTES = DASH_DASH.getBytes();
 
     /** The bounday string between multiparts */
     protected final static String BOUNDARY = "---------------------------7d159c1302d0y0"; // $NON-NLS-1$
@@ -318,7 +319,7 @@ public class PostWriter {
      * @throws IOException
      */
     private byte[] getMultipartDivider() throws IOException {
-        return new String(DASH_DASH + getBoundary()).getBytes(ENCODING);
+        return (DASH_DASH + getBoundary()).getBytes(ENCODING);
     }
 
     /**
@@ -328,7 +329,7 @@ public class PostWriter {
      * @throws IOException
      */
     private byte[] getFileMultipartEndDivider() throws IOException{
-        byte[] ending = new String(DASH_DASH + getBoundary()).getBytes(ENCODING);
+        byte[] ending = getMultipartDivider();
         byte[] completeEnding = new byte[ending.length + CRLF.length];
         System.arraycopy(CRLF, 0, completeEnding, 0, CRLF.length);
         System.arraycopy(ending, 0, completeEnding, CRLF.length, ending.length);
@@ -342,7 +343,7 @@ public class PostWriter {
      * @throws IOException
      */
     private byte[] getMultipartEndDivider() throws IOException{
-        byte[] ending = DASH_DASH.getBytes(ENCODING);
+        byte[] ending = DASH_DASH_BYTES;
         byte[] completeEnding = new byte[ending.length + CRLF.length];
         System.arraycopy(ending, 0, completeEnding, 0, ending.length);
         System.arraycopy(CRLF, 0, completeEnding, ending.length, CRLF.length);
