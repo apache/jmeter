@@ -264,8 +264,14 @@ public class PostWriter {
                     // Allow the mimetype of the file to control the content type
                     // This is not obvious in GUI if you are not uploading any files,
                     // but just sending the content of nameless parameters
-                    if(!hasContentTypeHeader && sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                    if(!hasContentTypeHeader) {
+                        if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
+                            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                        }
+                        else {
+                            // TODO: is this the correct default?
+                            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                        }
                     }
                     
                     // Just append all the parameter values, and use that as the post body
