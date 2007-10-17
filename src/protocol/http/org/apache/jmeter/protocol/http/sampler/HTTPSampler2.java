@@ -376,8 +376,14 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     // Allow the mimetype of the file to control the content type
                     // This is not obvious in GUI if you are not uploading any files,
                     // but just sending the content of nameless parameters
-                    if(!hasContentTypeHeader && getMimetype() != null && getMimetype().length() > 0) {
-                        post.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                    if(!hasContentTypeHeader) {
+                        if(getMimetype() != null && getMimetype().length() > 0) {
+                            post.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                        }
+                        else {
+                        	 // TODO - is this the correct default?
+                            post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
+                        }
                     }
                     
                     // Just append all the non-empty parameter values, and use that as the post body
