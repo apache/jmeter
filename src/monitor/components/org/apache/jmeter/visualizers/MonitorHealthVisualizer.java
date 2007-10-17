@@ -17,7 +17,6 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -25,8 +24,6 @@ import java.awt.Image;
 
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-
-import org.apache.jmeter.gui.util.VerticalPanel;
 
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;

@@ -37,13 +37,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JMeterError;
-import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public final class ActionRouter implements ActionListener {
 	private Map commands = new HashMap();
 
