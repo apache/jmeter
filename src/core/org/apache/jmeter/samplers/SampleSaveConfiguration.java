@@ -716,7 +716,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * Only intended for use by OldSaveService (and test cases)
      */
     public void setFormatter(DateFormat fmt){
-    	printMilliseconds = "ms".equals(fmt);// $NON-NLS-1$ maintain relationship
+    	printMilliseconds = (fmt == null); // maintain relationship
     	formatter = fmt;
     }
     
