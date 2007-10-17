@@ -740,14 +740,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         assertNotNull(boundaryString);
         byte[] expectedPostBody = createExpectedFormdataOutput(boundaryString, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, true, true);
         // Check request headers
-        assertTrue(isInRequestHeaders(res.getRequestHeaders(), HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
-        assertTrue(
-                isInRequestHeaders(
-                        res.getRequestHeaders(),
-                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
-                        Integer.toString(expectedPostBody.length)
-                )
-        );
+        checkHeaderTypeLength(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body from the result query string
         checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
 
@@ -765,14 +758,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             fail("No header and body section found");
         }
         // Check response headers
-        assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
-        assertTrue(
-                isInRequestHeaders(
-                        headersSent,
-                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
-                        Integer.toString(expectedPostBody.length)
-                )
-        );
+        checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody, bodySent.getBytes(contentEncoding));
@@ -802,14 +788,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         assertNotNull(boundaryString);
         byte[] expectedPostBody = createExpectedFormAndUploadOutput(boundaryString, contentEncoding, titleField, titleValue, descriptionField, descriptionValue, fileField, fileValue, fileMimeType, fileContent);
         // Check request headers
-        assertTrue(isInRequestHeaders(res.getRequestHeaders(), HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
-        assertTrue(
-                isInRequestHeaders(
-                        res.getRequestHeaders(),
-                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
-                        Integer.toString(expectedPostBody.length)
-                )
-        );
+        checkHeaderTypeLength(res.getRequestHeaders(), "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         // We cannot check post body from the result query string, since that will not contain
         // the actual file content, but placeholder text for file content
         //checkArraysHaveSameContent(expectedPostBody, res.getQueryString().getBytes(contentEncoding));
@@ -820,14 +799,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             fail("No header and body section found");
         }
         // Check response headers
-        assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, "multipart/form-data" + "; boundary=" + boundaryString));
-        assertTrue(
-                isInRequestHeaders(
-                        headersSent,
-                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
-                        Integer.toString(expectedPostBody.length)
-                )
-        );
+        checkHeaderTypeLength(headersSent, "multipart/form-data" + "; boundary=" + boundaryString, expectedPostBody.length);
         byte[] bodySent = getBodySent(res.getResponseData());
         assertNotNull("Sent body should not be null", bodySent);
         // Check post body which was sent to the mirror server, and
@@ -849,15 +821,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // Check URL
         assertEquals(sampler.getUrl(), res.getURL());
         // Check request headers
-        assertTrue(isInRequestHeaders(res.getRequestHeaders(), HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED));
-        assertTrue(
-                isInRequestHeaders(
-                        res.getRequestHeaders(),
-                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
-                        Integer.toString(expectedPostBody.getBytes(contentEncoding).length)
-                )
-        );
-        // Check post body from the result query string
+        checkHeaderTypeLength(res.getRequestHeaders(), HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, expectedPostBody.getBytes(contentEncoding).length);
+         // Check post body from the result query string
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), res.getQueryString().getBytes(contentEncoding));
 
         // Find the data sent to the mirror server, which the mirror server is sending back to us
@@ -874,14 +839,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             fail("No header and body section found");
         }
         // Check response headers
-        assertTrue(isInRequestHeaders(headersSent, HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED));
-        assertTrue(
-                isInRequestHeaders(
-                        headersSent,
-                        HTTPSamplerBase.HEADER_CONTENT_LENGTH,
-                        Integer.toString(expectedPostBody.getBytes(contentEncoding).length)
-                )
-        );
+        checkHeaderTypeLength(headersSent, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED, expectedPostBody.getBytes(contentEncoding).length);
         // Check post body which was sent to the mirror server, and
         // sent back by the mirror server
         checkArraysHaveSameContent(expectedPostBody.getBytes(contentEncoding), bodySent.getBytes(contentEncoding));
@@ -1055,6 +1013,14 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         return checkRegularExpression(requestHeaders, headerName + ": " + headerValue);
     }
     
+    private void checkHeaderTypeLength(String requestHeaders, String contentType, int contentLen) {
+    	boolean typeOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_TYPE, contentType);
+    	boolean lengOK = isInRequestHeaders(requestHeaders, HTTPSamplerBase.HEADER_CONTENT_LENGTH, Integer.toString(contentLen));
+        if (!typeOK || !lengOK){
+        	fail("Expected type:" + contentType + " & length: " +contentLen + " in:\n"+ requestHeaders);
+        }
+    }
+   
     private String getSentRequestHeaderValue(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         String expression = ".*" + headerName + ": (\\d*).*";
