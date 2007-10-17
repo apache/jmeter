@@ -58,7 +58,7 @@ public class ThroughputController extends GenericController implements Serializa
 
 	private static int globalIteration;
 
-	private static Object counterLock; // ensure counts are updated correctly
+	private static final Object counterLock = new Object(); // ensure counts are updated correctly
 
 	/**
 	 * Number of iterations on which we've chosen to deliver samplers.
@@ -217,9 +217,10 @@ public class ThroughputController extends GenericController implements Serializa
 	}
 
 	public void testStarted() {
-		globalNumExecutions = 0;
-		globalIteration = -1;
-		counterLock = new Object();
+		synchronized (counterLock) {
+			globalNumExecutions = 0;
+			globalIteration = -1;			
+		}
 	}
 
 	public void testStarted(String host) {
