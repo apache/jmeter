@@ -3603,6 +3603,9 @@ It is available only on the WorkBench.
 <p>
 The Debug Sampler generates a sample containing the values of all JMeter variables and/or properties.
 </p>
+<p>
+The values can be seen in the <complink name="View Results Tree"/> Listener Response Data pane.
+</p>
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
