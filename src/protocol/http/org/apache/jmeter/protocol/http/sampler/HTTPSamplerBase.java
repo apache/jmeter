@@ -328,12 +328,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
      * Determine if we should use multipart/form-data or 
      * application/x-www-form-urlencoded for the post
      * 
-     * @return true if multipart/form-data should be used
+     * @return true if multipart/form-data should be used and method is POST
      */
     public boolean getUseMultipartForPost(){
         // We use multipart if we have been told so, or files are present
         // and the files should not be send as the post body
-        if(getDoMultipartPost() || (hasUploadableFiles() && !getSendFileAsPostBody())) {
+        if(POST.equals(getMethod()) && (getDoMultipartPost() || (hasUploadableFiles() && !getSendFileAsPostBody()))) {
             return true;
         }
         else {
