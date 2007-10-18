@@ -59,7 +59,7 @@ public class PostWriterTest extends TestCase {
         postWriter=new PostWriter();
         
         // Create the test file content
-        TEST_FILE_CONTENT = new String("foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052").getBytes(UTF_8);
+        TEST_FILE_CONTENT = "foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052".getBytes(UTF_8);
 
         // create a temporary file to make sure we always have a file to give to the PostWriter 
         // Whereever we are or Whatever the current path is.
@@ -80,6 +80,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending a request which contains both formdata and file content
      */
     public void testSendPostData() throws IOException {
+    	sampler.setMethod(HTTPSamplerBase.POST);
         setupFilepart(sampler);
         String titleValue = "mytitle";
         String descriptionValue = "mydescription";
@@ -236,6 +237,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending only a file multipart.
      */
     public void testSendFileData_Multipart() throws IOException {
+    	sampler.setMethod(HTTPSamplerBase.POST);
         String fileField = "upload";
         String mimeType = "text/plain";
         File file = temporaryFile;
@@ -289,6 +291,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending only a formdata, as a multipart/form-data request.
      */
     public void testSendFormData_Multipart() throws IOException {
+    	sampler.setMethod(HTTPSamplerBase.POST);
         String titleField = "title";
         String titleValue = "mytitle";
         String descriptionField = "description";
@@ -388,7 +391,7 @@ public class PostWriterTest extends TestCase {
         postWriter.sendPostData(connection, sampler);
         
         checkContentTypeUrlEncoded(connection);
-        byte[] expectedUrl = new String("title=" + titleValue + "&description=" + descriptionValue).getBytes("US-ASCII");        
+        byte[] expectedUrl = ("title=" + titleValue + "&description=" + descriptionValue).getBytes("US-ASCII");        
         checkContentLength(connection, expectedUrl.length);
         checkArraysHaveSameContent(expectedUrl, connection.getOutputStreamContent());
         assertEquals(
@@ -539,6 +542,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
     public void testSetHeaders() throws IOException {
+    	sampler.setMethod(HTTPSamplerBase.POST);
         setupFilepart(sampler);
         setupFormData(sampler);
         
@@ -685,7 +689,7 @@ public class PostWriterTest extends TestCase {
             String descriptionValue,
             boolean firstMultipart,
             boolean lastMultipart) throws IOException {
-        final byte[] DASH_DASH = new String("--").getBytes(HTTP_ENCODING);
+        final byte[] DASH_DASH = "--".getBytes(HTTP_ENCODING);
         // All form parameter always have text/plain as mime type
         final String mimeType="text/plain";//TODO make this a parameter?
         
@@ -764,7 +768,7 @@ public class PostWriterTest extends TestCase {
             boolean lastMultipart) throws IOException {
         // The encoding used for http headers and control information
         final String httpEncoding = "ISO-8859-1";
-        final byte[] DASH_DASH = new String("--").getBytes(httpEncoding);
+        final byte[] DASH_DASH = "--".getBytes(httpEncoding);
         
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         if(firstMultipart) {
