@@ -61,9 +61,9 @@ public class HttpMirrorThread extends Thread {
             in = new BufferedInputStream(clientSocket.getInputStream());
             out = new BufferedOutputStream(clientSocket.getOutputStream());
             // The headers are written using ISO_8859_1 encoding
-            out.write("HTTP/1.0 200 OK".getBytes(ISO_8859_1));
+            out.write("HTTP/1.0 200 OK".getBytes(ISO_8859_1)); //$NON-NLS-1$
             out.write(CRLF);
-            out.write("Content-Type: text/plain".getBytes(ISO_8859_1));
+            out.write("Content-Type: text/plain".getBytes(ISO_8859_1)); //$NON-NLS-1$
             out.write(CRLF);
             out.write(CRLF);
             out.flush();
@@ -78,18 +78,14 @@ public class HttpMirrorThread extends Thread {
             byte[] buffer = new byte[1024];
             StringBuffer headers = new StringBuffer();
             int length = 0;
-            boolean haveAllHeaders = false;
             int positionOfBody = 0;
-            while(!haveAllHeaders && ((length = in.read(buffer)) != -1)) {
+            while(positionOfBody <= 0 && ((length = in.read(buffer)) != -1)) {
+            	out.write(buffer, 0, length); // echo back
                 headers.append(new String(buffer, 0, length, ISO_8859_1));
                 // Check if we have read all the headers
                 positionOfBody = getPositionOfBody(headers.toString());
-                haveAllHeaders = positionOfBody > 0;                                
             }
-            
-            // Write the headers
-            out.write(headers.toString().getBytes(ISO_8859_1));
-            
+          
             // Check if we have found a content-length header
             String contentLengthHeaderValue = getRequestHeaderValue(headers.toString(), "Content-Length"); //$NON-NLS-1$
             if(contentLengthHeaderValue != null) {
@@ -152,11 +148,14 @@ public class HttpMirrorThread extends Thread {
         log.info("End of Thread");
     }
     
-    private String getRequestHeaderValue(String requestHeaders, String headerName) {
+    private static String getRequestHeaderValue(String requestHeaders, String headerName) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-        String expression = ".*" + headerName + ": (\\d*).*"; // $NON-NLS-1$ $NON-NLS-2$
-        Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.SINGLELINE_MASK);
-        if(localMatcher.matches(requestHeaders, pattern)) {
+        // We use multi-line mask so can prefix the line with ^
+        // also match \w+ to catch Transfer-Encoding: chunked
+        // TODO: may need to be extended to allow for other header values with non-word contents
+        String expression = "^" + headerName + ":\\s+(\\w+)"; // $NON-NLS-1$ $NON-NLS-2$        
+        Pattern pattern = JMeterUtils.getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
+        if(localMatcher.contains(requestHeaders, pattern)) {
             // The value is in the first group, group 0 is the whole match
             return localMatcher.getMatch().group(1);
         }
@@ -164,15 +163,15 @@ public class HttpMirrorThread extends Thread {
             return null;
         }
     }
-    
-    private int getPositionOfBody(String stringToCheck) {
+
+    private static int getPositionOfBody(String stringToCheck) {
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
-        // The headers and body are divided by a blank line
-        String regularExpression = "^.$"; // $NON-NLS-1$
+        // The headers and body are divided by a blank line (the \r is to allow for the CR before LF)
+        String regularExpression = "^\\r$"; // $NON-NLS-1$
         Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
         
         PatternMatcherInput input = new PatternMatcherInput(stringToCheck);
-        while(localMatcher.contains(input, pattern)) {
+        if(localMatcher.contains(input, pattern)) {
             MatchResult match = localMatcher.getMatch();
             return match.beginOffset(0);
         }
