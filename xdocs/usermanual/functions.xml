@@ -71,29 +71,34 @@ Properties are not the same as variables.
 Variables are local to a thread; properties are common to all threads.
 </note>
 <p>List of functions:</p>
-<ul>
-        <li><a href="#__regexFunction">regexFunction - regular expression evaluator</a></li>
-        <li><a href="#__counter">counter</a></li>
-        <li><a href="#__threadNum">threadNum - get thread number</a></li>
-        <li><a href="#__intSum">intSum - add variables</a></li>
-        <li><a href="#__StringFromFile">StringFromFile - read a line from a file</a></li>
-        <li><a href="#__machineName">machineName - get the local machine name</a></li>
-        <li><a href="#__javaScript">JavaScript (Mozilla Rhino)</a></li>
-        <li><a href="#__Random">random number</a></li>
-        <li><a href="#__CSVRead">CSVRead - read from CSV delimited file</a></li>
-        <li><a href="#__property">read a property</a></li>
-        <li><a href="#__P">P - read a property</a></li>
-        <li><a href="#__setProperty">setProperty - set a property</a></li>
-        <li><a href="#__log">log - log a message</a></li>
-        <li><a href="#__logn">logn - log a message</a></li>
-        <li><a href="#__BeanShell">BeanShell - run BeanShell</a></li>
-        <li><a href="#__split">split - Split a string into variables</a></li>
-        <li><a href="#__XPath">XPath - XPath use an xpath expression</a></li>
-        <li><a href="#__time">time - return current time in various formats</a></li>
-        <li><a href="#__jexl">jexl - evaluate a Commons Jexl expression</a></li>
-        <li><a href="#__V">V evaluate a variable expression</a></li>
-</ul>
-
+<table border="1">
+        
+        <tr><th>Name</th><th>Comment</th></tr>
+        <!-- N.B. the leading space is needed to ensure the content is processed -->
+        <tr><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td></tr>
+        <tr><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td></tr>
+        <tr><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td></tr>
+        <tr><td> <a href="#__intSum">intSum</a></td><td>add numbers</td></tr>
+        <tr><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td></tr>
+        <tr><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td></tr>
+        <tr><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
+        <tr><td> <a href="#__Random">Random</a></td><td>generate a random number</td></tr>
+        <tr><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td></tr>
+        <tr><td> <a href="#__property">property</a> </td><td>read a property</td></tr>
+        <tr><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td></tr>
+        <tr><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td></tr>
+        <tr><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td></tr>
+        <tr><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td></tr>
+        <tr><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td></tr>
+        <tr><td> <a href="#__split">split</a></td><td>Split a string into variables</td></tr>
+        <tr><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td></tr>
+        <tr><td> <a href="#__time">time</a></td><td>return current time in various formats</td></tr>
+        <tr><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression</td></tr>
+        <tr><td> <a href="#__V">V</a></td><td>evaluate a variable name</td></tr>
+        <tr><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td></tr>
+        <tr><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td></tr>
+</table>
+<p></p>
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
 <p>There are two kinds of functions: user-defined static values (or variables), and built-in functions.<br></br>
 User-defined static values allow the user to define variables to be replaced with their static value when
@@ -117,13 +122,11 @@ request throughout the course of the test. </p>
 Each occurrence of a function call in a test plan is handled by a separate function instance.</note>
 </subsection>
 
-<subsection name="&sect-num;.2 Where can functions be used?" anchor="where">
+<subsection name="&sect-num;.2 Where can functions and variables be used?" anchor="where">
 <p>
 Functions and variables can be written into any field of any test component.  Some fields do not allow random strings 
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
 functions.
-<br></br>
-The Cookie Manager does not support variables/functions.
 </p>
 <p>
 Configuration elements are processed by a separate thread.
@@ -140,14 +143,12 @@ SELECT item from table where name=${VAR}
 </note>
 </subsection>
 
-<subsection name="&sect-num;.3 Writing the function string" anchor="how">
-<p>User-defined functions take the form: <code>${varName}</code>.  In the TestPlan tree element, a two-column table
-of user-defined values is kept, matching up variable names with static values.  Referencing the
-variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
-<p>Built-in functions are written in the same manner, but by convention, the names of built-in
+<subsection name="&sect-num;.3 How to reference variables and functions" anchor="how">
+<p>Referencing a variable in a test element is done by bracketing the variable name with '${' and '}'.</p>
+<p>Functions are referenced in the same manner, but by convention, the names of
 functions begin with "__" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
 configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
-be left out.</p>
+be omitted.</p>
 
 <p>Argument values that themselves contain commas should be escaped as necessary.
 If you need to include a comma in your parameter value, escape it like so: '\,'.
@@ -158,10 +159,24 @@ that may be needed in script method calls - e.g.
     ${__BeanShell(vars.put("name"\,"value"))}
 </pre>
 <p>
+Functions can reference variables and other functions, for example 
+<code>${__XPath(${__P(xpath.file),${XPATH})}</code> 
+will use the property "xpath.file" as the file name
+and the contents of the variable XPATH as the expression to search for.
+</p>
+<p>
 JMeter provides a tool to help you construct
 function calls for various built-in functions, which you can then copy-paste. 
 It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.</p>
 
+<p>
+<b>The value of a variable or function can be reported</b> using the <a href="#__logn">__logn()</a> function.
+The __logn() function reference can be used anywhere in the test plan after the variable has been defined.
+Alternatively, the Java Request sampler can be used to create a sample containing variable references;
+the output will be shown in the approriate Listener.
+For versions of JMeter later than 2.3, there is a <complink name="Debug Sampler"/> 
+that can be used to display the values of variables etc in the Tree View Listener.
+</p>
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
 variable will override the built-in function.</note>
 </subsection>
@@ -537,6 +552,11 @@ the second would return 1 and the last would return www.dummy.org
 <p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
 	In this case, the output is always printed - it does not depend on the current log setting.
 </p>
+<pre>
+For example:
+     ${__log(Message)} - written to the log file
+     ${__log(Message,OUT)} - written to console window
+</pre>
 </component>
 
 <component index="&sect-num;.5.12" name="__logn">
@@ -554,6 +574,10 @@ the second would return 1 and the last would return www.dummy.org
 <p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
 	In this case, the output is always printed - it does not depend on the current log setting.
 </p>
+<pre>
+For example:
+     ${__logn(VAR1=${VAR1},OUT)} - write the value of the variable to the console window
+</pre>
 </component>
 
 <component index="&sect-num;.5.13" name="__BeanShell">
@@ -660,8 +684,10 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
 <component index="&sect-num;.5.15" name="__XPath">
 <description>
 	<p>
-	The XPath function reads an XML file and matches the XPath, each
-	of the node match's are iterated through similar to the CVSReader.
+	The XPath function reads an XML file and matches the XPath.
+	Each time the function is called, the next match will be returned.
+	At end of file, it will wrap around to the start.
+	<note>Note that the entire file is held in memory, so this function should not be used for very large files.</note>
 	</p>
 	<p/>
 	Example:
@@ -671,7 +697,7 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
 	<br></br>
 	${__XPath(/path/to/build.xml, //target/@name)}
 	<br></br>
-	This will match all targets in build.xml and return the name variable
+	This will match all targets in build.xml and return the contents of the next name attribute
 	</code>
 </description>
 
