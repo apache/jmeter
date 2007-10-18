@@ -135,7 +135,7 @@ public class PostWriter {
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
             }
-            else {            
+            else if (formDataUrlEncoded != null){ // may be null for PUT           
                 // In an application/x-www-form-urlencoded request, we only support
                 // parameters, no file upload is allowed
                 OutputStream out = connection.getOutputStream();
