@@ -293,11 +293,17 @@ requests will use "Web Defaults 2", since we placed it in the Thread Group (the 
 </subsection>
 
 <subsection name="&sect-num;.7 Pre-Processor Elements" anchor="preprocessors">
-<p>A Pre-Processor executes some action prior to a Sampler Request being made.  If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running.  A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
+<p>A Pre-Processor executes some action prior to a Sampler Request being made. 
+If a Pre-Processor is attached to a Sampler element, then it will execute just prior to that sampler element running. 
+A Pre-Processor is most often used to modify the settings of a Sample Request just before it runs, or to update variables that aren't extracted from response text.  
+See the <a href="build-test-plan.html#scoping_rules"><b>scoping rules</b></a> for more details on when Pre-Processors are executed.</p>
 </subsection>
 
 <subsection name="&sect-num;.8 Post-Processor Elements" anchor="postprocessors">
-<p>A Post-Processor executes some action after a Sampler Request has been made.  If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.  A Post-Processor is most often used to process the response data, often to extract values from it.  See the <scope>scoping rules</scope> for more details on when Pre-Processors are executed.</p>
+<p>A Post-Processor executes some action after a Sampler Request has been made.
+If a Post-Processor is attached to a Sampler element, then it will execute just after that sampler element runs.
+A Post-Processor is most often used to process the response data, often to extract values from it.  
+See the <a href="build-test-plan.html#scoping_rules"><b>scoping rules</b></a> for more details on when Post-Processors are executed.</p>
 </subsection>
 
 <subsection name="&sect-num;.9 Execution order" anchor="executionorder">
