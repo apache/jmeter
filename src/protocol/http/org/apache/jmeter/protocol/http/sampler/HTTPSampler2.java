@@ -92,7 +92,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$ 
 
-	private static boolean canSetPreEmptive; // OK to set pre-emptive auth?
+	private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
 	
     static final String PROXY_HOST = 
         System.getProperty("http.proxyHost",""); // $NON-NLS-1$ 
@@ -115,7 +115,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
     private static final String PROXY_DOMAIN = 
         JMeterUtils.getPropDefault("http.proxyDomain",""); // $NON-NLS-1$ $NON-NLS-2$
     
-    static InetAddress localAddress = null;
+    static final InetAddress localAddress;
     
     private static final String localHost;
     
@@ -124,8 +124,8 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      */
 	static final ThreadLocal httpClients = new ThreadLocal();
 
-    private static Set nonProxyHostFull   = new HashSet();// www.apache.org
-    private static List nonProxyHostSuffix = new ArrayList();// .apache.org
+    private static final Set nonProxyHostFull   = new HashSet();// www.apache.org
+    private static final List nonProxyHostSuffix = new ArrayList();// .apache.org
 
     private static final int nonProxyHostSuffixSize;
 
@@ -174,12 +174,13 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 //                    new Protocol(PROTOCOL_HTTPS,new SlowHttpClientSocketFactory(cps),DEFAULT_HTTPS_PORT));
 //        }
 
+        InetAddress inet=null;
         String localHostOrIP = 
             JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
         if (localHostOrIP.length() > 0){
             try {
-                localAddress = InetAddress.getByName(localHostOrIP);
-                log.info("Using localAddress "+localAddress.getHostAddress());
+                inet = InetAddress.getByName(localHostOrIP);
+                log.info("Using localAddress "+inet.getHostAddress());
             } catch (UnknownHostException e) {
                 log.warn(e.getLocalizedMessage());
             }
@@ -192,19 +193,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 log.warn("Cannot determine localhost name, and httpclient.localaddress was not specified");
             }
         }
+        localAddress = inet;
         localHost = localHostOrIP;
         log.info("Local host = "+localHost);
         
-        setDefaultParams();
-        
-        if (JMeterUtils.getPropDefault("httpclient.loopback",false)){// $NON-NLS-1$
-        	LoopbackHttpClientSocketFactory.setup();
-        }
-	}
-
-    // Set default parameters as needed
-    private static void setDefaultParams(){
-        HttpParams params = DefaultHttpParams.getDefaultParams();
+        // Set default parameters as needed
+       HttpParams params = DefaultHttpParams.getDefaultParams();
         
         // Process httpclient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
@@ -232,7 +226,12 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // This must be done last, as must not be overridden
         params.setParameter(HttpMethodParams.COOKIE_POLICY,CookiePolicy.IGNORE_COOKIES);
         // We do our own cookie handling
-    }
+       
+        if (JMeterUtils.getPropDefault("httpclient.loopback",false)){// $NON-NLS-1$
+        	LoopbackHttpClientSocketFactory.setup();
+        }
+	}
+
     
     /**
 	 * Constructor for the HTTPSampler2 object.
