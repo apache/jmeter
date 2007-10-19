@@ -23,13 +23,18 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 
 public interface TestElement extends Cloneable {
-	public final static String NAME = "TestElement.name";
+	public final static String NAME = "TestElement.name"; //$NON-NLS-1$
 
-	public final static String GUI_CLASS = "TestElement.gui_class";
+	public final static String GUI_CLASS = "TestElement.gui_class"; //$NON-NLS-1$
 
-	public final static String ENABLED = "TestElement.enabled";
+	public final static String ENABLED = "TestElement.enabled"; //$NON-NLS-1$
 
-	public final static String TEST_CLASS = "TestElement.test_class";
+	public final static String TEST_CLASS = "TestElement.test_class"; //$NON-NLS-1$
+
+    // Needed by AbstractTestElement.
+    // Also TestElementConverter and TestElementPropertyConverter for handling empty comments
+    public final static String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
+    // N.B. Comments originally only applied to Test Plans, hence the name - which can now not be easily changed
 
 	public void addTestElement(TestElement child);
 
@@ -173,4 +178,8 @@ public interface TestElement extends Cloneable {
 	public String getName();
 	
 	public void setName(String name);
+	
+	public String getComment();
+	
+	public void setComment(String comment);
 }
