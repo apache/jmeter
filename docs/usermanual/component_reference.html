@@ -732,8 +732,8 @@ resource requires query string parameters, add them below in the
 						</i>
 									, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
         don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
-        the choice of "Method" you made (ie if you chose GET, the query string will be
-        appended to the URL, if POST, then it will be sent separately).  Also, if you are
+        the choice of "Method" you made (ie if you chose GET or DELETE, the query string will be
+        appended to the URL, if POST or PUT, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
         
@@ -759,10 +759,18 @@ resource requires query string parameters, add them below in the
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         
+												<p	>
+								
+        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the body
+        of the request. This allows arbitrary bodies to be sent. This functionality is present for POST requests
+        after version 2.2, and also for PUT requests after version 2.3.
+        
 												<b	>
-								In versions of JMeter after 2.2: if both the 'name' atribute and MIME type (below) are omitted, then the file is sent as the body
-        of the POST request. This allows arbitrary POST bodies to be sent.
+								See below for some further information on parameter handling.
 						</b>
+									
+        
+						</p>
 									
         
 			</td>
@@ -781,6 +789,10 @@ resource requires query string parameters, add them below in the
 			<tr>
 			<td>MIME Type</td>
 			<td>						MIME type (for example, text/plain).
+        If it is a POST or PUT request and either the 'name' atribute (below) are omitted or the request body is
+        constructed from parameter values only, then the value of this field is used as the value of the
+        content-type request header.
+        
 			</td>
 			<td>
 											No
@@ -843,9 +855,11 @@ Parameter Handling:
 												<br	>
 						</br>
 									
-For the POST method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
-then the body is created by concatenating all the value(s) of the parameters. 
+For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
+then the body is created by concatenating all the value(s) of the parameters.
+This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
+See also the MIME Type above how you can control the content-type request header that are sent.
 
 												<br	>
 						</br>
@@ -853,6 +867,16 @@ The values are encoded if the encoding flag is set (versions of JMeter after 2.3
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 (versions of JMeter after 2.3)
+
+						</p>
+							  									 				<p	>
+								
+Method Handling:
+												<br	>
+						</br>
+									
+The POST and PUT request methods work similar, except that the PUT method does not support multipart requests.
+The GET and DELETE request methods work similar.
 
 						</p>
 							  									 				<p	>
@@ -11373,6 +11397,15 @@ It is available only on the WorkBench.
 												<p	>
 								
 The Debug Sampler generates a sample containing the values of all JMeter variables and/or properties.
+
+						</p>
+									
+
+												<p	>
+								
+The values can be seen in the 
+												<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
+									 Listener Response Data pane.
 
 						</p>
 									
