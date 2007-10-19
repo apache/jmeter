@@ -90,7 +90,7 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
             if (!testFormat22 || !ConversionHelp.isSpecialProperty(jmp.getName())) 
             {
             	// Don't save empty comments
-	       		if (!(TestPlan.COMMENTS.equals(jmp.getName())
+	       		if (!(TestElement.COMMENTS.equals(jmp.getName())
 		       			&& jmp.getStringValue().length()==0))
 		       	{
 		            writeItem(jmp, context, writer);
