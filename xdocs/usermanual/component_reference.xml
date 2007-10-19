@@ -3484,8 +3484,24 @@ See the file BeanShellListeners.bshrc for example definitions.
 <description>
 		<br></br>
 </description>
-<component name="Test Plan" index="&sect-num;.9.1"  width="516" height="763" screenshot="testplan.png">
-<description><p>At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.  Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".  Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
+<component name="Test Plan" index="&sect-num;.9.1"  width="491" height="439" screenshot="testplan.png">
+<description>
+<p>
+The Test Plan is where the overall settings for a test are specified.
+</p>
+<p>
+Static variables can be defined for values that are repeated throughout a test, such as server names.
+For example the variable SERVER could be defined as www.example.com, and the rest of the test plan
+could refer to it as ${SERVER}. This simplifies changing the name later. 
+</p>
+<p>
+Selecting Functional Testing instructs JMeter to save the  additional sample information
+- Response Data and Sampler Data - to all result files.
+This increases the resources needed to run a test, and may adversely impact JMeter performance.
+If more data is required for a particular sampler only, then add a Listener to it, and configure the fields as required.
+[The option does not affect CSV result files, which cannot currently store such information.]
+</p>
+<p>Also, an option exists here to instruct JMeter to run the <complink name="Thread Group"/> serially rather than in parallel.</p>
 <p>Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.</p>
 <p>In jmeter.properties, edit "user.classpath" to include additional libraries. Note that paths with spaces may cause problems for Java.</p></description>
 </component>
