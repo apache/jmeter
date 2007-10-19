@@ -60,9 +60,9 @@ public class TestTreeCloner extends junit.framework.TestCase {
 			TestPlan clonedTestPlan = (TestPlan) newTree.getArray()[1];
 			clonedTestPlan.setRunningVersion(true);
 			clonedTestPlan.recoverRunningVersion();
-			assertTrue(!plan.getProperty(TestPlan.USER_DEFINED_VARIABLES).isRunningVersion());
-			assertTrue(clonedTestPlan.getProperty(TestPlan.USER_DEFINED_VARIABLES).isRunningVersion());
-			Arguments vars = (Arguments) plan.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue();
+			assertTrue(!plan.getUserDefinedVariablesAsProperty().isRunningVersion());
+			assertTrue(clonedTestPlan.getUserDefinedVariablesAsProperty().isRunningVersion());
+			Arguments vars = (Arguments) plan.getUserDefinedVariablesAsProperty().getObjectValue();
 			PropertyIterator iter = ((CollectionProperty) vars.getProperty(Arguments.ARGUMENTS)).iterator();
 			while (iter.hasNext()) {
 				JMeterProperty argProp = iter.next();
@@ -72,7 +72,7 @@ public class TestTreeCloner extends junit.framework.TestCase {
 				arg.setValue("yahoo");
 				assertEquals("yahoo", arg.getValue());
 			}
-			vars = (Arguments) clonedTestPlan.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue();
+			vars = (Arguments) clonedTestPlan.getUserDefinedVariablesAsProperty().getObjectValue();
 			iter = vars.propertyIterator();
 			while (iter.hasNext()) {
 				assertTrue(iter.next().isRunningVersion());

@@ -686,8 +686,8 @@ public class ProxyControl extends GenericController {
 
 					// Special case for the TestPlan's Arguments sub-element:
 					if (element instanceof TestPlan) {
-						Arguments args = (Arguments) element.getProperty(TestPlan.USER_DEFINED_VARIABLES)
-								.getObjectValue();
+						TestPlan tp = (TestPlan) element;
+						Arguments args = tp.getArguments();
 						if (myClass.isInstance(args)) {
 							if (ascending)
 								elements.addFirst(args);
