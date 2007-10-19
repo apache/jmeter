@@ -55,8 +55,6 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     public final static String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
     private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
     
-	public final static String COMMENTS = "TestPlan.comments"; //$NON-NLS-1$
-
     // Does not appear to be needed
 	public final static String BASEDIR = "basedir";
 
