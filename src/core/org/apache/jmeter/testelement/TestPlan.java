@@ -91,7 +91,13 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
         // Does not appear to be needed
 //        setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
 	}
-    
+
+	// create transient item
+	private Object readResolve() throws java.io.ObjectStreamException {
+		threadGroups = new LinkedList();
+        return this;
+    }
+
     public void prepareForPreCompile()
     {
         getVariables().setRunningVersion(true);
