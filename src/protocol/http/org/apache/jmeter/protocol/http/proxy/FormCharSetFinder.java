@@ -38,9 +38,12 @@ import org.htmlparser.util.ParserException;
 class FormCharSetFinder {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    static {
+        log.info("Using htmlparser version: "+Parser.getVersion());
+    }
+
     protected FormCharSetFinder() {
 		super();
-        log.info("Using htmlparser version: "+Parser.getVersion());
 	}
 
     /**
