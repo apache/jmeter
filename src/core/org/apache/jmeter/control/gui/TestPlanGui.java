@@ -38,6 +38,7 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.gui.ThreadGroupGui;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -143,14 +144,16 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 	 */
 	public void configure(TestElement el) {
 		super.configure(el);
-		functionalMode.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
-
-		serializedMode.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(TestPlan.SERIALIZE_THREADGROUPS));
-
-		if (el.getProperty(TestPlan.USER_DEFINED_VARIABLES) != null) {
-			argsPanel.configure((Arguments) el.getProperty(TestPlan.USER_DEFINED_VARIABLES).getObjectValue());
+		if (el instanceof TestPlan) {
+			TestPlan tp = (TestPlan) el;
+		functionalMode.setSelected(tp.isFunctionalMode());
+		serializedMode.setSelected(tp.isSerialized());
+		final JMeterProperty udv = tp.getUserDefinedVariablesAsProperty();
+		if (udv != null) {
+			argsPanel.configure((Arguments) udv.getObjectValue());
 		}
-        browseJar.setFiles( ((TestPlan)el).getTestPlanClasspathArray() );
+        browseJar.setFiles(tp.getTestPlanClasspathArray());
+		}
 	}
 
 	/**
