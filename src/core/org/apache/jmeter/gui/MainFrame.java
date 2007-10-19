@@ -463,8 +463,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 					if (treeNode instanceof DefaultMutableTreeNode) {
 						Object testElement = ((DefaultMutableTreeNode) treeNode).getUserObject();
 						if (testElement instanceof TestElement) {
-							String comment =
-								((TestElement) testElement).getPropertyAsString(TestPlan.COMMENTS);
+							String comment = ((TestElement) testElement).getComment();
 							if (comment != null && comment.length() > 0) {
 								return comment;
 								}

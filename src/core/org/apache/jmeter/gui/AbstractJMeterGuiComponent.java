@@ -194,7 +194,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		} else {
 			enabled = element.getPropertyAsBoolean(TestElement.ENABLED);
 		}
-		getCommentPanel().setText(element.getPropertyAsString(TestPlan.COMMENTS));
+		getCommentPanel().setText(element.getComment());
 	}
 
 	/**
@@ -235,7 +235,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 		// This stores the state of the TestElement
 		log.debug("setting element to enabled: " + enabled);
 		mc.setProperty(new BooleanProperty(TestElement.ENABLED, enabled));
-		mc.setProperty(TestPlan.COMMENTS, getComment());
+		mc.setComment(getComment());
 	}
 
 	/**
