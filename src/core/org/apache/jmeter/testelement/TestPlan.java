@@ -32,6 +32,7 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.ThreadGroup;
@@ -116,6 +117,10 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		setProperty(new TestElementProperty(USER_DEFINED_VARIABLES, vars));
 	}
 
+	public JMeterProperty getUserDefinedVariablesAsProperty() {
+		return getProperty(USER_DEFINED_VARIABLES);
+	}
+
     // Does not appear to be needed
 	public String getBasedir() {
 		return getPropertyAsString(BASEDIR);
@@ -124,6 +129,10 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     // Does not appear to be needed
 	public void setBasedir(String b) {
 		setProperty(BASEDIR, b);
+	}
+
+	public Arguments getArguments() {
+		return getVariables();
 	}
 
 	public Map getUserDefinedVariables() {
