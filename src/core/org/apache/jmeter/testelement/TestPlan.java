@@ -20,56 +20,49 @@ package org.apache.jmeter.testelement;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.NewDriver;
 import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.ThreadGroup;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class TestPlan extends AbstractTestElement implements Serializable, TestListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Does not appear to be needed
-	public final static String THREAD_GROUPS = "TestPlan.thread_groups"; //$NON-NLS-1$
+	// does not appear to be needed
+//	private final static String THREAD_GROUPS = "TestPlan.thread_groups"; //$NON-NLS-1$
 
-	public final static String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
+	private final static String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
 
-	public final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
+	private final static String USER_DEFINED_VARIABLES = "TestPlan.user_defined_variables"; //$NON-NLS-1$
 
-	public final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
+	private final static String SERIALIZE_THREADGROUPS = "TestPlan.serialize_threadgroups"; //$NON-NLS-1$
 
-    public final static String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
+	private final static String CLASSPATHS = "TestPlan.user_define_classpath"; //$NON-NLS-1$
     private static final String CLASSPATH_SEPARATOR = ","; //$NON-NLS-1$
     
-    // Does not appear to be needed
-	public final static String BASEDIR = "basedir";
+    private final static String BASEDIR = "basedir";
+
+    private transient List threadGroups = new LinkedList();
 
     // Does not appear to be needed
-	private transient List threadGroups = new LinkedList();
+//	private transient List configs = new LinkedList();
+
+//    // Does not appear to be needed
+//	private static List itemsCanAdd = new LinkedList();
 
     // Does not appear to be needed
-	private transient List configs = new LinkedList();
-
-    // Does not appear to be needed
-	private static List itemsCanAdd = new LinkedList();
-
-    // Does not appear to be needed
-	private static TestPlan plan;
+//	private static TestPlan plan;
 
 	// There's only 1 test plan, so can cache the mode here
 	private static boolean functionalMode = false;
@@ -81,7 +74,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		// element to a Test Plan.
 
         // Does not appear to be needed
-		itemsCanAdd.add(JMeterUtils.getResString("threadgroup")); //$NON-NLS-1$
+//		itemsCanAdd.add(JMeterUtils.getResString("threadgroup")); //$NON-NLS-1$
 	}
 
 	public TestPlan() {
@@ -96,7 +89,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		// setSerialized(false);
 
         // Does not appear to be needed
-        setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
+//        setProperty(new CollectionProperty(THREAD_GROUPS, threadGroups));
 	}
     
     public void prepareForPreCompile()
@@ -121,12 +114,11 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		return getProperty(USER_DEFINED_VARIABLES);
 	}
 
-    // Does not appear to be needed
 	public String getBasedir() {
 		return getPropertyAsString(BASEDIR);
 	}
 
-    // Does not appear to be needed
+    // Does not appear to be used yet
 	public void setBasedir(String b) {
 		setProperty(BASEDIR, b);
 	}
@@ -191,8 +183,8 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
     }
     
     /**
-     * Returns a string in CSV format
-     * @return
+     * Returns the classpath
+     * @return classpath
      */
     public String getTestPlanClasspath() {
         return getPropertyAsString(CLASSPATHS);
@@ -212,18 +204,18 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	}
 
     // Does not appear to be needed
-	public static TestPlan createTestPlan(String name) {
-		if (plan == null) {
-			if (name == null) {
-				plan = new TestPlan();
-			} else {
-				plan = new TestPlan(name);
-			}
-			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, 
-					"org.apache.jmeter.control.gui.TestPlanGui")); //$NON-NLS-1$
-		}
-		return plan;
-	}
+//	public static TestPlan createTestPlan(String name) {
+//		if (plan == null) {
+//			if (name == null) {
+//				plan = new TestPlan();
+//			} else {
+//				plan = new TestPlan(name);
+//			}
+//			plan.setProperty(new StringProperty(TestElement.GUI_CLASS, 
+//					"org.apache.jmeter.control.gui.TestPlanGui")); //$NON-NLS-1$
+//		}
+//		return plan;
+//	}
 
 	public void addTestElement(TestElement tg) {
 		super.addTestElement(tg);
@@ -232,33 +224,33 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 		}
 	}
 
-    // Does not appear to be needed
-	public void addJMeterComponent(TestElement child) {
-		if (child instanceof ThreadGroup) {
-			addThreadGroup((ThreadGroup) child);
-		}
-	}
+//    // Does not appear to be needed
+//	public void addJMeterComponent(TestElement child) {
+//		if (child instanceof ThreadGroup) {
+//			addThreadGroup((ThreadGroup) child);
+//		}
+//	}
 
-	/**
-	 * Gets the ThreadGroups attribute of the TestPlan object.
-	 * 
-	 * @return the ThreadGroups value
-	 */
-    // Does not appear to be needed
-	public Collection getThreadGroups() {
-		return threadGroups;
-	}
+//	/**
+//	 * Gets the ThreadGroups attribute of the TestPlan object.
+//	 * 
+//	 * @return the ThreadGroups value
+//	 */
+//    // Does not appear to be needed
+//	public Collection getThreadGroups() {
+//		return threadGroups;
+//	}
 
-	/**
-	 * Adds a feature to the ConfigElement attribute of the TestPlan object.
-	 * 
-	 * @param c
-	 *            the feature to be added to the ConfigElement attribute
-	 */
-    // Does not appear to be needed
-	public void addConfigElement(ConfigElement c) {
-		configs.add(c);
-	}
+//	/**
+//	 * Adds a feature to the ConfigElement attribute of the TestPlan object.
+//	 * 
+//	 * @param c
+//	 *            the feature to be added to the ConfigElement attribute
+//	 */
+//    // Does not appear to be needed
+//	public void addConfigElement(ConfigElement c) {
+//		configs.add(c);
+//	}
 
 	/**
 	 * Adds a feature to the ThreadGroup attribute of the TestPlan object.
@@ -266,7 +258,6 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 	 * @param group
 	 *            the feature to be added to the ThreadGroup attribute
 	 */
-    // Does not appear to be needed
 	public void addThreadGroup(ThreadGroup group) {
 		threadGroups.add(group);
 	}
