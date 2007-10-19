@@ -117,14 +117,14 @@ public class FileListPanel extends JPanel implements ActionListener {
         files.revalidate();
 
         JScrollPane scrollpane = new JScrollPane(files);
-        scrollpane.setPreferredSize(new Dimension(400,140));
+        scrollpane.setPreferredSize(new Dimension(100,80));
         add(scrollpane,BorderLayout.CENTER);
 
 		browse.setActionCommand(ACTION_BROWSE); // $NON-NLS-1$
 		browse.addActionListener(this);
         clear.addActionListener(this);
         delete.addActionListener(this);
-        this.setPreferredSize(new Dimension(400,230));
+        //this.setPreferredSize(new Dimension(400,150));
 	}
 
 	/**
