@@ -92,18 +92,19 @@ public class JMeterTreeModel extends DefaultTreeModel {
 		while (iter.hasNext()) {
 			TestElement item = (TestElement) iter.next();
 			if (item instanceof TestPlan) {
+				TestPlan tp = (TestPlan) item;
 				current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);
-				((TestElement) current.getUserObject()).addTestElement(item);
-				((TestPlan) current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
-				((TestPlan) current.getUserObject()).setFunctionalMode(item
-						.getPropertyAsBoolean(TestPlan.FUNCTIONAL_MODE));
-				((TestPlan) current.getUserObject()).setSerialized(item
-						.getPropertyAsBoolean(TestPlan.SERIALIZE_THREADGROUPS));
+				final TestPlan userObject = (TestPlan) current.getUserObject();
+				userObject.addTestElement(item);
+				userObject.setName(item.getName());
+				userObject.setFunctionalMode(tp.isFunctionalMode());
+				userObject.setSerialized(tp.isSerialized());
 				addSubTree(subTree.getTree(item), current);
 			} else if (item instanceof WorkBench) {
 				current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(1);
-				((TestElement) current.getUserObject()).addTestElement(item);
-				((WorkBench) current.getUserObject()).setName(item.getPropertyAsString(TestElement.NAME));
+				final TestElement testElement = ((TestElement) current.getUserObject());
+				testElement.addTestElement(item);
+				testElement.setName(item.getName());
 				addSubTree(subTree.getTree(item), current);
 			} else {
 				addSubTree(subTree.getTree(item), addComponent(item, current));
