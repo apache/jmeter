@@ -124,6 +124,14 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		return getProperty(TestElement.NAME).getStringValue();
 	}
 
+	public void setComment(String comment){
+		setProperty(new StringProperty(TestElement.COMMENTS, comment));
+	}
+	
+	public String getComment(){
+		return getProperty(TestElement.COMMENTS).getStringValue();
+	}
+
 	/**
 	 * Get the named property. If it doesn't exist, a new NullProperty object is
 	 * created with the same name and returned.
