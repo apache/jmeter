@@ -37,11 +37,11 @@ import org.apache.jmeter.threads.JMeterVariables;
  */
 public class CounterConfig extends AbstractTestElement implements Serializable, LoopIterationListener, NoThreadClone {
 
-	public final static String START = "CounterConfig.start"; // $NON-NLS-1$
+	private final static String START = "CounterConfig.start"; // $NON-NLS-1$
 
-	public final static String END = "CounterConfig.end"; // $NON-NLS-1$
+	private final static String END = "CounterConfig.end"; // $NON-NLS-1$
 
-	public final static String INCREMENT = "CounterConfig.incr"; // $NON-NLS-1$
+	private final static String INCREMENT = "CounterConfig.incr"; // $NON-NLS-1$
 
 	private final static String FORMAT = "CounterConfig.format"; // $NON-NLS-1$
 
@@ -123,6 +123,10 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 		return getPropertyAsLong(START);
 	}
 
+	public String getStartAsString() {
+		return getPropertyAsString(START);
+	}
+
 	public void setEnd(long end) {
 		setProperty(new LongProperty(END, end));
 	}
@@ -143,6 +147,10 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
        return propertyAsLong;
 	}
 
+	public String getEndAsString(){
+		return getPropertyAsString(END);
+	}
+
 	public void setIncrement(long inc) {
 		setProperty(new LongProperty(INCREMENT, inc));
 	}
@@ -153,6 +161,10 @@ public class CounterConfig extends AbstractTestElement implements Serializable, 
 
 	public long getIncrement() {
 		return getPropertyAsLong(INCREMENT);
+	}
+
+	public String getIncrementAsString() {
+		return getPropertyAsString(INCREMENT);
 	}
 
 	public void setIsPerUser(boolean isPer) {
