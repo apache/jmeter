@@ -195,6 +195,15 @@ itself.
 									 (windows) script.
 						</p>
 							  									 				<p	>
+								Note that there can only be one JMeter server on each node unless different RMI ports are used.
+						</p>
+							  									 				<p	>
+								Since JMeter 2.3.1, the JMeter server application starts the RMI registry itself; 
+there is no need to start RMI registry separately.
+To revert to the previous behaviour, define the JMeter property server.rmi.create=false on the server host systems.
+
+						</p>
+							  									 				<p	>
 												<b	>
 								Step 2: Add the server IP to your client's Properties File
 						</b>
@@ -281,6 +290,13 @@ There is currently no way to stop the remote servers gracefully from the command
 						</b>
 							</p>
 							  									 				<p	>
+								
+Since JMeter 2.3.1, the RMI registry is started by the JMeter server, so this section does not apply in the normal case.
+To revert to the previous behaviour, define the JMeter property server.rmi.create=false on the server host systems
+and follow the instructions below.
+
+						</p>
+							  									 				<p	>
 								JMeter uses Remote Method Invocation (RMI) as the remote communication mechanism.  Therefore, you need
 to run the RMI Registry application (which is named, "rmiregistry") that comes with the JDK and is located in the "bin" 
 directory.  Before running rmiregistry, make sure that the following jars are in your system claspath:
@@ -338,6 +354,12 @@ Use the "-s" option with the jmeter startup script ("jmeter -s").
 						</p>
 							  									 				<p	>
 								If you see connections refused, turn on debugging by passing the following options.
+						</p>
+							  									 				<p	>
+								Since JMeter 2.3.1, the RMI registry is started by the server; however the options can still be passed in from the JMeter command line.
+For example: "jmeter -s -Dsun.rmi.loader.logLevel=verbose" (i.e. omit the -J prefixes).
+Alternatively the properties can be defined in the system.properties file.
+
 						</p>
 							  									 				<p	>
 								The solution to the problem is to remove the loopbacks 127.0.0.1 and 127.0.0.2 from etc/hosts. What happens is jmeter-server can't connect to rmiregistry if 127.0.0.2 loopback is not available. Use the following settings to fix the problem.
@@ -432,7 +454,6 @@ $ SERVER_PORT=1664 jmeter-server [other options]
 								
 In both cases, the script starts rmiregistry on the specified port, 
 and then starts JMeter in server mode, having defined the "server_port" property.
-
 
 						</p>
 							  									 				<p	>
