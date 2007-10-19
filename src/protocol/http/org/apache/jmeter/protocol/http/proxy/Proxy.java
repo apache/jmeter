@@ -161,12 +161,12 @@ public class Proxy extends Thread {
 			
 			/*
 			 * If we're dealing with text data, and if we're spoofing https, 
-			 * replace all occurences of "https" with "http" for the client. 
+			 * replace all occurences of "https:" with "http:" for the client. 
 			 */
 			if (httpsSpoof && SampleResult.TEXT.equals(result.getDataType()))
 			{
 				String noHttpsResult = new String(result.getResponseData());
-				result.setResponseData(noHttpsResult.replaceAll("https", "http").getBytes());
+				result.setResponseData(noHttpsResult.replaceAll("https:", "http:").getBytes());// TODO this could mangle the encoding
 			}
 
             // Find the page encoding and possibly encodings for forms in the page
