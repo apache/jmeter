@@ -604,8 +604,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 		for (int i = 0; i < rh.length; i++) {
 			String key = rh[i].getName();
+            // TODO: Handle this in Proxy instead?
+			// As this has already been handled, it is currently removed to avoid confusing the JMeter Proxy
 			if (!key.equalsIgnoreCase(TRANSFER_ENCODING))
-                // TODO - why is this not saved?
 			{
 				headerBuf.append(key);
 				headerBuf.append(": "); // $NON-NLS-1$
@@ -1013,7 +1014,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      * Class extending FilePart, so that we can send placeholder text
      * instead of the actual file content
      */
-    private class ViewableFilePart extends FilePart {
+    private static class ViewableFilePart extends FilePart {
     	private boolean hideFileData;
     	
         public ViewableFilePart(String name, File file, String contentType, String charset) throws FileNotFoundException {
