@@ -83,7 +83,7 @@ public class SaveService {
     		// Translate to alias and then delegate to wrapped class
     	    public String serializedClass(Class type) {
     	    	if (type == null) {
-    	    		return super.serializedClass(type);
+    	    		return super.serializedClass(null); // was type, but that caused FindBugs warning
     	    	}
     	    	String alias = classToAlias(type.getName());
                 return alias == null ? super.serializedClass(type) : alias ;
@@ -146,7 +146,7 @@ public class SaveService {
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	private static final String FILEVERSION = "583199";// Expected value $NON-NLS-1$
+	private static final String FILEVERSION = "586574"; // Expected value $NON-NLS-1$
 	private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
