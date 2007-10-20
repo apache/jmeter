@@ -69,7 +69,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 	private static final byte[] NULL_BA = new byte[0];// can share these
 
 	/** Handles writing of a post request */
-    private PostWriter postWriter;
+    private transient PostWriter postWriter;
 
 	/**
 	 * Constructor for the HTTPSampler object.
