@@ -172,7 +172,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	/** A number to indicate that the port has not been set. * */
 	public static final int UNSPECIFIED_PORT = 0;
-    public static final String UNSPECIFIED_PORT_AS_STRING = "0";
+    public static final String UNSPECIFIED_PORT_AS_STRING = "0"; // $NON-NLS-1$
 
 	protected final static String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
 
@@ -198,9 +198,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String KEEP_ALIVE = "keep-alive"; // $NON-NLS-1$
 
-    protected static final String TRANSFER_ENCODING = "transfer-encoding";
+    // e.g. "Transfer-Encoding: chunked", which is processed automatically by the underlying protocol
+    protected static final String TRANSFER_ENCODING = "transfer-encoding"; // $NON-NLS-1$
 
-    protected static final String HEADER_CONTENT_ENCODING = "content-encoding";
+    protected static final String HEADER_CONTENT_ENCODING = "content-encoding"; // $NON-NLS-1$
 
     protected static final String HTTP_1_1 = "HTTP/1.1"; // $NON-NLS-1$
 
@@ -442,8 +443,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     }
 
     public boolean getDoMultipartPost() {
-    	// TODO - Maybe provide a setting in the properties file
-    	// to control the default value for this property
         return getPropertyAsBoolean(DO_MULTIPART_POST, false);
     }
 
@@ -1056,7 +1055,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 	                            continue;
 	                        }
 	                    }
-	                    if (pattern != null && !localMatcher.matches(urlStrEnc, pattern)) {
+	                    // I don't think localMatcher can be null here, but check just in case
+	                    if (pattern != null && localMatcher != null && !localMatcher.matches(urlStrEnc, pattern)) {
 	                    	continue; // we have a pattern and the URL does not match, so skip it
 	                    }
 	                    HTTPSampleResult binRes = sample(url, GET, false, frameDepth + 1);
