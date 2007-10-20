@@ -212,7 +212,7 @@ public class Proxy extends Thread {
 	 */
 	private void writeToClient(SampleResult res, OutputStream out) throws IOException {
 		try {
-			String responseHeaders = massageResponseHeaders(res, res.getResponseHeaders());
+			String responseHeaders = massageResponseHeaders(res);
             out.write(responseHeaders.getBytes());
 			out.write('\n'); // $NON-NLS-1$
 			out.write(res.getResponseData());
@@ -234,23 +234,50 @@ public class Proxy extends Thread {
 	 * In the event the content was gzipped and unpacked, the content-encoding
 	 * header must be removed and the content-length header should be corrected.
 	 * 
-	 * @param res
-	 * @param headers
-	 * @return
+	 * The Transfer-Encoding header is also removed.
+	 * 
+	 * @param res - response
+	 * 
+	 * @return updated headers to be sent to client
 	 */
-	private String massageResponseHeaders(SampleResult res, String headers) {
-		int encodingHeaderLoc = headers.indexOf(": gzip"); // $NON-NLS-1$
-		String newHeaders = headers;
-		if (encodingHeaderLoc > -1) {
-			int end = headers.indexOf(NEW_LINE, encodingHeaderLoc);
-			int begin = headers.lastIndexOf(NEW_LINE, encodingHeaderLoc);
-			newHeaders = newHeaders.substring(0, begin) + newHeaders.substring(end);
-			int lengthIndex = newHeaders.indexOf("ength: "); // $NON-NLS-1$
-			end = newHeaders.indexOf(NEW_LINE, lengthIndex);
-			newHeaders = newHeaders.substring(0, lengthIndex + 7) + res.getResponseData().length
-					+ newHeaders.substring(end);
+	private String massageResponseHeaders(SampleResult res) {
+		String headers = res.getResponseHeaders();
+		String [] headerLines=headers.split(NEW_LINE,-1); // keep empty trailing content
+		int contentLengthIndex=-1;
+		boolean fixContentLength = false;
+		for (int i=0;i<headerLines.length;i++){
+			String line=headerLines[i];
+			String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
+			if (parts.length==2){
+				if (HTTPSamplerBase.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])){
+					headerLines[i]=null; // We don't want this passed on to browser
+					continue;
+				}
+				if (HTTPSamplerBase.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
+					&&
+					HTTPSamplerBase.ENCODING_GZIP.equalsIgnoreCase(parts[1])
+				){
+					headerLines[i]=null; // We don't want this passed on to browser
+					fixContentLength = true;
+					continue;
+				}
+				if (HTTPSamplerBase.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
+					contentLengthIndex=i;
+					continue;
+				}
+			}
 		}
-		return newHeaders;
+		if (fixContentLength && contentLengthIndex>=0){// Fix the content length
+			headerLines[contentLengthIndex]=HTTPSamplerBase.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
+		}
+		StringBuffer sb = new StringBuffer(headers.length());
+		for (int i=0;i<headerLines.length;i++){
+			String line=headerLines[i];
+			if (line != null){
+				sb.append(line).append(NEW_LINE);
+			}
+		}
+		return sb.toString();
 	}
 
 	/**
