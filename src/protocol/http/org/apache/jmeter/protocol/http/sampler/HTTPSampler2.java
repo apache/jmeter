@@ -604,15 +604,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
 		for (int i = 0; i < rh.length; i++) {
 			String key = rh[i].getName();
-            // TODO: Handle this in Proxy instead?
-			// As this has already been handled, it is currently removed to avoid confusing the JMeter Proxy
-			if (!key.equalsIgnoreCase(TRANSFER_ENCODING))
-			{
-				headerBuf.append(key);
-				headerBuf.append(": "); // $NON-NLS-1$
-				headerBuf.append(rh[i].getValue());
-				headerBuf.append("\n"); // $NON-NLS-1$
-			}
+			headerBuf.append(key);
+			headerBuf.append(": "); // $NON-NLS-1$
+			headerBuf.append(rh[i].getValue());
+			headerBuf.append("\n"); // $NON-NLS-1$
 		}
 		return headerBuf.toString();
 	}
