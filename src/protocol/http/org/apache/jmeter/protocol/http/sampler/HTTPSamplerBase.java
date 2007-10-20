@@ -199,21 +199,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     protected static final String KEEP_ALIVE = "keep-alive"; // $NON-NLS-1$
 
     // e.g. "Transfer-Encoding: chunked", which is processed automatically by the underlying protocol
-    protected static final String TRANSFER_ENCODING = "transfer-encoding"; // $NON-NLS-1$
+    public static final String TRANSFER_ENCODING = "transfer-encoding"; // $NON-NLS-1$
 
-    protected static final String HEADER_CONTENT_ENCODING = "content-encoding"; // $NON-NLS-1$
+    public static final String HEADER_CONTENT_ENCODING = "content-encoding"; // $NON-NLS-1$
 
     protected static final String HTTP_1_1 = "HTTP/1.1"; // $NON-NLS-1$
 
     protected static final String HEADER_SET_COOKIE = "set-cookie"; // $NON-NLS-1$
 
-    protected static final String ENCODING_GZIP = "gzip"; // $NON-NLS-1$
+    public static final String ENCODING_GZIP = "gzip"; // $NON-NLS-1$
 
     protected static final String HEADER_CONTENT_DISPOSITION = "Content-Disposition"; // $NON-NLS-1$
 
     protected static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
 
-    protected static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
+    public static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
 
     protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
 
