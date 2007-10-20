@@ -70,19 +70,6 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	}
 
 	/**
-	 * A newly created component can be initialized with the contents of a Test
-	 * Element object by calling this method. The component is responsible for
-	 * querying the Test Element object for the relevant information to display
-	 * in its GUI.
-	 * 
-	 * @param element
-	 *            the TestElement to configure
-	 */
-	public void configure(TestElement element) {
-		getNamePanel().configure(element);
-	}
-
-	/**
 	 * When a user right-clicks on the component in the test tree, or selects
 	 * the edit menu when the component is selected, the component will be asked
 	 * to return a JPopupMenu that provides all the options available to the
@@ -104,7 +91,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 				JMeterUtils.getResString("add"), // $NON-NLS-1$
 				ActionNames.ADD);
 		menu.add(addMenu);
-		MenuFactory.addEditMenu(menu, false);
+		MenuFactory.addPasteResetMenu(menu);
 		MenuFactory.addFileMenu(menu);
 		return menu;
 	}
