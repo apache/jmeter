@@ -160,11 +160,14 @@ public final class MenuFactory {
 		}
 	}
 
-	public static void addPasteMenu(JPopupMenu menu) {
+	public static void addPasteResetMenu(JPopupMenu menu) {
 		addSeparator(menu);
 		menu.add(makeMenuItem(JMeterUtils.getResString("paste"), //$NON-NLS-1$
                 "Paste", ActionNames.PASTE, //$NON-NLS-1$
                 KeyStrokes.PASTE));
+		menu.add(makeMenuItem(JMeterUtils.getResString("reset_gui"), //$NON-NLS-1$
+                "Reset", ActionNames.RESET_GUI //$NON-NLS-1$
+                ));
 	}
 
 	public static void addFileMenu(JPopupMenu menu) {
