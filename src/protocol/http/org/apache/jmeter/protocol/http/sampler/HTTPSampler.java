@@ -279,8 +279,8 @@ public class HTTPSampler extends HTTPSamplerBase {
 
         String hfk;
 		for (int i = 1; (hfk=conn.getHeaderFieldKey(i)) != null; i++) {
-            // TODO - why is this not saved? A: it might be a proxy server specific field.
-            // If JMeter is using a proxy, the browser wouldn't know about that.
+            // TODO: Handle this in Proxy instead?
+			// As this has already been handled, it is currently removed to avoid confusing the JMeter Proxy
             if (!TRANSFER_ENCODING.equalsIgnoreCase(hfk)) {
                 headerBuf.append(hfk);
                 headerBuf.append(": "); // $NON-NLS-1$
