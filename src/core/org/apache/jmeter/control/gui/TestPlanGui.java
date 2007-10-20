@@ -92,7 +92,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
 		addMenu.add(MenuFactory.makeMenu(MenuFactory.POST_PROCESSORS, ActionNames.ADD));
 		addMenu.add(MenuFactory.makeMenu(MenuFactory.LISTENERS, ActionNames.ADD));
 		pop.add(addMenu);
-		MenuFactory.addPasteMenu(pop);
+		MenuFactory.addPasteResetMenu(pop);
 		MenuFactory.addFileMenu(pop);
 		return pop;
 	}
@@ -194,5 +194,13 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         southPanel.add(createClassPathPanel());
 
 		add(southPanel, BorderLayout.SOUTH);
+	}
+
+	public void clearGui() {
+		super.clearGui();
+		functionalMode.setSelected(false);
+		serializedMode.setSelected(false);
+		argsPanel.clear();
+		browseJar.clearFiles();
 	}
 }
