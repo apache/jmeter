@@ -279,14 +279,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 
         String hfk;
 		for (int i = 1; (hfk=conn.getHeaderFieldKey(i)) != null; i++) {
-            // TODO: Handle this in Proxy instead?
-			// As this has already been handled, it is currently removed to avoid confusing the JMeter Proxy
-            if (!TRANSFER_ENCODING.equalsIgnoreCase(hfk)) {
-                headerBuf.append(hfk);
-                headerBuf.append(": "); // $NON-NLS-1$
-                headerBuf.append(conn.getHeaderField(i));
-                headerBuf.append("\n"); // $NON-NLS-1$
-            }
+            headerBuf.append(hfk);
+            headerBuf.append(": "); // $NON-NLS-1$
+            headerBuf.append(conn.getHeaderField(i));
+            headerBuf.append("\n"); // $NON-NLS-1$
 		}
 		return headerBuf.toString();
 	}
