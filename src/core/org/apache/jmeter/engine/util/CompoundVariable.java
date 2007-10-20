@@ -65,7 +65,7 @@ public class CompoundVariable implements Function {
 				Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
 				String referenceKey = tempFunc.getReferenceKey();
                 functions.put(referenceKey, tempFunc.getClass());
-                // TODO: find better way to include aliases for rename of function(s)
+                // Add alias for original StringFromFile name (had only one underscore)
                 if (referenceKey.equals("__StringFromFile")){//$NON-NLS-1$
                     functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
                 }
