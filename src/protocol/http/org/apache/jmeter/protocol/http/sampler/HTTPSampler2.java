@@ -129,7 +129,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static final int nonProxyHostSuffixSize;
 
-    static boolean isNonProxy(String host){
+    private static boolean isNonProxy(String host){
         return nonProxyHostFull.contains(host) || isPartialMatch(host);
     }
 
@@ -490,7 +490,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @exception IOException
 	 *                if an I/O Exception occurs
 	 */
-	HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
+	protected HttpClient setupConnection(URL u, HttpMethodBase httpMethod, HTTPSampleResult res) throws IOException {
 
 		String urlStr = u.toString();
 
@@ -627,7 +627,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      * @return a String containing the cookie details (for the response)
      * May be null
 	 */
-	String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {        
+	private String setConnectionCookie(HttpMethod method, URL u, CookieManager cookieManager) {        
         String cookieHeader = null;
         if (cookieManager != null) {
             cookieHeader = cookieManager.getCookieHeaderForURL(u);
@@ -710,7 +710,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *            the <code>AuthManager</code> containing all the authorisations for
 	 *            this <code>UrlConfig</code>
 	 */
-	void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
+    private void setConnectionAuthorization(HttpClient client, URL u, AuthManager authManager) {
 		HttpParams params = client.getParams();
 		if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
@@ -1049,7 +1049,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * @param cookieManager
 	 *            the <code>CookieManager</code> containing all the cookies
 	 */
-	void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
+    protected void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
 		if (cookieManager != null) {
             Header hdr[] = method.getResponseHeaders(HEADER_SET_COOKIE);            
 			for (int i = 0; i < hdr.length; i++) {
