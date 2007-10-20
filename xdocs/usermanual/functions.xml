@@ -173,7 +173,7 @@ It will not automatically escape values for you, since functions can be paramete
 <b>The value of a variable or function can be reported</b> using the <a href="#__logn">__logn()</a> function.
 The __logn() function reference can be used anywhere in the test plan after the variable has been defined.
 Alternatively, the Java Request sampler can be used to create a sample containing variable references;
-the output will be shown in the approriate Listener.
+the output will be shown in the appropriate Listener.
 For versions of JMeter later than 2.3, there is a <complink name="Debug Sampler"/> 
 that can be used to display the values of variables etc in the Tree View Listener.
 </p>
