@@ -132,8 +132,8 @@ public class Functor {
 	 * @param _methodName method name
 	 * @param types
 	 */
-	public Functor(Object _invokee, String _methodName, Class[] types) {
-		this(null, _invokee, _methodName, null, types);
+	public Functor(Object _invokee, String _methodName, Class[] _types) {
+		this(null, _invokee, _methodName, null, _types);
 	}
 
 	/**
@@ -145,8 +145,8 @@ public class Functor {
 	 * @param _methodName method name
 	 * @param types
 	 */
-	public Functor(Class _clazz, String _methodName, Class[] types) {
-		this(_clazz, null, _methodName, null, types);
+	public Functor(Class _clazz, String _methodName, Class[] _types) {
+		this(_clazz, null, _methodName, null, _types);
 	}
 
 	/**
@@ -456,7 +456,6 @@ public class Functor {
 		return newArray;
 	}
 
-	// TODO - should this be synchronised?
 	private Class[] getTypes(Object[] _args) {
 		if (types == null)
 		{
