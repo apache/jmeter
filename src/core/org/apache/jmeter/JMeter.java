@@ -80,7 +80,7 @@ import org.apache.log.Logger;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
- * @author mstover
+ * Main JMeter class; processes options and starts the GUI, non-GUI or server as appropriate.
  */
 public class JMeter implements JMeterPlugin {
 
@@ -108,6 +108,7 @@ public class JMeter implements JMeterPlugin {
     private static final int VERSION_OPT        = 'v';// $NON-NLS-1$
 
     private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
+    private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
 	private static final int PROXY_HOST         = 'H';// $NON-NLS-1$
     private static final int JMETER_PROPERTY    = 'J';// $NON-NLS-1$
     private static final int LOGLEVEL           = 'L';// $NON-NLS-1$
@@ -166,6 +167,9 @@ public class JMeter implements JMeterPlugin {
 			new CLOptionDescriptor("jmeterproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_PROPERTY, 
                     "Define additional JMeter properties"),
+			new CLOptionDescriptor("globalproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
+					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_GLOBAL_PROP, 
+                    "Define Global properties (sent to servers)"),
 			new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY, 
                     "Define additional system properties"),
@@ -189,6 +193,8 @@ public class JMeter implements JMeterPlugin {
 	//transient boolean testEnded = false;
 
 	private JMeter parent;
+	
+	private Properties remoteProps; // Properties to be sent to remote servers
 
 	/**
 	 * Starts up JMeter in GUI mode
@@ -472,6 +478,7 @@ public class JMeter implements JMeterPlugin {
 		}
 
 		Properties jmeterProps = JMeterUtils.getJMeterProperties();
+		remoteProps = new Properties();
 
 		// Add local JMeter properties, if the file is found
 		String userProp = JMeterUtils.getPropDefault("user.properties",""); //$NON-NLS-1$
@@ -574,6 +581,12 @@ public class JMeter implements JMeterPlugin {
 					jmeterProps.remove(name);
 				}
 				break;
+			case JMETER_GLOBAL_PROP:
+				if (value.length() > 0) { // Set it
+					log.info("Setting Global property: " + name + "=" + value);
+					remoteProps.setProperty(name, value);
+				}
+				break;
 			case LOGLEVEL:
 				if (value.length() > 0) { // Set category
 					log.info("LogLevel: " + name + "=" + value);
@@ -609,7 +622,8 @@ public class JMeter implements JMeterPlugin {
 		} catch (InternalError e){
 			// ignored
 		}
-		JMeter driver = new JMeter();
+		JMeter driver = new JMeter();// TODO - why does it create a new instance?
+		driver.remoteProps = this.remoteProps;
 		driver.parent = this;
 		PluginManager.install(this, false);
 
@@ -790,6 +804,7 @@ public class JMeter implements JMeterPlugin {
 			System.exit(1);
 		}
 		engine.configure(testTree);
+		engine.setProperties(remoteProps);
 		return engine;
 	}
 
