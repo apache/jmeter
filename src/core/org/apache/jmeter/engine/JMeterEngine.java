@@ -18,12 +18,10 @@
 
 package org.apache.jmeter.engine;
 
+import java.util.Properties;
+
 import org.apache.jorphan.collections.HashTree;
 
-/**
- * @author Michael Stover
- * @version $Revision$ Last updated $Date$
- */
 public interface JMeterEngine {
 	void configure(HashTree testPlan);
 
@@ -34,6 +32,8 @@ public interface JMeterEngine {
 	void reset();
 
 	void setHost(String host);
+	
+	void setProperties(Properties p);
 
 	void exit();
 }
