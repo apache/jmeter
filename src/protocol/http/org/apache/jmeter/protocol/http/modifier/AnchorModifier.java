@@ -35,6 +35,7 @@ import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.parser.HtmlParsingUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -101,7 +102,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			}
 			sampler.setDomain(url.getDomain());
 			sampler.setPath(url.getPath());
-			if (url.getMethod().equals(HTTPSamplerBase.POST)) {
+			if (url.getMethod().equals(HTTPConstants.POST)) {
 				PropertyIterator iter = sampler.getArguments().iterator();
 				while (iter.hasNext()) {
 					Argument arg = (Argument) iter.next().getObjectValue();
@@ -160,7 +161,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		Iterator iter = urls.iterator();
 		while (iter.hasNext()) {
 			HTTPSamplerBase newUrl = (HTTPSamplerBase) iter.next();
-			newUrl.setMethod(HTTPSamplerBase.POST);
+			newUrl.setMethod(HTTPConstants.POST);
 			if (log.isDebugEnabled()) {
 			    log.debug("Potential Form match: " + newUrl.toString());
 			}
@@ -191,7 +192,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 			}
 			try {
 				HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(hrefStr, new URL(result.getURL(), base));
-				newUrl.setMethod(HTTPSamplerBase.GET);
+				newUrl.setMethod(HTTPConstants.GET);
 				if (log.isDebugEnabled()) {
 				    log.debug("Potential <a href> match: " + newUrl);
 				}
@@ -224,7 +225,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
            try {
                HTTPSamplerBase newUrl = HtmlParsingUtils.createUrlFromAnchor(
                        hrefStr, new URL(result.getURL(), base));
-               newUrl.setMethod(HTTPSamplerBase.GET);
+               newUrl.setMethod(HTTPConstants.GET);
                if (log.isDebugEnabled()) {
                    log.debug("Potential <frame src> match: " + newUrl);
                }

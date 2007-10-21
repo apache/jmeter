@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
@@ -163,8 +164,8 @@ public class PostWriter {
         if(sampler.getUseMultipartForPost()) {
             // Set the content type
             connection.setRequestProperty(
-                HTTPSamplerBase.HEADER_CONTENT_TYPE,
-                HTTPSamplerBase.MULTIPART_FORM_DATA + "; boundary=" + getBoundary()); // $NON-NLS-1$
+            		HTTPConstants.HEADER_CONTENT_TYPE,
+            		HTTPConstants.MULTIPART_FORM_DATA + "; boundary=" + getBoundary()); // $NON-NLS-1$
             
             // Write the form section
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -217,7 +218,7 @@ public class PostWriter {
             contentLength += getMultipartEndDivider().length;
 
             // Set the content length
-            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
+            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
 
             // Make the connection ready for sending post data
             connection.setDoOutput(true);
@@ -226,7 +227,7 @@ public class PostWriter {
         else {
             // Check if the header manager had a content type header
             // This allows the user to specify his own content-type for a POST request
-            String contentTypeHeader = connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
+            String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
             boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0; 
             
             // If there are no arguments, we can send a file as the body of the request
@@ -234,10 +235,10 @@ public class PostWriter {
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
                     if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                        connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
                     }
                     else {
-                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                        connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                 }
                 
@@ -255,7 +256,7 @@ public class PostWriter {
                 if(!sampler.getSendParameterValuesAsPostBody()) {
                     // Set the content type
                     if(!hasContentTypeHeader) {
-                        connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                        connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
 
                     // It is a normal post request, with parameter names and values
@@ -267,11 +268,11 @@ public class PostWriter {
                     // but just sending the content of nameless parameters
                     if(!hasContentTypeHeader) {
                         if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
                         }
                         else {
                             // TODO: is this the correct default?
-                            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED);
+                            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                         }
                     }
                     
@@ -296,7 +297,7 @@ public class PostWriter {
             }
             
             // Set the content length
-            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
+            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
 
             // Make the connection ready for sending post data
             connection.setDoOutput(true);
