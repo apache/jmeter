@@ -150,15 +150,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
     /* Shown as Parameter Name on the GUI */
 	public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
 
-	public final static String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
+//	public final static String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
 
-	public final static String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE"; // $NON-NLS-1$
+//	public final static String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE"; // $NON-NLS-1$
 
 	public final static String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
 
-	public final static String NORMAL_FORM = "normal_form"; // $NON-NLS-1$
+//	public final static String NORMAL_FORM = "normal_form"; // $NON-NLS-1$
 
-	public final static String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
+//	public final static String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
 
 	// public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
 	
@@ -211,7 +211,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final String HEADER_CONTENT_DISPOSITION = "Content-Disposition"; // $NON-NLS-1$
 
-    protected static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
+    public static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
 
     public static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
 
