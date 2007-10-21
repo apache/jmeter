@@ -43,6 +43,7 @@ import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -67,14 +68,10 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * Common constants and methods for HTTP samplers
  * 
  */
-public abstract class HTTPSamplerBase extends AbstractSampler implements TestListener, ThreadListener {
+public abstract class HTTPSamplerBase extends AbstractSampler
+    implements TestListener, ThreadListener, HTTPConstantsInterface {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-	public static final int DEFAULT_HTTPS_PORT = 443;
-
-	public static final int    DEFAULT_HTTP_PORT = 80;
-    public static final String DEFAULT_HTTP_PORT_STRING = "80"; // $NON-NLS-1$
 
 	public final static String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
@@ -104,29 +101,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
 	public final static String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
 
-    public static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
-
-    public static final String PROTOCOL_HTTPS = "https"; // $NON-NLS-1$
-
     private static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
 
-    public final static String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
+    private final static String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
 
 	public final static String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
-    public final static String HEAD = "HEAD"; // $NON-NLS-1$
-    
-	public final static String POST = "POST"; // $NON-NLS-1$
-
-    public final static String PUT = "PUT"; // $NON-NLS-1$
-
-	public final static String GET = "GET"; // $NON-NLS-1$
-
-    public final static String OPTIONS = "OPTIONS"; // $NON-NLS-1$
-    public final static String TRACE = "TRACE"; // $NON-NLS-1$
-    public final static String DELETE = "DELETE"; // $NON-NLS-1$
-
-    public final static String DEFAULT_METHOD = "GET"; // $NON-NLS-1$
+    public final static String DEFAULT_METHOD = GET; // $NON-NLS-1$
     // Supported methods:
     private final static String [] METHODS = {
         DEFAULT_METHOD, // i.e. GET
@@ -138,7 +119,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
         DELETE,
         };
     
-    public final static List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
+    private final static List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
 
     
 	public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
@@ -188,38 +169,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler implements TestLis
 
     protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
 
-    protected static final String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
-
-    protected static final String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
-
-    protected static final String HEADER_CONNECTION = "Connection"; // $NON-NLS-1$
-
-    protected static final String CONNECTION_CLOSE = "close"; // $NON-NLS-1$
-
-    protected static final String KEEP_ALIVE = "keep-alive"; // $NON-NLS-1$
-
-    // e.g. "Transfer-Encoding: chunked", which is processed automatically by the underlying protocol
-    public static final String TRANSFER_ENCODING = "transfer-encoding"; // $NON-NLS-1$
-
-    public static final String HEADER_CONTENT_ENCODING = "content-encoding"; // $NON-NLS-1$
-
-    protected static final String HTTP_1_1 = "HTTP/1.1"; // $NON-NLS-1$
-
-    protected static final String HEADER_SET_COOKIE = "set-cookie"; // $NON-NLS-1$
-
-    public static final String ENCODING_GZIP = "gzip"; // $NON-NLS-1$
-
-    protected static final String HEADER_CONTENT_DISPOSITION = "Content-Disposition"; // $NON-NLS-1$
-
-    public static final String HEADER_CONTENT_TYPE = "Content-Type"; // $NON-NLS-1$
-
-    public static final String HEADER_CONTENT_LENGTH = "Content-Length"; // $NON-NLS-1$
-
-    protected static final String HEADER_LOCATION = "Location"; // $NON-NLS-1$
-
-	public static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"; // $NON-NLS-1$
-    
-    public static final String MULTIPART_FORM_DATA = "multipart/form-data"; // $NON-NLS-1$
     
     // Derive the mapping of content types to parsers
     private static Map parsersForType = new HashMap();
