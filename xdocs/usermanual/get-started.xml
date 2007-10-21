@@ -245,7 +245,8 @@ the following command options</p>
 <p>-n This specifies JMeter is to run in non-gui mode</p>
 <p>-t [name of JMX file that contains the Test Plan].</p>
 <p>-l [name of JTL file to log sample results to].</p>
-<p>-r Run all remote servers specified in jmeter.properties (or remote servers specified on command line by overriding properties)</p>
+<p>-r Run the test in the servers specified by the JMeter property "remote_hosts"</p>
+<p>-R [list of remote servers] Run the test in the specified remote servers</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <p>-H [proxy server hostname or ip address]<br/>
 -P [proxy server port]</p>
@@ -267,7 +268,8 @@ Run jmeter-server/jmeter-server.bat, plus these optional commands:</p>
 <p>Java system properties, JMeter properties, and logging properties can be overriden directly on the command line (instead of modifying jmeter.properties).
 To do so, use the following options:</p>
 <p>-D[prop_name]=[value] - defines a java system property value.</p>
-<p>-J[prop name]=[value] - overrides a JMeter property.</p>
+<p>-J[prop name]=[value] - defines a local JMeter property.</p>
+<p>-G[prop name]=[value] - defines a JMeter property to be sent to all remote servers.</p>
 <p>-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.</p>
 <p>The -L flag can also be used without the category name to set the root logging level.</p>
 	<p><b>Examples</b>:
@@ -349,6 +351,8 @@ These are shown below.</p>
                 Set password for proxy server that JMeter is to use
         -J, --jmeterproperty {argument}={value}
                 Define additional JMeter properties
+        -G, --globalproperty (argument)=(value)
+                Define Global properties (sent to servers)
         -D, --systemproperty {argument}={value}
                 Define additional System properties
         -S, --systemPropertyFile {filename}

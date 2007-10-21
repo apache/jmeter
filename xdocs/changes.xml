@@ -77,6 +77,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>Server mode now creates the RMI registry; to disable set the JMeter property server.rmi.create=false</li>
 <li>HTTP Sampler now supports using MIME Type field to specify content-type request header when body is constructed from parameter values</li>
 <li>Enable exit after a single server test - define JMeter property server.exitaftertest=true</li>
+<li>Added -G option to set properties in remote servers</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
