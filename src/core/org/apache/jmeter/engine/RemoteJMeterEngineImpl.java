@@ -23,6 +23,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
+import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -122,5 +123,10 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 	public void exit() throws RemoteException {
 		log.info("Exitting");
 		backingEngine.exit();
+	}
+
+	public void setProperties(Properties p) throws RemoteException {
+		log.info("Applying properties "+p);
+		JMeterUtils.getJMeterProperties().putAll(p);
 	}
 }

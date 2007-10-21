@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Properties;
 
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -137,6 +138,15 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 			remote.exit();
 		} catch (RemoteException e) {
 			log.warn("Could not perform remote exit: " + e.toString());
+		}
+	}
+
+	public void setProperties(Properties p) {
+		log.info("Sending properties "+p);
+		try {
+			remote.setProperties(p);
+		} catch (RemoteException e) {
+			log.warn("Could not set properties: " + e.toString());
 		}
 	}
 }
