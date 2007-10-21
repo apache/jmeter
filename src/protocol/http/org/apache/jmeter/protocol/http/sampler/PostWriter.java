@@ -54,7 +54,7 @@ public class PostWriter {
     /** The start of the file multipart to be sent */
     private byte[] formDataFileStartMultipart;
     /** The boundary string for multipart */
-    private String boundary;
+    private final String boundary;
     
     /**
      * Constructor for PostWriter.
