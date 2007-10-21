@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.URL;
 
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**
@@ -106,7 +107,7 @@ public class HTTPSampleResult extends SampleResult {
 			sb.append(u.toString());
             sb.append("\n");
             // Include request body if it is a post or put
-            if (HTTPSamplerBase.POST.equals(method) || HTTPSamplerBase.PUT.equals(method)) {
+            if (HTTPConstants.POST.equals(method) || HTTPConstants.PUT.equals(method)) {
                 sb.append("\nPOST data:\n");
                 sb.append(queryString);
                 sb.append("\n");

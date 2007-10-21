@@ -32,6 +32,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
@@ -249,26 +250,26 @@ public class Proxy extends Thread {
 			String line=headerLines[i];
 			String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
 			if (parts.length==2){
-				if (HTTPSamplerBase.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])){
+				if (HTTPConstants.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])){
 					headerLines[i]=null; // We don't want this passed on to browser
 					continue;
 				}
-				if (HTTPSamplerBase.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
+				if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
 					&&
-					HTTPSamplerBase.ENCODING_GZIP.equalsIgnoreCase(parts[1])
+					HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
 				){
 					headerLines[i]=null; // We don't want this passed on to browser
 					fixContentLength = true;
 					continue;
 				}
-				if (HTTPSamplerBase.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
+				if (HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
 					contentLengthIndex=i;
 					continue;
 				}
 			}
 		}
 		if (fixContentLength && contentLengthIndex>=0){// Fix the content length
-			headerLines[contentLengthIndex]=HTTPSamplerBase.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
+			headerLines[contentLengthIndex]=HTTPConstants.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
 		}
 		StringBuffer sb = new StringBuffer(headers.length());
 		for (int i=0;i<headerLines.length;i++){
