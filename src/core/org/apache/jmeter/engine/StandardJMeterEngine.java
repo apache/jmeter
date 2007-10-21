@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
@@ -540,5 +541,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		};
 		log.info("Starting Closedown");
 		t.start();
+	}
+
+	public void setProperties(Properties p) {
+		//not needed locally
 	}
 }

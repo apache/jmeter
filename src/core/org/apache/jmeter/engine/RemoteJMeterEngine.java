@@ -20,12 +20,10 @@ package org.apache.jmeter.engine;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Properties;
 
 import org.apache.jorphan.collections.HashTree;
 
-/**
- * @version $Revision$ Last updated $Date$
- */
 public interface RemoteJMeterEngine extends Remote {
 	void configure(HashTree testTree) throws RemoteException;
 
@@ -36,6 +34,8 @@ public interface RemoteJMeterEngine extends Remote {
 	void reset() throws RemoteException;
 
 	void setHost(String host) throws RemoteException;
+
+	void setProperties(Properties p) throws RemoteException;
 
 	void exit() throws RemoteException;
 }
