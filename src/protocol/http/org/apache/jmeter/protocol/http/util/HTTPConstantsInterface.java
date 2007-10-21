@@ -33,7 +33,6 @@ public interface HTTPConstantsInterface {
 	public static final String DEFAULT_HTTP_PORT_STRING = "80"; // $NON-NLS-1$
 	public static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
 	public static final String PROTOCOL_HTTPS = "https"; // $NON-NLS-1$
-	public static final String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
 	public static final String HEAD = "HEAD"; // $NON-NLS-1$
 	public static final String POST = "POST"; // $NON-NLS-1$
 	public static final String PUT = "PUT"; // $NON-NLS-1$
