@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URLConnection;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
@@ -50,7 +51,7 @@ public class PutWriter extends PostWriter {
 
         // Check if the header manager had a content type header
         // This allows the user to specify his own content-type for a PUT request
-        String contentTypeHeader = connection.getRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE);
+        String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
         boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0; 
 
         // If there are no arguments, we can send a file as the body of the request
@@ -59,7 +60,7 @@ public class PutWriter extends PostWriter {
             if(!hasContentTypeHeader) {
                 // Allow the mimetype of the file to control the content type
                 if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                    connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                    connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
                 }
             }
 
@@ -73,7 +74,7 @@ public class PutWriter extends PostWriter {
             // This is not obvious in GUI if you are not uploading any files,
             // but just sending the content of nameless parameters
             if(!hasContentTypeHeader && sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
             }
 
             // We create the post body content now, so we know the size
@@ -99,7 +100,7 @@ public class PutWriter extends PostWriter {
         }
         if(hasPutBody) {
             // Set the content length
-            connection.setRequestProperty(HTTPSamplerBase.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
+            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_LENGTH, Long.toString(contentLength));
 
             // Make the connection ready for sending post data
             connection.setDoOutput(true);

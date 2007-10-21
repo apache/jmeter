@@ -39,6 +39,7 @@ import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -273,7 +274,7 @@ public class HttpRequestHdr {
     }
 
     private boolean isMultipart(String contentType) {
-        if (contentType != null && contentType.startsWith(HTTPSamplerBase.MULTIPART_FORM_DATA)) {
+        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
             return true;
         } else {
             return false;
@@ -306,7 +307,7 @@ public class HttpRequestHdr {
             if (log.isDebugEnabled())
     			log.debug("Proxy: setting protocol to : " + protocol);
 			sampler.setProtocol(protocol);
-		} else if (sampler.getPort() == HTTPSamplerBase.DEFAULT_HTTPS_PORT) {
+		} else if (sampler.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT) {
 			sampler.setProtocol(HTTPS);
             if (log.isDebugEnabled())
     			log.debug("Proxy: setting protocol to https");
@@ -395,7 +396,7 @@ public class HttpRequestHdr {
         // If it was a HTTP GET request, then all parameters in the URL
         // has been handled by the sampler.setPath above, so we just need
         // to do parse the rest of the request if it is not a GET request
-        if(!HTTPSamplerBase.GET.equals(method)) {
+        if(!HTTPConstants.GET.equals(method)) {
             // Check if it was a multipart http post request
             final String contentType = getContentType();
             MultipartUrlConfig urlConfig = getMultipartConfig(contentType);
@@ -418,10 +419,10 @@ public class HttpRequestHdr {
                 sampler.setMimetype(urlConfig.getMimeType());
             } else if (postData != null && postData.trim().startsWith("<?")) {
                 // Not sure if this is needed anymore. I assume these requests
-                // do not have HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED as content type,
+                // do not have HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED as content type,
                 // and they would therefore be catched by the last else if of these if else if tests
                 sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
-            } else if (contentType == null || contentType.startsWith(HTTPSamplerBase.APPLICATION_X_WWW_FORM_URLENCODED) ){
+            } else if (contentType == null || contentType.startsWith(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED) ){
                 // It is the most common post request, with parameter name and values
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
