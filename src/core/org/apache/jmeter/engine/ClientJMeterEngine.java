@@ -80,6 +80,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 	}
 
 	public void stopTest() {
+		log.info("about to stop remote test on "+host);
 		try {
 			remote.stopTest();
 		} catch (Exception ex) {
@@ -134,6 +135,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 	 * @see org.apache.jmeter.engine.JMeterEngine#exit()
 	 */
 	public void exit() {
+		log.info("about to exit remote server on "+host);
 		try {
 			remote.exit();
 		} catch (RemoteException e) {
