@@ -126,7 +126,6 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 	}
 
 	public void setProperties(Properties p) throws RemoteException {
-		log.info("Applying properties "+p);
-		JMeterUtils.getJMeterProperties().putAll(p);
+		backingEngine.setProperties(p);
 	}
 }
