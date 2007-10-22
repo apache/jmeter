@@ -78,6 +78,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>HTTP Sampler now supports using MIME Type field to specify content-type request header when body is constructed from parameter values</li>
 <li>Enable exit after a single server test - define JMeter property server.exitaftertest=true</li>
 <li>Added -G option to set properties in remote servers</li>
+<li>Added -X option to stop remote servers after non-GUI run</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>

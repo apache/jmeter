@@ -256,12 +256,21 @@ the following command options</p>
 <subsection name="&sect-num;.4.4 Server Mode" anchor="server">
 <p>For <a href="remote-test.html">distributed testing</a>, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
 You can also use non-GUI mode to run remote tests.
-
-Run jmeter-server/jmeter-server.bat, plus these optional commands:</p>
+To start the server(s), run jmeter-server/jmeter-server.bat on each server host.</p>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <p>-H [proxy server hostname or ip address]<br/>
 -P [proxy server port]</p>
 <p><b>Example</b>: jmeter-server -H my.proxy.server -P 8000</p>
+<p>If you want the server to exit after a single test has been run, then define the JMeter property server.exitaftertest=true.
+</p>
+<p>To run the test from the client in non-GUI mode, use the following command:</p>
+<pre>
+jmeter -n -t testplan.jmx -r [-Gprop=val] [-Z]
+where:
+-G is used to define JMeter properties to be set in the servers
+-X means exit the servers at the end of the test
+-Rserver1,server2 - can be used instead of -r to provide a list of servers (overrides remote_hosts)
+</pre>
 </subsection>
 
 <subsection name="&sect-num;.4.5 Overriding Properties Via The Command Line" anchor="override">
@@ -366,6 +375,8 @@ These are shown below.</p>
                 Start these remote servers (overrides remote_hosts)
         -d, --homedir {argument}
                 the jmeter home directory to use
+        -X, --remoteexit
+                Exit the remote servers at end of test (non-GUI)
 </pre>
 </subsection>
 </section>
