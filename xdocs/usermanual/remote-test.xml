@@ -66,9 +66,12 @@ To revert to the previous behaviour, define the JMeter property server.rmi.creat
 <p><b>Step 2: Add the server IP to your client's Properties File</b></p>
 <p>Edit the properties file <i>on the controlling JMeter machine</i>.  In /bin/jmeter.properties, find the property named, "remote_hosts", and   
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
-<p>Note that you can also use the -J <a href="get-started.html#override">command line option</a> to specify the remote host(s) to use.
-	E.g. jmeter -Jremote_hosts=host1,127.0.0.1,host2</p>
-
+<p>Note that you can use the -R <a href="get-started.html#override">command line option</a>
+instead to specify the remote host(s) to use. This has the same effect as using -r and -Jremote_hosts={serverlist}.
+	E.g. jmeter -Rhost1,127.0.0.1,host2</p>
+<p>If you define the JMeter property server.exitaftertest=true, then the server will exit after it runs a single test.
+See also the -X flag (described below)
+</p>
 <p><b>Step 3a: Start the JMeter Client from a GUI client</b></p>
 <p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "bin/jmeter.bat".  For UNIX, 
 use the script "bin/jmeter".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
@@ -84,14 +87,15 @@ The command to do this is:
 jmeter -n -t script.jmx -r
 or
 jmeter -n -t script.jmx -R server1,server2...
+
+Other flags that may be useful:
+-Gproperty=value - define a property in all the servers (may appear more than once)
+-Z - Exit remote servers at the end of the test.
 </pre>
 The first example will start whatever servers are defined in the JMeter property remote_hosts;
 the second example will define remote_hosts from the list of servers and then run the remote servers.
 <br/>
 The command-line client will exit when all the remote servers have stopped.
-<note>
-There is currently no way to stop the remote servers gracefully from the command-line.
-</note>
 </p>
 
 <subsection name="&sect-num;.1 Doing it Manually" anchor="detail_instructions">
