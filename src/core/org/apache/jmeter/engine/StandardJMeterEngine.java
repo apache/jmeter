@@ -544,6 +544,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	}
 
 	public void setProperties(Properties p) {
-		//not needed locally
+		log.info("Applying properties "+p);
+		JMeterUtils.getJMeterProperties().putAll(p);
 	}
 }
