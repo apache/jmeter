@@ -40,6 +40,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 	private JLabeledTextField urlField;
 	private JLabeledTextField soapAction;
     private JCheckBox sendSoapAction;
+    private JCheckBox useKeepAlive;
 	private JLabeledTextArea soapXml;
 
     private FilePanel soapXmlFile = new FilePanel();
@@ -77,6 +78,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
             sampler.setXmlFile(soapXmlFile.getFilename());
 			sampler.setSOAPAction(soapAction.getText());
 			sampler.setSendSOAPAction(sendSoapAction.isSelected());
+			sampler.setUseKeepAlive(useKeepAlive.isSelected());
 		}
 	}
 
@@ -91,6 +93,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         soapXml.setText(""); //$NON-NLS-1$
         sendSoapAction.setSelected(true);
         soapXmlFile.setFilename(""); //$NON-NLS-1$
+        useKeepAlive.setSelected(false);
     }    
 
 	private void init() {
@@ -103,6 +106,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 		soapXml = new JLabeledTextArea(JMeterUtils.getResString("soap_data_title")); //$NON-NLS-1$
 		soapAction = new JLabeledTextField("", 10); //$NON-NLS-1$
 		sendSoapAction = new JCheckBox(JMeterUtils.getResString("soap_send_action"), true); //$NON-NLS-1$
+		useKeepAlive = new JCheckBox(JMeterUtils.getResString("use_keepalive")); // $NON-NLS-1$
 
 		JPanel mainPanel = new JPanel(new BorderLayout());
 	    JPanel soapActionPanel = new JPanel();
@@ -123,6 +127,13 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 	    c.fill = GridBagConstraints.HORIZONTAL;
 	    c.weightx = 1;
 		soapActionPanel.add(soapAction, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+	    c.gridwidth = 2;
+	    c.gridy = 2;
+	    c.gridx = 0;
+		soapActionPanel.add(useKeepAlive, c);
+		
 		mainPanel.add(soapActionPanel, BorderLayout.NORTH);
 		mainPanel.add(soapXml, BorderLayout.CENTER);
         mainPanel.add(soapXmlFile, BorderLayout.SOUTH);
@@ -144,6 +155,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
 		soapAction.setText(sampler.getSOAPAction());
 		soapXml.setText(sampler.getXmlData());
         soapXmlFile.setFilename(sampler.getXmlFile());
+        useKeepAlive.setSelected(sampler.getUseKeepAlive());
 	}
 
 	public Dimension getPreferredSize() {
