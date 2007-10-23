@@ -172,11 +172,11 @@ public class XPathExtractor extends AbstractTestElement implements
     {
       //TODO: validate contentType for reasonable types?
 
+      //TODO: is it really necessary to recode the data?
       // NOTE: responseData encoding is server specific
       //       Therefore we do byte -> unicode -> byte conversion
       //       to ensure UTF-8 encoding as required by XPathUtil
-      String unicodeData = new String(result.getResponseData(),
-		                      result.getDataEncoding());
+      String unicodeData = result.getResponseDataAsString();
       // convert unicode String -> UTF-8 bytes
       byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
