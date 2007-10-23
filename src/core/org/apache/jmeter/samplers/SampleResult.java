@@ -464,11 +464,14 @@ public class SampleResult implements Serializable {
 	/**
 	 * Sets the responseData attribute of the SampleResult object.
 	 * 
+	 * If the parameter is null, then the responseData is set to an empty byte array.
+	 * This ensures that getResponseData() can never be null.
+	 * 
 	 * @param response
 	 *            the new responseData value
 	 */
 	public void setResponseData(byte[] response) {
-		responseData = response;
+		responseData = response == null ? EMPTY_BA : response;
 	}
 
     /**
@@ -486,7 +489,7 @@ public class SampleResult implements Serializable {
 	/**
 	 * Gets the responseData attribute of the SampleResult object.
 	 * 
-	 * @return the responseData value
+	 * @return the responseData value (cannot be null)
 	 */
 	public byte[] getResponseData() {
 		return responseData;
@@ -505,18 +508,6 @@ public class SampleResult implements Serializable {
             return new String(responseData);
         }
     }
-
-	/**
-	 * Convenience method to get responseData as a non-null byte array
-	 * 
-	 * @return the responseData. If responseData is null then an empty byte
-	 *         array is returned rather than null.
-	 *
-	 * @deprecated - no longer needed, as getResponseData() does not return null
-	 */
-	public byte[] getResponseDataAsBA() {
-		return responseData == null ? EMPTY_BA : responseData;
-	}
 
 	public void setSamplerData(String s) {
 		samplerData = s;
