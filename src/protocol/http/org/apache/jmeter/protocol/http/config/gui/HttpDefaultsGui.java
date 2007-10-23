@@ -21,36 +21,22 @@ package org.apache.jmeter.protocol.http.config.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.Box;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
-import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledTextField;
 
 public class HttpDefaultsGui extends AbstractConfigGui {
-	JLabeledTextField protocol;
-
-	JLabeledTextField domain;
-
-	JLabeledTextField path;
-
-	JLabeledTextField port;
-
-	HTTPArgumentsPanel argPanel;
 
 	private JCheckBox imageParser;
 
-	private JLabeledTextField encoding;
-	
+	private UrlConfigGui urlConfig;
+
 	public HttpDefaultsGui() {
 		super();
 		init();
@@ -75,18 +61,16 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
 	 */
 	public void modifyTestElement(TestElement config) {
+		ConfigTestElement cfg = (ConfigTestElement ) config;
+		ConfigTestElement el = (ConfigTestElement) urlConfig.createTestElement();
+        cfg.clear(); // need to clear because the 
+		cfg.addConfigElement(el);
 		super.configureTestElement(config);
-		config.setProperty(HTTPSamplerBase.PROTOCOL, protocol.getText());
-		config.setProperty(HTTPSamplerBase.DOMAIN, domain.getText());
-		config.setProperty(HTTPSamplerBase.PATH, path.getText());
-		config.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, argPanel.createTestElement()));
-		config.setProperty(HTTPSamplerBase.PORT, port.getText());
 		if (imageParser.isSelected())
 			config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
 		else {
 			config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
-		config.setProperty(HTTPSamplerBase.CONTENT_ENCODING, encoding.getText());
 	}
 
     /**
@@ -94,24 +78,13 @@ public class HttpDefaultsGui extends AbstractConfigGui {
      */
     public void clearGui() {
         super.clearGui();
-        
-        protocol.setText(""); //$NON-NLS-1$
-        domain.setText(""); //$NON-NLS-1$
-        path.setText(""); //$NON-NLS-1$
-        port.setText(""); //$NON-NLS-1$
-        encoding.setText(""); //$NON-NLS-1$
-        argPanel.clear();
+        urlConfig.clear();
         imageParser.setSelected(false);
     }    
 
 	public void configure(TestElement el) {
 		super.configure(el);
-		protocol.setText(el.getPropertyAsString(HTTPSamplerBase.PROTOCOL));
-		domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
-		path.setText(el.getPropertyAsString(HTTPSamplerBase.PATH));
-		port.setText(el.getPropertyAsString(HTTPSamplerBase.PORT));
-        encoding.setText(el.getPropertyAsString(HTTPSamplerBase.CONTENT_ENCODING));
-		argPanel.configure((TestElement) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue());
+		urlConfig.configure(el);
 		imageParser.setSelected(((AbstractTestElement) el).getPropertyAsBoolean(HTTPSamplerBase.IMAGE_PARSER));
 	}
 
@@ -121,28 +94,8 @@ public class HttpDefaultsGui extends AbstractConfigGui {
 
 		add(makeTitlePanel(), BorderLayout.NORTH);
 
-		Box mainPanel = Box.createVerticalBox();
-
-		VerticalPanel urlPanel = new VerticalPanel();
-		protocol = new JLabeledTextField(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
-		domain = new JLabeledTextField(JMeterUtils.getResString("web_server_domain")); // $NON-NLS-1$
-		path = new JLabeledTextField(JMeterUtils.getResString("path")); // $NON-NLS-1$
-		port = new JLabeledTextField(JMeterUtils.getResString("web_server_port")); // $NON-NLS-1$
-		encoding = new JLabeledTextField(JMeterUtils.getResString("content_encoding")); // $NON-NLS-1$
-
-        
-        urlPanel.add(domain);
-		urlPanel.add(port);
-        urlPanel.add(protocol);
-        urlPanel.add(path);
-        urlPanel.add(encoding);
-        
-		mainPanel.add(urlPanel);
-
-		argPanel = new HTTPArgumentsPanel();
-		mainPanel.add(argPanel);
-
-		add(mainPanel, BorderLayout.CENTER);
+		urlConfig = new UrlConfigGui(false);
+		add(urlConfig, BorderLayout.CENTER);
 
 		imageParser = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
 		add(imageParser, BorderLayout.SOUTH);
