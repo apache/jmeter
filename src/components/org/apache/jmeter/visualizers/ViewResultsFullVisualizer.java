@@ -611,28 +611,22 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 	private static String getResponseAsString(SampleResult res) {
 
-		byte[] responseBytes = res.getResponseData();
 		String response = null;
 		if ((SampleResult.TEXT).equals(res.getDataType())) {
-			try {
-				// Showing large strings can be VERY costly, so we will avoid
-				// doing so if the response
-				// data is larger than 200K. TODO: instead, we could delay doing
-				// the result.setText
-				// call until the user chooses the "Response data" tab. Plus we
-				// could warn the user
-				// if this happens and revert the choice if he doesn't confirm
-				// he's ready to wait.
-				if (responseBytes.length > 200 * 1024) {
-					response = ("Response too large to be displayed (" + responseBytes.length + " bytes).");
-					log.warn("Response too large to display.");
-				} else {
-					response = new String(responseBytes, res.getDataEncoding());
-				}
-			} catch (UnsupportedEncodingException err) {
-				log.warn("Could not decode response " + err);
-				response = new String(responseBytes);// Try the default
-														// encoding instead
+			// Showing large strings can be VERY costly, so we will avoid
+			// doing so if the response
+			// data is larger than 200K. TODO: instead, we could delay doing
+			// the result.setText
+			// call until the user chooses the "Response data" tab. Plus we
+			// could warn the user
+			// if this happens and revert the choice if he doesn't confirm
+			// he's ready to wait.
+			int len = res.getResponseData().length;
+			if (len > 200 * 1024) {
+				response = "Response too large to be displayed (" + len + " bytes).";
+				log.warn(response);
+			} else {
+				response = res.getResponseDataAsString();
 			}
 		}
 		return response;
