@@ -79,10 +79,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
 		}
 		List potentialLinks = new ArrayList();
 		String responseText = ""; // $NON-NLS-1$
-		try {
-			responseText = new String(result.getResponseData(), result.getDataEncoding());
-		} catch (UnsupportedEncodingException e) {
-		}
+		responseText = result.getResponseDataAsString();
 		Document html;
 		int index = responseText.indexOf("<"); // $NON-NLS-1$
 		if (index == -1) {
