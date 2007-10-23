@@ -137,8 +137,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		List collectAllMatches = new ArrayList();
 		try {
 			PatternMatcher matcher = JMeterUtils.getMatcher();
-			String responseText = new String(previousResult.getResponseData(),
-                    previousResult.getDataEncoding()); // Bug 37140
+			String responseText = previousResult.getResponseDataAsString();
 			PatternMatcherInput input = new PatternMatcherInput(responseText);
 			while (matcher.contains(input, searchPattern)) {
 				MatchResult match = matcher.getMatch();
@@ -146,9 +145,6 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			}
 		} catch (NumberFormatException e) {//TODO: can this occur?
 			log.error("", e); //$NON-NLS-1$
-			return defaultValue;
-		} catch (UnsupportedEncodingException e) {
-            log.error("Can't convert ResponseData", e);
 			return defaultValue;
 		} finally {
 			vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
