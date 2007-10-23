@@ -136,11 +136,10 @@ public class SampleResult implements Serializable {
 
 	private String dataEncoding;// (is this really the character set?) e.g.
 								// ISO-8895-1, UTF-8
-	// If null, then DEFAULT_ENCODING is returned by getDataEncoding()
 
-	private long time = 0;
+	private long time = 0; // elapsed time
 
-	private long latency = 0;
+	private long latency = 0; // time to first response
 
 	private boolean stopThread = false; // Should thread terminate?
 
@@ -184,6 +183,10 @@ public class SampleResult implements Serializable {
 	 *            existing sample result
 	 */
 	public SampleResult(SampleResult res) {
+		//TODO - why not just copy all the fields? Do we need the calculations that some of the set() methods perform?
+		//TODO - why are the following not copied:
+		// assertionResults, bytes, idleTime, latency, parent,pauseTime,resultFileName,sampleCount,samplerData,saveConfig
+		// stopTest, stopThread, subResults,threadName
 		setStartTime(res.getStartTime());
 		setEndTime(res.getStartTime()); 
 		// was setElapsed(0) which is the same as setStartTime=setEndTime=now
@@ -197,7 +200,7 @@ public class SampleResult implements Serializable {
 		setDataType(res.getDataType());
 		setResponseHeaders(res.getResponseHeaders());
         setContentType(res.getContentType());
-        setDataEncoding(res.getDataEncoding());
+        setDataEncoding(res.getDataEncodingNoDefault());
 		setURL(res.getURL());
 
 		setGroupThreads(res.getGroupThreads());
@@ -496,15 +499,15 @@ public class SampleResult implements Serializable {
 	}
 
     /**
-     * Gets the responseData attribute of the SampleResult object.
+     * Gets the responseData of the SampleResult object as a String
      * 
      * @return the responseData value as a String, converted according to the encoding
      */
     public String getResponseDataAsString() {
         try {
-            return new String(responseData,getDataEncoding());
+            return new String(responseData,getDataEncodingWithDefault());
         } catch (UnsupportedEncodingException e) {
-            log.warn("Using "+dataEncoding+" caused "+e);
+            log.warn("Using platform default as "+getDataEncodingWithDefault()+" caused "+e);
             return new String(responseData);
         }
     }
@@ -589,13 +592,32 @@ public class SampleResult implements Serializable {
 	}
 
 	/**
-	 * Returns the dataEncoding.
+	 * Returns the dataEncoding or the default if no dataEncoding was provided
+	 * 
+	 * @deprecated use getDataEncodingWithDefault() or getDataEncodingNoDefault() as needed.
 	 */
 	public String getDataEncoding() {
 		if (dataEncoding != null) {
 			return dataEncoding;
 		}
 		return DEFAULT_ENCODING;
+	}
+
+	/**
+	 * Returns the dataEncoding or the default if no dataEncoding was provided
+	 */
+	public String getDataEncodingWithDefault() {
+		if (dataEncoding != null) {
+			return dataEncoding;
+		}
+		return DEFAULT_ENCODING;
+	}
+
+	/**
+	 * Returns the dataEncoding or the default if no dataEncoding was provided
+	 */
+	public String getDataEncodingNoDefault() {
+		return dataEncoding;
 	}
 
 	/**
