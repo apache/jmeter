@@ -40,19 +40,20 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 
 public class LDAPArgument extends AbstractTestElement implements Serializable {
-	// TODO should these be public?
 
+	// ** These constants are used in the JMX files, and so must not be changed **
+	
 	/** Name used to store the argument's name. */
-	public static final String ARG_NAME = "Argument.name"; //$NON-NLS$
+	private static final String ARG_NAME = "Argument.name"; //$NON-NLS$
 
 	/** Name used to store the argument's value. */
-	public static final String VALUE = "Argument.value"; //$NON-NLS$
+	private static final String VALUE = "Argument.value"; //$NON-NLS$
 
 	/** Name used to store the argument's value. */
-	public static final String OPCODE = "Argument.opcode"; //$NON-NLS$
+	private static final String OPCODE = "Argument.opcode"; //$NON-NLS$
 
 	/** Name used to store the argument's metadata. */
-	public static final String METADATA = "Argument.metadata"; //$NON-NLS$
+	private static final String METADATA = "Argument.metadata"; //$NON-NLS$
 
 	/**
 	 * Create a new Argument without a name, value, or metadata.
