@@ -164,5 +164,31 @@ public class HTTPSampleResult extends SampleResult {
     		queryString = string;
         }
 	}
-    
+    /**
+     * Overrides the method from SampleResult - so the encoding can be extracted from
+     * the Meta content-type if necessary.
+     * 
+     * Updates the dataEncoding field if the content-type is found.
+     * 
+     * @return the dataEncoding value as a String
+     */
+    public String getDataEncodingWithDefault() {
+    	if (getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
+    		byte[] bytes=getResponseData();    		
+    		// get the start of the file
+    		String prefix = new String(bytes,0,Math.min(bytes.length, 1000)).toLowerCase();
+    		// Extract the content-type if present
+    		final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
+			int tagstart=prefix.indexOf(METATAG);
+    		if (tagstart!=-1){
+    			tagstart += METATAG.length();
+    			int tagend = prefix.indexOf("\"", tagstart); // $NON-NLS-1$
+    			if (tagend!=-1){
+    				final String ct = new String(bytes,tagstart,tagend-tagstart);
+					setEncodingAndType(ct);// Update the dataEncoding
+    			}
+    		}
+    	}
+		return super.getDataEncodingWithDefault();
+    }	    
 }

@@ -80,6 +80,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>Added -G option to set properties in remote servers</li>
 <li>Added -X option to stop remote servers after non-GUI run</li>
 <li>Bug 43485 - Ability to specify keep-alive on SOAP/XML-RPC request</li>
+<li>Bug 43678 - Handle META tag http-equiv charset</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
