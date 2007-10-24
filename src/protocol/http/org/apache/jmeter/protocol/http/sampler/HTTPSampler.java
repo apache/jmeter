@@ -209,9 +209,11 @@ public class HTTPSampler extends HTTPSamplerBase {
 			return NULL_BA;
 		}
 
+        // works OK even if ContentEncoding is null
+        boolean gzipped = ENCODING_GZIP.equals(conn.getContentEncoding());
+        
 		try {
-            // works OK even if ContentEncoding is null
-			if (ENCODING_GZIP.equals(conn.getContentEncoding())) {
+			if (gzipped) {
 				in = new BufferedInputStream(new GZIPInputStream(conn.getInputStream()));
 			} else {
 				in = new BufferedInputStream(conn.getInputStream());
@@ -235,7 +237,11 @@ public class HTTPSampler extends HTTPSamplerBase {
 			else {
 				log.info("Error Response Code: "+conn.getResponseCode());
 			}
-			in = new BufferedInputStream(errorStream);
+			if (gzipped) {
+				in = new BufferedInputStream(new GZIPInputStream(errorStream));
+			} else {
+			    in = new BufferedInputStream(errorStream);
+			}
 		} catch (Exception e) {
 			log.error("readResponse: "+e.toString());
 			Throwable cause = e.getCause();
