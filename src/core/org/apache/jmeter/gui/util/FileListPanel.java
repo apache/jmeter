@@ -81,9 +81,9 @@ public class FileListPanel extends JPanel implements ActionListener {
 	}
 
 	public FileListPanel(String title, String filetype) {
-		this(title);
+		this.title = title;
 		this.filetype = filetype;
-        init();
+		init();
 	}
 
 	/**
