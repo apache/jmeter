@@ -117,6 +117,7 @@ public class ForeachController extends GenericController implements Serializable
 	public Sampler next() {
 		if (emptyList()) {
 			reInitialize();
+			resetLoopCount();
 			return null;
 		}
 		return super.next();
