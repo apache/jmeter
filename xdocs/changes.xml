@@ -51,6 +51,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>HTTP Mirror Server now always returns the exact same content, it used to return wrong if UTF-8 encoding was used for HTTP POST body, for example</li>
 <li>Bug 43612 - HTTP PUT does not honor request parameters</li>
 <li>Bug 43694 - ForEach Controller (empty collection processing error)</li>
+<li>Bug 42012 - Variable Listener filenames do not get processed in remote tests</li>
 </ul>
 
 <h4>Improvements</h4>
