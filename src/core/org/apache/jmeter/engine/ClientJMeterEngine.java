@@ -111,7 +111,10 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 		testListeners = new SearchByClass(TestListener.class);
 		sampleListeners = new ConvertListeners();
 		HashTree testTree = getTestTree();
+		PreCompiler compiler = new PreCompiler();
 		synchronized(testTree) {
+			testTree.traverse(compiler);
+			testTree.traverse(new TurnElementsOn());
 			testTree.traverse(testListeners);
 			testTree.traverse(sampleListeners);
 		}
