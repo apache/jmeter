@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.lang.Character;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -114,16 +113,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	public final static Color CLIENT_ERROR_COLOR = Color.blue;
 
 	public final static Color REDIRECT_COLOR = Color.green;
-
-	private static final String DOWNLOAD_LABEL = "Download embedded resources";
-
-	private static final String HTML_BUTTON_LABEL = "Render HTML";
-
-	private static final String JSON_BUTTON_LABEL = "Render JSON";
-
-	private static final String XML_BUTTON_LABEL = "Render XML";
-
-	private static final String TEXT_BUTTON_LABEL = "Show Text";
 
 	private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
 
@@ -728,31 +717,31 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	private Component createHtmlOrTextPane() {
 		ButtonGroup group = new ButtonGroup();
 
-		textButton = new JRadioButton(TEXT_BUTTON_LABEL);
+		textButton = new JRadioButton(JMeterUtils.getResString("view_results_render_text")); // $NON-NLS-1$
 		textButton.setActionCommand(TEXT_COMMAND);
 		textButton.addActionListener(this);
 		textButton.setSelected(textMode);
 		group.add(textButton);
 
-		htmlButton = new JRadioButton(HTML_BUTTON_LABEL);
+		htmlButton = new JRadioButton(JMeterUtils.getResString("view_results_render_html")); // $NON-NLS-1$
 		htmlButton.setActionCommand(HTML_COMMAND);
 		htmlButton.addActionListener(this);
 		htmlButton.setSelected(!textMode);
 		group.add(htmlButton);
 
-		jsonButton = new JRadioButton(JSON_BUTTON_LABEL);
+		jsonButton = new JRadioButton(JMeterUtils.getResString("view_results_render_json")); // $NON-NLS-1$
 		jsonButton.setActionCommand(JSON_COMMAND);
 		jsonButton.addActionListener(this);
 		jsonButton.setSelected(!textMode);
 		group.add(jsonButton);
 
-		xmlButton = new JRadioButton(XML_BUTTON_LABEL);
+		xmlButton = new JRadioButton(JMeterUtils.getResString("view_results_render_xml")); // $NON-NLS-1$
 		xmlButton.setActionCommand(XML_COMMAND);
 		xmlButton.addActionListener(this);
 		xmlButton.setSelected(!textMode);
 		group.add(xmlButton);
 
-		downloadAll = new JCheckBox(DOWNLOAD_LABEL);
+		downloadAll = new JCheckBox(JMeterUtils.getResString("view_results_render_embedded")); // $NON-NLS-1$
 
 		JPanel pane = new JPanel();
 		pane.add(textButton);
