@@ -3429,6 +3429,24 @@ time boundary, so that multiple test runs on the same time will be
  synchronised.The interval is defined by the property "summariser.interval" - see jmeter.properties.
 
 This is mainly intended for batch (non-GUI) runs.
+The output looks like the following:
+<pre>
+label +   171 in  20.3s =    8.4/s Avg:  1129 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   263 in  31.3s =    8.4/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label =   434 in  50.4s =    8.6/s Avg:  1135 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   263 in  31.0s =    8.5/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
+label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
+</pre>
+The "+" means that the line is a delta line, i.e. shows the changes since the last output.
+The "=" means that the line is a totals line, i.e. it shows the running total.
+Entries in the jmeter log file also include time-stamps.
+The last two lines will appear at the end of a test.
+They will not be synchronised to the appropriate time boundary.
+Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
+The first delta will generally be lower, as JMeter synchronises to the interval boundary.
+The last delta will be lower, as the test will generally not finish on an exact interval boundary.
 	</description>
  <properties>
  <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
