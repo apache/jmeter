@@ -174,6 +174,7 @@ public final class NewDriver {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("JMeter home directory was detected as: "+jmDir);
+                System.exit(1);
             }
         } else {
             try {
@@ -185,6 +186,7 @@ public final class NewDriver {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("JMeter home directory was detected as: "+jmDir);
+                System.exit(1);
            }
         }
 	}
