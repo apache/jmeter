@@ -160,8 +160,11 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		if (myName == null)
 			myName = getName();
 
-		if (myTotals == null)
-			myTotals = (Totals) accumulators.get(myName);
+		if (myTotals == null) {
+			synchronized (accumulators) {
+				myTotals = (Totals) accumulators.get(myName);
+			}
+		}
 
 		if (s != null) {
 			myTotals.delta.addSample(s);
