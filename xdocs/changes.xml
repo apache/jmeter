@@ -84,6 +84,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 <li>Bug 43485 - Ability to specify keep-alive on SOAP/XML-RPC request</li>
 <li>Bug 43678 - Handle META tag http-equiv charset</li>
 <li>Bug 42555 - [I18N] Proposed corrections for the french translation</li>
+<li>Bug 43727 - Test Action does not support variables or functions</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
