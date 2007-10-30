@@ -55,7 +55,7 @@ public class TestActionGui extends AbstractSamplerGui {
 
 	private int action;
 
-	private int duration;
+	private String durationString;
 
 	// String in the panel
 	private static final String targetLabel = JMeterUtils.getResString("test_action_target"); // $NON-NLS-1$
@@ -76,6 +76,7 @@ public class TestActionGui extends AbstractSamplerGui {
 		super();
 		target = TestAction.THREAD;
 		action = TestAction.PAUSE;
+		durationString = ""; // $NON-NLS-1$
 		init();
 	}
 
@@ -99,8 +100,8 @@ public class TestActionGui extends AbstractSamplerGui {
 		else
 			stopButton.setSelected(true);
 
-		duration = ta.getDuration();
-		durationField.setText(Integer.toString(duration));
+		durationString = ta.getDurationAsString();
+		durationField.setText(durationString);
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class TestActionGui extends AbstractSamplerGui {
 		TestAction ta = (TestAction) element;
 		ta.setAction(action);
 		ta.setTarget(target);
-		ta.setDuration(duration);
+		ta.setDuration(durationString);
 	}
 
     /**
@@ -132,12 +133,12 @@ public class TestActionGui extends AbstractSamplerGui {
         super.clearGui();
         
         targetBox.setSelectedIndex(0);
+        durationString = ""; //$NON-NLS-1$
         durationField.setText(""); //$NON-NLS-1$
         pauseButton.setSelected(true);
         stopButton.setSelected(false);
         action = TestAction.PAUSE;
         target = TestAction.THREAD;
-        duration = 0;
         
     }    
 
@@ -196,17 +197,11 @@ public class TestActionGui extends AbstractSamplerGui {
 
 		// Duration
 		HorizontalPanel durationPanel = new HorizontalPanel();
-		durationField = new JTextField(5);
-		durationField.setText(Integer.toString(duration));
+		durationField = new JTextField(15);
+		durationField.setText("");
 		durationField.addFocusListener(new FocusListener() {
 			public void focusLost(FocusEvent e) {
-				try {
-					duration = Integer.parseInt(durationField.getText());
-				} catch (NumberFormatException nfe) {
-					duration = 0;
-					// alert
-					// durationField.grabFocus();
-				}
+				durationString = durationField.getText(); 
 			}
 
 			public void focusGained(FocusEvent e) {
