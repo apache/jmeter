@@ -21,8 +21,11 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Dummy Sampler used to pause or stop a thread or the test;
@@ -30,6 +33,9 @@ import org.apache.jmeter.threads.JMeterContextService;
  * 
  */
 public class TestAction extends AbstractSampler {
+	
+	private static final Logger log = LoggingManager.getLoggerForClass();
+	
 	// Actions
 	public final static int STOP = 0;
 	public final static int PAUSE = 1;
@@ -46,9 +52,6 @@ public class TestAction extends AbstractSampler {
 
 	public TestAction() {
 		super();
-		setTarget(THREAD);
-		setAction(PAUSE);
-		setDuration(0);
 	}
 
 	/*
@@ -62,7 +65,7 @@ public class TestAction extends AbstractSampler {
 		int target = getTarget();
 		int action = getAction();
         if (action == PAUSE) {
-            pause(getDuration());
+            pause(getDurationAsString());
         } else if (action == STOP) {
     		if (target == THREAD) {
                 context.getThread().stop();
@@ -79,7 +82,14 @@ public class TestAction extends AbstractSampler {
 		return null; // This means no sample is saved
 	}
 
-    private void pause(int milis) {
+    private void pause(String mili_s) {
+    	int milis;
+    	try {
+    		milis=Integer.parseInt(mili_s);
+    	} catch (NumberFormatException e){
+    		log.warn("Could not create number from "+mili_s);
+    		milis=0;
+    	}
         try {
             Thread.sleep(milis);
         } catch (InterruptedException e) {
@@ -102,11 +112,11 @@ public class TestAction extends AbstractSampler {
 		return getPropertyAsInt(ACTION);
 	}
 
-	public void setDuration(int duration) {
-		setProperty(new IntegerProperty(DURATION, duration));
+	public void setDuration(String duration) {
+		setProperty(new StringProperty(DURATION, duration));
 	}
 
-	public int getDuration() {
-		return getPropertyAsInt(DURATION);
+	public String getDurationAsString() {
+		return getPropertyAsString(DURATION);
 	}
 }
