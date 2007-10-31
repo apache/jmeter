@@ -75,18 +75,22 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
 	 * to return a JPopupMenu that provides all the options available to the
 	 * user from this component.
 	 * <p>
-	 * The WorkBench will return a popup menu allowing you to add Controllers,
-	 * Samplers, Configuration Elements, and Non-test Elements.
+	 * The WorkBench returns a popup menu allowing you to add anything.
 	 * 
 	 * @return a JPopupMenu appropriate for the component.
 	 */
 	public JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
 		JMenu addMenu = MenuFactory.makeMenus(new String[] { 
-				MenuFactory.CONTROLLERS, 
-				MenuFactory.SAMPLERS,
+				MenuFactory.NON_TEST_ELEMENTS, 
+				MenuFactory.CONTROLLERS,
 				MenuFactory.CONFIG_ELEMENTS, 
-				MenuFactory.NON_TEST_ELEMENTS 
+				MenuFactory.TIMERS,
+				MenuFactory.PRE_PROCESSORS,
+				MenuFactory.SAMPLERS,
+				MenuFactory.ASSERTIONS,
+				MenuFactory.POST_PROCESSORS,
+				MenuFactory.LISTENERS,
 				}, 
 				JMeterUtils.getResString("add"), // $NON-NLS-1$
 				ActionNames.ADD);
