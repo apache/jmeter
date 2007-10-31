@@ -107,7 +107,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 	public final static String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
-    public final static String DEFAULT_METHOD = GET; // $NON-NLS-1$
+	public static final String CLIENT = "HTTPSampler.client"; // $NON-NLS-1$
+
+	public final static String DEFAULT_METHOD = GET; // $NON-NLS-1$
     // Supported methods:
     private final static String [] METHODS = {
         DEFAULT_METHOD, // i.e. GET
@@ -177,7 +179,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final String RESPONSE_PARSERS= // list of parsers
         JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
-    static{
+   static{
         String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
         for (int i=0;i<parsers.length;i++){
             final String parser = parsers[i];
@@ -301,6 +303,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 			return DEFAULT_PROTOCOL;
 		}
 		return protocol;
+	}
+
+
+	public String getClient() {// TODO should it have a default?
+		return getPropertyAsString(CLIENT);
+	}
+
+	public void setClient(String client){
+		setProperty(CLIENT,client);
 	}
 
 	/**
