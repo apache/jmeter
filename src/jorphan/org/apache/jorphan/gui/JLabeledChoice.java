@@ -38,12 +38,12 @@ import javax.swing.event.ChangeListener;
 public class JLabeledChoice extends JPanel implements JLabeledField {
 	private static final Object[] EMPTY_OBJECT_ARRAY = new Object [0];
 
-    private JLabel mLabel = new JLabel();
+    private final JLabel mLabel = new JLabel();
 
-	private JComboBox choiceList;
+	private final JComboBox choiceList;
 
 	// Maybe move to vector if MT problems occur
-	private ArrayList mChangeListeners = new ArrayList(3);
+	private final ArrayList mChangeListeners = new ArrayList(3);
 
 	private JButton delete, add;
 
@@ -56,13 +56,6 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 		init();
 	}
 
-	public List getComponentList() {
-		List comps = new LinkedList();
-		comps.add(mLabel);
-		comps.add(choiceList);
-		return comps;
-	}
-
 	public JLabeledChoice(String pLabel, boolean editable) {
 		super();
 		choiceList = new JComboBox();
@@ -71,8 +64,41 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 		init();
 	}
 
+	/**
+	 * Constructs a non-edittable combo-box with the label displaying the passed text.
+	 * 
+	 * @param pLabel - the text to display in the label.
+	 * @param items - the items to display in the Combo box
+	 */
+	public JLabeledChoice(String pLabel, String[] items) {
+		this(pLabel, items, false);
+	}
+
+	/**
+	 * Constructs a combo-box with the label displaying the passed text.
+	 * 
+	 * @param pLabel - the text to display in the label.
+	 * @param items - the items to display in the Combo box
+	 * @param editable - if true, then Add and Delete buttons are created.
+	 * 
+	 */
+	public JLabeledChoice(String pLabel, String[] items, boolean editable) {
+		super();
+		mLabel.setText(pLabel);
+		choiceList = new JComboBox(items);
+		choiceList.setEditable(editable);
+		init();
+	}
+
+	public List getComponentList() {
+		List comps = new LinkedList();
+		comps.add(mLabel);
+		comps.add(choiceList);
+		return comps;
+	}
+
 	public void setEditable(boolean editable) {
-		choiceList.setEditable(false);// TODO - is this correct?
+		choiceList.setEditable(editable);
 	}
 
 	public void addValue(String item) {
@@ -84,28 +110,6 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 		for (int i = 0; i < items.length; i++) {
 			choiceList.addItem(items[i]);
 		}
-	}
-
-	/**
-	 * Constructs a new component with the label displaying the passed text.
-	 * 
-	 * @param pLabel
-	 *            The text to in the label.
-	 */
-	public JLabeledChoice(String pLabel, String[] items) {
-		super();
-		mLabel.setText(pLabel);
-		choiceList = new JComboBox(items);
-		choiceList.setEditable(false);
-		init();
-	}
-
-	public JLabeledChoice(String pLabel, String[] items, boolean editable) {
-		super();
-		mLabel.setText(pLabel);
-		choiceList = new JComboBox(items);
-		choiceList.setEditable(editable);
-		init();
 	}
 
 	/**
