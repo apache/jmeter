@@ -1919,6 +1919,7 @@ The remaining samples took longer than this.</li>
 <li>Throughput - Throughput measured in requests per second/minute/hour</li>
 <li>Kb/sec - The throughput measured in Kilobytes per second</li>
 </ul>
+<p>Times are in milliseonds.</p>
 </description>
 </component>
 
@@ -2077,6 +2078,7 @@ the Report.
 <li>Kb/sec - The throughput measured in Kilobytes per second</li>
 <li>Avg. Bytes - average size of the sample response in bytes. (in JMeter 2.2 it wrongly showed the value in kB)</li>
 </ul>
+<p>Times are in milliseonds.</p>
 </description>
 </component>
 
@@ -3442,6 +3444,7 @@ label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (
 The "+" means that the line is a delta line, i.e. shows the changes since the last output.
 The "=" means that the line is a totals line, i.e. it shows the running total.
 Entries in the jmeter log file also include time-stamps.
+The Avg, Min and Max times are in milliseonds.
 The last two lines will appear at the end of a test.
 They will not be synchronised to the appropriate time boundary.
 Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
