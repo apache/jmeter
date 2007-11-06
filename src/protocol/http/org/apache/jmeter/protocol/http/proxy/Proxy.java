@@ -266,7 +266,7 @@ public class Proxy extends Thread {
 	 */
 	private String massageResponseHeaders(SampleResult res) {
 		String headers = res.getResponseHeaders();
-		String [] headerLines=headers.split(NEW_LINE,-1); // keep empty trailing content
+		String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
 		int contentLengthIndex=-1;
 		boolean fixContentLength = false;
 		for (int i=0;i<headerLines.length;i++){
