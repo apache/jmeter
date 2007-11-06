@@ -3508,7 +3508,13 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
            If you are using grouping, please ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
-		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
+		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?
+		If specified, a Header Manager will be added to each HTTP Sampler.
+		The Proxy server always removes Cookie and Authorization headers from the generated Header Managers.
+		By default it also removes If-Modified-Since headers.
+        To change which additional headers are removed, define the JMeter property <b>proxy.headers.remove</b>
+        as a comma-separated list of headers.
+        </property>
 		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
 		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
         <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
