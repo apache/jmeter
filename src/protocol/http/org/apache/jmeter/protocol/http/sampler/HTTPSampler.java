@@ -505,8 +505,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 			res.setResponseMessage(respMsg);
 
 			String ct = conn.getContentType();
-			res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
-            res.setEncodingAndType(ct);
+			if (ct != null){
+			    res.setContentType(ct);// e.g. text/html; charset=ISO-8859-1
+                res.setEncodingAndType(ct);
+			}
 
 			res.setResponseHeaders(getResponseHeaders(conn));
 			if (res.isRedirect()) {
