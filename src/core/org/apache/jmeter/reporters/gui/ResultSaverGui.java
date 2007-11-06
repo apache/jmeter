@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.reporters.ResultSaver;
+import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.processor.gui.AbstractPostProcessorGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -36,8 +37,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * of files
  * 
  */
-public class ResultSaverGui extends AbstractPostProcessorGui {
-	// TODO should this implements Clearable ?
+public class ResultSaverGui extends AbstractPostProcessorGui implements Clearable {
 
 	private JTextField filename;
 
@@ -119,6 +119,11 @@ public class ResultSaverGui extends AbstractPostProcessorGui {
 		filenamePanel.add(label, BorderLayout.WEST);
 		filenamePanel.add(filename, BorderLayout.CENTER);
 		return filenamePanel;
+	}
+
+
+	// Needed to avoid Class cast error in Clear.java
+	public void clearData() {
 	}
 
 }
