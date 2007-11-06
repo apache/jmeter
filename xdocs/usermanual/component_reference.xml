@@ -2278,152 +2278,7 @@ cookie table entries.</property>
 
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.4.5"  width="960" height="650" screenshot="proxy_control.png">
-<note>The Proxy Server can only record HTTP traffic. 
-It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
-<description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
-with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
-directly into your test plan as you go (so you can view samples interactively while you make them).</p>
-
-<p>To use the proxy server, <i>add</i> the HTTP Proxy Server element to the workbench.
-Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
-</description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
-        <property name="Attempt https Spoofing" required="Yes">
-          When you enable https spoofing, the following  happens:
-          <ul>
-            <li>All http requests from the client are turned into https (between the proxy
-              and the web server).</li>
-            <li>All text response data is scanned and any occurrence of the string "https" 
-              is replaced with &quot;http.&quot;</li>
-          </ul>
-          So if you want to use this feature, while you are browsing in your client,
-          instead of typing "https://..." into the browser, type &quot;http://...&quot;.  JMeter
-          will request and record <i>everything</i> as https, whether it should be or not.
-        </property>
-        <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
-        <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
-           <ul>
-             <li>Do not group samplers: store all recorded samplers sequentially, without any grouping.</li>
-             <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
-             <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
-             <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
-           </ul>
-           The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
-           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
-           If you are using grouping, please ensure that you leave the required gap between clicks.
-        </property>
-        <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
-		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
-		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
-		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
-        <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
-        <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
-        <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?</property>
-		<property name="Use Keep-Alive" required="Yes">Set Use Keep-Alive in the generated samplers?</property>
-		<property name="Retrieve all Embedded Resources" required="Yes">Set Retrieve all Embedded Resources in the generated samplers?</property>
-		<property name="Content Type filter" required="No">
-		Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
-		The fields are regular expressions which are checked to see if they are contained in the content-type.
-		[Does not have to match the entire field].
-		The include filter is checked first, then the exclude filter.
-		Samples which are filtered out will not be stored.
-		</property>
-        <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
-        those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
-        left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
-        etc are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
-        recorded</b>.</property>
-        <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
-        <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
-        <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".</property>
-        <property name="Stop Button" required="N/A">Stop the proxy server.</property>
-        <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
-  useful when you change/add/delete an include/exclude filter expression.</property>
-</properties>
-
-<p>These entries will be treated as regular expressions (using Jakarta ORO).
-They will be matched against the host name + the path of each browser request.
-If the URL you are browsing is <b>http://jakarta.apache.org/jmeter/index.html?username=xxxx</b>,
-then the regular expression will be tested against the string: <b>&quot;jakarta.apache.org/jmeter/index.html&quot;</b>.  Thus,
-if you want to include all .html files, your regular expression might look like: <b>&quot;.*\.html&quot;</b>.
-</p>
-<p>
-If there are any include patterns, then the URL <b>must match at least one</b> of the patterns
-, otherwise it will not be recorded.
-If there are any exclude patterns, then the URL <b>must not match any</b> of the patterns
-, otherwise it will not be recorded.
-Using a combination of includes and excludes,
-you should be able to record what you are interested in and skip what you are not.
-</p>
-
-<p>
-N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
-</p>
-
-<p>It is also possible to have the proxy add timers to the recorded script. To
-do this, create a timer directly within the HTTP Proxy Server component.
-The proxy will place a copy of this timer into each sample it records, or into
-the first sample of each group if you're using grouping. This copy will then be
-scanned for occurences of variable ${T} in its properties, and any such
-occurences will be replaced by the time gap from the previous sampler
-recorded (in milliseconds).</p>
-
-<p>When you are ready to begin, hit &quot;start&quot;.</p>
-<note>You will need to edit the proxy settings of your browser to point at the
-appropriate server and port, where the server is the machine JMeter is running on, and
-the port # is from the Proxy Control Panel shown above.</note>
-
-<b>Where Do Samples Get Recorded?</b>
-<p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
-"Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
-sure to add a Recording Controller before you start recording).</p>
-
-<p>If the HTTP Proxy Server finds enabled <complink name="HTTP Request Defaults"/> directly within the
-controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
-will have empty fields for the default values you specified. You may further control this behaviour by placing an
-HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-blank values will override
-those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
-Practices with the Proxy Server</a> for more info.</p>
-
-<p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> (UDV) directly within the
-controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
-will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
-place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
-<a href="best-practices.html#proxy_server"> Best Practices with the Proxy Server</a> for more info.</p>
-
-<p>Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
-If you define the variable "WEB" with the value "www", for example, 
-the string "www" will be replaced by ${WEB} wherever it is found.
-To avoid this happening everywhere, set the "Regex Matching" check-box.
-This tells the proxy server to treat values as Regexes (using ORO).
-<br></br>
-If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
-<br></br>
-If you want to match /images at the start of a string only, use the value "^/images".
-Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
-but retain the trailing / in the output by using "^/images(?=/)".
-Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&amp;lt;=...) or (?&amp;lt;!...)".
-<br></br>
-If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
-so be sure to check this if UDVs are not working as expected.
-</p>
-<p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
-your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
-cookie manager, etc.</p>
-
-<b>How can I record the server's responses too?</b>
-<p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
-You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
-</p>
-
-</component>
-
-<component name="HTTP Request Defaults" index="&sect-num;.4.6" 
+<component name="HTTP Request Defaults" index="&sect-num;.4.5" 
          width="533" height="316" screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
@@ -2455,7 +2310,7 @@ resource requires query string parameters, add them below in the
 </properties>
 </component>
 
-<component name="HTTP Header Manager" index="&sect-num;.4.7"  width="" height="" screenshot="http-config/http-header-manager.gif">
+<component name="HTTP Header Manager" index="&sect-num;.4.6"  width="" height="" screenshot="http-config/http-header-manager.gif">
 <note>If there is more than one Header Manager in the scope of a Sampler,
 there is currently no way to sepcify which one is to be used.</note>
 
@@ -2487,13 +2342,13 @@ instead. (see figures 9 and 10).</p>
 
 </component>
 
-<component name="Java Request Defaults" index="&sect-num;.4.8"  width="454" height="283" screenshot="java_defaults.png">
+<component name="Java Request Defaults" index="&sect-num;.4.7"  width="454" height="283" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request" />.</p>
 </description>
 
 </component>
 
-<component name="JDBC Connection Configuration" index="&sect-num;.4.9" 
+<component name="JDBC Connection Configuration" index="&sect-num;.4.8" 
                  width="369" height="443" screenshot="jdbc-config/jdbc-conn-config.png">
 	<description>Creates a database connection pool (used by <complink name="JDBC Request"/>Sampler)
 	 with JDBC Connection settings.
@@ -2545,7 +2400,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 </component>
 
 
-<component name="Login Config Element" index="&sect-num;.4.11"  width="352" height="112" screenshot="login-config.png">
+<component name="Login Config Element" index="&sect-num;.4.9"  width="352" height="112" screenshot="login-config.png">
 <description><p>The Login Config Element lets you add or override username and password settings in samplers that use username and password as part of their setup.</p>
 </description>
 
@@ -2559,19 +2414,19 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 
 
 
-<component name="LDAP Request Defaults" index="&sect-num;.4.12"  width="465" height="375" screenshot="ldap_defaults.png">
+<component name="LDAP Request Defaults" index="&sect-num;.4.10"  width="465" height="375" screenshot="ldap_defaults.png">
 <description><p>The LDAP Request Defaults component lets you set default values for LDAP testing.  See the <complink name="LDAP Request"/>.</p>
 </description>
 
 </component>
 
-<component name="LDAP Extended Request Defaults" index="&sect-num;.4.13"  width="597" height="545" screenshot="ldapext_defaults.png">
+<component name="LDAP Extended Request Defaults" index="&sect-num;.4.11"  width="597" height="545" screenshot="ldapext_defaults.png">
 <description><p>The LDAP Extended Request Defaults component lets you set default values for extended LDAP testing.  See the <complink name="LDAP Extended Request"/>.</p>
 </description>
 
 </component>
 
-<component name="TCP Sampler Config" index="&sect-num;.4.14"  width="645" height="256" screenshot="tcpsamplerconfig.png">
+<component name="TCP Sampler Config" index="&sect-num;.4.12"  width="645" height="256" screenshot="tcpsamplerconfig.png">
 	<note>ALPHA CODE</note>
 <description>
         <p>
@@ -2588,7 +2443,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 </properties>
 </component>
 
-<component name="User Defined Variables" index="&sect-num;.4.15"  width="690" height="394" screenshot="user_defined_variables.png">
+<component name="User Defined Variables" index="&sect-num;.4.13"  width="690" height="394" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan" />.
 The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
 </description>
@@ -2601,7 +2456,7 @@ The variables in User Defined Variables components will take precedence over tho
 <note>If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.</note>
 </component>
 
-<component name="Simple Config Element" index="&sect-num;.4.16"  width="393" height="245" screenshot="simple_config_element.png">
+<component name="Simple Config Element" index="&sect-num;.4.14"  width="393" height="245" screenshot="simple_config_element.png">
 <description><p>The Simple Config Element lets you add or override arbitrary values in samplers.  You can choose the name of the value
 and the value itself.  Although some adventurous users might find a use for this element, it's here primarily for developers as a basic
 GUI that they can use while developing new JMeter components.</p>
@@ -3613,7 +3468,152 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </p>
 </component>
 
-<component name="HTTP Mirror Server" index="&sect-num;.9.5"  width="303" height="139" screenshot="mirrorserver.png">
+<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="960" height="650" screenshot="proxy_control.png">
+<note>The Proxy Server can only record HTTP traffic. 
+It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
+<description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
+with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
+directly into your test plan as you go (so you can view samples interactively while you make them).</p>
+
+<p>To use the proxy server, <i>add</i> the HTTP Proxy Server element to the workbench.
+Select the WorkBench element in the tree, and right-click on this element to get the
+Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
+        <property name="Attempt https Spoofing" required="Yes">
+          When you enable https spoofing, the following  happens:
+          <ul>
+            <li>All http requests from the client are turned into https (between the proxy
+              and the web server).</li>
+            <li>All text response data is scanned and any occurrence of the string "https" 
+              is replaced with &quot;http.&quot;</li>
+          </ul>
+          So if you want to use this feature, while you are browsing in your client,
+          instead of typing "https://..." into the browser, type &quot;http://...&quot;.  JMeter
+          will request and record <i>everything</i> as https, whether it should be or not.
+        </property>
+        <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
+        <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
+           <ul>
+             <li>Do not group samplers: store all recorded samplers sequentially, without any grouping.</li>
+             <li>Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.</li>
+             <li>Put each group in a new controller: create a new <complink name="Simple Controller"/> for each group, and store all samplers for that group in it.</li>
+             <li>Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.</li>
+           </ul>
+           The property <b>proxy.pause</b> determines the minimum gap that JMeter needs between requests
+           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
+           If you are using grouping, please ensure that you leave the required gap between clicks.
+        </property>
+        <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
+		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?</property>
+		<property name="Add Assertions" required="Yes">Add a blank assertion to each sampler?</property>
+		<property name="Regex Matching" required="Yes">Use Regex Matching when replacing variables?</property>
+        <property name="Type" required="Yes">Which type of sampler to generate (the Java default or HTTPClient)</property>
+        <property name="Redirect Automatically" required="Yes">Set Redirect Automatically in the generated samplers?</property>
+        <property name="Follow Redirects" required="Yes">Set Follow Redirects in the generated samplers?</property>
+		<property name="Use Keep-Alive" required="Yes">Set Use Keep-Alive in the generated samplers?</property>
+		<property name="Retrieve all Embedded Resources" required="Yes">Set Retrieve all Embedded Resources in the generated samplers?</property>
+		<property name="Content Type filter" required="No">
+		Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
+		The fields are regular expressions which are checked to see if they are contained in the content-type.
+		[Does not have to match the entire field].
+		The include filter is checked first, then the exclude filter.
+		Samples which are filtered out will not be stored.
+		</property>
+        <property name="Patterns to Include" required="No">Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
+        those that meet the requirements of the Include/Exclude fields are <i>recorded</i>.  If both Include and Exclude are
+        left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
+        etc are recorded).  <b>If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
+        recorded</b>.</property>
+        <property name="Patterns to Exclude" required="No">Regular expressions that are matched against the URL that is sampled.
+        <b>Any requests that match one or more Exclude pattern are <i>not</i> recorded</b>.</property>
+        <property name="Start Button" required="N/A">Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".</property>
+        <property name="Stop Button" required="N/A">Stop the proxy server.</property>
+        <property name="Restart Button" required="N/A">Stops and restarts the proxy server.  This is
+  useful when you change/add/delete an include/exclude filter expression.</property>
+</properties>
+
+<p>These entries will be treated as regular expressions (using Jakarta ORO).
+They will be matched against the host name, port (actual or implied) and path of each browser request.
+If the URL you are browsing is <b>http://jakarta.apache.org/jmeter/index.html?username=xxxx</b>,
+then the regular expression will be tested against the string: <b>&quot;jakarta.apache.org:80/jmeter/index.html&quot;</b>.  Thus,
+if you want to include all .html files, your regular expression might look like: <b>&quot;.*\.html&quot;</b>.
+</p>
+<p>
+If there are any include patterns, then the URL <b>must match at least one</b> of the patterns
+, otherwise it will not be recorded.
+If there are any exclude patterns, then the URL <b>must not match any</b> of the patterns
+, otherwise it will not be recorded.
+Using a combination of includes and excludes,
+you should be able to record what you are interested in and skip what you are not.
+</p>
+
+<p>
+N.B. the string that is matched by the regular expression must be the same as the <b>whole</b> host+path string.<br></br>Thus <b>&quot;\.html&quot;</b> will <b>not</b> match <b>j.a.o/index.html</b>
+</p>
+
+<p>It is also possible to have the proxy add timers to the recorded script. To
+do this, create a timer directly within the HTTP Proxy Server component.
+The proxy will place a copy of this timer into each sample it records, or into
+the first sample of each group if you're using grouping. This copy will then be
+scanned for occurences of variable ${T} in its properties, and any such
+occurences will be replaced by the time gap from the previous sampler
+recorded (in milliseconds).</p>
+
+<p>When you are ready to begin, hit &quot;start&quot;.</p>
+<note>You will need to edit the proxy settings of your browser to point at the
+appropriate server and port, where the server is the machine JMeter is running on, and
+the port # is from the Proxy Control Panel shown above.</note>
+
+<b>Where Do Samples Get Recorded?</b>
+<p>JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
+"Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
+sure to add a Recording Controller before you start recording).</p>
+
+<p>If the HTTP Proxy Server finds enabled <complink name="HTTP Request Defaults"/> directly within the
+controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
+will have empty fields for the default values you specified. You may further control this behaviour by placing an
+HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-blank values will override
+those in the other HTTP Request Defaults. See <a href="best-practices.html#proxy_server"> Best
+Practices with the Proxy Server</a> for more info.</p>
+
+<p>Similarly, if the HTTP Proxy Server finds <complink name="User Defined Variables"/> (UDV) directly within the
+controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
+will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
+place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
+<a href="best-practices.html#proxy_server"> Best Practices with the Proxy Server</a> for more info.</p>
+
+<p>Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
+If you define the variable "WEB" with the value "www", for example, 
+the string "www" will be replaced by ${WEB} wherever it is found.
+To avoid this happening everywhere, set the "Regex Matching" check-box.
+This tells the proxy server to treat values as Regexes (using ORO).
+<br></br>
+If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
+<br></br>
+If you want to match /images at the start of a string only, use the value "^/images".
+Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
+but retain the trailing / in the output by using "^/images(?=/)".
+Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&amp;lt;=...) or (?&amp;lt;!...)".
+<br></br>
+If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
+so be sure to check this if UDVs are not working as expected.
+</p>
+<p>When you are done recording your test samples, stop the proxy server (hit the &quot;stop&quot; button).  Remember to reset
+your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
+cookie manager, etc.</p>
+
+<b>How can I record the server's responses too?</b>
+<p>Just place a <complink name="View Results Tree"/> listener as a child of the Proxy Server and the responses will be displayed. 
+You can also add a <complink name="Save Responses to a file"/> Post-Processor which will save the responses to files.
+</p>
+
+</component>
+
+<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="303" height="139" screenshot="mirrorserver.png">
 <description>
 <p>
 The HTTP Mirrror Server is a very simple HTTP server - it simply mirrors the data sent to it.
@@ -3622,7 +3622,7 @@ This is useful for checking the content of HTTP requests.
 </description>
 </component>
 
-<component name="Property Display" index="&sect-num;.9.6"  width="776" height="502" screenshot="property_display.png">
+<component name="Property Display" index="&sect-num;.9.7"  width="776" height="502" screenshot="property_display.png">
 <description>
 <p>
 The Property Display shows the values of System or JMeter properties.
@@ -3635,7 +3635,7 @@ It is available only on the WorkBench.
 </properties>
 </component>
 
-<component name="Debug Sampler" index="&sect-num;.9.7"  width="355" height="172" screenshot="debug_sampler.png">
+<component name="Debug Sampler" index="&sect-num;.9.8"  width="355" height="172" screenshot="debug_sampler.png">
 <description>
 <p>
 The Debug Sampler generates a sample containing the values of all JMeter variables and/or properties.
