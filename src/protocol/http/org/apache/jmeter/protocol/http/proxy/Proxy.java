@@ -193,15 +193,6 @@ public class Proxy extends Thread {
             addFormEncodings(result, pageEncoding);
 
 			writeToClient(result, new BufferedOutputStream(clientSocket.getOutputStream()));
-			/*
-			 * We don't want to store any cookies in the generated test plan
-			 */
-			headers.removeHeaderNamed("cookie");// Always remove cookies // $NON-NLS-1$
-			headers.removeHeaderNamed("Authorization");// Always remove authorization // $NON-NLS-1$
-			// Remove additional headers
-			for(int i=0; i < headersToRemove.length; i++){
-				headers.removeHeaderNamed(headersToRemove[i]);
-			}
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.", uhe);
 			writeErrorToClient(HttpReplyHdr.formServerNotFound());
@@ -212,6 +203,17 @@ public class Proxy extends Thread {
 			if (log.isDebugEnabled()) {
 				log.debug("Will deliver sample " + sampler.getName());
 			}
+			/*
+			 * We don't want to store any cookies in the generated test plan
+			 */
+			if (headers != null) {
+				headers.removeHeaderNamed("cookie");// Always remove cookies // $NON-NLS-1$
+				headers.removeHeaderNamed("Authorization");// Always remove authorization // $NON-NLS-1$
+				// Remove additional headers
+				for(int i=0; i < headersToRemove.length; i++){
+					headers.removeHeaderNamed(headersToRemove[i]);
+				}
+		    }
 			target.deliverSampler(sampler, new TestElement[] { captureHttpHeaders ? headers : null }, result);
 			try {
 				clientSocket.close();
