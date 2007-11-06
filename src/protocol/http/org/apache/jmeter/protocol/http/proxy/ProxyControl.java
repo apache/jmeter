@@ -381,12 +381,14 @@ public class ProxyControl extends GenericController {
 
 			placeSampler(sampler, subConfigs, myTarget);
 
-			notifySampleListeners(new SampleEvent(result, sampler.getName()));
+			notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
 		}
 		else {
 			if(log.isDebugEnabled()) {
 				log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
 			}
+			result.setSampleLabel("["+result.getSampleLabel()+"]");
+			notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
 		}
 	}
 
