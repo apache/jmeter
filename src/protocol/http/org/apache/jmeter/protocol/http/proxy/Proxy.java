@@ -35,7 +35,9 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -46,9 +48,24 @@ import org.apache.log.Logger;
  * 
  */
 public class Proxy extends Thread {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String NEW_LINE = "\n"; // $NON-NLS-1$
+
+    private static final String[] headersToRemove;
+
+    // Allow list of headers to be overridden
+	private static final String PROXY_HEADERS_REMOVE = "proxy.headers.remove"; // $NON-NLS-1$
+
+	private static final String PROXY_HEADERS_REMOVE_DEFAULT = "If-Modified-Since"; // $NON-NLS-1$
+
+    private static final String PROXY_HEADERS_REMOVE_SEPARATOR = ","; // $NON-NLS-1$
+
+    static {
+    	String removeList = JMeterUtils.getPropDefault(PROXY_HEADERS_REMOVE,PROXY_HEADERS_REMOVE_DEFAULT);
+    	headersToRemove = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
+    	log.info("Proxy will remove the headers: "+removeList);
+    }
 
 	/** Socket to client. */
 	private Socket clientSocket = null;
@@ -180,7 +197,11 @@ public class Proxy extends Thread {
 			 * We don't want to store any cookies in the generated test plan
 			 */
 			headers.removeHeaderNamed("cookie");// Always remove cookies // $NON-NLS-1$
-			headers.removeHeaderNamed("Authorization");// Always remove cookies // $NON-NLS-1$
+			headers.removeHeaderNamed("Authorization");// Always remove authorization // $NON-NLS-1$
+			// Remove additional headers
+			for(int i=0; i < headersToRemove.length; i++){
+				headers.removeHeaderNamed(headersToRemove[i]);
+			}
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.", uhe);
 			writeErrorToClient(HttpReplyHdr.formServerNotFound());
