@@ -1461,7 +1461,7 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="compile-tests,_test,batchtest" 
+  <target name="test" depends="compile-tests,_test,batchtest,batchtestserver" 
   	description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
   
   <target name="test-both" depends="test-headless,test-headed"/>
@@ -1530,7 +1530,7 @@ run JMeter unless all the JMeter jars are added.
   	<property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
 
-  	<echo level="info" message="Starting ${batchtest.name}"/>
+  	<echo level="info" message="Starting ${batchtest.name} using ${remote}"/>
   	
   	<macrodef name="deleteworkfiles">
    	    <sequential>
