@@ -693,7 +693,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 </elementProp>
                 <elementProp name="Label" elementType="Argument">
                   <stringProp name="Argument.name">Label</stringProp>
-                  <stringProp name="Argument.value"></stringProp>
+                  <stringProp name="Argument.value">${__P(module)}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="ResponseCode" elementType="Argument">
