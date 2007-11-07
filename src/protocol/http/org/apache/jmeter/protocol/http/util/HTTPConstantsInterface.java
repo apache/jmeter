@@ -18,9 +18,6 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Constants used in HTTP, mainly header names.
