@@ -1479,17 +1479,20 @@ run JMeter unless all the JMeter jars are added.
   </target>
   
   <target name="batchtestserver" description="Run the batch test using client-server mode">
+  	<property name="batchtestserver.out" location="${basedir}/bin"/>
+  	<property name="batchtestserver.log" value="BatchTestServer.log"/>
   	<parallel>
   		<daemons>
-  		    <java classname="org.apache.jmeter.NewDriver" fork="yes" dir="${basedir}/bin">
+  		    <java classname="org.apache.jmeter.NewDriver" fork="yes" dir="${batchtestserver.out}">
   		       <classpath>
   		     	<fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
   		     	<fileset dir="${dest.jar}" includes="*.jar"/>
   		     	<path refid="classpath"/>
   		       </classpath>
   		       <sysproperty key="java.awt.headless" value="true"/>
+  		        <arg value="-ptestfiles/jmeter-batch.properties"/>
   		        <arg value="-j"/>
-  		        <arg value="${basedir}/bin/jmeter-server.log"/>
+  		        <arg value="${batchtestserver.out}/${batchtestserver.log}"/>
    		        <arg value="-s"/>
   		    	<arg value="-Jserver.exitaftertest=true"/>
   		     </java>
@@ -1501,11 +1504,23 @@ run JMeter unless all the JMeter jars are added.
   			</antcall>
   		</sequential>
   	</parallel>
-	   	<delete>
-	 	    <fileset dir="${basedir}/bin">
-	             <include name="jmeter-server.log"/>
-	 	    </fileset>
-	     </delete>
+    <!-- Show the log file -->
+    <concat>
+      <filelist dir="${batchtestserver.out}" files="${batchtestserver.log}" />
+    </concat>
+
+  	<condition property="BatchTestLocalServer.len">
+  		<length file="${batchtestserver.out}/${batchtestserver.log}" when="equal" length="0" />
+  	</condition>
+  	<fail unless="BatchTestLocalServer.len">
+  		Error detected in server log file. See above.
+  	</fail>
+
+   	<delete>
+ 	    <fileset dir="${batchtestserver.out}">
+             <include name="${batchtestserver.log}"/>
+ 	    </fileset>
+     </delete>
   </target>
 	
   <target name="batchtest" description="Run the batch test and compare output files">
