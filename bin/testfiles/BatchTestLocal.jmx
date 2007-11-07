@@ -314,7 +314,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
             </value>
             <name>saveConfig</name>
           </objProp>
-          <stringProp name="filename">BatchTestLocal.csv</stringProp>
+          <stringProp name="filename">${__P(CSVFILE)}</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Write XML" enabled="true">

@@ -1573,9 +1573,11 @@ run JMeter unless all the JMeter jars are added.
         <arg value="-j"/>
         <arg value="${batchtest.name}.log"/>
         <arg value="${remote}"/>
-    	<!-- Check parameters can be passed to local/remote tests -->
+    	<!-- Check properties can be passed to local/remote tests -->
         <arg value="-Jmodule=Module"/>
         <arg value="-Gmodule=Module"/>
+    	<!-- Check property can be used for filenames in local/remote tests (no need to defined as -G) -->
+    	<arg value="-JCSVFILE=${batchtest.name}.csv"/>
      </java>
 
   	<checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
