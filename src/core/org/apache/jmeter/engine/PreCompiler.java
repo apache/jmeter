@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.functions.InvalidVariableException;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -33,17 +34,28 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
+ * Class to replace function and variable references in the test tree.
+ * 
  */
 public class PreCompiler implements HashTreeTraverser {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private ValueReplacer replacer;
+	private final ValueReplacer replacer;
+	
+//	 Used by both StandardJMeterEngine and ClientJMeterEngine.
+//	 In the latter case, only ResultCollectors are updated,
+//	 as only these are relevant to the client, and updating
+//	 other elements causes all sorts of problems.
+	private final boolean isRemote; // skip certain processing for remote tests
 
 	public PreCompiler() {
 		replacer = new ValueReplacer();
+		isRemote = false;
+	}
+
+	public PreCompiler(boolean remote) {
+		replacer = new ValueReplacer();
+		isRemote = remote;
 	}
 
 	/*
@@ -52,6 +64,17 @@ public class PreCompiler implements HashTreeTraverser {
 	 * @see HashTreeTraverser#addNode(Object, HashTree)
 	 */
 	public void addNode(Object node, HashTree subTree) {
+        if(isRemote && node instanceof ResultCollector)
+        {
+            try {
+                replacer.replaceValues((TestElement) node);
+            } catch (InvalidVariableException e) {
+                log.error("invalid variables", e);
+            }
+        }
+        if (isRemote) {
+        	return;
+        }
         if(node instanceof TestElement)
         {
             try {
