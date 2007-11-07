@@ -72,9 +72,8 @@ import org.apache.jorphan.gui.ComponentUtil;
  * The main JMeter frame, containing the menu bar, test tree, and an area for
  * JMeter component GUIs.
  * 
- * @author Michael Stover
  */
-public class MainFrame extends JFrame implements TestListener, Remoteable {
+public class MainFrame extends JFrame implements TestListener {
 
     /** The menu bar. */
 	private JMeterMenuBar menuBar;
