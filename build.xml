@@ -1568,11 +1568,14 @@ run JMeter unless all the JMeter jars are added.
     	<!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
        <sysproperty key="java.awt.headless" value="false"/>
         <arg value="-ptestfiles/jmeter-batch.properties"/>
-       <arg value="-n"/>
-       <arg value="-ttestfiles/${batchtest.name}.jmx"/>
+        <arg value="-n"/>
+        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
         <arg value="-j"/>
         <arg value="${batchtest.name}.log"/>
         <arg value="${remote}"/>
+    	<!-- Check parameters can be passed to local/remote tests -->
+        <arg value="-Jmodule=Module"/>
+        <arg value="-Gmodule=Module"/>
      </java>
 
   	<checkfile type="output" file="${batchtest.out}/${batchtest.name}.csv"/>
