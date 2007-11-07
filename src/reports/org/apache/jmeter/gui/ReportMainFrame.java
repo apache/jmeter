@@ -65,10 +65,8 @@ import org.apache.log.Logger;
  * ReportMainFrame is based on MainFrame. it uses the same basic structure,
  * but with changes for the report gui.
  * 
- * @author Peter Lin
- * @version $Revision$
  */
-public class ReportMainFrame extends JFrame implements TestListener, Remoteable {
+public class ReportMainFrame extends JFrame implements TestListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
     
