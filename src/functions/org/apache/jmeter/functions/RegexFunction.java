@@ -20,7 +20,6 @@ package org.apache.jmeter.functions;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
