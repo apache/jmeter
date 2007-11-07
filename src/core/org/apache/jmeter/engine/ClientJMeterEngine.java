@@ -111,7 +111,7 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 		testListeners = new SearchByClass(TestListener.class);
 		sampleListeners = new ConvertListeners();
 		HashTree testTree = getTestTree();
-		PreCompiler compiler = new PreCompiler();
+		PreCompiler compiler = new PreCompiler(true); // limit the changes to client only test elements
 		synchronized(testTree) {
 			testTree.traverse(compiler);
 			testTree.traverse(new TurnElementsOn());
