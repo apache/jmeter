@@ -114,7 +114,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	/*
 	 * Allow functions etc to register for testStopped notification
 	 */
-	private static List testList = null;
+	private static final List testList = new ArrayList();
 
 	public static synchronized void register(TestListener tl) {
 		testList.add(tl);
@@ -327,7 +327,6 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	public void run() {
 		log.info("Running the test!");
 		running = true;
-		testList = new ArrayList();
 
 		SearchByClass testPlan = new SearchByClass(TestPlan.class);
 		getTestTree().traverse(testPlan);
@@ -358,7 +357,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		//	Merge in any additional test listeners
 		// currently only used by the function parser
 		testListeners.getSearchResults().addAll(testList);
-		testList = null; // no longer needed
+		testList.clear(); // no longer needed
 		
 		if (!startListenersLater )notifyTestListenersOfStart();
 		getTestTree().traverse(new TurnElementsOn());
