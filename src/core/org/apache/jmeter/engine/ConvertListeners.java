@@ -47,9 +47,6 @@ public class ConvertListeners implements HashTreeTraverser {
 	 * @see HashTreeTraverser#addNode(Object, HashTree)
 	 */
 	public void addNode(Object node, HashTree subTree) {
-		if (node instanceof ThreadGroup) {
-			log.info("num threads = " + ((ThreadGroup) node).getNumThreads());
-		}
 		Iterator iter = subTree.list().iterator();
 		while (iter.hasNext()) {
 			Object item = iter.next();
