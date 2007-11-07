@@ -60,6 +60,7 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
+import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -71,7 +72,7 @@ import org.apache.jorphan.gui.ComponentUtil;
  * JMeter component GUIs.
  * 
  */
-public class MainFrame extends JFrame implements TestListener {
+public class MainFrame extends JFrame implements TestListener, Remoteable {
 
     /** The menu bar. */
 	private JMeterMenuBar menuBar;
