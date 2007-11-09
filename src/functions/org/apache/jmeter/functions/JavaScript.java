@@ -26,6 +26,8 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -66,7 +68,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
 
-		JMeterVariables vars = getVariables();
+		JMeterContext jmctx = JMeterContextService.getContext();
+		JMeterVariables vars = jmctx.getVariables();
 
 		String script = ((CompoundVariable) values[0]).execute();
 		// Allow variable to be omitted
@@ -79,9 +82,9 @@ public class JavaScript extends AbstractFunction implements Serializable {
 			Scriptable scope = cx.initStandardObjects(null);
 			
 			// Set up some objects for the script to play with
-			scope.put("ctx", scope, currentSampler.getThreadContext()); //$NON-NLS-1$
+			scope.put("ctx", scope, jmctx); //$NON-NLS-1$
 			scope.put("vars", scope, vars); //$NON-NLS-1$
-			scope.put("theadName", scope, currentSampler.getThreadName()); //$NON-NLS-1$
+			scope.put("theadName", scope, Thread.currentThread().getName()); //$NON-NLS-1$
 			scope.put("sampler", scope, currentSampler); //$NON-NLS-1$
 			scope.put("sampleResult", scope, previousResult); //$NON-NLS-1$
 
