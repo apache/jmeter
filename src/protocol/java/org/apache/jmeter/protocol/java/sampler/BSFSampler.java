@@ -41,13 +41,15 @@ public class BSFSampler extends AbstractSampler {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String FILENAME = "BSFSampler.filename"; //$NON-NLS-1$
+	//+ JMX file attributes - do not change
+	private static final String FILENAME = "BSFSampler.filename"; //$NON-NLS-1$
 
-	public static final String SCRIPT = "BSFSampler.query"; //$NON-NLS-1$
+	private static final String SCRIPT = "BSFSampler.query"; //$NON-NLS-1$
 
-	public static final String LANGUAGE = "BSFSampler.language"; //$NON-NLS-1$
+	private static final String LANGUAGE = "BSFSampler.language"; //$NON-NLS-1$
 
-	public static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
+	private static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
+	//- JMX file attributes
 
 	private transient BSFManager mgr;
 
