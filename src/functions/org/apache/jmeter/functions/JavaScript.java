@@ -77,7 +77,15 @@ public class JavaScript extends AbstractFunction implements Serializable {
 		try {
 
 			Scriptable scope = cx.initStandardObjects(null);
-			Object result = cx.evaluateString(scope, script, "<cmd>", 1, null); //$NON-NLS-1$
+			
+			// Set up some objects for the script to play with
+			scope.put("ctx", scope, currentSampler.getThreadContext()); //$NON-NLS-1$
+			scope.put("vars", scope, vars); //$NON-NLS-1$
+			scope.put("theadName", scope, currentSampler.getThreadName()); //$NON-NLS-1$
+			scope.put("sampler", scope, currentSampler); //$NON-NLS-1$
+			scope.put("sampleResult", scope, previousResult); //$NON-NLS-1$
+
+            Object result = cx.evaluateString(scope, script, "<cmd>", 1, null); //$NON-NLS-1$
 
 			resultStr = Context.toString(result);
 			if (varName != null && vars != null) {// vars can be null if run from TestPlan
