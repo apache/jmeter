@@ -155,6 +155,12 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 						</li>
 									
 
+												<li	>
+								The Proxy server removes If-Modified-Since headers from generated Header Managers.
+To revert to the previous behaviour, define the property proxy.headers.remove with no value
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Bug fixes
@@ -189,6 +195,17 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 
 												<li	>
 								Bug 43612 - HTTP PUT does not honor request parameters
+						</li>
+									
+
+												<li	>
+								Bug 43694 - ForEach Controller (empty collection processing error)
+						</li>
+									
+
+												<li	>
+								Bug 42012 - Variable Listener filenames do not get processed in remote tests.
+Filenames can now include function references; variable references do not work.
 						</li>
 									
 
@@ -311,6 +328,55 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 
 												<li	>
 								Enable exit after a single server test - define JMeter property server.exitaftertest=true
+						</li>
+									
+
+												<li	>
+								Added -G option to set properties in remote servers
+						</li>
+									
+
+												<li	>
+								Added -X option to stop remote servers after non-GUI run
+						</li>
+									
+
+												<li	>
+								Bug 43485 - Ability to specify keep-alive on SOAP/XML-RPC request
+						</li>
+									
+
+												<li	>
+								Bug 43678 - Handle META tag http-equiv charset
+						</li>
+									
+
+												<li	>
+								Bug 42555 - [I18N] Proposed corrections for the french translation
+						</li>
+									
+
+												<li	>
+								Bug 43727 - Test Action does not support variables or functions
+						</li>
+									
+
+												<li	>
+								The Proxy server removes If-Modified-Since headers from generated Header Managers by default.
+To change the list of removed headers, define the property proxy.headers.remove as a comma-separated list of headers to remove
+						</li>
+									
+
+												<li	>
+								The javaScript function now has access to JMeter variables and context etc. See 
+												<a	 href="usermanual/functions.html#__javaScript">
+								JavaScript function
+						</a>
+							</li>
+									
+
+												<li	>
+								Use drop-down list for BSF Sampler language field
 						</li>
 									
 
@@ -2785,6 +2851,7 @@ The XSL stylesheets also now accept either "rc" or "rs"
 								All Beanshell access is now via a single class; only need BSH jar at run-time
 						</li>
 									
+
 
 												<li	>
 								Bug 32464 - document Direct Draw settings in jmeter.bat

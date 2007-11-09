@@ -217,12 +217,18 @@ To revert to the previous behaviour, define the JMeter property server.rmi.creat
 add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.
 						</p>
 							  									 				<p	>
-								Note that you can also use the -J 
+								Note that you can use the -R 
 												<a	 href="get-started.html#override">
 								command line option
 						</a>
-									 to specify the remote host(s) to use.
-	E.g. jmeter -Jremote_hosts=host1,127.0.0.1,host2
+									
+instead to specify the remote host(s) to use. This has the same effect as using -r and -Jremote_hosts={serverlist}.
+	E.g. jmeter -Rhost1,127.0.0.1,host2
+						</p>
+							  									 				<p	>
+								If you define the JMeter property server.exitaftertest=true, then the server will exit after it runs a single test.
+See also the -X flag (described below)
+
 						</p>
 							  									 				<p	>
 												<b	>
@@ -254,6 +260,10 @@ jmeter -n -t script.jmx -r
 or
 jmeter -n -t script.jmx -R server1,server2...
 
+Other flags that may be useful:
+-Gproperty=value - define a property in all the servers (may appear more than once)
+-Z - Exit remote servers at the end of the test.
+
 						</pre>
 									
 The first example will start whatever servers are defined in the JMeter property remote_hosts;
@@ -263,14 +273,6 @@ the second example will define remote_hosts from the list of servers and then ru
 						</br>
 									
 The command-line client will exit when all the remote servers have stopped.
-
-												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-		<tr><td>						
-There is currently no way to stop the remote servers gracefully from the command-line.
-
-			</td></tr>
-	</table></p>
-									
 
 						</p>
 							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">

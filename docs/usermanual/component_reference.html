@@ -192,7 +192,6 @@
 					<li><a href="#FTP_Request_Defaults">FTP Request Defaults</a></li>
 					<li><a href="#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li>
 					<li><a href="#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li>
-					<li><a href="#HTTP_Proxy_Server">HTTP Proxy Server</a></li>
 					<li><a href="#HTTP_Request_Defaults">HTTP Request Defaults</a></li>
 					<li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li>
 					<li><a href="#Java_Request_Defaults">Java Request Defaults</a></li>
@@ -250,6 +249,7 @@
 					<li><a href="#Thread_Group">Thread Group</a></li>
 					<li><a href="#WorkBench">WorkBench</a></li>
 					<li><a href="#SSL_Manager">SSL Manager</a></li>
+					<li><a href="#HTTP_Proxy_Server">HTTP Proxy Server</a></li>
 					<li><a href="#HTTP_Mirror_Server">HTTP Mirror Server</a></li>
 					<li><a href="#Property_Display">Property Display</a></li>
 					<li><a href="#Debug_Sampler">Debug Sampler</a></li>
@@ -1505,7 +1505,10 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		</tr>
 			<tr>
 			<td>Memory cache</td>
-			<td>						caches the request data
+			<td>						
+        When using external files, setting this causes the file to be processed once and caches the result.
+        This may use a lot of memory if there are many different large files.
+        
 			</td>
 			<td>
 											Yes
@@ -2638,6 +2641,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 							  									 				<p	>
 								The contents of the Parameters field is put into the variable "Parameters".
 			The string is also split into separate tokens using a single space as the separator, and the resulting list
+
 			is stored in the String array bsh.args.
 						</p>
 							  									 				<p	>
@@ -2823,6 +2827,10 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 			<tr>
 			<td>Scripting Language</td>
 			<td>						Name of the BSF scripting language to be used.
+	N.B. Not all the languages in the drop-down list are supported by default.
+	The following are supported: beanshell, jacl, javascript, xslt.
+	Others may be available if the appropriate jar is installed in the JMeter lib directory.
+	
 			</td>
 			<td>
 											Yes
@@ -2887,7 +2895,7 @@ Before invoking the script, some variables are set up:
 									
 
 												<li	>
-								bsh.args - the parameters, split as described above
+								args - the parameters, split as described above
 						</li>
 									
 
@@ -5362,6 +5370,15 @@ When reading from CSV results files, the header (if present) is used to determin
 						</p>
 									
 
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+The file name can contain function and/or variable references.
+However variable references do not work in client-server mode (functions work OK).
+
+			</td></tr>
+	</table></p>
+									
+
 												<p	>
 												<b	>
 								Listeners can use a lot of memory if there are a lot of samples.
@@ -5981,6 +5998,11 @@ The remaining samples took longer than this.
 						</ul>
 									
 
+												<p	>
+								Times are in milliseonds.
+						</p>
+									
+
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='762' height='235' src="../images/screenshots/aggregate_report.png"></div>
 											  		</td></tr>
@@ -6463,6 +6485,11 @@ the Report.
 									
 
 						</ul>
+									
+
+												<p	>
+								Times are in milliseonds.
+						</p>
 									
 
 														<p><b>Control Panel</b></p>
@@ -7024,452 +7051,7 @@ cookie table entries.
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="HTTP_Proxy_Server"><h3>18.4.5 HTTP Proxy Server</h3></a>
-		  </font>
-		</td></tr>
-				<tr><td>
-		  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-		<tr><td>						The Proxy Server can only record HTTP traffic. 
-It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.
-			</td></tr>
-	</table></p>
-							  																			<p	>
-								The Proxy Server allows JMeter to watch and record your actions while you browse your web application
-with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
-directly into your test plan as you go (so you can view samples interactively while you make them).
-						</p>
-									
-
-
-												<p	>
-								To use the proxy server, 
-												<i	>
-								add
-						</i>
-									 the HTTP Proxy Server element to the workbench.
-Select the WorkBench element in the tree, and right-click on this element to get the
-Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
-						</p>
-									
-
-														<p><b>Control Panel</b></p>
-						<div align="center"><img width='960' height='650' src="../images/screenshots/proxy_control.png"></div>
-											  									 			 <p>
-	<b>Parameters</b>
-	<table border="1" cellspacing="0" cellpadding="2">
-	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
-			<tr>
-			<td>Name</td>
-			<td>						Descriptive name for this controller that is shown in the tree.
-			</td>
-			<td>
-											No
-								</td>
-		</tr>
-			<tr>
-			<td>Port</td>
-			<td>						The port that the Proxy Server listens to.  8080 is the default, but you can change it.
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Attempt https Spoofing</td>
-			<td>						
-          When you enable https spoofing, the following  happens:
-          
-												<ul	>
-								
-            
-												<li	>
-								All http requests from the client are turned into https (between the proxy
-              and the web server).
-						</li>
-									
-            
-												<li	>
-								All text response data is scanned and any occurrence of the string "https" 
-              is replaced with "http."
-						</li>
-									
-          
-						</ul>
-									
-          So if you want to use this feature, while you are browsing in your client,
-          instead of typing "https://..." into the browser, type "http://...".  JMeter
-          will request and record 
-												<i	>
-								everything
-						</i>
-									 as https, whether it should be or not.
-        
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Target Controller</td>
-			<td>						The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Grouping</td>
-			<td>						Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
-           
-												<ul	>
-								
-             
-												<li	>
-								Do not group samplers: store all recorded samplers sequentially, without any grouping.
-						</li>
-									
-             
-												<li	>
-								Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.
-						</li>
-									
-             
-												<li	>
-								Put each group in a new controller: create a new 
-												<a href="../usermanual/component_reference.html#Simple_Controller">Simple Controller</a>
-									 for each group, and store all samplers for that group in it.
-						</li>
-									
-             
-												<li	>
-								Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.
-						</li>
-									
-           
-						</ul>
-									
-           The property 
-												<b	>
-								proxy.pause
-						</b>
-									 determines the minimum gap that JMeter needs between requests
-           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
-           If you are using grouping, please ensure that you leave the required gap between clicks.
-        
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Capture HTTP Headers</td>
-			<td>						Should headers be added to the plan?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Add Assertions</td>
-			<td>						Add a blank assertion to each sampler?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Regex Matching</td>
-			<td>						Use Regex Matching when replacing variables?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Type</td>
-			<td>						Which type of sampler to generate (the Java default or HTTPClient)
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Redirect Automatically</td>
-			<td>						Set Redirect Automatically in the generated samplers?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Follow Redirects</td>
-			<td>						Set Follow Redirects in the generated samplers?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Use Keep-Alive</td>
-			<td>						Set Use Keep-Alive in the generated samplers?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Retrieve all Embedded Resources</td>
-			<td>						Set Retrieve all Embedded Resources in the generated samplers?
-			</td>
-			<td>
-											Yes
-								</td>
-		</tr>
-			<tr>
-			<td>Content Type filter</td>
-			<td>						
-		Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
-		The fields are regular expressions which are checked to see if they are contained in the content-type.
-		[Does not have to match the entire field].
-		The include filter is checked first, then the exclude filter.
-		Samples which are filtered out will not be stored.
-		
-			</td>
-			<td>
-											No
-								</td>
-		</tr>
-			<tr>
-			<td>Patterns to Include</td>
-			<td>						Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
-        those that meet the requirements of the Include/Exclude fields are 
-												<i	>
-								recorded
-						</i>
-									.  If both Include and Exclude are
-        left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
-        etc are recorded).  
-												<b	>
-								If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
-        recorded
-						</b>
-									.
-			</td>
-			<td>
-											No
-								</td>
-		</tr>
-			<tr>
-			<td>Patterns to Exclude</td>
-			<td>						Regular expressions that are matched against the URL that is sampled.
-        
-												<b	>
-								Any requests that match one or more Exclude pattern are 
-												<i	>
-								not
-						</i>
-									 recorded
-						</b>
-									.
-			</td>
-			<td>
-											No
-								</td>
-		</tr>
-			<tr>
-			<td>Start Button</td>
-			<td>						Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".
-			</td>
-			<td>
-											N/A
-								</td>
-		</tr>
-			<tr>
-			<td>Stop Button</td>
-			<td>						Stop the proxy server.
-			</td>
-			<td>
-											N/A
-								</td>
-		</tr>
-			<tr>
-			<td>Restart Button</td>
-			<td>						Stops and restarts the proxy server.  This is
-  useful when you change/add/delete an include/exclude filter expression.
-			</td>
-			<td>
-											N/A
-								</td>
-		</tr>
-		</table>
-	</p>
-							  									 				<p	>
-								These entries will be treated as regular expressions (using Jakarta ORO).
-They will be matched against the host name + the path of each browser request.
-If the URL you are browsing is 
-												<b	>
-								http://jakarta.apache.org/jmeter/index.html?username=xxxx
-						</b>
-									,
-then the regular expression will be tested against the string: 
-												<b	>
-								"jakarta.apache.org/jmeter/index.html"
-						</b>
-									.  Thus,
-if you want to include all .html files, your regular expression might look like: 
-												<b	>
-								".*\.html"
-						</b>
-									.
-
-						</p>
-							  									 				<p	>
-								
-If there are any include patterns, then the URL 
-												<b	>
-								must match at least one
-						</b>
-									 of the patterns
-, otherwise it will not be recorded.
-If there are any exclude patterns, then the URL 
-												<b	>
-								must not match any
-						</b>
-									 of the patterns
-, otherwise it will not be recorded.
-Using a combination of includes and excludes,
-you should be able to record what you are interested in and skip what you are not.
-
-						</p>
-							  									 				<p	>
-								
-N.B. the string that is matched by the regular expression must be the same as the 
-												<b	>
-								whole
-						</b>
-									 host+path string.
-												<br	>
-						</br>
-									Thus 
-												<b	>
-								"\.html"
-						</b>
-									 will 
-												<b	>
-								not
-						</b>
-									 match 
-												<b	>
-								j.a.o/index.html
-						</b>
-									
-
-						</p>
-							  									 				<p	>
-								It is also possible to have the proxy add timers to the recorded script. To
-do this, create a timer directly within the HTTP Proxy Server component.
-The proxy will place a copy of this timer into each sample it records, or into
-the first sample of each group if you're using grouping. This copy will then be
-scanned for occurences of variable ${T} in its properties, and any such
-occurences will be replaced by the time gap from the previous sampler
-recorded (in milliseconds).
-						</p>
-							  									 				<p	>
-								When you are ready to begin, hit "start".
-						</p>
-							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-		<tr><td>						You will need to edit the proxy settings of your browser to point at the
-appropriate server and port, where the server is the machine JMeter is running on, and
-the port # is from the Proxy Control Panel shown above.
-			</td></tr>
-	</table></p>
-							  									 				<b	>
-								Where Do Samples Get Recorded?
-						</b>
-							  									 				<p	>
-								JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
-"Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
-sure to add a Recording Controller before you start recording).
-						</p>
-							  									 				<p	>
-								If the HTTP Proxy Server finds enabled 
-												<a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a>
-									 directly within the
-controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
-will have empty fields for the default values you specified. You may further control this behaviour by placing an
-HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-blank values will override
-those in the other HTTP Request Defaults. See 
-												<a	 href="best-practices.html#proxy_server">
-								 Best
-Practices with the Proxy Server
-						</a>
-									 for more info.
-						</p>
-							  									 				<p	>
-								Similarly, if the HTTP Proxy Server finds 
-												<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
-									 (UDV) directly within the
-controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
-will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
-place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
-
-												<a	 href="best-practices.html#proxy_server">
-								 Best Practices with the Proxy Server
-						</a>
-									 for more info.
-						</p>
-							  									 				<p	>
-								Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
-If you define the variable "WEB" with the value "www", for example, 
-the string "www" will be replaced by ${WEB} wherever it is found.
-To avoid this happening everywhere, set the "Regex Matching" check-box.
-This tells the proxy server to treat values as Regexes (using ORO).
-
-												<br	>
-						</br>
-									
-If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
-
-												<br	>
-						</br>
-									
-If you want to match /images at the start of a string only, use the value "^/images".
-Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
-but retain the trailing / in the output by using "^/images(?=/)".
-Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&lt;=...) or (?&lt;!...)".
-
-												<br	>
-						</br>
-									
-If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
-so be sure to check this if UDVs are not working as expected.
-
-						</p>
-							  									 				<p	>
-								When you are done recording your test samples, stop the proxy server (hit the "stop" button).  Remember to reset
-your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
-cookie manager, etc.
-						</p>
-							  									 				<b	>
-								How can I record the server's responses too?
-						</b>
-							  									 				<p	>
-								Just place a 
-												<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
-									 listener as a child of the Proxy Server and the responses will be displayed. 
-You can also add a 
-												<a href="../usermanual/component_reference.html#Save_Responses_to_a_file">Save Responses to a file</a>
-									 Post-Processor which will save the responses to files.
-
-						</p>
-							  		</td></tr>
-		<tr><td><br></td></tr>
-	 </table>
-	<hr>
-							  									 						<table border="0" cellspacing="0" cellpadding="2">
-		<tr><td>
-		  <font face="arial,helvetica,sanserif">
-			 <a name="HTTP_Request_Defaults"><h3>18.4.6 HTTP Request Defaults</h3></a>
+			 <a name="HTTP_Request_Defaults"><h3>18.4.5 HTTP Request Defaults</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -7578,7 +7160,7 @@ resource requires query string parameters, add them below in the
 							  									 					<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="HTTP_Header_Manager"><h3>18.4.7 HTTP Header Manager</h3></a>
+			 <a name="HTTP_Header_Manager"><h3>18.4.6 HTTP Header Manager</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -7692,7 +7274,7 @@ instead. (see figures 9 and 10).
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="Java_Request_Defaults"><h3>18.4.8 Java Request Defaults</h3></a>
+			 <a name="Java_Request_Defaults"><h3>18.4.7 Java Request Defaults</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -7712,7 +7294,7 @@ instead. (see figures 9 and 10).
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="JDBC_Connection_Configuration"><h3>18.4.9 JDBC Connection Configuration</h3></a>
+			 <a name="JDBC_Connection_Configuration"><h3>18.4.8 JDBC Connection Configuration</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -7991,7 +7573,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="Login_Config_Element"><h3>18.4.11 Login Config Element</h3></a>
+			 <a name="Login_Config_Element"><h3>18.4.9 Login Config Element</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -8039,7 +7621,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="LDAP_Request_Defaults"><h3>18.4.12 LDAP Request Defaults</h3></a>
+			 <a name="LDAP_Request_Defaults"><h3>18.4.10 LDAP Request Defaults</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -8059,7 +7641,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="LDAP_Extended_Request_Defaults"><h3>18.4.13 LDAP Extended Request Defaults</h3></a>
+			 <a name="LDAP_Extended_Request_Defaults"><h3>18.4.11 LDAP Extended Request Defaults</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -8079,7 +7661,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="TCP_Sampler_Config"><h3>18.4.14 TCP Sampler Config</h3></a>
+			 <a name="TCP_Sampler_Config"><h3>18.4.12 TCP Sampler Config</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -8159,7 +7741,7 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="User_Defined_Variables"><h3>18.4.15 User Defined Variables</h3></a>
+			 <a name="User_Defined_Variables"><h3>18.4.13 User Defined Variables</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -8208,7 +7790,7 @@ The variables in User Defined Variables components will take precedence over tho
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="Simple_Config_Element"><h3>18.4.16 Simple Config Element</h3></a>
+			 <a name="Simple_Config_Element"><h3>18.4.14 Simple Config Element</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -8301,6 +7883,7 @@ GUI that they can use while developing new JMeter components.
 			</td></tr>
 	</table></p>
 									
+
 
 						</description>
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
@@ -10893,6 +10476,29 @@ time boundary, so that multiple test runs on the same time will be
  synchronised.The interval is defined by the property "summariser.interval" - see jmeter.properties.
 
 This is mainly intended for batch (non-GUI) runs.
+The output looks like the following:
+
+												<pre	>
+								
+label +   171 in  20.3s =    8.4/s Avg:  1129 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   263 in  31.3s =    8.4/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label =   434 in  50.4s =    8.6/s Avg:  1135 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   263 in  31.0s =    8.5/s Avg:  1138 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label =   697 in  80.3s =    8.7/s Avg:  1136 Min:  1000 Max:  1250 Err:     0 (0.00%)
+label +   109 in  12.4s =    8.8/s Avg:  1092 Min:    47 Max:  1250 Err:     0 (0.00%)
+label =   806 in  91.6s =    8.8/s Avg:  1130 Min:    47 Max:  1250 Err:     0 (0.00%)
+
+						</pre>
+									
+The "+" means that the line is a delta line, i.e. shows the changes since the last output.
+The "=" means that the line is a totals line, i.e. it shows the running total.
+Entries in the jmeter log file also include time-stamps.
+The Avg, Min and Max times are in milliseonds.
+The last two lines will appear at the end of a test.
+They will not be synchronised to the appropriate time boundary.
+Note that the initial and final deltas may be for less than the interval (in the example above this is 30 seconds).
+The first delta will generally be lower, as JMeter synchronises to the interval boundary.
+The last delta will be lower, as the test will generally not finish on an exact interval boundary.
 	
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='358' height='131' src="../images/screenshots/summary.png"></div>
@@ -11096,12 +10702,29 @@ See the file BeanShellListeners.bshrc for example definitions.
 		  															
 
 												<p	>
-								At the Test Plan level, static variables can be defined that allow users to abstract values that are repeated throughout their tests, such as server names.
+								
+The Test Plan is where the overall settings for a test are specified.
+
 						</p>
 									
 
 												<p	>
-								Here, one can instruct JMeter to save the maximum sample information to file by selecting "functional testing".
+								
+Static variables can be defined for values that are repeated throughout a test, such as server names.
+For example the variable SERVER could be defined as www.example.com, and the rest of the test plan
+could refer to it as ${SERVER}. This simplifies changing the name later. 
+
+						</p>
+									
+
+												<p	>
+								
+Selecting Functional Testing instructs JMeter to save the  additional sample information
+- Response Data and Sampler Data - to all result files.
+This increases the resources needed to run a test, and may adversely impact JMeter performance.
+If more data is required for a particular sampler only, then add a Listener to it, and configure the fields as required.
+[The option does not affect CSV result files, which cannot currently store such information.]
+
 						</p>
 									
 
@@ -11339,7 +10962,462 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="HTTP_Mirror_Server"><h3>18.9.5 HTTP Mirror Server</h3></a>
+			 <a name="HTTP_Proxy_Server"><h3>18.9.5 HTTP Proxy Server</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						The Proxy Server can only record HTTP traffic. 
+It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.
+			</td></tr>
+	</table></p>
+							  																			<p	>
+								The Proxy Server allows JMeter to watch and record your actions while you browse your web application
+with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
+directly into your test plan as you go (so you can view samples interactively while you make them).
+						</p>
+									
+
+
+												<p	>
+								To use the proxy server, 
+												<i	>
+								add
+						</i>
+									 the HTTP Proxy Server element to the workbench.
+Select the WorkBench element in the tree, and right-click on this element to get the
+Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
+						</p>
+									
+
+														<p><b>Control Panel</b></p>
+						<div align="center"><img width='960' height='650' src="../images/screenshots/proxy_control.png"></div>
+											  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>Name</td>
+			<td>						Descriptive name for this controller that is shown in the tree.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Port</td>
+			<td>						The port that the Proxy Server listens to.  8080 is the default, but you can change it.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Attempt https Spoofing</td>
+			<td>						
+          When you enable https spoofing, the following  happens:
+          
+												<ul	>
+								
+            
+												<li	>
+								All http requests from the client are turned into https (between the proxy
+              and the web server).
+						</li>
+									
+            
+												<li	>
+								All text response data is scanned and any occurrence of the string "https" 
+              is replaced with "http."
+						</li>
+									
+          
+						</ul>
+									
+          So if you want to use this feature, while you are browsing in your client,
+          instead of typing "https://..." into the browser, type "http://...".  JMeter
+          will request and record 
+												<i	>
+								everything
+						</i>
+									 as https, whether it should be or not.
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Target Controller</td>
+			<td>						The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Grouping</td>
+			<td>						Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
+           
+												<ul	>
+								
+             
+												<li	>
+								Do not group samplers: store all recorded samplers sequentially, without any grouping.
+						</li>
+									
+             
+												<li	>
+								Add separators between groups: add a controller named "--------------" to create a visual separation between the groups. Otherwise the samplers are all stored sequentially.
+						</li>
+									
+             
+												<li	>
+								Put each group in a new controller: create a new 
+												<a href="../usermanual/component_reference.html#Simple_Controller">Simple Controller</a>
+									 for each group, and store all samplers for that group in it.
+						</li>
+									
+             
+												<li	>
+								Store 1st sampler of each group only: only the first request in each group will be recorded. The "Follow Redirects" and "Retrieve All Embedded Resources..." flags will be turned on in those samplers.
+						</li>
+									
+           
+						</ul>
+									
+           The property 
+												<b	>
+								proxy.pause
+						</b>
+									 determines the minimum gap that JMeter needs between requests
+           to treat them as separate "clicks". The default is 1000 (milliseconds) i.e. 1 second.
+           If you are using grouping, please ensure that you leave the required gap between clicks.
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Capture HTTP Headers</td>
+			<td>						Should headers be added to the plan?
+		If specified, a Header Manager will be added to each HTTP Sampler.
+		The Proxy server always removes Cookie and Authorization headers from the generated Header Managers.
+		By default it also removes If-Modified-Since headers.
+        To change which additional headers are removed, define the JMeter property 
+												<b	>
+								proxy.headers.remove
+						</b>
+									
+        as a comma-separated list of headers.
+        
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Add Assertions</td>
+			<td>						Add a blank assertion to each sampler?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Regex Matching</td>
+			<td>						Use Regex Matching when replacing variables?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Type</td>
+			<td>						Which type of sampler to generate (the Java default or HTTPClient)
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Redirect Automatically</td>
+			<td>						Set Redirect Automatically in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Follow Redirects</td>
+			<td>						Set Follow Redirects in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Use Keep-Alive</td>
+			<td>						Set Use Keep-Alive in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Retrieve all Embedded Resources</td>
+			<td>						Set Retrieve all Embedded Resources in the generated samplers?
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Content Type filter</td>
+			<td>						
+		Filter the requests based on the content-type - e.g. "text/html [;charset=utf-8 ]".
+		The fields are regular expressions which are checked to see if they are contained in the content-type.
+		[Does not have to match the entire field].
+		The include filter is checked first, then the exclude filter.
+		Samples which are filtered out will not be stored.
+		
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Patterns to Include</td>
+			<td>						Regular expressions that are matched against the full URL that is sampled.  Allows filtering of requests that are recorded.  All requests pass through, but only
+        those that meet the requirements of the Include/Exclude fields are 
+												<i	>
+								recorded
+						</i>
+									.  If both Include and Exclude are
+        left empty, then everything is recorded (which can result in dozens of samples recorded for each page, as images, stylesheets,
+        etc are recorded).  
+												<b	>
+								If there is at least one entry in the Include field, then only requests that match one or more Include patterns are
+        recorded
+						</b>
+									.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Patterns to Exclude</td>
+			<td>						Regular expressions that are matched against the URL that is sampled.
+        
+												<b	>
+								Any requests that match one or more Exclude pattern are 
+												<i	>
+								not
+						</i>
+									 recorded
+						</b>
+									.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Start Button</td>
+			<td>						Start the proxy server.  JMeter writes the following message to the console once the proxy server has started up and is ready to take requests: "Proxy up and running!".
+			</td>
+			<td>
+											N/A
+								</td>
+		</tr>
+			<tr>
+			<td>Stop Button</td>
+			<td>						Stop the proxy server.
+			</td>
+			<td>
+											N/A
+								</td>
+		</tr>
+			<tr>
+			<td>Restart Button</td>
+			<td>						Stops and restarts the proxy server.  This is
+  useful when you change/add/delete an include/exclude filter expression.
+			</td>
+			<td>
+											N/A
+								</td>
+		</tr>
+		</table>
+	</p>
+							  									 				<p	>
+								These entries will be treated as regular expressions (using Jakarta ORO).
+They will be matched against the host name, port (actual or implied) and path of each browser request.
+If the URL you are browsing is 
+												<b	>
+								http://jakarta.apache.org/jmeter/index.html?username=xxxx
+						</b>
+									,
+then the regular expression will be tested against the string: 
+												<b	>
+								"jakarta.apache.org:80/jmeter/index.html"
+						</b>
+									.  Thus,
+if you want to include all .html files, your regular expression might look like: 
+												<b	>
+								".*\.html"
+						</b>
+									.
+
+						</p>
+							  									 				<p	>
+								
+If there are any include patterns, then the URL 
+												<b	>
+								must match at least one
+						</b>
+									 of the patterns
+, otherwise it will not be recorded.
+If there are any exclude patterns, then the URL 
+												<b	>
+								must not match any
+						</b>
+									 of the patterns
+, otherwise it will not be recorded.
+Using a combination of includes and excludes,
+you should be able to record what you are interested in and skip what you are not.
+
+						</p>
+							  									 				<p	>
+								
+N.B. the string that is matched by the regular expression must be the same as the 
+												<b	>
+								whole
+						</b>
+									 host+path string.
+												<br	>
+						</br>
+									Thus 
+												<b	>
+								"\.html"
+						</b>
+									 will 
+												<b	>
+								not
+						</b>
+									 match 
+												<b	>
+								j.a.o/index.html
+						</b>
+									
+
+						</p>
+							  									 				<p	>
+								It is also possible to have the proxy add timers to the recorded script. To
+do this, create a timer directly within the HTTP Proxy Server component.
+The proxy will place a copy of this timer into each sample it records, or into
+the first sample of each group if you're using grouping. This copy will then be
+scanned for occurences of variable ${T} in its properties, and any such
+occurences will be replaced by the time gap from the previous sampler
+recorded (in milliseconds).
+						</p>
+							  									 				<p	>
+								When you are ready to begin, hit "start".
+						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						You will need to edit the proxy settings of your browser to point at the
+appropriate server and port, where the server is the machine JMeter is running on, and
+the port # is from the Proxy Control Panel shown above.
+			</td></tr>
+	</table></p>
+							  									 				<b	>
+								Where Do Samples Get Recorded?
+						</b>
+							  									 				<p	>
+								JMeter places the recorded samples in the Target Controller you choose. If you choose the default option
+"Use Recording Controller", they will be stored in the first Recording Controller found in the test object tree (so be
+sure to add a Recording Controller before you start recording).
+						</p>
+							  									 				<p	>
+								If the HTTP Proxy Server finds enabled 
+												<a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a>
+									 directly within the
+controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
+will have empty fields for the default values you specified. You may further control this behaviour by placing an
+HTTP Request Defaults element directly within the HTTP Proxy Server, whose non-blank values will override
+those in the other HTTP Request Defaults. See 
+												<a	 href="best-practices.html#proxy_server">
+								 Best
+Practices with the Proxy Server
+						</a>
+									 for more info.
+						</p>
+							  									 				<p	>
+								Similarly, if the HTTP Proxy Server finds 
+												<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
+									 (UDV) directly within the
+controller where samples are being stored, or directly within any of its parent controllers, the recorded samples
+will have any occurences of the values of those variables replaced by the corresponding variable. Again, you can
+place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
+
+												<a	 href="best-practices.html#proxy_server">
+								 Best Practices with the Proxy Server
+						</a>
+									 for more info.
+						</p>
+							  									 				<p	>
+								Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
+If you define the variable "WEB" with the value "www", for example, 
+the string "www" will be replaced by ${WEB} wherever it is found.
+To avoid this happening everywhere, set the "Regex Matching" check-box.
+This tells the proxy server to treat values as Regexes (using ORO).
+
+												<br	>
+						</br>
+									
+If you want to match a whole string only, enclose it in ^$, e.g. "^thus$".
+
+												<br	>
+						</br>
+									
+If you want to match /images at the start of a string only, use the value "^/images".
+Jakarta ORO also supports zero-width look-ahead, so one can match /images/... 
+but retain the trailing / in the output by using "^/images(?=/)".
+Note that the current version of Jakara ORO does not support look-behind - i.e. "(?&lt;=...) or (?&lt;!...)".
+
+												<br	>
+						</br>
+									
+If there are any problems interpreting any variables as patterns, these are reported in jmeter.log,
+so be sure to check this if UDVs are not working as expected.
+
+						</p>
+							  									 				<p	>
+								When you are done recording your test samples, stop the proxy server (hit the "stop" button).  Remember to reset
+your browser's proxy settings.  Now, you may want to sort and re-order the test script, add timers, listeners, a
+cookie manager, etc.
+						</p>
+							  									 				<b	>
+								How can I record the server's responses too?
+						</b>
+							  									 				<p	>
+								Just place a 
+												<a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a>
+									 listener as a child of the Proxy Server and the responses will be displayed. 
+You can also add a 
+												<a href="../usermanual/component_reference.html#Save_Responses_to_a_file">Save Responses to a file</a>
+									 Post-Processor which will save the responses to files.
+
+						</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 						<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="HTTP_Mirror_Server"><h3>18.9.6 HTTP Mirror Server</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -11362,7 +11440,7 @@ This is useful for checking the content of HTTP requests.
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="Property_Display"><h3>18.9.6 Property Display</h3></a>
+			 <a name="Property_Display"><h3>18.9.7 Property Display</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -11400,7 +11478,7 @@ It is available only on the WorkBench.
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="Debug_Sampler"><h3>18.9.7 Debug Sampler</h3></a>
+			 <a name="Debug_Sampler"><h3>18.9.8 Debug Sampler</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>

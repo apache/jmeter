@@ -897,7 +897,10 @@ the following command options
 								-l [name of JTL file to log sample results to].
 						</p>
 							  									 				<p	>
-								-r Run all remote servers specified in jmeter.properties (or remote servers specified on command line by overriding properties)
+								-r Run the test in the servers specified by the JMeter property "remote_hosts"
+						</p>
+							  									 				<p	>
+								-R [list of remote servers] Run the test in the specified remote servers
 						</p>
 							  									 				<p	>
 								The script also lets you specify the optional firewall/proxy server information:
@@ -934,8 +937,7 @@ the following command options
 						</a>
 									, run JMeter in server mode on the remote node(s), and then control the server(s) from the GUI.
 You can also use non-GUI mode to run remote tests.
-
-Run jmeter-server/jmeter-server.bat, plus these optional commands:
+To start the server(s), run jmeter-server/jmeter-server.bat on each server host.
 						</p>
 							  									 				<p	>
 								The script also lets you specify the optional firewall/proxy server information:
@@ -953,6 +955,22 @@ Run jmeter-server/jmeter-server.bat, plus these optional commands:
 						</b>
 									: jmeter-server -H my.proxy.server -P 8000
 						</p>
+							  									 				<p	>
+								If you want the server to exit after a single test has been run, then define the JMeter property server.exitaftertest=true.
+
+						</p>
+							  									 				<p	>
+								To run the test from the client in non-GUI mode, use the following command:
+						</p>
+							  									 				<pre	>
+								
+jmeter -n -t testplan.jmx -r [-Gprop=val] [-Z]
+where:
+-G is used to define JMeter properties to be set in the servers
+-X means exit the servers at the end of the test
+-Rserver1,server2 - can be used instead of -r to provide a list of servers (overrides remote_hosts)
+
+						</pre>
 							  		  </blockquote>
 		</td></tr>
 		<tr><td><br></td></tr>
@@ -973,7 +991,10 @@ To do so, use the following options:
 								-D[prop_name]=[value] - defines a java system property value.
 						</p>
 							  									 				<p	>
-								-J[prop name]=[value] - overrides a JMeter property.
+								-J[prop name]=[value] - defines a local JMeter property.
+						</p>
+							  									 				<p	>
+								-G[prop name]=[value] - defines a JMeter property to be sent to all remote servers.
 						</p>
 							  									 				<p	>
 								-L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.
@@ -1125,6 +1146,8 @@ These are shown below.
                 Set password for proxy server that JMeter is to use
         -J, --jmeterproperty {argument}={value}
                 Define additional JMeter properties
+        -G, --globalproperty (argument)=(value)
+                Define Global properties (sent to servers)
         -D, --systemproperty {argument}={value}
                 Define additional System properties
         -S, --systemPropertyFile {filename}
@@ -1138,6 +1161,8 @@ These are shown below.
                 Start these remote servers (overrides remote_hosts)
         -d, --homedir {argument}
                 the jmeter home directory to use
+        -X, --remoteexit
+                Exit the remote servers at end of test (non-GUI)
 
 						</pre>
 							  		  </blockquote>
