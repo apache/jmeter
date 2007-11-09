@@ -395,6 +395,16 @@ Javascript is used as a scripting language, so you can do calculations etc.</p>
 <p>
 For details of the language, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
 </p>
+<p>
+Versions of JMeter after 2.3 make the following variables available to the script:
+</p>
+<ul>
+<li>ctx - JMeterContext object</li>
+<li>vars - JMeterVariables object</li>
+<li>threadName - String</li>
+<li>sampler - current Sampler object (if any)</li>
+<li>sampleResult - previous SampleResult object (if any)</li>
+</ul>
 <note>
 JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
 </note>
@@ -756,8 +766,13 @@ time.YMD=yyMMdd
 <component index="&sect-num;.5.18" name="__jexl">
 <description>
 	<p>The jexl function returns the result of evaluating a 
-	<a href="http://jakarta.apache.org/commons/jexl">Commons JEXL expression</a>.
+	<a href="http://jakarta.apache.org/commons/jexl">Commons JEXL expression</a>. 
+	See links below for more information on JEXL expressions.
 	</p>
+	<ul>
+	<li><a href="http://commons.apache.org/jexl/reference/syntax.html">JEXL syntax description</a></li>
+	<li><a href="http://commons.apache.org/jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
+	</ul>
 	</description>
 
 <properties>
@@ -765,6 +780,16 @@ time.YMD=yyMMdd
         The expression to be evaluated. 
         </property>
 </properties>
+<p>
+JMeter 2.3 (and later versions) make the following variables available to the script:
+</p>
+<ul>
+<li>ctx - JMeterContext object</li>
+<li>vars - JMeterVariables object</li>
+<li>threadName - String</li>
+<li>sampler - current Sampler object (if any)</li>
+<li>sampleResult - previous SampleResult object (if any)</li>
+</ul>
 </component>
 
 <component index="&sect-num;.5.19" name="__V">
