@@ -64,28 +64,30 @@ import org.w3c.dom.Document;
 public class WebServiceSampler extends HTTPSamplerBase {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	public static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
+	//+ JMX file attribut names - do not change!
+	private static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
 
-	public static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
+	private static final String SOAP_ACTION = "Soap.Action"; //$NON-NLS-1$
 
-	public static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file"; //$NON-NLS-1$
+	private static final String XML_DATA_FILE = "WebServiceSampler.xml_data_file"; //$NON-NLS-1$
 
-	public static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc"; //$NON-NLS-1$
+	private static final String XML_PATH_LOC = "WebServiceSampler.xml_path_loc"; //$NON-NLS-1$
 
-	public static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
+	private static final String MEMORY_CACHE = "WebServiceSampler.memory_cache"; //$NON-NLS-1$
 
-	public static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
+	private static final String READ_RESPONSE = "WebServiceSampler.read_response"; //$NON-NLS-1$
 
-	public static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
+	private static final String USE_PROXY = "WebServiceSampler.use_proxy"; //$NON-NLS-1$
 
-	public static final String PROXY_HOST = "WebServiceSampler.proxy_host"; //$NON-NLS-1$
+	private static final String PROXY_HOST = "WebServiceSampler.proxy_host"; //$NON-NLS-1$
 
-	public static final String PROXY_PORT = "WebServiceSampler.proxy_port"; //$NON-NLS-1$
+	private static final String PROXY_PORT = "WebServiceSampler.proxy_port"; //$NON-NLS-1$
 
-	public static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
+	private static final String WSDL_URL = "WebserviceSampler.wsdl_url"; //$NON-NLS-1$
 
-    public static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
-
+	private static final String TIMEOUT = "WebserviceSampler.timeout"; //$NON-NLS-1$
+    //- JMX file attribut names - do not change!
+    
     private static final String PROXY_USER = 
         JMeterUtils.getPropDefault(JMeter.HTTP_PROXY_USER,""); // $NON-NLS-1$
     
