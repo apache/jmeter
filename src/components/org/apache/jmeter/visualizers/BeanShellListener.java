@@ -33,7 +33,8 @@ import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
 public class BeanShellListener extends BeanShellTestElement 
-    implements Cloneable, SampleListener, TestBean, UnsharedComponent  {
+    implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
+	// N.B. Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
 	// TODO - remove UnsharedComponent ? Probably does not make sense for a TestBean.
 	
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -73,6 +74,15 @@ public class BeanShellListener extends BeanShellTestElement
 	}
 
 	public void sampleStopped(SampleEvent e) {
+	}
+
+	public void add(SampleResult sample) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isStats() { // Needed by Visualizer interface
+		return false;
 	}
 
 }
