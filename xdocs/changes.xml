@@ -91,6 +91,7 @@ Filenames can now include function references; variable references do not work.<
 <li>The Proxy server removes If-Modified-Since headers from generated Header Managers by default.
 To change the list of removed headers, define the property proxy.headers.remove as a comma-separated list of headers to remove</li>
 <li>The javaScript function now has access to JMeter variables and context etc. See <a href="usermanual/functions.html#__javaScript">JavaScript function</a></li>
+<li>Use drop-down list for BSF Sampler language field</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>

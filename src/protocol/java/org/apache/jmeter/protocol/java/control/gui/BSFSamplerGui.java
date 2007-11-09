@@ -19,8 +19,12 @@
 package org.apache.jmeter.protocol.java.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.Box;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,7 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class BSFSamplerGui extends AbstractSamplerGui {
 	private JTextArea scriptField;
 
-	private JTextField langField;// Language TODO should this be a drop-down list?
+	private JComboBox langField;// Language
 
 	private JTextField filename;// script file name (if present)
 
@@ -47,10 +51,11 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 
 	public void configure(TestElement element) {
 		super.configure(element);
-		scriptField.setText(element.getPropertyAsString(BSFSampler.SCRIPT));
-		langField.setText(element.getPropertyAsString(BSFSampler.LANGUAGE));
-        filename.setText(element.getPropertyAsString(BSFSampler.FILENAME));
-        parameters.setText(element.getPropertyAsString(BSFSampler.PARAMETERS));
+		BSFSampler sampler = (BSFSampler) element;
+		scriptField.setText(sampler.getScript());
+		langField.setSelectedItem(sampler.getScriptLanguage());
+        filename.setText(sampler.getFilename());
+        parameters.setText(sampler.getParameters());
 	}
 
 	public TestElement createTestElement() {
@@ -67,10 +72,11 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 	public void modifyTestElement(TestElement te) {
 		te.clear();
 		this.configureTestElement(te);
-		te.setProperty(BSFSampler.FILENAME, filename.getText());
-		te.setProperty(BSFSampler.LANGUAGE, langField.getText());
-		te.setProperty(BSFSampler.PARAMETERS, parameters.getText());
-		te.setProperty(BSFSampler.SCRIPT, scriptField.getText());
+		BSFSampler sampler = (BSFSampler) te;
+		sampler.setFilename(filename.getText());
+		sampler.setScriptLanguage((String) langField.getSelectedItem());
+		sampler.setParameters(parameters.getText());
+		sampler.setScript(scriptField.getText());
 	}
     
     /**
@@ -80,7 +86,7 @@ public class BSFSamplerGui extends AbstractSamplerGui {
         super.clearGui();
         
         scriptField.setText(""); //$NON-NLS-1$
-        langField.setText(""); //$NON-NLS-1$
+        langField.setSelectedIndex(0);
         filename.setText(""); //$NON-NLS-1$
         parameters.setText(""); //$NON-NLS-1$
     }    
@@ -110,7 +116,6 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_parameters")); // $NON-NLS-1$
 
 		parameters = new JTextField(10);
-		parameters.setName(BSFSampler.PARAMETERS);
 		label.setLabelFor(parameters);
 
 		JPanel parameterPanel = new JPanel(new BorderLayout(5, 0));
@@ -124,7 +129,6 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_file")); // $NON-NLS-1$
 
 		filename = new JTextField(10);
-		filename.setName(BSFSampler.FILENAME);
 		label.setLabelFor(filename);
 
 		JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
@@ -136,13 +140,19 @@ public class BSFSamplerGui extends AbstractSamplerGui {
 	private JPanel createLanguagePanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("bsf_script_language")); // $NON-NLS-1$
 
-		langField = new JTextField(10);
-		langField.setName(BSFSampler.LANGUAGE);
+		Properties p = JMeterUtils.loadProperties("org/apache/bsf/Languages.properties"); // $NON-NLS-1$
+		Set keySet = p.keySet();
+		String [] items = (String[]) keySet.toArray(new String[]{});
+		Arrays.sort(items);
+
+		langField = new JComboBox(items);
+		langField.setEditable(true);
 		label.setLabelFor(langField);
 
 		JPanel langPanel = new JPanel(new BorderLayout(5, 0));
 		langPanel.add(label, BorderLayout.WEST);
 		langPanel.add(langField, BorderLayout.CENTER);
+
 		return langPanel;
 	}
 

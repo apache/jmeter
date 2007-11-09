@@ -858,7 +858,11 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 	</description>
 <properties>
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-	<property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.</property>
+	<property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.
+	N.B. Not all the languages in the drop-down list are supported by default.
+	The following are supported: beanshell, jacl, javascript, xslt.
+	Others may be available if the appropriate jar is installed in the JMeter lib directory.
+	</property>
 	<property name="Script File" required="No">Name of a file to be used as a BSF script</property>
 	<property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
 	<property name="Script" required="Yes (unless script file is provided)">Script to be passed to BSF language</property>
@@ -873,7 +877,7 @@ Before invoking the script, some variables are set up:
 <li>Label - the Sampler label</li>
 <li>FileName - the file name, if any</li>
 <li>Parameters - text from the Parameters field</li>
-<li>bsh.args - the parameters, split as described above</li>
+<li>args - the parameters, split as described above</li>
 <li>SampleResult - pointer to the current SampleResult</li>
 <li>ctx - JMeterContext</li>
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
