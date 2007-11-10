@@ -31,7 +31,7 @@
 
 <body>
 
-<section name="Introduction">
+<section name="Introduction" anchor="intro">
 
 <p>This document describes the process of creating and maintaining translated texts for JMeter in languages
 other than English. English has been tacitly chosen as the project's primary (or "default") language -- despite its
@@ -61,13 +61,14 @@ another tool, such as or <b>vi</b> or <b>Emacs</b>.
 
 <p>If you want to help with JMeter's translation process, start by reading this document. Then
 send a message to <a href="mailto:jmeter-dev@jakarta.apache.org">jmeter-dev@jakarta.apache.org</a>
-stating your intention. Surely one of the project contributors will be very happy to grab the current texts
+stating your intention. The files you need (*.properties and *.metaprop) are included in the source archive.
+But if you are having any difficulty, one of the project contributors will be able to grab the current texts
 from SVN and send them to you. You'll receive a jar, zip, tar or tgz file that you'll need to unpack in your
 local disk.</p>
 <p>If you are familiar with SVN or you're brave, feel free to anonymously connect to the Jakarta SVN server
 and obtain the JMeter source yourself, as described in
 <a href="http://jakarta.apache.org/site/cvsindex.html">http://jakarta.apache.org/site/cvsindex.html</a>
--- the files necessary to the translation process are all in the jakarta-jmeter/src directory.
+-- the files necessary to the translation process are all under the jakarta-jmeter/src directory.
 </p>
 <p>Once you've unpacked or checked out the files, make sure to find file jakarta-jmeter/src/i18nedit.properties in there:
 you'll need to know where it is to start working with i18nEdit.</p>
@@ -128,12 +129,12 @@ necessary, then press F2 again to repeat the process.</p>
 <section name="Submitting your translations to the project" anchor="submitting">
 
 <p>Once you're done translating, just pack up the whole set of files in jakarta-jmeter/src in a jar, zip, tar,
-tgz, or alike and send them to jmeter-dev@apache.org or, even better, post them in a JMeter bug report
+tgz, or alike and attach them to a JMeter bug report
 (follow link to "Known bugs" in <a href="http://jakarta.apache.org/jmeter">JMeter's home page</a> for that).</p>
 
 </section>
 
-<section name="Merging in new translations" anchor="submitting">
+<section name="Merging in new translations" anchor="merging">
 
 <p>If you're a committer receiving text files from a translator, follow this steps to merge them into
 the project:
