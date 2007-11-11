@@ -52,6 +52,7 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.save.TestResultWrapper;
@@ -198,7 +199,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
                     	long lineNumber=1;
-                    	SampleSaveConfiguration saveConfig = OldSaveService.getSampleSaveConfiguration(line,filename);
+                    	SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
                     	if (saveConfig == null) {// not a valid header
                     		saveConfig = (SampleSaveConfiguration) getSaveConfig().clone(); // OldSaveService may change the format
                     	} else { // header line has been processed, so read the next
@@ -206,7 +207,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             lineNumber++;
                     	}
                         while (line != null) { // Already read 1st line
-                            SampleEvent event = OldSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
+                            SampleEvent event = CSVSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
                             if (event != null) sendToVisualizer(event);
                             line = dataReader.readLine();
                             lineNumber++;
@@ -266,7 +267,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			// Write the EOL separately so we generate LF line ends on Unix and Windows
             writer.print("\n"); // $NON-NLS-1$
 		} else if (saveConfig.saveFieldNames()) {
-			writer.println(OldSaveService.printableFieldNamesToString(saveConfig));
+			writer.println(CSVSaveService.printableFieldNamesToString(saveConfig));
 		}
 	}
 
@@ -405,7 +406,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 					if (config.saveAsXml()) {
 						recordResult(result);
 					} else {
-						String savee = OldSaveService.resultToDelimitedString(e);
+						String savee = CSVSaveService.resultToDelimitedString(e);
 						out.println(savee);
 					}
 				} catch (Exception err) {
