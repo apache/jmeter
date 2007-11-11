@@ -28,8 +28,6 @@ import org.apache.log.Logger;
 /**
  * Packages information regarding the target of a sample event, such as the
  * result from that event and the thread group it ran in.
- * 
- * @version $Revision$
  */
 public class SampleEvent implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -37,7 +35,7 @@ public class SampleEvent implements Serializable {
     public static final String HOSTNAME;
 
 	static {
-        String hn=null;
+        String hn="";
 		try {
 			hn = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
