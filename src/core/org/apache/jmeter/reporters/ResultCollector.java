@@ -206,8 +206,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             lineNumber++;
                     	}
                         while (line != null) { // Already read 1st line
-                            SampleResult result = OldSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
-                            if (result != null) sendToVisualizer(result);
+                            SampleEvent event = OldSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
+                            if (event != null) sendToVisualizer(event);
                             line = dataReader.readLine();
                             lineNumber++;
                         }
@@ -418,6 +418,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	protected void sendToVisualizer(SampleResult r) {
 		if (getVisualizer() != null) {
 			getVisualizer().add(r);
+		}
+	}
+
+	private void sendToVisualizer(SampleEvent e) {
+		if (getVisualizer() != null) {
+			getVisualizer().add(e.getResult());
 		}
 	}
 
