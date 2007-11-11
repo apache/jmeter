@@ -159,7 +159,7 @@ public final class OldSaveService {
 		return configs;
 	}
 
-	public static Configuration getConfiguration(byte[] bin) {
+	private static Configuration getConfiguration(byte[] bin) {
 		DefaultConfiguration config = new DefaultConfiguration(BINARY, "JMeter Save Service"); // $NON-NLS-1$
 
 		try {
@@ -170,7 +170,7 @@ public final class OldSaveService {
 		return config;
 	}
 
-	public static byte[] getBinaryData(Configuration config) {
+	private static byte[] getBinaryData(Configuration config) {
 		if (config == null) {
 			return new byte[0];
 		}
@@ -181,7 +181,7 @@ public final class OldSaveService {
 		}
 	}
 
-	public static AssertionResult getAssertionResult(Configuration config) {
+	private static AssertionResult getAssertionResult(Configuration config) {
 		AssertionResult result = new AssertionResult(""); //TODO provide proper name?
 		result.setError(config.getAttributeAsBoolean(ERROR, false));
 		result.setFailure(config.getAttributeAsBoolean(FAILURE, false));
@@ -189,7 +189,7 @@ public final class OldSaveService {
 		return result;
 	}
 
-	public static Configuration getConfiguration(AssertionResult assResult) {
+	private static Configuration getConfiguration(AssertionResult assResult) {
 		DefaultConfiguration config = new DefaultConfiguration(ASSERTION_RESULT_TAG_NAME, "JMeter Save Service");
 
 		config.setAttribute(FAILURE_MESSAGE, assResult.getFailureMessage());
@@ -267,7 +267,7 @@ public final class OldSaveService {
 		return config;
 	}
 
-	public static Configuration getConfigForTestElement(String named, TestElement item) {
+	private static Configuration getConfigForTestElement(String named, TestElement item) {
 		TestElementSaver saver = new TestElementSaver(named);
 		item.traverse(saver);
 		Configuration config = saver.getConfiguration();
@@ -325,7 +325,7 @@ public final class OldSaveService {
 		}
 	}
 
-	public static TestElement createTestElement(Configuration config) throws ConfigurationException,
+	private static TestElement createTestElement(Configuration config) throws ConfigurationException,
 			ClassNotFoundException, IllegalAccessException, InstantiationException {
 		TestElement element = null;
 
