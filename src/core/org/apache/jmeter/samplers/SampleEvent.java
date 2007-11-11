@@ -46,7 +46,7 @@ public class SampleEvent implements Serializable {
 
 	SampleResult result;
 
-	String threadGroup;
+	String threadGroup; // TODO appears to duplicate the threadName field in SampleResult
 
 	String hostname;
 
@@ -57,6 +57,19 @@ public class SampleEvent implements Serializable {
 		this.result = result;
 		this.threadGroup = threadGroup;
 		this.hostname = HOSTNAME;
+	}
+
+	/**
+	 * Only intended for use when loading results from a file.
+	 * 
+	 * @param result
+	 * @param threadGroup
+	 * @param hostname
+	 */
+	public SampleEvent(SampleResult result, String threadGroup, String hostname) {
+		this.result = result;
+		this.threadGroup = threadGroup;
+		this.hostname = hostname;
 	}
 
 	public SampleResult getResult() {
