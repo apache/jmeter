@@ -28,7 +28,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,9 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
+import org.apache.commons.collections.map.LinkedMap;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.samplers.StatisticalSampleResult;
@@ -65,11 +66,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.xml.sax.SAXException;
 
 /**
- * This class provides a means for saving test results. Test results are
- * typically saved in an XML file, but other storage mechanisms may also be
- * used, for instance, CSV files or databases.
- * 
- * @version $Revision$ $Date$
+ * This class provides a means for saving/reading test results as CSV files.
+ * It also saves/restores the original Avalon XML format (not used by default).
  */
 public final class OldSaveService {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -414,7 +412,9 @@ public final class OldSaveService {
 	}
 	
 	// Map header names to set() methods
-	private static final Map headerLabelMethods = new HashMap();
+	private static final LinkedMap headerLabelMethods = new LinkedMap();
+	
+	// These entries must be in the same order as columns are saved/restored.
 	
 	static {
 		    headerLabelMethods.put(TIME_STAMP, new Functor("setTimestamp"));
@@ -427,13 +427,13 @@ public final class OldSaveService {
 			headerLabelMethods.put(SUCCESSFUL, new Functor("setSuccess"));
 			headerLabelMethods.put(FAILURE_MESSAGE, new Functor("setAssertionResultsFailureMessage"));
             headerLabelMethods.put(CSV_BYTES, new Functor("setBytes"));
+            // Both these are needed in the list even though they set the same variable
+            headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
+            headerLabelMethods.put(CSV_THREAD_COUNT2,new Functor("setThreadCounts"));
             headerLabelMethods.put(CSV_URL, new Functor("setUrl"));
             headerLabelMethods.put(CSV_FILENAME, new Functor("setFileName"));
             headerLabelMethods.put(CSV_LATENCY, new Functor("setLatency"));
             headerLabelMethods.put(CSV_ENCODING, new Functor("setEncoding"));
-            // Both these are needed in the list even though they set the same variable
-            headerLabelMethods.put(CSV_THREAD_COUNT1,new Functor("setThreadCounts"));
-            headerLabelMethods.put(CSV_THREAD_COUNT2,new Functor("setThreadCounts"));
             // Both these are needed in the list even though they set the same variable
             headerLabelMethods.put(CSV_SAMPLE_COUNT, new Functor("setSampleCount"));
             headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
@@ -487,11 +487,19 @@ public final class OldSaveService {
 
 	private static String[] splitHeader(String headerLine, String delim) {
 		String parts[]=headerLine.split("\\Q"+delim);// $NON-NLS-1$
+		int previous = -1;
 		// Check if the line is a header
 		for(int i=0;i<parts.length;i++){
-			if (!headerLabelMethods.containsKey(parts[i])){
+			final String label = parts[i];
+			int current = headerLabelMethods.indexOf(label);
+			if (current == -1){
 				return null; // unknown column name
 			}
+			if (current <= previous){
+				log.warn("Column header number "+(i+1)+" name "+ label + " is out of order.");
+				return null; // out of order
+			}
+			previous = current;
 		}
 		return parts;
 	}
@@ -523,26 +531,27 @@ public final class OldSaveService {
      * Convert a result into a string, where the fields of the result are
      * separated by the default delimiter.
      * 
-     * @param sample
-     *            the test result to be converted
+     * @param event
+     *            the sample event to be converted
      * @return the separated value representation of the result
      */
-    public static String resultToDelimitedString(SampleResult sample) {
-    	return resultToDelimitedString(sample, sample.getSaveConfig().getDelimiter());
+    public static String resultToDelimitedString(SampleEvent event) {
+    	return resultToDelimitedString(event, event.getResult().getSaveConfig().getDelimiter());
     }
 
     /**
      * Convert a result into a string, where the fields of the result are
      * separated by a specified String.
      * 
-     * @param sample
-     *            the test result to be converted
+     * @param event
+     *            the sample event to be converted
      * @param delimiter
      *            the separation string
      * @return the separated value representation of the result
      */
-    public static String resultToDelimitedString(SampleResult sample, String delimiter) {
+    public static String resultToDelimitedString(SampleEvent event, String delimiter) {
     	StringBuffer text = new StringBuffer();
+    	SampleResult sample = event.getResult();
     	SampleSaveConfiguration saveConfig = sample.getSaveConfig();
     
     	if (saveConfig.saveTimestamp()) {
