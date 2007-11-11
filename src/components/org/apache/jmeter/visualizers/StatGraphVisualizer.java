@@ -52,6 +52,7 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -388,7 +389,7 @@ ActionListener {
             try {
                 writer = new FileWriter(output);
                 Vector data = this.getAllTableData();
-                OldSaveService.saveCSVStats(data,writer);
+                CSVSaveService.saveCSVStats(data,writer);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {
