@@ -44,6 +44,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
     // N.B. These must agree with the new member names in SampleSaveConfiguration
 	private static final String NODE_FILENAME = "fileName"; // $NON-NLS-1$
+	private static final String NODE_HOSTNAME = "hostname"; // $NON-NLS-1$
 	private static final String NODE_URL = "url"; // $NON-NLS-1$
 	private static final String NODE_BYTES = "bytes"; // $NON-NLS-1$
     private static final String NODE_THREAD_COUNT = "threadCounts"; // $NON-NLS-1$
@@ -66,6 +67,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             if (fieldName.equals(NODE_BYTES)) return false; 
             if (fieldName.equals(NODE_URL)) return false; 
             if (fieldName.equals(NODE_FILENAME)) return false; 
+            if (fieldName.equals(NODE_HOSTNAME)) return false; 
             if (fieldName.equals(NODE_THREAD_COUNT)) return false; 
             if (fieldName.equals(NODE_SAMPLE_COUNT)) return false; 
 
@@ -112,6 +114,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         createNode(writer,prop.saveBytes(),NODE_BYTES);
         createNode(writer,prop.saveUrl(),NODE_URL);
         createNode(writer,prop.saveFileName(),NODE_FILENAME);
+        createNode(writer,prop.saveHostname(),NODE_HOSTNAME);
         createNode(writer,prop.saveThreadCounts(),NODE_THREAD_COUNT);
         createNode(writer,prop.saveSampleCount(),NODE_SAMPLE_COUNT);
 	}

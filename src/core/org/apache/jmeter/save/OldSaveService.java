@@ -109,6 +109,7 @@ public final class OldSaveService {
     private static final String CSV_FILENAME = "Filename"; // $NON-NLS-1$
     private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
     private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
+    private static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
     
     // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
@@ -129,8 +130,6 @@ public final class OldSaveService {
     //////////////////////////////////////////////////////////////////////////////
     //                  Start of CSV methods
     
-    // TODO - move to separate file? If so, remember that some of the
-      
     /**
      * Make a SampleResult given a delimited string.
      * 
@@ -141,12 +140,13 @@ public final class OldSaveService {
      * 
      * @throws JMeterError
      */
-    public static SampleResult makeResultFromDelimitedString(
+    public static SampleEvent makeResultFromDelimitedString(
     		final String inputLine, 
     		final SampleSaveConfiguration saveConfig, // may be updated
     		final long lineNumber) {
  
     	SampleResult result = null;
+        String hostname = "";// $NON-NLS-1$
 		long timeStamp = 0;
 		long elapsed = 0;
 		/*
@@ -282,6 +282,10 @@ public final class OldSaveService {
                 result.setErrorCount(Integer.parseInt(text));
             }
 
+            if (saveConfig.saveHostname()) {
+            	field = CSV_HOSTNAME;
+                hostname = parts[i++];
+            }
             
 		} catch (NumberFormatException e) {
 			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
@@ -293,7 +297,7 @@ public final class OldSaveService {
 			log.warn("Insufficient columns to parse field '" + field + "' at line " + lineNumber);
 			throw new JMeterError(e);
 		}
-		return result;
+		return new SampleEvent(result,"",hostname);
 	}
 
     /**
@@ -398,7 +402,12 @@ public final class OldSaveService {
 			text.append(delim);
 		}
 
-		String resultString = null;
+        if (saveConfig.saveHostname()) {
+            text.append(CSV_HOSTNAME);
+            text.append(delim);
+        }
+
+        String resultString = null;
 		int size = text.length();
 		int delSize = delim.length();
 
@@ -437,6 +446,7 @@ public final class OldSaveService {
             // Both these are needed in the list even though they set the same variable
             headerLabelMethods.put(CSV_SAMPLE_COUNT, new Functor("setSampleCount"));
             headerLabelMethods.put(CSV_ERROR_COUNT, new Functor("setSampleCount"));
+            headerLabelMethods.put(CSV_HOSTNAME, new Functor("setHostname"));
 	}
 
 	/**
@@ -656,6 +666,11 @@ public final class OldSaveService {
     		text.append(delimiter);
     	}
     
+        if (saveConfig.saveHostname()) {
+            text.append(event.getHostname());
+            text.append(delimiter);
+        }
+
     	String resultString = null;
     	int size = text.length();
     	int delSize = delimiter.length();
@@ -686,7 +701,14 @@ public final class OldSaveService {
 			throw new IOException("Problem using Avalon Configuration tools");
 		}
 	}
-    
+  
+    /**
+     * Read sampleResult from Avalon XML file.
+     * 
+     * @param config Avalon configuration
+     * @return sample result
+     */
+    // Probably no point in converting this to return a SampleEvent
     public static SampleResult getSampleResult(Configuration config) {
 		SampleResult result = new SampleResult(config.getAttributeAsLong(TIME_STAMP, 0L), config.getAttributeAsLong(
 				TIME, 0L));
@@ -775,18 +797,16 @@ public final class OldSaveService {
 		return config;
 	}
 
-	/*
-	 * TODO - I think this is used for the original test plan format
-	 * It seems to be rather out of date, as many attributes are missing?
-	*/
 	/**
 	 * This method determines the content of the result data that will be
-	 * stored.
+	 * stored for the Avalon XML format.
 	 * 
 	 * @param result
 	 *            the object containing all of the data that has been collected.
 	 * @param saveConfig
 	 *            the configuration giving the data items to be saved.
+	 * N.B. It is rather out of date, as many fields are not saved.
+	 * However it is probably not worth updating, as no-one should be using the format.
 	 */
 	public static Configuration getConfiguration(SampleResult result, SampleSaveConfiguration saveConfig) {
 		DefaultConfiguration config = new DefaultConfiguration(SAMPLE_RESULT_TAG_NAME, "JMeter Save Service"); // $NON-NLS-1$
