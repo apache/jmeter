@@ -172,6 +172,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	// Save fileName for ResultSaver
 	private static final String SAVE_FILENAME_PROP = "jmeter.save.saveservice.filename"; // $NON_NLS-1$
 
+	// Save hostname for ResultSaver
+	private static final String SAVE_HOSTNAME_PROP = "jmeter.save.saveservice.hostname"; // $NON_NLS-1$
+
 	/***************************************************************************
 	 * The name of the property indicating whether the time should be saved.
 	 **************************************************************************/
@@ -211,6 +214,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
 	private boolean url = _url, bytes = _bytes , fileName = _fileName;
+	
+	private boolean hostname = _hostname;
 	
     private boolean threadCounts = _threadCounts;
 
@@ -258,6 +263,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	
 	private static final boolean _fileName;
 
+	private static final boolean _hostname;
+	
     private static final boolean _threadCounts;
     
     private static final boolean _sampleCount;
@@ -315,6 +322,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		_url = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
 
 		_fileName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_FILENAME_PROP, FALSE));
+
+		_hostname = TRUE.equalsIgnoreCase(props.getProperty(SAVE_HOSTNAME_PROP, FALSE));
 
 		_time = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
@@ -381,6 +390,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 		encoding = value;
 		fieldNames = value;
 		fileName = value;
+		hostname = value;
 		label = value;
 		latency = value;
 		message = value;
@@ -455,6 +465,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             s.url == url &&
             s.bytes == bytes &&
             s.fileName == fileName &&
+            s.hostname == hostname &&
             s.sampleCount == sampleCount &&
             s.threadCounts == threadCounts;
         
@@ -497,6 +508,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         hash = 31 * hash + (url ? 1 : 0);
         hash = 31 * hash + (bytes ? 1 : 0);
         hash = 31 * hash + (fileName ? 1 : 0);
+        hash = 31 * hash + (hostname ? 1 : 0);
         hash = 31 * hash + (threadCounts ? 1 : 0);
         hash = 31 * hash + (delimiter != null  ? delimiter.hashCode() : 0);
         hash = 31 * hash + (formatter != null  ? formatter.hashCode() : 0);
@@ -754,5 +766,13 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 	public void setDefaultTimeStampFormat() {
 		printMilliseconds=_printMilliseconds;
 		formatter=_formatter;
+	}
+	
+	public boolean saveHostname(){
+		return hostname;
+	}
+	
+	public void setHostname(boolean save){
+		hostname = save;
 	}
 }
