@@ -405,7 +405,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 					if (config.saveAsXml()) {
 						recordResult(result);
 					} else {
-						String savee = OldSaveService.resultToDelimitedString(result);
+						String savee = OldSaveService.resultToDelimitedString(e);
 						out.println(savee);
 					}
 				} catch (Exception err) {
