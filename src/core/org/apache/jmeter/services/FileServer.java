@@ -93,7 +93,7 @@ public class FileServer {
 			if (!base.isDirectory()) {
 				base = base.getParentFile();
 			}
-			log.info("Set new base="+basedir);
+			log.info("Set new base="+base);
 		}
 	}
 
