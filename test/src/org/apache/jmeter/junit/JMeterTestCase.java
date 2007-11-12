@@ -65,6 +65,10 @@ public abstract class JMeterTestCase extends TestCase {
 			} else {
 				filePrefix = "";
 			}
+			// Used to be done in initializeProperties
+			String home=new File(System.getProperty("user.dir")).getParent();
+			System.out.println("Setting JMeterHome: "+home);
+			JMeterUtils.setJMeterHome(home);
 			JMeterUtils jmu = new JMeterUtils();
 			try {
 				jmu.initializeProperties(file);
