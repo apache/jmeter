@@ -116,6 +116,13 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
 	}
 
+	// Ensure that the sample save config is not shared between copied nodes
+	public Object clone(){
+		ResultCollector clone = (ResultCollector) super.clone();
+		clone.setSaveConfig((SampleSaveConfiguration)clone.getSaveConfig().clone());
+		return clone;
+	}
+
 	private void setFilenameProperty(String f) {
 		setProperty(FILENAME, f);
 	}
