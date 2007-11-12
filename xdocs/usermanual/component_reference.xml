@@ -3553,11 +3553,15 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
   useful when you change/add/delete an include/exclude filter expression.</property>
 </properties>
 
-<p>These entries will be treated as regular expressions (using Jakarta ORO).
-They will be matched against the host name, port (actual or implied) and path of each browser request.
-If the URL you are browsing is <b>http://jakarta.apache.org/jmeter/index.html?username=xxxx</b>,
-then the regular expression will be tested against the string: <b>&quot;jakarta.apache.org:80/jmeter/index.html&quot;</b>.  Thus,
-if you want to include all .html files, your regular expression might look like: <b>&quot;.*\.html&quot;</b>.
+<p>The <b>include and exclude patterns</b> are treated as regular expressions (using Jakarta ORO).
+They will be matched against the host name, port (actual or implied) path and query (if any) of each browser request.
+If the URL you are browsing is <br></br> 
+<b>&quot;http://jakarta.apache.org/jmeter/index.html?username=xxxx&quot;</b>,<br></br> 
+then the regular expression will be tested against the string:<br></br> 
+<b>&quot;jakarta.apache.org:80/jmeter/index.html?username=xxxx&quot;</b>.<br></br>   
+Thus, if you want to include all .html files, your regular expression might look like: <br></br> 
+<b>&quot;.*\.html(\?.*)?&quot;</b> - or <b>&quot;.*\.html&quot;</b> 
+if you know that there is no query string or you only want html pages without query strings.
 </p>
 <p>
 If there are any include patterns, then the URL <b>must match at least one</b> of the patterns
