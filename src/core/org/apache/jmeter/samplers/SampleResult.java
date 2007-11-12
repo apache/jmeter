@@ -114,6 +114,7 @@ public class SampleResult implements Serializable {
 
 	private String requestHeaders = "";
 
+	// TODO timeStamp == 0 means either not yet initialised or no stamp available (e.g. when loading a results file)
 	private long timeStamp = 0;// the time stamp - can be start or end
 
 	private long startTime = 0;
@@ -267,7 +268,7 @@ public class SampleResult implements Serializable {
 	 * Allow users to create a sample with specific timestamp and elapsed times
 	 * for cloning purposes, but don't allow the times to be changed later
 	 * 
-	 * Currently used by OldSaveService only
+	 * Currently used by OldSaveService, CSVSaveService and StatisticalSampleResult
 	 * 
 	 * @param stamp -
 	 *            this may be a start time or an end time
@@ -280,10 +281,12 @@ public class SampleResult implements Serializable {
 	// Helper method to maintain timestamp relationships
 	private void stampAndTime(long stamp, long elapsed) {
 		if (startTimeStamp) {
-			setTimes(stamp, stamp + elapsed);
+			startTime = stamp;
 		} else {
-			setTimes(stamp - elapsed, stamp);
+			endTime = stamp;
 		}
+		timeStamp = stamp;
+		time = elapsed;
 	}
 
 	/*
