@@ -598,8 +598,7 @@ public final class ReportGuiPackage implements LocaleChangeListener {
 	 */
 	public void setReportPlanFile(String f) {
 		reportPlanFile = f;
-		ReportGuiPackage.getInstance().getMainFrame().setTitle(
-				JMeterUtils.getExtendedFrameTitle(reportPlanFile));
+		ReportGuiPackage.getInstance().getMainFrame().setExtendedFrameTitle(reportPlanFile);
 		try {
 			FileServer.getFileServer().setBasedir(reportPlanFile);
 		} catch (IOException e1) {
