@@ -151,8 +151,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	/**
 	 * Default constructor for the JMeter frame. This constructor will not
 	 * properly initialize the tree, so don't use it.
+	 * 
+	 * @deprecated Do not use - only needed for JUnit tests
 	 */
-	MainFrame() {
+	public MainFrame() {
 	}
 
 	// MenuBar related methods
