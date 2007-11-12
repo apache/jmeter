@@ -70,6 +70,10 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 
     private static final Logger log = LoggingManager.getLoggerForClass();
     
+    // The default title for the Menu bar
+	private static final String DEFAULT_TITLE = 
+    	"Apache JMeter ("+JMeterUtils.getJMeterVersion()+")"; // $NON-NLS-1$ $NON-NLS-2$
+
     /** The menu bar. */
     protected ReportMenuBar menuBar;
 
@@ -86,7 +90,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	//private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
 
 	/** An image which is displayed when a test is not currently running. */
-	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");
+	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
 
     /** The x coordinate of the last location where a component was dragged. */
     private int previousDragXLocation = 0;
@@ -230,8 +234,8 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
      *            the host where JMeter threads are stopping
      */
     public void showStoppingMessage(String host) {
-        stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true);
-        JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host);
+        stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true);// $NON-NLS-1$
+        JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host);// $NON-NLS-1$
         stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         stoppingMessage.getContentPane().add(stopLabel);
         stoppingMessage.pack();
@@ -249,11 +253,6 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
         mainPanel.setViewportView(comp);
     }
 
-	/***************************************************************************
-	 * !ToDoo (Method description)
-	 * 
-	 * @return !ToDo (Return description)
-	 **************************************************************************/
 	public JTree getTree() {
 		return this.tree;
 	}
@@ -331,9 +330,25 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
+
+		setTitle(DEFAULT_TITLE);
+		setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
     }
 
-    /**
+	public void setExtendedFrameTitle(String fname) {
+		// file New operation may set to null, so just return app name
+		if (fname == null) {
+			setTitle(DEFAULT_TITLE);
+			return;
+		}
+
+		// allow for windows / chars in filename
+		String temp = fname.replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
+		String simpleName = temp.substring(temp.lastIndexOf("/") + 1);// $NON-NLS-1$
+		setTitle(simpleName + " (" + fname + ") - " + DEFAULT_TITLE); // $NON-NLS-1$ // $NON-NLS-2$
+	}
+
+	/**
      * Create the JMeter tool bar pane containing the running indicator.
      * 
      * @return a panel containing the running indicator

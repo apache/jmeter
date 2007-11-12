@@ -50,6 +50,7 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Load;
@@ -213,11 +214,7 @@ public class JMeter implements JMeterPlugin {
 		treeLis.setActionHandler(ActionRouter.getInstance());
 		// NOTUSED: GuiPackage guiPack =
 		GuiPackage.getInstance(treeLis, treeModel);
-		org.apache.jmeter.gui.MainFrame main = new org.apache.jmeter.gui.MainFrame(ActionRouter.getInstance(),
-				treeModel, treeLis);
-		// TODO - set up these items in MainFrame?
-		main.setTitle("Apache JMeter ("+JMeterUtils.getJMeterVersion()+")");// $NON-NLS-1$
-		main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
+		MainFrame main = new MainFrame(ActionRouter.getInstance(), treeModel, treeLis);
 		ComponentUtil.centerComponentInWindow(main, 80);
 		main.show();
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));

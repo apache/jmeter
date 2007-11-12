@@ -74,7 +74,15 @@ import org.apache.jorphan.gui.ComponentUtil;
  */
 public class MainFrame extends JFrame implements TestListener, Remoteable {
 
-    /** The menu bar. */
+	// This is used to keep track of local (non-remote) tests
+	// The name is chosen to be an unlikely host-name
+    private static final String LOCAL = "*local*"; // $NON-NLS-1$
+
+    // The default title for the Menu bar
+	private static final String DEFAULT_TITLE = 
+    	"Apache JMeter ("+JMeterUtils.getJMeterVersion()+")"; // $NON-NLS-1$ $NON-NLS-2$
+
+	/** The menu bar. */
 	private JMeterMenuBar menuBar;
 
 	/** The main panel where components display their GUIs. */
@@ -87,10 +95,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	private JTree tree;
 
 	/** An image which is displayed when a test is running. */
-	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");
+	private ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");// $NON-NLS-1$
 
 	/** An image which is displayed when a test is not currently running. */
-	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");
+	private ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
 
 	/** The button used to display the running/stopped image. */
 	private JButton runningIndicator;
@@ -129,8 +137,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 		runningIndicator.setMargin(new Insets(0, 0, 0, 0));
 		runningIndicator.setBorder(BorderFactory.createEmptyBorder());
 
-        totalThreads = new JLabel("0");
-        activeThreads = new JLabel("0");
+        totalThreads = new JLabel("0"); // $NON-NLS-1$
+        activeThreads = new JLabel("0"); // $NON-NLS-1$
         
 		tree = makeTree(treeModel, treeListener);
 
@@ -144,9 +152,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * Default constructor for the JMeter frame. This constructor will not
 	 * properly initialize the tree, so don't use it.
 	 */
-	public MainFrame() {
-		// TODO: Can we remove this constructor? JMeter won't behave properly
-		// if it used.
+	MainFrame() {
 	}
 
 	// MenuBar related methods
@@ -270,14 +276,14 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 */
 	public void showStoppingMessage(String host) {
 		stoppingMessage = new JDialog(this, JMeterUtils.getResString("stopping_test_title"), true); //$NON-NLS-1$
-		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host); //$NON-NLS-1$
+		JLabel stopLabel = new JLabel(JMeterUtils.getResString("stopping_test") + ": " + host); //$NON-NLS-1$$NON-NLS-2$
 		stopLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		stoppingMessage.getContentPane().add(stopLabel);
 		stoppingMessage.pack();
 		ComponentUtil.centerComponentInComponent(this, stoppingMessage);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				if (stoppingMessage != null) {
+				if (stoppingMessage != null) {// TODO - how can this be null?
 					stoppingMessage.show();
 				}
 			}
@@ -293,21 +299,10 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
         });
     }
 
-	/***************************************************************************
-	 * !ToDo (Method description)
-	 * 
-	 * @param comp
-	 *            !ToDo (Parameter description)
-	 **************************************************************************/
 	public void setMainPanel(JComponent comp) {
 		mainPanel.setViewportView(comp);
 	}
 
-	/***************************************************************************
-	 * !ToDoo (Method description)
-	 * 
-	 * @return !ToDo (Return description)
-	 **************************************************************************/
 	public JTree getTree() {
 		return tree;
 	}
@@ -320,7 +315,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * the running state.
 	 */
 	public void testStarted() {
-		testStarted("local");
+		testStarted(LOCAL);
 		menuBar.setEnabled(true);
 	}
 
@@ -335,8 +330,8 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	public void testStarted(String host) {
 		hosts.add(host);
 		runningIndicator.setIcon(runningIcon);
-        activeThreads.setText("0");
-        totalThreads.setText("0");
+        activeThreads.setText("0"); // $NON-NLS-1$
+        totalThreads.setText("0"); // $NON-NLS-1$
 		menuBar.setRunning(true, host);
 	}
 
@@ -346,7 +341,7 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 	 * stopping message dialog.
 	 */
 	public void testEnded() {
-		testEnded("local");
+		testEnded(LOCAL);
 		menuBar.setEnabled(false);
 	}
 
@@ -402,6 +397,22 @@ public class MainFrame extends JFrame implements TestListener, Remoteable {
 
 		tree.setSelectionRow(1);
 		addWindowListener(new WindowHappenings());
+		
+		setTitle(DEFAULT_TITLE);
+		setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());// $NON-NLS-1$
+	}
+
+	public void setExtendedFrameTitle(String fname) {
+		// file New operation may set to null, so just return app name
+		if (fname == null) {
+			setTitle(DEFAULT_TITLE);
+			return;
+		}
+
+		// allow for windows / chars in filename
+		String temp = fname.replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
+		String simpleName = temp.substring(temp.lastIndexOf("/") + 1);// $NON-NLS-1$
+		setTitle(simpleName + " (" + fname + ") - " + DEFAULT_TITLE); // $NON-NLS-1$ // $NON-NLS-2$
 	}
 
 	/**

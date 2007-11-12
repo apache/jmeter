@@ -216,8 +216,6 @@ public class JMeterReport implements JMeterPlugin {
         org.apache.jmeter.gui.ReportMainFrame main = 
             new org.apache.jmeter.gui.ReportMainFrame(ReportActionRouter.getInstance(),
                 treeModel, treeLis);
-        main.setTitle("Apache JMeter Report");
-        main.setIconImage(JMeterUtils.getImage("jmeter.jpg").getImage());
         ComponentUtil.centerComponentInWindow(main, 80);
         main.show();
 
