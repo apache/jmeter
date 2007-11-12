@@ -1047,28 +1047,6 @@ public class JMeterUtils implements UnitTestManager {
 	}
 
 	/**
-	 * Builds the string used as the main frame title
-	 * 
-	 * @param fname
-	 *            the fully qualified name of the current working file
-	 * 
-	 * @return a string of the form "FileName (<full path>/FileName) - Apache
-	 *         JMeter". If fname is null, returns "Apache JMeter".
-	 */
-	public static String getExtendedFrameTitle(String fname) {
-		// file New operation may set to null, so just return
-		// app name
-		if (fname == null) {
-			return "Apache JMeter"; // $NON-NLS-1$
-		}
-
-		// allow for windows / chars in filename
-		String temp = fname.replace('\\', '/');
-		String simpleName = temp.substring(temp.lastIndexOf("/") + 1);
-		return simpleName + " (" + fname + ") - Apache JMeter"; // $NON-NLS-1$ // $NON-NLS-2$ // $NON-NLS-3$
-	}
-
-	/**
 	 * Determine whether we are in 'expert' mode. Certain features may be hidden
 	 * from user's view unless in expert mode.
 	 * 
