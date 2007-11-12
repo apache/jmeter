@@ -56,6 +56,7 @@ To revert to the previous behaviour, define the property proxy.headers.remove wi
 <li>Bug 42012 - Variable Listener filenames do not get processed in remote tests.
 Filenames can now include function references; variable references do not work.</li>
 <li>Ensure Listener nodes get own save configuration when copy-pasted</li>
+<li>Correct Proxy Server include and exclude matching description - port and query are included, contrary to previously documented.</li>
 </ul>
 
 <h4>Improvements</h4>
