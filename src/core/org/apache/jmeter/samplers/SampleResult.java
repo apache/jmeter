@@ -282,7 +282,9 @@ public class SampleResult implements Serializable {
 	private void stampAndTime(long stamp, long elapsed) {
 		if (startTimeStamp) {
 			startTime = stamp;
+			endTime = stamp + elapsed;
 		} else {
+			startTime = stamp - elapsed;
 			endTime = stamp;
 		}
 		timeStamp = stamp;
