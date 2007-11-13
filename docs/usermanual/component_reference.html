@@ -11252,23 +11252,50 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 		</table>
 	</p>
 							  									 				<p	>
-								These entries will be treated as regular expressions (using Jakarta ORO).
-They will be matched against the host name, port (actual or implied) and path of each browser request.
-If the URL you are browsing is 
+								The 
 												<b	>
-								http://jakarta.apache.org/jmeter/index.html?username=xxxx
+								include and exclude patterns
+						</b>
+									 are treated as regular expressions (using Jakarta ORO).
+They will be matched against the host name, port (actual or implied) path and query (if any) of each browser request.
+If the URL you are browsing is 
+												<br	>
+						</br>
+									 
+
+												<b	>
+								"http://jakarta.apache.org/jmeter/index.html?username=xxxx"
 						</b>
 									,
-then the regular expression will be tested against the string: 
+												<br	>
+						</br>
+									 
+then the regular expression will be tested against the string:
+												<br	>
+						</br>
+									 
+
 												<b	>
-								"jakarta.apache.org:80/jmeter/index.html"
+								"jakarta.apache.org:80/jmeter/index.html?username=xxxx"
 						</b>
-									.  Thus,
-if you want to include all .html files, your regular expression might look like: 
+									.
+												<br	>
+						</br>
+									   
+Thus, if you want to include all .html files, your regular expression might look like: 
+												<br	>
+						</br>
+									 
+
+												<b	>
+								".*\.html(\?.*)?"
+						</b>
+									 - or 
 												<b	>
 								".*\.html"
 						</b>
-									.
+									 
+if you know that there is no query string or you only want html pages without query strings.
 
 						</p>
 							  									 				<p	>
