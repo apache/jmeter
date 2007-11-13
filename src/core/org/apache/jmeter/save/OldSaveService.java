@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.save;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,6 +45,7 @@ import org.apache.jmeter.testelement.property.MapProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.NameUpdater;
+import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
@@ -467,5 +469,45 @@ public final class OldSaveService {
 			}
 		}
 		return subTree;
+	}
+
+	// Called by ResultCollector#loadExistingFile()
+	public static void processSamples(String filename, Visualizer visualizer) 
+    throws SAXException, IOException, ConfigurationException 
+	{
+		DefaultConfigurationBuilder cfgbuilder = new DefaultConfigurationBuilder();
+		Configuration savedSamples = cfgbuilder.buildFromFile(filename);
+		Configuration[] samples = savedSamples.getChildren();
+		for (int i = 0; i < samples.length; i++) {
+		    SampleResult result = OldSaveService.getSampleResult(samples[i]);
+		    visualizer.add(result);
+		}
+	}
+
+	// Called by ResultCollector#recordResult()
+	public static String getSerializedSampleResult(
+			SampleResult result, DefaultConfigurationSerializer slzr, SampleSaveConfiguration cfg) 
+	    throws SAXException, IOException,
+			ConfigurationException {
+		ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+
+		slzr.serialize(tempOut, OldSaveService.getConfiguration(result, cfg));
+		String serVer = tempOut.toString();
+        String lineSep=System.getProperty("line.separator"); // $NON-NLS-1$
+        /*
+         * Remove the <?xml ... ?> prefix.
+         * When using the x-jars (xakan etc) or Java 1.4, the serialised output has a 
+         * newline after the prefix. However, when using Java 1.5 without the x-jars, the output
+         * has no newline at all.
+         */
+		int index = serVer.indexOf(lineSep); // Is there a new-line?
+		if (index > -1) {// Yes, assume it follows the prefix
+			return serVer.substring(index);
+		}
+		if (serVer.startsWith("<?xml")){ // $NON-NLS-1$
+		    index=serVer.indexOf("?>");// must exist // $NON-NLS-1$
+		    return lineSep + serVer.substring(index+2);// +2 for ?>
+		}
+		return serVer;
 	}
 }
