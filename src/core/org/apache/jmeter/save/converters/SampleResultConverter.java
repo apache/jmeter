@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleResult;
@@ -130,7 +131,10 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 			writeString(writer, TAG_SAMPLER_DATA, res.getSamplerData());
 		}
         if (save.saveUrl()) {
-            writeItem(res.getURL(), context, writer);
+            final URL url = res.getURL();
+            if (url != null) {
+            	writeItem(url, context, writer);
+            }
         }
 	}
 
