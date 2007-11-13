@@ -398,11 +398,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	/**
 	 * When a test result is received, display it and save it.
 	 * 
-	 * @param e
+	 * @param event
 	 *            the sample event that was received
 	 */
-	public void sampleOccurred(SampleEvent e) {
-		SampleResult result = e.getResult();
+	public void sampleOccurred(SampleEvent event) {
+		SampleResult result = event.getResult();
 
 		if (!isErrorLogging() || !result.isSuccessful()) {
 			sendToVisualizer(result);
@@ -411,9 +411,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 				result.setSaveConfig(config);
 				try {
 					if (config.saveAsXml()) {
-						recordResult(result);
+						recordResult(event);
 					} else {
-						String savee = CSVSaveService.resultToDelimitedString(e);
+						String savee = CSVSaveService.resultToDelimitedString(event);
 						out.println(savee);
 					}
 				} catch (Exception err) {
@@ -436,14 +436,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	}
 
 	// Only called if out != null
-	private void recordResult(SampleResult result) throws Exception {
+	private void recordResult(SampleEvent event) throws Exception {
+		SampleResult result = event.getResult();
 		if (!isResultMarked(result) && !this.isStats) {
 			if (SaveService.isSaveTestLogFormat20()) {
 				if (serializer == null)
 					serializer = new DefaultConfigurationSerializer();
 				out.write(getSerializedSampleResult(result));
 			} else {
-				SaveService.saveSampleResult(result, out);
+				SaveService.saveSampleResult(event, out);
 			}
 		}
 	}
