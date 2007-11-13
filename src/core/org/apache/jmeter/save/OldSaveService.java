@@ -54,7 +54,8 @@ import org.xml.sax.SAXException;
 
 /**
  * This class saves/restores the original Avalon XML format (not used by default).
- * @deprecated to be removed in a future release.
+ * 
+ * This may be removed in a future release.
  */
 public final class OldSaveService {
 	private static final Logger log = LoggingManager.getLoggerForClass();
