@@ -21,7 +21,6 @@ package org.apache.jmeter.reporters;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,9 +38,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.util.NoThreadClone;
@@ -60,18 +56,21 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
+import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.xml.sax.SAXException;
 
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
 		TestListener, Remoteable, NoThreadClone {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 23;
+	private static final long serialVersionUID = 231L;
+
+	// This string is used to identify local test runs, so must not be a valid host name
+	private static final String TEST_IS_LOCAL = "*local*"; // $NON-NLS-1$
 
 	private static final String TESTRESULTS_START = "<testResults>"; // $NON-NLS-1$
 
@@ -91,11 +90,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
-	// protected List results = Collections.synchronizedList(new ArrayList());
-	// private int current;
 	transient private DefaultConfigurationSerializer serializer;
 
-	// private boolean inLoading = false;
 	transient private volatile PrintWriter out;
 
 	private boolean inTest = false;
@@ -174,11 +170,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	}
 
 	public void testEnded() {
-		testEnded("local"); // $NON-NLS-1$
+		testEnded(TEST_IS_LOCAL);
 	}
 
 	public void testStarted() {
-		testStarted("local"); // $NON-NLS-1$
+		testStarted(TEST_IS_LOCAL);
 	}
 
     /**
@@ -190,6 +186,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * 
      */
 	public void loadExistingFile() {
+		final Visualizer visualizer = getVisualizer();
+		if (visualizer == null) {
+			return; // No point reading the file if there's no visualiser
+		}
 		boolean parsedOK = false, errorDetected = false;
 		String filename = getFilename();
         File file = new File(filename);
@@ -208,14 +208,16 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     	long lineNumber=1;
                     	SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
                     	if (saveConfig == null) {// not a valid header
-                    		saveConfig = (SampleSaveConfiguration) getSaveConfig().clone(); // OldSaveService may change the format
+                    		saveConfig = (SampleSaveConfiguration) getSaveConfig().clone(); // CSVSaveService may change the format
                     	} else { // header line has been processed, so read the next
                             line = dataReader.readLine();
                             lineNumber++;
                     	}
                         while (line != null) { // Already read 1st line
                             SampleEvent event = CSVSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
-                            if (event != null) sendToVisualizer(event);
+                            if (event != null){
+                            	visualizer.add(event.getResult());
+                            }
                             line = dataReader.readLine();
                             lineNumber++;
                         }
@@ -223,17 +225,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-                            readSamples(SaveService.loadTestResults(bufferedInputStream));
+                            readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer);
                             parsedOK = true;
                         } catch (Exception e) {
                             log.info("Failed to load "+filename+" using XStream, trying old XML format. Error was: "+e);
                             try {
-                                Configuration savedSamples = getConfiguration(filename);
-                                Configuration[] samples = savedSamples.getChildren();
-                                for (int i = 0; i < samples.length; i++) {
-                                    SampleResult result = OldSaveService.getSampleResult(samples[i]);
-                                    sendToVisualizer(result);
-                                }
+                                OldSaveService.processSamples(filename, visualizer);
                                 parsedOK = true;
                             } catch (Exception e1) {
                                 log.warn("Error parsing Avalon XML. " + e1.getLocalizedMessage());
@@ -361,24 +358,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		return true;
 	}
 
-	private void readSamples(TestResultWrapper testResults) throws Exception {
+    // Only called if visualizer is non-null
+	private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
 		Collection samples = testResults.getSampleResults();
 		Iterator iter = samples.iterator();
 		while (iter.hasNext()) {
 			SampleResult result = (SampleResult) iter.next();
-			sendToVisualizer(result);
+			visualizer.add(result);
 		}
-	}
-
-	/**
-	 * Gets the configuration attribute of the ResultCollector object.
-	 * 
-	 * @return the configuration value
-	 */
-	private Configuration getConfiguration(String filename) throws SAXException, IOException, ConfigurationException {
-		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-
-		return builder.buildFromFile(filename);
 	}
 
 	public void clearVisualizer() {
@@ -423,15 +410,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		}
 	}
 
-	protected void sendToVisualizer(SampleResult r) {
+	protected final void sendToVisualizer(SampleResult r) {
 		if (getVisualizer() != null) {
 			getVisualizer().add(r);
-		}
-	}
-
-	private void sendToVisualizer(SampleEvent e) {
-		if (getVisualizer() != null) {
-			getVisualizer().add(e.getResult());
 		}
 	}
 
@@ -440,37 +421,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		SampleResult result = event.getResult();
 		if (!isResultMarked(result) && !this.isStats) {
 			if (SaveService.isSaveTestLogFormat20()) {
-				if (serializer == null)
+				if (serializer == null) {
 					serializer = new DefaultConfigurationSerializer();
-				out.write(getSerializedSampleResult(result));
+				}
+				out.write(OldSaveService.getSerializedSampleResult(result, serializer, getSaveConfig()));
 			} else {
 				SaveService.saveSampleResult(event, out);
 			}
 		}
-	}
-
-	private String getSerializedSampleResult(SampleResult result) throws SAXException, IOException,
-			ConfigurationException {
-		ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-
-		serializer.serialize(tempOut, OldSaveService.getConfiguration(result, getSaveConfig()));
-		String serVer = tempOut.toString();
-        String lineSep=System.getProperty("line.separator"); // $NON-NLS-1$
-        /*
-         * Remove the <?xml ... ?> prefix.
-         * When using the x-jars (xakan etc) or Java 1.4, the serialised output has a 
-         * newline after the prefix. However, when using Java 1.5 without the x-jars, the output
-         * has no newline at all.
-         */
-		int index = serVer.indexOf(lineSep); // Is there a new-line?
-		if (index > -1) {// Yes, assume it follows the prefix
-			return serVer.substring(index);
-		}
-		if (serVer.startsWith("<?xml")){ // $NON-NLS-1$
-		    index=serVer.indexOf("?>");// must exist // $NON-NLS-1$
-		    return lineSep + serVer.substring(index+2);// +2 for ?>
-		}
-		return serVer;
 	}
 
 	/**
