@@ -33,18 +33,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import java.nio.charset.Charset;
+
+import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
-//import org.apache.jmeter.save.converters.BooleanPropertyConverter;
-//import org.apache.jmeter.save.converters.HashTreeConverter;
-//import org.apache.jmeter.save.converters.IntegerPropertyConverter;
-//import org.apache.jmeter.save.converters.LongPropertyConverter;
-//import org.apache.jmeter.save.converters.MultiPropertyConverter;
-//import org.apache.jmeter.save.converters.SampleResultConverter;
-//import org.apache.jmeter.save.converters.SampleSaveConfigurationConverter;
-//import org.apache.jmeter.save.converters.StringPropertyConverter;
-//import org.apache.jmeter.save.converters.TestElementConverter;
-//import org.apache.jmeter.save.converters.TestElementPropertyConverter;
-//import org.apache.jmeter.save.converters.TestResultWrapperConverter;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -303,12 +294,12 @@ public class SaveService {
 		return saver.fromXML(in);
 	}
 
-	public synchronized static void saveSampleResult(SampleResult res, OutputStream out) throws Exception {
+	public synchronized static void saveSampleResult(SampleEvent event, OutputStream out) throws Exception {
 		// Get the OutputWriter to use
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		writeXmlHeader(outputStreamWriter);
 		// Use deprecated method, to avoid duplicating code
-		saveSampleResult(res, outputStreamWriter);
+		saveSampleResult(event, outputStreamWriter);
 		outputStreamWriter.close();
 	}
 
@@ -316,8 +307,8 @@ public class SaveService {
      * @deprecated Use saveSampleResult(SampleResult res, OutputStream out) instead, which
      * takes the fileEncoding property of SaveService into consideration
      */
-	public synchronized static void saveSampleResult(SampleResult res, Writer writer) throws Exception {
-		saver.toXML(res, writer);
+	public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws Exception {
+		saver.toXML(evt.getResult(), writer); // TODO use event when can get unmarshall working
 		writer.write('\n');
 	}
 
