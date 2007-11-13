@@ -35,7 +35,6 @@ import java.util.Properties;
 import java.nio.charset.Charset;
 
 import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -133,11 +132,11 @@ public class SaveService {
 
     // This is written to JMX files by ScriptWrapperConverter
 	private static String propertiesVersion = "";// read from properties file; written to JMX files
-    private static final String PROPVERSION = "1.8";// Expected version $NON-NLS-1$
+    private static final String PROPVERSION = "2.0";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // read from properties file// $NON-NLS-1$
-	private static final String FILEVERSION = "594385"; // Expected value $NON-NLS-1$
+	private static final String FILEVERSION = "594567"; // Expected value $NON-NLS-1$
 	private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
@@ -240,7 +239,8 @@ public class SaveService {
         return r == null ? s : r;
     }
     
-	public static void saveTree(HashTree tree, OutputStream out) throws Exception {
+    // Called by Save function
+	public static void saveTree(HashTree tree, OutputStream out) throws IOException {
 		// Get the OutputWriter to use
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		writeXmlHeader(outputStreamWriter);
@@ -253,14 +253,15 @@ public class SaveService {
      * @deprecated Use saveTree(HashTree tree, OutputStream out) instead, which
      * takes the fileEncoding property of SaveService into consideration
      */
-	public static void saveTree(HashTree tree, Writer writer) throws Exception {
+	public static void saveTree(HashTree tree, Writer writer) throws IOException {
 		ScriptWrapper wrapper = new ScriptWrapper();
 		wrapper.testPlan = tree;
 		saver.toXML(wrapper, writer);
 		writer.write('\n');// Ensure terminated properly
 	}
 
-	public static void saveElement(Object el, OutputStream out) throws Exception {
+	// Used by Test code
+	public static void saveElement(Object el, OutputStream out) throws IOException {
 		// Get the OutputWriter to use
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		writeXmlHeader(outputStreamWriter);
@@ -273,11 +274,11 @@ public class SaveService {
      * @deprecated Use saveElement(Object el, OutputStream out) instead, which
      * takes the fileEncoding property of SaveService into consideration
      */
-	public static void saveElement(Object el, Writer writer) throws Exception {
+	public static void saveElement(Object el, Writer writer) throws IOException {
 		saver.toXML(el, writer);
 	}
 
-	public static Object loadElement(InputStream in) throws Exception {
+	public static Object loadElement(InputStream in) throws IOException {
 		// Get the InputReader to use
 		InputStreamReader inputStreamReader = getInputStreamReader(in);
 		// Use deprecated method, to avoid duplicating code
@@ -290,7 +291,7 @@ public class SaveService {
 	 * @deprecated Use loadElement(InputStream in) instead, since that takes
 	 * the fileEncoding property of SaveService into consideration
 	 */
-	public static Object loadElement(Reader in) throws Exception {
+	public static Object loadElement(Reader in) throws IOException {
 		return saver.fromXML(in);
 	}
 
