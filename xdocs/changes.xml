@@ -57,6 +57,7 @@ To revert to the previous behaviour, define the property proxy.headers.remove wi
 Filenames can now include function references; variable references do not work.</li>
 <li>Ensure Listener nodes get own save configuration when copy-pasted</li>
 <li>Correct Proxy Server include and exclude matching description - port and query are included, contrary to previously documented.</li>
+<li>Aggregate Graph and Aggregate Report Column Header is KB/Sec; fixed the values to be KB rather than bytes</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -101,6 +102,7 @@ To change the list of removed headers, define the property proxy.headers.remove 
 <li>Functor code tightened up; Functor can now be used with interfaces, as well as pre-defined targets and parameters.</li>
 <li>Save graphics function now prompts before overwriting an existing file</li>
 <li>Debug Sampler and Debug PostProcessor added.</li>
+<li>Fixed up method names in Calculator and SamplingStatCalculator</li>
 </ul>
 
 <!--  ===================  -->
