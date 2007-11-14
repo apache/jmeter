@@ -63,8 +63,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_RESPONSE_FILE     = "responseFile";     //$NON-NLS-1$
 
     // samplerData attributes. Must be unique. Keep sorted by string value.
-    // Ensure the documentation is updated when new attributes are added
-    // Current in component_reference.xml "Sample Result Save Configuration"
+    // Ensure the Listener documentation is updated when new attributes are added
     private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
     private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
     private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
