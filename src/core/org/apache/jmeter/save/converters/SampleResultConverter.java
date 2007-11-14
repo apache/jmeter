@@ -27,8 +27,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
+import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.util.Converter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -61,10 +63,13 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     protected static final String TAG_RESPONSE_FILE     = "responseFile";     //$NON-NLS-1$
 
     // samplerData attributes. Must be unique. Keep sorted by string value.
+    // Ensure the documentation is updated when new attributes are added
+    // Current in component_reference.xml "Sample Result Save Configuration"
     private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
     private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
     private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
-    private static final String ATT_ERROR_COUNT      = "ec"; //$NON-NLS-1$
+    private static final String ATT_ERROR_COUNT       = "ec"; //$NON-NLS-1$
+    private static final String ATT_HOSTNAME          = "hn"; //$NON-NLS-1$
     private static final String ATT_LABEL             = "lb"; //$NON-NLS-1$
     private static final String ATT_LATENCY           = "lt"; //$NON-NLS-1$
 
@@ -81,8 +86,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     private static final String ATT_SUCCESS           = "s";  //$NON-NLS-1$
     private static final String ATT_SAMPLE_COUNT      = "sc"; //$NON-NLS-1$
     private static final String ATT_TIME              = "t";  //$NON-NLS-1$
-    private static final String ATT_TIME_STAMP        = "ts"; //$NON-NLS-1$
     private static final String ATT_THREADNAME        = "tn"; //$NON-NLS-1$
+    private static final String ATT_TIME_STAMP        = "ts"; //$NON-NLS-1$
 
 	/**
 	 * Returns the converter version; used to check for possible
@@ -150,7 +155,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             writer.addAttribute(ATT_CLASS, JAVA_LANG_STRING);
 			try {
                 if (SampleResult.TEXT.equals(res.getDataType())){
-    				writer.setValue(new String(res.getResponseData(), res.getDataEncoding()));
+    				writer.setValue(new String(res.getResponseData(), res.getDataEncodingWithDefault()));
                 }
                 // Otherwise don't save anything - no point
 			} catch (UnsupportedEncodingException e) {
@@ -250,7 +255,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		if (save.saveDataType())
 			writer.addAttribute(ATT_DATA_TYPE, ConversionHelp.encode(res.getDataType()));
 		if (save.saveEncoding())
-			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncoding()));
+			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncodingNoDefault()));
 		if (save.saveBytes())
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
         if (save.saveSampleCount()){
@@ -260,6 +265,12 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         if (save.saveThreadCounts()){
            writer.addAttribute(ATT_GRP_THRDS, String.valueOf(res.getGroupThreads()));
            writer.addAttribute(ATT_ALL_THRDS, String.valueOf(res.getAllThreads()));
+        }
+        if (save.saveHostname()){
+            SampleEvent event = (SampleEvent) context.get(SaveService.SAMPLE_EVENT_OBJECT);
+            if (event != null) {
+            	writer.addAttribute(ATT_HOSTNAME, event.getHostname());        	
+            }
         }
 	}
 
@@ -321,10 +332,11 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		} else if (nodeName.equals(TAG_REQUEST_HEADER)) {
 			res.setRequestHeaders((String) subItem);
 		} else if (nodeName.equals(TAG_RESPONSE_DATA)) {
+			final String dataEncoding = res.getDataEncodingWithDefault();
 			try {
-				res.setResponseData(((String) subItem).getBytes(res.getDataEncoding()));
+				res.setResponseData(((String) subItem).getBytes(dataEncoding));
 			} catch (UnsupportedEncodingException e) {
-				res.setResponseData(("Can't support the char set: " + res.getDataEncoding()).getBytes());
+				res.setResponseData(("Can't support the char set: " + dataEncoding).getBytes());
 			}
 		} else if (nodeName.equals(TAG_SAMPLER_DATA)) {
 			res.setSamplerData((String) subItem);
