@@ -34,7 +34,6 @@ import org.apache.log.Logger;
  * class, and then call {@link #addSample(SampleResult)} a few times, and pull
  * the stats out with whatever methods you prefer.
  * 
- * @author James Boutcher
  */
 public class SamplingStatCalculator implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -48,8 +47,6 @@ public class SamplingStatCalculator implements Serializable {
 	private long firstTime;
 
 	private String label;
-
-	// private int index;
 
 	public SamplingStatCalculator() {// Don't (can't) use this...
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
@@ -268,9 +265,6 @@ public class SamplingStatCalculator implements Serializable {
 	private long getEndTime(SampleResult res) {
 		long endTime = res.getEndTime();
 		long lastTime = getCurrentSample().getEndTime();
-		if (res.isStampedAtStart()) {
-			endTime += res.getTime();
-		}
 		if (lastTime < endTime) {
 			lastTime = endTime;
 		}
@@ -334,38 +328,22 @@ public class SamplingStatCalculator implements Serializable {
 		return maxThroughput;
 	}
 
-	/**
-	 * @return
-	 */
 	public HashMap getDistribution() {
 		return calculator.getDistribution();
 	}
 
-	/**
-	 * @param percent
-	 * @return
-	 */
 	public Number getPercentPoint(double percent) {
 		return calculator.getPercentPoint(percent);
 	}
 
-	/**
-	 * @return
-	 */
 	public int getCount() {
 		return calculator.getCount();
 	}
 
-	/**
-	 * @return
-	 */
 	public Number getMax() {
 		return calculator.getMax();
 	}
 
-	/**
-	 * @return
-	 */
 	public double getMean() {
 		return calculator.getMean();
 	}
@@ -374,16 +352,10 @@ public class SamplingStatCalculator implements Serializable {
 		return new Long((long) calculator.getMean());
 	}
 
-	/**
-	 * @return
-	 */
 	public Number getMedian() {
 		return calculator.getMedian();
 	}
 
-	/**
-	 * @return
-	 */
 	public Number getMin() {
 		if (calculator.getMin().longValue() < 0) {
 			return new Long(0);
@@ -392,17 +364,10 @@ public class SamplingStatCalculator implements Serializable {
 		}
 	}
 
-	/**
-	 * @param percent
-	 * @return
-	 */
 	public Number getPercentPoint(float percent) {
 		return calculator.getPercentPoint(percent);
 	}
 
-	/**
-	 * @return
-	 */
 	public double getStandardDeviation() {
 		return calculator.getStandardDeviation();
 	}
