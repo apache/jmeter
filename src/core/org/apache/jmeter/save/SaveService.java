@@ -44,11 +44,13 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 
 /**
@@ -59,6 +61,8 @@ import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider
 public class SaveService {
 	
 	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	public static final String SAMPLE_EVENT_OBJECT = "SampleEvent"; // $NON-NLS-1$
 
     private static final XStream saver = new XStream(new PureJavaReflectionProvider()){
     	// Override wrapMapper in order to insert the Wrapper in the chain
@@ -278,6 +282,7 @@ public class SaveService {
 		saver.toXML(el, writer);
 	}
 
+	// Used by Test code
 	public static Object loadElement(InputStream in) throws IOException {
 		// Get the InputReader to use
 		InputStreamReader inputStreamReader = getInputStreamReader(in);
@@ -295,7 +300,7 @@ public class SaveService {
 		return saver.fromXML(in);
 	}
 
-	public synchronized static void saveSampleResult(SampleEvent event, OutputStream out) throws Exception {
+	public synchronized static void saveSampleResult(SampleEvent event, OutputStream out) throws IOException {
 		// Get the OutputWriter to use
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		writeXmlHeader(outputStreamWriter);
@@ -308,12 +313,17 @@ public class SaveService {
      * @deprecated Use saveSampleResult(SampleResult res, OutputStream out) instead, which
      * takes the fileEncoding property of SaveService into consideration
      */
-	public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws Exception {
-		saver.toXML(evt.getResult(), writer); // TODO use event when can get unmarshall working
+	// Used by ResultCollector#recordResult()
+	public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
+		DataHolder dh = saver.newDataHolder();
+		dh.put(SAMPLE_EVENT_OBJECT, evt);
+		// This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
+		// Don't know why there is no method for this in the XStream class
+		saver.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh); // TODO use event when can get unmarshall working
 		writer.write('\n');
 	}
 
-	public synchronized static void saveTestElement(TestElement elem, OutputStream out) throws Exception {
+	public synchronized static void saveTestElement(TestElement elem, OutputStream out) throws IOException {
 		// Get the OutputWriter to use
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		// Use deprecated method, to avoid duplicating code
@@ -325,7 +335,8 @@ public class SaveService {
      * @deprecated Use saveTestElement(TestElement elem, OutputStream out) instead, which
      * takes the fileEncoding property of SaveService into consideration
      */
-	public synchronized static void saveTestElement(TestElement elem, Writer writer) throws Exception {
+	// Used by ResultCollector#recordStats()
+	public synchronized static void saveTestElement(TestElement elem, Writer writer) throws IOException {
 		saver.toXML(elem, writer);
 		writer.write('\n');
 	}
