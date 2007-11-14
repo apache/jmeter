@@ -58,6 +58,10 @@ Filenames can now include function references; variable references do not work.<
 <li>Ensure Listener nodes get own save configuration when copy-pasted</li>
 <li>Correct Proxy Server include and exclude matching description - port and query are included, contrary to previously documented.</li>
 <li>Aggregate Graph and Aggregate Report Column Header is KB/Sec; fixed the values to be KB rather than bytes</li>
+<li>
+Fix SamplingStatCalculator so it no longer adds elapsed time to endTime, as this is handled by SampleResult.
+This corrects discrepancies between Summary Report and Aggregate Report throughput calculation.
+</li>
 </ul>
 
 <h4>Improvements</h4>
