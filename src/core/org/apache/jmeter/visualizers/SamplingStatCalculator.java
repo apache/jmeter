@@ -138,11 +138,53 @@ public class SamplingStatCalculator implements Serializable {
 	 * Should calculate the average page size, which means divide the bytes by number
 	 * of samples - actually calculates the throughput in bytes / second
 	 * 
-     * TODO - fix the name and comment
-     * 
-	 * @return
+     * @deprecated use getBytesPerSecond() instead
+     * @see #getAvgPageBytes() for the average page size
 	 */
 	public double getPageSize() {
+		double rate = 0;
+		if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
+			rate = calculator.getTotalBytes() / ((double) this.getElapsed() / 1000);
+		}
+		if (rate < 0) {
+			rate = 0;
+		}
+		return rate;
+	}
+
+    /**
+     * Throughput in bytes / second
+     * 
+     * @return throughput in bytes/second
+     */
+    public double getBytesPerSecond() {
+    	// Code duplicated from getPageSize()
+		double rate = 0;
+		if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
+			rate = calculator.getTotalBytes() / ((double) this.getElapsed() / 1000);
+		}
+		if (rate < 0) {
+			rate = 0;
+		}
+		return rate;
+    }
+
+    /**
+     * Throughput in kilobytes / second
+     * 
+     * @return Throughput in kilobytes / second
+     */
+    public double getKBPerSecond() {
+        return getBytesPerSecond() / 1024; // 1024=bytes per kb
+    }
+
+    /**
+     * calculates the average page size, which means divide the bytes by number
+     * of samples.
+     * 
+     * @return average page size in bytes
+     */
+	public double getAvgPageBytes() {
 		double rate = 0;
 		if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
 			rate = calculator.getTotalBytes() / ((double) this.getElapsed() / 1000);
