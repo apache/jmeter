@@ -233,7 +233,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
             return stat.getRate();
         } else if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_TRANSFER_RATE)) {
             // return the pagesize divided by 1024 to get kilobytes
-            return stat.getPageSize()/1024;
+            return stat.getKBPerSecond();
         } else {
             return Double.NaN;
         }
