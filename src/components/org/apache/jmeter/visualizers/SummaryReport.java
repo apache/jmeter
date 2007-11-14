@@ -97,11 +97,11 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
     				new Functor("getMeanAsNumber"),       //$NON-NLS-1$
                     new Functor("getMin"),                //$NON-NLS-1$
                     new Functor("getMax"),                //$NON-NLS-1$
-                    new Functor("getStandardDeviation"),                //$NON-NLS-1$
+                    new Functor("getStandardDeviation"),  //$NON-NLS-1$
                     new Functor("getErrorPercentage"),    //$NON-NLS-1$
                     new Functor("getRate"),               //$NON-NLS-1$
     				new Functor("getKBPerSecond"),        //$NON-NLS-1$
-                    new Functor("getPageSize"),           //$NON-NLS-1$
+                    new Functor("getAvgPageBytes"),       //$NON-NLS-1$
                 },
                 new Functor[] { null, null, null, null, null, null, null, null , null, null }, 
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
