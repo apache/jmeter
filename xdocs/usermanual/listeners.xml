@@ -57,19 +57,133 @@ The same filename can be used by multiple samplers - but make sure they all use 
 </p>
 </section>
 
-<section name="&sect-num;.1 Screen captures" anchor="screencap">
-<p>JMeter is capable of saving any listener as a PNG file. To do so, select the
-listener in the left panel. Click edit -> Save As Image. A file dialog will
-appear. Enter the desired name and save the listener.
+<section name="&sect-num;.1 Default Configuration" anchor="defaults">
+<p>
+The default items to be saved can be defined in the jmeter.properties (or user.properties) file.
+The properties are used as the initial settings for the Listener Config pop-up, and are also
+used for the log file specified by the -l command-line flag (commonly used for non-GUI test runs).
 </p>
-<figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
+<p>To change the default format, find the following line in jmeter.properties:</p>
+<p>jmeter.save.saveservice.output_format=</p>
+<p>
+The information to be saved is configurable.  For maximum information, choose "xml" as the format and specify "Functional Test Mode" on the Test Plan element.  If this box is not checked, the default saved
+data includes a time stamp (the number of milliseconds since midnight,
+January 1, 1970 UTC), the data type, the thread name, the label, the
+response time, message, and code, and a success indicator.  If checked, all information, including the full response data will be logged.</p>
+<p>
+The following example indicates how to set
+properties to get a vertical bar ("|") delimited format that will
+output results like:.</p>
+<p>
+<code>
+<pre>
+timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
+02/06/03 08:21:42|1187|Home|200|Thread Group-1|text|true|
+02/06/03 08:21:42|47|Login|200|Thread Group-1|text|false|Test Failed: 
+	expected to contain: password etc.
+</pre>
+</code></p>
+<p>
+The corresponding jmeter.properties that need to be set are shown below.  One oddity
+in this example is that the output_format is set to csv, which
+typically
+indicates comma-separated values.  However, the default_delimiter was
+set to be a vertical bar instead of a comma, so the csv tag is a
+misnomer in this case. (Think of CSV as meaning character separated values)</p>
+<p>
+<code>
+<pre>
+jmeter.save.saveservice.output_format=csv
+jmeter.save.saveservice.assertion_results_failure_message=true
+jmeter.save.saveservice.default_delimiter=|
+</pre>
+</code>
+<p>
+The full set of properties that affect result file output is shown below.
+</p>
+<code>
+<pre>
+#---------------------------------------------------------------------------
+# Results file configuration
+#---------------------------------------------------------------------------
 
+# This section helps determine how result data will be saved.
+# The commented out values are the defaults.
+
+# legitimate values: xml, csv, db.  Only xml and csv are currently supported.
+#jmeter.save.saveservice.output_format=xml
+
+
+# true when field should be saved; false otherwise
+
+# assertion_results_failure_message only affects CSV output
+#jmeter.save.saveservice.assertion_results_failure_message=false
+#
+#jmeter.save.saveservice.data_type=true
+#jmeter.save.saveservice.label=true
+#jmeter.save.saveservice.response_code=true
+# response_data is not currently supported for CSV output
+#jmeter.save.saveservice.response_data=false
+# Save ResponseData for failed samples
+#jmeter.save.saveservice.response_data.on_error=false
+#jmeter.save.saveservice.response_message=true
+#jmeter.save.saveservice.successful=true
+#jmeter.save.saveservice.thread_name=true
+#jmeter.save.saveservice.time=true
+#jmeter.save.saveservice.subresults=true
+#jmeter.save.saveservice.assertions=true
+#jmeter.save.saveservice.latency=true
+#jmeter.save.saveservice.samplerData=false
+#jmeter.save.saveservice.responseHeaders=false
+#jmeter.save.saveservice.requestHeaders=false
+#jmeter.save.saveservice.encoding=false
+#jmeter.save.saveservice.bytes=true
+#jmeter.save.saveservice.url=false
+#jmeter.save.saveservice.filename=false
+#jmeter.save.saveservice.hostname=false
+#jmeter.save.saveservice.thread_counts=false
+#jmeter.save.saveservice.sample_count=false
+
+# Timestamp format
+# legitimate values: none, ms, or a format suitable for SimpleDateFormat
+#jmeter.save.saveservice.timestamp_format=ms
+#jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
+
+# Put the start time stamp in logs instead of the end
+sampleresult.timestamp.start=true
+
+
+# legitimate values: none, first, all
+#jmeter.save.saveservice.assertion_results=none
+
+# For use with Comma-separated value (CSV) files or other formats
+# where the fields' values are separated by specified delimiters.
+# Default:
+#jmeter.save.saveservice.default_delimiter=,
+# For TAB, since JMeter 2.3 one can use:
+#jmeter.save.saveservice.default_delimiter=\t
+
+#jmeter.save.saveservice.print_field_names=false
+
+# Optional xml processing instruction for line 2 of the file:
+#jmeter.save.saveservice.xml_pi=&amp;lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?>
+</pre>
+</code></p>
+<p>
+The date format to be used for the timestamp_format is described in <A
+HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
+<B>SimpleDateFormat</B></A>.
+Bear in mind that choosing a date format other than "ms" is likely to
+make it impossible for JMeter to interpret the value when it is read
+in later for viewing purposes.</p>
 </section>
+
 <section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
 <p>
 When running in non-GUI mode, the -l flag can be used to create a top-level listener for the test run.
 This is in addition to any Listeners defined in the test plan.
-The configuration of this listener is controlled by entries in the file jmeter.properties.
+The configuration of this listener is controlled by entries in the file jmeter.properties
+as described in the previous section.
 </p>
 <p>
 This feature can be used to specify different data and log files for each test run, for example:
@@ -79,18 +193,25 @@ jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
 </pre>
 </p>
 <p>
-Note that jmeter logging messages are written to the jmeter.log by default.
+Note that JMeter logging messages are written to the file <b>jmeter.log</b> by default.
 This file is recreated each time, so if you want to keep the log files for each run, 
 you will need to rename it using the -j option as above. The -j option was added in version 2.3.
 </p>
 </section>
 
 <section name="&sect-num;.3 Resource usage" anchor="resources">
-<p>
-Listeners can be quite resource intensive so use as few as possible. 
-For minimum resource usage, remove all listeners, and run the test in non-GUI mode with the -l flag to define a single listener.
-The result log file can be read back into a Listener after a test has completed.
+<p><b>Listeners can use a lot of memory if there are a lot of samples.</b>
+Most of the listeners currently keep a copy of every sample they display, apart from:
 </p>
+<ul>
+<li>Simple Data Writer</li>
+<li>BeanShell Listener</li>
+<li>Assertion Results</li>
+<li>Mailer Visualizer</li>
+<li>Monitor Results</li>
+<li>Summary Report</li>
+</ul>
+<p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 </section>
 
 <section name="&sect-num;.4 CSV Log format" anchor="csvlogformat">
@@ -110,13 +231,17 @@ The order of appearance of columns is fixed, and is as follows:
 <li>success - true or false</li>
 <li>failureMessage - if any</li>
 <li>bytes - number of bytes in the sample</li>
+<li>grpThreads - number of active threads in this thread group</li>
+<li>allThreads - total number of active threads in all groups</li>
 <li>URL</li>
+<li>Filename - if Save Response to File was used</li>
 <li>latency - time to first response</li>
 <li>encoding</li>
+<li>SampleCount - number of samples (1, unless multiple samples are aggregated)</li>
+<li>ErrorCount - number of errors (0 or 1, unless multiple samples are aggregated)</li>
+<li>Hostname where the sample was generated</li>
 </ul>
-<p>
-The format of the XML files is as follows:
-</p>
+
 </section>
 
 <section name="&sect-num;.5 XML Log format 2.0" anchor="xmlformat2.0">
@@ -127,9 +252,11 @@ The format of the original XML (2.0) is as follows (line breaks will be differen
 &amp;lt;?xml version="1.0" encoding="UTF-8"?>
 &amp;lt;testResults version="1.2">
 &amp;lt;sampleResult timeStamp="1144365463297" dataType="text" threadName="Listen 1-1" 
-   label="HTTP Request" time="1502" responseMessage="OK" responseCode="200" success="true">
+   label="HTTP Request" time="1502" 
+   responseMessage="OK" responseCode="200" success="true">
  &amp;lt;sampleResult timeStamp="1144365464238" dataType="text" threadName="Listen 1-1" 
-    label="http://www.apache.org/style/style.css" time="171" responseMessage="OK" responseCode="200" success="true">
+    label="http://www.apache.org/style/style.css" time="171" 
+    responseMessage="OK" responseCode="200" success="true">
  &amp;lt;property xml:space="preserve" name="samplerData">
  GET http://www.apache.org/style/style.css
  &amp;lt;/property>
@@ -159,10 +286,12 @@ The format of the updated XML (2.1) is as follows (line breaks will be different
 
 -- HTTP Sample, with nested samples 
 
-&amp;lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" lb="HTTP Request" rc="200" rm="OK" 
+&amp;lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" 
+     lb="HTTP Request" rc="200" rm="OK" 
      tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407">
   &amp;lt;httpSample t="170" lt="170" ts="1144371015471" s="true" 
-        lb="http://www.apache.org/style/style.css" rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002">
+        lb="http://www.apache.org/style/style.css" rc="200" rm="OK" 
+        tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002">
     &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
 ...
@@ -182,7 +311,8 @@ Content-Type: text/css
     &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
     &amp;lt;url>http://www.apache.org/style/style.css&amp;lt;/url>
   &amp;lt;/httpSample>
-  &amp;lt;httpSample t="200" lt="180" ts="1144371015641" s="true" lb="http://www.apache.org/images/asf_logo_wide.gif" 
+  &amp;lt;httpSample t="200" lt="180" ts="1144371015641" s="true" 
+     lb="http://www.apache.org/images/asf_logo_wide.gif" 
      rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866">
     &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
@@ -190,12 +320,12 @@ Date: Fri, 07 Apr 2006 00:50:14 GMT
 Content-Type: image/gif
 &amp;lt;/responseHeader>
     &amp;lt;requestHeader class="java.lang.String">MyHeader: MyValue&amp;lt;/requestHeader>
-    &amp;lt;responseData class="java.lang.String">http://www.apache.org/images/asf_logo_wide.gif&amp;lt;/responseData>
+    &amp;lt;responseData class="java.lang.String">http://www.apache.org/asf.gif&amp;lt;/responseData>
       &amp;lt;responseFile class="java.lang.String">Mixed1.html&amp;lt;/responseFile>
     &amp;lt;cookies class="java.lang.String">&amp;lt;/cookies>
     &amp;lt;method class="java.lang.String">GET&amp;lt;/method>
     &amp;lt;queryString class="java.lang.String">&amp;lt;/queryString>
-    &amp;lt;url>http://www.apache.org/images/asf_logo_wide.gif&amp;lt;/url>
+    &amp;lt;url>http://www.apache.org/asf.gif&amp;lt;/url>
   &amp;lt;/httpSample>
   &amp;lt;responseHeader class="java.lang.String">HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:13 GMT
@@ -223,8 +353,8 @@ Content-Type: text/html; charset=ISO-8859-1
 
 -- nonHTTPP Sample
 
-&amp;lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler" rc="200" rm="OK" 
-    tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10">
+&amp;lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler"
+    rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10">
   &amp;lt;responseHeader class="java.lang.String">&amp;lt;/responseHeader>
   &amp;lt;requestHeader class="java.lang.String">&amp;lt;/requestHeader>
   &amp;lt;responseData class="java.lang.String">Listen 1-1&amp;lt;/responseData>
@@ -237,24 +367,30 @@ Content-Type: text/html; charset=ISO-8859-1
 <p>
 Note that the sample node name may be either "sample" or "httpSample".
 </p>
+</section>
+
+<section name="&sect-num;.7 Sample Attributes" anchor="attributes">
 <p>
 The sample attributes have the following meaning:
 </p>
 <table>
 <tr><th>Attribute</th><th>Content</th></tr>
-<tr><td>t</td><td>elapsed time (ms)</td></tr>
-<tr><td>lt</td><td>latency (ms) - not all samplers support this</td></tr>
-<tr><td>ts</td><td>timeStamp</td></tr>
-<tr><td>s</td><td>Success</td></tr>
-<tr><td>lb</td><td>Label</td></tr>
-<tr><td>rc</td><td>Response Code</td></tr>
-<tr><td>rm</td><td>Response Message</td></tr>
-<tr><td>tn</td><td>Thread Name</td></tr>
-<tr><td>dt</td><td>Data type</td></tr>
-<tr><td>de</td><td>Data encoding</td></tr>
 <tr><td>by</td><td>Bytes</td></tr>
-<tr><td>ng</td><td>Number of active threads in this group</td></tr>
+<tr><td>de</td><td>Data encoding</td></tr>
+<tr><td>dt</td><td>Data type</td></tr>
+<tr><td>ec</td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
+<tr><td>hn</td><td>Hostname where the sample was generated</td></tr>
+<tr><td>lb</td><td>Label</td></tr>
+<tr><td>lt</td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
 <tr><td>na</td><td>Number of active threads for all thread groups</td></tr>
+<tr><td>ng</td><td>Number of active threads in this group</td></tr>
+<tr><td>rc</td><td>Response Code (e.g. 200)</td></tr>
+<tr><td>rm</td><td>Response Message (e.g. OK)</td></tr>
+<tr><td> s</td><td>Success flag (true/false)</td></tr>
+<tr><td>sc</td><td>Sample count (1, unless multiple samples are aggregated)</td></tr>
+<tr><td> t</td><td>Elapsed time (milliseconds)</td></tr>
+<tr><td>tn</td><td>Thread Name</td></tr>
+<tr><td>ts</td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
 </table>
 <p>
 Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
@@ -262,7 +398,7 @@ This has been corrected so that it is always saved as "rc"; either "rc" or "rs" 
 </p>
 </section>
 
-<section name="&sect-num;.7 Saving response data" anchor="saving">
+<section name="&sect-num;.8 Saving response data" anchor="saving">
 <p>
 As shown above, the response data can be saved in the XML log file if required.
 However, this can make the file rather large, and the text has to be encoded so
@@ -274,10 +410,28 @@ The file name can then be included in the sample log output.
 The data will be retrieved from the file if necessary when the sample log file is reloaded.
 </p>
 </section>
-<section name="&sect-num;.8 Loading (reading) response data" anchor="loading">
+<section name="&sect-num;.9 Loading (reading) response data" anchor="loading">
 <p>To view an existing results file, you can use the File "Browse..." button to select a file.
 If necessary, just create a dummy testplan with the appropriate Listener in it.
 </p>
+<p>Results can be read from XML or CSV format files.
+When reading from CSV results files, the header (if present) is used to determine which fields were saved.
+<b>In order to interpret a header-less CSV file correctly, the appropriate JMeter properties must be set.</b>
+</p>
 </section>
 </body>
+<section name="&sect-num;.10 Saving Listener GUI data" anchor="screencap">
+<p>JMeter is capable of saving any listener as a PNG file. To do so, select the
+listener in the left panel. Click edit -> Save As Image. A file dialog will
+appear. Enter the desired name and save the listener.
+</p>
+<p>
+The Listeners which generate output as tables can also be saved using Copy/Paste.
+Select the desired cells in the table, and use the OS Copy short-cut (normally Control+C).
+The data will be saved to the clipboard, from where it can be pasted into another application,
+e.g. a spreadsheet or text editor.
+</p>
+<figure image="save_image.png">Figure 1 - Edit -> Save As Image</figure>
+
+</section>
 </document>

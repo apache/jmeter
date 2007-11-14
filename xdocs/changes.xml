@@ -104,6 +104,7 @@ To change the list of removed headers, define the property proxy.headers.remove 
 <li>Save graphics function now prompts before overwriting an existing file</li>
 <li>Debug Sampler and Debug PostProcessor added.</li>
 <li>Fixed up method names in Calculator and SamplingStatCalculator</li>
+<li>Tidied up Listener documentation.</li>
 </ul>
 
 <!--  ===================  -->
