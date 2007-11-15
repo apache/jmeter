@@ -473,7 +473,7 @@ public final class OldSaveService {
 	}
 
 	// Called by ResultCollector#loadExistingFile()
-	public static void processSamples(String filename, Visualizer visualizer) 
+	public static void processSamples(String filename, Visualizer visualizer, boolean showAll) 
     throws SAXException, IOException, ConfigurationException 
 	{
 		DefaultConfigurationBuilder cfgbuilder = new DefaultConfigurationBuilder();
@@ -481,7 +481,9 @@ public final class OldSaveService {
 		Configuration[] samples = savedSamples.getChildren();
 		for (int i = 0; i < samples.length; i++) {
 		    SampleResult result = OldSaveService.getSampleResult(samples[i]);
-		    visualizer.add(result);
+		    if (showAll || !result.isSuccessful()) {
+		    	visualizer.add(result);
+		    }
 		}
 	}
 
