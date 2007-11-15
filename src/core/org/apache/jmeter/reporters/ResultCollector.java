@@ -193,6 +193,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		boolean parsedOK = false, errorDetected = false;
 		String filename = getFilename();
         File file = new File(filename);
+        boolean showAll = !isErrorLogging();
         if (file.exists()) {
 			clearVisualizer();
 			BufferedReader dataReader = null;
@@ -216,7 +217,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         while (line != null) { // Already read 1st line
                             SampleEvent event = CSVSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
                             if (event != null){
-                            	visualizer.add(event.getResult());
+								final SampleResult result = event.getResult();
+                            	if (showAll || !result.isSuccessful()) {
+									visualizer.add(result);
+								}
                             }
                             line = dataReader.readLine();
                             lineNumber++;
@@ -225,12 +229,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-                            readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer);
+                            readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer, showAll);
                             parsedOK = true;
                         } catch (Exception e) {
                             log.info("Failed to load "+filename+" using XStream, trying old XML format. Error was: "+e);
                             try {
-                                OldSaveService.processSamples(filename, visualizer);
+                                OldSaveService.processSamples(filename, visualizer, showAll);
                                 parsedOK = true;
                             } catch (Exception e1) {
                                 log.warn("Error parsing Avalon XML. " + e1.getLocalizedMessage());
@@ -359,12 +363,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	}
 
     // Only called if visualizer is non-null
-	private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
+	private void readSamples(TestResultWrapper testResults, Visualizer visualizer, boolean showAll) throws Exception {
 		Collection samples = testResults.getSampleResults();
 		Iterator iter = samples.iterator();
 		while (iter.hasNext()) {
 			SampleResult result = (SampleResult) iter.next();
-			visualizer.add(result);
+			if (showAll || !result.isSuccessful()) {
+				visualizer.add(result);
+			}
 		}
 	}
 
