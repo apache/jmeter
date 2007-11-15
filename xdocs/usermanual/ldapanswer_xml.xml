@@ -30,7 +30,7 @@
 	construct an answer in xml encoding, so the results may be parsed with regextracter or alike functions.
 </p>
 
-<subsection name="1 Global overview">
+<subsection name="1 Global overview" anchor="overview">
 <p>
 	The global structure is as follows:<br/>
 <!--
@@ -48,7 +48,7 @@
 </ol>
 -->
 </p>
-<subsection name="1.1 The operation section">
+<subsection name="1.1 The operation section" anchor="operation">
 <p>
 The operation section defines the operation as it is sent to the LDAP Server. The 
 following tags (with a short explanation) are used
@@ -147,7 +147,7 @@ This will be used only in search requests.</li>
 </p>
 </subsection>
 
-<subsection name="1.2 respons message section">
+<subsection name="1.2 Response message section" anchor="response_message">
 <p>
 As the response code, the official LDAP error definitions are used, so this section
 contains the error message as returned from the server.
@@ -157,7 +157,7 @@ The following tag is used:
 &lt;responsemessage&gt;<br>
 --></p>
 </subsection>
-<subsection name="1.3 Responsecode section">
+<subsection name="1.3 Response code section" anchor="response_code">
 <p>
 As the response code, the official LDAP error definitions are used, so this section
 contains the error number as returned from the server.
@@ -168,7 +168,7 @@ The following tag is used:
 -->
 </p>
 </subsection>
-<subsection name="1.4 Search Result section">
+<subsection name="1.4 Search Result section" anchor="search">
 <p>
 The following tag is used:
 <!--

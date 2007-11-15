@@ -21,12 +21,12 @@
 </properties>
 
 <body>
-<section name="User's Manual">
+<section name="User's Manual" anchor="index">
 <p>Click on the section name to go straight to the section. 
 	Click on the "+" to go to the relevant section of the detailed section list,
 	where you can select individual subsections.</p>
 
-<subsection name="Section Summary">
+<subsection name="Section Summary" anchor="summary">
 <ul>
   <li><a href="#intro">+</a>...<a href="intro.html">1. Introduction</a></li>
   <li><a href="#get-started">+</a>...<a href="get-started.html">2. Getting Started</a></li>
@@ -52,7 +52,7 @@
   <li><a href="#glossary">+</a>...<a href="glossary.html">21. Glossary</a></li>
 </ul>
 </subsection>
-<subsection name="Detailed Section List">
+<subsection name="Detailed Section List" anchor="details">
 <ul>
   <li><a name="intro"/><a href="intro.html">1. Introduction</a></li>
   <ul>
