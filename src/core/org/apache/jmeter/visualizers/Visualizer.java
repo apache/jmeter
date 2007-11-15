@@ -28,8 +28,6 @@ import org.apache.jmeter.samplers.SampleResult;
  * the visualizer is to extend the
  * {@link org.apache.jmeter.visualizers.gui.AbstractVisualizer} class.
  * 
- * @author <a href="mailto:mstoer1@apache.org">Michael Stover</a>
- * @version $Revision$ $Date$
  */
 public interface Visualizer {
 	/**
@@ -41,7 +39,7 @@ public interface Visualizer {
 	/**
 	 * This method is used to indicate a visualizer generates statistics.
 	 * 
-	 * @return
+	 * @return true if visualiser generates statistics
 	 */
 	public boolean isStats();
 }
