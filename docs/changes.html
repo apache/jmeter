@@ -119,7 +119,7 @@
 						  						  									 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr><td bgcolor="#525D76">
 		  <font color="#ffffff" face="arial,helvetica,sanserif">
-			 <a name=""><strong>History of Changes</strong></a>
+			 <a name="$section.getAttributeValue("anchor")"><strong>History of Changes</strong></a>
 		  </font>
 		</td></tr>
 		<tr><td>
@@ -216,6 +216,19 @@ Filenames can now include function references; variable references do not work.
 
 												<li	>
 								Correct Proxy Server include and exclude matching description - port and query are included, contrary to previously documented.
+						</li>
+									
+
+												<li	>
+								Aggregate Graph and Aggregate Report Column Header is KB/Sec; fixed the values to be KB rather than bytes
+						</li>
+									
+
+												<li	>
+								
+Fix SamplingStatCalculator so it no longer adds elapsed time to endTime, as this is handled by SampleResult.
+This corrects discrepancies between Summary Report and Aggregate Report throughput calculation.
+
 						</li>
 									
 
@@ -390,6 +403,16 @@ To change the list of removed headers, define the property proxy.headers.remove 
 						</li>
 									
 
+												<li	>
+								Add hostname to items that can be saved in CSV and XML output files.
+						</li>
+									
+
+												<li	>
+								Errors only flag is now supported when loading XML and CSV files
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Non-functional Improvements
@@ -409,6 +432,16 @@ To change the list of removed headers, define the property proxy.headers.remove 
 
 												<li	>
 								Debug Sampler and Debug PostProcessor added.
+						</li>
+									
+
+												<li	>
+								Fixed up method names in Calculator and SamplingStatCalculator
+						</li>
+									
+
+												<li	>
+								Tidied up Listener documentation.
 						</li>
 									
 

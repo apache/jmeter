@@ -5431,149 +5431,25 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 									
 
 												<p	>
-								To change the default format, find the following line in jmeter.properties:
-						</p>
-									
-
-												<p	>
-								jmeter.save.saveservice.output_format=
-						</p>
-									
-
-												<p	>
 								
-The information to be saved is configurable.  For maximum information, choose "xml" as the format and specify "Functional Test Mode" on the Test Plan element.  If this box is not checked, the default saved
-data includes a time stamp (the number of milliseconds since midnight,
-January 1, 1970 UTC), the data type, the thread name, the label, the
-response time, message, and code, and a success indicator.  If checked, all information, including the full response data will be logged.
-						</p>
-									
+For full details on setting up the default items to be saved
+see the 
+												<a	 href="listeners.html#defaults">
+								Listener Default Configuration
+						</a>
+									 documentation.
+For details of the contents of the output files,
+see the 
+												<a	 href="listeners.html#csvlogformat">
+								CSV log
+						</a>
+									 format or
+the 
+												<a	 href="listeners.html#xmlformat2.1">
+								XML log
+						</a>
+									 format.
 
-												<p	>
-								
-The following example indicates how to set
-properties to get a vertical bar ("|") delimited format that will
-output results like:.
-						</p>
-									
-
-												<p	>
-								
-
-												<code	>
-								
-
-												<pre	>
-								
-timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
-02/06/03 08:21:42|1187|Backoffice Home|200|Thread Group-1|text|true|
-02/06/03 08:21:42|47|Login BO|200|Thread Group-1|text|false|Test Failed, 
-	expected to contain: password etc.
-
-						</pre>
-									
-
-						</code>
-							</p>
-									
-
-												<p	>
-								
-The corresponding jmeter.properties file excerpt is below.  One oddity
-in this example is that the output_format is set to csv, which
-typically
-indicates comma-separated values.  However, the default_delimiter was
-set to be a vertical bar instead of a comma, so the csv tag is a
-misnomer in this case.
-						</p>
-									
-
-												<p	>
-								
-
-												<code	>
-								
-
-												<pre	>
-								
-#---------------------------------------------------------------------------
-# Results file configuration
-#---------------------------------------------------------------------------
-
-# This section helps determine how result data will be saved.
-# The commented out values are the defaults.
-
-# legitimate values: xml, csv, db.  Only xml and csv are currently supported.
-#jmeter.save.saveservice.output_format=xml
-
-
-# true when field should be saved; false otherwise
-
-# assertion_results_failure_message only affects CSV output
-#jmeter.save.saveservice.assertion_results_failure_message=false
-#
-#jmeter.save.saveservice.data_type=true
-#jmeter.save.saveservice.label=true
-#jmeter.save.saveservice.response_code=true
-# response_data is not currently supported for CSV output
-#jmeter.save.saveservice.response_data=false
-# Save ResponseData for failed samples
-#jmeter.save.saveservice.response_data.on_error=false
-#jmeter.save.saveservice.response_message=true
-#jmeter.save.saveservice.successful=true
-#jmeter.save.saveservice.thread_name=true
-#jmeter.save.saveservice.time=true
-#jmeter.save.saveservice.subresults=true
-#jmeter.save.saveservice.assertions=true
-#jmeter.save.saveservice.latency=true
-#jmeter.save.saveservice.samplerData=false
-#jmeter.save.saveservice.responseHeaders=false
-#jmeter.save.saveservice.requestHeaders=false
-#jmeter.save.saveservice.encoding=false
-#jmeter.save.saveservice.bytes=true
-#jmeter.save.saveservice.url=false
-#jmeter.save.saveservice.filename=false
-#jmeter.save.saveservice.thread_counts=false
-#jmeter.save.saveservice.sample_count=false
-
-# Timestamp format
-# legitimate values: none, ms, or a format suitable for SimpleDateFormat
-#jmeter.save.saveservice.timestamp_format=ms
-#jmeter.save.saveservice.timestamp_format=MM/dd/yy HH:mm:ss
-
-# Put the start time stamp in logs instead of the end
-sampleresult.timestamp.start=true
-
-
-# legitimate values: none, first, all
-#jmeter.save.saveservice.assertion_results=none
-
-# For use with Comma-separated value (CSV) files or other formats
-# where the fields' values are separated by specified delimiters.
-#jmeter.save.saveservice.default_delimiter=,
-#jmeter.save.saveservice.print_field_names=false
-
-						</pre>
-									
-
-						</code>
-							</p>
-									
-
-												<p	>
-								
-The date format to be used for the timestamp_format is described in 
-												<A	 HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
-								
-
-												<B	>
-								SimpleDateFormat
-						</B>
-							</A>
-									.
-Bear in mind that choosing a date format other than "ms" is likely to
-make it impossible for JMeter to interpret the value when it is read
-in later for viewing purposes.
 						</p>
 									
 
@@ -5588,17 +5464,6 @@ by using the -l command-line flag.
 	</table></p>
 									
 
-												<p	>
-								
-The internal viewing capabilities are described in the following subsections.
-						</p>
-									
-	
-												<br	>
-						</br>
-									
-
-
 						</description>
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
@@ -5612,95 +5477,13 @@ The internal viewing capabilities are described in the following subsections.
 												<p	>
 								
 Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
-The defaults are defined as described in the previous section.
+The defaults are defined as described in  the 
+												<a	 href="listeners.html#defaults">
+								Listener Default Configuration
+						</a>
+									 documentation.
 
 						</p>
-									
-
-												<p	>
-								Meaning of the sample attributes in the log files:
-						</p>
-									
-
-												<ul	>
-								
-
-												<li	>
-								by - bytes in responses
-						</li>
-									
-
-												<li	>
-								de - data encoding
-						</li>
-									
-
-												<li	>
-								dt - data type
-						</li>
-									
-
-												<li	>
-								ec - error count (0 or 1, unless multiple samples are aggregated)
-						</li>
-									
-
-												<li	>
-								lb - label
-						</li>
-									
-
-												<li	>
-								lt - latency = time to initial response (ms)
-						</li>
-									
-
-												<li	>
-								na - number of active threads in all thread groups
-						</li>
-									
-
-												<li	>
-								ng - number of active threads in current thread group
-						</li>
-									
-
-												<li	>
-								rc - response code (e.g. 200)
-						</li>
-									
-
-												<li	>
-								rm - response message (e.g. OK)
-						</li>
-									
-
-												<li	>
-								 s - successful (true/false)
-						</li>
-									
-
-												<li	>
-								sc - sample count (1, unless multiple samples are aggregated)
-						</li>
-									
-
-												<li	>
-								 t - elapsed time (ms)
-						</li>
-									
-
-												<li	>
-								tn - thread name
-						</li>
-									
-
-												<li	>
-								ts - timestamp (ms since 1970)
-						</li>
-									
-
-						</ul>
 									
 
 														<p><b>Control Panel</b></p>
@@ -7883,7 +7666,6 @@ GUI that they can use while developing new JMeter components.
 			</td></tr>
 	</table></p>
 									
-
 
 						</description>
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
