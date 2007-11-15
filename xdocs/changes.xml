@@ -62,6 +62,8 @@ Filenames can now include function references; variable references do not work.<
 Fix SamplingStatCalculator so it no longer adds elapsed time to endTime, as this is handled by SampleResult.
 This corrects discrepancies between Summary Report and Aggregate Report throughput calculation.
 </li>
+<li>Default HTTPSampleResult to ISO-8859-1 encoding</li>
+<li>Fix default encoding for blank encoding</li>
 </ul>
 
 <h4>Improvements</h4>
