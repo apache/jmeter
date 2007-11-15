@@ -100,6 +100,7 @@ To change the list of removed headers, define the property proxy.headers.remove 
 <li>The javaScript function now has access to JMeter variables and context etc. See <a href="usermanual/functions.html#__javaScript">JavaScript function</a></li>
 <li>Use drop-down list for BSF Sampler language field</li>
 <li>Add hostname to items that can be saved in CSV and XML output files.</li>
+<li>Errors only flag is now supported when loading XML and CSV files</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
