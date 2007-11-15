@@ -43,7 +43,9 @@ import org.apache.log.Logger;
  */
 public class SampleResult implements Serializable {
 
-    // Needs to be accessible from Test code
+    public static final String DEFAULT_HTTP_ENCODING = "ISO-8859-1";  // $NON-NLS-1$
+
+	// Needs to be accessible from Test code
     static final Logger log = LoggingManager.getLoggerForClass();
 
 	// Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
@@ -53,7 +55,7 @@ public class SampleResult implements Serializable {
     // needs to be accessible from test code
 	static final String DEFAULT_ENCODING 
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
-			"ISO-8859-1"); // $NON-NLS-1$
+			DEFAULT_HTTP_ENCODING);
 
 	/**
 	 * Data type value indicating that the response data is text.
@@ -612,7 +614,7 @@ public class SampleResult implements Serializable {
 	 * Returns the dataEncoding or the default if no dataEncoding was provided
 	 */
 	public String getDataEncodingWithDefault() {
-		if (dataEncoding != null) {
+		if (dataEncoding != null && dataEncoding.length() > 0) {
 			return dataEncoding;
 		}
 		return DEFAULT_ENCODING;

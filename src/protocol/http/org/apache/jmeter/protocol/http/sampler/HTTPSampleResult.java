@@ -40,6 +40,7 @@ public class HTTPSampleResult extends SampleResult {
 
 	public HTTPSampleResult() {
 		super();
+		setDataEncoding(DEFAULT_HTTP_ENCODING); // default if encoding not provided be the page
 	}
 
 	public HTTPSampleResult(long elapsed) {
