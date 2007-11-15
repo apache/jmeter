@@ -331,11 +331,15 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 		} else if (nodeName.equals(TAG_REQUEST_HEADER)) {
 			res.setRequestHeaders((String) subItem);
 		} else if (nodeName.equals(TAG_RESPONSE_DATA)) {
-			final String dataEncoding = res.getDataEncodingWithDefault();
-			try {
-				res.setResponseData(((String) subItem).getBytes(dataEncoding));
-			} catch (UnsupportedEncodingException e) {
-				res.setResponseData(("Can't support the char set: " + dataEncoding).getBytes());
+			final String responseData = (String) subItem;
+			if (responseData.length() > 0) {
+				final String dataEncoding = res.getDataEncodingWithDefault();
+				try {
+					res.setResponseData(responseData.getBytes(dataEncoding));
+				} catch (UnsupportedEncodingException e) {
+					res.setResponseData(("Can't support the char set: " + dataEncoding).getBytes());
+					res.setDataType(SampleResult.TEXT);
+				}
 			}
 		} else if (nodeName.equals(TAG_SAMPLER_DATA)) {
 			res.setSamplerData((String) subItem);
