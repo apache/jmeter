@@ -28,7 +28,7 @@
 <body>
 
 <section name="&sect-num;. Regular Expressions" anchor="regex">
-<subsection name="&sect-num;.1 Overview">
+<subsection name="&sect-num;.1 Overview" anchor="overview">
 <p>
 JMeter includes the pattern matching software <a href="http://jakarta.apache.org/oro/">Apache Jakarta ORO</a>
 <br/>
@@ -70,7 +70,7 @@ So how does one use the Perl modifiers ismx etc if there is no trailing /?
 The solution is to use Perl5 extended regular expressions, i.e. /abc/i becomes (?i)abc
 </p>
 </subsection>
-<subsection name="&sect-num;.2 Examples">
+<subsection name="&sect-num;.2 Examples" anchor="examples">
 <p>
 Extract single string
 <br/>
@@ -125,7 +125,7 @@ The following variables would be set:
 These variables can be referred to later on in the JMeter test plan, as ${MYREF}, ${MYREF_g1} etc 
 </p>
 </subsection>
-<subsection name="&sect-num;.3 Line mode">
+<subsection name="&sect-num;.3 Line mode" anchor="line_mode">
 <p>The pattern matching behave in various slightly different ways, 
 depending on the setting of the multi-line and single-line modifiers.
 </p>
