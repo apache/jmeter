@@ -255,6 +255,10 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                                 "Result file loader");
 				}
 			}
+		} else {
+            GuiPackage.showErrorMessage(
+                    "Error loading results file - could not open file",
+                    "Result file loader");			
 		}
 	}
 
