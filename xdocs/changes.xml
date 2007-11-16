@@ -64,6 +64,7 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 </li>
 <li>Default HTTPSampleResult to ISO-8859-1 encoding</li>
 <li>Fix default encoding for blank encoding</li>
+<li>Fix Https spoofing</li>
 </ul>
 
 <h4>Improvements</h4>
