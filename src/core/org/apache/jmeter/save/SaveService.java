@@ -249,19 +249,11 @@ public class SaveService {
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		writeXmlHeader(outputStreamWriter);
 		// Use deprecated method, to avoid duplicating code
-		saveTree(tree, outputStreamWriter);
-		outputStreamWriter.close();
-	}
-
-    /**
-     * @deprecated Use saveTree(HashTree tree, OutputStream out) instead, which
-     * takes the fileEncoding property of SaveService into consideration
-     */
-	public static void saveTree(HashTree tree, Writer writer) throws IOException {
 		ScriptWrapper wrapper = new ScriptWrapper();
 		wrapper.testPlan = tree;
-		saver.toXML(wrapper, writer);
-		writer.write('\n');// Ensure terminated properly
+		saver.toXML(wrapper, outputStreamWriter);
+		outputStreamWriter.write('\n');// Ensure terminated properly
+		outputStreamWriter.close();
 	}
 
 	// Used by Test code
@@ -270,16 +262,8 @@ public class SaveService {
 		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
 		writeXmlHeader(outputStreamWriter);
 		// Use deprecated method, to avoid duplicating code
-		saveElement(el, outputStreamWriter);
+		saver.toXML(el, outputStreamWriter);
 		outputStreamWriter.close();
-	}
-
-	/**
-     * @deprecated Use saveElement(Object el, OutputStream out) instead, which
-     * takes the fileEncoding property of SaveService into consideration
-     */
-	public static void saveElement(Object el, Writer writer) throws IOException {
-		saver.toXML(el, writer);
 	}
 
 	// Used by Test code
@@ -287,31 +271,16 @@ public class SaveService {
 		// Get the InputReader to use
 		InputStreamReader inputStreamReader = getInputStreamReader(in);
 		// Use deprecated method, to avoid duplicating code
-		Object element = loadElement(inputStreamReader);
+		Object element = saver.fromXML(inputStreamReader);
 		inputStreamReader.close();
 		return element;
 	}
 
-	/**
-	 * @deprecated Use loadElement(InputStream in) instead, since that takes
-	 * the fileEncoding property of SaveService into consideration
-	 */
-	public static Object loadElement(Reader in) throws IOException {
-		return saver.fromXML(in);
-	}
-
-	public synchronized static void saveSampleResult(SampleEvent event, OutputStream out) throws IOException {
-		// Get the OutputWriter to use
-		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
-		writeXmlHeader(outputStreamWriter);
-		// Use deprecated method, to avoid duplicating code
-		saveSampleResult(event, outputStreamWriter);
-		outputStreamWriter.close();
-	}
-
     /**
-     * @deprecated Use saveSampleResult(SampleResult res, OutputStream out) instead, which
-     * takes the fileEncoding property of SaveService into consideration
+     * Save a sampleResult to an XML output file using XStream.
+     * 
+     * @param evt sampleResult wrapped in a sampleEvent
+     * @param writer output stream which must be created using {@link #getFileEncoding(String)}
      */
 	// Used by ResultCollector#recordResult()
 	public synchronized static void saveSampleResult(SampleEvent evt, Writer writer) throws IOException {
@@ -319,21 +288,13 @@ public class SaveService {
 		dh.put(SAMPLE_EVENT_OBJECT, evt);
 		// This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
 		// Don't know why there is no method for this in the XStream class
-		saver.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh); // TODO use event when can get unmarshall working
+		saver.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
 		writer.write('\n');
 	}
 
-	public synchronized static void saveTestElement(TestElement elem, OutputStream out) throws IOException {
-		// Get the OutputWriter to use
-		OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
-		// Use deprecated method, to avoid duplicating code
-		saveTestElement(elem, outputStreamWriter);
-		outputStreamWriter.close();
-	}
-
     /**
-     * @deprecated Use saveTestElement(TestElement elem, OutputStream out) instead, which
-     * takes the fileEncoding property of SaveService into consideration
+     * @param elem test element
+     * @param writer output stream which must be created using {@link #getFileEncoding(String)}
      */
 	// Used by ResultCollector#recordStats()
 	public synchronized static void saveTestElement(TestElement elem, Writer writer) throws IOException {
@@ -469,6 +430,22 @@ public class SaveService {
 			// We use the default character set encoding of the JRE
 			return new OutputStreamWriter(outStream);
 		}
+	}
+	
+	/**
+	 * Returns the file Encoding specified in saveservice.properties or the default
+	 * @param dflt value to return if file encoding was not provided
+	 * 
+	 * @return file encoding or default
+	 */
+	// Used by ResultCollector when creating output files
+	public static String getFileEncoding(String dflt){
+		if(fileEncoding != null && fileEncoding.length() > 0) {
+			return fileEncoding;
+		}
+		else {
+			return dflt;
+		}		
 	}
 	
 	private static Charset getFileEncodingCharset() {
