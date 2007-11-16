@@ -311,7 +311,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			if (pdir != null)
 				pdir.mkdirs();
 			writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-					trimmed)), "UTF-8"), true); // $NON-NLS-1$
+					trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
 			files.put(filename, writer);
 		}
 		if (!trimmed) {
