@@ -465,12 +465,14 @@ public class HttpRequestHdr {
 		return str;
 	}
 
+	// TODO replace repeated substr() above and below with more efficient method.
+	
 	/**
-	 * Find the :PORT form http://server.ect:PORT/some/file.xxx
+	 * Find the :PORT from http://server.ect:PORT/some/file.xxx
 	 * 
-	 * @return server's port
+	 * @return server's port (or UNSPECIFIED if not found)
 	 */
-	public int serverPort() {
+	private int serverPort() {
 		String str = url;
 		// chop to "server.name:x/thing"
 		int i = str.indexOf("//");
@@ -487,7 +489,7 @@ public class HttpRequestHdr {
 		if (0 < i) {
 			return Integer.parseInt(str.substring(i + 1).trim());
 		}
-		return 80;
+		return HTTPSamplerBase.UNSPECIFIED_PORT;
 	}
 
 	/**
@@ -495,7 +497,7 @@ public class HttpRequestHdr {
 	 * 
 	 * @return the deproxied url
 	 */
-	public String serverUrl() {
+	private String serverUrl() {
 		String str = url;
 		int i = str.indexOf("//");
 		if (i > 0) {
