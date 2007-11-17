@@ -486,7 +486,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 	}
 
 	private JPanel createPortPanel() {
-		portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 8);
+		portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 5);
 		portField.setName(PORTFIELD);
 		portField.addKeyListener(this);
 
@@ -498,7 +498,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 		httpsSpoof.addActionListener(this);
 		httpsSpoof.setActionCommand(ENABLE_RESTART);		
 		
-		httpsMatch = new JTextField(20);
+		httpsMatch = new JTextField(40);
 		httpsMatch.addKeyListener(this);
 		httpsMatch.setName(ENABLE_RESTART);
 
