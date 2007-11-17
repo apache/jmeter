@@ -80,6 +80,8 @@ public class Proxy extends Thread {
 	/** Whether to try to spoof as https **/
 	private boolean httpsSpoof;
 
+	private String httpsSpoofMatch; // if non-empty, then URLs must match in order to be spoofed
+
     /** Reference to Deamon's Map of url string to page character encoding of that page */
     private Map pageEncodings;
     /** Reference to Deamon's Map of url string to character encoding for the form */
@@ -132,6 +134,7 @@ public class Proxy extends Thread {
         this.clientSocket = _clientSocket;
         this.captureHttpHeaders = _target.getCaptureHttpHeaders();
         this.httpsSpoof = _target.getHttpsSpoof();
+        this.httpsSpoofMatch = _target.getHttpsSpoofMatch();
         this.pageEncodings = _pageEncodings;
         this.formEncodings = _formEncodings;
     }
@@ -173,7 +176,14 @@ public class Proxy extends Thread {
 			 * If we are trying to spoof https, change the protocol
 			 */
 			if (httpsSpoof) {
-				sampler.setProtocol("https");
+				if (httpsSpoofMatch.length() > 0){
+					String url = request.getUrl();
+					if (url.matches(httpsSpoofMatch)){
+						sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);						
+					}
+				} else {
+				    sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
+				}
 			}
 			sampler.threadStarted(); // Needed for HTTPSampler2
 			result = sampler.sample();
