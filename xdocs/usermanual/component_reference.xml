@@ -3371,32 +3371,43 @@ Your WorkBench can be saved independently, if you like (right-click on WorkBench
 </p>
 </component>
 
-<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="960" height="650" screenshot="proxy_control.png">
+<component name="HTTP Proxy Server" index="&sect-num;.9.5"  width="951" height="611" screenshot="proxy_control.png">
 <note>The Proxy Server can only record HTTP traffic. 
 It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spoofing mode - see below.</note>
 <description><p>The Proxy Server allows JMeter to watch and record your actions while you browse your web application
-with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
+with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).</p>
 
 <p>To use the proxy server, <i>add</i> the HTTP Proxy Server element to the workbench.
 Select the WorkBench element in the tree, and right-click on this element to get the
 Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
+<p>
+You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP requests.
+Do not use JMeter as the proxy for any other request types - HTTPS, FTP, etc. - as the JMeter proxy cannot handle them.
+</p>
 </description>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Port" required="Yes">The port that the Proxy Server listens to.  8080 is the default, but you can change it.</property>
-        <property name="Attempt https Spoofing" required="Yes">
-          When you enable https spoofing, the following  happens:
+        <property name="Attempt HTTPS Spoofing" required="Yes">
+          When you enable HTTPS spoofing, the following  happens:
           <ul>
-            <li>All http requests from the client are turned into https (between the proxy
+            <li>All matching (see below) http requests from the client are turned into https (between the proxy
               and the web server).</li>
-            <li>All text response data is scanned and any occurrence of the string "https" 
-              is replaced with &quot;http.&quot;</li>
+            <li>All text response data is scanned and any occurrence of the string "https://" 
+              is replaced with "http://"; the default HTTPS port (443) is also removed if present.</li>
           </ul>
           So if you want to use this feature, while you are browsing in your client,
-          instead of typing "https://..." into the browser, type &quot;http://...&quot;.  JMeter
-          will request and record <i>everything</i> as https, whether it should be or not.
+          instead of typing "https://..." into the browser, type "http://...".  
+          JMeter will request and record <i>everything that matches</i> as https, whether it should be or not.
+        </property>
+        <property name="Optional URL match string" required="No">
+        If this is specified, it must be a regular expression (java.util.regex) which matches the
+        HTTP URL(s) to be spoofed.
+        For example, if you want to spoof http://a.b.c/service/ but not http://a.b.c/images,
+        then you could use the expression "http://a.b.c/service/.*".
+        Note that the expression ends in ".*" because it must match the whole URL.
         </property>
         <property name="Target Controller" required="Yes">The controller where the proxy will store the generated samples. By default, it will look for a Recording Controller and store them there wherever it is.</property>
         <property name="Grouping" required="Yes">Whether to group samplers for requests from a single "click" (requests received without significant time separation), and how to represent that grouping in the recording:
