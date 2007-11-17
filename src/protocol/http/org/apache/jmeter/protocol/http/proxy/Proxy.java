@@ -28,7 +28,6 @@ import java.net.UnknownHostException;
 import java.net.URL;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpConstants;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -175,14 +174,17 @@ public class Proxy extends Thread {
 			/* 
 			 * If we are trying to spoof https, change the protocol
 			 */
+			boolean forcedHTTP = false; // so we know when to revert
 			if (httpsSpoof) {
 				if (httpsSpoofMatch.length() > 0){
 					String url = request.getUrl();
 					if (url.matches(httpsSpoofMatch)){
-						sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);						
+						sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
+						forcedHTTP = true;
 					}
 				} else {
 				    sampler.setProtocol(HTTPConstants.PROTOCOL_HTTPS);
+					forcedHTTP = true;
 				}
 			}
 			sampler.threadStarted(); // Needed for HTTPSampler2
@@ -190,12 +192,17 @@ public class Proxy extends Thread {
 			
 			/*
 			 * If we're dealing with text data, and if we're spoofing https, 
-			 * replace all occurences of "https:" with "http:" for the client. 
+			 * replace all occurences of "https://" with "http://" for the client.
+			 * TODO - also check the match string to restrict the changes further?
 			 */
-			if (httpsSpoof && SampleResult.TEXT.equals(result.getDataType()))
+			if (forcedHTTP && SampleResult.TEXT.equals(result.getDataType()))
 			{
-				String noHttpsResult = new String(result.getResponseData());
-				result.setResponseData(noHttpsResult.replaceAll("https:", "http:").getBytes());// TODO this could mangle the encoding
+				final String enc = result.getDataEncodingWithDefault();
+				String noHttpsResult = new String(result.getResponseData(),enc);
+				final String HTTPS_HOST = // match https://host[:port]/ and drop default port if present
+					"https://([^:/]+)(:"+HTTPConstants.DEFAULT_HTTPS_PORT_STRING+")?"; // $NON-NLS-1$ $NON-NLS-2$
+				noHttpsResult = noHttpsResult.replaceAll(HTTPS_HOST, "http://$1"); // $NON-NLS-1$
+				result.setResponseData(noHttpsResult.getBytes(enc));
 			}
 
             // Find the page encoding and possibly encodings for forms in the page
