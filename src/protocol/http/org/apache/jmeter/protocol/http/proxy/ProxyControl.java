@@ -87,35 +87,39 @@ public class ProxyControl extends GenericController {
 	public static final String DEFAULT_PORT_S =
         Integer.toString(DEFAULT_PORT);// Used by GUI
 
-	public static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
+	//+ JMX file attributes
+	private static final String PORT = "ProxyControlGui.port"; // $NON-NLS-1$
 
-	public static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list"; // $NON-NLS-1$
+	private static final String EXCLUDE_LIST = "ProxyControlGui.exclude_list"; // $NON-NLS-1$
 
-	public static final String INCLUDE_LIST = "ProxyControlGui.include_list"; // $NON-NLS-1$
+	private static final String INCLUDE_LIST = "ProxyControlGui.include_list"; // $NON-NLS-1$
 
-	public static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers"; // $NON-NLS-1$
+	private static final String CAPTURE_HTTP_HEADERS = "ProxyControlGui.capture_http_headers"; // $NON-NLS-1$
 
-	public static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion"; // $NON-NLS-1$
+	private static final String ADD_ASSERTIONS = "ProxyControlGui.add_assertion"; // $NON-NLS-1$
 
-	public static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
+	private static final String GROUPING_MODE = "ProxyControlGui.grouping_mode"; // $NON-NLS-1$
 
-	public static final String SAMPLER_TYPE_NAME = "ProxyControlGui.sampler_type_name"; // $NON-NLS-1$
+	private static final String SAMPLER_TYPE_NAME = "ProxyControlGui.sampler_type_name"; // $NON-NLS-1$
 
-	public static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
+	private static final String SAMPLER_REDIRECT_AUTOMATICALLY = "ProxyControlGui.sampler_redirect_automatically"; // $NON-NLS-1$
 
-	public static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
+	private static final String SAMPLER_FOLLOW_REDIRECTS = "ProxyControlGui.sampler_follow_redirects"; // $NON-NLS-1$
 
-	public static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
+	private static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
 
-	public static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
+	private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
 
-	public static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
+	private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
-	public static final String HTTPS_SPOOF = "ProxyControlGui.https_spoof";
+	private static final String HTTPS_SPOOF = "ProxyControlGui.https_spoof"; // $NON-NLS-1$
 
-	public static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
+	private static final String HTTPS_SPOOF_MATCH = "ProxyControlGui.https_spoof_match"; // $NON-NLS-1$
 
-	public static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
+	private static final String CONTENT_TYPE_EXCLUDE = "ProxyControlGui.content_type_exclude"; // $NON-NLS-1$
+
+	private static final String CONTENT_TYPE_INCLUDE = "ProxyControlGui.content_type_include"; // $NON-NLS-1$
+	//- JMX file attributes
 	
 	public static final int GROUPING_NO_GROUPS = 0;
 
@@ -229,11 +233,12 @@ public class ProxyControl extends GenericController {
 		setProperty(new BooleanProperty(REGEX_MATCH, b));
 	}
 	
-	/**
-	 * @param b
-	 */
 	public void setHttpsSpoof(boolean b) {
 		setProperty(new BooleanProperty(HTTPS_SPOOF, b));
+	}
+	
+	public void setHttpsSpoofMatch(String s) {
+		setProperty(new StringProperty(HTTPS_SPOOF_MATCH, s));
 	}
 	
 	public void setContentTypeExclude(String contentTypeExclude) {
@@ -298,6 +303,10 @@ public class ProxyControl extends GenericController {
 	
 	public boolean getHttpsSpoof() {
 		return getPropertyAsBoolean(HTTPS_SPOOF, false);
+	}
+	
+	public String getHttpsSpoofMatch() {
+		return getPropertyAsString(HTTPS_SPOOF_MATCH, "");
 	}
 	
 	public String getContentTypeExclude() {
