@@ -152,7 +152,7 @@ public class PackageTest extends JMeterTestCase {
 		allsuites.addTest(sff);
 
 		TestSuite split = new TestSuite("SplitFunction");
-		split.addTest(new PackageTest("SplitTest1"));
+		split.addTest(new PackageTest("splitTest1"));
 		allsuites.addTest(split);
 
 		TestSuite xpath = new TestSuite("XPath");
@@ -168,7 +168,7 @@ public class PackageTest extends JMeterTestCase {
 		allsuites.addTest(xpath);
 		
         TestSuite random = new TestSuite("Random");
-        random.addTest(new PackageTest("RandomTest1"));
+        random.addTest(new PackageTest("randomTest1"));
         allsuites.addTest(random);
 
         allsuites.addTest(new PackageTest("XPathSetup1"));
@@ -184,12 +184,12 @@ public class PackageTest extends JMeterTestCase {
         allsuites.addTest(par3);
 
         TestSuite variable = new TestSuite("Variable");
-        variable.addTest(new PackageTest("VariableTest1"));
+        variable.addTest(new PackageTest("variableTest1"));
         allsuites.addTest(variable);
         
         TestSuite eval = new TestSuite("Eval");
-        eval.addTest(new PackageTest("EvalTest1"));
-        eval.addTest(new PackageTest("EvalTest2"));
+        eval.addTest(new PackageTest("evalTest1"));
+        eval.addTest(new PackageTest("evalTest2"));
         allsuites.addTest(eval);
 
         return allsuites;
@@ -277,7 +277,7 @@ public class PackageTest extends JMeterTestCase {
 
 	}
 
-	public void SplitTest1() throws Exception {
+	public void splitTest1() throws Exception {
 		SplitFunction split = null;
 		String src = "";
 
@@ -811,7 +811,7 @@ public class PackageTest extends JMeterTestCase {
     
 
     
-    public void RandomTest1() throws Exception {
+    public void randomTest1() throws Exception {
         Random r = new Random();
         Collection parms = MakeParams("0","10000000000","VAR");
         r.setParameters(parms);
@@ -819,7 +819,7 @@ public class PackageTest extends JMeterTestCase {
         	r.execute(null,null);
     }
 
-    public void VariableTest1() throws Exception {
+    public void variableTest1() throws Exception {
         Variable r = new Variable();
         vars.put("A_1","a1");
         vars.put("A_2","a2");
@@ -865,7 +865,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("a1",s);
     }        
 
-    public void EvalTest1() throws Exception {
+    public void evalTest1() throws Exception {
         EvalFunction eval = new EvalFunction();
         vars.put("query","select ${column} from ${table}");
         vars.put("column","name");
@@ -880,7 +880,7 @@ public class PackageTest extends JMeterTestCase {
         
     }
 
-    public void EvalTest2() throws Exception {
+    public void evalTest2() throws Exception {
         EvalVarFunction evalVar = new EvalVarFunction();
         vars.put("query","select ${column} from ${table}");
         vars.put("column","name");
