@@ -65,7 +65,7 @@ public class TestFunctor extends JMeterTestCase {
 			return super.getName()+".";
 		}
 	}
-	class Test2 implements HasName, HasString {
+	static class Test2 implements HasName, HasString {
 		private final String name;
 		public Test2(){
 			this("");
