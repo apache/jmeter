@@ -39,9 +39,9 @@ public class WhileController extends GenericController implements Serializable {
 
 	private final static String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
-	static boolean testMode = false; // To make testing easier
+	boolean testMode = false; // To make testing easier
 
-	static boolean testModeResult = false; // dummy sample result
+	boolean testModeResult = false; // dummy sample result
 
 	public WhileController() {
 	}
