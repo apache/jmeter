@@ -40,7 +40,7 @@ Also user-written command files may need to be adjusted (the ones supplied with 
 <br></br>
 To revert to the earlier behaviour, define the JMeter property: server.rmi.create=false.
 </li>
-<li>The Proxy server removes If-Modified-Since headers from generated Header Managers.
+<li>The Proxy server removes If-Modified-Since and If-None-Match headers from generated Header Managers.
 To revert to the previous behaviour, define the property proxy.headers.remove with no value</li>
 </ul>
 
@@ -98,7 +98,7 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 <li>Bug 43678 - Handle META tag http-equiv charset</li>
 <li>Bug 42555 - [I18N] Proposed corrections for the french translation</li>
 <li>Bug 43727 - Test Action does not support variables or functions</li>
-<li>The Proxy server removes If-Modified-Since headers from generated Header Managers by default.
+<li>The Proxy server removes If-Modified-Since and If-None-Match headers from generated Header Managers by default.
 To change the list of removed headers, define the property proxy.headers.remove as a comma-separated list of headers to remove</li>
 <li>The javaScript function now has access to JMeter variables and context etc. See <a href="usermanual/functions.html#__javaScript">JavaScript function</a></li>
 <li>Use drop-down list for BSF Sampler language field</li>
