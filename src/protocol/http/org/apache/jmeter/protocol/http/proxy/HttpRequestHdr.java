@@ -123,12 +123,13 @@ public class HttpRequestHdr {
 		while ((inHeaders || readLength < dataLength) && ((x = in.read()) != -1)) {
 			line.write(x);
 			clientRequest.write(x);
-			if (inHeaders && !CharUtils.isAscii((char) x)){
+			if (first && !CharUtils.isAscii((char) x)){
 				throw new IllegalArgumentException("Only ASCII supported in headers (perhaps SSL was used?)");
 			}
 			if (inHeaders && (byte) x == (byte) '\n') { // $NON-NLS-1$
 				if (line.size() < 3) {
 					inHeaders = false;
+					first = false; // cannot be first line either
 				}
 				if (first) {
 					parseFirstLine(line.toString());
