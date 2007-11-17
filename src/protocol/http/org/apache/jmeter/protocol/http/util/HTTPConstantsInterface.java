@@ -26,6 +26,7 @@ package org.apache.jmeter.protocol.http.util;
 public interface HTTPConstantsInterface {
 
 	public static final int DEFAULT_HTTPS_PORT = 443;
+	public static final String DEFAULT_HTTPS_PORT_STRING = "443"; // $NON-NLS-1$
 	public static final int    DEFAULT_HTTP_PORT = 80;
 	public static final String DEFAULT_HTTP_PORT_STRING = "80"; // $NON-NLS-1$
 	public static final String PROTOCOL_HTTP = "http"; // $NON-NLS-1$
