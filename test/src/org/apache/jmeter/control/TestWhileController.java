@@ -68,10 +68,10 @@ public class TestWhileController extends JMeterTestCase {
 		}
 
 		public void runtestPrevOK(String type) throws Exception {
-            WhileController.testMode = true;
-            WhileController.testModeResult = true;
 			GenericController controller = new GenericController();
 			WhileController while_cont = new WhileController();
+			while_cont.testMode = true;
+			while_cont.testModeResult = true;
 			while_cont.setCondition(type);
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
@@ -86,23 +86,23 @@ public class TestWhileController extends JMeterTestCase {
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
 			assertEquals("one", nextName(controller));
-			WhileController.testModeResult = false;// one and two fail
+			while_cont.testModeResult = false;// one and two fail
 			if (type.equals(OTHER))
 				while_cont.setCondition("false");
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
-			WhileController.testModeResult = true;// but three OK, so does not exit
+			while_cont.testModeResult = true;// but three OK, so does not exit
 			if (type.equals(OTHER))
 				while_cont.setCondition(OTHER);
 			assertEquals("one", nextName(controller));
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
-			WhileController.testModeResult = false;// three fails, so exits while
+			while_cont.testModeResult = false;// three fails, so exits while
 			if (type.equals(OTHER))
 				while_cont.setCondition("false");
 			assertEquals("four", nextName(controller));
 			assertNull(nextName(controller));
-			WhileController.testModeResult = true;
+			while_cont.testModeResult = true;
 			if (type.equals(OTHER))
 				while_cont.setCondition(OTHER);
 			assertEquals("one", nextName(controller));
@@ -111,10 +111,10 @@ public class TestWhileController extends JMeterTestCase {
 		// While (blank), previous sample failed - should run once
 		public void testBlankPrevFailed() throws Exception {
 //			log.info("testBlankPrevFailed");
-			WhileController.testMode = true;
-			WhileController.testModeResult = false;
 			GenericController controller = new GenericController();
 			WhileController while_cont = new WhileController();
+			while_cont.testMode = true;
+			while_cont.testModeResult = false;
 			while_cont.setCondition("");
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
@@ -144,10 +144,10 @@ public class TestWhileController extends JMeterTestCase {
 		}
 
 		public void runTestPrevFailed(String s) throws Exception {
-			WhileController.testMode = true;
-			WhileController.testModeResult = false;
 			GenericController controller = new GenericController();
 			WhileController while_cont = new WhileController();
+			while_cont.testMode = true;
+			while_cont.testModeResult = false;
 			while_cont.setCondition(s);
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
@@ -170,12 +170,12 @@ public class TestWhileController extends JMeterTestCase {
 		}
 
 		public void runTestAlwaysFail(boolean other) {
-			WhileController.testMode = true;
-			WhileController.testModeResult = false;
 			LoopController controller = new LoopController();
 			controller.setContinueForever(true);
 			controller.setLoops(-1);
 			WhileController while_cont = new WhileController();
+			while_cont.testMode = true;
+			while_cont.testModeResult = false;
 			while_cont.setCondition("false");
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
