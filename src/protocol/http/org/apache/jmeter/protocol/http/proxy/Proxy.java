@@ -28,6 +28,7 @@ import java.net.UnknownHostException;
 import java.net.URL;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpConstants;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -196,9 +197,15 @@ public class Proxy extends Thread {
 		} catch (UnknownHostException uhe) {
 			log.warn("Server Not Found.", uhe);
 			writeErrorToClient(HttpReplyHdr.formServerNotFound());
+			result = generateErrorResult(result, uhe); // Generate result (if nec.) and populate it
+		} catch (IllegalArgumentException e) {
+			log.error("Not implemented (probably used https)", e);
+			writeErrorToClient(HttpReplyHdr.formNotImplemented());			
+			result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
 		} catch (Exception e) {
-			log.error("", e);
+			log.error("Exception when processing sample", e);
 			writeErrorToClient(HttpReplyHdr.formTimeout());
+			result = generateErrorResult(result, e); // Generate result (if nec.) and populate it
 		} finally {
 			if (log.isDebugEnabled()) {
 				log.debug("Will deliver sample " + sampler.getName());
@@ -222,6 +229,15 @@ public class Proxy extends Thread {
 			}
 			sampler.threadFinished(); // Needed for HTTPSampler2
 		}
+	}
+
+	private SampleResult generateErrorResult(SampleResult result, Exception e) {
+		if (result == null) {
+			result = new SampleResult();
+			result.setSampleLabel("Sample failed");
+		}
+		result.setResponseMessage(e.getMessage());
+		return result;
 	}
 
 	/**
@@ -347,6 +363,9 @@ public class Proxy extends Thread {
      */
     private void addFormEncodings(SampleResult result, String pageEncoding) {
         FormCharSetFinder finder = new FormCharSetFinder();
+        if (!result.getContentType().startsWith("text/")){ // TODO perhaps make more specific than this?
+        	return; // no point parsing anything else, e.g. GIF ...
+        }
         try {
             finder.addFormActionsAndCharSet(result.getResponseDataAsString(), formEncodings, pageEncoding);
         }
