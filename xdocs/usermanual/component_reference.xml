@@ -3414,7 +3414,9 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).</p>
 		<property name="Capture HTTP Headers" required="Yes">Should headers be added to the plan?
 		If specified, a Header Manager will be added to each HTTP Sampler.
 		The Proxy server always removes Cookie and Authorization headers from the generated Header Managers.
-		By default it also removes If-Modified-Since headers.
+		By default it also removes If-Modified-Since and If-None-Match headers.
+		These are used to determine if the browser cache items are up to date;
+		when recording one normally wants to download all the content.
         To change which additional headers are removed, define the JMeter property <b>proxy.headers.remove</b>
         as a comma-separated list of headers.
         </property>
