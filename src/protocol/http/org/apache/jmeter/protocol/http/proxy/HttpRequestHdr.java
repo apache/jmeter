@@ -337,10 +337,10 @@ public class HttpRequestHdr {
         
         URL pageUrl = null;
         if(sampler.isProtocolDefaultPort()) {            
-            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), serverUrl());
+            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), getPath());
         }
         else {
-            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), sampler.getPort(), serverUrl());
+            pageUrl = new URL(sampler.getProtocol(), sampler.getDomain(), sampler.getPort(), getPath());
         }
         String urlWithoutQuery = getUrlWithoutQuery(pageUrl);
         
@@ -388,14 +388,14 @@ public class HttpRequestHdr {
         }
 
         if(contentEncoding != null) {
-            sampler.setPath(serverUrl(), contentEncoding);
+            sampler.setPath(getPath(), contentEncoding);
         }
         else {
             // Although the spec says UTF-8 should be used for encoding URL parameters,
             // most browser use ISO-8859-1 for default if encoding is not known.
             // We use null for contentEncoding, then the url parameters will be added
             // with the value in the URL, and the "encode?" flag set to false
-            sampler.setPath(serverUrl(), null);
+            sampler.setPath(getPath(), null);
         }
         if (log.isDebugEnabled())
             log.debug("Proxy: setting path: " + sampler.getPath());
@@ -511,11 +511,11 @@ public class HttpRequestHdr {
 	}
 
 	/**
-	 * Find the /some/file.xxxx form http://server.ect:PORT/some/file.xxx
+	 * Find the /some/file.xxxx from http://server.ect:PORT/some/file.xxx
 	 * 
-	 * @return the deproxied url
+	 * @return the path
 	 */
-	private String serverUrl() {
+	private String getPath() {
 		String str = url;
 		int i = str.indexOf("//");
 		if (i > 0) {
@@ -528,6 +528,15 @@ public class HttpRequestHdr {
 		return str.substring(i);
 	}
 
+	/**
+	 * Returns the url string extracted from the first line of the client request.
+	 * 
+	 * @return the url
+	 */
+	public String getUrl(){
+		return url;
+	}
+	
 	/**
 	 * Returns the next token in a string.
 	 * 
