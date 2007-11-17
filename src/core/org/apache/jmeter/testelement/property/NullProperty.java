@@ -23,10 +23,9 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * A null property.
  * 
- * @version $Revision$
  */
-public class NullProperty extends AbstractProperty {
-	JMeterProperty tempValue;
+public final class NullProperty extends AbstractProperty {
+	private JMeterProperty tempValue; // TODO - why does null property have a value?
 
 	public NullProperty(String name) {
 		super(name);
@@ -77,7 +76,7 @@ public class NullProperty extends AbstractProperty {
 		tempValue = prop;
 	}
 
-	public Object clone() {
+	public final Object clone() {
 		return this;
 	}
 
