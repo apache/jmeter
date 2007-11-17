@@ -156,7 +156,7 @@ To revert to the earlier behaviour, define the JMeter property: server.rmi.creat
 									
 
 												<li	>
-								The Proxy server removes If-Modified-Since headers from generated Header Managers.
+								The Proxy server removes If-Modified-Since and If-None-Match headers from generated Header Managers.
 To revert to the previous behaviour, define the property proxy.headers.remove with no value
 						</li>
 									
@@ -239,6 +239,11 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 
 												<li	>
 								Fix default encoding for blank encoding
+						</li>
+									
+
+												<li	>
+								Fix Https spoofing (port problem)
 						</li>
 									
 
@@ -395,7 +400,7 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 									
 
 												<li	>
-								The Proxy server removes If-Modified-Since headers from generated Header Managers by default.
+								The Proxy server removes If-Modified-Since and If-None-Match headers from generated Header Managers by default.
 To change the list of removed headers, define the property proxy.headers.remove as a comma-separated list of headers to remove
 						</li>
 									
@@ -420,6 +425,26 @@ To change the list of removed headers, define the property proxy.headers.remove 
 
 												<li	>
 								Errors only flag is now supported when loading XML and CSV files
+						</li>
+									
+
+												<li	>
+								Ensure ResultCollector uses SaveService encoding
+						</li>
+									
+
+												<li	>
+								Proxy now rejects attempts to use it with https
+						</li>
+									
+
+												<li	>
+								Proxy spoofing can now use RE matching to determine which urls to spoof (useful if images are not https)
+						</li>
+									
+
+												<li	>
+								Proxy spoofing now drops the default HTTPS port (443) when converting https: links to http:
 						</li>
 									
 

@@ -10757,7 +10757,7 @@ It is not possible to record HTTPS (SSL) sessions; however there is an HTTPS spo
 	</table></p>
 							  																			<p	>
 								The Proxy Server allows JMeter to watch and record your actions while you browse your web application
-with your normal browser (such as Internet Explorer).  JMeter will create test sample objects and store them
+with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).
 						</p>
 									
@@ -10774,8 +10774,16 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 						</p>
 									
 
+												<p	>
+								
+You also need to set up your browser to use the JMeter proxy port as the proxy for HTTP requests.
+Do not use JMeter as the proxy for any other request types - HTTPS, FTP, etc. - as the JMeter proxy cannot handle them.
+
+						</p>
+									
+
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='960' height='650' src="../images/screenshots/proxy_control.png"></div>
+						<div align="center"><img width='951' height='611' src="../images/screenshots/proxy_control.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -10797,38 +10805,52 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 								</td>
 		</tr>
 			<tr>
-			<td>Attempt https Spoofing</td>
+			<td>Attempt HTTPS Spoofing</td>
 			<td>						
-          When you enable https spoofing, the following  happens:
+          When you enable HTTPS spoofing, the following  happens:
           
 												<ul	>
 								
             
 												<li	>
-								All http requests from the client are turned into https (between the proxy
+								All matching (see below) http requests from the client are turned into https (between the proxy
               and the web server).
 						</li>
 									
             
 												<li	>
-								All text response data is scanned and any occurrence of the string "https" 
-              is replaced with "http."
+								All text response data is scanned and any occurrence of the string "https://" 
+              is replaced with "http://"; the default HTTPS port (443) is also removed if present.
 						</li>
 									
           
 						</ul>
 									
           So if you want to use this feature, while you are browsing in your client,
-          instead of typing "https://..." into the browser, type "http://...".  JMeter
-          will request and record 
+          instead of typing "https://..." into the browser, type "http://...".  
+          JMeter will request and record 
 												<i	>
-								everything
+								everything that matches
 						</i>
 									 as https, whether it should be or not.
         
 			</td>
 			<td>
 											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Optional URL match string</td>
+			<td>						
+        If this is specified, it must be a regular expression (java.util.regex) which matches the
+        HTTP URL(s) to be spoofed.
+        For example, if you want to spoof http://a.b.c/service/ but not http://a.b.c/images,
+        then you could use the expression "http://a.b.c/service/.*".
+        Note that the expression ends in ".*" because it must match the whole URL.
+        
+			</td>
+			<td>
+											No
 								</td>
 		</tr>
 			<tr>
@@ -10888,7 +10910,9 @@ Add menu (Add --> Non-Test Elements --> HTTP Proxy Server).
 			<td>						Should headers be added to the plan?
 		If specified, a Header Manager will be added to each HTTP Sampler.
 		The Proxy server always removes Cookie and Authorization headers from the generated Header Managers.
-		By default it also removes If-Modified-Since headers.
+		By default it also removes If-Modified-Since and If-None-Match headers.
+		These are used to determine if the browser cache items are up to date;
+		when recording one normally wants to download all the content.
         To change which additional headers are removed, define the JMeter property 
 												<b	>
 								proxy.headers.remove
