@@ -241,7 +241,7 @@ public final class HttpReplyHdr {
 	 * @return The header in a string;
 	 */
 	public static String formNotImplemented() {
-		return formError("501 Method not implemented", "Service not implemented, programer was lazy");
+		return formError("501 Method not implemented", "Service not implemented");
 	}
 
 	/**
