@@ -43,7 +43,7 @@ import org.apache.log.output.io.WriterTarget;
 import org.xml.sax.SAXException;
 
 /**
- * @version $Revision$ on $Date$
+ * Manages JMeter logging
  */
 public final class LoggingManager {
 	// N.B time pattern is passed to java.text.SimpleDateFormat
@@ -63,15 +63,12 @@ public final class LoggingManager {
 	private static PatternFormatter format = null;
 
 	/** Used to hold the default logging target. */
-	private static LogTarget target;
+	private static LogTarget target = new NullOutputLogTarget();
 
-	// Hack to detect when System.out has been set as the target, to avoid
-	// closing it
-	private static boolean isTargetSystemOut = false;// Is the target
-														// System.out?
+	// Hack to detect when System.out has been set as the target, to avoid closing it
+	private static boolean isTargetSystemOut = false;// Is the target System.out?
 
-	private static boolean isWriterSystemOut = false;// Is the Writer
-														// System.out?
+	private static boolean isWriterSystemOut = false;// Is the Writer System.out?
 
 	public final static String LOG_FILE = "log_file";
 
@@ -80,8 +77,6 @@ public final class LoggingManager {
 	private static LoggingManager logManager = null;
 
 	private LoggingManager() {
-		// ensure that target is valid initially
-		target = new NullOutputLogTarget();
 	}
 
 	public static LoggingManager getLogManager() {
@@ -147,13 +142,11 @@ public final class LoggingManager {
 			manager.contextualize(ctx);
 			manager.configure(c);
 		} catch (IllegalArgumentException e) {
-			// This happens if the default log-target id-ref specifies a
-			// non-existent target
+			// This happens if the default log-target id-ref specifies a non-existent target
 			System.out.println("Error processing logging config " + cfg);
 			System.out.println(e.toString());
 		} catch (NullPointerException e) {
-			// This can happen if a log-target id-ref specifies a non-existent
-			// target
+			// This can happen if a log-target id-ref specifies a non-existent target
 			System.out.println("Error processing logging config " + cfg);
 			System.out.println("Perhaps a log target is missing?");
 		} catch (ConfigurationException e) {
@@ -226,8 +219,10 @@ public final class LoggingManager {
 	private final static String PACKAGE_PREFIX = "org.apache.";
 
 	/*
-	 * Stack contains the follow when the context is obtained: 0 -
-	 * getCallerClassNameAt() 1 - this method 2 - getLoggerForClass
+	 * Stack contains the follow when the context is obtained: 
+	 * 0 - getCallerClassNameAt()
+	 * 1 - this method
+	 * 2 - getLoggerForClass()
 	 * 
 	 */
 	private static String getCallerClassName() {
