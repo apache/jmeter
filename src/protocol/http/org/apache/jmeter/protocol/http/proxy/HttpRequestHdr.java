@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.CharUtils;
 import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -122,6 +123,9 @@ public class HttpRequestHdr {
 		while ((inHeaders || readLength < dataLength) && ((x = in.read()) != -1)) {
 			line.write(x);
 			clientRequest.write(x);
+			if (inHeaders && !CharUtils.isAscii((char) x)){
+				throw new IllegalArgumentException("Only ASCII supported in headers (perhaps SSL was used?)");
+			}
 			if (inHeaders && (byte) x == (byte) '\n') { // $NON-NLS-1$
 				if (line.size() < 3) {
 					inHeaders = false;
@@ -151,14 +155,28 @@ public class HttpRequestHdr {
 	}
 
 	private void parseFirstLine(String firstLine) {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
     		log.debug("browser request: " + firstLine);
+        }
+        if (!CharUtils.isAsciiAlphanumeric(firstLine.charAt(0))) {
+        	throw new IllegalArgumentException("Unrecognised header line (probably used HTTPS)");
+        }
 		StringTokenizer tz = new StringTokenizer(firstLine);
 		method = getToken(tz).toUpperCase();
 		url = getToken(tz);
-        if (log.isDebugEnabled())
-    		log.debug("parsed url: " + url);
+		if (url.toLowerCase().startsWith(HTTPConstants.PROTOCOL_HTTPS)) {
+			throw new IllegalArgumentException("Cannot handle https URLS: " + url);
+		}
 		version = getToken(tz);
+        if (log.isDebugEnabled()) {
+    		log.debug("parser input:  " + firstLine);
+    		log.debug("parsed method: " + method);
+    		log.debug("parsed url:    " + url);
+    		log.debug("parsed version:" + version);
+        }
+        if ("CONNECT".equalsIgnoreCase(method)){
+        	throw new IllegalArgumentException("Cannot handle CONNECT - probably used HTTPS");        	
+        }
 	}
 
     /*
@@ -298,7 +316,7 @@ public class HttpRequestHdr {
         if (log.isDebugEnabled())
     		log.debug("Proxy: setting server: " + sampler.getDomain());
 		sampler.setMethod(method);
-		log.debug("Proxy: method server: " + sampler.getMethod());
+		log.debug("Proxy: setting method: " + sampler.getMethod());
 		sampler.setPort(serverPort());
         if (log.isDebugEnabled())
             log.debug("Proxy: setting port: " + sampler.getPort());
