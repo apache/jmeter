@@ -83,7 +83,7 @@ public class XPathWrapper {
      * 
      * @param file
      * @param xpathString
-     * @return
+     * @return the next row from the file container
      */
     public static String getXPathString(String file, String xpathString) {
 		Map my = (Map) filePacks.get();

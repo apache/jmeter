@@ -130,7 +130,7 @@ public class Functor {
 	 * 
 	 * @param _invokee object on which to invoke the method
 	 * @param _methodName method name
-	 * @param types
+	 * @param _types
 	 */
 	public Functor(Object _invokee, String _methodName, Class[] _types) {
 		this(null, _invokee, _methodName, null, _types);
@@ -143,7 +143,7 @@ public class Functor {
      *
 	 * @param _clazz the class in which to find the method
 	 * @param _methodName method name
-	 * @param types
+	 * @param _types
 	 */
 	public Functor(Class _clazz, String _methodName, Class[] _types) {
 		this(_clazz, null, _methodName, null, _types);

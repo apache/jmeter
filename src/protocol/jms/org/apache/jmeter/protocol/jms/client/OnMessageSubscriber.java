@@ -93,7 +93,7 @@ public class OnMessageSubscriber {
 	 * @param useAuth
 	 * @param user
 	 * @param pwd
-	 * @return
+	 * @return the context or null
 	 */
 	public Context initJNDI(boolean useProps, String jndi, String url, String useAuth, String user, String pwd) {
 		if (useProps) {

@@ -32,12 +32,6 @@ import javax.naming.NamingException;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author pete
- * 
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
 public class ReceiveSubscriber implements Runnable {
 
 	private static Logger log = LoggingManager.getLoggerForClass();
@@ -89,7 +83,7 @@ public class ReceiveSubscriber implements Runnable {
 	 * @param useAuth
 	 * @param user
 	 * @param pwd
-	 * @return
+	 * @return  the JNDI initial context or null
 	 */
 	public Context initJNDI(boolean useProps, String jndi, String url, String useAuth, String user, String pwd) {
 		if (useProps) {
@@ -152,7 +146,6 @@ public class ReceiveSubscriber implements Runnable {
 	/**
 	 * Get the message as a string
 	 * 
-	 * @return
 	 */
 	public String getMessage() {
 		return this.buffer.toString();
@@ -161,7 +154,6 @@ public class ReceiveSubscriber implements Runnable {
 	/**
 	 * Get the message(s) as an array of byte[]
 	 * 
-	 * @return
 	 */
 	public byte[] getByteResult() {
 		if (this.buffer.length() > 0) {
@@ -207,18 +199,16 @@ public class ReceiveSubscriber implements Runnable {
 	/**
 	 * Increment the count and return the new value
 	 * 
-	 * @param count
-	 * @return
+	 * @param increment
 	 */
-	public synchronized int count(int count) {
-		counter += count;
+	public synchronized int count(int increment) {
+		counter += increment;
 		return counter;
 	}
 
 	/**
 	 * Reset will reset the counter and prepare for the next sample() call.
 	 * 
-	 * @return
 	 */
 	public synchronized int resetCount() {
 		counter = 0;

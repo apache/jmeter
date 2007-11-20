@@ -37,7 +37,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author pete
  *
  * This is a basic implementation that runs a single test method of
  * a JUnit test case. The current implementation will use the string
@@ -133,7 +132,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * get the string passed to the string constructor
-     * @return
      */
     public String getConstructorString()
     {
@@ -142,7 +140,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * Return the name of the method to test
-     * @return
      */
     public String getMethod(){
         return getPropertyAsString(METHOD);
@@ -159,7 +156,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * get the success message
-     * @return
      */
     public String getSuccess(){
         return getPropertyAsString(SUCCESS);
@@ -175,7 +171,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * get the success code defined by the user
-     * @return
      */
     public String getSuccessCode(){
         return getPropertyAsString(SUCCESSCODE);
@@ -192,7 +187,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * get the failure message
-     * @return
      */
     public String getFailure(){
         return getPropertyAsString(FAILURE);
@@ -208,7 +202,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * The failure code is used by other components
-     * @return
      */
     public String getFailureCode(){
         return getPropertyAsString(FAILURECODE);
@@ -224,7 +217,6 @@ public class JUnitSampler extends AbstractSampler {
 
     /**
      * return the descriptive error for the test
-     * @return
      */
     public String getError(){
         return getPropertyAsString(ERROR);
@@ -244,7 +236,6 @@ public class JUnitSampler extends AbstractSampler {
     /**
      * return the error code for the test method. it should
      * be an unique error code.
-     * @return
      */
     public String getErrorCode(){
         return getPropertyAsString(ERRORCODE);
@@ -261,7 +252,6 @@ public class JUnitSampler extends AbstractSampler {
     
     /**
      * return the comma separated string for the filter
-     * @return
      */
     public String getFilterString(){
         return getPropertyAsString(FILTER);
@@ -279,7 +269,6 @@ public class JUnitSampler extends AbstractSampler {
      * if the sample shouldn't call setup/teardown, the
      * method returns true. It's meant for onetimesetup
      * and onetimeteardown.
-     * @return
      */
     public boolean getDoNotSetUpTearDown(){
         return getPropertyAsBoolean(DOSETUP);
@@ -298,7 +287,6 @@ public class JUnitSampler extends AbstractSampler {
      * which means users have to explicitly set the sampler to
      * append the assert errors. Because of how junit works, there
      * should only be one error
-     * @return
      */
     public boolean getAppendError() {
         return getPropertyAsBoolean(APPEND_ERROR,false);
@@ -312,7 +300,6 @@ public class JUnitSampler extends AbstractSampler {
      * If append exception is not set, by default it is set to false.
      * Users have to explicitly set it to true to see the exceptions
      * in the result tree.
-     * @return
      */
     public boolean getAppendException() {
         return getPropertyAsBoolean(APPEND_EXCEPTION,false);
@@ -458,7 +445,6 @@ public class JUnitSampler extends AbstractSampler {
      * If the method is not able to create a new instance of the
      * class, it returns null and logs all the exceptions at
      * warning level.
-     * @return
      */
     public static Object getClassInstance(String className, String label){
         Object testclass = null;
@@ -531,7 +517,7 @@ public class JUnitSampler extends AbstractSampler {
      * 
      * @param clazz
      * @param method
-     * @return
+     * @return the method or null if an error occurred
      */
     public Method getMethod(Object clazz, String method){
         if (clazz != null && method != null){

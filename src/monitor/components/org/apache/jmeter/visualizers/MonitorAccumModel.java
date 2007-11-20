@@ -68,7 +68,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
 	/**
 	 * Added this method we that we can save the calculated stats.
 	 * 
-	 * @return
+	 * @return current sample
 	 */
 	public MonitorModel getLastSample() {
 		return this.CURRENT;
