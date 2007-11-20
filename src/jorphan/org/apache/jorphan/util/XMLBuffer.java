@@ -82,7 +82,7 @@ public class XMLBuffer{
 	 * 
 	 * @param tagname
 	 * @param content
-	 * @return
+	 * @return this
 	 */
 	public XMLBuffer tag(String tagname,String content){
 		startTag(tagname);
@@ -96,7 +96,7 @@ public class XMLBuffer{
 	 * 
 	 * @param tagname
 	 * @param content
-	 * @return
+	 * @return this
 	 */
 	public XMLBuffer tag(String tagname,StringBuffer content){
 		startTag(tagname);

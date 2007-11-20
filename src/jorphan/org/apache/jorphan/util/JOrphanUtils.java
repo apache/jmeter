@@ -33,8 +33,6 @@ import java.util.Vector;
 /**
  * This class contains frequently-used static utility methods.
  * 
- * author <a href="mailto://jsalvata@atg.com">Jordi Salvat i Alabart</a>
- *         Created 27th December 2002
  */
 public final class JOrphanUtils {
 
@@ -295,7 +293,7 @@ public final class JOrphanUtils {
     /**
      * Replace all patterns in a String
      * 
-     * @see String.replaceAll(regex,replacement) - JDK1.4 only
+     * @see String#replaceAll(String regex,String replacement) - JDK1.4 only
      * 
      * @param input - string to be transformed
      * @param pattern - pattern to replace

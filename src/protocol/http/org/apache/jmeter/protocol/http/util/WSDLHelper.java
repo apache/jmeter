@@ -100,7 +100,6 @@ public class WSDLHelper {
     /**
      * Return the protocol from the URL. this is needed, so that HTTPS works
      * as expected.
-     * @return
      */
     public String getProtocol() {
         return this.bindingURL.getProtocol();
@@ -108,7 +107,6 @@ public class WSDLHelper {
     
     /**
      * Return the host in the WSDL binding address
-     * @return
      */
     public String getBindingHost() {
         return this.bindingURL.getHost();
@@ -116,7 +114,6 @@ public class WSDLHelper {
     
     /**
      * Return the path in the WSDL for the binding address
-     * @return
      */
     public String getBindingPath() {
         return this.bindingURL.getPath();
@@ -124,7 +121,6 @@ public class WSDLHelper {
     
     /**
      * Return the port for the binding address
-     * @return
      */
     public int getBindingPort() {
         return this.bindingURL.getPort();

@@ -36,7 +36,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author pete
  * 
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
@@ -99,7 +98,6 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 	 * Create the OnMessageSubscriber client and set the sampler as the message
 	 * listener.
 	 * 
-	 * @return
 	 */
 	public synchronized OnMessageSubscriber initListenerClient() {
 		OnMessageSubscriber sub = (OnMessageSubscriber) ClientPool.get(this);
@@ -143,7 +141,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 	 * sample method will check which client it should use and call the
 	 * appropriate client specific sample method.
 	 * 
-	 * @return
+	 * @return the appropriate sample result
 	 */
 	public SampleResult sample() {
 		if (this.getClientChoice().equals(JMSSubscriberGui.receive_str)) {
@@ -156,7 +154,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 	/**
 	 * sample will block until messages are received
 	 * 
-	 * @return
+	 * @return the sample result
 	 */
 	public SampleResult sampleWithListener() {
 		SampleResult result = new SampleResult();
@@ -193,7 +191,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 	 * Sample method uses the ReceiveSubscriber client instead of onMessage
 	 * approach.
 	 * 
-	 * @return
+	 * @return the sample result
 	 */
 	public SampleResult sampleWithReceive() {
 		SampleResult result = new SampleResult();
@@ -252,11 +250,11 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 	/**
 	 * increment the count and return the new value.
 	 * 
-	 * @param count
-	 * @return
+	 * @param increment
+	 * @return the new value
 	 */
-	public synchronized int count(int count) {
-		this.counter += count;
+	public synchronized int count(int increment) {
+		this.counter += increment;
 		return this.counter;
 	}
 
@@ -281,7 +279,7 @@ public class SubscriberSampler extends BaseJMSSampler implements TestListener, M
 	/**
 	 * Return the client choice.
 	 * 
-	 * @return
+	 * @return the client choice
 	 */
 	public String getClientChoice() {
 		return getPropertyAsString(CLIENT_CHOICE);
