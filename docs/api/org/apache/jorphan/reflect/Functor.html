@@ -96,10 +96,38 @@ Class Functor</H2>
 <DT>public class <B>Functor</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>mstover</DD>
-</DL>
+Implements function call-backs.
+ 
+ Functors may be defined for instance objects or classes.
+ 
+ The method is created on first use, which allows the invokee (class or instance)
+ to be omitted from the constructor.
+ 
+ The class name takes precedence over the instance.
+ 
+ If a functor is created with a particular instance, then that is used for all future calls;
+ if an object is provided, it is ignored. 
+ This allows easy override of the table model behaviour.
+ 
+ If an argument list is provided in the constructor, then that is ignored in subsequent invoke() calls.
+ 
+ Usage:
+ f = new Functor("methodName")
+ o = f.invoke(object) - OR -
+ o = f.invoke(object,params)
+ 
+ f2 = new Functor(object,"methodName");
+ o = f2.invoke() - OR -
+ o = f2.invoke(params)
+ 
+ f3 = new Functor(class,"methodName");
+ o = f3.invoke(object) - will be ignored
+ o = f3.invoke() - OR -
+ o = f3.invoke(params)
+ o = f3.invoke(object,params) - object will be ignored
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -118,57 +146,77 @@ Class Functor</H2>
 <B>Constructor Summary</B></FONT></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String)">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Class, java.lang.String)">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;_clazz,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the invokee and a method name.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor from class and method name.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String, java.lang.Class[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;types)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Class, java.lang.String, java.lang.Class[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;_clazz,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;_types)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the invokee, method name, and argument class types.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the class, method name, and argument class types.
+
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String, java.lang.Object[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;args)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String)">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with an invokee, method name, and argument values.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the invokee and a method name.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String, java.lang.Object[], java.lang.Class[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;args,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;types)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String, java.lang.Class[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;_types)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with an invokee, method name, argument values, and
- argument class types.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the invokee, method name, and argument class types.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.String)">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.Object, java.lang.String, java.lang.Object[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;_args)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with just the method name.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with an invokee, method name, and argument values.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.String, java.lang.Class[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;types)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.String)">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the method name and argument class types.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with just the method name.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.String, java.lang.Object[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;args)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.String, java.lang.Class[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;_types)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor with the method name and argument class types.
+ 
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#Functor(java.lang.String, java.lang.Object[])">Functor</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;_args)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a functor from method name and arguments.
+  
+ </TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -186,7 +234,7 @@ Class Functor</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#checkMethod(java.lang.Object)">checkMethod</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>** for use by Unit test code only **</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -195,25 +243,7 @@ Class Functor</H2>
             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;c)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#getNewArray(int, java.lang.Class, java.lang.Class[])">getNewArray</A></B>(int&nbsp;i,
-            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;replacement,
-            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;orig)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#getPrimitive(java.lang.Class)">getPrimitive</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;t)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>** for use by Unit test code only **</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -221,7 +251,7 @@ Class Functor</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#invoke()">invoke</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invoke a Functor, which must have been created with either a class name or object.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -229,7 +259,7 @@ Class Functor</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#invoke(java.lang.Object)">invoke</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;p_invokee)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invoke the method on a given object.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -237,7 +267,9 @@ Class Functor</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/Functor.html#invoke(java.lang.Object[])">invoke</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;p_args)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invoke the method with the provided parameters.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -246,7 +278,9 @@ Class Functor</H2>
        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;p_args)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invoke the method on the invokee with the provided parameters.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -285,80 +319,111 @@ Class Functor</H2>
 <A NAME="Functor(java.lang.Object, java.lang.String)"><!-- --></A><H3>
 Functor</H3>
 <PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName)</PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName)</PRE>
 <DL>
 <DD>Create a functor with the invokee and a method name.
+ 
+ The invokee will be used in all future invoke calls.
 <P>
-<DT><B>Parameters:</B><DD><CODE>invokee</CODE> - <DD><CODE>methodName</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>_invokee</CODE> - object on which to invoke the method<DD><CODE>_methodName</CODE> - method name</DL>
+<HR>
+
+<A NAME="Functor(java.lang.Class, java.lang.String)"><!-- --></A><H3>
+Functor</H3>
+<PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;_clazz,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName)</PRE>
+<DL>
+<DD>Create a functor from class and method name.
+ This is useful for methods defined in interfaces.
+ 
+ The actual invokee must be provided in all invoke() calls,
+ and must be an instance of the class.
+<P>
+<DT><B>Parameters:</B><DD><CODE>_clazz</CODE> - class to be used<DD><CODE>_methodName</CODE> - method name</DL>
 <HR>
 
 <A NAME="Functor(java.lang.Object, java.lang.String, java.lang.Class[])"><!-- --></A><H3>
 Functor</H3>
 <PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;types)</PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;_types)</PRE>
 <DL>
 <DD>Create a functor with the invokee, method name, and argument class types.
+ 
+ The invokee will be ignored in any invoke() calls.
 <P>
-<DT><B>Parameters:</B><DD><CODE>invokee</CODE> - <DD><CODE>methodName</CODE> - <DD><CODE>types</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>_invokee</CODE> - object on which to invoke the method<DD><CODE>_methodName</CODE> - method name<DD><CODE>_types</CODE> - </DL>
+<HR>
+
+<A NAME="Functor(java.lang.Class, java.lang.String, java.lang.Class[])"><!-- --></A><H3>
+Functor</H3>
+<PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;_clazz,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;_types)</PRE>
+<DL>
+<DD>Create a functor with the class, method name, and argument class types.
+
+ Subsequent invoke() calls must provide the appropriate ivokee object.
+<P>
+<DT><B>Parameters:</B><DD><CODE>_clazz</CODE> - the class in which to find the method<DD><CODE>_methodName</CODE> - method name<DD><CODE>_types</CODE> - </DL>
 <HR>
 
 <A NAME="Functor(java.lang.String)"><!-- --></A><H3>
 Functor</H3>
 <PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName)</PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName)</PRE>
 <DL>
 <DD>Create a functor with just the method name.
+ 
+ The invokee and any parameters must be provided in all invoke() calls.
 <P>
-<DT><B>Parameters:</B><DD><CODE>methodName</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>_methodName</CODE> - method name</DL>
 <HR>
 
 <A NAME="Functor(java.lang.String, java.lang.Class[])"><!-- --></A><H3>
 Functor</H3>
 <PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;types)</PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;_types)</PRE>
 <DL>
 <DD>Create a functor with the method name and argument class types.
+ 
+ The invokee must be provided in all invoke() calls
 <P>
-<DT><B>Parameters:</B><DD><CODE>methodName</CODE> - <DD><CODE>types</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>_methodName</CODE> - method name<DD><CODE>_types</CODE> - parameter types</DL>
 <HR>
 
 <A NAME="Functor(java.lang.Object, java.lang.String, java.lang.Object[])"><!-- --></A><H3>
 Functor</H3>
 <PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;args)</PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;_args)</PRE>
 <DL>
 <DD>Create a functor with an invokee, method name, and argument values.
+ 
+ The invokee will be ignored in any invoke() calls.
 <P>
-<DT><B>Parameters:</B><DD><CODE>invokee</CODE> - <DD><CODE>methodName</CODE> - <DD><CODE>args</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>_invokee</CODE> - object on which to invoke the method<DD><CODE>_methodName</CODE> - method name<DD><CODE>_args</CODE> - arguments to be passed to the method</DL>
 <HR>
 
 <A NAME="Functor(java.lang.String, java.lang.Object[])"><!-- --></A><H3>
 Functor</H3>
 <PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;args)</PRE>
+public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;_methodName,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;_args)</PRE>
 <DL>
-</DL>
-<HR>
-
-<A NAME="Functor(java.lang.Object, java.lang.String, java.lang.Object[], java.lang.Class[])"><!-- --></A><H3>
-Functor</H3>
-<PRE>
-public <B>Functor</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;invokee,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;methodName,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;args,
-               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;types)</PRE>
-<DL>
-<DD>Create a functor with an invokee, method name, argument values, and
- argument class types.
+<DD>Create a functor from method name and arguments.
+  
+ The class will be determined from the first invoke call.
+ All invoke calls must include a target object;
+ which must be of the same type as the initial invokee.
 <P>
-<DT><B>Parameters:</B><DD><CODE>invokee</CODE> - <DD><CODE>methodName</CODE> - <DD><CODE>args</CODE> - <DD><CODE>types</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>_methodName</CODE> - method name<DD><CODE>_args</CODE> - </DL>
 
 <!-- ============ METHOD DETAIL ========== -->
 
@@ -375,8 +440,11 @@ invoke</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>invoke</B>()</PRE>
 <DL>
+<DD>Invoke a Functor, which must have been created with either a class name or object.
+<P>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>the object if any</DL>
 </DD>
 </DL>
 <HR>
@@ -386,8 +454,11 @@ invoke</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>invoke</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;p_invokee)</PRE>
 <DL>
+<DD>Invoke the method on a given object.
+<P>
 <DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>p_invokee</CODE> - - provides the object to call; ignored if the class or object were provided to the constructor
+<DT><B>Returns:</B><DD>the value</DL>
 </DD>
 </DL>
 <HR>
@@ -397,8 +468,13 @@ invoke</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>invoke</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;p_args)</PRE>
 <DL>
+<DD>Invoke the method with the provided parameters.
+ 
+ The invokee must have been provided in the constructor.
+<P>
 <DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>p_args</CODE> - parameters for the method
+<DT><B>Returns:</B><DD>the value</DL>
 </DD>
 </DL>
 <HR>
@@ -409,6 +485,13 @@ invoke</H3>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>invoke</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;p_invokee,
                      <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[]&nbsp;p_args)</PRE>
 <DL>
+<DD>Invoke the method on the invokee with the provided parameters.
+ 
+ The invokee must agree with the class (if any) provided at construction time.
+ 
+ If the invokee was provided at construction time, then this invokee will be ignored.
+ If actual arguments were provided at construction time, then arguments will be ignored.
+<P>
 <DD><DL>
 </DL>
 </DD>
@@ -420,8 +503,13 @@ checkMethod</H3>
 <PRE>
 public boolean <B>checkMethod</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee)</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>** for use by Unit test code only **</I>
+<P>
+<DD>Check if a read Functor method is valid.
+<P>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>true if method exists</DL>
 </DD>
 </DL>
 <HR>
@@ -432,8 +520,13 @@ checkMethod</H3>
 public boolean <B>checkMethod</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;_invokee,
                            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;c)</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>** for use by Unit test code only **</I>
+<P>
+<DD>Check if a write Functor method is valid.
+<P>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>true if method exists</DL>
 </DD>
 </DL>
 <HR>
@@ -442,30 +535,6 @@ public boolean <B>checkMethod</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/a
 toString</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>toString</B>()</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getPrimitive(java.lang.Class)"><!-- --></A><H3>
-getPrimitive</H3>
-<PRE>
-protected <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A> <B>getPrimitive</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;t)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getNewArray(int, java.lang.Class, java.lang.Class[])"><!-- --></A><H3>
-getNewArray</H3>
-<PRE>
-protected <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[] <B>getNewArray</B>(int&nbsp;i,
-                              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>&nbsp;replacement,
-                              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;orig)</PRE>
 <DL>
 <DD><DL>
 </DL>

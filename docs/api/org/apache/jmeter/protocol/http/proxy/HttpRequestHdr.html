@@ -164,27 +164,19 @@ The headers of the client HTTP request.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/proxy/HttpRequestHdr.html#getUrl()">getUrl</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the url string extracted from the first line of the client request.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;byte[]</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/proxy/HttpRequestHdr.html#parse(java.io.InputStream)">parse</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;in)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parses a http header from a stream.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/proxy/HttpRequestHdr.html#serverPort()">serverPort</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find the :PORT form http://server.ect:PORT/some/file.xxx</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/proxy/HttpRequestHdr.html#serverUrl()">serverUrl</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find the /some/file.xxxx form http://server.ect:PORT/some/file.xxx</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -306,30 +298,16 @@ public <A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSa
 </DL>
 <HR>
 
-<A NAME="serverPort()"><!-- --></A><H3>
-serverPort</H3>
+<A NAME="getUrl()"><!-- --></A><H3>
+getUrl</H3>
 <PRE>
-public int <B>serverPort</B>()</PRE>
+public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getUrl</B>()</PRE>
 <DL>
-<DD>Find the :PORT form http://server.ect:PORT/some/file.xxx
+<DD>Returns the url string extracted from the first line of the client request.
 <P>
 <DD><DL>
 
-<DT><B>Returns:</B><DD>server's port</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="serverUrl()"><!-- --></A><H3>
-serverUrl</H3>
-<PRE>
-public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>serverUrl</B>()</PRE>
-<DL>
-<DD>Find the /some/file.xxxx form http://server.ect:PORT/some/file.xxx
-<P>
-<DD><DL>
-
-<DT><B>Returns:</B><DD>the deproxied url</DL>
+<DT><B>Returns:</B><DD>the url</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

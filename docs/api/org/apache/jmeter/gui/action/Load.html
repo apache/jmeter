@@ -50,7 +50,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../../../../org/apache/jmeter/gui/action/KeyStrokes.html" title="class in org.apache.jmeter.gui.action"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../org/apache/jmeter/gui/action/LookAndFeelCommand.html" title="class in org.apache.jmeter.gui.action"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../org/apache/jmeter/gui/action/LoadRecentProject.html" title="class in org.apache.jmeter.gui.action"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../../../../index.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Load.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -90,6 +90,9 @@ Class Load</H2>
 </PRE>
 <DL>
 <DT><B>All Implemented Interfaces:</B> <DD><A HREF="../../../../../org/apache/jmeter/gui/action/Command.html" title="interface in org.apache.jmeter.gui.action">Command</A></DD>
+</DL>
+<DL>
+<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../../../../org/apache/jmeter/gui/action/LoadRecentProject.html" title="class in org.apache.jmeter.gui.action">LoadRecentProject</A></DD>
 </DL>
 <HR>
 <DL>
@@ -151,7 +154,7 @@ Handles the Open (load a new file) and Merge commands.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;boolean</CODE></FONT></TD>
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/action/Load.html#insertLoadedTree(int, org.apache.jorphan.collections.HashTree)">insertLoadedTree</A></B>(int&nbsp;id,
                  <A HREF="../../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree)</CODE>
 
@@ -160,7 +163,7 @@ Handles the Open (load a new file) and Merge commands.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;boolean</CODE></FONT></TD>
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/action/Load.html#insertLoadedTree(int, org.apache.jorphan.collections.HashTree, boolean)">insertLoadedTree</A></B>(int&nbsp;id,
                  <A HREF="../../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree,
                  boolean&nbsp;merging)</CODE>
@@ -242,11 +245,11 @@ public void <B>doAction</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/jav
 <A NAME="insertLoadedTree(int, org.apache.jorphan.collections.HashTree, boolean)"><!-- --></A><H3>
 insertLoadedTree</H3>
 <PRE>
-public boolean <B>insertLoadedTree</B>(int&nbsp;id,
-                                <A HREF="../../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree,
-                                boolean&nbsp;merging)
-                         throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A>,
-                                <A HREF="../../../../../org/apache/jmeter/exceptions/IllegalUserActionException.html" title="class in org.apache.jmeter.exceptions">IllegalUserActionException</A></PRE>
+public static boolean <B>insertLoadedTree</B>(int&nbsp;id,
+                                       <A HREF="../../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree,
+                                       boolean&nbsp;merging)
+                                throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A>,
+                                       <A HREF="../../../../../org/apache/jmeter/exceptions/IllegalUserActionException.html" title="class in org.apache.jmeter.exceptions">IllegalUserActionException</A></PRE>
 <DL>
 <DD>Returns a boolean indicating whether the loaded tree was a full test plan
 <P>
@@ -265,10 +268,10 @@ public boolean <B>insertLoadedTree</B>(int&nbsp;id,
 <A NAME="insertLoadedTree(int, org.apache.jorphan.collections.HashTree)"><!-- --></A><H3>
 insertLoadedTree</H3>
 <PRE>
-public boolean <B>insertLoadedTree</B>(int&nbsp;id,
-                                <A HREF="../../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree)
-                         throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A>,
-                                <A HREF="../../../../../org/apache/jmeter/exceptions/IllegalUserActionException.html" title="class in org.apache.jmeter.exceptions">IllegalUserActionException</A></PRE>
+public static boolean <B>insertLoadedTree</B>(int&nbsp;id,
+                                       <A HREF="../../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree)
+                                throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A>,
+                                       <A HREF="../../../../../org/apache/jmeter/exceptions/IllegalUserActionException.html" title="class in org.apache.jmeter.exceptions">IllegalUserActionException</A></PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -311,7 +314,7 @@ public boolean <B>insertLoadedTree</B>(int&nbsp;id,
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../../../../org/apache/jmeter/gui/action/KeyStrokes.html" title="class in org.apache.jmeter.gui.action"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../../../../org/apache/jmeter/gui/action/LookAndFeelCommand.html" title="class in org.apache.jmeter.gui.action"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../../../../org/apache/jmeter/gui/action/LoadRecentProject.html" title="class in org.apache.jmeter.gui.action"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../../../../index.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Load.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

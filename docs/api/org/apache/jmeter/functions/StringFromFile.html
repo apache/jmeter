@@ -203,7 +203,9 @@ StringFromFile Function to read a String from a text file.
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/StringFromFile.html#testEnded()">testEnded</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -211,7 +213,9 @@ StringFromFile Function to read a String from a text file.
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/functions/StringFromFile.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -220,7 +224,9 @@ StringFromFile Function to read a String from a text file.
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each time through a Thread Group's test script, an iteration event is
- fired for each thread.</TD>
+ fired for each thread.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -412,6 +418,8 @@ public void <B>testStarted</B>()</PRE>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Called just before the start of the test from the main engine thread.
  
+ This is before the test elements are cloned.
+ 
  Note that not all the test
  variables will have been set up at this point.
 <P>
@@ -432,6 +440,8 @@ public void <B>testStarted</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Called just before the start of the test from the main engine thread.
  
+ This is before the test elements are cloned.
+ 
  Note that not all the test
  variables will have been set up at this point.
 <P>
@@ -451,6 +461,8 @@ public void <B>testEnded</B>()</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Called once for all threads after the end of a test.
+ 
+ This will use the same element instances as at the start of the test.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html#testEnded()">testEnded</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -468,6 +480,8 @@ public void <B>testEnded</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/ja
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Called once for all threads after the end of a test.
+ 
+ This will use the same element instances as at the start of the test.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html#testEnded(java.lang.String)">testEnded</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -486,6 +500,9 @@ public void <B>testIterationStart</B>(<A HREF="../../../../org/apache/jmeter/eng
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Each time through a Thread Group's test script, an iteration event is
  fired for each thread.
+ 
+ This will be after the test elements have been cloned, so in general
+ the instance will not be the same as the ones the start/end methods call.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)">testIterationStart</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>

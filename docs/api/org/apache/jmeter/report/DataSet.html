@@ -95,16 +95,14 @@ Interface DataSet</H2>
 <DT>public interface <B>DataSet</B><DT>extends <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>Peter Lin
-
- DataSet extends Visualizer so that it can be used with ResultCollector.
+DataSet extends Visualizer so that it can be used with ResultCollector.
  Classes implementing the interface should create a new instance of
  ResultCollector and call setListener(Visualizer) passing itself.
  When the ResultCollector.loadExistingFile is called, it will pass
- the SampleResults.</DD>
-</DL>
+ the SampleResults.
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -188,7 +186,7 @@ Interface DataSet</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/report/DataSet.html#getStatistics(java.lang.String)">getStatistics</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;url)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return the SamplingStatCalculate for a specific URL.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return the SamplingStatCalculator for a specific URL.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -205,7 +203,7 @@ Interface DataSet</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/report/DataSet.html#getStats(java.util.List)">getStats</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A>&nbsp;urls)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convienance method for getting all the SamplingStatCalculator for
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convienance method for getting all the SamplingStatCalculators for
  a given URL.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -309,8 +307,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -329,8 +326,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -362,8 +358,7 @@ public long <B>getStartTimestamp</B>()</PRE>
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -395,8 +390,7 @@ public long <B>getEndTimestamp</B>()</PRE>
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -412,8 +406,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Date.html" tit
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -429,8 +422,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -446,8 +438,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -464,8 +455,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Set.html" titl
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -483,7 +473,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Set.html" titl
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>the set of statistics</DL>
 </DD>
 </DL>
 <HR>
@@ -493,14 +483,13 @@ getStatistics</H3>
 <PRE>
 public <A HREF="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html" title="class in org.apache.jmeter.visualizers">SamplingStatCalculator</A> <B>getStatistics</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;url)</PRE>
 <DL>
-<DD>Return the SamplingStatCalculate for a specific URL.
+<DD>Return the SamplingStatCalculator for a specific URL.
 <P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>url</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Parameters:</B><DD><CODE>url</CODE> - </DL>
 </DD>
 </DL>
 <HR>
@@ -510,15 +499,14 @@ getStats</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A> <B>getStats</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A>&nbsp;urls)</PRE>
 <DL>
-<DD>Convienance method for getting all the SamplingStatCalculator for
+<DD>Convienance method for getting all the SamplingStatCalculators for
  a given URL.
 <P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>urls</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Parameters:</B><DD><CODE>urls</CODE> - </DL>
 </DD>
 </DL>
 <HR>

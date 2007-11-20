@@ -209,14 +209,6 @@ This class contains the static utility methods used by JMeter.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getExtendedFrameTitle(java.lang.String)">getExtendedFrameTitle</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;fname)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Builds the string used as the main frame title</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Hashtable.html" title="class or interface in java.util">Hashtable</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/JMeterUtils.html#getHashtable(java.util.Properties, java.lang.String)">getHashtable</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html" title="class or interface in java.util">Properties</A>&nbsp;properties,
              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;name)</CODE>
@@ -831,7 +823,7 @@ public static org.apache.oro.text.regex.Pattern <B>getPattern</B>(<A HREF="http:
 <DT><B>Parameters:</B><DD><CODE>expression</CODE> - 
 <DT><B>Returns:</B><DD>compiled pattern
 <DT><B>Throws:</B>
-<DD><CODE>MalformedPatternException</CODE> - (Runtime)
+<DD><CODE>org.apache.oro.text.regex.MalformedPatternException</CODE> - (Runtime)
  This should be caught for expressions that may vary (e.g. user input)</DL>
 </DD>
 </DL>
@@ -852,7 +844,7 @@ public static org.apache.oro.text.regex.Pattern <B>getPattern</B>(<A HREF="http:
 <DT><B>Parameters:</B><DD><CODE>expression</CODE> - RE<DD><CODE>options</CODE> - e.g. READ_ONLY_MASK
 <DT><B>Returns:</B><DD>compiled pattern
 <DT><B>Throws:</B>
-<DD><CODE>MalformedPatternException</CODE> - (Runtime)
+<DD><CODE>org.apache.oro.text.regex.MalformedPatternException</CODE> - (Runtime)
  This should be caught for expressions that may vary (e.g. user input)</DL>
 </DD>
 </DL>
@@ -1616,24 +1608,6 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.
 <DD><DL>
 
 <DT><B>Returns:</B><DD>the JMeter copyright string</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getExtendedFrameTitle(java.lang.String)"><!-- --></A><H3>
-getExtendedFrameTitle</H3>
-<PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getExtendedFrameTitle</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;fname)</PRE>
-<DL>
-<DD>Builds the string used as the main frame title
-<P>
-<DD><DL>
-</DL>
-</DD>
-<DD><DL>
-<DT><B>Parameters:</B><DD><CODE>fname</CODE> - the fully qualified name of the current working file
-<DT><B>Returns:</B><DD>a string of the form "FileName (<full path>/FileName) - Apache
-         JMeter". If fname is null, returns "Apache JMeter".</DL>
 </DD>
 </DL>
 <HR>

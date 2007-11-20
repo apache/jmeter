@@ -175,6 +175,15 @@ Class to calculate various items that don't require all previous results to be s
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;double</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/Calculator.html#getAvgPageBytes()">getAvgPageBytes</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculates the average page size, which means divide the bytes by number
+ of samples.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;double</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/Calculator.html#getBytesPerSecond()">getBytesPerSecond</A></B>()</CODE>
 
 <BR>
@@ -251,8 +260,7 @@ Class to calculate various items that don't require all previous results to be s
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/Calculator.html#getPageSize()">getPageSize</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculates the average page size, which means divide the bytes by number
- of samples.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>use getAvgPageBytes() instead.</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -499,12 +507,31 @@ getPageSize</H3>
 <PRE>
 public double <B>getPageSize</B>()</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>use getAvgPageBytes() instead.</I>
+<P>
+<DD>calculates the average page size, which means divide the bytes by number
+ of samples.
+ 
+ This is an ambiguous name, so:
+<P>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>average page size</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getAvgPageBytes()"><!-- --></A><H3>
+getAvgPageBytes</H3>
+<PRE>
+public double <B>getAvgPageBytes</B>()</PRE>
+<DL>
 <DD>calculates the average page size, which means divide the bytes by number
  of samples.
 <P>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>average page size in bytes</DL>
 </DD>
 </DL>
 <HR>
@@ -518,7 +545,7 @@ public double <B>getBytesPerSecond</B>()</PRE>
 <P>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>throughput in bytes/second</DL>
 </DD>
 </DL>
 <HR>
@@ -532,7 +559,7 @@ public double <B>getKBPerSecond</B>()</PRE>
 <P>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>Throughput in kilobytes / second</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

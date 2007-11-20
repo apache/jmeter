@@ -98,14 +98,14 @@ Class JUnitSampler</H2>
 <DT>public class <B>JUnitSampler</B><DT>extends <A HREF="../../../../../../org/apache/jmeter/samplers/AbstractSampler.html" title="class in org.apache.jmeter.samplers">AbstractSampler</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>pete
-
- This is a basic implementation that runs a single test method of
+This is a basic implementation that runs a single test method of
  a JUnit test case. The current implementation will use the string
  constructor first. If the test class does not declare a string
- constructor, the sampler will try empty constructor.</DD>
+ constructor, the sampler will try empty constructor.
+<P>
+
+<P>
+<DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../../../serialized-form.html#org.apache.jmeter.protocol.java.sampler.JUnitSampler">Serialized Form</A></DL>
 <HR>
 
@@ -289,7 +289,7 @@ Class JUnitSampler</H2>
 <TD><B>Fields inherited from interface org.apache.jmeter.testelement.<A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#ENABLED">ENABLED</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#GUI_CLASS">GUI_CLASS</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#NAME">NAME</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#TEST_CLASS">TEST_CLASS</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#COMMENTS">COMMENTS</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#ENABLED">ENABLED</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#GUI_CLASS">GUI_CLASS</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#NAME">NAME</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#TEST_CLASS">TEST_CLASS</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -586,7 +586,7 @@ Class JUnitSampler</H2>
 <TD><B>Methods inherited from class org.apache.jmeter.testelement.<A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#nextIsNull()">nextIsNull</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#nextIsNull()">nextIsNull</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -604,7 +604,7 @@ Class JUnitSampler</H2>
 <TD><B>Methods inherited from interface org.apache.jmeter.testelement.<A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#clear()">clear</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#clone()">clone</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getName()">getName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#clear()">clear</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#clone()">clone</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getComment()">getComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getName()">getName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/TestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -911,8 +911,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>get the string passed to the string constructor
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -925,8 +924,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>Return the name of the method to test
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -953,8 +951,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>get the success message
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -980,8 +977,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>get the success code defined by the user
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1008,8 +1004,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>get the failure message
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1035,8 +1030,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>The failure code is used by other components
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1062,8 +1056,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>return the descriptive error for the test
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1093,8 +1086,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
  be an unique error code.
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1121,8 +1113,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD>return the comma separated string for the filter
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1150,8 +1141,7 @@ public boolean <B>getDoNotSetUpTearDown</B>()</PRE>
  and onetimeteardown.
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1180,8 +1170,7 @@ public boolean <B>getAppendError</B>()</PRE>
  should only be one error
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1207,8 +1196,7 @@ public boolean <B>getAppendException</B>()</PRE>
  in the result tree.
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1250,8 +1238,7 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.
  warning level.
 <P>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -1264,7 +1251,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/Method
 <DL>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>clazz</CODE> - <DD><CODE>method</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>the method or null if an error occurred</DL>
 </DD>
 </DL>
 <HR>

@@ -152,10 +152,13 @@ Package org.apache.jmeter.control
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control">ThroughputController</A></B></TD>
-<TD>This class represents a controller that can controll the number of times that
+<TD>This class represents a controller that can control the number of times that
  it is executed, either by the total number of times the user wants the
  controller executed (BYNUMBER) or by the percentage of time it is called
- (BYPERCENT)</TD>
+ (BYPERCENT)
+ 
+ The current implementation executes the first N samples (BYNUMBER)
+ or the last N% of samples (BYPERCENT).</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/TransactionController.html" title="class in org.apache.jmeter.control">TransactionController</A></B></TD>

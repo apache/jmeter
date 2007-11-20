@@ -92,10 +92,11 @@ Interface TestListener</H2>
 <DT>public interface <B>TestListener</B></DL>
 
 <P>
-<DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 516032 $ on $Date: 2007-03-08 13:14:40 +0000 (Thu, 08 Mar 2007) $</DD>
-</DL>
+TestListener interface is used for methods that are called at different
+ stages of each test.
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -122,7 +123,9 @@ Interface TestListener</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html#testEnded()">testEnded</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -130,7 +133,9 @@ Interface TestListener</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -139,7 +144,9 @@ Interface TestListener</H2>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each time through a Thread Group's test script, an iteration event is
- fired for each thread.</TD>
+ fired for each thread.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -188,6 +195,8 @@ public void <B>testStarted</B>()</PRE>
 <DL>
 <DD>Called just before the start of the test from the main engine thread.
  
+ This is before the test elements are cloned.
+ 
  Note that not all the test
  variables will have been set up at this point.
 <P>
@@ -204,6 +213,8 @@ public void <B>testStarted</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/
 <DL>
 <DD>Called just before the start of the test from the main engine thread.
  
+ This is before the test elements are cloned.
+ 
  Note that not all the test
  variables will have been set up at this point.
 <P>
@@ -219,6 +230,8 @@ testEnded</H3>
 public void <B>testEnded</B>()</PRE>
 <DL>
 <DD>Called once for all threads after the end of a test.
+ 
+ This will use the same element instances as at the start of the test.
 <P>
 <DD><DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/engine/StandardJMeterEngine.html#stopTest()"><CODE>StandardJMeterEngine.stopTest()</CODE></A></DL>
@@ -232,6 +245,8 @@ testEnded</H3>
 public void <B>testEnded</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</PRE>
 <DL>
 <DD>Called once for all threads after the end of a test.
+ 
+ This will use the same element instances as at the start of the test.
 <P>
 <DD><DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/engine/StandardJMeterEngine.html#stopTest()"><CODE>StandardJMeterEngine.stopTest()</CODE></A></DL>
@@ -246,6 +261,9 @@ public void <B>testIterationStart</B>(<A HREF="../../../../org/apache/jmeter/eng
 <DL>
 <DD>Each time through a Thread Group's test script, an iteration event is
  fired for each thread.
+ 
+ This will be after the test elements have been cloned, so in general
+ the instance will not be the same as the ones the start/end methods call.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>event</CODE> - </DL>

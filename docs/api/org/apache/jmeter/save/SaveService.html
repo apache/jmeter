@@ -93,8 +93,8 @@ Class SaveService</H2>
 <DT>public class <B>SaveService</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-author Mike Stover
- author <a href="mailto:kcassell&#X0040;apache.org">Keith Cassell </a>
+Handles setting up XStream serialisation.
+ The class reads alias definitions from saveservice.properties.
 <P>
 
 <P>
@@ -111,6 +111,14 @@ author Mike Stover
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TD COLSPAN=2><FONT SIZE="+2">
 <B>Field Summary</B></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#SAMPLE_EVENT_OBJECT">SAMPLE_EVENT_OBJECT</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -181,6 +189,14 @@ author Mike Stover
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#getFileEncoding(java.lang.String)">getFileEncoding</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;dflt)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the file Encoding specified in saveservice.properties or the default</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#getPropertiesVersion()">getPropertiesVersion</A></B>()</CODE>
 
 <BR>
@@ -228,15 +244,6 @@ author Mike Stover
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#loadElement(java.io.Reader)">loadElement</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Reader.html" title="class or interface in java.io">Reader</A>&nbsp;in)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use loadElement(InputStream in) instead, since that takes
- the fileEncoding property of SaveService into consideration</I></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html" title="class or interface in java.util">Properties</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#loadProperties()">loadProperties</A></B>()</CODE>
 
@@ -271,40 +278,11 @@ author Mike Stover
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#saveElement(java.lang.Object, java.io.Writer)">saveElement</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;el,
-            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use saveElement(Object el, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#saveSampleResult(org.apache.jmeter.samplers.SampleResult, java.io.OutputStream)">saveSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res,
-                 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/OutputStream.html" title="class or interface in java.io">OutputStream</A>&nbsp;out)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#saveSampleResult(org.apache.jmeter.samplers.SampleResult, java.io.Writer)">saveSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res,
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#saveSampleResult(org.apache.jmeter.samplers.SampleEvent, java.io.Writer)">saveSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;evt,
                  <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use saveSampleResult(SampleResult res, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#saveTestElement(org.apache.jmeter.testelement.TestElement, java.io.OutputStream)">saveTestElement</A></B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;elem,
-                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/OutputStream.html" title="class or interface in java.io">OutputStream</A>&nbsp;out)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save a sampleResult to an XML output file using XStream.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -313,8 +291,7 @@ author Mike Stover
                 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use saveTestElement(TestElement elem, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I></TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -324,16 +301,6 @@ author Mike Stover
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/SaveService.html#saveTree(org.apache.jorphan.collections.HashTree, java.io.Writer)">saveTree</A></B>(<A HREF="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree,
-         <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use saveTree(HashTree tree, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -357,6 +324,16 @@ author Mike Stover
 <B>Field Detail</B></FONT></TD>
 </TR>
 </TABLE>
+
+<A NAME="SAMPLE_EVENT_OBJECT"><!-- --></A><H3>
+SAMPLE_EVENT_OBJECT</H3>
+<PRE>
+public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>SAMPLE_EVENT_OBJECT</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../constant-values.html#org.apache.jmeter.save.SaveService.SAMPLE_EVENT_OBJECT">Constant Field Values</A></DL>
+</DL>
+<HR>
 
 <A NAME="TESTPLAN_FORMAT"><!-- --></A><H3>
 TESTPLAN_FORMAT</H3>
@@ -445,30 +422,12 @@ saveTree</H3>
 <PRE>
 public static void <B>saveTree</B>(<A HREF="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree,
                             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/OutputStream.html" title="class or interface in java.io">OutputStream</A>&nbsp;out)
-                     throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
+                     throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
 <DL>
 <DD><DL>
 
 <DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="saveTree(org.apache.jorphan.collections.HashTree, java.io.Writer)"><!-- --></A><H3>
-saveTree</H3>
-<PRE>
-public static void <B>saveTree</B>(<A HREF="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</A>&nbsp;tree,
-                            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)
-                     throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
-<DL>
-<DD><B>Deprecated.</B>&nbsp;<I>Use saveTree(HashTree tree, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>
-<P>
-<DD><DL>
-
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
 </DL>
 <HR>
@@ -478,30 +437,12 @@ saveElement</H3>
 <PRE>
 public static void <B>saveElement</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;el,
                                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/OutputStream.html" title="class or interface in java.io">OutputStream</A>&nbsp;out)
-                        throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
+                        throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
 <DL>
 <DD><DL>
 
 <DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="saveElement(java.lang.Object, java.io.Writer)"><!-- --></A><H3>
-saveElement</H3>
-<PRE>
-public static void <B>saveElement</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>&nbsp;el,
-                               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)
-                        throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
-<DL>
-<DD><B>Deprecated.</B>&nbsp;<I>Use saveElement(Object el, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>
-<P>
-<DD><DL>
-
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
 </DL>
 <HR>
@@ -510,77 +451,29 @@ public static void <B>saveElement</B>(<A HREF="http://java.sun.com/j2se/1.4.2/do
 loadElement</H3>
 <PRE>
 public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>loadElement</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;in)
-                          throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
+                          throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
 <DL>
 <DD><DL>
 
 <DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
 </DL>
 <HR>
 
-<A NAME="loadElement(java.io.Reader)"><!-- --></A><H3>
-loadElement</H3>
-<PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>loadElement</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Reader.html" title="class or interface in java.io">Reader</A>&nbsp;in)
-                          throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
-<DL>
-<DD><B>Deprecated.</B>&nbsp;<I>Use loadElement(InputStream in) instead, since that takes
- the fileEncoding property of SaveService into consideration</I>
-<P>
-<DD><DL>
-
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="saveSampleResult(org.apache.jmeter.samplers.SampleResult, java.io.OutputStream)"><!-- --></A><H3>
+<A NAME="saveSampleResult(org.apache.jmeter.samplers.SampleEvent, java.io.Writer)"><!-- --></A><H3>
 saveSampleResult</H3>
 <PRE>
-public static void <B>saveSampleResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res,
-                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/OutputStream.html" title="class or interface in java.io">OutputStream</A>&nbsp;out)
-                             throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
-<DL>
-<DD><DL>
-
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="saveSampleResult(org.apache.jmeter.samplers.SampleResult, java.io.Writer)"><!-- --></A><H3>
-saveSampleResult</H3>
-<PRE>
-public static void <B>saveSampleResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res,
+public static void <B>saveSampleResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;evt,
                                     <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)
-                             throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
+                             throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
 <DL>
-<DD><B>Deprecated.</B>&nbsp;<I>Use saveSampleResult(SampleResult res, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>
+<DD>Save a sampleResult to an XML output file using XStream.
 <P>
 <DD><DL>
-
+<DT><B>Parameters:</B><DD><CODE>evt</CODE> - sampleResult wrapped in a sampleEvent<DD><CODE>writer</CODE> - output stream which must be created using <A HREF="../../../../org/apache/jmeter/save/SaveService.html#getFileEncoding(java.lang.String)"><CODE>getFileEncoding(String)</CODE></A>
 <DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="saveTestElement(org.apache.jmeter.testelement.TestElement, java.io.OutputStream)"><!-- --></A><H3>
-saveTestElement</H3>
-<PRE>
-public static void <B>saveTestElement</B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;elem,
-                                   <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/OutputStream.html" title="class or interface in java.io">OutputStream</A>&nbsp;out)
-                            throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
-<DL>
-<DD><DL>
-
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
 </DL>
 <HR>
@@ -590,15 +483,12 @@ saveTestElement</H3>
 <PRE>
 public static void <B>saveTestElement</B>(<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;elem,
                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Writer.html" title="class or interface in java.io">Writer</A>&nbsp;writer)
-                            throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></PRE>
+                            throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
 <DL>
-<DD><B>Deprecated.</B>&nbsp;<I>Use saveTestElement(TestElement elem, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>
-<P>
 <DD><DL>
-
+<DT><B>Parameters:</B><DD><CODE>elem</CODE> - test element<DD><CODE>writer</CODE> - output stream which must be created using <A HREF="../../../../org/apache/jmeter/save/SaveService.html#getFileEncoding(java.lang.String)"><CODE>getFileEncoding(String)</CODE></A>
 <DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
 </DL>
 <HR>
@@ -627,6 +517,20 @@ public static <A HREF="../../../../org/apache/jorphan/collections/HashTree.html"
 
 <DT><B>Throws:</B>
 <DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Exception.html" title="class or interface in java.lang">Exception</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getFileEncoding(java.lang.String)"><!-- --></A><H3>
+getFileEncoding</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getFileEncoding</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;dflt)</PRE>
+<DL>
+<DD>Returns the file Encoding specified in saveservice.properties or the default
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>dflt</CODE> - value to return if file encoding was not provided
+<DT><B>Returns:</B><DD>file encoding or default</DL>
 </DD>
 </DL>
 <HR>

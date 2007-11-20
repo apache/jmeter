@@ -177,17 +177,15 @@ makeDocumentBuilder</H3>
 public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/DocumentBuilder.html" title="class or interface in javax.xml.parsers">DocumentBuilder</A> <B>makeDocumentBuilder</B>(boolean&nbsp;validate,
                                                   boolean&nbsp;whitespace,
                                                   boolean&nbsp;namespace)
-                                           throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A>,
-                                                  <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></PRE>
+                                           throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></PRE>
 <DL>
 <DD>Create a DocumentBuilder using the makeDocumentFactory func.
 <P>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>validate</CODE> - <DD><CODE>whitespace</CODE> - <DD><CODE>namespace</CODE> - 
+<DT><B>Parameters:</B><DD><CODE>validate</CODE> - should the parser validate documents?<DD><CODE>whitespace</CODE> - should the parser eliminate whitespace in element content?<DD><CODE>namespace</CODE> - should the parser be namespace aware?
 <DT><B>Returns:</B><DD>document builder
 <DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></CODE>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></CODE></DL>
 </DD>
 </DL>
 <HR>
@@ -207,7 +205,7 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Docum
 <DD>Utility function to get new Document
 <P>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>stream</CODE> - Document Input stream<DD><CODE>validate</CODE> - Validate Document<DD><CODE>whitespace</CODE> - Element Whitespace<DD><CODE>namespace</CODE> - Is Namespace aware.<DD><CODE>tolerant</CODE> - Is tolerant
+<DT><B>Parameters:</B><DD><CODE>stream</CODE> - Document Input stream<DD><CODE>validate</CODE> - Validate Document<DD><CODE>whitespace</CODE> - Element Whitespace<DD><CODE>namespace</CODE> - Is Namespace aware.<DD><CODE>tolerant</CODE> - Is tolerant - i.e. use the Tidy parser
 <DT><B>Returns:</B><DD>document
 <DT><B>Throws:</B>
 <DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></CODE>

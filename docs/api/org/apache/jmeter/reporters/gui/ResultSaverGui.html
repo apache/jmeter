@@ -95,11 +95,11 @@ Class ResultSaverGui</H2>
                           <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by"><B>org.apache.jmeter.reporters.gui.ResultSaverGui</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="../../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A></DD>
 </DL>
 <HR>
 <DL>
-<DT>public class <B>ResultSaverGui</B><DT>extends <A HREF="../../../../../org/apache/jmeter/processor/gui/AbstractPostProcessorGui.html" title="class in org.apache.jmeter.processor.gui">AbstractPostProcessorGui</A></DL>
+<DT>public class <B>ResultSaverGui</B><DT>extends <A HREF="../../../../../org/apache/jmeter/processor/gui/AbstractPostProcessorGui.html" title="class in org.apache.jmeter.processor.gui">AbstractPostProcessorGui</A><DT>implements <A HREF="../../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></DL>
 
 <P>
 Create a ResultSaver test element, which saves the sample information in set
@@ -227,6 +227,14 @@ Create a ResultSaver test element, which saves the sample information in set
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TD COLSPAN=2><FONT SIZE="+2">
 <B>Method Summary</B></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/reporters/gui/ResultSaverGui.html#clearData()">clearData</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clears the current data of the object.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -383,6 +391,9 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
  getStaticLabel() may be overridden instead.
 <P>
 <DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getLabelResource()">getLabelResource</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></DL>
+</DD>
+<DD><DL>
 
 <DT><B>Returns:</B><DD>the resource name<DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getStaticLabel()"><CODE>JMeterGUIComponent.getStaticLabel()</CODE></A></DL>
 </DD>
@@ -427,6 +438,9 @@ public <A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" t
  when new test elements are created.
 <P>
 <DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#createTestElement()">createTestElement</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></DL>
+</DD>
+<DD><DL>
 
 <DT><B>Returns:</B><DD>the Test Element object that the GUI component represents.<DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#createTestElement()"><CODE>JMeterGUIComponent.createTestElement()</CODE></A></DL>
 </DD>
@@ -440,6 +454,9 @@ public void <B>modifyTestElement</B>(<A HREF="../../../../../org/apache/jmeter/t
 <DL>
 <DD>Modifies a given TestElement to mirror the data in the gui components.
 <P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></DL>
+</DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>te</CODE> - the TestElement to modify<DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)"><CODE>JMeterGUIComponent.modifyTestElement(TestElement)</CODE></A></DL>
 </DD>
@@ -455,6 +472,23 @@ public void <B>clearGui</B>()</PRE>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#clearGui()">clearGui</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#clearGui()">clearGui</A></CODE> in class <CODE><A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="clearData()"><!-- --></A><H3>
+clearData</H3>
+<PRE>
+public void <B>clearData</B>()</PRE>
+<DL>
+<DD><B>Description copied from interface: <CODE><A HREF="../../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></CODE></B></DD>
+<DD>Clears the current data of the object.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/samplers/Clearable.html#clearData()">clearData</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>

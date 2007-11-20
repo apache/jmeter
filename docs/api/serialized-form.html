@@ -571,6 +571,9 @@ duration</H3>
 </TABLE>
 
 <P>
+<B>serialVersionUID:&nbsp;</B>1l
+
+<P>
 <A NAME="serializedForm"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
@@ -1588,24 +1591,6 @@ int <B>loopCount</B></PRE>
 </TABLE>
 
 <P>
-<A NAME="serialized_methods"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TD COLSPAN=1><FONT SIZE="+2">
-<B>Serialization Methods</B></FONT></TD>
-</TR>
-</TABLE>
-
-<P>
-
-<A NAME="readObject(java.io.ObjectInputStream)"><!-- --></A><H3>
-readObject</H3>
-<PRE>
-private void <B>readObject</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/ObjectInputStream.html" title="class or interface in java.io">ObjectInputStream</A>&nbsp;in)
-                 throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
-                        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/ClassNotFoundException.html" title="class or interface in java.lang">ClassNotFoundException</A></PRE>
-<DL>
-</DL>
 <A NAME="serializedForm"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
@@ -1613,26 +1598,6 @@ private void <B>readObject</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/
 <B>Serialized Fields</B></FONT></TD>
 </TR>
 </TABLE>
-
-<H3>
-globalNumExecutions</H3>
-<PRE>
-int <B>globalNumExecutions</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-globalIteration</H3>
-<PRE>
-int <B>globalIteration</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
 
 <H3>
 numExecutions</H3>
@@ -1783,6 +1748,32 @@ int <B>noFailingSamples</B></PRE>
 </TABLE>
 
 <P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+testMode</H3>
+<PRE>
+boolean <B>testMode</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+testModeResult</H3>
+<PRE>
+boolean <B>testModeResult</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
 
 <P>
 <HR SIZE="4" NOSHADE>
@@ -1898,6 +1889,16 @@ theCondition</H3>
 <DD>A field allowing the user to specify the number of times the controller
  should loop.
 <P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+evaluateAll</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>evaluateAll</B></PRE>
+<DL>
 <DL>
 </DL>
 </DL>
@@ -2569,6 +2570,16 @@ backingEngine</H3>
 <DL>
 </DL>
 </DL>
+<HR>
+
+<H3>
+hostName</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>hostName</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
 
 <P>
 <A NAME="org.apache.jmeter.engine.StandardJMeterEngine"><!-- --></A>
@@ -2580,7 +2591,7 @@ backingEngine</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>221l
+<B>serialVersionUID:&nbsp;</B>231l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -2703,6 +2714,66 @@ host</H3>
 <B>Class <A HREF="org/apache/jmeter/functions/CSVRead.html" title="class in org.apache.jmeter.functions">org.apache.jmeter.functions.CSVRead</A> extends <A HREF="org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A> implements Serializable</B></FONT></TD>
 </TR>
 </TABLE>
+
+<P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+values</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[] <B>values</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+
+<P>
+<A NAME="org.apache.jmeter.functions.EvalFunction"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/functions/EvalFunction.html" title="class in org.apache.jmeter.functions">org.apache.jmeter.functions.EvalFunction</A> extends <A HREF="org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+<B>serialVersionUID:&nbsp;</B>1l
+
+<P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+values</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A>[] <B>values</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+
+<P>
+<A NAME="org.apache.jmeter.functions.EvalVarFunction"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/functions/EvalVarFunction.html" title="class in org.apache.jmeter.functions">org.apache.jmeter.functions.EvalVarFunction</A> extends <A HREF="org/apache/jmeter/functions/AbstractFunction.html" title="class in org.apache.jmeter.functions">AbstractFunction</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+<B>serialVersionUID:&nbsp;</B>1l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -4362,9 +4433,39 @@ file_save_as</H3>
 <HR>
 
 <H3>
+file_selection_as</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenuItem.html" title="class or interface in javax.swing">JMenuItem</A> <B>file_selection_as</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+file_revert</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenuItem.html" title="class or interface in javax.swing">JMenuItem</A> <B>file_revert</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
 file_load</H3>
 <PRE>
 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenuItem.html" title="class or interface in javax.swing">JMenuItem</A> <B>file_load</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+file_load_recent_files</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A> <B>file_load_recent_files</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -5382,7 +5483,7 @@ boolean <B>successMsgSent</B></PRE>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>23l
+<B>serialVersionUID:&nbsp;</B>231l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -6148,6 +6249,26 @@ int <B>bytes</B></PRE>
 <HR>
 
 <H3>
+groupThreads</H3>
+<PRE>
+int <B>groupThreads</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+allThreads</H3>
+<PRE>
+int <B>allThreads</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
 location</H3>
 <PRE>
 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/net/URL.html" title="class or interface in java.net">URL</A> <B>location</B></PRE>
@@ -6166,7 +6287,7 @@ location</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>5l
+<B>serialVersionUID:&nbsp;</B>6l
 
 <P>
 <A NAME="serialized_methods"><!-- --></A>
@@ -6425,9 +6546,29 @@ boolean <B>fileName</B></PRE>
 <HR>
 
 <H3>
+hostname</H3>
+<PRE>
+boolean <B>hostname</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
 threadCounts</H3>
 <PRE>
 boolean <B>threadCounts</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+sampleCount</H3>
+<PRE>
+boolean <B>sampleCount</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -6498,6 +6639,9 @@ listener</H3>
 <B>Class <A HREF="org/apache/jmeter/samplers/StatisticalSampleResult.html" title="class in org.apache.jmeter.samplers">org.apache.jmeter.samplers.StatisticalSampleResult</A> extends <A HREF="org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A> implements Serializable</B></FONT></TD>
 </TR>
 </TABLE>
+
+<P>
+<B>serialVersionUID:&nbsp;</B>24l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -7074,6 +7218,23 @@ int <B>shape_counter</B></PRE>
 </TABLE>
 
 <P>
+<A NAME="serialized_methods"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialization Methods</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+
+<A NAME="readResolve()"><!-- --></A><H3>
+readResolve</H3>
+<PRE>
+private <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>readResolve</B>()
+                    throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/ObjectStreamException.html" title="class or interface in java.io">ObjectStreamException</A></PRE>
+<DL>
+</DL>
 
 <P>
 <A NAME="org.apache.jmeter.testelement.VariablesCollection"><!-- --></A>
@@ -7746,17 +7907,6 @@ boolean <B>onErrorStopThread</B></PRE>
 </DL>
 
 <P>
-<A NAME="org.apache.jmeter.threads.ReflectionThreadGroup"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
-<TD COLSPAN=2><FONT SIZE="+2">
-<B>Class <A HREF="org/apache/jmeter/threads/ReflectionThreadGroup.html" title="class in org.apache.jmeter.threads">org.apache.jmeter.threads.ReflectionThreadGroup</A> extends <A HREF="org/apache/jmeter/threads/ThreadGroup.html" title="class in org.apache.jmeter.threads">ThreadGroup</A> implements Serializable</B></FONT></TD>
-</TR>
-</TABLE>
-
-<P>
-
-<P>
 <A NAME="org.apache.jmeter.threads.ThreadGroup"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
@@ -7980,7 +8130,7 @@ stopTestBox</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>2l
+<B>serialVersionUID:&nbsp;</B>4l
 
 <P>
 
@@ -8323,7 +8473,7 @@ rangeField</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>3l
+<B>serialVersionUID:&nbsp;</B>4l
 
 <P>
 <A NAME="serialized_methods"><!-- --></A>
@@ -8349,6 +8499,26 @@ private <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" 
 <B>Serialized Fields</B></FONT></TD>
 </TR>
 </TABLE>
+
+<H3>
+parameters</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>parameters</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+filename</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>filename</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
 
 <H3>
 script</H3>
@@ -8540,7 +8710,7 @@ int <B>height</B></PRE>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>2l
+<B>serialVersionUID:&nbsp;</B>4l
 
 <P>
 
@@ -9848,6 +10018,80 @@ plaintext</H3>
 </TABLE>
 
 <P>
+
+<P>
+<A NAME="org.apache.jmeter.visualizers.PropertyControlGui"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/visualizers/PropertyControlGui.html" title="class in org.apache.jmeter.visualizers">org.apache.jmeter.visualizers.PropertyControlGui</A> extends <A HREF="org/apache/jmeter/config/gui/AbstractConfigGui.html" title="class in org.apache.jmeter.config.gui">AbstractConfigGui</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+<B>serialVersionUID:&nbsp;</B>1l
+
+<P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+systemButton</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>systemButton</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+jmeterButton</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>jmeterButton</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+tableLabel</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JLabel.html" title="class or interface in javax.swing">JLabel</A> <B>tableLabel</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+add</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A> <B>add</B></PRE>
+<DL>
+<DD>A button for adding new arguments to the table.
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+delete</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A> <B>delete</B></PRE>
+<DL>
+<DD>A button for removing arguments from the table.
+<P>
+<DL>
+</DL>
+</DL>
 
 <P>
 <A NAME="org.apache.jmeter.visualizers.Sample"><!-- --></A>
@@ -11194,7 +11438,18 @@ boolean <B>isStats</B></PRE>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>3l
+<B>serialVersionUID:&nbsp;</B>4l
+
+<P>
+
+<P>
+<A NAME="org.apache.jmeter.extractor.DebugPostProcessor"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/extractor/DebugPostProcessor.html" title="class in org.apache.jmeter.extractor">org.apache.jmeter.extractor.DebugPostProcessor</A> extends <A HREF="org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
 
 <P>
 
@@ -11345,6 +11600,26 @@ useURL</H3>
 <HR>
 
 <H3>
+useCode</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JRadioButton.html" title="class or interface in javax.swing">JRadioButton</A> <B>useCode</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+useMessage</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JRadioButton.html" title="class or interface in javax.swing">JRadioButton</A> <B>useMessage</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
 group</H3>
 <PRE>
 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/ButtonGroup.html" title="class or interface in javax.swing">ButtonGroup</A> <B>group</B></PRE>
@@ -11409,6 +11684,16 @@ tolerant</H3>
 <DL>
 </DL>
 </DL>
+<HR>
+
+<H3>
+nameSpace</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>nameSpace</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
 
 <P>
 <HR SIZE="4" NOSHADE>
@@ -11430,7 +11715,7 @@ tolerant</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>3l
+<B>serialVersionUID:&nbsp;</B>4l
 
 <P>
 
@@ -11710,6 +11995,53 @@ perIterationCheck</H3>
 </TABLE>
 
 <P>
+<A NAME="org.apache.jmeter.sampler.DebugSampler"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/sampler/DebugSampler.html" title="class in org.apache.jmeter.sampler">org.apache.jmeter.sampler.DebugSampler</A> extends <A HREF="org/apache/jmeter/samplers/AbstractSampler.html" title="class in org.apache.jmeter.samplers">AbstractSampler</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+displayJMeterVariables</H3>
+<PRE>
+boolean <B>displayJMeterVariables</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+displayJMeterProperties</H3>
+<PRE>
+boolean <B>displayJMeterProperties</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+displaySystemProperties</H3>
+<PRE>
+boolean <B>displaySystemProperties</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+
+<P>
 <A NAME="org.apache.jmeter.sampler.TestAction"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
@@ -11809,9 +12141,9 @@ int <B>action</B></PRE>
 <HR>
 
 <H3>
-duration</H3>
+durationString</H3>
 <PRE>
-int <B>duration</B></PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>durationString</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -11923,56 +12255,6 @@ args</H3>
 </TABLE>
 
 <H3>
-protocol</H3>
-<PRE>
-<A HREF="org/apache/jorphan/gui/JLabeledTextField.html" title="class in org.apache.jorphan.gui">JLabeledTextField</A> <B>protocol</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-domain</H3>
-<PRE>
-<A HREF="org/apache/jorphan/gui/JLabeledTextField.html" title="class in org.apache.jorphan.gui">JLabeledTextField</A> <B>domain</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-path</H3>
-<PRE>
-<A HREF="org/apache/jorphan/gui/JLabeledTextField.html" title="class in org.apache.jorphan.gui">JLabeledTextField</A> <B>path</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-port</H3>
-<PRE>
-<A HREF="org/apache/jorphan/gui/JLabeledTextField.html" title="class in org.apache.jorphan.gui">JLabeledTextField</A> <B>port</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-argPanel</H3>
-<PRE>
-<A HREF="org/apache/jmeter/protocol/http/gui/HTTPArgumentsPanel.html" title="class in org.apache.jmeter.protocol.http.gui">HTTPArgumentsPanel</A> <B>argPanel</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
 imageParser</H3>
 <PRE>
 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>imageParser</B></PRE>
@@ -11983,9 +12265,9 @@ imageParser</H3>
 <HR>
 
 <H3>
-encoding</H3>
+urlConfig</H3>
 <PRE>
-<A HREF="org/apache/jorphan/gui/JLabeledTextField.html" title="class in org.apache.jorphan.gui">JLabeledTextField</A> <B>encoding</B></PRE>
+<A HREF="org/apache/jmeter/protocol/http/config/gui/UrlConfigGui.html" title="class in org.apache.jmeter.protocol.http.config.gui">UrlConfigGui</A> <B>urlConfig</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -12160,6 +12442,16 @@ useMultipartForPost</H3>
 method</H3>
 <PRE>
 <A HREF="org/apache/jorphan/gui/JLabeledChoice.html" title="class in org.apache.jorphan.gui">JLabeledChoice</A> <B>method</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+notConfigOnly</H3>
+<PRE>
+boolean <B>notConfigOnly</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -12482,6 +12774,16 @@ soapAction</H3>
 sendSoapAction</H3>
 <PRE>
 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>sendSoapAction</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+useKeepAlive</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>useKeepAlive</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -12862,6 +13164,9 @@ proxyMessage3</H3>
 <B>Class <A HREF="org/apache/jmeter/protocol/http/gui/AuthPanel.html" title="class in org.apache.jmeter.protocol.http.gui">org.apache.jmeter.protocol.http.gui.AuthPanel</A> extends <A HREF="org/apache/jmeter/config/gui/AbstractConfigGui.html" title="class in org.apache.jmeter.config.gui">AbstractConfigGui</A> implements Serializable</B></FONT></TD>
 </TR>
 </TABLE>
+
+<P>
+<B>serialVersionUID:&nbsp;</B>-9214884465261470761l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -13719,6 +14024,9 @@ target</H3>
 </TABLE>
 
 <P>
+<B>serialVersionUID:&nbsp;</B>1l
+
+<P>
 <A NAME="serializedForm"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
@@ -13850,6 +14158,16 @@ samplerDownloadImages</H3>
 httpsSpoof</H3>
 <PRE>
 <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JCheckBox.html" title="class or interface in javax.swing">JCheckBox</A> <B>httpsSpoof</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+httpsMatch</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTextField.html" title="class or interface in javax.swing">JTextField</A> <B>httpsMatch</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -14168,24 +14486,6 @@ int <B>outpos</B></PRE>
 </TABLE>
 
 <P>
-<A NAME="serializedForm"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TD COLSPAN=1><FONT SIZE="+2">
-<B>Serialized Fields</B></FONT></TD>
-</TR>
-</TABLE>
-
-<H3>
-postWriter</H3>
-<PRE>
-<A HREF="org/apache/jmeter/protocol/http/sampler/PostWriter.html" title="class in org.apache.jmeter.protocol.http.sampler">PostWriter</A> <B>postWriter</B></PRE>
-<DL>
-<DD>Handles writing of a post request
-<P>
-<DL>
-</DL>
-</DL>
 
 <P>
 <A NAME="org.apache.jmeter.protocol.http.sampler.HTTPSampler2"><!-- --></A>
@@ -14816,23 +15116,6 @@ ftpDefaultPanel</H3>
 </TABLE>
 
 <P>
-<A NAME="serialized_methods"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TD COLSPAN=1><FONT SIZE="+2">
-<B>Serialization Methods</B></FONT></TD>
-</TR>
-</TABLE>
-
-<P>
-
-<A NAME="readResolve()"><!-- --></A><H3>
-readResolve</H3>
-<PRE>
-private <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A> <B>readResolve</B>()
-                    throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/ObjectStreamException.html" title="class or interface in java.io">ObjectStreamException</A></PRE>
-<DL>
-</DL>
 
 <P>
 <HR SIZE="4" NOSHADE>
@@ -15085,7 +15368,7 @@ scriptField</H3>
 <H3>
 langField</H3>
 <PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTextField.html" title="class or interface in javax.swing">JTextField</A> <B>langField</B></PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JComboBox.html" title="class or interface in javax.swing">JComboBox</A> <B>langField</B></PRE>
 <DL>
 <DL>
 </DL>

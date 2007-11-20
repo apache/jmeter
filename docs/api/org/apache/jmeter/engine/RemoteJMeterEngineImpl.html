@@ -99,9 +99,11 @@ Class RemoteJMeterEngineImpl</H2>
 <DT>public class <B>RemoteJMeterEngineImpl</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/rmi/server/UnicastRemoteObject.html" title="class or interface in java.rmi.server">UnicastRemoteObject</A><DT>implements <A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngine.html" title="interface in org.apache.jmeter.engine">RemoteJMeterEngine</A></DL>
 
 <P>
+This is the JMeter server main code.
+<P>
+
+<P>
 <DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 567432 $ Updated on: $Date: 2007-08-19 18:21:24 +0100 (Sun, 19 Aug 2007) $</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.engine.RemoteJMeterEngineImpl">Serialized Form</A></DL>
 <HR>
 
@@ -185,14 +187,6 @@ Class RemoteJMeterEngineImpl</H2>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngineImpl.html#main(java.lang.String[])">main</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;args)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The main program for the RemoteJMeterEngineImpl class.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngineImpl.html#reset()">reset</A></B>()</CODE>
 
@@ -211,6 +205,14 @@ Class RemoteJMeterEngineImpl</H2>
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngineImpl.html#setHost(java.lang.String)">setHost</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngineImpl.html#setProperties(java.util.Properties)">setProperties</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html" title="class or interface in java.util">Properties</A>&nbsp;p)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -423,18 +425,19 @@ public void <B>exit</B>()
 </DL>
 <HR>
 
-<A NAME="main(java.lang.String[])"><!-- --></A><H3>
-main</H3>
+<A NAME="setProperties(java.util.Properties)"><!-- --></A><H3>
+setProperties</H3>
 <PRE>
-public static void <B>main</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;args)</PRE>
+public void <B>setProperties</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html" title="class or interface in java.util">Properties</A>&nbsp;p)
+                   throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/rmi/RemoteException.html" title="class or interface in java.rmi">RemoteException</A></PRE>
 <DL>
-<DD>The main program for the RemoteJMeterEngineImpl class.
-<P>
 <DD><DL>
-</DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngine.html#setProperties(java.util.Properties)">setProperties</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/engine/RemoteJMeterEngine.html" title="interface in org.apache.jmeter.engine">RemoteJMeterEngine</A></CODE></DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>args</CODE> - the command line arguments</DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/rmi/RemoteException.html" title="class or interface in java.rmi">RemoteException</A></CODE></DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
