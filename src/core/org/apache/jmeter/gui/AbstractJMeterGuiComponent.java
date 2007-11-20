@@ -32,7 +32,6 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -340,7 +339,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	 * Subclasses need to over-ride this method, if they wish to return
 	 * something other than the Visualizer itself.
 	 * 
-	 * @return
+	 * @return this object
 	 */
 	public JComponent getPrintableComponent() {
 		return this;
