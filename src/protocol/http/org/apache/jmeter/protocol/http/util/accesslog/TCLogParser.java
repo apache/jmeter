@@ -70,8 +70,6 @@ import org.apache.log.Logger;
  * IIS and Netscape.
  * <p>
  * 
- * @version $Revision$ last updated $Date$ Created
- *          on: June 23, 2003<br>
  */
 
 public class TCLogParser implements LogParser {
@@ -107,7 +105,7 @@ public class TCLogParser implements LogParser {
      */
     protected boolean decode = true;
     
-	// TODO downcase UPPER case variables
+	// TODO downcase UPPER case non-final variables
 
 	/**
 	 * 
@@ -134,7 +132,7 @@ public class TCLogParser implements LogParser {
     
     /**
      * decode the parameter values is to true by default
-     * @return
+     * @return  if paramter values should be decoded
      */
     public boolean decodeParameterValue() {
         return this.decode;

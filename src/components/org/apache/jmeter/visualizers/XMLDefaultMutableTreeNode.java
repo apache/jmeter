@@ -33,8 +33,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A extended class of DefaultMutableTreeNode except that it also attached XML
- * node and convert XML document into DefaultMutableTreeNode author <a
- * href="mailto:d.maung@mdl.com">Dave Maung</a>
+ * node and convert XML document into DefaultMutableTreeNode.
  * 
  */
 public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
@@ -199,7 +198,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * get the xml node
 	 * 
-	 * @return
+	 * @return the XML node
 	 */
 	public Node getXMLNode() {
 		return xmlNode;

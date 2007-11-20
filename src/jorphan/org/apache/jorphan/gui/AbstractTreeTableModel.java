@@ -29,10 +29,6 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.jorphan.reflect.Functor;
 
-/**
- * @author Peter Lin
- *
- */
 public abstract class AbstractTreeTableModel extends DefaultTableModel implements TreeTableModel {
 
     protected TreeNode rootNode = null;
@@ -68,7 +64,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
     
     /**
      * The root node for the TreeTable
-     * @return
+     * @return the root node
      */
     public Object getRootNode() {
         return this.rootNode;
@@ -157,7 +153,7 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
      * the implementation checks if the Object is a treenode. If it is,
      * it returns isLeaf(), otherwise it returns false.
      * @param node
-     * @return
+     * @return whether object is a leaf node or not
      */
     public boolean isLeaf(Object node) {
         if (node instanceof TreeNode) {

@@ -26,7 +26,6 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
 import org.apache.jmeter.visualizers.Visualizer;
 
 /**
- * @author Peter Lin
  *
  * DataSet extends Visualizer so that it can be used with ResultCollector.
  * Classes implementing the interface should create a new instance of
@@ -45,7 +44,6 @@ public interface DataSet extends Visualizer {
     /**
      * Return the datasource. For files, it should be the absolute path.
      * For databases, it should be the datasource name created in jmeter.
-     * @return
      */
     public String getDataSource();
     /**
@@ -53,7 +51,6 @@ public interface DataSet extends Visualizer {
      * datasource string or something different. For example, we may
      * want to return just the filename and not the absolutePath of
      * a JTL file.
-     * @return
      */
     public String getDataSourceName();
     /**
@@ -63,7 +60,6 @@ public interface DataSet extends Visualizer {
     public void setStartTimestamp(long stamp);
     /**
      * return the timestamp in millisecond format.
-     * @return
      */
     public long getStartTimestamp();
     /**
@@ -73,47 +69,40 @@ public interface DataSet extends Visualizer {
     public void setEndTimestamp(long stamp);
     /**
      * return the timestamp in millisecond format.
-     * @return
      */
     public long getEndTimestamp();
     /**
      * Return the Date object using the start timestamp
-     * @return
      */
     public Date getDate();
     /**
      * convienance method for getting the date in mmdd format
-     * @return
      */
     public String getMonthDayDate();
     /**
      * convienant method for getting the date in yyyymmdd format
-     * @return
      */
     public String getMonthDayYearDate();
     /**
      * Classes implementing the method should return the URL's in the 
      * DataSet. It is up to the class to return Strings or URL.
-     * @return
      */
     public Set getURLs();
     /**
      * Classes implementing the method should return instance of 
      * SamplingStatCalculator.
-     * @return
+     * @return the set of statistics
      */
     public Set getStats();
     /**
-     * Return the SamplingStatCalculate for a specific URL.
+     * Return the SamplingStatCalculator for a specific URL.
      * @param url
-     * @return
      */
     public SamplingStatCalculator getStatistics(String url);
     /**
-     * Convienance method for getting all the SamplingStatCalculator for
+     * Convienance method for getting all the SamplingStatCalculators for
      * a given URL.
      * @param urls
-     * @return
      */
     public List getStats(List urls);
     /**
