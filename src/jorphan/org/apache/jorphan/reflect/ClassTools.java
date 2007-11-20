@@ -34,8 +34,8 @@ public class ClassTools {
 	 * Call no-args constructor for a class.
 	 * 
 	 * @param className
-	 * @return
-	 * @throws JMeterException
+	 * @return an instance of the class
+	 * @throws JMeterException if class cannot be created
 	 */
 	public static Object construct(String className) throws JMeterException {
 		Object instance = null;
@@ -52,11 +52,11 @@ public class ClassTools {
 	}
 
 	/**
-	 * Call a class constructor
+	 * Call a class constructor with an integer parameter
 	 * @param className
 	 * @param parameter (integer)
-	 * @return
-	 * @throws JMeterException
+	 * @return an instance of the class
+	 * @throws JMeterException if class cannot be created
 	 */
 	public static Object construct(String className, int parameter) throws JMeterException 
 	{

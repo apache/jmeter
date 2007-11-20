@@ -42,7 +42,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * property is set.
  * </ul>
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
 class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 
@@ -205,30 +204,18 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 			textField.selectAll();
 	}
 
-	/**
-	 * @return
-	 */
 	public String getInitialEditValue() {
 		return initialEditValue;
 	}
 
-	/**
-	 * @return
-	 */
 	public boolean getNoEdit() {
 		return noEdit;
 	}
 
-	/**
-	 * @return
-	 */
 	public boolean getNoUndefined() {
 		return noUndefined;
 	}
 
-	/**
-	 * @return
-	 */
 	public String[] getTags() {
 		return tags;
 	}

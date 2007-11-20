@@ -299,7 +299,7 @@ public class WebServiceSampler extends HTTPSamplerBase {
 	/**
 	 * method returns the WSDL URL
 	 * 
-	 * @return
+	 * @return the WSDL URL
 	 */
 	public String getWsdlURL() {
 		return getPropertyAsString(WSDL_URL);

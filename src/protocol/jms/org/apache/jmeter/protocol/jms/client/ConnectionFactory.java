@@ -34,7 +34,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author pete
  * 
  * ConnectionFactory is responsible for creating new connections. Eventually,
  * the connection factory should read an external configuration file and create
@@ -84,12 +83,6 @@ public class ConnectionFactory implements TestListener {
 	public void testIterationStart(LoopIterationEvent event) {
 	}
 
-	/**
-	 * 
-	 * @param ctx
-	 * @param fac
-	 * @return
-	 */
 	public static synchronized TopicConnectionFactory getTopicConnectionFactory(Context ctx, String fac) {
 		while (factory == null) {
 			try {
@@ -104,12 +97,6 @@ public class ConnectionFactory implements TestListener {
 		return factory;
 	}
 
-	/**
-	 * 
-	 * @param ctx
-	 * @param fac
-	 * @return
-	 */
 	public static synchronized QueueConnectionFactory getQueueConnectionFactory(Context ctx, String fac) {
 		while (qfactory == null) {
 			try {
@@ -124,10 +111,6 @@ public class ConnectionFactory implements TestListener {
 		return qfactory;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public static synchronized TopicConnection getTopicConnection() {
 		if (factory != null) {
 			try {
@@ -139,12 +122,6 @@ public class ConnectionFactory implements TestListener {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param ctx
-	 * @param queueConn
-	 * @return
-	 */
 	public static QueueConnection getQueueConnection(Context ctx, String queueConn) {
 		if (factory != null) {
 			try {

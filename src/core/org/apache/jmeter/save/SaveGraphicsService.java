@@ -174,7 +174,7 @@ public class SaveGraphicsService {
 	 * we shouldn't get a FNFE.
 	 * 
 	 * @param filename
-	 * @return
+	 * @return output stream created from the filename
 	 */
 	public FileOutputStream createFile(File filename) {
 		try {

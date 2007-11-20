@@ -398,9 +398,6 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		}
 	}
 
-	/**
-	 * @return
-	 */
 	public int getTimeout() {
 		if (getPropertyAsInt(TIMEOUT) < 1) {
 			return DEFAULT_TIMEOUT;

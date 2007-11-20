@@ -122,7 +122,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	 * The implementation will publish n messages within a for loop. Once n
 	 * messages are published, it sets the attributes of SampleResult.
 	 * 
-	 * @return
+	 * @return the populated sample result
 	 */
 	public SampleResult sample() {
 		SampleResult result = new SampleResult();
@@ -154,7 +154,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	/**
 	 * Method will check the setting and get the contents for the message.
 	 * 
-	 * @return
+	 * @return the contents for the message
 	 */
 	public String getMessageContent() {
 		if (this.getConfigChoice().equals(JMSPublisherGui.use_file)) {
@@ -180,7 +180,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	 * returns a string.
 	 * 
 	 * @param path
-	 * @return
+	 * @return the contents of the file
 	 */
 	public String getFileContent(String path) {
 		TextFile tf = new TextFile(path);
@@ -200,7 +200,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	/**
 	 * return the config choice
 	 * 
-	 * @return
 	 */
 	public String getConfigChoice() {
 		return getPropertyAsString(CONFIG_CHOICE);
@@ -218,7 +217,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	/**
 	 * return the source of the message
 	 * 
-	 * @return
 	 */
 	public String getMessageChoice() {
 		return getPropertyAsString(MESSAGE_CHOICE);
@@ -236,7 +234,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	/**
 	 * return the path of the input file
 	 * 
-	 * @return
 	 */
 	public String getInputFile() {
 		return getPropertyAsString(INPUT_FILE);
@@ -254,7 +251,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	/**
 	 * return the random path for messages
 	 * 
-	 * @return
 	 */
 	public String getRandomPath() {
 		return getPropertyAsString(RANDOM_PATH);
@@ -272,7 +268,6 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 	/**
 	 * return the text for the message
 	 * 
-	 * @return
 	 */
 	public String getTextMessage() {
 		return getPropertyAsString(TEXT_MSG);
