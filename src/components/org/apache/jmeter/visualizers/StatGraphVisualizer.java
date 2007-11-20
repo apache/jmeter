@@ -53,7 +53,6 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
-import org.apache.jmeter.save.OldSaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
@@ -351,7 +350,7 @@ ActionListener {
      * We use this method to get the data, since we are using
      * ObjectTableModel, so the calling getDataVector doesn't 
      * work as expected.
-     * @return
+     * @return the data from the model
      */
     public Vector getAllTableData() {
         Vector data = new Vector();
