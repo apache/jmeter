@@ -93,16 +93,12 @@ Class OldSaveService</H2>
 <DT>public final class <B>OldSaveService</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-This class provides a means for saving test results. Test results are
- typically saved in an XML file, but other storage mechanisms may also be
- used, for instance, CSV files or databases.
+This class saves/restores the original Avalon XML format (not used by default).
+ 
+ This may be removed in a future release.
 <P>
 
 <P>
-<DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 571988 $ $Date: 2007-09-02 15:19:10 +0100 (Sun, 02 Sep 2007) $</DD>
-</DL>
 <HR>
 
 <P>
@@ -125,62 +121,13 @@ This class provides a means for saving test results. Test results are
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#createTestElement(org.apache.avalon.framework.configuration.Configuration)">createTestElement</A></B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="../../../../org/apache/jmeter/assertions/AssertionResult.html" title="class in org.apache.jmeter.assertions">AssertionResult</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getAssertionResult(org.apache.avalon.framework.configuration.Configuration)">getAssertionResult</A></B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;byte[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getBinaryData(org.apache.avalon.framework.configuration.Configuration)">getBinaryData</A></B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;org.apache.avalon.framework.configuration.Configuration</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getConfigForTestElement(java.lang.String, org.apache.jmeter.testelement.TestElement)">getConfigForTestElement</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;named,
-                        <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;item)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;org.apache.avalon.framework.configuration.Configuration</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getConfiguration(org.apache.jmeter.assertions.AssertionResult)">getConfiguration</A></B>(<A HREF="../../../../org/apache/jmeter/assertions/AssertionResult.html" title="class in org.apache.jmeter.assertions">AssertionResult</A>&nbsp;assResult)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;org.apache.avalon.framework.configuration.Configuration</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getConfiguration(byte[])">getConfiguration</A></B>(byte[]&nbsp;bin)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;org.apache.avalon.framework.configuration.Configuration</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getConfiguration(org.apache.jmeter.samplers.SampleResult, org.apache.jmeter.samplers.SampleSaveConfiguration)">getConfiguration</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
                  <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method determines the content of the result data that will be
- stored.</TD>
+ stored for the Avalon XML format.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -188,15 +135,17 @@ This class provides a means for saving test results. Test results are
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getSampleResult(org.apache.avalon.framework.configuration.Configuration)">getSampleResult</A></B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Read sampleResult from Avalon XML file.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getSampleSaveConfiguration(java.lang.String)">getSampleSaveConfiguration</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;headerLine)</CODE>
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#getSerializedSampleResult(org.apache.jmeter.samplers.SampleResult, org.apache.avalon.framework.configuration.DefaultConfigurationSerializer, org.apache.jmeter.samplers.SampleSaveConfiguration)">getSerializedSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
+                          org.apache.avalon.framework.configuration.DefaultConfigurationSerializer&nbsp;slzr,
+                          <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;cfg)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parse a CSV header line</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -208,57 +157,13 @@ This class provides a means for saving test results. Test results are
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#makeResultFromDelimitedString(java.lang.String, org.apache.jmeter.samplers.SampleSaveConfiguration, long)">makeResultFromDelimitedString</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;inputLine,
-                              <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig,
-                              long&nbsp;lineNumber)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Make a SampleResult given a delimited string.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#printableFieldNamesToString()">printableFieldNamesToString</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates the field names for the output file</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#printableFieldNamesToString(org.apache.jmeter.samplers.SampleSaveConfiguration)">printableFieldNamesToString</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates the field names for the output file</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#resultToDelimitedString(org.apache.jmeter.samplers.SampleResult)">resultToDelimitedString</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;sample)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convert a result into a string, where the fields of the result are
- separated by the default delimiter.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#resultToDelimitedString(org.apache.jmeter.samplers.SampleResult, java.lang.String)">resultToDelimitedString</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;sample,
-                        <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;delimiter)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convert a result into a string, where the fields of the result are
- separated by a specified String.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#saveCSVStats(java.util.Vector, java.io.FileWriter)">saveCSVStats</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Vector.html" title="class or interface in java.util">Vector</A>&nbsp;data,
-             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer)</CODE>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, boolean)">processSamples</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
+               <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A>&nbsp;visualizer,
+               boolean&nbsp;showAll)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method will save aggregate statistics as CSV. </TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -298,117 +203,6 @@ This class provides a means for saving test results. Test results are
 </TR>
 </TABLE>
 
-<A NAME="makeResultFromDelimitedString(java.lang.String, org.apache.jmeter.samplers.SampleSaveConfiguration, long)"><!-- --></A><H3>
-makeResultFromDelimitedString</H3>
-<PRE>
-public static <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A> <B>makeResultFromDelimitedString</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;inputLine,
-                                                         <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig,
-                                                         long&nbsp;lineNumber)</PRE>
-<DL>
-<DD>Make a SampleResult given a delimited string.
-<P>
-<DD><DL>
-<DT><B>Parameters:</B><DD><CODE>inputLine</CODE> - - line from CSV file<DD><CODE>saveConfig</CODE> - - configuration<DD><CODE>lineNumber</CODE> - - line number for error reporting
-<DT><B>Returns:</B><DD>SampleResult or null if header line detected
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="../../../../org/apache/jorphan/util/JMeterError.html" title="class in org.apache.jorphan.util">JMeterError</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="printableFieldNamesToString()"><!-- --></A><H3>
-printableFieldNamesToString</H3>
-<PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>printableFieldNamesToString</B>()</PRE>
-<DL>
-<DD>Generates the field names for the output file
-<P>
-<DD><DL>
-
-<DT><B>Returns:</B><DD>the field names as a string</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="printableFieldNamesToString(org.apache.jmeter.samplers.SampleSaveConfiguration)"><!-- --></A><H3>
-printableFieldNamesToString</H3>
-<PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>printableFieldNamesToString</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</PRE>
-<DL>
-<DD>Generates the field names for the output file
-<P>
-<DD><DL>
-
-<DT><B>Returns:</B><DD>the field names as a string</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getSampleSaveConfiguration(java.lang.String)"><!-- --></A><H3>
-getSampleSaveConfiguration</H3>
-<PRE>
-public static <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A> <B>getSampleSaveConfiguration</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;headerLine)</PRE>
-<DL>
-<DD>Parse a CSV header line
-<P>
-<DD><DL>
-<DT><B>Parameters:</B><DD><CODE>headerLine</CODE> - from CSV file
-<DT><B>Returns:</B><DD>config corresponding to the header items found or null if not a header line</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="saveCSVStats(java.util.Vector, java.io.FileWriter)"><!-- --></A><H3>
-saveCSVStats</H3>
-<PRE>
-public static void <B>saveCSVStats</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Vector.html" title="class or interface in java.util">Vector</A>&nbsp;data,
-                                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer)
-                         throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
-<DL>
-<DD>Method will save aggregate statistics as CSV. For now I put it here.
- Not sure if it should go in the newer SaveService instead of here.
- if we ever decide to get rid of this class, we'll need to move this
- method to the new save service.
-<P>
-<DD><DL>
-<DT><B>Parameters:</B><DD><CODE>data</CODE> - <DD><CODE>writer</CODE> - 
-<DT><B>Throws:</B>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="resultToDelimitedString(org.apache.jmeter.samplers.SampleResult)"><!-- --></A><H3>
-resultToDelimitedString</H3>
-<PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>resultToDelimitedString</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;sample)</PRE>
-<DL>
-<DD>Convert a result into a string, where the fields of the result are
- separated by the default delimiter.
-<P>
-<DD><DL>
-<DT><B>Parameters:</B><DD><CODE>sample</CODE> - the test result to be converted
-<DT><B>Returns:</B><DD>the separated value representation of the result</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="resultToDelimitedString(org.apache.jmeter.samplers.SampleResult, java.lang.String)"><!-- --></A><H3>
-resultToDelimitedString</H3>
-<PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>resultToDelimitedString</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;sample,
-                                             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;delimiter)</PRE>
-<DL>
-<DD>Convert a result into a string, where the fields of the result are
- separated by a specified String.
-<P>
-<DD><DL>
-<DT><B>Parameters:</B><DD><CODE>sample</CODE> - the test result to be converted<DD><CODE>delimiter</CODE> - the separation string
-<DT><B>Returns:</B><DD>the separated value representation of the result</DL>
-</DD>
-</DL>
-<HR>
-
 <A NAME="saveSubTree(org.apache.jorphan.collections.HashTree, java.io.OutputStream)"><!-- --></A><H3>
 saveSubTree</H3>
 <PRE>
@@ -429,52 +223,11 @@ getSampleResult</H3>
 <PRE>
 public static <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A> <B>getSampleResult</B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</PRE>
 <DL>
+<DD>Read sampleResult from Avalon XML file.
+<P>
 <DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getConfiguration(byte[])"><!-- --></A><H3>
-getConfiguration</H3>
-<PRE>
-public static org.apache.avalon.framework.configuration.Configuration <B>getConfiguration</B>(byte[]&nbsp;bin)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getBinaryData(org.apache.avalon.framework.configuration.Configuration)"><!-- --></A><H3>
-getBinaryData</H3>
-<PRE>
-public static byte[] <B>getBinaryData</B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getAssertionResult(org.apache.avalon.framework.configuration.Configuration)"><!-- --></A><H3>
-getAssertionResult</H3>
-<PRE>
-public static <A HREF="../../../../org/apache/jmeter/assertions/AssertionResult.html" title="class in org.apache.jmeter.assertions">AssertionResult</A> <B>getAssertionResult</B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getConfiguration(org.apache.jmeter.assertions.AssertionResult)"><!-- --></A><H3>
-getConfiguration</H3>
-<PRE>
-public static org.apache.avalon.framework.configuration.Configuration <B>getConfiguration</B>(<A HREF="../../../../org/apache/jmeter/assertions/AssertionResult.html" title="class in org.apache.jmeter.assertions">AssertionResult</A>&nbsp;assResult)</PRE>
-<DL>
-<DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>config</CODE> - Avalon configuration
+<DT><B>Returns:</B><DD>sample result</DL>
 </DD>
 </DL>
 <HR>
@@ -486,22 +239,12 @@ public static org.apache.avalon.framework.configuration.Configuration <B>getConf
                                                                                        <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</PRE>
 <DL>
 <DD>This method determines the content of the result data that will be
- stored.
+ stored for the Avalon XML format.
 <P>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>result</CODE> - the object containing all of the data that has been collected.<DD><CODE>saveConfig</CODE> - the configuration giving the data items to be saved.</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getConfigForTestElement(java.lang.String, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
-getConfigForTestElement</H3>
-<PRE>
-public static org.apache.avalon.framework.configuration.Configuration <B>getConfigForTestElement</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;named,
-                                                                                              <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;item)</PRE>
-<DL>
-<DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>result</CODE> - the object containing all of the data that has been collected.<DD><CODE>saveConfig</CODE> - the configuration giving the data items to be saved.
+ N.B. It is rather out of date, as many fields are not saved.
+ However it is probably not worth updating, as no-one should be using the format.</DL>
 </DD>
 </DL>
 <HR>
@@ -520,22 +263,42 @@ public static <A HREF="../../../../org/apache/jorphan/collections/HashTree.html"
 </DL>
 <HR>
 
-<A NAME="createTestElement(org.apache.avalon.framework.configuration.Configuration)"><!-- --></A><H3>
-createTestElement</H3>
+<A NAME="processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, boolean)"><!-- --></A><H3>
+processSamples</H3>
 <PRE>
-public static <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A> <B>createTestElement</B>(org.apache.avalon.framework.configuration.Configuration&nbsp;config)
-                                     throws org.apache.avalon.framework.configuration.ConfigurationException,
-                                            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/ClassNotFoundException.html" title="class or interface in java.lang">ClassNotFoundException</A>,
-                                            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/IllegalAccessException.html" title="class or interface in java.lang">IllegalAccessException</A>,
-                                            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/InstantiationException.html" title="class or interface in java.lang">InstantiationException</A></PRE>
+public static void <B>processSamples</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
+                                  <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A>&nbsp;visualizer,
+                                  boolean&nbsp;showAll)
+                           throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
+                                  <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
+                                  org.apache.avalon.framework.configuration.ConfigurationException</PRE>
 <DL>
 <DD><DL>
 
 <DT><B>Throws:</B>
-<DD><CODE>org.apache.avalon.framework.configuration.ConfigurationException</CODE>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/ClassNotFoundException.html" title="class or interface in java.lang">ClassNotFoundException</A></CODE>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/IllegalAccessException.html" title="class or interface in java.lang">IllegalAccessException</A></CODE>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/InstantiationException.html" title="class or interface in java.lang">InstantiationException</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE>
+<DD><CODE>org.apache.avalon.framework.configuration.ConfigurationException</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getSerializedSampleResult(org.apache.jmeter.samplers.SampleResult, org.apache.avalon.framework.configuration.DefaultConfigurationSerializer, org.apache.jmeter.samplers.SampleSaveConfiguration)"><!-- --></A><H3>
+getSerializedSampleResult</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getSerializedSampleResult</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
+                                               org.apache.avalon.framework.configuration.DefaultConfigurationSerializer&nbsp;slzr,
+                                               <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;cfg)
+                                        throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
+                                               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
+                                               org.apache.avalon.framework.configuration.ConfigurationException</PRE>
+<DL>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE>
+<DD><CODE>org.apache.avalon.framework.configuration.ConfigurationException</CODE></DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

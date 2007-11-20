@@ -107,8 +107,6 @@ The main JMeter frame, containing the menu bar, test tree, and an area for
 
 <P>
 <DL>
-<DT><B>Author:</B></DT>
-  <DD>Michael Stover</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.gui.MainFrame">Serialized Form</A></DL>
 <HR>
 
@@ -235,7 +233,7 @@ The main JMeter frame, containing the menu bar, test tree, and an area for
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#MainFrame()">MainFrame</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default constructor for the JMeter frame. </TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Do not use - only needed for JUnit tests</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#MainFrame(java.awt.event.ActionListener, javax.swing.tree.TreeModel, org.apache.jmeter.gui.tree.JMeterTreeListener)">MainFrame</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A>&nbsp;actionHandler,
@@ -279,7 +277,7 @@ The main JMeter frame, containing the menu bar, test tree, and an area for
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#getTree()">getTree</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -324,10 +322,26 @@ The main JMeter frame, containing the menu bar, test tree, and an area for
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#setExtendedFrameTitle(java.lang.String)">setExtendedFrameTitle</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;fname)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#setFileLoadEnabled(boolean)">setFileLoadEnabled</A></B>(boolean&nbsp;enabled)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether or not the File|Load menu item should be enabled.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#setFileRevertEnabled(boolean)">setFileRevertEnabled</A></B>(boolean&nbsp;enabled)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether or not the File|Revert item should be enabled.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -343,7 +357,15 @@ The main JMeter frame, containing the menu bar, test tree, and an area for
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#setMainPanel(javax.swing.JComponent)">setMainPanel</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JComponent.html" title="class or interface in javax.swing">JComponent</A>&nbsp;comp)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/gui/MainFrame.html#setProjectFileLoaded(java.lang.String)">setProjectFileLoaded</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;file)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify the project file that was just loaded</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -377,7 +399,9 @@ The main JMeter frame, containing the menu bar, test tree, and an area for
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each time through a Thread Group's test script, an iteration event is
- fired for each thread.</TD>
+ fired for each thread.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -500,6 +524,8 @@ MainFrame</H3>
 <PRE>
 public <B>MainFrame</B>()</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Do not use - only needed for JUnit tests</I>
+<P>
 <DD>Default constructor for the JMeter frame. This constructor will not
  properly initialize the tree, so don't use it.
 <P>
@@ -543,6 +569,38 @@ public void <B>setFileSaveEnabled</B>(boolean&nbsp;enabled)</PRE>
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>enabled</CODE> - true if the menu item should be enabled, false otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setFileRevertEnabled(boolean)"><!-- --></A><H3>
+setFileRevertEnabled</H3>
+<PRE>
+public void <B>setFileRevertEnabled</B>(boolean&nbsp;enabled)</PRE>
+<DL>
+<DD>Specify whether or not the File|Revert item should be enabled.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>enabled</CODE> - true if the menu item should be enabled, false otherwise</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setProjectFileLoaded(java.lang.String)"><!-- --></A><H3>
+setProjectFileLoaded</H3>
+<PRE>
+public void <B>setProjectFileLoaded</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;file)</PRE>
+<DL>
+<DD>Specify the project file that was just loaded
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>file</CODE> - - the full path to the file that was loaded</DL>
 </DD>
 </DL>
 <HR>
@@ -679,13 +737,11 @@ setMainPanel</H3>
 <PRE>
 public void <B>setMainPanel</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JComponent.html" title="class or interface in javax.swing">JComponent</A>&nbsp;comp)</PRE>
 <DL>
-<DD>!ToDo (Method description)
-<P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>comp</CODE> - !ToDo (Parameter description)</DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -695,14 +751,11 @@ getTree</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTree.html" title="class or interface in javax.swing">JTree</A> <B>getTree</B>()</PRE>
 <DL>
-<DD>!ToDoo (Method description)
-<P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD>!ToDo (Return description)</DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -786,12 +839,29 @@ public void <B>testIterationStart</B>(<A HREF="../../../../org/apache/jmeter/eng
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Each time through a Thread Group's test script, an iteration event is
  fired for each thread.
+ 
+ This will be after the test elements have been cloned, so in general
+ the instance will not be the same as the ones the start/end methods call.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)">testIterationStart</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>event</CODE> - </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setExtendedFrameTitle(java.lang.String)"><!-- --></A><H3>
+setExtendedFrameTitle</H3>
+<PRE>
+public void <B>setExtendedFrameTitle</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;fname)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
 </DD>
 </DL>
 <HR>

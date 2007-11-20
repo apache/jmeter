@@ -93,10 +93,10 @@ Class ConversionHelp</H2>
 <DT>public class <B>ConversionHelp</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>mstover</DD>
-</DL>
+Utility conversion routines for use with XStream
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -184,7 +184,8 @@ Class ConversionHelp</H2>
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/save/converters/ConversionHelp.html#encode(java.lang.String)">encode</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;p)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Encode a string (if necessary) for output to a JTL file.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -334,8 +335,13 @@ encode</H3>
 <PRE>
 public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>encode</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;p)</PRE>
 <DL>
+<DD>Encode a string (if necessary) for output to a JTL file.
+ Strings are only encoded if the output version is 1.0,
+ but nulls are always converted to the empty string.
+<P>
 <DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>p</CODE> - string to encode
+<DT><B>Returns:</B><DD>encoded string (will never be null)</DL>
 </DD>
 </DL>
 <HR>

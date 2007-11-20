@@ -101,14 +101,14 @@ Class AbstractReportGui</H2>
 </DL>
 <HR>
 <DL>
-<DT>public abstract class <B>AbstractReportGui</B><DT>extends <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A><DT>implements <A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A></DL>
+<DT>public abstract class <B>AbstractReportGui</B><DT>extends <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></DL>
+
+<P>
+This is the abstract base for report gui's
+<P>
 
 <P>
 <DL>
-<DT><B>Author:</B></DT>
-  <DD>Peter Lin
-
- This is the abstract base for report gui's</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../../serialized-form.html#org.apache.jmeter.report.gui.AbstractReportGui">Serialized Form</A></DL>
 <HR>
 
@@ -278,15 +278,6 @@ Class AbstractReportGui</H2>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JComponent.html" title="class or interface in javax.swing">JComponent</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/report/gui/AbstractReportGui.html#getPrintableComponent()">getPrintableComponent</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subclasses need to over this method, if they wish to return something
- other than the Visualizer itself.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/Container.html" title="class or interface in java.awt">Container</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/report/gui/AbstractReportGui.html#makeTitlePanel()">makeTitlePanel</A></B>()</CODE>
 
@@ -301,7 +292,7 @@ Class AbstractReportGui</H2>
 <TD><B>Methods inherited from class org.apache.jmeter.gui.<A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#clearGui()">clearGui</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#configure(org.apache.jmeter.testelement.TestElement)">configure</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getComment()">getComment</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getDocAnchor()">getDocAnchor</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getName()">getName</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getNamePanel()">getNamePanel</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getNode()">getNode</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getStaticLabel()">getStaticLabel</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#makeBorder()">makeBorder</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#makeScrollPane(java.awt.Component)">makeScrollPane</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#makeScrollPane(java.awt.Component, int, int)">makeScrollPane</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setEnabled(boolean)">setEnabled</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setNode(javax.swing.tree.TreeNode)">setNode</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#clearGui()">clearGui</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#configure(org.apache.jmeter.testelement.TestElement)">configure</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getComment()">getComment</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getDocAnchor()">getDocAnchor</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getName()">getName</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getNamePanel()">getNamePanel</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getNode()">getNode</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getPrintableComponent()">getPrintableComponent</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getStaticLabel()">getStaticLabel</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#makeBorder()">makeBorder</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#makeScrollPane(java.awt.Component)">makeScrollPane</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#makeScrollPane(java.awt.Component, int, int)">makeScrollPane</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setEnabled(boolean)">setEnabled</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#setNode(javax.swing.tree.TreeNode)">setNode</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_javax.swing.JPanel"><!-- --></A>
@@ -406,9 +397,6 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
  getStaticLabel() may be overridden instead.
 <P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getLabelResource()">getLabelResource</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></DL>
-</DD>
-<DD><DL>
 
 <DT><B>Returns:</B><DD>the resource name</DL>
 </DD>
@@ -449,9 +437,6 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JPopupMenu.h
  user from this component.
 <P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#createPopupMenu()">createPopupMenu</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></DL>
-</DD>
-<DD><DL>
 
 <DT><B>Returns:</B><DD>a JPopupMenu appropriate for the component.</DL>
 </DD>
@@ -473,9 +458,6 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Collection.htm
  one category, but it is possible for a component to exist in multiple
  categories.
 <P>
-<DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#getMenuCategories()">getMenuCategories</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></DL>
-</DD>
 <DD><DL>
 
 <DT><B>Returns:</B><DD>a Collection of Strings, where each element is one of the
@@ -516,24 +498,6 @@ protected <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/Component.ht
 <DD><DL>
 
 <DT><B>Returns:</B><DD>a JLabel which subclasses can add to their GUI</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getPrintableComponent()"><!-- --></A><H3>
-getPrintableComponent</H3>
-<PRE>
-public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JComponent.html" title="class or interface in javax.swing">JComponent</A> <B>getPrintableComponent</B>()</PRE>
-<DL>
-<DD>Subclasses need to over this method, if they wish to return something
- other than the Visualizer itself.
-<P>
-<DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html#getPrintableComponent()">getPrintableComponent</A></CODE> in interface <CODE><A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#getPrintableComponent()">getPrintableComponent</A></CODE> in class <CODE><A HREF="../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></CODE></DL>
-</DD>
-<DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

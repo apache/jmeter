@@ -96,15 +96,13 @@ Class ConnectionFactory</H2>
 <DT>public class <B>ConnectionFactory</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A><DT>implements <A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>pete
- 
- ConnectionFactory is responsible for creating new connections. Eventually,
+ConnectionFactory is responsible for creating new connections. Eventually,
  the connection factory should read an external configuration file and create
  a pool of connections. The current implementation just does the basics. Once
- the tires get kicked a bit, we can add connection pooling support.</DD>
-</DL>
+ the tires get kicked a bit, we can add connection pooling support.
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -189,7 +187,9 @@ Class ConnectionFactory</H2>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/jms/client/ConnectionFactory.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;test)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -198,7 +198,9 @@ Class ConnectionFactory</H2>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each time through a Thread Group's test script, an iteration event is
- fired for each thread.</TD>
+ fired for each thread.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -269,6 +271,8 @@ public void <B>testStarted</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Called just before the start of the test from the main engine thread.
  
+ This is before the test elements are cloned.
+ 
  Note that not all the test
  variables will have been set up at this point.
 <P>
@@ -288,6 +292,8 @@ public void <B>testEnded</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/ja
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Called once for all threads after the end of a test.
+ 
+ This will use the same element instances as at the start of the test.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testEnded(java.lang.String)">testEnded</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -341,6 +347,9 @@ public void <B>testIterationStart</B>(<A HREF="../../../../../../org/apache/jmet
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
 <DD>Each time through a Thread Group's test script, an iteration event is
  fired for each thread.
+ 
+ This will be after the test elements have been cloned, so in general
+ the instance will not be the same as the ones the start/end methods call.
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testIterationStart(org.apache.jmeter.engine.event.LoopIterationEvent)">testIterationStart</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -361,8 +370,7 @@ public static javax.jms.TopicConnectionFactory <B>getTopicConnectionFactory</B>(
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>ctx</CODE> - <DD><CODE>fac</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -377,8 +385,7 @@ public static javax.jms.QueueConnectionFactory <B>getQueueConnectionFactory</B>(
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>ctx</CODE> - <DD><CODE>fac</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -392,8 +399,7 @@ public static javax.jms.TopicConnection <B>getTopicConnection</B>()</PRE>
 </DL>
 </DD>
 <DD><DL>
-
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -408,8 +414,7 @@ public static javax.jms.QueueConnection <B>getQueueConnection</B>(<A HREF="http:
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>ctx</CODE> - <DD><CODE>queueConn</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

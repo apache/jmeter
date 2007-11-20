@@ -214,7 +214,7 @@ Class JLabeledChoice</H2>
                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;items)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs a new component with the label displaying the passed text.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs a non-edittable combo-box with the label displaying the passed text.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/gui/JLabeledChoice.html#JLabeledChoice(java.lang.String, java.lang.String[], boolean)">JLabeledChoice</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;pLabel,
@@ -222,7 +222,7 @@ Class JLabeledChoice</H2>
                boolean&nbsp;editable)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructs a combo-box with the label displaying the passed text.</TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -434,9 +434,9 @@ JLabeledChoice</H3>
 public <B>JLabeledChoice</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;pLabel,
                       <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;items)</PRE>
 <DL>
-<DD>Constructs a new component with the label displaying the passed text.
+<DD>Constructs a non-edittable combo-box with the label displaying the passed text.
 <P>
-<DT><B>Parameters:</B><DD><CODE>pLabel</CODE> - The text to in the label.</DL>
+<DT><B>Parameters:</B><DD><CODE>pLabel</CODE> - - the text to display in the label.<DD><CODE>items</CODE> - - the items to display in the Combo box</DL>
 <HR>
 
 <A NAME="JLabeledChoice(java.lang.String, java.lang.String[], boolean)"><!-- --></A><H3>
@@ -446,7 +446,9 @@ public <B>JLabeledChoice</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/ja
                       <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;items,
                       boolean&nbsp;editable)</PRE>
 <DL>
-</DL>
+<DD>Constructs a combo-box with the label displaying the passed text.
+<P>
+<DT><B>Parameters:</B><DD><CODE>pLabel</CODE> - - the text to display in the label.<DD><CODE>items</CODE> - - the items to display in the Combo box<DD><CODE>editable</CODE> - - if true, then Add and Delete buttons are created.</DL>
 
 <!-- ============ METHOD DETAIL ========== -->
 

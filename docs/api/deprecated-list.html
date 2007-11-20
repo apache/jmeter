@@ -79,27 +79,7 @@ function windowTitle()
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TD COLSPAN=2><FONT SIZE="+2">
-<B>Deprecated Fields</B></FONT></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/protocol/http/config/MultipartUrlConfig.html#MULTIPART_FORM">org.apache.jmeter.protocol.http.config.MultipartUrlConfig.MULTIPART_FORM</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>use HTTPSamplerBase.MULTIPART_FORM_DATA instead</I>&nbsp;</TD>
-</TR>
-</TABLE>
-&nbsp;
-<P>
-
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TD COLSPAN=2><FONT SIZE="+2">
 <B>Deprecated Methods</B></FONT></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/protocol/http/config/MultipartUrlConfig.html#addEncodedArgument(java.lang.String, java.lang.String)">org.apache.jmeter.protocol.http.config.MultipartUrlConfig.addEncodedArgument(String, String)</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>values in a multipart/form-data are not urlencoded,
- so it does not make sense to add a value as a encoded value</I>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><A HREF="org/apache/jorphan/util/JOrphanUtils.html#booleanToString(boolean)">org.apache.jorphan.util.JOrphanUtils.booleanToString(boolean)</A>
@@ -107,9 +87,29 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Use Boolean.toString(boolean) instead.</I>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsBA()">org.apache.jmeter.samplers.SampleResult.getResponseDataAsBA()</A>
+<TD><A HREF="org/apache/jorphan/reflect/Functor.html#checkMethod(java.lang.Object)">org.apache.jorphan.reflect.Functor.checkMethod(Object)</A>
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>- no longer needed, as getResponseData() does not return null</I>&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>** for use by Unit test code only **</I>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="org/apache/jorphan/reflect/Functor.html#checkMethod(java.lang.Object, java.lang.Class)">org.apache.jorphan.reflect.Functor.checkMethod(Object, Class)</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>** for use by Unit test code only **</I>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="org/apache/jmeter/samplers/SampleResult.html#getDataEncoding()">org.apache.jmeter.samplers.SampleResult.getDataEncoding()</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>use getDataEncodingWithDefault() or getDataEncodingNoDefault() as needed.</I>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="org/apache/jmeter/util/Calculator.html#getPageSize()">org.apache.jmeter.util.Calculator.getPageSize()</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>use getAvgPageBytes() instead.</I>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="org/apache/jmeter/visualizers/SamplingStatCalculator.html#getPageSize()">org.apache.jmeter.visualizers.SamplingStatCalculator.getPageSize()</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>use getBytesPerSecond() instead</I>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><A HREF="org/apache/jmeter/util/JMeterUtils.html#getResString(java.lang.String, java.lang.String)">org.apache.jmeter.util.JMeterUtils.getResString(String, String)</A>
@@ -124,39 +124,9 @@ function windowTitle()
  that properly handles the encodings of the page</I>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/save/SaveService.html#loadElement(java.io.Reader)">org.apache.jmeter.save.SaveService.loadElement(Reader)</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Use loadElement(InputStream in) instead, since that takes
- the fileEncoding property of SaveService into consideration</I>&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><A HREF="org/apache/jmeter/testbeans/TestBeanHelper.html#prepare(org.apache.jmeter.testelement.TestElement)">org.apache.jmeter.testbeans.TestBeanHelper.prepare(TestElement)</A>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>to limit it's usage in expectation of moving it elsewhere.</I>&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/save/SaveService.html#saveElement(java.lang.Object, java.io.Writer)">org.apache.jmeter.save.SaveService.saveElement(Object, Writer)</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Use saveElement(Object el, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/save/SaveService.html#saveSampleResult(org.apache.jmeter.samplers.SampleResult, java.io.Writer)">org.apache.jmeter.save.SaveService.saveSampleResult(SampleResult, Writer)</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Use saveSampleResult(SampleResult res, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/save/SaveService.html#saveTestElement(org.apache.jmeter.testelement.TestElement, java.io.Writer)">org.apache.jmeter.save.SaveService.saveTestElement(TestElement, Writer)</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Use saveTestElement(TestElement elem, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><A HREF="org/apache/jmeter/save/SaveService.html#saveTree(org.apache.jorphan.collections.HashTree, java.io.Writer)">org.apache.jmeter.save.SaveService.saveTree(HashTree, Writer)</A>
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Use saveTree(HashTree tree, OutputStream out) instead, which
- takes the fileEncoding property of SaveService into consideration</I>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><A HREF="org/apache/jmeter/samplers/SampleResult.html#setResponseData(java.lang.String)">org.apache.jmeter.samplers.SampleResult.setResponseData(String)</A>
@@ -193,6 +163,11 @@ function windowTitle()
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>- only for use by JMeter class!</I>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="org/apache/jmeter/gui/MainFrame.html#MainFrame()">org.apache.jmeter.gui.MainFrame()</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Do not use - only needed for JUnit tests</I>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><A HREF="org/apache/jmeter/visualizers/MonitorGraph.html#MonitorGraph()">org.apache.jmeter.visualizers.MonitorGraph()</A>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Only for use in unit testing</I>&nbsp;</TD>
@@ -211,6 +186,11 @@ function windowTitle()
 <TD><A HREF="org/apache/jmeter/visualizers/ServerPanel.html#ServerPanel()">org.apache.jmeter.visualizers.ServerPanel()</A>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Only for use in unit testing</I>&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(long, long)">org.apache.jmeter.samplers.StatisticalSampleResult(long, long)</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I>Needs to be replaced when multiple sample results are sorted out</I>&nbsp;</TD>
 </TR>
 </TABLE>
 &nbsp;

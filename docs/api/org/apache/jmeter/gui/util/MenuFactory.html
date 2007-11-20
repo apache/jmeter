@@ -211,11 +211,33 @@ Class MenuFactory</H2>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/util/MenuFactory.html#doNothing()">doNothing</A></B>()</CODE>
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/util/MenuFactory.html#addPasteResetMenu(javax.swing.JPopupMenu)">addPasteResetMenu</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JPopupMenu.html" title="class or interface in javax.swing">JPopupMenu</A>&nbsp;menu)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/util/MenuFactory.html#canAddTo(org.apache.jmeter.gui.tree.JMeterTreeNode, org.apache.jmeter.gui.tree.JMeterTreeNode[])">canAddTo</A></B>(<A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeNode.html" title="class in org.apache.jmeter.gui.tree">JMeterTreeNode</A>&nbsp;parentNode,
+         <A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeNode.html" title="class in org.apache.jmeter.gui.tree">JMeterTreeNode</A>[]&nbsp;nodes)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Determine whether or not nodes can be added to this parent.
+ 
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/util/MenuFactory.html#canAddTo(org.apache.jmeter.gui.tree.JMeterTreeNode, org.apache.jmeter.testelement.TestElement)">canAddTo</A></B>(<A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeNode.html" title="class in org.apache.jmeter.gui.tree">JMeterTreeNode</A>&nbsp;parentNode,
+         <A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;element)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Determine whether or not nodes can be added to this parent.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -281,7 +303,7 @@ Class MenuFactory</H2>
          <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;menuName)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a menu from a collection of items.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -290,7 +312,7 @@ Class MenuFactory</H2>
          <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;actionCommand)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a menu from a menu category.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -300,7 +322,7 @@ Class MenuFactory</H2>
              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;actionCommand)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a single menu item</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -456,10 +478,11 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 </TR>
 </TABLE>
 
-<A NAME="doNothing()"><!-- --></A><H3>
-doNothing</H3>
+<A NAME="addEditMenu(javax.swing.JPopupMenu, boolean)"><!-- --></A><H3>
+addEditMenu</H3>
 <PRE>
-public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>doNothing</B>()</PRE>
+public static void <B>addEditMenu</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JPopupMenu.html" title="class or interface in javax.swing">JPopupMenu</A>&nbsp;menu,
+                               boolean&nbsp;removable)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -467,11 +490,10 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.
 </DL>
 <HR>
 
-<A NAME="addEditMenu(javax.swing.JPopupMenu, boolean)"><!-- --></A><H3>
-addEditMenu</H3>
+<A NAME="addPasteResetMenu(javax.swing.JPopupMenu)"><!-- --></A><H3>
+addPasteResetMenu</H3>
 <PRE>
-public static void <B>addEditMenu</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JPopupMenu.html" title="class or interface in javax.swing">JPopupMenu</A>&nbsp;menu,
-                               boolean&nbsp;removable)</PRE>
+public static void <B>addPasteResetMenu</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JPopupMenu.html" title="class or interface in javax.swing">JPopupMenu</A>&nbsp;menu)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -586,9 +608,11 @@ makeMenu</H3>
 public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenu.html" title="class or interface in javax.swing">JMenu</A> <B>makeMenu</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;category,
                              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;actionCommand)</PRE>
 <DL>
+<DD>Create a menu from a menu category.
+<P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>category</CODE> - - predefined string (used as key for menuMap HashMap and messages.properties lookup)<DD><CODE>actionCommand</CODE> - - predefined string, e.g. ActionNames.ADD
-<DT><B>Returns:</B><DD><DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/action/ActionNames.html" title="class in org.apache.jmeter.gui.action"><CODE>ActionNames</CODE></A></DL>
+<DT><B>Returns:</B><DD>the menu<DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/action/ActionNames.html" title="class in org.apache.jmeter.gui.action"><CODE>ActionNames</CODE></A></DL>
 </DD>
 </DL>
 <HR>
@@ -600,9 +624,11 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenu
                              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;actionCommand,
                              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;menuName)</PRE>
 <DL>
+<DD>Create a menu from a collection of items.
+<P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>menuInfo</CODE> - - collection of MenuInfo items<DD><CODE>actionCommand</CODE> - - predefined string, e.g. ActionNames.ADD<DD><CODE>menuName</CODE> - 
-<DT><B>Returns:</B><DD><DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/action/ActionNames.html" title="class in org.apache.jmeter.gui.action"><CODE>ActionNames</CODE></A></DL>
+<DT><B>Returns:</B><DD>the menu<DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/action/ActionNames.html" title="class in org.apache.jmeter.gui.action"><CODE>ActionNames</CODE></A></DL>
 </DD>
 </DL>
 <HR>
@@ -625,9 +651,11 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenu
                                      <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;name,
                                      <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;actionCommand)</PRE>
 <DL>
+<DD>Create a single menu item
+<P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>label</CODE> - for the MenuItem<DD><CODE>name</CODE> - for the MenuItem<DD><CODE>actionCommand</CODE> - - predefined string, e.g. ActionNames.ADD
-<DT><B>Returns:</B><DD><DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/action/ActionNames.html" title="class in org.apache.jmeter.gui.action"><CODE>ActionNames</CODE></A></DL>
+<DT><B>Returns:</B><DD>the menu item<DT><B>See Also:</B><DD><A HREF="../../../../../org/apache/jmeter/gui/action/ActionNames.html" title="class in org.apache.jmeter.gui.action"><CODE>ActionNames</CODE></A></DL>
 </DD>
 </DL>
 <HR>
@@ -642,6 +670,40 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JMenu
 <DL>
 <DD><DL>
 </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="canAddTo(org.apache.jmeter.gui.tree.JMeterTreeNode, org.apache.jmeter.testelement.TestElement)"><!-- --></A><H3>
+canAddTo</H3>
+<PRE>
+public static boolean <B>canAddTo</B>(<A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeNode.html" title="class in org.apache.jmeter.gui.tree">JMeterTreeNode</A>&nbsp;parentNode,
+                               <A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;element)</PRE>
+<DL>
+<DD>Determine whether or not nodes can be added to this parent.
+ 
+ Used by Merge
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>parentNode</CODE> - <DD><CODE>element</CODE> - - top-level test element to be added
+<DT><B>Returns:</B><DD>whether it is OK to add the element to this parent</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="canAddTo(org.apache.jmeter.gui.tree.JMeterTreeNode, org.apache.jmeter.gui.tree.JMeterTreeNode[])"><!-- --></A><H3>
+canAddTo</H3>
+<PRE>
+public static boolean <B>canAddTo</B>(<A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeNode.html" title="class in org.apache.jmeter.gui.tree">JMeterTreeNode</A>&nbsp;parentNode,
+                               <A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeNode.html" title="class in org.apache.jmeter.gui.tree">JMeterTreeNode</A>[]&nbsp;nodes)</PRE>
+<DL>
+<DD>Determine whether or not nodes can be added to this parent.
+ 
+ Used by DragNDrop and Paste.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>parentNode</CODE> - <DD><CODE>nodes</CODE> - - array of nodes that are to be added
+<DT><B>Returns:</B><DD>whether it is OK to add the dragged nodes to this parent</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

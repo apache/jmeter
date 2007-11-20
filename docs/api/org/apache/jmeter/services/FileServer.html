@@ -93,11 +93,7 @@ Class FileServer</H2>
 <DT>public class <B>FileServer</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>mstover
- 
- The point of this class is to provide thread-safe access to files, and to
+The point of this class is to provide thread-safe access to files, and to
  provide some simplifying assumptions about where to find files and how to
  name them. For instance, putting supporting files in the same directory as
  the saved test plan file allows users to refer to the file with just it's
@@ -106,8 +102,10 @@ Class FileServer</H2>
  goal of packaging up entire test plans as a directory structure that can be
  sent via rmi to remote servers (currently, one must make sure the remote
  server has all support files in a relative-same location) and to package up
- test plans to execute on unknown boxes that only have Java installed.</DD>
-</DL>
+ test plans to execute on unknown boxes that only have Java installed.
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -448,7 +446,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/File.html" title
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>basedir</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>a random File from the basedir that matches one of the extensions</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

@@ -131,6 +131,14 @@ This is a nice packaging for the various information returned from taking a
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#DEFAULT_HTTP_ENCODING">DEFAULT_HTTP_ENCODING</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#TEXT">TEXT</A></B></CODE>
 
 <BR>
@@ -176,7 +184,7 @@ This is a nice packaging for the various information returned from taking a
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Allow users to create a sample with specific timestamp and elapsed times
  for cloning purposes, but don't allow the times to be changed later
  
- Currently used by OldSaveService only</TD>
+ Currently used by OldSaveService, CSVSaveService and StatisticalSampleResult</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -244,6 +252,14 @@ This is a nice packaging for the various information returned from taking a
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAllThreads()">getAllThreads</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;<A HREF="../../../../org/apache/jmeter/assertions/AssertionResult.html" title="class in org.apache.jmeter.assertions">AssertionResult</A>[]</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAssertionResults()">getAssertionResults</A></B>()</CODE>
 
@@ -272,7 +288,23 @@ This is a nice packaging for the various information returned from taking a
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncoding()">getDataEncoding</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the dataEncoding.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>use getDataEncodingWithDefault() or getDataEncodingNoDefault() as needed.</I></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingNoDefault()">getDataEncodingNoDefault</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the dataEncoding or the default if no dataEncoding was provided</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingWithDefault()">getDataEncodingWithDefault</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the dataEncoding or the default if no dataEncoding was provided</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -286,6 +318,22 @@ This is a nice packaging for the various information returned from taking a
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;long</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getEndTime()">getEndTime</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getErrorCount()">getErrorCount</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the count of errors.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getGroupThreads()">getGroupThreads</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -348,19 +396,11 @@ This is a nice packaging for the various information returned from taking a
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;byte[]</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsBA()">getResponseDataAsBA</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>- no longer needed, as getResponseData() does not return null</I></TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsString()">getResponseDataAsString</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the responseData attribute of the SampleResult object.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the responseData of the SampleResult object as a String</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -573,6 +613,14 @@ This is a nice packaging for the various information returned from taking a
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setAllThreads(int)">setAllThreads</A></B>(int&nbsp;n)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setBytes(int)">setBytes</A></B>(int&nbsp;length)</CODE>
 
 <BR>
@@ -615,6 +663,22 @@ This is a nice packaging for the various information returned from taking a
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEndTime(long)">setEndTime</A></B>(long&nbsp;end)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setErrorCount(int)">setErrorCount</A></B>(int&nbsp;i)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setGroupThreads(int)">setGroupThreads</A></B>(int&nbsp;n)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -681,7 +745,9 @@ This is a nice packaging for the various information returned from taking a
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(byte[])">setResponseData</A></B>(byte[]&nbsp;response)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the responseData attribute of the SampleResult object.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets the responseData attribute of the SampleResult object.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -870,6 +936,16 @@ This is a nice packaging for the various information returned from taking a
 </TR>
 </TABLE>
 
+<A NAME="DEFAULT_HTTP_ENCODING"><!-- --></A><H3>
+DEFAULT_HTTP_ENCODING</H3>
+<PRE>
+public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>DEFAULT_HTTP_ENCODING</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../constant-values.html#org.apache.jmeter.samplers.SampleResult.DEFAULT_HTTP_ENCODING">Constant Field Values</A></DL>
+</DL>
+<HR>
+
 <A NAME="TEXT"><!-- --></A><H3>
 TEXT</H3>
 <PRE>
@@ -949,7 +1025,7 @@ public <B>SampleResult</B>(long&nbsp;stamp,
 <DD>Allow users to create a sample with specific timestamp and elapsed times
  for cloning purposes, but don't allow the times to be changed later
  
- Currently used by OldSaveService only
+ Currently used by OldSaveService, CSVSaveService and StatisticalSampleResult
 <P>
 <DT><B>Parameters:</B><DD><CODE>stamp</CODE> - -
             this may be a start time or an end time<DD><CODE>elapsed</CODE> - </DL>
@@ -1388,6 +1464,9 @@ setResponseData</H3>
 public void <B>setResponseData</B>(byte[]&nbsp;response)</PRE>
 <DL>
 <DD>Sets the responseData attribute of the SampleResult object.
+ 
+ If the parameter is null, then the responseData is set to an empty byte array.
+ This ensures that getResponseData() can never be null.
 <P>
 <DD><DL>
 </DL>
@@ -1428,7 +1507,7 @@ public byte[] <B>getResponseData</B>()</PRE>
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD>the responseData value</DL>
+<DT><B>Returns:</B><DD>the responseData value (cannot be null)</DL>
 </DD>
 </DL>
 <HR>
@@ -1438,7 +1517,7 @@ getResponseDataAsString</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getResponseDataAsString</B>()</PRE>
 <DL>
-<DD>Gets the responseData attribute of the SampleResult object.
+<DD>Gets the responseData of the SampleResult object as a String
 <P>
 <DD><DL>
 </DL>
@@ -1446,26 +1525,6 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 <DD><DL>
 
 <DT><B>Returns:</B><DD>the responseData value as a String, converted according to the encoding</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getResponseDataAsBA()"><!-- --></A><H3>
-getResponseDataAsBA</H3>
-<PRE>
-public byte[] <B>getResponseDataAsBA</B>()</PRE>
-<DL>
-<DD><B>Deprecated.</B>&nbsp;<I>- no longer needed, as getResponseData() does not return null</I>
-<P>
-<DD>Convenience method to get responseData as a non-null byte array
-<P>
-<DD><DL>
-</DL>
-</DD>
-<DD><DL>
-
-<DT><B>Returns:</B><DD>the responseData. If responseData is null then an empty byte
-         array is returned rather than null.</DL>
 </DD>
 </DL>
 <HR>
@@ -1611,7 +1670,41 @@ getDataEncoding</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getDataEncoding</B>()</PRE>
 <DL>
-<DD>Returns the dataEncoding.
+<DD><B>Deprecated.</B>&nbsp;<I>use getDataEncodingWithDefault() or getDataEncodingNoDefault() as needed.</I>
+<P>
+<DD>Returns the dataEncoding or the default if no dataEncoding was provided
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getDataEncodingWithDefault()"><!-- --></A><H3>
+getDataEncodingWithDefault</H3>
+<PRE>
+public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getDataEncodingWithDefault</B>()</PRE>
+<DL>
+<DD>Returns the dataEncoding or the default if no dataEncoding was provided
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getDataEncodingNoDefault()"><!-- --></A><H3>
+getDataEncodingNoDefault</H3>
+<PRE>
+public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getDataEncodingNoDefault</B>()</PRE>
+<DL>
+<DD>Returns the dataEncoding or the default if no dataEncoding was provided
 <P>
 <DD><DL>
 </DL>
@@ -2001,7 +2094,38 @@ public int <B>getSampleCount</B>()</PRE>
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>the sample count</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getErrorCount()"><!-- --></A><H3>
+getErrorCount</H3>
+<PRE>
+public int <B>getErrorCount</B>()</PRE>
+<DL>
+<DD>Returns the count of errors.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>0 - or 1 if the sample failed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setErrorCount(int)"><!-- --></A><H3>
+setErrorCount</H3>
+<PRE>
+public void <B>setErrorCount</B>(int&nbsp;i)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
 </DD>
 </DL>
 <HR>
@@ -2036,7 +2160,7 @@ public int <B>getBytes</B>()</PRE>
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>byte count</DL>
 </DD>
 </DL>
 <HR>
@@ -2196,6 +2320,62 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 setResultFileName</H3>
 <PRE>
 public void <B>setResultFileName</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;resultFileName)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getGroupThreads()"><!-- --></A><H3>
+getGroupThreads</H3>
+<PRE>
+public int <B>getGroupThreads</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setGroupThreads(int)"><!-- --></A><H3>
+setGroupThreads</H3>
+<PRE>
+public void <B>setGroupThreads</B>(int&nbsp;n)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getAllThreads()"><!-- --></A><H3>
+getAllThreads</H3>
+<PRE>
+public int <B>getAllThreads</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setAllThreads(int)"><!-- --></A><H3>
+setAllThreads</H3>
+<PRE>
+public void <B>setAllThreads</B>(int&nbsp;n)</PRE>
 <DL>
 <DD><DL>
 </DL>

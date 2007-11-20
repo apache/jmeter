@@ -97,10 +97,13 @@ Class StatisticalSampleResult</H2>
 <DT>public class <B>StatisticalSampleResult</B><DT>extends <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A><DT>implements <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A></DL>
 
 <P>
+Aggregates sample results for use by the Statistical remote batch mode.
+ Samples are aggregated by the key defined by getKey().
+ TODO: merge error count into parent class?
+<P>
+
+<P>
 <DL>
-<DT><B>Author:</B></DT>
-  <DD>Lars Krog-Jensen
-         Created: 2005-okt-04</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.samplers.StatisticalSampleResult">Serialized Form</A></DL>
 <HR>
 
@@ -123,7 +126,7 @@ Class StatisticalSampleResult</H2>
 <TD><B>Fields inherited from class org.apache.jmeter.samplers.<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#BINARY">BINARY</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#TEXT">TEXT</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#BINARY">BINARY</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#DEFAULT_HTTP_ENCODING">DEFAULT_HTTP_ENCODING</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#TEXT">TEXT</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -140,6 +143,13 @@ Class StatisticalSampleResult</H2>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(long, long)">StatisticalSampleResult</A></B>(long&nbsp;stamp,
+                        long&nbsp;elapsed)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Needs to be replaced when multiple sample results are sorted out</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult)">StatisticalSampleResult</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res)</CODE>
@@ -171,7 +181,7 @@ Class StatisticalSampleResult</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#getErrorCount()">getErrorCount</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the count of errors.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -179,7 +189,10 @@ Class StatisticalSampleResult</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#getKey(org.apache.jmeter.samplers.SampleEvent)">getKey</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;event)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates the key to be used for aggregating samples as follows:<br/>
+ <code>sampleLabel</code> "-" <code>threadGroup</code>
+ 
+ N.B. the key should agree with the fixed items that are saved in the sample.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -197,6 +210,14 @@ Class StatisticalSampleResult</H2>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the sample timestamp, which may be either the start time or the end time.</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/StatisticalSampleResult.html#setErrorCount(int)">setErrorCount</A></B>(int&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.samplers.SampleResult"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -204,7 +225,7 @@ Class StatisticalSampleResult</H2>
 <TD><B>Methods inherited from class org.apache.jmeter.samplers.<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addAssertionResult(org.apache.jmeter.assertions.AssertionResult)">addAssertionResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addSubResult(org.apache.jmeter.samplers.SampleResult)">addSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#configure(org.apache.avalon.framework.configuration.Configuration)">configure</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#createTestSample(long)">createTestSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#createTestSample(long, long)">createTestSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAssertionResults()">getAssertionResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getBytes()">getBytes</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getContentType()">getContentType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncoding()">getDataEncoding</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataType()">getDataType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getEndTime()">getEndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getIdleTime()">getIdleTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getLatency()">getLatency</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getMediaType()">getMediaType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getParent()">getParent</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getRequestHeaders()">getRequestHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseCode()">getResponseCode</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseData()">getResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsBA()">getResponseDataAsBA</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsString()">getResponseDataAsString</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseHeaders()">getResponseHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseMessage()">getResponseMessage</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResultFileName()">getResultFileName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleCount()">getSampleCount</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleLabel()">getSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSamplerData()">getSamplerData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSaveConfig()">getSaveConfig</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getStartTime()">getStartTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSubResults()">getSubResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getURL()">getURL</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getUrlAsString()">getUrlAsString</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isMarked(java.lang.String)">isMarked</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isMonitor()">isMonitor</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isResponseCodeOK()">isResponseCodeOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStampedAtStart()">isStampedAtStart</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopTest()">isStopTest</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopThread()">isStopThread</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isSuccessful()">isSuccessful</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#latencyEnd()">latencyEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleEnd()">sampleEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#samplePause()">samplePause</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleResume()">sampleResume</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleStart()">sampleStart</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setBytes(int)">setBytes</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setContentType(java.lang.String)">setContentType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setDataEncoding(java.lang.String)">setDataEncoding</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setDataType(java.lang.String)">setDataType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEncodingAndType(java.lang.String)">setEncodingAndType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEndTime(long)">setEndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setLatency(long)">setLatency</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setMarked(java.lang.String)">setMarked</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setMonitor(boolean)">setMonitor</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setParent(org.apache.jmeter.samplers.SampleResult)">setParent</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setRequestHeaders(java.lang.String)">setRequestHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseCode(java.lang.String)">setResponseCode</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseCodeOK()">setResponseCodeOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(byte[])">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(java.lang.String)">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseHeaders(java.lang.String)">setResponseHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseMessage(java.lang.String)">setResponseMessage</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseMessageOK()">setResponseMessageOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResultFileName(java.lang.String)">setResultFileName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSampleCount(int)">setSampleCount</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSampleLabel(java.lang.String)">setSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSamplerData(java.lang.String)">setSamplerData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSaveConfig(org.apache.jmeter.samplers.SampleSaveConfiguration)">setSaveConfig</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStampAndTime(long, long)">setStampAndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStartTime(long)">setStartTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopTest(boolean)">setStopTest</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopThread(boolean)">setStopThread</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSuccessful(boolean)">setSuccessful</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setTime(long)">setTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setTimeStamp(long)">setTimeStamp</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setURL(java.net.URL)">setURL</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#storeSubResult(org.apache.jmeter.samplers.SampleResult)">storeSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#toString()">toString</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addAssertionResult(org.apache.jmeter.assertions.AssertionResult)">addAssertionResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#addSubResult(org.apache.jmeter.samplers.SampleResult)">addSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#configure(org.apache.avalon.framework.configuration.Configuration)">configure</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#createTestSample(long)">createTestSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#createTestSample(long, long)">createTestSample</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAllThreads()">getAllThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getAssertionResults()">getAssertionResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getBytes()">getBytes</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getContentType()">getContentType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncoding()">getDataEncoding</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingNoDefault()">getDataEncodingNoDefault</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataEncodingWithDefault()">getDataEncodingWithDefault</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getDataType()">getDataType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getEndTime()">getEndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getGroupThreads()">getGroupThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getIdleTime()">getIdleTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getLatency()">getLatency</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getMediaType()">getMediaType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getParent()">getParent</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getRequestHeaders()">getRequestHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseCode()">getResponseCode</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseData()">getResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseDataAsString()">getResponseDataAsString</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseHeaders()">getResponseHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResponseMessage()">getResponseMessage</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getResultFileName()">getResultFileName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleCount()">getSampleCount</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSampleLabel()">getSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSamplerData()">getSamplerData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSaveConfig()">getSaveConfig</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getStartTime()">getStartTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getSubResults()">getSubResults</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getURL()">getURL</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getUrlAsString()">getUrlAsString</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isMarked(java.lang.String)">isMarked</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isMonitor()">isMonitor</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isResponseCodeOK()">isResponseCodeOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStampedAtStart()">isStampedAtStart</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopTest()">isStopTest</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isStopThread()">isStopThread</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#isSuccessful()">isSuccessful</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#latencyEnd()">latencyEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleEnd()">sampleEnd</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#samplePause()">samplePause</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleResume()">sampleResume</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#sampleStart()">sampleStart</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setAllThreads(int)">setAllThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setBytes(int)">setBytes</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setContentType(java.lang.String)">setContentType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setDataEncoding(java.lang.String)">setDataEncoding</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setDataType(java.lang.String)">setDataType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEncodingAndType(java.lang.String)">setEncodingAndType</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setEndTime(long)">setEndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setGroupThreads(int)">setGroupThreads</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setLatency(long)">setLatency</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setMarked(java.lang.String)">setMarked</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setMonitor(boolean)">setMonitor</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setParent(org.apache.jmeter.samplers.SampleResult)">setParent</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setRequestHeaders(java.lang.String)">setRequestHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseCode(java.lang.String)">setResponseCode</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseCodeOK()">setResponseCodeOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(byte[])">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseData(java.lang.String)">setResponseData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseHeaders(java.lang.String)">setResponseHeaders</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseMessage(java.lang.String)">setResponseMessage</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResponseMessageOK()">setResponseMessageOK</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setResultFileName(java.lang.String)">setResultFileName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSampleCount(int)">setSampleCount</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSampleLabel(java.lang.String)">setSampleLabel</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSamplerData(java.lang.String)">setSamplerData</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSaveConfig(org.apache.jmeter.samplers.SampleSaveConfiguration)">setSaveConfig</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStampAndTime(long, long)">setStampAndTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStartTime(long)">setStartTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopTest(boolean)">setStopTest</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setStopThread(boolean)">setStopThread</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setSuccessful(boolean)">setSuccessful</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setTime(long)">setTime</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setTimeStamp(long)">setTimeStamp</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setURL(java.net.URL)">setURL</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#storeSubResult(org.apache.jmeter.samplers.SampleResult)">storeSubResult</A>, <A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#toString()">toString</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -238,6 +259,19 @@ StatisticalSampleResult</H3>
 public <B>StatisticalSampleResult</B>()</PRE>
 <DL>
 </DL>
+<HR>
+
+<A NAME="StatisticalSampleResult(long, long)"><!-- --></A><H3>
+StatisticalSampleResult</H3>
+<PRE>
+public <B>StatisticalSampleResult</B>(long&nbsp;stamp,
+                               long&nbsp;elapsed)</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Needs to be replaced when multiple sample results are sorted out</I>
+<P>
+<DD>Allow OldSaveService to generate a suitable result when sample/error counts have been saved.
+<P>
+<DT><B>Parameters:</B><DD><CODE>stamp</CODE> - <DD><CODE>elapsed</CODE> - </DL>
 <HR>
 
 <A NAME="StatisticalSampleResult(org.apache.jmeter.samplers.SampleResult)"><!-- --></A><H3>
@@ -313,8 +347,26 @@ getErrorCount</H3>
 <PRE>
 public int <B>getErrorCount</B>()</PRE>
 <DL>
+<DD><B>Description copied from class: <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></B></DD>
+<DD>Returns the count of errors.
+<P>
 <DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#getErrorCount()">getErrorCount</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>0 - or 1 if the sample failed</DL>
+</DD>
 </DL>
+<HR>
+
+<A NAME="setErrorCount(int)"><!-- --></A><H3>
+setErrorCount</H3>
+<PRE>
+public void <B>setErrorCount</B>(int&nbsp;e)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html#setErrorCount(int)">setErrorCount</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -327,11 +379,17 @@ getKey</H3>
 <PRE>
 public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getKey</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</A>&nbsp;event)</PRE>
 <DL>
+<DD>Generates the key to be used for aggregating samples as follows:<br/>
+ <code>sampleLabel</code> "-" <code>threadGroup</code>
+ 
+ N.B. the key should agree with the fixed items that are saved in the sample.
+<P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>event</CODE> - sample event whose key is to be calculated
+<DT><B>Returns:</B><DD>the key to use for aggregating samples</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

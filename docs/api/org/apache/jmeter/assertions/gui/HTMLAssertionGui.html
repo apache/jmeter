@@ -95,11 +95,11 @@ Class HTMLAssertionGui</H2>
                           <IMG SRC="../../../../../resources/inherit.gif" ALT="extended by"><B>org.apache.jmeter.assertions.gui.HTMLAssertionGui</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html" title="class or interface in javax.swing.event">ChangeListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/EventListener.html" title="class or interface in java.util">EventListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html" title="class or interface in java.awt.event">FocusListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/EventListener.html" title="class or interface in java.util">EventListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html" title="class or interface in java.awt.event">KeyListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A></DD>
 </DL>
 <HR>
 <DL>
-<DT>public class <B>HTMLAssertionGui</B><DT>extends <A HREF="../../../../../org/apache/jmeter/assertions/gui/AbstractAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">AbstractAssertionGui</A><DT>implements <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html" title="class or interface in java.awt.event">FocusListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html" title="class or interface in javax.swing.event">ChangeListener</A></DL>
+<DT>public class <B>HTMLAssertionGui</B><DT>extends <A HREF="../../../../../org/apache/jmeter/assertions/gui/AbstractAssertionGui.html" title="class in org.apache.jmeter.assertions.gui">AbstractAssertionGui</A><DT>implements <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html" title="class or interface in java.awt.event">KeyListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A></DL>
 
 <P>
 GUI for HTMLAssertion
@@ -287,18 +287,34 @@ GUI for HTMLAssertion
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A></B>(<A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;inElement)</CODE>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html#keyPressed(java.awt.event.KeyEvent)">keyPressed</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyEvent.html" title="class or interface in java.awt.event">KeyEvent</A>&nbsp;e)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modifies a given TestElement to mirror the data in the gui components.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html#stateChanged(javax.swing.event.ChangeEvent)">stateChanged</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeEvent.html" title="class or interface in javax.swing.event">ChangeEvent</A>&nbsp;e)</CODE>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html#keyReleased(java.awt.event.KeyEvent)">keyReleased</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyEvent.html" title="class or interface in java.awt.event">KeyEvent</A>&nbsp;e)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method is called on change of output file input</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html#keyTyped(java.awt.event.KeyEvent)">keyTyped</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyEvent.html" title="class or interface in java.awt.event">KeyEvent</A>&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../org/apache/jmeter/assertions/gui/HTMLAssertionGui.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A></B>(<A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;inElement)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modifies a given TestElement to mirror the data in the gui components.</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.assertions.gui.AbstractAssertionGui"><!-- --></A>
@@ -494,7 +510,7 @@ public void <B>focusLost</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/ja
 <DD>This method is called if one of the threshold field looses the focus
 <P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html#focusLost(java.awt.event.FocusEvent)" title="class or interface in java.awt.event">focusLost</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html" title="class or interface in java.awt.event">FocusListener</A></CODE></DL>
+</DL>
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>inEvent</CODE> - </DL>
@@ -508,7 +524,7 @@ focusGained</H3>
 public void <B>focusGained</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusEvent.html" title="class or interface in java.awt.event">FocusEvent</A>&nbsp;e)</PRE>
 <DL>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html#focusGained(java.awt.event.FocusEvent)" title="class or interface in java.awt.event">focusGained</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html" title="class or interface in java.awt.event">FocusListener</A></CODE></DL>
+</DL>
 </DD>
 <DD><DL>
 <DT><B>See Also:</B><DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/FocusListener.html#focusGained(java.awt.event.FocusEvent)" title="class or interface in java.awt.event"><CODE>FocusListener.focusGained(java.awt.event.FocusEvent)</CODE></A></DL>
@@ -532,18 +548,44 @@ public void <B>actionPerformed</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/
 </DL>
 <HR>
 
-<A NAME="stateChanged(javax.swing.event.ChangeEvent)"><!-- --></A><H3>
-stateChanged</H3>
+<A NAME="keyPressed(java.awt.event.KeyEvent)"><!-- --></A><H3>
+keyPressed</H3>
 <PRE>
-public void <B>stateChanged</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeEvent.html" title="class or interface in javax.swing.event">ChangeEvent</A>&nbsp;e)</PRE>
+public void <B>keyPressed</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyEvent.html" title="class or interface in java.awt.event">KeyEvent</A>&nbsp;e)</PRE>
 <DL>
-<DD>This method is called on change of output file input
-<P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html#stateChanged(javax.swing.event.ChangeEvent)" title="class or interface in javax.swing.event">stateChanged</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html" title="class or interface in javax.swing.event">ChangeListener</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html#keyPressed(java.awt.event.KeyEvent)" title="class or interface in java.awt.event">keyPressed</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html" title="class or interface in java.awt.event">KeyListener</A></CODE></DL>
 </DD>
 <DD><DL>
-<DT><B>See Also:</B><DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html#stateChanged(javax.swing.event.ChangeEvent)" title="class or interface in javax.swing.event"><CODE>ChangeListener.stateChanged(javax.swing.event.ChangeEvent)</CODE></A></DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="keyReleased(java.awt.event.KeyEvent)"><!-- --></A><H3>
+keyReleased</H3>
+<PRE>
+public void <B>keyReleased</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyEvent.html" title="class or interface in java.awt.event">KeyEvent</A>&nbsp;e)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html#keyReleased(java.awt.event.KeyEvent)" title="class or interface in java.awt.event">keyReleased</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html" title="class or interface in java.awt.event">KeyListener</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="keyTyped(java.awt.event.KeyEvent)"><!-- --></A><H3>
+keyTyped</H3>
+<PRE>
+public void <B>keyTyped</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyEvent.html" title="class or interface in java.awt.event">KeyEvent</A>&nbsp;e)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html#keyTyped(java.awt.event.KeyEvent)" title="class or interface in java.awt.event">keyTyped</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/KeyListener.html" title="class or interface in java.awt.event">KeyListener</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
