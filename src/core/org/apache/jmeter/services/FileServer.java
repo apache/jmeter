@@ -42,7 +42,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author mstover
  * 
  * The point of this class is to provide thread-safe access to files, and to
  * provide some simplifying assumptions about where to find files and how to
@@ -260,7 +259,7 @@ public class FileServer {
      * File access relative to current test's base directory.  
 	 * 
 	 * @param basedir
-	 * @return
+	 * @return a random File from the basedir that matches one of the extensions
 	 */
 	public File getRandomFile(String basedir, String[] extensions) {
 		File input = null;

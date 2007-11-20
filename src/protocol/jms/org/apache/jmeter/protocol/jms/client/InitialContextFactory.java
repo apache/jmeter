@@ -73,7 +73,7 @@ public class InitialContextFactory {
 	 * 
 	 * @param ctx
 	 * @param name
-	 * @return
+	 * @return the topic or null
 	 */
 	public static synchronized Topic lookupTopic(Context ctx, String name) {
 		Topic t = null;

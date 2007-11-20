@@ -18,9 +18,6 @@
 
 package org.apache.jmeter.util;
 
-/**
- * @version $Revision$
- */
 public final class StringUtilities {
 
     /**
@@ -32,7 +29,7 @@ public final class StringUtilities {
     /**
      * Replace all patterns in a String
      * 
-     * @see String.replaceAll(String,String)
+     * @see String#replaceAll(String,String)
      *  - JDK1.4 only
      * 
      * @param input - string to be transformed

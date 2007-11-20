@@ -144,7 +144,7 @@ public class MonitorModel implements Clearable, Serializable, Cloneable {
 	/**
 	 * a clone method to clone the stats
 	 * 
-	 * @return
+	 * @return new instance of the class
 	 */
 	public MonitorStats cloneMonitorStats() {
 		return new MonitorStats(current.getHealth(), current.getLoad(), current.getCpuLoad(), current.getMemLoad(),

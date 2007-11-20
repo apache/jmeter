@@ -26,10 +26,6 @@ import javax.swing.JFileChooser;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public final class DirectoryDialoger {
 	/**
 	 * The last directory visited by the user while choosing Files.
@@ -44,10 +40,6 @@ public final class DirectoryDialoger {
 	private DirectoryDialoger() {
 	}
 
-    /**
-     * 
-     * @return
-     */
 	public static JFileChooser promptToOpenFile() {
 
 		if (lastJFCDirectory == null) {

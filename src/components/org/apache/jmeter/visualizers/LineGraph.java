@@ -179,7 +179,7 @@ public class LineGraph extends JPanel {
      * Since we only have 4 shapes, the method will start with the
      * first shape and keep cycling through the shapes in order.
      * @param count
-     * @return
+     * @return the first n shapes
      */
     public Shape[] createShapes(int count) {
         Shape[] shapes = new Shape[count];
@@ -191,7 +191,7 @@ public class LineGraph extends JPanel {
     
     /**
      * Return the next shape
-     * @return
+     * @return the next shape
      */
     public Shape nextShape() {
         this.shape_counter++;
@@ -204,7 +204,7 @@ public class LineGraph extends JPanel {
     /**
      * 
      * @param count
-     * @return
+     * @return the first count strokes
      */
     public Stroke[] createStrokes(int count) {
         Stroke[] str = new Stroke[count];
@@ -216,7 +216,7 @@ public class LineGraph extends JPanel {
     
     /**
      * method always return a new BasicStroke with 1.0f weight
-     * @return
+     * @return a new BasicStroke with 1.0f weight
      */
     public Stroke nextStroke() {
         return new BasicStroke(1.0f);
@@ -227,7 +227,7 @@ public class LineGraph extends JPanel {
      * implementation will cycle through 12 colors if a line graph
      * has more than 12 entries
      * @param count
-     * @return
+     * @return an array of Paint with different colors
      */
     public Paint[] createPaint(int count) {
         Paint[] pts = new Paint[count];
@@ -242,7 +242,7 @@ public class LineGraph extends JPanel {
      * Rather than return a random color, we want it to always go through
      * the same sequence. This way, the same charts will always use the
      * same color and make it easier to compare side by side.
-     * @return
+     * @return the next paint color in the PAINT_ARRAY
      */
     public Paint nextPaint() {
         this.paint_counter++;

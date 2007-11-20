@@ -1095,7 +1095,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		/**
 		 * get the JOptionPaneMessage Type
 		 * 
-		 * @return
+		 * @return the message type
 		 */
 		public int getMessageType() {
 			return messageType;
@@ -1104,7 +1104,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		/**
 		 * get error message
 		 * 
-		 * @return
+		 * @return the error message
 		 */
 		public String getErrorMessage() {
 			return msg;

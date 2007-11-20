@@ -21,7 +21,6 @@ package org.apache.jorphan.gui;
 import javax.swing.table.TableModel;
 
 /**
- * @author Peter Lin
  *
  * This is a basic interface for TreeTableModel that extends TableModel.
  * It's pretty minimal and isn't as full featured at other implementations.
@@ -33,7 +32,7 @@ public interface TreeTableModel extends TableModel {
      * the row is an object.
      * @param node
      * @param col
-     * @return
+     * @return the value at the column
      */
     public Object getValueAt(Object node, int col);
 
@@ -42,7 +41,7 @@ public interface TreeTableModel extends TableModel {
      * the row is an object.
      * @param node
      * @param col
-     * @return
+     * @return if cell is editable
      */
     public boolean isCellEditable(Object node, int col);
 
