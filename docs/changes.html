@@ -134,6 +134,122 @@
 								Version 2.3.1
 						</h3>
 							  									 				<h4	>
+								Summary of changes
+						</h4>
+							  									 				<h5	>
+								JMeter Proxy
+						</h5>
+							  									 				<p	>
+								
+The Proxy spoof function was broken in 2.3; it has been fixed. 
+Spoof now supports an optional parameter to limit spoofing to particular URLs. 
+This is useful for HTTPS pages that have insecure content - e.g. images/stylesheets may be accessed using HTTP.
+Spoofed responses now drop the default port (443) from https links to make them work better.
+
+						</p>
+							  									 				<p	>
+								
+Ignored proxy samples are now visible in Listeners - the label is enclosed in [ and ] as an indication. 
+Proxy documentation has been improved.
+
+						</p>
+							  									 				<h5	>
+								GUI changes
+						</h5>
+							  									 				<p	>
+								The Add menus show element types in the order in which they are processed 
+- see 
+												<a	 href="usermanual/test_plan.html#executionorder">
+								Test Plan Execution Order
+						</a>
+									.
+It is no longer possible to add test elements to inappropriate parts of the tree
+- e.g. samplers cannot be added directly under a test plan. 
+This also applies to Paste and drag and drop.
+
+						</p>
+							  									 				<p	>
+								
+The File menu now supports a "Revert" option, which reloads the current file.
+Also the last few file names used are remembered for easy reloading.
+
+						</p>
+							  									 				<h5	>
+								Remote testing
+						</h5>
+							  									 				<p	>
+								
+The JMeter server now starts the RMI server directly (by default).
+This simplifies testing, and means that the RMI server will be stopped when the server stops.
+
+						</p>
+							  									 				<p	>
+								
+Functions can now be used in Listener filenames (variables do not work).
+
+						</p>
+							  									 				<p	>
+								
+Command-line option -G can now be used to define properties for remote servers.
+Option -X can be used to stop a remote server after a non-GUI run.
+Server can be set to automatically exit after a single test (set property server.exitaftertest=true).
+
+						</p>
+							  									 				<h5	>
+								Other enhancements
+						</h5>
+							  									 				<p	>
+								
+JMeter startup no longer loads as many classes; this should reduce memory requirements.
+
+						</p>
+							  									 				<p	>
+								
+Parameter and file support added to all BeanShell elements. 
+Javascript function now supports access to JMeter objects; 
+Jexl function always did have access, but the documentation has now been included.
+New functions __eval() and __evalVar() for evaluating variables.
+
+						</p>
+							  									 				<p	>
+								
+CSV files with the correct header column names are now automatically recognised when loaded. 
+There is no need to configure the properties.
+
+						</p>
+							  									 				<p	>
+								
+The hostname can now be saved in CSV and XML output files. 
+Errors only flag is now supported when loading XML and CSV files. 
+
+						</p>
+							  									 				<p	>
+								
+General documentation improvements.
+
+						</p>
+							  									 				<h5	>
+								HTTP
+						</h5>
+							  									 				<p	>
+								PUT and DELETE should now work properly. 
+Cookie Manager no longer clears manually entered cookies.
+
+						</p>
+							  									 				<p	>
+								Now handles the META tag http-equiv charset
+						</p>
+							  									 				<h5	>
+								JDBC
+						</h5>
+							  									 				<p	>
+								JDBC Sampler now allows INOUT and OUT parameters for Called procedures. 
+JDBC Sampler now allows per-thread connections.
+
+						</p>
+							  									 				<hr	>
+						</hr>
+							  									 				<h4	>
 								Incompatible changes
 						</h4>
 							  									 				<ul	>
@@ -145,12 +261,12 @@ If the RMI registry has already been started externally, this will generate a wa
 This should not affect JMeter testing. 
 However, if you are also using the RMI registry for other applications there may be problems.
 For example, when the JMeter server shuts down it will stop the RMI registry.
-Also user-written command files may need to be adjusted (the ones supplied with JMeter have been updated)
-
-												<br	>
-						</br>
-									
-To revert to the earlier behaviour, define the JMeter property: server.rmi.create=false.
+Also user-written command files may need to be adjusted (the ones supplied with JMeter have been updated).
+To revert to the earlier behaviour, define the JMeter property: 
+												<b	>
+								server.rmi.create=false
+						</b>
+									.
 
 						</li>
 									
@@ -189,7 +305,7 @@ To revert to the previous behaviour, define the property proxy.headers.remove wi
 									
 
 												<li	>
-								HTTP Mirror Server now always returns the exact same content, it used to return wrong if UTF-8 encoding was used for HTTP POST body, for example
+								HTTP Mirror Server now always returns the exact same content, it used to return incorrect data if UTF-8 encoding was used for HTTP POST body, for example
 						</li>
 									
 
@@ -243,7 +359,7 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 									
 
 												<li	>
-								Fix Https spoofing (port problem)
+								Fix Https spoofing (port problem) which was broken in 2.3
 						</li>
 									
 
