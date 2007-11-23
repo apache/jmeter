@@ -27,6 +27,7 @@ import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -116,6 +117,9 @@ public abstract class AbstractVisualizer
 
 	/** A checkbox choosing whether or not only errors should be logged. */
 	private JCheckBox errorLogging;
+	
+	/* A checkbox choosing whether or not only successes should be logged. */
+	private JCheckBox successOnlyLogging;
 
 	private JButton saveConfigButton;
 
@@ -126,7 +130,19 @@ public abstract class AbstractVisualizer
 	public AbstractVisualizer() {
 		super();
 
+		// errorLogging and successOnlyLogging are mutually exclusive
 		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
+		errorLogging.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				if (errorLogging.isSelected()) successOnlyLogging.setSelected(false);
+			}			
+		});
+		successOnlyLogging = new JCheckBox(JMeterUtils.getResString("log_success_only")); // $NON-NLS-1$
+		successOnlyLogging.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				if (successOnlyLogging.isSelected()) errorLogging.setSelected(false);
+			}			
+		});
 		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$
 		saveConfigButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -142,7 +158,9 @@ public abstract class AbstractVisualizer
 
 		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".jtl"); // $NON-NLS-1$ $NON-NLS-2$
 		filePanel.addChangeListener(this);
+		filePanel.add(new JLabel(JMeterUtils.getResString("log_only"))); // $NON-NLS-1$
 		filePanel.add(errorLogging);
+		filePanel.add(successOnlyLogging);
 		filePanel.add(saveConfigButton);
 
 	}
@@ -275,6 +293,7 @@ public abstract class AbstractVisualizer
 		if (c instanceof ResultCollector) {
 			ResultCollector rc = (ResultCollector) c;
 			rc.setErrorLogging(errorLogging.isSelected());
+			rc.setSuccessOnlyLogging(successOnlyLogging.isSelected());
 			rc.setFilename(getFile());
 			collector = rc;
 		}
@@ -286,6 +305,7 @@ public abstract class AbstractVisualizer
 		setFile(el.getPropertyAsString(ResultCollector.FILENAME));
 		ResultCollector rc = (ResultCollector) el;
 		errorLogging.setSelected(rc.isErrorLogging());
+		successOnlyLogging.setSelected(rc.isSuccessOnlyLogging());
 		if (collector == null) {
 			collector = new ResultCollector();
 		}
