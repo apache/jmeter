@@ -36,6 +36,7 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.testelement.TestElement;
@@ -473,7 +474,7 @@ public final class OldSaveService {
 	}
 
 	// Called by ResultCollector#loadExistingFile()
-	public static void processSamples(String filename, Visualizer visualizer, boolean showAll) 
+	public static void processSamples(String filename, Visualizer visualizer, ResultCollector rc) 
     throws SAXException, IOException, ConfigurationException 
 	{
 		DefaultConfigurationBuilder cfgbuilder = new DefaultConfigurationBuilder();
@@ -481,7 +482,7 @@ public final class OldSaveService {
 		Configuration[] samples = savedSamples.getChildren();
 		for (int i = 0; i < samples.length; i++) {
 		    SampleResult result = OldSaveService.getSampleResult(samples[i]);
-		    if (showAll || !result.isSuccessful()) {
+		    if (rc.isSampleWanted(result.isSuccessful())) {
 		    	visualizer.add(result);
 		    }
 		}

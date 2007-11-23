@@ -5464,6 +5464,67 @@ by using the -l command-line flag.
 	</table></p>
 									
 
+												<p	>
+								
+	The figure below shows an example of the result file configuration panel
+
+												<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="../images/screenshots/simpledatawriter.png"><br>
+	<font size="-1">						Result file configuration panel
+			</font></td></tr></table></p>
+									
+
+						</p>
+									
+
+											 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>File Name</td>
+			<td>						Name of the file containing sample results
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Browse...</td>
+			<td>						File Browse Button
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Errors</td>
+			<td>						Select this to write/read only results with errors
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Successes</td>
+			<td>						Select this to write/read only results without errors.
+        If neither Errors nor Successes is selected, then all results are processed.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>Configure</td>
+			<td>						Configure Button, see below
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+		</table>
+	</p>
+									
+
 						</description>
 							  									 						<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
@@ -5827,7 +5888,7 @@ The fields to save are defined by JMeter properties.
 See the jmeter.properties file for details.
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='649' height='157' src="../images/screenshots/simpledatawriter.png"></div>
+						<div align="center"><img width='786' height='145' src="../images/screenshots/simpledatawriter.png"></div>
 											  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
@@ -10518,6 +10579,7 @@ If more data is required for a particular sampler only, then add a Listener to i
 									 serially rather than in parallel.
 						</p>
 									
+
 
 												<p	>
 								Test plan now provides an easy way to add classpath setting to a specific test plan. The feature is additive, meaning that you can add jar files or directories, but removing an entry requires restarting JMeter. In the past, users had to copy all the jar files to jmeter/lib/ directory. Now that is not necessary. JMeter properties also provides an entry for loading additional classpaths.
