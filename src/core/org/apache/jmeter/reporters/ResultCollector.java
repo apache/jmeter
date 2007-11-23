@@ -90,6 +90,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private static final String ERROR_LOGGING = "ResultCollector.error_logging"; // $NON-NLS-1$
 
+	private static final String SUCCESS_ONLY_LOGGING = "ResultCollector.success_only_logging"; // $NON-NLS-1$
+
 	transient private DefaultConfigurationSerializer serializer;
 
 	transient private volatile PrintWriter out;
@@ -109,6 +111,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		// current = -1;
 		// serializer = new DefaultConfigurationSerializer();
 		setErrorLogging(false);
+		setSuccessOnlyLogging(false);
 		setProperty(new ObjectProperty(SAVE_CONFIG, new SampleSaveConfiguration()));
 	}
 
@@ -135,6 +138,35 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		setProperty(new BooleanProperty(ERROR_LOGGING, errorLogging));
 	}
 
+	public void setSuccessOnlyLogging(boolean value) {
+		if (value) {
+		    setProperty(new BooleanProperty(SUCCESS_ONLY_LOGGING, true));
+		} else {
+			removeProperty(SUCCESS_ONLY_LOGGING);
+		}
+	}
+
+	public boolean isSuccessOnlyLogging() {
+		return getPropertyAsBoolean(SUCCESS_ONLY_LOGGING,false);
+	}
+
+	/**
+	 * Decides whether or not to a sample is wanted based on:
+	 * - errorOnly
+	 * - successOnly
+	 * - sample success
+	 * 
+	 * @param success is sample successful
+	 * @return whether to log/display the sample
+	 */
+	public boolean isSampleWanted(boolean success){
+		boolean errorOnly = isErrorLogging();
+		boolean successOnly = isSuccessOnlyLogging();
+		return (!errorOnly && !successOnly) || 
+		       (success && successOnly) ||
+			   (!success && errorOnly);
+		// successOnly and errorOnly cannot both be set
+	}
 	/**
 	 * Sets the filename attribute of the ResultCollector object.
 	 * 
@@ -193,7 +225,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		boolean parsedOK = false, errorDetected = false;
 		String filename = getFilename();
         File file = new File(filename);
-        boolean showAll = !isErrorLogging();
         if (file.exists()) {
 			clearVisualizer();
 			BufferedReader dataReader = null;
@@ -218,7 +249,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             SampleEvent event = CSVSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
                             if (event != null){
 								final SampleResult result = event.getResult();
-                            	if (showAll || !result.isSuccessful()) {
+                            	if (isSampleWanted(result.isSuccessful())) {
 									visualizer.add(result);
 								}
                             }
@@ -229,12 +260,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-                            readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer, showAll);
+                            readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer);
                             parsedOK = true;
                         } catch (Exception e) {
                             log.info("Failed to load "+filename+" using XStream, trying old XML format. Error was: "+e);
                             try {
-                                OldSaveService.processSamples(filename, visualizer, showAll);
+                                OldSaveService.processSamples(filename, visualizer, this);
                                 parsedOK = true;
                             } catch (Exception e1) {
                                 log.warn("Error parsing Avalon XML. " + e1.getLocalizedMessage());
@@ -367,12 +398,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	}
 
     // Only called if visualizer is non-null
-	private void readSamples(TestResultWrapper testResults, Visualizer visualizer, boolean showAll) throws Exception {
+	private void readSamples(TestResultWrapper testResults, Visualizer visualizer) throws Exception {
 		Collection samples = testResults.getSampleResults();
 		Iterator iter = samples.iterator();
 		while (iter.hasNext()) {
 			SampleResult result = (SampleResult) iter.next();
-			if (showAll || !result.isSuccessful()) {
+			if (isSampleWanted(result.isSuccessful())) {
 				visualizer.add(result);
 			}
 		}
@@ -401,7 +432,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 	public void sampleOccurred(SampleEvent event) {
 		SampleResult result = event.getResult();
 
-		if (!isErrorLogging() || !result.isSuccessful()) {
+		if (isSampleWanted(result.isSuccessful())) {
 			sendToVisualizer(result);
 			if ( out != null) {// no point otherwise
 				SampleSaveConfiguration config = getSaveConfig();

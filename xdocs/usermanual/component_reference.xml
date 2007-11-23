@@ -1698,6 +1698,18 @@ as shown below.
 The settings in jmeter.properties also apply to the listener that is added
 by using the -l command-line flag.
 </note>
+<p>
+	The figure below shows an example of the result file configuration panel
+<figure width="786" height="145" image="simpledatawriter.png">Result file configuration panel</figure>
+</p>
+<properties>
+        <property name="File Name" required="No">Name of the file containing sample results</property>
+        <property name="Browse..." required="No">File Browse Button</property>
+        <property name="Errors" required="No">Select this to write/read only results with errors</property>
+        <property name="Successes" required="No">Select this to write/read only results without errors.
+        If neither Errors nor Successes is selected, then all results are processed.</property>
+        <property name="Configure" required="No">Configure Button, see below</property>
+</properties>
 </description>
 
 <component name="Sample Result Save Configuration" index="&sect-num;.3.1"  width="629" height="300" screenshot="sample_result_config.png">
@@ -1832,7 +1844,7 @@ Like the <complink name="View Results Tree"/>, this visualizer uses a lot of mem
 </description>
 </component>
 
-<component name="Simple Data Writer" index="&sect-num;.3.9"  width="649" height="157" screenshot="simpledatawriter.png">
+<component name="Simple Data Writer" index="&sect-num;.3.9"  width="786" height="145" screenshot="simpledatawriter.png">
 <description>This listener can record results to a file
 but not to the UI.  It is meant to provide an efficient means of
 recording data by eliminating GUI overhead.
