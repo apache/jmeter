@@ -193,7 +193,15 @@
 #end
 
 #macro (figure $figure)
-	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img src="$sshotdir/$figure.getAttributeValue("image")"><br>
+	#set ($width = "")
+	#set ($width = $component.getAttributeValue('width') )
+	#set ($height = "")
+	#set ($height = $component.getAttributeValue('height') )
+	#set ($dim= "")
+	#if  ($width != "")
+	    #set ($dim = "width='$width' height='$height'")
+	#end
+	<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"><br>
 	<font size="-1">#runloop($figure)</font></td></tr></table></p>
 #end
 
