@@ -220,7 +220,8 @@ There is no need to configure the properties.
 							  									 				<p	>
 								
 The hostname can now be saved in CSV and XML output files. 
-Errors only flag is now supported when loading XML and CSV files. 
+New "Successes only" option added when saving result files.
+Errors / Successes only option is now supported when loading XML and CSV files. 
 
 						</p>
 							  									 				<p	>
@@ -571,6 +572,11 @@ To change the list of removed headers, define the property proxy.headers.remove 
 
 												<li	>
 								Add Successes Only logging and display
+						</li>
+									
+
+												<li	>
+								The JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) if it contains paired single-quotes,  .e.g. 'jmeter_'yyyyMMddHHmmss'.log'
 						</li>
 									
 
@@ -2061,6 +2067,7 @@ Users must explicitly check append in the sampler
 
 												<li	>
 								The Post-Processor "Save Responses to a File" now saves the generated file name with the
+
 sample, and the file name can be included in the sample log file.
 
 						</li>
