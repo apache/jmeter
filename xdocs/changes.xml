@@ -158,6 +158,7 @@ This corrects discrepancies between Summary Report and Aggregate Report throughp
 <li>Fix default encoding for blank encoding</li>
 <li>Fix Https spoofing (port problem) which was broken in 2.3</li>
 <li>Fix HTTP (Java) sampler so http.java.sampler.retries means retries, i.e. does not include initial try</li>
+<li>Fix SampleResult dataType checking to better detect TEXT documents</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -204,6 +205,7 @@ To change the list of removed headers, define the property proxy.headers.remove 
 <li>Add Successes Only logging and display</li>
 <li>The JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) if it contains paired single-quotes,  .e.g. 'jmeter_'yyyyMMddHHmmss'.log'</li>
 <li>Added Collapse All and Expand All Option menu items</li>
+<li>Allow optional definition of extra content-types that are viewable as text</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>

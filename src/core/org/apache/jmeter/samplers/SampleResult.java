@@ -555,10 +555,9 @@ public class SampleResult implements Serializable {
     public void setEncodingAndType(String ct){
         if (ct != null) {
             // Extract charset and store as DataEncoding
-            // TODO do we need process http-equiv META tags, e.g.:
-            // <META http-equiv="content-type" content="text/html;
-            // charset=foobar">
-            // or can we leave that to the renderer ?
+            // N.B. The meta tag:
+            // <META http-equiv="content-type" content="text/html; charset=foobar">
+        	// is now processed by HTTPSampleResult#getDataEncodingWithDefault
             final String CS_PFX = "charset="; // $NON-NLS-1$
             int cset = ct.toLowerCase().indexOf(CS_PFX);
             if (cset >= 0) {
@@ -571,14 +570,45 @@ public class SampleResult implements Serializable {
 				    setDataEncoding(charSet);
                 }
             }
-            if (ct.startsWith("image/")) {// $NON-NLS-1$
-                setDataType(BINARY);
-            } else {
+            if (isTextType(ct)) {
                 setDataType(TEXT);
+            } else {
+                setDataType(BINARY);
             }
         }
     }
 
+    // List of types that can be processed as text
+    private static final String[] TEXT_TYPES = {
+    	"text/",                  //$NON-NLS-1$
+    	"application/javascript", //$NON-NLS-1$
+    	"application/json",       //$NON-NLS-1$
+    	"application/xhtml+xml",  //$NON-NLS-1$
+        };
+ 
+    // Additional types as needed
+    private static final String[] TEXT_TYPES_OPT =
+    	JOrphanUtils.split(JMeterUtils.getPropDefault("content-type_text", ""), ","); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+ 
+    /*
+     * Determine if content-type can be displayed as text or not.
+     * 
+     * @param ct content type
+     * @return true if content-type is of type text.
+     */
+    private static boolean isTextType(String ct){
+    	for (int i = 0; i < TEXT_TYPES.length; i++){
+        	if (ct.startsWith(TEXT_TYPES[i])){
+        		return true;
+        	}    		
+    	}
+    	for (int i = 0; i < TEXT_TYPES_OPT.length; i++){
+        	if (ct.startsWith(TEXT_TYPES_OPT[i])){
+        		return true;
+        	}    		
+    	}
+    	return false;
+    }
 	/**
 	 * Sets the successful attribute of the SampleResult object.
 	 * 
