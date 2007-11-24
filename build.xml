@@ -409,7 +409,7 @@
   </target>
 
   <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
-  <property name="docversion" value="2.3"/>
+  <property name="docversion" value="2.3.1"/>
 
 	<!-- Get version from SVN status -->
   <target name="init-svnVersion" depends="svnCheck">
