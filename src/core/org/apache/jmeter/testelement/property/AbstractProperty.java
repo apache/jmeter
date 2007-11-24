@@ -353,8 +353,10 @@ public abstract class AbstractProperty implements JMeterProperty {
 	}
 
 	/**
-	 * @param item
-	 * @return
+	 * Create a JMeterProperty from an object.
+	 * 
+	 * @param item object to be turned into a propery
+	 * @return the JMeterProperty
 	 */
 	protected static JMeterProperty makeProperty(Object item) {
 		if (item instanceof JMeterProperty) {
