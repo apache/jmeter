@@ -5,18 +5,12 @@ Edit the testcase and replace the following:
 
 Old
 ===
-<HTTPSampler>
-<stringProp name="TestElement.test_class">
-org.apache.jmeter.protocol.http.sampler.HTTPSampler</stringProp>
-<stringProp name="TestElement.gui_class">
-org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui</stringProp>
+<HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="HTTP Request" enabled="true">
+...
 </HTTPSampler>
 
 New
 ===
-<HTTPSampler2>
-<stringProp name="TestElement.test_class">
-org.apache.jmeter.protocol.http.sampler.HTTPSampler2</stringProp>
-<stringProp name="TestElement.gui_class">
-org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui2</stringProp>
+<HTTPSampler2 guiclass="HttpTestSampleGui2" testclass="HTTPSampler2" testname="HTTP Request" enabled="true">
+...
 </HTTPSampler2>
