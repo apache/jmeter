@@ -183,7 +183,7 @@ variable will override the built-in function.</note>
 
 <subsection name="&sect-num;.4 The Function Helper Dialog" anchor="function_helper">
 <p>The Function Helper dialog is available from JMeter's Tools menu.</p>
-<figure image="function_helper_dialog.png">Function Helper Dialog</figure>
+<figure width="667" height="326" image="function_helper_dialog.png">Function Helper Dialog</figure>
 <p>Using the Function Helper, you can select a function from the pull down, and assign
 values for its arguments.  The left column in the table provides a brief description of the
 argument, and the right column is where you write in the value for that argument.  Different
