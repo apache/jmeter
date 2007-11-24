@@ -575,7 +575,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <li><b>Thread bind</b></li>
       <p>Any LDAP request is part of an LDAP session, so the first thing that should be done is starting a session to the LDAP server.
        For starting this session a thread bind is used, which is equal to the LDAP "bind" operation.
-       The user is requested to give a username (Distinghuised name) and password, 
+       The user is requested to give a username (Distinguished name) and password, 
        which will be used to initiate a session.
        When no password, or the wrong password is specified, an anonymous session is started. Take care,
        omitting the password will not fail this test, a wrong password will. </p>
@@ -584,9 +584,9 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
      <property name="Servername" required="Yes">The name (or IP-address) of the LDAP server.</property>
      <property name="Port" required="No">The port number that the LDAP server is listening to. If this is omitted 
      JMeter assumes the LDAP server is listening on the default port(389).</property>
-     <property name="DN" required="No">The distinghuished name of the base object that will be used for any subsequent operation. 
+     <property name="DN" required="No">The distinguished name of the base object that will be used for any subsequent operation. 
      It can be used as a starting point for all operations. You cannot start any operation on a higher level than this DN!</property>
-     <property name="Username" required="No">Full distinghuished name of the user as which you want to bind.</property>
+     <property name="Username" required="No">Full distinguished name of the user as which you want to bind.</property>
      <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
      If is is incorrect, the sampler will return an error and revert to an anonymous bind.</property>
     </properties>
@@ -605,7 +605,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		check the validity of the user/password combination, and end the session again.</p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Username" required="Yes">Full distinghuished name of the user as which you want to bind.</property>
+      <property name="Username" required="Yes">Full distinguished name of the user as which you want to bind.</property>
      <property name="Password" required="No">Password for the above user. If omitted it will result in an anonymous bind. 
      If is is incorrect, the sampler will return an error.</property>
      </properties>
@@ -617,9 +617,9 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
        the LDAP tree.  </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Old entry name" required="Yes">The current distinghuished name of the object you want to rename or move, 
+      <property name="Old entry name" required="Yes">The current distinguished name of the object you want to rename or move, 
       relative to the given DN in the thread bind operation.</property>
-     <property name="New distinghuished name" required="Yes">The new distinghuished name of the object you want to rename or move, 
+     <property name="New distinguished name" required="Yes">The new distinguished name of the object you want to rename or move, 
       relative to the given DN in the thread bind operation.</property>
      </properties>
        
@@ -629,7 +629,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
        object to the LDAP server.  </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry DN" required="Yes">Distinghuised name of the object you want to add, relative to the given DN in the thread bind operation.</property>
+      <property name="Entry DN" required="Yes">Distinguished name of the object you want to add, relative to the given DN in the thread bind operation.</property>
      <property name="Add test" required="Yes">A list of attributes and their values you want to use for the object.
      If you need to add a multiple value attribute, you need to add the same attribute with their respective 
      values several times to the list.</property>
@@ -641,7 +641,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
        object from the LDAP tree </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Delete" required="Yes">Distinghuished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
+      <property name="Delete" required="Yes">Distinguished name of the object you want to delete, relative to the given DN in the thread bind operation.</property>
       </properties>
        
  <br />       
@@ -649,7 +649,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
        <p>This is the LDAP "search" operation, and will be used for defining searches.  </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Search base" required="No">Distinghuished name of the subtree you want your 
+      <property name="Search base" required="No">Distinguished name of the subtree you want your 
       search to look in, relative to the given DN in the thread bind operation.</property>
       <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
       <property name="Scope" required="No">Use 0 for baseobject-, 1 for onelevel- and 2 for a subtree search. (Default=0)</property>
@@ -666,7 +666,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
        can be used to add, delete or replace values of an attribute. </p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry name" required="Yes">Distinghuished name of the object you want to modify, relative 
+      <property name="Entry name" required="Yes">Distinguished name of the object you want to modify, relative 
       to the given DN in the thread bind operation</property>
      <property name="Modification test" required="Yes">The attribute-value-opCode triples. The opCode can be any 
      valid LDAP operationCode (add, delete/remove or replace). If you don't specify a value with a delete operation,
@@ -684,7 +684,7 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
          If the compare operation fails, this test fails with errorcode 49.</p>
     <properties>
      <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
-      <property name="Entry DN" required="Yes">The current distinghuished name of the object of 
+      <property name="Entry DN" required="Yes">The current distinguished name of the object of 
       which you want  to compare an attribute, relative to the given DN in the thread bind operation.</property>
      <property name="Compare filter" required="Yes">In the form "attribute=value"</property>
      </properties>
@@ -1184,7 +1184,7 @@ processes the controller(s) you add to it.  So, in this example, JMeter sends th
 following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.
 Note, the File Reporter
 is configured to store the results in a file named "simple-test.dat" in the current directory.</p>
-<figure image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
+<figure width="337" height="233" image="logic-controller/simple-example.gif">Figure 6 Simple Controller Example</figure>
 
 </example>
 </component>
@@ -1213,7 +1213,7 @@ count to three, JMeter will send a total of 2 * 3 = 6 HTTP Requests.
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure image="logic-controller/loop-example.gif">Figure 4 - Loop Controller Example</figure>
+<figure width="362" height="178" image="logic-controller/loop-example.gif">Figure 4 - Loop Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
@@ -1248,7 +1248,7 @@ In this example, we created a Test Plan that has two threads that send HTTP requ
 Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
 Although we configured the Thread Group to iterate three times, each JMeter thread only
 sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-<figure image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
+<figure width="348" height="131" image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
 <p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
 Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
 
@@ -1285,7 +1285,7 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 we configured the Thread Group to have two threads and a loop count of five, for a total of ten
 requests per thread. See the table below for the sequence JMeter sends the HTTP Requests.</p>
 
-<figure image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
+<figure width="336" height="153" image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
 
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><th>Loop Iteration</th><th>Each JMeter Thread Sends These HTTP Requests</th></tr>
@@ -1311,7 +1311,7 @@ example, we configured the Thread Group
 to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
 two Interleave Controllers inside of it.</p>
 
-<figure image="logic-controller/interleave2.png">
+<figure width="207" height="249" image="logic-controller/interleave2.png">
         Figure 2 - Interleave Controller Example 2
 </figure>
 
@@ -1320,7 +1320,7 @@ two inner ones.  Then, each inner Interleave Controller alternates between each 
 thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.
 Note, the File Reporter is configured to store the results in a file named "interleave-test2.dat" in the current directory.</p>
 
-<figure image="logic-controller/interleave3.png">
+<figure width="204" height="247" image="logic-controller/interleave3.png">
         Figure 3 - Interleave Controller Example 3
 </figure>
 <p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.  However, if "ignore sub-controller blocks" was checked on the main interleave controller, then the order would be: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
@@ -1507,7 +1507,7 @@ This would be the case if the Regular Expression returned no matches.</note>
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request to every link that can be found on the page.</p>
 
-<figure image="logic-controller/foreach-example.png">Figure 7 - ForEach Controller Example</figure>
+<figure width="246" height="154" image="logic-controller/foreach-example.png">Figure 7 - ForEach Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. You can see that we added one HTTP Request to the Thread Group and
@@ -1521,7 +1521,7 @@ out of the return page and puts them in the inputVar variable</p>
 This has two Regular Expressions and ForEach Controllers.
 The first RE matches, but the second does not match, 
 so no samples are run by the second ForEach Controller</p>
-<figure image="logic-controller/foreach-example2.png">Figure 8 - ForEach Controller Example 2</figure>
+<figure width="198" height="253" image="logic-controller/foreach-example2.png">Figure 8 - ForEach Controller Example 2</figure>
 <p>The Thread Group has a single thread and a loop count of two.
 </p><p>
 Sample 1 uses the JavaTest Sampler to return the string "a b c d".
@@ -1798,7 +1798,7 @@ Any DTD nodes or Prolog nodes will not show up in tree; however, response may co
 <p>
 	The Control Panel (above) shows an example of an HTML display.
 	Figure 9 (below) shows an example of an XML display.
-<figure image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
+<figure width="751" height="461" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
 </p>
 </component>
 
@@ -2132,8 +2132,8 @@ a username and password (see figure 11).  The two HTTP requests named "SecretPag
 to "/secret/index.html" and "/secret/index2.html".  The other HTTP request, named "NoSecretPage" makes a request to
 "/index.html".</p>
 
-<figure image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
-<figure image="http-config/auth-manager-example1b.gif">Figure 11 - Authorization Manager Control Panel</figure>
+<figure width="289" height="201" image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
+<figure width="572" height="341" image="http-config/auth-manager-example1b.gif">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
 the URL, then JMeter passes this information along with the request.</p>
@@ -2251,8 +2251,8 @@ header table entries.</property>
 that tells JMeter to override the default "User-Agent" request header and use a particular Internet Explorer agent string
 instead. (see figures 9 and 10).</p>
 
-<figure image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
-<figure image="http-config/header-manager-example1b.gif">Figure 13 - Header Manager Control Panel</figure>
+<figure width="203" height="141" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
+<figure width="573" height="334" image="http-config/header-manager-example1b.gif">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
 </component>
@@ -2467,10 +2467,10 @@ pattern. You can attach multiple assertions to any controller for additional fle
 	The pattern is a Perl5-style regular expression, but without the enclosing brackets.
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
-<figure image="assertion/example1a.png">Figure 14 - Test Plan</figure>
-<figure image="assertion/example1b.png">Figure 15 - Assertion Control Panel with Pattern</figure>
-<figure image="assertion/example1c-pass.gif">Figure 16 - Assertion Listener Results (Pass)</figure>
-<figure image="assertion/example1c-fail.gif">Figure 17 - Assertion Listener Results (Fail)</figure>
+<figure width="187" height="94" image="assertion/example1a.png">Figure 14 - Test Plan</figure>
+<figure width="629" height="333" image="assertion/example1b.png">Figure 15 - Assertion Control Panel with Pattern</figure>
+<figure width="474" height="265" image="assertion/example1c-pass.gif">Figure 16 - Assertion Listener Results (Pass)</figure>
+<figure width="474" height="265" image="assertion/example1c-fail.gif">Figure 17 - Assertion Listener Results (Fail)</figure>
 </example>
 
 
@@ -2854,7 +2854,7 @@ anything, the modifier will probably have a list of radio buttons to choose from
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
 
-<figure image="modification.png">Figure 18 - Online Poll Example</figure>
+<figure width="755" height="325" image="modification.png">Figure 18 - Online Poll Example</figure>
 
 <note>One important thing to remember is that you must create a test sample immediately
 prior that will return an HTML page with the links and forms that are relevant to
