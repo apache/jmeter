@@ -482,7 +482,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 * 
 	 * @param u
 	 *            <code>URL</code> of the URL request
-	 * @param method 
+	 * @param httpMethod 
 	 *            GET/PUT/HEAD etc
 	 * @param res
 	 *            sample result to save request infos to
