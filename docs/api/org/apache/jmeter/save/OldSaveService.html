@@ -158,9 +158,9 @@ This class saves/restores the original Avalon XML format (not used by default).
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, boolean)">processSamples</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/OldSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)">processSamples</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
                <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A>&nbsp;visualizer,
-               boolean&nbsp;showAll)</CODE>
+               <A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>&nbsp;rc)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -263,12 +263,12 @@ public static <A HREF="../../../../org/apache/jorphan/collections/HashTree.html"
 </DL>
 <HR>
 
-<A NAME="processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, boolean)"><!-- --></A><H3>
+<A NAME="processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)"><!-- --></A><H3>
 processSamples</H3>
 <PRE>
 public static void <B>processSamples</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
                                   <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A>&nbsp;visualizer,
-                                  boolean&nbsp;showAll)
+                                  <A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>&nbsp;rc)
                            throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
                                   <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
                                   org.apache.avalon.framework.configuration.ConfigurationException</PRE>
