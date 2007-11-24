@@ -22,6 +22,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -180,6 +182,15 @@ public final class LoggingManager {
 	 * creating the file, then it uses System.out.
 	 */
 	private static Writer makeWriter(String logFile, String propName) {
+		// If the name contains at least one set of paired single-quotes, reformat using DateFormat
+		final int length = logFile.split("'",-1).length;
+		if (length > 1 && length %2 == 1){
+			try {
+				SimpleDateFormat df = new SimpleDateFormat(logFile);
+				logFile = df.format(new Date());
+			} catch (Exception ignored) {
+			}
+		}
 		Writer wt;
 		isWriterSystemOut = false;
 		try {
