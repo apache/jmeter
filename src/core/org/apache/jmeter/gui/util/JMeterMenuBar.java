@@ -310,6 +310,18 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 			optionsMenu.add(sslManager);
 		}
 		optionsMenu.add(makeLanguageMenu());
+		
+		JMenuItem collapse = new JMenuItem(JMeterUtils.getResString("menu_collapse_all")); //$NON-NLS-1$
+		collapse.addActionListener(ActionRouter.getInstance());
+		collapse.setActionCommand(ActionNames.COLLAPSE_ALL);
+		collapse.setAccelerator(KeyStrokes.COLLAPSE_ALL);
+		optionsMenu.add(collapse);
+		
+		JMenuItem expand = new JMenuItem(JMeterUtils.getResString("menu_expand_all")); //$NON-NLS-1$
+		expand.addActionListener(ActionRouter.getInstance());
+		expand.setActionCommand(ActionNames.EXPAND_ALL);
+		expand.setAccelerator(KeyStrokes.EXPAND_ALL);
+		optionsMenu.add(expand);
 	}
 
 	// TODO fetch list of languages from a file?

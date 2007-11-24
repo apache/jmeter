@@ -57,6 +57,10 @@ The File menu now supports a "Revert" option, which reloads the current file.
 Also the last few file names used are remembered for easy reloading.
 </p>
 
+<p>
+The Options Menu now supports Collapse All and Expand All items to collapse and expand the test tree.
+</p>
+
 <h5>Remote testing</h5>
 
 <p>
@@ -199,6 +203,7 @@ To change the list of removed headers, define the property proxy.headers.remove 
 <li>Proxy spoofing now drops the default HTTPS port (443) when converting https: links to http:</li>
 <li>Add Successes Only logging and display</li>
 <li>The JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) if it contains paired single-quotes,  .e.g. 'jmeter_'yyyyMMddHHmmss'.log'</li>
+<li>Added Collapse All and Expand All Option menu items</li>
 </ul>
 
 <h4>Non-functional Improvements</h4>
