@@ -1202,7 +1202,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	 * @param areFollowingRedirect
 	 * @param frameDepth
 	 * @param res
-	 * @return
+	 * @return the sample result
 	 */
 	protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect, int frameDepth, HTTPSampleResult res) {
 		boolean wasRedirected = false;
