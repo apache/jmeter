@@ -218,6 +218,25 @@ Class ResultCollector</H2>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html#isSampleWanted(boolean)">isSampleWanted</A></B>(boolean&nbsp;success)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Decides whether or not to a sample is wanted based on:
+ - errorOnly
+ - successOnly
+ - sample success</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html#isSuccessOnlyLogging()">isSuccessOnlyLogging</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html#loadExistingFile()">loadExistingFile</A></B>()</CODE>
 
@@ -285,6 +304,14 @@ Class ResultCollector</H2>
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html#setSaveConfig(org.apache.jmeter.samplers.SampleSaveConfiguration)">setSaveConfig</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html#setSuccessOnlyLogging(boolean)">setSuccessOnlyLogging</A></B>(boolean&nbsp;value)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -481,6 +508,54 @@ public void <B>setErrorLogging</B>(boolean&nbsp;errorLogging)</PRE>
 </DD>
 <DD><DL>
 </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setSuccessOnlyLogging(boolean)"><!-- --></A><H3>
+setSuccessOnlyLogging</H3>
+<PRE>
+public void <B>setSuccessOnlyLogging</B>(boolean&nbsp;value)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isSuccessOnlyLogging()"><!-- --></A><H3>
+isSuccessOnlyLogging</H3>
+<PRE>
+public boolean <B>isSuccessOnlyLogging</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isSampleWanted(boolean)"><!-- --></A><H3>
+isSampleWanted</H3>
+<PRE>
+public boolean <B>isSampleWanted</B>(boolean&nbsp;success)</PRE>
+<DL>
+<DD>Decides whether or not to a sample is wanted based on:
+ - errorOnly
+ - successOnly
+ - sample success
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>success</CODE> - is sample successful
+<DT><B>Returns:</B><DD>whether to log/display the sample</DL>
 </DD>
 </DL>
 <HR>

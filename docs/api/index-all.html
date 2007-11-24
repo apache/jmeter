@@ -11304,6 +11304,12 @@ Method in class org.apache.jmeter.testelement.property.<A HREF="org/apache/jmete
 <DT><A HREF="org/apache/jmeter/util/SSLManager.html#isSSLSupported()"><B>isSSLSupported()</B></A> - 
 Static method in class org.apache.jmeter.util.<A HREF="org/apache/jmeter/util/SSLManager.html" title="class in org.apache.jmeter.util">SSLManager</A>
 <DD>Test whether SSL is supported or not.
+<DT><A HREF="org/apache/jmeter/reporters/ResultCollector.html#isSampleWanted(boolean)"><B>isSampleWanted(boolean)</B></A> - 
+Method in class org.apache.jmeter.reporters.<A HREF="org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>
+<DD>Decides whether or not to a sample is wanted based on:
+ - errorOnly
+ - successOnly
+ - sample success
 <DT><A HREF="org/apache/jmeter/threads/JMeterContext.html#isSamplingStarted()"><B>isSamplingStarted()</B></A> - 
 Method in class org.apache.jmeter.threads.<A HREF="org/apache/jmeter/threads/JMeterContext.html" title="class in org.apache.jmeter.threads">JMeterContext</A>
 <DD>&nbsp;
@@ -11390,6 +11396,9 @@ Method in class org.apache.jmeter.visualizers.<A HREF="org/apache/jmeter/visuali
 Method in class org.apache.jmeter.protocol.http.sampler.<A HREF="org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html" title="class in org.apache.jmeter.protocol.http.sampler">HTTPSamplerBase</A>
 <DD>Determine if the HTTP status code is successful or not
  i.e. in range 200 to 399 inclusive
+<DT><A HREF="org/apache/jmeter/reporters/ResultCollector.html#isSuccessOnlyLogging()"><B>isSuccessOnlyLogging()</B></A> - 
+Method in class org.apache.jmeter.reporters.<A HREF="org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>
+<DD>&nbsp;
 <DT><A HREF="org/apache/jmeter/report/writers/DefaultPageSummary.html#isSuccessful()"><B>isSuccessful()</B></A> - 
 Method in class org.apache.jmeter.report.writers.<A HREF="org/apache/jmeter/report/writers/DefaultPageSummary.html" title="class in org.apache.jmeter.report.writers">DefaultPageSummary</A>
 <DD>&nbsp;
@@ -13923,7 +13932,7 @@ Method in interface org.apache.jorphan.collections.<A HREF="org/apache/jorphan/c
 <DT><A HREF="org/apache/jorphan/collections/SearchByClass.html#processPath()"><B>processPath()</B></A> - 
 Method in class org.apache.jorphan.collections.<A HREF="org/apache/jorphan/collections/SearchByClass.html" title="class in org.apache.jorphan.collections">SearchByClass</A>
 <DD>&nbsp;
-<DT><A HREF="org/apache/jmeter/save/OldSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, boolean)"><B>processSamples(String, Visualizer, boolean)</B></A> - 
+<DT><A HREF="org/apache/jmeter/save/OldSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)"><B>processSamples(String, Visualizer, ResultCollector)</B></A> - 
 Static method in class org.apache.jmeter.save.<A HREF="org/apache/jmeter/save/OldSaveService.html" title="class in org.apache.jmeter.save">OldSaveService</A>
 <DD>&nbsp;
 <DT><A HREF="org/apache/jmeter/protocol/http/modifier/UserParameterXMLContentHandler.html#processingInstruction(java.lang.String, java.lang.String)"><B>processingInstruction(String, String)</B></A> - 
@@ -18442,6 +18451,9 @@ Method in class org.apache.jmeter.protocol.java.sampler.<A HREF="org/apache/jmet
  be unique.
 <DT><A HREF="org/apache/jmeter/reporters/MailerModel.html#setSuccessLimit(java.lang.String)"><B>setSuccessLimit(String)</B></A> - 
 Method in class org.apache.jmeter.reporters.<A HREF="org/apache/jmeter/reporters/MailerModel.html" title="class in org.apache.jmeter.reporters">MailerModel</A>
+<DD>&nbsp;
+<DT><A HREF="org/apache/jmeter/reporters/ResultCollector.html#setSuccessOnlyLogging(boolean)"><B>setSuccessOnlyLogging(boolean)</B></A> - 
+Method in class org.apache.jmeter.reporters.<A HREF="org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>
 <DD>&nbsp;
 <DT><A HREF="org/apache/jmeter/reporters/MailerModel.html#setSuccessSubject(java.lang.String)"><B>setSuccessSubject(String)</B></A> - 
 Method in class org.apache.jmeter.reporters.<A HREF="org/apache/jmeter/reporters/MailerModel.html" title="class in org.apache.jmeter.reporters">MailerModel</A>
