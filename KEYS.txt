@@ -81,7 +81,40 @@ mxWttRHhexCFvISgGUJc6Q==
 =o4aH
 -----END PGP PUBLIC KEY BLOCK-----
 
+pub   1024D/BCA973AC 2004-10-06 [expires: 2008-11-23]
+uid                  Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
+sig 3        BCA973AC 2007-11-24  Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
+sub   1024g/E8B59CC4 2004-10-06 [expires: 2008-11-23]
+sig          BCA973AC 2007-11-24  Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.6 (MingW32)
+
+mQGiBEFkZy8RBACFosOpu8fhs01GpbiS6g45Go4TZGLdFh1xz7gIZazd3ry/3tJr
+HlZi49a3h/2+CJ/FX9qbALx/vjOu6dj1Fcgjop+mzFQJBqNB1o9bFa+WnmVoW2pi
+m6JcKPJd4h63TdOjfGclpsKIbLrEwA5OgQtIwsayaeaqHQDvpjOF5hrROwCgrbrN
+HvLXe3UBDgOJ6aoO3RsWP9cD/iTju/VFA5uDNdaWm2cQUSv53SVo1czLl+YZGM+A
+a3c9TuvVIdC428iOyUF6mABXj1K0ZOd7mNbShXnPOd+/hl65iM8WG946O3yEZj6U
+VTTluvuVnnrS+tnt5RY3jYOp/ReSBXMQ1zLFnL7v87lMHSTZwBXfmsyuYpYnobm4
+ZannA/93lEKSYcFIqQkOfsvNM7QULwHyBwBsW8U+odaJFO/9uS2JEeUSk+AouQaT
+P1jCAjnxMV0M/bYXXdXsM+bcy6HG4lY3w/Y15N56uDpA7Kj8vWn8y7NKyd791KLA
+15WuANT1F32IACz3Setwn4M4cavkStLB59TbBgURGskdH5YP7bQ0U2ViYXN0aWFu
+IEJhemxleSAoQVNGIFNpZ25pbmcgS2V5KSA8c2ViYkBhcGFjaGUub3JnPohkBBMR
+AgAkAhsDBgsJCAcDAgMVAgMDFgIBAh4BAheABQJHSJ0NBQkHxWleAAoJED/gwWG8
+qXOsxOsAn2j5FLtOD9GjE/MFi4ukicJCviQfAKCE1SzKCrZez4Q93Yw2/E7sKKx1
+SrkBDQRBZGc0EAQA/X04t3FJySqx1HgOifb4hG+xT7YuGzCkrG3hgNg6E2wl4SvA
+CkWMS43RwQgCd1MWNEwnASNBmJJwfDet8F3Z3cS0WRldcBSOwtOK0rnYwpuTWD51
+2bkXm+dskXQSUdPn2pQBfyOsCX8aBzicrnCKjHsWh8iziHRdVxisdLPrDocAAwUD
+/iuTQ0oi1G/NNJTEtRy5Ukia7gkqLf5/LMIM3poodj+BCYcyHXvzn5fFa2lGHX5E
+gnXGB2zZQnVDByQOkfbGOOKfiObETyeA1H/08p6yjIRQt8aKSYdc9cuEfmXg8MYQ
+4PylXFEHoS2aFuRM8lJciWYnLm9T994rmZcJSQraSPYZiE8EGBECAA8CGwwFAkdI
+nUMFCQfFaY8ACgkQP+DBYbypc6yfJACfQiZHkken6PLMaMgF3sZAw39PqboAn3/b
+ljjHe0UjR+lkt2TbRUMA2YiK
+=JlTN
+-----END PGP PUBLIC KEY BLOCK-----
+
+
+****  Expired key:
 
 pub  1024D/BCA973AC 2004-10-06 Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
 sig 3       BCA973AC 2004-11-18   Sebastian Bazley (ASF Signing Key) <sebb@apache.org>
