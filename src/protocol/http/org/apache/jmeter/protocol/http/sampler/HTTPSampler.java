@@ -441,7 +441,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 					break;
 				} catch (BindException e) {
 					if (retry >= MAX_CONN_RETRIES) {
-						log.error("Can't connect", e);
+						log.error("Can't connect after "+retry+" retries, "+e);
 						throw e;
 					}
 					log.debug("Bind exception, try again");
