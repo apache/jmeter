@@ -49,6 +49,9 @@ public class HttpMirrorServer extends Thread {
 	/** True if the Daemon is currently running. */
 	private volatile boolean running;
 
+	// Saves the error if one occurs
+	private volatile Exception except;
+	
 	/**
 	 * Create a new Daemon with the specified port and target.
 	 * 
@@ -65,6 +68,7 @@ public class HttpMirrorServer extends Thread {
 	 * not exit until {@link #stopServer()} is called or an error occurs.
 	 */
 	public void run() {
+		except = null;
 		running = true;
 		ServerSocket mainSocket = null;
 
@@ -94,6 +98,7 @@ public class HttpMirrorServer extends Thread {
 			}
 			log.info("HttpMirror Server stopped");
 		} catch (Exception e) {
+			except = e;
 			log.warn("HttpMirror Server stopped", e);
 		} finally {
 			JOrphanUtils.closeQuietly(mainSocket);
@@ -102,5 +107,9 @@ public class HttpMirrorServer extends Thread {
 
 	public void stopServer() {
 		running = false;
+	}
+	
+	public Exception getException(){
+		return except;
 	}
 }
