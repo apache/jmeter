@@ -66,11 +66,7 @@ public class TestHTTPMirrorThread extends TestCase {
     	    private HttpMirrorServer httpServer;
     	    
     		protected void setUp() throws Exception {
-            	// Start the http server
-            	httpServer = new HttpMirrorServer(HTTP_SERVER_PORT);
-            	httpServer.start();
-            	// Allow some time for the server to start
-                Thread.sleep(500);
+            	httpServer = startHttpMirror(HTTP_SERVER_PORT);
     		}
     		
     		protected void tearDown() throws Exception {
@@ -81,7 +77,34 @@ public class TestHTTPMirrorThread extends TestCase {
     	};
     	return setup;
     };
-    
+
+    /**
+     * Utility method to handle starting the HttpMirrorServer for testing.
+     * Also used by TestHTTPSamplersAgainstHttpMirrorServer
+     */
+    public static HttpMirrorServer startHttpMirror(int port) throws Exception {
+    	HttpMirrorServer server = null;
+    	server = new HttpMirrorServer(port);
+    	server.start();
+        Exception e = null;
+        for (int i=0; i < 10; i++) {// Wait up to 1 second
+	        try {
+				Thread.sleep(100);
+			} catch (InterruptedException ignored) {
+			}
+			e = server.getException();
+			if (e != null) {// Already failed
+	        	throw new Exception("Could not start mirror server on port: "+port+". "+e);
+			}
+			if (server.isAlive()) break; // succeeded
+        }
+        
+        if (!server.isAlive()){
+        	throw new Exception("Could not start mirror server on port: "+port);
+        }
+    	return server;
+    }
+
     public void testGetRequest() throws Exception {        
         // Connect to the http server, and do a simple http get
         Socket clientSocket = new Socket("localhost", HTTP_SERVER_PORT);
