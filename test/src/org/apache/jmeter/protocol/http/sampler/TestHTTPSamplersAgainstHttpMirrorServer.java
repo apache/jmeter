@@ -29,7 +29,8 @@ import java.net.URL;
 import java.util.Locale;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
-import org.apache.jmeter.protocol.http.control.HttpMirrorControl;
+import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
+import org.apache.jmeter.protocol.http.control.TestHTTPMirrorThread;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestPlan;
@@ -61,6 +62,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     private static final String US_ASCII = "US-ASCII"; // $NON-NLS-1$
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
+	private static final int MIRROR_PORT = 8081; // Different from TestHTTPMirrorThread port
     private static byte[] TEST_FILE_CONTENT;
 
     private static File temporaryFile;
@@ -71,13 +73,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     
     public static Test suite(){
     	TestSetup setup = new TestSetup(new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class)){
-    	    private int webServerPort = 8080;
-    	    private HttpMirrorControl webServerControl;
+    	    private HttpMirrorServer httpServer;
     		protected void setUp() throws Exception {
-    		        webServerControl = new HttpMirrorControl();
-    		        webServerControl.setPort(webServerPort);
-    		        webServerControl.startHttpMirror();
-
+	    			httpServer = TestHTTPMirrorThread.startHttpMirror(MIRROR_PORT);
     		        // Create the test file content
     		        TEST_FILE_CONTENT = new String("some foo content &?=01234+56789-\u007c\u2aa1\u266a\u0153\u20a1\u0115\u0364\u00c5\u2052\uc385%C3%85").getBytes("UTF-8");
 
@@ -88,20 +86,12 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     		        output.write(TEST_FILE_CONTENT);
     		        output.flush();
     		        output.close();
-    		        try {
-    					Thread.sleep(100);
-    				} catch (InterruptedException e) {
-    				}// Allow thread chance to fail
-    		        if (!webServerControl.isServerAlive()){
-    		        	throw new Exception("Could not start mirror server");
-    		        }
     		}
     		
     		protected void tearDown() throws Exception {
-    		        // Shutdown web server
-    		        webServerControl.stopHttpMirror();
-    		        //webServerControl = null;
-
+    		        // Shutdown mirror server
+	    			httpServer.stopServer();
+	    			httpServer = null;
     		        // delete temporay file
     		        temporaryFile.delete();
     		}
@@ -1072,12 +1062,11 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
         // String domain = "localhost";
         String domain = "localhost";
         String path = "/test/somescript.jsp";
-        int port = 8080;
         sampler.setProtocol(protocol);
         sampler.setMethod(HTTPSamplerBase.POST);
         sampler.setPath(path);
         sampler.setDomain(domain);
-        sampler.setPort(port);
+        sampler.setPort(MIRROR_PORT);
         sampler.setContentEncoding(contentEncoding);
     }
 
