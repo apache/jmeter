@@ -27,8 +27,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
+import org.apache.commons.lang.CharUtils;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JMeterError;
 
 /*
  * N.B. to add a new field, remember the following
@@ -297,6 +300,20 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         if (dlm.equals("\\t")) {// Make it easier to enter a tab (can use \<tab> but that is awkward)
         	dlm="\t";
         }
+
+        if (dlm.length() != 1){
+        	throw new JMeterError("Delimiter '"+dlm+"' must be of length 1.");
+        }
+        char ch = dlm.charAt(0);
+        
+        if (CharUtils.isAsciiAlphanumeric(ch) || ch == CSVSaveService.QUOTING_CHAR){
+        	throw new JMeterError("Delimiter '"+ch+"' must not be alphanumeric or "+CSVSaveService.QUOTING_CHAR+".");        	
+        }
+		
+        if (!CharUtils.isAsciiPrintable(ch)){
+        	throw new JMeterError("Delimiter (code "+(int)ch+") must be printable.");        	
+        }
+
 		_delimiter = dlm;
 
 		_fieldNames = TRUE.equalsIgnoreCase(props.getProperty(PRINT_FIELD_NAMES_PROP, FALSE));
