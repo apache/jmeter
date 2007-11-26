@@ -222,7 +222,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		if (visualizer == null) {
 			return; // No point reading the file if there's no visualiser
 		}
-		boolean parsedOK = false, errorDetected = false;
+		boolean parsedOK = false;
 		String filename = getFilename();
         File file = new File(filename);
         if (file.exists()) {
@@ -277,10 +277,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 log.warn("Problem reading JTL file: "+file);
 			} catch (JMeterError e){
                 log.warn("Problem reading JTL file: "+file);
+			} catch (RuntimeException e){ // e.g. NullPointerException
+                log.warn("Problem reading JTL file: "+file,e);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
-				if (!parsedOK || errorDetected) {
+				if (!parsedOK) {
                     GuiPackage.showErrorMessage(
                                 "Error loading results file - see log file",
                                 "Result file loader");
