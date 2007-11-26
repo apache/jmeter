@@ -233,33 +233,18 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 dataReader = new BufferedReader(new FileReader(file));
                 // Get the first line, and see if it is XML
                 String line = dataReader.readLine();
+                dataReader.close();
+                dataReader = null;
                 if (line == null) {
                     log.warn(filename+" is empty");
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
-                    	long lineNumber=1;
-                    	SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
-                    	if (saveConfig == null) {// not a valid header
-                    		saveConfig = (SampleSaveConfiguration) getSaveConfig().clone(); // CSVSaveService may change the format
-                    	} else { // header line has been processed, so read the next
-                            line = dataReader.readLine();
-                            lineNumber++;
-                    	}
-                        while (line != null) { // Already read 1st line
-                            SampleEvent event = CSVSaveService.makeResultFromDelimitedString(line,saveConfig,lineNumber);
-                            if (event != null){
-								final SampleResult result = event.getResult();
-                            	if (isSampleWanted(result.isSuccessful())) {
-									visualizer.add(result);
-								}
-                            }
-                            line = dataReader.readLine();
-                            lineNumber++;
-                        }
+                    	CSVSaveService.processSamples(filename, visualizer, this);
                         parsedOK = true;                                
                     } else { // We are processing XML
                         try { // Assume XStream
                             bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+                            // TODO change to process samples one by one
                             readSamples(SaveService.loadTestResults(bufferedInputStream), visualizer);
                             parsedOK = true;
                         } catch (Exception e) {
