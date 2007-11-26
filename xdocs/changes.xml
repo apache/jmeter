@@ -27,6 +27,32 @@
 
 <!--  ===================  -->
 
+<h3>Version 2.3.2</h3>
+
+<h4>Summary of changes</h4>
+
+<h4>Incompatible changes</h4>
+<ul>
+<li></li>
+</ul>
+
+<h4>Bug fixes</h4>
+<ul>
+<li>Check that the CSV delimiter is reasonable.</li>
+</ul>
+
+<h4>Improvements</h4>
+<ul>
+<li>CSV files can now handle fields with embedded delimiters.</li>
+</ul>
+
+<h4>Non-functional changes</h4>
+<ul>
+<li>Better handling of MirrorServer startup problems and improved unit test.</li>
+</ul>
+
+<!--  ===================  -->
+
 <h3>Version 2.3.1</h3>
 <h4>Summary of changes</h4>
 
