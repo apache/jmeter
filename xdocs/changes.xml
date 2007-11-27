@@ -49,6 +49,9 @@
 <h4>Non-functional changes</h4>
 <ul>
 <li>Better handling of MirrorServer startup problems and improved unit test.</li>
+<li>Renamed jars: ApacheJMeter_ => apache-jmeter- in line with other ASF projects</li>
+<li>Build process now detects missing 3rd party libraries and reports need for both binary and source archives</li>
+<li>Skip BeanShell tests if jar is not present</li>
 </ul>
 
 <!--  ===================  -->
