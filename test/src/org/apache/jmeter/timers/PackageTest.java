@@ -18,15 +18,38 @@
 
 package org.apache.jmeter.timers;
 
+import org.apache.jmeter.util.BeanShellInterpreter;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class PackageTest extends TestCase {
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
     public PackageTest(String arg0) {
 		super(arg0);
 	}
 
-	public void testTimer1() throws Exception {
+	public static Test suite() throws Exception {
+		TestSuite suite = new TestSuite("Timer PackageTest");
+
+		if (!BeanShellInterpreter.isInterpreterPresent()){
+			final String msg = "BeanShell jar not present, tests ignored";
+			log.warn(msg);
+		} else {
+			suite.addTest(new PackageTest("TimerBSH"));
+		}
+
+		suite.addTest(new PackageTest("Timer1"));
+		
+		return suite;
+	}
+	
+	public void Timer1() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         //timer.setCalcMode("mode");
         timer.setThroughput(60.0);// 1 per second
@@ -38,7 +61,12 @@ public class PackageTest extends TestCase {
 
 	}
 
-    public void testTimerBSH() throws Exception {
+    public void TimerBSH() throws Exception {
+		if (!BeanShellInterpreter.isInterpreterPresent()){
+			final String msg = "BeanShell jar not present, test ignored";
+			log.warn(msg);
+			return;
+		}
         BeanShellTimer timer = new BeanShellTimer();
         long delay;
         
