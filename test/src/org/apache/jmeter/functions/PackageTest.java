@@ -198,6 +198,10 @@ public class PackageTest extends JMeterTestCase {
         eval.addTest(new PackageTest("evalTest2"));
         allsuites.addTest(eval);
 
+        TestSuite intSum = new TestSuite("Sums");
+        intSum.addTest(new PackageTest("sumTest"));
+        allsuites.addTest(intSum);
+
         return allsuites;
 	}
 
@@ -898,5 +902,53 @@ public class PackageTest extends JMeterTestCase {
         evalVar.setParameters(parms);
         s = evalVar.execute(null,null);
         assertEquals("select name from customers",s);
-    }        
+    }
+    
+    private void checkInvalidParameterCounts(AbstractFunction func, int max) throws Exception {
+		Collection parms = new LinkedList();
+    	for (int c=0; c <= max; c++){
+        	try {
+        		func.setParameters(parms);
+    			fail("Should have generated InvalidVariableException for "+c+" parameters");
+    		} catch (InvalidVariableException ignored) {
+    		}
+    		parms.add("");
+    	}
+    }
+    public void sumTest() throws Exception {
+    	IntSum is = new IntSum();
+    	checkInvalidParameterCounts(is,2);
+    	checkSum(is,"3", new String[]{"1","2"});
+    	checkSum(is,"1", new String[]{"-1","1","1","1","-1","0"});
+    	String maxIntVal = Integer.toString(Integer.MAX_VALUE);
+    	String minIntVal = Integer.toString(Integer.MIN_VALUE);
+    	checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
+    	checkSum(is,minIntVal, new String[]{maxIntVal,"1"}); // wrap-round check
+
+    	is = null; // prevent accidental use below
+    	
+    	LongSum ls = new LongSum();
+    	checkInvalidParameterCounts(ls,2);
+    	checkSum(ls,"3", new String[]{"1","2"});
+    	checkSum(ls,"1", new String[]{"-1","1","1","1","-1","0"});
+    	String maxIntVal_1 = Long.toString(1+(long)Integer.MAX_VALUE);
+    	checkSum(ls,maxIntVal, new String[]{maxIntVal,"0"});
+    	checkSum(ls,maxIntVal_1, new String[]{maxIntVal,"1"}); // no wrap-round check
+    	String maxLongVal = Long.toString(Long.MAX_VALUE);
+    	String minLongVal = Long.toString(Long.MIN_VALUE);
+    	checkSum(ls,maxLongVal, new String[]{maxLongVal,"0"});
+    	checkSum(ls,minLongVal, new String[]{maxLongVal,"1"}); // wrap-round check
+    }
+    
+    // Perform a sum and check the results
+    private void checkSum(AbstractFunction func, String value, String [] addends)  throws Exception {
+		Collection parms = new LinkedList();
+		for (int i=0; i< addends.length; i++){
+			parms.add(new CompoundVariable(addends[i]));
+		}
+		parms.add(new CompoundVariable("Result"));
+    	func.setParameters(parms);
+    	assertEquals(value,func.execute(null,null));
+    	assertEquals(value,vars.getObject("Result"));    	
+    }
 }
