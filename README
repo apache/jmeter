@@ -6,9 +6,8 @@
   -----------
 
   Apache JMeter is a 100% pure Java application designed to test
-  and measure performance.  It may be used
-  as a highly portable server benchmark as well as multiclient
-  load generator.
+  and measure performance.  It may be used as a highly portable 
+  server benchmark as well as multiclient load generator.
 
   The Latest Version
   ------------------
@@ -57,10 +56,11 @@
   
   Change to the bin directory and run the jmeter (Un*x) or jmeter.bat (Windows) file.
   
-  For Windows, there are also some other scripts:
+  For Windows (2K, XP etc), there are also some other scripts:
   
-  jmeter-n.bat - drop a JMX file on this and it will run it as a non-GUI test
-  jmeter-t.bat - drop a JMX file on this and it will open the file for running a GUI test
+  jmeter-n.cmd - drop a JMX file on this and it will run it as a non-GUI test
+  jmeter-n-r.cmd - drop a JMX file on this and it will run it as a non-GUI remote (client-server) test
+  jmeter-t.cmd - drop a JMX file on this and it will open the file for running a GUI test
   
   Documentation
   -------------
@@ -107,8 +107,7 @@
   For legal and licensing issues, please look the files:
   LICENSE
   NOTICE
-  lib/LICENSE*
+  LICENSE*
 
 
-
-  Thanks for using Apache JMeter.
+  Thank you for using Apache JMeter.
