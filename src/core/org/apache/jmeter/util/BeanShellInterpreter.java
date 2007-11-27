@@ -203,4 +203,9 @@ public class BeanShellInterpreter {
 	public Object get(String s) throws JMeterException {
 		return bshInvoke(bshGet, new Object[] { s }, true);
 	}
+	
+	// For use by Unit Tests
+	public static boolean isInterpreterPresent(){
+		return bshClass != null;
+	}
 }
