@@ -30,19 +30,18 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Provides an intSum function that adds two or more integer values.
- * 
- * @see LongSum
+ * Provides a longSum function that adds two or more long values.
+ * @see IntSum
  */
-public class IntSum extends AbstractFunction implements Serializable {
+public class LongSum extends AbstractFunction implements Serializable {
 
 	private static final List desc = new LinkedList();
 
-	private static final String KEY = "__intSum"; //$NON-NLS-1$
+	private static final String KEY = "__longSum"; //$NON-NLS-1$
 
 	static {
-		desc.add(JMeterUtils.getResString("intsum_param_1")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("intsum_param_2")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("longsum_param_1")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("longsum_param_2")); //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
 	}
 
@@ -51,7 +50,7 @@ public class IntSum extends AbstractFunction implements Serializable {
 	/**
 	 * No-arg constructor.
 	 */
-	public IntSum() {
+	public LongSum() {
 	}
 
 	/**
@@ -74,14 +73,14 @@ public class IntSum extends AbstractFunction implements Serializable {
 
 		JMeterVariables vars = getVariables();
 
-		int sum = 0;
+		long sum = 0;
 		String varName = ((CompoundVariable) values[values.length - 1]).execute();
 
 		for (int i = 0; i < values.length - 1; i++) {
-			sum += Integer.parseInt(((CompoundVariable) values[i]).execute());
+			sum += Long.parseLong(((CompoundVariable) values[i]).execute());
 		}
 
-		String totalString = Integer.toString(sum);
+		String totalString = Long.toString(sum);
 		vars.put(varName, totalString);
 
 		return totalString;

@@ -78,7 +78,8 @@ Variables are local to a thread; properties are common to all threads.
         <tr><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td></tr>
         <tr><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td></tr>
         <tr><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td></tr>
-        <tr><td> <a href="#__intSum">intSum</a></td><td>add numbers</td></tr>
+        <tr><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td></tr>
+        <tr><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td></tr>
         <tr><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td></tr>
         <tr><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td></tr>
         <tr><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
@@ -279,7 +280,7 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 </note>
 </component>
 
-<component index="&sect-num;.5.4" name="__intSum">
+<component index="&sect-num;.5.4a" name="__intSum">
 <description><p>The intsum function can be used to compute the sum of two or more integer values.
 </p></description>
 
@@ -287,6 +288,19 @@ This function does not work in any Configuration elements (e.g. User Defined Var
         <property name="First argument" required="Yes">The first int value.</property>
         <property name="Second argument" required="Yes">The second int value.</property>
         <property name="nth argument" required="No">The nth int value.</property>
+        <property name="last argument" required="Yes">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.4b" name="__longSum">
+<description><p>The longSum function can be used to compute the sum of two or more long values.
+</p></description>
+
+<properties>
+        <property name="First argument" required="Yes">The first long value.</property>
+        <property name="Second argument" required="Yes">The second long value.</property>
+        <property name="nth argument" required="No">The nth long value.</property>
         <property name="last argument" required="Yes">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
