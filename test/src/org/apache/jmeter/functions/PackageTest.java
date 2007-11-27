@@ -39,6 +39,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
@@ -122,9 +123,14 @@ public class PackageTest extends JMeterTestCase {
 	public static Test suite() throws Exception {
 		TestSuite allsuites = new TestSuite("Function PackageTest");
 
-		TestSuite bsh = new TestSuite("BeanShell");
-		bsh.addTest(new PackageTest("BSH1"));
-		allsuites.addTest(bsh);
+		if (!BeanShellInterpreter.isInterpreterPresent()){
+			final String msg = "BeanShell jar not present, tests ignored";
+			log.warn(msg);
+		} else {
+			TestSuite bsh = new TestSuite("BeanShell");
+			bsh.addTest(new PackageTest("BSH1"));
+			allsuites.addTest(bsh);
+		}
 
 		TestSuite suite = new TestSuite("SingleThreaded");
 		suite.addTest(new PackageTest("CSVParams"));
