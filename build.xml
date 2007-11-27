@@ -17,6 +17,11 @@
 -->
 <project name="JMeter" default="all" basedir=".">
   <description>
+  	
+  	N.B. To build JMeter from a release you need both the binary and source archives,
+  	and these must be unpacked into the same directory structure.
+  	[The required external jars are only included in the binary release]
+  	
     To build JMeter from source and install:
       ant [all]
     To rebuild and install:
@@ -706,7 +711,7 @@
   </target>
 
   <target name="compile" 
-  depends="compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-report"
+  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-rmi,compile-monitor,compile-junit,compile-jms,compile-report"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
@@ -977,6 +982,22 @@ run JMeter unless all the JMeter jars are added.
            <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     	</manifest>
     </jar>
+  </target>
+
+  <!-- Check that the 3rd party libraries are present -->
+  <condition property="3rdparty.present">
+  	<and>
+  		<!-- No need to check all jars; just check a few -->
+        <available classpathref="classpath" classname="org.apache.bsf.BSFEngine"/>
+        <available classpathref="classpath" classname="org.htmlparser.Parser"/>
+        <available classpathref="classpath" classname="com.thoughtworks.xstream.XStream"/>
+  	</and>
+  </condition>
+	
+  <target name="_message_3rdParty" unless="3rdparty.present">
+  	<echo>Cannot find all the required 3rd party libraries.</echo>
+  	<echo>If building from a release, you need both source and binary archives.</echo>
+  	<fail message="Cannot find required classes"/>
   </target>
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
