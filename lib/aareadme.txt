@@ -66,8 +66,6 @@ jdom-1.0
 jdom-b9
 - Anakia
 
-(jorphan)
-
 js_rhino1_6R5
 - javascript function
 
