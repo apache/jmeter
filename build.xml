@@ -717,7 +717,7 @@
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
     <java classname="org.apache.jmeter.NewDriver" fork="true">
       <classpath>
-        <pathelement location="${dest.jar.jmeter}/apache-jmeter.jar"/>
+        <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
         <path refid="classpath"/>
       </classpath>
       <sysproperty key="jmeter.home" value="${basedir}"/>
@@ -751,7 +751,7 @@ run JMeter unless all the JMeter jars are added.
     - otherwise, change utils to ignore it -->
     
     <!-- JMeter launch jar -->
-    <jar jarfile="${dest.jar.jmeter}/apache-jmeter.jar" 
+    <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar" 
     	includes="**/NewDriver*,**/DynamicClassLoader*" 
         basedir="${build.core}" 
     	manifest="MANIFEST">
@@ -1027,7 +1027,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="MANIFEST"/>
-    <include name="${dest.jar.jmeter}/apache-jmeter.jar"/>
+    <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <include name="${dest.jar.jmeter}/BeanShell*.bshrc"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
@@ -1364,7 +1364,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="clean" description="Clean up to force a build from source.">
   	<delete quiet="true">
-  		<fileset dir="${dest.jar.jmeter}" includes="apache-jmeter.jar ApacheJMeter.jar"/>
+  		<fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
   	    <fileset dir="${lib.dir}" includes="apache-jmeter-jorphan.jar jorphan.jar"/>
   	    <fileset dir="${lib.dir}" includes="apache-jmeter-bshclient.jar bshclient.jar"/>
   	    <fileset dir="${dest.jar}" includes="*.jar"/>
