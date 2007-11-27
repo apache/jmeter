@@ -31,8 +31,7 @@
 	   <item name="Contributors"		href="http://wiki.apache.org/jakarta-jmeter/JMeterCommitters"/>
 	 </menu>
 	 <menu name="Download">
-	 	<item name="Download Binary"    href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries"/>
-        <item name="Download Source"    href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources"/>
+	 	<item name="Download Releases"    href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi"/>
 		<item name="Developer (Nightly) Builds"  	href="/nightly.html"/>
 	 </menu>
 	 <menu name="Documentation">
