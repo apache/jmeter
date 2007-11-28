@@ -116,7 +116,7 @@
       <sourcePath path="${src.mail}" />
       <sourcePath path="${src.components}" />
       <sourcePath path="${src.functions}" />
-      <class location="${lib.dir}/apache-jmeter-jorphan.jar" />
+      <class location="${lib.dir}/jorphan.jar" />
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
       <sourcePath path="${src.jms}" />
@@ -380,7 +380,7 @@
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${xml-apis.jar}"/>
   	<!-- Generated jars -->
-    <fileset dir="${lib.dir}" includes="apache-jmeter-jorphan.jar"/>
+    <fileset dir="${lib.dir}" includes="jorphan.jar"/>
   	<!-- API-only jars-->
     <pathelement location="${activation.jar}"/>
     <pathelement location="${javamail.jar}"/>
@@ -766,7 +766,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
 
     <!-- core -->    
-    <jar jarfile="${dest.jar}/apache-jmeter-core.jar" 
+    <jar jarfile="${dest.jar}/ApacheJMeter_core.jar" 
     	manifest="MANIFEST">
       <!-- Only include class files from build tree - see above -->
       <fileset dir="${build.core}" includes="**/*.class"
@@ -788,7 +788,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- components -->
-    <jar jarfile="${dest.jar}/apache-jmeter-components.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_components.jar" manifest="MANIFEST">
       <fileset dir="${build.components}" includes="**/*.class" />
       <fileset dir="${src.components}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -801,7 +801,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- functions -->
-    <jar jarfile="${dest.jar}/apache-jmeter-functions.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_functions.jar" manifest="MANIFEST">
       <fileset dir="${build.functions}" includes="**/*.class" />
       <fileset dir="${src.functions}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -814,7 +814,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
 
     <!-- http -->
-    <jar jarfile="${dest.jar}/apache-jmeter-http.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_http.jar" manifest="MANIFEST">
       <fileset dir="${build.http}" includes="**/*.class"/>
       <fileset dir="${src.http}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -827,7 +827,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
   	  	    
     <!-- ftp -->
-    <jar jarfile="${dest.jar}/apache-jmeter-ftp.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_ftp.jar" manifest="MANIFEST">
       <fileset dir="${build.ftp}" includes="**/*.class" />
       <fileset dir="${src.ftp}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -840,7 +840,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- jdbc -->
-    <jar jarfile="${dest.jar}/apache-jmeter-jdbc.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_jdbc.jar" manifest="MANIFEST">
       <fileset dir="${build.jdbc}" includes="**/*.class" />
       <fileset dir="${src.jdbc}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -853,7 +853,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- java -->
-    <jar jarfile="${dest.jar}/apache-jmeter-java.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_java.jar" manifest="MANIFEST">
       <fileset dir="${build.java}" includes="**/*.class" />
       <fileset dir="${src.java}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -866,7 +866,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- BeanShell Client -->
-    <jar jarfile="${lib.dir}/apache-jmeter-bshclient.jar" manifest="MANIFEST">
+    <jar jarfile="${lib.dir}/bshclient.jar" manifest="MANIFEST">
       <fileset dir="${build.core}" includes="**/BeanShellClient*.class" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
     	<manifest>
@@ -879,7 +879,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
   	    
     <!-- junit -->
-    <jar jarfile="${dest.jar}/apache-jmeter-junit.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_junit.jar" manifest="MANIFEST">
       <fileset dir="${build.junit}" includes="**/*.class" />
       <fileset dir="${src.junit}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -892,7 +892,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
 
     <!-- report -->
-    <jar jarfile="${dest.jar}/apache-jmeter-report.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_report.jar" manifest="MANIFEST">
       <fileset dir="${build.report}" includes="**/*.class" />
       <fileset dir="${src.report}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -905,7 +905,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
 
     <!-- ldap -->
-    <jar jarfile="${dest.jar}/apache-jmeter-ldap.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_ldap.jar" manifest="MANIFEST">
       <fileset dir="${build.ldap}" includes="**/*.class" />
       <fileset dir="${src.ldap}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -918,7 +918,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- mail -->
-    <jar jarfile="${dest.jar}/apache-jmeter-mail.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_mail.jar" manifest="MANIFEST">
       <fileset dir="${build.mail}" includes="**/*.class"  />
       <fileset dir="${src.mail}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -931,7 +931,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- tcp -->
-    <jar jarfile="${dest.jar}/apache-jmeter-tcp.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_tcp.jar" manifest="MANIFEST">
       <fileset dir="${build.tcp}" includes="**/*.class" />
       <fileset dir="${src.tcp}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -944,7 +944,7 @@ run JMeter unless all the JMeter jars are added.
     </jar>
     
     <!-- monitor -->
-    <jar jarfile="${dest.jar}/apache-jmeter-monitors.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_monitors.jar" manifest="MANIFEST">
       <fileset dir="${build.monitor.model}" includes="**/*.class" />
       <fileset dir="${build.monitor.components}" includes="**/*.class" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -959,7 +959,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- jms -->
     <!-- Ensure that build dir exists, even if JMS has not been built -->
     <mkdir dir="${build.jms}"/>
-    <jar jarfile="${dest.jar}/apache-jmeter-jms.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_jms.jar" manifest="MANIFEST">
       <fileset dir="${build.jms}" includes="**/*.class" />
       <fileset dir="${src.jms}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -971,7 +971,7 @@ run JMeter unless all the JMeter jars are added.
     	</manifest>
     </jar>
  	
-    <jar jarfile="${lib.dir}/apache-jmeter-jorphan.jar" manifest="MANIFEST">
+    <jar jarfile="${lib.dir}/jorphan.jar" manifest="MANIFEST">
         <fileset dir="${build.jorphan}" includes="**/*.class"/>
         <fileset dir="${src.jorphan}" includes="**/*.properties"/>
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1008,7 +1008,7 @@ run JMeter unless all the JMeter jars are added.
     description="Default: build from source. Does not create docs."/>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
-    <jar jarfile="${dest.jar}/apache-jmeter-examples.jar" manifest="MANIFEST">
+    <jar jarfile="${dest.jar}/ApacheJMeter_examples.jar" manifest="MANIFEST">
       <fileset dir="${build.examples}" includes="**/*.class" />
       <fileset dir="${src.examples}" includes="**/*.properties" />
         <metainf dir="." includes="LICENSE,NOTICE"/>
@@ -1045,8 +1045,8 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar}/"/>
     <include name="${dest.printable_docs}/**"/>
     <include name="${extras.dir}/**"/>
-    <include name="${lib.dir}/apache-jmeter-bshclient.jar"/>
-    <include name="${lib.dir}/apache-jmeter-jorphan.jar"/>
+    <include name="${lib.dir}/bshclient.jar"/>
+    <include name="${lib.dir}/jorphan.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
   </patternset>
 
@@ -1204,9 +1204,9 @@ run JMeter unless all the JMeter jars are added.
 
 	<target name="gump-check">
 	  	<!-- check if /usr and /x1 are the same -->
-	  	<checksum file="/usr/local/gump/public/workspace/jakarta-jmeter-22/lib/apache-jmeter-jorphan.jar" property="usrMD5"/>
+	  	<checksum file="/usr/local/gump/public/workspace/jakarta-jmeter-22/lib/jorphan.jar" property="usrMD5"/>
 	  	<echo>usrMD5 = ${usrMD5}</echo>
-	  	<checksum        file="/x1/gump/public/workspace/jakarta-jmeter-22/lib/apache-jmeter-jorphan.jar" property="x1MD5"/>
+	  	<checksum        file="/x1/gump/public/workspace/jakarta-jmeter-22/lib/jorphan.jar" property="x1MD5"/>
 	  	<echo>x1MD5  = ${x1MD5}</echo>
 	</target>
 
@@ -1365,8 +1365,8 @@ run JMeter unless all the JMeter jars are added.
   <target name="clean" description="Clean up to force a build from source.">
   	<delete quiet="true">
   		<fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
-  	    <fileset dir="${lib.dir}" includes="apache-jmeter-jorphan.jar jorphan.jar"/>
-  	    <fileset dir="${lib.dir}" includes="apache-jmeter-bshclient.jar bshclient.jar"/>
+  	    <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+  	    <fileset dir="${lib.dir}" includes="bshclient.jar"/>
   	    <fileset dir="${dest.jar}" includes="*.jar"/>
   	    <fileset dir="${build.dir}"/>
   	    <fileset dir="${dest.printable_docs}"/>
