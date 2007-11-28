@@ -53,6 +53,7 @@
 <li>Better handling of MirrorServer startup problems and improved unit test.</li>
 <li>Build process now detects missing 3rd party libraries and reports need for both binary and source archives</li>
 <li>Skip BeanShell tests if jar is not present</li>
+<li>Update to Xalan 2.7.1</li>
 </ul>
 
 <!--  ===================  -->
