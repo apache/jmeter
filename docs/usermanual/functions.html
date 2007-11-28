@@ -67,9 +67,7 @@
 		  		  </ul>
 	 		  <p><strong>Download</strong></p>
 		  <ul>
-		  				<li>	 <a href="http://jakarta.apache.org/site/binindex.cgi#jmeter_binaries">Download Binary</a>
-</li>
-		  				<li>	 <a href="http://jakarta.apache.org/site/sourceindex.cgi#jmeter_sources">Download Source</a>
+		  				<li>	 <a href="http://jakarta.apache.org/site/downloads/downloads_jmeter.cgi">Download Releases</a>
 </li>
 		  				<li>	 <a href="../nightly.html">Developer (Nightly) Builds</a>
 </li>
@@ -248,7 +246,19 @@ Variables are local to a thread; properties are common to all threads.
 </td>
 		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  add numbers
+		  		  add int numbers
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__longSum">longSum</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  add long numbers
 		  	 </font>
 </td>
 		  	 </tr>
@@ -942,7 +952,7 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 							  									 					<table border="0" cellspacing="0" cellpadding="2">
 		<tr><td>
 		  <font face="arial,helvetica,sanserif">
-			 <a name="__intSum"><h3>19.5.4 __intSum</h3></a>
+			 <a name="__intSum"><h3>19.5.4a __intSum</h3></a>
 		  </font>
 		</td></tr>
 				<tr><td>
@@ -973,6 +983,60 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 			<tr>
 			<td>nth argument</td>
 			<td>						The nth int value.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
+			<tr>
+			<td>last argument</td>
+			<td>						A reference name for reusing the value
+                computed by this function.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+		</table>
+	</p>
+							  		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+	<hr>
+							  									 					<table border="0" cellspacing="0" cellpadding="2">
+		<tr><td>
+		  <font face="arial,helvetica,sanserif">
+			 <a name="__longSum"><h3>19.5.4b __longSum</h3></a>
+		  </font>
+		</td></tr>
+				<tr><td>
+		  																			<p	>
+								The longSum function can be used to compute the sum of two or more long values.
+
+						</p>
+															  									 			 <p>
+	<b>Parameters</b>
+	<table border="1" cellspacing="0" cellpadding="2">
+	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
+			<tr>
+			<td>First argument</td>
+			<td>						The first long value.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Second argument</td>
+			<td>						The second long value.
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>nth argument</td>
+			<td>						The nth long value.
 			</td>
 			<td>
 											No
