@@ -250,7 +250,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 		assertionPanel.add(thresholdPanel);
 
 		// file panel
-		filePanel = new FilePanel(JMeterUtils.getResString("file_visualizer_output_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
+		filePanel = new FilePanel(JMeterUtils.getResString("html_assertion_file"), ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
 		assertionPanel.add(filePanel);
 
 		mainPanel.add(assertionPanel, BorderLayout.NORTH);
