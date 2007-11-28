@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.apache.jmeter.control.NextIsNullException;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MapProperty;
@@ -270,6 +271,25 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		setProperty(new StringProperty(name, Boolean.toString(value)));
 	}
 
+	/**
+	 * Create a boolean property - but only if it is not the default.
+	 * This is intended for use when adding new properties to JMeter
+	 * so that JMX files are not expanded unnecessarily.
+	 * 
+	 * N.B. - must agree with the default applied when reading the property.
+	 * 
+	 * @param name property name
+	 * @param value current value
+	 * @param dflt default if not present
+	 */
+	public void setProperty(String name, boolean value, boolean dflt) {
+		if (value == dflt) {
+			removeProperty(name);
+		} else {
+			setProperty(new BooleanProperty(name, value));
+		}
+	}
+	
 	public PropertyIterator propertyIterator() {
 		return new PropertyIteratorImpl(propMap.values());
 	}
