@@ -20,6 +20,8 @@ package org.apache.jmeter.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,7 +36,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * author Justin Spears jspears@astrology.com
  * 
  * This class provides a few utility methods for dealing with XML/XPath. Might
  * think about creating an interface for the setup, but, works fine now...
@@ -107,12 +108,36 @@ public class XPathUtil {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws SAXException
+	 * @throws TidyException
 	 */
 	public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-			boolean tolerant) throws ParserConfigurationException, SAXException, IOException {
+			boolean tolerant) throws ParserConfigurationException, SAXException, IOException, TidyException {
+		return makeDocument(stream, validate, whitespace, namespace, tolerant, true, false, false);
+		
+	}
+
+	/**
+	 * 
+	 * @param stream - Document Input stream
+	 * @param validate - Validate Document
+	 * @param whitespace - Element Whitespace
+	 * @param namespace - Is Namespace aware.
+	 * @param tolerant - Is tolerant - i.e. use the Tidy parser
+	 * @param quiet - 
+	 * @param showWarnings -
+	 * @param report_errors -
+	 * @return document
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws TidyException
+	 */
+	public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
+			boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors)
+	        throws ParserConfigurationException, SAXException, IOException, TidyException {
 		Document doc;
 		if (tolerant) {
-			doc = tidyDoc(stream);
+			doc = tidyDoc(stream, quiet, showWarnings, report_errors);
 			// doc=makeTolerantDocumentBuilder().parse(new
 			// InputStreamReader(stream));
 		} else {
@@ -129,24 +154,34 @@ public class XPathUtil {
 	// return builder;
 	// }
 
-	private static Document tidyDoc(InputStream stream) {
-		Document doc = null;
-		doc = makeTidyParser().parseDOM(stream, null);
+	private static Document tidyDoc(InputStream stream, boolean quiet, boolean showWarnings, boolean report_errors)
+	    throws TidyException {
+		Tidy tidy = makeTidyParser(quiet, showWarnings);		
+		StringWriter sw = null;
+		if (report_errors) {
+			sw = new StringWriter();
+			tidy.setErrout(new PrintWriter(sw));
+		}
+		Document doc = tidy.parseDOM(stream, null);
 		doc.normalize();
 		// remove the document declaration cause I think it causes
 		// issues this is only needed for JDOM, since I am not
 		// using it... But in case we change.
 		// Node name = doc.getDoctype();
 		// doc.removeChild(name);
+		if (sw != null && tidy.getParseErrors() > 0) {
+			log.error("Caught TidyException: " + sw.toString());			
+			throw new TidyException(tidy.getParseErrors(),tidy.getParseWarnings());
+		}
 
 		return doc;
 	}
 
-	private static Tidy makeTidyParser() {
+	private static Tidy makeTidyParser(boolean quiet, boolean showWarnings) {
 		Tidy tidy = new Tidy();
 		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-		tidy.setQuiet(true);
-		tidy.setShowWarnings(false);
+		tidy.setQuiet(quiet);
+		tidy.setShowWarnings(showWarnings);
 		tidy.setMakeClean(true);
 		tidy.setXmlTags(false); // Input is not valid XML
 		// tidy.setShowErrors(1);
