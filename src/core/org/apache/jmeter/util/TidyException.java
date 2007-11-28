@@ -23,7 +23,7 @@ package org.apache.jmeter.util;
  */
 public class TidyException extends Exception {
 
-	TidyException() {
+	public TidyException() {
 		this(0,0);
 	}
 	
