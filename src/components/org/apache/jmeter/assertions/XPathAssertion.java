@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -49,17 +50,17 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
 	// private static XPathAPI xpath = null;
 
-	private static final String XPATH_KEY = "XPath.xpath";
-
-	private static final String WHITESPACE_KEY = "XPath.whitespace";
-
-	private static final String VALIDATE_KEY = "XPath.validate";
-
-	private static final String TOLERANT_KEY = "XPath.tolerant";
-
-	private static final String NEGATE_KEY = "XPath.negate";
-
-	private static final String NAMESPACE_KEY = "XPath.namespace";
+	//+ JMX file attributes
+	private static final String XPATH_KEY         = "XPath.xpath"; // $NON-NLS-1$
+	private static final String WHITESPACE_KEY    = "XPath.whitespace"; // $NON-NLS-1$
+	private static final String VALIDATE_KEY      = "XPath.validate"; // $NON-NLS-1$
+	private static final String TOLERANT_KEY      = "XPath.tolerant"; // $NON-NLS-1$
+	private static final String NEGATE_KEY        = "XPath.negate"; // $NON-NLS-1$
+	private static final String NAMESPACE_KEY     = "XPath.namespace"; // $NON-NLS-1$
+	private static final String QUIET_KEY         = "XPath.quiet"; // $NON-NLS-1$
+	private static final String REPORT_ERRORS_KEY = "XPath.report_errors"; // $NON-NLS-1$
+	private static final String SHOW_WARNINGS_KEY = "XPath.show_warnings"; // $NON-NLS-1$
+	//- JMX file attributes
 
 	public static final String DEFAULT_XPATH = "/";
 
@@ -88,7 +89,7 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
 		try {
 			doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
-					isWhitespace(), isNamespace(), isTolerant());
+					isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors());
 		} catch (SAXException e) {
 			log.debug("Caught sax exception: " + e);
 			result.setError(true);
@@ -104,6 +105,10 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 			result.setError(true);
 			result.setFailureMessage(new StringBuffer("ParserConfigurationException: ").append(e.getMessage())
 					.toString());
+			return result;
+		} catch (TidyException e) {						
+			result.setError(true);
+			result.setFailureMessage(e.getMessage());
 			return result;
 		}
 
@@ -266,4 +271,27 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 		return getPropertyAsBoolean(NEGATE_KEY, false);
 	}
 
+	public void setReportErrors(boolean val) {
+	    setProperty(REPORT_ERRORS_KEY, val, false);
+	}
+	
+	public boolean reportErrors() {
+		return getPropertyAsBoolean(REPORT_ERRORS_KEY, false);
+	}
+	
+	public void setShowWarnings(boolean val) {
+	    setProperty(SHOW_WARNINGS_KEY, val, false);
+	}
+	
+	public boolean showWarnings() {
+		return getPropertyAsBoolean(SHOW_WARNINGS_KEY, false);
+	}
+	
+	public void setQuiet(boolean val) {
+	    setProperty(QUIET_KEY, val, true);
+	}
+	
+	public boolean isQuiet() {
+		return getPropertyAsBoolean(QUIET_KEY, true);
+	}
 }
