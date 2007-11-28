@@ -21,14 +21,22 @@ package org.apache.jmeter.assertions.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.jmeter.assertions.XPathAssertion;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class XMLConfPanel extends JPanel {
 	private JCheckBox validate, tolerant, whitespace, namespace;
+
+	private JCheckBox quiet; // Should Tidy be quiet?
+	
+	private JCheckBox reportErrors; // Report Tidy errors as Assertion failure?
+	
+	private JCheckBox showWarnings; // Show Tidy warnings ?
 
 	/**
 	 * 
@@ -47,7 +55,16 @@ public class XMLConfPanel extends JPanel {
 	}
 
 	private void init() {
-		add(getTolerant());
+		Box tidyOptions = Box.createHorizontalBox();
+		tidyOptions.setBorder(BorderFactory.createEtchedBorder());
+		tidyOptions.add(getTolerant());
+		quiet = new JCheckBox(JMeterUtils.getResString("xpath_tidy_quiet"),true);//$NON-NLS-1$
+		reportErrors = new JCheckBox(JMeterUtils.getResString("xpath_tidy_report_errors"),true);//$NON-NLS-1$
+		showWarnings = new JCheckBox(JMeterUtils.getResString("xpath_tidy_show_warnings"),true);//$NON-NLS-1$
+		tidyOptions.add(quiet);
+		tidyOptions.add(reportErrors);
+		tidyOptions.add(showWarnings);
+		add(tidyOptions);
 		add(getNamespace());
 		add(getValidate());
 		add(getWhitespace());
@@ -59,12 +76,16 @@ public class XMLConfPanel extends JPanel {
         setValidate(false);
         setTolerant(false);
         setNamespace(false);
+        quiet.setSelected(true);
+        reportErrors.setSelected(false);
+        showWarnings.setSelected(false);
+        tolerant();
     }
 
 	/**
 	 * @return Returns the namespace.
 	 */
-	public JCheckBox getNamespace() {
+    private JCheckBox getNamespace() {
 		if (namespace == null) {
 			namespace = new JCheckBox(JMeterUtils.getResString("xml_namespace_button")); //$NON-NLS-1$
 		}
@@ -74,7 +95,7 @@ public class XMLConfPanel extends JPanel {
 	/**
 	 * @return Returns the tolerant.
 	 */
-	public JCheckBox getTolerant() {
+    private JCheckBox getTolerant() {
 		if (tolerant == null) {
 			tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
 			tolerant.addActionListener(new ActionListener() {
@@ -90,7 +111,7 @@ public class XMLConfPanel extends JPanel {
 	/**
 	 * @return Returns the validate.
 	 */
-	public JCheckBox getValidate() {
+	private JCheckBox getValidate() {
 		if (validate == null) {
 			validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
 		}
@@ -100,64 +121,74 @@ public class XMLConfPanel extends JPanel {
 	/**
 	 * @return Returns the whitespace.
 	 */
-	public JCheckBox getWhitespace() {
+	private JCheckBox getWhitespace() {
 		if (whitespace == null) {
 			whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
 		}
 		return whitespace;
 	}
 
-	public boolean isNamespace() {
+	private boolean isNamespace() {
 		return getNamespace().isSelected();
 	}
 
-	public void setNamespace(boolean namespace) {
+	private void setNamespace(boolean namespace) {
 		getNamespace().setSelected(namespace);
 	}
 
-	public boolean isTolerant() {
+	private boolean isTolerant() {
 		return getTolerant().isSelected();
 	}
 
-	public void setTolerant(boolean tolerant) {
+	private void setTolerant(boolean tolerant) {
 		getTolerant().setSelected(tolerant);
 	}
 
-	public boolean isWhitespace() {
+	private boolean isWhitespace() {
 		return getWhitespace().isSelected();
 	}
 
-	public void setWhitespace(boolean whitespace) {
+	private void setWhitespace(boolean whitespace) {
 		getWhitespace().setSelected(whitespace);
 	}
 
-	public boolean isValidate() {
+	private boolean isValidate() {
 		return getValidate().isSelected();
 	}
 
-	public void setValidate(boolean validating) {
+	private void setValidate(boolean validating) {
 		getValidate().setSelected(validating);
 	}
 
 	private void tolerant() {
-		getValidate().setEnabled(!isTolerant());
-		getWhitespace().setEnabled(!isTolerant());
-		getNamespace().setEnabled(!isTolerant());
+		final boolean isTolerant = isTolerant();
+		getValidate().setEnabled(!isTolerant);
+		getWhitespace().setEnabled(!isTolerant);
+		getNamespace().setEnabled(!isTolerant);
+		quiet.setEnabled(isTolerant);
+		reportErrors.setEnabled(isTolerant);
+		showWarnings.setEnabled(isTolerant);
 	}
 
-	public static void main(String[] args) {
-		JPanel comb = new JPanel();
+	// Called by XPathAssertionGui
+	public void modifyTestElement(XPathAssertion assertion) {
+		assertion.setValidating(isValidate());
+		assertion.setWhitespace(isWhitespace());
+		assertion.setTolerant(isTolerant());
+		assertion.setNamespace(isNamespace());
+		assertion.setShowWarnings(showWarnings.isSelected());
+		assertion.setReportErrors(reportErrors.isSelected());
+		assertion.setQuiet(quiet.isSelected());		
+	}
 
-		XMLConfPanel xml = new XMLConfPanel();
-		XPathPanel xpath = new XPathPanel();
-		JFrame frame = new JFrame(xml.getClass().getName());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		comb.add(xpath);
-		comb.add(xml);
-		frame.add(comb);
-
-		frame.pack();
-		frame.setVisible(true);
-
+	// Called by XPathAssertionGui
+	public void configure(XPathAssertion assertion) {
+		setWhitespace(assertion.isWhitespace());
+		setValidate(assertion.isValidating());
+		setTolerant(assertion.isTolerant());
+		setNamespace(assertion.isNamespace());
+		quiet.setSelected(assertion.isQuiet());
+		showWarnings.setSelected(assertion.showWarnings());
+		reportErrors.setSelected(assertion.reportErrors());
 	}
 }

@@ -64,11 +64,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 		xpath.setXPath(assertion.getXPathString());
 		xpath.setNegated(assertion.isNegated());
 
-		xml.setWhitespace(assertion.isWhitespace());
-		xml.setValidate(assertion.isValidating());
-		xml.setTolerant(assertion.isTolerant());
-		xml.setNamespace(assertion.isNamespace());
-
+		xml.configure(assertion);
 	}
 
 	private void init() {
@@ -102,12 +98,9 @@ public class XPathAssertionGui extends AbstractAssertionGui {
 		super.configureTestElement(el);
 		if (el instanceof XPathAssertion) {
 			XPathAssertion assertion = (XPathAssertion) el;
-			assertion.setValidating(xml.isValidate());
-			assertion.setWhitespace(xml.isWhitespace());
-			assertion.setTolerant(xml.isTolerant());
-			assertion.setNamespace(xml.isNamespace());
 			assertion.setNegated(xpath.isNegated());
 			assertion.setXPathString(xpath.getXPath());
+			xml.modifyTestElement(assertion);
 		}
 	}
     
@@ -121,5 +114,6 @@ public class XPathAssertionGui extends AbstractAssertionGui {
         xpath.setNegated(false);
         
         xml.setDefaultValues();
+
     }    
 }
