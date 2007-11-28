@@ -45,6 +45,7 @@
 <ul>
 <li>CSV files can now handle fields with embedded delimiters.</li>
 <li>longSum() function added</li>
+<li>Bug 43382 - configure Tidy output (warnings, errors) for XPath Assertion and Post-Processor</li>
 </ul>
 
 <h4>Non-functional changes</h4>

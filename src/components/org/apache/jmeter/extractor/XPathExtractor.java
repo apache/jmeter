@@ -25,12 +25,14 @@ import java.io.UnsupportedEncodingException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
@@ -67,12 +69,17 @@ public class XPathExtractor extends AbstractTestElement implements
         PostProcessor, Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 	private static final String MATCH_NR = "matchNr"; // $NON-NLS-1$
-	protected static final String KEY_PREFIX = "XPathExtractor."; // $NON-NLS-1$
-	private static final String XPATH_QUERY = KEY_PREFIX +"xpathQuery"; // $NON-NLS-1$
-	private static final String REFNAME = KEY_PREFIX +"refname"; // $NON-NLS-1$
-	private static final String DEFAULT = KEY_PREFIX +"default"; // $NON-NLS-1$
-	private static final String TOLERANT = KEY_PREFIX +"tolerant"; // $NON-NLS-1$
-	private static final String NAMESPACE = KEY_PREFIX +"namespace"; // $NON-NLS-1$
+	
+	//+ JMX file attributes
+	private static final String XPATH_QUERY     = "XPathExtractor.xpathQuery"; // $NON-NLS-1$
+	private static final String REFNAME         = "XPathExtractor.refname"; // $NON-NLS-1$
+	private static final String DEFAULT         = "XPathExtractor.default"; // $NON-NLS-1$
+	private static final String TOLERANT        = "XPathExtractor.tolerant"; // $NON-NLS-1$
+	private static final String NAMESPACE       = "XPathExtractor.namespace"; // $NON-NLS-1$
+	private static final String QUIET           = "XPathExtractor.quiet"; // $NON-NLS-1$
+	private static final String REPORT_ERRORS   = "XPathExtractor.report_errors"; // $NON-NLS-1$
+	private static final String SHOW_WARNINGS   = "XPathExtractor.show_warnings"; // $NON-NLS-1$
+	//- JMX file attributes
 
 
     private String concat(String s1,String s2){
@@ -91,29 +98,33 @@ public class XPathExtractor extends AbstractTestElement implements
 		vars.put(refName, getDefaultValue());
         vars.put(concat(refName,MATCH_NR), "0"); // In case parse fails // $NON-NLS-1$
         vars.remove(concat(refName,"1")); // In case parse fails // $NON-NLS-1$
+		final SampleResult previousResult = context.getPreviousResult();
 
 		try{			
-			Document d = parseResponse(context.getPreviousResult());		
+			Document d = parseResponse(previousResult);		
 			getValuesForXPath(d,getXPathQuery(),vars, refName);
 		}catch(IOException e){// Should not happen
-			final String errorMessage = "error on "+XPATH_QUERY+"("+getXPathQuery()+")";
+			final String errorMessage = "error on ("+getXPathQuery()+")";
 			log.error(errorMessage,e);
 			throw new JMeterError(errorMessage,e);
 		} catch (ParserConfigurationException e) {// Should not happen
-			final String errrorMessage = "error on "+XPATH_QUERY+"("+getXPathQuery()+")";
+			final String errrorMessage = "error on ("+getXPathQuery()+")";
 			log.error(errrorMessage,e);
 			throw new JMeterError(errrorMessage,e);
 		} catch (SAXException e) {// Can happen for bad input document
-			log.warn("error on "+XPATH_QUERY+"("+getXPathQuery()+")"+e.getLocalizedMessage());
+			log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
 		} catch (TransformerException e) {// Can happen for incorrect XPath expression
-			log.warn("error on "+XPATH_QUERY+"("+getXPathQuery()+")"+e.getLocalizedMessage());
+			log.warn("error on ("+getXPathQuery()+")"+e.getLocalizedMessage());
+		} catch (TidyException e) {
+			AssertionResult ass = new AssertionResult("TidyException"); // $NON-NLS-1$
+			ass.setFailure(true);
+			ass.setFailureMessage(e.getMessage());
+			previousResult.addAssertionResult(ass);
+			previousResult.setSuccessful(false);
 		}
     }    
             
-    /**
-     * Clone?
-     */
-    public Object clone() {
+   public Object clone() {
 		XPathExtractor cloned = (XPathExtractor) super.clone();
 		return cloned;
 	}    
@@ -159,6 +170,30 @@ public class XPathExtractor extends AbstractTestElement implements
 		return getPropertyAsBoolean(NAMESPACE);
 	}
 
+	public void setReportErrors(boolean val) {
+		    setProperty(REPORT_ERRORS, val, false);
+	}
+
+	public boolean reportErrors() {
+		return getPropertyAsBoolean(REPORT_ERRORS, false);
+	}
+
+	public void setShowWarnings(boolean val) {
+	    setProperty(SHOW_WARNINGS, val, false);
+	}
+
+	public boolean showWarnings() {
+		return getPropertyAsBoolean(SHOW_WARNINGS, false);
+	}
+
+	public void setQuiet(boolean val) {
+	    setProperty(QUIET, val, true);
+	}
+
+	public boolean isQuiet() {
+		return getPropertyAsBoolean(QUIET, true);
+	}
+
 	/*================= internal business =================*/
     /**
      * Converts (X)HTML response to DOM object Tree.
@@ -168,7 +203,7 @@ public class XPathExtractor extends AbstractTestElement implements
      * 
      */
     private Document parseResponse(SampleResult result)
-      throws UnsupportedEncodingException, IOException, ParserConfigurationException,SAXException
+      throws UnsupportedEncodingException, IOException, ParserConfigurationException,SAXException,TidyException
     {
       //TODO: validate contentType for reasonable types?
 
@@ -181,7 +216,7 @@ public class XPathExtractor extends AbstractTestElement implements
       byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
       // this method assumes UTF-8 input data
-      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant());
+      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant(),isQuiet(),showWarnings(),reportErrors());
     }
 
     /**
