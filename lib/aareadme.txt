@@ -76,6 +76,9 @@ logkit-1.2
 - logging
 - Anakia
 
+serialiser_2_7_1
+- xalan
+
 soap (appears to be version 2.3.1)
 - WebServiceSampler ONLY
 
@@ -87,19 +90,19 @@ Tidy
 velocity-1.5
 - Anakia (create documentation) Not used by JMeter runtime
 
-xalan
+xalan_2_7_1
 +org.apache.xalan|xml|xpath
 
-xercesimpl
+xercesimpl_2_7_1
 +org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
 +org.w3c.dom.html|ls
 
-xml-apis
+xml-apis_2_7_1
 +javax.xml
 +org.w3c.dom
 +org.xml.sax
 
-The x* jars above are used for XML handling (probably not needed for JDK1.4)
+The x* jars above are used for XML handling
 
 xpp3_min-1.1.3.4.O
 - xstream
