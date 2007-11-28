@@ -2618,7 +2618,10 @@ on XPath.
 
 <properties>
 <property name="Name"		required="No">Descriptive name for this element that is shown in the tree.</property>
-<property name="Tolerant Parser"	required="No">Be tolerant of XML/HTML errors</property>
+<property name="Tolerant Parser"	required="Yes">Be tolerant of XML/HTML errors (i.e. use Tidy)</property>
+<property name="Quiet"	required="If tolerant is selected">Sets the Tidy Quiet flag</property>
+<property name="Report Errors"	required="If tolerant is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
+<property name="Show warnings"	required="If tolerant is selected">Sets the Tidy showWarnings option</property>
 <property name="Use Namespaces"	required="No">Should namespaces be honoured?</property>
 <property name="Validate XML"	required="No">Check the document against its schema.</property>
 <property name="XPath Assertion"		required="Yes">XPath to match in the document.</property>
@@ -3113,6 +3116,9 @@ generate the template string, and store the result into the given variable name.
 		   <li>"Use Tidy" should be unchecked for both XHTML or XML response (for example RSS)</li>
 	   </ul>
 	   </property>
+        <property name="Quiet"	required="If Tidy is selected">Sets the Tidy Quiet flag</property>
+        <property name="Report Errors"	required="If Tidy is selected">If a Tidy error occurs, then add an Assertion showing the details</property>
+        <property name="Show warnings"	required="If Tidy is selected">Sets the Tidy showWarnings option</property>
         <property name="Use Namespace?" required="Yes">
         If checked, then the XML parser will use namespace resolution.
         Note that currently only namespaces declared on the root element will be recognised.
