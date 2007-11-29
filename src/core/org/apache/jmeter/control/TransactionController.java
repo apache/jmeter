@@ -76,6 +76,9 @@ public class TransactionController extends GenericController implements SampleLi
 		return getPropertyAsBoolean(PARENT);
 	}
 
+	/**
+	 * @see org.apache.jmeter.control.Controller#next()
+	 */
 	public Sampler next(){
 		if (isParent()){
 			return next1();
@@ -86,10 +89,7 @@ public class TransactionController extends GenericController implements SampleLi
 	
 ///////////////// Transaction Controller - parent ////////////////
 
-	/**
-	 * @see org.apache.jmeter.control.Controller#next()
-	 */
-	public Sampler next1() {
+	private Sampler next1() {
         // Check if transaction is done
         if(transactionSampler != null && transactionSampler.isTransactionDone()) {
         	if (log.isDebugEnabled()) {
@@ -139,7 +139,7 @@ public class TransactionController extends GenericController implements SampleLi
 
 ////////////////////// Transaction Controller - additional sample //////////////////////////////
 
-	public Sampler next2() {
+	private Sampler next2() {
 		if (isFirst()) // must be the start of the subtree
 		{
 			calls = 0;
