@@ -153,7 +153,9 @@ public class ThroughputController extends GenericController implements Serializa
 
 	private int getExecutions() {
 		if (!isPerThread()) {
-			return globalNumExecutions;
+			synchronized (counterLock) {
+				return globalNumExecutions;
+			}
 		}
 		return numExecutions;
 	}
@@ -205,14 +207,16 @@ public class ThroughputController extends GenericController implements Serializa
 			synchronized (counterLock) {
 				globalIteration++;
 				runThisTime = decide(globalNumExecutions, globalIteration);
-				if (runThisTime)
+				if (runThisTime) {
 					globalNumExecutions++;
+				}
 			}
 		} else {
 			iteration++;
 			runThisTime = decide(numExecutions, iteration);
-			if (runThisTime)
+			if (runThisTime) {
 				numExecutions++;
+			}
 		}
 	}
 
