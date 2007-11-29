@@ -23,26 +23,24 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * This interface will typically be used in the following manner:
+ * This interface is used by JMeterThread in the following manner:
  * 
- * Controller controller; //gets initialized while(!controller.isDone() &&
- * controller.hasNext()) { Sampler sampler = controller.next(); return sampler; }
- * 
- * @author Michael Stover
- * @author Thad Smith
- * @version $Revision$
+ * while (running && (sampler = controller.next()) != null)
  */
 public interface Controller extends TestElement {
 	/**
-	 * Delivers the next Sampler.
+	 * Delivers the next Sampler or null
 	 * 
-	 * @return org.apache.jmeter.samplers.Sampler
+	 * @return org.apache.jmeter.samplers.Sampler or null
 	 */
 	public Sampler next();
 
 	/**
 	 * Indicates whether the Controller is done delivering Samplers for the rest
 	 * of the test.
+	 * 
+	 * When the top-level controller returns true to JMeterThread,
+	 * the thread is complete.
 	 * 
 	 * @return boolean
 	 */
