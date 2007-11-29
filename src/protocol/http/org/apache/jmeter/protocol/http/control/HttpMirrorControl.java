@@ -18,14 +18,16 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import org.apache.jmeter.config.ConfigElement;
-import org.apache.jmeter.control.GenericController;
+import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 //For unit tests, @see TestHttpMirrorControl
 
-public class HttpMirrorControl extends GenericController {
+/**
+ * Test element that implements the Workbench HTTP Mirror function
+ */
+public class HttpMirrorControl extends AbstractTestElement {
     
 	private transient HttpMirrorServer server;
 
@@ -76,9 +78,6 @@ public class HttpMirrorControl extends GenericController {
 
 	public Class getGuiClass() {
 		return org.apache.jmeter.protocol.http.control.gui.HttpMirrorControlGui.class;
-	}
-
-	public void addConfigElement(ConfigElement config) {
 	}
 
 	public void startHttpMirror() {
