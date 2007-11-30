@@ -107,6 +107,18 @@ public class TestSwitchController extends JMeterTestCase {
 
 		// Selection controller with two sub-controllers, but each has only 1
 		// child
+		/*
+		 * Controller
+		 * + Before
+		 * + Switch (cond)
+		 * + + zero
+		 * + + Controller sub_1
+		 * + + + one
+		 * + + two
+		 * + + Controller sub_2
+		 * + + + three
+		 * + After
+		 */
 		public void runSimpleTest2(String cond, String exp) throws Exception {
 			GenericController controller = new GenericController();
 			GenericController sub_1 = new GenericController();
@@ -129,10 +141,10 @@ public class TestSwitchController extends JMeterTestCase {
 			controller.addTestElement(new TestSampler("after"));
 			controller.initialize();
 			for (int i = 1; i <= 3; i++) {
-				assertEquals("before", nextName(controller));
-				assertEquals(exp, nextName(controller));
-				assertEquals("after", nextName(controller));
-				assertNull(nextName(controller));
+				assertEquals("Loop="+i,"before", nextName(controller));
+				assertEquals("Loop="+i,exp, nextName(controller));
+				assertEquals("Loop="+i,"after", nextName(controller));
+				assertNull("Loop="+i,nextName(controller));
 			}
 		}
 
@@ -148,9 +160,22 @@ public class TestSwitchController extends JMeterTestCase {
 		}
 
 		/*
-		 * Test: Before Selection Controller - zero (default) - simple
-		 * controller 1 - - one - - two - simple controller 2 - - three - - four -
-		 * five - six After
+		 * Test: 
+		 * Before 
+		 * Selection Controller
+		 *  - zero (default)
+		 *  - simple controller 1
+		 *  - - one
+		 *  - - two
+		 *  - simple controller 2
+		 *  - - three
+		 *  - - four
+		 *  - five
+		 *  - six
+		 * After
+		 * 
+		 * cond  = Switch condition 
+		 * exp[] = expected results
 		 */
 		public void runTest2(String cond, String exp[]) throws Exception {
 			int loops = 3;
