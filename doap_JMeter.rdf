@@ -38,6 +38,13 @@
         <revision>2.3 final</revision>
       </Version>
     </release>
+    <release>
+      <Version>
+        <name>Apache Jakarta JMeter</name>
+        <created>2007-11-30</created>
+        <revision>2.3.1 final</revision>
+      </Version>
+    </release>
     <repository>
       <SVNRepository>
         <location rdf:resource="http://svn.apache.org/repos/asf/jakarta/jmeter/"/>
