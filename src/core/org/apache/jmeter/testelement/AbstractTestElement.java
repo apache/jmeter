@@ -344,10 +344,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 		}
 	}
 
-	protected Sampler nextIsNull() throws NextIsNullException {
-		return null;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
