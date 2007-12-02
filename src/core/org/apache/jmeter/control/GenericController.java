@@ -33,15 +33,23 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @author Thad Smith
- * @version $Revision$
+ * <p>
+ * This class is the basis for all the controllers.
+ * It also implements SimpleController.
+ * </p>
+ * <p>
+ * The main entry point is next(), which is called by by JMeterThread as follows:
+ * </p>
+ * <p>
+ * <code>while (running && (sampler = controller.next()) != null)</code>
+ * </p>
  */
 public class GenericController extends AbstractTestElement implements Controller, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	protected transient LinkedList iterationListeners = new LinkedList();
+	private transient LinkedList iterationListeners = new LinkedList();
 
+	// May be replaced by RandomOrderController
 	protected transient List subControllersAndSamplers = new ArrayList();
 
 	protected transient int current;
@@ -59,8 +67,8 @@ public class GenericController extends AbstractTestElement implements Controller
 	public void initialize() {
 		resetCurrent();
 		resetIterCount();
-		done = false;
-		first = true;
+		done = false; // TODO should this use setDone()?
+		first = true; // TODO should this use setFirst()?
 		TestElement elem;
 		for (int i = 0; i < subControllersAndSamplers.size(); i++) {
 			elem = (TestElement) subControllersAndSamplers.get(i);
@@ -70,6 +78,16 @@ public class GenericController extends AbstractTestElement implements Controller
 		}
 	}
 
+	/**
+	 * Resets the controller:
+	 * <ul>
+	 * <li>resetCurrent() (i.e. current=0)</li>
+	 * <li>increment iteration count</li>
+	 * <li>sets first=true</li>
+	 * <li>recoverRunningVersion() to set the controller back to the initial state</li>
+	 * </ul>
+	 * 
+	 */
 	protected void reInitialize() {
 		resetCurrent();
 		incrementIterCount();
@@ -78,17 +96,42 @@ public class GenericController extends AbstractTestElement implements Controller
 	}
 
 	/**
-	 * @see org.apache.jmeter.control.Controller#next()
+	 * <p>
+	 * Determines the next sampler to be processed.
+	 * </p>
+	 * 
+	 * <p>
+	 * If isDone, returns null.
+	 * </p>
+	 * 
+	 * <p>
+	 * Gets the list element using current pointer.
+	 * If this is null, calls {@link #nextIsNull()}.
+	 * </p>
+	 * 
+	 * <p>
+	 * If the list element is a sampler, calls {@link #nextIsASampler(Sampler)},
+	 * otherwise calls {@link #nextIsAController(Controller)}
+	 * </p>
+	 * 
+	 * <p>
+	 * If any of the called methods throws NextIsNullException, returns null,
+	 * otherwise the value obtained above is returned.
+	 * </p>
+	 * 
+	 * @return the next sampler or null
 	 */
 	public Sampler next() {
 		fireIterEvents();
-		log.debug("Calling next on: " + this.getClass().getName());
-		if (isDone())
+		if (log.isDebugEnabled()) {
+			log.debug("Calling next on: " + this.getClass().getName());
+		}
+		if (isDone()) {
 			return null;
+		}
 		Sampler returnValue = null;
-		TestElement currentElement = null;
 		try {
-			currentElement = getCurrentElement();
+			TestElement currentElement = getCurrentElement();
 			setCurrentElement(currentElement);
 			if (currentElement == null) {
 				// incrementCurrent();
@@ -96,7 +139,7 @@ public class GenericController extends AbstractTestElement implements Controller
 			} else {
 				if (currentElement instanceof Sampler) {
 					returnValue = nextIsASampler((Sampler) currentElement);
-				} else {
+				} else { // must be a controller
 					returnValue = nextIsAController((Controller) currentElement);
 				}
 			}
@@ -125,28 +168,55 @@ public class GenericController extends AbstractTestElement implements Controller
 		first = b;
 	}
 
+	/**
+	 * Called by next() if the element is a Controller,
+	 * and returns the next sampler from the controller.
+	 * If this is null, then updates the current pointer and makes recursive call to next().
+	 * @param controller
+	 * @return the next sampler
+	 * @throws NextIsNullException
+	 */
 	protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
-		Sampler returnValue;
 		Sampler sampler = controller.next();
 		if (sampler == null) {
 			currentReturnedNull(controller);
-			returnValue = next();
-		} else {
-			returnValue = sampler;
+			sampler = next();
 		}
-		return returnValue;
+		return sampler;
 	}
 
+	/**
+	 * Increment the current pointer and return the element.
+	 * Called by next() if the element is a sampler.
+	 * (May be overriden by sub-classes).
+	 *  
+	 * @param element
+	 * @return input element
+	 * @throws NextIsNullException
+	 */
 	protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
 		incrementCurrent();
 		return element;
 	}
 
+	/**
+	 * Called by next() when getCurrentElement() returns null.
+	 * Reinitialises the controller.
+	 * 
+	 * @return null (always, for this class)
+	 * @throws NextIsNullException
+	 */
 	protected Sampler nextIsNull() throws NextIsNullException {
 		reInitialize();
 		return null;
 	}
 
+	/**
+	 * If the controller is done, remove it from the list,
+	 * otherwise increment to next entry in list.
+	 * 
+	 * @param c controller
+	 */
 	protected void currentReturnedNull(Controller c) {
 		if (c.isDone()) {
 			removeCurrentElement();
@@ -168,9 +238,27 @@ public class GenericController extends AbstractTestElement implements Controller
 		subControllersAndSamplers.add(child);
 	}
 
+	/**
+	 * Empty implementation - does nothing.
+	 * 
+	 * @param currentElement
+	 * @throws NextIsNullException
+	 */
 	protected void setCurrentElement(TestElement currentElement) throws NextIsNullException {
 	}
 
+	/**
+	 * <p>
+	 * Gets the element indicated by the <code>current</code> index, if one exists,
+	 * from the <code>subControllersAndSamplers</code> list.
+	 * </p>
+	 * <p>
+	 * If the <code>subControllersAndSamplers</code> list is empty, 
+	 * then set done = true, and throw NextIsNullException.
+	 * </p>
+	 * @return the current element - or null if current index too large
+	 * @throws NextIsNullException if list is empty
+	 */
 	protected TestElement getCurrentElement() throws NextIsNullException {
 		if (current < subControllersAndSamplers.size()) {
 			return (TestElement) subControllersAndSamplers.get(current);
@@ -187,6 +275,10 @@ public class GenericController extends AbstractTestElement implements Controller
 		subControllersAndSamplers.remove(current);
 	}
 
+	/**
+	 * Increments the current pointer; called by currentReturnedNull to move the
+	 * controller on to its next child.
+	 */
 	protected void incrementCurrent() {
 		current++;
 	}
