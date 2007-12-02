@@ -20,45 +20,46 @@ package org.apache.jmeter.control;
 
 import java.io.Serializable;
 
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-public class SwitchController extends InterleaveControl implements Serializable {
+public class SwitchController extends GenericController implements Serializable {
 	private final static String SWITCH_VALUE = "SwitchController.value";
 
 	public SwitchController() {
 		super();
-		this.setStyle(USE_SUB_CONTROLLERS);
 	}
 
-	public void reInitialize() {
-		super.reInitialize();
-		current = getSelectionAsInt();
-	}
-
-	/**
-	 * @see org.apache.jmeter.control.GenericController#resetCurrent()
-	 */
-	protected void resetCurrent() {
-		int c = getSubControllers().size();
-		if (c > 0) {
+	public Sampler next() {
+		if (isFirst()) { // Set the selection once per iteration
 			current = getSelectionAsInt();
-		} else {
-			current = 0;
 		}
+		return super.next();
 	}
 
-	/**
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * incrementCurrent is called when the current child (whether sampler or controller)
+	 * has been processed.
+	 * 
+	 * Setting it to int.max marks the controller as having processed all its
+	 * children. Thus the controller processes one child per iteration.
+	 * 
 	 * @see org.apache.jmeter.control.GenericController#incrementCurrent()
 	 */
 	protected void incrementCurrent() {
-		super.incrementCurrent();
-		current = getSelectionAsInt();
+		current=Integer.MAX_VALUE;
 	}
 
 	public void setSelection(String inputValue) {
 		setProperty(new StringProperty(SWITCH_VALUE, inputValue));
 	}
 
+	/*
+	 * Returns the selection value as a int,
+	 * with the value set to zero if it is out of range.
+	 */
 	private int getSelectionAsInt() {
 		int ret;
 		getProperty(SWITCH_VALUE).recoverRunningVersion(null);
