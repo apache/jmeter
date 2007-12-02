@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="1.8">
+<jmeterTestPlan version="1.2" properties="2.0">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -872,6 +872,210 @@ This is to ensure the test output is predictable, whilst still allowing testing 
           <stringProp name="filename">BatchTestLocal.xml</stringProp>
         </ResultCollector>
         <hashTree/>
+        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">true</boolProp>
+          <stringProp name="LoopController.loops">4</stringProp>
+        </LoopController>
+        <hashTree>
+          <SwitchController guiclass="SwitchControllerGui" testclass="SwitchController" testname="Switch Controller" enabled="true">
+            <stringProp name="SwitchController.value">${__counter(TRUE,COUNT)}</stringProp>
+          </SwitchController>
+          <hashTree>
+            <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="0" enabled="true">
+              <stringProp name="TestPlan.comments">0</stringProp>
+              <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="Sleep_Time" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Time</stringProp>
+                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Sleep_Mask" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Mask</stringProp>
+                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Label" elementType="Argument">
+                    <stringProp name="Argument.name">Label</stringProp>
+                    <stringProp name="Argument.value">0 ${COUNT}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseCode" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseCode</stringProp>
+                    <stringProp name="Argument.value">200</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseMessage" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseMessage</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Status" elementType="Argument">
+                    <stringProp name="Argument.name">Status</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="SamplerData" elementType="Argument">
+                    <stringProp name="Argument.name">SamplerData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResultData" elementType="Argument">
+                    <stringProp name="Argument.name">ResultData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
+            </JavaSampler>
+            <hashTree/>
+            <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="1" enabled="true">
+              <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="Sleep_Time" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Time</stringProp>
+                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Sleep_Mask" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Mask</stringProp>
+                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Label" elementType="Argument">
+                    <stringProp name="Argument.name">Label</stringProp>
+                    <stringProp name="Argument.value">1 ${COUNT}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseCode" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseCode</stringProp>
+                    <stringProp name="Argument.value">200</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseMessage" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseMessage</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Status" elementType="Argument">
+                    <stringProp name="Argument.name">Status</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="SamplerData" elementType="Argument">
+                    <stringProp name="Argument.name">SamplerData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResultData" elementType="Argument">
+                    <stringProp name="Argument.name">ResultData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
+            </JavaSampler>
+            <hashTree/>
+            <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="2" enabled="true">
+              <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="Sleep_Time" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Time</stringProp>
+                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Sleep_Mask" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Mask</stringProp>
+                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Label" elementType="Argument">
+                    <stringProp name="Argument.name">Label</stringProp>
+                    <stringProp name="Argument.value">2 ${COUNT}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseCode" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseCode</stringProp>
+                    <stringProp name="Argument.value">200</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseMessage" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseMessage</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Status" elementType="Argument">
+                    <stringProp name="Argument.name">Status</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="SamplerData" elementType="Argument">
+                    <stringProp name="Argument.name">SamplerData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResultData" elementType="Argument">
+                    <stringProp name="Argument.name">ResultData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
+            </JavaSampler>
+            <hashTree/>
+            <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="3" enabled="true">
+              <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="Sleep_Time" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Time</stringProp>
+                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Sleep_Mask" elementType="Argument">
+                    <stringProp name="Argument.name">Sleep_Mask</stringProp>
+                    <stringProp name="Argument.value">0xFF</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Label" elementType="Argument">
+                    <stringProp name="Argument.name">Label</stringProp>
+                    <stringProp name="Argument.value">3 ${COUNT}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseCode" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseCode</stringProp>
+                    <stringProp name="Argument.value">200</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResponseMessage" elementType="Argument">
+                    <stringProp name="Argument.name">ResponseMessage</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="Status" elementType="Argument">
+                    <stringProp name="Argument.name">Status</stringProp>
+                    <stringProp name="Argument.value">OK</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="SamplerData" elementType="Argument">
+                    <stringProp name="Argument.name">SamplerData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                  <elementProp name="ResultData" elementType="Argument">
+                    <stringProp name="Argument.name">ResultData</stringProp>
+                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
+            </JavaSampler>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
       </hashTree>
     </hashTree>
   </hashTree>

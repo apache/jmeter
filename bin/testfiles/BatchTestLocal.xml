@@ -657,5 +657,25 @@
   <queryString class="java.lang.String"></queryString>
   <java.net.URL>file:testfiles/jmeter_home_page.html</java.net.URL>
 </httpSample>
+<sample s="true" lb="1 1" rc="200" rm="OK" tn="Thread Group 2-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+</sample>
+<sample s="true" lb="2 2" rc="200" rm="OK" tn="Thread Group 2-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+</sample>
+<sample s="true" lb="3 3" rc="200" rm="OK" tn="Thread Group 2-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+</sample>
+<sample s="true" lb="0 4" rc="200" rm="OK" tn="Thread Group 2-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <responseHeader class="java.lang.String"></responseHeader>
+  <requestHeader class="java.lang.String"></requestHeader>
+  <responseFile class="java.lang.String"></responseFile>
+</sample>
 
 </testResults>
