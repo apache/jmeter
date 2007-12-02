@@ -39,6 +39,7 @@
 <h4>Bug fixes</h4>
 <ul>
 <li>Check that the CSV delimiter is reasonable.</li>
+<li>Fix Switch Controller to work properly with functions and variables</li>
 </ul>
 
 <h4>Improvements</h4>
