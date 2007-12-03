@@ -26,17 +26,24 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Function to log a message
+ * <p>
+ * Function to log a message.
+ * </p>
  * 
- * Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
- * unrecognised) - throwable message (optional)
- * 
- * Returns: - Empty String (so can be used where return value would be a
- * nuisance)
+ * <p>
+ * Parameters:
+ * <ul>
+ * <li>string value</li> 
+ * <li>log level (optional; defaults to INFO; or DEBUG if unrecognised; or can use OUT or ERR)</li> 
+ * <li>throwable message (optional)</li>
+ * </ul>
+ * </p>
+ * Returns: - Empty String (so can be used where return value would be a nuisance)
  * 
  */
 public class LogFunction2 extends AbstractFunction implements Serializable {
@@ -51,9 +58,9 @@ public class LogFunction2 extends AbstractFunction implements Serializable {
 
 	private static final int MAX_PARAMETER_COUNT = 3;
 	static {
-		desc.add("String to be logged");
-		desc.add("Log level (default INFO)");
-		desc.add("Throwable text (optional)");
+		desc.add(JMeterUtils.getResString("log_function_string"));    //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("log_function_level"));     //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("log_function_throwable")); //$NON-NLS-1$
 	}
 
 	private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
@@ -85,7 +92,7 @@ public class LogFunction2 extends AbstractFunction implements Serializable {
 			t = new Throwable(((CompoundVariable) values[2]).execute());
 		}
 
-		LogFunction.logDetails(log, stringToLog, priorityString, t);
+		LogFunction.logDetails(log, stringToLog, priorityString, t, "");
 
 		return "";
 
