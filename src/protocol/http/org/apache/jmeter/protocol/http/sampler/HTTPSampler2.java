@@ -1072,7 +1072,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			{
 				Map.Entry entry = (Map.Entry) it.next();
 				HttpClient cl = (HttpClient) entry.getValue();
-                cl.getHttpConnectionManager().closeIdleConnections(-1000);// Closes the connection
+                ((SimpleHttpConnectionManager)cl.getHttpConnectionManager()).shutdown();// Closes the connection
 			}
 			map.clear();
 		}
