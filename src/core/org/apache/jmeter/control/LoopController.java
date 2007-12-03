@@ -35,6 +35,12 @@ public class LoopController extends GenericController implements Serializable {
 
 	private final static String LOOPS = "LoopController.loops"; // $NON-NLS-1$
 
+	/*
+	 * TODO: eliminate this setting?
+	 * Most places assume that forever is the same as loopcount = -1 or < 0,
+	 * so having a separate flag is potentially ambiguous.
+	 * In fact, this already happens with ThreadGroup which can set forever = false and loops = -1
+	 */
 	private final static String CONTINUE_FOREVER = "LoopController.continue_forever"; // $NON-NLS-1$
 
 	private transient int loopCount = 0;
@@ -74,7 +80,7 @@ public class LoopController extends GenericController implements Serializable {
 		setProperty(new BooleanProperty(CONTINUE_FOREVER, forever));
 	}
 
-	public boolean getContinueForever() {
+	private boolean getContinueForever() {
 		return getPropertyAsBoolean(CONTINUE_FOREVER);
 	}
 
@@ -93,7 +99,8 @@ public class LoopController extends GenericController implements Serializable {
     }
 
 	private boolean endOfLoop() {
-		return (getLoops() > -1) && loopCount >= getLoops();
+		final int loops = getLoops();
+		return (loops > -1) && (loopCount >= loops);
 	}
 
 	/*
