@@ -572,14 +572,17 @@ the second would return 1 and the last would return www.dummy.org
         <property name="String to be logged" required="Yes">A string</property>
         <property name="Log Level" required="No">OUT, ERR, DEBUG, INFO (default), WARN or ERROR</property>
         <property name="Throwable text" required="No">If non-empty, creates a Throwable to pass to the logger</property>
+        <property name="Comment" required="No">If present, it is displayed in the string. 
+        Useful for identifying what is being logged.</property>
 </properties>
 <p>The OUT and ERR log level names are used to direct the output to System.out and System.err respectively.
 	In this case, the output is always printed - it does not depend on the current log setting.
 </p>
 <pre>
 For example:
-     ${__log(Message)} - written to the log file
+     ${__log(Message)} - written to the log file as   "...thread Name : Message"
      ${__log(Message,OUT)} - written to console window
+     ${__log(${VAR},,,VAR=)} - written to log file as "...thread Name VAR=value"
 </pre>
 </component>
 
