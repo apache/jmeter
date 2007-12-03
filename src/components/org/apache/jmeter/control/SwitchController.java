@@ -24,7 +24,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.StringProperty;
 
 public class SwitchController extends GenericController implements Serializable {
-	private final static String SWITCH_VALUE = "SwitchController.value";
+	// Package access for use by Test code
+	final static String SWITCH_VALUE = "SwitchController.value";
 
 	public SwitchController() {
 		super();
