@@ -584,6 +584,7 @@ public class SampleResult implements Serializable {
     	"application/javascript", //$NON-NLS-1$
     	"application/json",       //$NON-NLS-1$
     	"application/xhtml+xml",  //$NON-NLS-1$
+    	"application/soap+xml",   //$NON-NLS-1$
         };
  
     // Additional types as needed
