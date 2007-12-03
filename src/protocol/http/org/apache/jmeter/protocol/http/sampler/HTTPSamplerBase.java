@@ -153,9 +153,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 	public final static String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
-	/** A number to indicate that the port has not been set. * */
+	/** A number to indicate that the port has not been set. */
 	public static final int UNSPECIFIED_PORT = 0;
     public static final String UNSPECIFIED_PORT_AS_STRING = "0"; // $NON-NLS-1$
+    // TODO - change to use URL version? Will this affect test plans?
+
+	/** If the port is not present in a URL, getPort() returns -1 */
+	public static final int URL_UNSPECIFIED_PORT = -1;
+    public static final String URL_UNSPECIFIED_PORT_AS_STRING = "-1"; // $NON-NLS-1$
 
 	protected final static String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
 
@@ -509,8 +514,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 		setProperty(new IntegerProperty(PORT, value));
 	}
 
+	/**
+	 * Get the port number for a URL, applying defaults if necessary.
+	 * (Called by CookieManager.)
+	 * @param protocol from {@link URL#getProtocol()}
+	 * @param port number from {@link URL#getPort()}
+	 * @return the default port for the protocol
+	 */
     public static int getDefaultPort(String protocol,int port){
-        if (port==-1){
+        if (port==URL_UNSPECIFIED_PORT){
             return 
                 protocol.equalsIgnoreCase(PROTOCOL_HTTP)  ? DEFAULT_HTTP_PORT :
                 protocol.equalsIgnoreCase(PROTOCOL_HTTPS) ? DEFAULT_HTTPS_PORT :
@@ -520,12 +532,26 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
+     * Get the port number from the port string, allowing for trailing blanks.
+     * 
+     * @return port number or UNSPECIFIED_PORT (== 0)
+     */
+	public int getPortIfSpecified() {
+		String port_s = getPropertyAsString(PORT, UNSPECIFIED_PORT_AS_STRING);
+		try {
+			return Integer.parseInt(port_s.trim());
+		} catch (NumberFormatException e) {
+			return UNSPECIFIED_PORT;
+		}
+	}
+
+    /**
      * Tell whether the default port for the specified protocol is used
      * 
      * @return true if the default port number for the protocol is used, false otherwise
      */
     public boolean isProtocolDefaultPort() {
-    	final int port = getPropertyAsInt(PORT);
+		final int port = getPortIfSpecified();
         final String protocol = getProtocol();
 		if (port == UNSPECIFIED_PORT || 
                 (PROTOCOL_HTTP.equalsIgnoreCase(protocol) && port == DEFAULT_HTTP_PORT) ||
@@ -536,9 +562,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return false;
         }
     }
-    
+
+    /**
+     * Get the port; apply the default for the protocol if necessary.
+     * 
+     * @return the port number, with default applied if required.
+     */
 	public int getPort() {
-		int port = getPropertyAsInt(PORT);
+		final int port = getPortIfSpecified();
 		if (port == UNSPECIFIED_PORT) {
 			String prot = getProtocol();
             if (PROTOCOL_HTTPS.equalsIgnoreCase(prot)) {
