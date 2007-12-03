@@ -26,16 +26,25 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.apache.log.Priority;
 
 /**
- * Function to log a message
+ * <p>
+ * Function to log a message.
+ * </p>
  * 
- * Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
- * unrecognised) - throwable message (optional)
- * 
+ * <p>
+ * Parameters:
+ * <ul>
+ * <li>string value</li> 
+ * <li>log level (optional; defaults to INFO; or DEBUG if unrecognised; or can use OUT or ERR)</li> 
+ * <li>throwable message (optional)</li>
+ * <li>comment (optional)</li>
+ * </ul>
+ * </p>
  * Returns: - the input string
  * 
  */
@@ -49,14 +58,17 @@ public class LogFunction extends AbstractFunction implements Serializable {
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 1;
 
-	private static final int MAX_PARAMETER_COUNT = 3;
+	private static final int MAX_PARAMETER_COUNT = 4;
 	static {
-		desc.add("String to be logged");
-		desc.add("Log level (default INFO)");
-		desc.add("Throwable text (optional)");
+		desc.add(JMeterUtils.getResString("log_function_string_ret"));    //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("log_function_level"));     //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("log_function_throwable")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("log_function_comment"));   //$NON-NLS-1$
 	}
 
 	private static final String DEFAULT_PRIORITY = "INFO"; //$NON-NLS-1$
+
+	private static final String DEFAULT_SEPARATOR = " : "; //$NON-NLS-1$
 
 	private Object[] values;
 
@@ -82,41 +94,66 @@ public class LogFunction extends AbstractFunction implements Serializable {
 
 		Throwable t = null;
 		if (values.length > 2) { // Throwable wanted
-			t = new Throwable(((CompoundVariable) values[2]).execute());
+			String value = ((CompoundVariable) values[2]).execute();
+			if (value.length() > 0) t = new Throwable(value);
 		}
 
-		logDetails(log, stringToLog, priorityString, t);
+		String comment = "";
+		if (values.length > 3) { // Comment wanted
+			comment = ((CompoundVariable) values[3]).execute();
+		}
+		
+		logDetails(log, stringToLog, priorityString, t, comment);
 
 		return stringToLog;
 
 	}
 
 	// Common output function
-	private static void printDetails(java.io.PrintStream ps, String s, Throwable t) {
+	private static void printDetails(java.io.PrintStream ps, String s, Throwable t, String c) {
 		String tn = Thread.currentThread().getName();
+
+		StringBuffer sb = new StringBuffer(80);
+		sb.append("Log: ");
+		sb.append(tn);
+		if (c.length()>0){
+			sb.append(" ");
+			sb.append(c);
+		} else {
+			sb.append(DEFAULT_SEPARATOR);
+		}
 		if (t != null) {
-			ps.print("Log: " + tn + " : " + s + " ");
+			sb.append(" ");
+			ps.print(sb.toString());
 			t.printStackTrace(ps);
 		} else {
-			ps.println("Log: " + tn + " : " + s);
+			ps.print(sb.toString());
 		}
 	}
 
 	// Routine to perform the output (also used by __logn() function)
-	static void logDetails(Logger l, String s, String prio, Throwable t) {
+	static void logDetails(Logger l, String s, String prio, Throwable t, String c) {
 		if (prio.equalsIgnoreCase("OUT")) //$NON-NLS-1
 		{
-			printDetails(System.out, s, t);
+			printDetails(System.out, s, t, c);
 		} else if (prio.equalsIgnoreCase("ERR")) //$NON-NLS-1
 		{
-			printDetails(System.err, s, t);
+			printDetails(System.err, s, t, c);
 		} else {
 			// N.B. if the string is not recognised, DEBUG is assumed
 			Priority p = Priority.getPriorityForName(prio);
-			if (log.isPriorityEnabled(p)) {// Thread method is potentially
-											// expensive
+			if (log.isPriorityEnabled(p)) {// Thread method is potentially expensive
 				String tn = Thread.currentThread().getName();
-				log.log(p, tn + " " + s, t);
+				StringBuffer sb = new StringBuffer(40);
+				sb.append(tn);
+				if (c.length()>0){
+					sb.append(" ");
+					sb.append(c);
+				} else {
+					sb.append(DEFAULT_SEPARATOR);
+				}
+				sb.append(s);
+				log.log(p, sb.toString(), t);
 			}
 		}
 
