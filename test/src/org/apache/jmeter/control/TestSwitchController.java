@@ -18,10 +18,20 @@
 
 package org.apache.jmeter.control;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.jmeter.engine.util.CompoundVariable;
+import org.apache.jmeter.engine.util.ReplaceStringWithFunctions;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.StringProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestSwitchController extends JMeterTestCase {
 		static {
@@ -216,5 +226,55 @@ public class TestSwitchController extends JMeterTestCase {
 				assertEquals("Loop:" + i, "after", nextName(controller));
 			}
 			assertNull("Loops:" + loops, nextName(controller));
+		}
+		
+		/*
+		 * N.B. Requires ApacheJMeter_functions.jar to be on the classpath,
+		 * otherwise the function cannot be resolved.
+		*/
+		public void testFunction() throws Exception {
+			JMeterContext jmctx = JMeterContextService.getContext();
+			Map variables = new HashMap();
+			ReplaceStringWithFunctions transformer = new ReplaceStringWithFunctions(new CompoundVariable(), variables);
+			jmctx.setVariables(new JMeterVariables());
+			JMeterVariables jmvars = jmctx.getVariables();
+			jmvars.put("VAR", "100");
+			StringProperty prop = new StringProperty(SwitchController.SWITCH_VALUE,"${__counter(TRUE,VAR)}");
+			JMeterProperty newProp = transformer.transformValue(prop);
+			newProp.setRunningVersion(true);
+			
+			GenericController controller = new GenericController();
+
+			SwitchController switch_cont = new SwitchController();
+			switch_cont.setProperty(newProp);
+
+			controller.addTestElement(new TestSampler("before"));
+			controller.addTestElement(switch_cont);
+
+			switch_cont.addTestElement(new TestSampler("0"));
+			switch_cont.addTestElement(new TestSampler("1"));
+			switch_cont.addTestElement(new TestSampler("2"));
+			switch_cont.addTestElement(new TestSampler("3"));
+
+			controller.addTestElement(new TestSampler("after"));
+
+			controller.initialize();
+
+			assertEquals("100",jmvars.get("VAR"));
+			
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop " + i, "before", nextName(controller));
+				assertEquals("Loop " + i, ""+i, nextName(controller));
+				assertEquals("Loop " + i, ""+i, jmvars.get("VAR"));
+				assertEquals("Loop " + i, "after", nextName(controller));
+				assertNull(nextName(controller));
+			}
+			int i = 4;
+			assertEquals("Loop " + i, "before", nextName(controller));
+			assertEquals("Loop " + i, "0", nextName(controller));
+			assertEquals("Loop " + i, ""+i, jmvars.get("VAR"));
+			assertEquals("Loop " + i, "after", nextName(controller));
+			assertNull(nextName(controller));
+			assertEquals("4",jmvars.get("VAR"));
 		}
 }
