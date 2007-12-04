@@ -58,8 +58,18 @@ public class CompoundVariable implements Function {
 
 	static {
 		try {
+			final String contain = // Classnames must contain this string [.functions.]
+				JMeterUtils.getProperty("classfinder.functions.contain"); // $NON-NLS-1$ 
+			final String notContain = // Classnames must not contain this string [.gui.]
+				JMeterUtils.getProperty("classfinder.functions.notContain"); // $NON-NLS-1$
+			if (contain!=null){
+				log.info("Note: Function class names must contain the string: '"+contain+"'");
+			}
+			if (notContain!=null){
+				log.info("Note: Function class names must not contain the string: '"+notContain+"'");
+			}
 			List classes = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(),
-					new Class[] { Function.class }, true);
+					new Class[] { Function.class }, true, contain, notContain);
 			Iterator iter = classes.iterator();
 			while (iter.hasNext()) {
 				Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
