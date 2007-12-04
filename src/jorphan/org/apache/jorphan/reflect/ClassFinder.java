@@ -62,14 +62,21 @@ public final class ClassFinder {
     private static class FilterTreeSet extends TreeSet{
         private final Class[] parents; // parent classes to check
         private final boolean inner; // are inner classes OK?
+        
+        // hack to reduce the need to load every class in non-GUI mode, which only needs functions
+        // TODO perhaps use BCEL to scan class files instead?
+        private final String contains; // class name should contain this string
+        private final String notContains; // class name should not contain this string
 
         private final transient ClassLoader contextClassLoader 
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
         
-        FilterTreeSet(Class []parents, boolean inner){
+        FilterTreeSet(Class []parents, boolean inner, String contains, String notContains){
             super();
             this.parents=parents;
             this.inner=inner;
+            this.contains=contains;
+            this.notContains=notContains;
         }
         
         /**
@@ -84,6 +91,12 @@ public final class ClassFinder {
         public boolean add(Object o){
             if (contains(o)) return false;// No need to check it again
             String s = (String) o;// we only expect Strings
+            if (contains!=null && s.indexOf(contains) == -1){
+            	return false; // It does not contain a required string
+            }
+            if (notContains!=null && s.indexOf(notContains) != -1){
+            	return false; // It contains a banned string
+            }
             if ((s.indexOf("$") == -1) || inner) { // $NON-NLS-1$
                 if (isChildOf(parents,s, contextClassLoader)) {
                     return super.add(s);
@@ -140,6 +153,23 @@ public final class ClassFinder {
 	public static List findClassesThatExtend(String[] strPathsOrJars, 
             final Class[] superClasses, final boolean innerClasses)
 			throws IOException  {
+		return findClassesThatExtend(strPathsOrJars,superClasses,innerClasses,null,null);
+	}
+
+    /**
+     * Find classes in the provided path(s)/jar(s) that extend the class(es).
+     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param superClasses - required parent class(es)
+     * @param innerClasses - should we include inner classes?
+     * @param contains - classname should contain this string
+     * @param notContains - classname should not contain this string
+     * 
+     * @return List containing discovered classes
+     */
+	public static List findClassesThatExtend(String[] strPathsOrJars, 
+            final Class[] superClasses, final boolean innerClasses,
+            String contains, String notContains)
+			throws IOException  {
         
 		if (log.isDebugEnabled()) {
 			for (int i = 0; i < superClasses.length ; i++){
@@ -165,7 +195,7 @@ public final class ClassFinder {
 			}
 		}
         
-		Set listClasses = new FilterTreeSet(superClasses, innerClasses);
+		Set listClasses = new FilterTreeSet(superClasses, innerClasses, contains, notContains);
 		// first get all the classes
 		findClassesInPaths(listPaths, listClasses);
 		if (log.isDebugEnabled()) {
