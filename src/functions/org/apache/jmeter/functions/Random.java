@@ -33,11 +33,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * Provides a Random function which returns a random long integer between a min
  * (first argument) and a max (second argument).
  * 
- * @author <a href="mailto:sjkwadzo@praize.com">Jonathan Kwadzo</a>
  */
 public class Random extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private static final List desc = new LinkedList();
 
@@ -46,7 +45,7 @@ public class Random extends AbstractFunction implements Serializable {
 	static {
 		desc.add(JMeterUtils.getResString("minimum_param")); //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("maximum_param")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
 	private transient CompoundVariable varName, minimum, maximum;
@@ -77,7 +76,10 @@ public class Random extends AbstractFunction implements Serializable {
 		long rand = min + (long) (Math.random() * (max - min + 1));
 
 		String randString = Long.toString(rand);
-		vars.put(varName.execute(), randString);
+
+		if (varName != null) {
+			vars.put(varName.execute(), randString);
+		}
 
 		return randString;
 
@@ -91,12 +93,17 @@ public class Random extends AbstractFunction implements Serializable {
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 		Object[] values = parameters.toArray();
 
-		if (values.length < 3) {
-			throw new InvalidVariableException();
+		if (values.length < 2 || values.length > 3) {
+			throw new InvalidVariableException("Expecting 2 or 3 parameters, but found " + values.length);//$NON-NLS-1$
 		}
-		varName = (CompoundVariable) values[2];
+
 		minimum = (CompoundVariable) values[0];
 		maximum = (CompoundVariable) values[1];
+		if (values.length>2){
+			varName = (CompoundVariable) values[2];
+		} else {
+			varName = null;
+		}
 
 	}
 
