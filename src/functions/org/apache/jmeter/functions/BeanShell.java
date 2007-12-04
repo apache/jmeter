@@ -42,7 +42,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private static final List desc = new LinkedList();
 
@@ -52,7 +52,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 
 	static {
 		desc.add(JMeterUtils.getResString("bsh_function_expression"));// $NON-NLS1$
-		desc.add(JMeterUtils.getResString("function_name_param"));// $NON-NLS1$
+		desc.add(JMeterUtils.getResString("function_name_paropt"));// $NON-NLS1$
 	}
 
 	transient private Object[] values;
