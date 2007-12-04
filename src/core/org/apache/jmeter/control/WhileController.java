@@ -83,11 +83,7 @@ public class WhileController extends GenericController implements Serializable {
 	}
 
 	/*
-	 * This skips controller entirely if the condition is false
-	 * 
-	 * TODO consider checking for previous sampler failure here - would need to
-	 * distinguish this from previous failure *inside* loop
-	 * 
+	 * This skips controller entirely if the condition is false on first entry.
 	 */
 	public Sampler next(){
 		if (isFirst()){
