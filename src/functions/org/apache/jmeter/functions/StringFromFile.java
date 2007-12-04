@@ -63,7 +63,7 @@ import org.apache.log.Logger;
 public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private static final List desc = new LinkedList();
 
@@ -75,7 +75,7 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
 	static {
 		desc.add(JMeterUtils.getResString("string_from_file_file_name"));//$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param"));//$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt"));//$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("string_from_file_seq_start"));//$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("string_from_file_seq_final"));//$NON-NLS-1$
 	}

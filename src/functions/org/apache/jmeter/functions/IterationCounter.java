@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private static final List desc = new LinkedList();
 
@@ -49,7 +49,7 @@ public class IterationCounter extends AbstractFunction implements Serializable {
         
     static {
 		desc.add(JMeterUtils.getResString("iteration_counter_arg_1")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
 	transient private Object[] variables;
@@ -116,8 +116,8 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 		variables = parameters.toArray();
 
-		if (variables.length < 1) {
-			throw new InvalidVariableException("Need at least 1 parameter");
+		if (variables.length < 1 || variables.length > 2) {
+			throw new InvalidVariableException("Expecting 1 or 2 parameters, but found " + variables.length);//$NON-NLS-1$
 		}
 	}
 

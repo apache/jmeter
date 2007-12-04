@@ -44,6 +44,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Property extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 2L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__property"; //$NON-NLS-1$
@@ -54,7 +56,7 @@ public class Property extends AbstractFunction implements Serializable {
 
 	static {
 		desc.add(JMeterUtils.getResString("property_name_param")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("property_default_param")); //$NON-NLS-1$
 	}
 
