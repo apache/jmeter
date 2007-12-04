@@ -225,7 +225,7 @@ replacement string") parsed by this function</li>
         <property name="Second argument" required="Yes">This is the template string that will replace
         the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
         $[group_number]$.  Ie: $1$, or $2$.  Your template can be any string.</property>
-        <property name="Third argument" required="Yes">The third argument tells JMeter which match
+        <property name="Third argument" required="No, default=1">The third argument tells JMeter which match
         to use.  Your regular expression might find numerous matches.  You have four choices:
                 <ul><li>An integer - Tells JMeter to use that match.  '1' for the first found match, '2' for the
                 second, and so on</li>
@@ -341,6 +341,7 @@ This function does not work in any Configuration elements (e.g. User Defined Var
         </property>
         <property name="Variable Name" required="No">
 A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+Defaults to "StringFromFile_".
         </property>
         <property name="Start sequence number" required="No">Initial Sequence number (if omitted, the End sequence number is treated as a loop count)</property>
         <property name="End   sequence number" required="No">Final sequence number (if omitted, seqence numbers can increase without limit)</property>
@@ -452,7 +453,7 @@ the comma after 7 is escaped.</note>
 <properties>
         <property name="Minimum value" required="Yes">A number</property>
         <property name="Maximum value" required="Yes">A bigger number</property>
-        <property name="Name of function" required="Yes">A reference name for reusing the value
+        <property name="Name of function" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
 </component>
