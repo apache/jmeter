@@ -33,7 +33,13 @@
 
 <h4>Incompatible changes</h4>
 <ul>
-<li></li>
+<li>
+To reduce the number of classes loaded in non-GUI mode,
+Functions will only be found if their classname contains the string
+'.functions.' and does not contain the string '.gui.'.
+All existing JMeter functions conform to this restriction.
+To revert to earlier behaviour, comment or change the properties classfinder.functions.* in jmeter.properties.
+</li>
 </ul>
 
 <h4>Bug fixes</h4>
@@ -53,6 +59,8 @@
 <li>Bug 43984 - trim spaces from port field</li>
 <li>Add optional comment to __log() function</li>
 <li>Make Random function variable name optional</li>
+<li>Reduce class loading in non-GUI mode by only looking for Functions in class names
+that contain '.functions.' and don't contain '.gui.'</li>
 </ul>
 
 <h4>Non-functional changes</h4>
