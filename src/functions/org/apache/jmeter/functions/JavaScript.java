@@ -40,6 +40,8 @@ import org.mozilla.javascript.WrappedException;
 
 public class JavaScript extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 2L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__javaScript"; //$NON-NLS-1$
@@ -48,7 +50,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 
 	static {
 		desc.add(JMeterUtils.getResString("javascript_expression"));//$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
