@@ -41,6 +41,8 @@
 <li>Check that the CSV delimiter is reasonable.</li>
 <li>Fix Switch Controller to work properly with functions and variables</li>
 <li>Bug 44011 - application/soap+xml not treated as a text type</li>
+<li>Bug 43427 - Simple Controller is only partly executed in While loop</li>
+<li>Bug 33954 - Stack Overflow in If/While controllers (may have been fixed previously)</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -50,6 +52,7 @@
 <li>Bug 43382 - configure Tidy output (warnings, errors) for XPath Assertion and Post-Processor</li>
 <li>Bug 43984 - trim spaces from port field</li>
 <li>Add optional comment to __log() function</li>
+<li>Make Random function variable name optional</li>
 </ul>
 
 <h4>Non-functional changes</h4>

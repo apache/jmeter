@@ -31,42 +31,26 @@ import org.apache.log.Logger;
 
 // @see TestWhileController for unit tests
 
-/**
- * @version $Revision$
- */
 public class WhileController extends GenericController implements Serializable {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 2L;
+	
 	private final static String CONDITION = "WhileController.condition"; // $NON-NLS-1$
-
-	boolean testMode = false; // To make testing easier
-
-	boolean testModeResult = false; // dummy sample result
 
 	public WhileController() {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.control.Controller#isDone()
-	 */
-	public boolean isDone() {
-		if (getSubControllers().size() == 0) // Nothing left to run
-		{
-			return true;
-		}
-		return false;// Never want to remove the controller from the tree
-	}
-
-	/*
-	 * Evaluate the condition, which can be: blank or LAST = was the last
-	 * sampler OK? otherwise, evaluate the condition to see if it is not "false"
+	 * Evaluate the condition, which can be: 
+	 * blank or LAST = was the last sampler OK? 
+	 * otherwise, evaluate the condition to see if it is not "false"
 	 * If blank, only evaluate at the end of the loop
 	 * 
 	 * Must only be called at start and end of loop
 	 * 
-	 * @param loopEnd - are we at loop end? @return true means OK to continue
+	 * @param loopEnd - are we at loop end? 
+	 * @return true means OK to continue
 	 */
 	private boolean endOfLoop(boolean loopEnd) {
 		String cnd = getCondition();
@@ -74,13 +58,9 @@ public class WhileController extends GenericController implements Serializable {
 		boolean res;
 		// If blank, only check previous sample when at end of loop
 		if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
-			if (testMode) {
-				res = !testModeResult;
-			} else {
-				JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
-				// Use !false rather than true, so that null is treated as true
-				res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
-			}
+			JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
+			// Use !false rather than true, so that null is treated as true
+			res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
 		} else {
 			// cnd may be blank if next() called us
 			res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
@@ -96,11 +76,10 @@ public class WhileController extends GenericController implements Serializable {
 	 */
 	protected Sampler nextIsNull() throws NextIsNullException {
 		reInitialize();
-		if (!endOfLoop(true)) {
-			return super.next();
+		if (endOfLoop(true)){
+			return null;
 		}
-		setDone(true);
-		return null;
+		return next();
 	}
 
 	/*
@@ -110,16 +89,13 @@ public class WhileController extends GenericController implements Serializable {
 	 * distinguish this from previous failure *inside* loop
 	 * 
 	 */
-	public Sampler next() {
-		if (current != 0) { // in the middle of the loop
-			return super.next();
+	public Sampler next(){
+		if (isFirst()){
+			if (endOfLoop(false)){
+				return null;
+			}
 		}
-		// Must be start of loop
-		if (!endOfLoop(false)) {
-			return super.next(); // OK to continue
-		}
-		reInitialize(); // Don't even start the loop
-		return null;
+		return super.next();
 	}
 
 	/**
