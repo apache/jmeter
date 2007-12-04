@@ -18,14 +18,17 @@
 
 package org.apache.jmeter.control;
 
+import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterThread;
+import org.apache.jmeter.threads.JMeterVariables;
 
-/**
- * @version $Revision$
- */
 public class TestWhileController extends JMeterTestCase {
 		static {
 			// LoggingManager.setPriority("DEBUG","jmeter");
@@ -34,6 +37,26 @@ public class TestWhileController extends JMeterTestCase {
 
 		public TestWhileController(String name) {
 			super(name);
+		}
+
+		private JMeterContext jmctx;
+		private JMeterVariables jmvars;
+		
+		public void setUp() {
+			jmctx = JMeterContextService.getContext();
+			jmctx.setVariables(new JMeterVariables());
+			jmvars = jmctx.getVariables();
+		}
+
+		private void setLastSampleStatus(boolean status){
+			jmvars.put(JMeterThread.LAST_SAMPLE_OK,Boolean.toString(status));
+		}
+
+		private void setRunning(TestElement el){
+			PropertyIterator pi = el.propertyIterator();
+			while(pi.hasNext()){
+				pi.next().setRunningVersion(true);
+			}
 		}
 
 		// Get next sample and its name
@@ -58,8 +81,7 @@ public class TestWhileController extends JMeterTestCase {
 			runtestPrevOK("LAST");
 		}
 
-		private static final String OTHER = "X"; // Dummy for testing
-													// functions
+		private static final String OTHER = "X"; // Dummy for testing functions
 
 		// While (LAST), previous sample OK - should loop until false
 		public void testOtherPrevOK() throws Exception {
@@ -67,11 +89,10 @@ public class TestWhileController extends JMeterTestCase {
 			runtestPrevOK(OTHER);
 		}
 
-		public void runtestPrevOK(String type) throws Exception {
+		private void runtestPrevOK(String type) throws Exception {
 			GenericController controller = new GenericController();
 			WhileController while_cont = new WhileController();
-			while_cont.testMode = true;
-			while_cont.testModeResult = true;
+			setLastSampleStatus(true);
 			while_cont.setCondition(type);
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
@@ -86,25 +107,29 @@ public class TestWhileController extends JMeterTestCase {
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
 			assertEquals("one", nextName(controller));
-			while_cont.testModeResult = false;// one and two fail
-			if (type.equals(OTHER))
+			setLastSampleStatus(false);
+			if (type.equals(OTHER)){
 				while_cont.setCondition("false");
+			}
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
-			while_cont.testModeResult = true;// but three OK, so does not exit
-			if (type.equals(OTHER))
+			setLastSampleStatus(true);
+			if (type.equals(OTHER)) {
 				while_cont.setCondition(OTHER);
+			}
 			assertEquals("one", nextName(controller));
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
-			while_cont.testModeResult = false;// three fails, so exits while
-			if (type.equals(OTHER))
+			setLastSampleStatus(false);
+			if (type.equals(OTHER)) {
 				while_cont.setCondition("false");
+			}
 			assertEquals("four", nextName(controller));
 			assertNull(nextName(controller));
-			while_cont.testModeResult = true;
-			if (type.equals(OTHER))
+			setLastSampleStatus(true);
+			if (type.equals(OTHER)) {
 				while_cont.setCondition(OTHER);
+			}
 			assertEquals("one", nextName(controller));
 		}
 
@@ -112,9 +137,9 @@ public class TestWhileController extends JMeterTestCase {
 		public void testBlankPrevFailed() throws Exception {
 //			log.info("testBlankPrevFailed");
 			GenericController controller = new GenericController();
+			controller.setRunningVersion(true);
 			WhileController while_cont = new WhileController();
-			while_cont.testMode = true;
-			while_cont.testModeResult = false;
+			setLastSampleStatus(false);
 			while_cont.setCondition("");
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
@@ -125,10 +150,111 @@ public class TestWhileController extends JMeterTestCase {
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
 			assertNull(nextName(controller));
+			// Run entire test again
 			assertEquals("one", nextName(controller));
 			assertEquals("two", nextName(controller));
 			assertEquals("three", nextName(controller));
 			assertNull(nextName(controller));
+		}
+
+		public void testVariable1() throws Exception {
+			GenericController controller = new GenericController();
+			WhileController while_cont = new WhileController();
+			setLastSampleStatus(false);
+			while_cont.setCondition("${VAR}");
+			jmvars.put("VAR", "");
+			ValueReplacer vr = new ValueReplacer();
+			vr.replaceValues(while_cont);
+			setRunning(while_cont);
+			controller.addTestElement(new TestSampler("before"));
+			controller.addTestElement(while_cont);
+			while_cont.addTestElement(new TestSampler("one"));
+			while_cont.addTestElement(new TestSampler("two"));
+			GenericController simple = new GenericController();
+			while_cont.addTestElement(simple);
+			simple.addTestElement(new TestSampler("three"));
+			simple.addTestElement(new TestSampler("four"));
+			controller.addTestElement(new TestSampler("after"));
+			controller.initialize();
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop: "+i,"before", nextName(controller));
+				assertEquals("Loop: "+i,"one", nextName(controller));
+				assertEquals("Loop: "+i,"two", nextName(controller));
+				assertEquals("Loop: "+i,"three", nextName(controller));
+				assertEquals("Loop: "+i,"four", nextName(controller));
+				assertEquals("Loop: "+i,"after", nextName(controller));
+				assertNull("Loop: "+i,nextName(controller));
+			}
+			jmvars.put("VAR", "LAST"); // Should not enter the loop
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop: "+i,"before", nextName(controller));
+				assertEquals("Loop: "+i,"after", nextName(controller));
+				assertNull("Loop: "+i,nextName(controller));
+			}
+			jmvars.put("VAR", "");
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop: "+i,"before", nextName(controller));
+				if (i==1) {
+					assertEquals("Loop: "+i,"one", nextName(controller));
+					assertEquals("Loop: "+i,"two", nextName(controller));
+					assertEquals("Loop: "+i,"three", nextName(controller));
+					jmvars.put("VAR", "LAST"); // Should not enter the loop next time
+					assertEquals("Loop: "+i,"four", nextName(controller));
+				}
+				assertEquals("Loop: "+i,"after", nextName(controller));
+				assertNull("Loop: "+i,nextName(controller));
+			}
+		}
+
+		// Test with SimpleController as first item
+		public void testVariable2() throws Exception {
+			GenericController controller = new GenericController();
+			WhileController while_cont = new WhileController();
+			setLastSampleStatus(false);
+			while_cont.setCondition("${VAR}");
+			jmvars.put("VAR", "");
+			ValueReplacer vr = new ValueReplacer();
+			vr.replaceValues(while_cont);
+			setRunning(while_cont);
+			controller.addTestElement(new TestSampler("before"));
+			controller.addTestElement(while_cont);
+			GenericController simple = new GenericController();
+			while_cont.addTestElement(simple);
+			simple.addTestElement(new TestSampler("one"));
+			simple.addTestElement(new TestSampler("two"));
+			while_cont.addTestElement(new TestSampler("three"));
+			while_cont.addTestElement(new TestSampler("four"));
+			controller.addTestElement(new TestSampler("after"));
+			controller.initialize();
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop: "+i,"before", nextName(controller));
+				assertEquals("Loop: "+i,"one", nextName(controller));
+				assertEquals("Loop: "+i,"two", nextName(controller));
+				assertEquals("Loop: "+i,"three", nextName(controller));
+				assertEquals("Loop: "+i,"four", nextName(controller));
+				assertEquals("Loop: "+i,"after", nextName(controller));
+				assertNull("Loop: "+i,nextName(controller));
+			}
+			jmvars.put("VAR", "LAST"); // Should not enter the loop
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop: "+i,"before", nextName(controller));
+				assertEquals("Loop: "+i,"after", nextName(controller));
+				assertNull("Loop: "+i,nextName(controller));
+			}
+			jmvars.put("VAR", "");
+			for (int i = 1; i <= 3; i++) {
+				assertEquals("Loop: "+i,"before", nextName(controller));
+				if (i==1){
+					assertEquals("Loop: "+i,"one", nextName(controller));
+					assertEquals("Loop: "+i,"two", nextName(controller));
+					jmvars.put("VAR", "LAST"); // Should not enter the loop next time
+					// But should continue to the end of the loop
+					assertEquals("Loop: "+i,"three", nextName(controller));
+					assertEquals("Loop: "+i,"four", nextName(controller));
+				}
+				assertEquals("Loop: "+i,"after", nextName(controller));
+				assertNull("Loop: "+i,nextName(controller));
+			}
 		}
 
 		// While LAST, previous sample failed - should not run
@@ -143,11 +269,10 @@ public class TestWhileController extends JMeterTestCase {
 			runTestPrevFailed("False");
 		}
 
-		public void runTestPrevFailed(String s) throws Exception {
+		private void runTestPrevFailed(String s) throws Exception {
 			GenericController controller = new GenericController();
 			WhileController while_cont = new WhileController();
-			while_cont.testMode = true;
-			while_cont.testModeResult = false;
+			setLastSampleStatus(false);
 			while_cont.setCondition(s);
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
@@ -160,28 +285,60 @@ public class TestWhileController extends JMeterTestCase {
 			assertNull(nextName(controller));
 		}
 
+		public void testLastFailedBlank() throws Exception{
+			runTestLastFailed("");
+		}
+
+		public void testLastFailedLast() throws Exception{
+			runTestLastFailed("LAST");
+		}
+
+		// Should behave the same for blank and LAST because success on input
+		private void runTestLastFailed(String s) throws Exception {
+			GenericController controller = new GenericController();
+			controller.addTestElement(new TestSampler("1"));
+			WhileController while_cont = new WhileController();
+			controller.addTestElement(while_cont);
+			while_cont.setCondition(s);
+			GenericController sub = new GenericController();
+			while_cont.addTestElement(sub);
+			sub.addTestElement(new TestSampler("2"));
+			sub.addTestElement(new TestSampler("3"));
+			
+			controller.addTestElement(new TestSampler("4"));
+
+			setLastSampleStatus(true);
+			controller.initialize();
+			assertEquals("1", nextName(controller));
+			assertEquals("2", nextName(controller));
+			setLastSampleStatus(false);
+			assertEquals("3", nextName(controller));
+			assertEquals("4", nextName(controller));
+			assertNull(nextName(controller));
+		}
+
 		// Tests for Stack Overflow (bug 33954)
 		public void testAlwaysFailOK() throws Exception {
 			runTestAlwaysFail(true); // Should be OK
 		}
 
 		public void testAlwaysFailBAD() throws Exception {
-			runTestAlwaysFail(false); // Currently fails
+			runTestAlwaysFail(false);
 		}
 
-		public void runTestAlwaysFail(boolean other) {
+		private void runTestAlwaysFail(boolean other) {
 			LoopController controller = new LoopController();
 			controller.setContinueForever(true);
 			controller.setLoops(-1);
 			WhileController while_cont = new WhileController();
-			while_cont.testMode = true;
-			while_cont.testModeResult = false;
+			setLastSampleStatus(false);
 			while_cont.setCondition("false");
 			while_cont.addTestElement(new TestSampler("one"));
 			while_cont.addTestElement(new TestSampler("two"));
 			controller.addTestElement(while_cont);
-			if (other)
+			if (other) {
 				controller.addTestElement(new TestSampler("three"));
+			}
 			controller.initialize();
 			try {
 				if (other) {
