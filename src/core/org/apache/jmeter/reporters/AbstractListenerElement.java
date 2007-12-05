@@ -18,32 +18,37 @@
 
 package org.apache.jmeter.reporters;
 
+import java.lang.ref.WeakReference;
+
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.visualizers.Visualizer;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Base class for Listeners
  */
 
 public abstract class AbstractListenerElement extends AbstractTestElement {
-	transient private Visualizer listener;
+	// TODO should class implement SampleListener?
+	transient private WeakReference listener;
 
 	public AbstractListenerElement() {
 	}
 
-	protected Visualizer getVisualizer() {
-		return listener;
+	protected final Visualizer getVisualizer() {
+		if (listener == null){ // e.g. in non-GUI mode
+			return null;
+		}
+		return (Visualizer)listener.get();
 	}
 
 	public void setListener(Visualizer vis) {
-		listener = vis;
+		listener = new WeakReference(vis);
 	}
 
 	public Object clone() {
 		AbstractListenerElement clone = (AbstractListenerElement) super.clone();
 
-		clone.setListener(getVisualizer());
+		clone.listener=this.listener;
 		return clone;
 	}
 }

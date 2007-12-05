@@ -49,6 +49,7 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>Bug 44011 - application/soap+xml not treated as a text type</li>
 <li>Bug 43427 - Simple Controller is only partly executed in While loop</li>
 <li>Bug 33954 - Stack Overflow in If/While controllers (may have been fixed previously)</li>
+<li>Bug 44022 - Memory Leak when closing test plan</li>
 </ul>
 
 <h4>Improvements</h4>

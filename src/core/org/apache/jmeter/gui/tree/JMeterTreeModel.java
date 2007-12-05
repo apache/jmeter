@@ -195,7 +195,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
 	}
 
     /**
-     * Clear the test plan, and use default node for test plan and workbench
+     * Clear the test plan, and use default node for test plan and workbench.
+     * 
+     * N.B. Should only be called by {@link GuiPackage#clearTestPlan()}
      */
 	public void clearTestPlan() {
 		TestElement tp = new TestPlanGui().createTestElement();
@@ -204,6 +206,8 @@ public class JMeterTreeModel extends DefaultTreeModel {
     
     /**
      * Clear the test plan, and use specified node for test plan and default node for workbench
+     * 
+     * N.B. Should only be called by {@link GuiPackage#clearTestPlan(TestElement)}
      * 
      * @param testPlan the node to use as the testplan top node
      */
