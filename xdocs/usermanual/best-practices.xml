@@ -85,7 +85,11 @@ certain common elements from the recorded samples.  By defining some
 replace values in you recorded samples.  For instance, if you are testing an app on
 server "xxx.yyy.com", then you can define a variable called "server" with the value of
 "xxx.yyy.com", and anyplace that value is found in your recorded samples will be replaced
-with "${server}".</p><!--TODO: Describe how to use this to record against one server[name]
+with "${server}".
+
+<note>Please note that matching is case-sensitive.</note>
+
+</p><!--TODO: Describe how to use this to record against one server[name]
 and run against another. Actually, this particular example may be beter for the HTTP Request Defaults...
 a good similar example for the variables is http vs. https.-->
 <!--TODO: Hey! We need to mention that https is not supported and how to work around that!-->
