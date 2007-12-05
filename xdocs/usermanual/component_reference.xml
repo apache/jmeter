@@ -3552,6 +3552,8 @@ will have any occurences of the values of those variables replaced by the corres
 place User Defined Variables directly within the HTTP Proxy Server to override the values to be replaced. See
 <a href="best-practices.html#proxy_server"> Best Practices with the Proxy Server</a> for more info.</p>
 
+<note>Please note that matching is case-sensitive.</note>
+
 <p>Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
 If you define the variable "WEB" with the value "www", for example, 
 the string "www" will be replaced by ${WEB} wherever it is found.
