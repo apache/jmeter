@@ -62,6 +62,7 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>Make Random function variable name optional</li>
 <li>Reduce class loading in non-GUI mode by only looking for Functions in class names
 that contain '.functions.' and don't contain '.gui.'</li>
+<li>Bug 43379 - Switch Controller now supports selection by name as well as number</li>
 </ul>
 
 <h4>Non-functional changes</h4>
