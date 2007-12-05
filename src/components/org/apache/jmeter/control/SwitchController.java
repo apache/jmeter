@@ -19,10 +19,34 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 
+// For unit tests @see TestSwitchController
+
+/**
+ * <p>
+ * Implements a controller which selects at most one of its children
+ * based on the condition value, which may be a number or a string.
+ * </p>
+ * <p>
+ * For numeric input, the controller processes the appropriate child,
+ * where the numbering starts from 0. 
+ * If the number is out of range, then the first (0th) child is selected.
+ * If the condition is the empty string, then it is assumed to be 0.
+ * </p>
+ * <p>
+ * For non-empty non-numeric input, the child is selected by name.
+ * This may be the name of the controller or a sampler.
+ * If the string does not match any of the names, then the controller
+ * with the name "default" (any case) is processed.
+ * If there is no default entry, then unlike the numeric case,
+ * no child is selected.
+ * </p>
+ */
 public class SwitchController extends GenericController implements Serializable {
 	// Package access for use by Test code
 	final static String SWITCH_VALUE = "SwitchController.value";
@@ -67,13 +91,32 @@ public class SwitchController extends GenericController implements Serializable 
 		String sel = getSelection();
 		try {
 			ret = Integer.parseInt(sel);
+			if (ret < 0 || ret >= getSubControllers().size()) {
+				ret = 0;
+			}
 		} catch (NumberFormatException e) {
-			ret = 0;
-		}
-		if (ret < 0 || ret >= getSubControllers().size()) {
-			ret = 0;
+			if (sel.length()==0) {
+				ret = 0;
+			} else {
+				ret = scanControllerNames(sel);
+			}
 		}
 		return ret;
+	}
+
+	private int scanControllerNames(String sel){
+		Iterator iter = getSubControllers().iterator();
+		int i = 0;
+		int default_pos = Integer.MAX_VALUE;
+		while(iter.hasNext()) {
+			String name;
+		    TestElement el = (TestElement)iter.next();
+		    name=el.getName();
+			if (name.equals(sel)) return i;
+     		if (name.equalsIgnoreCase("default")) default_pos = i;
+			i++;
+		}
+		return default_pos;	
 	}
 
 	public String getSelection() {
