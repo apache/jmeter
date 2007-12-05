@@ -146,7 +146,7 @@ public class Load implements Command {
 		// If we are loading a new test plan, initialize the tree with the testplan node we are loading
 		GuiPackage guiInstance = GuiPackage.getInstance();
 		if(isTestPlan && !merging) {
-			guiInstance.getTreeModel().clearTestPlan((TestElement)tree.getArray()[0]);
+			guiInstance.clearTestPlan((TestElement)tree.getArray()[0]);
 		}
 
 		if (merging){ // Check if target of merge is reasonable
