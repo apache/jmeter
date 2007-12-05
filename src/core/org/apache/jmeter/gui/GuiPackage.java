@@ -462,6 +462,11 @@ public final class GuiPackage implements LocaleChangeListener {
 	 * 
 	 * @return the JMeter tree model
 	 */
+	/*
+	 * TODO consider removing this method, and providing method wrappers instead.
+	 * This would allow the Gui package to do any additional clearups if required,
+	 * as has been done with clearTestPlan()
+	*/ 
 	public JMeterTreeModel getTreeModel() {
 		return treeModel;
 	}
@@ -619,6 +624,25 @@ public final class GuiPackage implements LocaleChangeListener {
 		return testPlanFile;
 	}
 
+	/**
+	 * Clears the test plan and associated objects.
+	 * Clears the test plan file name.
+	 */
+    public void clearTestPlan() {
+        getTreeModel().clearTestPlan();
+        nodesToGui.clear();
+        setTestPlanFile(null);
+    }
+
+    /**
+     * Clears the test plan element and associated object
+     * 
+     * @param element to clear
+     */
+    public void clearTestPlan(TestElement element) {
+        getTreeModel().clearTestPlan(element);
+        removeNode(element);
+    }
 
     public static void showErrorMessage(final String message, final String title){
         showMessage(message,title,JOptionPane.ERROR_MESSAGE);

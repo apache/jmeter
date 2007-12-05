@@ -31,8 +31,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * This command clears the existing test plan, allowing the creation of a New
  * test plan.
  * 
- * @author <a href="mramshaw@alumni.concordia.ca">Martin Ramshaw</a> Created
- *         June 6, 2002
  */
 public class Close implements Command {
 
@@ -96,11 +94,8 @@ public class Close implements Command {
 	static void closeProject(ActionEvent e) {
 		GuiPackage guiPackage = GuiPackage.getInstance();
 
-		guiPackage.getTreeModel().clearTestPlan();
+		guiPackage.clearTestPlan();
 		guiPackage.getTreeListener().getJTree().setSelectionRow(1);
-
-		// Clear the name of the test plan file
-		guiPackage.setTestPlanFile(null);
 
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
 	}
