@@ -65,14 +65,17 @@ public class TestSwitchController extends JMeterTestCase {
 
 		public void test1() throws Exception {
 			runSimpleTests("1", "one");
+			runSimpleTests("one", "one"); // Match by name
 		}
 
 		public void test2() throws Exception {
 			runSimpleTests("2", "two");
+			runSimpleTests("two", "two"); // Match by name
 		}
 
 		public void test3() throws Exception {
 			runSimpleTests("3", "three");
+			runSimpleTests("three", "three"); // Match by name
 		}
 
 		public void test4() throws Exception {
@@ -80,16 +83,27 @@ public class TestSwitchController extends JMeterTestCase {
 		}
 
 		public void testX() throws Exception {
-			runSimpleTests("X", "zero");
+			runSimpleTests("X", null); // should not run any children
+			runSimpleTest2("X", "one", "Default"); // should match the default entry
 		}
 
-		public void runSimpleTests(String cond, String exp) throws Exception {
+		private void runSimpleTests(String cond, String exp) throws Exception {
 			runSimpleTest(cond, exp);
-			runSimpleTest2(cond, exp);
+			runSimpleTest2(cond, exp, "one");
 		}
 
-		// Simple test with single Selection controller
-		public void runSimpleTest(String cond, String exp) throws Exception {
+		/*
+		 *  Simple test with single Selection controller
+		 *  Generic Controller
+		 *  + Sampler "before"
+		 *  + Switch Controller
+		 *  + + Sampler "zero"
+		 *  + + Sampler "one"
+		 *  + + Sampler "two"
+		 *  + + Sampler "three"
+		 *  + Sampler "after"
+		 */
+		private void runSimpleTest(String cond, String exp) throws Exception {
 			GenericController controller = new GenericController();
 
 			SwitchController switch_cont = new SwitchController();
@@ -109,7 +123,9 @@ public class TestSwitchController extends JMeterTestCase {
 
 			for (int i = 1; i <= 3; i++) {
 				assertEquals("Loop " + i, "before", nextName(controller));
-				assertEquals("Loop " + i, exp, nextName(controller));
+				if (exp!=null){
+					assertEquals("Loop " + i, exp, nextName(controller));
+				}
 				assertEquals("Loop " + i, "after", nextName(controller));
 				assertNull(nextName(controller));
 			}
@@ -129,7 +145,7 @@ public class TestSwitchController extends JMeterTestCase {
 		 * + + + three
 		 * + After
 		 */
-		public void runSimpleTest2(String cond, String exp) throws Exception {
+		private void runSimpleTest2(String cond, String exp, String sub1Name) throws Exception {
 			GenericController controller = new GenericController();
 			GenericController sub_1 = new GenericController();
 			GenericController sub_2 = new GenericController();
@@ -140,11 +156,13 @@ public class TestSwitchController extends JMeterTestCase {
 			switch_cont.addTestElement(new TestSampler("zero"));
 			switch_cont.addTestElement(sub_1);
 			sub_1.addTestElement(new TestSampler("one"));
+			sub_1.setName(sub1Name);
 
 			switch_cont.addTestElement(new TestSampler("two"));
 
 			switch_cont.addTestElement(sub_2);
 			sub_2.addTestElement(new TestSampler("three"));
+			sub_2.setName("three");
 
 			controller.addTestElement(new TestSampler("before"));
 			controller.addTestElement(switch_cont);
@@ -152,7 +170,9 @@ public class TestSwitchController extends JMeterTestCase {
 			controller.initialize();
 			for (int i = 1; i <= 3; i++) {
 				assertEquals("Loop="+i,"before", nextName(controller));
-				assertEquals("Loop="+i,exp, nextName(controller));
+				if (exp!=null){
+					assertEquals("Loop="+i,exp, nextName(controller));
+				}
 				assertEquals("Loop="+i,"after", nextName(controller));
 				assertNull("Loop="+i,nextName(controller));
 			}
@@ -187,7 +207,7 @@ public class TestSwitchController extends JMeterTestCase {
 		 * cond  = Switch condition 
 		 * exp[] = expected results
 		 */
-		public void runTest2(String cond, String exp[]) throws Exception {
+		private void runTest2(String cond, String exp[]) throws Exception {
 			int loops = 3;
 			LoopController controller = new LoopController();
 			controller.setLoops(loops);
