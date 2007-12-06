@@ -265,11 +265,16 @@ public class SampleResultConverter extends AbstractCollectionConverter {
            writer.addAttribute(ATT_GRP_THRDS, String.valueOf(res.getGroupThreads()));
            writer.addAttribute(ATT_ALL_THRDS, String.valueOf(res.getAllThreads()));
         }
+        SampleEvent event = (SampleEvent) context.get(SaveService.SAMPLE_EVENT_OBJECT);
         if (save.saveHostname()){
-            SampleEvent event = (SampleEvent) context.get(SaveService.SAMPLE_EVENT_OBJECT);
             if (event != null) {
             	writer.addAttribute(ATT_HOSTNAME, event.getHostname());        	
             }
+        }
+        if (event != null) {
+        	for (int i = 0; i < SampleEvent.getVarCount(); i++){
+        	   writer.addAttribute(SampleEvent.getVarName(i), ConversionHelp.encode(event.getVarValue(i)));
+        	}
         }
 	}
 
