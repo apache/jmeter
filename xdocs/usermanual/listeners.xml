@@ -165,17 +165,29 @@ sampleresult.timestamp.start=true
 
 #jmeter.save.saveservice.print_field_names=false
 
+# Optional list of JMeter variable names whose values are to be saved in the result data files.
+# Use commas to separate the names. For example:
+#sample_variables=SESSION_ID,REFERENCE
+# N.B. The current implementation saves the values in XML as attributes,
+# so the names must be valid XML names.
+
 # Optional xml processing instruction for line 2 of the file:
 #jmeter.save.saveservice.xml_pi=&amp;lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?>
 </pre>
 </code></p>
 <p>
-The date format to be used for the timestamp_format is described in <A
+The date format to be used for the timestamp_format is described in <a
 HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
-<B>SimpleDateFormat</B></A>.
+<b>SimpleDateFormat</b></a>.
 Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
+<p>
+Versions of JMeter after 2.3.1 allow one to use the <b>sample_variables</b> 
+property to define a list of additional JMeter variables which are to be saved with
+each sample in the JTL files. The values are written to CSV files as additional columns,
+and as additional attributes in XML files.
+</p>
 </section>
 
 <section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
@@ -196,6 +208,12 @@ jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
 Note that JMeter logging messages are written to the file <b>jmeter.log</b> by default.
 This file is recreated each time, so if you want to keep the log files for each run, 
 you will need to rename it using the -j option as above. The -j option was added in version 2.3.
+</p>
+<p>Versions of JMeter after 2.3.1 support variables in the log file name.
+If the filename contains  paired single-quotes, then the name is processed
+as a SimpleDateFormat format applied to the current date, for example:
+<b>log_file='jmeter_'yyyyMMddHHmmss'.tmp'</b>. 
+This can be used to generate a unique name for each test run.
 </p>
 </section>
 
@@ -240,6 +258,7 @@ The order of appearance of columns is fixed, and is as follows:
 <li>SampleCount - number of samples (1, unless multiple samples are aggregated)</li>
 <li>ErrorCount - number of errors (0 or 1, unless multiple samples are aggregated)</li>
 <li>Hostname where the sample was generated</li>
+<li>Variables, if specified</li>
 </ul>
 
 </section>
@@ -391,11 +410,17 @@ The sample attributes have the following meaning:
 <tr><td> t</td><td>Elapsed time (milliseconds)</td></tr>
 <tr><td>tn</td><td>Thread Name</td></tr>
 <tr><td>ts</td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
+<tr><td>varname</td><td>Value of the named variable (versions of JMeter after 2.3.1)</td></tr>
 </table>
 <p>
 Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "rs", but read it back expecting to find "rc".
 This has been corrected so that it is always saved as "rc"; either "rc" or "rs" can be read.
 </p>
+<note>
+Versions of JMeter after 2.3.1 allow additional variables to be saved with the test plan.
+Currently, the variables are saved as additional attributes. 
+The testplan variable name is used as the attribute name.
+</note>
 </section>
 
 <section name="&sect-num;.8 Saving response data" anchor="saving">
