@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -32,8 +34,18 @@ import org.apache.log.Logger;
 public class SampleEvent implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final long serialVersionUID = 232L;
+
     public static final String HOSTNAME;
 
+    // List of variable names to be saved in JTL files
+	private static final String[] variableNames;
+	// Number of variable names
+	private static final int varCount;
+
+	// The values. Entries be null, but there will be the correct number.
+    private final String[] values;
+    
 	static {
         String hn="";
 		try {
@@ -42,21 +54,58 @@ public class SampleEvent implements Serializable {
             log.error("Cannot obtain local host name "+e);
 		}
         HOSTNAME=hn;
+        
+        String vars = JMeterUtils.getProperty("sample_variables"); // $NON-NLS-1$
+       	variableNames=vars != null ? vars.split(",") : new String[0];
+       	varCount=variableNames.length;
+        if (varCount>0){
+        	log.info(varCount + " sample_variables have been declared: "+vars);
+        }
 	}
 
-	SampleResult result;
 
-	String threadGroup; // TODO appears to duplicate the threadName field in SampleResult
+	private final SampleResult result;
 
-	String hostname;
+	private final String threadGroup; // TODO appears to duplicate the threadName field in SampleResult
 
+	private final String hostname;
+
+
+	/*
+	 * Only for Unit tests
+	 */
 	public SampleEvent() {
+		this(null, null);
 	}
 
+	/**
+	 * Creates SampleEvent without saving any variables.
+	 * 
+	 * Use by Proxy and StatisticalSampleSender.
+	 * 
+	 * @param result SampleResult
+	 * @param threadGroup name
+	 */
 	public SampleEvent(SampleResult result, String threadGroup) {
 		this.result = result;
 		this.threadGroup = threadGroup;
 		this.hostname = HOSTNAME;
+		values = new String[variableNames.length];
+	}
+
+	/**
+	 * Contructor used for normal samples, saves variable values if any are defined.
+	 * 
+	 * @param result
+	 * @param threadGroup name
+	 * @param jmvars Jmeter variables
+	 */
+	public SampleEvent(SampleResult result, String threadGroup, JMeterVariables jmvars) {
+		this.result = result;
+		this.threadGroup = threadGroup;
+		this.hostname = HOSTNAME;
+		values = new String[variableNames.length];
+		saveVars(jmvars);
 	}
 
 	/**
@@ -70,8 +119,30 @@ public class SampleEvent implements Serializable {
 		this.result = result;
 		this.threadGroup = threadGroup;
 		this.hostname = hostname;
+		values = new String[variableNames.length];
 	}
 
+	private void saveVars(JMeterVariables vars){
+		for(int i = 0; i < variableNames.length; i++){
+			values[i] = vars.get(variableNames[i]);
+		}
+	}
+
+	/** Return the number of variables defined */
+	public static int getVarCount(){
+		return varCount;
+	}
+
+	/** Get the nth variable name (zero-based) */
+	public static String getVarName(int i){
+		return variableNames[i];
+	}
+
+	/** Get the nth variable value (zero-based) */
+	public String getVarValue(int i){
+		return values[i];
+	}
+		
 	public SampleResult getResult() {
 		return result;
 	}
