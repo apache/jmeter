@@ -389,16 +389,15 @@ public class ProxyControl extends GenericController {
 			sampler.setImageParser(samplerDownloadImages);
 
 			placeSampler(sampler, subConfigs, myTarget);
-
-			notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
 		}
 		else {
 			if(log.isDebugEnabled()) {
 				log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
 			}
 			result.setSampleLabel("["+result.getSampleLabel()+"]");
-			notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
 		}
+		// SampleEvent is not passed JMeterVariables, because they don't make sense for Proxy Recording
+		notifySampleListeners(new SampleEvent(result, "WorkBench")); // TODO - is this the correct threadgroup name?
 	}
 
 	public void stopProxy() {
