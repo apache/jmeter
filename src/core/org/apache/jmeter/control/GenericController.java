@@ -305,7 +305,7 @@ public class GenericController extends AbstractTestElement implements Controller
 	protected void fireIterEvents() {
 		if (isFirst()) {
 			fireIterationStart();
-			first = false;
+			first = false; // TODO - should this use setFirst() ?
 		}
 	}
 
