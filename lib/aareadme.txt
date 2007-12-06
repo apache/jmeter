@@ -30,7 +30,7 @@ commons-lang-2.3
 - velocity (Anakia)
 - URLCollection (unescapeXml)
 
-commons-logging-1.1
+commons-logging-1.1.1
 - httpclient
 
 commons-net-1.4.1
