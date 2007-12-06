@@ -26,8 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jmeter.control.NextIsNullException;
-import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
