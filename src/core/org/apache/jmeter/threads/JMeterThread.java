@@ -286,9 +286,8 @@ public class JMeterThread implements Runnable, Serializable {
                             // Get the sampler ready to sample
                             SamplePackage pack = compiler.configureSampler(sam);
 
-						    // Hack: save the package for any transaction
-						    // controllers
-						    threadContext.getVariables().putObject(PACKAGE_OBJECT, pack);
+						    // Hack: save the package for any transaction controllers
+							threadVars.putObject(PACKAGE_OBJECT, pack);
 
                             delay(pack.getTimers());
                             Sampler sampler = pack.getSampler();
@@ -572,7 +571,7 @@ public class JMeterThread implements Runnable, Serializable {
 	}
 
 	private void notifyListeners(List listeners, SampleResult result) {
-		SampleEvent event = new SampleEvent(result, threadGroup.getName());
+		SampleEvent event = new SampleEvent(result, threadGroup.getName(), threadVars);
 		notifier.notifyListeners(event, listeners);
 
 	}

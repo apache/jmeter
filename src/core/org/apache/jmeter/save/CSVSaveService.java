@@ -86,7 +86,10 @@ public final class CSVSaveService {
     private static final String CSV_LATENCY = "Latency"; // $NON-NLS-1$
     private static final String CSV_ENCODING = "Encoding"; // $NON-NLS-1$
     private static final String CSV_HOSTNAME = "Hostname"; // $NON-NLS-1$
-    
+
+    // Used to enclose variable name labels, to distinguish from any of the above labels
+	private static final String VARIABLE_NAME_QUOTE_CHAR = "\"";  // $NON-NLS-1$
+
     // Initial config from properties
 	static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration.staticConfig();
 
@@ -120,6 +123,7 @@ public final class CSVSaveService {
 			long lineNumber=1;
 			SampleSaveConfiguration saveConfig = CSVSaveService.getSampleSaveConfiguration(line,filename);
 			if (saveConfig == null) {// not a valid header
+				log.info(filename+" does not appear to have a valid header. Using default configuration.");
 				saveConfig = (SampleSaveConfiguration) resultCollector.getSaveConfig().clone(); // may change the format later
 				dataReader.reset(); // restart from beginning
 				lineNumber = 0;
@@ -148,7 +152,7 @@ public final class CSVSaveService {
      * @param lineNumber - line number for error reporting
      * @return SampleResult
      * 
-     * @deprecated Does not handle quoted strings
+     * @deprecated Does not handle quoted strings; use {@link #processSamples(String, Visualizer, ResultCollector)} instead
      * 
      * @throws JMeterError
      */
@@ -174,7 +178,7 @@ public final class CSVSaveService {
      * 
      * @throws JMeterError
      */
-    public static SampleEvent makeResultFromDelimitedString(
+    private static SampleEvent makeResultFromDelimitedString(
     		final String[] parts, 
     		final SampleSaveConfiguration saveConfig, // may be updated
     		final long lineNumber) {
@@ -315,6 +319,10 @@ public final class CSVSaveService {
                 hostname = parts[i++];
             }
             
+            if (i + saveConfig.getVarCount() < parts.length){
+            	log.warn("Line: "+lineNumber+". Found "+parts.length+" fields, expected "+i+". Extra fields have been ignored.");
+            }
+
 		} catch (NumberFormatException e) {
 			log.warn("Error parsing field '" + field + "' at line " + lineNumber + " " + e);
 			throw new JMeterError(e);
@@ -435,6 +443,13 @@ public final class CSVSaveService {
             text.append(delim);
         }
 
+        for (int i = 0; i < SampleEvent.getVarCount(); i++){
+        	text.append(VARIABLE_NAME_QUOTE_CHAR);
+        	text.append(SampleEvent.getVarName(i));
+        	text.append(VARIABLE_NAME_QUOTE_CHAR);
+            text.append(delim);
+        }
+
         String resultString = null;
 		int size = text.length();
 		int delSize = delim.length();
@@ -496,7 +511,8 @@ public final class CSVSaveService {
 			// word followed by 0 or more repeats of (non-word char + word)
 			// where the non-word char (\2) is the same
 			// e.g.  abc|def|ghi but not abd|def~ghi
-			        .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*", // $NON-NLS-1$
+			        .getPattern("\\w+((\\W)\\w+)?(\\2\\w+)*(\\2\"\\w+\")*", // $NON-NLS-1$
+			        		// last entries may be quoted strings
 					Perl5Compiler.READ_ONLY_MASK);
 			if (matcher.matches(input, pattern)) {
 				delim = matcher.getMatch().group(2);
@@ -511,15 +527,24 @@ public final class CSVSaveService {
 		// We know the column names all exist, so create the config 
 		SampleSaveConfiguration saveConfig=new SampleSaveConfiguration(false);
 		
+		int varCount = 0;
 		for(int i=0;i<parts.length;i++){
-			Functor set = (Functor) headerLabelMethods.get(parts[i]);
-			set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
+			String label = parts[i];
+			if (isVariableName(label)){
+				varCount++;
+			} else {
+				Functor set = (Functor) headerLabelMethods.get(label);
+				set.invoke(saveConfig,new Boolean[]{Boolean.TRUE});
+			}
 		}
 
 		if (delim != null){
 			log.warn("Default delimiter '"+_saveConfig.getDelimiter()+"' did not work; using alternate '"+delim+"' for reading "+filename);
 			saveConfig.setDelimiter(delim);
 		}
+		
+		saveConfig.setVarCount(varCount);
+		
 		return saveConfig;
 	}
 
@@ -529,6 +554,11 @@ public final class CSVSaveService {
 		// Check if the line is a header
 		for(int i=0;i<parts.length;i++){
 			final String label = parts[i];
+			// Check for Quoted variable names
+			if (isVariableName(label)){
+				previous=Integer.MAX_VALUE; // they are always last
+				continue;
+			}
 			int current = headerLabelMethods.indexOf(label);
 			if (current == -1){
 				return null; // unknown column name
@@ -540,6 +570,18 @@ public final class CSVSaveService {
 			previous = current;
 		}
 		return parts;
+	}
+
+	/**
+	 * Check if the label is a variable name, i.e. is it enclosed in double-quotes?
+	 * 
+	 * @param label column name from CSV file
+	 * @return if the label is enclosed in double-quotes
+	 */
+	private static boolean isVariableName(final String label) {
+		return label.length() > 2
+		    && label.startsWith(VARIABLE_NAME_QUOTE_CHAR)
+		    && label.endsWith(VARIABLE_NAME_QUOTE_CHAR);
 	}
 
 	/**
@@ -613,6 +655,7 @@ public final class CSVSaveService {
     		// These methods handle parameters that could contain delimiters or escapes:
     		public void append(String s){
     			addDelim();
+    			//if (s == null) return;
     			sb.append(escapeDelimiters(s,specials));
     		}
     		public void append(Object obj){
@@ -730,6 +773,10 @@ public final class CSVSaveService {
     
         if (saveConfig.saveHostname()) {
             text.append(event.getHostname());
+        }
+
+        for (int i=0; i < SampleEvent.getVarCount(); i++){
+        	text.append(event.getVarValue(i));
         }
 
     	return text.toString();

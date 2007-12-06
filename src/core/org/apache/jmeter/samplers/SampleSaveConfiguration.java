@@ -59,7 +59,7 @@ import org.apache.jorphan.util.JMeterError;
  *
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
-	private static final long serialVersionUID = 6L;
+	private static final long serialVersionUID = 7L;
 
 	// ---------------------------------------------------------------------
 	// PROPERTY FILE CONSTANTS
@@ -384,7 +384,19 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
 	// Don't save this, as not settable via GUI
 	private String delimiter = _delimiter;
+	
+	// Don't save this - only needed for processing CSV headers currently
+	private transient int varCount = 0;
+	
 	private static final SampleSaveConfiguration _static = new SampleSaveConfiguration();
+
+	public int getVarCount() { // Only for use by CSVSaveService
+		return varCount;
+	}
+
+	public void setVarCount(int varCount) { // Only for use by CSVSaveService
+		this.varCount = varCount;
+	}
 
 	// Give access to initial configuration
 	public static SampleSaveConfiguration staticConfig() {
