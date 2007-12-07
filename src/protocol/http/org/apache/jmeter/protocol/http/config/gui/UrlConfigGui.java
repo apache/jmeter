@@ -106,7 +106,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 	}
 	
 	protected void configureTestElement(TestElement mc) {
-		mc.setProperty(TestElement.NAME, getName());
+		mc.setName(getName());
 		mc.setProperty(TestElement.GUI_CLASS, this.getClass().getName());
 		mc.setProperty(TestElement.TEST_CLASS, mc.getClass().getName());
 	}
@@ -157,7 +157,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 	 *            contains the data to be displayed
 	 */
 	public void configure(TestElement el) {
-		setName(el.getPropertyAsString(TestElement.NAME));
+		setName(el.getName());
 		argsPanel.configure((TestElement) el.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue());
 		domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
 

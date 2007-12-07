@@ -687,7 +687,7 @@ public class ProxyControl extends GenericController {
 				if (subNode.isEnabled()) {
 					TestElement element = (TestElement) subNode.getUserObject();
 					if (myClass.isInstance(element)) {
-						log.debug("Applicable: " + element.getPropertyAsString(TestElement.NAME));
+						log.debug("Applicable: " + element.getName());
 						if (ascending)
 							elements.addFirst(element);
 						else
