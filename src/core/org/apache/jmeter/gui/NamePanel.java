@@ -130,7 +130,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 
 	/* Implements JMeterGUIComponent.configure(TestElement) */
 	public void configure(TestElement testElement) {
-		setName(testElement.getPropertyAsString(TestElement.NAME));
+		setName(testElement.getName());
 	}
 
 	/* Implements JMeterGUIComponent.createPopupMenu() */
@@ -166,7 +166,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 
 	/* Implements JMeterGUIComponent.modifyTestElement(TestElement) */
 	public void modifyTestElement(TestElement wb) {
-		wb.setProperty(new StringProperty(TestElement.NAME, getName()));
+		wb.setName(getName());
 		wb.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
 		wb.setProperty(new StringProperty(TestElement.TEST_CLASS, WorkBench.class.getName()));
 	}
