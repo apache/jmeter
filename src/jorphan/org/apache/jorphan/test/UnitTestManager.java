@@ -24,8 +24,9 @@ package org.apache.jorphan.test;
  * running the junit unit tests.
  * 
  * @see AllTests
- * @author Michael Stover (mstover at apache.org)
- * @version $Revision$
+ * 
+ * N.B. This must be in the main src/ tree (not test/) because it is
+ * implemented by JMeterUtils
  */
 public interface UnitTestManager {
 	/**
