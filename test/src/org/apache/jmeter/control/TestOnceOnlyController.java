@@ -65,9 +65,9 @@ public class TestOnceOnlyController extends JMeterTestCase {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
 					if (i == 0 && counter < 2) {
-						assertEquals(interleaveOrder[counter], sampler.getPropertyAsString(TestElement.NAME));
+						assertEquals(interleaveOrder[counter], sampler.getName());
 					} else {
-						assertEquals(order[counter], sampler.getPropertyAsString(TestElement.NAME));
+						assertEquals(order[counter], sampler.getName());
 					}
 					counter++;
 				}
@@ -109,9 +109,9 @@ public class TestOnceOnlyController extends JMeterTestCase {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
 					if (i == 0 && counter < 2) {
-						assertEquals(interleaveOrder[counter], sampler.getPropertyAsString(TestElement.NAME));
+						assertEquals(interleaveOrder[counter], sampler.getName());
 					} else {
-						assertEquals(order[counter], sampler.getPropertyAsString(TestElement.NAME));
+						assertEquals(order[counter], sampler.getName());
 					}
 					counter++;
 				}

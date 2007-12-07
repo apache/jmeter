@@ -56,7 +56,7 @@ public class TestLoopController extends JMeterTestCase {
 				counter = 0;
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals(order[counter++], sampler.getPropertyAsString(TestElement.NAME));
+					assertEquals(order[counter++], sampler.getName());
 				}
 			}
 		}
