@@ -47,12 +47,6 @@ import org.apache.jorphan.reflect.Functor;
  * arguments (or parameters) are usually used to provide configuration values
  * for some other component.
  * 
- * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
- * company Siemens Netherlands N.V..
- * 
- * Based on the work of:
- * 
- * author Michael Stover
  */
 
 public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListener {
@@ -116,12 +110,8 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 		return null;
 	}
 
-	public String getStaticLabel() {
-		return ""; // This is not an independently displayable item
-	}
-
 	public String getLabelResource() {
-		return "unused";// TODO use constant
+		return "ldapext_sample_title"; // $NON-NLS-1$
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */
