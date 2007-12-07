@@ -43,11 +43,11 @@ import org.apache.log.Logger;
 /**
  * ThreadGroup
  * 
- * @author Michael Stover
- * @version $Id$
  */
 public class ThreadGroup extends AbstractTestElement implements SampleListener, Serializable, Controller {
 	private final static Logger log = LoggingManager.getLoggerForClass();
+
+    private static final long serialVersionUID = 232L;
 
 	public final static String NUM_THREADS = "ThreadGroup.num_threads";
 
