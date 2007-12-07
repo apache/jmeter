@@ -34,7 +34,6 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -49,7 +48,6 @@ import org.apache.log.Logger;
  * format of the authorization file is: URL user pass where URL is an HTTP URL,
  * user a username to use and pass the appropriate password.
  * 
- * author <a href="mailto:luta.raphael@networks.vivendi.com">Raphael Luta</a>
  */
 public class AuthManager extends ConfigTestElement implements ConfigElement, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -95,10 +93,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 		} else {
 			getAuthObjects().addItem(auth);
 		}
-	}
-
-	public void setName(String newName) {
-		setProperty(TestElement.NAME, newName);
 	}
 
 	public CollectionProperty getAuthObjects() {
@@ -197,10 +191,6 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 			log.debug("Did not match");
 		}
 		return null;
-	}
-
-	public String getName() {
-		return getPropertyAsString(TestElement.NAME);
 	}
 
 	public void addConfigElement(ConfigElement config) {
