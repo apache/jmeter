@@ -187,7 +187,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	 *            the TestElement to configure
 	 */
 	public void configure(TestElement element) {
-		setName(element.getPropertyAsString(TestElement.NAME));
+		setName(element.getName());
 		if (element.getProperty(TestElement.ENABLED) instanceof NullProperty) {
 			enabled = true;
 		} else {
@@ -225,7 +225,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	 *            the TestElement being created.
 	 */
 	protected void configureTestElement(TestElement mc) {
-		mc.setProperty(new StringProperty(TestElement.NAME, getName()));
+		mc.setName(getName());
 
 		mc.setProperty(new StringProperty(TestElement.GUI_CLASS, this.getClass().getName()));
 
