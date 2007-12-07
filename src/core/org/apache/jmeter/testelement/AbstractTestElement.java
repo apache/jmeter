@@ -116,11 +116,11 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	}
 
 	public void setName(String name) {
-		setProperty(new StringProperty(TestElement.NAME, name));
+		setProperty(TestElement.NAME, name);
 	}
 
 	public String getName() {
-		return getProperty(TestElement.NAME).getStringValue();
+		return getPropertyAsString(TestElement.NAME);
 	}
 
 	public void setComment(String comment){
