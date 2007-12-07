@@ -26,9 +26,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @version $Revision$
- */
 public abstract class AbstractProperty implements JMeterProperty {
     //TODO consider using private logs for each derived class
 	protected static final Logger log = LoggingManager.getLoggerForClass();
@@ -363,7 +360,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 			return (JMeterProperty) item;
 		}
 		if (item instanceof TestElement) {
-			return new TestElementProperty(((TestElement) item).getPropertyAsString(TestElement.NAME),
+			return new TestElementProperty(((TestElement) item).getName(),
 					(TestElement) item);
 		}
 		if (item instanceof Collection) {
