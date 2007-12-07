@@ -63,7 +63,7 @@ public class TestThroughputController extends JMeterTestCase {
 			for (int counter = 0; counter < order.length; counter++) {
 				TestElement sampler = test.next();
 				assertNotNull(sampler);
-				assertEquals("Counter: " + counter, order[counter], sampler.getPropertyAsString(TestElement.NAME));
+				assertEquals("Counter: " + counter, order[counter], sampler.getName());
 			}
 			assertNull(test.next());
 			sub_1.testEnded();
@@ -93,8 +93,7 @@ public class TestThroughputController extends JMeterTestCase {
 			for (int i = 0; i < 3; i++) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("Counter: " + counter + ", i: " + i, order[counter], sampler
-							.getPropertyAsString(TestElement.NAME));
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter], sampler.getName());
 					counter++;
 				}
 				assertEquals(counter, order.length);
@@ -142,8 +141,7 @@ public class TestThroughputController extends JMeterTestCase {
 			for (int i = 0; i < 3; i++) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("Counter: " + counter + ", i: " + i, order[counter], sampler
-							.getPropertyAsString(TestElement.NAME));
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter], sampler.getName());
 					counter++;
 				}
 				assertEquals(counter, order.length);
@@ -175,8 +173,7 @@ public class TestThroughputController extends JMeterTestCase {
 			for (int i = 0; i < 3; i++) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("Counter: " + counter + ", i: " + i, order[counter % order.length], sampler
-							.getPropertyAsString(TestElement.NAME));
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter % order.length], sampler.getName());
 					counter++;
 				}
 				assertEquals(counter, 150 * order.length);
@@ -208,8 +205,7 @@ public class TestThroughputController extends JMeterTestCase {
 			for (int i = 0; i < 3; i++) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("Counter: " + counter + ", i: " + i, order[counter % order.length], sampler
-							.getPropertyAsString(TestElement.NAME));
+					assertEquals("Counter: " + counter + ", i: " + i, order[counter % order.length], sampler.getName());
 					counter++;
 				}
 				assertEquals(counter, 150 * order.length);
