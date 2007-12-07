@@ -60,9 +60,9 @@ public class TestInterleaveControl extends JMeterTestCase {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
 					if (counter == 0) {
-						assertEquals(interleaveOrder[i % 2], sampler.getPropertyAsString(TestElement.NAME));
+						assertEquals(interleaveOrder[i % 2], sampler.getName());
 					} else {
-						assertEquals(order[counter], sampler.getPropertyAsString(TestElement.NAME));
+						assertEquals(order[counter], sampler.getName());
 					}
 					counter++;
 				}
@@ -89,7 +89,7 @@ public class TestInterleaveControl extends JMeterTestCase {
 				counter = 0;
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("one", sampler.getPropertyAsString(TestElement.NAME));
+					assertEquals("one", sampler.getName());
 					counter++;
 				}
 			}
@@ -124,7 +124,7 @@ public class TestInterleaveControl extends JMeterTestCase {
 			while (counter < order.length) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("failed on " + counter, order[counter], sampler.getPropertyAsString(TestElement.NAME));
+					assertEquals("failed on " + counter, order[counter], sampler.getName());
 					counter++;
 				}
 			}
@@ -159,7 +159,7 @@ public class TestInterleaveControl extends JMeterTestCase {
 			while (counter < order.length) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("failed on" + counter, order[counter], sampler.getPropertyAsString(TestElement.NAME));
+					assertEquals("failed on" + counter, order[counter], sampler.getName());
 					counter++;
 				}
 			}
@@ -189,7 +189,7 @@ public class TestInterleaveControl extends JMeterTestCase {
 			while (counter < order.length) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("failed on" + counter, order[counter], sampler.getPropertyAsString(TestElement.NAME));
+					assertEquals("failed on" + counter, order[counter], sampler.getName());
 					counter++;
 				}
 			}
@@ -219,7 +219,7 @@ public class TestInterleaveControl extends JMeterTestCase {
 			while (counter < order.length) {
 				TestElement sampler = null;
 				while ((sampler = controller.next()) != null) {
-					assertEquals("failed on" + counter, order[counter], sampler.getPropertyAsString(TestElement.NAME));
+					assertEquals("failed on" + counter, order[counter], sampler.getName());
 					counter++;
 				}
 			}

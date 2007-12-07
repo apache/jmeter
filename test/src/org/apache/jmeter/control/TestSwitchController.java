@@ -26,7 +26,6 @@ import org.apache.jmeter.engine.util.ReplaceStringWithFunctions;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
@@ -50,7 +49,7 @@ public class TestSwitchController extends JMeterTestCase {
 			if (s == null) {
 				return null;
 			} else {
-				n = s.getPropertyAsString(TestElement.NAME);
+				n = s.getName();
 				return n;
 			}
 		}
