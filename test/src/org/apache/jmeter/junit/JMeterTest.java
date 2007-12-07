@@ -64,9 +64,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-/**
- * @version $Revision$ Last update $Date$
- */
 public class JMeterTest extends JMeterTestCase {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -139,13 +136,14 @@ public class JMeterTest extends JMeterTestCase {
 		JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
 		treeLis.setActionHandler(ActionRouter.getInstance());
 		GuiPackage.getInstance(treeLis, treeModel);
-		try {
-			// The GuiPackage needs a MainFrame to work:
-			org.apache.jmeter.gui.MainFrame main = new org.apache.jmeter.gui.MainFrame(ActionRouter.getInstance(),
-					treeModel, treeLis);
-		} catch (RuntimeException e) {
-			System.out.println("Cannot create MainFrame: " + e);
-		}
+// Does not seem to be necessary after all
+//		try {
+//			// The GuiPackage needs a MainFrame to work:
+//			org.apache.jmeter.gui.MainFrame main = new org.apache.jmeter.gui.MainFrame(ActionRouter.getInstance(),
+//					treeModel, treeLis);
+//		} catch (RuntimeException e) {
+//			System.out.println("Cannot create MainFrame: " + e);
+//		}
 
         // The Locale used to instantiate the GUI objects
         JMeterUtils.setLocale(TEST_LOCALE);
@@ -422,10 +420,8 @@ public class JMeterTest extends JMeterTestCase {
 			try {
 				String label = guiItem.getLabelResource();
 				assertTrue(label.length() > 0);
-				if (!label.equals("unused")) { // TODO use constant
-					assertFalse("'" + label + "' should be in resource file for " + name, JMeterUtils.getResString(
-							label).startsWith(JMeterUtils.RES_KEY_PFX));
-				}
+				assertFalse("'" + label + "' should be in resource file for " + name, JMeterUtils.getResString(
+						label).startsWith(JMeterUtils.RES_KEY_PFX));
 			} catch (UnsupportedOperationException uoe) {
 				log.warn("Class has not yet implemented getLabelResource " + name);
 			}
@@ -445,11 +441,11 @@ public class JMeterTest extends JMeterTestCase {
 		assertNotNull(name + ".createTestElement should be non-null ", el);
 		assertEquals("GUI-CLASS: Failed on " + name, name, el.getPropertyAsString(TestElement.GUI_CLASS));
 
-		assertEquals("NAME: Failed on " + name, guiItem.getName(), el.getPropertyAsString(TestElement.NAME));
+		assertEquals("NAME: Failed on " + name, guiItem.getName(), el.getName());
 		assertEquals("TEST-CLASS: Failed on " + name, el.getClass().getName(), el
 				.getPropertyAsString(TestElement.TEST_CLASS));
 		TestElement el2 = guiItem.createTestElement();
-		el.setProperty(TestElement.NAME, "hey, new name!:");
+		el.setName("hey, new name!:");
 		el.setProperty("NOT", "Shouldn't be here");
 		if (!(guiItem instanceof UnsharedComponent)) {
 			assertEquals("SHARED: Failed on " + name, "", el2.getPropertyAsString("NOT"));
@@ -463,9 +459,9 @@ public class JMeterTest extends JMeterTestCase {
 		bis.close();
         assertNotNull("Load element failed on: "+name,el);
 		guiItem.configure(el);
-		assertEquals("CONFIGURE-TEST: Failed on " + name, el.getPropertyAsString(TestElement.NAME), guiItem.getName());
+		assertEquals("CONFIGURE-TEST: Failed on " + name, el.getName(), guiItem.getName());
 		guiItem.modifyTestElement(el2);
-		assertEquals("Modify Test: Failed on " + name, "hey, new name!:", el2.getPropertyAsString(TestElement.NAME));
+		assertEquals("Modify Test: Failed on " + name, "hey, new name!:", el2.getName());
 	}
 
 	/*
