@@ -46,7 +46,7 @@ public class TestRandomOrderController extends JMeterTestCase {
 			List usedSamplers = new ArrayList();
 			roc.initialize();
 			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getPropertyAsString(TestSampler.NAME);
+				String samplerName = sampler.getName();
 				if (usedSamplers.contains(samplerName)) {
 					assertTrue("Duplicate sampler returned from next()", false);
 				}
@@ -68,7 +68,7 @@ public class TestRandomOrderController extends JMeterTestCase {
 			List usedSamplers = new ArrayList();
 			roc.initialize();
 			while ((sampler = roc.next()) != null) {
-				String samplerName = sampler.getPropertyAsString(TestSampler.NAME);
+				String samplerName = sampler.getName();
 				if (usedSamplers.contains(samplerName)) {
 					assertTrue("Duplicate sampler returned from next()", false);
 				}
