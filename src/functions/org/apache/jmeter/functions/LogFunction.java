@@ -122,12 +122,13 @@ public class LogFunction extends AbstractFunction implements Serializable {
 		} else {
 			sb.append(DEFAULT_SEPARATOR);
 		}
+		sb.append(s);
 		if (t != null) {
 			sb.append(" ");
 			ps.print(sb.toString());
 			t.printStackTrace(ps);
 		} else {
-			ps.print(sb.toString());
+			ps.println(sb.toString());
 		}
 	}
 
