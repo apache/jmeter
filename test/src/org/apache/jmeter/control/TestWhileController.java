@@ -65,7 +65,7 @@ public class TestWhileController extends JMeterTestCase {
 			if (s == null) {
 				return null;
 			} else {
-				return s.getPropertyAsString(TestElement.NAME);
+				return s.getName();
 			}
 		}
 

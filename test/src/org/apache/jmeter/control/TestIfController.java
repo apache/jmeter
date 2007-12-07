@@ -68,7 +68,7 @@ public class TestIfController extends JMeterTestCase {
 //			TestElement sampler = null;
 //			while ((sampler = controller.next()) != null) {
 //				logger.debug("    ->>>  Gonna assertTrue :" + sampler.getClass().getName() + " Property is   ---->>>"
-//						+ sampler.getPropertyAsString(TestElement.NAME));
+//						+ sampler.getName());
 //			}
 		}
 }
