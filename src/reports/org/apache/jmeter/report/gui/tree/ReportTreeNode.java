@@ -36,14 +36,9 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportTreeNode extends DefaultMutableTreeNode implements
 		NamedTreeNode {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -149,13 +144,11 @@ public class ReportTreeNode extends DefaultMutableTreeNode implements
 	}
 
 	public void setName(String name) {
-		((TestElement) getUserObject()).setProperty(new StringProperty(
-				TestElement.NAME, name));
+		((TestElement) getUserObject()).setName(name);
 	}
 
 	public String getName() {
-		return ((TestElement) getUserObject())
-				.getPropertyAsString(TestElement.NAME);
+		return ((TestElement) getUserObject()).getName();
 	}
 
 	public void nameChanged() {
