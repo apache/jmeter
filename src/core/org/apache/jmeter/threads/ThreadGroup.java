@@ -243,7 +243,10 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
 	 * @return the sampler controller.
 	 */
 	public Controller getSamplerController() {
-		return (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
+		Controller c = (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
+		c.setName(getName()); // Copy our name into that of the controller
+		// Could perhaps do it earlier, but that might cause JMX files to change
+		return c;
 	}
 
 	/**
