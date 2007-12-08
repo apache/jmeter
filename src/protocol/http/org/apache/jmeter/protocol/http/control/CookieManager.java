@@ -440,7 +440,7 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	public void testIterationStart(LoopIterationEvent event) {
 		if (getClearEachIteration()) {
 			clearCookies();
-			setProperty(initialCookies);
+			setProperty((CollectionProperty)initialCookies.clone());
 		}
 	}
 }
