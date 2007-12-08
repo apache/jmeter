@@ -100,8 +100,9 @@
 	</target>
 
 	<property name="lib.dir" value="${jmeter.home}/lib"/>
-    <property file="${jmeter.home}/build.properties"/>
-
+    <property name="xalan.jar" value="${lib.dir}/xalan_2_7_1.jar"/>
+    <property name="serializer.jar" value="${lib.dir}/serializer_2_7_1.jar"/>
+	
 	<!-- Use xalan copy from JMeter lib directory to ensure consistent processing with Java 1.4+ -->
     <path id="xslt.classpath">
        <pathelement location="${xalan.jar}"/>
