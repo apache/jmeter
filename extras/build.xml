@@ -109,7 +109,7 @@
        <pathelement location="${serializer.jar}"/>
     </path>
 
-	<target name="report">
+	<target name="report" depends="_message_xalan">
 		<xslt
 			classpathref="xslt.classpath"
 			force="true"
@@ -119,4 +119,21 @@
 			<param name="showData" expression="${show-data}"/>
 		</xslt>
 	</target>
+
+	<!-- Check that the xalan libraries are present -->
+	<condition property="xalan.present">
+	  	<and>
+	  		<!-- No need to check all jars; just check a few -->
+	        <available classpathref="xslt.classpath" classname="org.apache.xalan.processor.TransformerFactoryImpl"/>
+	        <available classpathref="xslt.classpath" classname="org.apache.xml.serializer.ExtendedContentHandler"/>
+	  	</and>
+	</condition>
+
+	<target name="_message_xalan" unless="xalan.present">
+	  	<echo>Cannot find all xalan and/or serialiser jars</echo>
+		<echo>The XSLT formatting may not work correctly.</echo>
+		<echo>Check you have ${xalan.jar} and ${serializer.jar}</echo>
+	</target>
+
+
 </project>
