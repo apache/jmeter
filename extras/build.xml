@@ -30,14 +30,16 @@
 	
 	Additional options:
 		-Dshow-data=y - include response data in Failure Details
-		-Dbasedir=xyz - path to test file(s)
+		-Dtestpath=xyz - path to test file(s) (default user.dir).
+		                 N.B. Ant interprets relative paths against the build file
 		-Dformat=2.0 - use version 2.0 JTL files rather than 2.1
+		-Djmeter.home=.. - path to JMeter home directory (defaults to parent of this build file)
 	
 	</description>
 	
-	<property name="basedir" value=".">
+	<property name="testpath" value="${user.dir}"/>
+	<property name="jmeter.home" value="${basedir}/.."/>
 		
-	</property>
 	<!-- Name of test (without .jmx) -->
 	<property name="test" value="Test"/>
 	
@@ -66,7 +68,7 @@
 
 	<taskdef
 	    name="jmeter"
-	    classpath="../extras/ant-jmeter.jar"
+	    classpath="${basedir}/ant-jmeter.jar"
 	    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
 	
 	
@@ -78,11 +80,11 @@
 
 	<target name="run" depends="init">
 		<echo>funcMode = ${funcMode}</echo>
-		<delete file="${basedir}/${test}.html"/>
+		<delete file="${testpath}/${test}.html"/>
 		<jmeter
-		    jmeterhome=".."
-		    testplan ="${basedir}/${test}.jmx"
-		    resultlog="${basedir}/${test}.jtl">
+		    jmeterhome="${jmeter.home}"
+		    testplan ="${testpath}/${test}.jmx"
+		    resultlog="${testpath}/${test}.jtl">
 		<!--
 			<jvmarg value="-Xincgc"/>
 			<jvmarg value="-Xmx128m"/>
@@ -97,12 +99,22 @@
 		</jmeter>
 	</target>
 
+	<property name="lib.dir" value="${jmeter.home}/lib"/>
+    <property file="${jmeter.home}/build.properties"/>
+
+	<!-- Use xalan copy from JMeter lib directory to ensure consistent processing with Java 1.4+ -->
+    <path id="xslt.classpath">
+       <pathelement location="${xalan.jar}"/>
+       <pathelement location="${serializer.jar}"/>
+    </path>
+
 	<target name="report">
 		<xslt
+			classpathref="xslt.classpath"
 			force="true"
-		    in="${basedir}/${test}.jtl"
-		    out="${basedir}/${test}.html"
-		    style="../extras/jmeter-results-detail-report${style_version}.xsl">
+		    in="${testpath}/${test}.jtl"
+		    out="${testpath}/${test}.html"
+		    style="${basedir}/jmeter-results-detail-report${style_version}.xsl">
 			<param name="showData" expression="${show-data}"/>
 		</xslt>
 	</target>
