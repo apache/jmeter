@@ -439,7 +439,8 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 
 	public void testIterationStart(LoopIterationEvent event) {
 		if (getClearEachIteration()) {
-			clearCookies();
+			log.debug("Initialise cookies from pre-defined list");
+			// No need to call clear
 			setProperty((CollectionProperty)initialCookies.clone());
 		}
 	}
