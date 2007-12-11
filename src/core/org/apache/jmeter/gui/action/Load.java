@@ -21,6 +21,7 @@ package org.apache.jmeter.gui.action;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -119,6 +120,13 @@ public class Load implements Command {
         } catch (ConversionException ex) {
             log.warn("Could not convert file "+ex);
             JMeterUtils.reportErrorToUser(SaveService.CEtoString(ex));
+		} catch (IOException ex) {
+            log.warn("Error reading file: "+ex);
+			String msg = ex.getMessage();
+			if (msg == null) {
+				msg = "Unexpected error - see log for details";
+			}
+			JMeterUtils.reportErrorToUser(msg);
 		} catch (Exception ex) {
             log.warn("Unexpected error", ex);
 			String msg = ex.getMessage();
