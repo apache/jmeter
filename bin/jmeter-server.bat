@@ -97,6 +97,7 @@ call jmeter -Dserver_port=%SERVER_PORT% -s -j jmeter-server.log %JMETER_CMD_LINE
 
 :end
 
-taskkill /F /IM rmiregistry.exe
+rem No longer needed, as server is started in-process
+rem taskkill /F /IM rmiregistry.exe
 
 :exit
