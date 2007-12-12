@@ -19,11 +19,13 @@
 package org.apache.jmeter.exceptions;
 
 /**
- * @author Michael Stover
- * @version $Revision$
  */
 public class IllegalUserActionException extends Exception {
+	/**
+	 * @deprecated - use IllegalUserActionException(String)
+	 */
 	public IllegalUserActionException() {
+		super();
 	}
 
 	public IllegalUserActionException(String name) {
