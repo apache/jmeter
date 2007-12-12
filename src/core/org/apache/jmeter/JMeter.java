@@ -249,8 +249,17 @@ public class JMeter implements JMeterPlugin {
 	public void start(String[] args) {
 
 		CLArgsParser parser = new CLArgsParser(args, options);
-		if (null != parser.getErrorString()) {
-			System.err.println("Error: " + parser.getErrorString());
+		String error = parser.getErrorString();
+		if (error == null){// Check option combinations
+			boolean gui = parser.getArgumentById(NONGUI_OPT)==null;
+			boolean remoteStart = parser.getArgumentById(REMOTE_OPT)!=null 
+			                   || parser.getArgumentById(REMOTE_OPT_PARAM)!=null;
+		    if (gui && remoteStart) {
+		    	error = "-r and -R are only valid in non-GUI mode";
+		    }
+		}
+		if (null != error) {
+			System.err.println("Error: " + error);
 			System.out.println("Usage");
 			System.out.println(CLUtil.describeOptions(options).toString());
 			return;
@@ -644,11 +653,11 @@ public class JMeter implements JMeterPlugin {
 			}
 		}
 		if (testFile == null) {
-			throw new IllegalUserActionException();
+			throw new IllegalUserActionException("Non-GUI runs require a test plan");
 		}
 		String argument = testFile.getArgument();
         if (argument == null) {
-            throw new IllegalUserActionException();
+            throw new IllegalUserActionException("Non-GUI runs require a test plan");
         }
         if (logFile == null) {
 			driver.run(argument, null, remoteStart != null,remote_hosts_string);

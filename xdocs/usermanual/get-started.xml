@@ -269,7 +269,8 @@ jmeter -n -t testplan.jmx -r [-Gprop=val] [-Z]
 where:
 -G is used to define JMeter properties to be set in the servers
 -X means exit the servers at the end of the test
--Rserver1,server2 - can be used instead of -r to provide a list of servers (overrides remote_hosts)
+-Rserver1,server2 - can be used instead of -r to provide a list of servers to start
+  Overrides remote_hosts, but does not define the property.
 </pre>
 </subsection>
 
@@ -369,9 +370,9 @@ These are shown below.</p>
         -L, --loglevel {argument}={value}
                 Define loglevel: [category=]level 
                 e.g. jorphan=INFO or jmeter.util=DEBUG
-        -r, --runremote
+        -r, --runremote (non-GUI only)
                 Start remote servers (as defined by the jmeter property remote_hosts)
-        -R, --remotestart  server1,...
+        -R, --remotestart  server1,... (non-GUI only)
                 Start these remote servers (overrides remote_hosts)
         -d, --homedir {argument}
                 the jmeter home directory to use
