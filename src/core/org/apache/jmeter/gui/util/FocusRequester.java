@@ -25,17 +25,15 @@ import javax.swing.SwingUtilities;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
+/*
  * Note: This helper class appeared in JavaWorld in June 2001
  * (http://www.javaworld.com) and was written by Michael Daconta.
  * 
- * @author Kevin Hammond
- * @version $Revision$
  */
 public class FocusRequester implements Runnable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private Component comp;
+	private final Component comp;
 
 	public FocusRequester(Component comp) {
 		this.comp = comp;
