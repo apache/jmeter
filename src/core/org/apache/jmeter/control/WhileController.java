@@ -54,15 +54,14 @@ public class WhileController extends GenericController implements Serializable {
 	 */
 	private boolean endOfLoop(boolean loopEnd) {
 		String cnd = getCondition();
-		log.debug("Condition string:" + cnd);
+		log.debug("Condition string:" + cnd+".");
 		boolean res;
 		// If blank, only check previous sample when at end of loop
 		if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
 			JMeterVariables threadVars = JMeterContextService.getContext().getVariables();
-			// Use !false rather than true, so that null is treated as true
 			res = "false".equalsIgnoreCase(threadVars.get(JMeterThread.LAST_SAMPLE_OK));// $NON-NLS-1$
 		} else {
-			// cnd may be blank if next() called us
+			// cnd may be null if next() called us
 			res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
 		}
 		log.debug("Condition value: " + res);
@@ -111,7 +110,6 @@ public class WhileController extends GenericController implements Serializable {
         JMeterProperty prop=getProperty(CONDITION);
         prop.recoverRunningVersion(this);
 		cnd = prop.getStringValue();
-		log.debug("getCondition() => " + cnd);
 		return cnd;
 	}
 }
