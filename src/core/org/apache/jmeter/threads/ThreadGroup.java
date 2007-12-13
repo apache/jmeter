@@ -34,6 +34,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -244,8 +245,6 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
 	 */
 	public Controller getSamplerController() {
 		Controller c = (Controller) getProperty(MAIN_CONTROLLER).getObjectValue();
-		c.setName(getName()); // Copy our name into that of the controller
-		// Could perhaps do it earlier, but that might cause JMX files to change
 		return c;
 	}
 
@@ -421,7 +420,11 @@ public class ThreadGroup extends AbstractTestElement implements SampleListener, 
 	 * @see Controller#initialize()
 	 */
 	public void initialize() {
-		getSamplerController().initialize();
+		Controller c = getSamplerController();
+		JMeterProperty property = c.getProperty(TestElement.NAME);
+		property.setObjectValue(getName()); // Copy our name into that of the controller
+		property.setRunningVersion(property.isRunningVersion());// otherwise name reverts
+		c.initialize();
 	}
 
 	/**
