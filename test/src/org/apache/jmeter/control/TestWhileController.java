@@ -157,6 +157,17 @@ public class TestWhileController extends JMeterTestCase {
 			assertNull(nextName(controller));
 		}
 
+		/*
+		 * Generic Controller
+		 * - before
+		 * - While Controller ${VAR}
+		 * - - one
+		 * - - two
+		 * - - Simple Controller
+		 * - - - three
+		 * - - - four
+		 * - after
+		 */
 		public void testVariable1() throws Exception {
 			GenericController controller = new GenericController();
 			WhileController while_cont = new WhileController();
