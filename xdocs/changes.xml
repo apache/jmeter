@@ -29,7 +29,23 @@
 
 <h3>Version 2.3.2</h3>
 
-<h4>Summary of changes</h4>
+<h4>Summary of main changes</h4>
+
+<p>Fixes Clear Cookie each iteration bug (unfortunately introduced in 2.3.1)</p>
+
+<p>Switch Controller now works properly with functions and variables, 
+and the condition can now be a name instead of a number.
+Simple Controller now works properly under a While Controller</p>
+
+<p>CSV fields can now contain delimiters. 
+CSV and XML files can now contain additional variables (define the JMeter property sample_variables).</p>
+
+<p>Number of classes loaded in non-GUI mode is much reduced.</p>
+
+<h4>Known bugs</h4>
+
+<p>Once Only controller behaves OK under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</p>
 
 <h4>Incompatible changes</h4>
 <ul>
