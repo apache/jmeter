@@ -1253,6 +1253,8 @@ sends one request to the Home Page because this request lives inside a Once Only
 Bug Page, Bug Page. Note, the File Reporter is configured to store the results in a file named "loop-test.dat" in the current directory.</p>
 
 </example>
+<note>The behaviour of the Once Only controller under anything other than the 
+Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
 <component name="Interleave Controller" index="&sect-num;.2.4"  width="219" height="90" screenshot="logic-controller/interleave-controller.png">
