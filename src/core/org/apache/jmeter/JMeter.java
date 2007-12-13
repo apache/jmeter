@@ -26,17 +26,15 @@ import java.io.IOException;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
-import javax.swing.JLabel;
 
 import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
@@ -55,8 +53,8 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Load;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.plugin.JMeterPlugin;
 import org.apache.jmeter.plugin.PluginManager;
 import org.apache.jmeter.reporters.ResultCollector;
@@ -70,9 +68,9 @@ import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.reflect.ClassTools;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -631,12 +629,6 @@ public class JMeter implements JMeterPlugin {
 		// add a system property so samplers can check to see if JMeter
 		// is running in NonGui mode
 		System.setProperty("JMeter.NonGui", "true");// $NON-NLS-1$
-		// Force the X11 display to be checked
-		try {
-		    new JLabel();
-		} catch (InternalError e){
-			// ignored
-		}
 		JMeter driver = new JMeter();// TODO - why does it create a new instance?
 		driver.remoteProps = this.remoteProps;
 		driver.remoteStop = this.remoteStop;
