@@ -1072,7 +1072,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			{
 				Map.Entry entry = (Map.Entry) it.next();
 				HttpClient cl = (HttpClient) entry.getValue();
-                ((SimpleHttpConnectionManager)cl.getHttpConnectionManager()).shutdown();// Closes the connection
+				// Can cause NPE in HttpClient 3.1
+                //((SimpleHttpConnectionManager)cl.getHttpConnectionManager()).shutdown();// Closes the connection
+				// Revert to original method:
+                cl.getHttpConnectionManager().closeIdleConnections(-1000);// Closes the connection
 			}
 			map.clear();
 		}
