@@ -19,6 +19,7 @@
 package org.apache.jmeter.engine;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -57,6 +58,17 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 
 	private void init(int port) throws RemoteException {
 		log.info("Starting backing engine on " + port);
+		InetAddress localHost=null;
+		try {
+			localHost = InetAddress.getLocalHost();
+		} catch (UnknownHostException e1) {
+			throw new RemoteException("Cannot start. Unable to get local host IP address.");
+		}
+		log.info("IP address="+localHost.getHostAddress());
+		hostName = localHost.getHostName();
+		if (localHost.isLoopbackAddress()){
+			throw new RemoteException("Cannot start. "+hostName+" is a loopback address.");
+		}
 		log.debug("This = " + this);
 		if (createServer){
 			log.info("Creating RMI registry (server.rmi.create=true)");
@@ -71,7 +83,6 @@ public class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject 
 		}
 		try {
 			Registry reg = LocateRegistry.getRegistry(port);
-			hostName = InetAddress.getLocalHost().getHostName();
 			log.info("Creating JMeter engine on host "+hostName);
 			backingEngine = new StandardJMeterEngine(hostName);// see setHost()
 			reg.rebind("JMeterEngine", this); // $NON-NLS-1$
