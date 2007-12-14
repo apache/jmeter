@@ -67,6 +67,7 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>Bug 33954 - Stack Overflow in If/While controllers (may have been fixed previously)</li>
 <li>Bug 44022 - Memory Leak when closing test plan</li>
 <li>Bug 44042 - Regression in Cookie Manager (Bug introduced in 2.3.1)</li>
+<li>Bug 41028 - JMeter server doesn't alert the user when the host is defined as a loopback address</li>
 </ul>
 
 <h4>Improvements</h4>
