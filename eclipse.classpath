@@ -49,7 +49,7 @@
 	<classpathentry kind="lib" path="lib/xercesImpl_2_7_1.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis_2_7_1.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.3.4.O.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/api/geronimo-activation_1.0.2_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/api/geronimo-javamail_1.3.1_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/api/geronimo-jms_1.1_spec-1.0.jar"/>
