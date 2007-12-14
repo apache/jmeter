@@ -107,5 +107,5 @@ The x* jars above are used for XML handling
 xpp3_min-1.1.3.4.O
 - xstream
 
-xstream-1.2.1
+xstream-1.2.2
 - SaveService
