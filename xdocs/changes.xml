@@ -185,7 +185,7 @@ Cookie Manager no longer clears manually entered cookies.
 <h5>JDBC</h5>
 
 <p>JDBC Sampler now allows INOUT and OUT parameters for Called procedures. 
-JDBC Sampler now allows per-thread connections.
+JDBC Sampler now allows per-thread connections - set Max Connections = 0 in JDBC Config.
 </p>
 
 <hr></hr>
