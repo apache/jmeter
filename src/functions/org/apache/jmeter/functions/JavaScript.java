@@ -40,7 +40,7 @@ import org.mozilla.javascript.WrappedException;
 
 public class JavaScript extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 232L;
 	
 	private static final List desc = new LinkedList();
 
@@ -120,13 +120,8 @@ public class JavaScript extends AbstractFunction implements Serializable {
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-
+		checkParameterCount(parameters, 1, 2);
 		values = parameters.toArray();
-
-		if (values.length < 1 || values.length > 2) {
-			throw new InvalidVariableException("Expecting 1 or 2 parameters, but found " + values.length);//$NON-NLS-1$
-		}
-
 	}
 
 	/*

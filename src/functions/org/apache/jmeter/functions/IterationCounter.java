@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class IterationCounter extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 232L;
 	
 	private static final List desc = new LinkedList();
 
@@ -113,12 +113,8 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-
+		checkParameterCount(parameters, 1, 2);
 		variables = parameters.toArray();
-
-		if (variables.length < 1 || variables.length > 2) {
-			throw new InvalidVariableException("Expecting 1 or 2 parameters, but found " + variables.length);//$NON-NLS-1$
-		}
 	}
 
 	/*

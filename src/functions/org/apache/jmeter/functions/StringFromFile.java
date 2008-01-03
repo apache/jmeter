@@ -63,7 +63,7 @@ import org.apache.log.Logger;
 public class StringFromFile extends AbstractFunction implements Serializable, TestListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 232L;
 	
 	private static final List desc = new LinkedList();
 
@@ -306,12 +306,8 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
 		log.debug(this + "::StringFromFile.setParameters()");//$NON-NLS-1$
-
+		checkParameterCount(parameters, MIN_PARAM_COUNT, MAX_PARAM_COUNT);
 		values = parameters.toArray();
-
-		if ((values.length > MAX_PARAM_COUNT) || (values.length < MIN_PARAM_COUNT)) {
-			throw new InvalidVariableException("Wrong number of parameters");//$NON-NLS-1$
-		}
 
 		StringBuffer sb = new StringBuffer(40);
 		sb.append("setParameters(");//$NON-NLS-1$

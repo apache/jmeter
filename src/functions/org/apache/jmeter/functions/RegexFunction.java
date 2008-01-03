@@ -45,7 +45,7 @@ import org.apache.oro.text.regex.Util;
 public class RegexFunction extends AbstractFunction implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 232L;
 	
 	public static final String ALL = "ALL"; //$NON-NLS-1$
 
@@ -217,14 +217,8 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	}
 
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
 		values = parameters.toArray();
-
-		if ((values.length < MIN_PARAMETER_COUNT) || (values.length > MAX_PARAMETER_COUNT)) {
-			throw new InvalidVariableException("Parameter Count " //$NON-NLS-1$
-					+ values.length + " not between " //$NON-NLS-1$
-					+ MIN_PARAMETER_COUNT + " & " //$NON-NLS-1$
-					+ MAX_PARAMETER_COUNT);
-		}
 	}
 
 	private Object[] generateTemplate(String rawTemplate) {
