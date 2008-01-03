@@ -37,10 +37,7 @@ import org.apache.log.Logger;
  */
 public class JexlFunction extends AbstractFunction implements Serializable
 {
-    /**
-     * <code>serialVersionUID</code>
-     */
-    private static final long serialVersionUID = 3546359539474968625L;
+    private static final long serialVersionUID = 232L;
 
     private static Logger log = LoggingManager.getLoggerForClass();
 
@@ -100,11 +97,8 @@ public class JexlFunction extends AbstractFunction implements Serializable
     public synchronized void setParameters(Collection parameters)
             throws InvalidVariableException
     {
+		checkParameterCount(parameters, 1);
         values = parameters.toArray();
-        if (values.length != 1)
-        {
-            throw new InvalidVariableException("it only accepts one parameter");
-        }
     }
 
 }

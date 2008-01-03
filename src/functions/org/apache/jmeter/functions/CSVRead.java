@@ -50,12 +50,12 @@ import org.apache.log.Logger;
  * 
  * __CSVRead(*ONE,1); etc
  * 
- * 
- * @version $Revision$ Last Updated: $Date$
  */
 public class CSVRead extends AbstractFunction implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 232L;
+	
 	private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 
 	private static final List desc = new LinkedList();
@@ -156,9 +156,7 @@ public class CSVRead extends AbstractFunction implements Serializable {
 			}
 		}
 
-		if (values.length != 2) {
-			throw new InvalidVariableException("Wrong number of parameters; 2 != " + values.length);
-		}
+		checkParameterCount(parameters, 2);
 
 		/*
 		 * Need to reset the containers for repeated runs; about the only way
