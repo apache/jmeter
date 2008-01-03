@@ -37,11 +37,9 @@ public class MachineName extends AbstractFunction implements Serializable {
 
 	private static final String KEY = "__machineName"; //$NON-NLS-1$
 
-	// Number of parameters expected - used to reject invalid calls
-	private static final int PARAMETER_COUNT = 1;
 	static {
 		// desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -63,7 +61,6 @@ public class MachineName extends AbstractFunction implements Serializable {
 		 * .execute() .toLowerCase() .equals("true")) { fullHostName = true; }
 		 */
 
-		String varName = ((CompoundVariable) values[values.length - 1]).execute();
 		String machineName = "";
 
 		try {
@@ -81,19 +78,19 @@ public class MachineName extends AbstractFunction implements Serializable {
 		} catch (UnknownHostException e) {
 		}
 
-		vars.put(varName, machineName);
+		if (values.length >= 1){// we have a variable name
+			String varName = ((CompoundVariable) values[0]).execute();
+			if (varName.length() > 0) {
+			    vars.put(varName, machineName);
+			}
+		}
 		return machineName;
 
 	}
 
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-
+		checkParameterCount(parameters, 0, 1);
 		values = parameters.toArray();
-
-		if (values.length != PARAMETER_COUNT) {
-			throw new InvalidVariableException("Parameter Count != " + PARAMETER_COUNT);
-		}
-
 	}
 
 	public String getReferenceKey() {
