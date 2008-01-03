@@ -39,7 +39,6 @@ import org.apache.log.Logger;
 /**
  * CompoundFunction.
  * 
- * @author mstover
  */
 public class CompoundVariable implements Function {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -72,6 +71,7 @@ public class CompoundVariable implements Function {
 					new Class[] { Function.class }, true, contain, notContain);
 			Iterator iter = classes.iterator();
 			while (iter.hasNext()) {
+				// TODO skip class init - e.g. update findClassesThatExtend() to return classes instead of strings
 				Function tempFunc = (Function) Class.forName((String) iter.next()).newInstance();
 				String referenceKey = tempFunc.getReferenceKey();
                 functions.put(referenceKey, tempFunc.getClass());
@@ -180,14 +180,6 @@ public class CompoundVariable implements Function {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
-	 */
-	public void setParameters(Collection parameters) throws InvalidVariableException {
-	}
-
 	static Object getNamedFunction(String functionName) throws InvalidVariableException {
 		if (functions.containsKey(functionName)) {
 			try {
@@ -204,10 +196,23 @@ public class CompoundVariable implements Function {
 		return hasFunction;
 	}
 
+	// Dummy methods needed by Function interface
+	
 	/**
 	 * @see Function#getReferenceKey()
 	 */
 	public String getReferenceKey() {
 		return ""; // $NON-NLS-1$
+	}
+
+	public void setParameters(Collection parameters) throws InvalidVariableException {
+	}
+
+	public int getMaxArgCount() {
+		return 0;
+	}
+
+	public int getMinArgCount() {
+		return 0;
 	}
 }
