@@ -33,19 +33,28 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author ano ano
+ * Parses function / variable references of the form 
+ * ${functionName[([var[,var...]])]} 
+ * and 
+ * ${variableName}
  */
 class FunctionParser {
-	Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Compile a general string into a list of elements for a CompoundVariable.
+	 * 
+	 * Calls {@link #makeFunction(StringReader)} if it detects an unescaped "${".
+	 * 
+	 * @param value string containing the function / variable references (if any)
+	 * 
+	 * @return list of strings or Objects representing functions
 	 */
 	LinkedList compileString(String value) throws InvalidVariableException {
 		StringReader reader = new StringReader(value);
 		LinkedList result = new LinkedList();
 		StringBuffer buffer = new StringBuffer();
-		char previous = ' ';
+		char previous = ' '; // TODO - why use space?
 		char[] current = new char[1];
 		try {
 			while (reader.read(current) == 1) {
@@ -55,14 +64,14 @@ class FunctionParser {
 						break;
 					}
 					if (current[0] != '$' && current[0] != ',' && current[0] != '\\') {
-						buffer.append(previous);
+						buffer.append(previous); // i.e. '\\'
 					}
 					previous = ' ';
 					buffer.append(current[0]);
 					continue;
-				} else if (current[0] == '{' && previous == '$') {
+				} else if (current[0] == '{' && previous == '$') {// found "${"
 					buffer.deleteCharAt(buffer.length() - 1);
-					if (buffer.length() > 0) {
+					if (buffer.length() > 0) {// save leading text
 						result.add(buffer.toString());
 						buffer.setLength(0);
 					}
@@ -89,10 +98,19 @@ class FunctionParser {
 
 	/**
 	 * Compile a string into a function or SimpleVariable.
+	 * 
+	 * Called by {@link #compileString(String)} when that has detected "${".
+	 * 
+	 * Calls {@link CompoundVariable#getNamedFunction(String)} if it detects: 
+	 * '(' - start of parameter list
+	 * '}' - end of function call
+	 *  
+	 * @param reader points to input after the "${"
+	 * @return the function or variable object (or a String)
 	 */
 	Object makeFunction(StringReader reader) throws InvalidVariableException {
 		char[] current = new char[1];
-		char previous = ' ';
+		char previous = ' '; // TODO - why use space?
 		StringBuffer buffer = new StringBuffer();
 		Object function;
 		try {
@@ -123,8 +141,11 @@ class FunctionParser {
 						return function;
 					}
 					continue;
-				} else if (current[0] == '}') {
+				} else if (current[0] == '}') {// variable, or function with no parameter list
 					function = CompoundVariable.getNamedFunction(buffer.toString());
+					if (function instanceof Function){// ensure that setParameters() is called.
+						((Function) function).setParameters(new LinkedList());
+					}
 					buffer.setLength(0);
 					return function;
 				} else {
@@ -167,6 +188,10 @@ class FunctionParser {
 					buffer.setLength(0);
 					result.add(param);
 				} else if (current[0] == ')' && functionRecursion == 0 && parenRecursion == 0) {
+					// Detect functionName() so this does not generate empty string as the parameter
+					if (buffer.length() == 0 && result.isEmpty()){
+						return result;
+					}
 					CompoundVariable param = new CompoundVariable();
 					param.setParameters(buffer.toString());
 					buffer.setLength(0);
