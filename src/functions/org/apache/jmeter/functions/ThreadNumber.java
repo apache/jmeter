@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,9 +26,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
 /**
- * TODO: should this extend AbstractFunction?
+ * Function to return the current thread number.
  */
-public class ThreadNumber implements Function, Serializable {
+public class ThreadNumber extends AbstractFunction {
 
 	private static final String KEY = "__threadNum"; //$NON-NLS-1$
 
@@ -50,6 +49,7 @@ public class ThreadNumber implements Function, Serializable {
 	 * @see org.apache.jmeter.functions.Function#setParameters(Collection)
 	 */
 	public void setParameters(Collection parameters) throws InvalidVariableException {
+		checkParameterCount(parameters,0,0);
 	}
 
 	/*
