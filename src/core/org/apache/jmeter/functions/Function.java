@@ -25,8 +25,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 
 /**
- * @author mstover
- * @version $Revision$
+ * Methods that a function must implement
  */
 public interface Function {
 	/**
@@ -60,9 +59,7 @@ public interface Function {
 	 * Return a list of strings briefly describing each parameter your function
 	 * takes. Please use JMeterUtils.getResString(resource_name) to grab a
 	 * resource string. Otherwise, your help text will be difficult to
-	 * internationalize. Add your strings to all
-	 * org.apache.jmeter.resources.*.properties files. Do not worry about
-	 * translating - that's someone else's responsibility.
+	 * internationalize.
 	 * 
 	 * This list is not optional. If you don't wish to write help, you must at
 	 * least return a List containing the correct number of blank strings, one
