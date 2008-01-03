@@ -394,7 +394,7 @@ Examples:<br></br>
 <description><p>The machineName function returns the local host name</p></description>
 
 <properties>
-        <property name="Name of function" required="Yes">A reference name for reusing the value
+        <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
 </component>
@@ -436,7 +436,7 @@ JMeter is not a browser, and does not interpret the JavaScript in downloaded pag
         		<li>"${VAR}"=="abcd"</li>
         	</ul>
         	</property>
-        <property name="Name of function" required="No">A reference name for reusing the value
+        <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
 <note>Remember to include any necessary quotes for text strings and JMeter variables. Also, if
@@ -453,7 +453,7 @@ the comma after 7 is escaped.</note>
 <properties>
         <property name="Minimum value" required="Yes">A number</property>
         <property name="Maximum value" required="Yes">A bigger number</property>
-        <property name="Name of function" required="No">A reference name for reusing the value
+        <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
 </component>
@@ -520,7 +520,7 @@ the comma after 7 is escaped.</note>
 
 <properties>
         <property name="Property Name" required="Yes">The property name to be retrieved.</property>
-        <property name="Name of function" required="No">A reference name for reusing the value
+        <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
         <property name="Default Value" required="No">The default value for the property.</property>
 </properties>
@@ -763,7 +763,7 @@ If omitted, <b>,</b> is used. Note that <b>,</b> would need to be specified as <
         The format to be passed to SimpleDateFormat. 
         The function supports various shorthand aliases, see below.
         </property>
-        <property name="Variable" required="No">The name of the variable to set.</property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 <p>If the format string is omitted, then the function returns the current time in milliseconds.
 Otherwise, the current time is passed to SimpleDateFormat.
