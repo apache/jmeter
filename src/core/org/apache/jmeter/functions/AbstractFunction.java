@@ -45,7 +45,9 @@ public abstract class AbstractFunction implements Function {
 
 	/**
 	 * @see Function#setParameters(Collection)
-     * Note: This may not be called (e.g. if no parameters are provided)
+	 * <br/>
+     * Note: This is always called even if no parameters are provided 
+     * (versions of JMeter after 2.3.1)
      * 
 	 */
 	abstract public void setParameters(Collection parameters) throws InvalidVariableException;
@@ -59,8 +61,14 @@ public abstract class AbstractFunction implements Function {
 		return JMeterContextService.getContext().getVariables();
 	}
     
-    /*
-     * Utility method to check parameter counts 
+    /**
+     * Utility method to check parameter counts.
+     * 
+     * @param parameters collection of parameters
+     * @param min minimum number of parameters allowed
+     * @param max maximum number of parameters allowed
+     * 
+     * @throws InvalidVariableException if the number of parameters is incorrect
      */
     protected void checkParameterCount(Collection parameters, int min, int max) 
         throws InvalidVariableException
@@ -68,9 +76,13 @@ public abstract class AbstractFunction implements Function {
         int num = parameters.size();
         if ((num > max) || (num < min)) {
             throw new InvalidVariableException(
-                    "Wrong number of parameters. Actual: "+num+
-                    ". Expected: >= "+min
-                    +" and <= "+max
+            		getReferenceKey() +
+                    " called with wrong number of parameters. Actual: "+num+
+                    (
+                    	min==max ? 
+                    	". Expected: "+min+"." 
+                    	: ". Expected: >= "+min+" and <= "+max
+                    )
                     );
         }
     }
