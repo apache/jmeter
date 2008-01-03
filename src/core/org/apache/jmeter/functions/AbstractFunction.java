@@ -86,6 +86,7 @@ public abstract class AbstractFunction implements Function {
                     );
         }
     }
+
     /**
      * Utility method to check parameter counts.
      * 
@@ -102,6 +103,26 @@ public abstract class AbstractFunction implements Function {
             throw new InvalidVariableException(
             		getReferenceKey() +
                     " called with wrong number of parameters. Actual: "+num+". Expected: "+count+"." 
+                   );
+        }
+    }
+
+    /**
+     * Utility method to check parameter counts.
+     * 
+     * @param parameters collection of parameters
+     * @param minimum number of parameters expected
+     * 
+     * @throws InvalidVariableException if the number of parameters is incorrect
+     */
+    protected void checkMinParameterCount(Collection parameters, int minimum) 
+        throws InvalidVariableException
+    {
+        int num = parameters.size();
+        if (num < minimum) {
+            throw new InvalidVariableException(
+            		getReferenceKey() +
+                    " called with wrong number of parameters. Actual: "+num+". Expected at least: "+minimum+"." 
                    );
         }
     }
