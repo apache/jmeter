@@ -207,12 +207,4 @@ public class CompoundVariable implements Function {
 
 	public void setParameters(Collection parameters) throws InvalidVariableException {
 	}
-
-	public int getMaxArgCount() {
-		return 0;
-	}
-
-	public int getMinArgCount() {
-		return 0;
-	}
 }
