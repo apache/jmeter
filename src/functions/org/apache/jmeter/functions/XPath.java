@@ -48,6 +48,8 @@ import org.apache.log.Logger;
 public class XPath extends AbstractFunction implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
+	private static final long serialVersionUID = 232L;
+	
 	// static {
 	// LoggingManager.setPriority("DEBUG","jmeter");
 	// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
@@ -121,9 +123,7 @@ public class XPath extends AbstractFunction implements Serializable {
 			}
 		}
 
-		if (values.length != 2) {
-			throw new InvalidVariableException("Wrong number of parameters; 2 != " + values.length);
-		}
+		checkParameterCount(parameters, 2);
 
 		/*
 		 * Need to reset the containers for repeated runs; about the only way

@@ -42,7 +42,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 232L;
 	
 	private static final List desc = new LinkedList();
 
@@ -141,11 +141,9 @@ public class BeanShell extends AbstractFunction implements Serializable {
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
 
-		values = parameters.toArray();
+		checkParameterCount(parameters, 1, 2);
 
-		if (values.length < 1 || values.length > 2) {
-			throw new InvalidVariableException("Expecting 1 or 2 parameters, but found " + values.length);//$NON-NLS-1$
-		}
+		values = parameters.toArray();
 
 		try {
 			bshInterpreter = new BeanShellInterpreter(JMeterUtils.getProperty(INIT_FILE), log);

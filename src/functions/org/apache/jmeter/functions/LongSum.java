@@ -35,6 +35,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class LongSum extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 232L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__longSum"; //$NON-NLS-1$
@@ -93,12 +95,8 @@ public class LongSum extends AbstractFunction implements Serializable {
 	 * @see Function#setParameters(Collection)
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+		checkMinParameterCount(parameters, 3);
 		values = parameters.toArray();
-
-		if (values.length < 3) {
-			throw new InvalidVariableException();
-		}
-
 	}
 
 	/**
