@@ -86,4 +86,23 @@ public abstract class AbstractFunction implements Function {
                     );
         }
     }
+    /**
+     * Utility method to check parameter counts.
+     * 
+     * @param parameters collection of parameters
+     * @param count number of parameters expected
+     * 
+     * @throws InvalidVariableException if the number of parameters is incorrect
+     */
+    protected void checkParameterCount(Collection parameters, int count) 
+        throws InvalidVariableException
+    {
+        int num = parameters.size();
+        if (num != count) {
+            throw new InvalidVariableException(
+            		getReferenceKey() +
+                    " called with wrong number of parameters. Actual: "+num+". Expected: "+count+"." 
+                   );
+        }
+    }
 }
