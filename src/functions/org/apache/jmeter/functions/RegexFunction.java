@@ -71,7 +71,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); // variable name //$NON-NLS-1$
 	}
 
 	public RegexFunction() {
