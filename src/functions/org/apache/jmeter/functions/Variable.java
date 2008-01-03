@@ -41,6 +41,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Variable extends AbstractFunction implements Serializable {
 
+	private static final long serialVersionUID = 232L;
+	
 	private static final List desc = new LinkedList();
 
 	private static final String KEY = "__V"; //$NON-NLS-1$
@@ -71,14 +73,8 @@ public class Variable extends AbstractFunction implements Serializable {
 	}
 
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-
+		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
 		values = parameters.toArray();
-
-		if ((values.length < MIN_PARAMETER_COUNT) || (values.length > MAX_PARAMETER_COUNT)) {
-			throw new InvalidVariableException("Parameter Count not between " + MIN_PARAMETER_COUNT + " & "
-					+ MAX_PARAMETER_COUNT);
-		}
-
 	}
 
 	public String getReferenceKey() {

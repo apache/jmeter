@@ -36,7 +36,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Random extends AbstractFunction implements Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 232L;
 	
 	private static final List desc = new LinkedList();
 
@@ -91,11 +91,8 @@ public class Random extends AbstractFunction implements Serializable {
 	 * @see Function#setParameters(Collection)
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+		checkParameterCount(parameters, 2, 3);
 		Object[] values = parameters.toArray();
-
-		if (values.length < 2 || values.length > 3) {
-			throw new InvalidVariableException("Expecting 2 or 3 parameters, but found " + values.length);//$NON-NLS-1$
-		}
 
 		minimum = (CompoundVariable) values[0];
 		maximum = (CompoundVariable) values[1];
