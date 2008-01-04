@@ -654,10 +654,11 @@ https.default.protocol=SSLv3
 			<td>						
 		Sets the underlying http protocol handler to automatically follow redirects,
 		so they are not seen by JMeter, and thus will not appear as samples.
-		In versions after 2.2, this is now the default.
+		Should only be used for GET and HEAD requests.
+		The HttpClient sampler will reject attempts to use it for POST or PUT.
 		
 												<b	>
-								Warning: see below for information on cookie handling.
+								Warning: see below for information on cookie and header handling.
 						</b>
 									
         
@@ -837,12 +838,13 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 												<b	>
 								N.B.
 						</b>
-									 when using automatic redirection, cookies are only sent for the initial URL.
+									 when using Automatic Redirection, cookies are only sent for the initial URL.
 This can cause unexpected behaviour for web-sites that redirect to a local server.
 E.g. if www.example.com redirects to www.example.co.uk.
 In this case the server will probably return cookies for both URLs, but JMeter will only see the cookies for the last
-host, i.e. www.example.co.uk. If the next request uses www.example.com, 
+host, i.e. www.example.co.uk. If the next request in the test plan uses www.example.com, 
 rather than www.example.co.uk, it will not get the correct cookies.
+Likewise, Headers are sent for the initial request, and won't be sent for the redirect.
 This is generally only a problem for manually created test plans,
 as a test plan created using a recorder would continue from the redirected URL.
 
@@ -4118,7 +4120,12 @@ Bug Page, Bug Page. Note, the File Reporter is configured to store the results i
 									
 
 
-										  		</td></tr>
+										  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						The behaviour of the Once Only controller under anything other than the 
+Thread Group or a Loop Controller is not currently defined. Odd things may happen.
+			</td></tr>
+	</table></p>
+							  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
@@ -4775,14 +4782,32 @@ The Switch Controller acts like the
 												<a href="../usermanual/component_reference.html#Interleave_Controller">Interleave Controller</a>
 									 
 in that it runs one of the subordinate elements on each iteration, but rather than
-run them in sequence, the controller runs the element number defined by the switch value.
+run them in sequence, the controller runs the element defined by the switch value.
+
+						</p>
+									
+
+												<p	>
+								
+Note: In versions of JMeter after 2.3.1, the switch value can also be a name.
 
 						</p>
 									
 
 												<p	>
 								If the switch value is out of range, it will run the zeroth element, 
-which therefore acts as the default.
+which therefore acts as the default for the numeric case.
+It also runs the zeroth element if the value is the empty string.
+						</p>
+									
+
+												<p	>
+								
+If the value is non-numeric (and non-empty), then the Switch Controller looks for the
+element with the same name (case is significant).
+If none of the names match, then the element named "default" (case not significant) is selected.
+If there is no default, then no element is selected, and the controller will not run anything.
+
 						</p>
 									
 
@@ -4802,7 +4827,7 @@ which therefore acts as the default.
 		</tr>
 			<tr>
 			<td>Switch Value</td>
-			<td>						The number of the subordinate element to be invoked. Elements are numbered from 0.
+			<td>						The number (or name) of the subordinate element to be invoked. Elements are numbered from 0.
 			</td>
 			<td>
 											Yes
@@ -5429,6 +5454,15 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 
 												<p	>
 								
+
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+Versions of JMeter after 2.3.1 allow JMeter variables to be saved to the output files.
+This can only be specified using a property. See the following link for details.
+
+			</td></tr>
+	</table></p>
+									
 For full details on setting up the default items to be saved
 see the 
 												<a	 href="listeners.html#defaults">
@@ -5700,9 +5734,58 @@ There are several ways to view the response, selectable by a radio button.
 						</p>
 									
 
+												<ul	>
+								
+
+												<li	>
+								Show text
+						</li>
+									
+
+												<li	>
+								Render HTML
+						</li>
+									
+
+												<li	>
+								Render XML
+						</li>
+									
+
+												<li	>
+								Render JSON
+						</li>
+									
+
+						</ul>
+									
+
 												<p	>
-								The default view shows all of the text contained in the
-response.
+								
+The default "Show text" view shows all of the text contained in the
+response. 
+Note that this will only work if the response content-type is considered to be text.
+If the content-type begins with any of the following, it is considered as text,
+otherwise it is considered to be binary.
+
+												<pre	>
+								
+text/
+application/javascript
+application/json
+application/xhtml+xml
+application/soap+xml
+
+						</pre>
+									
+Additional types can be added by defining the JMeter property
+
+												<b	>
+								content-type_text
+						</b>
+									 
+as a comma-separated list of the content-type prefixes to be matched.
+
 						</p>
 									
 
@@ -9172,6 +9255,7 @@ your dynamic test sample.
 	</table></p>
 									
 
+
 										  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
@@ -10876,7 +10960,6 @@ directly into your test plan as you go (so you can view samples interactively wh
 									
 
 
-
 												<p	>
 								To use the proxy server, 
 												<i	>
@@ -11315,6 +11398,10 @@ place User Defined Variables directly within the HTTP Proxy Server to override t
 						</a>
 									 for more info.
 						</p>
+							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						Please note that matching is case-sensitive.
+			</td></tr>
+	</table></p>
 							  									 				<p	>
 								Replacement by Variables: by default, the Proxy server looks for all occurences of UDV values. 
 If you define the variable "WEB" with the value "www", for example, 
@@ -11662,7 +11749,7 @@ This is intended for developer use only.
 					 </td></tr>
 					 <tr><td colspan="2">
 						  <div align="center"><font color="#525D76" size="-1"><em>
-						  Copyright &#169; 1999-2007, Apache Software Foundation
+						  Copyright &#169; 1999-2008, Apache Software Foundation
 						  </em></font></div>
 					 </td></tr>
 				</table>
