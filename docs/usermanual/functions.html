@@ -817,7 +817,7 @@ replacement string") parsed by this function
 						</ul>
 				</td>
 			<td>
-											Yes
+											No, default=1
 								</td>
 		</tr>
 			<tr>
@@ -1128,6 +1128,7 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 			<td>Variable Name</td>
 			<td>						
 A reference name - refName - for reusing the value created by this function. Stored values are of the form ${refName}.
+Defaults to "StringFromFile_".
         
 			</td>
 			<td>
@@ -1282,12 +1283,12 @@ Examples:
 	<table border="1" cellspacing="0" cellpadding="2">
 	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 			<tr>
-			<td>Name of function</td>
+			<td>Variable Name</td>
 			<td>						A reference name for reusing the value
                 computed by this function.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 		</table>
@@ -1418,7 +1419,7 @@ JMeter is not a browser, and does not interpret the JavaScript in downloaded pag
 								</td>
 		</tr>
 			<tr>
-			<td>Name of function</td>
+			<td>Variable Name</td>
 			<td>						A reference name for reusing the value
                 computed by this function.
 			</td>
@@ -1478,12 +1479,12 @@ the comma after 7 is escaped.
 								</td>
 		</tr>
 			<tr>
-			<td>Name of function</td>
+			<td>Variable Name</td>
 			<td>						A reference name for reusing the value
                 computed by this function.
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 		</table>
@@ -1663,7 +1664,7 @@ the comma after 7 is escaped.
 								</td>
 		</tr>
 			<tr>
-			<td>Name of function</td>
+			<td>Variable Name</td>
 			<td>						A reference name for reusing the value
                 computed by this function.
 			</td>
@@ -1819,6 +1820,15 @@ the second would return 1 and the last would return www.dummy.org
 											No
 								</td>
 		</tr>
+			<tr>
+			<td>Comment</td>
+			<td>						If present, it is displayed in the string. 
+        Useful for identifying what is being logged.
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
 		</table>
 	</p>
 							  									 				<p	>
@@ -1829,8 +1839,9 @@ the second would return 1 and the last would return www.dummy.org
 							  									 				<pre	>
 								
 For example:
-     ${__log(Message)} - written to the log file
+     ${__log(Message)} - written to the log file as   "...thread Name : Message"
      ${__log(Message,OUT)} - written to console window
+     ${__log(${VAR},,,VAR=)} - written to log file as "...thread Name VAR=value"
 
 						</pre>
 							  		</td></tr>
@@ -2348,7 +2359,7 @@ If omitted,
 								</td>
 		</tr>
 			<tr>
-			<td>Variable</td>
+			<td>Name of variable</td>
 			<td>						The name of the variable to set.
 			</td>
 			<td>
@@ -2760,7 +2771,7 @@ For convenience, the START properties are also copied to variables with the same
 					 </td></tr>
 					 <tr><td colspan="2">
 						  <div align="center"><font color="#525D76" size="-1"><em>
-						  Copyright &#169; 1999-2007, Apache Software Foundation
+						  Copyright &#169; 1999-2008, Apache Software Foundation
 						  </em></font></div>
 					 </td></tr>
 				</table>

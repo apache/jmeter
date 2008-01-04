@@ -132,8 +132,30 @@
 								Version 2.3.2
 						</h3>
 							  									 				<h4	>
-								Summary of changes
+								Summary of main changes
 						</h4>
+							  									 				<p	>
+								Fixes Clear Cookie each iteration bug (unfortunately introduced in 2.3.1)
+						</p>
+							  									 				<p	>
+								Switch Controller now works properly with functions and variables, 
+and the condition can now be a name instead of a number.
+Simple Controller now works properly under a While Controller
+						</p>
+							  									 				<p	>
+								CSV fields can now contain delimiters. 
+CSV and XML files can now contain additional variables (define the JMeter property sample_variables).
+						</p>
+							  									 				<p	>
+								Number of classes loaded in non-GUI mode is much reduced.
+						</p>
+							  									 				<h4	>
+								Known bugs
+						</h4>
+							  									 				<p	>
+								Once Only controller behaves OK under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).
+						</p>
 							  									 				<h4	>
 								Incompatible changes
 						</h4>
@@ -141,6 +163,13 @@
 								
 
 												<li	>
+								
+To reduce the number of classes loaded in non-GUI mode,
+Functions will only be found if their classname contains the string
+'.functions.' and does not contain the string '.gui.'.
+All existing JMeter functions conform to this restriction.
+To revert to earlier behaviour, comment or change the properties classfinder.functions.* in jmeter.properties.
+
 						</li>
 									
 
@@ -153,6 +182,46 @@
 
 												<li	>
 								Check that the CSV delimiter is reasonable.
+						</li>
+									
+
+												<li	>
+								Fix Switch Controller to work properly with functions and variables
+						</li>
+									
+
+												<li	>
+								Bug 44011 - application/soap+xml not treated as a text type
+						</li>
+									
+
+												<li	>
+								Bug 43427 - Simple Controller is only partly executed in While loop
+						</li>
+									
+
+												<li	>
+								Bug 33954 - Stack Overflow in If/While controllers (may have been fixed previously)
+						</li>
+									
+
+												<li	>
+								Bug 44022 - Memory Leak when closing test plan
+						</li>
+									
+
+												<li	>
+								Bug 44042 - Regression in Cookie Manager (Bug introduced in 2.3.1)
+						</li>
+									
+
+												<li	>
+								Bug 41028 - JMeter server doesn't alert the user when the host is defined as a loopback address
+						</li>
+									
+
+												<li	>
+								Bug 44142 - Function __machineName causes NPE if parameters are omitted.
 						</li>
 									
 
@@ -175,6 +244,42 @@
 
 												<li	>
 								Bug 43382 - configure Tidy output (warnings, errors) for XPath Assertion and Post-Processor
+						</li>
+									
+
+												<li	>
+								Bug 43984 - trim spaces from port field
+						</li>
+									
+
+												<li	>
+								Add optional comment to __log() function
+						</li>
+									
+
+												<li	>
+								Make Random function variable name optional
+						</li>
+									
+
+												<li	>
+								Reduce class loading in non-GUI mode by only looking for Functions in class names
+that contain '.functions.' and don't contain '.gui.'
+						</li>
+									
+
+												<li	>
+								Bug 43379 - Switch Controller now supports selection by name as well as number
+						</li>
+									
+
+												<li	>
+								Can specify list of variable names to be written to JTL files (CSV and XML format)
+						</li>
+									
+
+												<li	>
+								Now checks that the remoteStart options -r and -R are only used with non_GUI -n option
 						</li>
 									
 
@@ -201,7 +306,12 @@
 									
 
 												<li	>
-								Update to Xalan 2.7.1
+								Update to Xalan 2.7.1, Commons-Logging 1.1.1, XStream 1.2.2
+						</li>
+									
+
+												<li	>
+								Use properties for log/logn function descriptions
 						</li>
 									
 
@@ -326,7 +436,7 @@ Cookie Manager no longer clears manually entered cookies.
 						</h5>
 							  									 				<p	>
 								JDBC Sampler now allows INOUT and OUT parameters for Called procedures. 
-JDBC Sampler now allows per-thread connections.
+JDBC Sampler now allows per-thread connections - set Max Connections = 0 in JDBC Config.
 
 						</p>
 							  									 				<hr	>
@@ -4606,7 +4716,7 @@ test engine code.
 					 </td></tr>
 					 <tr><td colspan="2">
 						  <div align="center"><font color="#525D76" size="-1"><em>
-						  Copyright &#169; 1999-2007, Apache Software Foundation
+						  Copyright &#169; 1999-2008, Apache Software Foundation
 						  </em></font></div>
 					 </td></tr>
 				</table>
