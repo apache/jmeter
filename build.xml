@@ -1400,7 +1400,7 @@ run JMeter unless all the JMeter jars are added.
       doctitle="Apache JMeter API" 
       windowtitle="Apache JMeter API" 
       header="&lt;b&gt;Apache JMeter&lt;/b&gt;" 
-      bottom="Copyright &#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved."
+      bottom="Copyright &amp;#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved."
       packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
       excludepackagenames="org.apache.jorphan.timer">
       <classpath refid="classpath"/>
