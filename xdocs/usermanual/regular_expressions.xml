@@ -148,6 +148,23 @@ Both modifiers (?sm): Treat string as a single long line, but detect multiple li
 </li>
 </ul>
 </subsection>
+<subsection name="&sect-num;.4 Meta characters" anchor="meta_chars">
+<p>
+Regular expressions use certain characters as meta characters - these characters have a special meaning to the RE engine.
+Such characters must be escaped by preceeding them with \ (backslash) in order to treat them as ordinary characters.
+Here is a list of the meta characters and their meaning (please check the ORO documentation if in doubt).
+</p>
+<ul>
+<li>( ) - grouping</li>
+<li>[ ] - character classes</li>
+<li>{ } - repetition</li>
+<li>* + ? - repetition</li>
+<li>. - wild-card character</li>
+<li>\ - escape character</li>
+<li>| - alternatives</li>
+<li>^ $ - start and end of string or line</li>
+</ul>
+</subsection>
 </section>
 
 </body>
