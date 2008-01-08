@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -69,11 +71,11 @@ import org.apache.oro.text.regex.Perl5Compiler;
  * that should be replaced.
  * <p>
  * 
- * @version $Revision$ last updated $Date$ Created
- *          on: Jun 26, 2003<br>
  */
 
 public class LogFilter implements Filter, Serializable {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** protected members used by class to filter * */
 	protected boolean CHANGEEXT = false;
@@ -408,7 +410,7 @@ public class LogFilter implements Filter, Serializable {
 			return JMeterUtils.getPatternCache().getPattern(pattern,
 					Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
 		} catch (MalformedCachePatternException exception) {
-			exception.printStackTrace();
+			log.error("Problem with pattern: "+pattern,exception);
 			return null;
 		}
 	}
