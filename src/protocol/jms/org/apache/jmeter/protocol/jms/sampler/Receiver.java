@@ -26,8 +26,6 @@ import javax.jms.*;
 /**
  * Receiver of pseudo-synchronous reply messages.
  * 
- * @author Martijn Blankestijn
- * @version $Id$.
  */
 public class Receiver implements Runnable {
 	private boolean active;
@@ -39,19 +37,15 @@ public class Receiver implements Runnable {
 	private QueueConnection conn;
 
 	// private static Receiver receiver;
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Receiver(QueueConnectionFactory factory, Queue receiveQueue) throws JMSException {
 		conn = factory.createQueueConnection();
 		session = conn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 		consumer = session.createReceiver(receiveQueue);
-		if (log.isDebugEnabled()) {
-			log.debug("Receiver - ctor. Starting connection now");
-		}
+		log.debug("Receiver - ctor. Starting connection now");
 		conn.start();
-		if (log.isInfoEnabled()) {
-			log.info("Receiver - ctor. Connection to messaging system established");
-		}
+		log.info("Receiver - ctor. Connection to messaging system established");
 	}
 
 	public static synchronized Receiver createReceiver(QueueConnectionFactory factory, Queue receiveQueue)
@@ -86,17 +80,22 @@ public class Receiver implements Runnable {
 				}
 
 			} catch (JMSException e1) {
-				e1.printStackTrace();
+				log.error("Error handling receive",e1);
 			}
 		}
 		// not active anymore
 		if (session != null) {
 			try {
 				session.close();
-				if (conn != null)
-					conn.close();
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+				} catch (JMSException e) {
+					log.error("Error closing connection",e);
+				}
 			} catch (JMSException e) {
-				e.printStackTrace();
+				log.error("Error closing session",e);
 			}
 		}
 	}
