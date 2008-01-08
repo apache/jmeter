@@ -33,6 +33,7 @@ import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -128,6 +129,9 @@ ActionListener {
     protected JButton saveTable = 
         new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));			//$NON-NLS-1$
     
+    private JCheckBox saveHeaders = // should header be saved with the data?
+    	new JCheckBox(JMeterUtils.getResString("aggregate_graph_save_table_header"));	//$NON-NLS-1$
+ 
     JLabeledTextField graphTitle = 
         new JLabeledTextField(JMeterUtils.getResString("aggregate_graph_user_title"));	//$NON-NLS-1$
     
@@ -264,6 +268,7 @@ ActionListener {
         buttonpanel.add(displayButton);
         buttonpanel.add(saveGraph);
         buttonpanel.add(saveTable);
+        buttonpanel.add(saveHeaders);
         
         graph.add(graphLabel);
         graph.add(graphTitle);
@@ -388,7 +393,7 @@ ActionListener {
             try {
                 writer = new FileWriter(output);
                 Vector data = this.getAllTableData();
-                CSVSaveService.saveCSVStats(data,writer);
+                CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? COLUMNS : null);
             } catch (FileNotFoundException e) {
                 log.warn(e.getMessage());
             } catch (IOException e) {
