@@ -616,7 +616,7 @@ public final class CSVSaveService {
         		if (i>0) {
         			writer.write(DELIM);
         		}
-        		writer.write(escapeDelimiters(headers[i],SPECIALS));
+        		writer.write(quoteDelimiters(headers[i],SPECIALS));
         	}
         	writer.write(LINE_SEP);
     	}
@@ -627,7 +627,7 @@ public final class CSVSaveService {
                     writer.write(DELIM);
                 }
                 Object item = row.elementAt(idy);
-                writer.write( escapeDelimiters(String.valueOf(item),SPECIALS));
+                writer.write( quoteDelimiters(String.valueOf(item),SPECIALS));
             }
             writer.write(LINE_SEP);
         }
@@ -660,13 +660,13 @@ public final class CSVSaveService {
     	/*
     	 * Class to handle generating the delimited string.
     	 * - adds the delimiter if not the first call
-    	 * - escapes (quotes) any strings that require it 
+    	 * - quotes any strings that require it 
     	 */
-    	final class StringEscaper{
+    	final class StringQuoter{
         	final StringBuffer sb = new StringBuffer();
     		private final char[] specials;
     		private boolean addDelim;
-    		public StringEscaper(char delim) {
+    		public StringQuoter(char delim) {
     			specials = new char[] {delim, QUOTING_CHAR, CharUtils.CR, CharUtils.LF};
     			addDelim=false; // Don't add delimiter first time round
 			}
@@ -678,17 +678,17 @@ public final class CSVSaveService {
     				addDelim = true;
     			}
     		}
-    		// These methods handle parameters that could contain delimiters or escapes:
+    		// These methods handle parameters that could contain delimiters or quotes:
     		public void append(String s){
     			addDelim();
     			//if (s == null) return;
-    			sb.append(escapeDelimiters(s,specials));
+    			sb.append(quoteDelimiters(s,specials));
     		}
     		public void append(Object obj){
     			append(String.valueOf(obj));
     		}
     		
-    		// These methods handle parameters that cannot contain delimiters or escapes
+    		// These methods handle parameters that cannot contain delimiters or quotes
     		public void append(int i){
     			addDelim();
     			sb.append(i);
@@ -707,7 +707,7 @@ public final class CSVSaveService {
     		}
     	}
     	
-    	StringEscaper text = new StringEscaper(delimiter.charAt(0));
+    	StringQuoter text = new StringQuoter(delimiter.charAt(0));
     	
     	SampleResult sample = event.getResult();
     	SampleSaveConfiguration saveConfig = sample.getSaveConfig();
@@ -808,7 +808,7 @@ public final class CSVSaveService {
     	return text.toString();
     }
 
-    // =================================== CSV escape/unescape handling ==============================
+    // =================================== CSV quote/unquote handling ==============================
     
     /*
      * Private versions of what might eventually be part of Commons-CSV or Commons-Lang/Io...
@@ -817,16 +817,16 @@ public final class CSVSaveService {
     /*
      * <p>
      * Returns a <code>String</code> value for a character-delimited column value
-     * enclosed in the escape character, if required.
+     * enclosed in the quote character, if required.
      * </p>
      *
      * <p>
      * If the value contains a special character,
-     * then the String value is returned enclosed in the escape character.
+     * then the String value is returned enclosed in the quote character.
      * </p>
      *
      * <p>
-     * Any escape characters in the value are escaped with another escape.
+     * Any quote characters in the value are doubled up.
      * </p>
      *
      * <p>
@@ -835,29 +835,29 @@ public final class CSVSaveService {
      * </p>
      * 
      * <p>
-     * N.B. The list of special characters includes the escape character.
+     * N.B. The list of special characters includes the quote character.
      * </p>
      * 
      * @param input the input column String, may be null (without enclosing delimiters)
-     * @param specialChars special characters; second one must be the escape character 
-     * @return the input String, enclosed in escape if the value contains a special character,
+     * @param specialChars special characters; second one must be the quote character 
+     * @return the input String, enclosed in quote characters if the value contains a special character,
      * <code>null</code> for null string input
      */
-    private static String escapeDelimiters(String input, char[] specialChars) {
+    private static String quoteDelimiters(String input, char[] specialChars) {
         if (StringUtils.containsNone(input, specialChars)) {
             return input;
         }
         StringBuffer buffer = new StringBuffer(input.length() + 10);
-        final char escape = specialChars[1];
-        buffer.append(escape);
+        final char quote = specialChars[1];
+        buffer.append(quote);
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            if (c == escape) {
-                buffer.append(escape); // escape the escape char
+            if (c == quote) {
+                buffer.append(quote); // double the quote char
             }
             buffer.append(c);
         }
-        buffer.append(escape);
+        buffer.append(quote);
         return buffer.toString();
     }
 
@@ -874,7 +874,7 @@ public final class CSVSaveService {
      */
     // State of the parser
 	private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
-	public static final char QUOTING_CHAR = '"'; // escape character
+	public static final char QUOTING_CHAR = '"';
 	private static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
 		int ch;
 		int state = INITIAL;
@@ -912,7 +912,7 @@ public final class CSVSaveService {
 				break;
 			case EMBEDDEDQUOTE:
 				if (ch == QUOTING_CHAR){
-					baos.write(QUOTING_CHAR); // doubled escape => escape
+					baos.write(QUOTING_CHAR); // doubled quote => quote
 					state = QUOTED;
 				} else if (isDelimOrEOL(delim, ch)) {
 					push = true;
