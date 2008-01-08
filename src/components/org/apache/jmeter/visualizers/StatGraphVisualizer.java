@@ -78,7 +78,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-	private final String[] COLUMNS = { JMeterUtils.getResString("url"), //$NON-NLS-1$
+	private final String[] COLUMNS = { JMeterUtils.getResString("sampler_label"), //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_count"),			//$NON-NLS-1$
 			JMeterUtils.getResString("average"),						//$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_median"),		//$NON-NLS-1$
@@ -378,7 +378,7 @@ ActionListener {
                         ActionNames.SAVE_GRAPHICS,SaveGraphics.class.getName()).doAction(
                                 new ActionEvent(this,1,ActionNames.SAVE_GRAPHICS));
             } catch (Exception e) {
-                e.printStackTrace();
+            	log.error(e.getMessage());
             }
         } else if (event.getSource() == saveTable) {
             JFileChooser chooser = FileDialoger.promptToSaveFile(
