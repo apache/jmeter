@@ -27,7 +27,9 @@ import java.io.Serializable;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /**
  * Description:<br>
@@ -55,6 +57,8 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 
 public class StandardGenerator implements Generator, Serializable {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	protected HTTPSamplerBase SAMPLE = null;
 
@@ -108,7 +112,7 @@ public class StandardGenerator implements Generator, Serializable {
 		try {
 			this.OUTPUT = new FileOutputStream(FILE);
 		} catch (IOException exception) {
-			// do nothing
+			log.error(exception.getMessage());
 		}
 	}
 
@@ -209,11 +213,7 @@ public class StandardGenerator implements Generator, Serializable {
 	 * @see org.apache.jmeter.protocol.http.util.accesslog.Generator#generateRequest()
 	 */
 	public Object generateRequest() {
-		try {
-			SAMPLE = HTTPSamplerFactory.newInstance();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+		SAMPLE = HTTPSamplerFactory.newInstance();
 		return SAMPLE;
 	}
 
@@ -222,14 +222,11 @@ public class StandardGenerator implements Generator, Serializable {
 	 * saved.
 	 */
 	public void save() {
-		try {
-			// no implementation at this time, since
-			// we bypass the idea of having a console
-			// tool to generate test plans. Instead
-			// I decided to have a sampler that uses
-			// the generator and parser directly
-		} catch (Exception exception) {
-		}
+		// no implementation at this time, since
+		// we bypass the idea of having a console
+		// tool to generate test plans. Instead
+		// I decided to have a sampler that uses
+		// the generator and parser directly
 	}
 
 	/**
