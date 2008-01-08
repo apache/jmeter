@@ -29,9 +29,14 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.jmeter.monitor.model.ObjectFactory;
 import org.apache.jmeter.monitor.model.Status;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public abstract class ParserImpl implements Parser {
-	private SAXParserFactory PARSERFACTORY = null;
+    
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private SAXParserFactory PARSERFACTORY = null;
 
 	private SAXParser PARSER = null;
 
@@ -51,11 +56,9 @@ public abstract class ParserImpl implements Parser {
 			DOCHANDLER = new MonitorHandler();
 			DOCHANDLER.setObjectFactory(this.FACTORY);
 		} catch (SAXException e) {
-			// e.printStackTrace();
-			// need to add logging later
+			log.error("Failed to create the parser",e);
 		} catch (ParserConfigurationException e) {
-			// e.printStackTrace();
-			// need to add logging later
+			log.error("Failed to create the parser",e);
 		}
 	}
 
@@ -72,11 +75,11 @@ public abstract class ParserImpl implements Parser {
 			PARSER.parse(is, DOCHANDLER);
 			return DOCHANDLER.getContents();
 		} catch (SAXException e) {
-			e.printStackTrace();
+			log.error("Failed to parse the bytes",e);
 			// let bad input fail silently
 			return DOCHANDLER.getContents();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e) { // Should never happen
+			log.error("Failed to read the bytes",e);
 			// let bad input fail silently
 			return DOCHANDLER.getContents();
 		}
