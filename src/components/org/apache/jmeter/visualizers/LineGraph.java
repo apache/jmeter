@@ -29,6 +29,8 @@ import java.awt.Stroke;
 
 import javax.swing.JPanel;
 
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.jCharts.axisChart.AxisChart;
 import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.DataSeries;
@@ -46,6 +48,8 @@ import org.jCharts.types.ChartType;
  * from the statistical data.
  */
 public class LineGraph extends JPanel {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     protected double[][] data = null;
     protected String title, xAxisTitle, yAxisTitle;
@@ -171,7 +175,7 @@ public class LineGraph extends JPanel {
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
         } catch (Exception e) {
-            e.printStackTrace();
+        	log.error(e.getMessage());
         }
     }
     
