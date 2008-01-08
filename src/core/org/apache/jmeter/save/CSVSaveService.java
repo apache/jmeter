@@ -589,21 +589,47 @@ public final class CSVSaveService {
      * Not sure if it should go in the newer SaveService instead of here.
      * if we ever decide to get rid of this class, we'll need to move this
      * method to the new save service.
-     * @param data
-     * @param writer
+     * @param data vector of data rows
+     * @param writer output file
      * @throws IOException
      */
     public static void saveCSVStats(Vector data, FileWriter writer) throws IOException {
+    	saveCSVStats(data, writer, null);
+    }
+	
+	/**
+     * Method will save aggregate statistics as CSV. For now I put it here.
+     * Not sure if it should go in the newer SaveService instead of here.
+     * if we ever decide to get rid of this class, we'll need to move this
+     * method to the new save service.
+     * @param data vector of data rows
+     * @param writer output file
+     * @param headers header names (if non-null)
+     * @throws IOException
+     */
+    public static void saveCSVStats(Vector data, FileWriter writer, String headers[]) throws IOException {
+    	final char DELIM = ',';
+		final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+		final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
+		if (headers != null){
+        	for (int i=0; i < headers.length; i++){
+        		if (i>0) {
+        			writer.write(DELIM);
+        		}
+        		writer.write(escapeDelimiters(headers[i],SPECIALS));
+        	}
+        	writer.write(LINE_SEP);
+    	}
         for (int idx=0; idx < data.size(); idx++) {
             Vector row = (Vector)data.elementAt(idx);
             for (int idy=0; idy < row.size(); idy++) {
                 if (idy > 0) {
-                    writer.write(","); // $NON-NLS-1$
+                    writer.write(DELIM);
                 }
                 Object item = row.elementAt(idy);
-                writer.write( String.valueOf(item) );
+                writer.write( escapeDelimiters(String.valueOf(item),SPECIALS));
             }
-            writer.write(System.getProperty("line.separator")); // $NON-NLS-1$
+            writer.write(LINE_SEP);
         }
     }
 
@@ -641,7 +667,7 @@ public final class CSVSaveService {
     		private final char[] specials;
     		private boolean addDelim;
     		public StringEscaper(char delim) {
-    			specials = new char[] {delim, '"', CharUtils.CR, CharUtils.LF};
+    			specials = new char[] {delim, QUOTING_CHAR, CharUtils.CR, CharUtils.LF};
     			addDelim=false; // Don't add delimiter first time round
 			}
     		
@@ -848,7 +874,7 @@ public final class CSVSaveService {
      */
     // State of the parser
 	private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
-	public static final char QUOTING_CHAR = '"';
+	public static final char QUOTING_CHAR = '"'; // escape character
 	private static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
 		int ch;
 		int state = INITIAL;
