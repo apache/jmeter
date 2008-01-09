@@ -29,9 +29,6 @@ import org.apache.log.Logger;
  * Request/reply executor with a fixed reply queue. <br>
  * Created on: October 28, 2004
  * 
- * @author Martijn Blankestijn
- * @version $Id: FixedQueueExecutor.java,v 1.3 2005/05/19 15:36:53 mblankestijn
- *          Exp $
  */
 public class FixedQueueExecutor implements QueueExecutor {
 	/** Sender. */
@@ -61,8 +58,12 @@ public class FixedQueueExecutor implements QueueExecutor {
 	 * @see org.apache.jmeter.protocol.jms.sampler.QueueExecutor#sendAndReceive(javax.jms.Message)
 	 */
 	public Message sendAndReceive(Message request) throws JMSException {
+		String id = request.getJMSCorrelationID();
+		if(id == null){
+		    log.error("Correlation id is null. Set the JMSCorrelationID header");
+		    return null;
+		}
 		producer.send(request);
-		String id = request.getJMSMessageID();
 		MessageAdmin.getAdmin().putRequest(id, request);
 		try {
 			if (log.isDebugEnabled()) {
@@ -78,6 +79,6 @@ public class FixedQueueExecutor implements QueueExecutor {
 		} catch (InterruptedException e) {
 			log.warn("Interrupt exception caught", e);
 		}
-		return MessageAdmin.getAdmin().get(request.getJMSMessageID());
+		return MessageAdmin.getAdmin().get(id);
 	}
 }
