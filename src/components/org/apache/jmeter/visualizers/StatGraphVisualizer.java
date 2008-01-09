@@ -54,7 +54,6 @@ import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.JLabeledChoice;
@@ -223,15 +222,6 @@ ActionListener {
 		tableRows.clear();
 		tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
 		model.addRow(tableRows.get(TOTAL_ROW_LABEL));
-	}
-
-	// overrides AbstractVisualizer
-	// forces GUI update after sample file has been read
-	public TestElement createTestElement() {
-		TestElement t = super.createTestElement();
-
-		// sleepTill = 0;
-		return t;
 	}
 
 	/**
