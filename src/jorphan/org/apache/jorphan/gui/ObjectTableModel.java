@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.gui;
 
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -31,10 +32,13 @@ import org.apache.jorphan.reflect.Functor;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$
+ * The ObjectTableModel is a TableModel whose rows are objects;
+ * columns are defined as Functors on the object.
  */
 public class ObjectTableModel extends DefaultTableModel {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final long serialVersionUID = 232L;
 
 	private transient ArrayList objects = new ArrayList();
 
@@ -97,6 +101,15 @@ public class ObjectTableModel extends DefaultTableModel {
         }
 	}
 
+    private Object readResolve() throws ObjectStreamException{
+    	objects = new ArrayList();
+    	headers = new ArrayList();
+    	classes = new ArrayList();
+    	readFunctors = new ArrayList();
+    	writeFunctors = new ArrayList();
+        return this;
+    }
+	
 	public Iterator iterator() {
 		return objects.iterator();
 	}
