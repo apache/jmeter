@@ -20,11 +20,19 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,8 +40,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
@@ -41,13 +51,19 @@ import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
  * Excludes the Median and 90% columns, which are expensive in memory terms
  */
-public class SummaryReport extends AbstractVisualizer implements Clearable {
+public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
+	
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
 	private final String[] COLUMNS = { 
             JMeterUtils.getResString("sampler_label"),               //$NON-NLS-1$
 			JMeterUtils.getResString("aggregate_report_count"),      //$NON-NLS-1$
@@ -68,6 +84,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
 
 	protected JScrollPane myScrollPane;
 
+    protected JButton saveTable = 
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));			//$NON-NLS-1$
+    
 	transient private ObjectTableModel model;
 
 	Map tableRows = Collections.synchronizedMap(new HashMap());
@@ -166,5 +185,25 @@ public class SummaryReport extends AbstractVisualizer implements Clearable {
 		myScrollPane = new JScrollPane(myJTable);
 		this.add(mainPanel, BorderLayout.NORTH);
 		this.add(myScrollPane, BorderLayout.CENTER);
+		saveTable.addActionListener(this);
+		this.add(saveTable,BorderLayout.SOUTH);
+	}
+
+	public void actionPerformed(ActionEvent ev) {
+		if (ev.getSource() == saveTable) {
+	        JFileChooser chooser = FileDialoger.promptToSaveFile("summary.csv");//$NON-NLS-1$
+			File output = chooser.getSelectedFile();
+			FileWriter writer = null;
+			try {
+			    writer = new FileWriter(output);
+			    CSVSaveService.saveCSVStats(model,writer);
+			} catch (FileNotFoundException e) {
+			    log.warn(e.getMessage());
+			} catch (IOException e) {
+			    log.warn(e.getMessage());
+			} finally {
+			    JOrphanUtils.closeQuietly(writer);
+			}
+		}
 	}
 }

@@ -86,6 +86,7 @@ that contain '.functions.' and don't contain '.gui.'</li>
 <li>Can specify list of variable names to be written to JTL files (CSV and XML format)</li>
 <li>Now checks that the remoteStart options -r and -R are only used with non_GUI -n option</li>
 <li>Bug 44184 - Allow header to be saved with Aggregate Graph data</li>
+<li>Added "Save Table Data" buttons to Aggregate and Summary Reports - save table as CSV format with header</li>
 </ul>
 
 <h4>Non-functional changes</h4>
