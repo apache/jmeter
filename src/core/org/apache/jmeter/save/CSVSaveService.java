@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.table.DefaultTableModel;
+
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
@@ -627,6 +629,40 @@ public final class CSVSaveService {
                     writer.write(DELIM);
                 }
                 Object item = row.elementAt(idy);
+                writer.write( quoteDelimiters(String.valueOf(item),SPECIALS));
+            }
+            writer.write(LINE_SEP);
+        }
+    }
+
+	/**
+     * Method saves aggregate statistics as CSV from a table model.
+     * Same as {@link #saveCSVStats(Vector, FileWriter, String[])} except
+     * that there is no need to create a Vector containing the data.
+     * 
+     * @param model table model containing the data
+     * @param writer output file
+     * @throws IOException
+     */
+    public static void saveCSVStats(DefaultTableModel model, FileWriter writer) throws IOException {
+    	final char DELIM = ',';
+		final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+		final char SPECIALS[] = new char[] {DELIM, QUOTING_CHAR};
+		final int columns = model.getColumnCount();
+		final int rows = model.getRowCount();
+    	for (int i=0; i < columns; i++){
+    		if (i>0) {
+    			writer.write(DELIM);
+    		}
+    		writer.write(quoteDelimiters(model.getColumnName(i),SPECIALS));
+    	}
+    	writer.write(LINE_SEP);
+        for (int row=0; row < rows; row++) {
+            for (int column=0; column < columns; column++) {
+                if (column > 0) {
+                    writer.write(DELIM);
+                }
+                Object item = model.getValueAt(row, column);
                 writer.write( quoteDelimiters(String.valueOf(item),SPECIALS));
             }
             writer.write(LINE_SEP);
