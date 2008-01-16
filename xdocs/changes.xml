@@ -87,6 +87,8 @@ that contain '.functions.' and don't contain '.gui.'</li>
 <li>Now checks that the remoteStart options -r and -R are only used with non_GUI -n option</li>
 <li>Bug 44184 - Allow header to be saved with Aggregate Graph data</li>
 <li>Added "Save Table Data" buttons to Aggregate and Summary Reports - save table as CSV format with header</li>
+<li>Allow most functions to be used on the Test Plan. 
+Note __split() and __regex() cannot be used on the Test Plan.</li>
 </ul>
 
 <h4>Non-functional changes</h4>
