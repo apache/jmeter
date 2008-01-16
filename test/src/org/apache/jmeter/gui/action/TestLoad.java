@@ -20,6 +20,11 @@ package org.apache.jmeter.gui.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.util.HashSet;
+import java.util.Set;
+
+import junit.framework.TestSuite;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.save.SaveService;
@@ -27,96 +32,76 @@ import org.apache.jorphan.collections.HashTree;
 
 /**
  * 
- * @version $Revision$ Last updated: $Date$
+ * Test JMX files to check that they can be loaded OK.
  */
 public class TestLoad extends JMeterTestCase {
-	File testFile1, testFile2, testFile3, testFile4, testFile5, testFile6, testFile7, testFile8, testFile9, testFile10,
-			testFile11, testFile12, testFile13;
 
-	static Load loader = new Load();
+	private static final String basedir = new File(System.getProperty("user.dir")).getParent();
+	private static final File testfiledir = new File(basedir,"bin/testfiles");
+	private static final File demofiledir = new File(basedir,"xdocs/demos");
+	
+	private static final Set notTestPlan = new HashSet();// not full test plans
+	
+	static{
+		notTestPlan.add("load_bug_list.jmx");// used by TestAnchorModifier
+		notTestPlan.add("Load_JMeter_Page.jmx");// used by TestAnchorModifier
+		notTestPlan.add("ProxyServerTestPlan.jmx");// used by TestSaveService
+	}
 
+	private static final FilenameFilter jmxFilter = new FilenameFilter() {
+		public boolean accept(File dir, String name) {
+			return name.endsWith(".jmx");
+		}
+	};
+
+	private final File testFile;
+	private final String parent;
+	
 	public TestLoad(String name) {
 		super(name);
+		testFile=null;
+		parent=null;
 	}
 
-	public void setUp() {
-//		testFile1 = // Old-style format; no longer used
-//		new File(System.getProperty("user.dir") + "/testfiles", "Test Plan.jmx");
-		testFile2 =
-		new File(System.getProperty("user.dir") + "/testfiles", "Modification Manager.jmx");
-		testFile3 = new File(System.getProperty("user.dir") + "/testfiles", "proxy.jmx");
-		testFile4 = new File(System.getProperty("user.dir") + "/testfiles", "AssertionTestPlan.jmx");
-		testFile5 = new File(System.getProperty("user.dir") + "/testfiles", "AuthManagerTestPlan.jmx");
-		testFile6 = new File(System.getProperty("user.dir") + "/testfiles", "HeaderManagerTestPlan.jmx");
-		testFile7 = new File(System.getProperty("user.dir") + "/testfiles", "InterleaveTestPlan.jmx");
-		testFile8 = new File(System.getProperty("user.dir") + "/testfiles", "InterleaveTestPlan2.jmx");
-		testFile9 = new File(System.getProperty("user.dir") + "/testfiles", "LoopTestPlan.jmx");
-		testFile10 = new File(System.getProperty("user.dir") + "/testfiles", "OnceOnlyTestPlan.jmx");
-		testFile11 = new File(System.getProperty("user.dir") + "/testfiles", "ProxyServerTestPlan.jmx");
-		testFile12 = new File(System.getProperty("user.dir") + "/testfiles", "SimpleTestPlan.jmx");
-		// Incomplete file
-//		testFile13 =
-//		new File(System.getProperty("user.dir") + "/testfiles", "URLRewritingExample.jmx");
+	public TestLoad(String name, File file, String dir) {
+		super(name);
+		testFile=file;
+		parent=dir;
 	}
 
-//	public void testFile1() throws Exception {
-//		assertTree(getTree(testFile1));
-//	}
-
-	public void testFile2() throws Exception {
-		assertTree(getTree(testFile2));
+	public static TestSuite suite(){
+		TestSuite suite=new TestSuite("Load Test");
+		scanFiles(suite,testfiledir);
+		scanFiles(suite,demofiledir);
+		return suite;
 	}
 
-	public void testFile3() throws Exception {
-		assertTree(getTree(testFile3));
-	}
-
-	private void assertTree(HashTree tree) throws Exception {
-		final Object object = tree.getArray()[0];
-		if (! (object instanceof org.apache.jmeter.testelement.TestPlan)){
-			fail("Hash tree should be TestPlan, but is "+object.getClass().getName());
+	private static void scanFiles(TestSuite suite, File parent) {
+		File testFiles[]=parent.listFiles(jmxFilter);
+		String dir = parent.getName();
+		for (int i=0; i<testFiles.length; i++){
+		    suite.addTest(new TestLoad("checkTestFile",testFiles[i],dir));
 		}
 	}
 
-	public void testFile4() throws Exception {
-		assertTree(getTree(testFile4));
+	public void checkTestFile() throws Exception{
+		HashTree tree = null;
+		try {
+			tree =getTree(testFile);
+		} catch (Exception e) {
+			fail(parent+": "+ testFile.getName()+" caused "+e);
+		}
+		assertTree(tree);
 	}
-
-	public void testFile5() throws Exception {
-		assertTree(getTree(testFile5));
+	
+	private void assertTree(HashTree tree) throws Exception {
+		final Object object = tree.getArray()[0];
+		final String name = testFile.getName();
+		
+		if (! (object instanceof org.apache.jmeter.testelement.TestPlan) && !notTestPlan.contains(name)){
+			fail(parent+ ": " +name+" tree should be TestPlan, but is "+object.getClass().getName());
+		}
 	}
-
-	public void testFile6() throws Exception {
-		assertTree(getTree(testFile6));
-	}
-
-	public void testFile7() throws Exception {
-		assertTree(getTree(testFile7));
-	}
-
-	public void testFile8() throws Exception {
-		assertTree(getTree(testFile8));
-	}
-
-	public void testFile9() throws Exception {
-		assertTree(getTree(testFile9));
-	}
-
-	public void testFile10() throws Exception {
-		assertTree(getTree(testFile10));
-	}
-
-	public void testFile11() throws Exception {
-		assertTree(getTree(testFile11));
-	}
-
-	public void testFile12() throws Exception {
-		assertTree(getTree(testFile12));
-	}
-
-//	public void testFile13() throws Exception {
-//		assertTree(getTree(testFile13));
-//	}
 
 	private HashTree getTree(File f) throws Exception {
 		HashTree tree = SaveService.loadTree(new FileInputStream(f));
