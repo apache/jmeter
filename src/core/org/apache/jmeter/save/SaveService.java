@@ -396,6 +396,10 @@ public class SaveService {
 			InputStreamReader inputStreamReader = getInputStreamReader(reader);
 			wrapper = (ScriptWrapper) saver.fromXML(inputStreamReader);
 			inputStreamReader.close();
+			if (wrapper == null){
+				log.warn("Problem loading new style: see above.");
+				return null;
+			}
 			return wrapper.testPlan;
 		} catch (CannotResolveClassException e) {
 			log.warn("Problem loading new style: " + e.getLocalizedMessage());
