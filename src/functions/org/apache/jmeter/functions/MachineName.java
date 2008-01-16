@@ -54,8 +54,6 @@ public class MachineName extends AbstractFunction implements Serializable {
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
 
-		JMeterVariables vars = getVariables();
-
 		/*
 		 * boolean fullHostName = false; if (((CompoundFunction) values[0])
 		 * .execute() .toLowerCase() .equals("true")) { fullHostName = true; }
@@ -79,9 +77,12 @@ public class MachineName extends AbstractFunction implements Serializable {
 		}
 
 		if (values.length >= 1){// we have a variable name
-			String varName = ((CompoundVariable) values[0]).execute();
-			if (varName.length() > 0) {
-			    vars.put(varName, machineName);
+			JMeterVariables vars = getVariables();
+			if (vars != null) {// May be null if function is used on TestPlan
+				String varName = ((CompoundVariable) values[0]).execute();
+				if (varName.length() > 0) {
+				    vars.put(varName, machineName);
+				}
 			}
 		}
 		return machineName;

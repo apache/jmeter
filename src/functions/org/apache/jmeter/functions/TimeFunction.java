@@ -103,7 +103,9 @@ public class TimeFunction extends AbstractFunction implements Serializable {
         
         if (variable.length() > 0) {
             JMeterVariables vars = getVariables();
-            vars.put(variable, datetime);
+            if (vars != null){// vars will be null on TestPlan
+            	vars.put(variable, datetime);
+            }
         }
         return datetime;
     }
