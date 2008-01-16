@@ -68,7 +68,6 @@ public class Random extends AbstractFunction implements Serializable {
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
 
-		JMeterVariables vars = getVariables();
 
 		long min = Long.parseLong(minimum.execute().trim());
 		long max = Long.parseLong(maximum.execute().trim());
@@ -78,7 +77,10 @@ public class Random extends AbstractFunction implements Serializable {
 		String randString = Long.toString(rand);
 
 		if (varName != null) {
-			vars.put(varName.execute(), randString);
+			JMeterVariables vars = getVariables();
+			if (vars != null){// vars will be null on TestPlan
+				vars.put(varName.execute(), randString);
+			}
 		}
 
 		return randString;
