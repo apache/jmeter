@@ -125,9 +125,30 @@ Each occurrence of a function call in a test plan is handled by a separate funct
 
 <subsection name="&sect-num;.2 Where can functions and variables be used?" anchor="where">
 <p>
-Functions and variables can be written into any field of any test component.  Some fields do not allow random strings 
+Functions and variables can be written into any field of any test component (apart from the TestPlan - see below).
+Some fields do not allow random strings 
 because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
 functions.
+</p>
+<p>
+Functions which are used on the Test Plan have some restrictions.
+JMeter thread variables will have not been fully set up when the functions are processed, 
+so variable names passed as parameters will not be set up, and variable references will not work, 
+so split() and regex() and the variable evaluation functions won't work. 
+The threadNum() function won't work (and does not make sense at test plan level).
+The following functions should work OK on the test plan:
+<ul>
+<li>intSum</li>
+<li>longSum</li>
+<li>machineName</li>
+<li>BeanShell</li>
+<li>javaScript</li>
+<li>jexl</li>
+<li>random</li>
+<li>time</li>
+<li>property functions</li>
+<li>log functions</li>
+</ul>
 </p>
 <p>
 Configuration elements are processed by a separate thread.
