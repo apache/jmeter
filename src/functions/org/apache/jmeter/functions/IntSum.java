@@ -84,7 +84,9 @@ public class IntSum extends AbstractFunction implements Serializable {
 		}
 
 		String totalString = Integer.toString(sum);
-		vars.put(varName, totalString);
+		if (vars != null){// vars will be null on TestPlan
+			vars.put(varName, totalString);
+		}
 
 		return totalString;
 

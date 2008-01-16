@@ -113,7 +113,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 			if (bshOut != null) {
 				resultStr = bshOut.toString();
 			}
-			if (varName.length() > 0) {
+			if (vars != null && varName.length() > 0) {// vars will be null on TestPlan
 				vars.put(varName, resultStr);
 			}
 		} catch (Exception ex) // Mainly for bsh.EvalError
