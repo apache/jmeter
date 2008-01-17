@@ -236,6 +236,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 	public void modifyTestElement(TestElement config) {
 		configureTestElement(config);
 		((JavaConfig) config).setArguments((Arguments) argsPanel.createTestElement());
-		((JavaConfig) config).setClassname(classnameCombo.getSelectedItem().toString());
+		((JavaConfig) config).setClassname(String.valueOf(classnameCombo.getSelectedItem()));
 	}
 }
