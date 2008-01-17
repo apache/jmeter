@@ -510,7 +510,7 @@
 					      <td align="center">
 					     #end
 						    <font color="$bodylink" size="-1"><em>
-						    Copyright &#169; 1999-$year, Apache Software Foundation
+						    Copyright &copy; 1999-$year, Apache Software Foundation
 						    </em></font>
 					      </td>
 					       #if ($updated != "")
