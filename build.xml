@@ -1547,7 +1547,7 @@ run JMeter unless all the JMeter jars are added.
 	
   <target name="batchtest" description="Run the batch test and compare output files">
 
-	<property name="remote" value=""/>
+	<property name="remote" value="-X"/>
   	<property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
   	<property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
