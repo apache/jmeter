@@ -28,6 +28,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+import sun.beans.editors.NumberEditor;
+
 /**
  * This is an implementation of a full-fledged property editor, providing both
  * object-text transformation and an editor GUI (a custom editor component),
@@ -273,6 +275,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 					shouldNeverHappen();
 
 				try {
+					// Bug 44314  Number field does not seem to accept ""
+					if (text.length()==0 && typeEditor instanceof NumberEditor){
+						text="0";
+					}
 					typeEditor.setAsText(text);
 				} catch (IllegalArgumentException e) {
 					shouldNeverHappen(e);
