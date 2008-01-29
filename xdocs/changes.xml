@@ -70,6 +70,7 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>Bug 41028 - JMeter server doesn't alert the user when the host is defined as a loopback address</li>
 <li>Bug 44142 - Function __machineName causes NPE if parameters are omitted.</li>
 <li>Bug 44144 - JMS point-to-point: request response test does not work</li>
+<li>Bug 44314 - Not possible to add more than one SyncTimer</li>
 </ul>
 
 <h4>Improvements</h4>
