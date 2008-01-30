@@ -361,8 +361,10 @@ These are shown below.</p>
                 Set password for proxy server that JMeter is to use
         -J, --jmeterproperty {argument}={value}
                 Define additional JMeter properties
-        -G, --globalproperty (argument)=(value)
+        -G, --globalproperty (argument)[=(value)]
                 Define Global properties (sent to servers)
+                e.g. -Gport=123
+                 or -Gglobal.properties
         -D, --systemproperty {argument}={value}
                 Define additional System properties
         -S, --systemPropertyFile {filename}

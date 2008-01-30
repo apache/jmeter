@@ -169,7 +169,7 @@ public class JMeter implements JMeterPlugin {
                     "Define additional JMeter properties"),
 			new CLOptionDescriptor("globalproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_GLOBAL_PROP, 
-                    "Define Global properties (sent to servers)"),
+                    "Define Global properties (sent to servers)\n\t\te.g. -Gport=123 or -Gglobal.properties"),
 			new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
 					| CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY, 
                     "Define additional system properties"),
@@ -595,6 +595,22 @@ public class JMeter implements JMeterPlugin {
 				if (value.length() > 0) { // Set it
 					log.info("Setting Global property: " + name + "=" + value);
 					remoteProps.setProperty(name, value);
+				} else {
+					File propFile = new File(name);
+					if (propFile.canRead()) {
+						log.info("Setting Global properties from the file "+name);
+						fis = null;
+						try {
+							fis = new FileInputStream(propFile);
+						    remoteProps.load(fis);
+						} catch (FileNotFoundException e) {
+							log.warn("Could not find properties file: "+e.getLocalizedMessage());
+						} catch (IOException e) {
+							log.warn("Could not load properties file: "+e.getLocalizedMessage());
+						} finally {
+							JOrphanUtils.closeQuietly(fis);
+						}
+					}
 				}
 				break;
 			case LOGLEVEL:
