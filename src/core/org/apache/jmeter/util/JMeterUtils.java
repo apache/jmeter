@@ -27,7 +27,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -77,6 +79,12 @@ public class JMeterUtils implements UnitTestManager {
 
 	private static ResourceBundle resources;
 
+	// What host am I running on?
+	
+	private static String localHostIP = null;
+	private static String localHostName = null;
+	private static String localHostFullName = null;
+	
 	private static ThreadLocal localMatcher = new ThreadLocal() {
 		protected Object initialValue() {
 			return new Perl5Matcher();
@@ -1068,5 +1076,39 @@ public class JMeterUtils implements UnitTestManager {
 			f=new File(getJMeterBinDir(),fileName);
 		}
 		return f;
+	}
+	
+	public static synchronized String getLocalHostIP(){
+		if (localHostIP == null) {
+			getLocalHostDetails();
+		}
+		return localHostIP;
+	}
+
+	public static synchronized String getLocalHostName(){
+		if (localHostName == null) {
+			getLocalHostDetails();
+		}
+		return localHostName;
+	}
+
+	public static synchronized String getLocalHostFullName(){
+		if (localHostFullName == null) {
+			getLocalHostDetails();
+		}
+		return localHostFullName;
+	}
+
+	private static void getLocalHostDetails(){
+		InetAddress localHost=null;
+		try {
+			localHost = InetAddress.getLocalHost();
+		} catch (UnknownHostException e1) {
+			log.error("Unable to get local host IP address.");
+			return; // TODO - perhaps this should be a fatal error?
+		}
+		localHostIP=localHost.getHostAddress();
+		localHostName=localHost.getHostName();
+		localHostFullName=localHost.getCanonicalHostName();
 	}
 }
