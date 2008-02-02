@@ -1375,6 +1375,12 @@ run JMeter unless all the JMeter jars are added.
   	</delete>
   </target>
 
+  <target name="clean-dist" description="Clean up dist directory.">
+  	<delete quiet="true">
+  	    <fileset dir="${dist.dir}"/>
+  	</delete>
+  </target>
+
   <target name="docs-api" description="Generate the API documentation.">
   	<tstamp>
   	  <!-- Used to ensure end-year is up to date -->
