@@ -828,7 +828,9 @@ public class JMeter implements JMeterPlugin {
 			System.exit(1);
 		}
 		engine.configure(testTree);
-		engine.setProperties(remoteProps);
+		if (!remoteProps.isEmpty()) {
+			engine.setProperties(remoteProps);
+		}
 		return engine;
 	}
 
