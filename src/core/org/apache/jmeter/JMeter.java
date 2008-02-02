@@ -288,6 +288,9 @@ public class JMeter implements JMeterPlugin {
 			log.info("JMeterHome="     + JMeterUtils.getJMeterHome());// $NON-NLS-1$
 			logProperty("user.dir","  ="); //$NON-NLS-1$
 			log.info("PWD       ="+new File(".").getCanonicalPath());//$NON-NLS-1$
+			log.info("IP: "+JMeterUtils.getLocalHostIP()
+					+" Name: "+JMeterUtils.getLocalHostName()
+					+" FullName: "+JMeterUtils.getLocalHostFullName());
             setProxy(parser);
             
             updateClassLoader();
