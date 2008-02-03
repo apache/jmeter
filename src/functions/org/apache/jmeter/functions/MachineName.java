@@ -19,8 +19,6 @@
 package org.apache.jmeter.functions;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,72 +31,57 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class MachineName extends AbstractFunction implements Serializable {
 
-	private static final List desc = new LinkedList();
+    private static final List desc = new LinkedList();
 
-	private static final String KEY = "__machineName"; //$NON-NLS-1$
+    private static final String KEY = "__machineName"; //$NON-NLS-1$
 
-	static {
-		// desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
-		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
-	}
+    static {
+        // desc.add("Use fully qualified host name: TRUE/FALSE (Default FALSE)");
+        desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
+    }
 
-	private Object[] values;
+    private Object[] values;
 
-	public MachineName() {
-	}
+    public MachineName() {
+    }
 
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
-	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
-			throws InvalidVariableException {
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
+            throws InvalidVariableException {
 
-		/*
-		 * boolean fullHostName = false; if (((CompoundFunction) values[0])
-		 * .execute() .toLowerCase() .equals("true")) { fullHostName = true; }
-		 */
+        /*
+         * boolean fullHostName = false; if (((CompoundFunction) values[0])
+         * .execute() .toLowerCase() .equals("true")) { fullHostName = true; }
+         */
 
-		String machineName = "";
+        String machineName = JMeterUtils.getLocalHostName();
+        
+        if (values.length >= 1){// we have a variable name
+            JMeterVariables vars = getVariables();
+            if (vars != null) {// May be null if function is used on TestPlan
+                String varName = ((CompoundVariable) values[0]).execute();
+                if (varName.length() > 0) {
+                    vars.put(varName, machineName);
+                }
+            }
+        }
+        return machineName;
 
-		try {
+    }
 
-			InetAddress Address = InetAddress.getLocalHost();
+    public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
+        checkParameterCount(parameters, 0, 1);
+        values = parameters.toArray();
+    }
 
-			// fullHostName disabled until we move up to 1.4 as the support jre
-			// if ( fullHostName ) {
-			// machineName = Address.getCanonicalHostName();
+    public String getReferenceKey() {
+        return KEY;
+    }
 
-			// } else {
-			machineName = Address.getHostName();
-			// }
-
-		} catch (UnknownHostException e) {
-		}
-
-		if (values.length >= 1){// we have a variable name
-			JMeterVariables vars = getVariables();
-			if (vars != null) {// May be null if function is used on TestPlan
-				String varName = ((CompoundVariable) values[0]).execute();
-				if (varName.length() > 0) {
-				    vars.put(varName, machineName);
-				}
-			}
-		}
-		return machineName;
-
-	}
-
-	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkParameterCount(parameters, 0, 1);
-		values = parameters.toArray();
-	}
-
-	public String getReferenceKey() {
-		return KEY;
-	}
-
-	public List getArgumentDesc() {
-		return desc;
-	}
+    public List getArgumentDesc() {
+        return desc;
+    }
 }
