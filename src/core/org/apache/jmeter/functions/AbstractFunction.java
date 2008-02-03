@@ -31,35 +31,44 @@ import org.apache.jmeter.threads.JMeterVariables;
  */
 public abstract class AbstractFunction implements Function {
 
-	/**
-	 * @see Function#execute(SampleResult, Sampler)
-	 */
-	abstract public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
+    /**
+     * <p><b>
+     * N.B. setParameters() and execute() are called from different threads, 
+     * so both must be synchronized unless there are no parameters to save
+     * </b></p>
+     * @see Function#execute(SampleResult, Sampler)
+     */
+    abstract public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException;
 
-	public String execute() throws InvalidVariableException {
-		JMeterContext context = JMeterContextService.getContext();
-		SampleResult previousResult = context.getPreviousResult();
-		Sampler currentSampler = context.getCurrentSampler();
-		return execute(previousResult, currentSampler);
-	}
+    public String execute() throws InvalidVariableException {
+        JMeterContext context = JMeterContextService.getContext();
+        SampleResult previousResult = context.getPreviousResult();
+        Sampler currentSampler = context.getCurrentSampler();
+        return execute(previousResult, currentSampler);
+    }
 
-	/**
-	 * @see Function#setParameters(Collection)
-	 * <br/>
+    /**
+     * 
+     * <p><b>
+     * N.B. setParameters() and execute() are called from different threads, 
+     * so both must be synchronized unless there are no parameters to save
+     * </b></p>
+     * 
+     * @see Function#setParameters(Collection)
+     * <br/>
      * Note: This is always called even if no parameters are provided 
      * (versions of JMeter after 2.3.1)
-     * 
-	 */
-	abstract public void setParameters(Collection parameters) throws InvalidVariableException;
+     */
+    abstract public void setParameters(Collection parameters) throws InvalidVariableException;
 
-	/**
-	 * @see Function#getReferenceKey()
-	 */
-	abstract public String getReferenceKey();
+    /**
+     * @see Function#getReferenceKey()
+     */
+    abstract public String getReferenceKey();
 
-	protected JMeterVariables getVariables() {
-		return JMeterContextService.getContext().getVariables();
-	}
+    protected JMeterVariables getVariables() {
+        return JMeterContextService.getContext().getVariables();
+    }
     
     /**
      * Utility method to check parameter counts.
@@ -76,12 +85,12 @@ public abstract class AbstractFunction implements Function {
         int num = parameters.size();
         if ((num > max) || (num < min)) {
             throw new InvalidVariableException(
-            		getReferenceKey() +
+                    getReferenceKey() +
                     " called with wrong number of parameters. Actual: "+num+
                     (
-                    	min==max ? 
-                    	". Expected: "+min+"." 
-                    	: ". Expected: >= "+min+" and <= "+max
+                        min==max ? 
+                        ". Expected: "+min+"." 
+                        : ". Expected: >= "+min+" and <= "+max
                     )
                     );
         }
@@ -101,7 +110,7 @@ public abstract class AbstractFunction implements Function {
         int num = parameters.size();
         if (num != count) {
             throw new InvalidVariableException(
-            		getReferenceKey() +
+                    getReferenceKey() +
                     " called with wrong number of parameters. Actual: "+num+". Expected: "+count+"." 
                    );
         }
@@ -121,7 +130,7 @@ public abstract class AbstractFunction implements Function {
         int num = parameters.size();
         if (num < minimum) {
             throw new InvalidVariableException(
-            		getReferenceKey() +
+                    getReferenceKey() +
                     " called with wrong number of parameters. Actual: "+num+". Expected at least: "+minimum+"." 
                    );
         }
