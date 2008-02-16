@@ -27,46 +27,74 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
  */
 public interface TestListener {
 	/**
+	 * <p>
 	 * Called just before the start of the test from the main engine thread.
 	 * 
 	 * This is before the test elements are cloned.
 	 * 
 	 * Note that not all the test
 	 * variables will have been set up at this point.
-	 * 
+     * </p>
+     * 
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
 	 * 
 	 */
 	public void testStarted();
 
 	/**
+	 * <p>
 	 * Called just before the start of the test from the main engine thread.
 	 * 
 	 * This is before the test elements are cloned.
 	 * 
 	 * Note that not all the test
 	 * variables will have been set up at this point.
+	 * </p>
 	 * 
+	 * <p>
+	 * <b>
+	 * N.B. testStarted() and testEnded() are called from different threads.
+	 * </b>
+	 * </p>
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#run()
 	 * 
 	 */
 	public void testStarted(String host);
 
 	/**
+	 * <p>
 	 * Called once for all threads after the end of a test.
 	 * 
 	 * This will use the same element instances as at the start of the test.
-	 * 
+	 * </p> 
+     * 
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
 	 * 
 	 */
 	public void testEnded();
 
 	/**
+	 * <p>
 	 * Called once for all threads after the end of a test.
 	 * 
 	 * This will use the same element instances as at the start of the test.
-	 * 
+     * </p> 
+     * 
+     * <p>
+     * <b>
+     * N.B. testStarted() and testEnded() are called from different threads.
+     * </b>
+     * </p>
 	 * @see org.apache.jmeter.engine.StandardJMeterEngine#stopTest()
 	 * 
 	 */
