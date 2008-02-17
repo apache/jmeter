@@ -18,14 +18,12 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import org.apache.jmeter.testelement.TestListener;
-import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author pete
  * 
  * BaseJMSSampler is an abstract class which provides implementation for common
  * properties. Rather than duplicate the code, it's contained in the base class.
@@ -61,26 +59,18 @@ public abstract class BaseJMSSampler extends AbstractSampler implements TestList
 	public BaseJMSSampler() {
 	}
 
-	public abstract void testEnded(String host);
-
-	public abstract void testStarted(String host);
-
-	public abstract void testEnded();
-
-	public abstract void testStarted();
-
-	public abstract void testIterationStart(LoopIterationEvent event);
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
 	 */
 	public SampleResult sample(Entry e) {
-		return new SampleResult();
+	    return this.sample();
 	}
 
-	// ------------- get/set properties ----------------------//
+	public abstract SampleResult sample();
+
+    // ------------- get/set properties ----------------------//
 	/**
 	 * set the initial context factory
 	 * 
