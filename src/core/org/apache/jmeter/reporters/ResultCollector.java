@@ -98,9 +98,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
 	private boolean inTest = false;
 
-	private static Map files = new HashMap();
+	private static final Map files = new HashMap();
 
-	private Set hosts = new HashSet();
+	private final Set hosts = new HashSet();
 
 	protected boolean isStats = false;
 
@@ -180,7 +180,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		setFilenameProperty(f);
 	}
 
-	public void testEnded(String host) {
+	public synchronized void testEnded(String host) {
 		hosts.remove(host);
 		if (hosts.size() == 0) {
 			finalizeFileOutput();
@@ -188,7 +188,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 		}
 	}
 
-	public void testStarted(String host) {
+	public synchronized void testStarted(String host) {
 		hosts.add(host);
 		try {
 			initializeFileOutput();
