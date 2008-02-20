@@ -77,6 +77,11 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
 	private final static int EQUALS = 1 << 3;
 
+    private final static int SUBSTRING = 1 << 4;
+
+    // Mask should contain all types (but not NOT)
+    private final static int TYPE_MASK = CONTAINS | EQUALS | MATCH | SUBSTRING;
+    
     private static final int  EQUALS_SECTION_DIFF_LEN
             = JMeterUtils.getPropDefault("assertion.equals_section_diff_len", 100);
 
@@ -147,6 +152,11 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		setProperty(new IntegerProperty(TEST_TYPE, testType));
 	}
 
+    private void setTestTypeMasked(int testType) {
+        int value = getTestType() & ~(TYPE_MASK) | testType;
+        setProperty(new IntegerProperty(TEST_TYPE, value));
+    }
+
 	public void addTestString(String testString) {
 		getTestStrings().addProperty(new StringProperty(String.valueOf(testString.hashCode()), testString));
 	}
@@ -211,6 +221,10 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 		return (getTestType() & EQUALS) > 0;
 	}
 
+    public boolean isSubstringType() {
+        return (getTestType() & SUBSTRING) > 0;
+    }
+
 	public boolean isContainsType() {
 		return (getTestType() & CONTAINS) > 0;
 	}
@@ -224,16 +238,20 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	}
 
 	public void setToContainsType() {
-		setTestType((getTestType() | CONTAINS) & ~(MATCH | EQUALS));
+		setTestTypeMasked(CONTAINS);
 	}
 
 	public void setToMatchType() {
-		setTestType((getTestType() | MATCH) & ~(CONTAINS | EQUALS));
+	    setTestTypeMasked(MATCH);
 	}
 
 	public void setToEqualsType() {
-		setTestType((getTestType() | EQUALS) & ~(MATCH | CONTAINS));
+	    setTestTypeMasked(EQUALS);
 	}
+
+    public void setToSubstringType() {
+        setTestTypeMasked(SUBSTRING);
+    }
 
 	public void setToNotType() {
 		setTestType((getTestType() | NOT));
@@ -292,6 +310,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
 		boolean contains = isContainsType(); // do it once outside loop
 		boolean equals = isEqualsType();
+        boolean substring = isSubstringType();
 		boolean debugEnabled = log.isDebugEnabled();
 		if (debugEnabled){
 			log.debug("Type:" + (contains?"Contains":"Match") + (not? "(not)": ""));
@@ -309,6 +328,8 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 					found = localMatcher.contains(toCheck, pattern);
                 } else if (equals) {
                     found = toCheck.equals(stringPattern);
+                } else if (substring) {
+                    found = toCheck.indexOf(stringPattern) != -1;
 				} else {
 					found = localMatcher.matches(toCheck, pattern);
 				}
@@ -356,9 +377,11 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
 		switch (getTestType()) {
 		case CONTAINS:
+        case SUBSTRING:
 			sb.append(" expected to contain ");
 			break;
 		case NOT | CONTAINS:
+        case NOT | SUBSTRING:
 			sb.append(" expected not to contain ");
 			break;
 		case MATCH:
