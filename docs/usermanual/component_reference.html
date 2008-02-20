@@ -7891,7 +7891,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
 
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='766' height='382' src="../images/screenshots/assertion/assertion.png"></div>
+						<div align="center"><img width='762' height='374' src="../images/screenshots/assertion/assertion.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -7933,9 +7933,35 @@ pattern. You can attach multiple assertions to any controller for additional fle
 		</tr>
 			<tr>
 			<td>Pattern Matching Rules</td>
-			<td>						Indicates whether the text being tested
-        must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
-        should NOT CONTAIN or NOT MATCH the test patterns.
+			<td>						Indicates how the text being tested
+        is checked against the pattern.
+        
+												<ul	>
+								
+        
+												<li	>
+								Contains - true if the text contains the regular expression pattern
+						</li>
+									
+        
+												<li	>
+								Matches - true if the whole text matches the regular expression pattern
+						</li>
+									
+        
+												<li	>
+								Equals - true if the whole text equals the pattern string (case-sensitive)
+						</li>
+									
+        
+												<li	>
+								Substring - true if the text contains the pattern string (case-sensitive)
+						</li>
+									
+        
+						</ul>
+									
+        NOT may also be selected to invert the result of the check.
 			</td>
 			<td>
 											Yes
@@ -7943,8 +7969,11 @@ pattern. You can attach multiple assertions to any controller for additional fle
 		</tr>
 			<tr>
 			<td>Patterns to Test</td>
-			<td>						A list of regular expressions to
-        be tested.  Each pattern is tested separately.  There is no difference between setting up
+			<td>						A list of patterns to
+        be tested.  
+        Each pattern is tested separately. 
+        If a pattern fails, then further patterns are not checked.
+        There is no difference between setting up
         one Assertion with multiple patterns and setting up multiple Assertions with one
         pattern each (assuming the other options are the same).
         
@@ -9254,7 +9283,6 @@ your dynamic test sample.
 			</td></tr>
 	</table></p>
 									
-
 
 										  		</td></tr>
 		<tr><td><br></td></tr>

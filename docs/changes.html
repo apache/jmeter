@@ -147,6 +147,9 @@ Simple Controller now works properly under a While Controller
 CSV and XML files can now contain additional variables (define the JMeter property sample_variables).
 						</p>
 							  									 				<p	>
+								Response Assertion can now match on substrings
+						</p>
+							  									 				<p	>
 								Number of classes loaded in non-GUI mode is much reduced.
 						</p>
 							  									 				<h4	>
@@ -230,6 +233,11 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 						</li>
 									
 
+												<li	>
+								Bug 44314 - Not possible to add more than one SyncTimer
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -301,6 +309,16 @@ that contain '.functions.' and don't contain '.gui.'
 												<li	>
 								Allow most functions to be used on the Test Plan. 
 Note __split() and __regex() cannot be used on the Test Plan.
+						</li>
+									
+
+												<li	>
+								Allow Global properties to be loaded from a file, e.g. -Gglobal.properties
+						</li>
+									
+
+												<li	>
+								Add "Substring" option to Response Assertion
 						</li>
 									
 
