@@ -385,6 +385,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 		spanish.setActionCommand(ActionNames.CHANGE_LANGUAGE);
 		spanish.setName("es"); //$NON-NLS-1$
 		languageMenu.add(spanish);
+		// add turkish
+		JMenuItem turkish = new JMenuItem(JMeterUtils.getResString("tr")); //$NON-NLS-1$
+		turkish.addActionListener(ActionRouter.getInstance());
+		turkish.setActionCommand(ActionNames.CHANGE_LANGUAGE);
+		turkish.setName("tr"); //$NON-NLS-1$
+		languageMenu.add(turkish);
 		return languageMenu;
 	}
 
