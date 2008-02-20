@@ -40,6 +40,8 @@ Simple Controller now works properly under a While Controller</p>
 <p>CSV fields can now contain delimiters. 
 CSV and XML files can now contain additional variables (define the JMeter property sample_variables).</p>
 
+<p>Response Assertion can now match on substrings</p>
+
 <p>Number of classes loaded in non-GUI mode is much reduced.</p>
 
 <h4>Known bugs</h4>
@@ -91,6 +93,7 @@ that contain '.functions.' and don't contain '.gui.'</li>
 <li>Allow most functions to be used on the Test Plan. 
 Note __split() and __regex() cannot be used on the Test Plan.</li>
 <li>Allow Global properties to be loaded from a file, e.g. -Gglobal.properties</li>
+<li>Add "Substring" option to Response Assertion</li>
 </ul>
 
 <h4>Non-functional changes</h4>
