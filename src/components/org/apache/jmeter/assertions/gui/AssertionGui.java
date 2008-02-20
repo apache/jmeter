@@ -83,9 +83,14 @@ public class AssertionGui extends AbstractAssertionGui {
 	private JRadioButton matchesBox;
 
 	/**
-	 * Radio button indicating if the field equals the first pattern.
+	 * Radio button indicating if the field equals the string.
 	 */
 	private JRadioButton equalsBox;
+
+    /**
+     * Radio button indicating if the field contains the string.
+     */
+    private JRadioButton substringBox;
 
     /**
 	 * Checkbox indicating to test that the field does NOT contain/match the
@@ -153,6 +158,8 @@ public class AssertionGui extends AbstractAssertionGui {
 				ra.setToContainsType();
 			} else if (equalsBox.isSelected()) {
                 ra.setToEqualsType();
+            } else if (substringBox.isSelected()) {
+                ra.setToSubstringType();
 			} else {
 				ra.setToMatchType();
 			}
@@ -181,8 +188,6 @@ public class AssertionGui extends AbstractAssertionGui {
         assumeSuccess.setSelected(false);
         
         containsBox.setSelected(true);
-        matchesBox.setSelected(false);
-        equalsBox.setSelected(false);
         notBox.setSelected(false);
     }    
 
@@ -201,23 +206,15 @@ public class AssertionGui extends AbstractAssertionGui {
 
 		if (model.isContainsType()) {
 			containsBox.setSelected(true);
-			matchesBox.setSelected(false);
-            equalsBox.setSelected(false);
         } else if (model.isEqualsType()) {
-			containsBox.setSelected(false);
-			matchesBox.setSelected(false);
             equalsBox.setSelected(true);
+        } else if (model.isSubstringType()) {
+            substringBox.setSelected(true);
 		} else {
-			containsBox.setSelected(false);
 			matchesBox.setSelected(true);
-            equalsBox.setSelected(false);
 		}
 
-		if (model.isNotType()) {
-			notBox.setSelected(true);
-		} else {
-			notBox.setSelected(false);
-		}
+		notBox.setSelected(model.isNotType());
 
 		if (model.isTestFieldResponseData()) {
 			responseStringButton.setSelected(true);
@@ -325,6 +322,10 @@ public class AssertionGui extends AbstractAssertionGui {
 		equalsBox = new JRadioButton(JMeterUtils.getResString("assertion_equals")); //$NON-NLS-1$
 		group.add(equalsBox);
 		panel.add(equalsBox);
+
+        substringBox = new JRadioButton(JMeterUtils.getResString("assertion_substring")); //$NON-NLS-1$
+        group.add(substringBox);
+        panel.add(substringBox);
 
 		notBox = new JCheckBox(JMeterUtils.getResString("assertion_not")); //$NON-NLS-1$
 		panel.add(notBox);

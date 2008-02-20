@@ -2441,7 +2441,7 @@ GUI that they can use while developing new JMeter components.</p>
 	"true" or "false" after all assertions for a sampler have been run.
 	 </note>
 </description>
-<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="766" height="382" screenshot="assertion/assertion.png">
+<component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="762" height="374" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
@@ -2496,6 +2496,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
         <li>Contains - true if the text contains the regular expression pattern</li>
         <li>Matches - true if the whole text matches the regular expression pattern</li>
         <li>Equals - true if the whole text equals the pattern string (case-sensitive)</li>
+        <li>Substring - true if the text contains the pattern string (case-sensitive)</li>
         </ul>
         NOT may also be selected to invert the result of the check.</property>
         <property name="Patterns to Test" required="Yes">A list of patterns to
