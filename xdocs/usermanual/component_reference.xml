@@ -2490,11 +2490,19 @@ pattern. You can attach multiple assertions to any controller for additional fle
                 Note that this will have the effect of clearing any previous assertion failures,
                 so make sure that this is only set on the first assertion.
                 </property>
-        <property name="Pattern Matching Rules" required="Yes">Indicates whether the text being tested
-        must CONTAIN or MATCH the test patterns.  NOT may also be selected to indicate the text
-        should NOT CONTAIN or NOT MATCH the test patterns.</property>
-        <property name="Patterns to Test" required="Yes">A list of regular expressions to
-        be tested.  Each pattern is tested separately.  There is no difference between setting up
+        <property name="Pattern Matching Rules" required="Yes">Indicates how the text being tested
+        is checked against the pattern.
+        <ul>
+        <li>Contains - true if the text contains the regular expression pattern</li>
+        <li>Matches - true if the whole text matches the regular expression pattern</li>
+        <li>Equals - true if the whole text equals the pattern string (case-sensitive)</li>
+        </ul>
+        NOT may also be selected to invert the result of the check.</property>
+        <property name="Patterns to Test" required="Yes">A list of patterns to
+        be tested.  
+        Each pattern is tested separately. 
+        If a pattern fails, then further patterns are not checked.
+        There is no difference between setting up
         one Assertion with multiple patterns and setting up multiple Assertions with one
         pattern each (assuming the other options are the same).
         <b>However, when the Ignore Status checkbox is selected, this has the effect of cancelling any
