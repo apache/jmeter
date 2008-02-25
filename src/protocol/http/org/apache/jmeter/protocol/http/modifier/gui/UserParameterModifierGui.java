@@ -36,6 +36,8 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * A swing panel to allow UI with the UserParameterModifier class.
  * 
+ * This test element is deprecated. Test plans should use User Parameters instead.
+ * @deprecated
  */
 public class UserParameterModifierGui extends AbstractPreProcessorGui {
 	// -------------------------------------------

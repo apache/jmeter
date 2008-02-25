@@ -30,11 +30,10 @@ import org.xml.sax.XMLReader;
  * Parse an XML file to obtain parameter name and value information for all
  * users defined in the XML file.
  * 
- * @author Mark Walsh
- * @version $Revision$
+ * This test element is deprecated. Test plans should use User Parameters instead.
+ * @deprecated
  */
 public class UserParameterXMLParser {
-	// private String vendorParseClass = "org.apache.xerces.parsers.SAXParser";
 
 	/**
 	 * Parse all user parameter data defined in XML file.
@@ -57,7 +56,7 @@ public class UserParameterXMLParser {
 		reader.setErrorHandler(parameterErrorHandler);
 
 		// Request validation
-		reader.setFeature("http://xml.org/sax/features/validation", true);
+		reader.setFeature("http://xml.org/sax/features/validation", true); // $NON-NLS-1$
 
 		// parse
 		InputSource inputSource = new InputSource(xmlURI);
