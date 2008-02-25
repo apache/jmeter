@@ -41,13 +41,13 @@ import org.apache.log.Logger;
  * For example if userid and password are defined in the XML parameter file for
  * each user (ie thread), then simulated multiple user activity can occur.
  * 
- * @author Mark Walsh
- * @version $Revision$
+ * This test element is deprecated. Test plans should use User Parameters instead.
+ * @deprecated
  */
 public class UserParameterModifier extends ConfigTestElement implements PreProcessor, Serializable, TestListener {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static final String XMLURI = "UserParameterModifier.xmluri";
+	private static final String XMLURI = "UserParameterModifier.xmluri"; // $NON-NLS-1$
 
 	private UserSequence allAvailableUsers;
 
