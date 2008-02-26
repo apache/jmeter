@@ -62,7 +62,7 @@ public class PackageTest extends JMeterTestCase {
 	}
 
 	// Create the CSVRead function and set its parameters.
-	private static CSVRead setParams(String p1, String p2) throws Exception {
+	private static CSVRead setCSVReadParams(String p1, String p2) throws Exception {
 		CSVRead cr = new CSVRead();
 		Collection parms = new LinkedList();
 		if (p1 != null)
@@ -562,39 +562,39 @@ public class PackageTest extends JMeterTestCase {
 
 	public void CSVParams() throws Exception {
 		try {
-			setParams(null, null);
+			setCSVReadParams(null, null);
 			fail("Should have failed");
 		} catch (InvalidVariableException e) {
 		}
 		try {
-			setParams(null, "");
+			setCSVReadParams(null, "");
 			fail("Should have failed");
 		} catch (InvalidVariableException e) {
 		}
 		try {
-			setParams("", null);
+			setCSVReadParams("", null);
 			fail("Should have failed");
 		} catch (InvalidVariableException e) {
 		}
 	}
 
 	public void CSVSetup() throws Exception {
-		cr1 = setParams("testfiles/test.csv", "1");
-		cr2 = setParams("testfiles/test.csv", "2");
-		cr3 = setParams("testfiles/test.csv", "3");
-		cr4 = setParams("testfiles/test.csv", "next");
-		cr5 = setParams("", "0");
-		cr6 = setParams("", "next");
+		cr1 = setCSVReadParams("testfiles/test.csv", "1");
+		cr2 = setCSVReadParams("testfiles/test.csv", "2");
+		cr3 = setCSVReadParams("testfiles/test.csv", "3");
+		cr4 = setCSVReadParams("testfiles/test.csv", "next");
+		cr5 = setCSVReadParams("", "0");
+		cr6 = setCSVReadParams("", "next");
 	}
 
 	public void CSValias() throws Exception {
-		cr1 = setParams("testfiles/test.csv", "*A");
-		cr2 = setParams("*A", "1");
-		cr3 = setParams("*A", "next");
+		cr1 = setCSVReadParams("testfiles/test.csv", "*A");
+		cr2 = setCSVReadParams("*A", "1");
+		cr3 = setCSVReadParams("*A", "next");
 
-		cr4 = setParams("testfiles/test.csv", "*B");
-		cr5 = setParams("*B", "2");
-		cr6 = setParams("*B", "next");
+		cr4 = setCSVReadParams("testfiles/test.csv", "*B");
+		cr5 = setCSVReadParams("*B", "2");
+		cr6 = setCSVReadParams("*B", "next");
 
 		String s;
 
@@ -627,22 +627,22 @@ public class PackageTest extends JMeterTestCase {
 	public void CSVNoFile() throws Exception {
 		String s;
 
-		cr1 = setParams("xtestfiles/test.csv", "1");
+		cr1 = setCSVReadParams("xtestfiles/test.csv", "1");
 		log.info("Expecting file not found");
 		s = cr1.execute(null, null);
 		assertEquals("", s);
 
-		cr2 = setParams("xtestfiles/test.csv", "next");
+		cr2 = setCSVReadParams("xtestfiles/test.csv", "next");
 		log.info("Expecting no entry for file");
 		s = cr2.execute(null, null);
 		assertEquals("", s);
 
-		cr3 = setParams("xtestfiles/test.csv", "*ABC");
+		cr3 = setCSVReadParams("xtestfiles/test.csv", "*ABC");
 		log.info("Expecting file not found");
 		s = cr3.execute(null, null);
 		assertEquals("", s);
 
-		cr4 = setParams("*ABC", "1");
+		cr4 = setCSVReadParams("*ABC", "1");
 		log.info("Expecting cannot open file");
 		s = cr4.execute(null, null);
 		assertEquals("", s);
@@ -650,8 +650,8 @@ public class PackageTest extends JMeterTestCase {
 
 	// Check blank lines are treated as EOF
 	public void CSVBlankLine() throws Exception {
-		CSVRead csv1 = setParams("testfiles/testblank.csv", "1");
-		CSVRead csv2 = setParams("testfiles/testblank.csv", "next");
+		CSVRead csv1 = setCSVReadParams("testfiles/testblank.csv", "1");
+		CSVRead csv2 = setCSVReadParams("testfiles/testblank.csv", "next");
 
 		String s;
 
@@ -904,20 +904,9 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("select name from customers",s);
     }
     
-    private void checkInvalidParameterCounts(AbstractFunction func, int max) throws Exception {
-		Collection parms = new LinkedList();
-    	for (int c=0; c <= max; c++){
-        	try {
-        		func.setParameters(parms);
-    			fail("Should have generated InvalidVariableException for "+c+" parameters");
-    		} catch (InvalidVariableException ignored) {
-    		}
-    		parms.add("");
-    	}
-    }
     public void sumTest() throws Exception {
     	IntSum is = new IntSum();
-    	checkInvalidParameterCounts(is,2);
+    	checkInvalidParameterCounts(is,3);
     	checkSum(is,"3", new String[]{"1","2"});
     	checkSum(is,"1", new String[]{"-1","1","1","1","-1","0"});
     	String maxIntVal = Integer.toString(Integer.MAX_VALUE);
@@ -928,7 +917,7 @@ public class PackageTest extends JMeterTestCase {
     	is = null; // prevent accidental use below
     	
     	LongSum ls = new LongSum();
-    	checkInvalidParameterCounts(ls,2);
+    	checkInvalidParameterCounts(ls,3);
     	checkSum(ls,"3", new String[]{"1","2"});
     	checkSum(ls,"1", new String[]{"-1","1","1","1","-1","0"});
     	String maxIntVal_1 = Long.toString(1+(long)Integer.MAX_VALUE);

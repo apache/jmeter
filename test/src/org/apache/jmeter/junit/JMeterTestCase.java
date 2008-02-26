@@ -19,9 +19,14 @@
 package org.apache.jmeter.junit;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
+
+import org.apache.jmeter.functions.AbstractFunction;
+import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -110,4 +115,44 @@ public abstract class JMeterTestCase extends TestCase {
 	}
 
 	protected static final Logger testLog = LoggingManager.getLoggerForClass();
+
+    protected void checkInvalidParameterCounts(AbstractFunction func, int minimum)
+            throws Exception {
+        Collection parms = new LinkedList();
+        for (int c = 0; c < minimum; c++) {
+            try {
+                func.setParameters(parms);
+                fail("Should have generated InvalidVariableException for " + parms.size()
+                        + " parameters");
+            } catch (InvalidVariableException ignored) {
+            }
+            parms.add("");
+        }
+        func.setParameters(parms);
+    }
+    
+    protected void checkInvalidParameterCounts(AbstractFunction func, int min,
+            int max) throws Exception {
+        Collection parms = new LinkedList();
+        for (int count = 0; count < min; count++) {
+            try {
+                func.setParameters(parms);
+                fail("Should have generated InvalidVariableException for " + parms.size()
+                        + " parameters");
+            } catch (InvalidVariableException ignored) {
+            }
+            parms.add("");
+        }
+        for (int count = min; count <= max; count++) {
+            func.setParameters(parms);
+            parms.add("");
+        }
+        parms.add("");
+        try {
+            func.setParameters(parms);
+            fail("Should have generated InvalidVariableException for " + parms.size()
+                    + " parameters");
+        } catch (InvalidVariableException ignored) {
+        }
+    }
 }
