@@ -76,7 +76,7 @@ logkit-1.2
 - logging
 - Anakia
 
-serialiser_2_7_1
+serialiser-2_9_1
 - xalan
 
 soap (appears to be version 2.3.1)
@@ -93,11 +93,11 @@ velocity-1.5
 xalan_2_7_1
 +org.apache.xalan|xml|xpath
 
-xercesimpl_2_7_1
+xercesimpl-2_9_1
 +org.apache.html.dom|org.apache.wml|org.apache.xerces|org.apache.xml.serialize
 +org.w3c.dom.html|ls
 
-xml-apis_2_7_1
+xml-apis-2_9_1
 +javax.xml
 +org.w3c.dom
 +org.xml.sax
