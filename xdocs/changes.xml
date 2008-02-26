@@ -96,6 +96,8 @@ Note __split() and __regex() cannot be used on the Test Plan.</li>
 <li>Add "Substring" option to Response Assertion</li>
 <li>Bug 44378 - Turkish localisation</li>
 <li>Add optional output variable name to Jexl function</li>
+<li>Add application/vnd.wap.xhtml+xml as a text type</li>
+<li>Add means to override maximum display size in View Results Tree - set the property: view.results.tree.max_size</li>
 </ul>
 
 <h4>Non-functional changes</h4>
