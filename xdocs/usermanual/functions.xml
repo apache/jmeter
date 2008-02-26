@@ -818,6 +818,7 @@ time.YMD=yyMMdd
         <property name="Expression" required="Yes">
         The expression to be evaluated. 
         </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 <p>
 JMeter 2.3 (and later versions) make the following variables available to the script:

@@ -28,6 +28,9 @@ import org.apache.commons.jexl.JexlHelper;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -35,6 +38,7 @@ import org.apache.log.Logger;
 /**
  * A function which understands Commons JEXL
  */
+// For unit tests, see TestJexlFunction
 public class JexlFunction extends AbstractFunction implements Serializable
 {
     private static final long serialVersionUID = 232L;
@@ -48,11 +52,12 @@ public class JexlFunction extends AbstractFunction implements Serializable
     static
     {
         desc.add(JMeterUtils.getResString("jexl_expression")); //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_paropt"));// $NON-NLS1$
     }
 
     private Object[] values;
 
-    public synchronized String execute(SampleResult result, Sampler sampler)
+    public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException
     {
         String str = ""; //$NON-NLS-1$
@@ -60,15 +65,23 @@ public class JexlFunction extends AbstractFunction implements Serializable
         CompoundVariable var = (CompoundVariable) values[0];
         String exp = var.execute();
 
+        String varName = ""; //$NON-NLS-1$
+        if (values.length > 1) {
+            varName = ((CompoundVariable) values[1]).execute();
+        }
+
+        JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
+
         try
         {
             Expression e = ExpressionFactory.createExpression(exp);
             JexlContext jc = JexlHelper.createContext();
-            jc.getVars().put("ctx", sampler.getThreadContext()); //$NON-NLS-1$
-            jc.getVars().put("vars", getVariables()); //$NON-NLS-1$
-            jc.getVars().put("theadName", sampler.getThreadName()); //$NON-NLS-1$
-            jc.getVars().put("sampler", sampler); //$NON-NLS-1$
-            jc.getVars().put("sampleResult", result); //$NON-NLS-1$
+            jc.getVars().put("ctx", jmctx); //$NON-NLS-1$                
+            jc.getVars().put("vars", vars); //$NON-NLS-1$
+            jc.getVars().put("theadName", Thread.currentThread().getName()); //$NON-NLS-1$
+            jc.getVars().put("sampler", currentSampler); //$NON-NLS-1$ (may be null)
+            jc.getVars().put("sampleResult", previousResult); //$NON-NLS-1$ (may be null)
 
             // Now evaluate the expression, getting the result
             Object o = e.evaluate(jc);
@@ -76,10 +89,13 @@ public class JexlFunction extends AbstractFunction implements Serializable
             {
                 str = o.toString();
             }
+            if (vars != null && varName.length() > 0) {// vars will be null on TestPlan
+                vars.put(varName, str);
+            }
         } catch (Exception e)
         {
             log.error("An error occurred while evaluating the expression \""
-                    + exp + "\"");
+                    + exp + "\"\n",e);
         }
         return str;
     }
@@ -97,7 +113,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
     public synchronized void setParameters(Collection parameters)
             throws InvalidVariableException
     {
-		checkParameterCount(parameters, 1);
+		checkParameterCount(parameters, 1, 2);
         values = parameters.toArray();
     }
 
