@@ -99,7 +99,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
         implements ActionListener, TreeSelectionListener, Clearable 
     {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    // Maximum size that we will display
+    private static final int MAX_DISPLAY_SIZE = 
+        JMeterUtils.getPropDefault("view.results.tree.max_size", 200 * 1024); // $NON-NLS-1$
 
 	// N.B. these are not multi-threaded, so don't make it static
 	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
@@ -611,8 +615,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 			// if this happens and revert the choice if he doesn't confirm
 			// he's ready to wait.
 			int len = res.getResponseData().length;
-			if (len > 200 * 1024) {
-				response = "Response too large to be displayed (" + len + " bytes).";
+			if (MAX_DISPLAY_SIZE > 0 && len > MAX_DISPLAY_SIZE) {
+				response = "Response too large to be displayed. Size: " + len + " > Max: "+MAX_DISPLAY_SIZE;
 				log.warn(response);
 			} else {
 				response = res.getResponseDataAsString();

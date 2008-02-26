@@ -5773,8 +5773,10 @@ otherwise it is considered to be binary.
 text/
 application/javascript
 application/json
-application/xhtml+xml
 application/soap+xml
+application/vnd.wap.xhtml+xml
+application/xhtml+xml
+application/xml
 
 						</pre>
 									
@@ -5785,6 +5787,17 @@ Additional types can be added by defining the JMeter property
 						</b>
 									 
 as a comma-separated list of the content-type prefixes to be matched.
+
+						</p>
+									
+
+												<p	>
+								If the response data is larger than 200K, then it won't be displayed.
+To change this limit, set the JMeter property 
+												<b	>
+								view.results.tree.max_size
+						</b>
+									
 
 						</p>
 									
