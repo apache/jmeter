@@ -84,6 +84,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 		showWarnings.setSelected(xpe.showWarnings());
 		reportErrors.setSelected(xpe.reportErrors());
 		nameSpace.setSelected(xpe.useNameSpace());
+        setTidyOptions(tolerant.isSelected());
 	}
 
     
