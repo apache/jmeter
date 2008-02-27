@@ -2681,6 +2681,9 @@ on XPath.
 <property name="Ignore Whitespace"	required="No">Ignore Element Whitespace.</property>
 <property name="True if nothing matches"	required="No">True if a XPath expression is not matched</property>
 </properties>
+<note>
+The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
+</note>
 </component>
 <component name="XML Schema Assertion" index="&sect-num;.5.9"  width="771" height="171" screenshot="assertion/XMLSchemaAssertion.png">
 <description><p>The XML Schema Assertion allows the user to validate a response against an XML Schema.</p></description>
