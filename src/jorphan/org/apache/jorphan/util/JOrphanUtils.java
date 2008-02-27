@@ -415,4 +415,28 @@ public final class JOrphanUtils {
         } catch (IOException e) {
         }
     }
+
+    /**
+     * Check if a byte array starts with the given byte array.
+     * 
+     * @see String#startsWith(String, int)
+     * 
+     * @param target array to scan
+     * @param search array to search for
+     * @param offset starting offset (>=0)
+     * @return true if the search array matches the target at the current offset
+     */
+    public static boolean startsWith(byte [] target, byte [] search, int offset){
+        final int targetLength = target.length;
+        final int searchLength = search.length;
+        if (offset < 0 || searchLength > targetLength+offset){
+            return false;
+        }
+        for(int i=0;i < searchLength; i++){
+            if (target[i+offset] != search[i]){
+                return false;
+            }
+        }
+        return true;
+    }
 }
