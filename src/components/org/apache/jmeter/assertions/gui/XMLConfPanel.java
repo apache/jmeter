@@ -190,5 +190,6 @@ public class XMLConfPanel extends JPanel {
 		quiet.setSelected(assertion.isQuiet());
 		showWarnings.setSelected(assertion.showWarnings());
 		reportErrors.setSelected(assertion.reportErrors());
+		tolerant();
 	}
 }
