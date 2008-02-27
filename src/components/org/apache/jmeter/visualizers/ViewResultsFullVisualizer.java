@@ -25,9 +25,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.lang.Character;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,21 +69,21 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.util.TidyException;
+import org.apache.jmeter.util.XPathUtil;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -110,7 +109,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	
 	private static final String NL = "\n"; // $NON-NLS-1$
 
-	private static final String XML_PFX = "<?xml "; // $NON-NLS-1$
+	private static final byte[] XML_PFX = "<?xml ".getBytes(); // $NON-NLS-1$
 
 	public final static Color SERVER_ERROR_COLOR = Color.red;
 
@@ -414,7 +413,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 							} else if (command.equals(JSON_COMMAND)) {
 								showRenderJSONResponse(response);
 							} else if (command.equals(XML_COMMAND)) {
-								showRenderXMLResponse(response);
+								showRenderXMLResponse(res);
 							}
 						} else {
 							byte[] responseBytes = res.getResponseData();
@@ -541,42 +540,25 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 	private static final SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
 
-	private void showRenderXMLResponse(String response) {
-		String parsable="";
-		if (response == null) {
-			results.setText(""); // $NON-NLS-1$
-			parsable = ""; // $NON-NLS-1$
-		} else {
-			results.setText(response);
-			int start = response.indexOf(XML_PFX);
-			if (start > 0) {
-			    parsable = response.substring(start);				
-			} else {
-			    parsable=response;
-			}
-		}
+	private void showRenderXMLResponse(SampleResult res) {
 		results.setContentType("text/xml"); // $NON-NLS-1$
 		results.setCaretPosition(0);
-
+		byte[] source = res.getResponseData();
+        final ByteArrayInputStream baIS = new ByteArrayInputStream(source);
+	    for(int i=0; i<source.length-XML_PFX.length; i++){
+	        if (JOrphanUtils.startsWith(source, XML_PFX, i)){
+	            baIS.skip(i);// Skip the leading bytes (if any)
+	            break;
+	        }
+	    }
 		Component view = results;
 
-		// there is duplicate Document class. Therefore I needed to declare the
-		// specific
-		// class that I want
+		// there is also a javax.swing.text.Document class.
 		org.w3c.dom.Document document = null;
 
 		try {
 
-			DocumentBuilderFactory parserFactory = DocumentBuilderFactory.newInstance();
-			parserFactory.setValidating(false);
-			parserFactory.setNamespaceAware(false);
-
-			// create a parser:
-			DocumentBuilder parser = parserFactory.newDocumentBuilder();
-
-			parser.setErrorHandler(saxErrorHandler);
-			document = parser.parse(new InputSource(new StringReader(parsable)));
-
+            document = XPathUtil.makeDocument(baIS,false,false,false,true,true,false,false);
 			JPanel domTreePanel = new DOMTreePanel(document);
 
 			document.normalize();
@@ -594,7 +576,10 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		} catch (ParserConfigurationException e) {
 			showErrorMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
 			log.debug(e.getMessage());
-		}
+		} catch (TidyException e) {
+            showErrorMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            log.debug(e.getMessage());
+        }
 		resultsScrollPane.setViewportView(view);
 		textButton.setEnabled(true);
 		htmlButton.setEnabled(true);
@@ -658,7 +643,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 			} else if (command.equals(JSON_COMMAND)) {
 				showRenderJSONResponse(response);
 			} else if (command.equals(XML_COMMAND)) {
-				showRenderXMLResponse(response);
+				showRenderXMLResponse(res);
 			}
 		}
 	}
