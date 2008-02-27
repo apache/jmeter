@@ -128,10 +128,11 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         showWarnings.setSelected(false);
     }
 
-    private void setTidyOptions(boolean selected){
-		quiet.setEnabled(selected);
-		reportErrors.setEnabled(selected);
-		showWarnings.setEnabled(selected);
+    private void setTidyOptions(boolean tidySelected){
+		quiet.setEnabled(tidySelected);
+		reportErrors.setEnabled(tidySelected);
+		showWarnings.setEnabled(tidySelected);
+		nameSpace.setEnabled(!tidySelected);
     }
 
 	private void init() {
