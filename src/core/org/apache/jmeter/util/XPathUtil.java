@@ -96,9 +96,9 @@ public class XPathUtil {
 	 * @param stream
 	 *            Document Input stream
 	 * @param validate
-	 *            Validate Document
+	 *            Validate Document (not Tidy)
 	 * @param whitespace
-	 *            Element Whitespace
+	 *            Element Whitespace (not Tidy)
 	 * @param namespace
 	 *            Is Namespace aware.
 	 * @param tolerant
@@ -112,20 +112,46 @@ public class XPathUtil {
 	 */
 	public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
 			boolean tolerant) throws ParserConfigurationException, SAXException, IOException, TidyException {
-		return makeDocument(stream, validate, whitespace, namespace, tolerant, true, false, false);
+		return makeDocument(stream, validate, whitespace, namespace, tolerant, true, false, false, false);
 		
 	}
 
 	/**
+     * Utility function to get new Document
+     * 
+     * @param stream - Document Input stream
+     * @param validate - Validate Document (not Tidy)
+     * @param whitespace - Element Whitespace (not Tidy)
+     * @param namespace - Is Namespace aware. (not Tidy)
+     * @param tolerant - Is tolerant - i.e. use the Tidy parser
+     * @param quiet - set Tidy quiet
+     * @param showWarnings - set Tidy warnings
+     * @param report_errors - throw TidyException if Tidy detects an error
+     * @return document
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws TidyException
+     */
+    public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
+    		boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors)
+            throws ParserConfigurationException, SAXException, IOException, TidyException {
+                return makeDocument(stream, validate, whitespace, namespace,
+                        tolerant, quiet, showWarnings, report_errors, false);
+            }
+
+    /**
+	 * Utility function to get new Document
 	 * 
 	 * @param stream - Document Input stream
-	 * @param validate - Validate Document
-	 * @param whitespace - Element Whitespace
-	 * @param namespace - Is Namespace aware.
+	 * @param validate - Validate Document (not Tidy)
+	 * @param whitespace - Element Whitespace (not Tidy)
+	 * @param namespace - Is Namespace aware. (not Tidy)
 	 * @param tolerant - Is tolerant - i.e. use the Tidy parser
-	 * @param quiet - 
-	 * @param showWarnings -
-	 * @param report_errors -
+	 * @param quiet - set Tidy quiet
+	 * @param showWarnings - set Tidy warnings
+	 * @param report_errors - throw TidyException if Tidy detects an error
+	 * @param isXml - is document already XML (Tidy only)
 	 * @return document
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
@@ -133,57 +159,44 @@ public class XPathUtil {
 	 * @throws TidyException
 	 */
 	public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-			boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors)
+			boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml)
 	        throws ParserConfigurationException, SAXException, IOException, TidyException {
 		Document doc;
 		if (tolerant) {
-			doc = tidyDoc(stream, quiet, showWarnings, report_errors);
-			// doc=makeTolerantDocumentBuilder().parse(new
-			// InputStreamReader(stream));
+			doc = tidyDoc(stream, quiet, showWarnings, report_errors, isXml);
 		} else {
 			doc = makeDocumentBuilder(validate, whitespace, namespace).parse(stream);
 		}
 		return doc;
 	}
 
-	// private static HTMLDocumentBuilder makeTolerantDocumentBuilder()
-	// throws ParserConfigurationException, SAXException, IOException {
-	// HTMLDocumentBuilder builder = new HTMLDocumentBuilder(
-	// new TolerantSaxDocumentBuilder(makeDocumentBuilder(false,false,false)
-	// ));
-	// return builder;
-	// }
-
-	private static Document tidyDoc(InputStream stream, boolean quiet, boolean showWarnings, boolean report_errors)
-	    throws TidyException {
-		Tidy tidy = makeTidyParser(quiet, showWarnings);		
-		StringWriter sw = null;
-		if (report_errors) {
-			sw = new StringWriter();
-			tidy.setErrout(new PrintWriter(sw));
-		}
+	private static Document tidyDoc(InputStream stream, boolean quiet, boolean showWarnings, boolean report_errors, 
+	        boolean isXML) throws TidyException {
+		Tidy tidy = makeTidyParser(quiet, showWarnings, isXML);
+		// Always capture errors
+		StringWriter sw = new StringWriter();
+        tidy.setErrout(new PrintWriter(sw));
 		Document doc = tidy.parseDOM(stream, null);
 		doc.normalize();
-		// remove the document declaration cause I think it causes
-		// issues this is only needed for JDOM, since I am not
-		// using it... But in case we change.
-		// Node name = doc.getDoctype();
-		// doc.removeChild(name);
-		if (sw != null && tidy.getParseErrors() > 0) {
-			log.error("Caught TidyException: " + sw.toString());			
-			throw new TidyException(tidy.getParseErrors(),tidy.getParseWarnings());
+		if (tidy.getParseErrors() > 0) {
+			if (report_errors) {
+	            log.error("TidyException: " + sw.toString());    
+			    throw new TidyException(tidy.getParseErrors(),tidy.getParseWarnings());
+			} else {
+		         log.warn("Tidy errors: " + sw.toString());    
+			}
 		}
 
 		return doc;
 	}
 
-	private static Tidy makeTidyParser(boolean quiet, boolean showWarnings) {
+	private static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml) {
 		Tidy tidy = new Tidy();
 		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
 		tidy.setQuiet(quiet);
 		tidy.setShowWarnings(showWarnings);
 		tidy.setMakeClean(true);
-		tidy.setXmlTags(false); // Input is not valid XML
+		tidy.setXmlTags(isXml);
 		// tidy.setShowErrors(1);
 		return tidy;
 	}
