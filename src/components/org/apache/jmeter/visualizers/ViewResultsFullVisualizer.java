@@ -26,7 +26,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,13 +69,11 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.logging.LoggingManager;
@@ -83,6 +81,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.tidy.Tidy;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -556,30 +555,18 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		// there is also a javax.swing.text.Document class.
 		org.w3c.dom.Document document = null;
 
-		try {
-
-            document = XPathUtil.makeDocument(baIS,false,false,false,true,true,false,false);
-			JPanel domTreePanel = new DOMTreePanel(document);
-
-			document.normalize();
-
-			view = domTreePanel;
-		} catch (SAXParseException e) {
-			showErrorMessageDialog(saxErrorHandler.getErrorMessage(), saxErrorHandler.getMessageType());
-			log.debug(e.getMessage());
-		} catch (SAXException e) {
-			showErrorMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
-			log.debug(e.getMessage());
-		} catch (IOException e) {
-			showErrorMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
-			log.debug(e.getMessage());
-		} catch (ParserConfigurationException e) {
-			showErrorMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
-			log.debug(e.getMessage());
-		} catch (TidyException e) {
-            showErrorMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
-            log.debug(e.getMessage());
+        StringWriter sw = new StringWriter();
+        Tidy tidy = XPathUtil.makeTidyParser(true, true, true, sw);
+        document = tidy.parseDOM(baIS, null);
+        document.normalize();
+        if (tidy.getParseErrors() > 0) {
+            showErrorMessageDialog(sw.toString(),
+                    "Tidy: " + tidy.getParseErrors() + " errors, " + tidy.getParseWarnings() + " warnings",
+                    JOptionPane.WARNING_MESSAGE);
         }
+
+        JPanel domTreePanel = new DOMTreePanel(document);    
+        view = domTreePanel;
 		resultsScrollPane.setViewportView(view);
 		textButton.setEnabled(true);
 		htmlButton.setEnabled(true);
@@ -949,7 +936,7 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		 */
 		private Node getFirstElement(Node parent) {
 			NodeList childNodes = parent.getChildNodes();
-			Node toReturn = null;
+			Node toReturn = parent; // Must return a valid node, or may generate an NPE
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node childNode = childNodes.item(i);
 				toReturn = childNode;
@@ -1022,8 +1009,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	}
 
 	private static void showErrorMessageDialog(String message, int messageType) {
-		JOptionPane.showMessageDialog(null, message, "Error", messageType);
+	    showErrorMessageDialog(message, "Error", messageType);
 	}
+
+    private static void showErrorMessageDialog(String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(null, message, title, messageType);
+    }
 
 	// Helper method to construct SAX error details
 	private static String errorDetails(SAXParseException spe) {
