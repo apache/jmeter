@@ -172,10 +172,8 @@ public class XPathUtil {
 
 	private static Document tidyDoc(InputStream stream, boolean quiet, boolean showWarnings, boolean report_errors, 
 	        boolean isXML) throws TidyException {
-		Tidy tidy = makeTidyParser(quiet, showWarnings, isXML);
-		// Always capture errors
-		StringWriter sw = new StringWriter();
-        tidy.setErrout(new PrintWriter(sw));
+        StringWriter sw = new StringWriter();
+		Tidy tidy = makeTidyParser(quiet, showWarnings, isXML, sw);
 		Document doc = tidy.parseDOM(stream, null);
 		doc.normalize();
 		if (tidy.getParseErrors() > 0) {
@@ -190,23 +188,19 @@ public class XPathUtil {
 		return doc;
 	}
 
-	private static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml) {
-		Tidy tidy = new Tidy();
-		tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
-		tidy.setQuiet(quiet);
-		tidy.setShowWarnings(showWarnings);
-		tidy.setMakeClean(true);
-		tidy.setXmlTags(isXml);
-		// tidy.setShowErrors(1);
-		return tidy;
-	}
-
-	// Not used
-	// public static Document makeDocument(InputStream stream)
-	// throws ParserConfigurationException, SAXException, IOException {
-	// return makeDocumentBuilder( false, false, false).parse(stream);
-	// }
-
+    public static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml, StringWriter sw) {
+        Tidy tidy = new Tidy();
+        tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
+        tidy.setQuiet(quiet);
+        tidy.setShowWarnings(showWarnings);
+        tidy.setMakeClean(true);
+        tidy.setXmlTags(isXml);
+        if (sw != null) {
+            tidy.setErrout(new PrintWriter(sw));
+        }
+        return tidy;
+    }
+ 
 	static class MyErrorHandler implements ErrorHandler {
 		private final boolean val, tol;
 
