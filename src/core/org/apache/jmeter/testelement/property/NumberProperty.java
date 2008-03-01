@@ -21,10 +21,6 @@
  */
 package org.apache.jmeter.testelement.property;
 
-/**
- * @author ano ano
- * @version $Revision$
- */
 public abstract class NumberProperty extends AbstractProperty {
 	public NumberProperty() {
 		super();
