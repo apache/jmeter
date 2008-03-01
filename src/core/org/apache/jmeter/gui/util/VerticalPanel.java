@@ -32,10 +32,6 @@ import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-/**
- * @author ano ano
- * @version $Revision$
- */
 public class VerticalPanel extends JPanel {
 	private Box subPanel = Box.createVerticalBox();
 

@@ -30,10 +30,6 @@ import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-/**
- * @author ano ano
- * @version $Revision$
- */
 public class HorizontalPanel extends JPanel {
 	private Box subPanel = Box.createHorizontalBox();
 

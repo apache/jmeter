@@ -31,10 +31,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author ano ano
- * @version $Revision$
- */
 public final class NameUpdater {
 	private static Properties nameMap;
 
