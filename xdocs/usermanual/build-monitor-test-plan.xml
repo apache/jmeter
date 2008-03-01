@@ -31,7 +31,7 @@
 <p>In this section, you will learn how to create a 
 <a href="build-test-plan.html">Test Plan</a> to monitor webservers. Monitors
 are useful for a stress testing and system management. Used with stress
-testing, the monitor provides addtion information about server performance.
+testing, the monitor provides additional information about server performance.
 It also makes it easier to see the relationship between server performance
 and response time on the client side. As a system administration tool, the
 monitor provides an easy way to monitor multiple servers from one console.
