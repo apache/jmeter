@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.testelement.property;
 
-/**
- * @author Administrator
- * @version $Revision$ on $Date$
- */
 public interface PropertyIterator {
 	public boolean hasNext();
 

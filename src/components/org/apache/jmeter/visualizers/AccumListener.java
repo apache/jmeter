@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.visualizers;
 
-/**
- * @author Administrator
- * @version $Revision$ on $Date$
- */
 public interface AccumListener {
 
 	public void updateGui(RunningSample s);

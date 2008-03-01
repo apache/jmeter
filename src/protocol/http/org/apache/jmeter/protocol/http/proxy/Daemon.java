@@ -34,8 +34,6 @@ import org.apache.log.Logger;
  * forever. For each client request, creates a proxy thread to handle the
  * request.
  * 
- * @author default Created June 29, 2001
- * @version $Revision$ Last updated: $Date$
  */
 public class Daemon extends Thread {
 	/** Logging */
