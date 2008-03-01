@@ -23,9 +23,6 @@ package org.apache.jmeter.engine.util;
 
 import java.util.Map;
 
-/**
- * @author ano ano
- */
 abstract class AbstractTransformer implements ValueTransformer {
 
 	protected CompoundVariable masterFunction;

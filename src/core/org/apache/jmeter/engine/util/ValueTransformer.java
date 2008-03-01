@@ -26,11 +26,6 @@ import java.util.Map;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 
-/**
- * @author ano ano
- * 
- * @version $Revision$
- */
 interface ValueTransformer {
 	/**
 	 * Transform the given property and return the new version.

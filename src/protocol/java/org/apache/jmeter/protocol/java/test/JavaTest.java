@@ -62,8 +62,6 @@ import org.apache.jmeter.testelement.TestElement;
  * <p>
  * Note: this class was derived from {@link SleepTest}.
  * 
- * @author ANO
- * @version $Version: 1.3 $ $Date$
  */
 
 public class JavaTest extends AbstractJavaSamplerClient implements Serializable {
