@@ -75,6 +75,7 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>Bug 44314 - Not possible to add more than one SyncTimer</li>
 <li>Capture Tidy console error output and log it</li>
 <li>Fix problems using Tidy(tolerant parser) in XPath Assertion and XPath Extractor</li>
+<li>Bug 44374 - improve timer calculation</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -101,6 +102,7 @@ Note __split() and __regex() cannot be used on the Test Plan.</li>
 <li>Add application/vnd.wap.xhtml+xml as a text type</li>
 <li>Add means to override maximum display size in View Results Tree - set the property: view.results.tree.max_size</li>
 <li>Use Tidy to display XML in View Results Tree Listener (avoids fetching DTDs)</li>
+<li>Bug 44487 - German translation</li>
 </ul>
 
 <h4>Non-functional changes</h4>
