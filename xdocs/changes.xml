@@ -31,6 +31,19 @@
 
 <h4>Summary of main changes</h4>
 
+<p>
+Version 2.3.1 changed the way binary and text content types were determined:
+originally everything except "image/" content types were considered text, but 2.3.1 introduced a check
+for specific content types. This has caused problems, as several popular types were omitted.
+Rather than try to list all the possible text types, JMeter now just checks for the following binary types:
+<ul>
+<li>image/*</li>
+<li>audio/*</li>
+<li>video/*</li>
+</ul>
+All other types are now assumed to be text.
+</p>
+
 <p>Fixes Clear Cookie each iteration bug (unfortunately introduced in 2.3.1)</p>
 
 <p>Switch Controller now works properly with functions and variables, 
@@ -695,6 +708,11 @@ Listeners are now started slightly later in order to allow variable names to be 
 This may cause some problems; if so define the following in jmeter.properties:
 <br/>
 jmeterengine.startlistenerslater=false
+</p>
+
+<p>
+The GUI now expands the tree by default when loading a test plan.
+This can be disabled by setting the JMeter property <b>onload.expandtree=false</b>
 </p>
 
 <h4>Known problems:</h4>
