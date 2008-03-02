@@ -570,49 +570,37 @@ public class SampleResult implements Serializable {
 				    setDataEncoding(charSet);
                 }
             }
-            if (isTextType(ct)) {
-                setDataType(TEXT);
-            } else {
+            if (isBinaryType(ct)) {
                 setDataType(BINARY);
+            } else {
+                setDataType(TEXT);
             }
         }
     }
 
-    // List of types that can be processed as text
-    private static final String[] TEXT_TYPES = {
-    	"text/",                  //$NON-NLS-1$
-    	"application/javascript", //$NON-NLS-1$
-    	"application/json",       //$NON-NLS-1$
-        "application/soap+xml",   //$NON-NLS-1$
-        "application/vnd.wap.xhtml+xml", //$NON-NLS-1$
-    	"application/xhtml+xml",  //$NON-NLS-1$
-    	"application/xml",        //$NON-NLS-1$
+    // List of types that are known to be binary
+    private static final String[] BINARY_TYPES = {
+        "image/",       //$NON-NLS-1$
+        "audio/",       //$NON-NLS-1$
+        "video/",       //$NON-NLS-1$
         };
  
-    // Additional types as needed
-    private static final String[] TEXT_TYPES_OPT =
-    	JOrphanUtils.split(JMeterUtils.getPropDefault("content-type_text", ""), ","); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
- 
     /*
-     * Determine if content-type can be displayed as text or not.
+     * Determine if content-type is known to be binary, i.e. not displayable as text.
      * 
      * @param ct content type
-     * @return true if content-type is of type text.
+     * @return true if content-type is of type binary.
      */
-    private static boolean isTextType(String ct){
-    	for (int i = 0; i < TEXT_TYPES.length; i++){
-        	if (ct.startsWith(TEXT_TYPES[i])){
-        		return true;
-        	}    		
-    	}
-    	for (int i = 0; i < TEXT_TYPES_OPT.length; i++){
-        	if (ct.startsWith(TEXT_TYPES_OPT[i])){
-        		return true;
-        	}    		
-    	}
-    	return false;
+    private static boolean isBinaryType(String ct){
+        for (int i = 0; i < BINARY_TYPES.length; i++){
+            if (ct.startsWith(BINARY_TYPES[i])){
+                return true;
+            }           
+        }
+        return false;
     }
-	/**
+
+    /**
 	 * Sets the successful attribute of the SampleResult object.
 	 * 
 	 * @param success
