@@ -102,6 +102,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 		return calcMode;
 	}
 
+	// Needed by test code
+    int getCalcModeInt() {
+        return modeInt;
+    }
+
 	public void setCalcMode(String mode) {
         this.calcMode = mode;
         // TODO find better way to get modeInt
@@ -134,7 +139,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	 * @param currentTime
 	 * @return new Target time
 	 */
-    // TODO - is this used?
+    // TODO - is this used? (apart from test code)
 	protected long calculateCurrentTarget(long currentTime) {
 		return currentTime + calculateDelay();
 	}
@@ -143,18 +148,18 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 	private long calculateDelay() {
 		long delay = 0;
         // N.B. we fetch the throughput each time, as it may vary during a test
-		long msPerRequest = (long) (MILLISEC_PER_MIN / getThroughput());
+		double msPerRequest = (MILLISEC_PER_MIN / getThroughput());
 		switch (modeInt) {
 		case 1: // Total number of threads
-			delay = JMeterContextService.getNumberOfThreads() * msPerRequest;
+			delay = (long) (JMeterContextService.getNumberOfThreads() * msPerRequest);
 			break;
             
 		case 2: // Active threads in this group
-			delay = JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest;
+			delay = (long) (JMeterContextService.getContext().getThreadGroup().getNumberOfThreads() * msPerRequest);
 			break;
             
         case 3: // All threads - alternate calculation
-            delay = calculateSharedDelay(allThreadsInfo,msPerRequest);
+            delay = calculateSharedDelay(allThreadsInfo,(long) msPerRequest);
             break;
             
         case 4: //All threads in this group - alternate calculation
@@ -168,11 +173,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
                     threadGroupsInfoMap.put(group, groupInfo);
                 }
             }
-            delay = calculateSharedDelay(groupInfo,msPerRequest);
+            delay = calculateSharedDelay(groupInfo,(long) msPerRequest);
             break;
             
-		default:
-			delay = msPerRequest; // i.e. * 1
+		default: // e.g. 0
+			delay = (long) msPerRequest; // i.e. * 1
 			break;
 		}
 		return delay;
