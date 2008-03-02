@@ -19,7 +19,8 @@
 package org.apache.jmeter.threads;
 
 /**
- * @version $Revision$
+ * Provides context service for JMeter threads.
+ * Keeps track of active and total thread counts.
  */
 public final class JMeterContextService {
 	static private ThreadLocal threadContext = new ThreadLocal() {
@@ -30,7 +31,7 @@ public final class JMeterContextService {
 
 	private static long testStart = 0;
 
-	private static int numberOfThreads = 0; // Active thread count
+	private static int numberOfActiveThreads = 0;
     
     private static int totalThreads = 0;
 
@@ -44,9 +45,9 @@ public final class JMeterContextService {
 		return (JMeterContext) threadContext.get();
 	}
 
-	static public void startTest() {//TODO should this be synchronized?
+	static public synchronized void startTest() {
 		if (testStart == 0) {
-			numberOfThreads = 0;
+			numberOfActiveThreads = 0;
 			testStart = System.currentTimeMillis();
 			threadContext = new ThreadLocal() {
 				public Object initialValue() {
@@ -56,35 +57,56 @@ public final class JMeterContextService {
 		}
 	}
 
+	/**
+	 * Increment number of active threads.
+	 */
 	static synchronized void incrNumberOfThreads() {
-		numberOfThreads++;
+		numberOfActiveThreads++;
 	}
 
+	/**
+	 * Decrement number of active threads.
+	 */
 	static synchronized void decrNumberOfThreads() {
-		numberOfThreads--;
+		numberOfActiveThreads--;
 	}
 
+	/**
+	 * Get the number of currently active threads
+	 * @return active thread count
+	 */
 	static public synchronized int getNumberOfThreads() {
-		return numberOfThreads;
+		return numberOfActiveThreads;
 	}
 
-	static public void endTest() {//TODO should this be synchronized?
+	static public synchronized void endTest() {
 		testStart = 0;
-		numberOfThreads = 0;
+		numberOfActiveThreads = 0;
 	}
 
-	static public long getTestStartTime() {// NOT USED
+	static public synchronized long getTestStartTime() {// NOT USED
 		return testStart;
 	}
 
+	/**
+	 * Get the total number of threads (>= active)
+	 * @return total thread count
+	 */
     public static synchronized int getTotalThreads() {
         return totalThreads;
     }
 
+    /**
+     * Update the total number of threads
+     * @param thisGroup number of threads in this thread group
+     */
     public static synchronized void addTotalThreads(int thisGroup) {
         totalThreads += thisGroup;
     }
 
+    /**
+     * Set total threads to zero
+     */
     public static synchronized void clearTotalThreads() {
         totalThreads = 0;
     }
