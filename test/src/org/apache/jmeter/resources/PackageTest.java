@@ -154,7 +154,7 @@ public class PackageTest extends TestCase {
 				try {
 					key = (String) enumr.nextElement();
 					String val =defaultPRB.getString(key);
-                    if (val.equals(prb.getString(key))){
+                    if (!resname.equalsIgnoreCase("de") && val.equals(prb.getString(key))){
                         System.out.println("Possible duplicate value for "+key+" in "+res);
                         subTestFailures++;
                     }
