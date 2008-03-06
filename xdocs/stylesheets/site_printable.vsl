@@ -431,7 +431,7 @@
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="$imgdir/jakarta-logo.gif" border="0"></a>
+<a href="http://jakarta.apache.org"><img alt="Jakarta" title="Jakarta" width="505" height="48" src="$imgdir/jakarta-logo.gif" border="0"></a>
 </td>
 <td align="right">
 #set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
