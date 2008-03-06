@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -104,5 +105,10 @@ public class JMeterVariables {
 	
 	public Iterator getIterator(){
 		return Collections.unmodifiableMap(variables).entrySet().iterator() ;
+	}
+	
+	// Used by DebugSampler
+	public Set entrySet(){
+	    return Collections.unmodifiableMap(variables).entrySet();
 	}
 }
