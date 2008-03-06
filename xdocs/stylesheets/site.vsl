@@ -409,8 +409,16 @@
 
 #macro (getProjectImage)
 #if ($project.getChild("logo"))
+#set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
+#set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
+#set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
+<td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="$logoHeight"
+    style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
 <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="$relativePath/images/jakarta-logo.gif" border="0"/></a>
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="$relativePath/images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
 </td>
 <td align="right">
 #set ( $logoString = $project.getChild("logo").getAttributeValue("href") )
