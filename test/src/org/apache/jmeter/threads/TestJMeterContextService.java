@@ -26,6 +26,21 @@ public class TestJMeterContextService extends TestCase {
         super(name);
     }
 
+    public void testCounts(){
+        assertEquals(0,JMeterContextService.getNumberOfThreads());
+        assertEquals(0,JMeterContextService.getTotalThreads());
+        incrNumberOfThreads();
+        assertEquals(1,JMeterContextService.getNumberOfThreads());
+        assertEquals(0,JMeterContextService.getTotalThreads());
+        decrNumberOfThreads();
+        assertEquals(0,JMeterContextService.getTotalThreads());
+        assertEquals(0,JMeterContextService.getNumberOfThreads());
+        JMeterContextService.addTotalThreads(27);
+        JMeterContextService.addTotalThreads(27);
+        assertEquals(54,JMeterContextService.getTotalThreads());
+        assertEquals(0,JMeterContextService.getNumberOfThreads());
+    }
+    
     // Give access to the method for test code
     public static void incrNumberOfThreads(){
         JMeterContextService.incrNumberOfThreads();
