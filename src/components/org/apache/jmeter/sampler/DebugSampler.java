@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -31,16 +30,15 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * This TestBean is just an example about how to write testbeans. The intent is
- * to demonstrate usage of the TestBean features to podential TestBean
- * developers. Note that only the class's introspector view matters: the methods
- * do nothing -- nothing useful, in any case.
+ * The Debug Sampler can be used to "sample" JMeter variables, JMeter properties and System Properties.
+ * 
  */
 public class DebugSampler extends AbstractSampler implements TestBean {
+    
+    private static final long serialVersionUID = 232L;
     
 	private boolean displayJMeterVariables;
 	
@@ -57,29 +55,21 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         if (isDisplayJMeterVariables()){
         	rd.append("JMeterVariables\n");
         	sb.append("JMeterVariables:\n");
-	        JMeterVariables vars = JMeterContextService.getContext().getVariables();
-	        Iterator i = vars.getIterator();
-	        while(i.hasNext())
-	        {
-	          Map.Entry me = (Map.Entry) i.next();
-	           if(String.class.equals(me.getValue().getClass())){
-	                 sb.append(me.toString()).append("\n");
-	           }
-	        }
+        	formatSet(sb, JMeterContextService.getContext().getVariables().entrySet());
 	        sb.append("\n");
         }
         
         if (isDisplayJMeterProperties()){
         	rd.append("JMeterProperties\n");
         	sb.append("JMeterProperties:\n");
-   		    formatProperties(sb, JMeterUtils.getJMeterProperties());        	
+        	formatSet(sb, JMeterUtils.getJMeterProperties().entrySet());        	
 	        sb.append("\n");
         }
         
         if (isDisplaySystemProperties()){
         	rd.append("SystemProperties\n");
         	sb.append("SystemProperties:\n");
-   		    formatProperties(sb, System.getProperties());        	        	
+        	formatSet(sb, System.getProperties().entrySet());        	        	
 	        sb.append("\n");
         }
         
@@ -91,8 +81,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
         return res;
 	}
 
-	private void formatProperties(StringBuffer sb, Properties p) {
-		Set s = p.entrySet();
+	private void formatSet(StringBuffer sb, Set s) {
 		ArrayList al = new ArrayList(s);
 		Collections.sort(al, new Comparator(){
 			public int compare(Object o1, Object o2) {
@@ -112,7 +101,7 @@ public class DebugSampler extends AbstractSampler implements TestBean {
 		}
 	}
 
-	public boolean isDisplayJMeterVariables() {
+    public boolean isDisplayJMeterVariables() {
 		return displayJMeterVariables;
 	}
 
