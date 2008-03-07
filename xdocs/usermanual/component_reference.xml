@@ -1870,8 +1870,8 @@ See the <complink name="Summary Report"/> for a similar Listener that does not n
 <li># Samples - The number of samples for the URL</li>
 <li>Average - The average time of a set of results</li>
 <li>Median - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
-50% of the samples took less than this time; the remainder took at least as long.</li>
-<li>90% Line - 90% of the samples took less than this time. #
+50% of the samples took no more than this time; the remainder took at least as long.</li>
+<li>90% Line - 90% of the samples took no more than this time. #
 The remaining samples at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
 <li>Min - The shortest time for the samples of the given URL</li>
 <li>Max - The longest time for the samples of the given URL</li>
