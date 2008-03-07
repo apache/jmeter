@@ -89,6 +89,7 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>Capture Tidy console error output and log it</li>
 <li>Fix problems using Tidy(tolerant parser) in XPath Assertion and XPath Extractor</li>
 <li>Bug 44374 - improve timer calculation</li>
+<li>Regular Expression Extractor now deletes all stale variables from previous matches.</li>
 </ul>
 
 <h4>Improvements</h4>
