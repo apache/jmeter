@@ -28,9 +28,6 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
-/**
- * @version $Revision$
- */
 public class TestRegexExtractor extends TestCase {
 		RegexExtractor extractor;
 
@@ -155,14 +152,28 @@ public class TestRegexExtractor extends TestCase {
 		public void testVariableExtraction5() throws Exception {
 			extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
 			extractor.setTemplate("$1$");
-			extractor.setMatchNumber(-1);
+			extractor.setMatchNumber(1);// Set up the non-wild variables
 			extractor.process();
-			assertEquals("3", vars.get("regVal_matchNr"));
+            assertNotNull(vars.get("regVal"));
+			assertEquals("2",vars.get("regVal_g"));
+            assertNotNull(vars.get("regVal_g0"));
+            assertNotNull(vars.get("regVal_g1"));
+            assertNotNull(vars.get("regVal_g2"));
+
+            extractor.setMatchNumber(-1);
+            extractor.process();
+            assertNotNull(vars.get("regVal"));// Should not clear this?
+            assertNull(vars.get("regVal_g"));
+            assertNull(vars.get("regVal_g1"));
+            assertNull(vars.get("regVal_g2"));
+            assertEquals("3", vars.get("regVal_matchNr"));
 			assertEquals("pinposition1", vars.get("regVal_1"));
 			assertEquals("pinposition2", vars.get("regVal_2"));
 			assertEquals("pinposition3", vars.get("regVal_3"));
+            assertEquals("2", vars.get("regVal_1_g"));
 			assertEquals("pinposition1", vars.get("regVal_1_g1"));
 			assertEquals("1", vars.get("regVal_1_g2"));
+            assertEquals("6", vars.get("regVal_3_g2"));
 			assertEquals("<value field=\"pinposition1\">1</value>", vars.get("regVal_1_g0"));
 			assertNull(vars.get("regVal_4"));
 
@@ -171,10 +182,28 @@ public class TestRegexExtractor extends TestCase {
 			extractor.process();
 			assertEquals("2", vars.get("regVal_matchNr"));
 			assertEquals("position", vars.get("regVal_1"));
+            assertEquals("1", vars.get("regVal_1_g"));
+            assertEquals("position", vars.get("regVal_1_g1"));
+            assertNull("Unused variables should be null", vars.get("regVal_1_g2"));
 			assertEquals("invalidpin", vars.get("regVal_2"));
+            assertEquals("1", vars.get("regVal_2_g"));
+            assertEquals("invalidpin", vars.get("regVal_2_g1"));
+            assertNull("Unused variables should be null", vars.get("regVal_2_g2"));
+            assertEquals("1", vars.get("regVal_1_g"));
 			assertNull("Unused variables should be null", vars.get("regVal_3"));
+            assertNull("Unused variables should be null", vars.get("regVal_3_g"));
 			assertNull("Unused variables should be null", vars.get("regVal_3_g0"));
 			assertNull("Unused variables should be null", vars.get("regVal_3_g1"));
+            assertNull("Unused variables should be null", vars.get("regVal_3_g2"));
+
+            // Check when match fails
+            extractor.setRegex("xxxx(.)(.)");
+            extractor.process();
+            assertEquals("0", vars.get("regVal_matchNr"));
+            assertNull("Unused variables should be null", vars.get("regVal_1"));
+            assertNull("Unused variables should be null", vars.get("regVal_1_g0"));
+            assertNull("Unused variables should be null", vars.get("regVal_1_g1"));
+            assertNull("Unused variables should be null", vars.get("regVal_1_g2"));
 		}
 
 		public void testVariableExtraction7() throws Exception {
