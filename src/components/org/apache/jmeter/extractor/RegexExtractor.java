@@ -140,6 +140,17 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 				x++;
 			} while (x != matchNumber && !done);
 
+            int prevCount = 0;
+            String prevString = vars.get(refName + REF_MATCH_NR);
+            if (prevString != null) {
+                vars.remove(refName + REF_MATCH_NR);// ensure old value is not left defined
+                try {
+                    prevCount = Integer.parseInt(prevString);
+                } catch (NumberFormatException e1) {
+                    log.warn("Could not parse "+prevString+" "+e1);
+                }
+            }
+            int matchCount=0;// Number of refName_n variable sets to keep
 			try {
 				MatchResult match;
 				if (matchNumber >= 0) {// Original match behaviour
@@ -148,38 +159,29 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 						vars.put(refName, generateResult(match));
 						saveGroups(vars, refName, match);
 					} else {
-                        vars.remove(refName + "_g"); // $NON-NLS-1$
-                        vars.remove(refName + "_g0"); // $NON-NLS-1$
-                        vars.remove(refName + "_g1"); // $NON-NLS-1$
-                        //TODO - remove other groups if present?
+					    // refname has already been set to the default (if present)
+					    removeGroups(vars, refName);
                     }
 				} else // < 0 means we save all the matches
 				{
-					int prevCount = 0;
-					String prevString = vars.get(refName + REF_MATCH_NR);
-					if (prevString != null) {
-						try {
-							prevCount = Integer.parseInt(prevString);
-						} catch (NumberFormatException e1) {
-                            log.warn("Could not parse "+prevString+" "+e1);
-						}
-					}
-					vars.put(refName + REF_MATCH_NR, "" + matches.size());// Save the count
-					for (int i = 1; i <= matches.size(); i++) {
+                    removeGroups(vars, refName); // remove any single matches
+				    matchCount = matches.size();
+					vars.put(refName + REF_MATCH_NR, Integer.toString(matchCount));// Save the count
+					for (int i = 1; i <= matchCount; i++) {
 						match = getCorrectMatch(matches, i);
 						if (match != null) {
-							vars.put(refName + UNDERSCORE + i, generateResult(match));
-							saveGroups(vars, refName + UNDERSCORE + i, match);
+		                    final String refName_n = new StringBuffer(refName).append(UNDERSCORE).append(i).toString();
+                            vars.put(refName_n, generateResult(match));
+							saveGroups(vars, refName_n, match);
 						}
 					}
-					for (int i = matches.size() + 1; i <= prevCount; i++) {
-						vars.remove(refName + UNDERSCORE + i);
-                        // Remove known groups
-						vars.remove(refName + UNDERSCORE + i + "_g0"); // $NON-NLS-1$
-						vars.remove(refName + UNDERSCORE + i + "_g1"); // $NON-NLS-1$
-						// TODO remove other groups if present?
-					}
 				}
+				// Remove any left-over variables
+                for (int i = matchCount + 1; i <= prevCount; i++) {
+                    final String refName_n = new StringBuffer(refName).append(UNDERSCORE).append(i).toString();
+                    vars.remove(refName_n);
+                    removeGroups(vars, refName_n);
+                }
 			} catch (RuntimeException e) {
 				log.warn("Error while generating result");
 			}
@@ -188,19 +190,64 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 		}
 	}
 
+	/**
+	 * Creates the variables:<br/>
+	 * basename_gn, where n=0...# of groups<br/>
+	 * basename_g = number of groups (apart from g0)
+	 */
 	private void saveGroups(JMeterVariables vars, String basename, MatchResult match) {
 		StringBuffer buf = new StringBuffer();
         buf.append(basename);
         buf.append("_g"); // $NON-NLS-1$
         int pfxlen=buf.length();
+        String prevString=vars.get(buf.toString());
+        int previous=0;
+        if (prevString!=null){
+            try {
+                previous=Integer.parseInt(prevString);
+            } catch (NumberFormatException e) {
+                log.warn("Could not parse "+prevString+" "+e);                
+            }
+        }
         //Note: match.groups() includes group 0
-		for (int x = 0; x < match.groups(); x++) {
+		final int groups = match.groups();
+        for (int x = 0; x < groups; x++) {
 			buf.append(x);
 			vars.put(buf.toString(), match.group(x));
 			buf.setLength(pfxlen);
 		}
-        vars.put(buf.toString(), Integer.toString(match.groups()-1));
+        vars.put(buf.toString(), Integer.toString(groups-1));
+        for (int i = groups; i <= previous; i++){
+            buf.append(i);
+            vars.remove(buf.toString());// remove the remaining _gn vars
+            buf.setLength(pfxlen);            
+        }
 	}
+
+    /**
+     * Removes the variables:<br/>
+     * basename_gn, where n=0...# of groups<br/>
+     * basename_g = number of groups (apart from g0)
+     */
+    private void removeGroups(JMeterVariables vars, String basename) {
+        StringBuffer buf = new StringBuffer();
+        buf.append(basename);
+        buf.append("_g"); // $NON-NLS-1$
+        int pfxlen=buf.length();
+        // How many groups are there?
+        int groups;
+        try {
+            groups=Integer.parseInt(vars.get(buf.toString()));
+        } catch (NumberFormatException e) {
+            groups=0;
+        }
+        vars.remove(buf.toString());// Remove the group count
+        for (int i = 0; i <= groups; i++) {
+            buf.append(i);
+            vars.remove(buf.toString());// remove the g0,g1...gn vars
+            buf.setLength(pfxlen);
+        }
+    }
 
 	public Object clone() {
 		RegexExtractor cloned = (RegexExtractor) super.clone();
