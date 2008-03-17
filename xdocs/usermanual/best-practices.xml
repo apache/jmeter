@@ -83,8 +83,8 @@ certain common elements from the recorded samples.  By defining some
 <a href="functions.html">user-defined variables</a> at the Test Plan level or in
 <complink name="User Defined Variables"/> elements, you can have JMeter automatically
 replace values in you recorded samples.  For instance, if you are testing an app on
-server "xxx.yyy.com", then you can define a variable called "server" with the value of
-"xxx.yyy.com", and anyplace that value is found in your recorded samples will be replaced
+server "xxx.example.com", then you can define a variable called "server" with the value of
+"xxx.example.com", and anyplace that value is found in your recorded samples will be replaced
 with "${server}".
 
 <note>Please note that matching is case-sensitive.</note>
