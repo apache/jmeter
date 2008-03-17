@@ -748,11 +748,26 @@ StandardGenerator and TCLogParser.
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="Server" required="Yes">Domain name or IP address of the web server.</property>
         <property name="Port" required="No (defaults to 80)">Port the web server is listening to.</property>
-        <property name="Log parser class" required="No (default provided)">The log parser class is responsible for parsing the logs.</property>
-        <property name="Generator class" required="No (default provided)">The generator class is responsible for creating HTTPSampler objects.</property>
+        <property name="Log parser class" required="Yes (default provided)">The log parser class is responsible for parsing the logs.</property>
+        <property name="Filter" required="No">The filter class is used to filter out certain lines.</property>
         <property name="Location of log file" required="Yes">The location of the access log file.</property>
 </properties>
-
+<p>
+The TCLogParser processes the access log independently for each thread.
+The SharedTCLogParser and OrderPreservingLogParser share access to the file, 
+i.e. each thread gets the next entry in the log.
+</p>
+<p>
+The SessionFilter is intended to handle Cookies across threads. 
+It does not filter out any entries, but modifies the cookie manager so that the cookies for a given IP are
+processed by a single thread at a time. If two threads try to process samples from the same client IP address,
+then one will be forced to wait until the other has completed.
+</p>
+<p>
+The LogFilter is intended to allow access log entries to be filtered by filename and regex,
+as well as allowing for the replacement of file extensions. However, it is not currently possible
+to configure this via the GUI, so it cannot really be used.
+</p>
 </component>
 
 <component name="BeanShell Sampler" index="&sect-num;.1.10"  width="601" height="244" screenshot="beanshellsampler.png">
