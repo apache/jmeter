@@ -157,7 +157,7 @@ https.default.protocol=SSLv3
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="No">Domain name or IP address of the web server.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]</property>
         <property name="Port" required="No">Port the web server is listening to. Default: 80</property>
         <property name="Protocol" required="No">HTTP, HTTPS or FILE. Default: HTTP</property>
         <property name="Method" required="Yes">GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE</property>
@@ -221,8 +221,8 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <property name="Use as monitor" required="Yes">For use with the <complink name="Monitor Results"/> listener.</property>
         <property name="Embedded URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
-        So if you only want to download embedded resources from http://server.com/, use the expression:
-        http://server\.com/.*
+        So if you only want to download embedded resources from http://example.com/, use the expression:
+        http://example\.com/.*
         </property>
 </properties>
 <p>
@@ -2261,7 +2261,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-        <property name="Server" required="No">Domain name or IP address of the web server.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.</property>
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
         <property name="Method" required="No">HTTP GET or HTTP POST.</property>
