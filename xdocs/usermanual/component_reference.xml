@@ -202,8 +202,8 @@ resource requires query string parameters, add them below in the
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         <p>
-        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the body
-        of the request. This allows arbitrary bodies to be sent. This functionality is present for POST requests
+        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the entire body
+        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
         after version 2.2, and also for PUT requests after version 2.3.
         <b>See below for some further information on parameter handling.</b>
         </p>
