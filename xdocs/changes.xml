@@ -117,6 +117,9 @@ Note __split() and __regex() cannot be used on the Test Plan.</li>
 <li>Add means to override maximum display size in View Results Tree - set the property: view.results.tree.max_size</li>
 <li>Use Tidy to display XML in View Results Tree Listener (avoids fetching DTDs)</li>
 <li>Bug 44487 - German translation</li>
+<li>
+As a special case, if the HTTP Sampler path starts with "http://" or "https://" then this is used as the full URL.
+</li>
 </ul>
 
 <h4>Non-functional changes</h4>
