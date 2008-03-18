@@ -230,7 +230,8 @@ public class XPathExtractor extends AbstractTestElement implements
     {
         String val = null;
      	XObject xObject = XPathAPI.eval(d, query);
-        if (xObject.getType() == XObject.CLASS_NODESET) {
+        final int objectType = xObject.getType();
+        if (objectType == XObject.CLASS_NODESET) {
 	        NodeList matches = xObject.nodelist();
 			int length = matches.getLength();
 	        vars.put(concat(refName,MATCH_NR), String.valueOf(length));
@@ -255,6 +256,10 @@ public class XPathExtractor extends AbstractTestElement implements
 	            }
 			}
 	        vars.remove(concat(refName,String.valueOf(length+1)));
+        } else if (objectType == XObject.CLASS_NULL
+                || objectType == XObject.CLASS_UNKNOWN
+                || objectType == XObject.CLASS_UNRESOLVEDVARIABLE) {
+            log.warn("Unexpected object type: "+xObject.getTypeString()+" returned for: "+getXPathQuery());
      	} else {
 	        val = xObject.toString();
 	        vars.put(concat(refName, MATCH_NR), "1");
