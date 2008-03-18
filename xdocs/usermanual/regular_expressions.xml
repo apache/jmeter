@@ -164,6 +164,8 @@ Here is a list of the meta characters and their meaning (please check the ORO do
 <li>| - alternatives</li>
 <li>^ $ - start and end of string or line</li>
 </ul>
+<p>Please note that ORO does not support the \Q and \E meta-characters.
+[In other RE engines, these can be used to quote a portion of an RE so that the meta-characters stand for themselves.]</p>
 </subsection>
 </section>
 
