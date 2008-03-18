@@ -36,10 +36,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * 
- * This class provides a few utility methods for dealing with XML/XPath. Might
- * think about creating an interface for the setup, but, works fine now...
- * 
+ * This class provides a few utility methods for dealing with XML/XPath.
  */
 public class XPathUtil {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -170,6 +167,18 @@ public class XPathUtil {
 		return doc;
 	}
 
+	/**
+	 * Create a document using Tidy
+	 * 
+	 * @param stream - input
+	 * @param quiet - set Tidy quiet?
+	 * @param showWarnings - show Tidy warnings?
+	 * @param report_errors - log errors and throw TidyException?
+	 * @param isXML - treat document as XML?
+	 * @return the document
+	 * 
+	 * @throws TidyException if a ParseError is detected and report_errors is true
+	 */
 	private static Document tidyDoc(InputStream stream, boolean quiet, boolean showWarnings, boolean report_errors, 
 	        boolean isXML) throws TidyException {
         StringWriter sw = new StringWriter();
@@ -188,15 +197,24 @@ public class XPathUtil {
 		return doc;
 	}
 
-    public static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml, StringWriter sw) {
+	/**
+	 * Create a Tidy parser with the specified settings.
+	 * 
+	 * @param quiet - set the Tidy quiet flag?
+	 * @param showWarnings - show Tidy warnings?
+	 * @param isXml - treat the content as XML?
+	 * @param stringWriter - if non-null, use this for Tidy errorOutput
+	 * @return the Tidy parser
+	 */
+    public static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml, StringWriter stringWriter) {
         Tidy tidy = new Tidy();
         tidy.setCharEncoding(org.w3c.tidy.Configuration.UTF8);
         tidy.setQuiet(quiet);
         tidy.setShowWarnings(showWarnings);
         tidy.setMakeClean(true);
         tidy.setXmlTags(isXml);
-        if (sw != null) {
-            tidy.setErrout(new PrintWriter(sw));
+        if (stringWriter != null) {
+            tidy.setErrout(new PrintWriter(stringWriter));
         }
         return tidy;
     }
