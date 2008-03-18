@@ -184,7 +184,12 @@ https.default.protocol=SSLv3
         </property>
         <property name="Path" required="Yes">The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
-"Send Parameters With the Request" section.</property>
+"Send Parameters With the Request" section.
+<b>
+As a special case, if the path starts with "http://" or "https://" then this is used as the full URL.
+</b>
+In this case, the server, port and protocol are ignored; parameters are also ignored for GET and DELETE methods.
+</property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
         <i>value</i>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
@@ -195,7 +200,7 @@ resource requires query string parameters, add them below in the
         multipart form specifications.
         <b>See below for some further information on parameter handling.</b>
         <p>
-        Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
+        Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as &amp;amp; or spaces, or
         question marks, then encoding is usually required.</p></property>
         <property name="Filename" required="No">Name of the file to send.  If left blank, JMeter
@@ -237,21 +242,21 @@ This is generally only a problem for manually created test plans,
 as a test plan created using a recorder would continue from the redirected URL.
 </p>
 <p>
-Parameter Handling:<br></br>
+<b>Parameter Handling:</b><br></br>
 For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
 then the body is created by concatenating all the value(s) of the parameters.
 This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
-See also the MIME Type above how you can control the content-type request header that are sent.
+See also the MIME Type above how you can control the content-type request header that is sent.
 <br></br>
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 (versions of JMeter after 2.3)
 </p>
 <p>
-Method Handling:<br></br>
-The POST and PUT request methods work similar, except that the PUT method does not support multipart requests.
-The GET and DELETE request methods work similar.
+<b>Method Handling:</b><br></br>
+The POST and PUT request methods work similarly, except that the PUT method does not support multipart requests.
+The GET and DELETE request methods work similarly.
 </p>
 <p>Upto and including JMeter 2.1.1, only responses with the content-type "text/html" were scanned for
 embedded resources. Other content-types were assumed to be something other than HTML.

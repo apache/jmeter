@@ -302,6 +302,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 		setProperty(PROTOCOL, value.toLowerCase());
 	}
 
+	/**
+	 * Gets the protocol, with default.
+	 * 
+	 * @return the protocol
+	 */
 	public String getProtocol() {
 		String protocol = getPropertyAsString(PROTOCOL);
 		if (protocol == null || protocol.length() == 0 ) {
@@ -688,8 +693,16 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 		return res;
 	}
 
+	private static final String HTTP_PREFIX = PROTOCOL_HTTP+"://"; // $NON-NLS-1$
+    private static final String HTTPS_PREFIX = PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
+    
 	/**
 	 * Get the URL, built from its component parts.
+	 * 
+	 * <p>
+	 * As a special case, if the path starts with "http[s]://",
+	 * then the path is assumed to be the entire URL.
+	 * </p>
 	 * 
 	 * @return The URL to be requested by this sampler.
 	 * @throws MalformedURLException
@@ -697,6 +710,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public URL getUrl() throws MalformedURLException {
 		StringBuffer pathAndQuery = new StringBuffer(100);
 		String path = this.getPath();
+		// Hack to allow entire URL to be provided in host field
+        if (path.startsWith(HTTP_PREFIX) 
+         || path.startsWith(HTTPS_PREFIX)){
+            return new URL(path);
+        }
         if (!path.startsWith("/")){ // $NON-NLS-1$
             pathAndQuery.append("/"); // $NON-NLS-1$
         }
@@ -709,7 +727,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // encoded in UTF-8, which is what the HTTP spec says
             String queryString = getQueryString(getContentEncoding());
             if(queryString.length() > 0) {
-                if (path.indexOf(QRY_PFX) > -1) {
+                if (path.indexOf(QRY_PFX) > -1) {// Already contains a prefix
                     pathAndQuery.append(QRY_SEP);
                 } else {
                     pathAndQuery.append(QRY_PFX);
