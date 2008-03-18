@@ -36,6 +36,7 @@ import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XObject;
@@ -215,8 +216,9 @@ public class XPathExtractor extends AbstractTestElement implements
       // convert unicode String -> UTF-8 bytes
       byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
+      boolean isXML = JOrphanUtils.isXML(utf8data);
       // this method assumes UTF-8 input data
-      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant(),isQuiet(),showWarnings(),reportErrors(),true);
+      return XPathUtil.makeDocument(in,false,false,useNameSpace(),isTolerant(),isQuiet(),showWarnings(),reportErrors(),isXML);
     }
 
     /**
