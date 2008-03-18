@@ -439,4 +439,16 @@ public final class JOrphanUtils {
         }
         return true;
     }
+    
+    private static final byte[] XML_PFX = "<?xml ".getBytes(); // $NON-NLS-1$
+    
+    /**
+     * Detects if some content starts with the standard XML prefix.
+     * 
+     * @param target the content to check
+     * @return true if the document starts with the standard XML prefix.
+     */
+    public static boolean isXML(byte [] target){
+        return startsWith(target, XML_PFX,0);
+    }
 }
