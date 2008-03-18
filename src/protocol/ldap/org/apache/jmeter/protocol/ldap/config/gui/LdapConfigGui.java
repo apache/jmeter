@@ -202,7 +202,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         servername.setText(""); //$NON-NLS-1$
         port.setText(""); //$NON-NLS-1$
         user_Defined.setSelected(false);
-        addTest.setSelected(false);
+        addTest.setSelected(true);
         modifyTest.setSelected(false);
         deleteTest.setSelected(false);
         searchTest.setSelected(false);
