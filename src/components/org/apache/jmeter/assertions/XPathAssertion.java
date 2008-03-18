@@ -32,6 +32,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.xpath.XPathAPI;
 import org.apache.xpath.objects.XObject;
@@ -87,33 +88,35 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 
 		Document doc = null;
 
-		try {
+        boolean isXML = JOrphanUtils.isXML(responseData);
+		
+        try {
 			doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
-					isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), true);
+					isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML);
 		} catch (SAXException e) {
 			log.debug("Caught sax exception: " + e);
-			result.setError(true);
+			result.setError(isXML);
 			result.setFailureMessage(new StringBuffer("SAXException: ").append(e.getMessage()).toString());
 			return result;
 		} catch (IOException e) {
 			log.warn("Cannot parse result content", e);
-			result.setError(true);
+			result.setError(isXML);
 			result.setFailureMessage(new StringBuffer("IOException: ").append(e.getMessage()).toString());
 			return result;
 		} catch (ParserConfigurationException e) {
 			log.warn("Cannot parse result content", e);
-			result.setError(true);
+			result.setError(isXML);
 			result.setFailureMessage(new StringBuffer("ParserConfigurationException: ").append(e.getMessage())
 					.toString());
 			return result;
 		} catch (TidyException e) {						
-			result.setError(true);
+			result.setError(isXML);
 			result.setFailureMessage(e.getMessage());
 			return result;
 		}
 
 		if (doc == null || doc.getDocumentElement() == null) {
-			result.setError(true);
+			result.setError(isXML);
 			result.setFailureMessage("Document is null, probably not parsable");
 			return result;
 		}
@@ -134,12 +137,12 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 					}
 					return result;
 				default:
-					result.setFailure(true);
+					result.setFailure(isXML);
 				    result.setFailureMessage("Cannot understand: " + pathString);
 				    return result;
 			}
 		} catch (TransformerException e) {
-			result.setError(true);
+			result.setError(isXML);
 			result.setFailureMessage(
 					new StringBuffer("TransformerException: ")
 					.append(e.getMessage())
