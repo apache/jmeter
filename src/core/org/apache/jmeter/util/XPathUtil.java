@@ -80,8 +80,10 @@ public class XPathUtil {
 	 * @return document builder
 	 * @throws ParserConfigurationException
 	 */
-	public static DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace)
+	public static synchronized DocumentBuilder makeDocumentBuilder(boolean validate, boolean whitespace, boolean namespace)
 			throws ParserConfigurationException {
+	    // N.B. the factory is re-usable, but not necessarily thread-safe, so
+	    // the method is synchronized to protect the creation of the builder
 		DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
 		builder.setErrorHandler(new MyErrorHandler(validate, false));
 		return builder;
