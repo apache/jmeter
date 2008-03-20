@@ -95,28 +95,28 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 					isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML);
 		} catch (SAXException e) {
 			log.debug("Caught sax exception: " + e);
-			result.setError(isXML);
+			result.setError(true);
 			result.setFailureMessage(new StringBuffer("SAXException: ").append(e.getMessage()).toString());
 			return result;
 		} catch (IOException e) {
 			log.warn("Cannot parse result content", e);
-			result.setError(isXML);
+			result.setError(true);
 			result.setFailureMessage(new StringBuffer("IOException: ").append(e.getMessage()).toString());
 			return result;
 		} catch (ParserConfigurationException e) {
 			log.warn("Cannot parse result content", e);
-			result.setError(isXML);
+			result.setError(true);
 			result.setFailureMessage(new StringBuffer("ParserConfigurationException: ").append(e.getMessage())
 					.toString());
 			return result;
 		} catch (TidyException e) {						
-			result.setError(isXML);
+			result.setError(true);
 			result.setFailureMessage(e.getMessage());
 			return result;
 		}
 
 		if (doc == null || doc.getDocumentElement() == null) {
-			result.setError(isXML);
+			result.setError(true);
 			result.setFailureMessage("Document is null, probably not parsable");
 			return result;
 		}
@@ -137,12 +137,12 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 					}
 					return result;
 				default:
-					result.setFailure(isXML);
+					result.setFailure(true);
 				    result.setFailureMessage("Cannot understand: " + pathString);
 				    return result;
 			}
 		} catch (TransformerException e) {
-			result.setError(isXML);
+			result.setError(true);
 			result.setFailureMessage(
 					new StringBuffer("TransformerException: ")
 					.append(e.getMessage())
