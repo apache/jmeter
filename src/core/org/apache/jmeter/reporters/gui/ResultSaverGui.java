@@ -43,6 +43,8 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 
 	private JCheckBox errorsOnly;
 
+    private JCheckBox successOnly;
+
 	public ResultSaverGui() {
 		super();
 		init();
@@ -62,15 +64,16 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 		super.configure(el);
 		filename.setText(el.getPropertyAsString(ResultSaver.FILENAME));
 		errorsOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.ERRORS_ONLY));
+        successOnly.setSelected(el.getPropertyAsBoolean(ResultSaver.SUCCESS_ONLY));
 	}
 
 	/**
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#createTestElement()
 	 */
 	public TestElement createTestElement() {
-		ResultSaver ResultSaver = new ResultSaver();
-		modifyTestElement(ResultSaver);
-		return ResultSaver;
+		ResultSaver resultSaver = new ResultSaver();
+		modifyTestElement(resultSaver);
+		return resultSaver;
 	}
 
 	/**
@@ -82,6 +85,7 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 		super.configureTestElement(te);
 		te.setProperty(ResultSaver.FILENAME, filename.getText());
 		te.setProperty(ResultSaver.ERRORS_ONLY, errorsOnly.isSelected());
+        te.setProperty(ResultSaver.SUCCESS_ONLY, successOnly.isSelected());
 	}
 
     /**
@@ -92,6 +96,7 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
         
         filename.setText(""); //$NON-NLS-1$
         errorsOnly.setSelected(false);
+        successOnly.setSelected(false);
     }
 
 	private void init() {
@@ -102,6 +107,8 @@ public class ResultSaverGui extends AbstractPostProcessorGui implements Clearabl
 		box.add(createFilenamePanel());
 		errorsOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_errors")); // $NON-NLS-1$
 		box.add(errorsOnly);
+        successOnly = new JCheckBox(JMeterUtils.getResString("resultsaver_success")); // $NON-NLS-1$
+        box.add(successOnly);
 		add(box, BorderLayout.NORTH);
 
 		// add(makeTitlePanel(),BorderLayout.NORTH);

@@ -34,12 +34,13 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * Save Result responseData to a set of files TODO - perhaps save other items
- * such as headers?
+ * Save Result responseData to a set of files 
+ * 
  * 
  * This is mainly intended for validation tests
  * 
  */
+// TODO - perhaps save other items such as headers?
 public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener, Clearable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -50,7 +51,9 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
 	public static final String ERRORS_ONLY = "FileSaver.errorsonly"; // $NON-NLS-1$
 
-	private static synchronized long nextNumber() {
+    public static final String SUCCESS_ONLY = "FileSaver.successonly"; // $NON-NLS-1$
+
+    private static synchronized long nextNumber() {
 		return ++sequenceNumber;
 	}
 
@@ -120,9 +123,16 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	 *            SampleResult to save
 	 */
 	private void saveSample(SampleResult s) {
-		// Should we save successful samples?
-		if (s.isSuccessful() && getErrorsOnly())
-			return;
+		// Should we save the sample?
+		if (s.isSuccessful()){
+		    if (getErrorsOnly()){
+		        return;
+		    }
+		} else {
+		    if (getSuccessOnly()){
+		        return;
+		    }
+		}
 
 		nextNumber();
 		String fileName = makeFileName(s.getContentType());
@@ -188,5 +198,9 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	private boolean getErrorsOnly() {
 		return getPropertyAsBoolean(ERRORS_ONLY);
 	}
+
+    private boolean getSuccessOnly() {
+        return getPropertyAsBoolean(SUCCESS_ONLY);
+    }
 
 }
