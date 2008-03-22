@@ -2084,11 +2084,13 @@ the Report.
 	<br></br>
 </description>
 
-<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="363" height="251" screenshot="csvdatasetconfig.png">
+<component name="CSV Data Set Config" index="&sect-num;.4.1"  width="308" height="278" screenshot="csvdatasetconfig.png">
 <description>
-        <p>
+    <p>
 	CSV Data Set Config is used to read lines from a file, and split them into variables.
 	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	Versions of JMeter after 2.3.1 allow variables to be quoted; this allows the value to contain a delimiter.
+	Previously it was necessary to choose a delimiter that was not used in any values.
 	</p>
 	<p>
 	The file is only opened once, and each thread will use a different line from the file. 
@@ -2100,7 +2102,7 @@ the Report.
 	However the variables do work in the HTTP Auth Manager, as the username etc are processed at run-time.
 	</note>
 	<p>
-	As a special case, the string "\t" (without quotes) is treated as a Tab.
+	As a special case, the string "\t" (without quotes) in the delimiter field is treated as a Tab.
 	</p>
 	<p>
 	When the end of file (EOF) is reached, and the recycle option is true, reading starts again with the first line of the file.
@@ -2125,6 +2127,7 @@ the Report.
   <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).</property>
+  <property name="Allow quoted data?" required="Yes">Should the CSV file allow values to be quoted?</property>
   <property name="Recycle on EOF?" required="Yes">Should the file be re-read from the beginning on reaching EOF? (default is true)</property>
   <property name="Stop thread on EOF?" required="Yes">Should the thread be stopped on EOF, if Recycle is false? (default is false)</property>
 </properties>
