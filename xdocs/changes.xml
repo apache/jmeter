@@ -121,6 +121,7 @@ Note __split() and __regex() cannot be used on the Test Plan.</li>
 As a special case, if the HTTP Sampler path starts with "http://" or "https://" then this is used as the full URL.
 </li>
 <li>Bug 44575 - Result Saver can now save only successful results</li>
+<li>Bug 44650 - CSV Dataset now handles quoted column values</li>
 </ul>
 
 <h4>Non-functional changes</h4>

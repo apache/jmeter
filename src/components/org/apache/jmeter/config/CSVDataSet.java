@@ -19,10 +19,12 @@
 package org.apache.jmeter.config;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
+import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -32,10 +34,6 @@ import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author mstover
- * 
- */
 public class CSVDataSet extends ConfigTestElement implements TestBean, LoopIterationListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -52,6 +50,8 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 
     private transient String delimiter;
 
+    private transient boolean quoted = false;
+    
     private transient boolean recycle = true;
     
     private transient boolean stopThread = false;
@@ -81,7 +81,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
             JMeterVariables threadVars = this.getThreadContext().getVariables();
 			String line = server.readLine(_fileName,getRecycle());
             if (line!=null) {// i.e. not EOF
-                String[] lineValues = JOrphanUtils.split(line, delim,false);
+                String[] lineValues = getQuotedData() ? 
+                        CSVSaveService.csvReadFile(new StringReader(line), delim.charAt(0))
+                        : JOrphanUtils.split(line, delim, false);
     			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
     				threadVars.put(vars[a], lineValues[a]);
     			}
@@ -151,6 +153,14 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
+
+    public boolean getQuotedData() {
+        return quoted;
+    }
+
+    public void setQuotedData(boolean quoted) {
+        this.quoted = quoted;
+    }
 
     public boolean getRecycle() {
         return recycle;

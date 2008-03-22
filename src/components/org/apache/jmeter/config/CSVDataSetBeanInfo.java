@@ -35,11 +35,12 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String DELIMITER = "delimiter";             //$NON-NLS-1$
     private static final String RECYCLE = "recycle";                 //$NON-NLS-1$
     private static final String STOPTHREAD = "stopThread";           //$NON-NLS-1$
+    private static final String QUOTED_DATA = "quotedData";          //$NON-NLS-1$
 
 	public CSVDataSetBeanInfo() {
 		super(CSVDataSet.class);
 		createPropertyGroup("csv_data",             //$NON-NLS-1$
-                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, RECYCLE, STOPTHREAD });
+                new String[] { FILENAME, FILE_ENCODING, VARIABLE_NAMES, DELIMITER, QUOTED_DATA, RECYCLE, STOPTHREAD });
         
 		PropertyDescriptor p = property(FILENAME);
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
@@ -60,6 +61,11 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, ",");        //$NON-NLS-1$
 		p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        
+        p = property(QUOTED_DATA);
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         
         p = property(RECYCLE);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
