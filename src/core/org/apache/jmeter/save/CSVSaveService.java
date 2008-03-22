@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -911,7 +912,7 @@ public final class CSVSaveService {
     // State of the parser
 	private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
 	public static final char QUOTING_CHAR = '"';
-	private static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
+	public static String[] csvReadFile(Reader infile, char delim) throws IOException {
 		int ch;
 		int state = INITIAL;
 		List list = new ArrayList();
