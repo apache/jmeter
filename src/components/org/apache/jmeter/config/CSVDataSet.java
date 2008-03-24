@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.config;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -82,11 +83,12 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 			String line = server.readLine(_fileName,getRecycle());
             if (line!=null) {// i.e. not EOF
                 String[] lineValues = getQuotedData() ? 
-                        CSVSaveService.csvReadFile(new StringReader(line), delim.charAt(0))
+                        CSVSaveService.csvReadFile(new BufferedReader(new StringReader(line)), delim.charAt(0))
                         : JOrphanUtils.split(line, delim, false);
     			for (int a = 0; a < vars.length && a < lineValues.length; a++) {
     				threadVars.put(vars[a], lineValues[a]);
     			}
+    			// TODO - report unused columns?
     			// TODO - provide option to set unused variables ?
             } else {
             	if (getStopThread()) {
@@ -96,7 +98,7 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
                     threadVars.put(vars[a], EOFVALUE);
                 }
             }
-		} catch (IOException e) {
+		} catch (IOException e) {// TODO - should the error be indicated in the variables?
 			log.error(e.toString());
 		}
 	}
