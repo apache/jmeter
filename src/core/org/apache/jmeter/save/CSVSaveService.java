@@ -23,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -898,21 +897,21 @@ public final class CSVSaveService {
         return buffer.toString();
     }
 
-    /*
+    // State of the parser
+	private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
+	public static final char QUOTING_CHAR = '"';
+    /**
      * Reads from file and splits input into strings according to the delimiter,
      * taking note of quoted strings.
      * 
      * Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
      * 
-     * @param infile input file
+     * @param infile input file  - must support mark(1)
      * @param delim delimiter (e.g. comma)
      * @return array of strings
-     * @throws IOException
+     * @throws IOException also for unexpected quote characters
      */
-    // State of the parser
-	private static final int INITIAL=0, PLAIN = 1, QUOTED = 2, EMBEDDEDQUOTE = 3;
-	public static final char QUOTING_CHAR = '"';
-	public static String[] csvReadFile(Reader infile, char delim) throws IOException {
+	public static String[] csvReadFile(BufferedReader infile, char delim) throws IOException {
 		int ch;
 		int state = INITIAL;
 		List list = new ArrayList();
@@ -932,7 +931,8 @@ public final class CSVSaveService {
 				break;
 			case PLAIN:
 				if (ch == QUOTING_CHAR){
-					throw new IllegalStateException("Cannot have quote-char in plain field:["+baos.toString()+"]");
+                    baos.write(ch); 
+					throw new IOException("Cannot have quote-char in plain field:["+baos.toString()+"]");
 				} else if (isDelimOrEOL(delim, ch)) {
 					push = true;
 					state = INITIAL;
@@ -955,7 +955,8 @@ public final class CSVSaveService {
 					push = true;
 					state = INITIAL;
 				} else {
-					throw new IllegalStateException("Cannot have single quote-char in quoted field:["+baos.toString()+"]");
+                    baos.write(QUOTING_CHAR);
+					throw new IOException("Cannot have single quote-char in quoted field:["+baos.toString()+"]");
 				}
 				break;
 			}
