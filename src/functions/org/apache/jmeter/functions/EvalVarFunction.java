@@ -28,7 +28,10 @@ import java.util.List;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * Function to evaluate a string which may contain variable or function references.
@@ -41,6 +44,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class EvalVarFunction extends AbstractFunction implements Serializable {
 
 	private static final long serialVersionUID = 232L;
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final List desc = new LinkedList();
 
@@ -66,8 +71,12 @@ public class EvalVarFunction extends AbstractFunction implements Serializable {
 	public synchronized String execute(SampleResult previousResult, Sampler currentSampler)
 			throws InvalidVariableException {
 		String variableName = ((CompoundVariable) values[0]).execute();
-		String variableValue = getVariables().get(variableName);
-		//String parameter = ((CompoundVariable) values[0]).execute();
+		final JMeterVariables vars = getVariables();
+		if (vars == null){
+		    log.error("Variables have not yet been defined");
+		    return "**ERROR - see log file**";
+		}
+        String variableValue = vars.get(variableName);
 		CompoundVariable cv = new CompoundVariable(variableValue);
 		return cv.execute();
 	}
