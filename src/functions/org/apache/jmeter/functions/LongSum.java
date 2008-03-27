@@ -44,7 +44,7 @@ public class LongSum extends AbstractFunction implements Serializable {
 	static {
 		desc.add(JMeterUtils.getResString("longsum_param_1")); //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("longsum_param_2")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -82,8 +82,14 @@ public class LongSum extends AbstractFunction implements Serializable {
 			sum += Long.parseLong(((CompoundVariable) values[i]).execute());
 		}
 
+        try {
+            sum += Long.parseLong(varName);
+            varName = null; // there is no variable name
+        } catch (NumberFormatException ignored) {
+        }
+        
 		String totalString = Long.toString(sum);
-		if (vars != null){// vars will be null on TestPlan
+		if (vars != null && varName != null){// vars will be null on TestPlan
 			vars.put(varName, totalString);
 		}
 
@@ -97,7 +103,7 @@ public class LongSum extends AbstractFunction implements Serializable {
 	 * @see Function#setParameters(Collection)
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkMinParameterCount(parameters, 3);
+		checkMinParameterCount(parameters, 2);
 		values = parameters.toArray();
 	}
 

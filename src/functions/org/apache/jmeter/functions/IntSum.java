@@ -45,7 +45,7 @@ public class IntSum extends AbstractFunction implements Serializable {
 	static {
 		desc.add(JMeterUtils.getResString("intsum_param_1")); //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("intsum_param_2")); //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_param")); //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
 	}
 
 	private Object[] values;
@@ -83,8 +83,14 @@ public class IntSum extends AbstractFunction implements Serializable {
 			sum += Integer.parseInt(((CompoundVariable) values[i]).execute());
 		}
 
-		String totalString = Integer.toString(sum);
-		if (vars != null){// vars will be null on TestPlan
+        try {
+            sum += Integer.parseInt(varName);
+            varName = null; // there is no variable name
+        } catch (NumberFormatException ignored) {
+        }
+
+        String totalString = Integer.toString(sum);
+		if (vars != null && varName != null){// vars will be null on TestPlan
 			vars.put(varName, totalString);
 		}
 
@@ -98,7 +104,7 @@ public class IntSum extends AbstractFunction implements Serializable {
 	 * @see Function#setParameters(Collection)
 	 */
 	public synchronized void setParameters(Collection parameters) throws InvalidVariableException {
-		checkMinParameterCount(parameters, 3);
+		checkMinParameterCount(parameters, 2);
 		values = parameters.toArray();
 	}
 
