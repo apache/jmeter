@@ -906,9 +906,11 @@ public class PackageTest extends JMeterTestCase {
     
     public void sumTest() throws Exception {
     	IntSum is = new IntSum();
-    	checkInvalidParameterCounts(is,3);
+    	checkInvalidParameterCounts(is,2);
     	checkSum(is,"3", new String[]{"1","2"});
-    	checkSum(is,"1", new String[]{"-1","1","1","1","-1","0"});
+        checkSumNoVar(is,"3", new String[]{"1","2"});
+    	checkSum(is,"1", new String[]{"-1","1","1","1","-2","1"});
+        checkSumNoVar(is,"1", new String[]{"-1","1","1","1","-2","1"});
     	String maxIntVal = Integer.toString(Integer.MAX_VALUE);
     	String minIntVal = Integer.toString(Integer.MIN_VALUE);
     	checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
@@ -917,9 +919,11 @@ public class PackageTest extends JMeterTestCase {
     	is = null; // prevent accidental use below
     	
     	LongSum ls = new LongSum();
-    	checkInvalidParameterCounts(ls,3);
+    	checkInvalidParameterCounts(ls,2);
     	checkSum(ls,"3", new String[]{"1","2"});
     	checkSum(ls,"1", new String[]{"-1","1","1","1","-1","0"});
+        checkSumNoVar(ls,"3", new String[]{"1","2"});
+        checkSumNoVar(ls,"1", new String[]{"-1","1","1","1","-1","0"});
     	String maxIntVal_1 = Long.toString(1+(long)Integer.MAX_VALUE);
     	checkSum(ls,maxIntVal, new String[]{maxIntVal,"0"});
     	checkSum(ls,maxIntVal_1, new String[]{maxIntVal,"1"}); // no wrap-round check
@@ -939,5 +943,14 @@ public class PackageTest extends JMeterTestCase {
     	func.setParameters(parms);
     	assertEquals(value,func.execute(null,null));
     	assertEquals(value,vars.getObject("Result"));    	
+    }
+    // Perform a sum and check the results
+    private void checkSumNoVar(AbstractFunction func, String value, String [] addends)  throws Exception {
+        Collection parms = new LinkedList();
+        for (int i=0; i< addends.length; i++){
+            parms.add(new CompoundVariable(addends[i]));
+        }
+        func.setParameters(parms);
+        assertEquals(value,func.execute(null,null));
     }
 }

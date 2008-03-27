@@ -302,15 +302,24 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 </component>
 
 <component index="&sect-num;.5.4a" name="__intSum">
-<description><p>The intsum function can be used to compute the sum of two or more integer values.
-</p></description>
+<description>
+<p>
+The intSum function can be used to compute the sum of two or more integer values.
+</p>
+<note>
+JMeter Versions 2.3.1 and earlier required the reference name to be present.
+The reference name is now optional, but it must not be a valid integer.
+</note>
+</description>
 
 <properties>
         <property name="First argument" required="Yes">The first int value.</property>
         <property name="Second argument" required="Yes">The second int value.</property>
         <property name="nth argument" required="No">The nth int value.</property>
-        <property name="last argument" required="Yes">A reference name for reusing the value
-                computed by this function.</property>
+        <property name="last argument" required="No">A reference name for reusing the value computed by this function. 
+                If specified, the reference name must contain at least one non-numeric character otherwise it will
+                be treated as another int value to be added.
+        </property>
 </properties>
 </component>
 
@@ -322,8 +331,10 @@ This function does not work in any Configuration elements (e.g. User Defined Var
         <property name="First argument" required="Yes">The first long value.</property>
         <property name="Second argument" required="Yes">The second long value.</property>
         <property name="nth argument" required="No">The nth long value.</property>
-        <property name="last argument" required="Yes">A reference name for reusing the value
-                computed by this function.</property>
+        <property name="last argument" required="No">A reference name for reusing the value computed by this function. 
+                If specified, the reference name must contain at least one non-numeric character otherwise it will
+                be treated as another long value to be added.
+        </property>
 </properties>
 </component>
 

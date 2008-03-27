@@ -71,6 +71,8 @@ Functions will only be found if their classname contains the string
 All existing JMeter functions conform to this restriction.
 To revert to earlier behaviour, comment or change the properties classfinder.functions.* in jmeter.properties.
 </li>
+<li>The reference value parameter for intSum() is now optional. 
+As a consequence, if a variable name is used, it must not be a valid integer.</li>
 </ul>
 
 <h4>Bug fixes</h4>
