@@ -2292,8 +2292,10 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
         <property name="Protocol" required="Yes">HTTP or HTTPS.</property>
         <property name="Method" required="No">HTTP GET or HTTP POST.</property>
         <property name="Path" required="No">The path to resource (for example, /servlets/myServlet). If the
-resource requires query string parameters, add them below in the
-"Send Parameters With the Request" section.</property>
+        resource requires query string parameters, add them below in the "Send Parameters With the Request" section.
+        Note that the path is the default for the full path, not a prefix to be applied to paths
+        specified on the HTTP Request screens.
+        </property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <i>name</i> and
         <i>value</i>.  The query string will be generated in the correct fashion, depending on
