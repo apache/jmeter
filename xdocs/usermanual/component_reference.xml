@@ -105,8 +105,11 @@ JMeter assumes the FTP server is listening on the default port.</property>
         them.  This can save you time if you have a lot of HTTP requests or requests with many
         parameters.</p>
 
-        <p>There are two versions of the sampler
-         - one uses the default Java HTTP implementation, the other uses Commons HttpClient.
+        <p><b>There are two versions of the sampler:</b>
+        <ul>
+        <li>HTTP Request - uses the default Java HTTP implementation</li>
+        <li>HTTP Request HTTPClient - uses Apache Commons HttpClient</li>
+        </ul>
          </p>
          <p>The default (Java) implementation has some limitations:</p>
          <ul>
