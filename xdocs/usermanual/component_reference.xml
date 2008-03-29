@@ -2443,13 +2443,18 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 <description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan" />.
 The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
 </description>
+<note>
+If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.
+Also, the variables are not available for use until after the element has been processed, 
+so you cannot use variables that are defined in the same element.
+You can use variables defined in earlier UDVs or on the Test Plan. 
+</note>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="User Defined Variables" required="">Variable name/value pairs. The string under the "Name"
   	column is what you'll need to place inside the brackets in ${...} constructs to use the variables later on. The
   	whole ${...} will then be replaced by the string in the "Value" column.</property>
 </properties>
-<note>If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.</note>
 </component>
 
 <component name="Simple Config Element" index="&sect-num;.4.14"  width="393" height="245" screenshot="simple_config_element.png">
@@ -3383,7 +3388,12 @@ The Test Plan is where the overall settings for a test are specified.
 <p>
 Static variables can be defined for values that are repeated throughout a test, such as server names.
 For example the variable SERVER could be defined as www.example.com, and the rest of the test plan
-could refer to it as ${SERVER}. This simplifies changing the name later. 
+could refer to it as ${SERVER}. This simplifies changing the name later.
+</p>
+<p>
+<b>Note that the Test Plan cannot refer to variables it defines.</b> 
+If you need to construct other variables from the Test Plan variables, 
+use a <complink name="User Defined Variables"/> or a <complink name="User Parameters"/> test element.
 </p>
 <p>
 Selecting Functional Testing instructs JMeter to save the  additional sample information
