@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.protocol.ftp.sampler;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,6 +50,8 @@ public class FTPSampler extends AbstractSampler {
 	public final static String REMOTE_FILENAME = "FTPSampler.filename"; // $NON-NLS-1$
 	
 	public final static String LOCAL_FILENAME = "FTPSampler.localfilename"; // $NON-NLS-1$
+
+    public final static String INPUT_DATA = "FTPSampler.inputdata"; // $NON-NLS-1$
 
 	// Use binary mode file transfer?
 	public final static String BINARY_MODE = "FTPSampler.binarymode"; // $NON-NLS-1$
@@ -85,6 +88,10 @@ public class FTPSampler extends AbstractSampler {
 	public String getLocalFilename() {
 		return getPropertyAsString(LOCAL_FILENAME);
 	}
+
+    private String getLocalFileContents() {
+        return getPropertyAsString(INPUT_DATA);
+    }
 
 	public boolean isBinaryMode(){
 		return getPropertyAsBoolean(BINARY_MODE,false);
@@ -137,10 +144,17 @@ public class FTPSampler extends AbstractSampler {
 					ftp.enterLocalPassiveMode();// should probably come from the setup dialog
 					boolean ftpOK=false;
 		            if (isUpload()) {
-		            	File infile = new File(local);
-		                input = new FileInputStream(infile);
+		                String contents=getLocalFileContents();
+		                if (contents.length() > 0){
+		                    byte bytes[] = contents.getBytes();// TODO this assumes local encoding
+		                    input = new ByteArrayInputStream(bytes);
+	                        res.setBytes(bytes.length);
+		                } else {
+	                        File infile = new File(local);
+	                        res.setBytes((int)infile.length());
+	                        input = new FileInputStream(infile);		                    
+		                }
 		                ftpOK = ftp.storeFile(remote, input);		                
-		                res.setBytes((int)infile.length());
 		            } else {
 		                final boolean saveResponse = isSaveResponse();
 		            	ByteArrayOutputStream baos=null; // No need to close this
