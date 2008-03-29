@@ -98,6 +98,10 @@ public class TestSampleResult extends TestCase {
             assertEquals("sample of size 100 bytes", res.getSampleLabel());
         }
 
+        private static long sampleClock() {
+            return SampleResult.currentTimeInMs();
+        }
+
         public void testSubResults() throws Exception {
         	// This test tries to emulate a http sample, with two
         	// subsamples, representing images that are downloaded for the
@@ -106,8 +110,8 @@ public class TestSampleResult extends TestCase {
             // Sample that will get two sub results, simulates a web page load 
             SampleResult resWithSubResults = new SampleResult();            
 
-            long beginTest = System.currentTimeMillis();
-            
+            long beginTest = sampleClock();
+
             resWithSubResults.sampleStart();
             Thread.sleep(100);
             resWithSubResults.setBytes(300);
@@ -142,8 +146,8 @@ public class TestSampleResult extends TestCase {
             resNoSubResults2.sampleEnd();
             long sample2Time = resNoSubResults2.getTime();
 
-            long overallTime = System.currentTimeMillis() - beginTest;
-            
+            long overallTime = sampleClock() - beginTest;
+
             assertTrue(resNoSubResults2.isSuccessful());
             assertEquals(200, resNoSubResults2.getBytes());
             assertEquals("sample with no subresults", resNoSubResults2.getSampleLabel());
