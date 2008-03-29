@@ -25,6 +25,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.config.ConfigTestElement;
@@ -42,6 +43,8 @@ public class FtpConfigGui extends AbstractConfigGui {
 	private JTextField remoteFile;
 
 	private JTextField localFile;
+	
+	private JTextArea inputData;
 
 	private JCheckBox binaryMode;
 	
@@ -72,6 +75,7 @@ public class FtpConfigGui extends AbstractConfigGui {
 		server.setText(element.getPropertyAsString(FTPSampler.SERVER));
 		remoteFile.setText(element.getPropertyAsString(FTPSampler.REMOTE_FILENAME));
 		localFile.setText(element.getPropertyAsString(FTPSampler.LOCAL_FILENAME));
+        inputData.setText(element.getPropertyAsString(FTPSampler.INPUT_DATA));
 		binaryMode.setSelected(element.getPropertyAsBoolean(FTPSampler.BINARY_MODE, false));
 		saveResponseData.setSelected(element.getPropertyAsBoolean(FTPSampler.SAVE_RESPONSE, false));
 		putBox.setSelected(element.getPropertyAsBoolean(FTPSampler.UPLOAD_FILE,false));
@@ -94,6 +98,7 @@ public class FtpConfigGui extends AbstractConfigGui {
 		element.setProperty(FTPSampler.SERVER,server.getText());
 		element.setProperty(FTPSampler.REMOTE_FILENAME,remoteFile.getText());
 		element.setProperty(FTPSampler.LOCAL_FILENAME,localFile.getText());
+        element.setProperty(FTPSampler.INPUT_DATA,inputData.getText());
 		element.setProperty(FTPSampler.BINARY_MODE,binaryMode.isSelected());
 		element.setProperty(FTPSampler.SAVE_RESPONSE, saveResponseData.isSelected());
 		element.setProperty(FTPSampler.UPLOAD_FILE,putBox.isSelected());
@@ -108,6 +113,7 @@ public class FtpConfigGui extends AbstractConfigGui {
         server.setText(""); //$NON-NLS-1$
         remoteFile.setText(""); //$NON-NLS-1$
         localFile.setText(""); //$NON-NLS-1$
+        inputData.setText(""); //$NON-NLS-1$
         binaryMode.setSelected(false);
         saveResponseData.setSelected(false);
         getBox.setSelected(true);
@@ -137,6 +143,18 @@ public class FtpConfigGui extends AbstractConfigGui {
 		filenamePanel.add(localFile, BorderLayout.CENTER);
 		return filenamePanel;
 	}
+
+    private JPanel createLocalFileContentsPanel() {
+        JLabel label = new JLabel(JMeterUtils.getResString("ftp_local_file_contents")); //$NON-NLS-1$
+
+        inputData = new JTextArea();
+        label.setLabelFor(inputData);
+
+        JPanel contentsPanel = new JPanel(new BorderLayout(5, 0));
+        contentsPanel.add(label, BorderLayout.WEST);
+        contentsPanel.add(inputData, BorderLayout.CENTER);
+        return contentsPanel;
+    }
 
 	private JPanel createRemoteFilenamePanel() {
 		JLabel label = new JLabel(JMeterUtils.getResString("ftp_remote_file")); //$NON-NLS-1$
@@ -185,7 +203,8 @@ public class FtpConfigGui extends AbstractConfigGui {
 		mainPanel.add(createServerPanel());
 		mainPanel.add(createRemoteFilenamePanel());
 		mainPanel.add(createLocalFilenamePanel());
-		mainPanel.add(createOptionsPanel());
+		mainPanel.add(createLocalFileContentsPanel());
+        mainPanel.add(createOptionsPanel());
 
 		add(mainPanel, BorderLayout.CENTER);
 	}
