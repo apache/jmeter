@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -140,6 +142,38 @@ public class SampleResult implements Serializable {
 	private String dataEncoding;// (is this really the character set?) e.g.
 								// ISO-8895-1, UTF-8
 
+	private static Method initNanoTimeMethod() {
+		try {
+			return System.class.getMethod("nanoTime", null);
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
+	}
+
+	private static boolean haveNanoTime() {
+		return nanoTimeMethod != null;
+	}
+
+	private static long nanoTime() {
+		Long result = null;
+		try {
+			result = (Long) nanoTimeMethod.invoke(null, null);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+		return result.longValue();
+	}
+
+	private static final Method nanoTimeMethod = initNanoTimeMethod();
+
+	// a reference time from the nanosecond clock
+	private static final long referenceTimeNsClock = haveNanoTime() ? sampleNsClockInMs() : Long.MIN_VALUE;
+
+	// a reference time from the millisecond clock
+	private static final long referenceTimeMsClock = System.currentTimeMillis(); 
+
 	private long time = 0; // elapsed time
 
 	private long latency = 0; // time to first response
@@ -228,7 +262,7 @@ public class SampleResult implements Serializable {
 	 *            create the sample finishing now, else starting now
 	 */
 	protected SampleResult(long elapsed, boolean atend) {
-		long now = System.currentTimeMillis();
+		long now = currentTimeInMs();
 		if (atend) {
 			setTimes(now - elapsed, now);
 		} else {
@@ -262,7 +296,7 @@ public class SampleResult implements Serializable {
 	 *            desired elapsed time
 	 */
 	public static SampleResult createTestSample(long elapsed) {
-		long now = System.currentTimeMillis();
+		long now = currentTimeInMs();
 		return createTestSample(now, now + elapsed);
 	}
 
@@ -278,6 +312,20 @@ public class SampleResult implements Serializable {
 	 */
 	public SampleResult(long stamp, long elapsed) {
 		stampAndTime(stamp, elapsed);
+	}
+
+	private static long sampleNsClockInMs() {
+		return nanoTime() / 1000000;
+	}
+
+	// Helper method to get 1 ms resolution timing.
+	public static long currentTimeInMs() {
+		if (haveNanoTime()) {
+			long elapsedInMs = sampleNsClockInMs() - referenceTimeNsClock;
+			return referenceTimeMsClock + elapsedInMs;
+		} else {
+			return System.currentTimeMillis();
+		}
 	}
 
 	// Helper method to maintain timestamp relationships
@@ -325,7 +373,7 @@ public class SampleResult implements Serializable {
 		if (startTime != 0 || endTime != 0){
 			throw new RuntimeException("Calling setTime() after start/end times have been set");
 		}
-		long now = System.currentTimeMillis();
+		long now = currentTimeInMs();
 	    setTimes(now - elapsed, now);
 	}
 
@@ -796,7 +844,7 @@ public class SampleResult implements Serializable {
 	 */
 	public void sampleStart() {
 		if (startTime == 0) {
-			setStartTime(System.currentTimeMillis());
+			setStartTime(currentTimeInMs());
 		} else {
 			log.error("sampleStart called twice", new Throwable("Invalid call sequence"));
 		}
@@ -808,7 +856,7 @@ public class SampleResult implements Serializable {
 	 */
 	public void sampleEnd() {
 		if (endTime == 0) {
-			setEndTime(System.currentTimeMillis());
+			setEndTime(currentTimeInMs());
 		} else {
 			log.error("sampleEnd called twice", new Throwable("Invalid call sequence"));
 		}
@@ -822,7 +870,7 @@ public class SampleResult implements Serializable {
 		if (pauseTime != 0) {
 			log.error("samplePause called twice", new Throwable("Invalid call sequence"));
 		}
-		pauseTime = System.currentTimeMillis();
+		pauseTime = currentTimeInMs();
 	}
 
 	/**
@@ -833,7 +881,7 @@ public class SampleResult implements Serializable {
 		if (pauseTime == 0) {
 			log.error("sampleResume without samplePause", new Throwable("Invalid call sequence"));
 		}
-		idleTime += System.currentTimeMillis() - pauseTime;
+		idleTime += currentTimeInMs() - pauseTime;
 		pauseTime = 0;
 	}
 
@@ -934,7 +982,7 @@ public class SampleResult implements Serializable {
      *
      */
 	public void latencyEnd() {
-		latency = System.currentTimeMillis() - startTime - idleTime;
+		latency = currentTimeInMs() - startTime - idleTime;
 	}
 
 	/**
