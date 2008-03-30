@@ -464,7 +464,7 @@ public final class JOrphanUtils {
      * @return hex representation of binary input
      */
     public static String baToHexString(byte ba[]) {
-        StrBuilder sb = new StrBuilder(ba.length);
+        StrBuilder sb = new StrBuilder(ba.length*2);
         for (int i = 0; i < ba.length; i++) {
             int j = ba[i] & 0xff;
             if (j < 16) {
