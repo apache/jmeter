@@ -22,12 +22,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -185,10 +185,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 		} else if (action.equals(LOAD_COMMAND)) {
 			try {
                 final String [] _txt={".txt"}; //$NON-NLS-1$
-				File tmp = FileDialoger.promptToOpenFile(_txt).getSelectedFile();
-				if (tmp != null) {
+				final JFileChooser chooser = FileDialoger.promptToOpenFile(_txt);
+				if (chooser != null) {
 					CookieManager manager = new CookieManager();
-					manager.addFile(tmp.getAbsolutePath());
+					manager.addFile(chooser.getSelectedFile().getAbsolutePath());
                     for (int i = 0; i < manager.getCookieCount() ; i++){
                         addCookieToTable(manager.get(i));
                     }
@@ -201,17 +201,15 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {
 			}
 		} else if (action.equals(SAVE_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToSaveFile("cookies.txt").getSelectedFile(); //$NON-NLS-1$
-				if (tmp != null) {
-					((CookieManager) createTestElement()).save(tmp.getAbsolutePath());
+				final JFileChooser chooser = FileDialoger.promptToSaveFile("cookies.txt"); //$NON-NLS-1$
+				if (chooser != null) {
+					((CookieManager) createTestElement()).save(chooser.getSelectedFile().getAbsolutePath());
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {
 			}
 		}
 	}
