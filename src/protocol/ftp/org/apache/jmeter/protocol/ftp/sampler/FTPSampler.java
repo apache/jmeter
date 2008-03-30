@@ -26,10 +26,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
+import org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -37,13 +40,17 @@ import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * A sampler which understands FTP file requests.
  * 
  */
 public class FTPSampler extends AbstractSampler {
-	public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    public final static String SERVER = "FTPSampler.server"; // $NON-NLS-1$
 
 	// N.B. Originally there was only one filename, and only get(RETR) was supported
 	// To maintain backwards compatibility, the property name needs to remain the same
@@ -113,10 +120,16 @@ public class FTPSampler extends AbstractSampler {
 	 * @return a formatted string label describing this sampler
 	 */
 	public String getLabel() {
-		return ("ftp://" + getServer() + "/" + getRemoteFilename() // $NON-NLS-1$ $NON-NLS-2$
-				+ (isBinaryMode() ? " (Binary) " : " (Ascii) ")    // $NON-NLS-1$ $NON-NLS-2$
-				+ (isUpload() ? " <- " : " -> ")                   // $NON-NLS-1$ $NON-NLS-2$
-				+ getLocalFilename());
+	    StrBuilder sb = new StrBuilder();
+	    sb.setNullText("null");// $NON-NLS-1$
+	    sb.append("ftp://");// $NON-NLS-1$
+	    sb.append(getServer());
+	    sb.append("/");// $NON-NLS-1$
+	    sb.append(getRemoteFilename());
+	    sb.append(isBinaryMode() ? " (Binary) " : " (Ascii) ");// $NON-NLS-1$ $NON-NLS-2$
+		sb.append(isUpload() ? " <- " : " -> "); // $NON-NLS-1$ $NON-NLS-2$
+		sb.append(getLocalFilename());
+		return sb.toString();
 	}
 
 	public SampleResult sample(Entry e) {
@@ -126,7 +139,13 @@ public class FTPSampler extends AbstractSampler {
 		String local = getLocalFilename();
 		boolean binaryTransfer = isBinaryMode();
 		res.setSampleLabel(getName());
-        res.setSamplerData(getLabel());
+        final String label = getLabel();
+        res.setSamplerData(label);
+        try {
+            res.setURL(new URL(label));
+        } catch (MalformedURLException e1) {
+            log.warn("Cannot set URL: "+e1.getLocalizedMessage());
+        }
         InputStream input = null;
         OutputStream output = null;
 
