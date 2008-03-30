@@ -287,4 +287,10 @@ public class TestJorphanUtils extends TestCase {
         assertEquals("",JOrphanUtils.trim("  ", " ;"));
         assertEquals("abc",JOrphanUtils.trim("abc ;", " ;"));
     }
+    
+    public void testbaToHexString(){
+        assertEquals("",JOrphanUtils.baToHexString(new byte[]{}));
+        assertEquals("00",JOrphanUtils.baToHexString(new byte[]{0}));
+        assertEquals("0f107f8081ff",JOrphanUtils.baToHexString(new byte[]{15,16,127,-128,-127,-1}));
+    }
 }
