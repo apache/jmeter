@@ -66,7 +66,9 @@ public class ClientJMeterEngine implements JMeterEngine, Runnable {
 	}
 
 	public void configure(HashTree testTree) {
-		test = testTree;
+        TreeCloner cloner = new TreeCloner(false);
+        testTree.traverse(cloner);
+		test = cloner.getClonedTree();
 	}
 
 	public void setHost(String host) {
