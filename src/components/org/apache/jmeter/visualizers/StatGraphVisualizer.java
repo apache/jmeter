@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -201,10 +200,11 @@ ActionListener {
 
 	public void add(SampleResult res) {
 		SamplingStatCalculator row = null;
+        final String sampleLabel = res.getSampleLabel();
 		synchronized (tableRows) {
-			row = (SamplingStatCalculator) tableRows.get(res.getSampleLabel());
+            row = (SamplingStatCalculator) tableRows.get(sampleLabel);
 			if (row == null) {
-				row = new SamplingStatCalculator(res.getSampleLabel());
+				row = new SamplingStatCalculator(sampleLabel);
 				tableRows.put(row.getLabel(), row);
 				model.insertRow(row, model.getRowCount() - 1);
 			}
@@ -376,12 +376,13 @@ ActionListener {
             	log.error(e.getMessage());
             }
         } else if (event.getSource() == saveTable) {
-            JFileChooser chooser = FileDialoger.promptToSaveFile(
-                    "statistics.csv");		//$NON-NLS-1$
-            File output = chooser.getSelectedFile();
+            JFileChooser chooser = FileDialoger.promptToSaveFile("statistics.csv");	//$NON-NLS-1$
+            if (chooser == null) {
+                return;
+            }
             FileWriter writer = null;
             try {
-                writer = new FileWriter(output);
+                writer = new FileWriter(chooser.getSelectedFile());
                 Vector data = this.getAllTableData();
                 CSVSaveService.saveCSVStats(data,writer,saveHeaders.isSelected() ? COLUMNS : null);
             } catch (FileNotFoundException e) {
