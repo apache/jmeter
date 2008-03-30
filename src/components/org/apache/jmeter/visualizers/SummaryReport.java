@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,6 +31,7 @@ import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -85,7 +85,10 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 	protected JScrollPane myScrollPane;
 
     protected JButton saveTable = 
-        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));			//$NON-NLS-1$
+        new JButton(JMeterUtils.getResString("aggregate_graph_save_table"));            //$NON-NLS-1$
+    
+    private JCheckBox useGroupName = 
+        new JCheckBox(JMeterUtils.getResString("aggregate_graph_use_group_name"));            //$NON-NLS-1$
     
 	transient private ObjectTableModel model;
 
@@ -140,10 +143,11 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
 	public void add(SampleResult res) {
 		Calculator row = null;
+        final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
 		synchronized (tableRows) {
-			row = (Calculator) tableRows.get(res.getSampleLabel());
+            row = (Calculator) tableRows.get(sampleLabel);
 			if (row == null) {
-				row = new Calculator(res.getSampleLabel());
+				row = new Calculator(sampleLabel);
 				tableRows.put(row.getLabel(), row);
 				model.insertRow(row, model.getRowCount() - 1);
 			}
@@ -186,16 +190,21 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 		this.add(mainPanel, BorderLayout.NORTH);
 		this.add(myScrollPane, BorderLayout.CENTER);
 		saveTable.addActionListener(this);
-		this.add(saveTable,BorderLayout.SOUTH);
+		JPanel opts = new JPanel();
+        opts.add(useGroupName, BorderLayout.WEST);
+		opts.add(saveTable, BorderLayout.CENTER);
+		this.add(opts,BorderLayout.SOUTH);
 	}
 
 	public void actionPerformed(ActionEvent ev) {
 		if (ev.getSource() == saveTable) {
 	        JFileChooser chooser = FileDialoger.promptToSaveFile("summary.csv");//$NON-NLS-1$
-			File output = chooser.getSelectedFile();
+            if (chooser == null) {
+                return;
+            }
 			FileWriter writer = null;
 			try {
-			    writer = new FileWriter(output);
+			    writer = new FileWriter(chooser.getSelectedFile());
 			    CSVSaveService.saveCSVStats(model,writer);
 			} catch (FileNotFoundException e) {
 			    log.warn(e.getMessage());
