@@ -130,6 +130,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Bug 44632 - Text input enhancement to FTP Sampler</li>
 <li>Bug 42204 - add thread group name to Aggregate and Summary reports</li>
 <li>FTP Sampler sets latency = time to login</li>
+<li>FTP Sampler sets a URL if it can</li>
 </ul>
 
 <h4>Non-functional changes</h4>
