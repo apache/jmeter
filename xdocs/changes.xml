@@ -126,6 +126,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Bug 44650 - CSV Dataset now handles quoted column values</li>
 <li>Bug 44600 - 1-ms resolution timer when running with Java 1.5+</li>
 <li>Bug 44632 - Text input enhancement to FTP Sampler</li>
+<li>Bug 42204 - add thread group name to Aggregate and Summary reports</li>
 </ul>
 
 <h4>Non-functional changes</h4>

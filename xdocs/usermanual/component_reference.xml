@@ -1878,7 +1878,7 @@ Any DTD nodes or Prolog nodes will not show up in tree; however, response may co
 </p>
 </component>
 
-<component name="Aggregate Report" index="&sect-num;.3.7"  width="762" height="235" screenshot="aggregate_report.png">
+<component name="Aggregate Report" index="&sect-num;.3.7"  width="784" height="287" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
@@ -1898,12 +1898,15 @@ Calculation of the Median and 90% Line (90<sup>th</sup> <a href="glossary.html#P
 See the <complink name="Summary Report"/> for a similar Listener that does not need so much memory.
 </note>
 <ul>
-<li>Label - The label of the sample.</li>
+<li>Label - The label of the sample.
+If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
+This allows identical labels from different thread groups to be collated separately if required.
+</li>
 <li># Samples - The number of samples for the URL</li>
 <li>Average - The average time of a set of results</li>
 <li>Median - The <a href="glossary.html#Median">median</a> is the time in the middle of a set of results.
 50% of the samples took no more than this time; the remainder took at least as long.</li>
-<li>90% Line - 90% of the samples took no more than this time. #
+<li>90% Line - 90% of the samples took no more than this time.
 The remaining samples at least as long as this. (90<sup>th</sup> <a href="glossary.html#Percentile">percentile</a>)</li>
 <li>Min - The shortest time for the samples of the given URL</li>
 <li>Max - The longest time for the samples of the given URL</li>
@@ -1913,6 +1916,12 @@ The remaining samples at least as long as this. (90<sup>th</sup> <a href="glossa
 </ul>
 <p>Times are in milliseonds.</p>
 </description>
+<div align="center">
+<p>
+	The figure below shows an example of selecting the "Include group name" checkbox.
+<figure width="784" height="287" image="aggregate_report_grouped.png">Sample "Include group name" display</figure>
+</p>
+</div>
 </component>
 
 <component name="View Results in Table" index="&sect-num;.3.8"  width="658" height="700" screenshot="table_results.png">
@@ -2045,7 +2054,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 <p>If the property <b>beanshell.listener.init</b> is defined, this is used to load an initialisation file, which can be used to define methods etc for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.15"  width="643" height="255" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.15"  width="784" height="287" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -2059,7 +2068,10 @@ It is important to choose the sampler labels correctly to get the best results f
 the Report.
 </p>
 <ul>
-<li>Label - The label of the sample.</li>
+<li>Label - The label of the sample.
+If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
+This allows identical labels from different thread groups to be collated separately if required.
+</li>
 <li># Samples - The number of samples for the URL</li>
 <li>Average - The average elapsed time of a set of results</li>
 <li>Min - The lowest elapsed time for the samples of the given URL</li>
@@ -2072,6 +2084,12 @@ the Report.
 </ul>
 <p>Times are in milliseonds.</p>
 </description>
+<div align="center">
+<p>
+	The figure below shows an example of selecting the "Include group name" checkbox.
+<figure width="784" height="287" image="summary_report_grouped.png">Sample "Include group name" display</figure>
+</p>
+</div>
 </component>
 
 
