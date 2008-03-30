@@ -23,12 +23,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -213,9 +213,9 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 		} else if (action.equals(LOAD_COMMAND)) {
 			try {
                 final String [] _txt={".txt"}; //$NON-NLS-1$
-				File tmp = FileDialoger.promptToOpenFile(_txt).getSelectedFile();
-				if (tmp != null) {
-					tableModel.manager.addFile(tmp.getAbsolutePath());
+				final JFileChooser dialog = FileDialoger.promptToOpenFile(_txt);
+				if (dialog != null) {
+					tableModel.manager.addFile(dialog.getSelectedFile().getAbsolutePath());
 					tableModel.fireTableDataChanged();
 
 					if (tableModel.getRowCount() > 0) {
@@ -225,17 +225,15 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {// TODO WHY?
 			}
 		} else if (action.equals(SAVE_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToSaveFile("auth.txt").getSelectedFile();
-				if (tmp != null) {
-					tableModel.manager.save(tmp.getAbsolutePath());
+				final JFileChooser chooser = FileDialoger.promptToSaveFile("auth.txt"); //$NON-NLS-1$
+				if (chooser != null) {
+					tableModel.manager.save(chooser.getSelectedFile().getAbsolutePath());
 				}
 			} catch (IOException ex) {
 				log.error("", ex);
-			} catch (NullPointerException err) {// TODO WHY?
 			}
 		}
 	}

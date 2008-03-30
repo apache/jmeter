@@ -19,19 +19,16 @@
 package org.apache.jmeter.gui.action;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.swing.JFileChooser;
 
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.reporters.FileReporter;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class Analyze implements Command {
 	private static Set commands = new HashSet();
 
@@ -48,16 +45,13 @@ public class Analyze implements Command {
 
 	public void doAction(ActionEvent e) {
 		FileReporter analyzer = new FileReporter();
-		try {
-			File f = FileDialoger.promptToOpenFile(new String[] { ".jtl" }).getSelectedFile();
-			if (f != null) {
-				try {
-					analyzer.init(f.getPath());
-				} catch (IOException err) {
-					JMeterUtils.reportErrorToUser("The file you selected could not be analyzed");
-				}
+		final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jtl" }); //$NON-NLS-1$
+		if (chooser != null) {
+			try {
+				analyzer.init(chooser.getSelectedFile().getPath());
+			} catch (IOException err) {
+				JMeterUtils.reportErrorToUser("The file you selected could not be analyzed");
 			}
-		} catch (NullPointerException err) {
 		}
 	}
 }
