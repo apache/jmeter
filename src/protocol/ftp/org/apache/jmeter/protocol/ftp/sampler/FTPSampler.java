@@ -134,6 +134,7 @@ public class FTPSampler extends AbstractSampler {
         FTPClient ftp = new FTPClient();
 		try {
 			ftp.connect(getServer());
+			res.latencyEnd();
 			int reply = ftp.getReplyCode();
             if (FTPReply.isPositiveCompletion(reply))
             {
