@@ -78,7 +78,11 @@ public class FtpConfigGui extends AbstractConfigGui {
         inputData.setText(element.getPropertyAsString(FTPSampler.INPUT_DATA));
 		binaryMode.setSelected(element.getPropertyAsBoolean(FTPSampler.BINARY_MODE, false));
 		saveResponseData.setSelected(element.getPropertyAsBoolean(FTPSampler.SAVE_RESPONSE, false));
-		putBox.setSelected(element.getPropertyAsBoolean(FTPSampler.UPLOAD_FILE,false));
+		// Not sure why both need to be set as they are part of a group.
+		// anyway, this fixes bug 44625
+        final boolean uploading = element.getPropertyAsBoolean(FTPSampler.UPLOAD_FILE,false);
+        getBox.setSelected(!uploading);
+        putBox.setSelected(uploading);
 	}
 
 	public TestElement createTestElement() {
