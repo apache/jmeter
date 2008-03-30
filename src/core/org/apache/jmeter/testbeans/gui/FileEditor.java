@@ -40,7 +40,6 @@ import org.apache.jmeter.gui.util.FileDialoger;
  * because JMeter is now too dumb to handle File objects (there's no
  * FileProperty).
  * 
- * @version $Revision$ updated on $Date$
  */
 public class FileEditor implements PropertyEditor, ActionListener {
 
@@ -77,9 +76,11 @@ public class FileEditor implements PropertyEditor, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		JFileChooser chooser = FileDialoger.promptToOpenFile();
 
-		File file = chooser.getSelectedFile();
+		if (chooser == null){
+		    return;
+		}
 
-		setValue(file.getPath());
+		setValue(chooser.getSelectedFile().getPath());
 	}
 
 	/**

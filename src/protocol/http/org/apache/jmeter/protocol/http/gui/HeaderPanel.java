@@ -22,11 +22,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -197,9 +197,9 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 			headerTable.setRowSelectionInterval(rowToSelect, rowToSelect);
 		} else if (action.equals(LOAD_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToOpenFile().getSelectedFile();
-				if (tmp != null) {
-					headerManager.addFile(tmp.getAbsolutePath());
+				final JFileChooser chooser = FileDialoger.promptToOpenFile();
+				if (chooser != null) {
+					headerManager.addFile(chooser.getSelectedFile().getAbsolutePath());
 					tableModel.fireTableDataChanged();
 
 					if (tableModel.getRowCount() > 0) {
@@ -209,17 +209,15 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 				}
 			} catch (IOException ex) {
 				log.error("Could not load headers", ex);
-			} catch (NullPointerException err) {
 			}
 		} else if (action.equals(SAVE_COMMAND)) {
 			try {
-				File tmp = FileDialoger.promptToSaveFile(null).getSelectedFile();
-				if (tmp != null) {
-					headerManager.save(tmp.getAbsolutePath());
+				final JFileChooser chooser = FileDialoger.promptToSaveFile(null);
+				if (chooser != null) {
+					headerManager.save(chooser.getSelectedFile().getAbsolutePath());
 				}
 			} catch (IOException ex) {
 				log.error("Could not save headers", ex);
-			} catch (NullPointerException err) {
 			}
 		}
 	}

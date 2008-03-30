@@ -445,6 +445,20 @@ public class SampleResult implements Serializable {
 		return label;
 	}
 
+	/**
+	 * Get the sample label for use in summary reports etc.
+	 * 
+	 * @param includeGroup whether to include the thread group name
+	 * @return the label
+	 */
+    public String getSampleLabel(boolean includeGroup) {
+        if (includeGroup) {
+            StringBuffer sb = new StringBuffer(threadName.substring(0,threadName.lastIndexOf(" "))); //$NON-NLS-1$
+            return sb.append(":").append(label).toString(); //$NON-NLS-1$
+        }
+        return label;
+    }
+
 	public void setSampleLabel(String label) {
 		this.label = label;
 	}
