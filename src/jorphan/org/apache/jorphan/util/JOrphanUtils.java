@@ -30,10 +30,15 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.commons.lang.text.StrBuilder;
+
 /**
  * This class contains frequently-used static utility methods.
  * 
  */
+
+// @see TestJorphanUtils for unit tests
+
 public final class JOrphanUtils {
 
 	/**
@@ -450,5 +455,23 @@ public final class JOrphanUtils {
      */
     public static boolean isXML(byte [] target){
         return startsWith(target, XML_PFX,0);
+    }
+
+    /**
+     * Convert binary byte array to hex string.
+     * 
+     * @param ba input binary byte array
+     * @return hex representation of binary input
+     */
+    public static String baToHexString(byte ba[]) {
+        StrBuilder sb = new StrBuilder(ba.length);
+        for (int i = 0; i < ba.length; i++) {
+            int j = ba[i] & 0xff;
+            if (j < 16) {
+                sb.append("0"); // $NON-NLS-1$ add zero padding
+            }
+            sb.append(Integer.toHexString(j));
+        }
+        return sb.toString();
     }
 }
