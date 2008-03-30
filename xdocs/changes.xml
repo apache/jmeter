@@ -92,6 +92,7 @@ As a consequence, if a variable name is used, it must not be a valid integer.</l
 <li>Fix problems using Tidy(tolerant parser) in XPath Assertion and XPath Extractor</li>
 <li>Bug 44374 - improve timer calculation</li>
 <li>Regular Expression Extractor now deletes all stale variables from previous matches.</li>
+<li>Bug 44707 - Running remote test changes stored tree</li>
 </ul>
 
 <h4>Improvements</h4>
