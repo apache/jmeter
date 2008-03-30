@@ -36,11 +36,6 @@ public class PackageTest extends TestCase {
 	public PackageTest(String arg0) {
 		super(arg0);
 	}
-	public void testHex() throws Exception {
-		assertEquals("00010203", MD5HexAssertion.baToHex(new byte[] { 0, 1, 2, 3 }));
-		assertEquals("03020100", MD5HexAssertion.baToHex(new byte[] { 3, 2, 1, 0 }));
-		assertEquals("0f807fff", MD5HexAssertion.baToHex(new byte[] { 0xF, -128, 127, -1 }));
-	}
 
 	public void testMD5() throws Exception {
 		assertEquals("D41D8CD98F00B204E9800998ECF8427E", MD5HexAssertion.baMD5Hex(new byte[] {}).toUpperCase());

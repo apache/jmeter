@@ -36,6 +36,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class MD5HexAssertion extends AbstractTestElement implements Serializable, Assertion {
@@ -94,18 +95,6 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 	}
 
 	// package protected so can be accessed by test class
-	static String baToHex(byte ba[]) {
-		StringBuffer sb = new StringBuffer(32);
-		for (int i = 0; i < ba.length; i++) {
-			int j = ba[i] & 0xff;
-			if (j < 16)
-				sb.append("0");
-			sb.append(Integer.toHexString(j));
-		}
-		return sb.toString();
-	}
-
-	// package protected so can be accessed by test class
 	static String baMD5Hex(byte ba[]) {
 		byte[] md5Result = {};
 
@@ -116,6 +105,6 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
 		} catch (NoSuchAlgorithmException e) {
 			log.error("", e);
 		}
-		return baToHex(md5Result);
+		return JOrphanUtils.baToHexString(md5Result);
 	}
 }
