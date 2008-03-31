@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.text.StrBuilder;
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -174,7 +175,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             	// plus a number of update counts. 
             	boolean hasResultSet = cstmt.execute();
             	String sb = resultSetsToString(cstmt,hasResultSet, out);
-            	res.setResponseData(sb.toString().getBytes());       	
+            	res.setResponseData(sb.getBytes());       	
             } else if (UPDATE.equals(_queryType)) {
             	stmt = conn.createStatement();
 				stmt.executeUpdate(getQuery());
@@ -186,13 +187,13 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             	setArguments(pstmt);
             	pstmt.executeQuery();
             	String sb = resultSetsToString(pstmt,true,null);
-            	res.setResponseData(sb.toString().getBytes());
+            	res.setResponseData(sb.getBytes());
             } else if (PREPARED_UPDATE.equals(_queryType)) {
             	PreparedStatement pstmt = getPreparedStatement(conn);
             	setArguments(pstmt);
             	pstmt.executeUpdate();
 				String sb = resultSetsToString(pstmt,false,null);
-            	res.setResponseData(sb.toString().getBytes());
+            	res.setResponseData(sb.getBytes());
             } else if (ROLLBACK.equals(_queryType)){
             	conn.rollback();
             	res.setResponseData(ROLLBACK.getBytes());
@@ -227,7 +228,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	}
 
 	private String resultSetsToString(PreparedStatement pstmt, boolean result, int[] out) throws SQLException {
-		StringBuffer sb = new StringBuffer();
+		StrBuilder sb = new StrBuilder();
 		sb.append("\n"); // $NON-NLS-1$
 		int updateCount = 0;
 		if (!result) {
@@ -430,7 +431,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	}
 
 	public String toString() {
-        StringBuffer sb = new StringBuffer(80);
+        StrBuilder sb = new StrBuilder(80);
         sb.append("["); // $NON-NLS-1$
         sb.append(getQueryType());
         sb.append("] "); // $NON-NLS-1$
