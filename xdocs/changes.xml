@@ -139,7 +139,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Better handling of MirrorServer startup problems and improved unit test.</li>
 <li>Build process now detects missing 3rd party libraries and reports need for both binary and source archives</li>
 <li>Skip BeanShell tests if jar is not present</li>
-<li>Update to Xerces 2.9.1, Xalan 2.7.1, Commons-Logging 1.1.1, XStream 1.2.2</li>
+<li>Update to Xerces 2.9.1, Xalan 2.7.1, Commons-Logging 1.1.1, XStream 1.3, XPP3 1.1.4c</li>
 <li>Use properties for log/logn function descriptions</li>
 <li>Check that all jmx files in the demos directory can be loaded OK</li>
 <li>Update copyright to 2008; use copy tag instead of numeric character in HTML output</li>
