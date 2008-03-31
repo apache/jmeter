@@ -17,7 +17,6 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -198,10 +197,10 @@ public class HTTPSampler extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
-		byte[] readBuffer = getThreadContext().getReadBuffer();
 		BufferedInputStream in;
 
-        if ((conn.getContentLength() == 0) 
+        final int contentLength = conn.getContentLength();
+        if ((contentLength == 0) 
         	&& JMeterUtils.getPropDefault("httpsampler.obey_contentlength", // $NON-NLS-1$
         	false)) {
             log.info("Content-Length: 0, not reading http-body");
@@ -250,20 +249,7 @@ public class HTTPSampler extends HTTPSamplerBase {
 			}
 			in = new BufferedInputStream(conn.getErrorStream());
 		}
-		java.io.ByteArrayOutputStream w = new ByteArrayOutputStream();
-		int x = 0;
-		boolean first = true;
-		while ((x = in.read(readBuffer)) > -1) {
-			if (first) {
-				res.latencyEnd();
-				first = false;
-			}
-			w.write(readBuffer, 0, x);
-		}
-		in.close();
-		w.flush();
-		w.close();
-		return w.toByteArray();
+		return readResponse(res, in, contentLength);
 	}
 
 	/**

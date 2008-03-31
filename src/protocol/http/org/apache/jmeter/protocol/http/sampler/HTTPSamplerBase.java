@@ -19,12 +19,15 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -152,6 +155,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public final static String EMBEDDED_URL_RE = "HTTPSampler.embedded_url_re"; // $NON-NLS-1$
 
 	public final static String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
+
+	// Store MD5 hash instead of storing response
+    private final static String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
 
 	/** A number to indicate that the port has not been set. */
 	public static final int UNSPECIFIED_PORT = 0;
@@ -438,6 +444,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public String getImplementation() {
         return this.getPropertyAsString(IMPLEMENTATION);
+    }
+
+    public boolean useMD5() {
+        return this.getPropertyAsBoolean(MD5, false);
+    }
+
+   public void setMD5(boolean truth) {
+        this.setProperty(MD5, truth, false);
     }
 
     /**
@@ -1333,6 +1347,65 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void threadStarted(){    	
     }
     public void threadFinished(){    	
+    }
+
+    /**
+     * Read response from the input stream, converting to MD5 digest if the useMD5 property is set.
+     * 
+     * For the MD5 case, the result byte count is set to the size of the original response.
+     * 
+     * @param sampleResult
+     * @param in input stream
+     * @param length expected input length or zero
+     * @return the response or the MD5 of the response
+     * @throws IOException
+     */
+    public byte[] readResponse(SampleResult sampleResult, InputStream in, int length) throws IOException {
+        
+        byte[] readBuffer = getThreadContext().getReadBuffer();
+        int bufferSize=32;// Enough for MD5
+        
+        MessageDigest md=null;
+        boolean asMD5 = useMD5();
+        if (asMD5) {
+            try {
+                md = MessageDigest.getInstance("MD5"); //$NON-NLS-1$
+            } catch (NoSuchAlgorithmException e) {
+                log.error("Should not happen - could not find MD5 digest", e);
+                asMD5=false;
+            }
+        } else {
+            if (length <= 0) {// may also happen if long value > int.max
+                bufferSize = 4 * 1024;
+            } else {
+                bufferSize = length;
+            }
+        }
+        ByteArrayOutputStream w = new ByteArrayOutputStream(bufferSize);
+        int bytesRead = 0;
+    	int totalBytes = 0;
+    	boolean first = true;
+    	while ((bytesRead = in.read(readBuffer)) > -1) {
+    		if (first) {
+    			sampleResult.latencyEnd();
+    			first = false;
+    		}
+    		if (asMD5 && md != null) {
+    		    md.update(readBuffer, 0 , bytesRead);
+    		    totalBytes += bytesRead;
+    		} else {
+    		    w.write(readBuffer, 0, bytesRead);
+    		}
+    	}
+    	in.close();
+    	w.flush();
+    	if (asMD5 && md != null) {
+            byte[] md5Result = md.digest();
+            w.write(JOrphanUtils.baToHexString(md5Result).getBytes());
+            sampleResult.setBytes(totalBytes);
+    	}
+    	w.close();
+    	return w.toByteArray();
     }
 }
 
