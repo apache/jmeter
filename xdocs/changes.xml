@@ -132,6 +132,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>FTP Sampler sets latency = time to login</li>
 <li>FTP Sampler sets a URL if it can</li>
 <li>Bug 41921 - add option for samplers to store MD5 of response; done for HTTP Samplers.</li>
+<li>Regex Function can now also be applied to a variable rather than just the previous sample result.</li>
 </ul>
 
 <h4>Non-functional changes</h4>

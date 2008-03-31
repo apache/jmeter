@@ -29,7 +29,9 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestRegexFunction extends JMeterTestCase {
-		RegexFunction variable;
+		private static final String INPUT_VARIABLE_NAME = "INVAR";
+
+        RegexFunction variable;
 
 		SampleResult result;
 
@@ -56,6 +58,8 @@ public class TestRegexFunction extends JMeterTestCase {
 					+ "</row></company-xmlext-query-ret>";
 			result.setResponseData(data.getBytes());
 			vars = new JMeterVariables();
+			String data2 = "The quick brown fox jumped over the lazy dog 123 times";
+			vars.put(INPUT_VARIABLE_NAME, data2);
 			jmctx.setVariables(vars);
 			jmctx.setPreviousResult(result);
 		}
@@ -69,6 +73,59 @@ public class TestRegexFunction extends JMeterTestCase {
 			String match = variable.execute(result, null);
 			assertEquals("5", match);
 		}
+
+		// Test with output variable name
+        public void testVariableExtraction1a() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$2$")); // template
+            params.add(new CompoundVariable("2")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("3", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("5", match);
+            assertEquals("5", vars.getObject("OUTVAR"));
+            assertEquals("<value field=\"pinposition2\">5</value>", vars.getObject("OUTVAR_g0"));
+            assertEquals("pinposition2", vars.getObject("OUTVAR_g1"));
+            assertEquals("5", vars.getObject("OUTVAR_g2"));
+        }
+
+        // Test with empty output variable name
+        public void testVariableExtraction1b() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("$2$")); // template
+            params.add(new CompoundVariable("2")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable(""));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("5", match);
+            assertNull(vars.getObject("OUTVAR"));
+        }
+
+        public void testVariableExtractionFromVariable() throws Exception {
+            params = new LinkedList();
+            params.add(new CompoundVariable("(\\d+)\\s+(\\w+)"));
+            params.add(new CompoundVariable("$2$")); // template
+            params.add(new CompoundVariable("1")); // match number
+            params.add(new CompoundVariable("-")); // ALL separator
+            params.add(new CompoundVariable("default"));
+            params.add(new CompoundVariable("OUTVAR"));
+            params.add(new CompoundVariable(INPUT_VARIABLE_NAME));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("1", vars.getObject("OUTVAR_matchNr"));
+            assertEquals("times", match);
+            assertEquals("times", vars.getObject("OUTVAR"));
+            assertEquals("123 times", vars.getObject("OUTVAR_g0"));
+            assertEquals("123", vars.getObject("OUTVAR_g1"));
+            assertEquals("times", vars.getObject("OUTVAR_g2"));
+        }
 
 		public void testVariableExtraction2() throws Exception {
 			params = new LinkedList();
