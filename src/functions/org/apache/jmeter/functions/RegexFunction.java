@@ -41,6 +41,11 @@ import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Util;
+/**
+ * Implements regular expression parsing of sample results and variables 
+ */
+
+// @see TestRegexFunction for unit tests
 
 public class RegexFunction extends AbstractFunction implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -64,14 +69,15 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 	// Number of parameters expected - used to reject invalid calls
 	private static final int MIN_PARAMETER_COUNT = 2;
 
-	private static final int MAX_PARAMETER_COUNT = 6;
+	private static final int MAX_PARAMETER_COUNT = 7;
 	static {
 		desc.add(JMeterUtils.getResString("regexfunc_param_1"));// regex //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("regexfunc_param_2"));// template //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("regexfunc_param_3"));// which match //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("regexfunc_param_4"));// between text //$NON-NLS-1$
 		desc.add(JMeterUtils.getResString("regexfunc_param_5"));// default text //$NON-NLS-1$
-		desc.add(JMeterUtils.getResString("function_name_paropt")); // variable name //$NON-NLS-1$
+		desc.add(JMeterUtils.getResString("function_name_paropt")); // output variable name //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("regexfunc_param_7"));// input variable //$NON-NLS-1$
 	}
 
 	public RegexFunction() {
@@ -94,6 +100,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			throws InvalidVariableException {
 		String valueIndex = "", defaultValue = "", between = ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		String name = ""; //$NON-NLS-1$
+		String inputVariable = ""; //$NON-NLS-1$
 		Pattern searchPattern;
 		Object[] tmplt;
 		try {
@@ -104,7 +111,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			if (values.length > 2) {
 				valueIndex = ((CompoundVariable) values[2]).execute();
 			}
-			if (valueIndex.equals("")) { //$NON-NLS-1$
+			if (valueIndex.length() == 0) {
 				valueIndex = "1"; //$NON-NLS-1$
 			}
 
@@ -114,30 +121,45 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 			if (values.length > 4) {
 				String dv = ((CompoundVariable) values[4]).execute();
-				if (!dv.equals("")) { //$NON-NLS-1$
+				if (dv.length() != 0) {
 					defaultValue = dv;
 				}
 			}
 
 			if (values.length > 5) {
-				name = ((CompoundVariable) values[values.length - 1]).execute();
+				name = ((CompoundVariable) values[5]).execute();
 			}
+
+			if (values.length > 6) {
+                inputVariable = ((CompoundVariable) values[6]).execute();
+            }
 		} catch (MalformedCachePatternException e) {
 			throw new InvalidVariableException(e.toString());
 		}
 
-		JMeterVariables vars = getVariables();// Relatively expensive
-												// operation, so do it once
-		vars.put(name, defaultValue);
-		if (previousResult == null || previousResult.getResponseData().length == 0) {
+		// Relatively expensive operation, so do it once
+		JMeterVariables vars = getVariables();
+		
+		if (name.length() > 0) {
+		    vars.put(name, defaultValue);
+		}
+        
+		String textToMatch=null;
+		
+		if (inputVariable.length() > 0){
+		    textToMatch=vars.get(inputVariable);
+		} else if (previousResult != null){
+		    textToMatch = previousResult.getResponseDataAsString();		    
+		}
+
+        if (textToMatch == null || textToMatch.length() == 0) {
 			return defaultValue;
 		}
 
 		List collectAllMatches = new ArrayList();
 		try {
 			PatternMatcher matcher = JMeterUtils.getMatcher();
-			String responseText = previousResult.getResponseDataAsString();
-			PatternMatcherInput input = new PatternMatcherInput(responseText);
+			PatternMatcherInput input = new PatternMatcherInput(textToMatch);
 			while (matcher.contains(input, searchPattern)) {
 				MatchResult match = matcher.getMatch();
 				collectAllMatches.add(match);
@@ -146,7 +168,9 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 			log.error("", e); //$NON-NLS-1$
 			return defaultValue;
 		} finally {
-			vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
+		    if (name.length() > 0){
+		        vars.put(name + "_matchNr", "" + collectAllMatches.size()); //$NON-NLS-1$ //$NON-NLS-2$
+		    }
 		}
 
 		if (collectAllMatches.size() == 0) {
@@ -208,7 +232,9 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 				result.append(match.group(((Integer) template[a]).intValue()));
 			}
 		}
-		vars.put(namep, result.toString());
+		if (namep.length() > 0){
+		    vars.put(namep, result.toString());
+		}
 		return result.toString();
 	}
 
