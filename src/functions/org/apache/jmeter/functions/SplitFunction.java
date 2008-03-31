@@ -27,6 +27,7 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -34,12 +35,24 @@ import org.apache.log.Logger;
 // @see org.apache.jmeter.functions.PackageTest for unit tests
 
 /**
- * Function to log a message
- * 
- * Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
- * unrecognised) - throwable message (optional)
- * 
- * Returns: - the input string
+ * Function to split a string into variables
+ * <p>
+ * Parameters:
+ * <ul>
+ * <li>String to split</li>
+ * <li>Variable name prefix</li>
+ * <li>String to split on (optional, default is comma)</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Returns: the input string
+ * </p>
+ * Also sets the variables:
+ * <ul>
+ * <li>VARNAME - the input string</li>
+ * <li>VARNAME_n - number of fields found</li>
+ * <li>VARNAME_1..n - fields</li>
+ * </ul>
  * 
  */
 public class SplitFunction extends AbstractFunction implements Serializable {
@@ -56,9 +69,9 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 
 	private static final int MAX_PARAMETER_COUNT = 3;
 	static {
-		desc.add("String to split");
-		desc.add("Variable name");
-		desc.add("Split character (omit for ',')");
+        desc.add(JMeterUtils.getResString("split_function_string")); // output variable name //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_param")); // output variable name //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("split_function_separator")); // output variable name //$NON-NLS-1$
 	}
 
 	private Object[] values;
