@@ -81,7 +81,7 @@ JMeter assumes the FTP server is listening on the default port.</property>
 
 </component>
 
-<component name="HTTP Request" index="&sect-num;.1.2"  width="688" height="592" screenshot="webtest/http-request.png">
+<component name="HTTP Request" index="&sect-num;.1.2"  width="683" height="590" screenshot="webtest/http-request.png">
 
 <description>
         <p>This sampler lets you send an HTTP/HTTPS request to a web server.  It
@@ -233,6 +233,11 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         See below for more details.
         </property>
         <property name="Use as monitor" required="Yes">For use with the <complink name="Monitor Results"/> listener.</property>
+       <property name="Save response as MD5 hash?" required="Yes">
+       If this is selected, then the response is not stored in the sample result.
+       Instead, the 32 character MD5 hash of the data is calculated and stored instead.
+       This is intended for testing large amounts of data.
+       </property>
         <property name="Embedded URLs must match:" required="No">
         If present, this must be a regular expression that is used to match against any embedded URLs found.
         So if you only want to download embedded resources from http://example.com/, use the expression:

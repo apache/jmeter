@@ -48,7 +48,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	private JCheckBox isMon;
 
-	private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
+    private JCheckBox useMD5;
+
+    private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
 	
 	public HttpTestSampleGui() {
 		init();
@@ -60,6 +62,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
 		getImages.setSelected(samplerBase.isImageParser());
 		isMon.setSelected(samplerBase.isMonitor());
+        useMD5.setSelected(samplerBase.useMD5());
 		embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
 	}
 
@@ -87,6 +90,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 			sampler.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
 		samplerBase.setMonitor(isMon.isSelected());
+        samplerBase.setMD5(useMD5.isSelected());
 		samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
 		this.configureTestElement(sampler);
 	}
@@ -120,9 +124,14 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		getImages = new JCheckBox(JMeterUtils.getResString("web_testing_retrieve_images")); // $NON-NLS-1$
 		// Is monitor
 		isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
-		checkBoxPanel.add(getImages);
+        // Use MD5
+        useMD5 = new JCheckBox(JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
+
+        checkBoxPanel.add(getImages);
 		checkBoxPanel.add(isMon);
-		optionalTasksPanel.add(checkBoxPanel);
+        checkBoxPanel.add(useMD5);
+        optionalTasksPanel.add(checkBoxPanel);
+
 		// Embedded URL match regex
 		embeddedRE = new JLabeledTextField(JMeterUtils.getResString("web_testing_embedded_url_pattern"),30); // $NON-NLS-1$
 		optionalTasksPanel.add(embeddedRE);
@@ -142,6 +151,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		super.clearGui();
 		getImages.setSelected(false);
 		isMon.setSelected(false);
+		useMD5.setSelected(false);
 		urlConfigGui.clear();
 		embeddedRE.setText(""); // $NON-NLS-1$
 	}
