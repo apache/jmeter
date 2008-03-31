@@ -104,8 +104,8 @@ xml-apis-2_9_1
 
 The x* jars above are used for XML handling
 
-xpp3_min-1.1.3.4.O
+xpp3_min-1.1.4c
 - xstream
 
-xstream-1.2.2
+xstream-1.3
 - SaveService
