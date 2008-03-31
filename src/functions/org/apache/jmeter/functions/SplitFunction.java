@@ -69,9 +69,9 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 
 	private static final int MAX_PARAMETER_COUNT = 3;
 	static {
-        desc.add(JMeterUtils.getResString("split_function_string")); // output variable name //$NON-NLS-1$
-        desc.add(JMeterUtils.getResString("function_name_param")); // output variable name //$NON-NLS-1$
-        desc.add(JMeterUtils.getResString("split_function_separator")); // output variable name //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("split_function_string"));   //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("function_name_param"));     //$NON-NLS-1$
+        desc.add(JMeterUtils.getResString("split_function_separator"));//$NON-NLS-1$
 	}
 
 	private Object[] values;
