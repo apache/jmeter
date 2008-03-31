@@ -830,25 +830,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 if (responseHeader!= null && ENCODING_GZIP.equals(responseHeader.getValue())) {
                     instream = new GZIPInputStream(instream);
                 }
-    
-                //int contentLength = httpMethod.getResponseContentLength();Not visible ...
-                //TODO size ouststream according to actual content length
-                ByteArrayOutputStream outstream = new ByteArrayOutputStream(4*1024);
-                        //contentLength > 0 ? contentLength : DEFAULT_INITIAL_BUFFER_SIZE);
-                byte[] buffer = new byte[4096];
-                int len;
-                boolean first = true;// first response
-                while ((len = instream.read(buffer)) > 0) {
-                    if (first) { // save the latency
-                        res.latencyEnd();
-                        first = false;
-                    }
-                    outstream.write(buffer, 0, len);
-                }
-    
-                res.setResponseData(outstream.toByteArray());
-                outstream.close();            
-
+                res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
             }
             
 			res.sampleEnd();
