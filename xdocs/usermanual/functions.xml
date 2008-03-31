@@ -66,38 +66,43 @@ ${__time(EEE\, d MMM yyyy)}
 ${VARIABLE}
 </pre>
 </p>
+<p>
+If an undefined function or variable is referenced, JMeter does not report/log an error - the reference is returned unchanged.
+For example if UNDEF is not defined as a variable, then the value of ${UNDEF} is ${UNDEF}.
+</p>
 <note>
 Properties are not the same as variables.
-Variables are local to a thread; properties are common to all threads.
+Variables are local to a thread; properties are common to all threads,
+and need to be referenced using the __P or __property function.
 </note>
-<p>List of functions:</p>
+<p>List of functions, loosely grouped into types.</p>
 <table border="1">
         
-        <tr><th>Name</th><th>Comment</th></tr>
+        <tr><th>Type of function</th><th>Name</th><th>Comment</th></tr>
         <!-- N.B. the leading space is needed to ensure the content is processed -->
-        <tr><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td></tr>
-        <tr><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td></tr>
-        <tr><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td></tr>
-        <tr><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td></tr>
-        <tr><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td></tr>
-        <tr><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td></tr>
-        <tr><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td></tr>
-        <tr><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
-        <tr><td> <a href="#__Random">Random</a></td><td>generate a random number</td></tr>
-        <tr><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td></tr>
-        <tr><td> <a href="#__property">property</a> </td><td>read a property</td></tr>
-        <tr><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td></tr>
-        <tr><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td></tr>
-        <tr><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td></tr>
-        <tr><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td></tr>
-        <tr><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td></tr>
-        <tr><td> <a href="#__split">split</a></td><td>Split a string into variables</td></tr>
-        <tr><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td></tr>
-        <tr><td> <a href="#__time">time</a></td><td>return current time in various formats</td></tr>
-        <tr><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression</td></tr>
-        <tr><td> <a href="#__V">V</a></td><td>evaluate a variable name</td></tr>
-        <tr><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td></tr>
-        <tr><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td></tr>
+        <tr><td>Information</td><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td></tr>
+        <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td></tr>
+        <tr><td>Information</td><td> <a href="#__time">time</a></td><td>return current time in various formats</td></tr>
+        <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td></tr>
+        <tr><td>Information</td><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td></tr>
+        <tr><td>Input</td><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td></tr>
+        <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td></tr>
+        <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression</td></tr>
+        <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td></tr>
+        <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td></tr>
+        <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td></tr>
+        <tr><td>Variables</td><td> <a href="#__split">split</a></td><td>Split a string into variables</td></tr>
+        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td></tr>
+        <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td></tr>
+        <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td></tr>
 </table>
 <p></p>
 <subsection name="&sect-num;.1 What can functions do" anchor="what_can_do">
@@ -217,10 +222,10 @@ for you to copy-paste into your test plan wherever you like.</p>
 <subsection name="&sect-num;.5 Functions" anchor="functions">
 
 <component index="&sect-num;.5.1" name="__regexFunction">
-<description><p>The Regex Function is used to parse the previous response using any regular
+<description><p>The Regex Function is used to parse the previous response (or the value of a variable) using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.</p>
-<p>The __regexFunction stores values for future use.  In the sixth parameter, you can specify
+<p>The __regexFunction can also store values for future use.  In the sixth parameter, you can specify
 a reference name.  After this function executes, the same values can be retrieved at later times
 using the syntax for user-defined values.  For instance, if you enter "refName" as the sixth
 parameter you will be able to use:
@@ -259,9 +264,12 @@ replacement string") parsed by this function</li>
         <property name="Fourth argument" required="No">If 'ALL' was selected for the above argument
         value, then this argument will be inserted between each appended copy of the template value.</property>
         <property name="Fifth argument" required="No">Default value returned if no match is found</property>
-    <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br></br>
+        <property name="Sixth argument" required="No">A reference name for reusing the values parsed by this function.<br></br>
         Stored values are ${refName} (the replacement template string) and ${refName_g#} where "#" is the
         group number from the regular expression ("0" can be used to refer to the entire match).</property>
+        <property name="Seventh argument" required="No">Input variable name. 
+        If specified, then the value of the variable is used as the input instead of using the previous sample result.
+        </property>
 </properties>
 </component>
 
