@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -59,7 +58,7 @@ public class HTMLReportWriterGui extends AbstractReportGui {
 	/**
 	 * init creates the necessary gui stuff.
 	 */
-	public void init() {
+	private void init() {// called from ctor, so must not be overridable
         setLayout(new BorderLayout(10, 10));
         setBorder(makeBorder());
         setBackground(Color.white);

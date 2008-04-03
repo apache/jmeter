@@ -119,7 +119,7 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 	 * init() will create all the necessary swing panels, labels and icons for
 	 * the performance panel.
 	 */
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		ROOTSAMPLE = new SampleResult();
 		ROOTSAMPLE.setSampleLabel(SERVER_TITLE);
 		ROOTSAMPLE.setSuccessful(true);

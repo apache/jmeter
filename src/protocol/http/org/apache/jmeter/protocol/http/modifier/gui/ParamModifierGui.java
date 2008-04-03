@@ -144,7 +144,7 @@ public class ParamModifierGui extends AbstractPreProcessorGui implements FocusLi
 		}
 	}
 
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());
 
