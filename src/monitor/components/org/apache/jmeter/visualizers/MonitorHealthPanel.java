@@ -76,7 +76,7 @@ public class MonitorHealthPanel extends JPanel implements MonitorListener, Clear
 	 * init is responsible for creating the necessary legends and information
 	 * for the health panel.
 	 */
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		this.setLayout(new BorderLayout());
 		ImageIcon legend = JMeterUtils.getImage("monitor-legend.gif"); //$NON-NLS-1$
 		JLabel label = new JLabel(legend);

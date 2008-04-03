@@ -307,7 +307,7 @@ public class ReportMainFrame extends JFrame implements TestListener, Remoteable 
 	/**
 	 * Create the GUI components and layout.
 	 */
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		menuBar = new ReportMenuBar();
 		setJMenuBar(menuBar);
 
