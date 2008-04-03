@@ -1394,6 +1394,10 @@ what results any given interaction will give</note>
 
 <component name="Throughput Controller" index="&sect-num;.2.7"  width="223" height="148" screenshot="throughput_controller.png">
 <description>
+<p>
+<b>This controller is badly named, as it does not control throughput.</b>
+Please refer to the <complink name="Constant Throughput Timer"/> for an element that can be used to adjust the throughput.
+</p>
 <p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
 executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
 setting is reset when a parent Loop Controller restarts.
