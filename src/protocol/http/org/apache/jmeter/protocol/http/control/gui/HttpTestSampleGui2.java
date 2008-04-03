@@ -29,7 +29,7 @@ import org.apache.jmeter.util.JMeterUtils;
 public class HttpTestSampleGui2 extends HttpTestSampleGui {
 
 	public HttpTestSampleGui2() {
-		super.init();
+		super();
 	}
 
 	public TestElement createTestElement() {

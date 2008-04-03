@@ -62,7 +62,7 @@ public class TableGui extends AbstractReportGui implements ChangeListener {
 	/**
      * Initialize the components and layout of this component.
      */
-    protected void init() {
+    private void init() {// called from ctor, so must not be overridable
         setLayout(new BorderLayout(10, 10));
         setBorder(makeBorder());
         setBackground(Color.white);

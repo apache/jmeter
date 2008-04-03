@@ -59,7 +59,13 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 
 	public MultipartUrlConfigGui() {
 		super();
+		init();
 	}
+
+    public MultipartUrlConfigGui(boolean value) {
+        super(value);
+        init();
+    }
 
 	public TestElement createTestElement() {
 		TestElement ce = super.createTestElement();
@@ -111,7 +117,7 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 		}
 	}
 
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		this.setLayout(new BorderLayout());
 
 		// WEB SERVER PANEL

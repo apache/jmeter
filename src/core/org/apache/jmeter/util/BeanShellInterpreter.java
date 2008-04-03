@@ -105,7 +105,8 @@ public class BeanShellInterpreter {
 		}
 	}
 
-	public void init(final String initFile, final Object logger) throws IOException, JMeterException {
+	// Called from ctor, so must be private (or final, but it does not seem useful elsewhere)
+	private void init(final String initFile, final Object logger) throws IOException, JMeterException {
 		if (logger != null) {// Do this before starting the script
 			try {
 				set("log", logger);//$NON-NLS-1$

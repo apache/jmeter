@@ -69,7 +69,7 @@ public class BarChartGui extends AbstractReportGui {
         return pop;
 	}
 
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
         setLayout(new BorderLayout(10, 10));
         setBorder(makeBorder());
         setBackground(Color.white);

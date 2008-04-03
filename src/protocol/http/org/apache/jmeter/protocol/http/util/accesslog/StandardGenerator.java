@@ -101,7 +101,7 @@ public class StandardGenerator implements Generator, Serializable {
 	 * <li> Writer</li>
 	 * </ol>
 	 */
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		generateRequest();
 	}
 

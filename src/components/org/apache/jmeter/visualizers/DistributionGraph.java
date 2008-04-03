@@ -80,7 +80,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 		setModel(model);
 	}
 
-	public void init() {
+	private void init() {// called from ctor, so must not be overridable
 		repaint();
 	}
 
