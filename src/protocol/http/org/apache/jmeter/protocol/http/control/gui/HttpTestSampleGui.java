@@ -99,7 +99,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 		return "web_testing_title"; // $NON-NLS-1$
 	}
 
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		setLayout(new BorderLayout(0, 5));
 		setBorder(makeBorder());
 

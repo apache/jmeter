@@ -139,7 +139,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
 	/**
 	 * Shows the main authentication panel for this object.
 	 */
-	public void init() {
+	private void init() {// called from ctor, so must not be overridable
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());
 

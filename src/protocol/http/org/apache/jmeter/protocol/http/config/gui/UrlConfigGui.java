@@ -181,7 +181,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 		}
 	}
 
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		this.setLayout(new BorderLayout());
 
 		// WEB SERVER PANEL
