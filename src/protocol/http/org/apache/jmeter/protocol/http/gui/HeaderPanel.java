@@ -124,7 +124,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 		return "header_manager_title"; // $NON-NLS-1$
 	}
 
-	public void init() {
+	private void init() {// called from ctor, so must not be overridable
 		setLayout(new BorderLayout());
 		setBorder(makeBorder());
 

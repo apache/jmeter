@@ -96,7 +96,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
 	/**
 	 * Initialize the GUI components and layout.
 	 */
-	protected void init() {
+	private void init() {// called from ctor, so must not be overridable
 		setLayout(new BorderLayout(0, 5));
 
 		if (displayName) {
