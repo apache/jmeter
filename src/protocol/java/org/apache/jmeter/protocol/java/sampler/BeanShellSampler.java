@@ -48,6 +48,8 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
 
 	public static final String INIT_FILE = "beanshell.sampler.init"; //$NON-NLS-1$
     
+	public static final String RESET_INTREPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
+
     protected String getInitFileProperty() {
         return INIT_FILE;
     }
@@ -73,6 +75,10 @@ public class BeanShellSampler extends BeanShellTestElement implements Sampler
 	public String getParameters() {
 		return getPropertyAsString(PARAMETERS);
 	}
+	
+    public boolean isResetInterpreter() {
+        return getPropertyAsBoolean(RESET_INTREPRETER);
+    }
 
 	public SampleResult sample(Entry e)// Entry tends to be ignored ...
 	{
