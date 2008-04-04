@@ -32,6 +32,14 @@ public abstract class BeanShellBeanInfoSupport extends BeanInfoSupport {
 		super(beanClass);
 		PropertyDescriptor p;
 		
+        p = property("resetInterpreter");
+        p.setValue(NOT_UNDEFINED, Boolean.TRUE);
+        p.setValue(DEFAULT, Boolean.FALSE);
+        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setValue(NOT_OTHER, Boolean.TRUE);
+        
+        createPropertyGroup("resetGroup", new String[] { "resetInterpreter" });
+		
 		p = property("parameters");
 		p.setValue(NOT_UNDEFINED, Boolean.TRUE);
 		p.setValue(DEFAULT, "");
