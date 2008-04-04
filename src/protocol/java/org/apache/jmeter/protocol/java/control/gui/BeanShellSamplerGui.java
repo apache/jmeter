@@ -52,7 +52,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		scriptField.setText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
 		filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
 		parameters.setText(element.getPropertyAsString(BeanShellSampler.PARAMETERS));
-		resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellSampler.RESET_INTREPRETER));
+		resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellSampler.RESET_INTERPRETER));
 		super.configure(element);
 	}
 
@@ -73,7 +73,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		te.setProperty(BeanShellSampler.SCRIPT, scriptField.getText());
 		te.setProperty(BeanShellSampler.FILENAME, filename.getText());
 		te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
-		te.setProperty(new BooleanProperty(BeanShellSampler.RESET_INTREPRETER, resetInterpreter.isSelected()));
+		te.setProperty(new BooleanProperty(BeanShellSampler.RESET_INTERPRETER, resetInterpreter.isSelected()));
 	}
     
     /**
