@@ -19,10 +19,9 @@
 package org.apache.jmeter.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JMeterException;
@@ -90,29 +89,46 @@ public class BeanShellInterpreter {
 	// This class is not serialised
 	private Object bshInstance = null; // The interpreter instance for this class
 
+	private final String initFile; // Script file to initialize the Interpreter with
+	
+	private final Logger logger; // Logger to use during initialization and script run
+	
 	public BeanShellInterpreter() throws ClassNotFoundException {
-		if (bshClass == null) {
-			throw new ClassNotFoundException(BSH_INTERPRETER);
-		}
-		try {
-			bshInstance = bshClass.newInstance();
-		} catch (InstantiationException e) {
-			log.error("Can't instantiate BeanShell", e);
-			throw new ClassNotFoundException("Can't instantiate BeanShell", e);
-		} catch (IllegalAccessException e) {
-			log.error("Can't instantiate BeanShell", e);
-			throw new ClassNotFoundException("Can't instantiate BeanShell", e);
-		}
+		initFile = null;
+		logger = null;
+		init();
 	}
 
+    /**
+     * 
+     * @param init initialisation file
+     * @param _log logger to pass to interpreter
+     */
+    public BeanShellInterpreter(String init, Logger _log)  throws ClassNotFoundException {
+        initFile = init;
+        logger = _log;
+        init();
+    }
+
 	// Called from ctor, so must be private (or final, but it does not seem useful elsewhere)
-	private void init(final String initFile, final Object logger) throws IOException, JMeterException {
-		if (logger != null) {// Do this before starting the script
+	private void init() throws ClassNotFoundException {
+        if (bshClass == null) {
+            throw new ClassNotFoundException(BSH_INTERPRETER);
+        }
+        try {
+            bshInstance = bshClass.newInstance();
+        } catch (InstantiationException e) {
+            log.error("Can't instantiate BeanShell", e);
+            throw new ClassNotFoundException("Can't instantiate BeanShell", e);
+        } catch (IllegalAccessException e) {
+            log.error("Can't instantiate BeanShell", e);
+            throw new ClassNotFoundException("Can't instantiate BeanShell", e);
+        }
+ 		if (logger != null) {// Do this before starting the script
 			try {
 				set("log", logger);//$NON-NLS-1$
 			} catch (JMeterException e) {
-				log.error("Can't set logger variable", e);
-				throw e;
+			    log.warn("Can't set logger variable", e);
 			}
 		}
 		if (initFile != null && initFile.length() > 0) {
@@ -125,30 +141,27 @@ public class BeanShellInterpreter {
 				        +File.separator+initFile;
 				in = new File(fileToUse);
 				if (!in.exists()) {
-					throw new FileNotFoundException(initFile); // use the original name here
+				    log.warn("Cannot find init file: "+initFile);
 				}
 			}
 			if (!in.canRead()) {
-				throw new IOException("Cannot read" + fileToUse);
+                log.warn("Cannot read init file: "+fileToUse);
 			}
-			source(fileToUse);
+			try {
+                source(fileToUse);
+            } catch (JMeterException e) {
+                log.warn("Cannot source init file: "+fileToUse,e);
+            }
 		}
 	}
 
-    /**
-     * 
-     * @param init initialisation file
-     * @param _log logger to pass to interpreter; also used to log errors in this method
-     */
-    public BeanShellInterpreter(String init, Logger _log)  throws ClassNotFoundException {
-        this();
-        try {
-            this.init(init, _log);
-        } catch (IOException e) {
-			_log.warn("Could not initialise interpreter: "+e.toString()); // no need for stack trace
-        } catch (JMeterException e) {
-			_log.warn("Could not initialise interpreter: "+e.toString()); // no need for stack trace
-        }
+	/**
+	 * Resets the BeanShell interpreter.
+	 * 
+	 * @throws ClassNotFoundException if interpreter cannot be instantiated
+	 */
+    public void reset() throws ClassNotFoundException {
+       init();
     }
 
     private Object bshInvoke(Method m, Object[] o, boolean shouldLog) throws JMeterException {
