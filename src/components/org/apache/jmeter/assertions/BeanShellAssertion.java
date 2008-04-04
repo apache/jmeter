@@ -43,7 +43,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
 
 	public static final String PARAMETERS = "BeanShellAssertion.parameters"; //$NON-NLS-1$
     
-    public static final String RESET_INTREPRETER = "BeanShellSampler.resetInterpreter"; //$NON-NLS-1$
+    public static final String RESET_INTERPRETER = "BeanShellAssertion.resetInterpreter"; //$NON-NLS-1$
 
 	// can be specified in jmeter.properties
 	public static final String INIT_FILE = "beanshell.assertion.init"; //$NON-NLS-1$
@@ -65,7 +65,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
 	}
     
     public boolean isResetInterpreter() {
-        return getPropertyAsBoolean(RESET_INTREPRETER);
+        return getPropertyAsBoolean(RESET_INTERPRETER);
     }
 
 	/*
