@@ -44,6 +44,8 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	private String filename; // file to source (overrides script)
 
 	private String script; // script (if file not provided)
+	
+	private boolean resetInterpreter = false;
 	//-- For TestBean implementations only
 
     
@@ -59,6 +61,14 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     protected abstract String getInitFileProperty();
 
     protected BeanShellInterpreter getBeanShellInterpreter() {
+        if (isResetInterpreter()) {
+            try {
+                bshInterpreter.reset();
+            } catch (ClassNotFoundException e) {
+                log.error("Cannot find BeanShell: "+e.toString());
+            }
+        }
+
         return bshInterpreter;
     }
 
@@ -203,5 +213,13 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 
 	public void setFilename(String s) {
 		filename = s;
+	}
+	
+	public boolean isResetInterpreter() {
+	    return resetInterpreter;
+	}
+	
+	public void setResetInterpreter(boolean b) {
+	    resetInterpreter = b;
 	}
 }
