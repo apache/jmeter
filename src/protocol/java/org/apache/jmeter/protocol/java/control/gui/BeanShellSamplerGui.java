@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,9 +31,12 @@ import javax.swing.JTextField;
 import org.apache.jmeter.protocol.java.sampler.BeanShellSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class BeanShellSamplerGui extends AbstractSamplerGui {
+    
+    private JCheckBox resetInterpreter;// reset the bsh.Interpreter before each execution
 
 	private JTextField filename;// script file name (if present)
 
@@ -48,6 +52,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		scriptField.setText(element.getPropertyAsString(BeanShellSampler.SCRIPT));
 		filename.setText(element.getPropertyAsString(BeanShellSampler.FILENAME));
 		parameters.setText(element.getPropertyAsString(BeanShellSampler.PARAMETERS));
+		resetInterpreter.setSelected(element.getPropertyAsBoolean(BeanShellSampler.RESET_INTREPRETER));
 		super.configure(element);
 	}
 
@@ -68,6 +73,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		te.setProperty(BeanShellSampler.SCRIPT, scriptField.getText());
 		te.setProperty(BeanShellSampler.FILENAME, filename.getText());
 		te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());
+		te.setProperty(new BooleanProperty(BeanShellSampler.RESET_INTREPRETER, resetInterpreter.isSelected()));
 	}
     
     /**
@@ -79,6 +85,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
         filename.setText(""); //$NON-NLS-1$
         parameters.setText(""); //$NON-NLS-1$
         scriptField.setText(""); //$NON-NLS-1$
+        resetInterpreter.setSelected(false);
     }    
 
 	public String getLabelResource() {
@@ -112,12 +119,22 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
 		return parameterPanel;
 	}
 
+    private JPanel createResetPanel() {
+        resetInterpreter = new JCheckBox(JMeterUtils.getResString("bsh_script_reset_interpreter")); // $NON-NLS-1$
+        resetInterpreter.setName(BeanShellSampler.PARAMETERS);
+
+        JPanel resetInterpreterPanel = new JPanel(new BorderLayout());
+        resetInterpreterPanel.add(resetInterpreter, BorderLayout.WEST);
+        return resetInterpreterPanel;
+    }
+
 	private void init() {
 		setLayout(new BorderLayout(0, 5));
 		setBorder(makeBorder());
 
 		Box box = Box.createVerticalBox();
 		box.add(makeTitlePanel());
+		box.add(createResetPanel());
 		box.add(createParameterPanel());
 		box.add(createFilenamePanel());
 		add(box, BorderLayout.NORTH);
