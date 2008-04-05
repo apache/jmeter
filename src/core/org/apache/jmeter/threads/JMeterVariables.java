@@ -27,7 +27,8 @@ import java.util.Set;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @version $Revision$
+ * Class which defines JMeter variables.
+ * These are similar to properties, but they are local to a single thread.
  */
 public class JMeterVariables {
 	private Map variables = new HashMap();
@@ -36,7 +37,7 @@ public class JMeterVariables {
     
     // Property names to preload into JMeter variables:
     private static final String [] PRE_LOAD = {
-      "START.MS", "START.YMD", "START.HMS"  
+      "START.MS", "START.YMD", "START.HMS"  //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
     };
 
 	public JMeterVariables() {
@@ -44,7 +45,7 @@ public class JMeterVariables {
 	}
 
     private void preloadVariables(){
-        for (int i = 0; i<PRE_LOAD.length;i++){
+        for (int i = 0; i < PRE_LOAD.length; i++){
             String property=PRE_LOAD[i];
             String value=JMeterUtils.getProperty(property);
             if (value != null){
