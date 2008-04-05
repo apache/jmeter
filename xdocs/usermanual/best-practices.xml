@@ -198,6 +198,52 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 </pre>
 </section>
 
-
+<section name="&sect-num;.8 BeanShell scripting" anchor="bsh_scripting">
+<subsection name="&sect-num;.8.1 Overview" anchor="bsh_overview">
+<p>
+Each BeanShell test element has its own copy of the interpreter (for each thread).
+If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
+between invocations unless the "Reset bsh.Interpreter before each call" option is selected.
+</p>
+<p>
+Some long-running tests may cause the interpreter to use lots of memory; if this is the case try using the reset option.
+</p>
+</subsection>
+<subsection name="&sect-num;.8.2 Sharing Variables" anchor="bsh_variables">
+<p>
+Variables can be defined in startup (initialisation) scripts.
+These will be retained across invocations of the test element, unless the reset option is used.\
+</p>
+<p>
+Scripts can also access JMeter variables using the get() and put() methods of the "vars" variable,
+for example: <code>vars.get("HOST"); vars.put("MSG","Successful");</code>.
+The get() and put() methods only support variables with String values,
+but there are also getObject() and putObject() methods which can be used for arbitrary objects.
+JMeter variables are local to a thread, but can be used by all test elements (not just Beanshell).
+</p>
+<p>
+If you need to share variables between threads, then JMeter properties can be used:
+<pre>
+import org.apache.jmeter.util.JMeterUtils;
+String value=JMeterUtils.getPropDefault("name","");
+JMeterUtils.setProperty("name", "value");
+</pre>
+The sample .bshrc files contain sample definitions of getprop() and setprop() methods.
+</p>
+<p>
+Another possible method of sharing variables is to use the "bsh.shared" shared namespace.
+For example:
+<pre>
+if (bsh.shared.myObj == void){
+    // not yet defined, so create it:
+    myObj=new AnyObject();
+}
+bsh.shared.myObj.process();
+</pre>
+Rather than creating the object in the test element, it can be created in the startup file
+defined by the JMeter property "beanshell.init.file". This is only processed once.
+</p>
+</subsection>
+</section>
 </body>
 </document>

@@ -94,6 +94,7 @@ As a consequence, if a variable name is used, it must not be a valid integer.</l
 <li>Regular Expression Extractor now deletes all stale variables from previous matches.</li>
 <li>Bug 44707 - Running remote test changes internal test plan</li>
 <li>Bug 44625 - Cannot have two or more FTP samplers with different "put" and "get" actions</li>
+<li>Bug 40850 - BeanShell memory leak</li>
 </ul>
 
 <h4>Improvements</h4>
