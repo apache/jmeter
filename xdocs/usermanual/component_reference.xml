@@ -789,7 +789,7 @@ to configure this via the GUI, so it cannot really be used.
 </p>
 </component>
 
-<component name="BeanShell Sampler" index="&sect-num;.1.10"  width="601" height="244" screenshot="beanshellsampler.png">
+<component name="BeanShell Sampler" index="&sect-num;.1.10"  width="592" height="303" screenshot="beanshellsampler.png">
 	<description><p>This sampler allows you to write a sampler using the BeanShell scripting language.		
 </p><p>
 		<b>Please note that the BeanShell jar file is not included with JMeter; it needs to be separately downloaded.
@@ -804,7 +804,14 @@ See the file BeanShellListeners.bshrc for example definitions.
 	</description>
 <properties>
 	<property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+    <property name="Reset bsh.Interpreter before each call" required="Yes">
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
+    This is intended for use with script files; for scripts defined in the GUI, you can use whatever
+    variable and function references you need within the script itself.
 	The parameters are stored in the following variables:
 	<ul>
 		<li>Parameters - string containing the parameters as a single variable</li>
@@ -2029,7 +2036,7 @@ failed responses from the server.</p></description>
 </properties>
 </component>
 
-<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="516" height="286" screenshot="beanshell_listener.png">
+<component name="BeanShell Listener"  index="&sect-num;.3.14"  width="597" height="303" screenshot="beanshell_listener.png">
 <description>
 <p>
 The BeanShell Listener allows the use of BeanShell for processing samples for saving etc.
@@ -2047,6 +2054,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 </description>
 <properties>
     <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Reset bsh.Interpreter before each call" required="Yes">
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
 	<ul>
@@ -2642,7 +2654,7 @@ validate the XML based on a DTD or schema or do any further validation.</p></des
 </properties>
 </component>
 
-<component name="BeanShell Assertion" index="&sect-num;.5.5"  width="632" height="253" screenshot="bsh_assertion.png">
+<component name="BeanShell Assertion" index="&sect-num;.5.5"  width="597" height="303" screenshot="bsh_assertion.png">
 <description><p>The BeanShell Assertion allows the user to perform assertion checking using a BeanShell script.
 </p>
 <p>
@@ -2672,6 +2684,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 
 <properties>
     <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Reset bsh.Interpreter before each call" required="Yes">
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
 	<ul>
@@ -2908,6 +2925,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Reset bsh.Interpreter before each call" required="Yes">
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
 	<ul>
@@ -3124,7 +3146,7 @@ with the start, continuing on like that until the test is ended.  </p>
 </properties>
 </component>
 
-<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="516" height="286" screenshot="beanshell_preprocessor.png">
+<component name="BeanShell PreProcessor" index="&sect-num;.7.7"  width="597" height="303" screenshot="beanshell_preprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied before taking a sample.
@@ -3142,6 +3164,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Reset bsh.Interpreter before each call" required="Yes">
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
 	<ul>
@@ -3364,7 +3391,7 @@ The last delta will be lower, as the test will generally not finish on an exact 
  </properties>
 </component>
 
-<component name="BeanShell PostProcessor"  index="&sect-num;.8.6"  width="516" height="286" screenshot="beanshell_postprocessor.png">
+<component name="BeanShell PostProcessor"  index="&sect-num;.8.6"  width="597" height="303" screenshot="beanshell_postprocessor.png">
 <description>
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
@@ -3383,6 +3410,11 @@ See the file BeanShellListeners.bshrc for example definitions.
 </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
+    <property name="Reset bsh.Interpreter before each call" required="Yes">
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see <a href="best-practices#bsh_scripting">Best Practices - BeanShell scripting</a>.
+    </property>
     <property name="Parameters" required="No">Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
 	<ul>
