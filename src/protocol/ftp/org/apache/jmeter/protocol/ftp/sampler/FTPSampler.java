@@ -134,7 +134,7 @@ public class FTPSampler extends AbstractSampler {
 
 	public SampleResult sample(Entry e) {
 		SampleResult res = new SampleResult();
-		res.setSuccessful(false);
+		res.setSuccessful(false); // Assume failure
 		String remote = getRemoteFilename();
 		String local = getLocalFilename();
 		boolean binaryTransfer = isBinaryMode();
@@ -195,15 +195,20 @@ public class FTPSampler extends AbstractSampler {
 		            		target=new NullOutputStream();
 		            	}
 		                input = ftp.retrieveFileStream(remote);
-		                long bytes = IOUtils.copy(input,target);
-		                ftpOK = bytes > 0;
-						if (saveResponse){
-							res.setResponseData(baos.toByteArray());
-							if (!binaryTransfer) {
-							    res.setDataType(SampleResult.TEXT);
-							}
+		                if (input == null){// Could not access file or other error
+	                        res.setResponseCode(Integer.toString(ftp.getReplyCode()));
+	                        res.setResponseMessage(ftp.getReplyString());		                    
 		                } else {
-		                	res.setBytes((int) bytes);
+    		                long bytes = IOUtils.copy(input,target);
+    		                ftpOK = bytes > 0;
+    						if (saveResponse){
+    							res.setResponseData(baos.toByteArray());
+    							if (!binaryTransfer) {
+    							    res.setDataType(SampleResult.TEXT);
+    							}
+    		                } else {
+    		                	res.setBytes((int) bytes);
+    		                }
 		                }
 		            }
 
