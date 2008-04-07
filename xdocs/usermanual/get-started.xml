@@ -172,14 +172,49 @@ This causes problems for remote testing.
 <p>To install a release build, simply unzip the zip/tar file into the directory
 where you want JMeter to be installed.  Provided that you have a JRE/JDK correctly installed
 and the JAVA_HOME environment variable set, there is nothing more for you to do.</p>
-
+<p>
+The installation directory structure should look something like this (for version 2.3.1):
+<pre>
+jakarta-jmeter-2.3.1
+jakarta-jmeter-2.3.1/bin
+jakarta-jmeter-2.3.1/docs
+jakarta-jmeter-2.3.1/extras
+jakarta-jmeter-2.3.1/lib/
+jakarta-jmeter-2.3.1/lib/ext
+jakarta-jmeter-2.3.1/lib/junit
+jakarta-jmeter-2.3.1/printable_docs
+</pre>
+You can rename the parent directory (e.g. jakarta-jmeter-2.3.1) if you want, but do not change any of the sub-directory names.
+The path to the parent directory should not contain any spaces; if it does, then you may have problems running client-server mode.
+</p>
 </section>
 
 <section name="&sect-num;.4 Running JMeter" anchor="running">
 <br/>
-<p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file. 
+<p>To run JMeter, run the jmeter.bat (for Windows) or jmeter (for Unix) file.
+These files are found in the bin directory.
+After a short pause, the JMeter GUI should appear. 
 </p>
 
+<p>
+There are some additional scripts in the bin directory that you may find useful.
+Windows script files (the .CMD files require Win2K or later):
+<ul>
+<li>jmeter.bat - run JMeter (in GUI mode by default)</li>
+<li>jmeter-n.cmd - drop a JMX file on this to run a non-GUI test</li>
+<li>jmeter-n-r.cmd - drop a JMX file on this to run a non-GUI test remotely</li>
+<li>jmeter-t.cmd - drop a JMX file on this to load it in GUI mode</li>
+<li>jmeter-server.bat - start JMeter in server mode</li>
+</ul>
+</p>
+
+<p>
+Un*x script files; should work on most Linux/Unix systems.
+<ul>
+<li>jmeter - run JMeter (in GUI mode by default)</li>
+<li>jmeter-server - start JMeter in server mode</li>
+</ul>
+</p>
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <ul>
