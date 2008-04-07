@@ -141,6 +141,8 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
         // Assume we will be successful
         res.setSuccessful(true);
+        res.setResponseMessageOK();
+        res.setResponseCodeOK();
 
 
 		res.sampleStart();
