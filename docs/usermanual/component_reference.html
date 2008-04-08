@@ -36,8 +36,13 @@
 				<table border="0" cellspacing="0">
 					 <!-- TOP IMAGE -->
 					 <tr>
-						  <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" border="0"/></a>
+						  <td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+    style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
 </td>
 <td align="right">
 <a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
@@ -291,13 +296,22 @@
 		  </font>
 		</td></tr>
 				<tr><td>
-		  															This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
+		  															
+This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
 using a 
 												<a href="../usermanual/component_reference.html#FTP_Request_Defaults">FTP Request Defaults</a>
 									 Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
 Controller. When downloading a file, it can be stored on disk (Local File) or in the Response Data, or both.
+
+												<p	>
+								
+Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
+
+						</p>
+									
+
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='502' height='299' src="../images/screenshots/ftptest/ftp-request.png"></div>
 											  									 			 <p>
@@ -323,7 +337,7 @@ JMeter assumes the FTP server is listening on the default port.
 		</tr>
 			<tr>
 			<td>Remote File:</td>
-			<td>						File to retrieve or upload.
+			<td>						File to retrieve or name of destination file to upload.
 			</td>
 			<td>
 											Yes
@@ -331,10 +345,18 @@ JMeter assumes the FTP server is listening on the default port.
 		</tr>
 			<tr>
 			<td>Local File:</td>
-			<td>						File to upload, or destination for downloads.
+			<td>						File to upload, or destination for downloads (defaults to remote file name).
 			</td>
 			<td>
-											Yes, if uploading
+											Yes, if uploading (*)
+								</td>
+		</tr>
+			<tr>
+			<td>Local File Contents:</td>
+			<td>						Provides the contents for the upload, overrides the Local File property.
+			</td>
+			<td>
+											Yes, if uploading (*)
 								</td>
 		</tr>
 			<tr>
@@ -483,8 +505,26 @@ JMeter assumes the FTP server is listening on the default port.
 
         
 												<p	>
-								There are two versions of the sampler
-         - one uses the default Java HTTP implementation, the other uses Commons HttpClient.
+												<b	>
+								There are two versions of the sampler:
+						</b>
+									
+        
+												<ul	>
+								
+        
+												<li	>
+								HTTP Request - uses the default Java HTTP implementation
+						</li>
+									
+        
+												<li	>
+								HTTP Request HTTPClient - uses Apache Commons HttpClient
+						</li>
+									
+        
+						</ul>
+									
          
 						</p>
 									
@@ -596,7 +636,7 @@ https.default.protocol=SSLv3
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='688' height='592' src="../images/screenshots/webtest/http-request.png"></div>
+						<div align="center"><img width='683' height='590' src="../images/screenshots/webtest/http-request.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -611,7 +651,7 @@ https.default.protocol=SSLv3
 		</tr>
 			<tr>
 			<td>Server</td>
-			<td>						Domain name or IP address of the web server.
+			<td>						Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.]
 			</td>
 			<td>
 											No
@@ -712,6 +752,15 @@ https.default.protocol=SSLv3
 			<td>						The path to resource (for example, /servlets/myServlet). If the
 resource requires query string parameters, add them below in the
 "Send Parameters With the Request" section.
+
+												<b	>
+								
+As a special case, if the path starts with "http://" or "https://" then this is used as the full URL.
+
+						</b>
+									
+In this case, the server, port and protocol are ignored; parameters are also ignored for GET and DELETE methods.
+
 			</td>
 			<td>
 											Yes
@@ -743,7 +792,7 @@ resource requires query string parameters, add them below in the
         
 												<p	>
 								
-        Additionally, you can specify whether each paramter should be URL encoded.  If you are not sure what this
+        Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as &amp; or spaces, or
         question marks, then encoding is usually required.
 						</p>
@@ -760,8 +809,8 @@ resource requires query string parameters, add them below in the
         
 												<p	>
 								
-        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the body
-        of the request. This allows arbitrary bodies to be sent. This functionality is present for POST requests
+        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the entire body
+        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
         after version 2.2, and also for PUT requests after version 2.3.
         
 												<b	>
@@ -819,11 +868,23 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
 								</td>
 		</tr>
 			<tr>
+			<td>Save response as MD5 hash?</td>
+			<td>						
+       If this is selected, then the response is not stored in the sample result.
+       Instead, the 32 character MD5 hash of the data is calculated and stored instead.
+       This is intended for testing large amounts of data.
+       
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
 			<td>Embedded URLs must match:</td>
 			<td>						
         If present, this must be a regular expression that is used to match against any embedded URLs found.
-        So if you only want to download embedded resources from http://server.com/, use the expression:
-        http://server\.com/.*
+        So if you only want to download embedded resources from http://example.com/, use the expression:
+        http://example\.com/.*
         
 			</td>
 			<td>
@@ -851,15 +912,18 @@ as a test plan created using a recorder would continue from the redirected URL.
 						</p>
 							  									 				<p	>
 								
-Parameter Handling:
-												<br	>
+
+												<b	>
+								Parameter Handling:
+						</b>
+													<br	>
 						</br>
 									
 For the POST and PUT method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
 then the body is created by concatenating all the value(s) of the parameters.
 This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
-See also the MIME Type above how you can control the content-type request header that are sent.
+See also the MIME Type above how you can control the content-type request header that is sent.
 
 												<br	>
 						</br>
@@ -871,12 +935,15 @@ then the parameter is ignored. This allows the use of optional parameters define
 						</p>
 							  									 				<p	>
 								
-Method Handling:
-												<br	>
+
+												<b	>
+								Method Handling:
+						</b>
+													<br	>
 						</br>
 									
-The POST and PUT request methods work similar, except that the PUT method does not support multipart requests.
-The GET and DELETE request methods work similar.
+The POST and PUT request methods work similarly, except that the PUT method does not support multipart requests.
+The GET and DELETE request methods work similarly.
 
 						</p>
 							  									 				<p	>
@@ -2498,15 +2565,15 @@ StandardGenerator and TCLogParser.
 			<td>						The log parser class is responsible for parsing the logs.
 			</td>
 			<td>
-											No (default provided)
+											Yes (default provided)
 								</td>
 		</tr>
 			<tr>
-			<td>Generator class</td>
-			<td>						The generator class is responsible for creating HTTPSampler objects.
+			<td>Filter</td>
+			<td>						The filter class is used to filter out certain lines.
 			</td>
 			<td>
-											No (default provided)
+											No
 								</td>
 		</tr>
 			<tr>
@@ -2519,6 +2586,28 @@ StandardGenerator and TCLogParser.
 		</tr>
 		</table>
 	</p>
+							  									 				<p	>
+								
+The TCLogParser processes the access log independently for each thread.
+The SharedTCLogParser and OrderPreservingLogParser share access to the file, 
+i.e. each thread gets the next entry in the log.
+
+						</p>
+							  									 				<p	>
+								
+The SessionFilter is intended to handle Cookies across threads. 
+It does not filter out any entries, but modifies the cookie manager so that the cookies for a given IP are
+processed by a single thread at a time. If two threads try to process samples from the same client IP address,
+then one will be forced to wait until the other has completed.
+
+						</p>
+							  									 				<p	>
+								
+The LogFilter is intended to allow access log entries to be filtered by filename and regex,
+as well as allowing for the replacement of file extensions. However, it is not currently possible
+to configure this via the GUI, so it cannot really be used.
+
+						</p>
 							  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
@@ -2560,7 +2649,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 	
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='601' height='244' src="../images/screenshots/beanshellsampler.png"></div>
+						<div align="center"><img width='592' height='303' src="../images/screenshots/beanshellsampler.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -2574,8 +2663,26 @@ See the file BeanShellListeners.bshrc for example definitions.
 								</td>
 		</tr>
 			<tr>
+			<td>Reset bsh.Interpreter before each call</td>
+			<td>						
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see 
+												<a	 href="best-practices#bsh_scripting">
+								Best Practices - BeanShell scripting
+						</a>
+									.
+    
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
 			<td>Parameters</td>
 			<td>						Parameters to pass to the BeanShell script.
+    This is intended for use with script files; for scripts defined in the GUI, you can use whatever
+    variable and function references you need within the script itself.
 	The parameters are stored in the following variables:
 	
 												<ul	>
@@ -4465,6 +4572,20 @@ what results any given interaction will give
 		  															
 
 												<p	>
+								
+
+												<b	>
+								This controller is badly named, as it does not control throughput.
+						</b>
+									
+Please refer to the 
+												<a href="../usermanual/component_reference.html#Constant_Throughput_Timer">Constant Throughput Timer</a>
+									 for an element that can be used to adjust the throughput.
+
+						</p>
+									
+
+												<p	>
 								The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.  Percent executions causes the controller to execute a certain percentage of the iterations through the test plan.  Total
 executions causes the controller to stop executing after a certain number of executions have occurred.  Like the Once Only Controller, this
 setting is reset when a parent Loop Controller restarts.
@@ -5369,7 +5490,19 @@ The saving and reading of test results is generic.  The various
 listeners have a panel whereby one can specify the file to
 which the results will be written (or read from).
 By default, the results are stored as XML
-files, typically with a ".jtl" extension.  Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).
+files, typically with a ".jtl" extension.
+Storing as CSV is the most efficient option, but is less detailed than XML (the other available option).
+
+						</p>
+									
+
+												<p	>
+								
+Listeners do not process sample data in non-GUI mode, but the raw data will be saved if an output
+file has been configured.
+In order to analyse the data generated by a non-GUI test run, you need to load the file into the appropriate
+Listener.
+
 						</p>
 									
 
@@ -5871,7 +6004,15 @@ the Aggregate Report.
 
 												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 		<tr><td>						
-Calculation of the Median and 90% Line values requires a lot of memory as details of every Sample have to be saved.
+Calculation of the Median and 90% Line (90
+												<sup	>
+								th
+						</sup>
+									 
+												<a	 href="glossary.html#Percentile">
+								percentile
+						</a>
+									) values requires a lot of memory as details of every Sample have to be saved.
 See the 
 												<a href="../usermanual/component_reference.html#Summary_Report">Summary Report</a>
 									 for a similar Listener that does not need so much memory.
@@ -5885,6 +6026,9 @@ See the
 
 												<li	>
 								Label - The label of the sample.
+If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
+This allows identical labels from different thread groups to be collated separately if required.
+
 						</li>
 									
 
@@ -5899,18 +6043,31 @@ See the
 									
 
 												<li	>
-								Median - The median is the time in the middle of a set of results.
+								Median - The 
+												<a	 href="glossary.html#Median">
+								median
+						</a>
+									 is the time in the middle of a set of results.
+50% of the samples took no more than this time; the remainder took at least as long.
 						</li>
 									
 
 												<li	>
-								90% Line - the maximum time taken for the fastest 90% of the samples. #
-The remaining samples took longer than this.
+								90% Line - 90% of the samples took no more than this time.
+The remaining samples at least as long as this. (90
+												<sup	>
+								th
+						</sup>
+									 
+												<a	 href="glossary.html#Percentile">
+								percentile
+						</a>
+									)
 						</li>
 									
 
 												<li	>
-								Min - The lowest time for the samples of the given URL
+								Min - The shortest time for the samples of the given URL
 						</li>
 									
 
@@ -5943,8 +6100,24 @@ The remaining samples took longer than this.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='762' height='235' src="../images/screenshots/aggregate_report.png"></div>
-											  		</td></tr>
+						<div align="center"><img width='784' height='287' src="../images/screenshots/aggregate_report.png"></div>
+											  									 				<div	 align="center">
+								
+
+												<p	>
+								
+	The figure below shows an example of selecting the "Include group name" checkbox.
+
+													<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/aggregate_report_grouped.png"><br>
+	<font size="-1">						Sample "Include group name" display
+			</font></td></tr></table></p>
+									
+
+						</p>
+									
+
+						</div>
+							  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
@@ -6243,7 +6416,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='516' height='286' src="../images/screenshots/beanshell_listener.png"></div>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_listener.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -6254,6 +6427,22 @@ See the file BeanShellListeners.bshrc for example definitions.
 			</td>
 			<td>
 											No
+								</td>
+		</tr>
+			<tr>
+			<td>Reset bsh.Interpreter before each call</td>
+			<td>						
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see 
+												<a	 href="best-practices#bsh_scripting">
+								Best Practices - BeanShell scripting
+						</a>
+									.
+    
+			</td>
+			<td>
+											Yes
 								</td>
 		</tr>
 			<tr>
@@ -6375,6 +6564,9 @@ the Report.
 
 												<li	>
 								Label - The label of the sample.
+If "Include group name in label?" is selected, then the name of the thread group is added as a prefix.
+This allows identical labels from different thread groups to be collated separately if required.
+
 						</li>
 									
 
@@ -6432,8 +6624,24 @@ the Report.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='643' height='255' src="../images/screenshots/summary_report.png"></div>
-											  		</td></tr>
+						<div align="center"><img width='784' height='287' src="../images/screenshots/summary_report.png"></div>
+											  									 				<div	 align="center">
+								
+
+												<p	>
+								
+	The figure below shows an example of selecting the "Include group name" checkbox.
+
+													<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img  src="../images/screenshots/summary_report_grouped.png"><br>
+	<font size="-1">						Sample "Include group name" display
+			</font></td></tr></table></p>
+									
+
+						</p>
+									
+
+						</div>
+							  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
 	<hr>
@@ -6476,11 +6684,13 @@ the Report.
 		</td></tr>
 				<tr><td>
 		  															
-        
+    
 												<p	>
 								
 	CSV Data Set Config is used to read lines from a file, and split them into variables.
 	It is easier to use than the __CSVRead() and _StringFromFile() functions.
+	Versions of JMeter after 2.3.1 allow variables to be quoted; this allows the value to contain a delimiter.
+	Previously it was necessary to choose a delimiter that was not used in any values.
 	
 						</p>
 									
@@ -6509,7 +6719,7 @@ the Report.
 	
 												<p	>
 								
-	As a special case, the string "\t" (without quotes) is treated as a Tab.
+	As a special case, the string "\t" (without quotes) in the delimiter field is treated as a Tab.
 	
 						</p>
 									
@@ -6545,7 +6755,7 @@ the Report.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='363' height='251' src="../images/screenshots/csvdatasetconfig.png"></div>
+						<div align="center"><img width='308' height='278' src="../images/screenshots/csvdatasetconfig.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -6595,6 +6805,14 @@ the Report.
 			<td>						Delimiter to be used to split the records in the file.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Allow quoted data?</td>
+			<td>						Should the CSV file allow values to be quoted?
 			</td>
 			<td>
 											Yes
@@ -7028,7 +7246,7 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 		</tr>
 			<tr>
 			<td>Server</td>
-			<td>						Domain name or IP address of the web server.
+			<td>						Domain name or IP address of the web server. e.g. www.example.com. [Do not include the http:// prefix.
 			</td>
 			<td>
 											No
@@ -7061,8 +7279,10 @@ JMeter 2.3 and later treat all port values equally; a sampler that does not spec
 			<tr>
 			<td>Path</td>
 			<td>						The path to resource (for example, /servlets/myServlet). If the
-resource requires query string parameters, add them below in the
-"Send Parameters With the Request" section.
+        resource requires query string parameters, add them below in the "Send Parameters With the Request" section.
+        Note that the path is the default for the full path, not a prefix to be applied to paths
+        specified on the HTTP Request screens.
+        
 			</td>
 			<td>
 											No
@@ -7694,7 +7914,16 @@ The variables in User Defined Variables components will take precedence over tho
 
 														<p><b>Control Panel</b></p>
 						<div align="center"><img width='690' height='394' src="../images/screenshots/user_defined_variables.png"></div>
-											  									 			 <p>
+											  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.
+Also, the variables are not available for use until after the element has been processed, 
+so you cannot use variables that are defined in the same element.
+You can use variables defined in earlier UDVs or on the Test Plan. 
+
+			</td></tr>
+	</table></p>
+							  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
 	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
@@ -7718,10 +7947,6 @@ The variables in User Defined Variables components will take precedence over tho
 		</tr>
 		</table>
 	</p>
-							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
-		<tr><td>						If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.
-			</td></tr>
-	</table></p>
 							  		</td></tr>
 		<tr><td><br></td></tr>
 	 </table>
@@ -8228,7 +8453,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='632' height='253' src="../images/screenshots/bsh_assertion.png"></div>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/bsh_assertion.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -8239,6 +8464,22 @@ See the file BeanShellListeners.bshrc for example definitions.
 			</td>
 			<td>
 											No
+								</td>
+		</tr>
+			<tr>
+			<td>Reset bsh.Interpreter before each call</td>
+			<td>						
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see 
+												<a	 href="best-practices#bsh_scripting">
+								Best Practices - BeanShell scripting
+						</a>
+									.
+    
+			</td>
+			<td>
+											Yes
 								</td>
 		</tr>
 			<tr>
@@ -9105,6 +9346,22 @@ See the file BeanShellListeners.bshrc for example definitions.
 								</td>
 		</tr>
 			<tr>
+			<td>Reset bsh.Interpreter before each call</td>
+			<td>						
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see 
+												<a	 href="best-practices#bsh_scripting">
+								Best Practices - BeanShell scripting
+						</a>
+									.
+    
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
 			<td>Parameters</td>
 			<td>						Parameters to pass to the BeanShell script.
 	The parameters are stored in the following variables:
@@ -9406,7 +9663,7 @@ Clever users will even determine that this modifier can be used to grab values t
 			 <a name="HTML_Parameter_Mask"><h3>18.7.3 HTML Parameter Mask</h3></a>
 		  </font>
 		</td></tr>
-					<tr><td><em>* - This element is deprecated.  Use <a href="../usermanual/component_reference.html#Counter">Counter</a> instead</td></tr>
+					<tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="../usermanual/component_reference.html#Counter">Counter</a> instead ***</b></div></td></tr>
 				<tr><td>
 		  																			<p	>
 								The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
@@ -9524,7 +9781,7 @@ user_4, etc.
 			 <a name="HTTP_User_Parameter_Modifier"><h3>18.7.4 HTTP User Parameter Modifier</h3></a>
 		  </font>
 		</td></tr>
-					<tr><td><em>* - This element is deprecated.  Use <a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a> instead</td></tr>
+					<tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a> instead ***</b></div></td></tr>
 				<tr><td>
 		  															
 
@@ -9803,7 +10060,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='516' height='286' src="../images/screenshots/beanshell_preprocessor.png"></div>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_preprocessor.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -9814,6 +10071,22 @@ See the file BeanShellListeners.bshrc for example definitions.
 			</td>
 			<td>
 											No
+								</td>
+		</tr>
+			<tr>
+			<td>Reset bsh.Interpreter before each call</td>
+			<td>						
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see 
+												<a	 href="best-practices#bsh_scripting">
+								Best Practices - BeanShell scripting
+						</a>
+									.
+    
+			</td>
+			<td>
+											Yes
 								</td>
 		</tr>
 			<tr>
@@ -10111,7 +10384,6 @@ generate the template string, and store the result into the given variable name.
 								refName_n, where n = 1,2,3 etc - the strings as generated by the template
 						</li>
 									
-
 		
 												<li	>
 								refName_n_gm, where m=0,1,2 - the groups for match n
@@ -10450,7 +10722,7 @@ generate the template string, and store the result into the given variable name.
 		in the test log output file if required.
 	
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='401' height='130' src="../images/screenshots/savetofile.png"></div>
+						<div align="center"><img width='361' height='165' src="../images/screenshots/savetofile.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -10465,7 +10737,7 @@ generate the template string, and store the result into the given variable name.
 		</tr>
 			<tr>
 			<td>Filename Prefix</td>
-			<td>						Prefix for the generated file names
+			<td>						Prefix for the generated file names; this can include a directory name.
 			</td>
 			<td>
 											Yes
@@ -10474,6 +10746,14 @@ generate the template string, and store the result into the given variable name.
 			<tr>
 			<td>Save Failed Responses only</td>
 			<td>						If selected, then only failed responses are saved
+			</td>
+			<td>
+											Yes
+								</td>
+		</tr>
+			<tr>
+			<td>Save Successful Responses only</td>
+			<td>						If selected, then only successful responses are saved
 			</td>
 			<td>
 											Yes
@@ -10591,7 +10871,7 @@ See the file BeanShellListeners.bshrc for example definitions.
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='516' height='286' src="../images/screenshots/beanshell_postprocessor.png"></div>
+						<div align="center"><img width='597' height='303' src="../images/screenshots/beanshell_postprocessor.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -10602,6 +10882,22 @@ See the file BeanShellListeners.bshrc for example definitions.
 			</td>
 			<td>
 											No
+								</td>
+		</tr>
+			<tr>
+			<td>Reset bsh.Interpreter before each call</td>
+			<td>						
+    If this option is selected, then the interpreter will be recreated for each sample.
+    This may be necessary for some long running scripts. 
+    For further information, see 
+												<a	 href="best-practices#bsh_scripting">
+								Best Practices - BeanShell scripting
+						</a>
+									.
+    
+			</td>
+			<td>
+											Yes
 								</td>
 		</tr>
 			<tr>
@@ -10736,7 +11032,24 @@ The Test Plan is where the overall settings for a test are specified.
 								
 Static variables can be defined for values that are repeated throughout a test, such as server names.
 For example the variable SERVER could be defined as www.example.com, and the rest of the test plan
-could refer to it as ${SERVER}. This simplifies changing the name later. 
+could refer to it as ${SERVER}. This simplifies changing the name later.
+
+						</p>
+									
+
+												<p	>
+								
+
+												<b	>
+								Note that the Test Plan cannot refer to variables it defines.
+						</b>
+									 
+If you need to construct other variables from the Test Plan variables, 
+use a 
+												<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
+									 or a 
+												<a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a>
+									 test element.
 
 						</p>
 									

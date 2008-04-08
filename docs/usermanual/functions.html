@@ -36,8 +36,13 @@
 				<table border="0" cellspacing="0">
 					 <!-- TOP IMAGE -->
 					 <tr>
-						  <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" border="0"/></a>
+						  <td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+    style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
 </td>
 <td align="right">
 <a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
@@ -179,19 +184,31 @@ ${VARIABLE}
 									
 
 						</p>
+							  									 				<p	>
+								
+If an undefined function or variable is referenced, JMeter does not report/log an error - the reference is returned unchanged.
+For example if UNDEF is not defined as a variable, then the value of ${UNDEF} is ${UNDEF}.
+
+						</p>
 							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 		<tr><td>						
 Properties are not the same as variables.
-Variables are local to a thread; properties are common to all threads.
+Variables are local to a thread; properties are common to all threads,
+and need to be referenced using the __P or __property function.
 
 			</td></tr>
 	</table></p>
 							  									 				<p	>
-								List of functions:
+								List of functions, loosely grouped into types.
 						</p>
 							  									 			 <table>
 	 		  				<tr>
 	 		  				<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Type of function
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#039acc" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		  Name
 		  	 </font>
@@ -205,29 +222,10 @@ Variables are local to a thread; properties are common to all threads.
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__regexFunction">regexFunction</a>
+		  		  Information
 		  	 </font>
 </td>
 		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  parse previous response using a regular expression
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__counter">counter</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  generate an incrementing number
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__threadNum">threadNum</a>
 		  	 </font>
@@ -241,41 +239,10 @@ Variables are local to a thread; properties are common to all threads.
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__intSum">intSum</a>
+		  		  Information
 		  	 </font>
 </td>
 		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  add int numbers
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__longSum">longSum</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  add long numbers
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__StringFromFile">StringFromFile</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  read a line from a file
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__machineName">machineName</a>
 		  	 </font>
@@ -289,137 +256,10 @@ Variables are local to a thread; properties are common to all threads.
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__javaScript">javaScript</a>
+		  		  Information
 		  	 </font>
 </td>
 		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  process JavaScript (Mozilla Rhino)
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__Random">Random</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  generate a random number
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__CSVRead">CSVRead</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  read from CSV delimited file
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__property">property</a> 
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  read a property
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__P">P</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  read a property (shorthand method)
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__setProperty">setProperty</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  set a JMeter property
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__log">log</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  log (or display) a message (and return the value)
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__logn">logn</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  log (or display) a message (empty return value)
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__BeanShell">BeanShell</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  run a BeanShell script
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__split">split</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  Split a string into variables
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		   <a href="#__XPath">XPath</a>
-		  	 </font>
-</td>
-		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
-	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-		  		  Use an XPath expression to read from a file
-		  	 </font>
-</td>
-		  	 </tr>
-		  	 		  				<tr>
-	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__time">time</a>
 		  	 </font>
@@ -433,6 +273,215 @@ Variables are local to a thread; properties are common to all threads.
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Information
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__log">log</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  log (or display) a message (and return the value)
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Information
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__logn">logn</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  log (or display) a message (empty return value)
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Input
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__StringFromFile">StringFromFile</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  read a line from a file
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Input
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__CSVRead">CSVRead</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  read from CSV delimited file
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Input
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__XPath">XPath</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Use an XPath expression to read from a file
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Calculation
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__counter">counter</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  generate an incrementing number
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Calculation
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__intSum">intSum</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  add int numbers
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Calculation
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__longSum">longSum</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  add long numbers
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Calculation
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__Random">Random</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  generate a random number
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Calculation
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__regexFunction">regexFunction</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  parse previous response using a regular expression
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Scripting
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__BeanShell">BeanShell</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  run a BeanShell script
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Scripting
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__javaScript">javaScript</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  process JavaScript (Mozilla Rhino)
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Scripting
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__jexl">jexl</a>
 		  	 </font>
 </td>
@@ -444,6 +493,79 @@ Variables are local to a thread; properties are common to all threads.
 		  	 </tr>
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Properties
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__property">property</a> 
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  read a property
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Properties
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__P">P</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  read a property (shorthand method)
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Properties
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__setProperty">setProperty</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  set a JMeter property
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Variables
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		   <a href="#__split">split</a>
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Split a string into variables
+		  	 </font>
+</td>
+		  	 </tr>
+		  	 		  				<tr>
+	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Variables
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__V">V</a>
 		  	 </font>
@@ -457,6 +579,11 @@ Variables are local to a thread; properties are common to all threads.
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Variables
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__eval">eval</a>
 		  	 </font>
 </td>
@@ -468,6 +595,11 @@ Variables are local to a thread; properties are common to all threads.
 		  	 </tr>
 		  	 		  				<tr>
 	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
+	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
+		  		  Variables
+		  	 </font>
+</td>
+		  	 		  				<td bgcolor="#a0ddf0" colspan="" rowspan="" valign="top" align="left">
 	 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 		  		   <a href="#__evalVar">evalVar</a>
 		  	 </font>
@@ -773,14 +905,14 @@ for you to copy-paste into your test plan wherever you like.
 		</td></tr>
 				<tr><td>
 		  																			<p	>
-								The Regex Function is used to parse the previous response using any regular
+								The Regex Function is used to parse the previous response (or the value of a variable) using any regular
 expression (provided by user).  The function returns the template string with variable values filled
 in.
 						</p>
 									
 
 												<p	>
-								The __regexFunction stores values for future use.  In the sixth parameter, you can specify
+								The __regexFunction can also store values for future use.  In the sixth parameter, you can specify
 a reference name.  After this function executes, the same values can be retrieved at later times
 using the syntax for user-defined values.  For instance, if you enter "refName" as the sixth
 parameter you will be able to use:
@@ -917,6 +1049,16 @@ replacement string") parsed by this function
 											No
 								</td>
 		</tr>
+			<tr>
+			<td>Seventh argument</td>
+			<td>						Input variable name. 
+        If specified, then the value of the variable is used as the input instead of using the previous sample result.
+        
+			</td>
+			<td>
+											No
+								</td>
+		</tr>
 		</table>
 	</p>
 							  		</td></tr>
@@ -1023,11 +1165,25 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 		  </font>
 		</td></tr>
 				<tr><td>
-		  																			<p	>
-								The intsum function can be used to compute the sum of two or more integer values.
+		  															
+
+												<p	>
+								
+The intSum function can be used to compute the sum of two or more integer values.
 
 						</p>
-															  									 			 <p>
+									
+
+												<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+JMeter Versions 2.3.1 and earlier required the reference name to be present.
+The reference name is now optional, but it must not be a valid integer.
+
+			</td></tr>
+	</table></p>
+									
+
+														  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
 	<tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
@@ -1057,11 +1213,13 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 		</tr>
 			<tr>
 			<td>last argument</td>
-			<td>						A reference name for reusing the value
-                computed by this function.
+			<td>						A reference name for reusing the value computed by this function. 
+                If specified, the reference name must contain at least one non-numeric character otherwise it will
+                be treated as another int value to be added.
+        
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 		</table>
@@ -1111,11 +1269,13 @@ This function does not work in any Configuration elements (e.g. User Defined Var
 		</tr>
 			<tr>
 			<td>last argument</td>
-			<td>						A reference name for reusing the value
-                computed by this function.
+			<td>						A reference name for reusing the value computed by this function. 
+                If specified, the reference name must contain at least one non-numeric character otherwise it will
+                be treated as another long value to be added.
+        
 			</td>
 			<td>
-											Yes
+											No
 								</td>
 		</tr>
 		</table>

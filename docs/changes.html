@@ -38,8 +38,13 @@
 				<table border="0" cellspacing="0">
 					 <!-- TOP IMAGE -->
 					 <tr>
-						  <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="./images/jakarta-logo.gif" border="0"/></a>
+						  <td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+    style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="./images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
 </td>
 <td align="right">
 <a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="./images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
@@ -135,6 +140,36 @@
 								Summary of main changes
 						</h4>
 							  									 				<p	>
+								
+Version 2.3.1 changed the way binary and text content types were determined:
+originally everything except "image/" content types were considered text, but 2.3.1 introduced a check
+for specific content types. This has caused problems, as several popular types were omitted.
+Rather than try to list all the possible text types, JMeter now just checks for the following binary types:
+
+												<ul	>
+								
+
+												<li	>
+								image/*
+						</li>
+									
+
+												<li	>
+								audio/*
+						</li>
+									
+
+												<li	>
+								video/*
+						</li>
+									
+
+						</ul>
+									
+All other types are now assumed to be text.
+
+						</p>
+							  									 				<p	>
 								Fixes Clear Cookie each iteration bug (unfortunately introduced in 2.3.1)
 						</p>
 							  									 				<p	>
@@ -173,6 +208,12 @@ Functions will only be found if their classname contains the string
 All existing JMeter functions conform to this restriction.
 To revert to earlier behaviour, comment or change the properties classfinder.functions.* in jmeter.properties.
 
+						</li>
+									
+
+												<li	>
+								The reference value parameter for intSum() is now optional. 
+As a consequence, if a variable name is used, it must not be a valid integer.
 						</li>
 									
 
@@ -253,6 +294,36 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 						</li>
 									
 
+												<li	>
+								Regular Expression Extractor now deletes all stale variables from previous matches.
+						</li>
+									
+
+												<li	>
+								Bug 44707 - Running remote test changes internal test plan
+						</li>
+									
+
+												<li	>
+								Bug 44625 - Cannot have two or more FTP samplers with different "put" and "get" actions
+						</li>
+									
+
+												<li	>
+								Bug 40850 - BeanShell memory leak
+						</li>
+									
+
+												<li	>
+								Ensure ResponseCode and ResponseMessage are set for successful JDBC samples
+						</li>
+									
+
+												<li	>
+								FTPSampler now detects and reports failure to open the remote file
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -323,7 +394,7 @@ that contain '.functions.' and don't contain '.gui.'
 
 												<li	>
 								Allow most functions to be used on the Test Plan. 
-Note __split() and __regex() cannot be used on the Test Plan.
+Note __evalVar(), __split() and __regex() cannot be used on the Test Plan.
 						</li>
 									
 
@@ -367,6 +438,63 @@ Note __split() and __regex() cannot be used on the Test Plan.
 						</li>
 									
 
+												<li	>
+								
+As a special case, if the HTTP Sampler path starts with "http://" or "https://" then this is used as the full URL.
+
+						</li>
+									
+
+												<li	>
+								Bug 44575 - Result Saver can now save only successful results
+						</li>
+									
+
+												<li	>
+								Bug 44650 - CSV Dataset now handles quoted column values
+						</li>
+									
+
+												<li	>
+								Bug 44600 - 1-ms resolution timer when running with Java 1.5+
+						</li>
+									
+
+												<li	>
+								Bug 44632 - Text input enhancement to FTP Sampler
+						</li>
+									
+
+												<li	>
+								Bug 42204 - add thread group name to Aggregate and Summary reports
+						</li>
+									
+
+												<li	>
+								FTP Sampler sets latency = time to login
+						</li>
+									
+
+												<li	>
+								FTP Sampler sets a URL if it can
+						</li>
+									
+
+												<li	>
+								Bug 41921 - add option for samplers to store MD5 of response; done for HTTP Samplers.
+						</li>
+									
+
+												<li	>
+								Regex Function can now also be applied to a variable rather than just the previous sample result.
+						</li>
+									
+
+												<li	>
+								Remove HTML Parameter Mask,HTTP User Parameter Modifier from menus as they are deprecated
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Non-functional changes
@@ -390,7 +518,7 @@ Note __split() and __regex() cannot be used on the Test Plan.
 									
 
 												<li	>
-								Update to Xerces 2.9.1, Xalan 2.7.1, Commons-Logging 1.1.1, XStream 1.2.2
+								Update to Xerces 2.9.1, Xalan 2.7.1, Commons IO 1.4, Commons Lang 2.4, Commons-Logging 1.1.1, XStream 1.3, XPP3 1.1.4c
 						</li>
 									
 
@@ -406,6 +534,11 @@ Note __split() and __regex() cannot be used on the Test Plan.
 
 												<li	>
 								Update copyright to 2008; use copy tag instead of numeric character in HTML output
+						</li>
+									
+
+												<li	>
+								Methods called from constructors must not be overridable: make GUI init methods private
 						</li>
 									
 
@@ -2053,7 +2186,6 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 						</li>
 									
 
-
 												<li	>
 								Bug 42057 - connection can be null if method is null
 						</li>
@@ -2199,6 +2331,16 @@ This may cause some problems; if so define the following in jmeter.properties:
 						</br>
 									
 jmeterengine.startlistenerslater=false
+
+						</p>
+							  									 				<p	>
+								
+The GUI now expands the tree by default when loading a test plan.
+This can be disabled by setting the JMeter property 
+												<b	>
+								onload.expandtree=false
+						</b>
+									
 
 						</p>
 							  									 				<h4	>
