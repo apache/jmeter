@@ -36,8 +36,13 @@
 				<table border="0" cellspacing="0">
 					 <!-- TOP IMAGE -->
 					 <tr>
-						  <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" border="0"/></a>
+						  <td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+    style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
 </td>
 <td align="right">
 <a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
@@ -254,8 +259,8 @@ certain common elements from the recorded samples.  By defining some
 												<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a>
 									 elements, you can have JMeter automatically
 replace values in you recorded samples.  For instance, if you are testing an app on
-server "xxx.yyy.com", then you can define a variable called "server" with the value of
-"xxx.yyy.com", and anyplace that value is found in your recorded samples will be replaced
+server "xxx.example.com", then you can define a variable called "server" with the value of
+"xxx.example.com", and anyplace that value is found in your recorded samples will be replaced
 with "${server}".
 
 
@@ -475,6 +480,108 @@ For example:
 java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 
 						</pre>
+							  		  </blockquote>
+		  </p>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+						  									 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#525D76">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="bsh_scripting"><strong>16.8 BeanShell scripting</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="bsh_overview"><strong>16.8.1 Overview</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+Each BeanShell test element has its own copy of the interpreter (for each thread).
+If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
+between invocations unless the "Reset bsh.Interpreter before each call" option is selected.
+
+						</p>
+							  									 				<p	>
+								
+Some long-running tests may cause the interpreter to use lots of memory; if this is the case try using the reset option.
+
+						</p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
+							  									 			 	 <table border="0" cellspacing="0" cellpadding="2" width="100%">
+		<tr><td bgcolor="#828DA6">
+		  <font color="#ffffff" face="arial,helvetica,sanserif">
+			 <a name="bsh_variables"><strong>16.8.2 Sharing Variables</strong></a>
+		  </font>
+		</td></tr>
+		<tr><td>
+		  <blockquote>
+		  									 				<p	>
+								
+Variables can be defined in startup (initialisation) scripts.
+These will be retained across invocations of the test element, unless the reset option is used.\
+
+						</p>
+							  									 				<p	>
+								
+Scripts can also access JMeter variables using the get() and put() methods of the "vars" variable,
+for example: 
+												<code	>
+								vars.get("HOST"); vars.put("MSG","Successful");
+						</code>
+									.
+The get() and put() methods only support variables with String values,
+but there are also getObject() and putObject() methods which can be used for arbitrary objects.
+JMeter variables are local to a thread, but can be used by all test elements (not just Beanshell).
+
+						</p>
+							  									 				<p	>
+								
+If you need to share variables between threads, then JMeter properties can be used:
+
+												<pre	>
+								
+import org.apache.jmeter.util.JMeterUtils;
+String value=JMeterUtils.getPropDefault("name","");
+JMeterUtils.setProperty("name", "value");
+
+						</pre>
+									
+The sample .bshrc files contain sample definitions of getprop() and setprop() methods.
+
+						</p>
+							  									 				<p	>
+								
+Another possible method of sharing variables is to use the "bsh.shared" shared namespace.
+For example:
+
+												<pre	>
+								
+if (bsh.shared.myObj == void){
+    // not yet defined, so create it:
+    myObj=new AnyObject();
+}
+bsh.shared.myObj.process();
+
+						</pre>
+									
+Rather than creating the object in the test element, it can be created in the startup file
+defined by the JMeter property "beanshell.init.file". This is only processed once.
+
+						</p>
+							  		  </blockquote>
+		</td></tr>
+		<tr><td><br></td></tr>
+	 </table>
 							  		  </blockquote>
 		  </p>
 		</td></tr>

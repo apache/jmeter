@@ -36,8 +36,13 @@
 				<table border="0" cellspacing="0">
 					 <!-- TOP IMAGE -->
 					 <tr>
-						  <td align="left">
-<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" border="0"/></a>
+						  <td>
+<!-- Need to specify height otherwise iframe seems to grab extra -->
+<iframe src="http://www.apache.org/ads/halfbanner.html" height="102"
+    style="border-width:0; float: left" frameborder="0" scrolling="no"></iframe>
+</td>
+<td align="left">
+<a href="http://jakarta.apache.org"><img width="505" height="48" src="../images/jakarta-logo.gif" alt="Jakarta" title="Jakarta" border="0"/></a>
 </td>
 <td align="right">
 <a href="http://jakarta.apache.org/jmeter/"><img width="221" height="102" src="../images/logo.jpg" alt="JMeter" title="JMeter" border="0"/></a>
@@ -133,10 +138,12 @@
 		  									 				<p	>
 								
 
+												<a	 name="Latency">
 												<b	>
 								Latency
 						</b>
-									 - JMeter measures the latency from just before sending the request to
+							</a>
+									. JMeter measures the latency from just before sending the request to
 just after the first response has been received. Thus the time
 includes all the processing needed to assemble the request as well as
 assembling the response, which in general will be longer than one
@@ -149,9 +156,57 @@ browser or other application client.
 							  									 				<p	>
 								
 
+												<a	 name="Median">
+												<b	>
+								Median
+						</b>
+							</a>
+									 is a number which divides the samples into two equal halves.
+Half of the samples are smaller than the median, and half are larger.
+[Some samples may equal the median.]
+This is a standard statistical measure.
+See, for example: 
+												<a	 href="http://en.wikipedia.org/wiki/Median">
+								Median
+						</a>
+									 entry at Wikipedia.
+The Median is the same as the 50
+												<sup	>
+								th
+						</sup>
+									 Percentile
+
+						</p>
+							  									 				<p	>
+								
+
+												<a	 name="Percentile">
+												<b	>
+								90% Line (90
+												<sup	>
+								th
+						</sup>
+									 Percentile)
+						</b>
+							</a>
+									 is the value below which 90% of the samples fall.
+The remaining samples too at least as long as the value.
+This is a standard statistical measure.
+See, for example: 
+												<a	 href="http://en.wikipedia.org/wiki/Percentile">
+								Percentile
+						</a>
+									 entry at Wikipedia.
+
+						</p>
+							  									 				<p	>
+								
+
+												<a	 name="Throughput">
 												<b	>
 								Throughput
 						</b>
+							</a>
 									 is calculated as requests/unit of time.
 The time is calculated from the start of the first sample to the end of the last sample.
 This includes any intervals between samples.   
