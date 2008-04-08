@@ -95,6 +95,8 @@ As a consequence, if a variable name is used, it must not be a valid integer.</l
 <li>Bug 44707 - Running remote test changes internal test plan</li>
 <li>Bug 44625 - Cannot have two or more FTP samplers with different "put" and "get" actions</li>
 <li>Bug 40850 - BeanShell memory leak</li>
+<li>Ensure ResponseCode and ResponseMessage are set for successful JDBC samples</li>
+<li>FTPSampler now detects and reports failure to open the remote file</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -134,6 +136,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>FTP Sampler sets a URL if it can</li>
 <li>Bug 41921 - add option for samplers to store MD5 of response; done for HTTP Samplers.</li>
 <li>Regex Function can now also be applied to a variable rather than just the previous sample result.</li>
+<li>Remove HTML Parameter Mask,HTTP User Parameter Modifier from menus as they are deprecated</li>
 </ul>
 
 <h4>Non-functional changes</h4>
@@ -145,6 +148,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Use properties for log/logn function descriptions</li>
 <li>Check that all jmx files in the demos directory can be loaded OK</li>
 <li>Update copyright to 2008; use copy tag instead of numeric character in HTML output</li>
+<li>Methods called from constructors must not be overridable: make GUI init methods private</li>
 </ul>
 
 <!--  ===================  -->
