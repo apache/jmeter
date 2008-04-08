@@ -294,7 +294,7 @@
 		  </font>
 		</td></tr>
 		#if($component.getAttribute("useinstead"))
-			<tr><td><em>* - This element is deprecated.  Use <a href="$relativePath/usermanual/component_reference.html#$component.getAttributeValue("useinstead").replace($space,$udsc)">$component.getAttributeValue("useinstead")</a> instead</td></tr>
+			<tr><td bgcolor="#bbbb00"><div align="center"><b>*** This element is deprecated.  Use <a href="$relativePath/usermanual/component_reference.html#$component.getAttributeValue("useinstead").replace($space,$udsc)">$component.getAttributeValue("useinstead")</a> instead ***</b></div></td></tr>
 		#end
 		<tr><td>
 		  #foreach ( $c_items in $component.getChildren() )
