@@ -33,7 +33,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.SamplingStatCalculator;
 
 /**
- * @author Peter Lin
  *
  * The purpose of TableData is to contain the results of a single .jtl file.
  * It is equivalent to what the AggregateListener table. A HashMap is used
@@ -55,8 +54,8 @@ public class JTLData implements Serializable, DataSet {
 	}
 
     /**
-     * Return a Set of the URL's
-     * @return
+     * Return a Set of the URLs
+     * @return set of URLs
      */
     public Set getURLs() {
         return this.data.keySet();
@@ -64,7 +63,7 @@ public class JTLData implements Serializable, DataSet {
     
     /**
      * Return a Set of the values
-     * @return
+     * @return values
      */
     public Set getStats() {
         return this.data.entrySet();
@@ -72,12 +71,12 @@ public class JTLData implements Serializable, DataSet {
     
     /**
      * The purpose of the method is to make it convienant to pass a list
-     * of the URL's and return a list of the SamplingStatCalculators. If
-     * no URL's match, the list is empty.
+     * of the URLs and return a list of the SamplingStatCalculators. If
+     * no URLs match, the list is empty.
      * The SamplingStatCalculators will be returned in the same sequence
      * as the url list.
      * @param urls
-     * @return
+     * @return array list of non-null entries (may be empty)
      */
     public List getStats(List urls) {
         ArrayList items = new ArrayList();
@@ -127,7 +126,7 @@ public class JTLData implements Serializable, DataSet {
      * reasoning is that a test may run for a long time, but it
      * is most likely scheduled to run using CRON on unix or
      * scheduled task in windows.
-     * @return
+     * @return start time
      */
     public Date getDate() {
         return new Date(this.startTimestamp);
@@ -152,7 +151,7 @@ public class JTLData implements Serializable, DataSet {
      * The method will SamplingStatCalculator for the given URL. If the URL
      * doesn't exist, the method returns null.
      * @param url
-     * @return
+     * @return data for this URL
      */
     public SamplingStatCalculator getStatistics(String url) {
         if (this.data.containsKey(url)) {
