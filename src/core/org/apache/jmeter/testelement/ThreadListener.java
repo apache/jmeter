@@ -21,7 +21,6 @@ package org.apache.jmeter.testelement;
 /**
  * Allow threads to perform startup and closedown if necessary
  * 
- * @version $Revision$ on $Date$
  */
 public interface ThreadListener {
 	/**
