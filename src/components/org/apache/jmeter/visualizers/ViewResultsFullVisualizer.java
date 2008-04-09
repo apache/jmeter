@@ -82,9 +82,7 @@ import org.apache.log.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * Allows the tester to view the textual response from sampling an Entry. This
@@ -331,94 +329,92 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 						log.debug("valueChanged1 : sample result - " + res);
 					}
 
-					if (res != null) {
-						// load time label
+					// load time label
 
-						log.debug("valueChanged1 : load time - " + res.getTime());
-						String sd = res.getSamplerData();
-						if (sd != null) {
-							String rh = res.getRequestHeaders();
-							if (rh != null) {
-								StringBuffer sb = new StringBuffer(sd.length() + rh.length()+20);
-								sb.append(sd);
-								sb.append("\nRequest Headers:\n");
-								sb.append(rh);
-								sd = sb.toString();
-							}
-							sampleDataField.setText(sd);
+					log.debug("valueChanged1 : load time - " + res.getTime());
+					String sd = res.getSamplerData();
+					if (sd != null) {
+						String rh = res.getRequestHeaders();
+						if (rh != null) {
+							StringBuffer sb = new StringBuffer(sd.length() + rh.length()+20);
+							sb.append(sd);
+							sb.append("\nRequest Headers:\n");
+							sb.append(rh);
+							sd = sb.toString();
 						}
+						sampleDataField.setText(sd);
+					}
 
-						StringBuffer statsBuff = new StringBuffer(200);
-						statsBuff.append("Thread Name: ").append(res.getThreadName()).append(NL);
-						String startTime = dateFormat.format(new Date(res.getStartTime()));
-						statsBuff.append("Sample Start: ").append(startTime).append(NL);
-						statsBuff.append("Load time: ").append(res.getTime()).append(NL);
-						statsBuff.append("Latency: ").append(res.getLatency()).append(NL);
-						statsBuff.append("Size in bytes: ").append(res.getBytes()).append(NL);
-						statsBuff.append("Sample Count: ").append(res.getSampleCount()).append(NL);
-						statsBuff.append("Error Count: ").append(res.getErrorCount()).append(NL);
-						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-						statsBuff = new StringBuffer(); //reset for reuse
-						
-						String responseCode = res.getResponseCode();
-						log.debug("valueChanged1 : response code - " + responseCode);
+					StringBuffer statsBuff = new StringBuffer(200);
+					statsBuff.append("Thread Name: ").append(res.getThreadName()).append(NL);
+					String startTime = dateFormat.format(new Date(res.getStartTime()));
+					statsBuff.append("Sample Start: ").append(startTime).append(NL);
+					statsBuff.append("Load time: ").append(res.getTime()).append(NL);
+					statsBuff.append("Latency: ").append(res.getLatency()).append(NL);
+					statsBuff.append("Size in bytes: ").append(res.getBytes()).append(NL);
+					statsBuff.append("Sample Count: ").append(res.getSampleCount()).append(NL);
+					statsBuff.append("Error Count: ").append(res.getErrorCount()).append(NL);
+					statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+					statsBuff = new StringBuffer(); //reset for reuse
+					
+					String responseCode = res.getResponseCode();
+					log.debug("valueChanged1 : response code - " + responseCode);
 
-						int responseLevel = 0;
-						if (responseCode != null) {
-							try {
-								responseLevel = Integer.parseInt(responseCode) / 100;
-							} catch (NumberFormatException numberFormatException) {
-								// no need to change the foreground color
-							}
+					int responseLevel = 0;
+					if (responseCode != null) {
+						try {
+							responseLevel = Integer.parseInt(responseCode) / 100;
+						} catch (NumberFormatException numberFormatException) {
+							// no need to change the foreground color
 						}
+					}
 
-						Style style = null;
-						switch (responseLevel) {
-						case 3:
-							style = statsDoc.getStyle(STYLE_REDIRECT);
-							break;
-						case 4:
-							style = statsDoc.getStyle(STYLE_CLIENT_ERROR);
-							break;
-						case 5:
-							style = statsDoc.getStyle(STYLE_SERVER_ERROR);
-							break;
+					Style style = null;
+					switch (responseLevel) {
+					case 3:
+						style = statsDoc.getStyle(STYLE_REDIRECT);
+						break;
+					case 4:
+						style = statsDoc.getStyle(STYLE_CLIENT_ERROR);
+						break;
+					case 5:
+						style = statsDoc.getStyle(STYLE_SERVER_ERROR);
+						break;
+					}
+
+					statsBuff.append("Response code: ").append(responseCode).append(NL);
+					statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
+					statsBuff = new StringBuffer(100); //reset for reuse
+
+					// response message label
+					String responseMsgStr = res.getResponseMessage();
+
+					log.debug("valueChanged1 : response message - " + responseMsgStr);
+					statsBuff.append("Response message: ").append(responseMsgStr).append(NL);
+
+					statsBuff.append(NL).append("Response headers:").append(NL);
+					statsBuff.append(res.getResponseHeaders()).append(NL);
+					statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+					statsBuff = null; // Done
+
+					// get the text response and image icon
+					// to determine which is NOT null
+					if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null) is OK
+					{
+						String response = getResponseAsString(res);
+						if (command.equals(TEXT_COMMAND)) {
+							showTextResponse(response);
+						} else if (command.equals(HTML_COMMAND)) {
+							showRenderedResponse(response, res);
+						} else if (command.equals(JSON_COMMAND)) {
+							showRenderJSONResponse(response);
+						} else if (command.equals(XML_COMMAND)) {
+							showRenderXMLResponse(res);
 						}
-
-						statsBuff.append("Response code: ").append(responseCode).append(NL);
-						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), style);
-						statsBuff = new StringBuffer(100); //reset for reuse
-
-						// response message label
-						String responseMsgStr = res.getResponseMessage();
-
-						log.debug("valueChanged1 : response message - " + responseMsgStr);
-						statsBuff.append("Response message: ").append(responseMsgStr).append(NL);
-
-						statsBuff.append(NL).append("Response headers:").append(NL);
-						statsBuff.append(res.getResponseHeaders()).append(NL);
-						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-						statsBuff = null; // Done
-
-						// get the text response and image icon
-						// to determine which is NOT null
-						if ((SampleResult.TEXT).equals(res.getDataType())) // equals(null) is OK
-						{
-							String response = getResponseAsString(res);
-							if (command.equals(TEXT_COMMAND)) {
-								showTextResponse(response);
-							} else if (command.equals(HTML_COMMAND)) {
-								showRenderedResponse(response, res);
-							} else if (command.equals(JSON_COMMAND)) {
-								showRenderJSONResponse(response);
-							} else if (command.equals(XML_COMMAND)) {
-								showRenderXMLResponse(res);
-							}
-						} else {
-							byte[] responseBytes = res.getResponseData();
-							if (responseBytes != null) {
-								showImage(new ImageIcon(responseBytes)); //TODO implement other non-text types
-							}
+					} else {
+						byte[] responseBytes = res.getResponseData();
+						if (responseBytes != null) {
+							showImage(new ImageIcon(responseBytes)); //TODO implement other non-text types
 						}
 					}
 				}
@@ -432,14 +428,12 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 						log.debug("valueChanged1 : sample result - " + res);
 					}
 
-					if (res != null) {
-						StringBuffer statsBuff = new StringBuffer(100);
-						statsBuff.append("Assertion error: ").append(res.isError()).append(NL);
-						statsBuff.append("Assertion failure: ").append(res.isFailure()).append(NL);
-						statsBuff.append("Assertion failure message : ").append(res.getFailureMessage()).append(NL);
-						statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-						statsBuff = null;
-					}
+					StringBuffer statsBuff = new StringBuffer(100);
+					statsBuff.append("Assertion error: ").append(res.isError()).append(NL);
+					statsBuff.append("Assertion failure: ").append(res.isFailure()).append(NL);
+					statsBuff.append("Assertion failure message : ").append(res.getFailureMessage()).append(NL);
+					statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
+					statsBuff = null;
 				}
 			}
 		} catch (BadLocationException exc) {
@@ -536,8 +530,6 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		jsonButton.setEnabled(true);
 		xmlButton.setEnabled(true);
 	}
-
-	private static final SAXErrorHandler saxErrorHandler = new SAXErrorHandler();
 
 	private void showRenderXMLResponse(SampleResult res) {
 		results.setContentType("text/xml"); // $NON-NLS-1$
@@ -940,8 +932,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node childNode = childNodes.item(i);
 				toReturn = childNode;
-				if (childNode.getNodeType() == Node.ELEMENT_NODE)
-					break;
+				if (childNode.getNodeType() == Node.ELEMENT_NODE){
+				    break;
+				}
 
 			}
 			return toReturn;
@@ -976,8 +969,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 				char[] chars = str.toCharArray();
 				for (int i = 0; i < chars.length; i++) {
 
-					if (i % maxChar == 0 && i != 0)
-						strBuf.append(separator);
+					if (i % maxChar == 0 && i != 0) {
+					    strBuf.append(separator);
+					}
 					strBuf.append(encode(chars[i]));
 
 				}
@@ -1008,87 +1002,8 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 		}
 	}
 
-	private static void showErrorMessageDialog(String message, int messageType) {
-	    showErrorMessageDialog(message, "Error", messageType);
-	}
-
     private static void showErrorMessageDialog(String message, String title, int messageType) {
         JOptionPane.showMessageDialog(null, message, title, messageType);
     }
-
-	// Helper method to construct SAX error details
-	private static String errorDetails(SAXParseException spe) {
-		StringBuffer str = new StringBuffer(80);
-		int i;
-		i = spe.getLineNumber();
-		if (i != -1) {
-			str.append("line=");
-			str.append(i);
-			str.append(" col=");
-			str.append(spe.getColumnNumber());
-			str.append(" ");
-		}
-		str.append(spe.getLocalizedMessage());
-		return str.toString();
-	}
-
-	private static class SAXErrorHandler implements ErrorHandler {
-		private String msg;
-
-		private int messageType;
-
-		public SAXErrorHandler() {
-			msg = ""; // $NON-NLS-1$
-
-		}
-
-		public void error(SAXParseException exception) throws SAXParseException {
-			msg = "error: " + errorDetails(exception);
-
-			log.debug(msg);
-			messageType = JOptionPane.ERROR_MESSAGE;
-			throw exception;
-		}
-
-		/*
-		 * Can be caused by: - premature end of file - non-whitespace content
-		 * after trailer
-		 */
-		public void fatalError(SAXParseException exception) throws SAXParseException {
-
-			msg = "fatal: " + errorDetails(exception);
-			messageType = JOptionPane.ERROR_MESSAGE;
-			log.debug(msg);
-
-			throw exception;
-		}
-
-		/*
-		 * Not clear what can cause this ? conflicting versions perhaps
-		 */
-		public void warning(SAXParseException exception) throws SAXParseException {
-			msg = "warning: " + errorDetails(exception);
-			log.debug(msg);
-			messageType = JOptionPane.WARNING_MESSAGE;
-		}
-
-		/**
-		 * get the JOptionPaneMessage Type
-		 * 
-		 * @return the message type
-		 */
-		public int getMessageType() {
-			return messageType;
-		}
-
-		/**
-		 * get error message
-		 * 
-		 * @return the error message
-		 */
-		public String getErrorMessage() {
-			return msg;
-		}
-	}
 
 }
