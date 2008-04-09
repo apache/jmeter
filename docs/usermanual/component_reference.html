@@ -8066,7 +8066,23 @@ GUI that they can use while developing new JMeter components.
 		  																			<p	>
 								The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
-	The pattern strings are Perl5-style regular expressions. 
+	The pattern strings are:
+	
+												<ul	>
+								
+	
+												<li	>
+								Contains, Matches: Perl5-style regular expressions
+						</li>
+									
+	
+												<li	>
+								Equals, Substring: plain text, case-sensitive
+						</li>
+									
+	
+						</ul>
+									
 	
 						</p>
 									
@@ -8206,6 +8222,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
         
 						</ul>
 									
+        Equals and Substring patterns are plain strings, not regular expressions.
         NOT may also be selected to invert the result of the check.
 			</td>
 			<td>
@@ -10502,6 +10519,7 @@ generate the template string, and store the result into the given variable name.
 			<tr>
 			<td>Use Namespace?</td>
 			<td>						
+
         If checked, then the XML parser will use namespace resolution.
         Note that currently only namespaces declared on the root element will be recognised.
         A later version of JMeter may support user-definition of additional workspace names.

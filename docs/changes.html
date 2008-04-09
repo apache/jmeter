@@ -170,7 +170,11 @@ All other types are now assumed to be text.
 
 						</p>
 							  									 				<p	>
-								Fixes Clear Cookie each iteration bug (unfortunately introduced in 2.3.1)
+								
+JMeter 2.3.1 introduced a bug in the Cookie Manager 
+- if "Clear Cookie each iteration" was selected, all threads would see the same cookies.
+This bug has been corrected.
+
 						</p>
 							  									 				<p	>
 								Switch Controller now works properly with functions and variables, 
@@ -178,11 +182,30 @@ and the condition can now be a name instead of a number.
 Simple Controller now works properly under a While Controller
 						</p>
 							  									 				<p	>
-								CSV fields can now contain delimiters. 
+								CSV fields in JTL files can now contain delimiters. 
 CSV and XML files can now contain additional variables (define the JMeter property sample_variables).
 						</p>
 							  									 				<p	>
-								Response Assertion can now match on substrings
+								Response Assertion can now match on substrings (i.e. not regular expression). 
+Regex extractor can operate on variables.
+						</p>
+							  									 				<p	>
+								
+XPath processing is improved; Tidy errors are handled better.
+
+						</p>
+							  									 				<p	>
+								Save Table Data buttons added to Summary and Aggregate reports to allow easy saving of the calculated data.
+						</p>
+							  									 				<p	>
+								HTTP(S) samplers can now save just the MD5 hash of responses, rather than the entire response.
+						</p>
+							  									 				<p	>
+								
+View Results Tree Listener now uses Tidy to display XML.
+This should allow more content to be displayed succesfully.
+It also avoids the need to download remote DTD files, which can slow the rendering considerably.
+
 						</p>
 							  									 				<p	>
 								Number of classes loaded in non-GUI mode is much reduced.
@@ -214,6 +237,11 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 												<li	>
 								The reference value parameter for intSum() is now optional. 
 As a consequence, if a variable name is used, it must not be a valid integer.
+						</li>
+									
+
+												<li	>
+								The ant-jmeter.jar is no longer shipped with JMeter. See extras/build.xml for how to aquire it.
 						</li>
 									
 
