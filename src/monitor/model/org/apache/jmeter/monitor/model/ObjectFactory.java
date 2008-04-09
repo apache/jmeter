@@ -30,7 +30,7 @@ public class ObjectFactory {
 
 	private static ObjectFactory FACTORY = null;
 
-	private Parser PARSER = null;
+	private final Parser PARSER;
 
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class ObjectFactory {
 		PARSER = new MonitorParser(this);
 	}
 
-	public static ObjectFactory getInstance() {
+	public static synchronized ObjectFactory getInstance() {
 		if (FACTORY == null) {
 			FACTORY = new ObjectFactory();
 		}
