@@ -45,10 +45,8 @@ import java.util.Set;
  * {@link HashTreeTraverser} interface in order to perform some operation on the
  * tree, or to extract information from the tree.
  * 
- * @author Michael Stover (mstover1 at apache.org)
  * @see HashTreeTraverser
  * @see SearchByClass
- * @version $Revision$ Updated on: $Date$
  */
 public class HashTree implements Serializable, Map {
 	// GetLoggerForClass() uses ClassContext, which
@@ -58,7 +56,10 @@ public class HashTree implements Serializable, Map {
 	// private static Logger log =
 	// LoggingManager.getLoggerForClass();
 
-	/**
+    // Used for the RuntimeException to short-circuit the traversal
+    private static final String FOUND = "found"; // $NON-NLS-1$
+
+    /**
 	 * Creates an empty new HashTree.
 	 */
 	public HashTree() {
@@ -382,9 +383,8 @@ public class HashTree implements Serializable, Map {
 			HashTree newTree = createNewTree();
 			data.put(key, newTree);
 			return newTree;
-		} else {
-			return getTree(key);
 		}
+		return getTree(key);
 	}
 
 	/**
@@ -589,9 +589,8 @@ public class HashTree implements Serializable, Map {
 	public HashTree getTree(Object[] treePath) {
 		if (treePath != null) {
 			return getTree(Arrays.asList(treePath));
-		} else {
-			return this;
 		}
+		return this;
 	}
 
 	/**
@@ -692,9 +691,8 @@ public class HashTree implements Serializable, Map {
 		HashTree temp = (HashTree) data.get(key);
 		if (temp != null) {
 			return temp.list();
-		} else {
-			return new LinkedList();
 		}
+		return new LinkedList();
 	}
 
 	/**
@@ -720,9 +718,8 @@ public class HashTree implements Serializable, Map {
 	public Collection list(Object[] treePath) {
 		if (treePath != null) {
 			return list(Arrays.asList(treePath));
-		} else {
-			return list();
 		}
+		return list();
 	}
 
 	/**
@@ -738,8 +735,9 @@ public class HashTree implements Serializable, Map {
 	 */
 	public Collection list(Collection treePath) {
 		HashTree tree = getTreePath(treePath);
-		if (tree != null)
+		if (tree != null) {
 			return tree.list();
+		}
 		return new LinkedList();
 	}
 
@@ -776,10 +774,10 @@ public class HashTree implements Serializable, Map {
 	 */
 	public Object[] getArray(Object key) {
 		HashTree t = getTree(key);
-		if (t != null)
+		if (t != null) {
 			return t.getArray();
-		else
-			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -796,9 +794,8 @@ public class HashTree implements Serializable, Map {
 	public Object[] getArray(Object[] treePath) {
 		if (treePath != null) {
 			return getArray(Arrays.asList(treePath));
-		} else {
-			return getArray();
 		}
+		return getArray();
 	}
 
 	/**
@@ -821,8 +818,9 @@ public class HashTree implements Serializable, Map {
 		HashTree tree = this;
 		Iterator iter = treePath.iterator();
 		while (iter.hasNext()) {
-			if (tree == null)
+			if (tree == null) {
 				return null;
+			}
 			Object temp = iter.next();
 			tree = tree.getTree(temp);
 		}
@@ -848,11 +846,13 @@ public class HashTree implements Serializable, Map {
 	 * @see java.lang.Object#equals(Object)
 	 */
 	public boolean equals(Object o) {
-		if (!(o instanceof HashTree))
+		if (!(o instanceof HashTree)) {
 			return false;
+		}
 		HashTree oo = (HashTree) o;
-		if (oo.size() != this.size())
+		if (oo.size() != this.size()) {
 			return false;
+		}
 		return data.equals(oo.data);
 
 		// boolean flag = true;
@@ -907,7 +907,7 @@ public class HashTree implements Serializable, Map {
 	 *            Key to search for
 	 * @return HashTree mapped to key, if found, otherwise <code>null</code>
 	 */
-	public HashTree search(Object key) {
+	public HashTree search(Object key) {// TODO does not appear to be used
 		HashTree result = getTree(key);
 		if (result != null) {
 			return result;
@@ -915,7 +915,10 @@ public class HashTree implements Serializable, Map {
 		TreeSearcher searcher = new TreeSearcher(key);
 		try {
 			traverse(searcher);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
+		    if (!e.getMessage().equals(FOUND)){
+		        throw e;
+		    }
 			// do nothing - means object is found
 		}
 		return searcher.getResult();
@@ -985,7 +988,8 @@ public class HashTree implements Serializable, Map {
 	protected Map data;
 
 	private static class TreeSearcher implements HashTreeTraverser {
-		Object target;
+
+        Object target;
 
 		HashTree result;
 
@@ -1006,8 +1010,8 @@ public class HashTree implements Serializable, Map {
 		public void addNode(Object node, HashTree subTree) {
 			result = subTree.getTree(target);
 			if (result != null) {
-				throw new RuntimeException("found"); // short circuit
-														// traversal when found
+			    // short circuit traversal when found
+				throw new RuntimeException(FOUND);
 			}
 		}
 
@@ -1017,8 +1021,7 @@ public class HashTree implements Serializable, Map {
 		 * @see org.apache.jorphan.collections.HashTreeTraverser#processPath()
 		 */
 		public void processPath() {
-			// TODO Auto-generated method stub
-
+            // Not used
 		}
 
 		/*
@@ -1027,8 +1030,7 @@ public class HashTree implements Serializable, Map {
 		 * @see org.apache.jorphan.collections.HashTreeTraverser#subtractNode()
 		 */
 		public void subtractNode() {
-			// TODO Auto-generated method stub
-
+		    // Not used
 		}
 	}
 
