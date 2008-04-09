@@ -187,7 +187,8 @@ ConnectionFactory is responsible for creating new connections. Eventually,
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/jms/client/ConnectionFactory.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;test)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called once for all threads after the end of a test.
  
  </TD>
 </TR>
@@ -216,7 +217,8 @@ ConnectionFactory is responsible for creating new connections. Eventually,
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/jms/client/ConnectionFactory.html#testStarted(java.lang.String)">testStarted</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;test)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called just before the start of the test from the main engine thread.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called just before the start of the test from the main engine thread.
  
  </TD>
 </TR>
@@ -269,12 +271,20 @@ testStarted</H3>
 public void <B>testStarted</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;test)</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
-<DD>Called just before the start of the test from the main engine thread.
+<DD><p>
+ Called just before the start of the test from the main engine thread.
  
  This is before the test elements are cloned.
  
  Note that not all the test
  variables will have been set up at this point.
+ </p>
+ 
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testStarted(java.lang.String)">testStarted</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -291,9 +301,17 @@ testEnded</H3>
 public void <B>testEnded</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;test)</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
-<DD>Called once for all threads after the end of a test.
+<DD><p>
+ Called once for all threads after the end of a test.
  
  This will use the same element instances as at the start of the test.
+ </p> 
+ 
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testEnded(java.lang.String)">testEnded</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -476,6 +494,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

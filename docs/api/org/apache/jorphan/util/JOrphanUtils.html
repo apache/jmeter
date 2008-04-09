@@ -120,6 +120,14 @@ This class contains frequently-used static utility methods.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/util/JOrphanUtils.html#baToHexString(byte[])">baToHexString</A></B>(byte[]&nbsp;ba)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convert binary byte array to hex string.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/util/JOrphanUtils.html#booleanToString(boolean)">booleanToString</A></B>(boolean&nbsp;value)</CODE>
 
 <BR>
@@ -197,6 +205,14 @@ This class contains frequently-used static utility methods.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/util/JOrphanUtils.html#isXML(byte[])">isXML</A></B>(byte[]&nbsp;target)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detects if some content starts with the standard XML prefix.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/StringBuffer.html" title="class or interface in java.lang">StringBuffer</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jorphan/util/JOrphanUtils.html#leftAlign(java.lang.StringBuffer, int)">leftAlign</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/StringBuffer.html" title="class or interface in java.lang">StringBuffer</A>&nbsp;in,
           int&nbsp;len)</CODE>
@@ -265,6 +281,16 @@ This class contains frequently-used static utility methods.
  strings of the string split by the tokenizer character(s).
  
  </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/util/JOrphanUtils.html#startsWith(byte[], byte[], int)">startsWith</A></B>(byte[]&nbsp;target,
+           byte[]&nbsp;search,
+           int&nbsp;offset)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Check if a byte array starts with the given byte array.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -622,6 +648,50 @@ public static void <B>closeQuietly</B>(<A HREF="http://java.sun.com/j2se/1.4.2/d
 <DT><B>Parameters:</B><DD><CODE>sock</CODE> - - ServerSocket (may be null)</DL>
 </DD>
 </DL>
+<HR>
+
+<A NAME="startsWith(byte[], byte[], int)"><!-- --></A><H3>
+startsWith</H3>
+<PRE>
+public static boolean <B>startsWith</B>(byte[]&nbsp;target,
+                                 byte[]&nbsp;search,
+                                 int&nbsp;offset)</PRE>
+<DL>
+<DD>Check if a byte array starts with the given byte array.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>target</CODE> - array to scan<DD><CODE>search</CODE> - array to search for<DD><CODE>offset</CODE> - starting offset (>=0)
+<DT><B>Returns:</B><DD>true if the search array matches the target at the current offset<DT><B>See Also:</B><DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html#startsWith(java.lang.String, int)" title="class or interface in java.lang"><CODE>String.startsWith(String, int)</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isXML(byte[])"><!-- --></A><H3>
+isXML</H3>
+<PRE>
+public static boolean <B>isXML</B>(byte[]&nbsp;target)</PRE>
+<DL>
+<DD>Detects if some content starts with the standard XML prefix.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>target</CODE> - the content to check
+<DT><B>Returns:</B><DD>true if the document starts with the standard XML prefix.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="baToHexString(byte[])"><!-- --></A><H3>
+baToHexString</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>baToHexString</B>(byte[]&nbsp;ba)</PRE>
+<DL>
+<DD>Convert binary byte array to hex string.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>ba</CODE> - input binary byte array
+<DT><B>Returns:</B><DD>hex representation of binary input</DL>
+</DD>
+</DL>
 <!-- ========= END OF CLASS DATA ========= -->
 <HR>
 
@@ -681,6 +751,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHO
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

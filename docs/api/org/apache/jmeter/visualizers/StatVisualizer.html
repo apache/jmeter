@@ -95,11 +95,11 @@ Class StatVisualizer</H2>
                           <IMG SRC="../../../../resources/inherit.gif" ALT="extended by"><B>org.apache.jmeter.visualizers.StatVisualizer</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html" title="class or interface in javax.swing.event">ChangeListener</A>, <A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/EventListener.html" title="class or interface in java.util">EventListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/gui/UnsharedComponent.html" title="interface in org.apache.jmeter.gui">UnsharedComponent</A>, <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/event/ChangeListener.html" title="class or interface in javax.swing.event">ChangeListener</A>, <A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/EventListener.html" title="class or interface in java.util">EventListener</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/gui/UnsharedComponent.html" title="interface in org.apache.jmeter.gui">UnsharedComponent</A>, <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A></DD>
 </DL>
 <HR>
 <DL>
-<DT>public class <B>StatVisualizer</B><DT>extends <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html" title="class in org.apache.jmeter.visualizers.gui">AbstractVisualizer</A><DT>implements <A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A></DL>
+<DT>public class <B>StatVisualizer</B><DT>extends <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html" title="class in org.apache.jmeter.visualizers.gui">AbstractVisualizer</A><DT>implements <A HREF="../../../../org/apache/jmeter/samplers/Clearable.html" title="interface in org.apache.jmeter.samplers">Clearable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A></DL>
 
 <P>
 Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
@@ -184,6 +184,14 @@ Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/visualizers/StatVisualizer.html#saveTable">saveTable</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.visualizers.gui.AbstractVisualizer"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -258,6 +266,14 @@ Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/visualizers/StatVisualizer.html#actionPerformed(java.awt.event.ActionEvent)">actionPerformed</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionEvent.html" title="class or interface in java.awt.event">ActionEvent</A>&nbsp;ev)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/visualizers/StatVisualizer.html#add(org.apache.jmeter.samplers.SampleResult)">add</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;res)</CODE>
 
 <BR>
@@ -271,15 +287,6 @@ Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clears this visualizer and its model, and forces a repaint of the table.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;<A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/visualizers/StatVisualizer.html#createTestElement()">createTestElement</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JMeter test components are separated into a model and a GUI
- representation. </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -305,7 +312,7 @@ Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
 <TD><B>Methods inherited from class org.apache.jmeter.visualizers.gui.<A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html" title="class in org.apache.jmeter.visualizers.gui">AbstractVisualizer</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#clearGui()">clearGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#configure(org.apache.jmeter.testelement.TestElement)">configure</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#configureTestElement(org.apache.jmeter.reporters.AbstractListenerElement)">configureTestElement</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#createPopupMenu()">createPopupMenu</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getErrorLoggingCheckbox()">getErrorLoggingCheckbox</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getFile()">getFile</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getFilePanel()">getFilePanel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getMenuCategories()">getMenuCategories</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getModel()">getModel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#isStats()">isStats</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#makeTitlePanel()">makeTitlePanel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#setFile(java.lang.String)">setFile</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#setModel(org.apache.jmeter.reporters.ResultCollector)">setModel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#stateChanged(javax.swing.event.ChangeEvent)">stateChanged</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#clearGui()">clearGui</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#configure(org.apache.jmeter.testelement.TestElement)">configure</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#configureTestElement(org.apache.jmeter.reporters.AbstractListenerElement)">configureTestElement</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#createPopupMenu()">createPopupMenu</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#createTestElement()">createTestElement</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getErrorLoggingCheckbox()">getErrorLoggingCheckbox</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getFile()">getFile</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getFilePanel()">getFilePanel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getMenuCategories()">getMenuCategories</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#getModel()">getModel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#isStats()">isStats</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#makeTitlePanel()">makeTitlePanel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#setFile(java.lang.String)">setFile</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#setModel(org.apache.jmeter.reporters.ResultCollector)">setModel</A>, <A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#stateChanged(javax.swing.event.ChangeEvent)">stateChanged</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.gui.AbstractJMeterGuiComponent"><!-- --></A>
@@ -389,6 +396,16 @@ protected <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTable.ht
 myScrollPane</H3>
 <PRE>
 protected <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JScrollPane.html" title="class or interface in javax.swing">JScrollPane</A> <B>myScrollPane</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="saveTable"><!-- --></A><H3>
+saveTable</H3>
+<PRE>
+protected <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A> <B>saveTable</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -493,20 +510,13 @@ public void <B>clearData</B>()</PRE>
 </DL>
 <HR>
 
-<A NAME="createTestElement()"><!-- --></A><H3>
-createTestElement</H3>
+<A NAME="actionPerformed(java.awt.event.ActionEvent)"><!-- --></A><H3>
+actionPerformed</H3>
 <PRE>
-public <A HREF="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A> <B>createTestElement</B>()</PRE>
+public void <B>actionPerformed</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionEvent.html" title="class or interface in java.awt.event">ActionEvent</A>&nbsp;ev)</PRE>
 <DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></B></DD>
-<DD>JMeter test components are separated into a model and a GUI
- representation. The model holds the data and the GUI displays it. The GUI
- class is responsible for knowing how to create and initialize with data
- the model class that it knows how to display, and this method is called
- when new test elements are created.
-<P>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#createTestElement()">createTestElement</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html#createTestElement()">createTestElement</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/visualizers/gui/AbstractVisualizer.html" title="class in org.apache.jmeter.visualizers.gui">AbstractVisualizer</A></CODE></DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html#actionPerformed(java.awt.event.ActionEvent)" title="class or interface in java.awt.event">actionPerformed</A></CODE> in interface <CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/event/ActionListener.html" title="class or interface in java.awt.event">ActionListener</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -571,6 +581,6 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

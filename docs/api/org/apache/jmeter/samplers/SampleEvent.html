@@ -146,7 +146,17 @@ Packages information regarding the target of a sample event, such as the
             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;threadGroup)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates SampleEvent without saving any variables.
+ 
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html#SampleEvent(org.apache.jmeter.samplers.SampleResult, java.lang.String, org.apache.jmeter.threads.JMeterVariables)">SampleEvent</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
+            <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;threadGroup,
+            <A HREF="../../../../org/apache/jmeter/threads/JMeterVariables.html" title="class in org.apache.jmeter.threads">JMeterVariables</A>&nbsp;jmvars)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contructor used for normal samples, saves variable values if any are defined.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html#SampleEvent(org.apache.jmeter.samplers.SampleResult, java.lang.String, java.lang.String)">SampleEvent</A></B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
@@ -189,6 +199,30 @@ Packages information regarding the target of a sample event, such as the
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html#getVarCount()">getVarCount</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return the number of variables defined</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html#getVarName(int)">getVarName</A></B>(int&nbsp;i)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the nth variable name (zero-based)</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html#getVarValue(int)">getVarValue</A></B>(int&nbsp;i)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the nth variable value (zero-based)</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -246,7 +280,23 @@ SampleEvent</H3>
 public <B>SampleEvent</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;threadGroup)</PRE>
 <DL>
-</DL>
+<DD>Creates SampleEvent without saving any variables.
+ 
+ Use by Proxy and StatisticalSampleSender.
+<P>
+<DT><B>Parameters:</B><DD><CODE>result</CODE> - SampleResult<DD><CODE>threadGroup</CODE> - name</DL>
+<HR>
+
+<A NAME="SampleEvent(org.apache.jmeter.samplers.SampleResult, java.lang.String, org.apache.jmeter.threads.JMeterVariables)"><!-- --></A><H3>
+SampleEvent</H3>
+<PRE>
+public <B>SampleEvent</B>(<A HREF="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;result,
+                   <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;threadGroup,
+                   <A HREF="../../../../org/apache/jmeter/threads/JMeterVariables.html" title="class in org.apache.jmeter.threads">JMeterVariables</A>&nbsp;jmvars)</PRE>
+<DL>
+<DD>Contructor used for normal samples, saves variable values if any are defined.
+<P>
+<DT><B>Parameters:</B><DD><CODE>result</CODE> - <DD><CODE>threadGroup</CODE> - name<DD><CODE>jmvars</CODE> - Jmeter variables</DL>
 <HR>
 
 <A NAME="SampleEvent(org.apache.jmeter.samplers.SampleResult, java.lang.String, java.lang.String)"><!-- --></A><H3>
@@ -269,6 +319,54 @@ public <B>SampleEvent</B>(<A HREF="../../../../org/apache/jmeter/samplers/Sample
 <B>Method Detail</B></FONT></TD>
 </TR>
 </TABLE>
+
+<A NAME="getVarCount()"><!-- --></A><H3>
+getVarCount</H3>
+<PRE>
+public static int <B>getVarCount</B>()</PRE>
+<DL>
+<DD>Return the number of variables defined
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getVarName(int)"><!-- --></A><H3>
+getVarName</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getVarName</B>(int&nbsp;i)</PRE>
+<DL>
+<DD>Get the nth variable name (zero-based)
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getVarValue(int)"><!-- --></A><H3>
+getVarValue</H3>
+<PRE>
+public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getVarValue</B>(int&nbsp;i)</PRE>
+<DL>
+<DD>Get the nth variable value (zero-based)
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
 
 <A NAME="getResult()"><!-- --></A><H3>
 getResult</H3>
@@ -369,6 +467,6 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

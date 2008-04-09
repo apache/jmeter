@@ -198,6 +198,14 @@ Checks if the result is a well-formed XML content and whether it matches an
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#isQuiet()">isQuiet</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#isTolerant()">isTolerant</A></B>()</CODE>
 
 <BR>
@@ -221,6 +229,14 @@ Checks if the result is a well-formed XML content and whether it matches an
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#reportErrors()">reportErrors</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#setNamespace(boolean)">setNamespace</A></B>(boolean&nbsp;namespace)</CODE>
 
@@ -231,6 +247,30 @@ Checks if the result is a well-formed XML content and whether it matches an
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#setNegated(boolean)">setNegated</A></B>(boolean&nbsp;negate)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#setQuiet(boolean)">setQuiet</A></B>(boolean&nbsp;val)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#setReportErrors(boolean)">setReportErrors</A></B>(boolean&nbsp;val)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#setShowWarnings(boolean)">setShowWarnings</A></B>(boolean&nbsp;val)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -267,6 +307,14 @@ Checks if the result is a well-formed XML content and whether it matches an
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the XPath String this will be used as an xpath</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/assertions/XPathAssertion.html#showWarnings()">showWarnings</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -274,7 +322,7 @@ Checks if the result is a well-formed XML content and whether it matches an
 <TD><B>Methods inherited from class org.apache.jmeter.testelement.<A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#nextIsNull()">nextIsNull</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -550,6 +598,90 @@ public boolean <B>isNegated</B>()</PRE>
 <DT><B>Returns:</B><DD>boolean negated</DL>
 </DD>
 </DL>
+<HR>
+
+<A NAME="setReportErrors(boolean)"><!-- --></A><H3>
+setReportErrors</H3>
+<PRE>
+public void <B>setReportErrors</B>(boolean&nbsp;val)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="reportErrors()"><!-- --></A><H3>
+reportErrors</H3>
+<PRE>
+public boolean <B>reportErrors</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setShowWarnings(boolean)"><!-- --></A><H3>
+setShowWarnings</H3>
+<PRE>
+public void <B>setShowWarnings</B>(boolean&nbsp;val)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="showWarnings()"><!-- --></A><H3>
+showWarnings</H3>
+<PRE>
+public boolean <B>showWarnings</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setQuiet(boolean)"><!-- --></A><H3>
+setQuiet</H3>
+<PRE>
+public void <B>setQuiet</B>(boolean&nbsp;val)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="isQuiet()"><!-- --></A><H3>
+isQuiet</H3>
+<PRE>
+public boolean <B>isQuiet</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
 <!-- ========= END OF CLASS DATA ========= -->
 <HR>
 
@@ -609,6 +741,6 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

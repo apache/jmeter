@@ -99,8 +99,6 @@ Class WhileController</H2>
 
 <P>
 <DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 595966 $</DD>
 <DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.control.WhileController">Serialized Form</A></DL>
 <HR>
 
@@ -123,7 +121,7 @@ Class WhileController</H2>
 <TD><B>Fields inherited from class org.apache.jmeter.control.<A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#current">current</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#iterationListeners">iterationListeners</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#subControllersAndSamplers">subControllersAndSamplers</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#current">current</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#subControllersAndSamplers">subControllersAndSamplers</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="fields_inherited_from_class_org.apache.jmeter.testelement.TestElement"><!-- --></A>
@@ -170,20 +168,13 @@ Class WhileController</H2>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/WhileController.html#isDone()">isDone</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indicates whether the Controller is done delivering Samplers for the rest
- of the test.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;<A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/WhileController.html#next()">next</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivers the next Sampler.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Determines the next sampler to be processed.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -191,7 +182,8 @@ Class WhileController</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/control/WhileController.html#nextIsNull()">nextIsNull</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called by next() when getCurrentElement() returns null.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -208,7 +200,7 @@ Class WhileController</H2>
 <TD><B>Methods inherited from class org.apache.jmeter.control.<A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#addIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">addIterationListener</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#currentReturnedNull(org.apache.jmeter.control.Controller)">currentReturnedNull</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#fireIterationStart()">fireIterationStart</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#fireIterEvents()">fireIterEvents</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#getCurrentElement()">getCurrentElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#getIterCount()">getIterCount</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#getSubControllers()">getSubControllers</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#incrementCurrent()">incrementCurrent</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#incrementIterCount()">incrementIterCount</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#initialize()">initialize</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#isFirst()">isFirst</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsAController(org.apache.jmeter.control.Controller)">nextIsAController</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsASampler(org.apache.jmeter.samplers.Sampler)">nextIsASampler</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#reInitialize()">reInitialize</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#removeCurrentElement()">removeCurrentElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#resetCurrent()">resetCurrent</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#resetIterCount()">resetIterCount</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#setCurrentElement(org.apache.jmeter.testelement.TestElement)">setCurrentElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#setDone(boolean)">setDone</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#setFirst(boolean)">setFirst</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#addIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">addIterationListener</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#currentReturnedNull(org.apache.jmeter.control.Controller)">currentReturnedNull</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#fireIterationStart()">fireIterationStart</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#fireIterEvents()">fireIterEvents</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#getCurrentElement()">getCurrentElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#getIterCount()">getIterCount</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#getSubControllers()">getSubControllers</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#incrementCurrent()">incrementCurrent</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#incrementIterCount()">incrementIterCount</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#initialize()">initialize</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#isDone()">isDone</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#isFirst()">isFirst</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsAController(org.apache.jmeter.control.Controller)">nextIsAController</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsASampler(org.apache.jmeter.samplers.Sampler)">nextIsASampler</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#reInitialize()">reInitialize</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#removeCurrentElement()">removeCurrentElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#resetCurrent()">resetCurrent</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#resetIterCount()">resetIterCount</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#setCurrentElement(org.apache.jmeter.testelement.TestElement)">setCurrentElement</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#setDone(boolean)">setDone</A>, <A HREF="../../../../org/apache/jmeter/control/GenericController.html#setFirst(boolean)">setFirst</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement"><!-- --></A>
@@ -217,7 +209,7 @@ Class WhileController</H2>
 <TD><B>Methods inherited from class org.apache.jmeter.testelement.<A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
+<TD><CODE><A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean, boolean)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -271,35 +263,22 @@ public <B>WhileController</B>()</PRE>
 </TR>
 </TABLE>
 
-<A NAME="isDone()"><!-- --></A><H3>
-isDone</H3>
-<PRE>
-public boolean <B>isDone</B>()</PRE>
-<DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</A></CODE></B></DD>
-<DD>Indicates whether the Controller is done delivering Samplers for the rest
- of the test.
-<P>
-<DD><DL>
-<DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/control/Controller.html#isDone()">isDone</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#isDone()">isDone</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></CODE></DL>
-</DD>
-<DD><DL>
-<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/control/Controller.html#isDone()"><CODE>Controller.isDone()</CODE></A></DL>
-</DD>
-</DL>
-<HR>
-
 <A NAME="nextIsNull()"><!-- --></A><H3>
 nextIsNull</H3>
 <PRE>
 protected <A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A> <B>nextIsNull</B>()
                       throws <A HREF="../../../../org/apache/jmeter/control/NextIsNullException.html" title="class in org.apache.jmeter.control">NextIsNullException</A></PRE>
 <DL>
+<DD><B>Description copied from class: <CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></CODE></B></DD>
+<DD>Called by next() when getCurrentElement() returns null.
+ Reinitialises the controller.
+<P>
 <DD><DL>
 <DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsNull()">nextIsNull</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></CODE></DL>
 </DD>
 <DD><DL>
 
+<DT><B>Returns:</B><DD>null (always, for this class)
 <DT><B>Throws:</B>
 <DD><CODE><A HREF="../../../../org/apache/jmeter/control/NextIsNullException.html" title="class in org.apache.jmeter.control">NextIsNullException</A></CODE></DL>
 </DD>
@@ -311,14 +290,36 @@ next</H3>
 <PRE>
 public <A HREF="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</A> <B>next</B>()</PRE>
 <DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</A></CODE></B></DD>
-<DD>Delivers the next Sampler.
+<DD><B>Description copied from class: <CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></CODE></B></DD>
+<DD><p>
+ Determines the next sampler to be processed.
+ </p>
+ 
+ <p>
+ If isDone, returns null.
+ </p>
+ 
+ <p>
+ Gets the list element using current pointer.
+ If this is null, calls <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsNull()"><CODE>GenericController.nextIsNull()</CODE></A>.
+ </p>
+ 
+ <p>
+ If the list element is a sampler, calls <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsASampler(org.apache.jmeter.samplers.Sampler)"><CODE>GenericController.nextIsASampler(Sampler)</CODE></A>,
+ otherwise calls <A HREF="../../../../org/apache/jmeter/control/GenericController.html#nextIsAController(org.apache.jmeter.control.Controller)"><CODE>GenericController.nextIsAController(Controller)</CODE></A>
+ </p>
+ 
+ <p>
+ If any of the called methods throws NextIsNullException, returns null,
+ otherwise the value obtained above is returned.
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/control/Controller.html#next()">next</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html#next()">next</A></CODE> in class <CODE><A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></CODE></DL>
 </DD>
 <DD><DL>
-<DT><B>See Also:</B><DD><A HREF="../../../../org/apache/jmeter/control/Controller.html#next()"><CODE>Controller.next()</CODE></A></DL>
+
+<DT><B>Returns:</B><DD>the next sampler or null</DL>
 </DD>
 </DL>
 <HR>
@@ -409,6 +410,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

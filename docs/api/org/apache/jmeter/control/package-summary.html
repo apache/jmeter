@@ -83,9 +83,9 @@ Package org.apache.jmeter.control
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</A></B></TD>
-<TD>This interface will typically be used in the following manner:
+<TD>This interface is used by JMeterThread in the following manner:
  
- Controller controller; //gets initialized while(!</TD>
+ while (running && (sampler = controller.next()) !</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/ReplaceableController.html" title="interface in org.apache.jmeter.control">ReplaceableController</A></B></TD>
@@ -108,7 +108,9 @@ Package org.apache.jmeter.control
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</A></B></TD>
-<TD>&nbsp;</TD>
+<TD>
+ This class is the basis for all the controllers.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/IfController.html" title="class in org.apache.jmeter.control">IfController</A></B></TD>
@@ -124,7 +126,7 @@ Package org.apache.jmeter.control
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/LoopController.html" title="class in org.apache.jmeter.control">LoopController</A></B></TD>
-<TD>&nbsp;</TD>
+<TD>Class that implements the Loop Controller.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/ModuleController.html" title="class in org.apache.jmeter.control">ModuleController</A></B></TD>
@@ -148,7 +150,10 @@ Package org.apache.jmeter.control
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/SwitchController.html" title="class in org.apache.jmeter.control">SwitchController</A></B></TD>
-<TD>&nbsp;</TD>
+<TD>
+ Implements a controller which selects at most one of its children
+ based on the condition value, which may be a number or a string.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control">ThroughputController</A></B></TD>
@@ -246,6 +251,6 @@ Package org.apache.jmeter.control
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

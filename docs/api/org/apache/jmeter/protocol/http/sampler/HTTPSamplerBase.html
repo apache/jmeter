@@ -343,7 +343,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#UNSPECIFIED_PORT">UNSPECIFIED_PORT</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A number to indicate that the port has not been set</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A number to indicate that the port has not been set.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -357,6 +357,22 @@ Common constants and methods for HTTP samplers
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#URL">URL</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#URL_UNSPECIFIED_PORT">URL_UNSPECIFIED_PORT</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the port is not present in a URL, getPort() returns -1</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#URL_UNSPECIFIED_PORT_AS_STRING">URL_UNSPECIFIED_PORT_AS_STRING</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -590,7 +606,8 @@ Common constants and methods for HTTP samplers
                int&nbsp;port)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the port number for a URL, applying defaults if necessary.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -694,7 +711,15 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getPort()">getPort</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the port; apply the default for the protocol if necessary.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getPortIfSpecified()">getPortIfSpecified</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the port number from the port string, allowing for trailing blanks.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -702,7 +727,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getProtocol()">getProtocol</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gets the protocol, with default.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -747,7 +772,9 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getUrl()">getUrl</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the URL, built from its component parts.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the URL, built from its component parts.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -857,6 +884,18 @@ Common constants and methods for HTTP samplers
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method allows a proxy server to send over the raw text from a
  browser's output stream to be parsed and stored correctly into the
  UrlConfig object.
+ 
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;byte[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#readResponse(org.apache.jmeter.samplers.SampleResult, java.io.InputStream, int)">readResponse</A></B>(<A HREF="../../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;sampleResult,
+             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;in,
+             int&nbsp;length)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Read response from the input stream, converting to MD5 digest if the useMD5 property is set.
  
  </TD>
 </TR>
@@ -1028,6 +1067,14 @@ Common constants and methods for HTTP samplers
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#setMD5(boolean)">setMD5</A></B>(boolean&nbsp;truth)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#setMethod(java.lang.String)">setMethod</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</CODE>
 
 <BR>
@@ -1106,7 +1153,8 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#testEnded()">testEnded</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called once for all threads after the end of a test.
  
  </TD>
 </TR>
@@ -1116,7 +1164,8 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#testEnded(java.lang.String)">testEnded</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called once for all threads after the end of a test.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called once for all threads after the end of a test.
  
  </TD>
 </TR>
@@ -1137,7 +1186,8 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#testStarted()">testStarted</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called just before the start of the test from the main engine thread.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called just before the start of the test from the main engine thread.
  
  </TD>
 </TR>
@@ -1147,7 +1197,8 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#testStarted(java.lang.String)">testStarted</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called just before the start of the test from the main engine thread.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ Called just before the start of the test from the main engine thread.
  
  </TD>
 </TR>
@@ -1175,6 +1226,14 @@ Common constants and methods for HTTP samplers
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#useMD5()">useMD5</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -1182,7 +1241,7 @@ Common constants and methods for HTTP samplers
 <TD><B>Methods inherited from class org.apache.jmeter.testelement.<A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A></B></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#nextIsNull()">nextIsNull</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
+<TD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String, boolean)">getPropertyAsBoolean</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String, java.lang.String)">getPropertyAsString</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, boolean, boolean)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String, java.lang.String)">setProperty</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty, org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</A>, <A HREF="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser, org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -1471,7 +1530,7 @@ UNSPECIFIED_PORT</H3>
 <PRE>
 public static final int <B>UNSPECIFIED_PORT</B></PRE>
 <DL>
-<DD>A number to indicate that the port has not been set. *
+<DD>A number to indicate that the port has not been set.
 <P>
 <DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.UNSPECIFIED_PORT">Constant Field Values</A></DL>
@@ -1485,6 +1544,28 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 <DL>
 <DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.UNSPECIFIED_PORT_AS_STRING">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="URL_UNSPECIFIED_PORT"><!-- --></A><H3>
+URL_UNSPECIFIED_PORT</H3>
+<PRE>
+public static final int <B>URL_UNSPECIFIED_PORT</B></PRE>
+<DL>
+<DD>If the port is not present in a URL, getPort() returns -1
+<P>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.URL_UNSPECIFIED_PORT">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="URL_UNSPECIFIED_PORT_AS_STRING"><!-- --></A><H3>
+URL_UNSPECIFIED_PORT_AS_STRING</H3>
+<PRE>
+public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>URL_UNSPECIFIED_PORT_AS_STRING</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.URL_UNSPECIFIED_PORT_AS_STRING">Constant Field Values</A></DL>
 </DL>
 <HR>
 
@@ -1693,11 +1774,14 @@ getProtocol</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getProtocol</B>()</PRE>
 <DL>
+<DD>Gets the protocol, with default.
+<P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>the protocol</DL>
 </DD>
 </DL>
 <HR>
@@ -2031,6 +2115,34 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" t
 </DL>
 <HR>
 
+<A NAME="useMD5()"><!-- --></A><H3>
+useMD5</H3>
+<PRE>
+public boolean <B>useMD5</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setMD5(boolean)"><!-- --></A><H3>
+setMD5</H3>
+<PRE>
+public void <B>setMD5</B>(boolean&nbsp;truth)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
 <A NAME="addEncodedArgument(java.lang.String, java.lang.String)"><!-- --></A><H3>
 addEncodedArgument</H3>
 <PRE>
@@ -2176,11 +2288,32 @@ getDefaultPort</H3>
 public static int <B>getDefaultPort</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;protocol,
                                  int&nbsp;port)</PRE>
 <DL>
+<DD>Get the port number for a URL, applying defaults if necessary.
+ (Called by CookieManager.)
+<P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
+<DT><B>Parameters:</B><DD><CODE>protocol</CODE> - from <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/net/URL.html#getProtocol()" title="class or interface in java.net"><CODE>URL.getProtocol()</CODE></A><DD><CODE>port</CODE> - number from <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/net/URL.html#getPort()" title="class or interface in java.net"><CODE>URL.getPort()</CODE></A>
+<DT><B>Returns:</B><DD>the default port for the protocol</DL>
+</DD>
 </DL>
+<HR>
+
+<A NAME="getPortIfSpecified()"><!-- --></A><H3>
+getPortIfSpecified</H3>
+<PRE>
+public int <B>getPortIfSpecified</B>()</PRE>
+<DL>
+<DD>Get the port number from the port string, allowing for trailing blanks.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Returns:</B><DD>port number or UNSPECIFIED_PORT (== 0)</DL>
 </DD>
 </DL>
 <HR>
@@ -2207,11 +2340,14 @@ getPort</H3>
 <PRE>
 public int <B>getPort</B>()</PRE>
 <DL>
+<DD>Get the port; apply the default for the protocol if necessary.
+<P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>the port number, with default applied if required.</DL>
 </DD>
 </DL>
 <HR>
@@ -2469,6 +2605,11 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/net/URL.html" title
            throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/net/MalformedURLException.html" title="class or interface in java.net">MalformedURLException</A></PRE>
 <DL>
 <DD>Get the URL, built from its component parts.
+ 
+ <p>
+ As a special case, if the path starts with "http[s]://",
+ then the path is assumed to be the entire URL.
+ </p>
 <P>
 <DD><DL>
 </DL>
@@ -2677,9 +2818,17 @@ testEnded</H3>
 public void <B>testEnded</B>()</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
-<DD>Called once for all threads after the end of a test.
+<DD><p>
+ Called once for all threads after the end of a test.
  
  This will use the same element instances as at the start of the test.
+ </p> 
+ 
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testEnded()">testEnded</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -2696,9 +2845,17 @@ testEnded</H3>
 public void <B>testEnded</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
-<DD>Called once for all threads after the end of a test.
+<DD><p>
+ Called once for all threads after the end of a test.
  
  This will use the same element instances as at the start of the test.
+ </p> 
+ 
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testEnded(java.lang.String)">testEnded</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -2736,12 +2893,20 @@ testStarted</H3>
 public void <B>testStarted</B>()</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
-<DD>Called just before the start of the test from the main engine thread.
+<DD><p>
+ Called just before the start of the test from the main engine thread.
  
  This is before the test elements are cloned.
  
  Note that not all the test
  variables will have been set up at this point.
+ </p>
+ 
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testStarted()">testStarted</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -2758,12 +2923,20 @@ testStarted</H3>
 public void <B>testStarted</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;host)</PRE>
 <DL>
 <DD><B>Description copied from interface: <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></B></DD>
-<DD>Called just before the start of the test from the main engine thread.
+<DD><p>
+ Called just before the start of the test from the main engine thread.
  
  This is before the test elements are cloned.
  
  Note that not all the test
  variables will have been set up at this point.
+ </p>
+ 
+ <p>
+ <b>
+ N.B. testStarted() and testEnded() are called from different threads.
+ </b>
+ </p>
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html#testStarted(java.lang.String)">testStarted</A></CODE> in interface <CODE><A HREF="../../../../../../org/apache/jmeter/testelement/TestListener.html" title="interface in org.apache.jmeter.testelement">TestListener</A></CODE></DL>
@@ -2958,6 +3131,30 @@ public void <B>threadFinished</B>()</PRE>
 <DT><B>See Also:</B><DD><CODE>org.apache.jmeter.threads.JMeterThread#threadFinished()</CODE></DL>
 </DD>
 </DL>
+<HR>
+
+<A NAME="readResponse(org.apache.jmeter.samplers.SampleResult, java.io.InputStream, int)"><!-- --></A><H3>
+readResponse</H3>
+<PRE>
+public byte[] <B>readResponse</B>(<A HREF="../../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</A>&nbsp;sampleResult,
+                           <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;in,
+                           int&nbsp;length)
+                    throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Read response from the input stream, converting to MD5 digest if the useMD5 property is set.
+ 
+ For the MD5 case, the result byte count is set to the size of the original response.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>sampleResult</CODE> - <DD><CODE>in</CODE> - input stream<DD><CODE>length</CODE> - expected input length or zero
+<DT><B>Returns:</B><DD>the response or the MD5 of the response
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
 <!-- ========= END OF CLASS DATA ========= -->
 <HR>
 
@@ -3017,6 +3214,6 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

@@ -98,11 +98,15 @@ Class UserParameterModifierGui</H2>
 <DT><B>All Implemented Interfaces:</B> <DD><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/accessibility/Accessible.html" title="class or interface in javax.accessibility">Accessible</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/image/ImageObserver.html" title="class or interface in java.awt.image">ImageObserver</A>, <A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/MenuContainer.html" title="class or interface in java.awt">MenuContainer</A>, <A HREF="../../../../../../../org/apache/jmeter/visualizers/Printable.html" title="interface in org.apache.jmeter.visualizers">Printable</A>, <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A></DD>
 </DL>
 <HR>
+
+<P>
 <DL>
 <DT>public class <B>UserParameterModifierGui</B><DT>extends <A HREF="../../../../../../../org/apache/jmeter/processor/gui/AbstractPreProcessorGui.html" title="class in org.apache.jmeter.processor.gui">AbstractPreProcessorGui</A></DL>
 
 <P>
 A swing panel to allow UI with the UserParameterModifier class.
+ 
+ This test element is deprecated. Test plans should use User Parameters instead.
 <P>
 
 <P>
@@ -215,7 +219,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#UserParameterModifierGui()">UserParameterModifierGui</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;&nbsp;</TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -233,7 +237,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#clearGui()">clearGui</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Implements JMeterGUIComponent.clearGui</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;Implements JMeterGUIComponent.clearGui</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -241,7 +245,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#configure(org.apache.jmeter.testelement.TestElement)">configure</A></B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A newly created gui component can be initialized with the contents of a
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;A newly created gui component can be initialized with the contents of a
  Test Element object by calling this method. </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -250,7 +254,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#createTestElement()">createTestElement</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JMeter test components are separated into a model and a GUI
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;JMeter test components are separated into a model and a GUI
  representation. </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -259,7 +263,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#getLabelResource()">getLabelResource</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the component's resource name, which getStaticLabel uses to derive
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;Get the component's resource name, which getStaticLabel uses to derive
  the component's label in the local language. </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -268,7 +272,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#getPreferredSize()">getPreferredSize</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -276,7 +280,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)">modifyTestElement</A></B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;mod)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modifies a given TestElement to mirror the data in the gui components.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;Modifies a given TestElement to mirror the data in the gui components.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -284,7 +288,7 @@ A swing panel to allow UI with the UserParameterModifier class.
 <TD><CODE><B><A HREF="../../../../../../../org/apache/jmeter/protocol/http/modifier/gui/UserParameterModifierGui.html#updateGui()">updateGui</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;&nbsp;</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_org.apache.jmeter.processor.gui.AbstractPreProcessorGui"><!-- --></A>
@@ -371,7 +375,7 @@ UserParameterModifierGui</H3>
 <PRE>
 public <B>UserParameterModifierGui</B>()</PRE>
 <DL>
-</DL>
+<DD><B>Deprecated.</B>&nbsp;</DL>
 
 <!-- ============ METHOD DETAIL ========== -->
 
@@ -388,7 +392,7 @@ createTestElement</H3>
 <PRE>
 public <A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A> <B>createTestElement</B>()</PRE>
 <DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></B></DD>
+<DD><B>Deprecated.</B>&nbsp;<DD><B>Description copied from interface: <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></B></DD>
 <DD>JMeter test components are separated into a model and a GUI
  representation. The model holds the data and the GUI displays it. The GUI
  class is responsible for knowing how to create and initialize with data
@@ -407,7 +411,7 @@ modifyTestElement</H3>
 <PRE>
 public void <B>modifyTestElement</B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;mod)</PRE>
 <DL>
-<DD>Modifies a given TestElement to mirror the data in the gui components.
+<DD><B>Deprecated.</B>&nbsp;<DD>Modifies a given TestElement to mirror the data in the gui components.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>mod</CODE> - the TestElement to modify<DT><B>See Also:</B><DD><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#modifyTestElement(org.apache.jmeter.testelement.TestElement)"><CODE>JMeterGUIComponent.modifyTestElement(TestElement)</CODE></A></DL>
@@ -420,7 +424,7 @@ clearGui</H3>
 <PRE>
 public void <B>clearGui</B>()</PRE>
 <DL>
-<DD>Implements JMeterGUIComponent.clearGui
+<DD><B>Deprecated.</B>&nbsp;<DD>Implements JMeterGUIComponent.clearGui
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html#clearGui()">clearGui</A></CODE> in interface <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE><DT><B>Overrides:</B><DD><CODE><A HREF="../../../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html#clearGui()">clearGui</A></CODE> in class <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></CODE></DL>
@@ -436,7 +440,7 @@ updateGui</H3>
 <PRE>
 public void <B>updateGui</B>()</PRE>
 <DL>
-<DD><DL>
+<DD><B>Deprecated.</B>&nbsp;<DD><DL>
 </DL>
 </DD>
 </DL>
@@ -447,7 +451,7 @@ getLabelResource</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getLabelResource</B>()</PRE>
 <DL>
-<DD><B>Description copied from interface: <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></B></DD>
+<DD><B>Deprecated.</B>&nbsp;<DD><B>Description copied from interface: <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/JMeterGUIComponent.html" title="interface in org.apache.jmeter.gui">JMeterGUIComponent</A></CODE></B></DD>
 <DD>Get the component's resource name, which getStaticLabel uses to derive
  the component's label in the local language. The resource name is fixed,
  and does not vary with the selected language.
@@ -468,7 +472,7 @@ configure</H3>
 <PRE>
 public void <B>configure</B>(<A HREF="../../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;el)</PRE>
 <DL>
-<DD><B>Description copied from class: <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></CODE></B></DD>
+<DD><B>Deprecated.</B>&nbsp;<DD><B>Description copied from class: <CODE><A HREF="../../../../../../../org/apache/jmeter/gui/AbstractJMeterGuiComponent.html" title="class in org.apache.jmeter.gui">AbstractJMeterGuiComponent</A></CODE></B></DD>
 <DD>A newly created gui component can be initialized with the contents of a
  Test Element object by calling this method. The component is responsible
  for querying the Test Element object for the relevant information to
@@ -493,7 +497,7 @@ getPreferredSize</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/awt/Dimension.html" title="class or interface in java.awt">Dimension</A> <B>getPreferredSize</B>()</PRE>
 <DL>
-<DD><DL>
+<DD><B>Deprecated.</B>&nbsp;<DD><DL>
 </DL>
 </DD>
 </DL>
@@ -556,6 +560,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>
