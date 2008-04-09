@@ -17,6 +17,12 @@
 -->
 <project name="ant-jmeter" default="all">
 	<description>
+	
+		Sample build file for use with ant-jmeter.jar
+		See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php
+		
+		Download the ant-jmeter.jar file and save it in the same directory as this build file
+		
 	To run a test and create the output report:
 		ant -Dtest=script
 	
@@ -32,9 +38,11 @@
 		-Dshow-data=y - include response data in Failure Details
 		-Dtestpath=xyz - path to test file(s) (default user.dir).
 		                 N.B. Ant interprets relative paths against the build file
-		-Dformat=2.0 - use version 2.0 JTL files rather than 2.1
 		-Djmeter.home=.. - path to JMeter home directory (defaults to parent of this build file)
-	
+
+		Deprecated:
+		-Dformat=2.0 - use version 2.0 JTL files rather than 2.1
+
 	</description>
 	
 	<property name="testpath" value="${user.dir}"/>
@@ -66,6 +74,10 @@
 	  </not>
 	</condition>
 
+	<!-- 
+		See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php	
+		Download the ant-jmeter.jar file and save it in the same directory as this build file
+	--> 
 	<taskdef
 	    name="jmeter"
 	    classpath="${basedir}/ant-jmeter.jar"
