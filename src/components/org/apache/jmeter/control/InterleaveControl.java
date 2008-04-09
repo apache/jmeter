@@ -117,7 +117,7 @@ public class InterleaveControl extends GenericController implements Serializable
 	 * If the current is null, reset and continue searching. The searchStart
 	 * attribute will break us off when we start a repeat.
 	 * 
-	 * @see org.apache.jmeter.testelement.AbstractTestElement#nextIsNull()
+	 * @see org.apache.jmeter.control.GenericController#nextIsNull()
 	 */
 	protected Sampler nextIsNull() {
 		resetCurrent();
