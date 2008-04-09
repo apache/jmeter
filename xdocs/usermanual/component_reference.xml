@@ -2540,7 +2540,11 @@ GUI that they can use while developing new JMeter components.</p>
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
 	fields of the response.
-	The pattern strings are Perl5-style regular expressions. 
+	The pattern strings are:
+	<ul>
+	<li>Contains, Matches: Perl5-style regular expressions</li>
+	<li>Equals, Substring: plain text, case-sensitive</li>
+	</ul>
 	</p>
 	<p>
 	A summary of the pattern matching characters can be found at <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html">http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package-summary.html</a>
@@ -2593,6 +2597,7 @@ pattern. You can attach multiple assertions to any controller for additional fle
         <li>Equals - true if the whole text equals the pattern string (case-sensitive)</li>
         <li>Substring - true if the text contains the pattern string (case-sensitive)</li>
         </ul>
+        Equals and Substring patterns are plain strings, not regular expressions.
         NOT may also be selected to invert the result of the check.</property>
         <property name="Patterns to Test" required="Yes">A list of patterns to
         be tested.  
