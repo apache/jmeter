@@ -22,6 +22,7 @@
 		See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php
 		
 		Download the ant-jmeter.jar file and save it in the same directory as this build file
+		- or in the Ant lib directory
 		
 	To run a test and create the output report:
 		ant -Dtest=script
@@ -77,10 +78,16 @@
 	<!-- 
 		See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php	
 		Download the ant-jmeter.jar file and save it in the same directory as this build file
-	--> 
+		- or in the Ant lib directory
+	-->
+	<!-- Allow jar to be picked up locally as well -->
+    <path id="jmeter.classpath">
+       <pathelement location="${basedir}/ant-jmeter.jar"/>
+    </path>
+
 	<taskdef
 	    name="jmeter"
-	    classpath="${basedir}/ant-jmeter.jar"
+	    classpathref="jmeter.classpath"
 	    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
 	
 	
