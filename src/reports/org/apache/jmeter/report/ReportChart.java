@@ -25,7 +25,7 @@ public interface ReportChart {
     /**
      * The method takes a list of the DataSet items. It is up to the chart
      * class to extract the data and use it to render a graphic.
-     * @param list of DataSet 
+     * @param data list of DataSet 
      * @return the component
      */
 	JComponent renderChart(List data);

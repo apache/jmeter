@@ -22,11 +22,11 @@ package org.apache.jorphan.test;
  * Implement this interface to work with the AllTests class. This interface
  * allows AllTests to pass a configuration file to your application before
  * running the junit unit tests.
- * 
- * @see AllTests
- * 
- * N.B. This must be in the main src/ tree (not test/) because it is
+ * <p>
+ * N.B. This interface must be in the main src/ tree (not test/) because it is
  * implemented by JMeterUtils
+ * </p>
+ * @see org.apache.jorphan.test.AllTests
  */
 public interface UnitTestManager {
 	/**
