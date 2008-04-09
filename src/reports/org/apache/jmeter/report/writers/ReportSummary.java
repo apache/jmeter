@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,7 +18,6 @@
 package org.apache.jmeter.report.writers;
 
 /**
- * @author Peter Lin
  *
  * The purpose of ReportSummary is to provide a detailed description of the
  * reports generated, how long it took and where the generated files are
@@ -35,13 +33,13 @@ public interface ReportSummary extends Cloneable {
      * This should be the elapsed time to run all the reports. Classes
      * implementing it should simply add up the elapsed time for each
      * report page.
-     * @return
+     * @return elapsed time
      */
     long getElapsedTime();
     /**
      * The method should return a list of the pages generated for the
      * report and whether it succeeded or not
-     * @return
+     * @return page summary array
      */
     PageSummary[] getPagesSummaries();
     /**

@@ -31,7 +31,6 @@ import org.apache.jmeter.visualizers.SamplingStatCalculator;
 
 /**
  * The class is reponsible for returning 
- * @author pete
  *
  */
 public class BarChart extends AbstractChart {
@@ -53,7 +52,7 @@ public class BarChart extends AbstractChart {
     /**
      * Convert the data from SamplingStatCalculator to double array of array
      * @param data
-     * @return
+     * @return data values
      */
     public double[][] convertToDouble(List data) {
         double[][] dataset = new double[1][data.size()];

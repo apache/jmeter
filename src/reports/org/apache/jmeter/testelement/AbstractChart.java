@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -31,8 +30,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * The general idea of the chart graphs information for a table.
  * A chart can only be generated from a specific table, though more
  * than one chart can be generated from a single table.
- * @author Peter Lin
- *
+  *
  */
 public abstract class AbstractChart extends AbstractTestElement implements ReportChart {
 
@@ -106,7 +104,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * The title is a the name for the chart. A page link will
      * be generated using the title. The title will also be
      * used for a page index.
-     * @return
+     * @return chart title
      */
     public String getTitle() {
     	return getPropertyAsString(REPORT_CHART_TITLE);
@@ -125,7 +123,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     /**
      * The caption is a description for the chart explaining
      * what the chart means.
-     * @return
+     * @return caption
      */
     public String getCaption() {
         return getPropertyAsString(REPORT_CHART_CAPTION);
@@ -142,7 +140,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     
     /**
      * if no width is set, the default is returned
-     * @return
+     * @return width
      */
     public int getWidth() {
         int w = getPropertyAsInt(REPORT_CHART_WIDTH);
@@ -163,7 +161,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     
     /**
      * if the height is not set, the default is returned
-     * @return
+     * @return height
      */
     public int getHeight() {
         int h = getPropertyAsInt(REPORT_CHART_HEIGHT); 
@@ -193,7 +191,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
     
     /**
      * this makes it easy to get the bufferedImage
-     * @return
+     * @return image
      */
     public BufferedImage getBufferedImage() {
         return this.image;
@@ -212,7 +210,7 @@ public abstract class AbstractChart extends AbstractTestElement implements Repor
      * Method.invoke(Object,Object[]), it's simpler to just check which
      * column is selected and call the method directly.
      * @param stat
-     * @return
+     * @return value
      */
     public double getValue(SamplingStatCalculator stat) {
         if (this.getXAxis().equals(AbstractTable.REPORT_TABLE_50_PERCENT)) {

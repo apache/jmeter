@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -27,7 +26,7 @@ public interface ReportChart {
      * The method takes a list of the DataSet items. It is up to the chart
      * class to extract the data and use it to render a graphic.
      * @param list of DataSet 
-     * @return
+     * @return the component
      */
 	JComponent renderChart(List data);
 }
