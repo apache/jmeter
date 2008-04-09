@@ -2016,7 +2016,10 @@ the graph as a PNG file. By default, the aggregate graph will generate a bar cha
 <component name="Mailer Visualizer" index="&sect-num;.3.13"  width="645" height="345" screenshot="mailervisualizer.png">
 <description><p>The mailer visualizer can be set up to send email if a test run receives too many
 failed responses from the server.</p></description>
-
+<note>
+The Mailer Visualizer requires the optional Javamail jars.
+If these are not present in the lib directory, the element will not appear in the menus.
+</note>
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
         <property name="From" required="Yes">Email address to send messages from.</property>
