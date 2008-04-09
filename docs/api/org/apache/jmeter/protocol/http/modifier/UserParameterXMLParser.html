@@ -89,21 +89,19 @@ Class UserParameterXMLParser</H2>
   <IMG SRC="../../../../../../resources/inherit.gif" ALT="extended by"><B>org.apache.jmeter.protocol.http.modifier.UserParameterXMLParser</B>
 </PRE>
 <HR>
+
+<P>
 <DL>
 <DT>public class <B>UserParameterXMLParser</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
 Parse an XML file to obtain parameter name and value information for all
  users defined in the XML file.
+ 
+ This test element is deprecated. Test plans should use User Parameters instead.
 <P>
 
 <P>
-<DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 493789 $</DD>
-<DT><B>Author:</B></DT>
-  <DD>Mark Walsh</DD>
-</DL>
 <HR>
 
 <P>
@@ -125,7 +123,7 @@ Parse an XML file to obtain parameter name and value information for all
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/modifier/UserParameterXMLParser.html#UserParameterXMLParser()">UserParameterXMLParser</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;&nbsp;</TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -143,7 +141,7 @@ Parse an XML file to obtain parameter name and value information for all
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/modifier/UserParameterXMLParser.html#getXMLParameters(java.lang.String)">getXMLParameters</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;xmlURI)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parse all user parameter data defined in XML file.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;Parse all user parameter data defined in XML file.</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -176,7 +174,7 @@ UserParameterXMLParser</H3>
 <PRE>
 public <B>UserParameterXMLParser</B>()</PRE>
 <DL>
-</DL>
+<DD><B>Deprecated.</B>&nbsp;</DL>
 
 <!-- ============ METHOD DETAIL ========== -->
 
@@ -195,7 +193,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" tit
                       throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
                              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
 <DL>
-<DD>Parse all user parameter data defined in XML file.
+<DD><B>Deprecated.</B>&nbsp;<DD>Parse all user parameter data defined in XML file.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>xmlURI</CODE> - name of the XML to load users parameter data
@@ -264,6 +262,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

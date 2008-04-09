@@ -93,10 +93,7 @@ Class XPathUtil</H2>
 <DT>public class <B>XPathUtil</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-author Justin Spears jspears@astrology.com
- 
- This class provides a few utility methods for dealing with XML/XPath. Might
- think about creating an interface for the setup, but, works fine now...
+This class provides a few utility methods for dealing with XML/XPath.
 <P>
 
 <P>
@@ -134,6 +131,37 @@ author Justin Spears jspears@astrology.com
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Document.html" title="class or interface in org.w3c.dom">Document</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/XPathUtil.html#makeDocument(java.io.InputStream, boolean, boolean, boolean, boolean, boolean, boolean, boolean)">makeDocument</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;stream,
+             boolean&nbsp;validate,
+             boolean&nbsp;whitespace,
+             boolean&nbsp;namespace,
+             boolean&nbsp;tolerant,
+             boolean&nbsp;quiet,
+             boolean&nbsp;showWarnings,
+             boolean&nbsp;report_errors)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Utility function to get new Document</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Document.html" title="class or interface in org.w3c.dom">Document</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/XPathUtil.html#makeDocument(java.io.InputStream, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean)">makeDocument</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;stream,
+             boolean&nbsp;validate,
+             boolean&nbsp;whitespace,
+             boolean&nbsp;namespace,
+             boolean&nbsp;tolerant,
+             boolean&nbsp;quiet,
+             boolean&nbsp;showWarnings,
+             boolean&nbsp;report_errors,
+             boolean&nbsp;isXml)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Utility function to get new Document</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/DocumentBuilder.html" title="class or interface in javax.xml.parsers">DocumentBuilder</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/XPathUtil.html#makeDocumentBuilder(boolean, boolean, boolean)">makeDocumentBuilder</A></B>(boolean&nbsp;validate,
                     boolean&nbsp;whitespace,
@@ -141,6 +169,17 @@ author Justin Spears jspears@astrology.com
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a DocumentBuilder using the makeDocumentFactory func.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;org.w3c.tidy.Tidy</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/util/XPathUtil.html#makeTidyParser(boolean, boolean, boolean, java.io.StringWriter)">makeTidyParser</A></B>(boolean&nbsp;quiet,
+               boolean&nbsp;showWarnings,
+               boolean&nbsp;isXml,
+               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/StringWriter.html" title="class or interface in java.io">StringWriter</A>&nbsp;stringWriter)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a Tidy parser with the specified settings.</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -200,17 +239,97 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Docum
                                     boolean&nbsp;tolerant)
                              throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A>,
                                     <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
-                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
+                                    <A HREF="../../../../org/apache/jmeter/util/TidyException.html" title="class in org.apache.jmeter.util">TidyException</A></PRE>
 <DL>
 <DD>Utility function to get new Document
 <P>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>stream</CODE> - Document Input stream<DD><CODE>validate</CODE> - Validate Document<DD><CODE>whitespace</CODE> - Element Whitespace<DD><CODE>namespace</CODE> - Is Namespace aware.<DD><CODE>tolerant</CODE> - Is tolerant - i.e. use the Tidy parser
+<DT><B>Parameters:</B><DD><CODE>stream</CODE> - Document Input stream<DD><CODE>validate</CODE> - Validate Document (not Tidy)<DD><CODE>whitespace</CODE> - Element Whitespace (not Tidy)<DD><CODE>namespace</CODE> - Is Namespace aware.<DD><CODE>tolerant</CODE> - Is tolerant - i.e. use the Tidy parser
 <DT><B>Returns:</B><DD>document
 <DT><B>Throws:</B>
 <DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></CODE>
 <DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE>
-<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE></DL>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE>
+<DD><CODE><A HREF="../../../../org/apache/jmeter/util/TidyException.html" title="class in org.apache.jmeter.util">TidyException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="makeDocument(java.io.InputStream, boolean, boolean, boolean, boolean, boolean, boolean, boolean)"><!-- --></A><H3>
+makeDocument</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Document.html" title="class or interface in org.w3c.dom">Document</A> <B>makeDocument</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;stream,
+                                    boolean&nbsp;validate,
+                                    boolean&nbsp;whitespace,
+                                    boolean&nbsp;namespace,
+                                    boolean&nbsp;tolerant,
+                                    boolean&nbsp;quiet,
+                                    boolean&nbsp;showWarnings,
+                                    boolean&nbsp;report_errors)
+                             throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A>,
+                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
+                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
+                                    <A HREF="../../../../org/apache/jmeter/util/TidyException.html" title="class in org.apache.jmeter.util">TidyException</A></PRE>
+<DL>
+<DD>Utility function to get new Document
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>stream</CODE> - - Document Input stream<DD><CODE>validate</CODE> - - Validate Document (not Tidy)<DD><CODE>whitespace</CODE> - - Element Whitespace (not Tidy)<DD><CODE>namespace</CODE> - - Is Namespace aware. (not Tidy)<DD><CODE>tolerant</CODE> - - Is tolerant - i.e. use the Tidy parser<DD><CODE>quiet</CODE> - - set Tidy quiet<DD><CODE>showWarnings</CODE> - - set Tidy warnings<DD><CODE>report_errors</CODE> - - throw TidyException if Tidy detects an error
+<DT><B>Returns:</B><DD>document
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></CODE>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE>
+<DD><CODE><A HREF="../../../../org/apache/jmeter/util/TidyException.html" title="class in org.apache.jmeter.util">TidyException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="makeDocument(java.io.InputStream, boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean)"><!-- --></A><H3>
+makeDocument</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Document.html" title="class or interface in org.w3c.dom">Document</A> <B>makeDocument</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/InputStream.html" title="class or interface in java.io">InputStream</A>&nbsp;stream,
+                                    boolean&nbsp;validate,
+                                    boolean&nbsp;whitespace,
+                                    boolean&nbsp;namespace,
+                                    boolean&nbsp;tolerant,
+                                    boolean&nbsp;quiet,
+                                    boolean&nbsp;showWarnings,
+                                    boolean&nbsp;report_errors,
+                                    boolean&nbsp;isXml)
+                             throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A>,
+                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A>,
+                                    <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A>,
+                                    <A HREF="../../../../org/apache/jmeter/util/TidyException.html" title="class in org.apache.jmeter.util">TidyException</A></PRE>
+<DL>
+<DD>Utility function to get new Document
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>stream</CODE> - - Document Input stream<DD><CODE>validate</CODE> - - Validate Document (not Tidy)<DD><CODE>whitespace</CODE> - - Element Whitespace (not Tidy)<DD><CODE>namespace</CODE> - - Is Namespace aware. (not Tidy)<DD><CODE>tolerant</CODE> - - Is tolerant - i.e. use the Tidy parser<DD><CODE>quiet</CODE> - - set Tidy quiet<DD><CODE>showWarnings</CODE> - - set Tidy warnings<DD><CODE>report_errors</CODE> - - throw TidyException if Tidy detects an error<DD><CODE>isXml</CODE> - - is document already XML (Tidy only)
+<DT><B>Returns:</B><DD>document
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/xml/parsers/ParserConfigurationException.html" title="class or interface in javax.xml.parsers">ParserConfigurationException</A></CODE>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/SAXException.html" title="class or interface in org.xml.sax">SAXException</A></CODE>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE>
+<DD><CODE><A HREF="../../../../org/apache/jmeter/util/TidyException.html" title="class in org.apache.jmeter.util">TidyException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="makeTidyParser(boolean, boolean, boolean, java.io.StringWriter)"><!-- --></A><H3>
+makeTidyParser</H3>
+<PRE>
+public static org.w3c.tidy.Tidy <B>makeTidyParser</B>(boolean&nbsp;quiet,
+                                               boolean&nbsp;showWarnings,
+                                               boolean&nbsp;isXml,
+                                               <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/StringWriter.html" title="class or interface in java.io">StringWriter</A>&nbsp;stringWriter)</PRE>
+<DL>
+<DD>Create a Tidy parser with the specified settings.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>quiet</CODE> - - set the Tidy quiet flag?<DD><CODE>showWarnings</CODE> - - show Tidy warnings?<DD><CODE>isXml</CODE> - - treat the content as XML?<DD><CODE>stringWriter</CODE> - - if non-null, use this for Tidy errorOutput
+<DT><B>Returns:</B><DD>the Tidy parser</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
@@ -272,6 +391,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHO
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

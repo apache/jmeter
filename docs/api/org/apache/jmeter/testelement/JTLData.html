@@ -96,13 +96,13 @@ Class JTLData</H2>
 <DT>public class <B>JTLData</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A><DT>implements <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="class or interface in java.io">Serializable</A>, <A HREF="../../../../org/apache/jmeter/report/DataSet.html" title="interface in org.apache.jmeter.report">DataSet</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>Peter Lin
-
- The purpose of TableData is to contain the results of a single .jtl file.
+The purpose of TableData is to contain the results of a single .jtl file.
  It is equivalent to what the AggregateListener table. A HashMap is used
- to store the data. The URL is the key and the value is SamplingStatCalculator</DD>
+ to store the data. The URL is the key and the value is SamplingStatCalculator
+<P>
+
+<P>
+<DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../serialized-form.html#org.apache.jmeter.testelement.JTLData">Serialized Form</A></DL>
 <HR>
 
@@ -274,7 +274,7 @@ Class JTLData</H2>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The purpose of the method is to make it convienant to pass a list
- of the URL's and return a list of the SamplingStatCalculators. </TD>
+ of the URLs and return a list of the SamplingStatCalculators. </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -282,7 +282,7 @@ Class JTLData</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/testelement/JTLData.html#getURLs()">getURLs</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return a Set of the URL's</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return a Set of the URLs</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -430,14 +430,14 @@ getURLs</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Set.html" title="class or interface in java.util">Set</A> <B>getURLs</B>()</PRE>
 <DL>
-<DD>Return a Set of the URL's
+<DD>Return a Set of the URLs
 <P>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE><A HREF="../../../../org/apache/jmeter/report/DataSet.html#getURLs()">getURLs</A></CODE> in interface <CODE><A HREF="../../../../org/apache/jmeter/report/DataSet.html" title="interface in org.apache.jmeter.report">DataSet</A></CODE></DL>
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>set of URLs</DL>
 </DD>
 </DL>
 <HR>
@@ -454,7 +454,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Set.html" titl
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>values</DL>
 </DD>
 </DL>
 <HR>
@@ -465,8 +465,8 @@ getStats</H3>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A> <B>getStats</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A>&nbsp;urls)</PRE>
 <DL>
 <DD>The purpose of the method is to make it convienant to pass a list
- of the URL's and return a list of the SamplingStatCalculators. If
- no URL's match, the list is empty.
+ of the URLs and return a list of the SamplingStatCalculators. If
+ no URLs match, the list is empty.
  The SamplingStatCalculators will be returned in the same sequence
  as the url list.
 <P>
@@ -475,7 +475,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" tit
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>urls</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>array list of non-null entries (may be empty)</DL>
 </DD>
 </DL>
 <HR>
@@ -619,7 +619,7 @@ public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Date.html" tit
 </DD>
 <DD><DL>
 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>start time</DL>
 </DD>
 </DL>
 <HR>
@@ -671,7 +671,7 @@ public <A HREF="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator
 </DD>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>url</CODE> - 
-<DT><B>Returns:</B><DD></DL>
+<DT><B>Returns:</B><DD>data for this URL</DL>
 </DD>
 </DL>
 <HR>
@@ -786,6 +786,6 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

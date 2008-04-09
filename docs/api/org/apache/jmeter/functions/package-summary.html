@@ -97,7 +97,7 @@ Functions
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/Function.html" title="interface in org.apache.jmeter.functions">Function</A></B></TD>
-<TD>&nbsp;</TD>
+<TD>Methods that a function must implement</TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -163,22 +163,19 @@ Functions
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/LogFunction.html" title="class in org.apache.jmeter.functions">LogFunction</A></B></TD>
-<TD>Function to log a message
- 
- Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
- unrecognised) - throwable message (optional)
- 
- Returns: - the input string</TD>
+<TD>
+ Function to log a message.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/LogFunction2.html" title="class in org.apache.jmeter.functions">LogFunction2</A></B></TD>
-<TD>Function to log a message
- 
- Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
- unrecognised) - throwable message (optional)
- 
- Returns: - Empty String (so can be used where return value would be a
- nuisance)</TD>
+<TD>
+ Function to log a message.
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/LongSum.html" title="class in org.apache.jmeter.functions">LongSum</A></B></TD>
+<TD>Provides a longSum function that adds two or more long values.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/MachineName.html" title="class in org.apache.jmeter.functions">MachineName</A></B></TD>
@@ -209,7 +206,7 @@ Functions
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/RegexFunction.html" title="class in org.apache.jmeter.functions">RegexFunction</A></B></TD>
-<TD>&nbsp;</TD>
+<TD>Implements regular expression parsing of sample results and variables</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/SetProperty.html" title="class in org.apache.jmeter.functions">SetProperty</A></B></TD>
@@ -226,12 +223,24 @@ Functions
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/SplitFunction.html" title="class in org.apache.jmeter.functions">SplitFunction</A></B></TD>
-<TD>Function to log a message
+<TD>Function to split a string into variables
  
- Parameters: - string - log level (optional; defaults to INFO; or DEBUG if
- unrecognised) - throwable message (optional)
+ Parameters:
  
- Returns: - the input string</TD>
+ String to split
+ Variable name prefix
+ String to split on (optional, default is comma)
+ 
+ 
+ 
+ Returns: the input string
+ 
+ Also sets the variables:
+ 
+ VARNAME - the input string
+ VARNAME_n - number of fields found
+ VARNAME_1..n - fields
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/StringFromFile.html" title="class in org.apache.jmeter.functions">StringFromFile</A></B></TD>
@@ -241,7 +250,7 @@ Functions
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/ThreadNumber.html" title="class in org.apache.jmeter.functions">ThreadNumber</A></B></TD>
-<TD>TODO: should this extend AbstractFunction?</TD>
+<TD>Function to return the current thread number.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../../../org/apache/jmeter/functions/TimeFunction.html" title="class in org.apache.jmeter.functions">TimeFunction</A></B></TD>
@@ -368,6 +377,6 @@ Package org.apache.jmeter.functions Description
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

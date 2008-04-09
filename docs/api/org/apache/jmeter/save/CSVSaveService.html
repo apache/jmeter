@@ -69,9 +69,9 @@ function windowTitle()
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
 </TABLE>
 <A NAME="skip-navbar_top"></A>
@@ -105,7 +105,22 @@ This class provides a means for saving/reading test results as CSV files.
 
 <!-- =========== FIELD SUMMARY =========== -->
 
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;char</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#QUOTING_CHAR">QUOTING_CHAR</A></B></CODE>
 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 
 
@@ -116,6 +131,18 @@ This class provides a means for saving/reading test results as CSV files.
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TD COLSPAN=2><FONT SIZE="+2">
 <B>Method Summary</B></FONT></TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#csvReadFile(java.io.BufferedReader, char)">csvReadFile</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/BufferedReader.html" title="class or interface in java.io">BufferedReader</A>&nbsp;infile,
+            char&nbsp;delim)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reads from file and splits input into strings according to the delimiter,
+ taking note of quoted strings.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -134,7 +161,7 @@ This class provides a means for saving/reading test results as CSV files.
                               long&nbsp;lineNumber)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Make a SampleResult given a delimited string.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Does not handle quoted strings; use <A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)"><CODE>processSamples(String, Visualizer, ResultCollector)</CODE></A> instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -151,6 +178,16 @@ This class provides a means for saving/reading test results as CSV files.
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates the field names for the output file</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)">processSamples</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
+               <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A>&nbsp;visualizer,
+               <A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>&nbsp;resultCollector)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Read Samples from a file; handles quoted strings.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -174,8 +211,28 @@ This class provides a means for saving/reading test results as CSV files.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#saveCSVStats(javax.swing.table.DefaultTableModel, java.io.FileWriter)">saveCSVStats</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/table/DefaultTableModel.html" title="class or interface in javax.swing.table">DefaultTableModel</A>&nbsp;model,
+             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method saves aggregate statistics as CSV from a table model.
+ </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#saveCSVStats(java.util.Vector, java.io.FileWriter)">saveCSVStats</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Vector.html" title="class or interface in java.util">Vector</A>&nbsp;data,
              <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method will save aggregate statistics as CSV. </TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#saveCSVStats(java.util.Vector, java.io.FileWriter, java.lang.String[])">saveCSVStats</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Vector.html" title="class or interface in java.util">Vector</A>&nbsp;data,
+             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer,
+             <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;headers)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method will save aggregate statistics as CSV. </TD>
@@ -195,6 +252,22 @@ This class provides a means for saving/reading test results as CSV files.
 
 <!-- ============ FIELD DETAIL =========== -->
 
+<A NAME="field_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Field Detail</B></FONT></TD>
+</TR>
+</TABLE>
+
+<A NAME="QUOTING_CHAR"><!-- --></A><H3>
+QUOTING_CHAR</H3>
+<PRE>
+public static final char <B>QUOTING_CHAR</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../constant-values.html#org.apache.jmeter.save.CSVSaveService.QUOTING_CHAR">Constant Field Values</A></DL>
+</DL>
 
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 
@@ -209,6 +282,24 @@ This class provides a means for saving/reading test results as CSV files.
 </TR>
 </TABLE>
 
+<A NAME="processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)"><!-- --></A><H3>
+processSamples</H3>
+<PRE>
+public static void <B>processSamples</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;filename,
+                                  <A HREF="../../../../org/apache/jmeter/visualizers/Visualizer.html" title="interface in org.apache.jmeter.visualizers">Visualizer</A>&nbsp;visualizer,
+                                  <A HREF="../../../../org/apache/jmeter/reporters/ResultCollector.html" title="class in org.apache.jmeter.reporters">ResultCollector</A>&nbsp;resultCollector)
+                           throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Read Samples from a file; handles quoted strings.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>filename</CODE> - input file<DD><CODE>visualizer</CODE> - where to send the results<DD><CODE>resultCollector</CODE> - the parent collector
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
 <A NAME="makeResultFromDelimitedString(java.lang.String, org.apache.jmeter.samplers.SampleSaveConfiguration, long)"><!-- --></A><H3>
 makeResultFromDelimitedString</H3>
 <PRE>
@@ -216,11 +307,13 @@ public static <A HREF="../../../../org/apache/jmeter/samplers/SampleEvent.html" 
                                                         <A HREF="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</A>&nbsp;saveConfig,
                                                         long&nbsp;lineNumber)</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Does not handle quoted strings; use <A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#processSamples(java.lang.String, org.apache.jmeter.visualizers.Visualizer, org.apache.jmeter.reporters.ResultCollector)"><CODE>processSamples(String, Visualizer, ResultCollector)</CODE></A> instead</I>
+<P>
 <DD>Make a SampleResult given a delimited string.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>inputLine</CODE> - - line from CSV file<DD><CODE>saveConfig</CODE> - - configuration<DD><CODE>lineNumber</CODE> - - line number for error reporting
-<DT><B>Returns:</B><DD>SampleResult or null if header line detected
+<DT><B>Returns:</B><DD>SampleResult
 <DT><B>Throws:</B>
 <DD><CODE><A HREF="../../../../org/apache/jorphan/util/JMeterError.html" title="class in org.apache.jorphan.util">JMeterError</A></CODE></DL>
 </DD>
@@ -283,7 +376,47 @@ public static void <B>saveCSVStats</B>(<A HREF="http://java.sun.com/j2se/1.4.2/d
  method to the new save service.
 <P>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>data</CODE> - <DD><CODE>writer</CODE> - 
+<DT><B>Parameters:</B><DD><CODE>data</CODE> - vector of data rows<DD><CODE>writer</CODE> - output file
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="saveCSVStats(java.util.Vector, java.io.FileWriter, java.lang.String[])"><!-- --></A><H3>
+saveCSVStats</H3>
+<PRE>
+public static void <B>saveCSVStats</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Vector.html" title="class or interface in java.util">Vector</A>&nbsp;data,
+                                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer,
+                                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;headers)
+                         throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Method will save aggregate statistics as CSV. For now I put it here.
+ Not sure if it should go in the newer SaveService instead of here.
+ if we ever decide to get rid of this class, we'll need to move this
+ method to the new save service.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>data</CODE> - vector of data rows<DD><CODE>writer</CODE> - output file<DD><CODE>headers</CODE> - header names (if non-null)
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="saveCSVStats(javax.swing.table.DefaultTableModel, java.io.FileWriter)"><!-- --></A><H3>
+saveCSVStats</H3>
+<PRE>
+public static void <B>saveCSVStats</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/table/DefaultTableModel.html" title="class or interface in javax.swing.table">DefaultTableModel</A>&nbsp;model,
+                                <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/FileWriter.html" title="class or interface in java.io">FileWriter</A>&nbsp;writer)
+                         throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Method saves aggregate statistics as CSV from a table model.
+ Same as <A HREF="../../../../org/apache/jmeter/save/CSVSaveService.html#saveCSVStats(java.util.Vector, java.io.FileWriter, java.lang.String[])"><CODE>saveCSVStats(Vector, FileWriter, String[])</CODE></A> except
+ that there is no need to create a Vector containing the data.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>model</CODE> - table model containing the data<DD><CODE>writer</CODE> - output file
 <DT><B>Throws:</B>
 <DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
@@ -317,6 +450,27 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>event</CODE> - the sample event to be converted<DD><CODE>delimiter</CODE> - the separation string
 <DT><B>Returns:</B><DD>the separated value representation of the result</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="csvReadFile(java.io.BufferedReader, char)"><!-- --></A><H3>
+csvReadFile</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[] <B>csvReadFile</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/BufferedReader.html" title="class or interface in java.io">BufferedReader</A>&nbsp;infile,
+                                   char&nbsp;delim)
+                            throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Reads from file and splits input into strings according to the delimiter,
+ taking note of quoted strings.
+ 
+ Handles DOS (CRLF), Unix (LF), and Mac (CR) line-endings equally.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>infile</CODE> - input file  - must support mark(1)<DD><CODE>delim</CODE> - delimiter (e.g. comma)
+<DT><B>Returns:</B><DD>array of strings
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE> - also for unexpected quote characters</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
@@ -369,15 +523,15 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
 </TABLE>
 <A NAME="skip-navbar_bottom"></A>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

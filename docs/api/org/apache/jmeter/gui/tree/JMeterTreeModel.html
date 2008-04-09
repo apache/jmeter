@@ -185,7 +185,9 @@ Class JMeterTreeModel</H2>
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeModel.html#clearTestPlan()">clearTestPlan</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear the test plan, and use default node for test plan and workbench</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear the test plan, and use default node for test plan and workbench.
+ 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -193,7 +195,9 @@ Class JMeterTreeModel</H2>
 <TD><CODE><B><A HREF="../../../../../org/apache/jmeter/gui/tree/JMeterTreeModel.html#clearTestPlan(org.apache.jmeter.testelement.TestElement)">clearTestPlan</A></B>(<A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;testPlan)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear the test plan, and use specified node for test plan and default node for workbench</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear the test plan, and use specified node for test plan and default node for workbench
+ 
+ N.B. </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -407,7 +411,9 @@ clearTestPlan</H3>
 <PRE>
 public void <B>clearTestPlan</B>()</PRE>
 <DL>
-<DD>Clear the test plan, and use default node for test plan and workbench
+<DD>Clear the test plan, and use default node for test plan and workbench.
+ 
+ N.B. Should only be called by <A HREF="../../../../../org/apache/jmeter/gui/GuiPackage.html#clearTestPlan()"><CODE>GuiPackage.clearTestPlan()</CODE></A>
 <P>
 <DD><DL>
 </DL>
@@ -421,6 +427,8 @@ clearTestPlan</H3>
 public void <B>clearTestPlan</B>(<A HREF="../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</A>&nbsp;testPlan)</PRE>
 <DL>
 <DD>Clear the test plan, and use specified node for test plan and default node for workbench
+ 
+ N.B. Should only be called by <A HREF="../../../../../org/apache/jmeter/gui/GuiPackage.html#clearTestPlan(org.apache.jmeter.testelement.TestElement)"><CODE>GuiPackage.clearTestPlan(TestElement)</CODE></A>
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>testPlan</CODE> - the node to use as the testplan top node</DL>
@@ -485,6 +493,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&n
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

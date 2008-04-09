@@ -142,6 +142,18 @@ This class finds classes that extend one of a set of parent classes
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find classes in the provided path(s)/jar(s) that extend the class(es).</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../org/apache/jorphan/reflect/ClassFinder.html#findClassesThatExtend(java.lang.String[], java.lang.Class[], boolean, java.lang.String, java.lang.String)">findClassesThatExtend</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;strPathsOrJars,
+                      <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;superClasses,
+                      boolean&nbsp;innerClasses,
+                      <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;contains,
+                      <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;notContains)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Find classes in the provided path(s)/jar(s) that extend the class(es).</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -208,6 +220,27 @@ public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.ht
 <DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
 </DD>
 </DL>
+<HR>
+
+<A NAME="findClassesThatExtend(java.lang.String[], java.lang.Class[], boolean, java.lang.String, java.lang.String)"><!-- --></A><H3>
+findClassesThatExtend</H3>
+<PRE>
+public static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html" title="class or interface in java.util">List</A> <B>findClassesThatExtend</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>[]&nbsp;strPathsOrJars,
+                                         <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Class.html" title="class or interface in java.lang">Class</A>[]&nbsp;superClasses,
+                                         boolean&nbsp;innerClasses,
+                                         <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;contains,
+                                         <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;notContains)
+                                  throws <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></PRE>
+<DL>
+<DD>Find classes in the provided path(s)/jar(s) that extend the class(es).
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>strPathsOrJars</CODE> - - pathnames or jarfiles to search for classes<DD><CODE>superClasses</CODE> - - required parent class(es)<DD><CODE>innerClasses</CODE> - - should we include inner classes?<DD><CODE>contains</CODE> - - classname should contain this string<DD><CODE>notContains</CODE> - - classname should not contain this string
+<DT><B>Returns:</B><DD>List containing discovered classes
+<DT><B>Throws:</B>
+<DD><CODE><A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/io/IOException.html" title="class or interface in java.io">IOException</A></CODE></DL>
+</DD>
+</DL>
 <!-- ========= END OF CLASS DATA ========= -->
 <HR>
 
@@ -267,6 +300,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHO
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>

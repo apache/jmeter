@@ -93,10 +93,11 @@ Class JMeterContextService</H2>
 <DT>public final class <B>JMeterContextService</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-<DL>
-<DT><B>Version:</B></DT>
-  <DD>$Revision: 493779 $</DD>
-</DL>
+Provides context service for JMeter threads.
+ Keeps track of active and total thread counts.
+<P>
+
+<P>
 <HR>
 
 <P>
@@ -123,7 +124,7 @@ Class JMeterContextService</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/threads/JMeterContextService.html#addTotalThreads(int)">addTotalThreads</A></B>(int&nbsp;thisGroup)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the total number of threads</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -131,7 +132,7 @@ Class JMeterContextService</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/threads/JMeterContextService.html#clearTotalThreads()">clearTotalThreads</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set total threads to zero</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -155,7 +156,7 @@ Class JMeterContextService</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/threads/JMeterContextService.html#getNumberOfThreads()">getNumberOfThreads</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the number of currently active threads</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -171,7 +172,7 @@ Class JMeterContextService</H2>
 <TD><CODE><B><A HREF="../../../../org/apache/jmeter/threads/JMeterContextService.html#getTotalThreads()">getTotalThreads</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the total number of threads (>= active)</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -237,8 +238,11 @@ getNumberOfThreads</H3>
 <PRE>
 public static int <B>getNumberOfThreads</B>()</PRE>
 <DL>
+<DD>Get the number of currently active threads
+<P>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>active thread count</DL>
 </DD>
 </DL>
 <HR>
@@ -270,8 +274,11 @@ getTotalThreads</H3>
 <PRE>
 public static int <B>getTotalThreads</B>()</PRE>
 <DL>
+<DD>Get the total number of threads (>= active)
+<P>
 <DD><DL>
-</DL>
+
+<DT><B>Returns:</B><DD>total thread count</DL>
 </DD>
 </DL>
 <HR>
@@ -281,8 +288,10 @@ addTotalThreads</H3>
 <PRE>
 public static void <B>addTotalThreads</B>(int&nbsp;thisGroup)</PRE>
 <DL>
+<DD>Update the total number of threads
+<P>
 <DD><DL>
-</DL>
+<DT><B>Parameters:</B><DD><CODE>thisGroup</CODE> - number of threads in this thread group</DL>
 </DD>
 </DL>
 <HR>
@@ -292,6 +301,8 @@ clearTotalThreads</H3>
 <PRE>
 public static void <B>clearTotalThreads</B>()</PRE>
 <DL>
+<DD>Set total threads to zero
+<P>
 <DD><DL>
 </DL>
 </DD>
@@ -355,6 +366,6 @@ DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHO
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright © 1998-2007 Apache Software Foundation. All Rights Reserved.
+Copyright &#xA9; 1998-2008 Apache Software Foundation. All Rights Reserved.
 </BODY>
 </HTML>
