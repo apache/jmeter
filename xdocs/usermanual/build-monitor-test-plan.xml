@@ -63,7 +63,7 @@ see the element, "expand" the Test Plan tree by clicking on the Test Plan elemen
 <figure image="webtest/threadgroup.png">
 Figure 10.1. Thread Group with Default Values</figure>
 
-<p>Enter the name of the server.</p>
+<p>Change the loop count to forever (or some large number) so that enough samples are generated.</p>
 
 </section>
 
