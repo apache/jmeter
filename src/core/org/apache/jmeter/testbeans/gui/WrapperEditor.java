@@ -54,32 +54,32 @@ import sun.beans.editors.NumberEditor;
  * 
  */
 class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
-	protected static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The type's property editor.
 	 */
-	PropertyEditor typeEditor;
+	private PropertyEditor typeEditor;
 
 	/**
 	 * The gui property editor
 	 */
-	PropertyEditor guiEditor;
+	private PropertyEditor guiEditor;
 
 	/**
 	 * Whether to allow <b>null</b> as a property value.
 	 */
-	boolean acceptsNull;
+	private boolean acceptsNull;
 
 	/**
 	 * Whether to allow JMeter 'expressions' as property values.
 	 */
-	boolean acceptsExpressions;
+	private boolean acceptsExpressions;
 
 	/**
 	 * Whether to allow any constant values different from the provided tags.
 	 */
-	boolean acceptsOther;
+	private boolean acceptsOther;
 
 	/**
 	 * Keep track of the last valid value in the editor, so that we can revert
@@ -124,16 +124,17 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			// initial edit value:
 
 			String v;
-			if (!_acceptsOther)
-				v = "${}";
-			else if (isValidValue(""))
-				v = "";
-			else if (_acceptsExpressions)
-				v = "${}";
-			else if (tags != null && tags.length > 0)
+			if (!_acceptsOther) {
+				v = "${}"; //$NON-NLS-1$
+			} else if (isValidValue("")) { //$NON-NLS-1$
+				v = ""; //$NON-NLS-1$
+			} else if (_acceptsExpressions) {
+				v = "${}"; //$NON-NLS-1$
+			} else if (tags != null && tags.length > 0) {
 				v = tags[0];
-			else
+			} else {
 				v = getAsText();
+			}
 
 			((ComboStringEditor) _guiEditor).setInitialEditValue(v);
 		}
@@ -161,11 +162,13 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 	 */
 	private boolean isATag(String text) {
 		String[] tags = getTags();
-		if (tags == null)
+		if (tags == null) {
 			return false;
+		}
 		for (int i = 0; i < tags.length; i++) {
-			if (tags[i].equals(text))
+			if (tags[i].equals(text)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -178,21 +181,24 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 	 * @return true iif text is a valid value
 	 */
 	private boolean isValidValue(String text) {
-		if (text == null)
+		if (text == null) {
 			return acceptsNull;
+		}
 
-		if (acceptsExpressions && isExpression(text))
+		if (acceptsExpressions && isExpression(text)) {
 			return true;
+		}
 
 		// Not an expression (isn't or can't be), not null.
 
 		// The known tags are assumed to be valid:
-		if (isATag(text))
+		if (isATag(text)) {
 			return true;
-
+		}
 		// Was not a tag, so if we can't accept other values...
-		if (!acceptsOther)
+		if (!acceptsOther) {
 			return false;
+		}
 
 		// Delegate the final check to the typeEditor:
 		try {
@@ -238,7 +244,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 	 * true for "${}".
 	 */
 	private final boolean isExpression(String text) {
-		return text.indexOf("${") != -1;
+		return text.indexOf("${") != -1;//$NON-NLS-1$
 	}
 
 	/**
@@ -261,8 +267,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		Object value;
 
 		if (text == null) {
-			if (!acceptsNull)
+			if (!acceptsNull) {
 				shouldNeverHappen();
+			}
 			value = null;
 		} else {
 			if (acceptsExpressions && isExpression(text)) {
@@ -271,13 +278,14 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 				// not an expression (isn't or can't be), not null.
 
 				// a check, just in case:
-				if (!acceptsOther && !isATag(text))
+				if (!acceptsOther && !isATag(text)) {
 					shouldNeverHappen();
+				}
 
 				try {
 					// Bug 44314  Number field does not seem to accept ""
 					if (text.length()==0 && typeEditor instanceof NumberEditor){
-						text="0";
+						text="0";//$NON-NLS-1$
 					}
 					typeEditor.setAsText(text);
 				} catch (IllegalArgumentException e) {
@@ -301,8 +309,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		}
 
 		if (value == null) {
-			if (!acceptsNull)
+			if (!acceptsNull) {
 				throw new IllegalArgumentException("Null is not allowed");
+			}
 			text = null;
 		} else if (acceptsExpressions && isExpression(value)) {
 			text = (String) value;
@@ -311,8 +320,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			typeEditor.setValue(value); // may throw IllegalArgumentExc.
 			text = typeEditor.getAsText();
 
-			if (!acceptsOther && !isATag(text))
+			if (!acceptsOther && !isATag(text)) {
 				throw new IllegalArgumentException("Value not allowed: "+text);
+			}
 		}
 
 		guiEditor.setValue(text);
@@ -322,8 +332,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		String text = guiEditor.getAsText();
 
 		if (text == null) {
-			if (!acceptsNull)
+			if (!acceptsNull) {
 				shouldNeverHappen();
+			}
 		} else if (!acceptsExpressions || !isExpression(text)) {
 			// not an expression (can't be or isn't), not null.
 			try {
@@ -334,8 +345,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			text = typeEditor.getAsText();
 
 			// a check, just in case:
-			if (!acceptsOther && !isATag(text))
+			if (!acceptsOther && !isATag(text)) {
 				shouldNeverHappen();
+			}
 		}
 
 		if (log.isDebugEnabled()) {
@@ -352,8 +364,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		String value;
 
 		if (text == null) {
-			if (!acceptsNull)
+			if (!acceptsNull) {
 				throw new IllegalArgumentException("Null parameter not allowed");
+			}
 			value = null;
 		} else {
 			if (acceptsExpressions && isExpression(text)) {
@@ -364,8 +377,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 				typeEditor.setAsText(text); // may throw IllegalArgumentException
 				value = typeEditor.getAsText();
 
-				if (!acceptsOther && !isATag(text))
+				if (!acceptsOther && !isATag(text)) {
 					throw new IllegalArgumentException("Value not allowed: "+text);
+				}
 			}
 		}
 
@@ -379,9 +393,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			firePropertyChange();
 		} else {
 			// TODO: how to bring the editor back in view & focus?
-			JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(), JMeterUtils
-					.getResString("property_editor.value_is_invalid_message"), JMeterUtils
-					.getResString("property_editor.value_is_invalid_title"), JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(),
+			        JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
+			        JMeterUtils.getResString("property_editor.value_is_invalid_title"),  //$NON-NLS-1$
+			        JOptionPane.WARNING_MESSAGE);
 
 			// Revert to the previous value:
 			guiEditor.setAsText(lastValidValue);

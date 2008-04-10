@@ -140,8 +140,9 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 
 	public String getAuthHeaderForURL(URL url) {
 		Authorization auth = getAuthForURL(url);
-		if (auth == null)
+		if (auth == null) {
 			return null;
+		}
 		return auth.toBasicHeader();
 	}
 
@@ -174,8 +175,9 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 
 		String s1 = url.toString();
 		String s2 = null;
-		if (url2 != null)
+		if (url2 != null) {
 			s2 = url2.toString();
+		}
 
 		    log.debug("Target URL strings to match against: "+s1+" and "+s2);
 		// TODO should really return most specific (i.e. longest) match.

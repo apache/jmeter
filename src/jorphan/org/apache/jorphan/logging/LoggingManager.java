@@ -53,14 +53,14 @@ public final class LoggingManager {
 	 * Predefined format patterns, selected by the property log_format_type (see
 	 * jmeter.properties) The new-line is added later
 	 */
-	private static final String DEFAULT_PATTERN = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - "
-			+ "%{category}: %{message} %{throwable}";
+	private static final String DEFAULT_PATTERN = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - "  //$NON_NLS-1$
+			+ "%{category}: %{message} %{throwable}"; //$NON_NLS-1$
 
-	private static final String PATTERN_THREAD_PREFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "
-			+ "%12{thread} %{category}: %{message} %{throwable}";
+	private static final String PATTERN_THREAD_PREFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "  //$NON_NLS-1$
+			+ "%12{thread} %{category}: %{message} %{throwable}";  //$NON_NLS-1$
 
-	private static final String PATTERN_THREAD_SUFFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "
-			+ "%{category}[%{thread}]: %{message} %{throwable}";
+	private static final String PATTERN_THREAD_SUFFIX = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} "  //$NON_NLS-1$
+			+ "%{category}[%{thread}]: %{message} %{throwable}";  //$NON_NLS-1$
 
 	private static PatternFormatter format = null;
 
@@ -72,9 +72,9 @@ public final class LoggingManager {
 
 	private static boolean isWriterSystemOut = false;// Is the Writer System.out?
 
-	public final static String LOG_FILE = "log_file";
+	public final static String LOG_FILE = "log_file";  //$NON_NLS-1$
 
-	public final static String LOG_PRIORITY = "log_level";
+	public final static String LOG_PRIORITY = "log_level";  //$NON_NLS-1$
 
 	private static LoggingManager logManager = null;
 
@@ -102,7 +102,7 @@ public final class LoggingManager {
 		setFormat(properties);
 
 		// Set the top-level defaults
-		setTarget(makeWriter(properties.getProperty(LOG_FILE, "jmeter.log"), LOG_FILE));
+		setTarget(makeWriter(properties.getProperty(LOG_FILE, "jmeter.log"), LOG_FILE));  //$NON_NLS-1$
 		setPriority(properties.getProperty(LOG_PRIORITY, "INFO"));
 
 		setLoggingLevels(properties);
@@ -113,25 +113,26 @@ public final class LoggingManager {
 
 	private static void setFormat(Properties properties) {
 		String pattern = DEFAULT_PATTERN;
-		String type = properties.getProperty("log_format_type", "");
+		String type = properties.getProperty("log_format_type", "");  //$NON_NLS-1$
 		if (type.length() == 0) {
-			pattern = properties.getProperty("log_format", DEFAULT_PATTERN);
+			pattern = properties.getProperty("log_format", DEFAULT_PATTERN);  //$NON_NLS-1$
 		} else {
-			if (type.equalsIgnoreCase("thread_suffix")) {
+			if (type.equalsIgnoreCase("thread_suffix")) {  //$NON_NLS-1$
 				pattern = PATTERN_THREAD_SUFFIX;
-			} else if (type.equalsIgnoreCase("thread_prefix")) {
+			} else if (type.equalsIgnoreCase("thread_prefix")) {  //$NON_NLS-1$
 				pattern = PATTERN_THREAD_PREFIX;
 			} else {
 				pattern = DEFAULT_PATTERN;
 			}
 		}
-		format = new PatternFormatter(pattern + "\n");
+		format = new PatternFormatter(pattern + "\n"); //$NON_NLS-1$
 	}
 
 	private static void setConfig(Properties p) {
-		String cfg = p.getProperty("log_config");
-		if (cfg == null)
+		String cfg = p.getProperty("log_config"); //$NON_NLS-1$
+		if (cfg == null) {
 			return;
+		}
 
 		// Make sure same hierarchy is used
 		Hierarchy hier = Hierarchy.getDefaultHierarchy();
@@ -172,7 +173,7 @@ public final class LoggingManager {
 	 */
 	private static PatternFormatter getFormat() {
 		if (format == null) {
-			format = new PatternFormatter(DEFAULT_PATTERN + "\n");
+			format = new PatternFormatter(DEFAULT_PATTERN + "\n"); //$NON_NLS-1$
 		}
 		return format;
 	}
@@ -213,13 +214,13 @@ public final class LoggingManager {
 		Iterator props = appProperties.keySet().iterator();
 		while (props.hasNext()) {
 			String prop = (String) props.next();
-			if (prop.startsWith(LOG_PRIORITY + "."))
+			if (prop.startsWith(LOG_PRIORITY + ".")) //$NON_NLS-1$
 			// don't match the empty category
 			{
 				String category = prop.substring(LOG_PRIORITY.length() + 1);
 				setPriority(appProperties.getProperty(prop), category);
 			}
-			if (prop.startsWith(LOG_FILE + ".")) {
+			if (prop.startsWith(LOG_FILE + ".")) { //$NON_NLS-1$
 				String category = prop.substring(LOG_FILE.length() + 1);
 				String file = appProperties.getProperty(prop);
 				setTarget(new WriterTarget(makeWriter(file, prop), getFormat()), category);
@@ -227,7 +228,7 @@ public final class LoggingManager {
 		}
 	}
 
-	private final static String PACKAGE_PREFIX = "org.apache.";
+	private final static String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
 
 	/*
 	 * Stack contains the follow when the context is obtained: 

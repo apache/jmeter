@@ -34,7 +34,6 @@ import org.apache.log.Logger;
  * alias, if used). A list of open files is also maintained for each thread,
  * together with the current line number.
  * 
- * @version $Revision$ $Date$
  */
 public class FileWrapper {
 
@@ -158,8 +157,9 @@ public class FileWrapper {
 				fw = (FileWrapper) my.get(file);
 			}
 			// TODO improve the error handling
-			if (fw == null)
-				return "";
+			if (fw == null) {
+				return "";  //$NON-NLS-1$
+			}
 		}
 		return fw.getColumn(col);
 	}

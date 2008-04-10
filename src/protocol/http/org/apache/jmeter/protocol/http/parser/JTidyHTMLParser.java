@@ -100,12 +100,13 @@ class JTidyHTMLParser extends HTMLParser {
 			NamedNodeMap attrs = node.getAttributes();
 			if (name.equalsIgnoreCase(TAG_BASE)) {
 				String tmp = getValue(attrs, ATT_HREF);
-				if (tmp != null)
+				if (tmp != null) {
 					try {
 						baseUrl = new URL(baseUrl, tmp);
 					} catch (MalformedURLException e) {
 						throw new HTMLParseException(e);
 					}
+			    }
 				break;
 			}
 
@@ -178,8 +179,9 @@ class JTidyHTMLParser extends HTMLParser {
 	private String getValue(NamedNodeMap attrs, String attname) {
 		String v = null;
 		Node n = attrs.getNamedItem(attname);
-		if (n != null)
+		if (n != null) {
 			v = n.getNodeValue();
+		}
 		return v;
 	}
 

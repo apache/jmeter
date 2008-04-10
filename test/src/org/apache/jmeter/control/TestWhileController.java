@@ -30,10 +30,10 @@ import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestWhileController extends JMeterTestCase {
-		static {
-			// LoggingManager.setPriority("DEBUG","jmeter");
-			// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-		}
+//		static {
+//			 LoggingManager.setPriority("DEBUG","jmeter");
+//			 LoggingManager.setTarget(new java.io.PrintWriter(System.out));
+//		}
 
 		public TestWhileController(String name) {
 			super(name);
@@ -64,9 +64,8 @@ public class TestWhileController extends JMeterTestCase {
 			Sampler s = c.next();
 			if (s == null) {
 				return null;
-			} else {
-				return s.getName();
 			}
+			return s.getName();
 		}
 
 		// While (blank), previous sample OK - should loop until false

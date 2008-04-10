@@ -822,7 +822,7 @@ class TreeNodeWrapper {
 	private String label;
 
 	private TreeNodeWrapper() {
-	};
+	}
 
 	public TreeNodeWrapper(JMeterTreeNode tn, String label) {
 		this.tn = tn;

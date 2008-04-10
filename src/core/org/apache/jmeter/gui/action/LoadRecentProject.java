@@ -54,7 +54,9 @@ public class LoadRecentProject extends Load {
 
 	public void doAction(ActionEvent e) {
         // We must ask the user if it is ok to close current project
-	    if (!Close.performAction(e)) return;
+	    if (!Close.performAction(e)) {
+	        return;
+	    }
         // Load the file for this recent file command
 	    loadProjectFile(e, getRecentFile(e), false);
 	}
@@ -160,7 +162,9 @@ public class LoadRecentProject extends Load {
             if(recentFilePath != null) {
                 File file = new File(recentFilePath);
                 StringBuffer sb = new StringBuffer(60);
-                if (i<9) sb.append(i+1).append(" "); //$NON-NLS-1$
+                if (i<9) {
+                    sb.append(i+1).append(" "); //$NON-NLS-1$
+                }
                 sb.append(getMenuItemDisplayName(file));
                 recentFile.setText(sb.toString());
                 recentFile.setToolTipText(recentFilePath);

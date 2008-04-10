@@ -83,8 +83,9 @@ public class LogFunction2 extends AbstractFunction implements Serializable {
 		String priorityString;
 		if (values.length > 1) { // We have a default
 			priorityString = ((CompoundVariable) values[1]).execute();
-			if (priorityString.length() == 0)
+			if (priorityString.length() == 0) {
 				priorityString = DEFAULT_PRIORITY;
+			}
 		} else {
 			priorityString = DEFAULT_PRIORITY;
 		}

@@ -125,9 +125,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 */
 	public void save(String authFile) throws IOException {
 		File file = new File(authFile);
-		if (!file.isAbsolute())
+		if (!file.isAbsolute()) {
 			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
                     + File.separator + authFile);
+		}
 		PrintWriter writer = new PrintWriter(new FileWriter(file));
 		writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
 		PropertyIterator cookies = getCookies().iterator();
@@ -148,9 +149,10 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
 	 */
 	public void addFile(String cookieFile) throws IOException {
 		File file = new File(cookieFile);
-		if (!file.isAbsolute())
+		if (!file.isAbsolute()) {
 			file = new File(System.getProperty("user.dir") // $NON-NLS-1$
                     + File.separator + cookieFile);
+		}
 		BufferedReader reader = null;
 		if (file.canRead()) {
 			reader = new BufferedReader(new FileReader(file));
@@ -164,8 +166,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
             final CollectionProperty cookies = getCookies();
     		while ((line = reader.readLine()) != null) {
     			try {
-    				if (line.startsWith("#") || line.trim().length() == 0)//$NON-NLS-1$
+    				if (line.startsWith("#") || line.trim().length() == 0) {//$NON-NLS-1$
     					continue;
+    				}
                     String[] st = JOrphanUtils.split(line, TAB, false);
     				
                     final int _domain = 0;
@@ -180,11 +183,14 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
                         throw new IOException("Expected "+_fields+" fields, found "+st.length+" in "+line);
                     }
     
-                    if (st[_path].length()==0)
+                    if (st[_path].length()==0) {
     					st[_path] = "/"; //$NON-NLS-1$
+                    }
                     boolean secure = Boolean.valueOf(st[_secure]).booleanValue();
                     long expires = new Long(st[_expires]).longValue();
-                    if (expires==Long.MAX_VALUE) expires=0;
+                    if (expires==Long.MAX_VALUE) {
+                        expires=0;
+                    }
                     //long max was used to represent a non-expiring cookie, but that caused problems
     				Cookie cookie = new Cookie(st[_name], st[_value], st[_domain], st[_path], secure, expires);
                     cookies.addItem(cookie);
@@ -307,9 +313,13 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         for (PropertyIterator iter = getCookies().iterator(); iter.hasNext();) {
             Cookie jmcookie = (Cookie) iter.next().getObjectValue();
             // Set to running version, to allow function evaluation for the cookie values (bug 28715)
-            if (ALLOW_VARIABLE_COOKIES) jmcookie.setRunningVersion(true);
+            if (ALLOW_VARIABLE_COOKIES) {
+                jmcookie.setRunningVersion(true);
+            }
             cookies[i++] = makeCookie(jmcookie);
-            if (ALLOW_VARIABLE_COOKIES) jmcookie.setRunningVersion(false);
+            if (ALLOW_VARIABLE_COOKIES) {
+                jmcookie.setRunningVersion(false);
+            }
         }
         String host = url.getHost();
         String protocol = url.getProtocol();
@@ -363,7 +373,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         } catch (IllegalArgumentException e) {
             log.warn(cookieHeader+e.getLocalizedMessage());
         }
-        if (cookies == null) return;
+        if (cookies == null) {
+            return;
+        }
         for(int i=0;i<cookies.length;i++){
             Date expiryDate = cookies[i].getExpiryDate();
             long exp = 0;
@@ -407,8 +419,9 @@ public class CookieManager extends ConfigTestElement implements TestListener, Se
         PropertyIterator iter = getCookies().iterator();
         while (iter.hasNext()) {
             Cookie cookie = (Cookie) iter.next().getObjectValue();
-            if (cookie == null)
+            if (cookie == null) {
                 continue;
+            }
             if (match(cookie,newCookie)) { 
                 if (log.isDebugEnabled()) {
                     log.debug("New Cookie = " + newCookie.toString()

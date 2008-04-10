@@ -48,7 +48,7 @@ public class Example1 extends AbstractSampler implements TestBean {
 	// A String property:
 	public void setMyStringProperty(String s) {
         myStringProperty=s;
-	};
+	}
 
 	public String getMyStringProperty() {
 		return myStringProperty;

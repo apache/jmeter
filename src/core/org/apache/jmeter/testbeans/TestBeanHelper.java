@@ -38,8 +38,6 @@ import org.apache.log.Logger;
  * from the test beans themselves. To ensure this will be doable with minimum
  * damage, all inherited methods are deprecated.
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart </a>
- * @version $Revision$ updated on $Date$
  */
 public class TestBeanHelper {
 	protected static final Logger log = LoggingManager.getLoggerForClass();
@@ -60,8 +58,9 @@ public class TestBeanHelper {
 			PropertyDescriptor[] desc = beanInfo.getPropertyDescriptors();
 			Object[] param = new Object[1];
 
-			if (log.isDebugEnabled())
+			if (log.isDebugEnabled()) {
 				log.debug("Preparing " + el.getClass());
+		    }
 
 			for (int x = 0; x < desc.length; x++) {
 				// Obtain a value of the appropriate type for this property.
@@ -69,8 +68,9 @@ public class TestBeanHelper {
 				Class type = desc[x].getPropertyType();
 				Object value = Converter.convert(jprop.getStringValue(), type);
 
-				if (log.isDebugEnabled())
+				if (log.isDebugEnabled()) {
 					log.debug("Setting " + jprop.getName() + "=" + value);
+				}
 
 				// Set the bean's property to the value we just obtained:
 				if (value != null || !type.isPrimitive())
@@ -78,7 +78,9 @@ public class TestBeanHelper {
 				{
 					param[0] = value;
 					Method writeMethod = desc[x].getWriteMethod();
-					if (writeMethod!=null) invokeOrBailOut(el, writeMethod, param);
+					if (writeMethod!=null) {
+					    invokeOrBailOut(el, writeMethod, param);
+					}
 				}
 			}
 		} catch (IntrospectionException e) {

@@ -25,10 +25,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportCellRenderer extends DefaultTreeCellRenderer {
 	public ReportCellRenderer() {
 	}
@@ -51,8 +47,9 @@ public class ReportCellRenderer extends DefaultTreeCellRenderer {
 				// Must therefore set the enabled icon so there is at least some
 				// icon
 				ic = ((ReportTreeNode) value).getIcon();
-				if (ic != null)
+				if (ic != null) {
 					setIcon(ic);
+				}
 			}
 		}
 		this.setEnabled(enabled);

@@ -63,13 +63,13 @@ public class TestHTMLParser extends JMeterTestCase {
         private static class StaticTestClass // Can't instantiate
         {
             private StaticTestClass() {
-            };
+            }
         }
 
         private class TestClass // Can't instantiate
         {
             private TestClass() {
-            };
+            }
         }
 
         private static class TestData {
@@ -193,8 +193,9 @@ public class TestHTMLParser extends JMeterTestCase {
                 HTMLParser.getParser("java.lang.String");
                 fail("Should not have been able to create the parser");
             } catch (HTMLParseError e) {
-                if (e.getCause() instanceof ClassCastException)
+                if (e.getCause() instanceof ClassCastException) {
                     return;
+                }
                 throw e;
             }
         }
@@ -204,8 +205,9 @@ public class TestHTMLParser extends JMeterTestCase {
                 HTMLParser.getParser(TestClass.class.getName());
                 fail("Should not have been able to create the parser");
             } catch (HTMLParseError e) {
-                if (e.getCause() instanceof InstantiationException)
+                if (e.getCause() instanceof InstantiationException) {
                     return;
+                }
                 throw e;
             }
         }
@@ -215,10 +217,12 @@ public class TestHTMLParser extends JMeterTestCase {
                 HTMLParser.getParser(StaticTestClass.class.getName());
                 fail("Should not have been able to create the parser");
             } catch (HTMLParseError e) {
-                if (e.getCause() instanceof ClassCastException)
+                if (e.getCause() instanceof ClassCastException) {
                     return;
-                if (e.getCause() instanceof IllegalAccessException)
+                }
+                if (e.getCause() instanceof IllegalAccessException) {
                     return;
+                }
                 throw e;
             }
         }

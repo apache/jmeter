@@ -116,8 +116,9 @@ public class TCPClientImpl implements TCPClient {
 		try {
 			while ((x = is.read(buffer)) > -1) {
 				w.write(buffer, 0, x);
-				if ((eolByte != 0) && (buffer[x - 1] == eolByte))
+				if ((eolByte != 0) && (buffer[x - 1] == eolByte)) {
 					break;
+				}
 			}
 			/*
 			 * Timeout is reported as follows: JDK1.3: InterruptedIOException

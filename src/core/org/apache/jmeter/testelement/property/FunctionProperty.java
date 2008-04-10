@@ -24,7 +24,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 
 /**
- * @version $Revision$
+ * Class that implements the Function property
  */
 public class FunctionProperty extends AbstractProperty {
 	transient CompoundVariable function;
@@ -73,19 +73,21 @@ public class FunctionProperty extends AbstractProperty {
 		if (!isRunningVersion() /*|| !ctx.isSamplingStarted()*/) {
 			log.debug("Not running version, return raw function string");
 			return function.getRawParameters();
-		} else {
-            if(!ctx.isSamplingStarted()) return function.execute();
-			log.debug("Running version, executing function");
-			int iter = ctx.getVariables() != null ? ctx.getVariables().getIteration() : -1;
-			if (iter < testIteration) {
-				testIteration = -1;
-			}
-			if (iter > testIteration || cacheValue == null) {
-				testIteration = iter;
-				cacheValue = function.execute();
-			}
-			return cacheValue;
 		}
+        if(!ctx.isSamplingStarted()) {
+            return function.execute();
+        }
+		log.debug("Running version, executing function");
+		int iter = ctx.getVariables() != null ? ctx.getVariables().getIteration() : -1;
+		if (iter < testIteration) {
+			testIteration = -1;
+		}
+		if (iter > testIteration || cacheValue == null) {
+			testIteration = iter;
+			cacheValue = function.execute();
+		}
+		return cacheValue;
+
 	}
 
 	/**

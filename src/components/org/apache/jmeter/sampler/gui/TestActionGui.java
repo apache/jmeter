@@ -89,16 +89,17 @@ public class TestActionGui extends AbstractSamplerGui {
 		TestAction ta = (TestAction) element;
 
 		target = ta.getTarget();
-		if (target == TestAction.THREAD)
+		if (target == TestAction.THREAD) {
 			targetBox.setSelectedItem(threadTarget);
-		else
+		} else {
 			targetBox.setSelectedItem(testTarget);
-
+		}
 		action = ta.getAction();
-		if (action == TestAction.PAUSE)
+		if (action == TestAction.PAUSE) {
 			pauseButton.setSelected(true);
-		else
+		} else {
 			stopButton.setSelected(true);
+		}
 
 		durationString = ta.getDurationAsString();
 		durationField.setText(durationString);

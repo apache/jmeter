@@ -623,17 +623,21 @@ public class ProxyControl extends GenericController {
 	 */
 	private JMeterTreeNode findTargetControllerNode() {
 		JMeterTreeNode myTarget = getTarget();
-		if (myTarget != null)
+		if (myTarget != null) {
 			return myTarget;
+		}
 		myTarget = findFirstNodeOfType(RecordingController.class);
-		if (myTarget != null)
+		if (myTarget != null) {
 			return myTarget;
+		}
 		myTarget = findFirstNodeOfType(ThreadGroup.class);
-		if (myTarget != null)
+		if (myTarget != null) {
 			return myTarget;
+		}
 		myTarget = findFirstNodeOfType(WorkBench.class);
-		if (myTarget != null)
+		if (myTarget != null) {
 			return myTarget;
+		}
 		log.error("Program error: proxy recording target not found.");
 		return null;
 	}
@@ -670,10 +674,11 @@ public class ProxyControl extends GenericController {
 			if (subNode.isEnabled()) {
 				TestElement element = (TestElement) subNode.getUserObject();
 				if (myClass.isInstance(element)) {
-					if (ascending)
+					if (ascending) {
 						elements.addFirst(element);
-					else
+					} else {
 						elements.add(element);
+					}
 				}
 			}
 		}
@@ -688,10 +693,11 @@ public class ProxyControl extends GenericController {
 					TestElement element = (TestElement) subNode.getUserObject();
 					if (myClass.isInstance(element)) {
 						log.debug("Applicable: " + element.getName());
-						if (ascending)
+						if (ascending) {
 							elements.addFirst(element);
-						else
+						} else {
 							elements.add(element);
+						}
 					}
 
 					// Special case for the TestPlan's Arguments sub-element:
@@ -699,10 +705,11 @@ public class ProxyControl extends GenericController {
 						TestPlan tp = (TestPlan) element;
 						Arguments args = tp.getArguments();
 						if (myClass.isInstance(args)) {
-							if (ascending)
+							if (ascending) {
 								elements.addFirst(args);
-							else
+							} else {
 								elements.add(args);
+							}
 						}
 					}
 				}
@@ -728,13 +735,15 @@ public class ProxyControl extends GenericController {
 				}
 				firstInBatch = true;// Remember this was first in its batch
 			}
-			if (lastTime == 0)
+			if (lastTime == 0) {
 				deltaT = 0; // Decent value for timers
+			}
 			lastTime = now;
 
 			if (groupingMode == GROUPING_STORE_FIRST_ONLY) {
-				if (!firstInBatch)
+				if (!firstInBatch) {
 					return; // Huh! don't store this one!
+				}
 
 				// If we're not storing subsequent samplers, we'll need the
 				// first sampler to do all the work...:
@@ -803,8 +812,9 @@ public class ProxyControl extends GenericController {
 				String configValue = config.getPropertyAsString(name);
 
 				if (configValue != null && configValue.length() > 0) {
-					if (configValue.equals(value))
+					if (configValue.equals(value)) {
 						sampler.setProperty(name, ""); // $NON-NLS-1$
+					}
 					// Property was found in a config element. Whether or not
 					// it matched the value in the sampler, we're done with
 					// this property -- don't look at lower-priority configs:

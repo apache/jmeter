@@ -135,8 +135,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 
     private static boolean isPartialMatch(String host) {    
         for (int i=0;i<nonProxyHostSuffixSize;i++){
-            if (host.endsWith((String)nonProxyHostSuffix.get(i)))
+            if (host.endsWith((String)nonProxyHostSuffix.get(i))) {
                 return true;
+            }
         }
         return false;
     }
@@ -877,8 +878,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
 			log.debug("End : sample");
-			if (httpMethod != null)
+			if (httpMethod != null) {
 				httpMethod.releaseConnection();
+			}
 			return res;
 		} catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
 		{
@@ -893,8 +895,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			return err;
 		} finally {
             JOrphanUtils.closeQuietly(instream);
-			if (httpMethod != null)
+			if (httpMethod != null) {
 				httpMethod.releaseConnection();
+			}
 		}
 	}
 
@@ -982,9 +985,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             put.setRequestHeader(HEADER_CONTENT_LENGTH, Long.toString(put.getRequestEntity().getContentLength()));
             return putBody.toString();
         }
-        else {
-            return null;
-        }        
+        return null;        
     }
     
     /**

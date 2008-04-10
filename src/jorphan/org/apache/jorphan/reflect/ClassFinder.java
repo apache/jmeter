@@ -39,8 +39,6 @@ import org.apache.log.Logger;
 /**
  * This class finds classes that extend one of a set of parent classes
  * 
- * @author Burt Beckwith
- * @author Michael Stover (mstover1 at apache.org)
  */
 public final class ClassFinder {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -89,7 +87,9 @@ public final class ClassFinder {
          * @see java.util.TreeSet#add(java.lang.Object)
          */
         public boolean add(Object o){
-            if (contains(o)) return false;// No need to check it again
+            if (contains(o)) {
+                return false;// No need to check it again
+            }
             String s = (String) o;// we only expect Strings
             if (contains!=null && s.indexOf(contains) == -1){
             	return false; // It does not contain a required string
@@ -268,7 +268,9 @@ public final class ClassFinder {
      * - remove all trailing /
      */
     private static String fixPathEntry(String path){
-        if (path == null ) return null;
+        if (path == null ) {
+            return null;
+        }
         if (path.equals(".")) { // $NON-NLS-1$
             return System.getProperty("user.dir"); // $NON-NLS-1$
         }

@@ -29,7 +29,7 @@ import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
 /**
- * @author Michael Stover
+ * Converter utilities for TestBeans
  */
 public class Converter {
 
@@ -172,9 +172,8 @@ public class Converter {
 			}
 			if (o instanceof Number) {
 				return ((Number) o).floatValue();
-			} else {
-				return Float.parseFloat(o.toString());
 			}
+			return Float.parseFloat(o.toString());
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
@@ -191,9 +190,8 @@ public class Converter {
 			}
 			if (o instanceof Number) {
 				return ((Number) o).doubleValue();
-			} else {
-				return Double.parseDouble(o.toString());
 			}
+			return Double.parseDouble(o.toString());
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
@@ -212,8 +210,8 @@ public class Converter {
 			return defaultValue;
 		} else if (o instanceof Boolean) {
 			return ((Boolean) o).booleanValue();
-		} else
-			return Boolean.valueOf(o.toString()).booleanValue();
+		}
+		return Boolean.valueOf(o.toString()).booleanValue();
 	}
 
 	/**
@@ -231,9 +229,8 @@ public class Converter {
 			}
 			if (o instanceof Number) {
 				return ((Number) o).intValue();
-			} else {
-				return Integer.parseInt(o.toString());
 			}
+			return Integer.parseInt(o.toString());
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
@@ -258,8 +255,8 @@ public class Converter {
 				String s = o.toString();
 				if (s.length() > 0) {
 					return o.toString().charAt(0);
-				} else
-					return defaultValue;
+				}
+				return defaultValue;
 			}
 		} catch (Exception e) {
 			return defaultValue;
@@ -292,9 +289,8 @@ public class Converter {
 			}
 			if (o instanceof Number) {
 				return ((Number) o).longValue();
-			} else {
-				return Long.parseLong(o.toString());
 			}
+			return Long.parseLong(o.toString());
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}
@@ -360,26 +356,20 @@ public class Converter {
 	public static String insertLineBreaks(String v, String insertion) {
 		if (v == null) {
 			return "";
-		} else {
-			StringBuffer replacement = new StringBuffer();
-			StringTokenizer tokens = new StringTokenizer(v, "\n", true);
-			while (tokens.hasMoreTokens()) {
-				String token = tokens.nextToken();
-				if (token.compareTo("\n") == 0) {
-					replacement.append(insertion);
-				} else {
-					replacement.append(token);
-				}
-			}
-			return replacement.toString();
 		}
+		StringBuffer replacement = new StringBuffer();
+		StringTokenizer tokens = new StringTokenizer(v, "\n", true);
+		while (tokens.hasMoreTokens()) {
+			String token = tokens.nextToken();
+			if (token.compareTo("\n") == 0) {
+				replacement.append(insertion);
+			} else {
+				replacement.append(token);
+			}
+		}
+		return replacement.toString();
 	}
-// Does not appear to be used.
-// Remove as replaceAll() requires 1.4
-//	public static String insertSpaceBreaks(String v, String insertion) {
-//		return v.trim().replaceAll("\\s+", insertion);
-//	}
-
+	
 	/**
 	 * Converts object to a String, defaults to empty string if object is null.
 	 * 

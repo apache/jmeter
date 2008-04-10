@@ -52,10 +52,10 @@ public class PackageTest extends JMeterTestCase {
 
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	static {
-		// LoggingManager.setPriority("DEBUG","jmeter");
-		// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-	}
+//	static {
+//		 LoggingManager.setPriority("DEBUG","jmeter");
+//		 LoggingManager.setTarget(new java.io.PrintWriter(System.out));
+//	}
 
 	public PackageTest(String arg0) {
 		super(arg0);
@@ -65,10 +65,12 @@ public class PackageTest extends JMeterTestCase {
 	private static CSVRead setCSVReadParams(String p1, String p2) throws Exception {
 		CSVRead cr = new CSVRead();
 		Collection parms = new LinkedList();
-		if (p1 != null)
+		if (p1 != null) {
 			parms.add(new CompoundVariable(p1));
-		if (p2 != null)
+		}
+		if (p2 != null) {
 			parms.add(new CompoundVariable(p2));
+		}
 		cr.setParameters(parms);
 		return cr;
 	}
@@ -77,14 +79,18 @@ public class PackageTest extends JMeterTestCase {
 	private static StringFromFile SFFParams(String p1, String p2, String p3, String p4) throws Exception {
 		StringFromFile sff = new StringFromFile();
 		Collection parms = new LinkedList();
-		if (p1 != null)
+		if (p1 != null) {
 			parms.add(new CompoundVariable(p1));
-		if (p2 != null)
+		}
+		if (p2 != null) {
 			parms.add(new CompoundVariable(p2));
-		if (p3 != null)
+		}
+		if (p3 != null) {
 			parms.add(new CompoundVariable(p3));
-		if (p4 != null)
+		}
+		if (p4 != null) {
 			parms.add(new CompoundVariable(p4));
+		}
 		sff.setParameters(parms);
 		return sff;
 	}
@@ -94,10 +100,12 @@ public class PackageTest extends JMeterTestCase {
 		SplitFunction split = new SplitFunction();
 		Collection parms = new LinkedList();
 		parms.add(new CompoundVariable(p1));
-		if (p2 != null)
+		if (p2 != null) {
 			parms.add(new CompoundVariable(p2));
-		if (p3 != null)
+		}
+		if (p3 != null) {
 			parms.add(new CompoundVariable(p3));
+		}
 		split.setParameters(parms);
 		return split;
 	}
@@ -111,12 +119,15 @@ public class PackageTest extends JMeterTestCase {
 
 	private static Collection MakeParams(String p1, String p2, String p3) {
 		Collection parms = new LinkedList();
-		if (p1 != null)
+		if (p1 != null) {
 			parms.add(new CompoundVariable(p1));
-		if (p2 != null)
+		}
+		if (p2 != null) {
 			parms.add(new CompoundVariable(p2));
-		if (p3 != null)
+		}
+		if (p3 != null) {
 			parms.add(new CompoundVariable(p3));
+		}
 		return parms;
 	}
 

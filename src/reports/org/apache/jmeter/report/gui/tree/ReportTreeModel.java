@@ -38,12 +38,6 @@ import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 
-/**
- * 
- * author Peter Lin
- * 
- * @version $Revision$
- */
 public class ReportTreeModel extends DefaultTreeModel {
 
 	public ReportTreeModel() {
@@ -152,8 +146,9 @@ public class ReportTreeModel extends DefaultTreeModel {
 		while (enumNode.hasMoreElements()) {
 			ReportTreeNode child = (ReportTreeNode) enumNode.nextElement();
 			ReportTreeNode result = traverseAndFind(userObject, child);
-			if (result != null)
+			if (result != null) {
 				return result;
+			}
 		}
 		return null;
 	}

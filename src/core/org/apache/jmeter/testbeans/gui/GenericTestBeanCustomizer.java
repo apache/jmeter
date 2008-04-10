@@ -90,8 +90,6 @@ import org.apache.log.Logger;
  * will be obtained from property "<b><i>group</i>.displayName</b>" if
  * available (where <b><i>group</i></b> is the group name).
  * </dl>
- * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
 public class GenericTestBeanCustomizer extends JPanel implements SharedCustomizer {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -253,17 +251,19 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		String[] editorTags = typeEditor.getTags();
 		String[] additionalTags = (String[]) descriptor.getValue(TAGS);
 		String[] tags = null;
-		if (editorTags == null)
+		if (editorTags == null) {
 			tags = additionalTags;
-		else if (additionalTags == null)
+		} else if (additionalTags == null) {
 			tags = editorTags;
-		else {
+		} else {
 			tags = new String[editorTags.length + additionalTags.length];
 			int j = 0;
-			for (int i = 0; i < editorTags.length; i++)
+			for (int i = 0; i < editorTags.length; i++) {
 				tags[j++] = editorTags[i];
-			for (int i = 0; i < additionalTags.length; i++)
+			}
+			for (int i = 0; i < additionalTags.length; i++) {
 				tags[j++] = additionalTags[i];
+			}
 		}
 
 		boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
@@ -330,8 +330,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
 		// Now set the editors to the element's values:
 		for (int i = 0; i < editors.length; i++) {
-			if (editors[i] == null)
+			if (editors[i] == null) {
 				continue;
+			}
 			try {
 				setEditorValue(i, propertyMap.get(descriptors[i].getName()));
 			} catch (IllegalArgumentException e) {
@@ -400,8 +401,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		int y = 0;
 
 		for (int i = 0; i < editors.length; i++) {
-			if (editors[i] == null)
+			if (editors[i] == null) {
 				continue;
+			}
 
 			if (log.isDebugEnabled()) {
 				log.debug("Laying property " + descriptors[i].getName());
@@ -482,8 +484,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	 */
 	private String group(PropertyDescriptor d) {
 		String group = (String) d.getValue(GROUP);
-		if (group == null)
+		if (group == null){
 			group = DEFAULT_GROUP;
+		}
 		return group;
 	}
 
@@ -493,10 +496,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 	private String groupDisplayName(String group) {
 		try {
 			ResourceBundle b = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(RESOURCE_BUNDLE);
-			if (b == null)
+			if (b == null) {
 				return group;
-			else
-				return b.getString(group + ".displayName");
+			}
+			return b.getString(group + ".displayName");
 		} catch (MissingResourceException e) {
 			return group;
 		}
@@ -517,17 +520,20 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 			Integer go1 = groupOrder(g1), go2 = groupOrder(g2);
 
 			result = go1.compareTo(go2);
-			if (result != 0)
+			if (result != 0) {
 				return result;
+			}
 
 			result = g1.compareTo(g2);
-			if (result != 0)
+			if (result != 0) {
 				return result;
+			}
 
 			Integer po1 = propertyOrder(d1), po2 = propertyOrder(d2);
 			result = po1.compareTo(po2);
-			if (result != 0)
+			if (result != 0) {
 				return result;
+			}
 
 			return d1.getName().compareTo(d2.getName());
 		}
@@ -541,8 +547,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		 */
 		private Integer groupOrder(String group) {
 			Integer order = (Integer) beanInfo.getBeanDescriptor().getValue(ORDER(group));
-			if (order == null)
+			if (order == null) {
 				order = new Integer(0);
+			}
 			return order;
 		}
 
@@ -554,8 +561,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 		 */
 		private Integer propertyOrder(PropertyDescriptor d) {
 			Integer order = (Integer) d.getValue(ORDER);
-			if (order == null)
+			if (order == null) {
 				order = new Integer(0);
+			}
 			return order;
 		}
 	}
