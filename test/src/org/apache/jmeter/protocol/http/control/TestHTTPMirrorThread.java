@@ -76,7 +76,7 @@ public class TestHTTPMirrorThread extends TestCase {
     		}
     	};
     	return setup;
-    };
+    }
 
     /**
      * Utility method to handle starting the HttpMirrorServer for testing.
@@ -96,7 +96,9 @@ public class TestHTTPMirrorThread extends TestCase {
 			if (e != null) {// Already failed
 	        	throw new Exception("Could not start mirror server on port: "+port+". "+e);
 			}
-			if (server.isAlive()) break; // succeeded
+			if (server.isAlive()) {
+			    break; // succeeded
+			}
         }
         
         if (!server.isAlive()){

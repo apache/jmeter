@@ -28,8 +28,7 @@ import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Class implementing a file open dialogue
  */
 public final class FileDialoger {
 	/**
@@ -75,9 +74,8 @@ public final class FileDialoger {
 
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			return jfc;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	private static void clearFileFilters() {
@@ -141,8 +139,7 @@ public final class FileDialoger {
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 			return jfc;
-		} else {
-			return null;
 		}
+		return null;
 	}
 }

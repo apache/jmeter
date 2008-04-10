@@ -137,8 +137,9 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 	 * test has ended ...
 	 */
 	private void closeFile() {
-		if (myBread == null)
+		if (myBread == null) {
 			return;
+		}
 		String tn = Thread.currentThread().getName();
 		log.info(tn + " closing file " + fileName);//$NON-NLS-1$
 		try {
@@ -172,8 +173,9 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 		}
 		// Have we used myCurrent yet?
 		// Set to 1 if start number is missing (to allow for end without start)
-		if (myCurrent == COUNT_UNUSED)
+		if (myCurrent == COUNT_UNUSED) {
 			myCurrent = myStart == COUNT_UNUSED ? 1 : myStart;
+		}
 
 		if (values.length >= PARAM_END) {
 			String tmp = ((CompoundVariable) values[PARAM_END - 1]).execute();
@@ -312,8 +314,9 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 		StringBuffer sb = new StringBuffer(40);
 		sb.append("setParameters(");//$NON-NLS-1$
 		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
+			if (i > 0) {
 				sb.append(",");
+			}
 			sb.append(((CompoundVariable) values[i]).getRawParameters());
 		}
 		sb.append(")");//$NON-NLS-1$

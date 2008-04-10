@@ -43,7 +43,7 @@ public class IterationCounter extends AbstractFunction implements Serializable {
         perThreadInt = new ThreadLocal(){
             protected synchronized Object initialValue() {
                 return new Integer(0);
-            };
+            }
         };
     }
         
@@ -102,8 +102,9 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 			counterString = String.valueOf(globalCounter);
 		}
 
-		if (varName.length() > 0)
+		if (varName.length() > 0) {
 			vars.put(varName, counterString);
+		}
 		return counterString;
 	}
 

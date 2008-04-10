@@ -25,8 +25,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Class to render the test tree - sets the enabled/disabled versions of the icons
  */
 public class JMeterCellRenderer extends DefaultTreeCellRenderer {
 	public JMeterCellRenderer() {
@@ -50,8 +49,9 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
 				// Must therefore set the enabled icon so there is at least some
 				// icon
 				ic = ((JMeterTreeNode) value).getIcon();
-				if (ic != null)
-					setIcon(ic);
+				if (ic != null) {
+				    setIcon(ic);
+				}
 			}
 		}
 		this.setEnabled(enabled);

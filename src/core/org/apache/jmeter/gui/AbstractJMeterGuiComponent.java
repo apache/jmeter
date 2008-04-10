@@ -123,8 +123,8 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
 	public String getName() {
 		if (getNamePanel() != null) {
 			return getNamePanel().getName();
-		} else
-			return ""; // $NON-NLS-1$
+		}
+		return ""; // $NON-NLS-1$
 	}
     
     /**
@@ -135,9 +135,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         if (getCommentPanel() != null) {
             return getCommentPanel().getText();
         }
-        else {
-            return ""; // $NON-NLS-1$
-        }
+        return ""; // $NON-NLS-1$
     }
 
 	/**

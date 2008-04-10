@@ -262,13 +262,12 @@ public class GenericController extends AbstractTestElement implements Controller
 	protected TestElement getCurrentElement() throws NextIsNullException {
 		if (current < subControllersAndSamplers.size()) {
 			return (TestElement) subControllersAndSamplers.get(current);
-		} else {
-			if (subControllersAndSamplers.size() == 0) {
-				setDone(true);
-				throw new NextIsNullException();
-			}
-			return null;
 		}
+		if (subControllersAndSamplers.size() == 0) {
+			setDone(true);
+			throw new NextIsNullException();
+		}
+		return null;
 	}
 
 	protected void removeCurrentElement() {

@@ -167,9 +167,9 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
 		success = context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT).equalsIgnoreCase("OK");
 
 		label = context.getParameter(LABEL_NAME, "");
-		if (label.length() == 0)
-			label = context.getParameter(TestElement.NAME); // default to name
-															// of element
+		if (label.length() == 0) {
+			label = context.getParameter(TestElement.NAME); // default to name of element
+		}
 
 		samplerData = context.getParameter(SAMPLER_DATA_NAME, SAMPLER_DATA_DEFAULT);
 

@@ -33,13 +33,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-/**
- * @author Peter Lin
- *
- */
 public class ReportPageGui extends AbstractReportGui {
     
-    private JLabeledTextField pageTitle = new JLabeledTextField(JMeterUtils.getResString("report_page_title"));;
+    private JLabeledTextField pageTitle = new JLabeledTextField(JMeterUtils.getResString("report_page_title"));
 
     private JCheckBox makeIndex = new JCheckBox(JMeterUtils.getResString("report_page_index"));
     

@@ -33,10 +33,10 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 
 public class TestSwitchController extends JMeterTestCase {
-		static {
-			// LoggingManager.setPriority("DEBUG","jmeter");
-			// LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-		}
+//		static {
+//			 LoggingManager.setPriority("DEBUG","jmeter");
+//			 LoggingManager.setTarget(new java.io.PrintWriter(System.out));
+//		}
 
 		public TestSwitchController(String name) {
 			super(name);
@@ -48,10 +48,9 @@ public class TestSwitchController extends JMeterTestCase {
 			String n;
 			if (s == null) {
 				return null;
-			} else {
-				n = s.getName();
-				return n;
 			}
+			n = s.getName();
+			return n;
 		}
 
 		public void test() throws Exception {

@@ -49,7 +49,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  */
 public class SwitchController extends GenericController implements Serializable {
 	// Package access for use by Test code
-	final static String SWITCH_VALUE = "SwitchController.value";
+	final static String SWITCH_VALUE = "SwitchController.value"; //$NON-NLS-1$
 
 	public SwitchController() {
 		super();
@@ -112,8 +112,12 @@ public class SwitchController extends GenericController implements Serializable 
 			String name;
 		    TestElement el = (TestElement)iter.next();
 		    name=el.getName();
-			if (name.equals(sel)) return i;
-     		if (name.equalsIgnoreCase("default")) default_pos = i;
+			if (name.equals(sel)) { 
+			    return i; 
+			}
+     		if (name.equalsIgnoreCase("default")) {  //$NON-NLS-1$
+     		    default_pos = i; 
+     		}
 			i++;
 		}
 		return default_pos;	

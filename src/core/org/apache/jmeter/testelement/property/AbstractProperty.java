@@ -37,8 +37,9 @@ public abstract class AbstractProperty implements JMeterProperty {
 	// private static StringProperty defaultProperty = new StringProperty();
 
 	public AbstractProperty(String name) {
-		if (name == null)
+		if (name == null) {
 			throw new IllegalArgumentException("Name cannot be null");
+		}
 		this.name = name;
 	}
 
@@ -73,8 +74,9 @@ public abstract class AbstractProperty implements JMeterProperty {
 	}
 
 	public void setName(String name) {
-		if (name == null)
+		if (name == null) {
 			throw new IllegalArgumentException("Name cannot be null");
+		}
 		this.name = name;
 	}
 
@@ -198,13 +200,16 @@ public abstract class AbstractProperty implements JMeterProperty {
 	 * @return true if names are equal and values are equal (or both null)
 	 */
 	public boolean equals(Object o) {
-		if (!(o instanceof JMeterProperty))
+		if (!(o instanceof JMeterProperty)) {
 			return false;
-		if (this == o)
+		}
+		if (this == o) {
 			return true;
+		}
 		JMeterProperty jpo = (JMeterProperty) o;
-		if (!name.equals(jpo.getName()))
+		if (!name.equals(jpo.getName())) {
 			return false;
+		}
 		String s1 = getStringValue();
 		String s2 = jpo.getStringValue();
 		return s1 == null ? s2 == null : s1.equals(s2);

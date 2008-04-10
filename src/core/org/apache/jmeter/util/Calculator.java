@@ -160,8 +160,9 @@ public class Calculator {
      * started before that start time and ended after that end time.
      */
     public double getRate() {
-        if (elapsedTime == 0)
+        if (elapsedTime == 0) {
             return 0.0;
+        }
 
         return ((double) count / (double) elapsedTime ) * 1000;
     }

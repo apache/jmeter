@@ -45,8 +45,6 @@ import org.apache.jmeter.protocol.http.control.AuthManager;
  * <p>
  * Created on: Jun 3, 2003<br>
  * 
- * @author Peter Lin
- * @version $Revision$
  */
 public class WSDLHelper {
 	/**
@@ -196,9 +194,10 @@ public class WSDLHelper {
 	 */
 	protected void close() {
 		try {
-			if (CONN != null)
+			if (CONN != null) {
 				CONN.getInputStream().close();
-		} catch (IOException exception) {
+			}
+		} catch (IOException ignored) {
 			// do nothing
 		}
 	}
@@ -324,9 +323,8 @@ public class WSDLHelper {
 		}
 		if (list.size() > 0) {
 			return list.toArray();
-		} else {
-			return new Object[0];
 		}
+		return new Object[0];
 	}
 
 	/**

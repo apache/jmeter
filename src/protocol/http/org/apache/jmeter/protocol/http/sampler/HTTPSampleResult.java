@@ -26,7 +26,6 @@ import org.apache.jmeter.samplers.SampleResult;
 /**
  * This is a specialisation of the SampleResult class for the HTTP protocol.
  * 
- * author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
 public class HTTPSampleResult extends SampleResult {
 
@@ -87,8 +86,9 @@ public class HTTPSampleResult extends SampleResult {
 		final String[] REDIRECT_CODES = { "301", "302", "303" }; // NOT 304!
 		String code = getResponseCode();
 		for (int i = 0; i < REDIRECT_CODES.length; i++) {
-			if (REDIRECT_CODES[i].equals(code))
+			if (REDIRECT_CODES[i].equals(code)) {
 				return true;
+			}
 		}
 		return false;
 	}

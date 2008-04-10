@@ -162,7 +162,7 @@ public class FileServer {
 				fileEntry.inputOutputObject = reader;
 				line = reader.readLine();
 			}
-            if (log.isDebugEnabled()) log.debug("Read:"+line);
+            if (log.isDebugEnabled()) { log.debug("Read:"+line); }
 			return line;
 		}
 		throw new IOException("File never reserved: "+filename);
@@ -190,7 +190,7 @@ public class FileServer {
 				throw new IOException("File " + filename + " already in use");
 			}
 			BufferedWriter writer = (BufferedWriter) fileEntry.inputOutputObject;
-            if (log.isDebugEnabled()) log.debug("Write:"+value);
+            if (log.isDebugEnabled()) { log.debug("Write:"+value); }
 			writer.write(value);
 		} else {
             throw new IOException("File never reserved: "+filename);      

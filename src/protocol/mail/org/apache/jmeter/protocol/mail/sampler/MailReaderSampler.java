@@ -39,7 +39,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Thad Smith
+ * Sampler that can read from POP3 and IMAP mail servers
  */
 public class MailReaderSampler extends AbstractSampler {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -108,8 +108,9 @@ public class MailReaderSampler extends AbstractSampler {
 			data.append(" messages found\n");
 
 			int n = getNumMessages();
-			if (n == ALL_MESSAGES || n > messages.length)
+			if (n == ALL_MESSAGES || n > messages.length) {
 				n = messages.length;
+			}
 
 			// TODO - create a sample result for each message?
 			for (int i = 0; i < n; i++) {
@@ -131,8 +132,9 @@ public class MailReaderSampler extends AbstractSampler {
 				Address[] recips = message.getAllRecipients();
 				for (int j = 0; j < recips.length; j++) {
 					data.append(recips[j].toString());
-					if (j < recips.length - 1)
+					if (j < recips.length - 1) {
 						data.append("; "); // $NON-NLS-1$
+					}
 				}
 				data.append(NEW_LINE);
 
@@ -140,8 +142,9 @@ public class MailReaderSampler extends AbstractSampler {
 				Address[] from = message.getFrom();
 				for (int j = 0; j < from.length; j++) {
 					data.append(from[j].toString());
-					if (j < from.length - 1)
+					if (j < from.length - 1) {
 						data.append("; "); // $NON-NLS-1$
+					}
 				}
 				data.append(NEW_LINE);
 

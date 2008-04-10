@@ -97,7 +97,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
     		}
     	};
     	return setup;
-    };
+    }
     
     public void testPostRequest_UrlEncoded() throws Exception {
         testPostRequest_UrlEncoded(HTTP_SAMPLER, ISO_8859_1);
@@ -1018,9 +1018,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends TestCase {
             // The value is in the first group, group 0 is the whole match
             return localMatcher.getMatch().group(1);
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     private boolean checkRegularExpression(String stringToCheck, String regularExpression) {

@@ -77,8 +77,9 @@ public class CSVDataSet extends ConfigTestElement implements TestBean, LoopItera
 		}
 		try {
 			String delim = getDelimiter();
-			if (delim.equals("\\t")) // $NON-NLS-1$
+			if (delim.equals("\\t")) { // $NON-NLS-1$
 				delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
+		    }
             JMeterVariables threadVars = this.getThreadContext().getVariables();
 			String line = server.readLine(_fileName,getRecycle());
             if (line!=null) {// i.e. not EOF

@@ -103,9 +103,7 @@ public class LoopController extends GenericController implements Serializable {
         if(endOfLoop()) {
             return null;
         }
-        else {
-            return super.next();
-        }
+        return super.next();
     }
 
 	private boolean endOfLoop() {
