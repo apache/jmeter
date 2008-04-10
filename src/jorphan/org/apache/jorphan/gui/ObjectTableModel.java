@@ -168,8 +168,9 @@ public class ObjectTableModel extends DefaultTableModel {
 	public Object getValueAt(int row, int col) {
 		log.debug("Getting row value");
 		Object value = objects.get(row);
-		if(headers.size() == 1 && col >= readFunctors.size())
+		if(headers.size() == 1 && col >= readFunctors.size()) {
 			return value;
+		}
 		Functor getMethod = (Functor) readFunctors.get(col);
 		if (getMethod != null && value != null) {
 			return getMethod.invoke(value);

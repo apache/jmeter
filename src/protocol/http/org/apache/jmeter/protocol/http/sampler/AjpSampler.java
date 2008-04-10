@@ -156,10 +156,11 @@ public class AjpSampler extends HTTPSamplerBase {
         res.setHTTPMethod(method);
         outpos = 4;
         setByte((byte)2);
-        if(method.equals(POST))
+        if(method.equals(POST)) {
             setByte((byte)4);
-        else
+        } else {
             setByte((byte)2);
+        }
         if(JMeterUtils.getPropDefault("httpclient.version","1.1").equals("1.0")) {//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             setString("HTTP/1.0");//$NON-NLS-1$
         } else {

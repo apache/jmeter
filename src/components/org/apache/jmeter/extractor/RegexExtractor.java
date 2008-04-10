@@ -335,8 +335,9 @@ public class RegexExtractor extends AbstractTestElement implements PostProcessor
 	private MatchResult getCorrectMatch(List matches, int entry) {
 		int matchSize = matches.size();
 
-		if (matchSize <= 0 || entry > matchSize)
-			return null;
+		if (matchSize <= 0 || entry > matchSize){
+		    return null;
+		}
 
 		if (entry == 0) // Random match
 		{

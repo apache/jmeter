@@ -27,7 +27,6 @@ import org.apache.jmeter.samplers.SampleResult;
  * class, and then call {@link #addSample(SampleResult)} a few times, and pull
  * the stats out with whatever methods you prefer.
  * 
- * @author James Boutcher
  */
 public class RunningSample {
 
@@ -107,8 +106,9 @@ public class RunningSample {
 	 * @return how long the samples took
 	 */
 	public long getElapsed() {
-		if (lastTime == 0)
+		if (lastTime == 0) {
 			return 0;// No samples collected ...
+		}
 		return lastTime - firstTime;
 	}
 
@@ -119,8 +119,9 @@ public class RunningSample {
 	 * started before that start time and ended after that end time.
 	 */
 	public double getRate() {
-		if (counter == 0)
+		if (counter == 0) {
 			return 0.0; // Better behaviour when howLong=0 or lastTime=0
+		}
 
 		long howLongRunning = lastTime - firstTime;
 
@@ -138,8 +139,9 @@ public class RunningSample {
 	 * started before that start time and ended after that end time.
 	 */
 	public double getRatePerMin() {
-		if (counter == 0)
+		if (counter == 0) {
 			return 0.0; // Better behaviour when howLong=0 or lastTime=0
+		}
 
 		long howLongRunning = lastTime - firstTime;
 
@@ -236,14 +238,18 @@ public class RunningSample {
 		this.counter += rs.counter;
 		this.errorCount += rs.errorCount;
 		this.runningSum += rs.runningSum;
-		if (this.firstTime > rs.firstTime)
+		if (this.firstTime > rs.firstTime) {
 			this.firstTime = rs.firstTime;
-		if (this.lastTime < rs.lastTime)
+		}
+		if (this.lastTime < rs.lastTime) {
 			this.lastTime = rs.lastTime;
-		if (this.max < rs.max)
+		}
+		if (this.max < rs.max) {
 			this.max = rs.max;
-		if (this.min > rs.min)
+		}
+		if (this.min > rs.min) {
 			this.min = rs.min;
+		}
 	}
 
 	/**

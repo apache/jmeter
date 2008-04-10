@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -33,10 +32,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportDragNDrop extends AbstractAction {
 	public final static String ADD = "drag_n_drop.add";//$NON-NLS-1$
 
@@ -97,18 +92,23 @@ public class ReportDragNDrop extends AbstractAction {
 	 * @return whether it is OK to add the dragged nodes to this parent
 	 */
 	static boolean canAddTo(ReportTreeNode parentNode) {
-		if (null == parentNode)
+		if (null == parentNode) {
 			return false;
+		}
 		TestElement te = parentNode.getTestElement();
 		// System.out.println("Add to: "+te.getClass().getName());
-		if (te instanceof Controller)
+		if (te instanceof Controller) {
 			return true;
-		if (te instanceof Sampler)
+		}
+		if (te instanceof Sampler) {
 			return true;
-		if (te instanceof WorkBench)
+		}
+		if (te instanceof WorkBench) {
 			return true;
-		if (te instanceof TestPlan)
+		}
+		if (te instanceof TestPlan) {
 			return true;
+		}
 		return false;
 	}
 

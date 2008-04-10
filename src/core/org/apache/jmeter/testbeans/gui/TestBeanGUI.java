@@ -190,8 +190,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#getStaticLabel()
 	 */
 	public String getStaticLabel() {
-		if (beanInfo == null)
-			return "null";// $NON-NLS-1$
+		if (beanInfo == null){
+		    return "null";// $NON-NLS-1$
+		}
 		return beanInfo.getBeanDescriptor().getDisplayName();
 	}
 
@@ -295,7 +296,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         {
             return MenuFactory.getDefaultVisualizerMenu();
         }
-        else return MenuFactory.getDefaultControllerMenu();
+        else {
+            return MenuFactory.getDefaultControllerMenu();
+        }
 	}
 
 	/*
@@ -304,8 +307,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#configure(org.apache.jmeter.testelement.TestElement)
 	 */
 	public void configure(TestElement element) {
-		if (!initialized)
-			init();
+		if (!initialized){
+		    init();
+		}
 		clearGui();
 
 		super.configure(element);
@@ -319,8 +323,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 		if (customizer != null) {
 			customizer.setObject(propertyMap);
 		} else {
-			if (initialized)
-				remove(customizerIndexInPanel);
+			if (initialized){
+			    remove(customizerIndexInPanel);
+			}
 			Customizer c = (Customizer) customizers.get(element);
 			if (c == null) {
 				c = createCustomizer();
@@ -413,8 +418,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 			customizer = createCustomizer();
 		}
 
-		if (customizer != null)
-			add((Component) customizer, BorderLayout.CENTER);
+		if (customizer != null){
+		    add((Component) customizer, BorderLayout.CENTER);
+		}
 	}
 
 	/*

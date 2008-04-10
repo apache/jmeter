@@ -113,8 +113,9 @@ public class SamplingStatCalculator implements Serializable {
 	 * @return how long the samples took
 	 */
 	public long getElapsed() {
-		if (getCurrentSample().getEndTime() == 0)
+		if (getCurrentSample().getEndTime() == 0) {
 			return 0;// No samples collected ...
+		}
 		return getCurrentSample().getEndTime() - firstTime;
 	}
 
@@ -125,8 +126,9 @@ public class SamplingStatCalculator implements Serializable {
 	 * started before that start time and ended after that end time.
 	 */
 	public double getRate() {
-		if (calculator.getCount() == 0)
+		if (calculator.getCount() == 0) {
 			return 0.0; // Better behaviour when howLong=0 or lastTime=0
+		}
 
 		return getCurrentSample().getThroughput();
 	}
@@ -359,9 +361,8 @@ public class SamplingStatCalculator implements Serializable {
 	public Number getMin() {
 		if (calculator.getMin().longValue() < 0) {
 			return new Long(0);
-		} else {
-			return calculator.getMin();
 		}
+		return calculator.getMin();
 	}
 
 	public Number getPercentPoint(float percent) {

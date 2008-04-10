@@ -66,9 +66,9 @@ public class HttpDefaultsGui extends AbstractConfigGui {
         cfg.clear(); // need to clear because the 
 		cfg.addConfigElement(el);
 		super.configureTestElement(config);
-		if (imageParser.isSelected())
+		if (imageParser.isSelected()) {
 			config.setProperty(new BooleanProperty(HTTPSamplerBase.IMAGE_PARSER, true));
-		else {
+		} else {
 			config.removeProperty(HTTPSamplerBase.IMAGE_PARSER);
 		}
 	}

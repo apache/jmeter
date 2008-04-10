@@ -96,7 +96,9 @@ public class TimeFunction extends AbstractFunction implements Serializable {
         } else {
             // Resolve any aliases
             String fmt = (String) aliases.get(format);
-            if (fmt == null) fmt = format;// Not found
+            if (fmt == null) {
+                fmt = format;// Not found
+            }
             SimpleDateFormat df = new SimpleDateFormat(fmt);// Not synchronised, so can't be shared
             datetime = df.format(new Date());            
         }

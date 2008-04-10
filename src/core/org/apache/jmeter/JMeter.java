@@ -337,7 +337,7 @@ public class JMeter implements JMeterPlugin {
 				startOptionalServers();
 			} else {
 				CLOption rem=parser.getArgumentById(REMOTE_OPT_PARAM);
-				if (rem==null) rem=parser.getArgumentById(REMOTE_OPT);
+				if (rem==null) { rem=parser.getArgumentById(REMOTE_OPT); }
 				startNonGui(parser.getArgumentById(TESTFILE_OPT), 
 						parser.getArgumentById(LOGFILE_OPT), 
 						rem);
@@ -366,7 +366,7 @@ public class JMeter implements JMeterPlugin {
 
 	private void updatePath(String property, String sep) {
         String userpath= JMeterUtils.getPropDefault(property,"");// $NON-NLS-1$
-        if (userpath.length() <= 0) return;
+        if (userpath.length() <= 0) { return; }
         log.info(property+"="+userpath); //$NON-NLS-1$
 		StringTokenizer tok = new StringTokenizer(userpath, sep);
 		while(tok.hasMoreTokens()) {
@@ -788,8 +788,9 @@ public class JMeter implements JMeterPlugin {
                     } else {
                         convertSubTree(tree.getTree(item));
                     }
-                } else
+                } else {
                     tree.remove(item);
+                }
             } else {
                 JMeterTreeNode item = (JMeterTreeNode) o;
                 if (item.isEnabled()) {
@@ -960,8 +961,9 @@ public class JMeter implements JMeterPlugin {
 			String icons[] = JOrphanUtils.split(p.getProperty(key), " ");//$NON-NLS-1$
 			iconlist[i][0] = key;
 			iconlist[i][1] = icons[0];
-			if (icons.length > 1)
-				iconlist[i][2] = icons[1];
+			if (icons.length > 1) {
+			    iconlist[i][2] = icons[1];
+			}
 			i++;
 		}
 		return iconlist;

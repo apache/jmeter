@@ -31,7 +31,6 @@ import org.apache.log.Logger;
  * To enable, define the JMeter property: beanshell.server.port (see
  * JMeter.java) beanshell.server.file (optional, startup file)
  * 
- * @version $Revision$ Last updated: $Date$
  */
 public class BeanShellServer implements Runnable {
 
@@ -90,7 +89,9 @@ public class BeanShellServer implements Runnable {
 				} catch (InvocationTargetException e1) {
 					log.warn("Could not source " + serverfile);
 					Throwable t= e1.getCause();
-					if (t != null) log.warn(t.toString());
+					if (t != null) {
+					    log.warn(t.toString());
+					}
 				}
 			}
 			eval.invoke(instance, new Object[] { "setAccessibility(true);" });//$NON-NLS-1$

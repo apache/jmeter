@@ -336,7 +336,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 			if (context != null) {
 				try {
 					context.close();
-				} catch (NamingException e1) {
+				} catch (NamingException ignored) {
 					// ignore
 				}
 			}
@@ -347,13 +347,15 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 		Hashtable table = new Hashtable();
 
 		if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
-			if (LOGGER.isDebugEnabled())
+			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Using InitialContext [" + getInitialContextFactory() + "]");
+			}
 			table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
 		}
 		if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
-			if (LOGGER.isDebugEnabled())
+			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Using Provider [" + getContextProvider() + "]");
+			}
 			table.put(Context.PROVIDER_URL, getContextProvider());
 		}
 		Map map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
@@ -413,21 +415,23 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 	public void threadFinished() {
 		LOGGER.debug("Thread ended " + new Date());
 
-		if (session != null)
+		if (session != null) {
 			try {
 				session.close();
 			} catch (JMSException e) {
 				LOGGER.info(e.getLocalizedMessage());
-
 			}
-		if (connection != null)
+		}
+		if (connection != null) {
 			try {
 				connection.close();
 			} catch (JMSException e) {
 				LOGGER.info(e.getLocalizedMessage());
 			}
-		if (receiverThread != null)
+		}
+		if (receiverThread != null) {
 			receiverThread.deactivate();
+		}
 	}
 
 	private boolean useTemporyQueue() {

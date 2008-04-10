@@ -81,7 +81,9 @@ public class Load implements Command {
             boolean merging = e.getActionCommand().equals(ActionNames.MERGE);
             // We must ask the user if it is ok to close current project
             if(!merging) {
-				if (!Close.performAction(e)) return;
+				if (!Close.performAction(e)) {
+				    return;
+				}
             }
             loadProjectFile(e, selectedFile, merging);
         }

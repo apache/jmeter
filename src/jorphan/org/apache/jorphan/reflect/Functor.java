@@ -333,8 +333,9 @@ public class Functor {
 					Class primitive = getPrimitive(p_types[i]);
 					if (primitive != null) {
 						methodToInvoke = doCreateMethod(p_class, getNewArray(i, primitive, p_types));
-						if (methodToInvoke != null)
+						if (methodToInvoke != null) {
 							return methodToInvoke;
+						}
 					}
 					Class[] interfaces = p_types[i].getInterfaces();
 					for (int j = 0; j < interfaces.length; j++) {
@@ -409,7 +410,9 @@ public class Functor {
 		sb.append("(");
 		if (_types != null){
 			for(int i=0; i < _types.length; i++){
-				if (i>0) sb.append(",");
+				if (i>0) {
+				    sb.append(",");
+				}
 				sb.append(_types[i].getName());
 			}
 		}
@@ -423,7 +426,9 @@ public class Functor {
 	}
 
 	private Class getPrimitive(Class t) {
-		if (t==null) return null;
+		if (t==null) {
+		    return null;
+		}
 		if (t.equals(Integer.class)) {
 			return int.class;
 		} else if (t.equals(Long.class)) {

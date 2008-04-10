@@ -657,7 +657,9 @@ public final class GuiPackage implements LocaleChangeListener {
     }
 
     public static void showMessage(final String message, final String title, final int type){
-        if (guiPack == null) return ;
+        if (guiPack == null) {
+            return ;
+        }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JOptionPane.showMessageDialog(null,message,title,type);

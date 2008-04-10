@@ -125,10 +125,12 @@ public class ThreadGroupGui extends AbstractJMeterGuiComponent implements ItemLi
 	}
 
 	private String onSampleError() {
-		if (stopTestBox.isSelected())
+		if (stopTestBox.isSelected()) {
 			return ThreadGroup.ON_SAMPLE_ERROR_STOPTEST;
-		if (stopThrdBox.isSelected())
+		}
+		if (stopThrdBox.isSelected()) {
 			return ThreadGroup.ON_SAMPLE_ERROR_STOPTHREAD;
+		}
 
 		// Defaults to continue
 		return ThreadGroup.ON_SAMPLE_ERROR_CONTINUE;

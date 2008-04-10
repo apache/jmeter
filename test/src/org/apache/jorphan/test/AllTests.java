@@ -91,8 +91,6 @@ import org.apache.log.Logger;
  * </dl>
  * 
  * @see UnitTestManager
- * @author Michael Stover (mstover1 at apache.org)
- * @version $Revision$
  */
 public final class AllTests {
 	transient private static Logger log = LoggingManager.getLoggerForClass();
@@ -106,8 +104,9 @@ public final class AllTests {
 	private static void logprop(String prop, boolean show) {
 		String value = System.getProperty(prop);
 		log.info(prop + "=" + value);
-		if (show)
+		if (show) {
 			System.out.println(prop + "=" + value);
+		}
 	}
 
 	private static void logprop(String prop) {

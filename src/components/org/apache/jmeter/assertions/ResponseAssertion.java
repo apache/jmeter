@@ -297,8 +297,9 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 			toCheck = response.getResponseHeaders();
 		} else { // Assume it is the URL
 			toCheck = response.getSamplerData(); // TODO - is this where the URL is stored?
-			if (toCheck == null)
+			if (toCheck == null) {
 				toCheck = "";
+			}
 		}
 
 		if (toCheck.length() == 0) {
@@ -356,7 +357,7 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 	 * @param stringPattern
 	 * @return the message for the assertion report 
 	 */
-	// TODO strings should be resources (but currently must not contain commas or the CSV file will be broken)
+	// TODO strings should be resources
 	private String getFailText(String stringPattern, String toCheck) {
 		
 		StringBuffer sb = new StringBuffer(200);
@@ -416,12 +417,13 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
     private static String trunc(final boolean right, final String str)
     {
-        if (str.length() <= EQUALS_SECTION_DIFF_LEN)
+        if (str.length() <= EQUALS_SECTION_DIFF_LEN) {
             return str;
-        else if (right)
+        } else if (right) {
             return str.substring(0, EQUALS_SECTION_DIFF_LEN) + EQUALS_DIFF_TRUNC;
-        else
+        } else {
             return EQUALS_DIFF_TRUNC + str.substring(str.length() - EQUALS_SECTION_DIFF_LEN, str.length());
+        }
     }
 
     /**
@@ -451,13 +453,16 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
 
 
         text = new StringBuffer(Math.max(recLength, compLength) * 2);
-        for (firstDiff = 0; firstDiff < minLength; firstDiff++)
-            if (received.charAt(firstDiff) != comparison.charAt(firstDiff))
+        for (firstDiff = 0; firstDiff < minLength; firstDiff++) {
+            if (received.charAt(firstDiff) != comparison.charAt(firstDiff)){
                 break;
-        if (firstDiff == 0)
+            }
+        }
+        if (firstDiff == 0) {
             startingEqSeq = "";
-        else
+        } else {
             startingEqSeq = trunc(false, received.substring(0, firstDiff));
+        }
 
         lastRecDiff = recLength - 1;
         lastCompDiff = compLength - 1;
@@ -480,13 +485,15 @@ public class ResponseAssertion extends AbstractTestElement implements Serializab
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, lastCompDiff + 1));
         }
         pad = new StringBuffer(Math.abs(recDeltaSeq.length() - compDeltaSeq.length()));
-        for (int i = 0; i < pad.capacity(); i++)
+        for (int i = 0; i < pad.capacity(); i++){
             pad.append(' ');
-        if (recDeltaSeq.length() > compDeltaSeq.length())
+        }
+        if (recDeltaSeq.length() > compDeltaSeq.length()){
             compDeltaSeq += pad.toString();
-        else
+        } else {
             recDeltaSeq += pad.toString();
-
+        }
+        
         text.append("\n\n");
         text.append(RECEIVED_STR);
         text.append(startingEqSeq);

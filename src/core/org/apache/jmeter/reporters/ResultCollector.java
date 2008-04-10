@@ -326,8 +326,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			// Find the name of the directory containing the file
 			// and create it - if there is one
 			File pdir = new File(filename).getParentFile();
-			if (pdir != null)
+			if (pdir != null) {
 				pdir.mkdirs();
+			}
 			writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
 					trimmed)), SaveService.getFileEncoding("UTF-8")), true); // $NON-NLS-1$
 			files.put(filename, writer);
@@ -375,8 +376,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 			return false;
 		} finally {
 			try {
-				if (raf != null)
+				if (raf != null) {
 					raf.close();
+				}
 			} catch (IOException e1) {
 				log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
 			}

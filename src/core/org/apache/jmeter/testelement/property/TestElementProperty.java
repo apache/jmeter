@@ -20,9 +20,6 @@ package org.apache.jmeter.testelement.property;
 
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @version $Revision$
- */
 public class TestElementProperty extends MultiProperty {
 	private TestElement value;
 
@@ -45,8 +42,9 @@ public class TestElementProperty extends MultiProperty {
 	 */
 	public boolean equals(Object o) {
 		if (o instanceof TestElementProperty) {
-			if (this == o)
+			if (this == o) {
 				return true;
+			}
 			if (value != null) {
 				return value.equals(((JMeterProperty) o).getObjectValue());
 			}

@@ -82,9 +82,8 @@ public class TransactionController extends GenericController implements SampleLi
 	public Sampler next(){
 		if (isParent()){
 			return next1();
-		} else {
-			return next2();
 		}
+		return next2();
 	}
 	
 ///////////////// Transaction Controller - parent ////////////////

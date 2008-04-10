@@ -239,8 +239,9 @@ public class JMeterTest extends JMeterTestCase {
 	private int scanprintMap(Map m, String t) {
 		Set s = m.keySet();
 		int unseen = 0;
-		if (s.size() == 0)
+		if (s.size() == 0) {
 			return 0;
+		}
 		Iterator i = s.iterator();
 		while (i.hasNext()) {
 			Object key = i.next();
@@ -372,9 +373,9 @@ public class JMeterTest extends JMeterTestCase {
 		if (funcTitles.size() > 0) {
 			String title = funcItem.getReferenceKey();
 			boolean ct = funcTitles.containsKey(title);
-			if (ct)
-				funcTitles.put(title, Boolean.TRUE);// For detecting extra
-													// entries
+			if (ct) {
+				funcTitles.put(title, Boolean.TRUE);// For detecting extra entries
+			}
 			if (// Is this a work in progress ?
 			title.indexOf("(ALPHA") == -1 && title.indexOf("(EXPERIMENTAL") == -1) {// No,
 																					// not
@@ -384,8 +385,9 @@ public class JMeterTest extends JMeterTestCase {
 																					// progress
 																					// ...
 				String s = "function.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
-				if (!ct)
+				if (!ct) {
 					log.warn(s); // Record in log as well
+				}
 				assertTrue(s, ct);
 			}
 		}
