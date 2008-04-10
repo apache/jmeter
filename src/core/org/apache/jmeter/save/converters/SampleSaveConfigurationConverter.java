@@ -22,6 +22,7 @@ import org.apache.jmeter.samplers.SampleSaveConfiguration;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.core.JVM;
@@ -38,7 +39,17 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  */
 public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
-	private static final ReflectionProvider rp = new JVM().bestReflectionProvider();
+	private static final ReflectionProvider rp;
+
+	static {
+	    ReflectionProvider tmp;
+	    try {
+            tmp = new JVM().bestReflectionProvider();
+        } catch (NullPointerException e) {// Bug in above method
+            tmp = new PureJavaReflectionProvider();
+        }
+        rp = tmp;
+	}
 
     private static final String TRUE = "true"; // $NON-NLS-1$
 
