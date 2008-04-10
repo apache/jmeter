@@ -191,11 +191,9 @@ public class XPathUtil {
 			if (report_errors) {
 	            log.error("TidyException: " + sw.toString());    
 			    throw new TidyException(tidy.getParseErrors(),tidy.getParseWarnings());
-			} else {
-		         log.warn("Tidy errors: " + sw.toString());    
 			}
+		    log.warn("Tidy errors: " + sw.toString());
 		}
-
 		return doc;
 	}
 
@@ -234,20 +232,23 @@ public class XPathUtil {
 
 		public void warning(SAXParseException ex) throws SAXException {
 			log.info("Type=" + type + " " + ex);
-			if (val && !tol)
+			if (val && !tol){
 				throw new SAXException(ex);
+			}
 		}
 
 		public void error(SAXParseException ex) throws SAXException {
 			log.warn("Type=" + type + " " + ex);
-			if (val && !tol)
+			if (val && !tol) {
 				throw new SAXException(ex);
+			}
 		}
 
 		public void fatalError(SAXParseException ex) throws SAXException {
 			log.error("Type=" + type + " " + ex);
-			if (val && !tol)
+			if (val && !tol) {
 				throw new SAXException(ex);
+			}
 		}
 	}
 }

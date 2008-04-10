@@ -793,7 +793,9 @@ public final class CSVSaveService {
     			// Find the first non-null message
     			for (int i = 0; i < results.length; i++){
         			message = results[i].getFailureMessage();
-    				if (message != null) break;
+    				if (message != null) {
+    				    break;
+    				}
     			}
     		}
     

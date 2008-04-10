@@ -41,10 +41,10 @@ import junit.framework.TestSuite;
  * Find all beans out there and check their resource property files: - Check
  * that non-default property files don't have any extra keys. - Check all
  * necessary properties are defined at least in the default property file,
- * except for beans whose name contains "Experimental" or "Alpha". TODO: - Check
- * property files don't have duplicate keys (is this important)
+ * except for beans whose name contains "Experimental" or "Alpha". 
  * 
- * @version $Revision$ updated on $Date$
+ * TODO: - Check property files don't have duplicate keys (is this important)
+ * 
  */
 public class PackageTest extends JMeterTestCase {
 	private static Logger log = LoggingManager.getLoggerForClass();
@@ -91,8 +91,9 @@ public class PackageTest extends JMeterTestCase {
 			throw new Error(e.toString()); // Programming error. Don't
 											// continue.
 		}
-		if (bundle == null)
+		if (bundle == null) {
 			throw new Error("This can't happen!");
+		}
 	}
 
 	public void tearDown() {
@@ -100,10 +101,11 @@ public class PackageTest extends JMeterTestCase {
 	}
 
 	public void runTest() {
-		if (bundle == defaultBundle)
+		if (bundle == defaultBundle) {
 			checkAllNecessaryKeysPresent();
-		else
+		} else {
 			checkNoInventedKeys();
+		}
 	}
 
 	public void checkNoInventedKeys() {
@@ -122,8 +124,9 @@ public class PackageTest extends JMeterTestCase {
 		String dn = defaultBundle.getString("displayName").toUpperCase(Locale.ENGLISH);
 
 		// Skip the rest of this test for alpha/experimental beans:
-		if (dn.indexOf("(ALPHA") != -1 || dn.indexOf("(EXPERIMENTAL") != -1)
+		if (dn.indexOf("(ALPHA") != -1 || dn.indexOf("(EXPERIMENTAL") != -1) {
 			return;
+		}
 
 		// Check for property- and group-related texts:
 		PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
@@ -131,13 +134,15 @@ public class PackageTest extends JMeterTestCase {
 			// Skip non-editable properties, that is:
 			// Ignore hidden, read-only, and write-only properties
 			if (descriptors[i].isHidden() || descriptors[i].getReadMethod() == null
-					|| descriptors[i].getWriteMethod() == null)
+					|| descriptors[i].getWriteMethod() == null) {
 				continue;
+			}
 			// Ignore TestElement properties which don't have an explicit
 			// editor:
 			if (TestElement.class.isAssignableFrom(descriptors[i].getPropertyType())
-					&& descriptors[i].getPropertyEditorClass() == null)
+					&& descriptors[i].getPropertyEditorClass() == null) {
 				continue;
+			}
 			// Done -- we're working with an editable property.
 
 			String name = descriptors[i].getName();
@@ -146,8 +151,9 @@ public class PackageTest extends JMeterTestCase {
 			// bundle.getString(name+".shortDescription"); NOT MANDATORY
 
 			String group = (String) descriptors[i].getValue(GenericTestBeanCustomizer.GROUP);
-			if (group != null)
-				bundle.getString(group + ".displayName");
+			if (group != null) {
+				bundle.getString( group + ".displayName");
+			}
 		}
 	}
 

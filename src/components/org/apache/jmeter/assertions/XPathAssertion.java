@@ -44,7 +44,6 @@ import org.xml.sax.SAXException;
  * Checks if the result is a well-formed XML content and whether it matches an
  * XPath
  * 
- * author <a href="mailto:jspears@astrology.com">Justin Spears </a>
  */
 public class XPathAssertion extends AbstractTestElement implements Serializable, Assertion {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -160,12 +159,14 @@ public class XPathAssertion extends AbstractTestElement implements Serializable,
 		}
 		log.debug("nodeList length " + nodeList.getLength());
 		if (log.isDebugEnabled() & !isNegated()) {
-			for (int i = 0; i < nodeList.getLength(); i++)
-				log.debug(new StringBuffer("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
+			for (int i = 0; i < nodeList.getLength(); i++){
+			    log.debug(new StringBuffer("nodeList[").append(i).append("] ").append(nodeList.item(i)).toString());
+			}
 		}
 		result.setFailure(isNegated());
-		if (isNegated())
-			result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
+		if (isNegated()) {
+		    result.setFailureMessage("Specified XPath was found... Turn off negate if this is not desired");
+		}
 		return result;
 	}
 

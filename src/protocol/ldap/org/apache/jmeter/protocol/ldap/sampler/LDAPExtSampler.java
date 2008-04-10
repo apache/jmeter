@@ -765,8 +765,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 				} finally {
 					res.sampleEnd();
 				}				
-				if (cmp.hasMore()) {
-				} else {
+				if (!cmp.hasMore()) {
 					res.setResponseCode("5"); // $NON-NLS-1$
 					res.setResponseMessage("compareFalse");
 					isSuccessful = false;
@@ -924,10 +923,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 			    final Attribute     attr = (Attribute) ait.next();
 
 			    StringBuffer sb = new StringBuffer();
-			    if (attr.size() == 1)
+			    if (attr.size() == 1) {
 			        sb.append(getWriteValue(attr.get()));
-			    else
-			    {
+			    } else {
 			        final ArrayList     sortedVals = new ArrayList(attr.size());
 			        boolean             first = true;
 
@@ -986,8 +984,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		            char    c1 = s1.charAt(s1i);
 		            char    c2 = s2.charAt(s2i);
 
-		            if (c1 != c2)
+		            if (c1 != c2) {
 		                return c1 - c2;
+		            }
 		        }
 		        return len1 - len2;
 		    }
@@ -997,10 +996,12 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 		        String      nm1 = ((SearchResult) o1).getName();
 		        String      nm2 = ((SearchResult) o2).getName();
 
-		        if (nm1 == null)
+		        if (nm1 == null) {
 		            nm1 = "";
-		        if (nm2 == null)
+		        }
+		        if (nm2 == null) {
 		            nm2 = "";
+		        }
 		        return compareToReverse(nm1, nm2);
 		    }
 		});
@@ -1012,14 +1013,16 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
         if (!srName.endsWith(searchBase))
         {
-            if (srName.length() > 0)
+            if (srName.length() > 0) {
                 srName = srName + ',';
+            }
             srName = srName + searchBase;
         }
         if ((rootDn.length() > 0) && !srName.endsWith(rootDn))
         {
-            if (srName.length() > 0)
+            if (srName.length() > 0) {
                 srName = srName + ',';
+            }
             srName = srName + rootDn;
         }
         sr.setName(srName);
@@ -1028,18 +1031,20 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 
     private String getWriteValue(final Object value)
     {
-        if (value instanceof String)
+        if (value instanceof String) {
             // assume it's senstive data
             return StringEscapeUtils.escapeXml((String)value);
-        else if (value instanceof byte[])
+        }
+        if (value instanceof byte[]) {
             try
             {
-                return StringEscapeUtils.escapeXml(new String((byte[])value, "UTF-8"));
+                return StringEscapeUtils.escapeXml(new String((byte[])value, "UTF-8")); //$NON-NLS-1$
             }
             catch (UnsupportedEncodingException e)
             {
                 log.error("this can't happen: UTF-8 character encoding not supported", e);
             }
+        }
         return StringEscapeUtils.escapeXml(value.toString());
     }
 

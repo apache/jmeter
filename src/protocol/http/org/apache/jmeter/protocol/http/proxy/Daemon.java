@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -178,36 +178,31 @@ public class Daemon extends Thread {
 			log.info("Proxy up and running!");
 
 			while (running) {
+			    Socket clientSocket = null;
 				try {
 					// Listen on main socket
-					Socket clientSocket = mainSocket.accept();
+					clientSocket = mainSocket.accept();
 					if (running) {
 						// Pass request to new proxy thread
 						Proxy thd = (Proxy) proxyClass.newInstance();
                         thd.configure(clientSocket, target, pageEncodings, formEncodings);
 						thd.start();
-					} else {
+					//} else {
 						// The socket was accepted after we were told to stop.
-						try {
-							clientSocket.close();
-						} catch (IOException e) {
-							// Ignore
-						}
 					}
 				} catch (InterruptedIOException e) {
+				    continue;
 					// Timeout occurred. Ignore, and keep looping until we're
 					// told to stop running.
+				} finally {
+                    JOrphanUtils.closeQuietly(clientSocket);				    
 				}
 			}
 			log.info("Proxy Server stopped");
 		} catch (Exception e) {
 			log.warn("Proxy Server stopped", e);
 		} finally {
-			try {
-				if (mainSocket != null)
-					mainSocket.close();
-			} catch (Exception exc) {
-			}
+		    JOrphanUtils.closeQuietly(mainSocket);
 		}
         
         // Clear maps

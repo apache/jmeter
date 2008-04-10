@@ -65,10 +65,11 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
 	}
 
 	public void setValue(Object value) {
-		if (value instanceof String)
+		if (value instanceof String) {
 			setAsText((String) value);
-		else
+		} else {
 			throw new IllegalArgumentException();
+		}
 	}
 
 	/*
@@ -90,8 +91,9 @@ public class PasswordEditor extends PropertyEditorSupport implements ActionListe
 	public void firePropertyChange() {
 		String newValue = getAsText();
 
-		if (initialValue.equals(newValue))
-			return;
+		if (initialValue.equals(newValue)) {
+		    return;
+		}
 		initialValue = newValue;
 
 		super.firePropertyChange();

@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * @author mstover
+ * XStream Class to convert TestResultWrapper
  * 
  */
 public class TestResultWrapperConverter extends AbstractCollectionConverter {
@@ -86,8 +86,9 @@ public class TestResultWrapperConverter extends AbstractCollectionConverter {
 		TestResultWrapper results = new TestResultWrapper();
 		Collection samples = new ArrayList();
 		String ver = reader.getAttribute("version");  //$NON-NLS-1$
-		if (ver == null || ver.length() == 0)
+		if (ver == null || ver.length() == 0) {
 			ver = "1.0";  //$NON-NLS-1$
+		}
 		results.setVersion(ver);
 		ConversionHelp.setInVersion(ver);// Make sure decoding follows input
 											// file

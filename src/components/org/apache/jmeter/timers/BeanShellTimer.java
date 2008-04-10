@@ -59,7 +59,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             bshInterpreter.set("ctx", jmctx);//$NON-NLS-1$
             bshInterpreter.set("vars", vars);//$NON-NLS-1$
             Object o = processFileOrScript(bshInterpreter);
-            if (o != null) ret=o.toString();
+            if (o != null) { ret=o.toString(); }
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }

@@ -34,7 +34,6 @@ import org.apache.commons.lang.StringEscapeUtils;
  * N.B. Designed for use by HTMLParser, so is not a full implementation - e.g.
  * does not support remove()
  * 
- * @version $Revision$ $Date$
  */
 public class URLCollection {
 	Collection coll;
@@ -85,8 +84,9 @@ public class URLCollection {
 	 *         collection
 	 */
 	public boolean addURL(String url, URL baseUrl) {
-		if (url == null || url.length() == 0)
+		if (url == null || url.length() == 0) {
 			return false;
+		}
 		//url.replace('+',' ');
 		url=StringEscapeUtils.unescapeXml(url);
 		boolean b = false;

@@ -159,8 +159,9 @@ public class JDateField extends JTextField {
 		}
 		String newDate = dateFormat.format(c.getTime());
 		setText(newDate);
-		if (pos > newDate.length())
+		if (pos > newDate.length()) {
 			pos = newDate.length();
+		}
 		setCaretPosition(pos);// Restore position
 
 	}

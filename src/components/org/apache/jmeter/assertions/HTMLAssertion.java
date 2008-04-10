@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.MessageFormat;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -202,12 +203,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 				log.warn("writeOutput() -> could not write output to file " + lFilename, ex);
 			} finally {
 				// close file
-				if (lOutputWriter != null) {
-					try {
-						lOutputWriter.close();
-					} catch (IOException e) {
-					}
-				}
+			    IOUtils.closeQuietly(lOutputWriter);
 			}
 		}
 	}

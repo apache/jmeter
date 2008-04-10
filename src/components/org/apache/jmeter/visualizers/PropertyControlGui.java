@@ -142,7 +142,9 @@ public class PropertyControlGui extends AbstractConfigGui
 		if (jmeterButton.isSelected()) {
 			p = JMeterUtils.getJMeterProperties();
 		}
-		if (p == null) return;
+		if (p == null) {
+		    return;
+		}
 		Set s = p.entrySet();
 		ArrayList al = new ArrayList(s);
 		Collections.sort(al, new Comparator(){
@@ -197,7 +199,7 @@ public class PropertyControlGui extends AbstractConfigGui
 	 * 
 	 * @return a GUI panel containing the buttons
 	 */
-	private JPanel makeButtonPanel() {
+	private JPanel makeButtonPanel() {// Not currently used
 		add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
 		add.setActionCommand(ADD);
 		add.setEnabled(true);

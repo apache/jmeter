@@ -59,8 +59,9 @@ public class ConstantThroughputTimerBeanInfo extends BeanInfoSupport {
 	// TODO need to find better way to do this
 	public static int getCalcModeAsInt(String mode) {
 		for (int i = 0; i < tags.length; i++) {
-			if (tags[i].equals(mode))
-				return i;
+			if (tags[i].equals(mode)) {
+			    return i;
+			}
 		}
 		return -1;
 	}

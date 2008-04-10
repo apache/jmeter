@@ -85,8 +85,9 @@ public class ConversionHelp {
 			return ""; // $NON-NLS-1$
 		}
 		// Only encode strings if outVersion = 1.0
-		if (!"1.0".equals(outVersion))//$NON-NLS-1$
+		if (!"1.0".equals(outVersion)) {//$NON-NLS-1$
 			return p;
+		}
 		try {
 			String p1 = URLEncoder.encode(p, CHAR_SET);
 			return p1;
@@ -97,8 +98,9 @@ public class ConversionHelp {
 	}
 
 	public static String decode(String p) {
-		if (!"1.0".equals(inVersion))//$NON-NLS-1$
+		if (!"1.0".equals(inVersion)) {//$NON-NLS-1$
 			return p;
+		}
 		// Only decode strings if inVersion = 1.0
 		if (p == null) {
 			return null;
@@ -151,7 +153,9 @@ public class ConversionHelp {
             boolean encode){
         String item=el.getPropertyAsString(prop);
         if (item.length() > 0) {
-            if (encode) item=ConversionHelp.encode(item);
+            if (encode) {
+                item=ConversionHelp.encode(item);
+            }
             writer.addAttribute((String)propertyToAttribute.get(prop),item);
         }
     }
@@ -161,7 +165,9 @@ public class ConversionHelp {
         String att=(String) propertyToAttribute.get(prop);
         String value=reader.getAttribute(att);
         if (value!=null){
-            if (decode) value=ConversionHelp.decode(value);
+            if (decode) {
+                value=ConversionHelp.decode(value);
+            }
             el.setProperty(prop,value);
         }
     }

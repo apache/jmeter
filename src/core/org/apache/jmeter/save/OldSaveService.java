@@ -353,7 +353,9 @@ public final class OldSaveService {
 			if (children[i].getName().equals("property")) { // $NON-NLS-1$
 				try {
                     JMeterProperty prop = createProperty(children[i], newClass);
-					if (prop!=null) element.setProperty(prop);
+					if (prop!=null) {
+					    element.setProperty(prop);
+					}
 				} catch (Exception ex) {
 					log.error("Problem loading property", ex);
 					element.setProperty(children[i].getAttribute("name"), ""); // $NON-NLS-1$ // $NON-NLS-2$
@@ -380,7 +382,9 @@ public final class OldSaveService {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].getName().equals("property")) { // $NON-NLS-1$ 
                 JMeterProperty prop = createProperty(items[i], testClass);
-				if (prop!=null) coll.add(prop);
+				if (prop!=null) {
+				    coll.add(prop);
+				}
 			} else if (items[i].getName().equals("testelement")) { // $NON-NLS-1$ 
 				coll.add(new TestElementProperty(items[i].getAttribute("name", ""), createTestElement(items[i]))); // $NON-NLS-1$ // $NON-NLS-2$
 			} else if (items[i].getName().equals("collection")) { // $NON-NLS-1$ 
@@ -388,7 +392,9 @@ public final class OldSaveService {
 						createCollection(items[i], testClass)));
 			} else if (items[i].getName().equals("string")) { // $NON-NLS-1$ 
                 JMeterProperty prop = createProperty(items[i], testClass);
-				if (prop!=null) coll.add(prop);
+				if (prop!=null) {
+				    coll.add(prop);
+				}
 			} else if (items[i].getName().equals("map")) { // $NON-NLS-1$ 
 				coll.add(new MapProperty(items[i].getAttribute("name", ""), createMap(items[i], testClass))); // $NON-NLS-1$ // $NON-NLS-2$
 			}
@@ -434,7 +440,9 @@ public final class OldSaveService {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].getName().equals("property")) { // $NON-NLS-1$ 
 				JMeterProperty prop = createProperty(items[i], testClass);
-				if (prop!=null) map.put(prop.getName(), prop);
+				if (prop!=null) {
+				    map.put(prop.getName(), prop);
+				}
 			} else if (items[i].getName().equals("testelement")) { // $NON-NLS-1$ 
 				map.put(items[i].getAttribute("name", ""), new TestElementProperty(items[i].getAttribute("name", ""), // $NON-NLS-1$ // $NON-NLS-2$
 						createTestElement(items[i])));

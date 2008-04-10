@@ -102,13 +102,15 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	private static Map allThreadsSave;
 
 	public static void stopEngineNow() {
-		if (engine != null) // May be null if called from Unit test
+		if (engine != null) {// May be null if called from Unit test
 			engine.stopTest(true);
+		}
 	}
 
 	public static void stopEngine() {
-		if (engine != null) // May be null if called from Unit test
+		if (engine != null) { // May be null if called from Unit test
 			engine.stopTest(false);
+		}
 	}
 
 	/*
@@ -129,8 +131,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	}
 
 	private static boolean stopThread(String threadName, boolean now) {
-		if (allThreadNames == null)
-			return false;// e.g. not yet started
+		if (allThreadNames == null) {
+		    return false;// e.g. not yet started
+		}
 		JMeterThread thrd;
 		try {
 			thrd = (JMeterThread) allThreadNames.get(threadName);
@@ -225,8 +228,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		Iterator iter = testListeners.getSearchResults().iterator();
 		while (iter.hasNext()) {
 			TestListener tl = (TestListener) iter.next();
-			if (tl instanceof TestBean)
-				TestBeanHelper.prepare((TestElement) tl);
+			if (tl instanceof TestBean) {
+			    TestBeanHelper.prepare((TestElement) tl);
+			}
 			if (host == null) {
 				tl.testStarted();
 			} else {
@@ -240,8 +244,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		Iterator iter = testListeners.getSearchResults().iterator();
 		while (iter.hasNext()) {
 			TestListener tl = (TestListener) iter.next();
-			if (tl instanceof TestBean)
-				TestBeanHelper.prepare((TestElement) tl);
+			if (tl instanceof TestBean) {
+			    TestBeanHelper.prepare((TestElement) tl);
+			}
 			if (host == null) {
 				tl.testEnded();
 			} else {
@@ -359,9 +364,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 		testListeners.getSearchResults().addAll(testList);
 		testList.clear(); // no longer needed
 		
-		if (!startListenersLater )notifyTestListenersOfStart();
+		if (!startListenersLater ) { notifyTestListenersOfStart(); }
 		getTestTree().traverse(new TurnElementsOn());
-        if (startListenersLater)notifyTestListenersOfStart();
+        if (startListenersLater) { notifyTestListenersOfStart(); }
 
 		List testLevelElements = new LinkedList(getTestTree().list(getTestTree().getArray()[0]));
 		removeThreadGroups(testLevelElements);
@@ -461,8 +466,9 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 				thread.setStartTime(group.getDelay() * 1000 + now);
 			} else {
 				long start = group.getStartTime();
-				if (start < now)
-					start = now; // Force a sensible start time
+				if (start < now) {
+				    start = now; // Force a sensible start time
+				}
 				thread.setStartTime(start);
 			}
 

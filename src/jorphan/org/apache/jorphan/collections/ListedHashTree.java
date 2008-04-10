@@ -38,8 +38,6 @@ import java.util.Set;
  * the order in which the nodes were added to the tree.
  * 
  * @see HashTree
- * @author mstover1 at apache.org
- * @version $Revision$
  */
 public class ListedHashTree extends HashTree implements Serializable, Cloneable {
 	private List order;
@@ -135,9 +133,8 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 			data.put(key, newTree);
 			order.add(key);
 			return newTree;
-		} else {
-			return getTree(key);
 		}
+		return getTree(key);
 	}
 
 	public Collection list() {
@@ -162,8 +159,9 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 	}
 
 	public boolean equals(Object o) {
-		if (!(o instanceof ListedHashTree))
+		if (!(o instanceof ListedHashTree)) {
 			return false;
+		}
 		ListedHashTree lht = (ListedHashTree) o;
 		return (super.equals(lht) && order.equals(lht.order));
 

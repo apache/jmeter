@@ -129,16 +129,14 @@ public class JMeterThread implements Runnable, Serializable {
 	}
 
 	/**
-	 * Checks whether the JMeterThread is Scheduled. author
-	 * T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 * Checks whether the JMeterThread is Scheduled.
 	 */
 	public boolean isScheduled() {
 		return this.scheduler;
 	}
 
 	/**
-	 * Enable the scheduler for this JMeterThread. author
-	 * T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 * Enable the scheduler for this JMeterThread.
 	 */
 	public void setScheduled(boolean sche) {
 		this.scheduler = sche;
@@ -147,9 +145,7 @@ public class JMeterThread implements Runnable, Serializable {
 	/**
 	 * Set the StartTime for this Thread.
 	 * 
-	 * @param stime
-	 *            the StartTime value. author
-	 *            T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 * @param stime the StartTime value.
 	 */
 	public void setStartTime(long stime) {
 		startTime = stime;
@@ -158,8 +154,7 @@ public class JMeterThread implements Runnable, Serializable {
 	/**
 	 * Get the start time value.
 	 * 
-	 * @return the start time value. author
-	 *         T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 * @return the start time value.
 	 */
 	public long getStartTime() {
 		return startTime;
@@ -169,8 +164,7 @@ public class JMeterThread implements Runnable, Serializable {
 	 * Set the EndTime for this Thread.
 	 * 
 	 * @param etime
-	 *            the EndTime value. author
-	 *            T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 *            the EndTime value.
 	 */
 	public void setEndTime(long etime) {
 		endTime = etime;
@@ -179,8 +173,7 @@ public class JMeterThread implements Runnable, Serializable {
 	/**
 	 * Get the end time value.
 	 * 
-	 * @return the end time value. author
-	 *         T.Elanjchezhiyan(chezhiyan@siptech.co.in)
+	 * @return the end time value.
 	 */
 	public long getEndTime() {
 		return endTime;
@@ -189,7 +182,6 @@ public class JMeterThread implements Runnable, Serializable {
 	/**
 	 * Check the scheduled time is completed.
 	 * 
-	 * author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
 	 */
 	private void stopScheduler() {
 		long delay = System.currentTimeMillis() - endTime;
@@ -201,7 +193,6 @@ public class JMeterThread implements Runnable, Serializable {
 	/**
 	 * Wait until the scheduled start time if necessary
 	 * 
-	 * Author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
 	 */
 	private void startScheduler() {
 		long delay = (startTime - System.currentTimeMillis());
@@ -430,12 +421,14 @@ public class JMeterThread implements Runnable, Serializable {
 		 * them to access the running values of functions and variables (however
 		 * it does not seem to help with the listeners)
 		 */
-		if (startEarlier)
+		if (startEarlier) {
 			threadContext.setSamplingStarted(true);
+		}
 		controller.initialize();
 		controller.addIterationListener(new IterationListener());
-		if (!startEarlier)
+		if (!startEarlier) {
 			threadContext.setSamplingStarted(true);
+		}
 		threadStarted();
 	}
 
@@ -499,8 +492,9 @@ public class JMeterThread implements Runnable, Serializable {
 		running = false;
 		log.info("Stop Test detected by thread " + threadName);
 		// engine.stopTest();
-		if (engine != null)
+		if (engine != null) {
 			engine.askThreadsToStop();
+		}
 	}
 
 	private void stopThread() {

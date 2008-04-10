@@ -396,8 +396,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	 */
 	public void setThreadContext(JMeterContext inthreadContext) {
 		if (threadContext != null) {
-			if (inthreadContext != threadContext)
+			if (inthreadContext != threadContext) {
 				throw new RuntimeException("Attempting to reset the thread context");
+			}
 		}
 		this.threadContext = inthreadContext;
 	}
@@ -415,8 +416,9 @@ public abstract class AbstractTestElement implements TestElement, Serializable {
 	 */
 	public void setThreadName(String inthreadName) {
 		if (threadName != null) {
-			if (!threadName.equals(inthreadName))
+			if (!threadName.equals(inthreadName)) {
 				throw new RuntimeException("Attempting to reset the thread name");
+			}
 		}
 		this.threadName = inthreadName;
 	}

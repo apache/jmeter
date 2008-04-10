@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -63,7 +62,6 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * @author pete
  *
  * JMeterReport is the main class for the reporting component. For now,
  * the plan is to make the reporting component a separate GUI, which 
@@ -186,8 +184,9 @@ public class JMeterReport implements JMeterPlugin {
             String icons[] = JOrphanUtils.split(p.getProperty(key), " ");
             iconlist[i][0] = key;
             iconlist[i][1] = icons[0];
-            if (icons.length > 1)
+            if (icons.length > 1){
                 iconlist[i][2] = icons[1];
+            }
             i++;
         }
         return iconlist;
