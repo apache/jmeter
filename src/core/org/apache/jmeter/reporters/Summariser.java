@@ -157,8 +157,9 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		// "+Thread.currentThread().getName()
 		// +" "+s.getSampleLabel());
 
-		if (myName == null)
+		if (myName == null) {
 			myName = getName();
+		}
 
 		if (myTotals == null) {
 			synchronized (accumulators) {
@@ -344,17 +345,21 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 				if (t.total.getNumSamples() != 0) {// Only print delta if different
 												// from total
 					str = format(t.delta, "+");
-					if (TOLOG)
+					if (TOLOG) {
 						log.info(str);
-					if (TOOUT)
+					}
+					if (TOOUT) {
 						System.out.println(str);
+					}
 				}
 				t.moveDelta();
 				str = format(t.total, "=");
-				if (TOLOG)
+				if (TOLOG) {
 					log.info(str);
-				if (TOOUT)
+				}
+				if (TOOUT) {
 					System.out.println(str);
+				}
 				t.last = -1;
 			}
 		}

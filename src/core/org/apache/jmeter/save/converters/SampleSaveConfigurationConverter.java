@@ -62,18 +62,18 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         }
         
         public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-            if (SampleSaveConfiguration.class != definedIn) return true;
+            if (SampleSaveConfiguration.class != definedIn) { return true; }
             // These are new fields; not saved unless true
-            if (fieldName.equals(NODE_BYTES)) return false; 
-            if (fieldName.equals(NODE_URL)) return false; 
-            if (fieldName.equals(NODE_FILENAME)) return false; 
-            if (fieldName.equals(NODE_HOSTNAME)) return false; 
-            if (fieldName.equals(NODE_THREAD_COUNT)) return false; 
-            if (fieldName.equals(NODE_SAMPLE_COUNT)) return false; 
+            if (fieldName.equals(NODE_BYTES)) { return false; } 
+            if (fieldName.equals(NODE_URL)) { return false; } 
+            if (fieldName.equals(NODE_FILENAME)) { return false; } 
+            if (fieldName.equals(NODE_HOSTNAME)) { return false; } 
+            if (fieldName.equals(NODE_THREAD_COUNT)) { return false; } 
+            if (fieldName.equals(NODE_SAMPLE_COUNT)) { return false; } 
 
             // These fields are not currently saved or restored
-            if (fieldName.equals(NODE_DELIMITER)) return false; 
-            if (fieldName.equals(NODE_PRINTMS)) return false; 
+            if (fieldName.equals(NODE_DELIMITER)) { return false; } 
+            if (fieldName.equals(NODE_PRINTMS)) { return false; } 
             return true;
         }
     }
@@ -121,7 +121,9 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
     // Helper method to simplify marshall routine
     private void createNode(HierarchicalStreamWriter writer, boolean save, String node) {
-        if (!save) return;
+        if (!save) {
+            return;
+        }
         writer.startNode(node);
         writer.setValue(TRUE);
         writer.endNode();

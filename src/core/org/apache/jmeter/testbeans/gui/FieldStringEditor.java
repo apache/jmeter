@@ -35,8 +35,6 @@ import org.apache.log.Logger;
  * <p>
  * The provided GUI is a simple text field.
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
  */
 class FieldStringEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
 	protected static Logger log = LoggingManager.getLoggerForClass();
@@ -76,10 +74,11 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
 	}
 
 	public void setValue(Object value) {
-		if (value instanceof String)
+		if (value instanceof String) {
 			setAsText((String) value);
-		else
+		} else {
 			throw new IllegalArgumentException();
+		}
 	}
 
 	/*
@@ -97,8 +96,9 @@ class FieldStringEditor extends PropertyEditorSupport implements ActionListener,
 	public void firePropertyChange() {
 		String newValue = getAsText();
 
-		if (initialValue.equals(newValue))
-			return;
+		if (initialValue.equals(newValue)) {
+		    return;
+		}
 		initialValue = newValue;
 
 		super.firePropertyChange();

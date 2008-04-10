@@ -406,7 +406,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 	public static void close(Connection c) {
 		try {
-			if (c != null) c.close();
+			if (c != null) {
+			    c.close();
+			}
 		} catch (SQLException e) {
 			log.warn("Error closing Connection", e);
 		}
@@ -414,7 +416,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	
 	public static void close(Statement s) {
 		try {
-			if (s != null) s.close();
+			if (s != null) {
+			    s.close();
+			}
 		} catch (SQLException e) {
 			log.warn("Error closing Statement " + s.toString(), e);
 		}
@@ -422,7 +426,9 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 
 	public static void close(ResultSet rs) {
 		try {
-			if (rs != null) rs.close();
+			if (rs != null) {
+			    rs.close();
+			}
 		} catch (SQLException e) {
 			log.warn("Error closing ResultSet", e);
 		}

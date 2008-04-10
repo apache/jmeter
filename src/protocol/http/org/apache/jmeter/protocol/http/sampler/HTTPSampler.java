@@ -233,9 +233,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 				res.setResponseHeaders(getResponseHeaders(conn));
 				return NULL_BA;
 			}
-			else {
-				log.info("Error Response Code: "+conn.getResponseCode());
-			}
+			
+			log.info("Error Response Code: "+conn.getResponseCode());
+
 			if (gzipped) {
 				in = new BufferedInputStream(new GZIPInputStream(errorStream));
 			} else {
@@ -431,7 +431,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 						throw e;
 					}
 					log.debug("Bind exception, try again");
-					if (conn!=null) conn.disconnect();
+					if (conn!=null) {
+					    conn.disconnect();
+					}
 					this.setUseKeepAlive(false);
 					continue; // try again
 				} catch (IOException e) {
@@ -465,7 +467,9 @@ public class HTTPSampler extends HTTPSamplerBase {
 			int errorLevel = conn.getResponseCode();
             String respMsg = conn.getResponseMessage();
     		String hdr=conn.getHeaderField(0);
-    		if (hdr == null) hdr="(null)";  // $NON-NLS-1$
+    		if (hdr == null) {
+    		    hdr="(null)";  // $NON-NLS-1$
+    		}
             if (errorLevel == -1){// Bug 38902 - sometimes -1 seems to be returned unnecessarily
             	if (respMsg != null) {// Bug 41902 - NPE
 	                try {

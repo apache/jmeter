@@ -36,11 +36,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 //For unit tests, @see TestURLRewritingModifier
 
-/**
- * @author mstover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- */
-
 public class URLRewritingModifier extends AbstractTestElement implements Serializable, PreProcessor {
 
 	private static final String SEMI_COLON = ";"; // $NON-NLS-1$
@@ -115,8 +110,9 @@ public class URLRewritingModifier extends AbstractTestElement implements Seriali
 				MatchResult result = matcher.getMatch();
 				for (int i = 1; i < result.groups(); i++) {
 					value = result.group(i);
-					if (value != null)
+					if (value != null) {
 						break;
+					}
 				}
 			}
 		}

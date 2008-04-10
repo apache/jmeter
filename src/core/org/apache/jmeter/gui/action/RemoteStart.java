@@ -126,8 +126,9 @@ public class RemoteStart extends AbstractAction {
 	 */
 	private void doRemoteExit(String name) {
 		JMeterEngine engine = (JMeterEngine) remoteEngines.get(name);
-		if (engine == null)
+		if (engine == null) {
 			return;
+		}
 		// GuiPackage.getInstance().getMainFrame().showStoppingMessage(name);
 		engine.exit();
 	}

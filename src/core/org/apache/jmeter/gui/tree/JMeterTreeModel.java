@@ -174,8 +174,9 @@ public class JMeterTreeModel extends DefaultTreeModel {
 		while (enumNode.hasMoreElements()) {
 			JMeterTreeNode child = (JMeterTreeNode) enumNode.nextElement();
 			JMeterTreeNode result = traverseAndFind(userObject, child);
-			if (result != null)
-				return result;
+			if (result != null) {
+			    return result;
+			}
 		}
 		return null;
 	}

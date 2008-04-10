@@ -84,9 +84,12 @@ public final class JOrphanUtils {
     			splittee = splittee.substring(0, spot + splitLength)
     					+ splittee.substring(spot + adjacentSplitLength, splittee.length());
     		}
-            if(splittee.startsWith(splitChar)) splittee = splittee.substring(splitLength);
-            if(splittee.endsWith(splitChar)) // Remove trailing splitter
+            if(splittee.startsWith(splitChar)) {
+                splittee = splittee.substring(splitLength);
+            }
+            if(splittee.endsWith(splitChar)) { // Remove trailing splitter
                 splittee = splittee.substring(0,splittee.length()-splitLength);
+            }
         }
 		Vector returns = new Vector();
         final int length = splittee.length(); // This is the new length
@@ -180,10 +183,12 @@ public final class JOrphanUtils {
 	 */
 	public static StringBuffer rightAlign(StringBuffer in, int len) {
 		int pfx = len - in.length();
-		if (pfx <= 0)
+		if (pfx <= 0) {
 			return in;
-		if (pfx > SPACES_LEN)
+		}
+		if (pfx > SPACES_LEN) {
 			pfx = SPACES_LEN;
+		}
 		in.insert(0, SPACES.substring(0, pfx));
 		return in;
 	}
@@ -199,10 +204,12 @@ public final class JOrphanUtils {
 	 */
 	public static StringBuffer leftAlign(StringBuffer in, int len) {
 		int sfx = len - in.length();
-		if (sfx <= 0)
+		if (sfx <= 0) {
 			return in;
-		if (sfx > SPACES_LEN)
+		}
+		if (sfx > SPACES_LEN) {
 			sfx = SPACES_LEN;
+		}
 		in.append(SPACES.substring(0, sfx));
 		return in;
 	}
@@ -262,10 +269,12 @@ public final class JOrphanUtils {
 	public static String replaceFirst(String source, String search, String replace) {
 		int start = source.indexOf(search);
 		int len = search.length();
-		if (start == -1)
+		if (start == -1) {
 			return source;
-		if (start == 0)
+		}
+		if (start == 0) {
 			return replace + source.substring(len);
+		}
 		return source.substring(0, start) + replace + source.substring(start + len);
 	}
 
@@ -355,14 +364,18 @@ public final class JOrphanUtils {
 		return slice;
 	}
 
+	// N.B. Commons IO IOUtils has equivalent methods; these were added before IO was included
+	// TODO - perhaps deprecate these in favour of Commons IO?
     /**
      * close a stream with no error thrown
      * @param is - InputStream (may be null)
      */
     public static void closeQuietly(InputStream is){
         try {
-            if (is != null) is.close();
-        } catch (IOException e) {
+            if (is != null) {
+                is.close();
+            }
+        } catch (IOException ignored) {
         }
     }
 
@@ -372,8 +385,10 @@ public final class JOrphanUtils {
      */
     public static void closeQuietly(OutputStream os){
         try {
-            if (os != null) os.close();
-        } catch (IOException e) {
+            if (os != null) {
+                os.close();
+            }
+        } catch (IOException ignored) {
         }
     }
 
@@ -383,8 +398,10 @@ public final class JOrphanUtils {
      */
     public static void closeQuietly(Writer wr){
         try {
-            if (wr != null) wr.close();
-        } catch (IOException e) {
+            if (wr != null) {
+                wr.close();
+            }
+        } catch (IOException ignored) {
         }
     }
 
@@ -394,8 +411,10 @@ public final class JOrphanUtils {
      */
     public static void closeQuietly(Reader rd){
         try {
-            if (rd != null) rd.close();
-        } catch (IOException e) {
+            if (rd != null) {
+                rd.close();
+            }
+        } catch (IOException ignored) {
         }
     }
 
@@ -405,8 +424,10 @@ public final class JOrphanUtils {
      */
     public static void closeQuietly(Socket sock){
         try {
-            if (sock!= null) sock.close();
-        } catch (IOException e) {
+            if (sock!= null) {
+                sock.close();
+            }
+        } catch (IOException ignored) {
         }
     }
 
@@ -416,8 +437,10 @@ public final class JOrphanUtils {
      */
     public static void closeQuietly(ServerSocket sock){
         try {
-            if (sock!= null) sock.close();
-        } catch (IOException e) {
+            if (sock!= null) {
+                sock.close();
+            }
+        } catch (IOException ignored) {
         }
     }
 

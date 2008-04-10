@@ -114,7 +114,9 @@ public class HttpSSLProtocolSocketFactory
     private String join(String[] strings) {
 		StringBuffer sb = new StringBuffer();
     	for (int i=0;i<strings.length;i++){
-    		if (i>0) sb.append(" ");
+    		if (i>0) {
+    		    sb.append(" ");
+    		}
     		sb.append(strings[i]);
     	}
     	return sb.toString();
@@ -133,7 +135,9 @@ public class HttpSSLProtocolSocketFactory
      * Wraps the socket in a slow SSL socket if necessary
      */
     private Socket wrapSocket(Socket sock){
-    	if (CPS>0) return new SlowSSLSocket((SSLSocket) sock, CPS);
+    	if (CPS>0) {
+    	    return new SlowSSLSocket((SSLSocket) sock, CPS);
+    	}
     	return sock;
     }
 

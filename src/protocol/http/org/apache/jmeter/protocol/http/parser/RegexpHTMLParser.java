@@ -71,7 +71,6 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * <li>&lt; ... codebase=<b>url</b> ... &gt;
  * </ul>
  * 
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
  */
 class RegexpHTMLParser extends HTMLParser {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -155,8 +154,9 @@ class RegexpHTMLParser extends HTMLParser {
 		while (matcher.contains(input, pattern)) {
 			MatchResult match = matcher.getMatch();
 			String s;
-			if (log.isDebugEnabled())
+			if (log.isDebugEnabled()) {
 				log.debug("match groups " + match.groups() + " " + match.toString());
+			}
 			// Check for a BASE HREF:
 			for (int g = 1; g <= NUM_BASE_GROUPS && g <= match.groups(); g++) {
 				s = match.group(g);

@@ -108,9 +108,8 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 
 		if (fileName.length() == 0) {
 			return bsh.eval(getScript());
-		} else {
-			return bsh.source(fileName);
-		}
+		} 
+		return bsh.source(fileName);
     }
 
     /**
@@ -136,7 +135,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
     }
 
 	public void threadStarted() {
-        if (bshInterpreter == null || !hasInitFile) return;
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
 		try {
 			bshInterpreter.evalNoLog("threadStarted()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
@@ -145,7 +146,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	}
 
 	public void threadFinished() {
-        if (bshInterpreter == null || !hasInitFile) return;
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
 		try {
 			bshInterpreter.evalNoLog("threadFinished()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
@@ -154,7 +157,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	}
 
 	public void testEnded() {
-        if (bshInterpreter == null || !hasInitFile) return;
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
 		try {
 			bshInterpreter.evalNoLog("testEnded()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
@@ -163,7 +168,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	}
 
 	public void testEnded(String host) {
-        if (bshInterpreter == null || !hasInitFile) return;
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
 		try {
 			bshInterpreter.eval((new StringBuffer("testEnded(")) // $NON-NLS-1$
 					.append(host)
@@ -179,7 +186,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	}
 
 	public void testStarted() {
-        if (bshInterpreter == null || !hasInitFile) return;
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
 		try {
 			bshInterpreter.evalNoLog("testStarted()"); // $NON-NLS-1$
 		} catch (JMeterException ignored) {
@@ -188,7 +197,9 @@ public abstract class BeanShellTestElement extends AbstractTestElement
 	}
 
 	public void testStarted(String host) {
-        if (bshInterpreter == null || !hasInitFile) return;
+        if (bshInterpreter == null || !hasInitFile) {
+            return;
+        }
 		try {
 			bshInterpreter.eval((new StringBuffer("testStarted(")) // $NON-NLS-1$
 					.append(host)

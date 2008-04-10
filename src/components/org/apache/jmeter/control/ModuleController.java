@@ -45,7 +45,6 @@ import org.apache.jorphan.collections.ListedHashTree;
  * elements can be attached to the ModuleController to alter the functionality
  * (which user logs in, which account is created, etc.) of the module.
  * 
- * @author Thad Smith
  */
 public class ModuleController extends GenericController implements ReplaceableController {
 
@@ -91,8 +90,9 @@ public class ModuleController extends GenericController implements ReplaceableCo
 	 * @return JMeterTreeNode
 	 */
 	public JMeterTreeNode getSelectedNode() {
-		if (selectedNode == null)
-			restoreSelected();
+		if (selectedNode == null){
+		    restoreSelected();
+		}
 		return selectedNode;
 	}
 
@@ -143,8 +143,9 @@ public class ModuleController extends GenericController implements ReplaceableCo
 			for (int i = 0; i < node.getChildCount(); i++) {
 				JMeterTreeNode cur = (JMeterTreeNode) node.getChildAt(i);
 				if (cur.getName().equals(nodePath.get(level).toString())) {
-					if (nodePath.size() == (level + 1))
-						selectedNode = cur;
+					if (nodePath.size() == (level + 1)) {
+					    selectedNode = cur;
+					}
 					traverse(cur, nodePath, level + 1);
 				}
 			}

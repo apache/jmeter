@@ -80,10 +80,12 @@ public class OnErrorPanel extends JPanel {
 	}
 
 	public int getOnErrorSetting() {
-		if (stopTestBox.isSelected())
-			return OnErrorTestElement.ON_ERROR_STOPTEST;
-		if (stopThrdBox.isSelected())
-			return OnErrorTestElement.ON_ERROR_STOPTHREAD;
+		if (stopTestBox.isSelected()) {
+		    return OnErrorTestElement.ON_ERROR_STOPTEST;
+		}
+		if (stopThrdBox.isSelected()) {
+		    return OnErrorTestElement.ON_ERROR_STOPTHREAD;
+		}
 
 		// Defaults to continue
 		return OnErrorTestElement.ON_ERROR_CONTINUE;

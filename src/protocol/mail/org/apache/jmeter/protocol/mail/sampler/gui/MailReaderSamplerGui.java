@@ -144,19 +144,21 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 		MailReaderSampler mrs = (MailReaderSampler) te;
 
-		if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label))
+		if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label)) {
 			mrs.setServerType(MailReaderSampler.TYPE_POP3);
-		else
+		} else {
 			mrs.setServerType(MailReaderSampler.TYPE_IMAP);
+		}
 
 		mrs.setFolder(folderBox.getText());
 		mrs.setServer(serverBox.getText());
 		mrs.setUserName(usernameBox.getText());
 		mrs.setPassword(passwordBox.getText());
-		if (allMessagesButton.isSelected())
+		if (allMessagesButton.isSelected()) {
 			mrs.setNumMessages(MailReaderSampler.ALL_MESSAGES);
-		else
+		} else {
 			mrs.setNumMessages(someMessagesField.getText());
+		}
 		mrs.setDeleteMessages(deleteBox.isSelected());
 	}
 

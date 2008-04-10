@@ -130,10 +130,10 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	public String getAsText() {
 		Object value = combo.getSelectedItem();
 
-		if (value == UNDEFINED)
+		if (value == UNDEFINED) {
 			return null;
-		else
-			return (String) value;
+		}
+		return (String) value;
 	}
 
 	/*
@@ -153,10 +153,11 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	public void setAsText(String value) {
 		combo.setEditable(true);
 
-		if (value == null)
+		if (value == null) {
 			combo.setSelectedItem(UNDEFINED);
-		else
+		} else {
 			combo.setSelectedItem(value);
+		}
 
 		if (!startingEdit && combo.getSelectedIndex() >= 0) {
 			combo.setEditable(false);
@@ -192,16 +193,18 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 		textField.requestFocus();
 
 		String text = initialEditValue;
-		if (initialEditValue == null)
-			text = ""; // will revert to last valid value if invalid
+		if (initialEditValue == null) {
+		    text = ""; // will revert to last valid value if invalid
+		}
 
 		combo.setSelectedItem(text);
 
 		int i = text.indexOf("${}");
-		if (i != -1)
+		if (i != -1) {
 			textField.setCaretPosition(i + 2);
-		else
+		} else {
 			textField.selectAll();
+		}
 	}
 
 	public String getInitialEditValue() {
@@ -231,45 +234,52 @@ class ComboStringEditor extends PropertyEditorSupport implements ItemListener {
 	 * @param b
 	 */
 	public void setNoEdit(boolean b) {
-		if (noEdit == b)
+		if (noEdit == b) {
 			return;
+		}
 		noEdit = b;
 
-		if (noEdit)
+		if (noEdit) {
 			model.removeElement(EDIT);
-		else
+		} else {
 			model.addElement(EDIT);
+		}
 	}
 
 	/**
 	 * @param b
 	 */
 	public void setNoUndefined(boolean b) {
-		if (noUndefined == b)
+		if (noUndefined == b) {
 			return;
+		}
 		noUndefined = b;
 
-		if (noUndefined)
+		if (noUndefined) {
 			model.removeElement(UNDEFINED);
-		else
+		} else {
 			model.insertElementAt(UNDEFINED, 0);
+		}
 	}
 
 	/**
 	 * @param strings
 	 */
 	public void setTags(String[] strings) {
-		if (Arrays.equals(tags,strings))
-			return;
+		if (Arrays.equals(tags,strings)) {
+		    return;
+		}
 
-		for (int i = 0; i < tags.length; i++)
+		for (int i = 0; i < tags.length; i++) {
 			model.removeElement(tags[i]);
+		}
 
 		tags = strings == null ? new String[0] : strings;
 
 		int b = noUndefined ? 0 : 1; // base index for tags
-		for (int i = 0; i < tags.length; i++)
+		for (int i = 0; i < tags.length; i++) {
 			model.insertElementAt(tags[i], b + i);
+		}
 	}
 
 	/**

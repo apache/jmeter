@@ -72,8 +72,9 @@ public class RunTime extends GenericController implements Serializable {
 	}
 
 	public Sampler next() {
-		if (startTime == 0)
-			startTime = System.currentTimeMillis();
+		if (startTime == 0) {
+		    startTime = System.currentTimeMillis();
+		}
 		if (endOfLoop()) {
 			reInitialize();// ??
 			resetLoopCount();

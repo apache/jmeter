@@ -63,12 +63,11 @@ import org.apache.log.Logger;
  * <p>
  * Created on: Jun 26, 2003
  * 
- * @author Peter Lin
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
 	private static Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
 	
 	public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 
@@ -129,8 +128,9 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 		SampleResult res = null;
 		try {
 
-			if (PARSER == null)
+			if (PARSER == null) {
 				throw new JMeterException("No Parser available");
+			}
 			/*
 			 * samp.setDomain(this.getDomain()); samp.setPort(this.getPort());
 			 */
@@ -150,11 +150,13 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 				if (count == 0 || filter == null) {
 					JMeterContextService.getContext().getThread().stop();
 				}
-				if (filter != null)
+				if (filter != null) {
 					filter.reset();
+				}
 				CookieManager cm = getCookieManager();
-				if (cm != null)
+				if (cm != null) {
 					cm.clear();
+				}
 				count = 0;
 				return errorResult(new Error("No entries found"), new HTTPSampleResult());
 			}
@@ -224,7 +226,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 	/**
 	 * @return Returns the domain.
 	 */
-	public String getDomain() {
+	public String getDomain() { // N.B. Must be in this class for the TestBean code to work
 		return super.getDomain();
 	}
 
@@ -232,7 +234,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
 	 * @param domain
 	 *            The domain to set.
 	 */
-	public void setDomain(String domain) {
+	public void setDomain(String domain) { // N.B. Must be in this class for the TestBean code to work
 		super.setDomain(domain);
 	}
 
@@ -343,9 +345,11 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      * @see org.apache.jmeter.testelement.AbstractTestElement#threadFinished()
      */
     public void threadFinished() {
-        if(PARSER instanceof ThreadListener)
+        if(PARSER instanceof ThreadListener) {
             ((ThreadListener)PARSER).threadFinished();
-        if(filter instanceof ThreadListener)
+        }
+        if(filter instanceof ThreadListener) {
             ((ThreadListener)filter).threadFinished();
+        }
     }
 }

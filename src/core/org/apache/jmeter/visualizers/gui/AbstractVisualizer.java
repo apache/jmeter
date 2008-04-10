@@ -134,13 +134,17 @@ public abstract class AbstractVisualizer
 		errorLogging = new JCheckBox(JMeterUtils.getResString("log_errors_only")); // $NON-NLS-1$
 		errorLogging.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				if (errorLogging.isSelected()) successOnlyLogging.setSelected(false);
+				if (errorLogging.isSelected()) {
+				    successOnlyLogging.setSelected(false);
+				}
 			}			
 		});
 		successOnlyLogging = new JCheckBox(JMeterUtils.getResString("log_success_only")); // $NON-NLS-1$
 		successOnlyLogging.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				if (successOnlyLogging.isSelected()) errorLogging.setSelected(false);
+				if (successOnlyLogging.isSelected()) {
+				    errorLogging.setSelected(false);
+				}
 			}			
 		});
 		saveConfigButton = new JButton(JMeterUtils.getResString("config_save_settings")); // $NON-NLS-1$

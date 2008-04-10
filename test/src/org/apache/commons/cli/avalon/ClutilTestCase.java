@@ -949,7 +949,9 @@ public final class ClutilTestCase extends TestCase {
 		final int size = clOptions.size();
 		StringBuffer sb = new StringBuffer();
 		for (int i=0; i< size; i++){
-			if (i>0) sb.append(" ");
+			if (i>0) {
+			    sb.append(" ");
+			}
 			sb.append(((CLOption)clOptions.get(i)).toShortString());	
 		}
 		assertEquals("Canonical form ("+size+")",canon,sb.toString());

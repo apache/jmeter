@@ -191,14 +191,13 @@ public class HttpRequestHdr {
 		// look for termination of HTTP command
 		if (0 == token.length()) {
 			return 0;
-		} else {
-			String trimmed = token.trim();
-            String name = trimmed.substring(0, trimmed.length() - 1);// drop ':'
-			String value = getRemainder(tz);
-			headers.put(name.toLowerCase(), new Header(name, value));
-			if (name.equalsIgnoreCase(CONTENT_LENGTH)) {
-				return Integer.parseInt(value);
-			}
+		}
+		String trimmed = token.trim();
+        String name = trimmed.substring(0, trimmed.length() - 1);// drop ':'
+		String value = getRemainder(tz);
+		headers.put(name.toLowerCase(), new Header(name, value));
+		if (name.equalsIgnoreCase(CONTENT_LENGTH)) {
+			return Integer.parseInt(value);
 		}
 		return 0;
 	}
@@ -248,8 +247,9 @@ public class HttpRequestHdr {
 		sampler.setFollowRedirects(false);
 		sampler.setUseKeepAlive(true);
 		
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
     		log.debug("getSampler: sampler path = " + sampler.getPath());
+        }
 		return sampler;
 	}
     
@@ -295,9 +295,8 @@ public class HttpRequestHdr {
     private boolean isMultipart(String contentType) {
         if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     private MultipartUrlConfig getMultipartConfig(String contentType) {
@@ -306,33 +305,36 @@ public class HttpRequestHdr {
             String boundaryString = contentType.substring(contentType.toLowerCase().indexOf("boundary=") + "boundary=".length());
             return new MultipartUrlConfig(boundaryString);
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     private void populateSampler(Map pageEncodings, Map formEncodings) 
             throws MalformedURLException, UnsupportedEncodingException {        
         sampler.setDomain(serverName());
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
     		log.debug("Proxy: setting server: " + sampler.getDomain());
+        }
 		sampler.setMethod(method);
 		log.debug("Proxy: setting method: " + sampler.getMethod());
 		sampler.setPort(serverPort());
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("Proxy: setting port: " + sampler.getPort());
+        }
 		if (url.indexOf("//") > -1) {
 			String protocol = url.substring(0, url.indexOf(":"));
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
     			log.debug("Proxy: setting protocol to : " + protocol);
+            }
 			sampler.setProtocol(protocol);
 		} else if (sampler.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT) {
 			sampler.setProtocol(HTTPS);
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
     			log.debug("Proxy: setting protocol to https");
+            }
 		} else {
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
     			log.debug("Proxy setting default protocol to: http");
+            }
 			sampler.setProtocol(HTTP);
 		}
         
@@ -398,8 +400,9 @@ public class HttpRequestHdr {
             // with the value in the URL, and the "encode?" flag set to false
             sampler.setPath(getPath(), null);
         }
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("Proxy: setting path: " + sampler.getPath());
+        }
         if (numberRequests) {
             requestNumber++;
             sampler.setName(requestNumber + " " + sampler.getPath());
@@ -451,8 +454,9 @@ public class HttpRequestHdr {
                 sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
             }
         }
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
     		log.debug("sampler path = " + sampler.getPath());
+        }
 	}
 
 	//

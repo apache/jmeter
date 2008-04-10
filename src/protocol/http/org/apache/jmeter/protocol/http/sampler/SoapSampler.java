@@ -306,8 +306,9 @@ public class SoapSampler extends HTTPSampler2 {
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             log.debug("End : sample");
-            if (httpMethod != null)
+            if (httpMethod != null) {
                 httpMethod.releaseConnection();
+            }
             return res;
         } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
         {
@@ -322,8 +323,9 @@ public class SoapSampler extends HTTPSampler2 {
             return err;
         } finally {
             JOrphanUtils.closeQuietly(instream);
-            if (httpMethod != null)
+            if (httpMethod != null) {
                 httpMethod.releaseConnection();
+            }
         }
     }
 

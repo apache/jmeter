@@ -152,12 +152,10 @@ public class WebServiceSampler extends HTTPSamplerBase {
 				File one = fileList[RANDOM.nextInt(fileList.length)];
 				// return the absolutePath of the file
 				return one.getAbsolutePath();
-			} else {
-				return getXmlFile();
 			}
-		} else {
 			return getXmlFile();
 		}
+		return getXmlFile();
 	}
 
 	/**
@@ -427,8 +425,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 		try {
 			result.setURL(this.getUrl());
 			org.w3c.dom.Element rdoc = createDocument();
-			if (rdoc == null)
+			if (rdoc == null) {
 				throw new SOAPException("Could not create document", null);
+			}
 			Envelope msgEnv = Envelope.unmarshall(rdoc);
 			// create a new message
 			Message msg = new Message();

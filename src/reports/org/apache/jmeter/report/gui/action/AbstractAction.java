@@ -36,8 +36,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author mstover
- * @version $Revision$
+ * Parent class for implementing Menu item commands 
  */
 public abstract class AbstractAction implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -57,8 +56,9 @@ public abstract class AbstractAction implements Command {
 		Iterator iter = new LinkedList(tree.list()).iterator();
 		while (iter.hasNext()) {
 			Object o = iter.next();
-			if(o instanceof TestElement)
+			if(o instanceof TestElement) {
 				continue; //hey, no need to convert
+			}
 			ReportTreeNode item = (ReportTreeNode) o;
 			if (item.isEnabled()) {
 				if (item.getUserObject() instanceof ReplaceableController) {

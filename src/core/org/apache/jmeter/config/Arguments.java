@@ -91,8 +91,9 @@ public class Arguments extends ConfigTestElement implements Serializable {
 			// that this element's values prevail over defaults provided by
 			// configuration
 			// elements:
-			if (!argMap.containsKey(arg.getName()))
-				argMap.put(arg.getName(), arg.getValue());
+			if (!argMap.containsKey(arg.getName())) {
+			    argMap.put(arg.getName(), arg.getValue());
+			}
 		}
 		return argMap;
 	}

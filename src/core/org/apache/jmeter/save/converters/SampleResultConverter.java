@@ -26,12 +26,16 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.SaveService;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
+import org.apache.log.Logger;
+
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -43,7 +47,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * XStream Converter for the SampleResult class
  */
 public class SampleResultConverter extends AbstractCollectionConverter {
-	//private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
  
     private static final String JAVA_LANG_STRING = "java.lang.String"; //$NON-NLS-1$
     private static final String ATT_CLASS = "class"; //$NON-NLS-1$
@@ -234,29 +238,39 @@ public class SampleResultConverter extends AbstractCollectionConverter {
 	 */
 	protected void setAttributes(HierarchicalStreamWriter writer, MarshallingContext context, SampleResult res,
 			SampleSaveConfiguration save) {
-		if (save.saveTime())
+		if (save.saveTime()) {
 			writer.addAttribute(ATT_TIME, Long.toString(res.getTime()));
-		if (save.saveLatency())
+		}
+		if (save.saveLatency()) {
 			writer.addAttribute(ATT_LATENCY, Long.toString(res.getLatency()));
-		if (save.saveTimestamp())
+		}
+		if (save.saveTimestamp()) {
 			writer.addAttribute(ATT_TIME_STAMP, Long.toString(res.getTimeStamp()));
-		if (save.saveSuccess())
-			writer.addAttribute(ATT_SUCCESS,
-					Boolean.toString(res.isSuccessful()));
-		if (save.saveLabel())
+		}
+		if (save.saveSuccess()) {
+			writer.addAttribute(ATT_SUCCESS, Boolean.toString(res.isSuccessful()));
+		}
+		if (save.saveLabel()) {
 			writer.addAttribute(ATT_LABEL, ConversionHelp.encode(res.getSampleLabel()));
-		if (save.saveCode())
+		}
+		if (save.saveCode()) {
 			writer.addAttribute(ATT_RESPONSE_CODE, ConversionHelp.encode(res.getResponseCode()));
-		if (save.saveMessage())
+		}
+		if (save.saveMessage()) {
 			writer.addAttribute(ATT_RESPONSE_MESSAGE, ConversionHelp.encode(res.getResponseMessage()));
-		if (save.saveThreadName())
+		}
+		if (save.saveThreadName()) {
 			writer.addAttribute(ATT_THREADNAME, ConversionHelp.encode(res.getThreadName()));
-		if (save.saveDataType())
+		}
+		if (save.saveDataType()) {
 			writer.addAttribute(ATT_DATA_TYPE, ConversionHelp.encode(res.getDataType()));
-		if (save.saveEncoding())
+		}
+		if (save.saveEncoding()) {
 			writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncodingNoDefault()));
-		if (save.saveBytes())
+		}
+		if (save.saveBytes()) {
 			writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
+		}
         if (save.saveSampleCount()){
         	writer.addAttribute(ATT_SAMPLE_COUNT, String.valueOf(res.getSampleCount()));
         	writer.addAttribute(ATT_ERROR_COUNT, String.valueOf(res.getErrorCount()));
@@ -399,14 +413,11 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             outstream.close();
             res.setResponseData(outstream.toByteArray());
         } catch (FileNotFoundException e) {
-            //log.warn(e.getLocalizedMessage());
+            log.warn(e.getLocalizedMessage());
         } catch (IOException e) {
-            //log.warn(e.getLocalizedMessage());
+            log.warn(e.getLocalizedMessage());
         } finally {
-            try {
-                if (fis != null) fis.close();
-            } catch (IOException e) {
-            }
+            IOUtils.closeQuietly(fis);
         }
     }
 

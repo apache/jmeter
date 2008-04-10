@@ -47,6 +47,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 // import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.test.UnitTestManager;
@@ -167,8 +168,9 @@ public class JMeterUtils implements UnitTestManager {
 			try {
 				is = 
 					ClassLoader.getSystemResourceAsStream("org/apache/jmeter/jmeter.properties"); // $NON-NLS-1$
-				if (is == null)
+				if (is == null) {
 					throw new RuntimeException("Could not read JMeter properties file");
+				}
 				p.load(is);
 			} catch (IOException ex) {
 				// JMeter.fail("Could not read internal resource. " +
@@ -480,11 +482,7 @@ public class JMeterUtils implements UnitTestManager {
 		} catch (IOException e) {
 			return ""; // $NON-NLS-1$
 		} finally {
-			if (fileReader != null)
-				try {
-					fileReader.close();
-				} catch (IOException e1) {
-				}
+		    IOUtils.closeQuietly(fileReader);
 		}
 	}
 

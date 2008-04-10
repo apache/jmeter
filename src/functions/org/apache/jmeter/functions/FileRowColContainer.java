@@ -33,7 +33,6 @@ import org.apache.log.Logger;
  * File data container for CSV (and similar delimited) files Data is accessible
  * via row and column number
  * 
- * @version $Revision$
  */
 public class FileRowColContainer {
 
@@ -98,8 +97,9 @@ public class FileRowColContainer {
 			log.warn(e.toString());
 			throw e;
 		} finally {
-			if (myBread != null)
+			if (myBread != null) {
 				myBread.close();
+			}
 		}
 	}
 
