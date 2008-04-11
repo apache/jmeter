@@ -1755,7 +1755,8 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 <p>
 <note>
 Versions of JMeter after 2.3.1 allow JMeter variables to be saved to the output files.
-This can only be specified using a property. See the following link for details.
+This can only be specified using a property.
+See the <a href="listeners.html#sample_variables">Listener Sample Variables</a> for details
 </note>
 For full details on setting up the default items to be saved
 see the <a href="listeners.html#defaults">Listener Default Configuration</a> documentation.
