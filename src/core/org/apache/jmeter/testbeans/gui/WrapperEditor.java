@@ -318,7 +318,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		} else {
 			// Not an expression (isn't or can't be), not null.
 			typeEditor.setValue(value); // may throw IllegalArgumentExc.
-			text = typeEditor.getAsText();
+			text = fixGetAsTextBug(typeEditor.getAsText());
 
 			if (!acceptsOther && !isATag(text)) {
 				throw new IllegalArgumentException("Value not allowed: "+text);
@@ -328,7 +328,23 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 		guiEditor.setValue(text);
 	}
 
-	public String getAsText() {
+	/*
+	 * Fix bug in JVMs that return true/false rather than True/False
+	 * from the type editor getAsText() method
+	 */
+	private String fixGetAsTextBug(String asText) {
+        if (asText.equals("true")){
+            log.debug("true=>True");// so we can detect it
+            return "True";
+        }
+        if (asText.equals("false")){
+            log.debug("false=>False");// so we can detect it
+            return "False";
+        }
+        return asText;
+    }
+
+    public String getAsText() {
 		String text = guiEditor.getAsText();
 
 		if (text == null) {
@@ -342,7 +358,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 			} catch (IllegalArgumentException e) {
 				shouldNeverHappen(e);
 			}
-			text = typeEditor.getAsText();
+			text = fixGetAsTextBug(typeEditor.getAsText());
 
 			// a check, just in case:
 			if (!acceptsOther && !isATag(text)) {
