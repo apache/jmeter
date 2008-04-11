@@ -76,11 +76,18 @@ public class PackageTest extends JMeterTestCase {
 		this.defaultBundle = defaultBundle;
 	}
 
+	private PackageTest(String name){
+	    super(name);
+	}
+	
 	BeanInfo beanInfo;
 
 	ResourceBundle bundle;
 
 	public void setUp() {
+	    if (testLocale == null) {
+	        return;// errorDetected()
+	    }
 		JMeterUtils.setLocale(testLocale);
 		Introspector.flushFromCaches(testBeanClass);
 		try {
@@ -88,8 +95,7 @@ public class PackageTest extends JMeterTestCase {
 			bundle = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
 		} catch (IntrospectionException e) {
 			log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
-			throw new Error(e.toString()); // Programming error. Don't
-											// continue.
+			throw new Error(e.toString()); // Programming error. Don't continue.
 		}
 		if (bundle == null) {
 			throw new Error("This can't happen!");
@@ -100,7 +106,11 @@ public class PackageTest extends JMeterTestCase {
 		JMeterUtils.setLocale(Locale.getDefault());
 	}
 
-	public void runTest() {
+	public void runTest() throws Throwable {
+        if (testLocale == null) {
+            super.runTest();
+            return;// errorDetected()
+        }
 		if (bundle == defaultBundle) {
 			checkAllNecessaryKeysPresent();
 		} else {
@@ -163,11 +173,12 @@ public class PackageTest extends JMeterTestCase {
 		Iterator iter = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class })
 				.iterator();
 
+		boolean errorDetected = false;
 		while (iter.hasNext()) {
 			String className = (String) iter.next();
 			Class testBeanClass = Class.forName(className);
 			JMeterUtils.setLocale(defaultLocale);
-			ResourceBundle defaultBundle;
+			ResourceBundle defaultBundle = null;
 			try {
 				defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(
 						GenericTestBeanCustomizer.RESOURCE_BUNDLE);
@@ -179,10 +190,13 @@ public class PackageTest extends JMeterTestCase {
 
 			if (defaultBundle == null) {
 				if (className.startsWith("org.apache.jmeter.examples.")) {
-					log.warn("No default bundle found for " + className);
+					log.info("No default bundle found for " + className);
 					continue;
 				}
-				throw new Error("No default bundle for class " + className);
+                errorDetected=true;
+                log.error("No default bundle found for " + className);
+				//throw new Error("No default bundle for class " + className);
+                continue;
 			}
 
 			suite.addTest(new PackageTest(testBeanClass, defaultLocale, defaultBundle));
@@ -192,6 +206,14 @@ public class PackageTest extends JMeterTestCase {
 			}
 		}
 
+		if (errorDetected)
+		{
+		    suite.addTest(new PackageTest("errorDetected"));
+		}
 		return suite;
 	}
+
+    public void errorDetected(){
+        fail("One or more errors detected - see log file");
+    }
 }
