@@ -158,6 +158,7 @@ The following functions should work OK on the test plan:
 <p>
 Configuration elements are processed by a separate thread.
 Therefore functions such as __threadNum do not work properly in elements such as User Defined Variables.
+Also note that variables defined in a UDV element are not available until the element has been processed.
 </p>
 <note>When using variable/function references in SQL code (etc),
 remember to include any necessary quotes for text strings,
@@ -306,6 +307,7 @@ is indistinguishable from thread #1 in another threadgroup, from the point of vi
 </description>
 <note>
 This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+Nor does it make sense to use it on the Test Plan.
 </note>
 </component>
 
@@ -542,6 +544,22 @@ the comma after 7 is escaped.</note>
         	*ALIAS - open a file and assign it to the alias
         	</property>
 </properties>
+<p>For example, you could set up some variables as follows:
+<ul>
+<li>COL1a ${__CSVRead(random.txt,0)}</li>
+<li>COL2a ${__CSVRead(random.txt,1)}${__CSVRead(random.txt,next)}</li>
+<li>COL1b ${__CSVRead(random.txt,0)}</li>
+<li>COL2b ${__CSVRead(random.txt,1)}${__CSVRead(random.txt,next)}</li>
+</ul>
+This would read two columns from one line, and two columns from the next available line.
+If all the variables are defined on the same User Parameters Pre-Processor, then the lines
+will be consecutive. Otherwise, a different thread may grab the next line.
+</p>
+<note>
+The function is not suitable for use with large files, as the entire file is stored in memory.
+For larger files, use <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
+or <a href="#__StringFromFile">StringFromFile</a>.
+</note>
 </component>
 
 <component index="&sect-num;.5.9" name="__property">
@@ -835,7 +853,7 @@ time.YMD=yyMMdd
 
 <properties>
         <property name="Expression" required="Yes">
-        The expression to be evaluated. 
+        The expression to be evaluated. For example, 6*(5+2)
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
@@ -891,13 +909,22 @@ JMeter 2.3 (and later versions) make the following variables available to the sc
 </component>
 <component index="&sect-num;.5.21" name="__eval">
 <description>
-	<p>The eval function returns the result of evaluating an expression.
+	<p>The eval function returns the result of evaluating a string expression.
 	</p>
 	<p>
-	This allows one to interpolate variable and function references in a string.
-	For example, if "column" and "table" contain "name" and "customers", 
-	then ${__eval(select ${column} from ${table})}
-	will evaluate as "select name from customers". 
+	This allows one to interpolate variable and function references in a string
+	which is stored in a variable.	For example, given the following variables:
+	<ul>
+	<li>name=Smith</li>
+	<li>column=age</li>
+	<li>table=birthdays</li>
+	<li>SQL=select ${column} from ${table} where name='${name}'</li>
+	</ul>
+	then ${__eval(${SQL})} will evaluate as "select age from birthdays where name='Smith'". 
+	</p>
+	<p>
+	This can be used in conjunction with CSV Dataset, for example 
+	where the both SQL statements and the values are defined in the data file.
 	</p>
 	</description>
 
