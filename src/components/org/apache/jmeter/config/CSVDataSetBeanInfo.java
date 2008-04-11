@@ -65,16 +65,13 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
         p = property(QUOTED_DATA);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.FALSE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
         
         p = property(RECYCLE);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.TRUE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 
         p = property(STOPTHREAD);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, Boolean.FALSE);
-        p.setValue(NOT_EXPRESSION, Boolean.TRUE);
 	}
 }
