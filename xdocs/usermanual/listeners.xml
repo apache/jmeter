@@ -182,12 +182,14 @@ HREF="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">
 Bear in mind that choosing a date format other than "ms" is likely to
 make it impossible for JMeter to interpret the value when it is read
 in later for viewing purposes.</p>
+<subsection name="&sect-num;.1.1 Sample Variables" anchor="sample_variables">
 <p>
 Versions of JMeter after 2.3.1 allow one to use the <b>sample_variables</b> 
 property to define a list of additional JMeter variables which are to be saved with
 each sample in the JTL files. The values are written to CSV files as additional columns,
-and as additional attributes in XML files.
+and as additional attributes in XML files. See above for an example.
 </p>
+</subsection>
 </section>
 
 <section name="&sect-num;.2 non-GUI (batch) test runs" anchor="batch">
