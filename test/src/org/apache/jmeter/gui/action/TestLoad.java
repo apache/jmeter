@@ -26,14 +26,9 @@ import java.util.Set;
 
 import junit.framework.TestSuite;
 
-import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.tree.JMeterTreeListener;
-import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 /**
  * 
@@ -41,8 +36,6 @@ import org.apache.log.Logger;
  */
 public class TestLoad extends JMeterTestCase {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
-	
 	private static final String basedir = new File(System.getProperty("user.dir")).getParent();
 	private static final File testfiledir = new File(basedir,"bin/testfiles");
 	private static final File demofiledir = new File(basedir,"xdocs/demos");
@@ -55,8 +48,6 @@ public class TestLoad extends JMeterTestCase {
 		notTestPlan.add("ProxyServerTestPlan.jmx");// used by TestSaveService
 	}
 
-	private static GuiPackage guiInstance = null;
-	
 	private static final FilenameFilter jmxFilter = new FilenameFilter() {
 		public boolean accept(File dir, String name) {
 			return name.endsWith(".jmx");
@@ -80,7 +71,7 @@ public class TestLoad extends JMeterTestCase {
 
 	public static TestSuite suite(){
 		TestSuite suite=new TestSuite("Load Test");
-		suite.addTest(new TestLoad("checkGuiPackage"));
+		//suite.addTest(new TestLoad("checkGuiPackage"));
 		scanFiles(suite,testfiledir);
 		scanFiles(suite,demofiledir);
 		return suite;
@@ -92,17 +83,6 @@ public class TestLoad extends JMeterTestCase {
 		for (int i=0; i<testFiles.length; i++){
 		    suite.addTest(new TestLoad("checkTestFile",testFiles[i],dir));
 		}
-	}
-
-	public void checkGuiPackage(){
-		guiInstance = GuiPackage.getInstance();
-		if (guiInstance == null){// e.g. if running this test stand-alone
-			System.out.println("Creating GuiPackage");
-			JMeterTreeModel treeModel = new JMeterTreeModel();
-			JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
-			guiInstance = GuiPackage.getInstance(treeLis, treeModel);
-	    }
-		assertNotNull("GuiPackage should not be null",guiInstance);
 	}
 	
 	public void checkTestFile() throws Exception{
@@ -119,14 +99,6 @@ public class TestLoad extends JMeterTestCase {
 		final Object object = tree.getArray()[0];
 		final String name = testFile.getName();
 		
-		if (parent.equals("demos") && guiInstance != null) {
-			try {
-				guiInstance.addSubTree(tree);
-			} catch (Exception e){
-				log.warn(parent+ ": " +name,e);
-				fail(parent+ ": " +name+" "+e);
-			}
-		}
 		if (! (object instanceof org.apache.jmeter.testelement.TestPlan) && !notTestPlan.contains(name)){
 			fail(parent+ ": " +name+" tree should be TestPlan, but is "+object.getClass().getName());
 		}
