@@ -174,10 +174,10 @@ public class PackageTest extends JMeterTestCase {
 				.iterator();
 
 		boolean errorDetected = false;
+        JMeterUtils.setLocale(defaultLocale);
 		while (iter.hasNext()) {
 			String className = (String) iter.next();
 			Class testBeanClass = Class.forName(className);
-			JMeterUtils.setLocale(defaultLocale);
 			ResourceBundle defaultBundle = null;
 			try {
 				defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(
