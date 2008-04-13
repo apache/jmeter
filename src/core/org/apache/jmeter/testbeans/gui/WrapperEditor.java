@@ -24,6 +24,7 @@ import java.beans.PropertyEditorSupport;
 
 import javax.swing.JOptionPane;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -220,8 +221,8 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 	 * @throws Error
 	 *             always throws an error.
 	 */
-	private final void shouldNeverHappen() throws Error {
-		throw new Error(); // Programming error: bail out.
+	private final void shouldNeverHappen(String msg) throws Error {
+		throw new Error(msg); // Programming error: bail out.
 	}
 
 	/**
@@ -268,7 +269,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 		if (text == null) {
 			if (!acceptsNull) {
-				shouldNeverHappen();
+				shouldNeverHappen("Text is null but null is not allowed");
 			}
 			value = null;
 		} else {
@@ -279,7 +280,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 				// a check, just in case:
 				if (!acceptsOther && !isATag(text)) {
-					shouldNeverHappen();
+					shouldNeverHappen("Text is not a tag but other entries are not allowed");
 				}
 
 				try {
@@ -333,6 +334,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 	 * from the type editor getAsText() method
 	 */
 	private String fixGetAsTextBug(String asText) {
+	    if (asText == null){
+	        return asText;
+	    }
         if (asText.equals("true")){
             log.debug("true=>True");// so we can detect it
             return "True";
@@ -345,11 +349,11 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     }
 
     public String getAsText() {
-		String text = guiEditor.getAsText();
+		String text = fixGetAsTextBug(guiEditor.getAsText());
 
 		if (text == null) {
 			if (!acceptsNull) {
-				shouldNeverHappen();
+				shouldNeverHappen("Text is null, but null is not allowed");
 			}
 		} else if (!acceptsExpressions || !isExpression(text)) {
 			// not an expression (can't be or isn't), not null.
@@ -362,7 +366,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 
 			// a check, just in case:
 			if (!acceptsOther && !isATag(text)) {
-				shouldNeverHappen();
+				shouldNeverHappen("Text is not a tag, but other values are not allowed");
 			}
 		}
 
@@ -403,17 +407,19 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
-		String text = guiEditor.getAsText();
+		String text = fixGetAsTextBug(guiEditor.getAsText());
 		if (isValidValue(text)) {
 			lastValidValue = text;
 			firePropertyChange();
 		} else {
-			// TODO: how to bring the editor back in view & focus?
-			JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(),
-			        JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
+			if (GuiPackage.getInstance() == null){
+			    log.warn("Invalid value: "+text+" "+guiEditor);
+			} else {
+			    JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(),
+			       JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
 			        JMeterUtils.getResString("property_editor.value_is_invalid_title"),  //$NON-NLS-1$
 			        JOptionPane.WARNING_MESSAGE);
-
+			}
 			// Revert to the previous value:
 			guiEditor.setAsText(lastValidValue);
 		}
