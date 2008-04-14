@@ -67,8 +67,11 @@ ${VARIABLE}
 </pre>
 </p>
 <p>
+<b>
 If an undefined function or variable is referenced, JMeter does not report/log an error - the reference is returned unchanged.
 For example if UNDEF is not defined as a variable, then the value of ${UNDEF} is ${UNDEF}.
+</b>
+Variables, functions (and properties) are all case-sensitive.
 </p>
 <note>
 Properties are not the same as variables.
