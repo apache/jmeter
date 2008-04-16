@@ -177,6 +177,22 @@ public class TestURLRewritingModifier extends JMeterTestCase {
 			}
 		}
 
+    public void testGrabSessionIdURLinJSON() throws Exception {
+			String html = 
+			    "<a href=\"#\" onclick=\"$(\'frame\').src=\'/index?param1=bla&sessionid=xyzxyzxyz\\'";
+			response = new SampleResult();
+			response.setResponseData(html.getBytes());
+			mod.setArgumentName("sessionid");
+			HTTPSamplerBase sampler = createSampler();
+			sampler.addArgument("sessionid", "xyzxyzxyz");
+			context.setCurrentSampler(sampler);
+			context.setPreviousResult(response);
+			mod.process();
+			Arguments args = sampler.getArguments();
+			assertEquals("xyzxyzxyz", ((Argument) args.getArguments().get(0).getObjectValue())
+					.getValue());
+		}
+
         public void testCache() throws Exception {
             String[] html = new String[] { 
                     "<input name=\"sid\" value=\"myId\">", 
