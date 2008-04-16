@@ -1064,8 +1064,20 @@ jmeter -LDEBUG
 		</td></tr>
 		<tr><td>
 		  <blockquote>
-		  									 				<p	>
-								If JMeter detects an error, a message will be written to the log file. 
+		  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
+		<tr><td>						
+    JMeter does not generally use pop-up dialog boxes for errors, as these would interfere with
+    running tests. Nor does it report any error for a mis-spelt variable or function; instead the
+    reference is just used as is. See 
+												<a	 href="functions.html">
+								Functions and Variables for more information
+						</a>
+									.
+    
+			</td></tr>
+	</table></p>
+							  									 				<p	>
+								If JMeter detects an error during a test, a message will be written to the log file. 
 		The log file name is defined in the jmeter.properties file (or using the -j option, see below).
 		It defaults to 
 												<b	>
