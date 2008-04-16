@@ -157,6 +157,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Bug 41921 - add option for samplers to store MD5 of response; done for HTTP Samplers.</li>
 <li>Regex Function can now also be applied to a variable rather than just the previous sample result.</li>
 <li>Remove HTML Parameter Mask,HTTP User Parameter Modifier from menus as they are deprecated</li>
+<li>Bug 44807 - allow session ids to be terminated by backslash</li>
 </ul>
 
 <h4>Non-functional changes</h4>
