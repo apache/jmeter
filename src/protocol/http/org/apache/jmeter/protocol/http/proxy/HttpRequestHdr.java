@@ -40,11 +40,11 @@ import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampler2;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 //For unit tests, @see TestHttpRequestHdr
@@ -225,7 +225,7 @@ public class HttpRequestHdr {
 	}
 
     public HTTPSamplerBase getSampler(Map pageEncodings, Map formEncodings)
-            throws MalformedURLException, IOException, ProtocolException {
+            throws MalformedURLException, IOException {
 		// Damn! A whole new GUI just to instantiate a test element?
 		// Isn't there a beter way?
 		HttpTestSampleGui tempGui = null;
@@ -273,24 +273,6 @@ public class HttpRequestHdr {
 		}
         return null;
 	}
-
-    private String getContentEncoding() {
-        String contentType = getContentType();
-        if(contentType != null) {
-            int charSetStartPos = contentType.toLowerCase().indexOf("charset="); 
-            if(charSetStartPos >= 0) {
-                String charSet = contentType.substring(charSetStartPos + "charset=".length());
-                if(charSet != null && charSet.length() > 0) {
-                    // Remove quotes if present 
-                    charSet = JOrphanUtils.replaceAllChars(charSet, '"', "");
-                    if(charSet.length() > 0) {
-                        return charSet;
-                    }
-                }
-            }
-        }
-        return null;
-    }
 
     private boolean isMultipart(String contentType) {
         if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
@@ -350,7 +332,7 @@ public class HttpRequestHdr {
 
         // Check if the request itself tells us what the encoding is
         String contentEncoding = null;
-        String requestContentEncoding = getContentEncoding();
+        String requestContentEncoding = ConversionUtils.getEncodingFromContentType(getContentType());
         if(requestContentEncoding != null) {
             contentEncoding = requestContentEncoding;
         }
@@ -439,7 +421,7 @@ public class HttpRequestHdr {
                 sampler.setFileField(urlConfig.getFileFieldName());
                 sampler.setFilename(urlConfig.getFilename());
                 sampler.setMimetype(urlConfig.getMimeType());
-            } else if (postData != null && postData.trim().startsWith("<?")) {
+            } else if (postData.trim().startsWith("<?")) {
                 // Not sure if this is needed anymore. I assume these requests
                 // do not have HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED as content type,
                 // and they would therefore be catched by the last else if of these if else if tests
@@ -449,7 +431,7 @@ public class HttpRequestHdr {
                 // We also assume this if no content type is present, to be most backwards compatible,
                 // but maybe we should only parse arguments if the content type is as expected
                 sampler.parseArguments(postData.trim(), contentEncoding); //standard name=value postData
-            } else if (postData != null && postData.length() > 0) {
+            } else if (postData.length() > 0) {
                 // Just put the whole postbody as the value of a parameter
                 sampler.addNonEncodedArgument("", postData, ""); //used when postData is pure xml (ex. an xml-rpc call)
             }
