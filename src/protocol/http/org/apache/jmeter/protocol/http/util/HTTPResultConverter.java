@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
- * @author mstover
+ * Class for XStream conversion of HTTPResult 
  * 
  */
 public class HTTPResultConverter extends SampleResultConverter {
