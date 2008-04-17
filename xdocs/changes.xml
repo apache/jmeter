@@ -158,6 +158,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Regex Function can now also be applied to a variable rather than just the previous sample result.</li>
 <li>Remove HTML Parameter Mask,HTTP User Parameter Modifier from menus as they are deprecated</li>
 <li>Bug 44807 - allow session ids to be terminated by backslash</li>
+<li>Bug 44784 - allow for broken server returning additional charset</li>
 </ul>
 
 <h4>Non-functional changes</h4>
