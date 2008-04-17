@@ -20,6 +20,8 @@ package org.apache.jmeter.protocol.http.util;
 
 import org.apache.jorphan.util.JOrphanUtils;
 
+// @see TestHTTPUtils for unit tests
+
 /**
  * General purpose conversion utilities related to HTTP/HTML
  */
@@ -33,19 +35,27 @@ public class ConversionUtils {
      * e.g. "text/html; charset=utf-8".
      * 
      * @param contentType
-     * @return the charset encoding
+     * @return the charset encoding - or null, if none was found
      */
     public static String getEncodingFromContentType(String contentType){
         String charSet = null;
         if (contentType != null) {
             int charSetStartPos = contentType.toLowerCase().indexOf(CHARSET_EQ);
-            if (charSetStartPos > 0) {
+            if (charSetStartPos >= 0) {
                 charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
                 if (charSet != null) {
                     // Remove quotes from charset name
                     charSet = JOrphanUtils.replaceAllChars(charSet, '"', "");
                     charSet = charSet.trim();
                     if (charSet.length() > 0) {
+                        // See Bug 44784
+                        int semi = charSet.indexOf(";");
+                        if (semi == 0){
+                            return null;
+                        }
+                        if (semi != -1) {
+                            return charSet.substring(0,semi);
+                        }
                         return charSet;
                     }
                     return null;
