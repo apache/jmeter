@@ -32,6 +32,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
@@ -362,7 +363,7 @@ public class Proxy extends Thread {
      * @return the page encoding found for the sample result, or null
      */
     private String addPageEncoding(SampleResult result) {
-        String pageEncoding = getContentEncoding(result);
+        String pageEncoding = ConversionUtils.getEncodingFromContentType(result.getContentType());
         if(pageEncoding != null) {
             String urlWithoutQuery = getUrlWithoutQuery(result.getURL());
             synchronized(pageEncodings) {
@@ -389,31 +390,6 @@ public class Proxy extends Thread {
         catch (HTMLParseException parseException) {
             log.debug("Unable to parse response, could not find any form character set encodings");
         }
-    }
-
-    /**
-     * Get the value of the charset of the content-type header of the sample result
-     * 
-     * @param res the sample result to find the charset for
-     * @return the charset found, or null
-     */
-    private String getContentEncoding(SampleResult res) {
-        String contentTypeHeader = res.getContentType();
-        String charSet = null;
-        if (contentTypeHeader != null) {
-            int charSetStartPos = contentTypeHeader.toLowerCase().indexOf("charset=");
-            if (charSetStartPos > 0) {
-                charSet = contentTypeHeader.substring(charSetStartPos + "charset=".length());
-                if (charSet != null) {
-                    if (charSet.trim().length() > 0) {
-                        charSet = charSet.trim();
-                    } else {
-                        charSet = null;
-                    }
-                }
-            }
-        }
-        return charSet;
     }
 
     private String getUrlWithoutQuery(URL url) {
