@@ -137,7 +137,23 @@ Sampler that can read from POP3 and IMAP mail servers
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/mail/sampler/MailReaderSampler.html#TYPE_IMAPS">TYPE_IMAPS</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/mail/sampler/MailReaderSampler.html#TYPE_POP3">TYPE_POP3</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/mail/sampler/MailReaderSampler.html#TYPE_POP3S">TYPE_POP3S</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -367,6 +383,16 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 </DL>
 <HR>
 
+<A NAME="TYPE_POP3S"><!-- --></A><H3>
+TYPE_POP3S</H3>
+<PRE>
+public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>TYPE_POP3S</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.mail.sampler.MailReaderSampler.TYPE_POP3S">Constant Field Values</A></DL>
+</DL>
+<HR>
+
 <A NAME="TYPE_IMAP"><!-- --></A><H3>
 TYPE_IMAP</H3>
 <PRE>
@@ -374,6 +400,16 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 <DL>
 <DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.mail.sampler.MailReaderSampler.TYPE_IMAP">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="TYPE_IMAPS"><!-- --></A><H3>
+TYPE_IMAPS</H3>
+<PRE>
+public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>TYPE_IMAPS</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.mail.sampler.MailReaderSampler.TYPE_IMAPS">Constant Field Values</A></DL>
 </DL>
 <HR>
 
@@ -434,8 +470,8 @@ setServerType</H3>
 public void <B>setServerType</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;serverType)</PRE>
 <DL>
 <DD>Sets the type of protocol to use when talking with the remote mail
- server. Either MailReaderSampler.TYPE_IMAP or
- MailReaderSampler.TYPE_POP3. Default is MailReaderSampler.TYPE_POP3.
+ server. Either MailReaderSampler.TYPE_IMAP[S] or
+ MailReaderSampler.TYPE_POP3[S]. Default is MailReaderSampler.TYPE_POP3.
 <P>
 <DD><DL>
 <DT><B>Parameters:</B><DD><CODE>serverType</CODE> - </DL>
@@ -449,8 +485,8 @@ getServerType</H3>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getServerType</B>()</PRE>
 <DL>
 <DD>Returns the type of the protocol set to use when talking with the remote
- server. Either MailReaderSampler.TYPE_IMAP or
- MailReaderSampler.TYPE_POP3.
+ server. Either MailReaderSampler.TYPE_IMAP[S] or
+ MailReaderSampler.TYPE_POP3[S].
 <P>
 <DD><DL>
 

@@ -66,6 +66,10 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 	private final static String IMAPLabel = JMeterUtils.getResString("mail_reader_imap");// $NON-NLS-1$
 
+    private final static String POP3SLabel = JMeterUtils.getResString("mail_reader_pop3s");// $NON-NLS-1$
+
+    private final static String IMAPSLabel = JMeterUtils.getResString("mail_reader_imaps");// $NON-NLS-1$
+
 	private final static String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
 	private final static String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
@@ -103,6 +107,12 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3)) {
 			serverTypeBox.setSelectedItem(POP3Label);
 			folderBox.setText(INBOX);
+		} else if (mrs.getServerType().equals(MailReaderSampler.TYPE_POP3S)) {
+	            serverTypeBox.setSelectedItem(POP3SLabel);
+	            folderBox.setText(INBOX);
+        } else if (mrs.getServerType().equals(MailReaderSampler.TYPE_IMAPS)) {
+            serverTypeBox.setSelectedItem(IMAPSLabel);
+            folderBox.setText(mrs.getFolder());
 		} else {
 			serverTypeBox.setSelectedItem(IMAPLabel);
 			folderBox.setText(mrs.getFolder());
@@ -144,8 +154,13 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 
 		MailReaderSampler mrs = (MailReaderSampler) te;
 
-		if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label)) {
+		final String item = (String) serverTypeBox.getSelectedItem();
+        if (item.equals(POP3Label)) {
 			mrs.setServerType(MailReaderSampler.TYPE_POP3);
+		} else if (item.equals(POP3SLabel)){
+            mrs.setServerType(MailReaderSampler.TYPE_POP3S);
+        } else if (item.equals(IMAPSLabel)){
+            mrs.setServerType(MailReaderSampler.TYPE_IMAPS);
 		} else {
 			mrs.setServerType(MailReaderSampler.TYPE_IMAP);
 		}
@@ -176,11 +191,14 @@ public class MailReaderSamplerGui extends AbstractSamplerGui {
 		serverTypePanel.add(new JLabel(ServerTypeLabel));
 		DefaultComboBoxModel serverTypeModel = new DefaultComboBoxModel();
 		serverTypeModel.addElement(POP3Label);
-		serverTypeModel.addElement(IMAPLabel);
+        serverTypeModel.addElement(POP3SLabel);
+        serverTypeModel.addElement(IMAPLabel);
+		serverTypeModel.addElement(IMAPSLabel);
 		serverTypeBox = new JComboBox(serverTypeModel);
 		serverTypeBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (((String) serverTypeBox.getSelectedItem()).equals(POP3Label)) {
+				final String item = (String) serverTypeBox.getSelectedItem();
+                if (item.equals(POP3Label)||item.equals(POP3SLabel)) {
 					folderLabel.setEnabled(false);
 					folderBox.setText(INBOX);
 					folderBox.setEnabled(false);
