@@ -283,9 +283,9 @@ public class JMeter implements JMeterPlugin {
 			logProperty("os.arch"); //$NON-NLS-1$
 			logProperty("os.version"); //$NON-NLS-1$
 			logProperty("file.encoding"); // $NON-NLS-1$
-			log.info("Default Locale=" + Locale.getDefault().getDisplayName());// $NON-NLS-1$
-            log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());// $NON-NLS-1$
-			log.info("JMeterHome="     + JMeterUtils.getJMeterHome());// $NON-NLS-1$
+			log.info("Default Locale=" + Locale.getDefault().getDisplayName());
+            log.info("JMeter  Locale=" + JMeterUtils.getLocale().getDisplayName());
+			log.info("JMeterHome="     + JMeterUtils.getJMeterHome());
 			logProperty("user.dir","  ="); //$NON-NLS-1$
 			log.info("PWD       ="+new File(".").getCanonicalPath());//$NON-NLS-1$
 			log.info("IP: "+JMeterUtils.getLocalHostIP()
@@ -307,11 +307,11 @@ public class JMeter implements JMeterPlugin {
 
             // Set some (hopefully!) useful properties
             long now=System.currentTimeMillis();
-            JMeterUtils.setProperty("START.MS",Long.toString(now));
+            JMeterUtils.setProperty("START.MS",Long.toString(now));// $NON-NLS-1$
             Date today=new Date(now); // so it agrees with above
             // TODO perhaps should share code with __time() function for this...
-            JMeterUtils.setProperty("START.YMD",new SimpleDateFormat("yyyyMMdd").format(today));
-            JMeterUtils.setProperty("START.HMS",new SimpleDateFormat("HHmmss").format(today));
+            JMeterUtils.setProperty("START.YMD",new SimpleDateFormat("yyyyMMdd").format(today));// $NON-NLS-1$ $NON-NLS-2$
+            JMeterUtils.setProperty("START.HMS",new SimpleDateFormat("HHmmss").format(today));// $NON-NLS-1$ $NON-NLS-2$
             
 			if (parser.getArgumentById(VERSION_OPT) != null) {
 				System.out.println(JMeterUtils.getJMeterCopyright());
