@@ -37,7 +37,10 @@ public class JMeterVariables {
     
     // Property names to preload into JMeter variables:
     private static final String [] PRE_LOAD = {
-      "START.MS", "START.YMD", "START.HMS"  //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+      "START.MS",     // $NON-NLS-1$
+      "START.YMD",    // $NON-NLS-1$
+      "START.HMS",    //$NON-NLS-1$
+      "TESTSTART.MS", // $NON-NLS-1$
     };
 
 	public JMeterVariables() {
