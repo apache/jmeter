@@ -17,6 +17,7 @@
  */
 package org.apache.jmeter.protocol.mail.sampler;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
@@ -25,6 +26,7 @@ import javax.mail.BodyPart;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeMultipart;
@@ -55,7 +57,9 @@ public class MailReaderSampler extends AbstractSampler {
 	
 	// Needed by GUI
 	public final static String TYPE_POP3 = "pop3"; // $NON-NLS-1$
+    public final static String TYPE_POP3S = "pop3s"; // $NON-NLS-1$
 	public final static String TYPE_IMAP = "imap"; // $NON-NLS-1$
+    public final static String TYPE_IMAPS = "imaps"; // $NON-NLS-1$
 	public static final int ALL_MESSAGES = -1;
 
 	public MailReaderSampler() {
@@ -71,16 +75,16 @@ public class MailReaderSampler extends AbstractSampler {
 	 * @see org.apache.jmeter.samplers.Sampler#sample(org.apache.jmeter.samplers.Entry)
 	 */
 	public SampleResult sample(Entry e) {
-		SampleResult res = new SampleResult();
+		SampleResult parent = new SampleResult();
 		boolean isOK = false; // Did sample succeed?
 		boolean deleteMessages = getDeleteMessages();
 
-		res.setSampleLabel(getName());
-        res.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
+		parent.setSampleLabel(getName());
+		parent.setSamplerData(getServerType() + "://" + getUserName() + "@" + getServer());
 		/*
 		 * Perform the sampling
 		 */
-		res.sampleStart(); // Start timing
+		parent.sampleStart(); // Start timing
 		try {
 			// Create empty properties
 			Properties props = new Properties();
@@ -103,84 +107,95 @@ public class MailReaderSampler extends AbstractSampler {
 			// Get directory
 			Message messages[] = folder.getMessages();
 			Message message;
-			StringBuffer data = new StringBuffer();
-			data.append(messages.length);
-			data.append(" messages found\n");
+			StringBuffer pdata = new StringBuffer();
+			pdata.append(messages.length);
+			pdata.append(" messages found\n");
 
 			int n = getNumMessages();
 			if (n == ALL_MESSAGES || n > messages.length) {
 				n = messages.length;
 			}
 
-			// TODO - create a sample result for each message?
 			for (int i = 0; i < n; i++) {
+	            StringBuffer cdata = new StringBuffer();
+			    SampleResult child = new SampleResult();
+			    child.sampleStart();
 				message = messages[i];
 
-				if (i == 0) { // Assumes all the messaged have the same type ...
-					res.setContentType(message.getContentType());
+				//if (i == 0) 
+				{ // Assumes all the messaged have the same type ...
+				    child.setContentType(message.getContentType());
 				}
 
-				data.append("Message "); // $NON-NLS-1$
-				data.append(message.getMessageNumber());
-				data.append(":\n"); // $NON-NLS-1$
+				cdata.append("Message "); // $NON-NLS-1$
+				cdata.append(message.getMessageNumber());
+				child.setSampleLabel(cdata.toString());
+				child.setSamplerData(cdata.toString());
+				cdata.setLength(0);
 				
-				data.append("Date: "); // $NON-NLS-1$
-				data.append(message.getSentDate());
-				data.append(NEW_LINE);
+				cdata.append("Date: "); // $NON-NLS-1$
+				cdata.append(message.getSentDate());
+				cdata.append(NEW_LINE);
 
-				data.append("To: "); // $NON-NLS-1$
+				cdata.append("To: "); // $NON-NLS-1$
 				Address[] recips = message.getAllRecipients();
 				for (int j = 0; j < recips.length; j++) {
-					data.append(recips[j].toString());
+					cdata.append(recips[j].toString());
 					if (j < recips.length - 1) {
-						data.append("; "); // $NON-NLS-1$
+						cdata.append("; "); // $NON-NLS-1$
 					}
 				}
-				data.append(NEW_LINE);
+				cdata.append(NEW_LINE);
 
-				data.append("From: "); // $NON-NLS-1$
+				cdata.append("From: "); // $NON-NLS-1$
 				Address[] from = message.getFrom();
 				for (int j = 0; j < from.length; j++) {
-					data.append(from[j].toString());
+					cdata.append(from[j].toString());
 					if (j < from.length - 1) {
-						data.append("; "); // $NON-NLS-1$
+						cdata.append("; "); // $NON-NLS-1$
 					}
 				}
-				data.append(NEW_LINE);
+				cdata.append(NEW_LINE);
 
-				data.append("Subject: "); // $NON-NLS-1$
-				data.append(message.getSubject());
-				data.append(NEW_LINE);
+				cdata.append("Subject: "); // $NON-NLS-1$
+				cdata.append(message.getSubject());
+				cdata.append(NEW_LINE);
 				
-				data.append(NEW_LINE);
+				cdata.append(NEW_LINE);
 				Object content = message.getContent();
 				if (content instanceof MimeMultipart) {
 					MimeMultipart mmp = (MimeMultipart) content;
 					int count = mmp.getCount();
-					data.append("Multipart. Count: ");
-					data.append(count);
-					data.append(NEW_LINE);
+					cdata.append("Multipart. Count: ");
+					cdata.append(count);
+					cdata.append(NEW_LINE);
 					for (int j=0; j<count;j++){
 						BodyPart bodyPart = mmp.getBodyPart(j);
-						data.append("Type: ");
-						data.append(bodyPart.getContentType());
-						data.append(NEW_LINE);
+						cdata.append("Type: ");
+						cdata.append(bodyPart.getContentType());
+						cdata.append(NEW_LINE);
 						try {
-							data.append(bodyPart.getContent());
+							cdata.append(bodyPart.getContent());
 						} catch (UnsupportedEncodingException ex){
-							data.append(ex.getLocalizedMessage());
+							cdata.append(ex.getLocalizedMessage());
 						}
-						data.append(NEW_LINE);
+						cdata.append(NEW_LINE);
 					}
 				} else {
-				    data.append(content);
-					data.append(NEW_LINE);
+				    cdata.append(content);
+					cdata.append(NEW_LINE);
 				}
-				data.append(NEW_LINE);
 
 				if (deleteMessages) {
 					message.setFlag(Flags.Flag.DELETED, true);
 				}
+	            child.setResponseData(cdata.toString().getBytes());
+	            child.setDataType(SampleResult.TEXT);
+	            child.setResponseCodeOK();
+	            child.setResponseMessage("OK"); // $NON-NLS-1$
+	            child.setSuccessful(true);
+	            child.sampleEnd();
+	            parent.addSubResult(child);
 			}
 
 			// Close connection
@@ -190,31 +205,37 @@ public class MailReaderSampler extends AbstractSampler {
 			/*
 			 * Set up the sample result details
 			 */
-			res.setResponseData(data.toString().getBytes());
-			res.setDataType(SampleResult.TEXT);
+			parent.setResponseData(pdata.toString().getBytes());
+			parent.setDataType(SampleResult.TEXT);
 
-			res.setResponseCodeOK();
-			res.setResponseMessage("OK"); // $NON-NLS-1$
+			parent.setResponseCodeOK();
+			parent.setResponseMessage("OK"); // $NON-NLS-1$
 			isOK = true;
         } catch (NoClassDefFoundError ex) {
             log.debug("",ex);// No need to log normally, as we set the status
-            res.setResponseCode("500"); // $NON-NLS-1$
-            res.setResponseMessage(ex.toString());
-		} catch (Exception ex) {
+            parent.setResponseCode("500"); // $NON-NLS-1$
+            parent.setResponseMessage(ex.toString());
+		} catch (MessagingException ex) {
 			log.debug("", ex);// No need to log normally, as we set the status
-			res.setResponseCode("500"); // $NON-NLS-1$
-			res.setResponseMessage(ex.toString());
+			parent.setResponseCode("500"); // $NON-NLS-1$
+			parent.setResponseMessage(ex.toString());
+        } catch (IOException ex) {
+            log.debug("", ex);// No need to log normally, as we set the status
+            parent.setResponseCode("500"); // $NON-NLS-1$
+            parent.setResponseMessage(ex.toString());
 		}
 
-		res.sampleEnd();
-		res.setSuccessful(isOK);
-		return res;
+		if (parent.getEndTime()==0){// not been set by any child samples
+		    parent.sampleEnd();
+		}
+		parent.setSuccessful(isOK);
+		return parent;
 	}
 
 	/**
 	 * Sets the type of protocol to use when talking with the remote mail
-	 * server. Either MailReaderSampler.TYPE_IMAP or
-	 * MailReaderSampler.TYPE_POP3. Default is MailReaderSampler.TYPE_POP3.
+	 * server. Either MailReaderSampler.TYPE_IMAP[S] or
+	 * MailReaderSampler.TYPE_POP3[S]. Default is MailReaderSampler.TYPE_POP3.
 	 * 
 	 * @param serverType
 	 */
@@ -224,8 +245,8 @@ public class MailReaderSampler extends AbstractSampler {
 
 	/**
 	 * Returns the type of the protocol set to use when talking with the remote
-	 * server. Either MailReaderSampler.TYPE_IMAP or
-	 * MailReaderSampler.TYPE_POP3.
+	 * server. Either MailReaderSampler.TYPE_IMAP[S] or
+	 * MailReaderSampler.TYPE_POP3[S].
 	 * 
 	 * @return Server Type
 	 */
