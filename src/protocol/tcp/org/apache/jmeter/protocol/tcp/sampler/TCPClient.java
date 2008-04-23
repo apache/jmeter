@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * @version $Revision$ $Date$
+ * Interface required by TCPSampler for TCPClient implementations.
  */
 public interface TCPClient {
 	void setupTest();
