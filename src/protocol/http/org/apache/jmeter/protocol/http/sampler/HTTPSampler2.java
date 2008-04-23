@@ -541,6 +541,9 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 		if ( httpClient == null )
 		{
 			httpClient = new HttpClient(new SimpleHttpConnectionManager());
+            if (log.isDebugEnabled()) {
+                log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient));
+            }
 			httpClient.setHostConfiguration(hc);
 			map.put(hc, httpClient);
             // These items don't change, so only need to be done once
@@ -553,6 +556,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 }
             }
 
+		} else {
+            if (log.isDebugEnabled()) {
+                log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient));
+            }
 		}
 
 		// Allow HttpClient to handle the redirects:
