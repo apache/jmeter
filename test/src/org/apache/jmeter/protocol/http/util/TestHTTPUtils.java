@@ -27,14 +27,12 @@ public class TestHTTPUtils extends TestCase {
 
 		public void testgetEncoding() throws Exception {
 		    assertNull(ConversionUtils.getEncodingFromContentType("xyx"));
-            assertEquals("abc",ConversionUtils.getEncodingFromContentType("charset=abc"));
-            assertEquals("abc",ConversionUtils.getEncodingFromContentType("charset=\"abc\""));
-            assertEquals("abc",ConversionUtils.getEncodingFromContentType("text/plain ;charset=abc"));
-            assertEquals("abc",ConversionUtils.getEncodingFromContentType("text/html ;charset=abc;charset=def"));
+            assertEquals("utf8",ConversionUtils.getEncodingFromContentType("charset=utf8"));
+            assertEquals("utf8",ConversionUtils.getEncodingFromContentType("charset=\"utf8\""));
+            assertEquals("utf8",ConversionUtils.getEncodingFromContentType("text/plain ;charset=utf8"));
+            assertEquals("utf8",ConversionUtils.getEncodingFromContentType("text/html ;charset=utf8;charset=def"));
             assertNull(ConversionUtils.getEncodingFromContentType("charset="));
             assertNull(ConversionUtils.getEncodingFromContentType(";charset=;"));
-		}
-		
-		public void testEncoding() throws Exception {
+            assertNull(ConversionUtils.getEncodingFromContentType(";charset=no-such-charset;"));
 		}
 }
