@@ -245,6 +245,13 @@ As a consequence, if a variable name is used, it must not be a valid integer.
 						</li>
 									
 
+												<li	>
+								The supplied TCPClient implementation no longer treats tcp.eolByte=0 as special.
+To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a valid byte)
+
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Bug fixes
@@ -545,6 +552,13 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 
 												<li	>
 								Mail Reader Sampler now creates a sub-sample for each mail.
+						</li>
+									
+
+												<li	>
+								The supplied TCPClient implementation no longer treats tcp.eolByte=0 as special.
+To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a valid byte)
+
 						</li>
 									
 
