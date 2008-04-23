@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.nio.charset.Charset;
+
 import org.apache.jorphan.util.JOrphanUtils;
 
 // @see TestHTTPUtils for unit tests
@@ -35,7 +37,7 @@ public class ConversionUtils {
      * e.g. "text/html; charset=utf-8".
      * 
      * @param contentType
-     * @return the charset encoding - or null, if none was found
+     * @return the charset encoding - or null, if none was found or the charset is not supported
      */
     public static String getEncodingFromContentType(String contentType){
         String charSet = null;
@@ -54,7 +56,10 @@ public class ConversionUtils {
                             return null;
                         }
                         if (semi != -1) {
-                            return charSet.substring(0,semi);
+                            charSet = charSet.substring(0,semi);
+                        }
+                        if (!Charset.isSupported(charSet)){
+                            return null;
                         }
                         return charSet;
                     }
