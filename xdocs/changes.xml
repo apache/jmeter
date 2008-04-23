@@ -93,6 +93,9 @@ To revert to earlier behaviour, comment or change the properties classfinder.fun
 <li>The reference value parameter for intSum() is now optional. 
 As a consequence, if a variable name is used, it must not be a valid integer.</li>
 <li>The ant-jmeter.jar is no longer shipped with JMeter. See extras/build.xml for how to aquire it.</li>
+<li>The supplied TCPClient implementation no longer treats tcp.eolByte=0 as special.
+To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a valid byte)
+</li>
 </ul>
 
 <h4>Bug fixes</h4>
@@ -162,6 +165,9 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>Added TESTSTART.MS property / variable = test start time in milliseconds</li>
 <li>Add POP3S and IMAPS protocols to Mail Reader Sampler.</li>
 <li>Mail Reader Sampler now creates a sub-sample for each mail.</li>
+<li>The supplied TCPClient implementation no longer treats tcp.eolByte=0 as special.
+To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a valid byte)
+</li>
 </ul>
 
 <h4>Non-functional changes</h4>

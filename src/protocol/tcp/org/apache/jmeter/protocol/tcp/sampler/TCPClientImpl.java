@@ -37,17 +37,23 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * 
+ * Sample TCPClient implementation
  * 
  */
 public class TCPClientImpl implements TCPClient {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private byte eolByte = (byte) JMeterUtils.getPropDefault("tcp.eolByte", 0);
+	private int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000);
+	
+	private byte eolByte = (byte) eolInt; // -128 to +127
+	
+	private boolean eolIgnore = eolInt < -128 || eolInt > 127;
 
 	public TCPClientImpl() {
 		super();
-		log.info("Using eolByte=" + eolByte);
+		if (!eolIgnore) {
+		    log.info("Using eolByte=" + eolByte);
+		}
 	}
 
 	/*
@@ -116,7 +122,7 @@ public class TCPClientImpl implements TCPClient {
 		try {
 			while ((x = is.read(buffer)) > -1) {
 				w.write(buffer, 0, x);
-				if ((eolByte != 0) && (buffer[x - 1] == eolByte)) {
+				if (!eolIgnore && (buffer[x - 1] == eolByte)) {
 					break;
 				}
 			}
@@ -160,5 +166,6 @@ public class TCPClientImpl implements TCPClient {
 	 */
 	public void setEolByte(byte eolByte) {
 		this.eolByte = eolByte;
+		eolIgnore = false;
 	}
 }
