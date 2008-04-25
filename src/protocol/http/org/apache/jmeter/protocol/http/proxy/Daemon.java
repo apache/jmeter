@@ -39,12 +39,6 @@ public class Daemon extends Thread {
 	/** Logging */
 	private static transient Logger log = LoggingManager.getLoggerForClass();
 
-	/** The default port to listen on. */
-	private static final int DEFAULT_DAEMON_PORT = 8080;
-
-	/** The maximum allowed port to listen on. */
-	private static final int MAX_DAEMON_PORT = 65535;
-
 	/**
 	 * The time (in milliseconds) to wait when accepting a client connection.
 	 * The accept will be retried until the Daemon is told to stop. So this
@@ -125,41 +119,6 @@ public class Daemon extends Thread {
 	}
 
 	/**
-	 * Main method which will start the Proxy daemon on the specified port (or
-	 * the default port if no port is specified).
-	 * 
-	 * @param args
-	 *            the command-line arguments
-	 */
-	public static void main(String args[]) {
-		if (args.length > 1) {
-			System.err.println("Usage: Daemon [daemon port]");
-			log.info("Usage: Daemon [daemon port]");
-			return;
-		}
-
-		int daemonPort = DEFAULT_DAEMON_PORT;
-		if (args.length > 0) {
-			try {
-				daemonPort = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				System.err.println("Invalid daemon port: " + e);
-				log.error("Invalid daemon port", e);
-				return;
-			}
-			if (daemonPort <= 0 || daemonPort > MAX_DAEMON_PORT) {
-				System.err.println("Invalid daemon port");
-				log.error("Invalid daemon port");
-				return;
-			}
-		}
-
-		Daemon demon = new Daemon();
-		demon.configureProxy(daemonPort);
-		demon.start();
-	}
-
-	/**
 	 * Listen on the daemon port and handle incoming requests. This method will
 	 * not exit until {@link #stopServer()} is called or an error occurs.
 	 */
@@ -178,24 +137,19 @@ public class Daemon extends Thread {
 			log.info("Proxy up and running!");
 
 			while (running) {
-			    Socket clientSocket = null;
 				try {
 					// Listen on main socket
-					clientSocket = mainSocket.accept();
+				    Socket clientSocket = mainSocket.accept();
 					if (running) {
 						// Pass request to new proxy thread
 						Proxy thd = (Proxy) proxyClass.newInstance();
                         thd.configure(clientSocket, target, pageEncodings, formEncodings);
 						thd.start();
-					//} else {
-						// The socket was accepted after we were told to stop.
 					}
 				} catch (InterruptedIOException e) {
 				    continue;
 					// Timeout occurred. Ignore, and keep looping until we're
 					// told to stop running.
-				} finally {
-                    JOrphanUtils.closeQuietly(clientSocket);				    
 				}
 			}
 			log.info("Proxy Server stopped");
