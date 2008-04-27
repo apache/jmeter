@@ -42,7 +42,7 @@ public class ConversionUtils {
     public static String getEncodingFromContentType(String contentType){
         String charSet = null;
         if (contentType != null) {
-            int charSetStartPos = contentType.toLowerCase().indexOf(CHARSET_EQ);
+            int charSetStartPos = contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf(CHARSET_EQ);
             if (charSetStartPos >= 0) {
                 charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
                 if (charSet != null) {

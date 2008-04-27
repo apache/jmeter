@@ -177,7 +177,7 @@ public class HTTPSampleResult extends SampleResult {
     	if (getDataEncodingNoDefault() == null && getContentType().startsWith("text/html")){ // $NON-NLS-1$
     		byte[] bytes=getResponseData();    		
     		// get the start of the file
-    		String prefix = new String(bytes,0,Math.min(bytes.length, 1000)).toLowerCase();
+    		String prefix = new String(bytes,0,Math.min(bytes.length, 1000)).toLowerCase(java.util.Locale.ENGLISH);
     		// Extract the content-type if present
     		final String METATAG = "<meta http-equiv=\"content-type\" content=\""; // $NON-NLS-1$
 			int tagstart=prefix.indexOf(METATAG);

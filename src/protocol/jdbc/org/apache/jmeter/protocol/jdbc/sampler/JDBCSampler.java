@@ -76,7 +76,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
             try {
                 String name = fields[i].getName();                
                 Integer value = (Integer)fields[i].get(null);
-                mapJdbcNameToInt.put(name.toLowerCase(),value);
+                mapJdbcNameToInt.put(name.toLowerCase(java.util.Locale.ENGLISH),value);
             } catch (IllegalAccessException e) {
             	throw new RuntimeException(e); // should not happen
             }
@@ -315,7 +315,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
     
     
     private static int getJdbcType(String jdbcType) throws SQLException {
-    	Integer entry = (Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase());
+    	Integer entry = (Integer)mapJdbcNameToInt.get(jdbcType.toLowerCase(java.util.Locale.ENGLISH));
     	if (entry == null) {
     		throw new SQLException("Invalid data type: "+jdbcType);
     	}
