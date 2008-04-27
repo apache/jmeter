@@ -27,58 +27,70 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
- * Main class for JMeter - sets up initial classpath.
+ * Main class for JMeter - sets up initial classpath and the loader.
  * 
- * @author Michael Stover
  */
 public final class NewDriver {
-	/** The class loader to use for loading JMeter classes. */
-	private static DynamicClassLoader loader;
+    
+	private static final String CLASSPATH_SEPARATOR = System.getProperty("path.separator");// $NON-NLS-1$
+
+    private static final String OS_NAME = System.getProperty("os.name");// $NON-NLS-1$
+
+    private static final String OS_NAME_LC = OS_NAME.toLowerCase(java.util.Locale.ENGLISH);
+
+    private static final String JAVA_CLASS_PATH = "java.class.path";// $NON-NLS-1$
+
+    /** The class loader to use for loading JMeter classes. */
+	private static final DynamicClassLoader loader;
 
 	/** The directory JMeter is installed in. */
-	private static String jmDir;
+	private static final String jmDir;
 
 	static {
 		List jars = new LinkedList();
-		String cp = System.getProperty("java.class.path");
+		final String initial_classpath = System.getProperty(JAVA_CLASS_PATH);
 
-		// Find JMeter home dir
-		StringTokenizer tok = new StringTokenizer(cp, File.pathSeparator);
+		// Find JMeter home dir from the initial classpath
+		String tmpDir=null;
+		StringTokenizer tok = new StringTokenizer(initial_classpath, File.pathSeparator);
 		if (tok.countTokens() == 1 
-				|| (tok.countTokens()  == 2 
-				    && System.getProperty("os.name").toLowerCase().startsWith("mac os x")
+				|| (tok.countTokens()  == 2 // Java on Mac OS can add a second entry to the initial classpath
+				    && OS_NAME_LC.startsWith("mac os x")// $NON-NLS-1$
 				   )
 		   ) {
 			File jar = new File(tok.nextToken());
 			try {
-				jmDir = jar.getCanonicalFile().getParentFile().getParent();
+			    tmpDir = jar.getCanonicalFile().getParentFile().getParent();
 			} catch (IOException e) {
 			}
 		} else {// e.g. started from IDE with full classpath
-			jmDir = System.getProperty("jmeter.home","");// Allow override
-			if (jmDir.length() == 0) {
-				File userDir = new File(System.getProperty("user.dir"));
-				jmDir = userDir.getAbsoluteFile().getParent();
+		    tmpDir = System.getProperty("jmeter.home","");// Allow override $NON-NLS-1$ $NON-NLS-2$
+			if (tmpDir.length() == 0) {
+				File userDir = new File(System.getProperty("user.dir"));// $NON-NLS-1$
+				tmpDir = userDir.getAbsoluteFile().getParent();
 			}
 		}
-
+		jmDir=tmpDir;
+		
 		/*
 		 * Does the system support UNC paths? If so, may need to fix them up
 		 * later
 		 */
-		boolean usesUNC = System.getProperty("os.name").startsWith("Windows");
+		boolean usesUNC = OS_NAME_LC.startsWith("windows");// $NON-NLS-1$
 
+		// Add standard jar locations to initial classpath
 		StringBuffer classpath = new StringBuffer();
-		File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),
-				new File(jmDir + File.separator + "lib" + File.separator + "ext"),
-                new File(jmDir + File.separator + "lib" + File.separator + "junit")};
+		File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
+				new File(jmDir + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
+                new File(jmDir + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
 		for (int a = 0; a < libDirs.length; a++) {
 			File[] libJars = libDirs[a].listFiles(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					return name.endsWith(".jar");
+				public boolean accept(File dir, String name) {// only accept jar files
+					return name.endsWith(".jar");// $NON-NLS-1$
 				}
 			});
 			if (libJars == null) {
@@ -91,15 +103,15 @@ public final class NewDriver {
 
 					// Fix path to allow the use of UNC URLs
 					if (usesUNC) {
-						if (s.startsWith("\\\\") && !s.startsWith("\\\\\\")) {
-							s = "\\\\" + s;
-						} else if (s.startsWith("//") && !s.startsWith("///")) {
-							s = "//" + s;
+						if (s.startsWith("\\\\") && !s.startsWith("\\\\\\")) {// $NON-NLS-1$ $NON-NLS-2$
+							s = "\\\\" + s;// $NON-NLS-1$
+						} else if (s.startsWith("//") && !s.startsWith("///")) {// $NON-NLS-1$ $NON-NLS-2$
+							s = "//" + s;// $NON-NLS-1$
 						}
 					} // usesUNC
 
-					jars.add(new URL("file", "", s));
-					classpath.append(System.getProperty("path.separator"));
+					jars.add(new URL("file", "", s));// $NON-NLS-1$ $NON-NLS-2$
+					classpath.append(CLASSPATH_SEPARATOR);
 					classpath.append(s);
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
@@ -107,8 +119,8 @@ public final class NewDriver {
 			}
 		}
 
-		// ClassFinder needs this
-		System.setProperty("java.class.path", System.getProperty("java.class.path") + classpath.toString());
+		// ClassFinder needs the classpath
+		System.setProperty(JAVA_CLASS_PATH, initial_classpath + classpath.toString());
 		loader = new DynamicClassLoader((URL[]) jars.toArray(new URL[0]));
 	}
 
@@ -118,8 +130,13 @@ public final class NewDriver {
 	private NewDriver() {
 	}
 
-    public static void addURL(String url) {
-        File furl = new File(url);
+	/**
+     * Add a URL to the loader classpath only; does not update the system classpath.
+     * 
+	 * @param path to be added.
+	 */
+    public static void addURL(String path) {
+        File furl = new File(path);
         try {
             loader.addURL(furl.toURL());
         } catch (MalformedURLException e) {
@@ -127,18 +144,29 @@ public final class NewDriver {
         }
     }
     
+    /**
+     * Add a URL to the loader classpath only; does not update the system classpath.
+     * 
+     * @param url
+     */
     public static void addURL(URL url) {
         loader.addURL(url);
     }
     
+    /**
+     * Add a directory or jar to the loader and system classpaths.
+     * 
+     * @param path to add to the loader and system classpath
+     * @throws MalformedURLException
+     */
     public static void addPath(String path) throws MalformedURLException {
 		URL url = new URL("file","",path);
         loader.addURL(url);
-    	StringBuffer sb = new StringBuffer(System.getProperty("java.class.path"));
-    	sb.append(System.getProperty("path.separator"));
+    	StringBuffer sb = new StringBuffer(System.getProperty(JAVA_CLASS_PATH));
+    	sb.append(CLASSPATH_SEPARATOR);
     	sb.append(path);
 		// ClassFinder needs this
-		System.setProperty("java.class.path",sb.toString());
+		System.setProperty(JAVA_CLASS_PATH,sb.toString());
     }
     
 	/**
@@ -159,35 +187,24 @@ public final class NewDriver {
 	 */
 	public static void main(String[] args) {
 		Thread.currentThread().setContextClassLoader(loader);
-		if (System.getProperty("log4j.configuration") == null) {
-			File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");
+		if (System.getProperty("log4j.configuration") == null) {// $NON-NLS-1$ $NON-NLS-2$
+			File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");// $NON-NLS-1$ $NON-NLS-2$
 			System.setProperty("log4j.configuration", "file:" + conf);
 		}
-
-        if (args != null && args.length > 0 && args[0].equals("report")) {
-            try {
-                Class JMeterReport = loader.loadClass("org.apache.jmeter.JMeterReport");
-                Object instance = JMeterReport.newInstance();
-                Method startup = JMeterReport.getMethod("start", new Class[] { (new String[0]).getClass() });
-                startup.invoke(instance, new Object[] { args });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("JMeter home directory was detected as: "+jmDir);
-                System.exit(1);
+		
+        try {
+            Class initialClass;
+            if (args != null && args.length > 0 && args[0].equals("report")) {// $NON-NLS-1$
+                initialClass = loader.loadClass("org.apache.jmeter.JMeterReport");// $NON-NLS-1$
+            } else {
+                initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
             }
-        } else {
-            try {
-                Class JMeter = loader.loadClass("org.apache.jmeter.JMeter");
-                Object instance = JMeter.newInstance();
-                Method startup = JMeter.getMethod("start", new Class[] { (new String[0]).getClass() });
-                startup.invoke(instance, new Object[] { args });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("JMeter home directory was detected as: "+jmDir);
-                System.exit(1);
-           }
+            Object instance = initialClass.newInstance();
+            Method startup = initialClass.getMethod("start", new Class[] { (new String[0]).getClass() });// $NON-NLS-1$
+            startup.invoke(instance, new Object[] { args });
+        } catch(Throwable e){
+            e.printStackTrace();
+            System.out.println("JMeter home directory was detected as: "+jmDir);
         }
 	}
 }
