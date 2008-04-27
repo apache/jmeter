@@ -38,7 +38,7 @@ public class PackageTest extends TestCase {
 	}
 
 	public void testMD5() throws Exception {
-		assertEquals("D41D8CD98F00B204E9800998ECF8427E", MD5HexAssertion.baMD5Hex(new byte[] {}).toUpperCase());
+		assertEquals("D41D8CD98F00B204E9800998ECF8427E", MD5HexAssertion.baMD5Hex(new byte[] {}).toUpperCase(java.util.Locale.ENGLISH));
 	}
 
 	int threadsRunning;

@@ -163,9 +163,9 @@ public class HttpRequestHdr {
         	throw new IllegalArgumentException("Unrecognised header line (probably used HTTPS)");
         }
 		StringTokenizer tz = new StringTokenizer(firstLine);
-		method = getToken(tz).toUpperCase();
+		method = getToken(tz).toUpperCase(java.util.Locale.ENGLISH);
 		url = getToken(tz);
-		if (url.toLowerCase().startsWith(HTTPConstants.PROTOCOL_HTTPS)) {
+		if (url.toLowerCase(java.util.Locale.ENGLISH).startsWith(HTTPConstants.PROTOCOL_HTTPS)) {
 			throw new IllegalArgumentException("Cannot handle https URLS: " + url);
 		}
 		version = getToken(tz);
@@ -195,7 +195,7 @@ public class HttpRequestHdr {
 		String trimmed = token.trim();
         String name = trimmed.substring(0, trimmed.length() - 1);// drop ':'
 		String value = getRemainder(tz);
-		headers.put(name.toLowerCase(), new Header(name, value));
+		headers.put(name.toLowerCase(java.util.Locale.ENGLISH), new Header(name, value));
 		if (name.equalsIgnoreCase(CONTENT_LENGTH)) {
 			return Integer.parseInt(value);
 		}
@@ -284,7 +284,7 @@ public class HttpRequestHdr {
     private MultipartUrlConfig getMultipartConfig(String contentType) {
         if(isMultipart(contentType)) {
             // Get the boundary string for the multiparts from the content type
-            String boundaryString = contentType.substring(contentType.toLowerCase().indexOf("boundary=") + "boundary=".length());
+            String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
             return new MultipartUrlConfig(boundaryString);
         }
         return null;
