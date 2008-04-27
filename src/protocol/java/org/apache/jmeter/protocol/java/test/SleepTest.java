@@ -181,7 +181,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
 	public Arguments getDefaultParameters() {
 		Arguments params = new Arguments();
 		params.addArgument("SleepTime", String.valueOf(DEFAULT_SLEEP_TIME));
-		params.addArgument("SleepMask", "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase());
+		params.addArgument("SleepMask", "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase(java.util.Locale.ENGLISH));
 		return params;
 	}
 

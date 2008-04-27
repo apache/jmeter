@@ -299,13 +299,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if(POST.equals(getMethod()) && (getDoMultipartPost() || (hasUploadableFiles() && !getSendFileAsPostBody()))) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
 	public void setProtocol(String value) {
-		setProperty(PROTOCOL, value.toLowerCase());
+		setProperty(PROTOCOL, value.toLowerCase(java.util.Locale.ENGLISH));
 	}
 
 	/**
@@ -577,9 +575,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 (PROTOCOL_HTTPS.equalsIgnoreCase(protocol) && port == DEFAULT_HTTPS_PORT)) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -753,9 +749,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if(isProtocolDefaultPort()) {
 			return new URL(getProtocol(), getDomain(), pathAndQuery.toString());
 		}
-        else {
-            return new URL(getProtocol(), getDomain(), getPort(), pathAndQuery.toString());
-        }
+        return new URL(getProtocol(), getDomain(), getPort(), pathAndQuery.toString());
 	}
 
     /**

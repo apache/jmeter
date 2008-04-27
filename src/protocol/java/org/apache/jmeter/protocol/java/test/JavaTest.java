@@ -84,7 +84,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable 
 	public static final long DEFAULT_SLEEP_MASK = 0xff;
 
 	/** Formatted string representation of the default SleepMask. */
-	private static final String DEFAULT_MASK_STRING = "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase();
+	private static final String DEFAULT_MASK_STRING = "0x" + (Long.toHexString(DEFAULT_SLEEP_MASK)).toUpperCase(java.util.Locale.ENGLISH);
 
 	/** The name used to store the SleepMask parameter. */
 	private static final String MASK_NAME = "Sleep_Mask";
