@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -292,7 +293,7 @@ public class AuthManager extends ConfigTestElement implements ConfigElement, Ser
 
     // Needs to be package protected for Unit test
 	static boolean isSupportedProtocol(URL url) {
-		String protocol = url.getProtocol().toUpperCase();
-		return protocol.equals("HTTP") || protocol.equals("HTTPS"); //$NON-NLS-1$ //$NON-NLS-2$
+		String protocol = url.getProtocol().toLowerCase(java.util.Locale.ENGLISH);
+		return protocol.equals(HTTPConstants.PROTOCOL_HTTP) || protocol.equals(HTTPConstants.PROTOCOL_HTTPS);
 	}
 }

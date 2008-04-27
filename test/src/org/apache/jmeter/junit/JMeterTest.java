@@ -332,8 +332,8 @@ public class JMeterTest extends JMeterTestCase {
             String name = guiItem.getClass().getName();
 			if (// Is this a work in progress or an internal GUI component?
 			    (title != null && title.length() > 0) // Will be "" for internal components
-				&& (title.toUpperCase().indexOf("(ALPHA") == -1) 
-                && (title.toUpperCase().indexOf("(BETA") == -1)
+				&& (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(ALPHA") == -1) 
+                && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(BETA") == -1)
 				&& (!title.equals("Example1")) // Skip the example samplers ...
 				&& (!title.equals("Example2"))
                 && (!name.startsWith("org.apache.jmeter.examples."))
