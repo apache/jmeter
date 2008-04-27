@@ -27,7 +27,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -204,7 +203,7 @@ public final class NewDriver {
             startup.invoke(instance, new Object[] { args });
         } catch(Throwable e){
             e.printStackTrace();
-            System.out.println("JMeter home directory was detected as: "+jmDir);
+            System.err.println("JMeter home directory was detected as: "+jmDir);
         }
 	}
 }
