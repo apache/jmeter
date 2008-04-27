@@ -393,8 +393,9 @@ public class JMeterUtils implements UnitTestManager {
 		if (key == null) {
 			return null;
 		}
-		key = key.replace(' ', '_'); // TODO - why does it do this? // $NON-NLS-1$ // $NON-NLS-2$
-		key = key.toLowerCase(); // (it's been here since v1.1)
+		// Resource keys cannot contain spaces
+		key = key.replace(' ', '_'); // $NON-NLS-1$ // $NON-NLS-2$
+		key = key.toLowerCase(java.util.Locale.ENGLISH);
 		String resString = null;
 		try {
 			resString = resources.getString(key);
