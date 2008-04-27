@@ -621,7 +621,7 @@ public class SampleResult implements Serializable {
             // <META http-equiv="content-type" content="text/html; charset=foobar">
         	// is now processed by HTTPSampleResult#getDataEncodingWithDefault
             final String CS_PFX = "charset="; // $NON-NLS-1$
-            int cset = ct.toLowerCase().indexOf(CS_PFX);
+            int cset = ct.toLowerCase(java.util.Locale.ENGLISH).indexOf(CS_PFX);
             if (cset >= 0) {
             	// TODO - assumes charset is not followed by anything else
                 String charSet = ct.substring(cset + CS_PFX.length());
@@ -790,7 +790,7 @@ public class SampleResult implements Serializable {
      * @return the media type - e.g. text/html (without charset, if any)
      */
     public String getMediaType() {
-        return JOrphanUtils.trim(contentType," ;").toLowerCase();
+        return JOrphanUtils.trim(contentType," ;").toLowerCase(java.util.Locale.ENGLISH);
     }
 
 	/**
