@@ -72,6 +72,7 @@ public class JMeterFileFilter extends javax.swing.filechooser.FileFilter impleme
 	 */
 	public boolean accept(File f) {
 		return (allowDirs && f.isDirectory()) || accept(f.getName().toLowerCase());
+		// TODO - why lower case? OK to use the default Locale?
 	}
 
 	/**
