@@ -81,7 +81,7 @@ public class PackageTest extends TestCase {
 				 * JMeterUtils.getResString() converts space to _ and lowercases
 				 * the key, so make sure all keys pass the test
 				 */
-				if ((key.indexOf(' ') >= 0) || !key.toLowerCase().equals(key)) {
+				if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
 					System.out.println("Invalid key for JMeterUtils " + key);
 					fails++;
 				}
