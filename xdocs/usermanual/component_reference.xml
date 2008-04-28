@@ -1131,6 +1131,7 @@ includes extensions like oneTimeSetUp and oneTimeTearDown. The sampler works lik
 JavaSampler with some differences.
 <br></br>1. rather than use Jmeter's test interface, it scans the jar files for classes extending junit's TestCase class. That includes any class or subclass.
 <br></br>2. Junit test jar files should be placed in jmeter/lib/junit instead of /lib directory.
+In versions of JMeter after 2.3.1, you can also use the "user.classpath" property to specify where to look for TestCase classes. 
 <br></br>3. Junit sampler does not use name/value pairs for configuration like the JavaSampler. The sampler assumes setUp and tearDown will configure the test correctly.
 <br></br>4. The sampler measures the elapsed time only for the test method and does not include setUp and tearDown.
 <br></br>5. Each time the test method is called, Jmeter will pass the result to the listeners.

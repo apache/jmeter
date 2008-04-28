@@ -359,6 +359,11 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 						</li>
 									
 
+												<li	>
+								Class directories defined in search_paths and user.classpath no longer need trailing "/"
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -525,6 +530,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 						</li>
 									
 
+
 												<li	>
 								Remove HTML Parameter Mask,HTTP User Parameter Modifier from menus as they are deprecated
 						</li>
@@ -559,6 +565,11 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 								The supplied TCPClient implementation no longer treats tcp.eolByte=0 as special.
 To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a valid byte)
 
+						</li>
+									
+
+												<li	>
+								JUnit sampler GUI now also finds Test classes defined in user.classpath
 						</li>
 									
 
