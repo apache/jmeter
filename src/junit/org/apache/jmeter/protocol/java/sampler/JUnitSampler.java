@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  */
 public class JUnitSampler extends AbstractSampler {
 
-	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
+	private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
 	
     /**
      * Property key representing the classname of the JavaSamplerClient to
@@ -482,15 +482,13 @@ public class JUnitSampler extends AbstractSampler {
                 } catch (NoSuchMethodException e) {
                     log.info("String constructor:: " + e.getMessage());
                 }
-                if (con == null ){
-                    try {
-                        con = theclazz.getDeclaredConstructor(new Class[0]);
-                        if (con != null){
-                            params = new Object[]{};
-                        }
-                    } catch (NoSuchMethodException e) {
-                        log.info("Empty constructor:: " + e.getMessage());
+                try {
+                    con = theclazz.getDeclaredConstructor(new Class[0]);
+                    if (con != null){
+                        params = new Object[]{};
                     }
+                } catch (NoSuchMethodException e) {
+                    log.info("Empty constructor:: " + e.getMessage());
                 }
                 try {
                     // if the string constructor is not null, we use it.
