@@ -120,6 +120,7 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 <li>Bug 40850 - BeanShell memory leak</li>
 <li>Ensure ResponseCode and ResponseMessage are set for successful JDBC samples</li>
 <li>FTPSampler now detects and reports failure to open the remote file</li>
+<li>Class directories defined in search_paths and user.classpath no longer need trailing "/"</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -168,6 +169,7 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 <li>The supplied TCPClient implementation no longer treats tcp.eolByte=0 as special.
 To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a valid byte)
 </li>
+<li>JUnit sampler GUI now also finds Test classes defined in user.classpath</li>
 </ul>
 
 <h4>Non-functional changes</h4>

@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.java.control.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -66,9 +67,25 @@ implements ChangeListener, ActionListener
     private static final String ONETIMETEARDOWN = "oneTimeTearDown"; //$NON-NLS-1$
     private static final String SUITE = "suite"; //$NON-NLS-1$
     
-    private static final String[] SPATHS = new String[] {
-            JMeterUtils.getJMeterHome() + "/lib/junit/", //$NON-NLS-1$
-    };
+    private static final String[] SPATHS;
+
+    static {
+        String paths[];
+        String ucp = JMeterUtils.getProperty("user.classpath");
+        if (ucp!=null){
+            String parts[] = ucp.split(File.pathSeparator);
+            paths = new String[parts.length+1];
+            paths[0] = JMeterUtils.getJMeterHome() + "/lib/junit/"; //$NON-NLS-1$
+            for(int i=0; i < parts.length; i++){
+                paths[i+1]=parts[i];
+            }
+        } else {
+            paths = new String[]{
+                JMeterUtils.getJMeterHome() + "/lib/junit/" //$NON-NLS-1$
+            };
+        }
+        SPATHS = paths;
+    }
 
     private JLabeledTextField constructorLabel =
         new JLabeledTextField(
