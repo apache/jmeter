@@ -45,6 +45,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	// File name sequence number
+	//@GuardedBy("this")
 	private static long sequenceNumber = 0;
 
 	public static final String FILENAME = "FileSaver.filename"; // $NON-NLS-1$
@@ -53,7 +54,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 
     public static final String SUCCESS_ONLY = "FileSaver.successonly"; // $NON-NLS-1$
 
-    private static synchronized long nextNumber() {
+    private synchronized long nextNumber() {
 		return ++sequenceNumber;
 	}
 
@@ -89,7 +90,9 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		// System.out.println("-- "+me+this.getName()+"
 		// "+Thread.currentThread().getName());
 		super.clear();
-		sequenceNumber = 0; // TODO is this the right thing to do?
+		synchronized(this){
+		    sequenceNumber = 0; // TODO is this the right thing to do?
+		}
 	}
 
 	// TODO - is this the same as the above?
@@ -134,7 +137,6 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 		    }
 		}
 
-		nextNumber();
 		String fileName = makeFileName(s.getContentType());
 		log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
         s.setResultFileName(fileName);// Associate sample with file name
@@ -170,7 +172,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
 				}
 			}
 		}
-		return getFilename() + sequenceNumber + "." + suffix;
+		return getFilename() + nextNumber() + "." + suffix;
 	}
 
 	/*
