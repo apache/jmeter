@@ -37,9 +37,6 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Michael Stover
- */
 public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListener {
 
 	private JTextField filenameField;
@@ -49,13 +46,13 @@ public class MultipartUrlConfigGui extends UrlConfigGui implements ActionListene
 	private JTextField mimetypeField;
 
 	// TODO these are used as names for the GUI elements - are they needed? are they NLS?
-	private static String FILENAME = "filename";
+	private static final String FILENAME = "filename";
 
-	private static String BROWSE = "browse";  // $NON-NLS-1$ used as an ActionName locally
+	private static final String BROWSE = "browse";  // $NON-NLS-1$ used as an ActionName locally
 
-	private static String PARAMNAME = "paramname";
+	private static final String PARAMNAME = "paramname";
 
-	private static String MIMETYPE = "mimetype";
+	private static final String MIMETYPE = "mimetype";
 
 	public MultipartUrlConfigGui() {
 		super();

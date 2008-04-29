@@ -54,23 +54,23 @@ import org.apache.jorphan.gui.JLabeledChoice;
 public class UrlConfigGui extends JPanel implements ChangeListener {
 	protected HTTPArgumentsPanel argsPanel;
 
-	private static String DOMAIN = "domain"; // $NON-NLS-1$
+	private static final String DOMAIN = "domain"; // $NON-NLS-1$
 
-	private static String PORT = "port"; // $NON-NLS-1$
+	private static final String PORT = "port"; // $NON-NLS-1$
 
-	private static String PROTOCOL = "protocol"; // $NON-NLS-1$
+	private static final String PROTOCOL = "protocol"; // $NON-NLS-1$
 
-	private static String CONTENT_ENCODING = "content_encoding"; // $NON-NLS-1$
+	private static final String CONTENT_ENCODING = "content_encoding"; // $NON-NLS-1$
 
-	private static String PATH = "path"; // $NON-NLS-1$
+	private static final String PATH = "path"; // $NON-NLS-1$
 
-	private static String FOLLOW_REDIRECTS = "follow_redirects"; // $NON-NLS-1$
+	private static final String FOLLOW_REDIRECTS = "follow_redirects"; // $NON-NLS-1$
 
-	private static String AUTO_REDIRECTS = "auto_redirects"; // $NON-NLS-1$
+	private static final String AUTO_REDIRECTS = "auto_redirects"; // $NON-NLS-1$
 
-	private static String USE_KEEPALIVE = "use_keepalive"; // $NON-NLS-1$
+	private static final String USE_KEEPALIVE = "use_keepalive"; // $NON-NLS-1$
 
-    private static String USE_MULTIPART_FOR_POST = "use_multipart_for_post"; // $NON-NLS-1$
+    private static final String USE_MULTIPART_FOR_POST = "use_multipart_for_post"; // $NON-NLS-1$
 
 	private JTextField domain;
 

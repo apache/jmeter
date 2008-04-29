@@ -39,7 +39,7 @@ import org.apache.log.Logger;
  * 
  */
 public class Graph extends JComponent implements Scrollable, Clearable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private boolean wantData = true;
 
@@ -53,7 +53,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 
 	private SamplingStatCalculator model;
 
-	private static int width = 2000;
+	private static final int width = 2000;
 
 	private long graphMax = 1;
 

@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -38,31 +37,27 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Peter Lin created 8/11
- * @version $Revision$ Last updated: $Date$
- */
 public class ReportPlan extends AbstractTestElement implements Serializable, TestListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String REPORT_PAGE = "ReportPlan.report_page";
+	public static final String REPORT_PAGE = "ReportPlan.report_page";
 
-	public final static String USER_DEFINED_VARIABLES = "ReportPlan.user_defined_variables";
+	public static final String USER_DEFINED_VARIABLES = "ReportPlan.user_defined_variables";
 
-	public final static String COMMENTS = "ReportPlan.comments";
+	public static final String COMMENTS = "ReportPlan.comments";
 
-	public final static String BASEDIR = "ReportPlan.basedir";
+	public static final String BASEDIR = "ReportPlan.basedir";
 
 	private transient List reportPages = new LinkedList();
 
 	private transient List configs = new LinkedList();
 
-	private static List itemsCanAdd = new LinkedList();
+	private static final List itemsCanAdd = new LinkedList();
 
 	private static ReportPlan plan;
 
 	// There's only 1 test plan, so can cache the mode here
-	private static boolean functionalMode = false;
+	private static volatile boolean functionalMode = false;
 
 	static {
 		itemsCanAdd.add(JMeterUtils.getResString("report_page"));

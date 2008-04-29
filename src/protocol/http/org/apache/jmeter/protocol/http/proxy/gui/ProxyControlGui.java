@@ -67,9 +67,9 @@ import org.apache.log.Logger;
 
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
 		KeyListener, UnsharedComponent {
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 232L;
 
 	private JTextField portField;
 

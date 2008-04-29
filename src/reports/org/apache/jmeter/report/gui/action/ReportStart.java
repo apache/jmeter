@@ -25,17 +25,13 @@ import java.util.Set;
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.action.ActionNames;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
-/**
- * @author Michael Stover Created March 1, 2001
- * @version $Revision$ Last updated: $Date$
- */
 public class ReportStart extends AbstractAction {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	//private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(ActionNames.ACTION_START);
 		commands.add(ActionNames.ACTION_STOP);

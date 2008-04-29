@@ -43,7 +43,7 @@ import org.apache.log.Logger;
 
 public class HttpMirrorControlGui extends LogicControllerGui 
     implements JMeterGUIComponent, ActionListener, UnsharedComponent {
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private JTextField portField;
 

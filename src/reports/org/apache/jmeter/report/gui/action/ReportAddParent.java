@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -31,14 +30,10 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportAddParent implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add("Add Parent");
 	}

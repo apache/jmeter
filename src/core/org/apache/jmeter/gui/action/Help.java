@@ -36,13 +36,12 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * 
- * @version $Revision$ $Date$
+ * Implements the Help menu item.
  */
 public class Help implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 
 	private static final String HELP_DOCS = "file:///"  // $NON-NLS-1$
 		+ JMeterUtils.getJMeterHome() 

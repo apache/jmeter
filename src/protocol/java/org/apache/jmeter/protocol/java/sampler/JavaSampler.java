@@ -37,13 +37,14 @@ import org.apache.log.Logger;
  * A sampler for executing custom Java code in each sample. See
  * {@link JavaSamplerClient} and {@link AbstractJavaSamplerClient} for
  * information on writing Java code to be executed by this sampler.
- * 
- * @author <a href="mailto:jeremy_a@bigfoot.com">Jeremy Arnold</a>
+ *
  */
 public class JavaSampler extends AbstractSampler implements TestListener {
 
-	private static final long serialVersionUID = 221L; // Remember to change this when the class changes ...
-	
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
+
 	/**
 	 * Property key representing the classname of the JavaSamplerClient to user.
 	 */
@@ -68,15 +69,10 @@ public class JavaSampler extends AbstractSampler implements TestListener {
 	private transient JavaSamplerContext context = null;
 
 	/**
-	 * Logging
-	 */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
-
-	/**
 	 * Set used to register all active JavaSamplers. This is used so that the
 	 * samplers can be notified when the test ends.
 	 */
-	private static Set allSamplers = new HashSet();
+	private static final Set allSamplers = new HashSet();
 
 	/**
 	 * Create a JavaSampler.

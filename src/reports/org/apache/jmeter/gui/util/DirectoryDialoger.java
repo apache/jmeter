@@ -1,4 +1,3 @@
-// $Header $
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -32,7 +31,7 @@ public final class DirectoryDialoger {
 	 */
 	private static String lastJFCDirectory = null;
 
-	private static JFileChooser jfc = new JFileChooser();
+	private static final JFileChooser jfc = new JFileChooser();
 
 	/**
 	 * Prevent instantiation of utility class.

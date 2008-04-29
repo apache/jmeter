@@ -48,7 +48,8 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 
 	private boolean dirty = false;
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.CHECK_DIRTY);
 		commands.add(ActionNames.SUB_TREE_SAVED);

@@ -38,11 +38,9 @@ import org.apache.log.Logger;
  * and retrieval of the data into and out of string arrays. It is also handy for
  * reading CSV files.
  * 
- * @author Michael Stover (mstover1 at apache.org)
- * @version $Revision$
  */
 public class Data implements Serializable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	Map data;
 

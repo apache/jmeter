@@ -33,12 +33,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * This command clears the existing test plan, allowing the creation of a New
  * test plan.
  * 
- * @author Peter Lin
- * @version $Revision$ Last updated: $Date$
  */
 public class ReportClose implements Command {
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add("close");
 	}

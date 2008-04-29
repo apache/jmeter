@@ -43,7 +43,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
 {
     private static final long serialVersionUID = 232L;
 
-    private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final String KEY = "__jexl"; //$NON-NLS-1$
 
@@ -67,7 +67,7 @@ public class JexlFunction extends AbstractFunction implements Serializable
 
         String varName = ""; //$NON-NLS-1$
         if (values.length > 1) {
-            varName = ((CompoundVariable) values[1]).execute();
+            varName = ((CompoundVariable) values[1]).execute().trim();
         }
 
         JMeterContext jmctx = JMeterContextService.getContext();

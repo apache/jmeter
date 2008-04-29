@@ -36,10 +36,11 @@ import javax.swing.JSeparator;
  */
 public class LoadRecentProject extends Load {
     /** Prefix for the user preference key */
-    private static String USER_PREFS_KEY = "recent_file_"; //$NON-NLS-1$
+    private static final String USER_PREFS_KEY = "recent_file_"; //$NON-NLS-1$
     /** The number of menu items used for recent files */
     private static final int NUMBER_OF_MENU_ITEMS = 9;
-    private static Set commands = new HashSet();
+    private static final Set commands = new HashSet();
+
     static {
         commands.add(ActionNames.OPEN_RECENT);
     }

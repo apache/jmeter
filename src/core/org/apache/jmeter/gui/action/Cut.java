@@ -26,11 +26,11 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 
 /**
- * @author Thad Smith
- * @version $Revision$
+ * Implements the Cut menu item command
  */
 public class Cut extends AbstractAction {
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.CUT);
 	}

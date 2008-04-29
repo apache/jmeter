@@ -38,11 +38,9 @@ import org.apache.log.Logger;
  * Ldap Client class is main class to create, modify, search and delete all the
  * LDAP functionality available.
  * 
- * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
- *         Exports Ltd. Created Apr 29 2003 11:00 AM
  */
 public class LdapClient {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private DirContext dirContext = null;
 

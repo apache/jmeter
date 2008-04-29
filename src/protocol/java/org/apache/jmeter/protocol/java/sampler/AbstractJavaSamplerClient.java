@@ -52,13 +52,8 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
-	/**
-	 * The Logger to be used by the Java protocol. This can be used by
-	 * subclasses through the getLogger() method.
-	 * 
-	 * @see #getLogger()
-	 */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
 	public void setupTest(JavaSamplerContext context) {

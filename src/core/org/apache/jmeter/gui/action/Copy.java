@@ -34,15 +34,14 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author Thad Smith
- * @version $Revision$
+ * Implements the Copy menu command
  */
 public class Copy extends AbstractAction {
 	private static JMeterTreeNode copiedNode = null;
 
 	private static JMeterTreeNode copiedNodes[] = null;
 
-	private static HashSet commands = new HashSet();
+	private static final HashSet commands = new HashSet();
     
 	static {
 		commands.add(ActionNames.COPY);

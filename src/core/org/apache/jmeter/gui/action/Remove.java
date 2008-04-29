@@ -30,13 +30,13 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Implements the Remove menu item.
  */
 public class Remove implements Command {
 	
-    private static Set commands = new HashSet();
-	static {
+    private static final Set commands = new HashSet();
+
+    static {
 		commands.add(ActionNames.REMOVE);
 	}
 

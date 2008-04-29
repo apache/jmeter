@@ -36,17 +36,12 @@ import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * 
- * @author unattributed
- * @version $Revision$ $Date$
- */
 public class ReportHelp implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String HELP = "help";
+	public static final String HELP = "help";
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 
 	public static final String HELP_DOCS = "file:///" + JMeterUtils.getJMeterHome() + "/printable_docs/usermanual/";
 

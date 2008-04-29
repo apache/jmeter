@@ -45,8 +45,9 @@ public class RemoteStart extends AbstractAction {
 
     private static final String REMOTE_HOSTS_SEPARATOR = ","; // $NON-NLS-1$
 
-    private static Set commands = new HashSet();
-	static {
+    private static final Set commands = new HashSet();
+
+    static {
 		commands.add(ActionNames.REMOTE_START);
 		commands.add(ActionNames.REMOTE_STOP);
 		commands.add(ActionNames.REMOTE_START_ALL);

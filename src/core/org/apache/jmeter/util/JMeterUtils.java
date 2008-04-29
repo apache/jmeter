@@ -64,9 +64,9 @@ import org.xml.sax.XMLReader;
  * 
  */
 public class JMeterUtils implements UnitTestManager {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static PatternCacheLRU patternCache = new PatternCacheLRU(
+	private static final PatternCacheLRU patternCache = new PatternCacheLRU(
 			getPropDefault("oro.patterncache.size",1000), // $NON-NLS-1$
 			new Perl5Compiler());
 
@@ -74,7 +74,7 @@ public class JMeterUtils implements UnitTestManager {
 
 	private static Properties appProperties;
 
-	private static Vector localeChangeListeners = new Vector();
+	private static final Vector localeChangeListeners = new Vector();
 
 	private static Locale locale;
 
@@ -82,18 +82,21 @@ public class JMeterUtils implements UnitTestManager {
 
 	// What host am I running on?
 	
+	//@GuardedBy("this")
 	private static String localHostIP = null;
+	//@GuardedBy("this")
 	private static String localHostName = null;
+	//@GuardedBy("this")
 	private static String localHostFullName = null;
 	
-	private static ThreadLocal localMatcher = new ThreadLocal() {
+	private static final ThreadLocal localMatcher = new ThreadLocal() {
 		protected Object initialValue() {
 			return new Perl5Matcher();
 		}
 	};
 
 	// Provide Random numbers to whomever wants one
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	/**
 	 * Gets Perl5Matcher for this thread.
@@ -128,7 +131,6 @@ public class JMeterUtils implements UnitTestManager {
 	 */
 	public static void initLogging() {
 		LoggingManager.initializeLogging(appProperties);
-		log = LoggingManager.getLoggerForClass();
 	}
 
 	/**

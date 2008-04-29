@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -30,18 +29,14 @@ import org.apache.jmeter.report.gui.tree.ReportTreeListener;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportCopy extends AbstractAction {
 	private static ReportTreeNode copiedNode = null;
 
 	private static ReportTreeNode copiedNodes[] = null;
 
-	private static String COPY = "Copy";
+	private static final String COPY = "Copy";
 
-	private static HashSet commands = new HashSet();
+	private static final HashSet commands = new HashSet();
 	static {
 		commands.add(COPY);
 	}

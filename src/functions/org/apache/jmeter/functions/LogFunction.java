@@ -49,7 +49,7 @@ import org.apache.log.Priority;
  * 
  */
 public class LogFunction extends AbstractFunction implements Serializable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final long serialVersionUID = 232L;
 	
