@@ -47,7 +47,7 @@ public class JavaSamplerContext {
 	 */
 
 	/** Logging */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Map containing the initialization parameters for the JavaSamplerClient.

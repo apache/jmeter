@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 
 /*
  * 
- * @version $Revision$ $Date$
+ * Represents an Argument for HTTP requests.
  */
 public class HTTPArgument extends Argument implements Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
@@ -44,7 +44,7 @@ public class HTTPArgument extends Argument implements Serializable {
 
 	private static final String USE_EQUALS = "HTTPArgument.use_equals";
 
-	private static EncoderCache cache = new EncoderCache(1000);
+	private static final EncoderCache cache = new EncoderCache(1000);
 
 	/**
 	 * Constructor for the Argument object.

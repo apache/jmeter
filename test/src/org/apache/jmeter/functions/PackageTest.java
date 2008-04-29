@@ -483,7 +483,7 @@ public class PackageTest extends JMeterTestCase {
 
 	}
 
-	private static Baton baton = new Baton();
+	private static final Baton baton = new Baton();
 
 	public void CSVThread1() throws Exception {
 		Thread.currentThread().setName("One");

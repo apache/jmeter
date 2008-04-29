@@ -45,9 +45,9 @@ public class CompoundVariable implements Function {
 
 	private String rawParameters;
 
-	private static FunctionParser functionParser = new FunctionParser();
+	private static final FunctionParser functionParser = new FunctionParser();
 
-	private static Map functions = new HashMap();
+	private static final Map functions = new HashMap();
 
 	private boolean hasFunction, isDynamic;
 

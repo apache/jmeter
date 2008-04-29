@@ -114,7 +114,7 @@ class RegexpHTMLParser extends HTMLParser {
 	/**
 	 * Thread-local input:
 	 */
-	private static ThreadLocal localInput = new ThreadLocal() {
+	private static final ThreadLocal localInput = new ThreadLocal() {
 		protected Object initialValue() {
 			return new PatternMatcherInput(new char[0]);
 		}

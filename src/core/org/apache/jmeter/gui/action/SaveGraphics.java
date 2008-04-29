@@ -45,7 +45,8 @@ import org.apache.jmeter.visualizers.Printable;
  */
 public class SaveGraphics implements Command {
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.SAVE_GRAPHICS);
         commands.add(ActionNames.SAVE_GRAPHICS_ALL);

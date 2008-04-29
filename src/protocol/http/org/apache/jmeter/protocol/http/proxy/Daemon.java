@@ -36,8 +36,8 @@ import org.apache.log.Logger;
  * 
  */
 public class Daemon extends Thread {
-	/** Logging */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The time (in milliseconds) to wait when accepting a client connection.

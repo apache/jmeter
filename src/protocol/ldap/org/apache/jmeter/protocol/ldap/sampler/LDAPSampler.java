@@ -42,39 +42,37 @@ import org.apache.log.Logger;
  * Ldap Sampler class is main class for the LDAP test. This will control all the
  * test available in the LDAP Test.
  * 
- * @author T.Elanjchezhiyan(chezhiyan@siptech.co.in) - Sip Technologies and
- *         Exports Ltd. Created Apr 29 2003 11:00 AM
  */
 public class LDAPSampler extends AbstractSampler {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SERVERNAME = "servername"; //$NON-NLS-1$
+	public static final String SERVERNAME = "servername"; //$NON-NLS-1$
 
-	public final static String PORT = "port"; //$NON-NLS-1$
+	public static final String PORT = "port"; //$NON-NLS-1$
 
-	public final static String ROOTDN = "rootdn"; //$NON-NLS-1$
+	public static final String ROOTDN = "rootdn"; //$NON-NLS-1$
 
-	public final static String TEST = "test"; //$NON-NLS-1$
+	public static final String TEST = "test"; //$NON-NLS-1$
 
-	public final static String ADD = "add"; //$NON-NLS-1$
+	public static final String ADD = "add"; //$NON-NLS-1$
 
-	public final static String MODIFY = "modify"; //$NON-NLS-1$
+	public static final String MODIFY = "modify"; //$NON-NLS-1$
 
-	public final static String DELETE = "delete"; //$NON-NLS-1$
+	public static final String DELETE = "delete"; //$NON-NLS-1$
 
-	public final static String SEARCHBASE = "search"; //$NON-NLS-1$
+	public static final String SEARCHBASE = "search"; //$NON-NLS-1$
 
-	public final static String SEARCHFILTER = "searchfilter"; //$NON-NLS-1$
+	public static final String SEARCHFILTER = "searchfilter"; //$NON-NLS-1$
 
-	public final static String USER_DEFINED = "user_defined"; //$NON-NLS-1$
+	public static final String USER_DEFINED = "user_defined"; //$NON-NLS-1$
 
-	public final static String ARGUMENTS = "arguments"; //$NON-NLS-1$
+	public static final String ARGUMENTS = "arguments"; //$NON-NLS-1$
 
-	public final static String BASE_ENTRY_DN = "base_entry_dn"; //$NON-NLS-1$
+	public static final String BASE_ENTRY_DN = "base_entry_dn"; //$NON-NLS-1$
 
 	// For In build test case using this counter
 	// create the new entry in the server
-	private static int counter = 0;
+	private static volatile int counter = 0;
 
 	private boolean searchFoundEntries;// TODO turn into parameter?
 

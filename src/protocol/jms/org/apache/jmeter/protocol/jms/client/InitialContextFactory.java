@@ -32,16 +32,14 @@ import org.apache.log.Logger;
 import org.apache.jmeter.protocol.jms.sampler.BaseJMSSampler;
 
 /**
- * @author pete
- * 
  * InitialContextFactory is responsible for getting and instance of the initial
  * context. It is also responsible for looking up JMS topics and queues.
  */
 public class InitialContextFactory {
 
-	private static java.util.HashMap MAP = new HashMap();
+	private static final java.util.HashMap MAP = new HashMap();
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static synchronized Context lookupContext(String jndi, String url, String useAuth, String user, String pwd) {
 		Context ctx = (Context) MAP.get(jndi + url);

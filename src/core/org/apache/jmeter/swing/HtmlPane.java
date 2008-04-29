@@ -26,10 +26,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$ Updated on: $Date$
+ * Implements an HTML Pane with local hyperlinking enabled.
  */
 public class HtmlPane extends JTextPane {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public HtmlPane() {
 		this.addHyperlinkListener(new HyperlinkListener() {

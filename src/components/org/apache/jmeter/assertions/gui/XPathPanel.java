@@ -39,14 +39,10 @@ import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- * author jspears
- * 
- */
 public class XPathPanel extends JPanel {
-	private static Document testDoc = null;
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private final static Logger log = LoggingManager.getLoggerForClass();
+	private static Document testDoc;
 
 	private JCheckBox negated;
 

@@ -54,7 +54,8 @@ public class JDateField extends JTextField {
 	 * Current format: MM/DD/YYYY HH:MM:SS 01234567890123456789 ^buffer
 	 * positions
 	 */
-	private static int fieldPositions[] = { Calendar.YEAR, // Y
+	private static final int fieldPositions[] = {
+	        Calendar.YEAR, // Y
 			Calendar.YEAR, // Y
 			Calendar.YEAR, // Y
 			Calendar.YEAR, // Y

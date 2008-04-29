@@ -65,7 +65,7 @@ public class ReportCheckDirty extends AbstractAction implements HashTreeTraverse
 
 	boolean dirty = false;
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(CHECK_DIRTY);
 		commands.add(SUB_TREE_SAVED);

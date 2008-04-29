@@ -37,9 +37,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class Start extends AbstractAction {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.ACTION_START);
 		commands.add(ActionNames.ACTION_STOP);

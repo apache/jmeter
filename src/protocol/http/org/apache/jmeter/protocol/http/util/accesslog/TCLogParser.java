@@ -73,7 +73,7 @@ import org.apache.log.Logger;
  */
 
 public class TCLogParser implements LogParser {
-	static Logger log = LoggingManager.getLoggerForClass();
+	protected static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String GET = "GET";
 
@@ -361,10 +361,9 @@ public class TCLogParser implements LogParser {
 				}
 			}
 			return url;
-		} else {
-			// we return the original string
-			return url;
 		}
+		// we return the original string
+		return url;
 	}
 
 	/**
@@ -400,10 +399,9 @@ public class TCLogParser implements LogParser {
 			this.URL_PATH = tokens.nextToken();
 			el.setProperty(HTTPSamplerBase.PATH, URL_PATH);
 			return tokens.hasMoreTokens() ? tokens.nextToken() : null;
-		} else {
-			el.setProperty(HTTPSamplerBase.PATH, url);
-			return null;
 		}
+		el.setProperty(HTTPSamplerBase.PATH, url);
+		return null;
 	}
 
 	/**
@@ -416,9 +414,8 @@ public class TCLogParser implements LogParser {
 	public boolean checkURL(String url) {
 		if (url.indexOf("?") > -1) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -431,9 +428,8 @@ public class TCLogParser implements LogParser {
 	public boolean checkParamFormat(String text) {
 		if (text.indexOf("&") > -1 && text.indexOf("=") > -1) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/**

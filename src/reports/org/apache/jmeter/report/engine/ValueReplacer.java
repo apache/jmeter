@@ -28,16 +28,11 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.testelement.ReportPlan;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @author <a href="mailto:jsalvata@apache.org">Jordi Salvat i Alabart</a>
- * @version $Revision$ updated on $Date$
- */
 public class ValueReplacer {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+//	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	Map variables = new HashMap();
 

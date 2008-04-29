@@ -30,7 +30,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class NumberFieldErrorListener extends FocusAdapter {
 
-	private static NumberFieldErrorListener listener = new NumberFieldErrorListener();
+	private static final NumberFieldErrorListener listener = new NumberFieldErrorListener();
 
 	public static NumberFieldErrorListener getNumberFieldErrorListener() {
 		return listener;

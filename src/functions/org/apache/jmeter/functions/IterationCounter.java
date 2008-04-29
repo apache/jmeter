@@ -88,7 +88,7 @@ public class IterationCounter extends AbstractFunction implements Serializable {
 
 		String varName = ""; //$NON-NLS-1$
         if (variables.length >=2) {// Ensure variable has been provided
-            varName = ((CompoundVariable) variables[1]).execute();
+            varName = ((CompoundVariable) variables[1]).execute().trim();
         }
 		
         String counterString = ""; //$NON-NLS-1$

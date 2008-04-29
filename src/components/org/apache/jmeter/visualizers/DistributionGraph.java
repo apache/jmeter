@@ -47,23 +47,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 
 	private SamplingStatCalculator model;
 
-	private static int width = 600;
-
-	private int xborder = 30;
-
-	/**
-	 * the granularity for the distribution graph. it can only be whole numbers.
-	 */
-	// NOTREAD private int granularity = 5;
-	/**
-	 * there's an option to delay drawing
-	 */
-	// NOTREAD private boolean delay = false;
-	/**
-	 * delay redraw
-	 */
-	// NOTREAD private int counter = 20;
-	private static int total = -1;
+	private final int xborder = 30;
 
 	/**
 	 * Constructor for the Graph object.
@@ -156,7 +140,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 	}
 
 	private void drawSample(SamplingStatCalculator p_model, Graphics g) {
-		width = getWidth();
+		int width = getWidth();
 		double height = getHeight() - 1.0;
 
 		// first lets draw the grid
@@ -181,7 +165,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 			Number ninety = p_model.getPercentPoint(0.90);
 			Number fifty = p_model.getPercentPoint(0.50);
 
-			total = p_model.getCount();
+			int total = p_model.getCount();
 			Collection values = p_model.getDistribution().values();
 			Object[] objval = new Object[values.size()];
 			objval = values.toArray(objval);

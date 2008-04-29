@@ -92,7 +92,7 @@ public class HttpRequestHdr {
 	private static final boolean numberRequests = 
         JMeterUtils.getPropDefault("proxy.number.requests", false); // $NON-NLS-1$
 
-	private static int requestNumber = 0;// running number
+	private static volatile int requestNumber = 0;// running number
 
 	public HttpRequestHdr() {
 		this.sampler = HTTPSamplerFactory.newInstance();

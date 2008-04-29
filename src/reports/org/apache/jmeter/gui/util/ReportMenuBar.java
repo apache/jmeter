@@ -46,12 +46,9 @@ import org.apache.log.Logger;
 /**
  * This is a version of the MenuBar for the reporting tool. I started
  * with the existing jmeter menubar.
- * @author Peter Lin
- * @author Michael Stover
- * @version $Revision$ updated on $Date$
  */
 public class ReportMenuBar extends JMenuBar implements LocaleChangeListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	JMenu fileMenu;
 

@@ -85,7 +85,7 @@ public class BeanShell extends AbstractFunction implements Serializable {
 		String script = ((CompoundVariable) values[0]).execute();
 		String varName = ""; //$NON-NLS-1$
 		if (values.length > 1) {
-			varName = ((CompoundVariable) values[1]).execute();
+			varName = ((CompoundVariable) values[1]).execute().trim();
 		}
 
 		String resultStr = ""; //$NON-NLS-1$

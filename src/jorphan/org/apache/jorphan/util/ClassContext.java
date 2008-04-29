@@ -24,7 +24,6 @@ package org.apache.jorphan.util;
  * 
  * May not work with applications that install their own security managers.
  * 
- * @version $Revision$ last updated $Date$
  */
 public final class ClassContext extends SecurityManager {
 	/**
@@ -33,7 +32,7 @@ public final class ClassContext extends SecurityManager {
 	private ClassContext() {
 	}
 
-	private static ClassContext _instance = new ClassContext();
+	private static final ClassContext _instance = new ClassContext();
 
 	/*
 	 * N.B. Both static routines pick up the instance context directly This

@@ -61,7 +61,7 @@ public class TestCompiler implements HashTreeTraverser {
 	 * This set keeps track of which ObjectPairs have been seen Its purpose is
 	 * not entirely clear (please document if you know!) but it is needed,..
 	 */
-	private static Set pairing = new HashSet();
+	private static final Set pairing = new HashSet();
 
 	//List loopIterListeners = new ArrayList();
 
