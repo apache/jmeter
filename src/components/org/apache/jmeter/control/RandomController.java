@@ -21,12 +21,8 @@ package org.apache.jmeter.control;
 import java.io.Serializable;
 import java.util.Random;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class RandomController extends InterleaveControl implements Serializable {
-	static Random rand = new Random();
+	static final Random rand = new Random();
 
 	public RandomController() {
 	}

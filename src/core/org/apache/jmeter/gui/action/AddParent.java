@@ -30,13 +30,13 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Implements the Add Parent menu command
  */
 public class AddParent implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.ADD_PARENT);
 	}

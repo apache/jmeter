@@ -27,10 +27,6 @@ import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public final class ReportFileDialoger {
 	/**
 	 * The last directory visited by the user while choosing Files.

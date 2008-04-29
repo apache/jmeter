@@ -131,7 +131,7 @@ public class TimeFunction extends AbstractFunction implements Serializable {
         }
         
         if (count > 1) {
-            variable = ((CompoundVariable)values[1]).execute();
+            variable = ((CompoundVariable)values[1]).execute().trim();
         }
         
     }

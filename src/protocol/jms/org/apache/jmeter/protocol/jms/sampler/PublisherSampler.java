@@ -51,7 +51,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestListener {
 
 	private StringBuffer BUFFER = new StringBuffer();
 
-	private static FileServer FSERVER = FileServer.getFileServer();
+	private static final FileServer FSERVER = FileServer.getFileServer();
 
 	private String file_contents = null;
 

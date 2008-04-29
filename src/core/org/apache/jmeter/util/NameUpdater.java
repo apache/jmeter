@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public final class NameUpdater {
 	private static Properties nameMap;
 
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	static {
 		nameMap = new Properties();

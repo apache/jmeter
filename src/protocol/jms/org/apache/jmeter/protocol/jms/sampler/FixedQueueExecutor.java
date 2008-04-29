@@ -37,7 +37,7 @@ public class FixedQueueExecutor implements QueueExecutor {
 	/** Timeout used for waiting on message. */
 	private int timeout;
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Constructor.

@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  * @deprecated
  */
 public class UserParameterModifier extends ConfigTestElement implements PreProcessor, Serializable, TestListener {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final String XMLURI = "UserParameterModifier.xmluri"; // $NON-NLS-1$
 

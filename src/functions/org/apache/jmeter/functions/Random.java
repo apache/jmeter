@@ -78,8 +78,9 @@ public class Random extends AbstractFunction implements Serializable {
 
 		if (varName != null) {
 			JMeterVariables vars = getVariables();
-			if (vars != null){// vars will be null on TestPlan
-				vars.put(varName.execute(), randString);
+            final String varTrim = varName.execute().trim();
+			if (vars != null && varTrim.length() > 0){// vars will be null on TestPlan
+                vars.put(varTrim, randString);
 			}
 		}
 

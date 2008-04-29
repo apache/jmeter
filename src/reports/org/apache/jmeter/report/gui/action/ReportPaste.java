@@ -30,14 +30,12 @@ import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 /**
  * Places a copied JMeterTreeNode under the selected node.
  * 
- * @author Thad Smith
- * @version $Revision$
  */
 public class ReportPaste extends AbstractAction {
 
-	public final static String PASTE = "Paste";
+	public static final String PASTE = "Paste"; //$NON-NLS-1$
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(PASTE);
 	}

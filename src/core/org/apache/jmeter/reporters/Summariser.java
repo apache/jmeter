@@ -70,7 +70,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 	 * Summariser name, so all Summarisers with the same name will use the same
 	 * accumulators.
 	 */
-	private static Hashtable accumulators = new Hashtable();
+	private static final Hashtable accumulators = new Hashtable();
 
 	/*
 	 * Constructor is initially called once for each occurrence in the test plan.
@@ -223,7 +223,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 		return JOrphanUtils.rightAlign(sb, len);
 	}
 
-	private static DecimalFormat dfDouble = new DecimalFormat("#0.0");
+	private static final DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
 
 	private static StringBuffer doubleToSb(StringBuffer sb, double d, int len, int frac) {
 		sb.setLength(0);

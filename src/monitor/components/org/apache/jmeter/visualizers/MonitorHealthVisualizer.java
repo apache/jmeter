@@ -52,9 +52,9 @@ public class MonitorHealthVisualizer extends AbstractVisualizer implements Image
 
 	private MonitorGraph GRAPH;
 
-	public static final String BUFFER = "monitor.buffer.size";
+	public static final String BUFFER = "monitor.buffer.size"; // $NON-NLS-1$
 
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Constructor for the GraphVisualizer object.

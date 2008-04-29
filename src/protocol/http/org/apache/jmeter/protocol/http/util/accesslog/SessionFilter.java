@@ -41,12 +41,12 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
- * @author mstover
+ * Provides Session Filtering for the AccessLog Sampler.
  * 
  */
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
-    private static final long serialVersionUID = 1;
-	static Logger log = LoggingManager.getLoggerForClass();
+    private static final long serialVersionUID = 232L;
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * These objects are static across multiple threads in a test, via clone()

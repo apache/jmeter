@@ -28,17 +28,14 @@ import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @version $Revision$
- */
 public class ReportEnableComponent implements Command {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public static final String ENABLE = "enable";
 
 	public static final String DISABLE = "disable";
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(ENABLE);
 		commands.add(DISABLE);

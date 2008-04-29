@@ -47,7 +47,7 @@ import junit.framework.TestSuite;
  * 
  */
 public class PackageTest extends JMeterTestCase {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private ResourceBundle defaultBundle;
 

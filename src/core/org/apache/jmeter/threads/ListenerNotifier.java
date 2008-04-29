@@ -56,10 +56,9 @@ import org.apache.log.Logger;
  * 
  * @see org.apache.jmeter.samplers.SampleListener
  * 
- * @version $Revision$
  */
 public class ListenerNotifier {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * The number of milliseconds between batches of notifications.

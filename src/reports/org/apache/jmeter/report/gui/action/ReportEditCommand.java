@@ -26,12 +26,8 @@ import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.gui.NamePanel;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public class ReportEditCommand implements Command {
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add("edit");
 	}

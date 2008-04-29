@@ -33,13 +33,13 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
 public class ReportDragNDrop extends AbstractAction {
-	public final static String ADD = "drag_n_drop.add";//$NON-NLS-1$
+	public static final String ADD = "drag_n_drop.add";//$NON-NLS-1$
 
-	public final static String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
+	public static final String INSERT_BEFORE = "drag_n_drop.insert_before";//$NON-NLS-1$
 
-	public final static String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
+	public static final String INSERT_AFTER = "drag_n_drop.insert_after";//$NON-NLS-1$
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(ADD);
 		commands.add(INSERT_BEFORE);

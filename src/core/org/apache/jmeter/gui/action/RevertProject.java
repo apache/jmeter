@@ -32,7 +32,8 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class RevertProject implements Command {
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.REVERT_PROJECT);
 	}
