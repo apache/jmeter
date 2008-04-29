@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
@@ -34,6 +35,7 @@ import javax.xml.parsers.DocumentBuilder;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jorphan.io.TextFile;
 import org.apache.jorphan.logging.LoggingManager;
 
@@ -62,7 +64,7 @@ import org.w3c.dom.Document;
  * 
  */
 public class WebServiceSampler extends HTTPSamplerBase {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	//+ JMX file attribut names - do not change!
 	private static final String XML_DATA = "HTTPSamper.xml_data"; //$NON-NLS-1$
@@ -503,14 +505,11 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			if (st != null && st.receive() != null) {
 				br = st.receive();
 				if (getReadResponse()) {
-					StringBuffer buf = new StringBuffer();
-					String line;
-					while ((line = br.readLine()) != null) {
-						buf.append(line);
-					}
+					StringWriter sw = new StringWriter();
+					IOUtils.copy(br, sw);
 					result.sampleEnd();
 					// set the response
-					result.setResponseData(buf.toString().getBytes());
+					result.setResponseData(sw.toString().getBytes());
 				} else {
 					// by not reading the response
 					// for real, it improves the
