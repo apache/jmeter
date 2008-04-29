@@ -23,6 +23,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -148,9 +149,14 @@ public class SoapSampler extends HTTPSampler2 {
      * @param post
      * @throws IOException if an I/O exception occurs
      */
-    protected void sendPostData(PostMethod post, final int length) {
+    private String sendPostData(PostMethod post, final int length) {
+        // Buffer to hold the post body, except file content
+        StringBuffer postedBody = new StringBuffer(1000);
         final String xmlFile = getXmlFile();
-        if (xmlFile != null && getXmlFile().length() > 0) {
+        if (xmlFile != null && xmlFile.length() > 0) {
+            // We just add placeholder text for file content
+            postedBody.append("Filename: ").append(xmlFile).append("\n");
+            postedBody.append("<actual file content, not shown here>");
             post.setRequestEntity(new RequestEntity() {
                 public boolean isRepeatable() {
                     return true;
@@ -187,6 +193,7 @@ public class SoapSampler extends HTTPSampler2 {
                 }
             });
         } else {
+            postedBody.append(getXmlData());
             post.setRequestEntity(new RequestEntity() {
                 public boolean isRepeatable() {
                     return true;
@@ -207,23 +214,23 @@ public class SoapSampler extends HTTPSampler2 {
                 }
             });
         }
+        return postedBody.toString();
     }
 
     protected HTTPSampleResult sample(URL url, String method, boolean areFollowingRedirect, int frameDepth) {
 
         String urlStr = url.toString();
 
-        log.debug("Start : sample" + urlStr);
-        log.debug("method" + method);
+        log.debug("Start : sample " + urlStr);
 
         PostMethod httpMethod;
         httpMethod = new PostMethod(urlStr);
 
         HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
+        res.setMonitor(false);
 
         res.setSampleLabel(urlStr); // May be replaced later
-        res.setHTTPMethod(method);
+        res.setHTTPMethod(HTTPConstants.POST);
         res.sampleStart(); // Count the retries as well in the time
         HttpClient client = null;
         InputStream instream = null;
@@ -231,9 +238,8 @@ public class SoapSampler extends HTTPSampler2 {
             int content_len = setPostHeaders(httpMethod);
             client = setupConnection(url, httpMethod, res);
 
-            res.setQueryString(getQueryString());
-            sendPostData(httpMethod,content_len);
-
+            res.setQueryString(sendPostData(httpMethod,content_len));
+            res.setRequestHeaders(getConnectionHeaders(httpMethod));
             int statusCode = client.executeMethod(httpMethod);
 
             // Request sent. Now get the response:
@@ -306,9 +312,7 @@ public class SoapSampler extends HTTPSampler2 {
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             log.debug("End : sample");
-            if (httpMethod != null) {
-                httpMethod.releaseConnection();
-            }
+            httpMethod.releaseConnection();
             return res;
         } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
         {
@@ -323,9 +327,7 @@ public class SoapSampler extends HTTPSampler2 {
             return err;
         } finally {
             JOrphanUtils.closeQuietly(instream);
-            if (httpMethod != null) {
-                httpMethod.releaseConnection();
-            }
+            httpMethod.releaseConnection();
         }
     }
 
