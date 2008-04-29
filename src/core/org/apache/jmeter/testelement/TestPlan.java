@@ -65,7 +65,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestL
 //	private static TestPlan plan;
 
 	// There's only 1 test plan, so can cache the mode here
-	private static boolean functionalMode = false;
+	private static volatile boolean functionalMode = false;
 
 	static {
 		// WARNING! This String value must be identical to the String value
