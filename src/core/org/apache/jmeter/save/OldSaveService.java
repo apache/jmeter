@@ -66,8 +66,8 @@ public final class OldSaveService {
     // ---------------------------------------------------------------------
 
     // Shared with TestElementSaver
-    final static String PRESERVE = "preserve"; // $NON-NLS-1$
-    final static String XML_SPACE = "xml:space"; // $NON-NLS-1$
+    static final String PRESERVE = "preserve"; // $NON-NLS-1$
+    static final String XML_SPACE = "xml:space"; // $NON-NLS-1$
 
     private static final String ASSERTION_RESULT_TAG_NAME = "assertionResult"; // $NON-NLS-1$
     private static final String BINARY = "binary"; // $NON-NLS-1$
@@ -84,7 +84,7 @@ public final class OldSaveService {
     private static final String TIME = "time"; // $NON-NLS-1$
     private static final String TIME_STAMP = "timeStamp"; // $NON-NLS-1$
 
-	private static DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
+	private static final DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
 
 	/**
 	 * Private constructor to prevent instantiation.

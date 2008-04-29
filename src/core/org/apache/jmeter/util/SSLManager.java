@@ -57,11 +57,12 @@ public abstract class SSLManager {
 	private static final String PKCS12 = "pkcs12"; // $NON-NLS-1$
 
 	/** Singleton instance of the manager */
+	//@GuardedBy("this")
 	private static SSLManager manager;
 
-	private static boolean isSSLSupported = true;
+	private static final boolean isSSLSupported = true;
 
-	private static Provider sslProvider = null;
+	private static final Provider sslProvider = null;
 
 	/** Cache the KeyStore instance */
 	private JmeterKeyStore keyStore;
@@ -77,7 +78,7 @@ public abstract class SSLManager {
 	/**
 	 * Resets the SSLManager so that we can create a new one with a new keystore
 	 */
-	static public void reset() {
+	public static synchronized void reset() {
 		SSLManager.manager = null;
 	}
 
@@ -244,7 +245,7 @@ public abstract class SSLManager {
 	/**
 	 * Static accessor for the SSLManager object. The SSLManager is a singleton.
 	 */
-	public static final SSLManager getInstance() {
+	public static final synchronized SSLManager getInstance() {
 		if (null == SSLManager.manager) {
 			SSLManager.manager = new JsseSSLManager(SSLManager.sslProvider);
 //			if (SSLManager.isSSLSupported) {

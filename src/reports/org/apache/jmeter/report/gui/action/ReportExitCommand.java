@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -31,15 +30,11 @@ import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.report.gui.action.ReportSave;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Peter Lin
- * @version $Revision$ updated on $Date$
- */
 public class ReportExitCommand implements Command {
 
 	public static final String EXIT = "exit";
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(EXIT);
 	}

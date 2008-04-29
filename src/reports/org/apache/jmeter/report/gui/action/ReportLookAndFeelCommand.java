@@ -29,13 +29,9 @@ import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
-/**
- * @author Brendan Burns
- * @version $Revision$
- */
 public class ReportLookAndFeelCommand implements Command {
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		UIManager.LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
 		for (int i = 0; i < lfs.length; i++) {

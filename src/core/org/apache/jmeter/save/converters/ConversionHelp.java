@@ -59,6 +59,8 @@ public class ConversionHelp {
 	/*
 	 * These must be set before reading/writing the XML. Rather a hack, but
 	 * saves changing all the method calls to include an extra variable.
+	 * 
+	 * AFAIK the variables should only be accessed from one thread, so no need to synchronize.
 	 */
 	private static String inVersion;
 

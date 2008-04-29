@@ -76,45 +76,45 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
+	public static final String ARGUMENTS = "HTTPsampler.Arguments"; // $NON-NLS-1$
 
-	public final static String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
+	public static final String AUTH_MANAGER = "HTTPSampler.auth_manager"; // $NON-NLS-1$
 
-	public final static String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
+	public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
 
-	public final static String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
+	public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
 
-	public final static String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
+	public static final String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
 
-	public final static String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
+	public static final String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
 
-	public final static String PORT = "HTTPSampler.port"; // $NON-NLS-1$
+	public static final String PORT = "HTTPSampler.port"; // $NON-NLS-1$
 
-	public final static String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
+	public static final String METHOD = "HTTPSampler.method"; // $NON-NLS-1$
 
-	public final static String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
+	public static final String CONTENT_ENCODING = "HTTPSampler.contentEncoding"; // $NON-NLS-1$
 
-    public final static String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
+    public static final String IMPLEMENTATION = "HTTPSampler.implementation"; // $NON-NLS-1$
 
-    public final static String PATH = "HTTPSampler.path"; // $NON-NLS-1$
+    public static final String PATH = "HTTPSampler.path"; // $NON-NLS-1$
 
-	public final static String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects"; // $NON-NLS-1$
+	public static final String FOLLOW_REDIRECTS = "HTTPSampler.follow_redirects"; // $NON-NLS-1$
 
-	public final static String AUTO_REDIRECTS = "HTTPSampler.auto_redirects"; // $NON-NLS-1$
+	public static final String AUTO_REDIRECTS = "HTTPSampler.auto_redirects"; // $NON-NLS-1$
 
-	public final static String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
+	public static final String PROTOCOL = "HTTPSampler.protocol"; // $NON-NLS-1$
 
     private static final String PROTOCOL_FILE = "file"; // $NON-NLS-1$
 
-    private final static String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
+    private static final String DEFAULT_PROTOCOL = PROTOCOL_HTTP;
 
-	public final static String URL = "HTTPSampler.URL"; // $NON-NLS-1$
+	public static final String URL = "HTTPSampler.URL"; // $NON-NLS-1$
 
 	public static final String CLIENT = "HTTPSampler.client"; // $NON-NLS-1$
 
-	public final static String DEFAULT_METHOD = GET; // $NON-NLS-1$
+	public static final String DEFAULT_METHOD = GET; // $NON-NLS-1$
     // Supported methods:
-    private final static String [] METHODS = {
+    private static final String [] METHODS = {
         DEFAULT_METHOD, // i.e. GET
         POST,
         HEAD,
@@ -124,40 +124,40 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         DELETE,
         };
     
-    private final static List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
+    private static final List METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
 
     
-	public final static String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
+	public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
-	public final static String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
+	public static final String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
     
-    public final static String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
+    public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
     /* Shown as Parameter Name on the GUI */
-	public final static String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
+	public static final String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
 
-//	public final static String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
+//	public static final String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
 
-//	public final static String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE"; // $NON-NLS-1$
+//	public static final String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE"; // $NON-NLS-1$
 
-	public final static String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
+	public static final String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
 
-//	public final static String NORMAL_FORM = "normal_form"; // $NON-NLS-1$
+//	public static final String NORMAL_FORM = "normal_form"; // $NON-NLS-1$
 
-//	public final static String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
+//	public static final String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
 
-	// public final static String ENCODED_PATH= "HTTPSampler.encoded_path";
+	// public static final String ENCODED_PATH= "HTTPSampler.encoded_path";
 	
 	// IMAGE_PARSER now really means EMBEDDED_PARSER
-	public final static String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
+	public static final String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
 	
 	// Embedded URLs must match this RE (if provided)
-	public final static String EMBEDDED_URL_RE = "HTTPSampler.embedded_url_re"; // $NON-NLS-1$
+	public static final String EMBEDDED_URL_RE = "HTTPSampler.embedded_url_re"; // $NON-NLS-1$
 
-	public final static String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
+	public static final String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
 	// Store MD5 hash instead of storing response
-    private final static String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
+    private static final String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
 
 	/** A number to indicate that the port has not been set. */
 	public static final int UNSPECIFIED_PORT = 0;
@@ -168,9 +168,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public static final int URL_UNSPECIFIED_PORT = -1;
     public static final String URL_UNSPECIFIED_PORT_AS_STRING = "-1"; // $NON-NLS-1$
 
-	protected final static String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
+	protected static final String NON_HTTP_RESPONSE_CODE = "Non HTTP response code";
 
-	protected final static String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
+	protected static final String NON_HTTP_RESPONSE_MESSAGE = "Non HTTP response message";
 
     private static final String ARG_VAL_SEP = "="; // $NON-NLS-1$
 
@@ -184,7 +184,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     
     // Derive the mapping of content types to parsers
-    private static Map parsersForType = new HashMap();
+    private static final Map parsersForType = new HashMap();
     // Not synch, but it is not modified after creation
     
     private static final String RESPONSE_PARSERS= // list of parsers

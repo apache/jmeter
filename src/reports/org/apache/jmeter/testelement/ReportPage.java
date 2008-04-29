@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -20,17 +19,15 @@ package org.apache.jmeter.testelement;
 
 import java.io.Serializable;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
  * ReportPage
  * 
- * @author Peter Lin
- * @version $Id$
  */
 public class ReportPage extends AbstractTestElement implements Serializable {
-    private final static Logger log = LoggingManager.getLoggerForClass();
+//    private static final Logger log = LoggingManager.getLoggerForClass();
 
     public static final String REPORT_PAGE_TITLE = "ReportPage.title";
     public static final String REPORT_PAGE_INDEX = "ReportPage.index";

@@ -81,7 +81,7 @@ import org.apache.log.Logger;
  */
 public class JMeterReport implements JMeterPlugin {
 
-    transient private static Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final int PROPFILE_OPT = 'p';
 

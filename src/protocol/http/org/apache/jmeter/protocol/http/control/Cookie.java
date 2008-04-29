@@ -29,24 +29,23 @@ import org.apache.jorphan.util.JOrphanUtils;
 /**
  * This class is a Cookie encapsulator.
  * 
- * @author <a href="mailto:sdowd@arcmail.com">Sean Dowd</a>
  */
 public class Cookie extends AbstractTestElement implements Serializable {
 	private static final String TAB = "\t";
 
-    private static String VALUE = "Cookie.value"; //$NON-NLS-1$
+    private static final String VALUE = "Cookie.value"; //$NON-NLS-1$
 
-	private static String DOMAIN = "Cookie.domain"; //$NON-NLS-1$
+	private static final String DOMAIN = "Cookie.domain"; //$NON-NLS-1$
 
-	private static String EXPIRES = "Cookie.expires"; //$NON-NLS-1$
+	private static final String EXPIRES = "Cookie.expires"; //$NON-NLS-1$
 
-	private static String SECURE = "Cookie.secure"; //$NON-NLS-1$
+	private static final String SECURE = "Cookie.secure"; //$NON-NLS-1$
 
-	private static String PATH = "Cookie.path"; //$NON-NLS-1$
+	private static final String PATH = "Cookie.path"; //$NON-NLS-1$
 
-    private static String PATH_SPECIFIED = "Cookie.path_specified"; //$NON-NLS-1$
+    private static final String PATH_SPECIFIED = "Cookie.path_specified"; //$NON-NLS-1$
 
-    private static String DOMAIN_SPECIFIED = "Cookie.domain_specified"; //$NON-NLS-1$
+    private static final String DOMAIN_SPECIFIED = "Cookie.domain_specified"; //$NON-NLS-1$
 
 	/**
 	 * create the coookie

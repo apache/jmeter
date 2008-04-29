@@ -58,7 +58,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable {
 	/** Logging */
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** Flag indicating whether or not this component is enabled. */
 	private boolean enabled = true;

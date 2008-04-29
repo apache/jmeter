@@ -28,12 +28,13 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$
+ * Implements the Enable menu item.
  */
 public class EnableComponent implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.ENABLE);
 		commands.add(ActionNames.DISABLE);

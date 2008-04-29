@@ -29,15 +29,13 @@ import org.apache.log.Logger;
 /**
  * Administration of messages.
  * 
- * @author Martijn Blankestijn
- * @version $Id$.
  */
 public class MessageAdmin {
 	private static final MessageAdmin SINGLETON = new MessageAdmin();
 
 	private Map table = new Hashtable();
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private MessageAdmin() {
 	}

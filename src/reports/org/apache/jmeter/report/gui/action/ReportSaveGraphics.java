@@ -44,11 +44,11 @@ import org.apache.jmeter.visualizers.Printable;
  * it will call SaveGraphicsService to save in the format.
  */
 public class ReportSaveGraphics implements Command {
-	//transient private static Logger log = LoggingManager.getLoggerForClass();
+	//transient private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
+	public static final String SAVE_GRAPHICS = "save_graphics"; // $NON-NLS-1$
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(SAVE_GRAPHICS);
 	}

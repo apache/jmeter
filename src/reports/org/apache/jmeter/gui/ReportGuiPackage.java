@@ -53,7 +53,7 @@ import org.apache.log.Logger;
  */
 public final class ReportGuiPackage implements LocaleChangeListener {
 	/** Logging. */
-	private static transient Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/** Singleton instance. */
 	private static ReportGuiPackage guiPack;

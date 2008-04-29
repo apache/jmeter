@@ -65,7 +65,7 @@ import org.apache.log.Logger;
  * 
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
 	

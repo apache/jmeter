@@ -44,8 +44,10 @@ public class ConnectionFactory implements TestListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    //@GuardedBy("this")
 	private static TopicConnectionFactory factory = null;
 
+    //@GuardedBy("this")
 	private static QueueConnectionFactory qfactory = null;
 
 	/**
@@ -67,7 +69,7 @@ public class ConnectionFactory implements TestListener {
 	 * 
 	 * @see junit.framework.TestListener#endTest(junit.framework.Test)
 	 */
-	public void testEnded() {
+	public synchronized void testEnded() {
         ConnectionFactory.factory = null;//N.B. static reference
 	}
 
@@ -122,7 +124,7 @@ public class ConnectionFactory implements TestListener {
 		return null;
 	}
 
-	public static QueueConnection getQueueConnection(Context ctx, String queueConn) {
+	public static synchronized QueueConnection getQueueConnection(Context ctx, String queueConn) {
 		if (factory != null) {
 			try {
 				return qfactory.createQueueConnection();

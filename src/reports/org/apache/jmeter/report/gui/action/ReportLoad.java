@@ -44,16 +44,12 @@ import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportLoad implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	XStream loadService = new XStream();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add("open");
 		commands.add("merge");

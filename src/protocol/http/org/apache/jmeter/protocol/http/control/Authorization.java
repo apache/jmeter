@@ -27,19 +27,18 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 /**
  * This class is an Authorization encapsulator.
  * 
- * author <a href="mailto:luta.raphael@networks.vivendi.net">Raphael Luta</a>
  */
 public class Authorization extends AbstractTestElement implements Serializable {
 
-	private static String URL = "Authorization.url"; // $NON-NLS-1$
+	private static final String URL = "Authorization.url"; // $NON-NLS-1$
 
-	private static String USERNAME = "Authorization.username"; // $NON-NLS-1$
+	private static final String USERNAME = "Authorization.username"; // $NON-NLS-1$
 
-	private static String PASSWORD = "Authorization.password"; // $NON-NLS-1$
+	private static final String PASSWORD = "Authorization.password"; // $NON-NLS-1$
 
-	private static String DOMAIN = "Authorization.domain"; // $NON-NLS-1$
+	private static final String DOMAIN = "Authorization.domain"; // $NON-NLS-1$
 
-	private static String REALM = "Authorization.realm"; // $NON-NLS-1$
+	private static final String REALM = "Authorization.realm"; // $NON-NLS-1$
 
 	private static final String TAB = "\t"; // $NON-NLS-1$
 

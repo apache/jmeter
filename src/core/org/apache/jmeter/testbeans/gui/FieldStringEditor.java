@@ -25,8 +25,8 @@ import java.beans.PropertyEditorSupport;
 
 import javax.swing.JTextField;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+//import org.apache.jorphan.logging.LoggingManager;
+//import org.apache.log.Logger;
 
 /**
  * This class implements a property editor for non-null String properties that
@@ -37,7 +37,7 @@ import org.apache.log.Logger;
  * 
  */
 class FieldStringEditor extends PropertyEditorSupport implements ActionListener, FocusListener {
-	protected static Logger log = LoggingManager.getLoggerForClass();
+//	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * This will hold the text editing component, either a plain JTextField (in

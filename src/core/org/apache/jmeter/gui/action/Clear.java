@@ -39,7 +39,8 @@ import org.apache.log.Logger;
 public class Clear implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.CLEAR);
 		commands.add(ActionNames.CLEAR_ALL);

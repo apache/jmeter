@@ -65,23 +65,25 @@ public final class LoggingManager {
 	private static PatternFormatter format = null;
 
 	/** Used to hold the default logging target. */
+	//@GuardedBy("this")
 	private static LogTarget target = new NullOutputLogTarget();
 
 	// Hack to detect when System.out has been set as the target, to avoid closing it
-	private static boolean isTargetSystemOut = false;// Is the target System.out?
+	private static volatile boolean isTargetSystemOut = false;// Is the target System.out?
 
-	private static boolean isWriterSystemOut = false;// Is the Writer System.out?
+	private static volatile boolean isWriterSystemOut = false;// Is the Writer System.out?
 
-	public final static String LOG_FILE = "log_file";  //$NON_NLS-1$
+	public static final String LOG_FILE = "log_file";  //$NON_NLS-1$
 
-	public final static String LOG_PRIORITY = "log_level";  //$NON_NLS-1$
+	public static final String LOG_PRIORITY = "log_level";  //$NON_NLS-1$
 
+    //@GuardedBy("this")
 	private static LoggingManager logManager = null;
 
 	private LoggingManager() {
 	}
 
-	public static LoggingManager getLogManager() {
+	public static synchronized LoggingManager getLogManager() {
 		return logManager;
 	}
 
@@ -95,9 +97,11 @@ public final class LoggingManager {
 	 * 
 	 */
 	public static void initializeLogging(Properties properties) {
-		if (logManager == null) {
-			logManager = new LoggingManager();
-		}
+	    synchronized(LoggingManager.class){
+    		if (logManager == null) {
+    			logManager = new LoggingManager();
+    		}
+	    }
 
 		setFormat(properties);
 
@@ -228,7 +232,7 @@ public final class LoggingManager {
 		}
 	}
 
-	private final static String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
+	private static final String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
 
 	/*
 	 * Stack contains the follow when the context is obtained: 
@@ -304,7 +308,7 @@ public final class LoggingManager {
 	 * @param targetFile
 	 *            (Writer)
 	 */
-	public static void setTarget(Writer targetFile) {
+	public static synchronized void setTarget(Writer targetFile) {
 		if (target == null) {
 			target = getTarget(targetFile, getFormat());
 			isTargetSystemOut = isWriterSystemOut;

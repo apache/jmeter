@@ -21,13 +21,14 @@ package org.apache.jmeter.functions.util;
 import org.apache.oro.text.perl.Perl5Util;
 
 /**
- * @version $Revision$
+ * Encode an Argument
  */
 public final class ArgumentEncoder {
-	private static Perl5Util util = new Perl5Util();
+	private static final Perl5Util util = new Perl5Util();
 
-	private static String expression = "s#([${}(),\\\\])#\\$1#g";
+	private static final String expression = "s#([${}(),\\\\])#\\$1#g";
 
+	// TODO does not appear to be used
 	public static String encode(String s) {
 		return util.substitute(expression, s);
 	}

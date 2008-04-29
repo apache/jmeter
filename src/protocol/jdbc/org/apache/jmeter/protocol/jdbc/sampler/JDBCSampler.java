@@ -109,7 +109,7 @@ public class JDBCSampler extends AbstractSampler implements TestBean {
 	 *  The cache has a fixed size of MAX_ENTRIES and it will throw aways all PreparedStatements 
 	 *  from the least recently used connections.  
 	 */
-	private static Map perConnCache = new LinkedHashMap(MAX_ENTRIES){
+	private static final Map perConnCache = new LinkedHashMap(MAX_ENTRIES){
 		private static final long serialVersionUID = 1L;
 		protected boolean removeEldestEntry(java.util.Map.Entry arg0) {
 			if (size() > MAX_ENTRIES) {

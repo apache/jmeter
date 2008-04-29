@@ -32,11 +32,11 @@ import org.apache.log.Logger;
 // @see TestWhileController for unit tests
 
 public class WhileController extends GenericController implements Serializable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 232L;
 	
-	private final static String CONDITION = "WhileController.condition"; // $NON-NLS-1$
+	private static final String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
 	public WhileController() {
 	}

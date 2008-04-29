@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 
 public class ReceiveSubscriber implements Runnable {
 
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
 

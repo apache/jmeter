@@ -26,11 +26,11 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.NamePanel;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Implements the Edit menu item.
  */
 public class EditCommand implements Command {
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.EDIT);
 	}
