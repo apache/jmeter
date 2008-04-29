@@ -1339,15 +1339,15 @@ requests per thread. See the table below for the sequence JMeter sends the HTTP 
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><th>Loop Iteration</th><th>Each JMeter Thread Sends These HTTP Requests</th></tr>
 <tr valign="top"><td>1</td><td>News Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>1</td><td>Log Page</td></tr>
 <tr valign="top"><td>2</td><td>FAQ Page</td></tr>
 <tr valign="top"><td>2</td><td>Log Page</td></tr>
 <tr valign="top"><td>3</td><td>Gump Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>3</td><td>Log Page</td></tr>
 <tr valign="top"><td>4</td><td>Because there are no more requests in the controller,<br> </br> JMeter starts over and sends the first HTTP Request, which is the News Page.</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>4</td><td>Log Page</td></tr>
 <tr valign="top"><td>5</td><td>FAQ Page</td></tr>
-<tr valign="top"><td>2</td><td>Log Page</td></tr>
+<tr valign="top"><td>5</td><td>Log Page</td></tr>
 </table>
 
 
