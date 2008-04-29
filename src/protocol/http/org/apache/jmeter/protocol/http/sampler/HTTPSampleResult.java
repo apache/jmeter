@@ -121,6 +121,10 @@ public class HTTPSampleResult extends SampleResult {
             }
             sb.append("\n");
 		}
+		final String sampData = super.getSamplerData();
+        if (sampData != null){
+            sb.append(sampData);
+        }
 		return sb.toString();
 	}
 
