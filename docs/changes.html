@@ -364,6 +364,16 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 						</li>
 									
 
+												<li	>
+								Bug 44852 SOAP/ XML-RPC Request does not show Request details in View Results Tree
+						</li>
+									
+
+												<li	>
+								WebService(SOAP) Sampler ResponseData now includes the EOLs sent by server
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Improvements
@@ -530,7 +540,6 @@ As a special case, if the HTTP Sampler path starts with "http://" or "https://" 
 						</li>
 									
 
-
 												<li	>
 								Remove HTML Parameter Mask,HTTP User Parameter Modifier from menus as they are deprecated
 						</li>
@@ -617,6 +626,11 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 
 												<li	>
 								Methods called from constructors must not be overridable: make GUI init methods private
+						</li>
+									
+
+												<li	>
+								Make static variables final if possible
 						</li>
 									
 
