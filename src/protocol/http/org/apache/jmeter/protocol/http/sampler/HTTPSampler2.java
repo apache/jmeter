@@ -252,7 +252,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	 *                if an I/O exception occurs
 	 */
 	private String sendPostData(PostMethod post) throws IOException {
-        // Buffer to hold the post body, expect file content
+        // Buffer to hold the post body, except file content
         StringBuffer postedBody = new StringBuffer(1000);
         
         // Check if we should do a multipart/form-data or an
@@ -683,7 +683,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
      *            <code>HttpMethod</code> which represents the request
      * @return the headers as a string
      */
-    private String getConnectionHeaders(HttpMethod method) {
+    protected String getConnectionHeaders(HttpMethod method) {
         // Get all the request headers
         StringBuffer hdrs = new StringBuffer(100);        
         Header[] requestHeaders = method.getRequestHeaders();
