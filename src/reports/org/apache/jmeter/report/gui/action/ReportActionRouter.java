@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -39,16 +38,12 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * @version $Revision$
- */
 public final class ReportActionRouter implements ActionListener {
 	private Map commands = new HashMap();
 
 	private static ReportActionRouter router;
 
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private Map preActionListeners = new HashMap();
 

@@ -47,7 +47,7 @@ import org.apache.log.Logger;
  * 
  */
 public class LogFunction2 extends AbstractFunction implements Serializable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final long serialVersionUID = 232L;
 	

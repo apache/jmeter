@@ -30,9 +30,9 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class RunningSample {
 
-	private static DecimalFormat rateFormatter = new DecimalFormat("#.0");
+	private static final DecimalFormat rateFormatter = new DecimalFormat("#.0"); // $NON-NLS-1$
 
-	private static DecimalFormat errorFormatter = new DecimalFormat("#0.00%");
+	private static final DecimalFormat errorFormatter = new DecimalFormat("#0.00%"); // $NON-NLS-1$
 
 	// The counts all need to be volatile - or else the get() methods need to be synchronised.
 	

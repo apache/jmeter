@@ -49,13 +49,10 @@ import org.w3c.dom.NodeList;
 
 // For Unit tests, @see TestAnchorModifier
 
-/**
- * @author Michael Stover
- */
 public class AnchorModifier extends AbstractTestElement implements PreProcessor, Serializable {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	public AnchorModifier() {
 	}

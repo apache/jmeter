@@ -67,7 +67,7 @@ public class TestSampleResult extends TestCase {
             }
         }
 
-        private static Formatter fmt = new RawFormatter();
+        private static final Formatter fmt = new RawFormatter();
 
         private StringWriter wr = null;
 

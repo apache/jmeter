@@ -33,11 +33,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author Michael Stover
- * @version $Revision$
+ * Packages methods related to sample handling.
  */
 public class SamplePackage {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	List sampleListeners = new LinkedList();
 

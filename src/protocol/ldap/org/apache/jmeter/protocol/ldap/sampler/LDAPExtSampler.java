@@ -68,80 +68,80 @@ public class LDAPExtSampler extends AbstractSampler implements TestListener {
 	 * The following strings are used in the test plan, and the values must not be changed
 	 * if test plans are to be upwardly compatible. 
 	 */
-	public final static String SERVERNAME = "servername"; // $NON-NLS-1$
+	public static final String SERVERNAME = "servername"; // $NON-NLS-1$
 
-	public final static String PORT = "port"; // $NON-NLS-1$
+	public static final String PORT = "port"; // $NON-NLS-1$
 	
-	public final static String SECURE = "secure"; // $NON-NLS-1$
+	public static final String SECURE = "secure"; // $NON-NLS-1$
 
-	public final static String ROOTDN = "rootdn"; // $NON-NLS-1$
+	public static final String ROOTDN = "rootdn"; // $NON-NLS-1$
 
-	public final static String TEST = "test"; // $NON-NLS-1$
+	public static final String TEST = "test"; // $NON-NLS-1$
 
 	// These are values for the TEST attribute above
-	public final static String ADD = "add"; // $NON-NLS-1$
+	public static final String ADD = "add"; // $NON-NLS-1$
 
-	public final static String MODIFY = "modify"; // $NON-NLS-1$
+	public static final String MODIFY = "modify"; // $NON-NLS-1$
 
-	public final static String BIND = "bind"; // $NON-NLS-1$
+	public static final String BIND = "bind"; // $NON-NLS-1$
 
-	public final static String UNBIND = "unbind"; // $NON-NLS-1$
+	public static final String UNBIND = "unbind"; // $NON-NLS-1$
 
-	public final static String DELETE = "delete"; // $NON-NLS-1$
+	public static final String DELETE = "delete"; // $NON-NLS-1$
 
-	public final static String SEARCH = "search"; // $NON-NLS-1$
+	public static final String SEARCH = "search"; // $NON-NLS-1$
     // end of TEST values
 	
-	public final static String SEARCHBASE = "search"; // $NON-NLS-1$
+	public static final String SEARCHBASE = "search"; // $NON-NLS-1$
 
-	public final static String SEARCHFILTER = "searchfilter"; // $NON-NLS-1$
+	public static final String SEARCHFILTER = "searchfilter"; // $NON-NLS-1$
 
-	public final static String ARGUMENTS = "arguments"; // $NON-NLS-1$
+	public static final String ARGUMENTS = "arguments"; // $NON-NLS-1$
 
-	public final static String LDAPARGUMENTS = "ldaparguments"; // $NON-NLS-1$
+	public static final String LDAPARGUMENTS = "ldaparguments"; // $NON-NLS-1$
 
-	public final static String BASE_ENTRY_DN = "base_entry_dn"; // $NON-NLS-1$
+	public static final String BASE_ENTRY_DN = "base_entry_dn"; // $NON-NLS-1$
 
-	public final static String SCOPE = "scope"; // $NON-NLS-1$
+	public static final String SCOPE = "scope"; // $NON-NLS-1$
 
-	public final static String COUNTLIM = "countlimit"; // $NON-NLS-1$
+	public static final String COUNTLIM = "countlimit"; // $NON-NLS-1$
 
-	public final static String TIMELIM = "timelimit"; // $NON-NLS-1$
+	public static final String TIMELIM = "timelimit"; // $NON-NLS-1$
 
-	public final static String ATTRIBS = "attributes"; // $NON-NLS-1$
+	public static final String ATTRIBS = "attributes"; // $NON-NLS-1$
 
-	public final static String RETOBJ = "return_object"; // $NON-NLS-1$
+	public static final String RETOBJ = "return_object"; // $NON-NLS-1$
 
-	public final static String DEREF = "deref_aliases"; // $NON-NLS-1$
+	public static final String DEREF = "deref_aliases"; // $NON-NLS-1$
 
-	public final static String USERDN = "user_dn"; // $NON-NLS-1$
+	public static final String USERDN = "user_dn"; // $NON-NLS-1$
 
-	public final static String USERPW = "user_pw"; // $NON-NLS-1$
+	public static final String USERPW = "user_pw"; // $NON-NLS-1$
 
-	public final static String SBIND = "sbind"; // $NON-NLS-1$
+	public static final String SBIND = "sbind"; // $NON-NLS-1$
 
-	public final static String COMPARE = "compare"; // $NON-NLS-1$
+	public static final String COMPARE = "compare"; // $NON-NLS-1$
 	
-	public final static String CONNTO = "connection_timeout"; // $NON-NLS-1$
+	public static final String CONNTO = "connection_timeout"; // $NON-NLS-1$
 
-	public final static String COMPAREDN = "comparedn"; // $NON-NLS-1$
+	public static final String COMPAREDN = "comparedn"; // $NON-NLS-1$
 
-	public final static String COMPAREFILT = "comparefilt"; // $NON-NLS-1$
+	public static final String COMPAREFILT = "comparefilt"; // $NON-NLS-1$
 
-	public final static String PARSEFLAG = "parseflag"; // $NON-NLS-1$
+	public static final String PARSEFLAG = "parseflag"; // $NON-NLS-1$
 
-	public final static String RENAME = "rename"; // $NON-NLS-1$
+	public static final String RENAME = "rename"; // $NON-NLS-1$
 
-	public final static String MODDDN = "modddn"; // $NON-NLS-1$
+	public static final String MODDDN = "modddn"; // $NON-NLS-1$
 
-	public final static String NEWDN = "newdn"; // $NON-NLS-1$
+	public static final String NEWDN = "newdn"; // $NON-NLS-1$
 
     private static final String SEMI_COLON = ";"; // $NON-NLS-1$
 
 
-    private static Hashtable ldapConnections = new Hashtable();
+    private static final Hashtable ldapConnections = new Hashtable();
 
-	private static Hashtable ldapContexts = new Hashtable();
+	private static final Hashtable ldapContexts = new Hashtable();
 
 	private static final int MAX_SORTED_RESULTS = 
 		JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$

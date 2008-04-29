@@ -47,43 +47,44 @@ import org.apache.log.Logger;
 public class TCPSampler extends AbstractSampler implements ThreadListener {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SERVER = "TCPSampler.server"; //$NON-NLS-1$
+	public static final String SERVER = "TCPSampler.server"; //$NON-NLS-1$
 
-	public final static String PORT = "TCPSampler.port"; //$NON-NLS-1$
+	public static final String PORT = "TCPSampler.port"; //$NON-NLS-1$
 
-	public final static String FILENAME = "TCPSampler.filename"; //$NON-NLS-1$
+	public static final String FILENAME = "TCPSampler.filename"; //$NON-NLS-1$
 
-	public final static String CLASSNAME = "TCPSampler.classname";//$NON-NLS-1$
+	public static final String CLASSNAME = "TCPSampler.classname";//$NON-NLS-1$
 
-	public final static String NODELAY = "TCPSampler.nodelay"; //$NON-NLS-1$
+	public static final String NODELAY = "TCPSampler.nodelay"; //$NON-NLS-1$
 
-	public final static String TIMEOUT = "TCPSampler.timeout"; //$NON-NLS-1$
+	public static final String TIMEOUT = "TCPSampler.timeout"; //$NON-NLS-1$
 
-	public final static String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
+	public static final String REQUEST = "TCPSampler.request"; //$NON-NLS-1$
 
-	public final static String RE_USE_CONNECTION = "TCPSampler.reUseConnection"; //$NON-NLS-1$
+	public static final String RE_USE_CONNECTION = "TCPSampler.reUseConnection"; //$NON-NLS-1$
 
-	private final static String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
+	private static final String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
 
-	private final static String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
+	private static final String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
 
 	// If set, this is the regex that is used to extract the status from the
 	// response
-	// NOT implemented yet private final static String STATUS_REGEX =
+	// NOT implemented yet private static final String STATUS_REGEX =
 	// JMeterUtils.getPropDefault("tcp.status.regex","");
 
 	// Otherwise, the response is scanned for these strings
-	private final static String STATUS_PREFIX = JMeterUtils.getPropDefault("tcp.status.prefix", "");
+	private static final String STATUS_PREFIX = JMeterUtils.getPropDefault("tcp.status.prefix", "");
 
-	private final static String STATUS_SUFFIX = JMeterUtils.getPropDefault("tcp.status.suffix", "");
+	private static final String STATUS_SUFFIX = JMeterUtils.getPropDefault("tcp.status.suffix", "");
 
-	private final static String STATUS_PROPERTIES = JMeterUtils.getPropDefault("tcp.status.properties", "");
+	private static final String STATUS_PROPERTIES = JMeterUtils.getPropDefault("tcp.status.properties", "");
 
-	private final static Properties statusProps = new Properties();
+	private static final Properties statusProps = new Properties();
 
-	private static boolean haveStatusProps = false;
+	private static final boolean haveStatusProps;
 
 	static {
+	    boolean hsp = false;
 		log.debug("Protocol Handler name=" + getClassname());
 		log.debug("Status prefix=" + STATUS_PREFIX);
 		log.debug("Status suffix=" + STATUS_SUFFIX);
@@ -95,7 +96,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 				fis = new FileInputStream(f);
 				statusProps.load(fis);
 				log.debug("Successfully loaded properties");
-				haveStatusProps = true;
+				hsp = true;
 			} catch (FileNotFoundException e) {
 				log.debug("Property file not found");
 			} catch (IOException e) {
@@ -104,10 +105,11 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 				JOrphanUtils.closeQuietly(fis);
 			}
 		}
+		haveStatusProps = hsp;
 	}
 
 	/** the cache of TCP Connections */
-	private static ThreadLocal tp = new ThreadLocal() {
+	private static final ThreadLocal tp = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
 		}

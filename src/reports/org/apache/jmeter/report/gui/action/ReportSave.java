@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -42,22 +41,18 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author Peter Lin
- * @version $Revision$ updated on $Date$
- */
 public class ReportSave implements Command {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String SAVE_ALL_AS = "save_all_as";
+	public static final String SAVE_ALL_AS = "save_all_as";
 
-	public final static String SAVE_AS = "save_as";
+	public static final String SAVE_AS = "save_as";
 
-	public final static String SAVE = "save";
+	public static final String SAVE = "save";
 
 	// NOTUSED private String chosenFile;
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(SAVE_AS);
 		commands.add(SAVE_ALL_AS);

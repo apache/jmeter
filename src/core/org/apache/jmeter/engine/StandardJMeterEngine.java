@@ -58,7 +58,7 @@ public class StandardJMeterEngine implements JMeterEngine, JMeterThreadMonitor, 
 	
 	private transient Thread runningThread;
 
-	private static long WAIT_TO_DIE = 5 * 1000; // 5 seconds
+	private static final long WAIT_TO_DIE = 5 * 1000; // 5 seconds
 
 	private transient Map allThreads;
 

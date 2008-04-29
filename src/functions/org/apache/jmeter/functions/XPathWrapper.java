@@ -45,10 +45,10 @@ public class XPathWrapper {
      * - maps names to  containers
      * - ensures only one container per file across all threads
      */
-    private static Map fileContainers = new HashMap();
+    private static final Map fileContainers = new HashMap();
     
 	/* The cache of file packs - for faster local access */
-	private static ThreadLocal filePacks = new ThreadLocal() {
+	private static final ThreadLocal filePacks = new ThreadLocal() {
 		protected Object initialValue() {
 			return new HashMap();
 		}

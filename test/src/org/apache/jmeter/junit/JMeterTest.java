@@ -61,7 +61,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
 public class JMeterTest extends JMeterTestCase {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static Map guiTitles;
 
@@ -116,7 +116,7 @@ public class JMeterTest extends JMeterTestCase {
 	// Constructor for Function tests
 	private Function funcItem;
 
-	private static boolean classPathShown = false;// Only show classpath once
+	private static volatile boolean classPathShown = false;// Only show classpath once
 
 	public JMeterTest(String testName, Function fi) {
 		super(testName);// Save the method name

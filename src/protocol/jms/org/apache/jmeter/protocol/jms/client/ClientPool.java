@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * @author pete
  * 
  * ClientPool holds the client instances in an ArrayList. The main purpose of
  * this is to make it easier to clean up all the instances at the end of a test.
@@ -30,9 +29,9 @@ import java.util.Iterator;
  */
 public class ClientPool {
 
-	private static ArrayList clients = new ArrayList();
+	private static final ArrayList clients = new ArrayList();
 
-	private static HashMap client_map = new HashMap();
+	private static final HashMap client_map = new HashMap();
 
 	/**
 	 * Add a ReceiveClient to the ClientPool. This is so that we can make sure

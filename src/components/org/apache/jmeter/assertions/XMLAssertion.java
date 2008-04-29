@@ -40,7 +40,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 	private static final char NEW_LINE = '\n'; // $NON-NLS-1$
 
 	// one builder for all requests in a thread
-    private static ThreadLocal myBuilder = new ThreadLocal() {
+    private static final ThreadLocal myBuilder = new ThreadLocal() {
         protected Object initialValue() {
             return new SAXBuilder();
         }

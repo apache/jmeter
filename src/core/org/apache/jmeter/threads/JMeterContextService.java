@@ -25,16 +25,19 @@ import org.apache.jmeter.util.JMeterUtils;
  * Keeps track of active and total thread counts.
  */
 public final class JMeterContextService {
-	static private ThreadLocal threadContext = new ThreadLocal() {
+    private static final ThreadLocal threadContext = new ThreadLocal() {
 		public Object initialValue() {
 			return new JMeterContext();
 		}
 	};
 
+	//@GuardedGy("this")
 	private static long testStart = 0;
 
+    //@GuardedGy("this")
 	private static int numberOfActiveThreads = 0;
     
+    //@GuardedGy("this")
     private static int totalThreads = 0;
 
 	/**
@@ -52,12 +55,6 @@ public final class JMeterContextService {
 			numberOfActiveThreads = 0;
 			testStart = System.currentTimeMillis();
             JMeterUtils.setProperty("TESTSTART.MS",Long.toString(testStart));// $NON-NLS-1$
-			
-			threadContext = new ThreadLocal() {
-				public Object initialValue() {
-					return new JMeterContext();
-				}
-			};
 		}
 	}
 

@@ -56,7 +56,7 @@ import org.apache.log.Logger;
  * 
  */
 public class SplitFunction extends AbstractFunction implements Serializable {
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private static final long serialVersionUID = 232L;
 	
@@ -88,7 +88,7 @@ public class SplitFunction extends AbstractFunction implements Serializable {
 		JMeterVariables vars = getVariables();
 
 		String stringToSplit = ((CompoundVariable) values[0]).execute();
-		String varNamePrefix = ((CompoundVariable) values[1]).execute();
+		String varNamePrefix = ((CompoundVariable) values[1]).execute().trim();
 		String splitString = ",";
 
 		if (values.length > 2) { // Split string provided

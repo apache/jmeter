@@ -108,11 +108,11 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 
 	private static final byte[] XML_PFX = "<?xml ".getBytes(); // $NON-NLS-1$
 
-	public final static Color SERVER_ERROR_COLOR = Color.red;
+	public static final Color SERVER_ERROR_COLOR = Color.red;
 
-	public final static Color CLIENT_ERROR_COLOR = Color.blue;
+	public static final Color CLIENT_ERROR_COLOR = Color.blue;
 
-	public final static Color REDIRECT_COLOR = Color.green;
+	public static final Color REDIRECT_COLOR = Color.green;
 
 	private static final String TEXT_HTML = "text/html"; // $NON-NLS-1$
 
@@ -149,9 +149,9 @@ public class ViewResultsFullVisualizer extends AbstractVisualizer
 	private String command = TEXT_COMMAND;
 
 	// Keep copies of the two editors needed
-	private static EditorKit customisedEditor = new LocalHTMLEditorKit();
+	private static final EditorKit customisedEditor = new LocalHTMLEditorKit();
 
-	private static EditorKit defaultHtmlEditor = JEditorPane.createEditorKitForContentType(TEXT_HTML);
+	private static final EditorKit defaultHtmlEditor = JEditorPane.createEditorKitForContentType(TEXT_HTML);
 
 	private DefaultMutableTreeNode root;
 

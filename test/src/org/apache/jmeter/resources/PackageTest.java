@@ -51,9 +51,6 @@ import junit.framework.TestSuite;
  * why the tests failed.
  */
 
-/**
- * @version $Revision$ $Date$
- */
 public class PackageTest extends TestCase {
 
 	// private static List defaultList = null;
@@ -65,7 +62,7 @@ public class PackageTest extends TestCase {
 		return new PropertyResourceBundle(ras);
 	}
 
-	private static Object[] DUMMY_PARAMS = new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+	private static final Object[] DUMMY_PARAMS = new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 	// Read resource file saving the keys
 	private int readRF(String res, List l) throws Exception {

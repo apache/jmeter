@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -32,12 +31,8 @@ import org.apache.jmeter.gui.action.Command;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportRemove implements Command {
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add("remove");
 	}

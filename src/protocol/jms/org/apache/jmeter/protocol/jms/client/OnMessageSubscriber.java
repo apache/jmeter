@@ -32,8 +32,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * @author pete
- * 
  * OnMessageSubscriber is designed to create the connection, session and
  * subscriber. The sampler is responsible for implementing
  * javax.jms.MessageListener interface and onMessage(Message msg) method.
@@ -44,7 +42,7 @@ import org.apache.log.Logger;
  */
 public class OnMessageSubscriber {
 
-	static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	private TopicConnection CONN = null;
 

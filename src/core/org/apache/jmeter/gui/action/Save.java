@@ -52,9 +52,10 @@ import org.apache.log.Logger;
 public class Save implements Command {
 	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
+	public static final String JMX_FILE_EXTENSION = ".jmx"; // $NON-NLS-1$
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.SAVE_AS); // Save (Selection) As
 		commands.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As

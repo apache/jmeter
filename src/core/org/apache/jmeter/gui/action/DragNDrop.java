@@ -32,7 +32,8 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
 public class DragNDrop extends AbstractAction {
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
+
 	static {
 		commands.add(ActionNames.DRAG_ADD);
 		commands.add(ActionNames.INSERT_BEFORE);

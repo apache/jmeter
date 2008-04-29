@@ -76,7 +76,7 @@ public class LongSum extends AbstractFunction implements Serializable {
 		JMeterVariables vars = getVariables();
 
 		long sum = 0;
-		String varName = ((CompoundVariable) values[values.length - 1]).execute();
+		String varName = ((CompoundVariable) values[values.length - 1]).execute().trim();
 
 		for (int i = 0; i < values.length - 1; i++) {
 			sum += Long.parseLong(((CompoundVariable) values[i]).execute());
@@ -89,7 +89,7 @@ public class LongSum extends AbstractFunction implements Serializable {
         }
         
 		String totalString = Long.toString(sum);
-		if (vars != null && varName != null){// vars will be null on TestPlan
+		if (vars != null && varName != null && varName.length() > 0){// vars will be null on TestPlan
 			vars.put(varName, totalString);
 		}
 

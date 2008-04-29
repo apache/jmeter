@@ -29,17 +29,13 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 
-/**
- * @author mstover
- * 
- */
 public class TestSaveService extends JMeterTestCase {
 	private static final String[] FILES = new String[] { "AssertionTestPlan.jmx", "AuthManagerTestPlan.jmx",
 			"HeaderManagerTestPlan.jmx", "InterleaveTestPlan2.jmx", "InterleaveTestPlan.jmx", "LoopTestPlan.jmx",
 			"Modification Manager.jmx", "OnceOnlyTestPlan.jmx", "proxy.jmx", "ProxyServerTestPlan.jmx",
 			"SimpleTestPlan.jmx", "GuiTest.jmx", };
 
-	private static boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
+	private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
 
 	public TestSaveService(String name) {
 		super(name);

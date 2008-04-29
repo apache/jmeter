@@ -63,27 +63,27 @@ public final class MenuFactory {
 	 *  These are used as menu categories in the menuMap Hashmap, 
 	 *  and also for resource lookup in messages.properties
 	*/
-	public final static String TIMERS = "menu_timer"; //$NON-NLS-1$
+	public static final String TIMERS = "menu_timer"; //$NON-NLS-1$
 
-	public final static String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
+	public static final String CONTROLLERS = "menu_logic_controller"; //$NON-NLS-1$
 
-	public final static String SAMPLERS = "menu_generative_controller"; //$NON-NLS-1$
+	public static final String SAMPLERS = "menu_generative_controller"; //$NON-NLS-1$
 
-	public final static String CONFIG_ELEMENTS = "menu_config_element"; //$NON-NLS-1$
+	public static final String CONFIG_ELEMENTS = "menu_config_element"; //$NON-NLS-1$
 
-	public final static String POST_PROCESSORS = "menu_post_processors"; //$NON-NLS-1$
+	public static final String POST_PROCESSORS = "menu_post_processors"; //$NON-NLS-1$
 
-	public final static String PRE_PROCESSORS = "menu_pre_processors"; //$NON-NLS-1$
+	public static final String PRE_PROCESSORS = "menu_pre_processors"; //$NON-NLS-1$
 
-	public final static String ASSERTIONS = "menu_assertions"; //$NON-NLS-1$
+	public static final String ASSERTIONS = "menu_assertions"; //$NON-NLS-1$
 
-	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements"; //$NON-NLS-1$
+	public static final String NON_TEST_ELEMENTS = "menu_non_test_elements"; //$NON-NLS-1$
 
-	public final static String LISTENERS = "menu_listener"; //$NON-NLS-1$
+	public static final String LISTENERS = "menu_listener"; //$NON-NLS-1$
 
-	private static Map menuMap = new HashMap();
+	private static final Map menuMap = new HashMap();
 
-	private static Set elementsToSkip = new HashSet();
+	private static final Set elementsToSkip = new HashSet();
 
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu

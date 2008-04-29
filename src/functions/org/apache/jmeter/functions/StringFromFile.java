@@ -237,7 +237,7 @@ public class StringFromFile extends AbstractFunction implements Serializable, Te
 
 
 		if (values.length >= PARAM_NAME) {
-			myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute();
+			myName = ((CompoundVariable) values[PARAM_NAME - 1]).execute().trim();
 		}
 
 		myValue = ERR_IND;

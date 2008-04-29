@@ -47,15 +47,14 @@ import org.apache.log.Logger;
  * There must be a corresponding "void setXXX(boolean)" method, and a property save_XXX which is
  * used to name the field on the dialogue.
  * 
- * @author mstover
  */
 public class SavePropertyDialog extends JDialog implements ActionListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-	private static Map functors = new HashMap();
+    private static final long serialVersionUID = 232L;
 
-	private static final long serialVersionUID = 1;
+	private static final Map functors = new HashMap();
 
     private static final String NAME_SAVE_PFX   = "save";  // $NON-NLS-1$ i.e. boolean saveXXX()
     private static final String NAME_SET_PREFIX = "set";   // $NON-NLS-1$ i.e. void setXXX(boolean)

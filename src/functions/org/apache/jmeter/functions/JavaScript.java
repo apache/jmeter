@@ -46,7 +46,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 
 	private static final String KEY = "__javaScript"; //$NON-NLS-1$
 
-	private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	static {
 		desc.add(JMeterUtils.getResString("javascript_expression"));//$NON-NLS-1$
@@ -75,7 +75,7 @@ public class JavaScript extends AbstractFunction implements Serializable {
 
 		String script = ((CompoundVariable) values[0]).execute();
 		// Allow variable to be omitted
-		String varName = values.length < 2 ? null : ((CompoundVariable) values[1]).execute();
+		String varName = values.length < 2 ? null : ((CompoundVariable) values[1]).execute().trim();
 		String resultStr = "";
 
 		Context cx = Context.enter();

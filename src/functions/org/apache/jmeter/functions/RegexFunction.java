@@ -60,7 +60,7 @@ public class RegexFunction extends AbstractFunction implements Serializable {
 
 	private Object[] values;// Parameters are stored here
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	private static final List desc = new LinkedList();
 

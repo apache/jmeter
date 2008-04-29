@@ -27,11 +27,9 @@ import org.xml.sax.SAXParseException;
 /**
  * XML Parseing errors for XML parameters file are handled here.
  * 
- * @author Mark Walsh
- * @version $Revision$
  */
 public class UserParameterXMLErrorHandler implements ErrorHandler {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	public void warning(SAXParseException exception) throws SAXException {
 		log.warn("**Parsing Warning**\n" + "  line:    " + exception.getLineNumber() + "\n" + "  URI:    :"

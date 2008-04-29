@@ -93,7 +93,7 @@ import org.apache.log.Logger;
  * @see UnitTestManager
  */
 public final class AllTests {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
 	/**
 	 * Private constructor to prevent instantiation.

@@ -57,11 +57,11 @@ public abstract class HTMLParser {
     protected static final String STYLESHEET        = "stylesheet";// $NON-NLS-1$
 
 	// Cache of parsers - parsers must be re-usable
-	private static Hashtable parsers = new Hashtable(3);
+	private static final Hashtable parsers = new Hashtable(3);
 
-	public final static String PARSER_CLASSNAME = "htmlParser.className"; // $NON-NLS-1$
+	public static final String PARSER_CLASSNAME = "htmlParser.className"; // $NON-NLS-1$
 
-	public final static String DEFAULT_PARSER = 
+	public static final String DEFAULT_PARSER = 
         "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser"; // $NON-NLS-1$
 
 	/**

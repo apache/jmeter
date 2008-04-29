@@ -42,10 +42,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * @author Michael Stover
- * 
- */
 public class DataSourceElement extends AbstractTestElement 
     implements ConfigElement, TestListener, TestBean
     {
@@ -229,7 +225,7 @@ public class DataSourceElement extends AbstractTestElement
 	}
 
 	// used to hold per-thread singleton connection pools
-	private static ThreadLocal perThreadPoolMap = new ThreadLocal(){
+	private static final ThreadLocal perThreadPoolMap = new ThreadLocal(){
 		protected synchronized Object initialValue() {
             return new HashMap();
         }

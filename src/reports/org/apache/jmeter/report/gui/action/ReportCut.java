@@ -1,4 +1,3 @@
-//$Header$
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -27,14 +26,10 @@ import org.apache.jmeter.gui.ReportGuiPackage;
 import org.apache.jmeter.report.gui.action.AbstractAction;
 import org.apache.jmeter.report.gui.tree.ReportTreeNode;
 
-/**
- * @author Peter Lin
- * @version $Revision$
- */
 public class ReportCut extends AbstractAction {
-	public final static String CUT = "Cut";
+	public static final String CUT = "Cut";//$NON-NLS-1$
 
-	private static Set commands = new HashSet();
+	private static final Set commands = new HashSet();
 	static {
 		commands.add(CUT);
 	}

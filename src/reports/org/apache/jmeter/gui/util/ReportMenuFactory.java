@@ -48,34 +48,30 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-/**
- * @author Peter Lin
- * @version $Revision$ updated on $Date$
- */
 public final class ReportMenuFactory {
-	transient private static Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggingManager.getLoggerForClass();
 
-	public final static String TIMERS = "menu_timer";
+	public static final String TIMERS = "menu_timer";
 
-	public final static String CONTROLLERS = "menu_logic_controller";
+	public static final String CONTROLLERS = "menu_logic_controller";
 
-	public final static String CONFIG_ELEMENTS = "menu_config_element";
+	public static final String CONFIG_ELEMENTS = "menu_config_element";
 
-	public final static String POST_PROCESSORS = "menu_post_processors";
+	public static final String POST_PROCESSORS = "menu_post_processors";
 
-	public final static String PRE_PROCESSORS = "menu_pre_processors";
+	public static final String PRE_PROCESSORS = "menu_pre_processors";
 
-	public final static String NON_TEST_ELEMENTS = "menu_non_test_elements";
+	public static final String NON_TEST_ELEMENTS = "menu_non_test_elements";
 
-	public final static String LISTENERS = "menu_listener";
+	public static final String LISTENERS = "menu_listener";
 	
-	public final static String REPORT_PAGE = "menu_report_page";
+	public static final String REPORT_PAGE = "menu_report_page";
 	
-	public final static String TABLES = "menu_tables";
+	public static final String TABLES = "menu_tables";
 
-	private static Map menuMap = new HashMap();
+	private static final Map menuMap = new HashMap();
 
-	private static Set elementsToSkip = new HashSet();
+	private static final Set elementsToSkip = new HashSet();
 
 	// MENU_ADD_xxx - controls which items are in the ADD menu
 	// MENU_PARENT_xxx - controls which items are in the Insert Parent menu
