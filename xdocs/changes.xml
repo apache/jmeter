@@ -121,6 +121,8 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 <li>Ensure ResponseCode and ResponseMessage are set for successful JDBC samples</li>
 <li>FTPSampler now detects and reports failure to open the remote file</li>
 <li>Class directories defined in search_paths and user.classpath no longer need trailing "/"</li>
+<li>Bug 44852 SOAP/ XML-RPC Request does not show Request details in View Results Tree</li>
+<li>WebService(SOAP) Sampler ResponseData now includes the EOLs sent by server</li>
 </ul>
 
 <h4>Improvements</h4>
