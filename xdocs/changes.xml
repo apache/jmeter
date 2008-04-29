@@ -184,6 +184,7 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 <li>Check that all jmx files in the demos directory can be loaded OK</li>
 <li>Update copyright to 2008; use copy tag instead of numeric character in HTML output</li>
 <li>Methods called from constructors must not be overridable: make GUI init methods private</li>
+<li>Make static variables final if possible</li>
 </ul>
 
 <!--  ===================  -->
