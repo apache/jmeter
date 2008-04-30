@@ -885,9 +885,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 			res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
 			log.debug("End : sample");
-			if (httpMethod != null) {
-				httpMethod.releaseConnection();
-			}
+			httpMethod.releaseConnection();
 			return res;
 		} catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
 		{
