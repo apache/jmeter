@@ -368,7 +368,8 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
 			return HELPER.getWebMethods();
 		} catch (Exception exception) {
 			JOptionPane.showConfirmDialog(this,
-                    JMeterUtils.getResString("wsdl_helper_error"), // $NON-NLS-1$
+                    JMeterUtils.getResString("wsdl_helper_error") // $NON-NLS-1$
+                    +"\n"+exception, // $NON-NLS-1$
                     "Warning",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			return null;
