@@ -72,6 +72,10 @@ If an undefined function or variable is referenced, JMeter does not report/log a
 For example if UNDEF is not defined as a variable, then the value of ${UNDEF} is ${UNDEF}.
 </b>
 Variables, functions (and properties) are all case-sensitive.
+<b>
+Versions of JMeter after 2.3.1 trim spaces from variable names before use, so for example
+${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '.
+</b>
 </p>
 <note>
 Properties are not the same as variables.
