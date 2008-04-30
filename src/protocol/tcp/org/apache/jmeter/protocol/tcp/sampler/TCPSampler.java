@@ -141,6 +141,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener {
 
 		// Not in cache, so create new one and cache it
 		try {
+		    closeSocket(); // Bug 44910 - close previous socket (if any)
 			con = new Socket(getServer(), getPort());
 			con.setSoTimeout(getTimeout());
 			con.setTcpNoDelay(getNoDelay());
