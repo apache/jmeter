@@ -127,6 +127,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Class directories defined in search_paths and user.classpath no longer need trailing "/"</li>
 <li>Bug 44852 SOAP/ XML-RPC Request does not show Request details in View Results Tree</li>
 <li>WebService(SOAP) Sampler ResponseData now includes the EOLs sent by server</li>
+<li>Bug 44910 - close previous socket (if any) in TCP Sampler</li>
 </ul>
 
 <h4>Improvements</h4>
