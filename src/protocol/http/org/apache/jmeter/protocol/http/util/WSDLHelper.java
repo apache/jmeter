@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -54,7 +55,7 @@ public class WSDLHelper {
 
 	protected URL WSDLURL = null;
 
-	protected HttpURLConnection CONN = null;
+	protected URLConnection CONN = null;
 
 	protected Document WSDLDOC = null;
 
@@ -176,12 +177,12 @@ public class WSDLHelper {
 	 */
 	protected void connect() throws IOException {
 		try {
-			CONN = (HttpURLConnection) WSDLURL.openConnection();
+			CONN = WSDLURL.openConnection();
 			// in the rare case the WSDL is protected and requires
 			// authentication, use the AuthManager to set the
 			// authorization. Basic and Digest authorization are
 			// pretty weak and don't provide real security.
-			if (this.AUTH != null && this.AUTH.getAuthHeaderForURL(this.WSDLURL) != null) {
+			if (CONN instanceof HttpURLConnection && this.AUTH != null && this.AUTH.getAuthHeaderForURL(this.WSDLURL) != null) {
 				CONN.setRequestProperty("Authorization", this.AUTH.getAuthHeaderForURL(this.WSDLURL));
 			}
 		} catch (IOException exception) {
