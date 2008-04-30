@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.WebServiceSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -372,7 +373,7 @@ public class WebServiceSamplerGui extends AbstractSamplerGui implements java.awt
                     +"\n"+exception, // $NON-NLS-1$
                     "Warning",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-			return null;
+			return ArrayUtils.EMPTY_STRING_ARRAY;
 		}
 	}
 
