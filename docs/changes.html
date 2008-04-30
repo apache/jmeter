@@ -252,6 +252,14 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 						</li>
 									
 
+												<li	>
+								
+Leading and trailing spaces are trimmed from variable names in function calls.
+For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '.
+
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Bug fixes
@@ -579,6 +587,14 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 
 												<li	>
 								JUnit sampler GUI now also finds Test classes defined in user.classpath
+						</li>
+									
+
+												<li	>
+								
+Leading and trailing spaces are trimmed from variable names in function calls.
+For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '
+
 						</li>
 									
 

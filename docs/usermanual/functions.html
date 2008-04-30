@@ -196,6 +196,14 @@ For example if UNDEF is not defined as a variable, then the value of ${UNDEF} is
 									
 Variables, functions (and properties) are all case-sensitive.
 
+												<b	>
+								
+Versions of JMeter after 2.3.1 trim spaces from variable names before use, so for example
+${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '.
+
+						</b>
+									
+
 						</p>
 							  									 				<p><table border="1" bgcolor="#bbbb00" width="50%" cellspacing="0" cellpadding="2">
 		<tr><td>						
