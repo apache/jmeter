@@ -180,6 +180,7 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 Leading and trailing spaces are trimmed from variable names in function calls.
 For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '
 </li>
+<li>Webservice(SOAP) Sampler can now load local WSDL files using the file: protocol</li>
 </ul>
 
 <h4>Non-functional changes</h4>

@@ -457,7 +457,7 @@ Or set Content-Length to -1 to force chunked encoding.
  left blank. If a sampler has values in the proxy host and port text field, it
  will use the ones provided by the user. This behavior may not be what users
  expect.</p>
- <p>By default, the webservice sampler set SOAPHTTPConnection.setMaintainSession
+ <p>By default, the webservice sampler sets SOAPHTTPConnection.setMaintainSession
  (true). If you need to maintain the session, add a blank Header Manager. The
  sampler uses the Header Manager to store the SOAPHTTPConnection object, since
  there apache soap does provide a easy way to get and set the cookies.</p>
@@ -481,8 +481,12 @@ xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 <properties>
         <property name="Name" required="No">Descriptive name for this sampler
          that is shown in the tree.</property>
-        <property name="WSDL URL" required="No">The WSDL URL with the service description.</property>
-        <property name="Webmethods" required="No">The WSDL URL with the service description.</property>
+        <property name="WSDL URL" required="No">The WSDL URL with the service description.
+        Versions of JMeter after 2.3.1 support the file: protocol for local WSDL files.
+        </property>
+        <property name="Web Methods" required="No">Will be populated from the WSDL when the Load WSDL button is pressed.
+        Select one of the methods and press the Configure button to populate the Protocol, Server, Port, Path and SOAPAction fields. 
+        </property>
         <property name="Protocol" required="Yes">HTTP or HTTPS are acceptable protocol.</property>
         <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
         <property name="Port Number" required="Yes">Port Number.</property>
