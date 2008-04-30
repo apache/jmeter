@@ -537,7 +537,9 @@ public class WebServiceSampler extends HTTPSamplerBase {
 			// peter lin.
             // Removed URL, as that is already stored elsewere
 			result.setSamplerData(fileContents);// WARNING - could be large
-			result.setEncodingAndType(st.getResponseSOAPContext().getContentType());
+			if (st!= null){
+			    result.setEncodingAndType(st.getResponseSOAPContext().getContentType());
+			}
 			// setting this is just a formality, since
 			// soap will return a descriptive error
 			// message, soap errors within the response
