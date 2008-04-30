@@ -77,22 +77,16 @@ public class ClientPool {
 			Object client = itr.next();
 			if (client instanceof ReceiveSubscriber) {
 				ReceiveSubscriber sub = (ReceiveSubscriber) client;
-				if (sub != null) {
-					sub.close();
-					sub = null;
-				}
+				sub.close();
+				sub = null;
 			} else if (client instanceof Publisher) {
 				Publisher pub = (Publisher) client;
-				if (pub != null) {
-					pub.close();
-					pub = null;
-				}
+				pub.close();
+				pub = null;
 			} else if (client instanceof OnMessageSubscriber) {
 				OnMessageSubscriber sub = (OnMessageSubscriber) client;
-				if (sub != null) {
-					sub.close();
-					sub = null;
-				}
+				sub.close();
+				sub = null;
 			}
 		}
 		clients.clear();

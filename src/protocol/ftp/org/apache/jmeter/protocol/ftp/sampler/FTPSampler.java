@@ -234,7 +234,7 @@ public class FTPSampler extends AbstractSampler {
         	res.setResponseCode("000"); // TODO
             res.setResponseMessage(ex.toString());
         } finally {
-            if (ftp != null && ftp.isConnected()) {
+            if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
                 } catch (IOException ignored) {
