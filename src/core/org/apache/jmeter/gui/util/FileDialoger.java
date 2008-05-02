@@ -67,7 +67,10 @@ public final class FileDialoger {
 		}
 		clearFileFilters();
         if(exts != null && exts.length > 0) {
-    		jfc.addChoosableFileFilter(new JMeterFileFilter(exts));
+            JMeterFileFilter currentFilter = new JMeterFileFilter(exts);
+            jfc.addChoosableFileFilter(currentFilter);
+            jfc.setAcceptAllFileFilterUsed(true);
+            jfc.setFileFilter(currentFilter);
         }
 		int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
 		lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
