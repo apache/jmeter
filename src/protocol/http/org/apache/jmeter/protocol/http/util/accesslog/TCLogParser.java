@@ -275,7 +275,7 @@ public class TCLogParser implements LogParser {
 				// parameters.
 				line = FILTER.filter(cleanedLine);
 				if (line != null) {
-					createUrl(cleanedLine, el);
+					createUrl(line, el);
 				}
 			} else {
 				log.debug("Line was filtered");
@@ -470,7 +470,7 @@ public class TCLogParser implements LogParser {
 	 * @return NVPair
 	 */
 	protected NVPair parseOneParameter(String parameter) {
-		String name = null;
+		String name = ""; // avoid possible NPE when trimming the name
 		String value = null;
 		try {
 			StringTokenizer param = this.tokenize(parameter, "=");

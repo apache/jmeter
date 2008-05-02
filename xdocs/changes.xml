@@ -128,6 +128,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Bug 44852 SOAP/ XML-RPC Request does not show Request details in View Results Tree</li>
 <li>WebService(SOAP) Sampler ResponseData now includes the EOLs sent by server</li>
 <li>Bug 44910 - close previous socket (if any) in TCP Sampler</li>
+<li>Bug 44912 - Filter not working in Log Parser</li>
 </ul>
 
 <h4>Improvements</h4>
@@ -182,6 +183,7 @@ Leading and trailing spaces are trimmed from variable names in function calls.
 For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '
 </li>
 <li>Webservice(SOAP) Sampler can now load local WSDL files using the file: protocol</li>
+<li>Bug 44872 - Add "All Files" filter to Open File dialogs</li>
 </ul>
 
 <h4>Non-functional changes</h4>
