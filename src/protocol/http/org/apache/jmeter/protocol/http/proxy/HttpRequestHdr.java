@@ -80,9 +80,9 @@ public class HttpRequestHdr {
 
     private byte[] rawPostData;
 
-	private Map headers = new HashMap();
+	private final Map headers = new HashMap();
 
-	private HTTPSamplerBase sampler;
+	private final HTTPSamplerBase sampler;
 
 	private HeaderManager headerManager;
 	
@@ -116,26 +116,30 @@ public class HttpRequestHdr {
 		boolean inHeaders = true;
 		int readLength = 0;
 		int dataLength = 0;
-		boolean first = true;
+		boolean firstLine = true;
 		ByteArrayOutputStream clientRequest = new ByteArrayOutputStream();
 		ByteArrayOutputStream line = new ByteArrayOutputStream();
 		int x;
 		while ((inHeaders || readLength < dataLength) && ((x = in.read()) != -1)) {
 			line.write(x);
 			clientRequest.write(x);
-			if (first && !CharUtils.isAscii((char) x)){
+			if (firstLine && !CharUtils.isAscii((char) x)){// includes \n
 				throw new IllegalArgumentException("Only ASCII supported in headers (perhaps SSL was used?)");
 			}
 			if (inHeaders && (byte) x == (byte) '\n') { // $NON-NLS-1$
 				if (line.size() < 3) {
 					inHeaders = false;
-					first = false; // cannot be first line either
+					firstLine = false; // cannot be first line either
 				}
-				if (first) {
+				if (firstLine) {
 					parseFirstLine(line.toString());
-					first = false;
+					firstLine = false;
 				} else {
-					dataLength = Math.max(parseLine(line.toString()), dataLength);
+				    // parse other header lines, looking for Content-Length
+					final int contentLen = parseLine(line.toString());
+					if (contentLen > 0) {
+					    dataLength = contentLen; // Save the last valid content length one
+					}
 				}
                 if (log.isDebugEnabled()){
     				log.debug("Client Request Line: " + line.toString());
