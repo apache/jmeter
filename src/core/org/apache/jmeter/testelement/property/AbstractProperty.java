@@ -308,6 +308,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 					newColl = (Collection) coll.getClass().newInstance();
 				} catch (Exception e) {
 					log.error("Bad collection", e);
+					return coll;
 				}
 			}
 			newColl.add(convertObject(item));
@@ -335,6 +336,7 @@ public abstract class AbstractProperty implements JMeterProperty {
 					newColl = (Map) coll.getClass().newInstance();
 				} catch (Exception e) {
 					log.error("Bad collection", e);
+					return coll;
 				}
 			}
 			newColl.put(item, convertObject(prop));
