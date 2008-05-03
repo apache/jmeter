@@ -861,11 +861,11 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			<li>ResponseMessage - for example "OK"</li>
 			<li>IsSuccess - true/false</li>
 			</ul>
-			<p>The Sampler ResponseData is set from the return value of the script.
+			<p>The SampleResult ResponseData is set from the return value of the script.
 			Since version 2.1.2, if the script returns null, it can set the response directly, by using the method 
-			SampleResponse.setResponseData(data), where data is either a String or a byte array.
+			SampleResult.setResponseData(data), where data is either a String or a byte array.
 			The data type defaults to "text", but can be set to binary by using the method
-			SampleResponse.setDataType(SampleResponse.BINARY).
+			SampleResult.setDataType(SampleResult.BINARY).
 			</p>
 			<p>The SampleResult variable gives the script full access to all the fields and
 				methods in the SampleResult. For example, the script has access to the methods
@@ -930,11 +930,11 @@ Before invoking the script, some variables are set up:
 <li>vars - JMeterVariables  - e.g. vars.get("VAR1"); vars.put("VAR2","value"); vars.remove("VAR3"); vars.putObject("OBJ1",new Object());</li>
 </ul>
 <p>
-The Sampler ResponseData is set from the return value of the script.
+The SampleResult ResponseData is set from the return value of the script.
 If the script returns null, it can set the response directly, by using the method 
-SampleResponse.setResponseData(data), where data is either a String or a byte array.
+SampleResult.setResponseData(data), where data is either a String or a byte array.
 The data type defaults to "text", but can be set to binary by using the method
-SampleResponse.setDataType(SampleResponse.BINARY).
+SampleResult.setDataType(SampleResult.BINARY).
 </p>
 <p>
 The SampleResult variable gives the script full access to all the fields and
@@ -943,11 +943,11 @@ setStopThread(boolean) and setStopTest(boolean).
 </p>
 <p>
 Unlike the Beanshell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
-Currently the only way to changes these is via the SampleResponse methods:
+Currently the only way to changes these is via the SampleResult methods:
 <ul>
-<li>SampleResponse.setSuccessful(true/false)</li>
-<li>SampleResponse.setResponseCode("code")</li>
-<li>SampleResponse.setResponseMessage("message")</li>
+<li>SampleResult.setSuccessful(true/false)</li>
+<li>SampleResult.setResponseCode("code")</li>
+<li>SampleResult.setResponseMessage("message")</li>
 </ul>
 </p>
 </component>

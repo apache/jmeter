@@ -2840,11 +2840,11 @@ If a script file is supplied, that will be used, otherwise the script will be us
 			
 						</ul>
 							  									 				<p	>
-								The Sampler ResponseData is set from the return value of the script.
+								The SampleResult ResponseData is set from the return value of the script.
 			Since version 2.1.2, if the script returns null, it can set the response directly, by using the method 
-			SampleResponse.setResponseData(data), where data is either a String or a byte array.
+			SampleResult.setResponseData(data), where data is either a String or a byte array.
 			The data type defaults to "text", but can be set to binary by using the method
-			SampleResponse.setDataType(SampleResponse.BINARY).
+			SampleResult.setDataType(SampleResult.BINARY).
 			
 						</p>
 							  									 				<p	>
@@ -3027,11 +3027,11 @@ Before invoking the script, some variables are set up:
 						</ul>
 							  									 				<p	>
 								
-The Sampler ResponseData is set from the return value of the script.
+The SampleResult ResponseData is set from the return value of the script.
 If the script returns null, it can set the response directly, by using the method 
-SampleResponse.setResponseData(data), where data is either a String or a byte array.
+SampleResult.setResponseData(data), where data is either a String or a byte array.
 The data type defaults to "text", but can be set to binary by using the method
-SampleResponse.setDataType(SampleResponse.BINARY).
+SampleResult.setDataType(SampleResult.BINARY).
 
 						</p>
 							  									 				<p	>
@@ -3044,23 +3044,23 @@ setStopThread(boolean) and setStopTest(boolean).
 							  									 				<p	>
 								
 Unlike the Beanshell Sampler, the BSF Sampler does not set the ResponseCode, ResponseMessage and sample status via script variables.
-Currently the only way to changes these is via the SampleResponse methods:
+Currently the only way to changes these is via the SampleResult methods:
 
 												<ul	>
 								
 
 												<li	>
-								SampleResponse.setSuccessful(true/false)
+								SampleResult.setSuccessful(true/false)
 						</li>
 									
 
 												<li	>
-								SampleResponse.setResponseCode("code")
+								SampleResult.setResponseCode("code")
 						</li>
 									
 
 												<li	>
-								SampleResponse.setResponseMessage("message")
+								SampleResult.setResponseMessage("message")
 						</li>
 									
 
