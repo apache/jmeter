@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.java.sampler;
 import java.io.FileInputStream;
 
 import org.apache.bsf.BSFEngine;
+import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -51,10 +52,7 @@ public class BSFSampler extends AbstractSampler {
 	private static final String PARAMETERS = "BSFSampler.parameters"; //$NON-NLS-1$
 	//- JMX file attributes
 
-	private transient BSFManager mgr;
-
 	public BSFSampler() {
-		mgr = new BSFManager();
 	}
 
 	public String getFilename() {
@@ -102,15 +100,29 @@ public class BSFSampler extends AbstractSampler {
 	public SampleResult sample(Entry e)// Entry tends to be ignored ...
 	{
 		final String label = getLabel();
-		log.info(label + " " + getFilename());
+        final String request = getScript();
+        final String fileName = getFilename();
+		log.debug(label + " " + fileName);
 		SampleResult res = new SampleResult();
 		res.setSampleLabel(label);
 		FileInputStream is = null;
-		
-		res.sampleStart();
+		BSFEngine bsfEngine = null;
+		// There's little point saving the manager between invocations
+		// as we need to reset most of the beans anyway
+        BSFManager mgr = new BSFManager();
+
+        // TODO: find out how to retrieve these from the script
+        // At present the script has to use SampleResult methods to set them.
+        res.setResponseCode("200"); // $NON-NLS-1$
+        res.setResponseMessage("OK"); // $NON-NLS-1$
+        res.setSuccessful(true);
+        res.setDataType(SampleResult.TEXT); // Default (can be overridden by the script)
+
+        JMeterContext jmctx = JMeterContextService.getContext();
+        JMeterVariables vars = jmctx.getVariables();
+
+        res.sampleStart();
 		try {
-			final String request = getScript();
-			final String fileName = getFilename();
 			
 			mgr.declareBean("log", log, log.getClass()); // $NON-NLS-1$
 			mgr.declareBean("Label",label, String.class); // $NON-NLS-1$
@@ -120,26 +132,18 @@ public class BSFSampler extends AbstractSampler {
 			mgr.declareBean("args",args,args.getClass());//$NON-NLS-1$
 			mgr.declareBean("SampleResult", res, res.getClass()); // $NON-NLS-1$
 			
-			// TODO: find out how to retrieve these from the script
-			// At present the script has to use SampleResult methods to set them.
-			res.setResponseCode("200"); // $NON-NLS-1$
-			res.setResponseMessage("OK"); // $NON-NLS-1$
-			res.setSuccessful(true);
-
 			// These are not useful yet, as have not found how to get updated values back
 			//mgr.declareBean("ResponseCode", "200", String.class); // $NON-NLS-1$
 			//mgr.declareBean("ResponseMessage", "OK", String.class); // $NON-NLS-1$
 			//mgr.declareBean("IsSuccess", Boolean.TRUE, Boolean.class); // $NON-NLS-1$
 
-			res.setDataType(SampleResult.TEXT); // Default (can be overridden by the script)
-
 			// Add variables for access to context and variables
-			JMeterContext jmctx = JMeterContextService.getContext();
-			JMeterVariables vars = jmctx.getVariables();
 			mgr.declareBean("ctx", jmctx, jmctx.getClass()); // $NON-NLS-1$
 			mgr.declareBean("vars", vars, vars.getClass()); // $NON-NLS-1$
 
-			BSFEngine bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
+			// N.B. some engines (e.g. Javascript) cannot handle certain declareBean() calls
+			// after the engine has been initialised, so create the engine last
+			bsfEngine = mgr.loadScriptingEngine(getScriptLanguage());
 
 			Object bsfOut = null;
 			if (fileName.length()>0) {
@@ -154,19 +158,23 @@ public class BSFSampler extends AbstractSampler {
 			if (bsfOut != null) {
 			    res.setResponseData(bsfOut.toString().getBytes());
 			}
-		} catch (NoClassDefFoundError ex) {
-			log.warn("", ex);
-			res.setSuccessful(false);
-			res.setResponseCode("500"); // $NON-NLS-1$
-			res.setResponseMessage(ex.toString());
-		} catch (Exception ex) {
-			log.warn("", ex);
+        } catch (BSFException ex) {
+            log.warn("BSF error", ex);
+            res.setSuccessful(false);
+            res.setResponseCode("500"); // $NON-NLS-1$
+            res.setResponseMessage(ex.toString());
+		} catch (Exception ex) {// Catch evaluation errors
+			log.warn("Problem evaluating the script", ex);
 			res.setSuccessful(false);
 			res.setResponseCode("500"); // $NON-NLS-1$
 			res.setResponseMessage(ex.toString());
 		} finally {
 			res.sampleEnd();
 			IOUtils.closeQuietly(is);
+			if (bsfEngine != null) {
+			    bsfEngine.terminate();
+			}
+	        mgr.terminate();
 		}
 
 		return res;
