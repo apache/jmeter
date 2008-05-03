@@ -129,6 +129,8 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>WebService(SOAP) Sampler ResponseData now includes the EOLs sent by server</li>
 <li>Bug 44910 - close previous socket (if any) in TCP Sampler</li>
 <li>Bug 44912 - Filter not working in Log Parser</li>
+<li>The BeanShell and BSF component documentation made some incorrect references to the "SampleResponse" object;
+this has been corrected to "SampleResult"</li>
 </ul>
 
 <h4>Improvements</h4>
