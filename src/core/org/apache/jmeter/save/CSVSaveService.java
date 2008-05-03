@@ -827,7 +827,7 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveEncoding()) {
-            text.append(sample.getDataEncoding());
+            text.append(sample.getDataEncodingWithDefault());
         }
 
     	if (saveConfig.saveSampleCount()) {// Need both sample and error count to be any use
