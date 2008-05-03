@@ -131,6 +131,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Bug 44912 - Filter not working in Log Parser</li>
 <li>The BeanShell and BSF component documentation made some incorrect references to the "SampleResponse" object;
 this has been corrected to "SampleResult"</li>
+<li>BSF Sampler now works properly with Javascript</li>
 </ul>
 
 <h4>Improvements</h4>
