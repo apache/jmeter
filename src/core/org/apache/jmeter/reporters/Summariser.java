@@ -205,7 +205,7 @@ public class Summariser extends AbstractTestElement implements Serializable, Sam
 			}
 
 			// Only if we have updated them
-			if (myTotal.getNumSamples() != myDelta.getNumSamples()) {
+			if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) {
 				str = format(myTotal, "=");
 				if (TOLOG) {
 					log.info(str);
