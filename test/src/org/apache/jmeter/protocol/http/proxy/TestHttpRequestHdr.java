@@ -29,6 +29,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
     public TestHttpRequestHdr(String name) {
@@ -231,7 +232,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String contentEncoding = "";
         String param1Value = "yes";
         String param2Value = "0+5 -\u00c5\uc385%C3%85";
-        String param2ValueEncoded = URLEncoder.encode(param2Value);
+        String param2ValueEncoded = URLEncoder.encode(param2Value,"UTF-8");
         String testGetRequest = 
             "GET " + url
             + "?param1=" + param1Value + "&param2=" + param2ValueEncoded + " "
@@ -291,7 +292,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         String contentEncoding = "";
         String param1Value = "yes";
         String param2Value = "0+5 -\u00c5%C3%85";
-        String param2ValueEncoded = URLEncoder.encode(param2Value);
+        String param2ValueEncoded = URLEncoder.encode(param2Value,"UTF-8");
         String postBody = "param1=" + param1Value + "&param2=" + param2ValueEncoded + "\r\n"; 
         String testPostRequest = 
             "POST " + url + " HTTP/1.1\r\n"
@@ -465,9 +466,10 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(0, arguments.getArgumentCount());
-        assertEquals(fileFieldValue, s.getFileField());
-        assertEquals(fileName, s.getFilename());
-        assertEquals(mimeType, s.getMimetype());
+        HTTPFileArg file = s.getFirstHTTPFileArg();
+        assertEquals(fileFieldValue, file.getParamName());
+        assertEquals(fileName, file.getPath());
+        assertEquals(mimeType, file.getMimeType());
     }        
 
     private String createMultipartFormBody(String titleValue, String descriptionValue, String contentEncoding, boolean includeExtraHeaders, String boundary, String endOfLine) {
