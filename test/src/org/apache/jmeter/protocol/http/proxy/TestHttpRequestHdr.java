@@ -29,7 +29,6 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
-import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 
 public class TestHttpRequestHdr  extends JMeterTestCase {
     public TestHttpRequestHdr(String name) {
@@ -466,10 +465,9 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         // Check arguments
         Arguments arguments = s.getArguments();
         assertEquals(0, arguments.getArgumentCount());
-        HTTPFileArg file = s.getFirstHTTPFileArg();
-        assertEquals(fileFieldValue, file.getParamName());
-        assertEquals(fileName, file.getPath());
-        assertEquals(mimeType, file.getMimeType());
+        assertEquals(fileFieldValue, s.getFileField());
+        assertEquals(fileName, s.getFilename());
+        assertEquals(mimeType, s.getMimetype());
     }        
 
     private String createMultipartFormBody(String titleValue, String descriptionValue, String contentEncoding, boolean includeExtraHeaders, String boundary, String endOfLine) {
