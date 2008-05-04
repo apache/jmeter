@@ -32,6 +32,11 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
+/**
+ * A GUI panel allowing the user to enter HTTP Parameters.
+ * These have names and values, as well as check-boxes to determine whether or not to
+ * include the "=" sign in the output and whether or not to encode the output.
+ */
 public class HTTPArgumentsPanel extends ArgumentsPanel {
 
 	private static final String ENCODE_OR_NOT = JMeterUtils.getResString("encode?"); //$NON-NLS-1$
