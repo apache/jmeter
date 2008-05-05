@@ -70,8 +70,8 @@ public class FtpConfigGui extends AbstractConfigGui {
 	}
 
 	public void configure(TestElement element) {
-		super.configure(element);
-		// Note: the element is a ConfigTestElement, so cannot use FTPSampler access methods
+		super.configure(element); // TODO - should this be done for embedded usage?
+		// Note: the element is a ConfigTestElement when used standalone, so we cannot use FTPSampler access methods
 		server.setText(element.getPropertyAsString(FTPSampler.SERVER));
 		remoteFile.setText(element.getPropertyAsString(FTPSampler.REMOTE_FILENAME));
 		localFile.setText(element.getPropertyAsString(FTPSampler.LOCAL_FILENAME));
