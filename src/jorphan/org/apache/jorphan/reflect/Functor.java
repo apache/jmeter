@@ -245,8 +245,10 @@ public class Functor {
 		try {
 			Method method = doCreateMethod(_class , argTypes);
 			if (method == null){
-				log.error("Can't find method "+_class+typesToString(argTypes));
-				throw new JMeterError("Can't find method "+_class+typesToString(argTypes));
+	            final String message = "Can't find method "
+	                +_class.getName()+"#"+methodName+typesToString(argTypes);
+	            log.error(message, new Throwable());
+	            throw new JMeterError(message);	                
 			}
 			return method.invoke(_invokee, _args);
 		} catch (Exception e) {
