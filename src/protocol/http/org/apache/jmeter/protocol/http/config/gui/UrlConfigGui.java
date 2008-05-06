@@ -131,6 +131,16 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 		ConfigTestElement element = new ConfigTestElement();
 
 		this.configureTestElement(element);
+		modifyTestElement(element);
+		return element;
+    }
+
+	/**
+	 * Save the GUI values in the sampler.
+	 * 
+	 * @param element
+	 */
+    public void modifyTestElement(TestElement element) {
 		Arguments args = (Arguments) argsPanel.createTestElement();
 
 		HTTPArgument.convertArgumentsToHTTP(args);
@@ -147,7 +157,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 			element.setProperty(new BooleanProperty(HTTPSamplerBase.USE_KEEPALIVE, useKeepAlive.isSelected()));
 	        element.setProperty(new BooleanProperty(HTTPSamplerBase.DO_MULTIPART_POST, useMultipartForPost.isSelected()));
 		}
-		return element;
 	}
 
 	/**
