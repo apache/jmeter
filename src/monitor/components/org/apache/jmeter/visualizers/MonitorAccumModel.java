@@ -153,7 +153,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
     		if (sample.isResponseCodeOK() && ((HTTPSampleResult) sample).isMonitor()) {
     			ObjectFactory of = ObjectFactory.getInstance();
     			Status st = of.parseBytes(sample.getResponseData());
-    			if (st != null) {
+    			if (st != null && surl != null) {// surl can be null if read from a file
     				MonitorStats stat = new MonitorStats(Stats.calculateStatus(st), Stats.calculateLoad(st), 0, Stats
     						.calculateMemoryLoad(st), Stats.calculateThreadLoad(st), surl.getHost(), String.valueOf(surl
     						.getPort()), surl.getProtocol(), System.currentTimeMillis());
