@@ -19,8 +19,8 @@ setlocal
 
 cd /D %~dp0
 
-set CP=..\lib\ext\ApacheJMeter_http.jar;..\lib\ext\ApacheJMeter_core.jar;..\lib\jorphan.jar;..\lib\logkit-1.2.jar;..\lib\avalon-framework-4.1.4.jar
-
+set CP=..\lib\ext\ApacheJMeter_http.jar;..\lib\ext\ApacheJMeter_core.jar;..\lib\jorphan.jar;..\lib\logkit-1.2.jar
+set CP=%CP%;..\lib\avalon-framework-4.1.4.jar;..\lib\jakarta-oro-2.0.8.jar
 java -cp %CP% org.apache.jmeter.protocol.http.control.HttpMirrorServer %1
 
 pause
