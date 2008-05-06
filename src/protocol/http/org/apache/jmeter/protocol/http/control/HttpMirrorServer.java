@@ -112,4 +112,13 @@ public class HttpMirrorServer extends Thread {
 	public Exception getException(){
 		return except;
 	}
+	
+	public static void main(String args[]){
+	    int port = 8080;
+	    if (args.length > 0){
+	        port = Integer.parseInt(args[0]);
+	    }
+	    HttpMirrorServer serv = new HttpMirrorServer(port);
+	    serv.start();
+	}
 }
