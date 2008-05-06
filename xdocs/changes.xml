@@ -187,6 +187,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 </li>
 <li>Webservice(SOAP) Sampler can now load local WSDL files using the file: protocol</li>
 <li>Bug 44872 - Add "All Files" filter to Open File dialogs</li>
+<li>Mirror server can now be run independently (mirror-server.cmd and mirror-server.sh)</li>
 </ul>
 
 <h4>Non-functional changes</h4>
