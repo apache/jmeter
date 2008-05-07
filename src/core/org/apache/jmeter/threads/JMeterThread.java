@@ -402,6 +402,7 @@ public class JMeterThread implements Runnable, Serializable {
 		threadContext.getVariables().put(LAST_SAMPLE_OK, "true");
 		threadContext.setThread(this);
         threadContext.setThreadGroup(threadGroup);
+        threadContext.setEngine(engine);
 		testTree.traverse(compiler);
 		// listeners = controller.getListeners();
 		if (scheduler) {
