@@ -132,6 +132,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>The BeanShell and BSF component documentation made some incorrect references to the "SampleResponse" object;
 this has been corrected to "SampleResult"</li>
 <li>BSF Sampler now works properly with Javascript</li>
+<li>Test Action "Stop Test" now works</li>
 </ul>
 
 <h4>Improvements</h4>
