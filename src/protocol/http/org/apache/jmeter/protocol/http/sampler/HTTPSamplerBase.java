@@ -46,6 +46,8 @@ import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jmeter.protocol.http.parser.HTMLParser;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
 import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -83,8 +85,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public static final String COOKIE_MANAGER = "HTTPSampler.cookie_manager"; // $NON-NLS-1$
 
 	public static final String HEADER_MANAGER = "HTTPSampler.header_manager"; // $NON-NLS-1$
-
-	public static final String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
 
 	public static final String DOMAIN = "HTTPSampler.domain"; // $NON-NLS-1$
 
@@ -129,25 +129,40 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     
 	public static final String USE_KEEPALIVE = "HTTPSampler.use_keepalive"; // $NON-NLS-1$
 
-	public static final String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
-    
     public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
+    /*
+     * JMeter 2.3.1 and earlier only had fields for one file on the GUI:
+     * - FILE_NAME
+     * - FILE_FIELD
+     * - MIMETYPE
+     * These were stored in their own individual properties.
+     * 
+     * Version 2.3.3 introduced a list of files, each with their own path, name and mimetype.
+     * 
+     * In order to maintain backwards compatibility of test plans, the 3 original properties
+     * have been retained; additional file entries are stored in an HTTPFileArgs class.
+     * The HTTPFileArgs class is only present if there is more than 1 file; this means that
+     * such test plans are backward compatible.
+     * 
+     * The original get methods still work, but have been deprecated;
+     * the user is expected to retrieve the list of files using the getHTTPFiles() method.
+     * 
+     * In order to speed up processing, the class maintains a copy of the current
+     * files in the fileList variable.
+     */
+    // Must be private, as the file list needs special handling
+    private final static String FILE_ARGS = "HTTPsampler.Files"; // $NON-NLS-1$
+    // MIMETYPE is kept for backward compatibility with old test plans
+    private static final String MIMETYPE = "HTTPSampler.mimetype"; // $NON-NLS-1$
+    // FILE_NAME is kept for backward compatibility with old test plans
+    private static final String FILE_NAME = "HTTPSampler.FILE_NAME"; // $NON-NLS-1$
     /* Shown as Parameter Name on the GUI */
-	public static final String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
-
-//	public static final String FILE_DATA = "HTTPSampler.FILE_DATA"; // $NON-NLS-1$
-
-//	public static final String FILE_MIMETYPE = "HTTPSampler.FILE_MIMETYPE"; // $NON-NLS-1$
+	// FILE_FIELD is kept for backward compatibility with old test plans
+    private static final String FILE_FIELD = "HTTPSampler.FILE_FIELD"; // $NON-NLS-1$
 
 	public static final String CONTENT_TYPE = "HTTPSampler.CONTENT_TYPE"; // $NON-NLS-1$
 
-//	public static final String NORMAL_FORM = "normal_form"; // $NON-NLS-1$
-
-//	public static final String MULTIPART_FORM = "multipart_form"; // $NON-NLS-1$
-
-	// public static final String ENCODED_PATH= "HTTPSampler.encoded_path";
-	
 	// IMAGE_PARSER now really means EMBEDDED_PARSER
 	public static final String IMAGE_PARSER = "HTTPSampler.image_parser"; // $NON-NLS-1$
 	
@@ -221,6 +236,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     
     private boolean dynamicPath = false;// Set false if spaces are already encoded
 
+    // must be kept in synch with the various file properties
+    private transient HTTPFileArg[] fileList;
+    // The code assumes that this will be accessed from a single thread only
+
     ////////////////////// Code ///////////////////////////
     
     public HTTPSamplerBase() {
@@ -229,42 +248,112 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     /**
      * The name parameter to be applied to the file
+     * @deprecated use setHTTPFiles() instead
      */
 	public void setFileField(String value) {
-		setProperty(FILE_FIELD, value);
+        fileList = null; // Force rebuild
+        setFileFieldProperty(value);
 	}
+
+    private void setFileFieldProperty(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value must not be null");
+        }
+        setProperty(FILE_FIELD, value);
+    }
 
     /**
      * The name parameter to be applied to the file
+     * @deprecated Use getHTTPFiles() array instead
      */
 	public String getFileField() {
-		return getPropertyAsString(FILE_FIELD);
+        checkCount("getFileField");
+		return getFileFieldProperty();
 	}
+
+    private String getFileFieldProperty() {
+        return getPropertyAsString(FILE_FIELD);
+    }
 
     /**
      * The actual name of the file to POST
+     * @deprecated use setHTTPFiles() instead
      */
 	public void setFilename(String value) {
-		setProperty(FILE_NAME, value);
+	    fileList = null; // Force rebuild
+		setFilenameProperty(value);
 	}
+
+    private void setFilenameProperty(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value must not be null");
+        }
+        setProperty(FILE_NAME, value);
+    }
 
     /**
      * The actual name of the file to POST
+     * @deprecated Use getHTTPFiles() array instead
      */
 	public String getFilename() {
-		return getPropertyAsString(FILE_NAME);
+	    checkCount("getFilename");
+		return getFilenameProperty();
 	}
+
+    private String getFilenameProperty() {
+        return getPropertyAsString(FILE_NAME);
+    }
+
+    /**
+     * Set the files mime type
+     * @deprecated use setHTTPFiles() instead
+     * @param value
+     */
+    public void setMimetype(String value) {
+        fileList = null; // Force rebuild
+        setMimetypeProperty(value);
+    }
+
+    private void setMimetypeProperty(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value must not be null");
+        }
+        setProperty(MIMETYPE, value);
+    }
+
+    /**
+     * @deprecated Use getHTTPFiles() array instead
+     */
+    public String getMimetype() {
+        checkCount("getMimetype");
+        return getMimetypeProperty();
+    }
+
+    private String getMimetypeProperty() {
+        return getPropertyAsString(MIMETYPE);
+    }
+
+    private void checkCount(String method) {
+        if (getHTTPFileCount() > 1) {
+            log.warn(method + "() called with more than 1 file; additional files may be ignored.");
+        }
+        
+    }
 
 	/**
 	 * Determine if the file should be sent as the entire Post body,
 	 * i.e. without any additional wrapping
-	 * 
+	 *
 	 * @return true if specified file is to be sent as the body,
 	 * i.e. FileField is blank
 	 */
 	public boolean getSendFileAsPostBody() {
-        // If no file field is specified, the file is sent as post body
-		return getFileField().length()== 0 && getFilename().length() > 0;
+		// If there is one file with no parameter name, the file will
+		// be sent as post body.
+	    HTTPFileArg[] files = getHTTPFiles();
+		return (files.length == 1)
+			&& (files[0].getPath().length() > 0)
+			&& (files[0].getParamName().length() == 0);
 	}
     
     /**
@@ -296,7 +385,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public boolean getUseMultipartForPost(){
         // We use multipart if we have been told so, or files are present
         // and the files should not be send as the post body
-        if(POST.equals(getMethod()) && (getDoMultipartPost() || (hasUploadableFiles() && !getSendFileAsPostBody()))) {
+        HTTPFileArg[] files = getHTTPFiles();
+        if(POST.equals(getMethod()) && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()))) {
             return true;
         }
         return false;
@@ -320,10 +410,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	}
 
 
-	public String getClient() {// TODO should it have a default?
+	// Not used?
+	public String getClient() {
 		return getPropertyAsString(CLIENT);
 	}
 
+	// Not used?
 	public void setClient(String client){
 		setProperty(CLIENT,client);
 	}
@@ -649,14 +741,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 	public CookieManager getCookieManager() {
 		return (CookieManager) getProperty(COOKIE_MANAGER).getObjectValue();
-	}
-
-	public void setMimetype(String value) {
-		setProperty(MIMETYPE, value);
-	}
-
-	public String getMimetype() {
-		return getPropertyAsString(MIMETYPE);
 	}
 
 	public boolean isImageParser() {
@@ -1139,7 +1223,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 		JMeterProperty pathP = getProperty(PATH);
 		log.debug("path property is a " + pathP.getClass().getName());
 		log.debug("path beginning value = " + pathP.getStringValue());
-		if (pathP instanceof StringProperty && !"".equals(pathP.getStringValue())) {
+		if (pathP instanceof StringProperty && pathP.getStringValue().length() > 0) {
 			log.debug("Encoding spaces in path");
 			pathP.setObjectValue(encodeSpaces(pathP.getStringValue()));
             dynamicPath = false;
@@ -1167,6 +1251,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 	public Object clone() {
 		HTTPSamplerBase base = (HTTPSamplerBase) super.clone();
 		base.dynamicPath = dynamicPath;
+		base.fileList = null;
 		return base;
 	}
 
@@ -1317,11 +1402,121 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     	return newValue.toString();
     }
 
-    /**
-     * Method to tell if the request has any files to be uploaded
+	/*
+	 * Method to set files list to be uploaded.
+	 *
+	 * @param value
+	 *	 HTTPFileArgs object that stores file list to be uploaded.
+	 */
+	private void setHTTPFileArgs(HTTPFileArgs value) {
+		setProperty(new TestElementProperty(FILE_ARGS, value));
+	}
+
+	/*
+	 * Method to get files list to be uploaded.
+	 */
+	private HTTPFileArgs getHTTPFileArgs() {
+		return (HTTPFileArgs) getProperty(FILE_ARGS).getObjectValue();
+	}
+
+    /*
+     * Method to clear the additional files list to be uploaded.
+     *
+     *   HTTPFileArgs object that stores file list to be uploaded.
      */
-    protected boolean hasUploadableFiles() {
-        return getFilename() != null && getFilename().trim().length() > 0;        
+    private void clearHTTPFileArgs() {
+        removeProperty(FILE_ARGS);
+    }
+
+    /**
+     * Get the collection of files as a list.
+     * The list is built up from the filename/filefield/mimetype properties,
+     * plus any additional entries saved in the FILE_ARGS property.
+     *
+     * If there are no valid file entries, then an empty list is returned.
+     * 
+     * @return an array of file arguments (never null)
+     */
+    public HTTPFileArg[] getHTTPFiles() {
+        if (fileList != null){
+            return fileList;
+        }
+        HTTPFileArg[] outFiles;
+        // Check for original data names
+        String fileName = getFilenameProperty();
+        String paramName = getFileFieldProperty();
+        String mimeType = getMimetypeProperty();
+        HTTPFileArg file = new HTTPFileArg(fileName, paramName, mimeType);
+        if(file.isNotEmpty()) {
+            // Now deal with any additional file arguments
+            final HTTPFileArgs fileArgs = getHTTPFileArgs();
+            if(fileArgs != null) {
+                outFiles = new HTTPFileArg[1+fileArgs.getHTTPFileArgCount()];
+                outFiles[0] = file; // first file
+                HTTPFileArg[] infiles = fileArgs.asArray();
+                for (int i = 0; i < infiles.length; i++){
+                    outFiles[i+1] = infiles[i];
+                }
+            } else {
+                outFiles = new HTTPFileArg[]{file}; // just one file
+            }
+        } else {
+            outFiles = new HTTPFileArg[]{}; // no files, empty array
+        }
+        fileList = outFiles; // update the list cache
+        return fileList;
+    }
+
+    public int getHTTPFileCount(){
+        return getHTTPFiles().length;
+    }
+    /**
+     * Saves the list of files. 
+     * The first file is saved in the Filename/field/mimetype properties.
+     * Any additional files are saved in the FILE_ARGS array.
+     * 
+     * @param files list of files to save
+     */
+    public void setHTTPFiles(HTTPFileArg[] files) {
+        clearHTTPFileArgs();
+        fileList = null; // it will be regenerated by get
+        // First weed out the empty files
+        HTTPFileArg[] nonEmptyFile = {};
+        int filesFound = 0;
+        if (files.length > 0) {
+            nonEmptyFile = new HTTPFileArg[files.length];
+            for(int i=0; i < files.length; i++){
+                HTTPFileArg file = files[i];
+                if (file.isNotEmpty()){
+                    nonEmptyFile[filesFound++] = file;
+                }
+            }
+        }
+        // Any files left?
+        if (filesFound > 0){
+            HTTPFileArg file = nonEmptyFile[0];
+            setFilenameProperty(file.getPath());
+            setFileFieldProperty(file.getParamName());
+            setMimetypeProperty(file.getMimeType());
+            if (filesFound > 1){
+                HTTPFileArgs fileArgs = new HTTPFileArgs();
+                boolean empty=true;
+                for(int i=1; i < filesFound; i++){
+                    final HTTPFileArg fileArg = nonEmptyFile[i];
+                    if (fileArg.isNotEmpty()){
+                        fileArgs.addHTTPFileArg(fileArg);
+                        empty=false;
+                    }
+                }
+                if (!empty){
+                    setHTTPFileArgs(fileArgs);
+                }
+            }
+        } else {
+            setFilenameProperty("");
+            setFileFieldProperty("");
+            setMimetypeProperty("");
+        }
     }
 
     public static String[] getValidMethodsAsArray(){

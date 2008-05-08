@@ -24,10 +24,10 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
-import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -42,7 +42,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  * 
  */
 public class HttpTestSampleGui extends AbstractSamplerGui {
-	private UrlConfigGui urlConfigGui;
+	private MultipartUrlConfigGui urlConfigGui;
 
 	private JCheckBox getImages;
 
@@ -58,8 +58,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
 	public void configure(TestElement element) {
 		super.configure(element);
+        final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
 		urlConfigGui.configure(element);
-		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) element;
 		getImages.setSelected(samplerBase.isImageParser());
 		isMon.setSelected(samplerBase.isMonitor());
         useMD5.setSelected(samplerBase.useMD5());
@@ -78,9 +78,8 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 	 * @see org.apache.jmeter.gui.JMeterGUIComponent#modifyTestElement(TestElement)
 	 */
 	public void modifyTestElement(TestElement sampler) {
-		TestElement el = urlConfigGui.createTestElement();
 		sampler.clear();
-		sampler.addTestElement(el);
+        urlConfigGui.modifyTestElement(sampler);
 		final HTTPSamplerBase samplerBase = (HTTPSamplerBase) sampler;
 		if (getImages.isSelected()) {
 			samplerBase.setImageParser(true);
