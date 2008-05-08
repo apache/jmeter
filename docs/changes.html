@@ -201,6 +201,9 @@ XPath processing is improved; Tidy errors are handled better.
 								HTTP(S) samplers can now save just the MD5 hash of responses, rather than the entire response.
 						</p>
 							  									 				<p	>
+								The HTTP Samplers can now POST multiple files
+						</p>
+							  									 				<p	>
 								
 View Results Tree Listener now uses Tidy to display XML.
 This should allow more content to be displayed succesfully.
@@ -400,6 +403,11 @@ this has been corrected to "SampleResult"
 
 												<li	>
 								BSF Sampler now works properly with Javascript
+						</li>
+									
+
+												<li	>
+								Test Action "Stop Test" now works
 						</li>
 									
 
@@ -631,6 +639,11 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 
 												<li	>
 								Mirror server can now be run independently (mirror-server.cmd and mirror-server.sh)
+						</li>
+									
+
+												<li	>
+								Bug 19128 - Added multiple file POST support to HTTP Samplers
 						</li>
 									
 

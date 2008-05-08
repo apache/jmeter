@@ -506,7 +506,7 @@ JMeter assumes the FTP server is listening on the default port.
         
 												<p	>
 												<b	>
-								There are two versions of the sampler:
+								There are three versions of the sampler:
 						</b>
 									
         
@@ -520,6 +520,13 @@ JMeter assumes the FTP server is listening on the default port.
         
 												<li	>
 								HTTP Request HTTPClient - uses Apache Commons HttpClient
+						</li>
+									
+        
+												<li	>
+								AJP/1.3 Sampler - uses the Tomcat mod_jk protocol (allows testing of Tomcat in AJP mode without needing Apache httpd)
+        The AJP Sampler does not support multiple file upload; only the first file will be used.
+        
 						</li>
 									
         
@@ -636,7 +643,7 @@ https.default.protocol=SSLv3
 									
 
 														<p><b>Control Panel</b></p>
-						<div align="center"><img width='683' height='590' src="../images/screenshots/webtest/http-request.png"></div>
+						<div align="center"><img width='682' height='619' src="../images/screenshots/webtest/http-request.png"></div>
 											  									 			 <p>
 	<b>Parameters</b>
 	<table border="1" cellspacing="0" cellpadding="2">
@@ -802,14 +809,15 @@ In this case, the server, port and protocol are ignored; parameters are also ign
 								</td>
 		</tr>
 			<tr>
-			<td>Filename</td>
+			<td>File Path:</td>
 			<td>						Name of the file to send.  If left blank, JMeter
         does not send a file, if filled in, JMeter automatically sends the request as
         a multipart form request.
         
 												<p	>
 								
-        If it is a POST or PUT request and the 'name' atribute (below) are omitted, then the file is sent as the entire body
+        If it is a POST or PUT request and there is a single file whose 'name' attribute (below) is omitted, 
+        then the file is sent as the entire body
         of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for POST requests
         after version 2.2, and also for PUT requests after version 2.3.
         
@@ -827,7 +835,7 @@ In this case, the server, port and protocol are ignored; parameters are also ign
 								</td>
 		</tr>
 			<tr>
-			<td>Value for 'name' attribute</td>
+			<td>Parameter name:</td>
 			<td>						Value of the "name" web request parameter.
 			</td>
 			<td>

@@ -71,6 +71,7 @@ import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.LoopbackHttpClientSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHttpClientSocketFactory;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -254,7 +255,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
 	private String sendPostData(PostMethod post) throws IOException {
         // Buffer to hold the post body, except file content
         StringBuffer postedBody = new StringBuffer(1000);
-        
+        HTTPFileArg files[] = getHTTPFiles();
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(getUseMultipartForPost()) {
@@ -267,10 +268,7 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             
             // Check how many parts we need, one for each parameter and file
             int noParts = getArguments().getArgumentCount();
-            if(hasUploadableFiles())
-            {
-                noParts++;
-            }
+            noParts += files.length;
 
             // Create the parts
             Part[] parts = new Part[noParts];
@@ -287,10 +285,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             }
             
             // Add any files
-            if(hasUploadableFiles()) {
-                File inputFile = new File(getFilename());
+            for (int i=0; i < files.length; i++) {
+                HTTPFileArg file = files[i];
+                File inputFile = new File(file.getPath());
                 // We do not know the char set of the file to be uploaded, so we set it to null
-                ViewableFilePart filePart = new ViewableFilePart(getFileField(), inputFile, getMimetype(), null);
+                ViewableFilePart filePart = new ViewableFilePart(file.getParamName(), inputFile, file.getMimeType(), null);
                 filePart.setCharSet(null); // We do not know what the char set of the file is
                 parts[partNo++] = filePart;
             }
@@ -338,20 +337,22 @@ public class HTTPSampler2 extends HTTPSamplerBase {
             // This allows the user to specify his own content-type for a POST request
             Header contentTypeHeader = post.getRequestHeader(HEADER_CONTENT_TYPE);
             boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
-
             // If there are no arguments, we can send a file as the body of the request
+            // TODO: needs a multiple file upload scenerio
             if(!hasArguments() && getSendFileAsPostBody()) {
+                // If getSendFileAsPostBody returned true, it's sure that file is not null
+                HTTPFileArg file = files[0];
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
-                    if(getMimetype() != null && getMimetype().length() > 0) {
-                        post.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                    if(file.getMimeType() != null && file.getMimeType().length() > 0) {
+                        post.setRequestHeader(HEADER_CONTENT_TYPE, file.getMimeType());
                     }
                     else {
                         post.setRequestHeader(HEADER_CONTENT_TYPE, APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                 }
-                
-                FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(getFilename()),null); 
+
+                FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(file.getPath()),null);
                 post.setRequestEntity(fileRequestEntity);
                 
                 // We just add placeholder text for file content
@@ -376,9 +377,11 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                     // Allow the mimetype of the file to control the content type
                     // This is not obvious in GUI if you are not uploading any files,
                     // but just sending the content of nameless parameters
+                    // TODO: needs a multiple file upload scenerio
                     if(!hasContentTypeHeader) {
-                        if(getMimetype() != null && getMimetype().length() > 0) {
-                            post.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                        HTTPFileArg file = files.length > 0? files[0] : null;
+                        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                            post.setRequestHeader(HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
                         	 // TODO - is this the correct default?
@@ -918,12 +921,16 @@ public class HTTPSampler2 extends HTTPSamplerBase {
         // This allows the user to specify his own content-type for a POST request
         Header contentTypeHeader = put.getRequestHeader(HEADER_CONTENT_TYPE);
         boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0; 
+        HTTPFileArg files[] = getHTTPFiles();
 
         // If there are no arguments, we can send a file as the body of the request
+        
+        // TODO: needs a multiple file upload scenerio
         if(!hasArguments() && getSendFileAsPostBody()) {
             hasPutBody = true;
                 
-            FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(getFilename()),null); 
+            // If getSendFileAsPostBody returned true, it's sure that file is not null
+            FileRequestEntity fileRequestEntity = new FileRequestEntity(new File(files[0].getPath()),null);
             put.setRequestEntity(fileRequestEntity);
                 
             // We just add placeholder text for file content
@@ -982,8 +989,10 @@ public class HTTPSampler2 extends HTTPSamplerBase {
                 // Allow the mimetype of the file to control the content type
                 // This is not obvious in GUI if you are not uploading any files,
                 // but just sending the content of nameless parameters
-                if(getMimetype() != null && getMimetype().length() > 0) {
-                    put.setRequestHeader(HEADER_CONTENT_TYPE, getMimetype());
+                // TODO: needs a multiple file upload scenerio
+                HTTPFileArg file = files.length > 0? files[0] : null;
+                if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                    put.setRequestHeader(HEADER_CONTENT_TYPE, file.getMimeType());
                 }
             }
             // Set the content length

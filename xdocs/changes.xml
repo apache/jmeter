@@ -68,6 +68,8 @@ XPath processing is improved; Tidy errors are handled better.
 
 <p>HTTP(S) samplers can now save just the MD5 hash of responses, rather than the entire response.</p>
 
+<p>The HTTP Samplers can now POST multiple files</p>
+
 <p>
 View Results Tree Listener now uses Tidy to display XML.
 This should allow more content to be displayed succesfully.
@@ -189,6 +191,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Webservice(SOAP) Sampler can now load local WSDL files using the file: protocol</li>
 <li>Bug 44872 - Add "All Files" filter to Open File dialogs</li>
 <li>Mirror server can now be run independently (mirror-server.cmd and mirror-server.sh)</li>
+<li>Bug 19128 - Added multiple file POST support to HTTP Samplers</li>
 </ul>
 
 <h4>Non-functional changes</h4>

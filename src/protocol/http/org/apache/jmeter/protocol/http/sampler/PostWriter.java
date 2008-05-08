@@ -30,6 +30,7 @@ import java.net.URLConnection;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
@@ -52,8 +53,6 @@ public class PostWriter {
     protected byte[] formDataUrlEncoded;    
     /** The form data that is going to be sent in post body */
     protected byte[] formDataPostBody;
-    /** The start of the file multipart to be sent */
-    private byte[] formDataFileStartMultipart;
     /** The boundary string for multipart */
     private final String boundary;
     
@@ -84,7 +83,9 @@ public class PostWriter {
 	public String sendPostData(URLConnection connection, HTTPSampler sampler) throws IOException {
         // Buffer to hold the post body, except file content
         StringBuffer postedBody = new StringBuffer(1000);
-        
+
+        HTTPFileArg files[] = sampler.getHTTPFiles();
+
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(sampler.getUseMultipartForPost()) {
@@ -98,24 +99,27 @@ public class PostWriter {
             postedBody.append(new String(formDataPostBody, "UTF-8")); // $NON-NLS-1$
             
             // Add any files
-            if(sampler.hasUploadableFiles()) {
+            for (int i=0; i < files.length; i++) {
+                HTTPFileArg file = files[i];
                 // First write the start multipart file
-                out.write(formDataFileStartMultipart);
+                byte[] header = file.getHeader().getBytes();
+                out.write(header);
                 // We get the posted bytes as UTF-8, since java is using UTF-8
-                postedBody.append(new String(formDataFileStartMultipart, "UTF-8")); // $NON-NLS-1$
-                
+                postedBody.append(new String(header, "UTF-8")); // $NON-NLS-1$
                 // Write the actual file content
-                writeFileToStream(sampler.getFilename(), out);
+                writeFileToStream(file.getPath(), out);
                 // We just add placeholder text for file content
                 postedBody.append("<actual file content, not shown here>"); // $NON-NLS-1$
-
                 // Write the end of multipart file
-                byte[] fileMultipartEndDivider = getFileMultipartEndDivider(); 
+                byte[] fileMultipartEndDivider = getFileMultipartEndDivider();
                 out.write(fileMultipartEndDivider);
                 // We get the posted bytes as UTF-8, since java is using UTF-8
                 postedBody.append(new String(fileMultipartEndDivider, "UTF-8")); // $NON-NLS-1$
+                if(i + 1 < files.length) {
+                    out.write(CRLF);
+                    postedBody.append(new String(CRLF, "UTF-8")); // $NON-NLS-1$
+                }
             }
-
             // Write end of multipart
             byte[] multipartEndDivider = getMultipartEndDivider(); 
             out.write(multipartEndDivider);
@@ -129,7 +133,10 @@ public class PostWriter {
             // If there are no arguments, we can send a file as the body of the request
             if(sampler.getArguments() != null && !sampler.hasArguments() && sampler.getSendFileAsPostBody()) {
                 OutputStream out = connection.getOutputStream();
-                writeFileToStream(sampler.getFilename(), out);
+                // we're sure that there is at least one file because of
+                // getSendFileAsPostBody method's return value.
+                HTTPFileArg file = files[0];
+                writeFileToStream(file.getPath(), out);
                 out.flush();
                 out.close();
 
@@ -158,7 +165,8 @@ public class PostWriter {
             contentEncoding = ENCODING;
         }
         long contentLength = 0L;
-    	
+        HTTPFileArg files[] = sampler.getHTTPFiles();
+
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(sampler.getUseMultipartForPost()) {
@@ -186,7 +194,7 @@ public class PostWriter {
                 writeFormMultipart(bos, parameterName, arg.getValue(), contentEncoding);
             }
             // If there are any files, we need to end the previous multipart
-            if(sampler.hasUploadableFiles()) {
+            if(files.length > 0) {
                 // End the previous multipart
                 bos.write(CRLF);
             }
@@ -199,19 +207,26 @@ public class PostWriter {
             // Now we just construct any multipart for the files
             // We only construct the file multipart start, we do not write
             // the actual file content
-            if(sampler.hasUploadableFiles()) {
-                bos = new ByteArrayOutputStream();
+            for (int i=0; i < files.length; i++) {
+                HTTPFileArg file = files[i];
                 // Write multipart for file
-                writeStartFileMultipart(bos, sampler.getFilename(), sampler.getFileField(), sampler.getMimetype());
+                bos = new ByteArrayOutputStream();
+                writeStartFileMultipart(bos, file.getPath(), file.getParamName(), file.getMimeType());
                 bos.flush();
-                formDataFileStartMultipart = bos.toByteArray();
+                String header = bos.toString();
+                // If this is not the first file we can't write its header now
+                // for simplicity we always save it, even if there is only one file
+                file.setHeader(header);
                 bos.close();
-                contentLength += formDataFileStartMultipart.length;
+                contentLength += header.length();
                 // Add also the length of the file content
-                File uploadFile = new File(sampler.getFilename());
+                File uploadFile = new File(file.getPath());
                 contentLength += uploadFile.length();
                 // And the end of the file multipart
                 contentLength += getFileMultipartEndDivider().length;
+                if(i+1 < files.length) {
+                    contentLength += CRLF.length;
+                }
             }
 
             // Add the end of multipart
@@ -232,18 +247,20 @@ public class PostWriter {
             
             // If there are no arguments, we can send a file as the body of the request
             if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+                // we're sure that there is one file because of
+                // getSendFileAsPostBody method's return value.
+                HTTPFileArg file = files[0];
                 if(!hasContentTypeHeader) {
                     // Allow the mimetype of the file to control the content type
-                    if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                        connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                    if(file.getMimeType() != null && file.getMimeType().length() > 0) {
+                        connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                     }
                     else {
                         connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                 }
-                
                 // Create the content length we are going to write
-                File inputFile = new File(sampler.getFilename());
+                File inputFile = new File(file.getPath());
                 contentLength = inputFile.length();
             }
             else {
@@ -266,9 +283,11 @@ public class PostWriter {
                     // Allow the mimetype of the file to control the content type
                     // This is not obvious in GUI if you are not uploading any files,
                     // but just sending the content of nameless parameters
+                    // TODO: needs a multiple file upload scenerio
                     if(!hasContentTypeHeader) {
-                        if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                        HTTPFileArg file = files.length > 0? files[0] : null;
+                        if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {
+                            connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                         }
                         else {
                             // TODO: is this the correct default?
@@ -341,9 +360,8 @@ public class PostWriter {
      * Get the bytes used to end the multipart request
      * 
      * @return the bytes used to end the multipart request
-     * @throws IOException
      */
-    private byte[] getMultipartEndDivider() throws IOException{
+    private byte[] getMultipartEndDivider(){
         byte[] ending = DASH_DASH_BYTES;
         byte[] completeEnding = new byte[ending.length + CRLF.length];
         System.arraycopy(ending, 0, completeEnding, 0, ending.length);
