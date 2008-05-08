@@ -724,6 +724,8 @@ Windows script files (the .CMD files require Win2K or later):
 
 						</ul>
 									
+Note: the special name LAST can be used with jmeter-n.cmd, jmeter-t.cmd and jmeter-n-r.cmd
+and means the last test plan that was run interactively.
 
 						</p>
 							  									 				<p	>
@@ -1203,6 +1205,12 @@ These are shown below.
 								
 Note: the JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) 
 if it contains paired single-quotes,  .e.g. 'jmeter_'yyyyMMddHHmmss'.log'
+
+						</p>
+							  									 				<p	>
+								
+If the special name LAST is used for the -t, -j or -l flags, then JMeter takes that to mean the last test plan
+that was run in interactive mode.
 
 						</p>
 							  		  </blockquote>
