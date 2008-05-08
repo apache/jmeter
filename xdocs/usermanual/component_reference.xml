@@ -2502,13 +2502,25 @@ The Database URL and JDBC Driver class are defined by the provider of the JDBC i
 
 <component name="User Defined Variables" index="&sect-num;.4.13"  width="690" height="394" screenshot="user_defined_variables.png">
 <description><p>The User Defined Variables lets you define variables for use in other test elements, just as in the <complink name="Test Plan" />.
-The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.</p>
+The variables in User Defined Variables components will take precedence over those defined closer to the tree root -- including those defined in the Test Plan.
+Note that all the UDV elements in a test plan - no matter where they are - are processed at the start.
+</p>
+<p>
+For simplicity, it is suggested that UDVs are placed only at the start of a Thread Group
+(or perhaps under the Test Plan itself).
+</p>
+<p>
+If a runtime element such as a User Parameters Pre-Processor or Regular Expression Extractor defines a variable
+with the same name as one of the global variables, then other test elements will see the local
+local value of the variable.
+The global value is not affected.
+</p>
 </description>
 <note>
 If you have more than one Thread Group, make sure you use different names for different values, as UDVs are shared between Thread Groups.
 Also, the variables are not available for use until after the element has been processed, 
 so you cannot use variables that are defined in the same element.
-You can use variables defined in earlier UDVs or on the Test Plan. 
+You can reference variables defined in earlier UDVs or on the Test Plan. 
 </note>
 <properties>
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -3477,9 +3489,16 @@ For example the variable SERVER could be defined as www.example.com, and the res
 could refer to it as ${SERVER}. This simplifies changing the name later.
 </p>
 <p>
+If the same variable name is reused on one of more
+<complink name="User Defined Variables"/> Configuration elements,
+the value is set to the last definition in the test plan (reading from top to bottom).
+Such variables should be used for items that may change between test runs, 
+but which remain the same during a test run.
+</p>
+<p>
 <b>Note that the Test Plan cannot refer to variables it defines.</b> 
 If you need to construct other variables from the Test Plan variables, 
-use a <complink name="User Defined Variables"/> or a <complink name="User Parameters"/> test element.
+use a <complink name="User Defined Variables"/> test element.
 </p>
 <p>
 Selecting Functional Testing instructs JMeter to save the  additional sample information
