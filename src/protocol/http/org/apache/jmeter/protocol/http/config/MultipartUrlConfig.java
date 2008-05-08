@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.oro.text.regex.Pattern;
@@ -29,24 +30,30 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
- * @author Michael Stover
+ * Configuration element which handles HTTP Parameters and files to be uploaded
  */
 public class MultipartUrlConfig implements Serializable {
 
-	private String boundary, filename, fileField, mimetype;
+	private final String boundary;
 
-	private Arguments args;
+	private final Arguments args;
 
-	public MultipartUrlConfig() {
-		args = new Arguments();
+	/**
+	 * HTTPFileArgs list to be uploaded with http request.
+	 */
+	private final HTTPFileArgs files;
+
+	/**
+	 * @deprecated only for use by unit tests
+	 */
+	public MultipartUrlConfig(){
+	    this(null);
 	}
 
+	// called by HttpRequestHdr
 	public MultipartUrlConfig(String boundary) {
-		this();
-		this.boundary = boundary;
-	}
-
-	public void setBoundary(String boundary) {
+        args = new Arguments();
+        files = new HTTPFileArgs();
 		this.boundary = boundary;
 	}
 
@@ -54,32 +61,8 @@ public class MultipartUrlConfig implements Serializable {
 		return boundary;
 	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-
-	public String getFilename() {
-		return filename;
-	}
-
 	public Arguments getArguments() {
 		return args;
-	}
-
-	public void setFileFieldName(String name) {
-		this.fileField = name;
-	}
-
-	public String getFileFieldName() {
-		return fileField;
-	}
-
-	public void setMimeType(String type) {
-		mimetype = type;
-	}
-
-	public String getMimeType() {
-		return mimetype;
 	}
 
 	public void addArgument(String name, String value) {
@@ -91,6 +74,10 @@ public class MultipartUrlConfig implements Serializable {
 		Arguments myArgs = this.getArguments();
 		myArgs.addArgument(new HTTPArgument(name, value, metadata));
 	}
+
+    public HTTPFileArgs getHTTPFileArgs() {
+        return files;
+    }
 
 // NOT USED	
 //    /**
@@ -129,32 +116,32 @@ public class MultipartUrlConfig implements Serializable {
 	 * UrlConfig object.
 	 */
 	public void parseArguments(String queryString) {
-		String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary());
+		String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary()); //$NON-NLS-1$
 		for (int i = 0; i < parts.length; i++) {
-            String contentDisposition = getHeaderValue("Content-disposition", parts[i]);
-            String contentType = getHeaderValue("Content-type", parts[i]);
+            String contentDisposition = getHeaderValue("Content-disposition", parts[i]); //$NON-NLS-1$
+            String contentType = getHeaderValue("Content-type", parts[i]); //$NON-NLS-1$
             // Check if it is form data
-            if (contentDisposition != null && contentDisposition.indexOf("form-data") > -1) {
+            if (contentDisposition != null && contentDisposition.indexOf("form-data") > -1) { //$NON-NLS-1$
                 // Get the form field name
-                int index = contentDisposition.indexOf("name=\"") + 6;
-                String name = contentDisposition.substring(index, contentDisposition.indexOf("\"", index));
+                final String namePrefix = "name=\""; //$NON-NLS-1$
+                int index = contentDisposition.indexOf(namePrefix) + namePrefix.length();
+                String name = contentDisposition.substring(index, contentDisposition.indexOf("\"", index)); //$NON-NLS-1$
 
                 // Check if it is a file being uploaded
-                if (contentDisposition.indexOf("filename=") > -1) {
+                final String filenamePrefix = "filename=\""; //$NON-NLS-1$
+                if (contentDisposition.indexOf(filenamePrefix) > -1) {
                     // Get the filename
-                    index = contentDisposition.indexOf("filename=\"") + 10;
-                    String fn = contentDisposition.substring(index, contentDisposition.indexOf("\"", index));
-                    if(fn != null && fn.length() > 0) {
-                        // Set the values retrieves for the file upload
-                        this.setFileFieldName(name);
-                        this.setFilename(fn);
-                        this.setMimeType(contentType);
+                    index = contentDisposition.indexOf(filenamePrefix) + filenamePrefix.length();
+                    String path = contentDisposition.substring(index, contentDisposition.indexOf("\"", index)); //$NON-NLS-1$
+                    if(path != null && path.length() > 0) {
+                        // Set the values retrieved for the file upload
+                        files.addHTTPFileArg(path, name, contentType);
                     }
                 }
                 else {
                     // Find the first empty line of the multipart, it signals end of headers for multipart
-                    int indexEmptyLfCrLfLinePos = parts[i].indexOf("\n\r\n");
-                    int indexEmptyLfLfLinePos = parts[i].indexOf("\n\n");
+                    int indexEmptyLfCrLfLinePos = parts[i].indexOf("\n\r\n"); //$NON-NLS-1$
+                    int indexEmptyLfLfLinePos = parts[i].indexOf("\n\n"); //$NON-NLS-1$
                     String value = null;
                     if(indexEmptyLfCrLfLinePos > -1) {
                         value = parts[i].substring(indexEmptyLfCrLfLinePos).trim();
@@ -169,7 +156,7 @@ public class MultipartUrlConfig implements Serializable {
 	}
     
     private String getHeaderValue(String headerName, String multiPart) {
-        String regularExpression = headerName + "\\s*:\\s*(.*)$";
+        String regularExpression = headerName + "\\s*:\\s*(.*)$"; //$NON-NLS-1$
         Perl5Matcher localMatcher = JMeterUtils.getMatcher();
         Pattern pattern = JMeterUtils.getPattern(regularExpression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
         if(localMatcher.contains(multiPart, pattern)) {
