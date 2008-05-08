@@ -45,6 +45,8 @@ public class LoadRecentProject extends Load {
         commands.add(ActionNames.OPEN_RECENT);
     }
 
+    private static final Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
+    
 	public LoadRecentProject() {
 		super();
 	}
@@ -68,8 +70,7 @@ public class LoadRecentProject extends Load {
     private File getRecentFile(ActionEvent e) {
         JMenuItem menuItem = (JMenuItem)e.getSource();
         // Get the preference for the recent files
-        Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
-        return new File(getRecentFile(prefs, Integer.parseInt(menuItem.getName())));
+        return new File(getRecentFile(Integer.parseInt(menuItem.getName())));
     }
 
     /**
@@ -80,7 +81,6 @@ public class LoadRecentProject extends Load {
     public static List getRecentFileMenuItems() {
         LinkedList menuItems = new LinkedList();
         // Get the preference for the recent files
-        Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             // Create the menu item
             JMenuItem recentFile = new JMenuItem();
@@ -102,7 +102,7 @@ public class LoadRecentProject extends Load {
         menuItems.add(separator);
         
         // Update menu items to reflect recent files
-        updateMenuItems(menuItems, prefs);
+        updateMenuItems(menuItems);
         
         return menuItems;
     }
@@ -116,12 +116,12 @@ public class LoadRecentProject extends Load {
      */
     public static void updateRecentFileMenuItems(List menuItems, String loadedFileName) {
         // Get the preference for the recent files
-        Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
+        
         LinkedList newRecentFiles = new LinkedList();
         // Check if the new file is already in the recent list
         boolean alreadyExists = false;
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
-            String recentFilePath = getRecentFile(prefs, i);
+            String recentFilePath = getRecentFile(i);
             if(!loadedFileName.equals(recentFilePath)) {
                 newRecentFiles.add(recentFilePath);
             }
@@ -139,18 +139,18 @@ public class LoadRecentProject extends Load {
         for(int i = 0; i < NUMBER_OF_MENU_ITEMS; i++) {
             String fileName = (String)newRecentFiles.get(i);
             if(fileName != null) {
-                setRecentFile(prefs, i, fileName);
+                setRecentFile(i, fileName);
             }
         }
         // Update menu items to reflect recent files
-        updateMenuItems(menuItems, prefs);
+        updateMenuItems(menuItems);
     }
 
     /**
      * Set the content and visibility of menu items and menu separator,
      * based on the recent file stored user preferences.
      */
-    private static void updateMenuItems(List menuItems, Preferences prefs) {
+    private static void updateMenuItems(List menuItems) {
         // Assume no recent files
         boolean someRecentFiles = false;
         // Update the menu items
@@ -159,7 +159,7 @@ public class LoadRecentProject extends Load {
             JMenuItem recentFile = (JMenuItem)menuItems.get(i);
             
             // Find and set the file for this recent file command
-            String recentFilePath = getRecentFile(prefs, i);
+            String recentFilePath = getRecentFile(i);
             if(recentFilePath != null) {
                 File file = new File(recentFilePath);
                 StringBuffer sb = new StringBuffer(60);
@@ -241,14 +241,14 @@ public class LoadRecentProject extends Load {
     /**
      * Get the full path to the recent file where index 0 is the most recent
      */
-    private static String getRecentFile(Preferences prefs, int index) {
+    public static String getRecentFile(int index) {
         return prefs.get(USER_PREFS_KEY + index, null);        
     }
 
     /**
      * Set the full path to the recent file where index 0 is the most recent
      */
-    private static void setRecentFile(Preferences prefs, int index, String fileName) {
+    private static void setRecentFile(int index, String fileName) {
         prefs.put(USER_PREFS_KEY + index, fileName);
     }
 }
