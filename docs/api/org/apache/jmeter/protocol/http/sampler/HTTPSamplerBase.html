@@ -212,22 +212,6 @@ Common constants and methods for HTTP samplers
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#FILE_FIELD">FILE_FIELD</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#FILE_NAME">FILE_NAME</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#FOLLOW_REDIRECTS">FOLLOW_REDIRECTS</A></B></CODE>
 
 <BR>
@@ -277,14 +261,6 @@ Common constants and methods for HTTP samplers
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#METHOD">METHOD</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#MIMETYPE">MIMETYPE</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -639,7 +615,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getFileField()">getFileField</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The name parameter to be applied to the file</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use getHTTPFiles() array instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -647,7 +623,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getFilename()">getFilename</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The actual name of the file to POST</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use getHTTPFiles() array instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -664,6 +640,23 @@ Common constants and methods for HTTP samplers
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getHTTPFileCount()">getHTTPFileCount</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPFileArg.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArg</A>[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getHTTPFiles()">getHTTPFiles</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get the collection of files as a list.
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -687,7 +680,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#getMimetype()">getMimetype</A></B>()</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>Use getHTTPFiles() array instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -808,14 +801,6 @@ Common constants and methods for HTTP samplers
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#hasUploadableFiles()">hasUploadableFiles</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method to tell if the request has any files to be uploaded</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -1022,7 +1007,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#setFileField(java.lang.String)">setFileField</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The name parameter to be applied to the file</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>use setHTTPFiles() instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -1030,7 +1015,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#setFilename(java.lang.String)">setFilename</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The actual name of the file to POST</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>use setHTTPFiles() instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -1047,6 +1032,15 @@ Common constants and methods for HTTP samplers
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#setHTTPFiles(org.apache.jmeter.protocol.http.util.HTTPFileArg[])">setHTTPFiles</A></B>(<A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPFileArg.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArg</A>[]&nbsp;files)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saves the list of files. 
+ </TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -1086,7 +1080,7 @@ Common constants and methods for HTTP samplers
 <TD><CODE><B><A HREF="../../../../../../org/apache/jmeter/protocol/http/sampler/HTTPSamplerBase.html#setMimetype(java.lang.String)">setMimetype</A></B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Deprecated.</B>&nbsp;<I>use setHTTPFiles() instead</I></TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -1315,16 +1309,6 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 </DL>
 <HR>
 
-<A NAME="MIMETYPE"><!-- --></A><H3>
-MIMETYPE</H3>
-<PRE>
-public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>MIMETYPE</B></PRE>
-<DL>
-<DL>
-<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.MIMETYPE">Constant Field Values</A></DL>
-</DL>
-<HR>
-
 <A NAME="DOMAIN"><!-- --></A><H3>
 DOMAIN</H3>
 <PRE>
@@ -1455,16 +1439,6 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 </DL>
 <HR>
 
-<A NAME="FILE_NAME"><!-- --></A><H3>
-FILE_NAME</H3>
-<PRE>
-public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>FILE_NAME</B></PRE>
-<DL>
-<DL>
-<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.FILE_NAME">Constant Field Values</A></DL>
-</DL>
-<HR>
-
 <A NAME="DO_MULTIPART_POST"><!-- --></A><H3>
 DO_MULTIPART_POST</H3>
 <PRE>
@@ -1472,16 +1446,6 @@ public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/S
 <DL>
 <DL>
 <DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.DO_MULTIPART_POST">Constant Field Values</A></DL>
-</DL>
-<HR>
-
-<A NAME="FILE_FIELD"><!-- --></A><H3>
-FILE_FIELD</H3>
-<PRE>
-public static final <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>FILE_FIELD</B></PRE>
-<DL>
-<DL>
-<DT><B>See Also:</B><DD><A HREF="../../../../../../constant-values.html#org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase.FILE_FIELD">Constant Field Values</A></DL>
 </DL>
 <HR>
 
@@ -1640,6 +1604,8 @@ setFileField</H3>
 <PRE>
 public void <B>setFileField</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>use setHTTPFiles() instead</I>
+<P>
 <DD>The name parameter to be applied to the file
 <P>
 <DD><DL>
@@ -1656,6 +1622,8 @@ getFileField</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getFileField</B>()</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Use getHTTPFiles() array instead</I>
+<P>
 <DD>The name parameter to be applied to the file
 <P>
 <DD><DL>
@@ -1672,6 +1640,8 @@ setFilename</H3>
 <PRE>
 public void <B>setFilename</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>use setHTTPFiles() instead</I>
+<P>
 <DD>The actual name of the file to POST
 <P>
 <DD><DL>
@@ -1688,7 +1658,43 @@ getFilename</H3>
 <PRE>
 public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getFilename</B>()</PRE>
 <DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Use getHTTPFiles() array instead</I>
+<P>
 <DD>The actual name of the file to POST
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setMimetype(java.lang.String)"><!-- --></A><H3>
+setMimetype</H3>
+<PRE>
+public void <B>setMimetype</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>use setHTTPFiles() instead</I>
+<P>
+<DD>Set the files mime type
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>value</CODE> - </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getMimetype()"><!-- --></A><H3>
+getMimetype</H3>
+<PRE>
+public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getMimetype</B>()</PRE>
+<DL>
+<DD><B>Deprecated.</B>&nbsp;<I>Use getHTTPFiles() array instead</I>
 <P>
 <DD><DL>
 </DL>
@@ -2492,34 +2498,6 @@ public <A HREF="../../../../../../org/apache/jmeter/protocol/http/control/Cookie
 </DL>
 <HR>
 
-<A NAME="setMimetype(java.lang.String)"><!-- --></A><H3>
-setMimetype</H3>
-<PRE>
-public void <B>setMimetype</B>(<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A>&nbsp;value)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getMimetype()"><!-- --></A><H3>
-getMimetype</H3>
-<PRE>
-public <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>getMimetype</B>()</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
 <A NAME="isImageParser()"><!-- --></A><H3>
 isImageParser</H3>
 <PRE>
@@ -3041,18 +3019,55 @@ protected static <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Stri
 </DL>
 <HR>
 
-<A NAME="hasUploadableFiles()"><!-- --></A><H3>
-hasUploadableFiles</H3>
+<A NAME="getHTTPFiles()"><!-- --></A><H3>
+getHTTPFiles</H3>
 <PRE>
-protected boolean <B>hasUploadableFiles</B>()</PRE>
+public <A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPFileArg.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArg</A>[] <B>getHTTPFiles</B>()</PRE>
 <DL>
-<DD>Method to tell if the request has any files to be uploaded
+<DD>Get the collection of files as a list.
+ The list is built up from the filename/filefield/mimetype properties,
+ plus any additional entries saved in the FILE_ARGS property.
+
+ If there are no valid file entries, then an empty list is returned.
 <P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
+
+<DT><B>Returns:</B><DD>an array of file arguments (never null)</DL>
+</DD>
 </DL>
+<HR>
+
+<A NAME="getHTTPFileCount()"><!-- --></A><H3>
+getHTTPFileCount</H3>
+<PRE>
+public int <B>getHTTPFileCount</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="setHTTPFiles(org.apache.jmeter.protocol.http.util.HTTPFileArg[])"><!-- --></A><H3>
+setHTTPFiles</H3>
+<PRE>
+public void <B>setHTTPFiles</B>(<A HREF="../../../../../../org/apache/jmeter/protocol/http/util/HTTPFileArg.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArg</A>[]&nbsp;files)</PRE>
+<DL>
+<DD>Saves the list of files. 
+ The first file is saved in the Filename/field/mimetype properties.
+ Any additional files are saved in the FILE_ARGS array.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>files</CODE> - list of files to save</DL>
 </DD>
 </DL>
 <HR>

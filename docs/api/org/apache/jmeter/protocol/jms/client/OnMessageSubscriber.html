@@ -93,18 +93,16 @@ Class OnMessageSubscriber</H2>
 <DT>public class <B>OnMessageSubscriber</B><DT>extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Object.html" title="class or interface in java.lang">Object</A></DL>
 
 <P>
-<DL>
-<DT><B>Author:</B></DT>
-  <DD>pete
- 
- OnMessageSubscriber is designed to create the connection, session and
+OnMessageSubscriber is designed to create the connection, session and
  subscriber. The sampler is responsible for implementing
  javax.jms.MessageListener interface and onMessage(Message msg) method.
  
  The implementation provides a close() method to clean up the client at the
  end of a test. This is important to make sure there aren't any zombie threads
- or odd memory leaks.</DD>
-</DL>
+ or odd memory leaks.
+<P>
+
+<P>
 <HR>
 
 <P>
