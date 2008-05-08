@@ -30,10 +30,21 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 
 public class TestSaveService extends JMeterTestCase {
-	private static final String[] FILES = new String[] { "AssertionTestPlan.jmx", "AuthManagerTestPlan.jmx",
-			"HeaderManagerTestPlan.jmx", "InterleaveTestPlan2.jmx", "InterleaveTestPlan.jmx", "LoopTestPlan.jmx",
-			"Modification Manager.jmx", "OnceOnlyTestPlan.jmx", "proxy.jmx", "ProxyServerTestPlan.jmx",
-			"SimpleTestPlan.jmx", "GuiTest.jmx", };
+	private static final String[] FILES = new String[] {
+	    "AssertionTestPlan.jmx",
+	    "AuthManagerTestPlan.jmx",
+		"HeaderManagerTestPlan.jmx",
+		"InterleaveTestPlan2.jmx", 
+		"InterleaveTestPlan.jmx",
+		"LoopTestPlan.jmx",
+		"Modification Manager.jmx",
+		"OnceOnlyTestPlan.jmx",
+		"proxy.jmx",
+		"ProxyServerTestPlan.jmx",
+		"SimpleTestPlan.jmx",
+		"GuiTest.jmx", 
+		"GuiTest231.jmx",
+		};
 
 	private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
 
