@@ -25,6 +25,7 @@ import java.net.URLConnection;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 
 /**
@@ -53,19 +54,24 @@ public class PutWriter extends PostWriter {
         // This allows the user to specify his own content-type for a PUT request
         String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
         boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0; 
-
+        
+        HTTPFileArg files[] = sampler.getHTTPFiles();
+        
         // If there are no arguments, we can send a file as the body of the request
+        // TODO: needs a multiple file upload scenerio
         if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
+            // If getSendFileAsPostBody returned true, it's sure that file is not null
+            HTTPFileArg file = files[0];
             hasPutBody = true;
             if(!hasContentTypeHeader) {
                 // Allow the mimetype of the file to control the content type
-                if(sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                    connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
+                if(file.getMimeType().length() > 0) {
+                    connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, file.getMimeType());
                 }
             }
 
             // Create the content length we are going to write
-            File inputFile = new File(sampler.getFilename());
+            File inputFile = new File(file.getPath());
             contentLength = inputFile.length();
         }
         else if(sampler.getSendParameterValuesAsPostBody()) {
@@ -73,8 +79,9 @@ public class PutWriter extends PostWriter {
             // Allow the mimetype of the file to control the content type
             // This is not obvious in GUI if you are not uploading any files,
             // but just sending the content of nameless parameters
-            if(!hasContentTypeHeader && sampler.getMimetype() != null && sampler.getMimetype().length() > 0) {
-                connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, sampler.getMimetype());
+            // TODO: needs a multiple file upload scenerio
+            if(!hasContentTypeHeader && files.length == 1 && files[0].getMimeType().length() > 0) {
+                connection.setRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE, files[0].getMimeType());
             }
 
             // We create the post body content now, so we know the size
