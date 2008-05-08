@@ -20,18 +20,13 @@ package org.apache.jmeter.config;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-
-// Mark Walsh, 2002-08-03 add method:
-// addArgument(String name, Object value, Object metadata)
-// Modify methods:
-// toString(), addEmptyArgument(), addArgument(String name, Object value)
 
 /**
  * A set of Argument objects.
@@ -83,7 +78,7 @@ public class Arguments extends ConfigTestElement implements Serializable {
 	 */
 	public Map getArgumentsAsMap() {
 		PropertyIterator iter = getArguments().iterator();
-		Map argMap = new HashMap();
+		Map argMap = new LinkedHashMap();
 		while (iter.hasNext()) {
 			Argument arg = (Argument) iter.next().getObjectValue();
 			// Because CollectionProperty.mergeIn will not prevent adding two
