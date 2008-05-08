@@ -652,6 +652,11 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 						</li>
 									
 
+												<li	>
+								Allow use of special name LAST to mean the last test run; applies to -t, -l, -j flags
+						</li>
+									
+
 						</ul>
 							  									 				<h4	>
 								Non-functional changes
@@ -920,7 +925,6 @@ Filenames can now include function references; variable references do not work.
 								Aggregate Graph and Aggregate Report Column Header is KB/Sec; fixed the values to be KB rather than bytes
 						</li>
 									
-
 
 												<li	>
 								
@@ -2511,6 +2515,7 @@ This can be disabled by setting the JMeter property
 						</h4>
 							  									 				<ul	>
 								
+
 
 												<li	>
 								Post-processors run in reverse order (see bug 41140)

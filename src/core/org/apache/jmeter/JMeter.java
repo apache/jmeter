@@ -52,6 +52,7 @@ import org.apache.jmeter.gui.MainFrame;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Load;
+import org.apache.jmeter.gui.action.LoadRecentProject;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -89,6 +90,11 @@ public class JMeter implements JMeterPlugin {
 
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
 
+
+    // If the -t flag is to "LAST", then the last loaded file (if any) is used
+    private static final String USE_LAST_JMX = "LAST";
+    // If the -j  or -l flag is set to LAST or LAST.log|LAST.jtl, then the last loaded file name is used to
+    // generate the log file name by removing .JMX and replacing it with .log|.jtl
 
     private static final int PROXY_PASSWORD     = 'a';// $NON-NLS-1$
     private static final int JMETER_HOME_OPT    = 'd';// $NON-NLS-1$
@@ -204,7 +210,7 @@ public class JMeter implements JMeterPlugin {
 	/**
 	 * Starts up JMeter in GUI mode
 	 */
-	private void startGui(CLOption testFile) {
+	private void startGui(String testFile) {
 
 		PluginManager.install(this, true);
 		JMeterTreeModel treeModel = new JMeterTreeModel();
@@ -216,11 +222,10 @@ public class JMeter implements JMeterPlugin {
 		ComponentUtil.centerComponentInWindow(main, 80);
 		main.show();
 		ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
-        String arg; 
-		if (testFile != null && (arg = testFile.getArgument()) != null) {
+		if (testFile != null) {
             FileInputStream reader = null;
 			try {
-                File f = new File(arg);
+                File f = new File(testFile);
 				log.info("Loading file: " + f);
 				reader = new FileInputStream(f);
 				HashTree tree = SaveService.loadTree(reader);
@@ -332,17 +337,30 @@ public class JMeter implements JMeterPlugin {
                 // Start the server
 				startServer(JMeterUtils.getPropDefault("server_port", 0));// $NON-NLS-1$
 				startOptionalServers();
-			} else if (parser.getArgumentById(NONGUI_OPT) == null) {
-				startGui(parser.getArgumentById(TESTFILE_OPT));
-				startOptionalServers();
 			} else {
-				CLOption rem=parser.getArgumentById(REMOTE_OPT_PARAM);
-				if (rem==null) { rem=parser.getArgumentById(REMOTE_OPT); }
-				startNonGui(parser.getArgumentById(TESTFILE_OPT), 
-						parser.getArgumentById(LOGFILE_OPT), 
-						rem);
-				startOptionalServers();
-			}
+	            String testFile=null;
+	            CLOption testFileOpt = parser.getArgumentById(TESTFILE_OPT);
+	            if (testFileOpt != null){
+	                testFile = testFileOpt.getArgument();
+	                if (USE_LAST_JMX.equals(testFile)) {
+	                    testFile = LoadRecentProject.getRecentFile(0);// most recent
+	                }
+	            }
+                if (parser.getArgumentById(NONGUI_OPT) == null) {
+                	startGui(testFile);
+                	startOptionalServers();
+                } else {
+                	CLOption rem=parser.getArgumentById(REMOTE_OPT_PARAM);
+                	if (rem==null) { rem=parser.getArgumentById(REMOTE_OPT); }
+                	CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
+                	String jtlFile = null;
+                	if (jtl != null){
+                	    jtlFile=processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
+                	}
+                	startNonGui(testFile, jtlFile, rem);
+                	startOptionalServers();
+                }
+            }
 		} catch (IllegalUserActionException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Incorrect Usage");
@@ -476,11 +494,12 @@ public class JMeter implements JMeterPlugin {
 					+ "jmeter.properties");// $NON-NLS-1$
 		}
 
-		if (parser.getArgumentById(JMLOGFILE_OPT) != null){
-			String jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
-			JMeterUtils.setProperty(LoggingManager.LOG_FILE,jmlogfile);
-		}
-		
+        if (parser.getArgumentById(JMLOGFILE_OPT) != null){
+            String jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
+            jmlogfile = processLAST(jmlogfile, ".log");// $NON-NLS-1$
+            JMeterUtils.setProperty(LoggingManager.LOG_FILE,jmlogfile);
+        }
+        
 		JMeterUtils.initLogging();
 		JMeterUtils.initLocale();
 		// Bug 33845 - allow direct override of Home dir
@@ -602,7 +621,6 @@ public class JMeter implements JMeterPlugin {
 					File propFile = new File(name);
 					if (propFile.canRead()) {
 						log.info("Setting Global properties from the file "+name);
-						fis = null;
 						try {
 							fis = new FileInputStream(propFile);
 						    remoteProps.load(fis);
@@ -633,6 +651,21 @@ public class JMeter implements JMeterPlugin {
 	
 	}
 
+	/*
+	 * Checks for LAST or LASTsuffix.
+	 * Returns the LAST name with .JMX replaced by suffix.
+	 */
+    private String processLAST(String jmlogfile, String suffix) {
+        if (USE_LAST_JMX.equals(jmlogfile) || USE_LAST_JMX.concat(suffix).equals(jmlogfile)){
+            String last = LoadRecentProject.getRecentFile(0);// most recent
+            final String JMX_SUFFIX = ".JMX"; // $NON-NLS-1$
+            if (last.toUpperCase(Locale.ENGLISH).endsWith(JMX_SUFFIX)){
+                jmlogfile=last.substring(0, last.length() - JMX_SUFFIX.length()).concat(suffix);
+            }
+        }
+        return jmlogfile;
+    }
+
 	private void startServer(int port) {
 		try {
 			new RemoteJMeterEngineImpl(port);
@@ -643,7 +676,7 @@ public class JMeter implements JMeterPlugin {
 		}
 	}
 
-	private void startNonGui(CLOption testFile, CLOption logFile, CLOption remoteStart)
+	private void startNonGui(String testFile, String logFile, CLOption remoteStart)
 			throws IllegalUserActionException {
 		// add a system property so samplers can check to see if JMeter
 		// is running in NonGui mode
@@ -666,14 +699,10 @@ public class JMeter implements JMeterPlugin {
 		if (testFile == null) {
 			throw new IllegalUserActionException("Non-GUI runs require a test plan");
 		}
-		String argument = testFile.getArgument();
-        if (argument == null) {
-            throw new IllegalUserActionException("Non-GUI runs require a test plan");
-        }
         if (logFile == null) {
-			driver.run(argument, null, remoteStart != null,remote_hosts_string);
+			driver.run(testFile, null, remoteStart != null,remote_hosts_string);
 		} else {
-			driver.run(argument, logFile.getArgument(), remoteStart != null,remote_hosts_string);
+			driver.run(testFile, logFile, remoteStart != null,remote_hosts_string);
 		}
 	}
 
@@ -724,7 +753,7 @@ public class JMeter implements JMeterPlugin {
 			}
 			List engines = new LinkedList();
 			tree.add(tree.getArray()[0], new ListenToTest(parent, (remoteStart && remoteStop) ? engines : null));
-			println("Created the tree successfully");
+			println("Created the tree successfully using "+testFile);
 			JMeterEngine engine = null;
 			if (!remoteStart) {
 				engine = new StandardJMeterEngine();

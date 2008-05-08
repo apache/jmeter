@@ -193,6 +193,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 <li>Bug 44872 - Add "All Files" filter to Open File dialogs</li>
 <li>Mirror server can now be run independently (mirror-server.cmd and mirror-server.sh)</li>
 <li>Bug 19128 - Added multiple file POST support to HTTP Samplers</li>
+<li>Allow use of special name LAST to mean the last test run; applies to -t, -l, -j flags</li>
 </ul>
 
 <h4>Non-functional changes</h4>

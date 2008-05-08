@@ -206,6 +206,8 @@ Windows script files (the .CMD files require Win2K or later):
 <li>jmeter-t.cmd - drop a JMX file on this to load it in GUI mode</li>
 <li>jmeter-server.bat - start JMeter in server mode</li>
 </ul>
+Note: the special name LAST can be used with jmeter-n.cmd, jmeter-t.cmd and jmeter-n-r.cmd
+and means the last test plan that was run interactively.
 </p>
 
 <p>
@@ -410,6 +412,10 @@ These are shown below.</p>
 <p>
 Note: the JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) 
 if it contains paired single-quotes,  .e.g. 'jmeter_'yyyyMMddHHmmss'.log'
+</p>
+<p>
+If the special name LAST is used for the -t, -j or -l flags, then JMeter takes that to mean the last test plan
+that was run in interactive mode.
 </p>
 </subsection>
 </section>
