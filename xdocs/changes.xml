@@ -135,6 +135,7 @@ For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather 
 this has been corrected to "SampleResult"</li>
 <li>BSF Sampler now works properly with Javascript</li>
 <li>Test Action "Stop Test" now works</li>
+<li>Bug 42833 - Argument class uses LinkedHashMap in getArgumentsAsMap() to preserve ordering</li>
 </ul>
 
 <h4>Improvements</h4>
