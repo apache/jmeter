@@ -1803,7 +1803,7 @@ int <B>noFailingSamples</B></PRE>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>2l
+<B>serialVersionUID:&nbsp;</B>232l
 
 <P>
 
@@ -3996,7 +3996,7 @@ stoppingMessage</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>1l
+<B>serialVersionUID:&nbsp;</B>232l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -8879,7 +8879,7 @@ xborder</H3>
 int <B>xborder</B></PRE>
 <DL>
 <DL>
-</DL>
+<DT><B>See Also:</B><DD><A HREF="constant-values.html#org.apache.jmeter.visualizers.DistributionGraph.xborder">Constant Field Values</A></DL>
 </DL>
 
 <P>
@@ -12412,40 +12412,22 @@ boundary</H3>
 <HR>
 
 <H3>
-filename</H3>
-<PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>filename</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-fileField</H3>
-<PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>fileField</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-mimetype</H3>
-<PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>mimetype</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
 args</H3>
 <PRE>
 <A HREF="org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</A> <B>args</B></PRE>
 <DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+files</H3>
+<PRE>
+<A HREF="org/apache/jmeter/protocol/http/util/HTTPFileArgs.html" title="class in org.apache.jmeter.protocol.http.util">HTTPFileArgs</A> <B>files</B></PRE>
+<DL>
+<DD>HTTPFileArgs list to be uploaded with http request.
+<P>
 <DL>
 </DL>
 </DL>
@@ -12516,30 +12498,13 @@ urlConfig</H3>
 </TABLE>
 
 <H3>
-filenameField</H3>
+filesPanel</H3>
 <PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTextField.html" title="class or interface in javax.swing">JTextField</A> <B>filenameField</B></PRE>
+<A HREF="org/apache/jmeter/protocol/http/gui/HTTPFileArgsPanel.html" title="class in org.apache.jmeter.protocol.http.gui">HTTPFileArgsPanel</A> <B>filesPanel</B></PRE>
 <DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-paramNameField</H3>
-<PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTextField.html" title="class or interface in javax.swing">JTextField</A> <B>paramNameField</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<H3>
-mimetypeField</H3>
-<PRE>
-<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JTextField.html" title="class or interface in javax.swing">JTextField</A> <B>mimetypeField</B></PRE>
-<DL>
+<DD>Files panel that holds file informations to be uploaded by
+ http request.
+<P>
 <DL>
 </DL>
 </DL>
@@ -12898,7 +12863,7 @@ mirrorController</H3>
 <H3>
 urlConfigGui</H3>
 <PRE>
-<A HREF="org/apache/jmeter/protocol/http/config/gui/UrlConfigGui.html" title="class in org.apache.jmeter.protocol.http.config.gui">UrlConfigGui</A> <B>urlConfigGui</B></PRE>
+<A HREF="org/apache/jmeter/protocol/http/config/gui/MultipartUrlConfigGui.html" title="class in org.apache.jmeter.protocol.http.config.gui">MultipartUrlConfigGui</A> <B>urlConfigGui</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -13678,6 +13643,71 @@ saveButton</H3>
 <P>
 
 <P>
+<A NAME="org.apache.jmeter.protocol.http.gui.HTTPFileArgsPanel"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/protocol/http/gui/HTTPFileArgsPanel.html" title="class in org.apache.jmeter.protocol.http.gui">org.apache.jmeter.protocol.http.gui.HTTPFileArgsPanel</A> extends <A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JPanel.html" title="class or interface in javax.swing">JPanel</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+tableLabel</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JLabel.html" title="class or interface in javax.swing">JLabel</A> <B>tableLabel</B></PRE>
+<DL>
+<DD>The title label for this component.
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+add</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A> <B>add</B></PRE>
+<DL>
+<DD>A button for adding new files to the table.
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+browse</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A> <B>browse</B></PRE>
+<DL>
+<DD>A button for browsing file system to set path of selected row in table.
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<H3>
+delete</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/JButton.html" title="class or interface in javax.swing">JButton</A> <B>delete</B></PRE>
+<DL>
+<DD>A button for removing files from the table.
+<P>
+<DL>
+</DL>
+</DL>
+
+<P>
 <HR SIZE="4" NOSHADE>
 
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -14258,7 +14288,7 @@ target</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>1l
+<B>serialVersionUID:&nbsp;</B>232l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -14886,6 +14916,46 @@ fileContents</H3>
 <P>
 
 <P>
+<A NAME="org.apache.jmeter.protocol.http.util.HTTPFileArg"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/protocol/http/util/HTTPFileArg.html" title="class in org.apache.jmeter.protocol.http.util">org.apache.jmeter.protocol.http.util.HTTPFileArg</A> extends <A HREF="org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+<A NAME="serializedForm"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TD COLSPAN=1><FONT SIZE="+2">
+<B>Serialized Fields</B></FONT></TD>
+</TR>
+</TABLE>
+
+<H3>
+header</H3>
+<PRE>
+<A HREF="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/String.html" title="class or interface in java.lang">String</A> <B>header</B></PRE>
+<DL>
+<DD>temporary storage for header.
+<P>
+<DL>
+</DL>
+</DL>
+
+<P>
+<A NAME="org.apache.jmeter.protocol.http.util.HTTPFileArgs"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
+<TD COLSPAN=2><FONT SIZE="+2">
+<B>Class <A HREF="org/apache/jmeter/protocol/http/util/HTTPFileArgs.html" title="class in org.apache.jmeter.protocol.http.util">org.apache.jmeter.protocol.http.util.HTTPFileArgs</A> extends <A HREF="org/apache/jmeter/config/ConfigTestElement.html" title="class in org.apache.jmeter.config">ConfigTestElement</A> implements Serializable</B></FONT></TD>
+</TR>
+</TABLE>
+
+<P>
+
+<P>
 <A NAME="org.apache.jmeter.protocol.http.util.WSDLException"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableSubHeadingColor">
@@ -15065,7 +15135,7 @@ NEWFILE</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>1l
+<B>serialVersionUID:&nbsp;</B>232l
 
 <P>
 <A NAME="serializedForm"><!-- --></A>
@@ -15901,7 +15971,7 @@ CLASSLIST</H3>
 </TABLE>
 
 <P>
-<B>serialVersionUID:&nbsp;</B>221l
+<B>serialVersionUID:&nbsp;</B>232l
 
 <P>
 
